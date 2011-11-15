@@ -48,8 +48,8 @@ class tx_mksearch_marker_SearchResultSimple extends tx_rnbase_util_BaseMarker {
 		
 		//wenn wir ein array haben, holen wir uns dazu eine 
 		//kommaseparierte Liste um damit einfach im FE arbeiten zu können
-		foreach ($item->record as $sField => $mValue){
-			if(is_array($mValue)) $item->record[$sField.'_list'] = implode(', ', $mValue);
+		foreach ($item->record as &$mValue){
+			if(is_array($mValue)) $mValue = implode(', ', $mValue);
 		}
 		
 		// Fill MarkerArray
