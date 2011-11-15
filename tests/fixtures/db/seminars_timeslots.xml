@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dataset>
+	<tx_seminars_timeslots>
+		<uid>1</uid>
+		<seminar>1</seminar>
+		<title>somewhen</title>
+		<begin_date>1305287200</begin_date>
+		<end_date>1305284200</end_date>
+		<speakers>1</speakers>
+		<place>1</place>
+	</tx_seminars_timeslots>
+	<tx_seminars_timeslots>
+		<uid>2</uid>
+		<seminar>1</seminar>
+		<title>somewhen too</title>
+		<begin_date>1308287200</begin_date>
+		<end_date>1309284200</end_date>
+		<speakers>1</speakers>
+		<place>2</place>
+	</tx_seminars_timeslots>
+	<tx_seminars_timeslots>
+		<uid>3</uid>
+		<seminar>3</seminar>
+		<title>somewhen</title>
+		<begin_date>1305287200</begin_date>
+		<end_date>1305284200</end_date>
+		<speakers>1</speakers>
+		<place>1</place>
+	</tx_seminars_timeslots>
+	<tx_seminars_timeslots>
+		<uid>4</uid>
+		<seminar>4</seminar>
+		<title>somewhen too</title>
+		<begin_date>1308287200</begin_date>
+		<end_date>1309284200</end_date>
+		<speakers>1</speakers>
+		<place>2</place>
+	</tx_seminars_timeslots>
+</dataset>

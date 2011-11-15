@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dataset>
+	<tt_news_cat_mm>
+		<uid_local>1</uid_local>
+		<uid_foreign>1</uid_foreign>
+	</tt_news_cat_mm>
+	<tt_news_cat_mm>
+		<uid_local>2</uid_local>
+		<uid_foreign>2</uid_foreign>
+	</tt_news_cat_mm>
+</dataset>

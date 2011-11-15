@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>database</type>
+		<description>Language labels for database tables/fields belonging to extension 'mksearch'</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="general.undef">Undefined</label>
+			<label index="plugin.mksearch.label">MK Search</label>
+			<label index="plugin.mksearch.flexform.tab.tssetup">TypoScript setup</label>
+			<label index="plugin.mksearch.flexform.tab.action">View</label>
+			<label index="plugin.mksearch.flexform.tab.softlink">Softlink</label>
+			<label index="plugin.mksearch.flexform.tssetup">TS config path: plugin.tx_mksearch.</label>
+			<label index="plugin.mksearch.label">MK Search</label>
+			<label index="plugin.mksearch.flexform.action.searchLucene">Search Form for Lucene</label>
+			<label index="plugin.mksearch.flexform.action.searchSolr">Search view for Solr</label>
+			<label index="plugin.mksearch.flexform.usedIndex">Search Index to use</label>
+			<label index="plugin.mksearch.flexform.filter.confid">Filter</label>
+			<label index="plugin.mksearch.flexform.filter.confid.default">default</label>
+			<label index="plugin.mksearch.flexform.filter.confid.dismax">DisMax</label>
+			<label index="plugin.mksearch.flexform.requestHandler">Request handler</label>
+			<label index="plugin.mksearch.flexform.filterClass">Filter class</label>
+			<label index="plugin.mksearch.flexform.mainmarkerclass">Main marker class</label>
+			<label index="plugin.mksearch.flexform.mainsubpart">Main subpart</label>
+			<label index="plugin.mksearch.flexform.template">Template</label>
+
+			<label index="scheduler_indexTask_name">MKSearch Indexing</label>
+			<label index="scheduler_indexTask_description">Start indexing process of documents</label>
+			<label index="scheduler_indexTask_field_amountOfItems">Amount of items to be indexed per run</label>
+			<label index="scheduler_indexTask_taskinfo">Index %d items per run. Currently %d items in queue.</label>
+
+			<label index="tx_mksearch_indices">Index</label>
+			<label index="tx_mksearch_indices.hidden">Hidden, i.e. creation / update of index is disabled</label>
+			<label index="tx_mksearch_indices.title">Title</label>
+			<label index="tx_mksearch_indices.description">Description</label>
+			<label index="tx_mksearch_indices.name">Name of the index used for actual storage. Depending on the indexing engine this might be the file system directory path or similar.</label>
+			<label index="tx_mksearch_indices.composites">Used configuration composites</label>
+			<label index="tx_mksearch_indices_engine">Search engine</label>
+			<label index="tx_mksearch_indices_engine_solr">Apache Solr</label>
+			<label index="tx_mksearch_indices_engine_zendlucene">Zend Lucene (PHP)</label>
+			
+			<label index="tx_mksearch_configcomposites">Indexer configuration composite</label>
+			<label index="tx_mksearch_configcomposites.hidden">Hidden, i.e. composite is disabled</label>
+			<label index="tx_mksearch_configcomposites.title">Title</label>
+			<label index="tx_mksearch_configcomposites.description">Description</label>
+			<label index="tx_mksearch_configcomposites.indices">Assigned to indices</label>
+			<label index="tx_mksearch_configcomposites.configs">Connected index configurations</label>
+			
+			<label index="tx_mksearch_indexerconfigs">Indexer configuration</label>
+			<label index="tx_mksearch_indexerconfigs.hidden">Hidden, i.e. configuration is disabled</label>
+			<label index="tx_mksearch_indexerconfigs.title">Title</label>
+			<label index="tx_mksearch_indexerconfigs.description">Description</label>
+			<label index="tx_mksearch_indexerconfigs.extkey">Extension key, i.e. first part of indexer service subtype</label>
+			<label index="tx_mksearch_indexerconfigs.contenttype">Content type, i.e. second part of indexer service subtype</label>
+			<label index="tx_mksearch_indexerconfigs.configuration">Configuration. Define all necessary parameters of this indexer here.</label>
+			<label index="tx_mksearch_indexerconfigs.composites">Assigned to composites</label>
+
+			<label index="tx_mksearch_keywords">MKSearch keyword</label>
+			<label index="tx_mksearch_keywords_keyword">Keyword</label>
+			<label index="tx_mksearch_keywords_link">Link</label>
+
+			<label index="plugin_common_enable">Enable</label>
+			
+			<label index="plugin.mksearch.tt_content.header_layout">Hidden (but indexed via mksearch)</label>
+		</languageKey>
+		<languageKey index="de" type="array">
+			<label index="general.undef">Undefiniert</label>
+			<label index="scheduler_indexTask_name">MKSearch Indizierung</label>
+			<label index="scheduler_indexTask_description">Startet die Indizierung von Dokumenten</label>
+			<label index="scheduler_indexTask_field_amountOfItems">Anzahl von Dokumenten pro Indexlauf</label>
+			<label index="scheduler_indexTask_taskinfo">Es werden %d Dokumente pro Lauf indiziert. Aktuell sind %d Dokumente in der Warteschlange.</label>
+
+			<label index="plugin_common_enable">Aktivieren</label>
+			<label index="plugin.mksearch.tt_content.header_layout">Verborgen (aber via mksearch indiziert)</label>
+		</languageKey>
+	</data>
+</T3locallang>

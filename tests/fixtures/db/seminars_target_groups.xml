@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dataset>
+	<tx_seminars_target_groups>
+		<uid>1</uid>
+		<title>1. Zielgruppe</title>
+	</tx_seminars_target_groups>
+	<tx_seminars_target_groups>
+		<uid>2</uid>
+		<title>2. Zielgruppe</title>
+	</tx_seminars_target_groups>	
+</dataset>

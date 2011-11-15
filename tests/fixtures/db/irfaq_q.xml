@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dataset>
+	<tx_irfaq_q>
+		<uid>1</uid>
+		<sorting>87</sorting>
+		<q>1. FAQ</q>
+		<cat>1</cat>
+		<a>You have to know this and this</a>
+		<expert>1</expert>
+		<related>something related</related>
+		<related_links>some related links</related_links>
+		<faq_files>some files</faq_files>
+	</tx_irfaq_q>
+	<tx_irfaq_q>
+		<uid>2</uid>
+		<sorting>89</sorting>
+		<q>2. FAQ</q>
+		<cat>1</cat>
+		<a>You have to know that and that</a>
+		<expert>1</expert>
+	</tx_irfaq_q>
+	<tx_irfaq_q>
+		<uid>3</uid>
+		<sorting>99</sorting>
+		<q>3. FAQ</q>
+		<cat>1</cat>
+		<a>You have to know nothing</a>
+	</tx_irfaq_q>	
+</dataset>

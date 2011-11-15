@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dataset>
+	<tx_seminars_organizers>
+		<uid>1</uid>
+		<title>1. Veranstalter</title>
+	</tx_seminars_organizers>
+	<tx_seminars_organizers>
+		<uid>2</uid>
+		<title>2. Veranstalter</title>
+	</tx_seminars_organizers>	
+</dataset>

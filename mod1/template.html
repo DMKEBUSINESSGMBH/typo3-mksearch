@@ -1,0 +1,100 @@
+<!-- ###FULLDOC### begin -->
+<style type="text/css">
+	.mkheader h2 {
+		font-size:1.6em;
+	}
+	.mkselector{
+	}
+	.mktabs{
+		width: 95%;
+	}
+	.mkcontent{
+		width: 95%;
+	}
+	/**
+		HIER müsste in RN_base mal geändert werden, die klasse muss tabact heißen, nicht tabAct!
+	.tabAct {
+		background-color: #F8F9FB !important;
+		border-color: #000000 !important;	
+	}
+	.tabAct a {
+		color: #000000 !important;	
+	}
+	*/
+	.graybox {
+		margin: 0 0 2em 0;
+		padding: 10px;
+		background-color: #E4E5F0;
+		border: 1px solid #A2AAB8;
+	}
+	h2.bgColor2 {
+		margin: 0em 0 -1px 0;
+		line-height: 20px;
+		padding: 0 10px;
+	}
+	.tables table .t3-row-header td {
+		font-weight:bold;
+	}
+	.tables table tr td  {
+		padding:4px 8px;
+	}
+	/*
+	.graybox table tr td {
+		background-color: #EFEFF4;
+	}
+	.graybox table.ivtab tr td {
+		background-color: transparent;
+		padding:1px 2px;
+	}
+	*/
+	.btnBlock {
+		margin: 1em 0;
+	}	
+	input[type=submit] {
+		height: 20px;
+		padding: 0 6px 2px;
+		font-weight:bold;
+		cursor: pointer;
+	}
+</style>
+<div class="typo3-fullDoc">
+	<!-- Page header with buttons, path details and csh -->
+	<div id="typo3-docheader">
+		<div id="typo3-docheader-row1">
+			<div class="buttonsleft">###BUTTONLIST_LEFT###</div>
+			<div class="buttonsright">###BUTTONLIST_RIGHT###</div>
+		</div>
+		<div id="typo3-docheader-row2">
+			<div class="docheader-row2-left">
+				<div class="docheader-csh">###CSH###</div>
+				<!--div class="docheader-funcmenu">###FUNC_MENU###</div-->
+			</div>
+			<div class="docheader-row2-right">###PAGEPATH######PAGEINFO###</div>
+		</div>
+	</div>
+	<!-- Content of module, for instance listing, info or editing -->
+	<div id="typo3-docbody">
+		<div id="typo3-inner-docbody">
+			<div class="mkheader" style="margin-bottom:1em;">###HEADER###</div>
+			<div class="mkselector">###SELECTOR###</div>
+			<div class="cleardiv">
+				<div class="mktabs">###TABS###</div>
+				<div class="mkcontent">###CONTENT###</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- ###FULLDOC### end -->
+
+<!-- ###BUTTON_GROUP_WRAP### -->
+	<div class="buttongroup">###BUTTONS###</div>
+<!-- ###BUTTON_GROUP_WRAP### -->
+
+<!-- ###BUTTON_GROUPS_LEFT### -->
+<!-- ###BUTTON_GROUP1### -->###VIEW###<!-- ###BUTTON_GROUP1### -->
+<!-- ###BUTTON_GROUPS_LEFT### -->
+
+<!-- ###BUTTON_GROUPS_RIGHT### -->
+<!-- ###BUTTON_GROUP1### -->###RECORD_LIST######SHORTCUT###<!-- ###BUTTON_GROUP1### -->
+<!-- ###BUTTON_GROUPS_RIGHT### -->
+

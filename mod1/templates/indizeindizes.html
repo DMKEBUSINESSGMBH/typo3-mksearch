@@ -1,0 +1,61 @@
+<!DOCTYPE html
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	</head>
+	<body>
+
+		<!-- ###INDIZEINDIZES### -->
+		
+		<style type="text/css">
+			.tables table.typo3-dblist {
+				width: auto !important;
+				width: 0;	
+			}
+			a.tooltip {text-decoration:none;}
+			.tooltip span.info{display:none;}
+			.tooltip:hover span.info{display:block;position:absolute; padding:2px;background-color:white;}
+		</style>
+
+		<div class="status">
+			<h2 class="bgColor2">###LABEL_core_status_head###</h2>
+			<div class="graybox">
+				###CORE_STATUS###
+			</div>
+		</div>
+		
+		<div class="status" style="display:###ISSTATUS###">
+			<h2 class="bgColor2">###LABEL_queue_state_head###</h2>
+			<div class="graybox">
+				###STATUS###
+			</div>
+		</div>
+		
+		<h2 class="bgColor2">###LABEL_configured_indexer_tables_head###</h2>
+		<div class="tables graybox">
+			###TABLES_TABLE###
+			<div class="count">###TABLES_COUNT### ###LABEL_table_count###</div>
+		</div>
+		
+		<h2 class="bgColor2">###LABEL_triger_queue_head### (###LABEL_queue_size### ###QUEUESIZE###)</h2>
+		<div class="tables graybox">
+			<table class="ivtab">
+				<tr>
+					<td><input type="checkbox" name="triggerIndexingQueue" value="1" id="triggerIndexingQueue" /></td>
+					<td><label for="triggerIndexingQueue">###LABEL_triger_queue_input###</label></td>
+					<td><input type="text" name="triggerIndexingQueueCount" value="###INDEXITEMS###" id="triggerIndexingQueueCount" /></td>
+					<td><label for="triggerIndexingQueueCount">###LABEL_triger_queue_items###</label></td>
+				</tr>
+			</table>
+		</div>
+		
+		<div class="btnBlock">
+			<input type="submit" name="updateIndex"/>
+		</div>
+		<!-- ###INDIZEINDIZES### -->
+
+	</body>
+</html>

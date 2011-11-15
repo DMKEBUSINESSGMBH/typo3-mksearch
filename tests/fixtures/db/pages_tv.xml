@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dataset>
+<!-- for the tests considering the pageTrees Options -->
+	<pages>
+		<uid>1</uid>
+		<pid>0</pid>
+		<doktype>1</doktype>
+		<title>Main1</title>
+	</pages>
+	<pages>
+		<uid>2</uid>
+		<pid>0</pid>
+		<doktype>1</doktype>
+		<title>Main2</title>
+		<hidden>1</hidden>
+	</pages>
+	<pages>
+		<uid>3</uid>
+		<pid>0</pid>
+		<doktype>1</doktype>
+		<title>Main3</title>
+	</pages>
+	<pages>
+		<uid>4</uid>
+		<pid>0</pid>
+		<doktype>1</doktype>
+		<title>Main4</title>
+	</pages>	
+</dataset>

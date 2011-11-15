@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+    <meta type="array">
+        <type>module</type>
+        <description>Language labels for module "tools_txmksearchM1"</description>
+    </meta>
+    <data type="array">
+        <languageKey index="default" type="array">
+            <label index="title">MK Search</label>
+            <label index="func_config_indizes">Configure indizes</label>
+            <label index="func_indize_indizes">Indexing Queue</label>
+            
+            <label index="label_no_indexers_found">No indexers defined!</label>
+            <label index="label_configured_indexer_tables_head">Tables from configured indexers</label>
+            <label index="label_core_status_head">Core status</label>
+            <label index="label_triger_queue_head">Trigger indexing queue</label>
+            <label index="label_triger_queue_input">Trigger indexing queue</label>
+            <label index="label_triger_queue_items">Items</label>
+            <label index="label_queue_cleared">The following tables are cleared in index queue: </label>
+            <label index="label_queue_reseted">The following tables are reset for indexing: </label>
+            <label index="label_queue_indexed">Indexing queue was triggered! Records processed: </label>
+            <label index="label_queue_indexed_empty">Nothing to do at the moment - indexing queue is empty.</label>
+            <label index="label_queue_state_head">Status</label>
+            <label index="label_queue_size">current size:</label>
+            <label index="label_table_count">tables found.</label>
+            <label index="label_table_name">Table</label>
+            <label index="label_table_queuecount">Queue</label>
+            <label index="label_table_reset">Reset</label>
+            <label index="label_table_clear">Clear</label>
+        </languageKey>
+    </data>
+</T3locallang>

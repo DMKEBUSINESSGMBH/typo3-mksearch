@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<description>language labels for mksearch frontend strings</description>
+		<type>database</type>
+		<csh_table></csh_table>
+		<fileId>EXT:mksearch/locallang.xml</fileId>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="label_search_foundresults">Number of search results found:</label>
+			<label index="label_search_term_was">term was:</label>
+			<label index="label_search_searchterm">Search for:</label>
+			<label index="label_search_options">Options:</label>
+			<label index="label_search_options_standard">Standard search:</label>
+			<label index="label_search_options_standard_label">Use this type for standard search options.</label>
+			<label index="label_search_options_standard_hint">Note: You may prepend individual words with a "-" to exclude documents containing this word.</label>
+			
+			<label index="label_search_options_standard_combination">Combination:</label>
+			<label index="label_search_options_standard_combination_none">None (same as or at the moment)</label>
+			<label index="label_search_options_standard_combination_free">Free syntax</label>
+			<label index="label_search_options_standard_combination_or">Find either word</label>
+			<label index="label_search_options_standard_combination_and">Find all words</label>
+			<label index="label_search_options_standard_combination_exact">Find exact phrase</label>
+
+			<label index="label_search_options_standard_others">Others:</label>
+			<label index="label_search_options_standard_others_fuzzy">Fuzzy search</label>
+			<label index="label_search_options_standard_others_fuzzy_lucene">Fuzzy search (not yet implemented!)</label>
+			
+			<label index="label_search_options_standard_others_contenttypes">Search within content types only (not yet implemented!)</label>
+
+			
+			<label index="label_search_options_advanced">Advanced search:</label>
+			<label index="label_search_options_advanced_label">Use this type if you want to form complex (boolean) searches.</label>
+
+			<label index="label_search_submit">Submit search</label>
+			<label index="label_search_yoursearchtermwas">Your search term was:</label>
+			<label index="label_search_readmore">read more</label>
+			<label index="label_search_noresultsfound"><![CDATA[<div class="noResultsFound">Your search did not return any results.</div>]]></label>
+			
+			<label index="label_search_reset">reset Search</label>
+			
+		</languageKey>
+		<languageKey index="de" type="array">
+			<label index="label_search_foundresults">Anzahl der gefundenen Ergebnisse:</label>
+			<label index="label_search_term_was">Suchbegriff war:</label>
+			<label index="label_search_searchterm">Suche</label>
+			<label index="label_search_options">Optionen:</label>
+			<label index="label_search_options_standard">Standardsuche:</label>
+			<label index="label_search_options_standard_label">Verwenden Sie diesen Typ für Standard-Suchmöglichkeiten.</label>
+			<label index="label_search_options_standard_hint">Hinweis: Sie können einzelnen Wörter ein "-" voranstellen, um Dokumente mit diesem Wort auszuschließen.</label>
+			
+			<label index="label_search_options_standard_combination">Kombination:</label>
+			<label index="label_search_options_standard_combination_none">Standard (zurzeit das selbe wie or)</label>
+			<label index="label_search_options_standard_combination_free">Freihe Syntax</label>
+			<label index="label_search_options_standard_combination_or">Einzelne Wörter suchen</label>
+			<label index="label_search_options_standard_combination_and">Alle Wörter suchen</label>
+			<label index="label_search_options_standard_combination_exact">Den exakten Ausdruck</label>
+
+			<label index="label_search_options_standard_others">Andere:</label>
+			<label index="label_search_options_standard_others_fuzzy">Fuzzy-Suche</label>
+			<label index="label_search_options_standard_others_fuzzy_lucene">Fuzzy-Suche (noch nicht implementiert!)</label>
+			
+			<label index="label_search_options_standard_others_contenttypes">Suche innerhalb der Content-Typen (noch nicht  implementiert!)</label>
+
+			
+			<label index="label_search_options_advanced">Erweiterte Suche:</label>
+			<label index="label_search_options_advanced_label">Verwenden Sie diesen Typ, wenn Sie komplexe (boolean) sucht Form wünschen.</label>
+
+			<label index="label_search_submit">Suche abschicken</label>
+			<label index="label_search_yoursearchtermwas">Ihr Suchbegriff war:</label>
+			<label index="label_search_readmore">mehr lesen</label>
+			<label index="label_search_noresultsfound"><![CDATA[<div class="noResultsFound">Ihre Suche brachte keine Ergebnisse.</div>]]></label>
+			
+			<label index="label_search_reset">Suche zurücksetzen</label>
+			
+		</languageKey>
+	</data>
+</T3locallang>

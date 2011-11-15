@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Product list template - you should NEVER see this!</title>
+</head>
+<body>
+
+###ITEM###
+<h2 class="searchResultTitle">Seminar</h2>
+<b><div>###ITEM_REALTITLE_S### for ###ITEM_TARGETGROUPS_TITLE_MS###</div></b>
+<div class="searchResultLink">###ITEM_SHOWLINK######LABEL_SEARCH_READMORE######ITEM_SHOWLINK###</div>
+<br/>
+###ITEM###
+
+<!-- 
+This is a very simple default template for displaying a search result.
+No additional data is displayed - just the link to the actual found page. 
+
+You may extend this template to display additional info by cloning it into your own extension
+and configuring the mksearch plugin typoscript (plugin.tx_mksearch.setup.[your.content_type])
+to your customized marker class and / or html template. 
+
+Remember to insert a link to the search result like above which is rendered through 
+tx_rnbase_util_BaseMarker::initLink().
+Also don't forget to set the link pid via plugin.tx_mksearch.search.render.[your.content_type].links.show 
+
+You are encouraged to comply with the above standard link text in order to enable a smooth, homogeneous look
+of the search result list. Please diverge from that standard only if you have good reasons to do so :-) 
+-->
+
+</body>
+</html>

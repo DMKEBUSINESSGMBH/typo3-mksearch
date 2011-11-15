@@ -1,0 +1,208 @@
+<?php
+/***************************************************************
+ *  Copyright notice
+ *
+ *  (c) 2011 Michael Wagner <michael.wagner@das-medienkombinat.de>
+ *  All rights reserved
+ *
+ *  This script is part of the TYPO3 project. The TYPO3 project is
+ *  free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  The GNU General Public License can be found at
+ *  http://www.gnu.org/copyleft/gpl.html.
+ *
+ *  This script is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  This copyright notice MUST APPEAR in all copies of the script!
+ ***************************************************************/
+
+require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+tx_rnbase::load('tx_rnbase_mod_BaseModFunc');
+tx_rnbase::load('tx_rnbase_util_Templates');
+tx_rnbase::load('tx_mksearch_util_ServiceRegistry');
+tx_rnbase::load('tx_mksearch_mod1_util_IndexStatusHandler');
+
+
+/**
+ * Mksearch backend module 
+ */
+class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc {
+
+	/**
+	 * Return function id (used in page typoscript etc.)
+	 *
+	 * @return string
+	 */
+	protected function getFuncId() {
+		return 'indizeindizes';
+	}
+	
+	/**
+	 * Return the actual html content
+	 * 
+	 * Actually, just the list view of the defined storage folder
+	 * is displayed within an iframe.
+	 * 
+	 * @param string $template
+	 * @param tx_rnbase_configurations $configurations
+	 * @param tx_rnbase_util_FormatUtil $formatter
+	 * @param tx_rnbase_util_FormTool $formTool
+	 * @return string
+	 */
+	protected function getContent($template, &$configurations, &$formatter, $formTool) {
+		$status = array();
+		if(!$GLOBALS['BE_USER']->isAdmin())
+			return '';
+
+		$oIntIndexSrv = tx_mksearch_util_ServiceRegistry::getIntIndexService();
+			
+		if(t3lib_div::_GP('updateIndex')) {
+			$status[] = $this->handleReset($oIntIndexSrv, $configurations);
+			$status[] = $this->handleClear($oIntIndexSrv, $configurations);
+			$status[] = $this->handleTrigger($oIntIndexSrv, $configurations);
+		}
+		
+		$markerArray = array();
+		$bIsStatus = count($status=array_filter($status)) ? true : false;
+		$markerArray['###ISSTATUS###'] = $bIsStatus ? 'block' : 'none';
+		$markerArray['###STATUS###'] = $bIsStatus ? implode('<br />', $status) : '';
+		$markerArray['###QUEUESIZE###'] = $oIntIndexSrv->countItemsInQueue();
+		$indexItems = intval(t3lib_div::_GP('triggerIndexingQueueCount'));
+		$markerArray['###INDEXITEMS###'] = $indexItems > 0 ? $indexItems : 100;
+
+		$markerArray['###CORE_STATUS###'] = tx_mksearch_mod1_util_IndexStatusHandler::getInstance()->handleRequest();
+
+		$this->showTables($template, $configurations, $formTool, $markerArray, $oIntIndexSrv);
+		
+		$out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray);
+		
+		return $out;
+	}
+	/**
+	 * Returns search form
+	 * @param 	string $template
+	 * @param 	tx_rnbase_configurations $configurations
+	 * @param 	tx_rnbase_util_FormTool $formTool
+	 * @param 	array $markerArray
+	 * @param 	tx_mksearch_service_internal_Index $oIntIndexSrv
+	 */
+	protected function showTables($template, $configurations, $formTool, &$markerArray, $oIntIndexSrv) {
+		tx_rnbase::load('tx_mksearch_util_Config');
+		$aIndexers = tx_mksearch_util_Config::getIndexers();
+		$aIndices = $oIntIndexSrv->findAll();
+
+		$aDefinedTables = array();
+		
+		foreach($aIndices as $oIndex){
+			foreach($aIndexers as $indexer){
+				if(!$oIntIndexSrv->isIndexerDefined($oIndex, $indexer))
+					continue;
+
+				list($extKey, $contentType) = $indexer->getContentType();
+				$aTables = tx_mksearch_util_Config::getDatabaseTablesForIndexer($extKey, $contentType);
+				$aRecord = array();
+				$aRecord['name'] = array_shift($aTables);
+				// Die Tabelle nur einmal darstellen, auch wenn Sie in mehreren Indexern definiert ist.
+				if(!in_array($aRecord, $aDefinedTables)) {
+					$aDefinedTables[] = $aRecord;
+				}
+			}
+		}
+		
+		$decor = tx_rnbase::makeInstance('tx_mksearch_mod1_decorator_Indizes', $this->getModule());
+		$columns = array(
+			'name' => array('title' => 'label_table_name', 'decorator' => $decor),
+			'queuecount' => array('title' => 'label_table_queuecount', 'decorator' => $decor),
+			'clear' => array('title' => 'label_table_clear', 'decorator' => $decor),
+			'reset' => array('title' => 'label_table_reset', 'decorator' => $decor),
+		);
+
+		if($count = count($aDefinedTables)) {
+			tx_rnbase::load('tx_rnbase_mod_Tables');
+			$arr = tx_rnbase_mod_Tables::prepareTable($aDefinedTables, $columns, $this->formTool, $this->options);
+			$content = $this->mod->doc->table($arr[0]);
+		}
+		else {
+	  		$content = '<p><strong>'.$configurations->getLL('label_no_indexers_found').'</strong></p><br/>';
+	  		$count = '';
+		}
+		
+		$markerArray['###TABLES_TABLE###'] = $content;
+		$markerArray['###TABLES_COUNT###'] = count($aDefinedTables);
+	}
+
+	/**
+	 * Handle reset command from request
+	 * @param tx_mksearch_service_internal_Index $oIntIndexSrv
+	 * @param 	tx_rnbase_configurations $configurations
+	 * @return string
+	 */
+	private function handleClear($oIntIndexSrv, &$configurations) {
+		$aTables = t3lib_div::_GP('clearTables');
+		if (!(is_array($aTables) && (!empty($aTables)))) return '';
+	
+		$status = $configurations->getLL('label_queue_cleared');
+		foreach ($aTables as $sTable) {
+			$oIntIndexSrv->clearIndexingQueueForTable($sTable);
+		}
+
+		$status .= '<ul><li>'.implode('</li><li/>', $aTables).'</li></ul>';
+		return $status;
+	}
+
+	/**
+	 * Handle reset command from request
+	 * @param tx_mksearch_service_internal_Index $oIntIndexSrv
+	 * @param 	tx_rnbase_configurations $configurations
+	 * @return string
+	 */
+	private function handleReset($oIntIndexSrv, &$configurations) {
+		$aTables = t3lib_div::_GP('resetTables');
+		if (!(is_array($aTables) && (!empty($aTables)))) return '';
+
+		$status = $configurations->getLL('label_queue_reseted');
+		foreach ($aTables as $sTable) {
+			$oIntIndexSrv->resetIndexingQueueForTable($sTable, array());
+		}
+		
+		$status .= '<ul><li>'.implode('</li><li/>', $aTables).'</li></ul>';
+		return $status;
+	}
+	
+	/**
+	 * Handle trigger command from request
+	 * @param tx_mksearch_service_internal_Index $oIntIndexSrv
+	 * @param 	tx_rnbase_configurations $configurations
+	 * @return string
+	 */
+	private function handleTrigger($oIntIndexSrv, &$configurations) {
+		$triggerIndexingQueue = t3lib_div::_GP('triggerIndexingQueue');
+		if (!$triggerIndexingQueue) return '';
+
+		$status = '';
+		$indexItems = intval(t3lib_div::_GP('triggerIndexingQueueCount'));
+		$rows = $oIntIndexSrv->triggerQueueIndexing($indexItems > 0 ? $indexItems : 100);
+		if ($rows) {
+			$status .= $configurations->getLL('label_queue_indexed');
+			// Komplette Anzahl ausgeben.
+			$status .= ' '.count(call_user_func_array('array_merge', array_values($rows)));
+			// Anzahl einzelner Tabellen ausgeben
+			foreach($rows as $table => $row) {
+				$rows[$table] = $table.': '.count($row);
+			}
+			$status .= '<ul><li>'.implode('</li><li/>', array_values($rows)).'</li></ul>';
+		} else {
+			$status .= $configurations->getLL('label_queue_indexed_empty');
+		}
+		return $status;
+	}
+}
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/class.tx_mksearch_mod1_IndizeIndizes.php'])	{
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/class.tx_mksearch_mod1_IndizeIndizes.php']);
+}

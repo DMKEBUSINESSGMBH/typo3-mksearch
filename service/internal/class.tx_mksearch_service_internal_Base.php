@@ -1,0 +1,113 @@
+<?php
+/***************************************************************
+*  Copyright notice
+*
+*  (c) 2010 das Medienkombinat
+*  All rights reserved
+*
+*  This script is part of the TYPO3 project. The TYPO3 project is
+*  free software; you can redistribute it and/or modify
+*  it under the terms of the GNU General Public License as published by
+*  the Free Software Foundation; either version 2 of the License, or
+*  (at your option) any later version.
+*
+*  The GNU General Public License can be found at
+*  http://www.gnu.org/copyleft/gpl.html.
+*
+*  This script is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU General Public License for more details.
+*
+*  This copyright notice MUST APPEAR in all copies of the script!
+***************************************************************/
+
+require_once(PATH_t3lib.'class.t3lib_svbase.php');
+require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+tx_rnbase::load('tx_rnbase_util_SearchBase');
+
+/**
+ * Service for accessing models from database
+ */
+class tx_mksearch_service_internal_Base extends t3lib_svbase {
+	
+	/**
+	 * Search class - set this to the search class name 
+	 *
+	 * @var string
+	 */
+	protected $searchClass;
+
+	/**
+	 * Search database
+	 *
+	 * @param array $fields
+	 * @param array $options
+	 * @return array[tx_mksearch_model_internal_Index]
+	 */
+	public function search($fields, $options) {
+		$searcher = tx_rnbase_util_SearchBase::getInstance($this->searchClass);
+		return $searcher->search($fields, $options);
+	}
+	/**
+	 * Check if a indexer is defined to index data into a given core.
+	 * @param tx_mksearch_model_internal_Index $core
+	 * @param tx_mksearch_interface_Indexer $indexer keys: extKey and contentType
+	 * @return boolean
+	 */
+	public function isIndexerDefined($core, tx_mksearch_interface_Indexer $indexer) {
+		$ret = false;
+		$cfg = $core->getIndexerOptions();
+		$indexerType = $indexer->getContentType();
+		list($extKey, $contentType) = $indexer->getContentType();
+		$indexerData = array('extKey'=>$extKey, 'contentType'=>$contentType);
+
+
+		if(array_key_exists($indexerData['extKey'].'.', $cfg)) {
+			if(array_key_exists($indexerData['contentType'].'.', $cfg[$indexerData['extKey'].'.'])) {
+				$ret = true;
+			}
+		}
+		return $ret;
+	}
+	/**
+	 * Search database for all configurated Indices
+	 *
+	 * @param array $fields
+	 * @param array $options
+	 * @return array[tx_mksearch_model_internal_Index]
+	 */
+	public function findAll() {
+		$fields = array();
+		$options = array();
+		//$options['debug'] = 1;
+		$options['enablefieldsfe'] = 1;
+		return $this->search($fields, $options);
+	}
+	
+	/**
+	 * Get model from database by its uid
+	 *
+	 * @param array $fields
+	 * @param array $options
+	 * @return tx_mksearch_model_*
+	 */
+	public function get($uid) {
+		$searcher = tx_rnbase_util_SearchBase::getInstance($this->searchClass);
+		return tx_rnbase::makeInstance($searcher->getWrapperClass(), $uid);
+	}
+	
+//	/**
+//	 * Pass through search class's table mappings
+//	 *
+//	 * @return array
+//	 */
+//	public function getTableMappings() {
+//		$searcher = tx_rnbase_util_SearchBase::getInstance($this->searchClass);
+//		return $searcher->getTableMappings();
+//	}
+}
+
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/service/internal/class.tx_mksearch_service_internal_Base.php']) {
+  include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/service/internal/class.tx_mksearch_service_internal_Base.php']);
+}

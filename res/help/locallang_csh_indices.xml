@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>database</type>
+		<description>Language labels for the 'tx_mksearch_types' context sensitive help (CSH)</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="name.description">If you use Solr you have to set the name by following schema: 'host,port,core' e.g. 'localhost,8983,/solr/core-name'</label>
+			<label index="name.details"></label>
+		</languageKey>
+		<languageKey index="de" type="array">
+			<label index="name.description">Wenn Sie Solr nutzen muss der Name nach folgendem Schema angegeben werden: 'Host,Port,Core' z.B.: 'localhost,8983,/solr/core-name'</label>
+			<label index="name.details"></label>
+		</languageKey>
+	</data>
+</T3locallang>

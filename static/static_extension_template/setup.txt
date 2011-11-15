@@ -1,0 +1,528 @@
+includeLibs.tx_rnbase_controller = EXT:rn_base/class.tx_rnbase_controller.php
+includeLibs.tx_mksearch_util_UserFunc = EXT:mksearch/util/class.tx_mksearch_util_UserFunc.php
+
+plugin.tx_mksearch = USER_INT
+plugin.tx_mksearch {
+	# flexform			= flexform_main.xml
+	userFunc			= tx_rnbase_controller->main
+	defaultAction		= tx_mksearch_action_Search
+	qualifier			= mksearch
+	templatePath		= EXT:mksearch/templates
+	locallangFilename	= EXT:mksearch/locallang.xml
+}
+
+tt_content.list.20.tx_mksearch =< plugin.tx_mksearch
+
+
+# Default page browser config
+lib.mksearch.pagebrowser {
+  limit = 50
+  maxPages = 11
+  pagefloat = CENTER
+  hideIfSinglePage = 1
+  link.useKeepVars = 1
+}
+
+# Filter for Lucene search
+# TODO: code review!
+lib.mksearch.filter {
+	# Default filter which provides a standard form
+	# to receive a search term
+	searchForm = tx_mksearch_filter_SearchForm
+	searchForm {
+		# Configuration of the filter itself
+		config {
+			# form marker in main search template
+			# 	>>>	marker "SEARCH_FORM" is already defined
+			# 		in the default main search template! 
+			marker = SEARCH_FORM
+			# template containing the actual form
+			template = EXT:mksearch/templates/searchForm.html
+			# subpart in the form template
+			subpart = OLDFORM
+			links {
+				action.pid = 0
+			}
+		}
+		# Configuration of form data used for displaying the form
+		form {
+			searchterm.stdWrap.htmlSpecialChars = 1
+			dcsearchtermheading = TEXT
+			dcsearchtermheading {
+				wrap = <h1>###LABEL_search_yoursearchtermwas### <em>|</em></h1>
+				required = 1
+				field = searchterm
+				stdWrap.htmlSpecialChars = 1
+			}
+		}
+	}
+	
+	# Alternative filter which receives the search term from the
+	# HTTP referer URL. This could be used to search our own site
+	# for the search term the user just entered on Google website.
+	searchByReferer = tx_mksearch_filter_SearchByReferer
+	searchByReferer {
+		referers {
+			google {
+				# Which URL? All URLs ending with "google.xx[x]"
+				urlRegEx = /\.google\.[a-z]{2,3}\//i
+				# How to find the search term within the URL? Here it's the "q" parameter.
+				# The term within the (first and only) brackets () is used.
+				searchTermRegEx = /[?&]q=([^&]*)/
+				# How to separate words within the url encoded search term?
+				searchTermDelimiterRegEx = /\++/
+				# Type of logical conjunction in our own page search: "or" [default] or "and"
+				searchTermOperator = or
+			}
+			yahoo {
+				urlRegEx = /\.yahoo\.[a-z]{2,3}\//i
+				searchTermRegEx = /[?&]p=([^&]*)/
+				searchTermDelimiterRegEx = /\++/
+				searchTermOperator = or
+			}
+		}
+	}
+}
+
+lib.mksearch.defaultsolrfilter {
+	### wird der DisMaxRequestHandler genutzt? wenn ja muss auch params.mksearch.term. angepasst werden!
+	useDisMax = 0
+	
+	options.limit = 10
+	template {
+		file = EXT:mksearch/templates/searchForm.html
+		subpart = ###SIMPLE###
+	}
+	form {
+		### beispiel für das verändern des checked="checked"
+		#combination_none = TEXT
+		#combination_none.value = selected="selected"
+		#combination_none.fieldRequired = combination_none
+	}
+	# Die hier konfigurierten Parameter werden als Marker im Term-String verwendet
+	# Es sind verschiedene Extensions möglich
+	params.mksearch {
+		term = TEXT
+		term {
+			field = term
+			### der Wrap muss beim DisMaxRequestHandler geleert werden!
+			wrap = AND text:|
+			fieldRequired = term
+			required = term
+			preUserFunc = tx_mksearch_util_UserFunc->searchSolrOptions
+			preUserFunc {
+				### wo steckt der combination parameter?
+				qualifier = mksearch
+				### wird der DisMaxRequestHandler genutzt?
+				dismax = 0
+				## in Anführungszeichen setzen?
+				quote = 1
+				### for fuzzy search!
+				fuzzySlop = 0.2
+				### remove solr control characters?
+				sanitize = 1
+				### wie sollen die einzelnen wörter im suchterm verbunden werden
+				combination = or
+			}
+		}
+	}
+	# So wurden auch alle Parameter von tt_news ausgelesen
+	#params.tt_news {
+	#}
+	fields {
+		# Die Marker haben das Format ###PARAM_EXTQUALIFIER_PARAMNAME###
+		### beim DisMaxRequestHandler darf hier nur ###PARAM_MKSEARCH_TERM### stehen!
+		term = contentType:* ###PARAM_MKSEARCH_TERM###
+	}
+	
+	### wenn Facetten genutzt werden und plugin.tx_mksearch.searchsolr.facet.links.show.excludeFieldName = 1
+	### gesetzt ist, dann kann hier das Solr Feld für die Facetten angegeben werden. Es wird dann nachträglich
+	### im defaultFilter vorrangestellt wenn ein fq Parameter gesetzt wurde.
+	fqField = 
+}
+
+plugin.tx_mksearch {
+	# lucene search	
+	search {
+		# Filter configuration - default filter is the form filter
+		filter < lib.mksearch.filter.searchForm
+		
+		# Alternative filter used for doing a search based on HTTP referer
+		# e.g. to search the recent Google search phrase within the page
+		# When this filter is used, another template without the 
+		# ###SEARCH_FORM### marker should be used.
+		# filter < lib.mksearch.filter.searchByReferer
+		
+		# For testing and debugging purposes the http referer can be set:
+		# filter.refererDebug = http://www.google.de/search?hl=de&q=Some+test+search+term
+		
+		# Name of label for the "no results found" message
+		listinfo.llkeyEmpty = label_search_noresultsfound
+		
+		# Only the searchform was displayed, no search was done
+		formOnly = 0
+
+		# Konfig für die Darstellung des Treffers über den allgemeinen Marker
+		hit {
+		  # Hier wird die Config für die jeweiligen Datentypen eingebunden
+			extrainfo =< lib.mksearch.extrainfo 
+		}
+
+####
+# Ab hier wird der Code für diesen View nicht mehr verwendet!!
+# Nach Übernahme und erfolgreichem Test bitte löschen!
+####
+/*
+		# Default configuration for fields
+		default {
+			abstract {
+				wrap = <div class="searchResultAbstract">|</div>
+				required = 1
+				stdWrap.htmlSpecialChars = 1
+			}
+			extrainfo {
+				wrap = <div class="searchResultExtraInfo">|</div>
+				required = 1
+			}
+		}
+		
+		# Configuration for rendered fields for each content type
+		render {
+			# Content type "core.page" 
+			# 1.) OBLIGATORY: import default values
+			core.page < plugin.tx_mksearch.search.default
+			# 2.) OPTIONALLY: make your specific configurations
+			core.page {
+				# You might set own values for some fields, or even delete their display,
+				# as your template has an adequate substitute, e. g.:
+				# abstract.field = [some field]
+				
+				# Usually just configure the pid of result page statically:
+				# links.show {
+					# The pid usually will be defined in the backend
+					# pid = [some page id]
+					
+					# IMPORTANT: Define the link qualifier with the key of the extension
+					# which is responsible for displaying the respective search result! 
+					# qualifier = [extkey]
+					
+					# Optionally, when the default search result marker class is used,
+					# the name of the link parameter which holds the record uid within the link
+					# can be changed. By default this is the search result's content type,
+					# e.g. "tt_content" in this case. 
+					# paramName = [some other parameter name]
+					
+					# Optionally, additional parameters can be defined.
+					# These however are not entirely free, but are subvalues
+					# of the parameter named by .qualifier
+					# additionalParams {
+					#	key = value
+					# }
+					
+				# }
+				
+				# Special case for core.page: Dynamically assigned pid
+				links.show.pid = TEXT
+				links.show.pid.data = register : mksearch.core.page
+			}
+			
+			# Content type "core.tt_content" 
+			# 1.) OBLIGATORY: import default values
+			core.tt_content < plugin.tx_mksearch.search.default
+			# 2.) OPTIONALLY: make your specific configurations
+			core.tt_content {
+				links.show.pid = TEXT
+				links.show.pid.data = register : mksearch.core.tt_content
+			}
+			
+			# Content type "tt_news.news"
+			tt_news.news < plugin.tx_mksearch.search.default
+			tt_news.news {
+				links.show {
+					# PID of single news page
+					pid = 0
+					qualifier = tx_ttnews
+					paramName = tt_news
+					# Additional parameters
+					additionalParams {
+						# PID of news list page
+						backPid = 0
+					}
+				}
+			}
+			# Content type "tt_address.address"
+			tt_address.address < plugin.tx_mksearch.search.default
+			tt_address.address {
+				links.show.pid = 0
+			}
+		}
+		
+		# Configuration of search result displaying ui for each content type
+		setup {
+			# Default configuration which can be used without any changes
+			# if no special marker or template things have to be done
+			default { 
+				# Class responsible for displaying additional search result info - just the default one
+				markerClass = tx_mksearch_marker_SearchResultSimple
+				
+				# Template to be used for rendering extra info - again just the default one
+				template = EXT:mksearch/templates/searchResultSimple.html
+				
+				# Subpart name containing the particular markup within the template
+				# This key is optional - fallback is "ITEM"
+				subpartName = ITEM
+			}
+		
+			# Content type "core.page": Use an own marker class, but stay with the default template
+			core.page < .default
+			core.page.markerClass = tx_mksearch_marker_CorePage
+			
+			# Content type "core.tt_content": Use an own marker class, but stay with the default template
+			core.tt_content < .default
+			core.tt_content.markerClass = tx_mksearch_marker_CoreTtContent
+			
+			# Content type "tt_news.news": Use default marker class and default template
+			tt_news.news < .default
+			
+			# Content type "tt_address.address": Use default marker class and default template
+			tt_address.address < .default
+		}
+*/
+####
+# Ende veralteter Code
+####
+
+	}
+
+	searchsolr {
+		# soll gesucht oder nur die Templates geparsed werden?
+		nosearch = 0
+		
+		# shall we prepare everything for the autocomplete feature? (including js etc)
+		# dont forget to set the extension config for updating the autocomplete index
+		# after each indexing
+		autocomplete{
+			enable = 0
+			# include the javascript files?
+			includeJquery = 0
+			includeJqueryUiCore = 0
+			includeJqueryUiAutocomplete = 0
+			minLength = 2
+			### should be an id. for globaly use '[name="mksearch[term]"]'
+			elementSelector = "#mksearch_term"
+			actionLink {
+				# Additional parameters
+				# type should be the page type containing the search action
+				# qt is our request handler
+				useKeepVars = 1
+				useKeepVars.add = qt= , ::type=540
+				absurl = 1
+				noHash = 1
+			}
+		}
+		
+		filter = tx_mksearch_filter_SolrBase
+		# Beispiel-Config für den Solr-Filter
+		filter.default =< lib.mksearch.defaultsolrfilter
+		filter.dismax =< lib.mksearch.defaultsolrfilter
+		filter.dismax {
+			useDisMax = 1
+			
+			### setzt den mm (Min-should-match) Parameter ###
+			### none wird auch als default genutzt
+			###default müssen 100% der Suchparameter vorkommen
+			mm.none = 80%
+			## bei einer or suche brauchen nur noch 20% vorkommen
+			mm.or = 20%
+			
+			params.mksearch {
+				term = TEXT
+				term {
+					wrap = 
+					preUserFunc.dismax = 1
+				}
+			}
+			fields {
+				term = ###PARAM_MKSEARCH_TERM###
+			}
+		}
+		hit {
+			pagebrowser =< lib.mksearch.pagebrowser
+			extrainfo =< lib.mksearch.extrainfo 
+			totalline.startValue = 1
+			# TODO: Für Highlighting testen
+			content.override.cObject = TEXT
+			content.override.cObject.field = content_hl
+		}
+		
+		facet{
+			markerClass = tx_mksearch_marker_Facet
+			links{
+				### bestehende Suche soll eingeschränkt werden
+				### dabei wird direkt mksearch[fq] gesetzt
+				show{
+					useKeepVars = 1
+					### shall the field name not be taken into the link so
+					### we don't have something like mksearch[fq]=contentType:media
+					### but something like mksearch[fq]=media. This is strongly
+					### recommended in a live environment as nobody needs to know
+					### the name of the solr fields. The field name should be defined
+					### in the default filter config (fqField) so it can be added
+					excludeFieldName = 0
+				}
+				### Einschränkung rückgängig machen
+				reset.useKeepVars = 1
+				reset.useKeepVars.deny = fq
+			}
+		}
+		
+		### aktueller Suchbegriff
+		plugin.dcsearchterm = TEXT
+		plugin.dcsearchterm {
+			data = GPvar:mksearch|term
+			stdWrap.htmlSpecialChars = 1
+			### nur wenn nicht leer ausgeben
+			required = 1
+			wrap = ###LABEL_search_term_was### "|"
+		}
+	}
+}
+
+
+###
+# Konfiguration für Ausgabe verschiedener Treffertypen
+# Drittextensions sollten ihre Angaben in diesem lib-Objekt hinzufügen.
+###
+lib.mksearch.extrainfo {
+	# In Default werden die Basisangeben defniert. Diese werden dann aber meistens überschrieben.
+	default {
+		# Class responsible for displaying additional search result info - just the default one
+		markerClass = tx_mksearch_marker_SearchResultSimple
+				
+		# Template to be used for rendering extra info - again just the default one
+		template = EXT:mksearch/templates/searchResultSimple.html
+				
+		# Subpart name containing the particular markup within the template
+		# This key is optional - fallback is "ITEM"
+		subpartName = ITEM
+		hit {
+			abstract {
+				wrap = <div class="searchResultAbstract">|</div>
+				required = 1
+				stdWrap.htmlSpecialChars = 1
+			}
+			extrainfo {
+				wrap = <div class="searchResultExtraInfo">|</div>
+				required = 1
+			}
+		}
+	}
+
+	core.page < .default
+	core.page {
+		markerClass = tx_mksearch_marker_CorePage
+		hit {
+			# Special case for core.page: Dynamically assigned pid
+			links.show.pid = TEXT
+			links.show.pid.data = register : mksearch.core.page
+		}
+	}
+
+	core.tt_content < .default
+	core.tt_content {
+		markerClass = tx_mksearch_marker_CoreTtContent
+		subpartName = TTCONTENT
+		hit {
+			links.show.pid = TEXT
+			links.show.pid.data = register : mksearch.core.tt_content
+		}
+	}
+
+
+	# Content type "tt_news.news"
+	tt_news.news < .default
+	tt_news.news {
+		markerClass = tx_mksearch_marker_CoreTtNews
+		hit {
+			links.show {
+				# PID of single news page
+				pid = 0
+				qualifier = tx_ttnews
+				paramName = tt_news
+				# Additional parameters
+				additionalParams {
+					# PID of news list page
+					backPid = 0
+				}
+			}
+			datetime_i.strftime= %d.%m.%y
+		}
+	}
+	# Content type "tt_address.address"
+	tt_address.address < .default
+	tt_address.address {
+		### TT_ADDRESS_ADDRESS
+		subpartName = 
+		hit {
+			links.show.pid = 0
+			www_s.typolink = 1
+			www_s.typolink.parameter.field = www_s
+			email_s.typolink = 1
+			email_s.typolink.parameter.field = email_s
+		}
+	}
+
+	# Content type "dam.media"
+	dam.media < .default
+	dam.media {
+		hit {
+			links{
+				show.pid.cObject = TEXT
+				show.pid.cObject.field = file_relpath_s
+				show.atagparams.rel = external
+			}
+		}
+	}
+	
+	# Content type "irfaq.question"
+	irfaq.question < .default
+	irfaq.question{
+		template = EXT:mksearch/templates/searchResultIrfaq.html
+	}
+	
+	# Content type "seminars.seminar"
+	seminars.seminar < .default
+	seminars.seminar{
+		template = EXT:mksearch/templates/searchResultSeminar.html
+		hit {
+			links.show {
+				### pid for the single view of a seminar
+				pid = 0
+				qualifier = tx_seminars_pi1
+				paramName = showUid
+			}
+		}
+	}
+}
+
+### our own page type for the autocomplete plugin so we dont have to init
+### the complete TYPO3
+mksearchAjaxPage = PAGE
+mksearchAjaxPage {
+  typeNum=540
+  config.disableAllHeaderCode = 1
+  config.metaCharset = utf-8
+  config.additionalHeaders = Content-Type: text/plain; charset=utf-8
+  config.xhtml_cleaning = 0
+  config.admPanel = 0
+  config.sendNoCacheHeaders = 1
+  config.no_cache = 1
+
+	10 =< plugin.tx_mksearch
+	10 {
+		action = tx_mksearch_action_SearchSolr
+		searchsolr.filter = tx_mksearch_filter_SolrAutocomplete
+		searchsolr.filter.default.force = 1
+		searchsolr.filter.dismax.force = 1
+	}
+}
