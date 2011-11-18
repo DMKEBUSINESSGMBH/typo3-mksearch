@@ -57,11 +57,10 @@ class tx_mksearch_filter_SearchForm extends tx_rnbase_filter_BaseFilter implemen
 	 * @param tx_rnbase_parameters $parameters
 	 * @param tx_rnbase_configurations $configurations
 	 * @param string $confId
-	 * @return bool	Should subsequent query be executed at all? 
-	 * 
+	 * @return bool	Should subsequent query be executed at all?
+	 *
 	 */
 	protected function initFilter(&$fields, &$options, &$parameters, &$configurations, $confId) {
-		
 		// Only the searchform was displayed
 		if($configurations->get('formOnly'))
 			return false;
@@ -88,7 +87,7 @@ class tx_mksearch_filter_SearchForm extends tx_rnbase_filter_BaseFilter implemen
 
 			if (!isset($ooptions['combination']) or $ooptions['combination'] == 'or' or $ooptions['combination'] == 'and') {
 				// Simple or / and combination
-				$sign = $ooptions['combination'] == 'or' ? null : true; 
+				$sign = $ooptions['combination'] == 'or' ? null : true;
 				foreach (explode(' ', $term) as $t) {
 					// Process only non-empty tokens
 					if (strlen($t) > 1 or strlen($t) > 0 and $t[0] != '-') {
@@ -100,7 +99,7 @@ class tx_mksearch_filter_SearchForm extends tx_rnbase_filter_BaseFilter implemen
 			} else {
 				// Phrase
 				$fields['__default__'][] = array('term' => $term, 'phrase' => true);
-			} 		
+			}
 
 			// @todo: Restrict content types - according to search form options
 		}
@@ -147,14 +146,14 @@ class tx_mksearch_filter_SearchForm extends tx_rnbase_filter_BaseFilter implemen
 			} else {
 				$formTxt = '<!-- NO FORM TEMPLATE FOUND: '.$confId.'.template'.' -->';
 			}
-			// Insert form template into main template			
+			// Insert form template into main template
 			$template = str_replace('###'.$conf['config.']['marker'].'###', $formTxt, $template);
 		}
 		return $template;
 	}
 	
 	/**
-	 * Get a message string for empty list. This is an language string. The key is 
+	 * Get a message string for empty list. This is an language string. The key is
 	 * taken from ts-config: [item].listinfo.llkeyEmpty
 	 *
 	 * @param array_object $viewData
@@ -163,8 +162,8 @@ class tx_mksearch_filter_SearchForm extends tx_rnbase_filter_BaseFilter implemen
 	 */
 	function getEmptyListMessage($confId, &$viewData, &$configurations) {
 		if ($this->isSearch) {
-			$emptyMsg = $configurations->getLL($configurations->get($confId.'listinfo.llkeyEmpty')); 
-			if ($configurations->get($confId.'listinfo.form')) {	
+			$emptyMsg = $configurations->getLL($configurations->get($confId.'listinfo.llkeyEmpty'));
+			if ($configurations->get($confId.'listinfo.form')) {
 				//Puts a marker for the form if needed. The Form must be after the plugin.
 				$GLOBALS[$configurations->get($confId.'listinfo.formclass')]['enabled']=1;
 			}

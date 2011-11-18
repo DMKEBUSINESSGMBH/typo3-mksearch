@@ -31,7 +31,7 @@ tx_rnbase::load('tx_mksearch_util_Misc');
 
 /**
  * Controller to show a list of modular products
- * 
+ *
  */
 class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 	
@@ -54,7 +54,7 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 		$this->prepareAutocomplete($configurations, $confId.'autocomplete.');
 		
 		//manchmal will man nur ein Suchformular auf jeder Seite im Header einbinden
-		//dieses soll dann aber nur auf eine Ergebnisseite verweisen ohne 
+		//dieses soll dann aber nur auf eine Ergebnisseite verweisen ohne
 		//selbst zu suchen
 		if($configurations->get($confId.'nosearch')) return null;
 		//else
@@ -100,7 +100,7 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 	
 	/**
 	 * Generiert den Cache-Schlüssel für die aktuelle Anfrage
-	 * 
+	 *
 	 * @param array $fields
 	 * @param array $options
 	 * @return string
@@ -116,12 +116,12 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 	
 	/**
 	 * Sucht in Solr
-	 * 
+	 *
 	 * @param array $fields
 	 * @param array $options
 	 * @param tx_rnbase_configurations $configurations
 	 * @param tx_mksearch_model_internal_Index $index
-	 * 
+	 *
 	 * @return array|false
 	 */
 	private function searchSolr(&$fields, &$options, $configurations, $index) {
@@ -152,7 +152,7 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 				$aOptions = array('ignoremaillock' => true);
 				tx_rnbase_util_Misc::sendErrorMail($addr, 'tx_mksearch_action_SearchSolr_searchSolr', $e, $aOptions);
 			}
-			tx_rnbase_util_Logger::fatal('Solr search failed with Exception!', 'mksearch', 
+			tx_rnbase_util_Logger::fatal('Solr search failed with Exception!', 'mksearch',
 				array('Exception' => $e->getMessage(), 'fields'=>$fields, 'options' => $options, 'URL'=> $lastUrl));
 			return false;
 		}
@@ -188,8 +188,8 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 			$link->destination($rows[0]['link']);
 			$link->redirect();
 //			$redirect_url = $this->pi_linkTP_keepPIvars_url(
-//				array('ux_tx_indexedsearch' => '', 'backPid' => '', 'sword' => ''), 
-//				$this->allowCaching, $this->conf['dontUseBackPid']?1:0, 
+//				array('ux_tx_indexedsearch' => '', 'backPid' => '', 'sword' => ''),
+//				$this->allowCaching, $this->conf['dontUseBackPid']?1:0,
 //				$rows[0]['link']);
 //			$redirect_url = strtok($redirect_url,'?');
 //			header('Location: '.t3lib_div::locationHeaderUrl($redirect_url));
@@ -275,14 +275,14 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 			$aJsScripts[] = 'jquery-ui-1.8.15.autocomplete.min.js';
 		
 		if (!empty($aJsScripts))
-			foreach ($aJsScripts as $sJavaScriptFilename)			
+			foreach ($aJsScripts as $sJavaScriptFilename)
 				$GLOBALS['TSFE']->additionalHeaderData[$sJavaScriptFilename] = '<script type="text/javascript" src="'.$sJavascriptsPath.$sJavaScriptFilename.'"></script>';
 				
 		//now add the autocomplete call
 		$oLink = $configurations->createLink();
 		$oLink->initByTS(
-			$configurations, 
-			$confId.'actionLink.', 
+			$configurations,
+			$confId.'actionLink.',
 			array(
 				'usedIndex' => $configurations->get($this->getConfId().'usedIndex'),
 				'ajax' => 1 //set always true

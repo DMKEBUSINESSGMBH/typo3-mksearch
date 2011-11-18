@@ -58,7 +58,7 @@ class tx_mksearch_marker_Search extends tx_rnbase_util_BaseMarker {
 	
 
 	/**
-	 * Diese Methode ersetzt im HTML-Template der Marker ###..._INFO###. Es wird dafür nach einem konfigurierten 
+	 * Diese Methode ersetzt im HTML-Template der Marker ###..._INFO###. Es wird dafür nach einem konfigurierten
 	 * Marker für den Typ des Logeintrages gesucht. Diesem wird dann ein passendes HTML-Template übergeben.
 	 *
 	 * @param string $template

@@ -71,8 +71,8 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 	 * @param tx_rnbase_parameters $parameters
 	 * @param tx_rnbase_configurations $configurations
 	 * @param string $confId
-	 * @return bool	Should subsequent query be executed at all? 
-	 * 
+	 * @return bool	Should subsequent query be executed at all?
+	 *
 	 */
 	protected function initFilter(&$fields, &$options, &$parameters, &$configurations, $confId) {
 		// Es muss ein Submit-Parameter im request liegen, damit der Filter greift
@@ -102,7 +102,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 
 	/**
 	 * Fügt den Suchstring zu dem Filter hinzu.
-	 * 
+	 *
 	 * @param 	array 						$fields
 	 * @param 	array 						$options
 	 * @param 	tx_rnbase_IParameters 		$parameters
@@ -117,7 +117,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 			foreach($extQualifiers As $qualifier) {
 				$params = $parameters->getAll($qualifier);
 				$termTemplate = $templateMarker->parseTemplate($termTemplate, $params, $configurations->getFormatter(), $confId.'params.'.$qualifier.'.', 'PARAM_'.strtoupper($qualifier));
-				//wenn keine params gesetzt sind, kommt der marker ungeparsed raus. 
+				//wenn keine params gesetzt sind, kommt der marker ungeparsed raus.
 				//also ersetzen wir diesen prinzipiell am ende durch ein leeren string.
 				$termTemplate = preg_replace('/(###PARAM_'.strtoupper($qualifier).'_)\w.*###/', '', $termTemplate);
 			}
@@ -134,7 +134,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 	 *
 	 * Die hauptaufgabe macht bereits fie userfunc in handleTerm.
 	 * @see tx_mksearch_util_SearchBuilder::searchSolrOptions
-	 * 
+	 *
 	 * @param 	array 						$fields
 	 * @param 	array 						$options
 	 * @param 	tx_rnbase_IParameters 		$parameters
@@ -152,7 +152,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 	
 	/**
 	 * Fügt eine Filter Query (Einschränkung) zu dem Filter hinzu.
-	 * 
+	 *
 	 * @param 	array 					$options
 	 * @param 	tx_rnbase_IParameters 	$parameters
 	 * @param 	tx_rnbase_configurations 	$configurations
@@ -168,7 +168,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 
 	/**
 	 * Fügt die Sortierung zu dem Filter hinzu.
-	 * 
+	 *
 	 * @param 	array 					$options
 	 * @param 	tx_rnbase_IParameters 	$parameters
 	 */
