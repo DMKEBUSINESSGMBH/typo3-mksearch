@@ -41,8 +41,8 @@ class tx_mksearch_indexer_DamMedia implements tx_mksearch_interface_Indexer {
 	 * and is used on later searches to identify the search results.
 	 * You're completely free in the range of values, but take care
 	 * as you at the same time are responsible for
-	 * uniqueness (i.e. no overlapping with other content types) and 
-	 * consistency (i.e. recognition) on indexing and searching data. 
+	 * uniqueness (i.e. no overlapping with other content types) and
+	 * consistency (i.e. recognition) on indexing and searching data.
 	 *
 	 * @return array([extension key], [key of content type])
 	 */
@@ -117,7 +117,7 @@ class tx_mksearch_indexer_DamMedia implements tx_mksearch_interface_Indexer {
 		$indexDoc->addSECommand('indexBinary', $binaryOptions);
 	}
 	/**
-	 * 
+	 *
 	 * @param table $tableName
 	 * @param array $sourceRecord
 	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
@@ -190,6 +190,16 @@ class tx_mksearch_indexer_DamMedia implements tx_mksearch_interface_Indexer {
 						break;
 					case 'byDirectory.':
 						$ret = in_array($sourceRecord['file_path'], $filterValue);
+						// wenn keine treffer gefunden wurden, prüfen wir, ob es ein unterordner davon ist.
+						if(!$ret && $filterValue['checkSubFolder']) {
+							unset($filterValue['checkSubFolder']); // brauchen wir nicht mehr
+							foreach($filterValue as $folder) {
+								if(t3lib_div::isFirstPartOfStr($sourceRecord['file_path'], $folder)){
+									$ret = true;
+									break;
+								}
+							}
+						}
 						break;
 				}
 				if(!$ret) break;
@@ -208,14 +218,14 @@ class tx_mksearch_indexer_DamMedia implements tx_mksearch_interface_Indexer {
 
 	/**
 	 * Return the default Typoscript configuration for this indexer.
-	 * 
+	 *
 	 * Note that this config is not used for actual indexing
 	 * but only serves as assistance when actually configuring an indexer!
 	 * Hence all possible configuration options should be set or
 	 * at least be mentioned to provide an easy-to-access inline documentation!
-	 * 
+	 *
 	 * @return string
-	 * 
+	 *
 	 */
 	public function getDefaultTSConfig() {
 		return <<<CFG
@@ -230,14 +240,14 @@ class tx_mksearch_indexer_DamMedia implements tx_mksearch_interface_Indexer {
 #      0 = first
 #      1 = second
 #   }
-# }		
+# }
 
 # Configuration for indexing mode: tika/solr
 # - tika means local data extraction with tika.jar (Java required on local server!)
 # - solr means data extraction on remote Solr-Server. Binary data is streamed by http.
 indexMode = solr
 # optional array of key value pairs that will be sent with the post (see Solr Cell documentation)
-#solr.indexOptions.params 
+#solr.indexOptions.params
 
 
 ### delete from or abort indexing for the record if isIndexableRecord or no record?
@@ -247,8 +257,10 @@ indexMode = solr
 filter.tx_dam {
   # a regular expression
   byDirectory = /^fileadmin\/.*\//
-  # diese ordner werden geprüft, wenn byDirectory wahr oder nicht gesetzt ist 
+  # Diese Ordner werden geprüft, wenn byDirectory wahr oder nicht gesetzt ist.
   byDirectory {
+    # Dateien dürfen auch in Unterordnern liegen.
+    checkSubFolder = 1
     #0 = fileadmin/templates/
   }
   # commaseparated strings

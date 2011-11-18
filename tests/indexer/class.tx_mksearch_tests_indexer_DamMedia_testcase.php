@@ -28,7 +28,7 @@ tx_rnbase::load('tx_mksearch_indexer_DamMedia');
 
 /**
  * Kindklasse des Indexers, um auf private Methoden zuzugreifen.
- * 
+ *
  * @author Michael Wagner <michael.wagner@das-medienkombinat.de>
  */
 class tx_mksearch_indexer_DamMediaTest extends tx_mksearch_indexer_DamMedia {
@@ -40,7 +40,7 @@ class tx_mksearch_indexer_DamMediaTest extends tx_mksearch_indexer_DamMedia {
 
 /**
  * Tests für den Dam Media Indexer
- * 
+ *
  * @author Michael Wagner <michael.wagner@das-medienkombinat.de>
  */
 class tx_mksearch_tests_indexer_DamMedia_testcase extends tx_phpunit_testcase {
@@ -134,11 +134,33 @@ class tx_mksearch_tests_indexer_DamMedia_testcase extends tx_phpunit_testcase {
 						'byDirectory.' => array('fileadmin/unterordner/', 'fileadmin/allowed/'),
 					), true
 				),
+				'Line: '. __LINE__ => array(
+					array(
+						'file_path' => 'fileadmin/unterordner/subfolder/',
+						'file_type' => 'txt'
+					), array(
+						'byFileExtension' => 'html, xhtml',
+						'byFileExtension.' => array('pdf', 'txt'),
+						'byDirectory' => '/^fileadmin\/.*\//',
+						'byDirectory.' => array('fileadmin/unterordner/', 'fileadmin/allowed/'),
+					), false
+				),
+				'Line: '. __LINE__ => array(
+					array(
+						'file_path' => 'fileadmin/unterordner/subfolder/',
+						'file_type' => 'txt'
+					), array(
+						'byFileExtension' => 'html, xhtml',
+						'byFileExtension.' => array('pdf', 'txt'),
+						'byDirectory' => '/^fileadmin\/.*\//',
+						'byDirectory.' => array('checkSubFolder' => 1,'fileadmin/unterordner/', 'fileadmin/allowed/'),
+					), true
+				),
 			);
 	}
 	
 	/**
-	 * 
+	 *
 	 */
 	public function testIsIndexableRecordWithoutDeleteIfNotIndexableOption() {
 		$indexer = new tx_mksearch_indexer_DamMedia();
@@ -157,7 +179,7 @@ class tx_mksearch_tests_indexer_DamMedia_testcase extends tx_phpunit_testcase {
 	}
 	
 	/**
-	 * 
+	 *
 	 */
 	public function testIsIndexableRecordWithDeleteIfNotIndexableOption() {
 		$indexer = new tx_mksearch_indexer_DamMedia();
