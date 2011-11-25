@@ -202,6 +202,8 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 #      1 = second
 #   }
 # }
+### delete from or abort indexing for the record if isIndexableRecord or no record?
+# deleteIfNotIndexable = 0
 CONFIG;
 	}
 	
