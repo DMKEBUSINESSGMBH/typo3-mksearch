@@ -111,7 +111,7 @@ class tx_mksearch_tests_indexer_DamMedia_testcase extends tx_phpunit_testcase {
 						'file_type' => 'pdf'
 					), array(
 						'byFileExtension.' => array('pdf', 'txt'),
-						'byDirectory.' => array('fileadmin/unterordner/', 'fileadmin/allowed/'),
+						'byDirectory.' => array('fileadmin/unterordner/' => 1, 'fileadmin/allowed/' => 1),
 					), true
 				),
 				'Line: '. __LINE__ => array(
@@ -120,7 +120,7 @@ class tx_mksearch_tests_indexer_DamMedia_testcase extends tx_phpunit_testcase {
 						'file_type' => 'pdf'
 					), array(
 						'byFileExtension' => 'pdf, html',
-						'byDirectory.' => array('fileadmin/unterordner/', 'fileadmin/allowed/'),
+						'byDirectory.' => array('fileadmin/unterordner/' => 1, 'fileadmin/allowed/' => 1),
 					), false
 				),
 				'Line: '. __LINE__ => array(
@@ -131,7 +131,7 @@ class tx_mksearch_tests_indexer_DamMedia_testcase extends tx_phpunit_testcase {
 						'byFileExtension' => 'html, xhtml',
 						'byFileExtension.' => array('pdf', 'txt'),
 						'byDirectory' => '/^fileadmin\/.*\//',
-						'byDirectory.' => array('fileadmin/unterordner/', 'fileadmin/allowed/'),
+						'byDirectory.' => array('fileadmin/unterordner/' => 1, 'fileadmin/allowed/' => 1),
 					), true
 				),
 				'Line: '. __LINE__ => array(
@@ -142,7 +142,7 @@ class tx_mksearch_tests_indexer_DamMedia_testcase extends tx_phpunit_testcase {
 						'byFileExtension' => 'html, xhtml',
 						'byFileExtension.' => array('pdf', 'txt'),
 						'byDirectory' => '/^fileadmin\/.*\//',
-						'byDirectory.' => array('fileadmin/unterordner/', 'fileadmin/allowed/'),
+						'byDirectory.' => array('fileadmin/unterordner/' => 1, 'fileadmin/allowed/' => 1),
 					), false
 				),
 				'Line: '. __LINE__ => array(
@@ -153,7 +153,7 @@ class tx_mksearch_tests_indexer_DamMedia_testcase extends tx_phpunit_testcase {
 						'byFileExtension' => 'html, xhtml',
 						'byFileExtension.' => array('pdf', 'txt'),
 						'byDirectory' => '/^fileadmin\/.*\//',
-						'byDirectory.' => array('checkSubFolder' => 1,'fileadmin/unterordner/', 'fileadmin/allowed/'),
+						'byDirectory.' => array('checkSubFolder' => 1,'fileadmin/unterordner/' => 1, 'fileadmin/allowed/' => 1),
 					), true
 				),
 			);

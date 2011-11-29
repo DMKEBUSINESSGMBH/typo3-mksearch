@@ -189,16 +189,22 @@ class tx_mksearch_indexer_DamMedia implements tx_mksearch_interface_Indexer {
 						$ret = preg_match($pattern, $directory) != 0;
 						break;
 					case 'byDirectory.':
-						$ret = in_array($sourceRecord['file_path'], $filterValue);
+						if(isset($filterValue[$sourceRecord['file_path']])) {
+							$ret = intval($filterValue[$sourceRecord['file_path']]) ? true : false;;
+						}
 						// wenn keine treffer gefunden wurden, prüfen wir, ob es ein unterordner davon ist.
-						if(!$ret && $filterValue['checkSubFolder']) {
+						elseif($filterValue['checkSubFolder']) {
 							unset($filterValue['checkSubFolder']); // brauchen wir nicht mehr
-							foreach($filterValue as $folder) {
+							foreach($filterValue as $folder => $index) {
 								if(t3lib_div::isFirstPartOfStr($sourceRecord['file_path'], $folder)){
-									$ret = true;
+									$ret = intval($index) ? true : false;
 									break;
 								}
 							}
+						}
+						// dieser ordner wurde nicht konfiguriert, wir ignorieren ihn
+						else {
+							$ret = false;
 						}
 						break;
 				}
@@ -261,7 +267,8 @@ filter.tx_dam {
   byDirectory {
     # Dateien dürfen auch in Unterordnern liegen.
     checkSubFolder = 1
-    #0 = fileadmin/templates/
+    #fileadmin/denied/ = 0
+    #fileadmin/allowed/ = 1
   }
   # commaseparated strings
   byFileExtension = pdf, html
