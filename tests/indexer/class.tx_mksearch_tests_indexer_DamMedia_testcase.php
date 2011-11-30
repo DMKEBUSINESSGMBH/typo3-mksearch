@@ -156,6 +156,18 @@ class tx_mksearch_tests_indexer_DamMedia_testcase extends tx_phpunit_testcase {
 						'byDirectory.' => array('checkSubFolder' => 1,'fileadmin/unterordner/' => 1, 'fileadmin/allowed/' => 1),
 					), true
 				),
+				// spezieller eternit fall
+				'Line: '. __LINE__ => array(
+					array(
+						'file_path' => 'fileadmin/downloads/tx_eternitdownload/',
+						'file_type' => 'txt'
+					), array(
+						'byFileExtension' => 'html, xhtml',
+						'byFileExtension.' => array('pdf', 'txt'),
+						'byDirectory' => '/^fileadmin\/.*\//',
+						'byDirectory.' => array('checkSubFolder' => '1','fileadmin/downloads/' => '1','fileadmin/downloads/tx_eternitdownload/' => '0'),
+					), false
+				),
 			);
 	}
 	
