@@ -340,6 +340,7 @@ plugin.tx_mksearch {
 				term {
 					wrap = 
 					preUserFunc.dismax = 1
+					preUserFunc.combination = free
 				}
 			}
 			fields {

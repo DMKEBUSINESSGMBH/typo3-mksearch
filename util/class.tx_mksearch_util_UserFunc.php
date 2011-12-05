@@ -41,6 +41,8 @@ class tx_mksearch_util_UserFunc {
 		//fallback aus TS
 		if(empty($combination))
 			$combination = $conf['combination'];
+		if($combination == MKSEARCH_OP_FREE) // Bei free kann die volle Dismax-Syntax durch den User verwendet werden
+			return $term;
 
 		$options = $parameters->get('options', $conf['qualifier']);
 		
