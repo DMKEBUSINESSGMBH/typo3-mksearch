@@ -35,20 +35,22 @@ class tx_mksearch_util_UserFunc {
 	public static function searchSolrOptions($term = '', $conf = array()){
 		if(empty($term)) { return ''; }
 		
-		/* @var $parameters tx_rnbase_parameters */ 
+		tx_rnbase::load('tx_mksearch_util_SearchBuilder');
+		
+		/* @var $parameters tx_rnbase_parameters */
 		$parameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
 		$combination = $parameters->get('combination', $conf['qualifier']);
 		//fallback aus TS
 		if(empty($combination))
 			$combination = $conf['combination'];
-		if($combination == MKSEARCH_OP_FREE) // Bei free kann die volle Dismax-Syntax durch den User verwendet werden
+		// Bei free kann die volle Dismax-Syntax durch den User verwendet werden
+		if($combination == MKSEARCH_OP_FREE)
 			return $term;
 
 		$options = $parameters->get('options', $conf['qualifier']);
 		
 		$options = is_array($options) ? array_merge($conf, $options) : $conf;
 		
-		tx_rnbase::load('tx_mksearch_util_SearchBuilder');
 		return tx_mksearch_util_SearchBuilder::searchSolrOptions($term, $combination, $options);
 	}
 
