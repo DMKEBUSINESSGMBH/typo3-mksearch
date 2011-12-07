@@ -55,7 +55,10 @@ class tx_mksearch_indexer_DamMedia implements tx_mksearch_interface_Indexer {
 	 * @see tx_mksearch_interface_Indexer::prepareSearchData()
 	 */
 	public function prepareSearchData($tableName, $sourceRecord, tx_mksearch_interface_IndexerDocument $indexDoc, $options) {
-
+		
+		// die uid muss vor dem setDeleted gesetzt sein
+		$indexDoc->setUid($sourceRecord['sys_language_uid'] ? $sourceRecord['l18n_parent'] : $sourceRecord['uid']);
+		
 		// Check if record is configured to be indexed
 		if(!$this->isIndexableRecord($tableName, $sourceRecord, $options['filter.'])) {
 			if(isset($options['deleteIfNotIndexable']) && $options['deleteIfNotIndexable']) {
@@ -63,8 +66,6 @@ class tx_mksearch_indexer_DamMedia implements tx_mksearch_interface_Indexer {
 				return $indexDoc;
 			} else return null;
 		}
-
-		$indexDoc->setUid($sourceRecord['sys_language_uid'] ? $sourceRecord['l18n_parent'] : $sourceRecord['uid']);
 
 		if($sourceRecord['deleted']) {
 			$indexDoc->setDeleted(true);
