@@ -28,18 +28,18 @@ require_once(t3lib_extMgm::extPath('mksearch').'lib/Apache/Solr/Document.php' );
 
 /**
  * Model for search hits from solt
- * 
+ *
  * As the base data doesn't come from a real table but gets filled
- * by the search engine some things are different from an usual 
+ * by the search engine some things are different from an usual
  * rn_base model. We use it anyway to keep all the remaining nice
- * functions like automatic marker filling etc. 
- *  
+ * functions like automatic marker filling etc.
+ *
  */
 class tx_mksearch_model_SolrHit extends tx_rnbase_model_base {
 	private $solrDoc;
 	/**
 	 * Initialiaze model and fill it with data if provided
-	 * 
+	 *
 	 * @param $rowOrUid
 	 * @return void
 	 */
@@ -63,8 +63,8 @@ class tx_mksearch_model_SolrHit extends tx_rnbase_model_base {
 	}
 
 	/**
-	 * Return name of model's base table - not used in this model. 
-	 * 
+	 * Return name of model's base table - not used in this model.
+	 *
 	 * @return string
 	 */
 	public function getTableName(){return '';}
@@ -72,9 +72,9 @@ class tx_mksearch_model_SolrHit extends tx_rnbase_model_base {
 	
 	/**
 	 * Return $TCA defined table column names.
-	 * As this model doesn't have a $TCA defined name, 
+	 * As this model doesn't have a $TCA defined name,
 	 * return 0 like the original function, when no columns were found.
-	 * 
+	 *
 	 * @return 0
 	 */
 	public function getColumnNames() {return 0;}

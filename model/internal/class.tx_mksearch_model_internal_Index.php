@@ -99,7 +99,7 @@ class tx_mksearch_model_internal_Index extends tx_rnbase_model_base {
 			//use the uid of the index config as key to be able to
 			//get different configs for the same contenttype
 			foreach ($tmpCfg as $oModel) {
-				$sTs .= $oModel->record['extkey'] . '.' . $oModel->record['contenttype'] . '.' . $oModel->record['uid'] . " {\n" . 
+				$sTs .= $oModel->record['extkey'] . '.' . $oModel->record['contenttype'] . '.' . $oModel->record['uid'] . " {\n" .
 					$oModel->record['configuration'] . "\n}\n";
 			}
 			$this->options = $this->parseTsConfig($sTs);
@@ -112,6 +112,7 @@ class tx_mksearch_model_internal_Index extends tx_rnbase_model_base {
 	 * @param string $sTs
 	 */
 	private function parseTsConfig($sTs) {
+		/* @var $TSparserObject t3lib_tsparser */
 		$TSparserObject = t3lib_div::makeInstance('t3lib_tsparser');
 		$TSparserObject->parse($sTs);
 		return $TSparserObject->setup;

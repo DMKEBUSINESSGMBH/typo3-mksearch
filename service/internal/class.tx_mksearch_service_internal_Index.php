@@ -32,7 +32,7 @@ tx_rnbase::load('tx_rnbase_util_Logger');
  */
 class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Base {
 	/**
-	 * Search class of this service 
+	 * Search class of this service
 	 *
 	 * @var string
 	 */
@@ -46,12 +46,12 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 
 	/**
 	 * Add a single database record to search index.
-	 * 
+	 *
 	 * @param string $tableName
 	 * @param int $uid
 	 * @param boolean $prefer
-	 * @param string $resolver class name of record resolver 
-	 * @param array $data 
+	 * @param string $resolver class name of record resolver
+	 * @param array $data
 	 * @return boolean true if record was successfully spooled
 	 */
 	public function indexRecord($tableName, $uid, $prefer=false, $resolver=false, $data=false) {
@@ -72,11 +72,11 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 	
 	/**
 	 * Builds the record for insert
-	 * 
+	 *
 	 * @param 	string 		$tableName
 	 * @param 	int 		$uid
 	 * @param 	boolean 	$prefer
-	 * @param 	string 		$resolver class name of record resolver  
+	 * @param 	string 		$resolver class name of record resolver
 	 * @param 	array 		$data
 	 * @param 	array 		$options
 	 * @return 	mixed		array: (cr_date,prefer,recid,tablename,data,resolver) | false: if allredy exists
@@ -111,11 +111,11 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 	
 	/**
 	 * Add a single database record to search index.
-	 * 
+	 *
 	 * @param 	string 		$tableName
 	 * @param 	int 		$uid
 	 * @param 	boolean 	$prefer
-	 * @param 	string 		$resolver class name of record resolver  
+	 * @param 	string 		$resolver class name of record resolver
 	 * @param 	array 		$data
 	 * @param 	array 		$options
 	 * @return 	boolean 	true if record was successfully spooled
@@ -136,7 +136,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 	
 	/**
 	 * Add single database records to search index.
-	 * 
+	 *
 	 * @param 	array 		$records array('tablename' => 'required', 'uid' => 'required', 'preferer' => 'optional', 'resolver' => 'optional', 'data' => 'optional');
 	 * @param 	array 		$options
 	 * @return 	boolean 	true if record was successfully spooled
@@ -168,9 +168,9 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 				// build the query part
 				$sqlValues[] = '(' . implode(',', $record) . ')';
 				// insert max. 500 items
-				$count++; 
+				$count++;
 				if($count >= 500) {
-					// do import 
+					// do import
 					$this->doInsertRecords($sqlValues);
 					// reset
 					$count = 0;
@@ -264,9 +264,10 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 		try {
 			// Loop through all active indices, collecting all configurations
 			foreach ($indices as $index) {
+				/* @var $index tx_mksearch_model_internal_Index */
 				tx_rnbase_util_Logger::debug('[INDEXQUEUE] Next index is '.$index->getTitle(), 'mksearch');
 				// Container for all documents to be indexed / deleted
-				$indexDocs = array(); 
+				$indexDocs = array();
 				$searchEngine = tx_mksearch_util_ServiceRegistry::getSearchEngine($index);
 	
 				$indexConfig = $index->getIndexerOptions();
@@ -296,8 +297,8 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 								list($extKey, $contentType) = $indexer->getContentType();
 								//there can be more than one config for the current indexer
 								//so we execute the indexer with each config that was found.
-								//when one element (tt_content) is indexed by let's say tow indexer configs which 
-								//aim to the same index than you should take care that the element 
+								//when one element (tt_content) is indexed by let's say tow indexer configs which
+								//aim to the same index than you should take care that the element
 								//isn't taken by both indexer configs as the doc of the element for
 								//the first config will be overwritten by the second one
 								foreach ($indexConfig[$extKey.'.'][$contentType.'.'] as $aConfigByContentType){
@@ -408,7 +409,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 //						if(tx_rnbase_util_Logger::isWarningEnabled())
 //							tx_rnbase_util_Logger::warn('tx_mkhoga_srv_Search->updateIndex(): Error on indexing item '.$extKey.'/'.$contentType.'.', 'tx_mkhoga', array('code' => $e->getCode(), 'msg' => $e->getMessage()));
 //					}
-//				} while ($doc !== null || (!empty($e))); 
+//				} while ($doc !== null || (!empty($e)));
 //			}
 //			$solrSrv->commitIndex();
 //		}
@@ -419,10 +420,10 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 	/**
 	 * Adds fixed fields which are defined in the indexer config
 	 * if none are defined we have nothing to do
-	 * 
+	 *
 	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
 	 * @param array $options
-	 * 
+	 *
 	 * @return tx_mksearch_interface_IndexerDocument
 	 */
 	protected function addFixedFields(tx_mksearch_interface_IndexerDocument $indexDoc, $options) {
@@ -438,7 +439,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 			//}
 			if(is_array($mFixedFieldValue)){
 				//if we have an array we have to delete the
-				//trailing dot of the key name because this 
+				//trailing dot of the key name because this
 				//seems senseless to add
 				$sFixedFieldKey = substr($sFixedFieldKey, 0, strlen($sFixedFieldKey) -1);
 			}
@@ -466,7 +467,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 
 	/**
 	 * Clear indexing queue for the given table
-	 * 
+	 *
 	 * @param string	$table
 	 * @param array		$options
 	 */
@@ -478,7 +479,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 	
 	/**
 	 * Reset indexing queue for the given table
-	 * 
+	 *
 	 * Old entries are deleted before all (valid) entries of the
 	 * given table name are inserted.
 	 *
@@ -493,12 +494,12 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 		$resolver = count($resolver) ? $resolver['className'] : '';
 		
 		$fullQuoted = $GLOBALS['TYPO3_DB']->fullQuoteStr($table, self::$queueTable);
-		$uidName = isset($options['uidcol']) ? $options['uidcol'] : 'uid'; 
+		$uidName = isset($options['uidcol']) ? $options['uidcol'] : 'uid';
 		$from = isset($options['from']) ? $options['from'] : $table;
 		$where = isset($options['where']) ? ' WHERE ' . $options['where'] : '';
 		
 		$query = 'INSERT INTO ' . self::$queueTable . '(tablename, recid, resolver) ';
-		$query .= 'SELECT DISTINCT ' . $fullQuoted . ', '. $uidName . 
+		$query .= 'SELECT DISTINCT ' . $fullQuoted . ', '. $uidName .
 			', CONCAT(\''.$resolver.'\') FROM ' . $from . $where;
 		
 		if($options['debug'])
