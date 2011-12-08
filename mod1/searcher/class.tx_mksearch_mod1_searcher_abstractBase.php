@@ -232,7 +232,7 @@ abstract class tx_mksearch_mod1_searcher_abstractBase {
 		//die fields nun mit dem Suchbegriff und den Spalten,
 		//in denen gesucht werden soll, füllen
 		tx_rnbase::load('tx_mksearch_mod1_util_SearchBuilder');
-		tx_mklib_mod1_util_SearchBuilder::buildFreeText($fields, $this->currentSearchWord, $this->getSearchColumns());
+		tx_mksearch_mod1_util_SearchBuilder::buildFreeText($fields, $this->currentSearchWord, $this->getSearchColumns());
 		
 	}
 	
@@ -265,11 +265,9 @@ abstract class tx_mksearch_mod1_searcher_abstractBase {
 	}
 	
 	/**
-	 * @return 	tx_mklib_mod1_decorator_Base
+	 * @return 	tx_rnbase_mod_IDecorator
 	 */
-	protected function getDecorator(&$mod){
-		return tx_rnbase::makeInstance('tx_mklib_mod1_decorator_Base', $mod);
-	}
+	abstract protected function getDecorator(&$mod);
 	/**
 	 * @deprecated bitte getDecoratorColumns nutzen
 	 */
@@ -279,7 +277,7 @@ abstract class tx_mksearch_mod1_searcher_abstractBase {
 	
 	/**
 	 * Liefert die Spalten für den Decorator.
-	 * @param 	tx_mklib_mod1_decorator_Base 	$oDecorator
+	 * @param 	tx_rnbase_mod_IDecorator 	$oDecorator
 	 * @return 	array
 	 */
 	protected function getDecoratorColumns(&$oDecorator) {
@@ -299,7 +297,7 @@ abstract class tx_mksearch_mod1_searcher_abstractBase {
 	 * Returns an instance of tx_mkhoga_beutil_Selector.
 	 * Der Selector wird erst erzeugt, wenn er benötigt wird
 	 *
-	 * @return 	tx_mklib_mod1_util_Selector
+	 * @return 	tx_mksearch_mod1_util_Selector
 	 */
 	protected function getSelector() {
 		if(!$this->selector) {
@@ -357,6 +355,6 @@ abstract class tx_mksearch_mod1_searcher_abstractBase {
 	}
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mklib/mod1/searcher/class.tx_mksearch_mod1_searcher_abstractBase.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mklib/mod1/searcher/class.tx_mksearch_mod1_searcher_abstractBase.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/searcher/class.tx_mksearch_mod1_searcher_abstractBase.php'])	{
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/searcher/class.tx_mksearch_mod1_searcher_abstractBase.php']);
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * 	@package tx_mklib
- *  @subpackage tx_mklib_srv
+ * 	@package tx_mksearch
+ *  @subpackage tx_mksearch_service
  *  @author Hannes Bochmann
  *
  *  Copyright notice
@@ -35,8 +35,8 @@ tx_rnbase::load('tx_rnbase_util_SearchBase');
 /**
  * Base service class
  *
- * @package tx_mklib
- * @subpackage tx_mklib_srv
+ * @package tx_mksearch
+ * @subpackage tx_mksearch_service
  */
 abstract class tx_mksearch_service_Base extends t3lib_svbase {
 
