@@ -37,7 +37,9 @@ tx_rnbase::load('tx_mksearch_util_Misc');
  * Base indexer class offering some common methods
  * to make the object orientated indexing ("indexing by models")
  * more comfortable
- * 
+ *
+ * @TODO: no_search in der pages tabelle beachten!
+ *
  * @package tx_mksearch
  * @subpackage tx_mksearch_indexer
  */
@@ -49,9 +51,9 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 	 */
 	public function prepareSearchData($sTableName, $aRawData, tx_mksearch_interface_IndexerDocument $oIndexDoc, $aOptions) {
 		//when an indexer is configured for more than one table
-		//the index process may be different for the tables. 
-		//overwrite this method in your child class to stop processing and 
-		//do something different like putting a record into the queue. 
+		//the index process may be different for the tables.
+		//overwrite this method in your child class to stop processing and
+		//do something different like putting a record into the queue.
 		if($this->stopIndexing($sTableName, $aRawData, $oIndexDoc, $aOptions))
 			return null;
 			
@@ -83,18 +85,18 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 	
 	/**
 	 * Shall we break the indexing for the current data?
-	 * 
+	 *
 	 * when an indexer is configured for more than one table
-	 * the index process may be different for the tables. 
-	 * overwrite this method in your child class to stop processing and 
+	 * the index process may be different for the tables.
+	 * overwrite this method in your child class to stop processing and
 	 * do something different like putting a record into the queue
 	 * if it's not the table that should be indexed
-	 *  
+	 *
 	 * @param string $sTableName
 	 * @param array $aRawData
 	 * @param tx_mksearch_interface_IndexerDocument $oIndexDoc
 	 * @param array $aOptions
-	 * 
+	 *
 	 * @return bool
 	 */
 	protected function stopIndexing($sTableName, $aRawData, tx_mksearch_interface_IndexerDocument $oIndexDoc, $aOptions) {
@@ -104,7 +106,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 	
 	/**
 	 * Indexes all fields of the model according to the given mapping
-	 * 
+	 *
 	 * @param tx_rnbase_model_Base $oModel
 	 * @param array $aMapping
 	 * @param tx_mksearch_interface_IndexerDocument $oIndexDoc
@@ -115,7 +117,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 		foreach ($aRecordIndexMapping as $sRecordKey => $sIndexDocKey) {
 			if(!empty($oModel->record[$sRecordKey]))
 				$oIndexDoc->addField(
-					$sPrefix.$sIndexDocKey, 
+					$sPrefix.$sIndexDocKey,
 					$aOptions['keepHtml'] ? $oModel->record[$sRecordKey] : tx_mksearch_util_Misc::html2plain($oModel->record[$sRecordKey])
 				);
 		}
@@ -124,7 +126,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 	/**
 	 * Collects the values of all models inside the given array
 	 * and adds them as multivalue (array)
-	 * 
+	 *
 	 * @param tx_rnbase_model_Base $oModel
 	 * @param array $aMapping
 	 * @param tx_mksearch_interface_IndexerDocument $oIndexDoc
@@ -137,13 +139,13 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 			foreach ($aRecordIndexMapping as $sRecordKey => $sIndexDocKey) {
 				if(!empty($oModel->record[$sRecordKey]))
 					$aTempIndexDoc[$sPrefix.$sIndexDocKey][] = $oModel->record[$sRecordKey];
-			}	
+			}
 		}
 		
 		//and now add the fields
 		if(!empty($aTempIndexDoc)){
 			foreach ($aTempIndexDoc as $sIndexDocKey => $aValues){
-				$oIndexDoc->addField($sIndexDocKey, $aValues);				
+				$oIndexDoc->addField($sIndexDocKey, $aValues);
 			}
 		}
 	}
@@ -234,7 +236,7 @@ CONFIG;
 	}
 	
 	/**
-	 * Checks if a include or exclude option was set for a 
+	 * Checks if a include or exclude option was set for a
 	 * given option key
 	 * if set we check if at least one of the uids given in the options
 	 * is found in the given models
@@ -289,7 +291,7 @@ CONFIG;
 					$bIsValid = $bHit;
 				}
 			}
-		}else 
+		}else
 			$bIsValid = true;//no option given
 		return $bIsValid;
 	}
@@ -297,7 +299,7 @@ CONFIG;
 	/**
 	 * Prüft ob die Seite speziell in einem Seitenbaum liegt,
 	 * der inkludiert oder ausgeschlossen werden soll
-	 * 
+	 *
 	 * @param array $sourceRecord
 	 * @param array $options
 	 * @return bool
@@ -310,23 +312,23 @@ CONFIG;
 		
 		$oDbUtil = tx_rnbase::makeInstance('tx_rnbase_util_DB');
 		
-		if(!$this->checkPageTreeIncludes($sourceRecord,$options,$oDbUtil))return false;
-		if($this->checkPageTreeExcludes($sourceRecord,$options,$oDbUtil))return false;
+		if (!$this->checkPageTreeIncludes($sourceRecord, $options, $oDbUtil)) return false;
+		if ( $this->checkPageTreeExcludes($sourceRecord, $options, $oDbUtil)) return false;
 	
 		return true;
 	}
 	
 	/**
 	 * Wenn das Element im gegebenen Seitenbaum ist, wird NICHT indiziert
-	 * 
+	 *
 	 * @param unknown_type $sourceRecord
 	 * @param unknown_type $options
 	 * @param unknown_type $oDbUtil
 	 */
-	private function checkPageTreeExcludes($sourceRecord,$options,$oDbUtil) {
+	private function checkPageTreeExcludes($sourceRecord, $options, $oDbUtil) {
 		// Prüfen ob die Seite in den index darf sprich nicht in den gegebenen Seitenbäumen liegt
-		$aPids = $this->getPidList($sourceRecord,$options['exclude.'],$oDbUtil,'pageTrees');
-		if(array_search($sourceRecord['pid'],$aPids) !== false)
+		$aPids = $this->getPidList($sourceRecord,$options['exclude.'], $oDbUtil, 'pageTrees');
+		if (array_search($sourceRecord['pid'], $aPids) !== false)
 			return true;
 		//else
 		return false;
@@ -334,15 +336,15 @@ CONFIG;
 
 	/**
 	 * Nur wenn das Element im gegebenen Seitenbaum ist, wird indiziert
-	 * 
+	 *
 	 * @param unknown_type $sourceRecord
 	 * @param unknown_type $options
 	 * @param unknown_type $oDbUtil
 	 */
-	private function checkPageTreeIncludes($sourceRecord,$options,$oDbUtil) {
+	private function checkPageTreeIncludes($sourceRecord, $options, $oDbUtil) {
 		// Prüfen ob die Seite in den index darf sprich in den gegebenen Seitenbäumen liegt
 		$aPids = $this->getPidList($sourceRecord,$options['include.'],$oDbUtil,'pageTrees');
-		if(array_search($sourceRecord['pid'],$aPids) !== false || empty($aPids))
+		if (array_search($sourceRecord['pid'], $aPids) !== false || empty($aPids))
 			return true;
 		//else
 		return false;
@@ -355,21 +357,21 @@ CONFIG;
 	 * @param mixed $options
 	 * @param tx_rnbase_util_DB $oDbUtil
 	 * @param string $sKey
-	 * 
+	 *
 	 * @return array
 	 */
-	private function getPidList($sourceRecord,$options,tx_rnbase_util_DB $oDbUtil,$sKey) {
+	private function getPidList($sourceRecord, $options, tx_rnbase_util_DB $oDbUtil, $sKey) {
 		$aPids = array();
 		$aPageTrees = $this->getConfigValue($sKey, $options);
-		if(is_array($aPageTrees) && !empty($aPageTrees)){
+		if (is_array($aPageTrees) && !empty($aPageTrees)){
 			foreach ($aPageTrees as $iUid)
-				$aPidsByPageTree[] = explode(',',$oDbUtil->_getPidList($iUid,999));
+				$aPidsByPageTree[] = explode(',', $oDbUtil->_getPidList($iUid,999));
 		}
 
-		if(is_array($aPidsByPageTree) && count($aPidsByPageTree)) {
+		if (is_array($aPidsByPageTree) && count($aPidsByPageTree)) {
 			//jetzt alle pids zusammenführen für alle angegebenen Seitenbäume
 			foreach ($aPidsByPageTree as $aPidsTemp)
-				$aPids = array_merge($aPids,$aPidsTemp);
+				$aPids = array_merge($aPids, $aPidsTemp);
 		}
 		
 		return $aPids;
@@ -381,10 +383,10 @@ CONFIG;
 	 * Dann wird geprüft ob test eine kommaseparierte Liste liegt
 	 * Ist das nicht der Fall wird noch geprüft ob test. ein array ist
 	 * @param string $sKey
-	 * 
+	 *
 	 * @return array
 	 */
-	protected function getConfigValue($sKey,$options) {
+	protected function getConfigValue($sKey, $options) {
 		if(is_array($options)){
 			$aConfig = array();
 			$aConfig = (array_key_exists($sKey, $options) && strlen(trim($options[$sKey]))) ? t3lib_div::trimExplode(',', $options[$sKey]) : false;
@@ -405,7 +407,7 @@ CONFIG;
 		$aSqlOptions = array(
 			'where' => 'pages.uid=' . $oModel->record['pid'],
 			//so we get only pages that are valid for the FE
-			'enablefieldsfe' => true,	
+			'enablefieldsfe' => true,
 		);
 		$aFrom = array('pages', 'pages');
 		return $aRows = tx_rnbase_util_DB::doSelect('*', $aFrom, $aSqlOptions);
@@ -413,16 +415,16 @@ CONFIG;
 	
 	/**
 	 * Returns the model to be indexed
-	 * 
+	 *
 	 * @param array $aRawData
-	 * 
+	 *
 	 * @return tx_rnbase_model_base
 	 */
-	protected abstract function createModel(array $aRawData);	
+	protected abstract function createModel(array $aRawData);
 
 	/**
 	 * Do the actual indexing for the given model
-	 * 
+	 *
 	 * @param tx_rnbase_model_base $oModel
 	 * @param string $sTableName
 	 * @param array $aRawData
