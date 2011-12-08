@@ -1,9 +1,12 @@
 <?php
-/***************************************************************
-*  Copyright notice
-*
-*  (c) 2010 das Medienkombinat
-*  All rights reserved
+/**
+ * 	@package tx_mksearch
+ *  @subpackage tx_mksearch_model
+ *
+ *  Copyright notice
+ *
+ *  (c) 2011 das MedienKombinat GmbH <kontakt@das-medienkombinat.de>
+ *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
 *  free software; you can redistribute it and/or modify
@@ -21,25 +24,28 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
-
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+require_once(t3lib_extMgm::extPath('rn_base', 'class.tx_rnbase.php'));
 tx_rnbase::load('tx_rnbase_model_base');
 
 /**
- * Model for indexer configurations
+ * Model for indices
+ *
+ * @package tx_mksearch
+ * @subpackage tx_mksearch_model
+ * @author Michael Wagner <michael.wagner@das-medienkombinat.de>
  */
-class tx_mksearch_model_internal_Config extends tx_rnbase_model_base {
-
+class tx_mksearch_model_internal_Keyword extends tx_rnbase_model_base {
+	
 	/**
 	 * Return this model's table name
 	 *
 	 * @return string
 	 */
 	public function getTableName() {
-		return 'tx_mksearch_indexerconfigs';
+		return 'tx_mksearch_indices';
 	}
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/model/internal/class.tx_mksearch_model_internal_Config.php']) {
-  include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/model/internal/class.tx_mksearch_model_internal_Config.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/model/internal/class.tx_mksearch_model_internal_Keyword.php']) {
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/model/internal/class.tx_mksearch_model_internal_Keyword.php']);
 }

@@ -2,15 +2,21 @@
 <T3locallang>
     <meta type="array">
         <type>module</type>
-        <description>Language labels for module "tools_txmksearchM1"</description>
+        <description>Language labels for module "web_txmksearchM1"</description>
     </meta>
     <data type="array">
         <languageKey index="default" type="array">
             <label index="title">MK Search</label>
             <label index="func_config_indizes">Configure indizes</label>
+            <label index="func_keywords">Keywords</label>
+            <label index="func_config_indizesdblist">Configure indizes (old db list)</label>
             <label index="func_indize_indizes">Indexing Queue</label>
+
+            <label index="label_handler_index">Indizes</label>
+            <label index="label_handler_indexerconfig">Indexer Configuration</label>
+            <label index="label_handler_composite">Indexer Composites</label>
             
-            <label index="label_no_indexers_found">No indexers defined!</label>
+            <label index="label_no_indexers_found">No indexers defined on this page!</label>
             <label index="label_configured_indexer_tables_head">Tables from configured indexers</label>
             <label index="label_core_status_head">Core status</label>
             <label index="label_triger_queue_head">Trigger indexing queue</label>
@@ -21,12 +27,49 @@
             <label index="label_queue_indexed">Indexing queue was triggered! Records processed: </label>
             <label index="label_queue_indexed_empty">Nothing to do at the moment - indexing queue is empty.</label>
             <label index="label_queue_state_head">Status</label>
-            <label index="label_queue_size">current size:</label>
+            <label index="label_queue_size">global size:</label>
             <label index="label_table_count">tables found.</label>
             <label index="label_table_name">Table</label>
-            <label index="label_table_queuecount">Queue</label>
+            <label index="label_table_queuecount">Queue (Global)</label>
             <label index="label_table_reset">Reset</label>
-            <label index="label_table_clear">Clear</label>
+            <label index="label_table_resetG">Reset (Global)</label>
+            <label index="label_table_clear">Clear (Global)</label>
+            
+			<label index="label_common_start">Requestinfos</label>
+			<label index="label_common_end">Requestinfos</label>
+			<label index="label_search_form">Filter</label>
+			<label index="label_buttons">Functions</label>
+			<label index="label_pager">Navigation</label>
+			<label index="label_list">Results</label>
+			<label index="label_search">Free text search:</label>
+			<label index="label_hidden">Hidden entries:</label>
+			<label index="label_button_search">search</label>
+			<label index="label_select_hide_hidden">Hide</label>
+			<label index="label_select_show_hidden">Show</label>
+			<label index="label_list_size">Entries found: </label>
+			
+			<label index="confirmation_deletion">Delete this record?</label>
+			
+			<label index="label_uid">ID</label>
+			<label index="label_tableheader_title">Title</label>
+			<label index="label_tableheader_name">Name</label>
+			<label index="label_tableheader_engine">Engine</label>
+			<label index="label_tableheader_keyword">Keyword</label>
+			<label index="label_tableheader_link">Link</label>
+			<label index="label_tableheader_contenttype">ContentType</label>
+			<label index="label_tableheader_composites">Composites</label>
+			<label index="label_tableheader_indices">Indizes</label>
+			<label index="label_tableheader_configs">Configurations</label>
+			<label index="label_tableheader_actions"> </label>
+            
+            <label index="label_no_indizes">No indizes found.</label>
+            <label index="label_no_composites">No indexer composites found.</label>
+            <label index="label_no_indexerconfigurations">No indexer configurations found.</label>
+            
+            <label index="label_add_keyword">add Keyword</label>
+            <label index="label_add_index">add Index</label>
+            <label index="label_add_indexerconfig">add Indexer Configuration</label>
+            <label index="label_add_composite">add Indexer Composite</label>
         </languageKey>
     </data>
 </T3locallang>

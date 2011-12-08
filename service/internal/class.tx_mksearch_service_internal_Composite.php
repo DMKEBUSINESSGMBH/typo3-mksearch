@@ -31,11 +31,34 @@ tx_rnbase::load('tx_mksearch_service_internal_Base');
 class tx_mksearch_service_internal_Composite extends tx_mksearch_service_internal_Base {
 	
 	/**
-	 * Search class of this service 
+	 * Search class of this service
 	 *
 	 * @var string
 	 */
 	protected $searchClass = 'tx_mksearch_search_Composite';
+	
+	/**
+	 * Search database for all configurated Indices
+	 *
+	 * @param 	tx_mksearch_model_internal_Config 	$indexerconfig
+	 * @return 	array[tx_mksearch_model_internal_Index]
+	 */
+	public function getByConfiguration(tx_mksearch_model_internal_Config $indexerconfig) {
+		$fields['CMPCFGMM.uid_foreign'][OP_EQ_INT] = $indexerconfig->getUid();
+// 		$options['debug']=1;
+		return $this->search($fields, $options);
+	}
+	/**
+	 * Search database for all configurated Indices
+	 *
+	 * @param 	tx_mksearch_model_internal_Index 	$indexerconfig
+	 * @return 	array[tx_mksearch_model_internal_Index]
+	 */
+	public function getByIndex(tx_mksearch_model_internal_Index $index) {
+		$fields['INDXCMPMM.uid_local'][OP_EQ_INT] = $index->getUid();
+// 		$options['debug']=1;
+		return $this->search($fields, $options);
+	}
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/service/internal/class.tx_mksearch_service_internal_Composite.php']) {

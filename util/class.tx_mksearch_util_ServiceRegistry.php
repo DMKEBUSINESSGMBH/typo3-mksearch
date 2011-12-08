@@ -68,10 +68,10 @@ class tx_mksearch_util_ServiceRegistry {
 	
 	/**
 	 * Return best search engine service which implements tx_mksearch_interface_Indexer
-	 * 
+	 *
 	 * This method does NOT use tx_rnbase_util_Misc::getService intentionally,
 	 * as we do not want to "mayday" in case of an error!
-	 * 
+	 *
 	 * @param string $extKey
 	 * @param string $contentType
 	 * @return tx_mksearch_interface_Indexer
@@ -82,7 +82,7 @@ class tx_mksearch_util_ServiceRegistry {
 		if (!is_object($srv))
 			throw new Exception('Service "mksearch_indexer.' . $subType . '" not found!');
 		// else
-		if (!$srv instanceof tx_mksearch_interface_Indexer) 
+		if (!$srv instanceof tx_mksearch_interface_Indexer)
 			throw new Exception('Service "' . $srv->info['className'] . '" does not implement tx_mksearch_interface_Indexer!');
 		// else
 		return $srv;
@@ -97,7 +97,7 @@ class tx_mksearch_util_ServiceRegistry {
 		return tx_rnbase_util_Misc::getService('mksearch', 'int_index');
 	}
 	/**
-	 * 
+	 *
 	 * Return internal indexer configuration composite service
 	 *
 	 * @return tx_mksearch_service_internal_Composite
@@ -113,6 +113,14 @@ class tx_mksearch_util_ServiceRegistry {
 	 */
 	public static function getIntConfigService() {
 		return tx_rnbase_util_Misc::getService('mksearch', 'int_config');
+	}
+	/**
+	 * Return internal indexer configuration service
+	 *
+	 * @return tx_mksearch_service_internal_Keyword
+	 */
+	public static function getKeywordService() {
+		return tx_rnbase_util_Misc::getService('mksearch', 'keyword');
 	}
 	
 	/**

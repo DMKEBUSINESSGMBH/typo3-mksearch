@@ -27,9 +27,8 @@ require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 
 /**
  * Diese Klasse ist für die Darstellung von Indexer tabellen im Backend verantwortlich
- * Wird für die Indexing Wueue benötigt
  */
-class tx_mksearch_mod1_decorator_Indizes {
+class tx_mksearch_mod1_decorator_Keyword {
 	function __construct($mod) {
 		$this->mod = $mod;
 	}
@@ -51,33 +50,35 @@ class tx_mksearch_mod1_decorator_Indizes {
 	public function format($value, $colName, $record, $item) {
 		
 		switch($colName){
-			case 'name':
-				$ret = '<label for="resetTables'.$record['name'].'">'.$value.'</label>';
+			case 'link':
+				// dazu müssten wir erst fe virtualisieren, ist glaub ich nicht nötig!
+// 				/* @var $link tx_rnbase_util_Link */
+// 				$link = tx_rnbase::makeInstance('tx_rnbase_util_Link');
+// 				$link->destination($value);
+// 				$ret = $link->makeUrl();
+				$ret = $value;
 				break;
-			case 'reset':
-				$ret = '<input type="checkbox" name="resetTables[]" value="'.$record['name'].'" id="resetTables'.$record['name'].'" />';
-				break;
-			case 'resetG':
-				$ret = '<input type="checkbox" name="resetTablesG[]" value="'.$record['name'].'" id="resetTablesG'.$record['name'].'" />';
-				break;
-			case 'clear':
-				$ret = '<input type="checkbox" name="clearTables[]" value="'.$record['name'].'" id="clearTables'.$record['name'].'" />';
-				break;
-			case 'queuecount':
-					$oIntIndexSrv = tx_mksearch_util_ServiceRegistry::getIntIndexService();
-					$ret = $oIntIndexSrv->countItemsInQueue($record['name']);
+			case 'actions':
+				$formtool = $this->getModule()->getFormTool();
+				$ret  = '';
+				// bearbeiten link
+				$ret .= $formtool->createEditLink($item->getTableName(), $item->getUid(), '');
+				// hide undhide link
+				$ret .= $formtool->createHideLink($item->getTableName(), $item->getUid(), $item->record['hidden']);
+				// remove link
+				$ret .= $formtool->createDeleteLink($item->getTableName(), $item->getUid(), '', array('confirm' => $GLOBALS['LANG']->getLL('confirmation_deletion')));
 				break;
 			default:
 				$ret = $value;
-				break;
 		}
+		
 		return $ret;
 	}
 
 }
 
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/decorator/class.tx_mksearch_mod1_decorator_Indizes.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/decorator/class.tx_mksearch_mod1_decorator_Indizes.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/decorator/class.tx_mksearch_mod1_decorator_Keyword.php'])	{
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/decorator/class.tx_mksearch_mod1_decorator_Keyword.php']);
 }
 ?>

@@ -2,7 +2,7 @@
 <T3locallang>
     <meta type="array">
         <type>module</type>
-        <description>Language labels for module "tools_txmksearchM1" - header, description</description>
+        <description>Language labels for module "web_txmksearchM1" - header, description</description>
     </meta>
     <data type="array">
         <languageKey index="default" type="array">

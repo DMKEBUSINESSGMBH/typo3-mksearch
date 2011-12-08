@@ -3,10 +3,6 @@ zendPath =
 # cat=mksearch/basic/file; type=string;label=Directory containing Lucene index directory / directories. Either absolute path or relative to PATH_site.
 luceneIndexDir =
 
-## Das wird nur für das BE-Modul benötigt und verhindert Multidomain-Einsatz
-# cat=mksearch/basic/file; type=string;label=Indexer config storage PID: Page ID of folder used store indexer configurations
-indexerConfigStoragePid = 0
-
   # cat=mksearch/basic/file; type=string; label= Tika jar-file: Absolute path to Apache Tika jarfile (optional)
 tikaJar =
 

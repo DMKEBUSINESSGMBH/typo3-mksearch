@@ -43,7 +43,19 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 	 * @var string
 	 */
 	private static $queueTable = 'tx_mksearch_queue';
-
+	
+	/**
+	 * Search database for all configurated Indices
+	 *
+	 * @param 	tx_mksearch_model_internal_Composite 	$indexerconfig
+	 * @return 	array[tx_mksearch_model_internal_Index]
+	 */
+	public function getByComposite(tx_mksearch_model_internal_Composite $composite) {
+		$fields['INDXCMPMM.uid_foreign'][OP_EQ_INT] = $composite->getUid();
+// 		$options['debug']=1;
+		return $this->search($fields, $options);
+	}
+	
 	/**
 	 * Add a single database record to search index.
 	 *
@@ -219,15 +231,23 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 	/**
 	 * Trigger indexing from indexing queue
 	 *
-	 * @param int $no	Number of items to be indexed
-	 * @return int number of triggered items
+	 * @param 	array 	$config
+	 * 						no: 	Number of items to be indexed
+	 * 						pid: 	trigger only records for this pageid
+	 * @return 	array	indexed tables array(array('tablename' => 'count'))
 	 */
-	public function triggerQueueIndexing($no=100) {
+	public function triggerQueueIndexing($config=array()) {
+		if (!is_array($config)){
+			$limit = $config;
+			$config = array();
+		} else {
+			$limit = $config['limit'] ? $config['limit'] : 100;
+		}
 		$options = array();
-		$options['orderby']='prefer desc, cr_date asc, uid asc';
-		$options['limit']=$no;
+		$options['orderby'] = 'prefer desc, cr_date asc, uid asc';
+		$options['limit'] = $limit;
 		$options['where'] = 'deleted=0';
-		$options['enablefieldsoff']=1;
+		$options['enablefieldsoff'] = 1;
 		
 		$data = tx_rnbase_util_DB::doSelect('*', self::$queueTable, $options);
 
@@ -235,7 +255,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 		if (empty($data)) return 0;
 
 		// Trigger update for the found items
-		self::executeQueueData($data);
+		self::executeQueueData($data, $config);
 
 		$uids = array();
 		$rows = array();
@@ -254,17 +274,36 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 	}
 	/**
 	 * Abarbeitung der Indizierungs-Queue
-	 * @param array $data records aus der Tabelle tx_mksearch_queue
-	 * @return void
+	 * @param 	array $data records aus der Tabelle tx_mksearch_queue
+	 * @param 	array 	$config
+	 * 						pid: 	trigger only records for this pageid
+	 * @return 	void
 	 */
-	private function executeQueueData($data) {
-		$indices = $this->findAll();
+	private function executeQueueData($data, $config) {
+		$rootline = 0;
+		// alle indexer fragen oder nur von der aktuellen pid?
+		if($config['pid']) {
+			$indices = $this->getByPageId($config['pid']);
+		}
+		else {
+			$indices = $this->findAll();
+		}
+		
 		tx_rnbase_util_Logger::debug('[INDEXQUEUE] Found '.count($indices) . ' indices for update', 'mksearch');
 
 		try {
 			// Loop through all active indices, collecting all configurations
 			foreach ($indices as $index) {
 				/* @var $index tx_mksearch_model_internal_Index */
+				// Wir lesen die rootpage des indexers aus.
+				tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
+				$rootpage = tx_mksearch_service_indexer_core_Config::getSiteRootPage(
+								// wurde eine pid übergeben?
+								$config['pid'] ? $config['pid'] :
+								// wurde eine rootpage definiert. fallback ist die pid
+								($index->record['rootpage'] ? $index->record['rootpage'] : $index->record['pid'])
+					);
+				
 				tx_rnbase_util_Logger::debug('[INDEXQUEUE] Next index is '.$index->getTitle(), 'mksearch');
 				// Container for all documents to be indexed / deleted
 				$indexDocs = array();
@@ -302,6 +341,13 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 								//isn't taken by both indexer configs as the doc of the element for
 								//the first config will be overwritten by the second one
 								foreach ($indexConfig[$extKey.'.'][$contentType.'.'] as $aConfigByContentType){
+									// die rootpage dem indexer zur verfügung stellen
+									$aConfigByContentType['rootpage'] = $rootpage;
+									// Dem Indexer mitteilen, das dieser Record in Rootpage enthalten sein muss.
+									// Der Indexer muss sich darum kümmern, ob dieses Element indiziert werden soll.
+									// @see tx_mksearch_indexer_Base::checkPageTreeIncludes
+									$aConfigByContentType['include.']['pageTrees.'][] = $rootpage['uid'];
+									// indizieren!
 									$doc = $indexer->prepareSearchData($queueRecord['tablename'], $record, $searchEngine->makeIndexDocInstance($extKey, $contentType), $aConfigByContentType);
 									if($doc) {
 										//add fixed_fields from indexer config if defined

@@ -4,6 +4,12 @@ mod {
 		
 		configindizes {
 			template = EXT:mksearch/mod1/templates/configindizes.html
+		}
+		keywords {
+			template = EXT:mksearch/mod1/templates/keywords.html
+		}
+		configindizesdblist {
+			template = EXT:mksearch/mod1/templates/configindizesdblist.html
 			showerror = CASE
 			showerror.key.field = showerror
 			showerror.default = TEXT

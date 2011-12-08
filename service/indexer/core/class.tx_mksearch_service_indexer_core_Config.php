@@ -36,7 +36,7 @@ class tx_mksearch_service_indexer_core_Config {
 	 *
 	 * @var t3lib_pageSelect
 	 */
-	private static $page; 
+	private static $page;
 
 	/**
 	 * Return page instance
@@ -44,14 +44,14 @@ class tx_mksearch_service_indexer_core_Config {
 	 * @return t3lib_pageSelect
 	 */
 	private static function page() {
-		if (!isset(self::$page)) 
+		if (!isset(self::$page))
 			self::$page = t3lib_div::makeInstance('t3lib_pageSelect');
 		return self::$page;
 	}
 	
 	/**
 	 * Cache for storing actually resulting fe groups of pages
-	 * 
+	 *
 	 * Note that this cache is used for both pages and tt_contents!
 	 *
 	 * @var array('groups' => [array], 'local' => [array])
@@ -67,17 +67,49 @@ class tx_mksearch_service_indexer_core_Config {
 	 */
 	private static $groupCache = array();
 	
+	/**
+	 * Returns the rootline of the given page id.
+	 * @param 	int 	$uid
+	 * @return 	array
+	 */
+	private static function getRootLine($uid){
+		return self::page()->getRootLine($uid);
+	}
+	/**
+	 * Returns the siteroot page of the given page.
+	 * @param 	int 	$uid
+	 * @return 	array
+	 */
+	public static function getSiteRootPage($uid){
+		foreach (self::page()->getRootLine($uid) as $page){
+			if($rootPage['is_siteroot']) {
+				return $page;
+			}
+		}
+		return array();
+	}
+	/**
+	 * Returns al list of page ids from the siteroot page of the given page.
+	 * @param 	int 	$uid
+	 * @return 	string
+	 */
+	public static function getPidListFromSiteRootPage($uid, $recursive = 0){
+		$rootPage = self::getSiteRootPage($uid);
+		if(empty($rootPage)) return '';
+		tx_rnbase::load('tx_rnbase_util_DB');
+		return tx_rnbase_util_DB::_getPidList($rootPage['uid'], $recursive);
+	}
 	
 	/**
 	 * Fetch all subgroups for the given group
 	 *
 	 * @param int $groupId
-	 * @param array $callStackGroups	For internal use only! As groups and subgroups may define an endless recursion, all groups of the current call stack are stored here to make it possible to break through the endless loop!  
+	 * @param array $callStackGroups	For internal use only! As groups and subgroups may define an endless recursion, all groups of the current call stack are stored here to make it possible to break through the endless loop!
 	 * @return array
 	 */
 	private static function getSubGroups($groupId, array $callStackGroups=array()) {
 		// Cache?
-		if (isset(self::$groupCache[$groupId])) return self::$groupCache[$groupId]; 
+		if (isset(self::$groupCache[$groupId])) return self::$groupCache[$groupId];
 		
 		// Simplify query via table sys_refindex so what
 		// we don't need to struggle with those stupid csv fields...
@@ -85,7 +117,7 @@ class tx_mksearch_service_indexer_core_Config {
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 									'ref_uid',
 									'fe_groups JOIN sys_refindex AS ref ON fe_groups.uid = ref.ref_uid',
-											'1=1' . self::page()->enableFields('fe_groups') . 
+											'1=1' . self::page()->enableFields('fe_groups') .
 									' AND ref.ref_table = \'fe_groups\' AND ref.field = \'subgroup\'' .
 									' AND ref.recuid = ' . intval($groupId)
 								);
@@ -101,7 +133,7 @@ class tx_mksearch_service_indexer_core_Config {
 		// Eliminate duplicates
 		if ($sub) $sub = array_unique($sub);
 		
-		// Fill cache	
+		// Fill cache
 		self::$groupCache[$groupId] = $sub;
 		
 		return $sub;
@@ -111,12 +143,12 @@ class tx_mksearch_service_indexer_core_Config {
 	 * Actually calculate fe_groups
 	 *
 	 * Calculation means to respect the fe_groups of
-	 * hierarchically superordinated pages, and also 
+	 * hierarchically superordinated pages, and also
 	 * includes exploring of all implicite subgroups
-	 * which are finally returned explicitely. 
-	 * 
+	 * which are finally returned explicitely.
+	 *
 	 * @param int $pid
-	 * @return array('groups' => [array], 'extendToSubPages' => [bool]) 
+	 * @return array('groups' => [array], 'extendToSubPages' => [bool])
 	 * @see self::getEffectiveFeGroups()
 	 * @todo Move to tx_mksearch_service_indexer_BaseDataBase
 	 */
@@ -124,7 +156,7 @@ class tx_mksearch_service_indexer_core_Config {
 		// In cache?
 		if (isset(self::$resultingAccessCache[$pid])) return self::$resultingAccessCache[$pid];
 		// else: Begin calculating...
-		$rootline = self::page()->getRootLine($pid);
+		$rootline = self::getRootLine($pid);
 		
 		if (!sizeof($rootline))
 			// MW: Keine Rootline gefunden, Seite gelöscht!?
@@ -188,8 +220,8 @@ class tx_mksearch_service_indexer_core_Config {
 	
 	/**
 	 * Return calculated FE groups of the given page
-	 * 
-	 * @param int $pid	ID of page, for which FE groups are searched 
+	 *
+	 * @param int $pid	ID of page, for which FE groups are searched
 	 * @return array
 	 */
 	public static function getEffectivePageFeGroups($pid) {
@@ -201,9 +233,9 @@ class tx_mksearch_service_indexer_core_Config {
 	
 	/**
 	 * Return a content element's FE groups
-	 * 
+	 *
 	 * @param int	$pid		ID of the content element's page
-	 * @param array	$ceGroups	FE groups of content element 
+	 * @param array	$ceGroups	FE groups of content element
 	 * @return array
 	 */
 	public static function getEffectiveContentElementFeGroups($pid, $ceGroups) {
@@ -212,7 +244,7 @@ class tx_mksearch_service_indexer_core_Config {
 		$groupsArr = (isset($groupsArr['local'])) ? 	$groupsArr['local'] : $groupsArr['groups'];
 
 		// Explicite groups for content element?
-		if ($ceGroups && is_array($groupsArr)) 
+		if ($ceGroups && is_array($groupsArr))
 			$groupsArr = array_intersect($groupsArr, $ceGroups);
 
 		if(empty($groupsArr))
@@ -223,7 +255,7 @@ class tx_mksearch_service_indexer_core_Config {
 	/**
 	 * Return SQL where clause containing include and exclude pages
 	 *
-	 * @param array 	$include		Include options as returned by self::getIncludeExclude() 
+	 * @param array 	$include		Include options as returned by self::getIncludeExclude()
 	 * @param array		$exclude		Exclude options as returned by self::getExcludeExclude()
 	 * @return string
 	 * @todo Move to tx_mksearch_service_indexer_BaseDataBase, making it generic
@@ -241,7 +273,7 @@ class tx_mksearch_service_indexer_core_Config {
 		if (count($foo)) $whereAll[] = '(' . implode(' OR ', $foo) . ')';
 		
 		if (count($whereAll))
-			return ' AND ' . implode(' AND ', $whereAll); 
+			return ' AND ' . implode(' AND ', $whereAll);
 		else return '';
 	}
 	
@@ -249,9 +281,9 @@ class tx_mksearch_service_indexer_core_Config {
 	/**
 	 * Return arrays of include and exclude uids
 	 *
-	 * @param array 	$include		Include options as defined in tx_mksearch_service_indexer_core_Page config options 
+	 * @param array 	$include		Include options as defined in tx_mksearch_service_indexer_core_Page config options
 	 * @param array		$exclude		Exclude options as defined in tx_mksearch_service_indexer_core_Page config options
-	 * @param array		$parame=array	Array of parameter suffixes to be processed, with the array key being the name of the column used for restriction in SQL statement 
+	 * @param array		$parame=array	Array of parameter suffixes to be processed, with the array key being the name of the column used for restriction in SQL statement
 	 * @return array['include' => array[param1 => array[uids], param2 => array[uids]], 'exclude' => ...]
 	 * @todo Move to tx_mksearch_service_indexer_BaseDataBase, making it generic
 	 */

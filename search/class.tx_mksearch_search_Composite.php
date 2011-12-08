@@ -30,7 +30,7 @@ class tx_mksearch_search_Composite extends tx_rnbase_util_SearchBase {
 
 	/**
 	 * Return table mappings
-	 * 
+	 *
 	 * MUST be public as we need these data from external!
 	 */
 	public function getTableMappings() {
@@ -50,6 +50,14 @@ class tx_mksearch_search_Composite extends tx_rnbase_util_SearchBase {
 	 */
 	public function getBaseTable() {
 		return 'tx_mksearch_configcomposites';
+	}
+	/**
+	 * return name of base table
+	 * MUST be public as we need these data from external!
+	 * @see util/tx_rnbase_util_SearchBase#getBaseTable()
+	 */
+	public function getBaseTableAlias() {
+		return 'CMP';
 	}
 	
 	public function getWrapperClass() {

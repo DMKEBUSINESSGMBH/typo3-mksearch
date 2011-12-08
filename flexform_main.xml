@@ -68,8 +68,15 @@
 						<label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.usedIndex</label>
 						<config>
 							<type>select</type>
-							<foreign_table>tx_mksearch_indices</foreign_table>
-							<foreign_table_where>AND engine='solr' ORDER BY name</foreign_table_where>
+			                <items type="array">
+			                  <numIndex index="0" type="array">
+			                    <numIndex index="0"></numIndex>
+			                    <numIndex index="1"></numIndex>
+			                  </numIndex>
+			                </items>
+							<itemsProcFunc>EXT:mksearch/util/class.tx_mksearch_util_TCA.php:tx_mksearch_util_TCA->getIndexes</itemsProcFunc>
+							<!--foreign_table>tx_mksearch_indices</foreign_table>
+							<foreign_table_where>AND engine='solr' ORDER BY name</foreign_table_where-->
 							<multiple>0</multiple>
 							<maxitems>1</maxitems>
 							<size>1</size>

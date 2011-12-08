@@ -16,6 +16,7 @@ CREATE TABLE tx_mksearch_indices (
 	description text,
 	name varchar(255) DEFAULT '0' NOT NULL,
 	engine varchar(50) DEFAULT '0' NOT NULL,
+	rootpage int(11) DEFAULT '0' NOT NULL,
 	composites int(11) DEFAULT '0' NOT NULL,
 	configuration text,
 	PRIMARY KEY (uid),

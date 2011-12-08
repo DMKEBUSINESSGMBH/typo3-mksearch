@@ -31,17 +31,17 @@ class tx_mksearch_util_TCA {
 	
 	/**
 	 * Convert HTML to plain text
-	 * 
-	 * Removes HTML tags and HTML comments and converts HTML entities  
+	 *
+	 * Removes HTML tags and HTML comments and converts HTML entities
 	 * to their applicable characters.
-	 * 
+	 *
 	 * @param string	$t
 	 * @return string	Converted string (utf8-encoded)
 	 */
 	public static function html2plain($t) {
 		return html_entity_decode(
 					preg_replace(
-									array('/(\s+|(<.*?>)+)/', '/<!--.*?-->/'), 
+									array('/(\s+|(<.*?>)+)/', '/<!--.*?-->/'),
 									array(' ', ''),
 									$t
 								),
@@ -52,7 +52,7 @@ class tx_mksearch_util_TCA {
 
 	/**
 	 * Get extension keys of all registered indexers
-	 * 
+	 *
 	 * @param array &$params
 	 * @return array
 	 */
@@ -67,7 +67,7 @@ class tx_mksearch_util_TCA {
 	
 	/**
 	 * Get content types keys of the given indexer extension
-	 * 
+	 *
 	 * @param array &$params
 	 * @return array
 	 */
@@ -88,7 +88,7 @@ class tx_mksearch_util_TCA {
 	 * @param array $params
 	 */
 	public static function insertIndexerDefaultTSConfig(array &$params) {
-		if (!(isset($params['params']['insertBetween']) && is_array($params['params']['insertBetween']) && 
+		if (!(isset($params['params']['insertBetween']) && is_array($params['params']['insertBetween']) &&
 					!empty($params['row']['extkey']) && !empty($params['row']['contenttype'])))
 			return;
 		
@@ -111,9 +111,34 @@ class tx_mksearch_util_TCA {
 		if ($rpos === false or $lpos > $rpos) return;
 
 		$between = substr($params['item'], $lpos, $rpos-$lpos);
-		if (!isset($params['params']['onMatchOnly']) ||preg_match($params['params']['onMatchOnly'], $between)) {
+		if (!isset($params['params']['onMatchOnly']) || preg_match($params['params']['onMatchOnly'], $between)) {
 			$params['item'] = substr($params['item'], 0, $lpos) . $ts . substr($params['item'], $rpos, strlen($params['item'])-$rpos);
 		}
+	}
+	
+	/**
+	 * Insert indexes fot the current rootpage/domain
+	 *
+	 * @param array $params
+	 */
+	public static function getIndexes(array &$params) {
+		// rootpage des aktuellen plugins
+		tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
+		$rootOfPlugin = tx_mksearch_service_indexer_core_Config::getSiteRootPage($params['row']['pid']);
+		
+		// Wir suchen alle Indexes, da die aktuelle PageId oder die RootPageId
+		// nicht die der PageId des Indexes entsprechen muss.
+		$indexer = tx_mksearch_util_ServiceRegistry::getIntIndexService()->findAll();
+		foreach($indexer as $index) {
+			/* @var $index tx_mksearch_model_internal_Index */
+			// rootpage des indexes
+			$rootOfIndex = tx_mksearch_service_indexer_core_Config::getSiteRootPage($index->record['pid']);
+			// Sind die RootPages identisch oder ist der Index global,
+			// kann der Index verwendet werden.
+			if(empty($rootOfIndex['uid']) || $rootOfIndex['uid'] == $rootOfPlugin['uid'])
+				$params['items'][] = array($index->getTitle(), $index->getUid());
+		}
+		
 	}
 }
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_TCA.php'])	{

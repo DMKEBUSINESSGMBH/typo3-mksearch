@@ -48,6 +48,13 @@ abstract class tx_mksearch_service_Base extends t3lib_svbase {
 	abstract public function getSearchClass();
 
 	/**
+	 * @return tx_rnbase_util_SearchBase
+	 */
+	public function getSearcher(){
+		return tx_rnbase_util_SearchBase::getInstance($this->getSearchClass());
+	}
+	
+	/**
 	 * Search database
 	 *
 	 * @param array $fields
@@ -55,7 +62,7 @@ abstract class tx_mksearch_service_Base extends t3lib_svbase {
 	 * @return array[tx_rnbase_model_base]
 	 */
 	public function search($fields, $options) {
-		$searcher = tx_rnbase_util_SearchBase::getInstance($this->getSearchClass());
+		$searcher = $this->getSearcher();
 
 		// On default, return hidden and deleted fields in backend
 		// @TODO: realy return deleted fields? make Konfigurable!
@@ -73,7 +80,7 @@ abstract class tx_mksearch_service_Base extends t3lib_svbase {
 
 	/**
 	 * Search the item for the given uid
-	 * 
+	 *
 	 * @TODO: 	Achtung,
 	 * 			tx_rnbase_util_SearchBase::getWrapperClass() ist eigentlich protected!
 	 *

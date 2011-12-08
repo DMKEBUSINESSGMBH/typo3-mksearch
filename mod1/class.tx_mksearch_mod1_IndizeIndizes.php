@@ -30,7 +30,7 @@ tx_rnbase::load('tx_mksearch_mod1_util_IndexStatusHandler');
 
 
 /**
- * Mksearch backend module 
+ * Mksearch backend module
  */
 class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc {
 
@@ -43,12 +43,16 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc {
 		return 'indizeindizes';
 	}
 	
+	protected function getPageId() {
+		return $this->getModule()->id;
+	}
+	
 	/**
 	 * Return the actual html content
-	 * 
+	 *
 	 * Actually, just the list view of the defined storage folder
 	 * is displayed within an iframe.
-	 * 
+	 *
 	 * @param string $template
 	 * @param tx_rnbase_configurations $configurations
 	 * @param tx_rnbase_util_FormatUtil $formatter
@@ -95,7 +99,7 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc {
 	protected function showTables($template, $configurations, $formTool, &$markerArray, $oIntIndexSrv) {
 		tx_rnbase::load('tx_mksearch_util_Config');
 		$aIndexers = tx_mksearch_util_Config::getIndexers();
-		$aIndices = $oIntIndexSrv->findAll();
+		$aIndices = $oIntIndexSrv->getByPageId($this->getPageId());
 
 		$aDefinedTables = array();
 		
@@ -120,6 +124,7 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc {
 			'name' => array('title' => 'label_table_name', 'decorator' => $decor),
 			'queuecount' => array('title' => 'label_table_queuecount', 'decorator' => $decor),
 			'clear' => array('title' => 'label_table_clear', 'decorator' => $decor),
+			'resetG' => array('title' => 'label_table_resetG', 'decorator' => $decor),
 			'reset' => array('title' => 'label_table_reset', 'decorator' => $decor),
 		);
 
@@ -137,6 +142,24 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc {
 		$markerArray['###TABLES_COUNT###'] = count($aDefinedTables);
 	}
 
+	private function getPidList() {
+		// wir holen uns eine liste von page ids
+		// nur elemente dieser page id dürfen in der Queue landen
+		tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
+		$pidList = tx_mksearch_service_indexer_core_Config::getPidListFromSiteRootPage($this->getPageId(), 999);
+
+		if(empty($pidList)) return $pidList;
+		
+		// ausnahmen
+		
+		// pageids für dam
+		if (t3lib_extMgm::isLoaded('dam')) {
+			$pages = tx_rnbase_util_DB::doSelect('uid', 'pages', array('where' => 'pages.module=\'dam\''));
+			$pidList .= (empty($pidList) ? '' : ',').implode(',', array_values($pages[0]));
+		}
+		return $pidList;
+	}
+	
 	/**
 	 * Handle reset command from request
 	 * @param tx_mksearch_service_internal_Index $oIntIndexSrv
@@ -146,7 +169,7 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc {
 	private function handleClear($oIntIndexSrv, &$configurations) {
 		$aTables = t3lib_div::_GP('clearTables');
 		if (!(is_array($aTables) && (!empty($aTables)))) return '';
-	
+		
 		$status = $configurations->getLL('label_queue_cleared');
 		foreach ($aTables as $sTable) {
 			$oIntIndexSrv->clearIndexingQueueForTable($sTable);
@@ -163,15 +186,42 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc {
 	 * @return string
 	 */
 	private function handleReset($oIntIndexSrv, &$configurations) {
-		$aTables = t3lib_div::_GP('resetTables');
-		if (!(is_array($aTables) && (!empty($aTables)))) return '';
+		// reset aller elemente im siteroot
+		$aTables['pid'] = t3lib_div::_GP('resetTables');
+		// global, alle elemente
+		$aTables['global'] = t3lib_div::_GP('resetTablesG');
+		if (
+			(!is_array($aTables['pid']) && empty($aTables['pid']))
+			&& (!is_array($aTables['global']) && empty($aTables['global']))
+		) return '';
 
 		$status = $configurations->getLL('label_queue_reseted');
-		foreach ($aTables as $sTable) {
-			$oIntIndexSrv->resetIndexingQueueForTable($sTable, array());
+		foreach ($aTables as $key => $aResets) {
+			if (is_array($aResets)) {
+				foreach ($aResets as $sTable) {
+					$options = array();
+					
+					if ($key == 'pid') {
+						// wir holen uns eine liste von page ids
+						// nur elemente dieser page id dürfen in der Queue landen
+						$pidList = $this->getPidList();
+						if (!empty($pidList)) $options['where'] = 'pid IN ('.$pidList.')';
+					}
+					$oIntIndexSrv->resetIndexingQueueForTable($sTable, $options );
+				}
+			}
 		}
 		
-		$status .= '<ul><li>'.implode('</li><li/>', $aTables).'</li></ul>';
+		$status .= 	'<ul><li>'.
+					implode('</li><li/>',
+						array_unique(
+							array_merge(
+								is_array($aTables['pid']) ? $aTables['pid'] : array(),
+								is_array($aTables['global']) ? $aTables['global'] : array()
+							)
+						)
+					).
+					'</li></ul>';
 		return $status;
 	}
 	
@@ -187,7 +237,9 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc {
 
 		$status = '';
 		$indexItems = intval(t3lib_div::_GP('triggerIndexingQueueCount'));
-		$rows = $oIntIndexSrv->triggerQueueIndexing($indexItems > 0 ? $indexItems : 100);
+		$options['limit'] = $indexItems > 0 ? $indexItems : 100;
+		$options['pid'] = $this->getPageId();
+		$rows = $oIntIndexSrv->triggerQueueIndexing($options);
 		if ($rows) {
 			$status .= $configurations->getLL('label_queue_indexed');
 			// Komplette Anzahl ausgeben.

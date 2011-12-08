@@ -24,7 +24,6 @@
 
 require_once(PATH_t3lib.'class.t3lib_svbase.php');
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
-tx_rnbase::load('tx_rnbase_util_SearchBase');
 
 /**
  * Service for accessing models from database
@@ -32,12 +31,19 @@ tx_rnbase::load('tx_rnbase_util_SearchBase');
 class tx_mksearch_service_internal_Base extends t3lib_svbase {
 	
 	/**
-	 * Search class - set this to the search class name 
+	 * Search class - set this to the search class name
 	 *
 	 * @var string
 	 */
 	protected $searchClass;
-
+	
+	/**
+	* @return tx_rnbase_util_SearchBase
+	*/
+	public function getSearcher() {
+		tx_rnbase::load('tx_rnbase_util_SearchBase');
+		return tx_rnbase_util_SearchBase::getInstance($this->searchClass);
+	}
 	/**
 	 * Search database
 	 *
@@ -46,8 +52,7 @@ class tx_mksearch_service_internal_Base extends t3lib_svbase {
 	 * @return array[tx_mksearch_model_internal_Index]
 	 */
 	public function search($fields, $options) {
-		$searcher = tx_rnbase_util_SearchBase::getInstance($this->searchClass);
-		return $searcher->search($fields, $options);
+		return $this->getSearcher()->search($fields, $options);
 	}
 	/**
 	 * Check if a indexer is defined to index data into a given core.
@@ -70,6 +75,7 @@ class tx_mksearch_service_internal_Base extends t3lib_svbase {
 		}
 		return $ret;
 	}
+	
 	/**
 	 * Search database for all configurated Indices
 	 *
@@ -86,6 +92,21 @@ class tx_mksearch_service_internal_Base extends t3lib_svbase {
 	}
 	
 	/**
+	 * Search database for all configurated Indices
+	 *
+	 * @param array $fields
+	 * @param array $options
+	 * @return array[tx_mksearch_model_internal_Index]
+	 */
+	public function getByPageId($pageId) {
+		//$options['debug'] = 1;
+		$alias = $this->getSearcher()->getBaseTableAlias();
+		if(intval($pageId)) $fields[$alias.'.pid'][OP_EQ_INT] = $pageId;
+		$options['enablefieldsfe'] = 1;
+		return $this->search($fields, $options);
+	}
+		
+	/**
 	 * Get model from database by its uid
 	 *
 	 * @param array $fields
@@ -93,8 +114,7 @@ class tx_mksearch_service_internal_Base extends t3lib_svbase {
 	 * @return tx_mksearch_model_*
 	 */
 	public function get($uid) {
-		$searcher = tx_rnbase_util_SearchBase::getInstance($this->searchClass);
-		return tx_rnbase::makeInstance($searcher->getWrapperClass(), $uid);
+		return tx_rnbase::makeInstance($this->getSearcher()->getWrapperClass(), $uid);
 	}
 	
 //	/**

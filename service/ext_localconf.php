@@ -37,10 +37,10 @@ t3lib_extMgm::addService($_EXTKEY,  'mksearch_engine' /* sv type */,  'tx_mksear
 
 // Activate indexer services
 
-// Activate at most ONE of 'core.page' OR 'templavoila.page' indexer services! 
+// Activate at most ONE of 'core.page' OR 'templavoila.page' indexer services!
 $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['indexer']['active'][] = 'core.page';
 //$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['indexer']['active'][] = 'templavoila.page';
-// Activate at most ONE of 'core.tt_content' OR 'templavoila.tt_content' indexer services! 
+// Activate at most ONE of 'core.tt_content' OR 'templavoila.tt_content' indexer services!
 $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['indexer']['active'][] = 'core.tt_content';
 //$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['indexer']['active'][] = 'templavoila.tt_content';
 
@@ -51,20 +51,20 @@ require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_mksearch_util_Config');
 
 tx_mksearch_util_Config::registerIndexer(
-	'core', 
-	'page', 
-	'tx_mksearch_indexer_Page', 
+	'core',
+	'page',
+	'tx_mksearch_indexer_Page',
 	array(
 		'pages',
-		//@todo handle page overlay 
+		//@todo handle page overlay
 		'pages_language_overlay'
 	)
 );
 
 tx_mksearch_util_Config::registerIndexer(
-	'core', 
-	'tt_content', 
-	'tx_mksearch_indexer_TtContent', 
+	'core',
+	'tt_content',
+	'tx_mksearch_indexer_TtContent',
 	array(
 		//Main Table
 		'tt_content',
@@ -78,9 +78,9 @@ tx_mksearch_util_Config::registerIndexer('dam', 'media', 'tx_mksearch_indexer_Da
 
 // seminars Extension
 tx_mksearch_util_Config::registerIndexer(
-	'seminars', 
-	'seminar', 
-	'tx_mksearch_indexer_seminars_Seminar', 
+	'seminars',
+	'seminar',
+	'tx_mksearch_indexer_seminars_Seminar',
 	array(
 		//main table
 		'tx_seminars_seminars',
@@ -96,9 +96,9 @@ tx_mksearch_util_Config::registerIndexer(
 
 // irfaq Extension
 tx_mksearch_util_Config::registerIndexer(
-	'irfaq', 
-	'question', 
-	'tx_mksearch_indexer_Irfaq', 
+	'irfaq',
+	'question',
+	'tx_mksearch_indexer_Irfaq',
 	array(
 		//main table
 		'tx_irfaq_q',
@@ -167,6 +167,20 @@ t3lib_extMgm::addService($_EXTKEY, 'mksearch', 'tx_mksearch_indexer_internal_con
 			'className' => 'tx_mksearch_service_internal_Config',
 		)
 	);
+t3lib_extMgm::addService($_EXTKEY, 'mksearch', 'tx_mksearch_service_internal_Keyword',
+		array(
+			'title' => 'Keyword Service',
+			'description' => 'Service for keywords',
+			'subtype' => 'keyword',
+			'available' => TRUE,
+			'priority' => 50,
+			'quality' => 50,
+			'os' => '',
+			'exec' => '',
+			'classFile' => t3lib_extMgm::extPath($_EXTKEY).'service/internal/class.tx_mksearch_service_internal_Keyword.php',
+			'className' => 'tx_mksearch_service_internal_Keyword',
+		)
+	);
 
 t3lib_extMgm::addService($_EXTKEY, 'mksearch', 'tx_mksearch_service_irfaq_Expert',
 		array(
@@ -181,7 +195,7 @@ t3lib_extMgm::addService($_EXTKEY, 'mksearch', 'tx_mksearch_service_irfaq_Expert
 			'classFile' => t3lib_extMgm::extPath($_EXTKEY).'service/irfaq/class.tx_mksearch_service_irfaq_Expert.php',
 			'className' => 'tx_mksearch_service_irfaq_Expert',
 		)
-	);	
+	);
 	
 t3lib_extMgm::addService($_EXTKEY, 'mksearch', 'tx_mksearch_service_irfaq_Category',
 		array(
@@ -211,4 +225,4 @@ t3lib_extMgm::addService($_EXTKEY, 'mksearch', 'tx_mksearch_service_irfaq_Questi
 			'classFile' => t3lib_extMgm::extPath($_EXTKEY).'service/irfaq/class.tx_mksearch_service_irfaq_Question.php',
 			'className' => 'tx_mksearch_service_irfaq_Question',
 		)
-	);	
+	);

@@ -23,34 +23,21 @@
 ***************************************************************/
 
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
-tx_rnbase::load('tx_mksearch_service_internal_Base');
+tx_rnbase::load('tx_rnbase_model_base');
 
 /**
- * Service for accessing indexer configuration models from database
+ * Model for indexer configuration composites
  */
-class tx_mksearch_service_internal_Config extends tx_mksearch_service_internal_Base {
-	
-	/**
-	 * Search class of this service
-	 *
-	 * @var string
-	 */
-	protected $searchClass = 'tx_mksearch_search_Config';
-	
+class tx_mksearch_model_internal_Composite extends tx_rnbase_model_base {
 
 	/**
-	 * Search database for all configurated Indices
+	 * Return this model's table name
 	 *
-	 * @param 	tx_mksearch_model_internal_Composite 	$indexerconfig
-	 * @return 	array[tx_mksearch_model_internal_Config]
+	 * @return string
 	 */
-	public function getByComposite(tx_mksearch_model_internal_Composite $composite) {
-		$fields['CMPCFGMM.uid_local'][OP_EQ_INT] = $composite->getUid();
-// 		$options['debug']=1;
-		return $this->search($fields, $options);
-	}
+	public function getTableName() {return 'tx_mksearch_configcomposites';}
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/service/internal/class.tx_mksearch_service_internal_Config.php']) {
-  include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/service/internal/class.tx_mksearch_service_internal_Config.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/model/internal/class.tx_mksearch_model_internal_Composite.php']) {
+  include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/model/internal/class.tx_mksearch_model_internal_Composite.php']);
 }

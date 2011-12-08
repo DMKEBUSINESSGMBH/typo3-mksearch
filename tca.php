@@ -8,7 +8,7 @@ $TCA['tx_mksearch_indices'] = array (
 	),
 	'feInterface' => $TCA['tx_mksearch_indices']['feInterface'],
 	'columns' => array (
-		'hidden' => array (		
+		'hidden' => array (
 			'exclude' => 1,
 			'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices.hidden',
 			'config'  => array (
@@ -16,13 +16,13 @@ $TCA['tx_mksearch_indices'] = array (
 				'default' => '0'
 			)
 		),
-		'title' => array (		
-			'exclude' => 0,	
+		'title' => array (
+			'exclude' => 0,
 			'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices.title',
 			'config' => array (
-				'type' => 'input',	
-				'size' => '30',	
-				'max' => '100',	
+				'type' => 'input',
+				'size' => '30',
+				'max' => '100',
 				'eval' => 'required,trim',
 			)
 		),
@@ -33,27 +33,48 @@ $TCA['tx_mksearch_indices'] = array (
 				'type' => 'text',
 				'cols' => '30',
 				'rows' => '3',
-			),		
+			),
 		),
-		'name' => array (		
-			'exclude' => 0,		
+		'name' => array (
+			'exclude' => 0,
 			'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices.name',
 			'config' => array (
-				'type' => 'input',	
-				'size' => '30',	
-				'max' => '100',	
+				'type' => 'input',
+				'size' => '30',
+				'max' => '100',
 				'eval' => 'required,trim',
 			)
 		),
-		'composites' => array (		
-			'exclude' => 0,		
+		'rootpage' => array(
+			'exclude' => 0,
+			'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices.rootpage',
+			'config' => array (
+					'type' => 'group',
+					'internal_type' => 'db',
+					'allowed' => 'pages',
+					'size' => 1,
+					'minitems' => 0,
+					'maxitems' => 1,
+					'wizards' => array (
+						'suggest' => array(
+							'type' => 'suggest',
+							'default' => array(
+								'maxItemsInResultList' => 5,
+								'searchWholePhrase' => true, // true: LIKE %term% false: LIKE term%
+							),
+						),
+					),
+				),
+		),
+		'composites' => array (
+			'exclude' => 0,
 			'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices.composites',
 			'config' => array (
-				'type' => 'select',	
+				'type' => 'select',
 				'foreign_table' => 'tx_mksearch_configcomposites',
-				'foreign_table_where' => ' ORDER BY tx_mksearch_configcomposites.title',
-				'MM' => 'tx_mksearch_indices_configcomposites_mm',	
-				'size' => 20,	
+				'foreign_table_where' => ' AND tx_mksearch_configcomposites.pid=###CURRENT_PID### ORDER BY tx_mksearch_configcomposites.title',
+				'MM' => 'tx_mksearch_indices_configcomposites_mm',
+				'size' => 20,
 				'minitems' => 0,
 				'maxitems' => 100,
 				'wizards' => array(
@@ -104,9 +125,9 @@ $TCA['tx_mksearch_indices'] = array (
 				'default' => 'zend_lucene'
 			)
 		),
-		'configuration' => array (		
-			'exclude' => 0,		
-			'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indexerconfigs.configuration',		
+		'configuration' => array (
+			'exclude' => 0,
+			'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indexerconfigs.configuration',
 			'config' => array (
 				'type' => 'text',
 				'cols' => '200',
@@ -116,7 +137,7 @@ $TCA['tx_mksearch_indices'] = array (
 		)
 	),
 	'types' => array (
-		'0' => array('showitem' => 'hidden;;1, title, description, engine, configuration, name, composites')
+		'0' => array('showitem' => 'hidden;;1, title, description, engine, rootpage, configuration, name, composites')
 	),
 	'palettes' => array (
 		'1' => array('showitem' => '')
@@ -130,43 +151,43 @@ $TCA['tx_mksearch_configcomposites'] = array (
 	),
 	'feInterface' => $TCA['tx_mksearch_configcomposites']['feInterface'],
 	'columns' => array (
-		'hidden' => array (		
+		'hidden' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_configcomposites.hidden',		
+			'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_configcomposites.hidden',
 			'config'  => array (
 				'type'    => 'check',
 				'default' => '0'
 			)
 		),
-		'title' => array (		
-			'exclude' => 0,		
-			'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_configcomposites.title',		
+		'title' => array (
+			'exclude' => 0,
+			'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_configcomposites.title',
 			'config' => array (
-				'type' => 'input',	
-				'size' => '30',	
-				'max' => '100',	
+				'type' => 'input',
+				'size' => '30',
+				'max' => '100',
 				'eval' => 'required,trim',
 			)
 		),
-		'description' => array (		
-			'exclude' => 0,		
-			'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_configcomposites.description',		
+		'description' => array (
+			'exclude' => 0,
+			'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_configcomposites.description',
 			'config' => array (
 				'type' => 'text',
 				'cols' => '30',
 				'rows' => '5',
 			)
 		),
-		'indices' => array (		
-			'exclude' => 0,		
-			'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_configcomposites.indices',		
+		'indices' => array (
+			'exclude' => 0,
+			'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_configcomposites.indices',
 			'config' => array (
-				'type' => 'select',	
+				'type' => 'select',
 				'foreign_table' => 'tx_mksearch_indices',
-				'foreign_table_where' => ' ORDER BY tx_mksearch_indices.title',
-				'MM' => 'tx_mksearch_indices_configcomposites_mm',	
-				'MM_opposite_field' => 'composites',	
-				'size' => 20,	
+				'foreign_table_where' => ' AND tx_mksearch_indices.pid=###CURRENT_PID### ORDER BY tx_mksearch_indices.title',
+				'MM' => 'tx_mksearch_indices_configcomposites_mm',
+				'MM_opposite_field' => 'composites',
+				'size' => 20,
 				'minitems' => 0,
 				'maxitems' => 100,
 				'wizards' => array(
@@ -204,15 +225,15 @@ $TCA['tx_mksearch_configcomposites'] = array (
 				),
 			)
 		),
-		'configs' => array (		
-			'exclude' => 0,		
-			'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_configcomposites.configs',		
+		'configs' => array (
+			'exclude' => 0,
+			'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_configcomposites.configs',
 			'config' => array (
-				'type' => 'select',	
-				'foreign_table' => 'tx_mksearch_indexerconfigs',	
-				'foreign_table_where' => ' ORDER BY tx_mksearch_indexerconfigs.title',
-				'MM' => 'tx_mksearch_configcomposites_indexerconfigs_mm',	
-				'size' => 20,	
+				'type' => 'select',
+				'foreign_table' => 'tx_mksearch_indexerconfigs',
+				'foreign_table_where' => ' AND tx_mksearch_indexerconfigs.pid=###CURRENT_PID### ORDER BY tx_mksearch_indexerconfigs.title',
+				'MM' => 'tx_mksearch_configcomposites_indexerconfigs_mm',
+				'size' => 20,
 				'minitems' => 0,
 				'maxitems' => 100,
 				'wizards' => array(
@@ -266,59 +287,59 @@ $TCA['tx_mksearch_indexerconfigs'] = array (
 	),
 	'feInterface' => $TCA['tx_mksearch_indexerconfigs']['feInterface'],
 	'columns' => array (
-		'hidden' => array (		
+		'hidden' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indexerconfigs.hidden',		
+			'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indexerconfigs.hidden',
 				'config'  => array (
 				'type'    => 'check',
 				'default' => '0'
 			)
 		),
-		'title' => array (		
-			'exclude' => 0,		
-			'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indexerconfigs.title',		
+		'title' => array (
+			'exclude' => 0,
+			'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indexerconfigs.title',
 			'config' => array (
-				'type' => 'input',	
-				'size' => '30',	
-				'max' => '100',	
+				'type' => 'input',
+				'size' => '30',
+				'max' => '100',
 				'eval' => 'required,trim',
 			)
 		),
-		'description' => array (		
-			'exclude' => 0,		
-			'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indexerconfigs.description',		
+		'description' => array (
+			'exclude' => 0,
+			'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indexerconfigs.description',
 			'config' => array (
 				'type' => 'text',
 				'cols' => '30',
 				'rows' => '5',
 			)
 		),
-		'extkey' => array (		
-			'exclude' => 0,		
-			'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indexerconfigs.extkey',		
+		'extkey' => array (
+			'exclude' => 0,
+			'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indexerconfigs.extkey',
 			'config' => array (
 				'type' => 'select',
 				'items' => array(array('','')),
-				'itemsProcFunc' => 'EXT:mksearch/util/class.tx_mksearch_util_TCA.php:tx_mksearch_util_TCA->getIndexerExtKeys',	
-				'size' => '1',	
-				'maxitems' => '1',	
+				'itemsProcFunc' => 'EXT:mksearch/util/class.tx_mksearch_util_TCA.php:tx_mksearch_util_TCA->getIndexerExtKeys',
+				'size' => '1',
+				'maxitems' => '1',
 			)
 		),
-		'contenttype' => array (		
-			'exclude' => 0,		
-			'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indexerconfigs.contenttype',		
+		'contenttype' => array (
+			'exclude' => 0,
+			'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indexerconfigs.contenttype',
 			'config' => array (
-				'type' => 'select',	
+				'type' => 'select',
 				'items' => array(array('','')),
-				'itemsProcFunc' => 'EXT:mksearch/util/class.tx_mksearch_util_TCA.php:tx_mksearch_util_TCA->getIndexerContentTypes',	
-				'size' => '1',	
-				'maxitems' => '1',	
+				'itemsProcFunc' => 'EXT:mksearch/util/class.tx_mksearch_util_TCA.php:tx_mksearch_util_TCA->getIndexerContentTypes',
+				'size' => '1',
+				'maxitems' => '1',
 				'eval' => 'required,trim',
 			)
 		),
-		'configuration' => array (		
-			'exclude' => 0,		
-			'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indexerconfigs.configuration',		
+		'configuration' => array (
+			'exclude' => 0,
+			'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indexerconfigs.configuration',
 			'config' => array (
 				'type' => 'text',
 				'cols' => '200',
@@ -336,16 +357,16 @@ $TCA['tx_mksearch_indexerconfigs'] = array (
 				)
 			)
 		),
-		'composites' => array (		
-			'exclude' => 0,		
-			'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indexerconfigs.composites',		
+		'composites' => array (
+			'exclude' => 0,
+			'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indexerconfigs.composites',
 			'config' => array (
-				'type' => 'select',	
+				'type' => 'select',
 				'foreign_table' => 'tx_mksearch_configcomposites',
-				'foreign_table_where' => ' ORDER BY tx_mksearch_configcomposites.title',
+				'foreign_table_where' => ' AND tx_mksearch_configcomposites.pid=###CURRENT_PID### ORDER BY tx_mksearch_configcomposites.title',
 				'MM' => 'tx_mksearch_configcomposites_indexerconfigs_mm',
-				'MM_opposite_field' => 'configs',	
-				'size' => 20,	
+				'MM_opposite_field' => 'configs',
+				'size' => 20,
 				'minitems' => 0,
 				'maxitems' => 100,
 				'wizards' => array(
@@ -418,7 +439,7 @@ $TCA['tx_mksearch_keywords'] = array (
 		),
 		'link' => Array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_keywords_link',		
+			'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_keywords_link',
 			'config' => Array (
 				'type' => 'input',
 				'size' => '15',

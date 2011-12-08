@@ -2,23 +2,98 @@
 
 <body>
 
-###CONFIGINDIZES###
-<p style="display: ###SHOWERROR###">
-	Please set <em>indexerConfigStoragePid</em> to a non-zero value in the mksearch extension configuration!
-</p>
+Vorlage fÃ¼r die Verwaltung Symbolnummernliste
 
-<iframe name="mksearchIframe"
-		onLoad="d=frames[this.name].document;
-				h=d.getElementById('typo3-docheader').offsetHeight+d.getElementById('typo3-inner-docbody').offsetHeight;
-				this.style.height=h+'px';"
-		style="width: 100%; height:500px; border: 0px;"
-		scrolling="no" frameborder="0" marginheight="0" marginwidth="0" src="###PATH###">
-	<p>
-		Your browser does not support IFrames. Please visit this <a href="###PATH###">link</a> to manually navigate to
-		the IFrame's target.
-	</p>
-</iframe>
-###CONFIGINDIZES###
+<!-- ###CONFIGINDIZES### START -->
+	<!-- Dieser Teil wird in allen Sub-Modulen integriert -->
+	<!-- ###COMMON_START### START -->
+	<!-- ###COMMON_START### END -->
+	
+	<!-- ###COMMON_END### START -->
+	<div class="mkcommon">
+		<h2 class="bgColor2 t3-row-header">###LABEL_COMMON_END###</h2>
+		<div class="tables graybox">
+<pre>Parsetime  ###MOD_PARSETIME###s
+Mem used   ###MOD_MEMUSED### Bytes
+Mem start  ###MOD_MEMSTART### Bytes
+Mem end    ###MOD_MEMEND### Bytes</pre>
+		</div>
+	</div>
+	<!-- ###COMMON_END### END -->
+	
+	###COMMON_START###
+	<!-- ###INDEX### START -->
+		
+		<div class="tables graybox mksearchform">
+			<h2 class="bgColor2 t3-row-header">###LABEL_SEARCH_FORM###</h2>
+			###INDEX_SEARCHFORM###
+		</div>
+		
+		<div class="tables graybox mkbuttons">
+			<h2 class="bgColor2 t3-row-header">###LABEL_BUTTONS###</h2>
+			###BUTTON_INDEX_NEW###
+		</div>
+		
+		<div class="tables graybox mkpager">
+			<h2 class="bgColor2 t3-row-header">###LABEL_PAGER###</h2>
+			###INDEX_PAGER###
+		</div>
+		
+		<div class="cleardiv"></div>
+		
+		<h2 class="bgColor2 t3-row-header">###LABEL_LIST### <span class="mklistsize">(###LABEL_LIST_SIZE### ###INDEX_SIZE###)</span></h2>
+		<div class="mklist">###INDEX_LIST###</div>
+		
+	<!-- ###INDEX### END -->
+	<!-- ###INDEXERCONFIG### START -->
+		
+		<div class="tables graybox mksearchform">
+			<h2 class="bgColor2 t3-row-header">###LABEL_SEARCH_FORM###</h2>
+			###INDEXERCONFIG_SEARCHFORM###
+		</div>
+		
+		<div class="tables graybox mkbuttons">
+			<h2 class="bgColor2 t3-row-header">###LABEL_BUTTONS###</h2>
+			###BUTTON_INDEXERCONFIG_NEW###
+		</div>
+		
+		<div class="tables graybox mkpager">
+			<h2 class="bgColor2 t3-row-header">###LABEL_PAGER###</h2>
+			###INDEXERCONFIG_PAGER###
+		</div>
+		
+		<div class="cleardiv"></div>
+		
+		<h2 class="bgColor2 t3-row-header">###LABEL_LIST### <span class="mklistsize">(###LABEL_LIST_SIZE### ###INDEXERCONFIG_SIZE###)</span></h2>
+		<div class="mklist">###INDEXERCONFIG_LIST###</div>
+		
+	<!-- ###INDEXERCONFIG### END -->
+	<!-- ###COMPOSITE### START -->
+		
+		<div class="tables graybox mksearchform">
+			<h2 class="bgColor2 t3-row-header">###LABEL_SEARCH_FORM###</h2>
+			###COMPOSITE_SEARCHFORM###
+		</div>
+		
+		<div class="tables graybox mkbuttons">
+			<h2 class="bgColor2 t3-row-header">###LABEL_BUTTONS###</h2>
+			###BUTTON_COMPOSITE_NEW###
+		</div>
+		
+		<div class="tables graybox mkpager">
+			<h2 class="bgColor2 t3-row-header">###LABEL_PAGER###</h2>
+			###COMPOSITE_PAGER###
+		</div>
+		
+		<div class="cleardiv"></div>
+		
+		<h2 class="bgColor2 t3-row-header">###LABEL_LIST### <span class="mklistsize">(###LABEL_LIST_SIZE### ###COMPOSITE_SIZE###)</span></h2>
+		<div class="mklist">###COMPOSITE_LIST###</div>
+		
+	<!-- ###COMPOSITE### END -->
+	###COMMON_END###
+
+<!-- ###CONFIGINDIZES### END -->
 
 </body>
 </html>

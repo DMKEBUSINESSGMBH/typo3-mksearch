@@ -39,7 +39,7 @@ class tx_mksearch_util_Misc {
 
 	/**
 	 * Allgemeine Include/exclude-Prüfung. Derzeit auf PID-Ebene
-	 * 
+	 *
 	 * @param array 	$sourceRecord
 	 * @param array 	$options
 	 * @return boolean
@@ -47,7 +47,8 @@ class tx_mksearch_util_Misc {
 	public static function isIndexable($sourceRecord, $options){
 		if(!is_array($options)) { return true; }
 		if(array_key_exists('include.', $options) && is_array($options['include.'])) {
-			$aPages = (array_key_exists('pages', $options['include.']) && strlen(trim($options['include.']['pages']))) ? t3lib_div::intExplode(',', $options['include.']['pages']) : false;
+			$aPages = (array_key_exists('pages', $options['include.']) && strlen(trim($options['include.']['pages'])))
+						? t3lib_div::intExplode(',', $options['include.']['pages']) : false;
 			if(!is_array($aPages))
 				$aPages = $options['include.']['pages.'];
 
@@ -57,7 +58,8 @@ class tx_mksearch_util_Misc {
 			}
 		}
 		if(array_key_exists('exclude.', $options) && is_array($options['exclude.'])) {
-			$aPages = (array_key_exists('pages', $options['exclude.']) && strlen(trim($options['exclude.']['pages']))) ? t3lib_div::intExplode(',', $options['exclude.']['pages']) : false;
+			$aPages = (array_key_exists('pages', $options['exclude.']) && strlen(trim($options['exclude.']['pages'])))
+						? t3lib_div::intExplode(',', $options['exclude.']['pages']) : false;
 			if(!is_array($aPages))
 				$aPages = $options['exclude.']['pages.'];
 			if(is_array($aPages) && count($aPages)) {
@@ -71,9 +73,9 @@ class tx_mksearch_util_Misc {
 
 	/**
 	 * Liefert einen UTF8 codierten String
-	 * 
+	 *
 	 * @TODO: wäre in der tx_rnbase_util_Strings besser aufgehoben?
-	 * 
+	 *
 	 * @param 	mixed 	$t
 	 * @return 	mixed
 	 */
@@ -87,17 +89,17 @@ class tx_mksearch_util_Misc {
 	
 	/**
 	 * Convert HTML to plain text
-	 * 
-	 * Removes HTML tags and HTML comments and converts HTML entities  
+	 *
+	 * Removes HTML tags and HTML comments and converts HTML entities
 	 * to their applicable characters.
-	 * 
+	 *
 	 * @param string	$t
 	 * @return string	Converted string (utf8-encoded)
 	 */
 	static function html2plain($t) {
 		return html_entity_decode(
 					preg_replace(
-									array('/(\s+|(<.*?>)+)/', '/<!--.*?-->/'), 
+									array('/(\s+|(<.*?>)+)/', '/<!--.*?-->/'),
 									array(' ', ''),
 									$t
 								),
@@ -117,7 +119,7 @@ class tx_mksearch_util_Misc {
 		//wir brauchen 3 backslashes (\\\) um einen einfachen zu entwerten.
 		//der erste entwertet den zweiten für die hochkommas. der zweite
 		//entwertet den dritten für regex.
-		//ansonsten sind das alle Zeichen, die in Solr nicht auftauchen 
+		//ansonsten sind das alle Zeichen, die in Solr nicht auftauchen
 		//dürfen da sie zur such-syntax gehören
 		//genau dürfen nicht auftauchen: + - & | ! ( ) { } [ ] ^ " ~ * ? : \
 		//außerdem nehmen wir folgende raus um die Suche zu verfeinern:

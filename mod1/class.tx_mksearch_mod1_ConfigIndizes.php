@@ -26,49 +26,39 @@
  ***************************************************************/
 
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
-tx_rnbase::load('tx_rnbase_mod_BaseModFunc');
+tx_rnbase::load('tx_rnbase_mod_ExtendedModFunc');
 
 /**
- * Mksearch backend module 
+ * Mksearch backend module
  */
-class tx_mksearch_mod1_ConfigIndizes extends tx_rnbase_mod_BaseModFunc {
-	/**
-	 * Return the actual html content
-	 * 
-	 * Actually, just the list view of the defined storage folder
-	 * is displayed within an iframe.
-	 * 
-	 * @param string $template
-	 * @param tx_rnbase_configurations $configurations
-	 * @param tx_rnbase_util_FormatUtil $formatter
-	 * @param tx_rnbase_util_FormTool $formTool
-	 * @return string
-	 */
-	protected function getContent($template, &$configurations, &$formatter, $formTool) {
-		$data = array();
-		$storagePid = tx_rnbase_configurations::getExtensionCfgValue('mksearch', 'indexerConfigStoragePid');
-		if ($storagePid) {
-			$data['showerror'] = 0;
-			$data['path'] = t3lib_div::locationHeaderUrl('/'.TYPO3_mainDir).'db_list.php?id='.$storagePid;
-//			$data['path'] = '/'.TYPO3_mainDir.'db_list.php?id='.$storagePid;
-		} else {
-			$data['showerror'] = 1;
-			$data['path'] = 'about:blank';
-		}
-   		
-   		$markerArray = $formatter->getItemMarkerArrayWrapped($data, $this->getConfId(), 0, '');
-		$out = $configurations->getCObj()->substituteMarkerArrayCached($template, $markerArray);
-		
-		return $out;
-	}
+class tx_mksearch_mod1_ConfigIndizes extends tx_rnbase_mod_ExtendedModFunc {
 
 	/**
 	 * Return function id (used in page typoscript etc.)
 	 *
-	 * @return string
+	 * @return 	string
 	 */
 	protected function getFuncId() {
 		return 'configindizes';
+	}
+	
+	/**
+	 * Liefert die Einträge für das Tab-Menü.
+	 * @return 	array
+	 */
+	protected function getSubMenuItems() {
+		return array(
+				tx_rnbase::makeInstance('tx_mksearch_mod1_handler_Index'),
+				tx_rnbase::makeInstance('tx_mksearch_mod1_handler_Composite'),
+				tx_rnbase::makeInstance('tx_mksearch_mod1_handler_IndexerConfig'),
+			);
+	}
+	
+	/**
+	 *
+	 */
+	protected function makeSubSelectors(&$selStr) {
+		return false;
 	}
 }
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/class.tx_mksearch_mod1_ConfigIndizes.php'])	{

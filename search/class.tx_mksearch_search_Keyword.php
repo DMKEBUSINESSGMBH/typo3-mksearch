@@ -1,8 +1,11 @@
 <?php
-/***************************************************************
+/**
+ * 	@package tx_mksearch
+ *  @subpackage tx_mksearch_search
+ *
  *  Copyright notice
  *
- *  (c) 2010 das Medienkombinat
+ *  (c) 2011 das MedienKombinat GmbH <kontakt@das-medienkombinat.de>
  *  All rights reserved
  *
  * This library is free software; you can redistribute it and/or
@@ -24,9 +27,13 @@ require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_rnbase_util_SearchBase');
 
 /**
- * Class to search indices from database
+ * Class to search keywords from database
+ *
+ * @package tx_mksearch
+ * @subpackage tx_mksearch_search
+ * @author Michael Wagner <michael.wagner@das-medienkombinat.de>
  */
-class tx_mksearch_search_Index extends tx_rnbase_util_SearchBase {
+class tx_mksearch_search_Keyword extends tx_rnbase_util_SearchBase {
 
 	/**
 	 * Return table mappings
@@ -35,9 +42,7 @@ class tx_mksearch_search_Index extends tx_rnbase_util_SearchBase {
 	 */
 	public function getTableMappings() {
 		$tableMapping = array();
-		$tableMapping['INDX'] = self::getBaseTable();
-		$tableMapping['CMP'] = 'tx_mksearch_configcomposites';
-		$tableMapping['INDXCMPMM'] = 'tx_mksearch_indices_configcomposites_mm';
+		$tableMapping['KEYWORD'] = 'tx_mksearch_keywords';
 		return $tableMapping;
 	}
 
@@ -47,7 +52,7 @@ class tx_mksearch_search_Index extends tx_rnbase_util_SearchBase {
 	 * @see util/tx_rnbase_util_SearchBase#getBaseTable()
 	 */
 	public function getBaseTable() {
-		return 'tx_mksearch_indices';
+		return 'tx_mksearch_keywords';
 	}
 	/**
 	 * return name of base table
@@ -55,31 +60,19 @@ class tx_mksearch_search_Index extends tx_rnbase_util_SearchBase {
 	 * @see util/tx_rnbase_util_SearchBase#getBaseTable()
 	 */
 	public function getBaseTableAlias() {
-		return 'INDX';
+		return 'KEYWORD';
 	}
 	
 	public function getWrapperClass() {
-		return 'tx_mksearch_model_internal_Index';
+		return 'tx_mksearch_model_internal_Keyword';
 	}
 	
 	protected function getJoins($tableAliases) {
 	  	$join = '';
-	  	$tableMapping = $this->getTableMappings();
-	  	
-		// Additional table "composites" or its MM table?
-		if(isset($tableAliases['INDXCMPMM']) or isset($tableAliases['CMP']))
-			$join .=
-	    		' JOIN ' . $tableMapping['INDXCMPMM'] .
-	    			' ON ' . $tableMapping['INDX'] . '.uid = ' . $tableMapping['INDXCMPMM'] . '.uid_local';
-	  	
-		// Additional table "composites"?
-	  	if(isset($tableAliases['CMP'])) {
-	    	$join .= ' JOIN ' . $tableMapping['CMP'] . ' ON ' . $tableMapping['INDXCMPMM'] . '.uid_foreign = ' . $tableMapping['CMP'] . '.uid';
-	    }
 		return $join;
 	}
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/search/class.tx_mksearch_search_Index.php']) {
-  include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/search/class.tx_mksearch_search_Index.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/search/class.tx_mksearch_search_Keyword.php']) {
+  include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/search/class.tx_mksearch_search_Keyword.php']);
 }

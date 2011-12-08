@@ -28,7 +28,7 @@ require_once t3lib_extMgm::extPath('scheduler', 'interfaces/interface.tx_schedul
 define('FIELD_ITEMS', 'amountOfItems');
 
 /**
- * 
+ *
  */
 class tx_mksearch_scheduler_IndexTaskAddFieldProvider implements tx_scheduler_AdditionalFieldProvider {
 
@@ -67,14 +67,14 @@ class tx_mksearch_scheduler_IndexTaskAddFieldProvider implements tx_scheduler_Ad
 
 		// Write the code for the field
 		$fieldID = 'field_'.FIELD_ITEMS;
-		// Note: Name qualifier MUST be "tx_scheduler" as the tx_scheduler's BE module is used! 
+		// Note: Name qualifier MUST be "tx_scheduler" as the tx_scheduler's BE module is used!
 		$fieldCode = '<input type="text" name="tx_scheduler['.FIELD_ITEMS.']" id="' . $fieldID .
 						'" value="' . $taskInfo[FIELD_ITEMS] . '" size="10" />';
 		$additionalFields = array();
 		$additionalFields[$fieldID] = array(
 			'code'     => $fieldCode,
 			'label'    => 'LLL:EXT:mksearch/locallang_db.xml:scheduler_indexTask_field_'.FIELD_ITEMS,
-			'cshKey'   => '_MOD_tools_txschedulerM1',
+			'cshKey'   => '_MOD_web_txschedulerM1',
 //			'cshLabel' => $fieldID
 		);
 		
@@ -103,7 +103,7 @@ class tx_mksearch_scheduler_IndexTaskAddFieldProvider implements tx_scheduler_Ad
 		$additionalFields[$fieldID] = array(
 			'code'     => $fieldCode,
 			'label'    => 'LLL:EXT:mksearch/locallang_db.xml:indexTask.fieldType',
-//			'cshKey'   => '_MOD_tools_txschedulerM1',
+//			'cshKey'   => '_MOD_web_txschedulerM1',
 //			'cshLabel' => $fieldID
 		);
 		return $additionalFields;

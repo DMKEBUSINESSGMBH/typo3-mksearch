@@ -1,31 +1,56 @@
 <!-- ###FULLDOC### begin -->
 <style type="text/css">
+	.mkindent {
+		margin-left: 10px;
+	}
 	.mkheader h2 {
-		font-size:1.6em;
+		font-size: 1.6em;
+		margin-bottom: 1em;
 	}
-	.mkselector{
+	.mksubheader {
+		font-weight: bold;
+		font-size: 1em;
+		line-height: 19px;
+		margin: 0 -1em;
+		padding: 0 1em;
 	}
-	.mktabs{
+	.mkselector {
+	}
+	.mktabs {
 		width: 95%;
 	}
-	.mkcontent{
+	.mklist .typo3-dblist {
+		margin: 0;
+		width: 100%;
+	}
+	.mksubselector {
+		margin-top: 1em;
+	}
+	.mkmaincontent {
+		border: 1px solid #A2AAB8;
+		padding: 0 1em;
 		width: 95%;
 	}
-	/**
-		HIER müsste in RN_base mal geändert werden, die klasse muss tabact heißen, nicht tabAct!
-	.tabAct {
-		background-color: #F8F9FB !important;
-		border-color: #000000 !important;	
+	.mkcontent {
+		/*width: 95%;*/
 	}
-	.tabAct a {
-		color: #000000 !important;	
+	.mksearchform {
+		float: left;
+		width: 45%;
 	}
-	*/
+	.mkbuttons, .mkpager {
+		float: right;
+		width: 45%;
+	}
 	.graybox {
-		margin: 0 0 2em 0;
+		margin: 0 0 1em 0;
 		padding: 10px;
 		background-color: #E4E5F0;
 		border: 1px solid #A2AAB8;
+	}
+	.graybox h2.bgColor2 {
+		/* das padding der graybox ausgleichen */
+		margin: -10px -10px 10px;
 	}
 	h2.bgColor2 {
 		margin: 0em 0 -1px 0;
@@ -38,15 +63,6 @@
 	.tables table tr td  {
 		padding:4px 8px;
 	}
-	/*
-	.graybox table tr td {
-		background-color: #EFEFF4;
-	}
-	.graybox table.ivtab tr td {
-		background-color: transparent;
-		padding:1px 2px;
-	}
-	*/
 	.btnBlock {
 		margin: 1em 0;
 	}	
@@ -56,6 +72,18 @@
 		font-weight:bold;
 		cursor: pointer;
 	}
+	.mkbuttons a {
+		display: block;
+		line-height: 16px;
+	}
+	.mkbuttons a img {
+		padding: 0 5px 0 0;
+		vertical-align: bottom;
+	}
+	a.tooltip { text-decoration:none; }
+	.tooltip span.info { display:none; }
+	.tooltip:hover span.info { display:block; position:absolute; padding:2px; background-color:white; }
+	
 </style>
 <div class="typo3-fullDoc">
 	<!-- Page header with buttons, path details and csh -->
@@ -75,10 +103,13 @@
 	<!-- Content of module, for instance listing, info or editing -->
 	<div id="typo3-docbody">
 		<div id="typo3-inner-docbody">
-			<div class="mkheader" style="margin-bottom:1em;">###HEADER###</div>
-			<div class="mkselector">###SELECTOR###</div>
-			<div class="cleardiv">
-				<div class="mktabs">###TABS###</div>
+			<div class="mkheader">###HEADER###</div>
+			<div class="mktabs mkselector">###SELECTOR###</div><div class="cleardiv"></div>
+			<div class="mktabs mkselector">###FUNC_MENU###</div>
+			<div class="cleardiv"></div>
+			<div class="mkmaincontent">
+				<div class="mksubheader bgColor2 t3-row-header">&nbsp;<!-- ###HEADING_SUBMENU### --></div>
+				<div class="mktabs mksubselector">###SUBMENU###</div>
 				<div class="mkcontent">###CONTENT###</div>
 			</div>
 		</div>
