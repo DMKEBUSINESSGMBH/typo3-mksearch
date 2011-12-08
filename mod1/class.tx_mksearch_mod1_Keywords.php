@@ -73,6 +73,7 @@ class tx_mksearch_mod1_Keywords extends tx_rnbase_mod_BaseModFunc {
 	 * @return 	string
 	 */
 	protected function showSearch($template, $configurations, $formTool, &$markerArray) {
+		tx_rnbase::load('tx_mksearch_mod1_util_Template');
 		return tx_mksearch_mod1_util_Template::parseList(
 					$template,
 					$this->getModule(),
