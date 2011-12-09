@@ -152,8 +152,14 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 				$aOptions = array('ignoremaillock' => true);
 				tx_rnbase_util_Misc::sendErrorMail($addr, 'tx_mksearch_action_SearchSolr_searchSolr', $e, $aOptions);
 			}
-			tx_rnbase_util_Logger::fatal('Solr search failed with Exception!', 'mksearch',
-				array('Exception' => $e->getMessage(), 'fields'=>$fields, 'options' => $options, 'URL'=> $lastUrl));
+			tx_rnbase::load('tx_rnbase_util_Logger');
+			if(tx_rnbase_util_Logger::isFatalEnabled()) {
+				tx_rnbase_util_Logger::fatal('Solr search failed with Exception!', 'mksearch',
+					array('Exception' => $e->getMessage(), 'fields'=>$fields, 'options' => $options, 'URL'=> $lastUrl));
+			}
+			if($configurations->getBool($this->getConfId().'throwSolrSearchException')) {
+				throw $e;
+			}
 			return false;
 		}
 		
