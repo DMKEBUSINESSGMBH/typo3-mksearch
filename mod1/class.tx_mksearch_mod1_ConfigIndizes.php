@@ -56,11 +56,13 @@ class tx_mksearch_mod1_ConfigIndizes extends tx_rnbase_mod_ExtendedModFunc {
 			if(empty($rootPage))
 				$rootPage = array_pop(tx_mksearch_service_indexer_core_Config::getRootLine($this->getModule()->id));
 			
-			// felder erzeugen
-			foreach($rootPage as $field => $value)
-				$markerArr['###ROOTPAGE_'.strtoupper($field).'###'] = $value;
-			
-			$out = tx_rnbase_util_Templates::substituteMarkerArrayCached($out, $markerArr);
+			if (is_array($rootPage)) {
+				// felder erzeugen
+				foreach($rootPage as $field => $value)
+					$markerArr['###ROOTPAGE_'.strtoupper($field).'###'] = $value;
+				
+				$out = tx_rnbase_util_Templates::substituteMarkerArrayCached($out, $markerArr);
+			}
 		}
 		return $out;
 	}
