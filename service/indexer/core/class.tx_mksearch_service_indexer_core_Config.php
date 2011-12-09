@@ -72,7 +72,7 @@ class tx_mksearch_service_indexer_core_Config {
 	 * @param 	int 	$uid
 	 * @return 	array
 	 */
-	private static function getRootLine($uid){
+	public static function getRootLine($uid){
 		return self::page()->getRootLine($uid);
 	}
 	/**

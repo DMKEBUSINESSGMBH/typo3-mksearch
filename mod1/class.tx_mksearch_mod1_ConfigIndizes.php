@@ -42,6 +42,29 @@ class tx_mksearch_mod1_ConfigIndizes extends tx_rnbase_mod_ExtendedModFunc {
 		return 'configindizes';
 	}
 	
+	
+	public function main() {
+		$out = parent::main();
+
+		// rootpage marker hinzufügen
+		if(tx_rnbase_util_BaseMarker::containsMarker($out, 'ROOTPAGE_')) {
+			// Marker für Rootpage integrieren
+			tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
+			$rootPage = tx_mksearch_service_indexer_core_Config::getSiteRootPage($this->getModule()->id, 999);
+			
+			// keine rootpage, dann die erste seite im baum
+			if(empty($rootPage))
+				$rootPage = array_pop(tx_mksearch_service_indexer_core_Config::getRootLine($this->getModule()->id));
+			
+			// felder erzeugen
+			foreach($rootPage as $field => $value)
+				$markerArr['###ROOTPAGE_'.strtoupper($field).'###'] = $value;
+			
+			$out = tx_rnbase_util_Templates::substituteMarkerArrayCached($out, $markerArr);
+		}
+		return $out;
+	}
+	
 	/**
 	 * Liefert die Einträge für das Tab-Menü.
 	 * @return 	array
