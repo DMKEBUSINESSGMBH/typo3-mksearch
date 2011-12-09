@@ -2,68 +2,72 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Product list template - you should NEVER see this!</title>
+<title>Search template - you should NEVER see this!</title>
 </head>
 <body>
 
-###SEARCH###
+<!-- ###SEARCH### START -->
 
 ###SEARCH_FORM###
 
-###FACETS###
-	###FACET###
+<!-- ###FACETS### START -->
+	<!-- ###FACET### START -->
 		Feld: ###FACET_FIELD###<br/>
 		Label: ###FACET_LABEL###<br/>
 		Count: ###FACET_COUNT###<br/>
-	###FACET###
+	<!-- ###FACET### END -->
 	###FACET_RESETLINK######LABEL_search_reset######FACET_RESETLINK###<br/>
-###FACETS###
+<!-- ###FACETS### END -->
 
-###SEARCHRESULTS###
-	###SEARCHRESULT###
-		<h2 class="searchResultTitle">###SEARCHRESULT_TITLE###</h2>
-		###SEARCHRESULT_ABSTRACT###
-		###SEARCHRESULT_EXTRAINFO###
-	###SEARCHRESULT###
+<!-- ###SEARCHRESULTS### START -->
+	<!-- ###SEARCHRESULTEMPTYLIST### START -->
+			###LABEL_SEARCH_NORESULTSFOUND###
+	<!-- ###SEARCHRESULTEMPTYLIST### END -->
+	<ol>
+	<!-- ###SEARCHRESULT### START -->
+		<li id="searchresult-###SEARCHRESULT_TOTALLINE###">
+			<h2 class="searchResultTitle">###SEARCHRESULT_TITLE###</h2>
+			###SEARCHRESULT_ABSTRACT### ###SEARCHRESULT_EXTRAINFO###
+		</li>
+	<!-- ###SEARCHRESULT### END -->
+	</ol>
 
-###LABEL_search_foundresults### ###SEARCHRESULTCOUNT###<br/>
-###LABEL_search_term_was### ###PLUGIN_DCSEARCHTERM###
+<div>###LABEL_search_foundresults### ###SEARCHRESULTCOUNT###</div>
+<div>###PLUGIN_DCSEARCHTERM###</div>
 
 
 
 <!-- ###PAGEBROWSER### START -->
-
 <div class="mkcontact-pagebrowser">
-###PAGEBROWSER_CURRENT_PAGE###
-###LABEL_page### ###PAGEBROWSER_CURRENT_PAGE_NUMBER###
-###PAGEBROWSER_CURRENT_PAGE###
-
-###PAGEBROWSER_NORMAL_PAGE###
-###PAGEBROWSER_NORMAL_PAGE_LINK### ###PAGEBROWSER_NORMAL_PAGE_NUMBER### ###PAGEBROWSER_NORMAL_PAGE_LINK###
-###PAGEBROWSER_NORMAL_PAGE###
-
-###PAGEBROWSER_PREV_PAGE###
-&nbsp;###PAGEBROWSER_PREV_PAGE_LINK###<###PAGEBROWSER_PREV_PAGE_LINK###&nbsp;
-###PAGEBROWSER_PREV_PAGE###
-
-###PAGEBROWSER_NEXT_PAGE###
-&nbsp;###PAGEBROWSER_NEXT_PAGE_LINK###>###PAGEBROWSER_NEXT_PAGE_LINK###&nbsp;
-###PAGEBROWSER_NEXT_PAGE###
-
-###PAGEBROWSER_FIRST_PAGE###
-###PAGEBROWSER_FIRST_PAGE_LINK### |< ###PAGEBROWSER_FIRST_PAGE_LINK###
-###PAGEBROWSER_FIRST_PAGE###
-
-###PAGEBROWSER_LAST_PAGE###
-###PAGEBROWSER_LAST_PAGE_LINK### >| ###PAGEBROWSER_LAST_PAGE_LINK###
-###PAGEBROWSER_LAST_PAGE###
-
+	###PAGEBROWSER_CURRENT_PAGE###
+	###LABEL_page### ###PAGEBROWSER_CURRENT_PAGE_NUMBER###
+	###PAGEBROWSER_CURRENT_PAGE###
+	
+	###PAGEBROWSER_NORMAL_PAGE###
+	###PAGEBROWSER_NORMAL_PAGE_LINK### ###PAGEBROWSER_NORMAL_PAGE_NUMBER### ###PAGEBROWSER_NORMAL_PAGE_LINK###
+	###PAGEBROWSER_NORMAL_PAGE###
+	
+	###PAGEBROWSER_PREV_PAGE###
+	&nbsp;###PAGEBROWSER_PREV_PAGE_LINK###<###PAGEBROWSER_PREV_PAGE_LINK###&nbsp;
+	###PAGEBROWSER_PREV_PAGE###
+	
+	###PAGEBROWSER_NEXT_PAGE###
+	&nbsp;###PAGEBROWSER_NEXT_PAGE_LINK###>###PAGEBROWSER_NEXT_PAGE_LINK###&nbsp;
+	###PAGEBROWSER_NEXT_PAGE###
+	
+	###PAGEBROWSER_FIRST_PAGE###
+	###PAGEBROWSER_FIRST_PAGE_LINK### |< ###PAGEBROWSER_FIRST_PAGE_LINK###
+	###PAGEBROWSER_FIRST_PAGE###
+	
+	###PAGEBROWSER_LAST_PAGE###
+	###PAGEBROWSER_LAST_PAGE_LINK### >| ###PAGEBROWSER_LAST_PAGE_LINK###
+	###PAGEBROWSER_LAST_PAGE###
 </div>
-
 <!-- ###PAGEBROWSER### END -->
-###SEARCHRESULTS###
 
-###SEARCH###
+<!-- ###SEARCHRESULTS### END -->
+
+<!-- ###SEARCH### END -->
 
 
 </body>
