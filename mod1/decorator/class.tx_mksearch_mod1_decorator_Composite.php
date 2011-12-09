@@ -109,7 +109,8 @@ class tx_mksearch_mod1_decorator_Composite {
 			$indizes = tx_mksearch_util_ServiceRegistry::getIntIndexService()->getByComposite($item);
 			/* @var $compositeDecorator tx_mksearch_mod1_decorator_Index */
 			$indizesDecorator = tx_rnbase::makeInstance('tx_mksearch_mod1_decorator_Index', $this->getModule());
-			$out .= '<div class="mkindent"><strong>###LABEL_TABLEHEADER_INDICES###:</strong><br/>';
+			$out .= '<div><strong>###LABEL_TABLEHEADER_INDICES###:</strong></div>';
+			$out .= '<div class="mkindent">';
 			$out .= $indizesDecorator->getIndexInfos($indizes);
 			$out .= '</div>';
 		}
@@ -117,7 +118,8 @@ class tx_mksearch_mod1_decorator_Composite {
 			$configs = tx_mksearch_util_ServiceRegistry::getIntConfigService()->getByComposite($item);
 			/* @var $compositeDecorator tx_mksearch_mod1_decorator_IndexerConfig */
 			$configDecorator = tx_rnbase::makeInstance('tx_mksearch_mod1_decorator_IndexerConfig', $this->getModule());
-			$out .= '<div class="mkindent"><strong>###LABEL_TABLEHEADER_CONFIGS###:</strong><br/>';
+			$out .= '<div ><strong>###LABEL_TABLEHEADER_CONFIGS###:</strong></div>';
+			$out .= '<div class="mkindent">';
 			$out .= $configDecorator->getConfigInfos($configs);
 			$out .= '</div>';
 		}
