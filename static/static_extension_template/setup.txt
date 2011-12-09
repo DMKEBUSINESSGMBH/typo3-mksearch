@@ -298,6 +298,8 @@ plugin.tx_mksearch {
 		# soll gesucht oder nur die Templates geparsed werden?
 		nosearch = 0
 		
+		throwSolrSearchException = 0
+		
 		# shall we prepare everything for the autocomplete feature? (including js etc)
 		# dont forget to set the extension config for updating the autocomplete index
 		# after each indexing
