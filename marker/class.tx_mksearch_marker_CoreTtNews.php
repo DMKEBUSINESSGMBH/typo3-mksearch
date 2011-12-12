@@ -41,7 +41,9 @@ class tx_mksearch_marker_CoreTtNews extends tx_mksearch_marker_SearchResultSimpl
 	public function parseTemplate($template, &$item, &$formatter, $confId, $marker = 'ITEM') {
 		//wir benötigen das datetime_dt feld lediglich zusätzlich als timestamp
 		$oDateTime = new DateTime($item->record['datetime_dt']);
-		$item->record['datetime_i'] = $oDateTime->getTimestamp();
+		// getTimestamp gibt es erst ab PHP 5.3
+// 		$item->record['datetime_i'] = $oDateTime->getTimestamp();
+		$item->record['datetime_i'] = $oDateTime->format('U');
 		
 		return parent::parseTemplate($template, $item, $formatter, $confId, $marker);
 	}
