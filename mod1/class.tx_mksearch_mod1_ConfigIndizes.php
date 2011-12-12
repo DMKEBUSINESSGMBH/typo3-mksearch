@@ -42,6 +42,9 @@ class tx_mksearch_mod1_ConfigIndizes extends tx_rnbase_mod_ExtendedModFunc {
 		return 'configindizes';
 	}
 	
+	protected function getPageId(){
+		return $this->getModule()->id;
+	}
 	
 	public function main() {
 		$out = parent::main();
@@ -50,11 +53,11 @@ class tx_mksearch_mod1_ConfigIndizes extends tx_rnbase_mod_ExtendedModFunc {
 		if(tx_rnbase_util_BaseMarker::containsMarker($out, 'ROOTPAGE_')) {
 			// Marker für Rootpage integrieren
 			tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
-			$rootPage = tx_mksearch_service_indexer_core_Config::getSiteRootPage($this->getModule()->id, 999);
+			$rootPage = tx_mksearch_service_indexer_core_Config::getSiteRootPage($this->getPageId(), 999);
 			
 			// keine rootpage, dann die erste seite im baum
 			if(empty($rootPage))
-				$rootPage = array_pop(tx_mksearch_service_indexer_core_Config::getRootLine($this->getModule()->id));
+				$rootPage = array_pop(tx_mksearch_service_indexer_core_Config::getRootLine($this->getPageId() ? $this->getPageId() : 0));
 			
 			if (is_array($rootPage)) {
 				// felder erzeugen

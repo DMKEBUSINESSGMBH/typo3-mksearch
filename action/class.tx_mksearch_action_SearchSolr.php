@@ -61,9 +61,14 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 		
 		$fields = array();
 		$options = array();
+		
 		// die ip muss im debug stehen
-		if($parameters->get('debug') == t3lib_div::getIndpEnv('REMOTE_ADDR')) {
-			$options['debug'] = 1; $options['debugQuery'] = 'true';
+		if($parameters->get('debug')) {
+			tx_rnbase::load('tx_mksearch_util_Misc');
+			if(	$parameters->get('debug') == t3lib_div::getIndpEnv('REMOTE_ADDR')
+				|| tx_mksearch_util_Misc::isDevIpMask()) {
+				$options['debug'] = 1; $options['debugQuery'] = 'true';
+			}
 		}
 		
 		$result = null;
@@ -93,6 +98,10 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 			} else {
 				$result = array('items' => array());
 			}
+		}
+		// auch einen debug ausgeben, wenn nichts gesucht wird
+		elseif ($options['debug']) {
+			t3lib_div::debug(array('Filter returns false, no search done.', $fields, $options), 'class.tx_mksearch_action_SearchSolr.php Line: '.__LINE__); // TODO: remove me
 		}
 		$viewData->offsetSet('result', $result);
 		return null;

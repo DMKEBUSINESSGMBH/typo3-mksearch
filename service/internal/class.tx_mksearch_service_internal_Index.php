@@ -298,10 +298,14 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 				// Wir lesen die rootpage des indexers aus.
 				tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
 				$rootpage = tx_mksearch_service_indexer_core_Config::getSiteRootPage(
-								// wurde eine pid übergeben?
-								$config['pid'] ? $config['pid'] :
-								// wurde eine rootpage definiert. fallback ist die pid
-								($index->record['rootpage'] ? $index->record['rootpage'] : $index->record['pid'])
+								// die rootpage des indexers nutzen
+								$index->record['rootpage'] ? $index->record['rootpage'] :
+								(
+									// wurde eine pid übergeben?
+									$config['pid'] ? $config['pid'] :
+									// fallback ist die pid
+									$index->record['pid']
+								)
 					);
 				
 				tx_rnbase_util_Logger::debug('[INDEXQUEUE] Next index is '.$index->getTitle(), 'mksearch');

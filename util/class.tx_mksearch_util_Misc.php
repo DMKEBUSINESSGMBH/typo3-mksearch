@@ -128,6 +128,19 @@ class tx_mksearch_util_Misc {
 		//werden
 		return preg_replace('/[%,.&*+-\/\'!?#()\[\]\{\}"^|<>:\\\~]+/', '', $sTerm);
 	}
+	
+	/**
+	 * IP-based Access restrictions
+	 *
+	 * @param 	string 		$remoteAddress
+	 * @param 	string 		$devIPmask
+	 * @return 	boolean
+	 */
+	public static function isDevIpMask($remoteAddress='',$devIPmask=''){
+		$devIPmask = trim(strcmp($devIPmask, '') ? $devIPmask : $GLOBALS['TYPO3_CONF_VARS']['SYS']['devIPmask']);
+		$remoteAddress = trim(strcmp($remoteAddress, '') ? $remoteAddress : t3lib_div::getIndpEnv('REMOTE_ADDR'));
+		return t3lib_div::cmpIP($remoteAddress, $devIPmask);
+	}
 }
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_Misc.php'])	{
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_Misc.php']);
