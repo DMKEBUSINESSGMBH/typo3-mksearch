@@ -56,6 +56,22 @@ class tx_mksearch_mod1_decorator_Index {
 				if(!empty($record->record['description']))
 					$ret .= '<br /><pre>'.$record->record['description'].'</pre>';
 				break;
+			case 'name':
+				$credentials = $item->getCredentialString();
+				try {
+					$status = tx_mksearch_util_ServiceRegistry::getSearchEngine($item)->getStatus();
+					$msg = $status->getMessage();
+					$color = $status->getStatus() > 0 ? 'green' : ($status->getStatus() < 0 ? 'red' : 'yellow');
+				}
+				catch(Exception $e) {
+					$color = 'red';
+					$msg = 'Exception occured: '.$e->getMessage();
+				}
+				$ret  = '<a href="#hint" class="tooltip">';
+				$ret .= '<span style="width:20px; background-color:'.$color.'">&nbsp;&nbsp;&nbsp;</span>&nbsp;'. $credentials;
+				$ret .= '<span class="info">'.$msg.'</span>';
+				$ret .= '</a>';
+				break;
 			case 'engine':
 				switch($value) {
 					case 'zend_lucene':
