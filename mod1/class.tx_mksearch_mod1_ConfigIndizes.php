@@ -1,8 +1,12 @@
 <?php
-/***************************************************************
+/**
+ *
+ *  @package tx_mksearch
+ *  @subpackage tx_mksearch_mod1
+ *
  *  Copyright notice
  *
- *  (c) 2010 Lars Heber <lars.heber@das-medienkombinat.de>
+ *  (c) 2011 das MedienKombinat GmbH <kontakt@das-medienkombinat.de>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -13,9 +17,6 @@
  *
  *  The GNU General Public License can be found at
  *  http://www.gnu.org/copyleft/gpl.html.
- *  A copy is found in the textfile GPL.txt and important notices to the license
- *  from the author is found in LICENSE.txt distributed with these scripts.
- *
  *
  *  This script is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -30,6 +31,10 @@ tx_rnbase::load('tx_rnbase_mod_ExtendedModFunc');
 
 /**
  * Mksearch backend module
+ *
+ * @package tx_mksearch
+ * @subpackage tx_mksearch_mod1
+ * @author Michael Wagner <michael.wagner@das-medienkombinat.de>
  */
 class tx_mksearch_mod1_ConfigIndizes extends tx_rnbase_mod_ExtendedModFunc {
 

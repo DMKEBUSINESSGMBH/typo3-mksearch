@@ -1,8 +1,12 @@
 <?php
-/***************************************************************
+/**
+ *
+ *  @package tx_mksearch
+ *  @subpackage tx_mksearch_mod1
+ *
  *  Copyright notice
  *
- *  (c) 2011 Michael Wagner <michael.wagner@das-medienkombinat.de>
+ *  (c) 2011 das MedienKombinat GmbH <kontakt@das-medienkombinat.de>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -31,6 +35,10 @@ tx_rnbase::load('tx_mksearch_mod1_util_IndexStatusHandler');
 
 /**
  * Mksearch backend module
+ *
+ * @package tx_mksearch
+ * @subpackage tx_mksearch_mod1
+ * @author Michael Wagner <michael.wagner@das-medienkombinat.de>
  */
 class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc {
 
