@@ -83,6 +83,10 @@ class tx_mksearch_mod1_searcher_Index extends tx_mksearch_mod1_searcher_abstract
 				'title' => 'label_uid',
 				'decorator' => $oDecorator
 			),
+			'actions' => array(
+				'title' => 'label_tableheader_actions',
+				'decorator' => $oDecorator, 'width' => 90
+			),
 			'title' => array(
 				'title' => 'label_tableheader_title',
 				'decorator' => $oDecorator, 'width' => 90
@@ -97,10 +101,6 @@ class tx_mksearch_mod1_searcher_Index extends tx_mksearch_mod1_searcher_abstract
 			),
 			'composites' => array(
 				'title' => 'label_tableheader_composites',
-				'decorator' => $oDecorator, 'width' => 90
-			),
-			'actions' => array(
-				'title' => 'label_tableheader_actions',
 				'decorator' => $oDecorator, 'width' => 90
 			),
 		);

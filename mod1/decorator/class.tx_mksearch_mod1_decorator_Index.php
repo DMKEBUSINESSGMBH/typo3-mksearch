@@ -95,7 +95,7 @@ class tx_mksearch_mod1_decorator_Index {
 		foreach($items as $item) {
 			$ret[] = $this->getIndexInfo($item, $options);
 		}
-		$ret = empty($ret) ? '###LABEL_NO_INDIZES###' : implode('</li><li>',$ret);
+		$ret = empty($ret) ? '###LABEL_NO_INDIZES###' : implode('</li><li class="hr"></li><li>',$ret);
 		return '<ul><li>'.$ret.'</li></ul>';
 	}
 	/**
@@ -107,8 +107,9 @@ class tx_mksearch_mod1_decorator_Index {
 	public function getIndexInfo(tx_mksearch_model_internal_Index $item, $options=array()){
 		$formtool = $this->getModule()->getFormTool();
 		
-		$out  = $item->getTitle();
+		$out  = '';
 		$out .= $formtool->createEditLink($item->getTableName(), $item->getUid(), '');
+		$out .= $item->getTitle();
 // 		$out .= '<br />'; // @TODO: verbundene tabellen anhand von options ausgeben
 		return '<div>'.$out.'</div>';
 	}

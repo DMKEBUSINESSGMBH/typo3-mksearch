@@ -86,7 +86,7 @@ class tx_mksearch_mod1_decorator_IndexerConfig {
 		foreach($items as $item) {
 			$ret[] = $this->getConfigInfo($item, $options);
 		}
-		$ret = empty($ret) ? '###LABEL_NO_INDEXERCONFIGURATIONS###' : implode('</li><li>',$ret);
+		$ret = empty($ret) ? '###LABEL_NO_INDEXERCONFIGURATIONS###' : implode('</li><li class="hr"></li><li>',$ret);
 		return '<ul><li>'.$ret.'</li></ul>';
 	}
 	/**
@@ -98,8 +98,9 @@ class tx_mksearch_mod1_decorator_IndexerConfig {
 	public function getConfigInfo(tx_mksearch_model_internal_Config $item, $options=array()){
 		$formtool = $this->getModule()->getFormTool();
 		
-		$out  = $item->getTitle();
+		$out  = '';
 		$out .= $formtool->createEditLink($item->getTableName(), $item->getUid(), '');
+		$out .= $item->getTitle();
 // 		$out .= '<br />'; // @TODO: in indices und configs wahlweise mit ausgeben
 		return '<div>'.$out.'</div>';
 	}

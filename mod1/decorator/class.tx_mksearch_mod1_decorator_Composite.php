@@ -91,7 +91,7 @@ class tx_mksearch_mod1_decorator_Composite {
 		foreach($items as $item) {
 			$ret[] = $this->getCompositeInfo($item, $options);
 		}
-		$ret = empty($ret) ? '###LABEL_NO_COMPOSITES###' : implode('</li><li>',$ret);
+		$ret = empty($ret) ? '###LABEL_NO_COMPOSITES###' : implode('</li><li class="hr"></li><li>',$ret);
 		return '<ul><li>'.$ret.'</li></ul>';
 	}
 	/**
@@ -103,8 +103,9 @@ class tx_mksearch_mod1_decorator_Composite {
 	public function getCompositeInfo(tx_mksearch_model_internal_Composite $item, $options=array()){
 		$formtool = $this->getModule()->getFormTool();
 		
-		$out  = $item->getTitle();
+		$out  = '';
 		$out .= $formtool->createEditLink($item->getTableName(), $item->getUid(), '');
+		$out .= $item->getTitle();
 		if($options['includeIndex']) {
 			$indizes = tx_mksearch_util_ServiceRegistry::getIntIndexService()->getByComposite($item);
 			/* @var $compositeDecorator tx_mksearch_mod1_decorator_Index */
