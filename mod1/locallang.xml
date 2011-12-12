@@ -52,6 +52,7 @@
 			
 			<label index="label_uid">ID</label>
 			<label index="label_tableheader_title">Title</label>
+			<label index="label_tableheader_core">Core</label>
 			<label index="label_tableheader_name">Name</label>
 			<label index="label_tableheader_engine">Engine</label>
 			<label index="label_tableheader_keyword">Keyword</label>

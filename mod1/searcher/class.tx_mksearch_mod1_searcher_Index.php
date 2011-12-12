@@ -87,12 +87,8 @@ class tx_mksearch_mod1_searcher_Index extends tx_mksearch_mod1_searcher_abstract
 				'title' => 'label_tableheader_actions',
 				'decorator' => $oDecorator, 'width' => 90
 			),
-			'title' => array(
-				'title' => 'label_tableheader_title',
-				'decorator' => $oDecorator, 'width' => 90
-			),
-			'name' => array(
-				'title' => 'label_tableheader_name',
+			'core' => array(
+				'title' => 'label_tableheader_core',
 				'decorator' => $oDecorator, 'width' => 90
 			),
 			'engine' => array(

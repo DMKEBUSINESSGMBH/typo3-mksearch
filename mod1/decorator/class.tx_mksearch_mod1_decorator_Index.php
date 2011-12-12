@@ -23,7 +23,7 @@
  ***************************************************************/
 
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
-
+tx_rnbase::load('tx_mksearch_mod1_util_IndexStatusHandler');
 
 /**
  * Diese Klasse ist für die Darstellung von Indexer tabellen im Backend verantwortlich
@@ -50,27 +50,11 @@ class tx_mksearch_mod1_decorator_Index {
 	public function format($value, $colName, $record, $item) {
 		$ret = '';
 		switch ($colName) {
-			case 'title':
+			case 'core':
 				$ret  = '';
-				$ret .= $value;
+				$ret .= tx_mksearch_mod1_util_IndexStatusHandler::getInstance()->handleRequest4Index($item);
 				if(!empty($record->record['description']))
 					$ret .= '<br /><pre>'.$record->record['description'].'</pre>';
-				break;
-			case 'name':
-				$credentials = $item->getCredentialString();
-				try {
-					$status = tx_mksearch_util_ServiceRegistry::getSearchEngine($item)->getStatus();
-					$msg = $status->getMessage();
-					$color = $status->getStatus() > 0 ? 'green' : ($status->getStatus() < 0 ? 'red' : 'yellow');
-				}
-				catch(Exception $e) {
-					$color = 'red';
-					$msg = 'Exception occured: '.$e->getMessage();
-				}
-				$ret  = '<a href="#hint" class="tooltip">';
-				$ret .= '<span style="width:20px; background-color:'.$color.'">&nbsp;&nbsp;&nbsp;</span>&nbsp;'. $credentials;
-				$ret .= '<span class="info">'.$msg.'</span>';
-				$ret .= '</a>';
 				break;
 			case 'engine':
 				switch($value) {

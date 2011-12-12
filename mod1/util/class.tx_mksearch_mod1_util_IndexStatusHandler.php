@@ -37,6 +37,31 @@ class tx_mksearch_mod1_util_IndexStatusHandler {
 	}
 
 	/**
+	 *
+	 * Enter description here ...
+	 * @param 	tx_mksearch_model_internal_Index 	$index
+	 * @return 	string
+	 */
+	public function handleRequest4Index(tx_mksearch_model_internal_Index $index){
+		try {
+			$searchEngine = tx_mksearch_util_ServiceRegistry::getSearchEngine($index);
+			$status = $searchEngine->getStatus();
+			$msg = $status->getMessage();
+			$color = $status->getStatus() > 0 ? 'green' : ($status->getStatus() < 0 ? 'red' : 'yellow');
+		}
+		catch(Exception $e) {
+			$color = 'red';
+			$msg = 'Exception occured: '.$e->getMessage();
+		}
+		$ret  = '';
+		$ret .= '<a href="#hint" class="tooltip">';
+		$ret .= '<span style="width:20px; background-color:'.$color.'">&nbsp;&nbsp;&nbsp;</span>&nbsp;';
+		$ret .= '<strong>'. $index->getTitle() . '</strong> - '. $index->getCredentialString().'<br />';
+		$ret .= '<span class="info">'.$msg.'</span>';
+		$ret .= '</a>';
+		return $ret;
+	}
+	/**
 	 * Handle request
 	 */
 	public function handleRequest() {
@@ -46,23 +71,7 @@ class tx_mksearch_mod1_util_IndexStatusHandler {
 
 		// Loop through all active indices, collecting all configurations
 		foreach ($indices as $index) {
-			$title = $index->getTitle();
-			$credentials = $index->getCredentialString();
-			try {
-				$searchEngine = tx_mksearch_util_ServiceRegistry::getSearchEngine($index);
-				$status = $searchEngine->getStatus();
-				$msg = $status->getMessage();
-				$color = $status->getStatus() > 0 ? 'green' : ($status->getStatus() < 0 ? 'red' : 'yellow');
-			}
-			catch(Exception $e) {
-				$color = 'red';
-				$msg = 'Exception occured: '.$e->getMessage();
-			}
-			$states[] = '
-			<a href="#hint" class="tooltip">
-			<span style="width:20px; background-color:'.$color.'">&nbsp;&nbsp;&nbsp;</span>&nbsp;<strong>'. $title . '</strong> - '. $credentials.'<br />
-			<span class="info">'.$msg.'</span>
-			</a>';
+			$states[] = $this->handleRequest4Index($index);
 		}
 		$ret = implode('<br />', $states);
 		return $ret;
