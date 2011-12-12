@@ -48,8 +48,14 @@ class tx_mksearch_mod1_decorator_Index {
 	 * @param array $item
 	 */
 	public function format($value, $colName, $record, $item) {
-		
-		switch($colName){
+		$ret = '';
+		switch ($colName) {
+			case 'title':
+				$ret  = '';
+				$ret .= $value;
+				if(!empty($record->record['description']))
+					$ret .= '<br /><pre>'.$record->record['description'].'</pre>';
+				break;
 			case 'engine':
 				switch($value) {
 					case 'zend_lucene':
@@ -70,7 +76,6 @@ class tx_mksearch_mod1_decorator_Index {
 				break;
 			case 'actions':
 				$formtool = $this->getModule()->getFormTool();
-				$ret  = '';
 				// bearbeiten link
 				$ret .= $formtool->createEditLink($item->getTableName(), $item->getUid(), '');
 				// hide undhide link

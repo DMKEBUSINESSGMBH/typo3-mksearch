@@ -49,9 +49,14 @@ class tx_mksearch_mod1_decorator_Composite {
 	 */
 	public function format($value, $colName, $record, $item) {
 		
-		switch($colName){
+		switch ($colName) {
 // 			case 'uid':
-// 			case 'title':
+			case 'title':
+				$ret  = '';
+				$ret .= $value;
+				if(!empty($record->record['description']))
+					$ret .= '<br /><pre>'.$record->record['description'].'</pre>';
+				break;
 			case 'indices':
 				$indizes = tx_mksearch_util_ServiceRegistry::getIntIndexService()->getByComposite($item);
 				/* @var $compositeDecorator tx_mksearch_mod1_decorator_Index */

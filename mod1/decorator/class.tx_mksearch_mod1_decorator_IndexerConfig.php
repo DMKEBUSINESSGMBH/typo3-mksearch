@@ -49,7 +49,13 @@ class tx_mksearch_mod1_decorator_IndexerConfig {
 	 */
 	public function format($value, $colName, $record, $item) {
 		
-		switch($colName){
+		switch ($colName) {
+			case 'title':
+				$ret  = '';
+				$ret .= $value;
+				if(!empty($record->record['description']))
+					$ret .= '<br /><pre>'.$record->record['description'].'</pre>';
+				break;
 			case 'contenttype':
 				$ret = $item->getExtkey().'.'.$item->getContenttype();
 				break;
