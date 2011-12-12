@@ -82,7 +82,7 @@ class tx_mksearch_service_indexer_core_Config {
 	 */
 	public static function getSiteRootPage($uid){
 		foreach (self::page()->getRootLine($uid) as $page){
-			if($rootPage['is_siteroot']) {
+			if($page['is_siteroot']) {
 				return $page;
 			}
 		}

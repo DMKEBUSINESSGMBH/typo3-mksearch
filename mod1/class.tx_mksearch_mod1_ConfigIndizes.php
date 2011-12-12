@@ -58,18 +58,23 @@ class tx_mksearch_mod1_ConfigIndizes extends tx_rnbase_mod_ExtendedModFunc {
 		if(tx_rnbase_util_BaseMarker::containsMarker($out, 'ROOTPAGE_')) {
 			// Marker für Rootpage integrieren
 			tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
-			$rootPage = tx_mksearch_service_indexer_core_Config::getSiteRootPage($this->getPageId(), 999);
+			$rootPage = tx_mksearch_service_indexer_core_Config::getSiteRootPage($this->getPageId());
 			
 			// keine rootpage, dann die erste seite im baum
 			if(empty($rootPage))
 				$rootPage = array_pop(tx_mksearch_service_indexer_core_Config::getRootLine($this->getPageId() ? $this->getPageId() : 0));
 			
+			$rootPage = is_array($rootPage) ? t3lib_BEfunc::readPageAccess($rootPage['uid'], $GLOBALS['BE_USER']->getPagePermsClause(1)) : false;
+			
 			if (is_array($rootPage)) {
+				
 				// felder erzeugen
 				foreach($rootPage as $field => $value)
 					$markerArr['###ROOTPAGE_'.strtoupper($field).'###'] = $value;
 				
 				$out = tx_rnbase_util_Templates::substituteMarkerArrayCached($out, $markerArr);
+			} else {
+				$out = tx_rnbase_util_Templates::substituteSubpart($out, '###ROOTPAGE###', '<pre>No page selected.</pre>');
 			}
 		}
 		return $out;
