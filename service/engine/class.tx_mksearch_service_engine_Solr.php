@@ -57,7 +57,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @return void
 	 */
 	public function __construct() {
@@ -84,7 +84,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 	
 	/**
 	 * Check if an index was opened
-	 * 
+	 *
 	 * @param bool $throwException	throw exception in case of error
 	 * @return bool
 	 */
@@ -106,7 +106,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 	
 	/**
 	 * Build query recursively from query array
-	 * 
+	 *
 	 * @param $fields
 	 * @return Zend_Search_Lucene_Search_Query_Boolean
 	 */
@@ -131,7 +131,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 						// The term is really just a simple string
 						$mtquery->addTerm(
 										new Zend_Search_Lucene_Index_Term(
-											$ff['term'], 
+											$ff['term'],
 											$key=='__default__'?null:$key
 										),
 										isset($ff['sign']) ? $ff['sign'] : null
@@ -162,7 +162,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 				} else {
 					// The term represents a subquery - step down recursively
 					$query->addSubquery(
-									$this->buildQuery($ff['term']), 
+									$this->buildQuery($ff['term']),
 									isset($ff['sign']) ? $ff['sign'] : null
 								);
 				}
@@ -180,7 +180,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 	 * Possible attribute for $fields: 'term'
 	 * $fields['term'] = 'solrfield:test* OR otherfield:test*'
 	 * The term string contains the solr query string.
-	 * 
+	 *
 	 * @param array		$fields
 	 * @param array		$options	key / value pairs for other query parameters (see Solr documentation), use arrays for parameter keys used more than once (e.g. facet.field)
 	 * 								* [int] offset
@@ -193,7 +193,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 
 	/**
 	 * Suche in Solr
-	 * 
+	 *
 	 * @param array $fields erlaubt ist derzeit term
 	 * @param array $options Alle weiteren Solr-Optionen
 	 * @return array
@@ -227,13 +227,13 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 							//in ein eigenes Feld nach folgendem Schema ins Dokument geschrieben: $Feldname_hl
 							//dabei wäre es dann möglich die Felder flexibel über TS überschrieben zu lassen
 							//indem bspw. ein TS wie content.override.field = content_hl angegeben wird ;)
-							$highlightField = ($options['overrideWithHl']) ? $docField :$docField.'_hl';
+							$highlightField = ($options['overrideWithHl']) ? $docField : $docField.'_hl';
+
 							$doc->$highlightField = $highlightValue;
 						}
 					}
 					$hits[] = tx_rnbase::makeInstance('tx_mksearch_model_SolrHit', $doc);
 				}
-			
 			$ret['items'] = $hits;
 			//Facets
 			if($response->facet_counts){
@@ -265,7 +265,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 
 	/**
 	 * Checks if we got highlightings and wraps them in case in an array
-	 * 
+	 *
 	 * @param Apache_Solr_Response $oResponse
 	 * @return array
 	 */
@@ -279,7 +279,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 					//jedes Highlighting
 					foreach($aHighlightFields as $sHighlightField) {
 						//wir nehmen als key die Dokument ID ($highlightId) zwecks Zuordnung
-						$aHighlights[$iHighlightId][$sHighlightFieldsName] = $sHighlightField;	
+						$aHighlights[$iHighlightId][$sHighlightFieldsName] = $sHighlightField;
 					}
 				}
 			}
@@ -298,7 +298,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 	
 	/**
 	 * Open an index
-	 * 
+	 *
 	 * @param tx_mksearch_model_internal_Index	$index Instance of the index to open
 	 * @param bool 		$forceCreation	Force creation of index if it doesn't exist
 	 * @return void
@@ -338,10 +338,10 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 	
 	/**
 	 * Commit index
-	 * 
-	 * Explicite commits are not needed for Zend_Lucene, as commit commit happens implicitely on 
+	 *
+	 * Explicite commits are not needed for Zend_Lucene, as commit commit happens implicitely on
 	 * close of index and prior to all other operations which depend on a clean data state.
-	 * 
+	 *
 	 * @return bool success
 	 * @throws Exception
 	 */
@@ -362,7 +362,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 	
 	/**
 	 * Delete an entire index
-	 * 
+	 *
 	 * @param optional string $name	Name of index to delete, if not the open index is meant to be deleted
 	 * @return void
 	 */
@@ -387,20 +387,20 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 	
 	/**
 	 * Optimize index
-	 * 
+	 *
 	 * @return void
 	 */
 	public function optimizeIndex() {
-		// Committing the index before doing the actual optimization is not necessary 
+		// Committing the index before doing the actual optimization is not necessary
 		// as the commit happens implictely on optimization by Zend_Lucene
 		$this->index->optimize();
 	}
 	
 	/**
 	 * Replace an index with another.
-	 * 
+	 *
 	 * The index to be replaced will be deleted.
-	 * This actually means that the old's index's directory will be deleted recursively!  
+	 * This actually means that the old's index's directory will be deleted recursively!
 	 *
 	 * @param string	$which	Name of index to be replaced i. e. deleted
 	 * @param string	$by		Name of index which replaces the index named $which
@@ -412,7 +412,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 		
 		// Delete index $which
 		$this->deleteIndex($which);
-		// Rename index $by to the just deleted $which 
+		// Rename index $by to the just deleted $which
 		rename($this->getIndexDirectory($by), $this->getIndexDirectory($which));
 	}
 	
@@ -479,8 +479,8 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 	
 	/**
 	 * Put a new record into index
-	 * 
-	 * @param tx_mksearch_interface_IndexerDocument	$doc	"Document" to index 
+	 *
+	 * @param tx_mksearch_interface_IndexerDocument	$doc	"Document" to index
 	 * @return void
 	 */
 	public function indexNew(tx_mksearch_interface_IndexerDocument $doc) {
@@ -516,7 +516,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 						$solrDoc->addField($key, tx_mksearch_util_Misc::utf8Encode($value['value']), $value['boost']);
 				}
 			}
-		}	
+		}
 		// There's intentionally no test if $this->index is valid for performance reasons.
 		// You should not have made it to this point without a valid index anyway...
 		try {
@@ -568,8 +568,8 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 
 	/**
 	 * Update or create an index record
-	 * 
-	 * @param tx_mksearch_interface_IndexerDocument	$doc	"Document" to index 
+	 *
+	 * @param tx_mksearch_interface_IndexerDocument	$doc	"Document" to index
 	 * @return void
 	 */
 	public function indexUpdate(tx_mksearch_interface_IndexerDocument $doc) {
@@ -594,7 +594,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 
 	/**
 	 * Delete index document specified by content uid
-	 * 
+	 *
 	 * @param int		$uid			Unique identifier of data record - unique within the scope of $extKey and $content_type
 	 * @param string	$extKey			Key of extension the data record belongs to
 	 * @param string	$contentType	Name of semantic content type
@@ -605,14 +605,14 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 		// No document with passed uid found?
 		if ($result['numFound'] == 0) return false;
 		$hits = $result['items'];
-		foreach ($hits as $hit) 
+		foreach ($hits as $hit)
 			$this->getSolr()->deleteById($hit->getSolrId());
 		return true;
 	}
 	
 	/**
 	 * Delete index document specified by index id
-	 * 
+	 *
 	 * @param int $id
 	 * @return void
 	 */
@@ -622,7 +622,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 	
 	/**
 	 * Return an indexer document instance for the given content type
-	 * 
+	 *
 	 * @param string	$extKey			Extension key of records to be indexed
 	 * @param string	$contentType	Content type of records to be indexed
 	 * @return tx_mksearch_interface_IndexerDocument
@@ -672,7 +672,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 	
 	/**
 	 * Shall the autocomplete/spellcheck index be updated?
-	 * 
+	 *
 	 * @see tx_mksearch_interface_SearchEngine::postProcessIndexing()
 	 */
 	public function postProcessIndexing(tx_mksearch_model_internal_Index $oIndex) {
@@ -684,7 +684,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 	
 	/**
 	 * Build the autocomplete index
-	 * 
+	 *
 	 * @deprecated use buildOnCommit Option for the Solr Suggest/Spellcheck Component. Take
 	 * a look at the default solrconfig.xml and the "suggest" search component.
 	 * @param string $sRequestHandler
