@@ -40,13 +40,17 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 	 * @return string
 	 */
 	protected function getConfId($extended = true) {
+		static $confIdExtended = false;
 		//$this->confId ist private, deswegen müssen wir deren methode aufrufen.
 		$confId = parent::getConfId();
 		if($extended) {
-			$extended = $this->getConfigurations()->get($confId.'filter.confid');
-			$extended = 'filter.'.($extended ? $extended : 'default').'.';
-		} else $extended = '';
-		return parent::getConfId().$extended;
+			if (!$confIdExtended) {
+				$confIdExtended = $this->getConfigurations()->get($confId.'filter.confid');
+				$confIdExtended = 'filter.'.($confIdExtended ? $confIdExtended : 'default').'.';
+			}
+			$confId .= $confIdExtended;
+		}
+		return $confId;
 	}
 	
 	/**
@@ -201,9 +205,9 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 		$markArray = $subpartArray  = $wrappedSubpartArray = array();
 		
 		// Formular einfügen
-		$this->parseSearchForm($template, $markArray, $formatter, $confId, $marker);
+		$this->parseSearchForm($template, $markArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, $marker);
 		// Sortierung einfügen
-		$this->parseSortFields($template, $markArray, $wrappedSubpartArray, $formatter, $confId, $marker);
+		$this->parseSortFields($template, $markArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, $marker);
 		
 		$template = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markArray, $subpartArray, $wrappedSubpartArray);
 		return $template;
@@ -214,12 +218,14 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 	 *
 	 * @param string $template HTML template
 	 * @param array $markArray
+	 * @param array $subpartArray
+	 * @param array $wrappedSubpartArray
 	 * @param tx_rnbase_util_FormatUtil $formatter
 	 * @param string $confId
 	 * @param string $marker
 	 * @return string
 	 */
-	function parseSortFields($template, &$markArray, &$wrappedSubpartArray, &$formatter, $confId, $marker = 'FILTER') {
+	function parseSortFields($template, &$markArray, &$subpartArray, &$wrappedSubpartArray, &$formatter, $confId, $marker = 'FILTER') {
 		$marker = 'SORT';
 		$confId = $this->getConfId().'sort.';
 		$configurations = $formatter->getConfigurations();
@@ -267,12 +273,14 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 	 *
 	 * @param string $template HTML template
 	 * @param array $markArray
+	 * @param array $subpartArray
+	 * @param array $wrappedSubpartArray
 	 * @param tx_rnbase_util_FormatUtil $formatter
 	 * @param string $confId
 	 * @param string $marker
 	 * @return string
 	 */
-	function parseSearchForm($template, &$markArray, &$formatter, $confId, $marker = 'FILTER') {
+	function parseSearchForm($template, &$markArray, &$subpartArray, &$wrappedSubpartArray, &$formatter, $confId, $marker = 'FILTER') {
 		$markerName = 'SEARCH_FORM';
 		if(!tx_rnbase_util_BaseMarker::containsMarker($template, $markerName))
 			return $template;
