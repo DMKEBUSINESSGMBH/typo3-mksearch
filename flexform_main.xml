@@ -106,6 +106,15 @@
 						</config>
 					</TCEforms>
 				</searchsolr.filter.confid>
+				<searchsolr.force>
+					<TCEforms>
+						<exclude>1</exclude>
+						<label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.force</label>
+						<config>
+							<type>check</type>
+						</config>
+					</TCEforms>
+				</searchsolr.force>
 				<searchsolr.requestHandler>
 					<TCEforms>
 						<exclude>1</exclude>
