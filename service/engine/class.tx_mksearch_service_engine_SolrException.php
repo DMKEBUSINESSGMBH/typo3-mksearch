@@ -20,11 +20,13 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  ***************************************************************/
+require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+tx_rnbase::load('tx_rnbase_util_Exception');
 
 /**
  * Solr exception
  */
-class tx_mksearch_service_engine_SolrException extends Exception {
+class tx_mksearch_service_engine_SolrException extends tx_rnbase_util_Exception {
 	private $lastUrl = '';
 	private $parent = false;
 	/**
@@ -44,6 +46,14 @@ class tx_mksearch_service_engine_SolrException extends Exception {
 	}
 	public function getParent() {
 		return $this->parent;
+	}
+
+	/**
+	 * Liefert zusätzliche Daten.
+	 * @return mixed string or plain data
+	 */
+	public function getAdditional($asString=true) {
+		return $this->getLastUrl();
 	}
 }
 
