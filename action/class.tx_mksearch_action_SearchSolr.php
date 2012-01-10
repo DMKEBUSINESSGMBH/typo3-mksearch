@@ -146,10 +146,20 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 		//else nix im cache also Solr suchen lassen
 		
 		try {
+			// in unserem fall sollte es der solr service sein!
+			/* @var $searchEngine tx_mksearch_service_engine_Solr */
 			$searchEngine = tx_mksearch_util_ServiceRegistry::getSearchEngine($index);
 			$searchEngine->openIndex($index);
-			$result = $searchEngine->search($fields, $options, $configurations);
+			$result = $searchEngine->search($fields, $options);
 			$searchEngine->closeIndex();
+			
+			//der solr responce processor bearbeidet die results
+			// es werden hits, facets, uws. erzeugt.
+			tx_rnbase::load('tx_mksearch_util_SolrResponseProcessor');
+			tx_mksearch_util_SolrResponseProcessor::processSolrResult(
+					$result, $configurations,
+					$this->getConfId().'responseProcessor.'
+				);
 		}
 		catch(Exception $e) {
 			$lastUrl = $e instanceof tx_mksearch_service_engine_SolrException ? $e->getLastUrl() : '';
@@ -157,8 +167,6 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 			//also machen wir das manuell
 			if($addr = tx_rnbase_configurations::getExtensionCfgValue('rn_base', 'sendEmailOnException')) {
 				tx_rnbase::load('tx_rnbase_util_Misc');
-				//die Mail soll immer geschickt werden
-				$aOptions = array('ignoremaillock' => true);
 				tx_rnbase_util_Misc::sendErrorMail($addr, 'tx_mksearch_action_SearchSolr_searchSolr', $e, $aOptions);
 			}
 			tx_rnbase::load('tx_rnbase_util_Logger');

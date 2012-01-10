@@ -30,7 +30,7 @@ class tx_mksearch_tests_util_FacetBuilder_testcase extends tx_phpunit_testcase {
 
 	public function testBuildFacetsWithEmptyFacetData() {
 		$facetData = array();
-		$facetData = tx_mksearch_util_FacetBuilder::buildFacets($facetData);
+		$facetData = tx_mksearch_util_FacetBuilder::getInstance()->buildFacets($facetData);
 		$this->assertTrue(is_array($facetData),'es wurde kein array zurück gegeben!');
 		$this->assertTrue(empty($facetData),'es wurde kein leeres array zurück gegeben!');
 	}
@@ -41,7 +41,7 @@ class tx_mksearch_tests_util_FacetBuilder_testcase extends tx_phpunit_testcase {
 		$facetData->contentType->news = 2;
 		$facetData->contentType->offer = 34;
 		$facetData->contentType->product = 6;
-		$facetData = tx_mksearch_util_FacetBuilder::buildFacets($facetData);
+		$facetData = tx_mksearch_util_FacetBuilder::getInstance()->buildFacets($facetData);
 		
 		$this->assertTrue(is_array($facetData),'es wurde kein array zurück gegeben!');
 		$this->assertEquals(3,count($facetData),'Das array hat nicht die richtige Größe!');

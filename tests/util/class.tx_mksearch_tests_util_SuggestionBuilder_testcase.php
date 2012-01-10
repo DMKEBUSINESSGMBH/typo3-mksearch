@@ -30,7 +30,7 @@ class tx_mksearch_tests_util_SuggestionBuilder_testcase extends tx_phpunit_testc
 
 	public function testBuildFacetsWithEmptyFacetData() {
 		$suggestionData = array();
-		$suggestionData = tx_mksearch_util_SuggestionBuilder::buildSuggestions($suggestionData);
+		$suggestionData = tx_mksearch_util_SuggestionBuilder::getInstance()->buildSuggestions($suggestionData);
 		$this->assertTrue(is_array($suggestionData),'es wurde kein array zurück gegeben!');
 		$this->assertTrue(empty($suggestionData),'es wurde kein leeres array zurück gegeben!');
 	}
@@ -45,7 +45,7 @@ class tx_mksearch_tests_util_SuggestionBuilder_testcase extends tx_phpunit_testc
 			0 => searchWordFoundOnce,
 			1 => searchWordFoundTwice
 		);
-		$suggestionData = tx_mksearch_util_SuggestionBuilder::buildSuggestions($suggestionData);
+		$suggestionData = tx_mksearch_util_SuggestionBuilder::getInstance()->buildSuggestions($suggestionData);
 		
 		$this->assertTrue(is_array($suggestionData),'es wurde kein array zurück gegeben!');
 		$this->assertEquals(1,count($suggestionData),'Das array hat nicht die richtige Größe!');

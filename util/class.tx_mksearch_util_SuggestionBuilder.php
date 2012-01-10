@@ -6,7 +6,7 @@
  *
  *  Copyright notice
  *
- *  (c) 2010 Hannes Bochmann <hannes.bochmann@das-medienkombinat.de>
+ *  (c) 2010 - 2011 das MedienKombinat GmbH <kontakt@das-medienkombinat.de>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -35,20 +35,35 @@ require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
  * Der SuggestionBuilder erstellt aus den Rohdaten der Suggestions passende Objekte für das Rendering.
  * @package tx_mksearch
  * @subpackage tx_mksearch_util
+ * @author Hannes Bochmann <hannes.bochmann@das-medienkombinat.de>
+ * @author Michael Wagner <michael.wagner@das-medienkombinat.de>
  */
 class tx_mksearch_util_SuggestionBuilder {
+	
+	/**
+	 * @param string $class
+	 * @return tx_mksearch_util_SuggestionBuilder
+	 */
+	public static function getInstance($class='') {
+		static $instance;
+		$class = empty($class) ? 'tx_mksearch_util_SuggestionBuilder' : $class;
+		if(!$instance[$class])
+			$instance[$class] = tx_rnbase::makeInstance($class);
+		return $instance[$class];
+	}
+	
 	/**
 	 * Baut die Daten für die Suggestions zusammen
 	 * @param array $aSuggestionData Daten von Solr
 	 * @return array Ausgabedaten
 	 */
-	public static function buildSuggestions($aSuggestionData) {
+	public function buildSuggestions($aSuggestionData) {
 		$aSuggestions = array();
 		if(!$aSuggestionData) return $aSuggestions;
 		foreach ($aSuggestionData as $sSearchWord => $oSearchWord) {
 			foreach ($oSearchWord->suggestion as $sSuggestion){
 				//sorted by search word
-				$aSuggestions[$sSearchWord][] = self::getSimpleSuggestion(
+				$aSuggestions[$sSearchWord][] = $this->getSimpleSuggestion(
 					array(
 						'value' => $sSuggestion,
 						'searchWord' => $sSearchWord,
@@ -64,8 +79,8 @@ class tx_mksearch_util_SuggestionBuilder {
 	 * @param string $field
 	 * @return tx_mksearch_model_Suggestion
 	 */
-	private static function getSimpleSuggestion($aSuggestion) {
-		return tx_rnbase::makeInstance('tx_mksearch_model_Suggestion', $aSuggestion);		
+	private function getSimpleSuggestion($aSuggestion) {
+		return tx_rnbase::makeInstance('tx_mksearch_model_Suggestion', $aSuggestion);
 	}
 }
 

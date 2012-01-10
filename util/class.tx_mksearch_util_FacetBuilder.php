@@ -6,7 +6,7 @@
  *
  *  Copyright notice
  *
- *  (c) 2011 Hannes Bochmann <hannes.bochmann@das-medienkombinat.de>
+ *  (c) 2011 das MedienKombinat GmbH <kontakt@das-medienkombinat.de>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -35,19 +35,34 @@ require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
  * Der FacetBuilder erstellt aus den Rohdaten der Facets passende Objekte für das Rendering.
  * @package tx_mksearch
  * @subpackage tx_mksearch_util
+ * @author Hannes Bochmann <hannes.bochmann@das-medienkombinat.de>
+ * @author Michael Wagner <michael.wagner@das-medienkombinat.de>
  */
 class tx_mksearch_util_FacetBuilder {
+	
+	/**
+	 * @param string $class
+	 * @return tx_mksearch_util_FacetBuilder
+	 */
+	public static function getInstance($class='') {
+		static $instance;
+		$class = empty($class) ? 'tx_mksearch_util_FacetBuilder' : $class;
+		if(!$instance[$class])
+			$instance[$class] = tx_rnbase::makeInstance($class);
+		return $instance[$class];
+	}
+	
 	/**
 	 * Baut die Daten für die Facets zusammen
 	 * @param array $facetData Daten von Solr
 	 * @return array Ausgabedaten
 	 */
-	public static function buildFacets($facetData) {
+	public function buildFacets($facetData) {
 		$facetGroups = array();
 		if(!$facetData) return $facetGroups;
 		foreach ($facetData As $field => $facetGroup) {
 			foreach($facetGroup As $id => $count) {
-				$facetGroups[] = self::getSimpleFacet($field, $id, $count);
+				$facetGroups[] = $this->getSimpleFacet($field, $id, $count);
 			}
 		}
 		return $facetGroups;
@@ -59,9 +74,9 @@ class tx_mksearch_util_FacetBuilder {
 	 * @param int $id
 	 * @param int $count
 	 */
-	private static function getSimpleFacet($field, $id, $count) {
+	private function getSimpleFacet($field, $id, $count) {
 		$title = $id;
-		return tx_rnbase::makeInstance('tx_mksearch_model_Facet', $field, $id, $title, $count);		
+		return tx_rnbase::makeInstance('tx_mksearch_model_Facet', $field, $id, $title, $count);
 	}
 }
 

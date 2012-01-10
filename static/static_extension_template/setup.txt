@@ -349,6 +349,14 @@ plugin.tx_mksearch {
 				term = ###PARAM_MKSEARCH_TERM###
 			}
 		}
+		
+		responseProcessor {
+			### see tx_mksearch_util_SolrResponseProcessor::processHits
+			hit.overrideWithHl = 0
+			facet.builderClass = tx_mksearch_util_FacetBuilder
+			suggestions.builderClass = tx_mksearch_util_SuggestionBuilder
+		}
+		
 		hit {
 			pagebrowser =< lib.mksearch.pagebrowser
 			extrainfo =< lib.mksearch.extrainfo 

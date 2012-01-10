@@ -207,50 +207,12 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 			if($response->getHttpStatus() != 200) {
 				throw new tx_mksearch_service_engine_SolrException('Error requesting solr. HTTP status:'.$response->getHttpStatus(), -1, $solr->lastUrl);
 			}
-			//highlighting einfügen
-			$highlights = $this->getHighlighting($response);
-	
-			$hits = array();
-			// Gibt es docs?
-			// Im Fall eines Autocompletes, haben wir keinen Responce, nur Suggestions!
-			if($response->response->docs)
-				foreach($response->response->docs as $doc) {
-					//highlighting hinzufügen für alle Felder
-					if(!empty($highlights[$doc->id])){
-						foreach($highlights[$doc->id] as $docField => $highlightValue) {
-							//Solr liefert die Highlightings gesondert weshalb wir diese in das
-							//eigentliche Dokument bekommen müssen. Dafür gibts es 2 Möglichkeiten:
-							//1. wenn overrideWithHl auf true gesetzt ist werden die jeweiligen Inhaltsfelder
-							//mit den korrespondierenden Highlighting Snippets überschrieben. Dabei muss man auf
-							//hl.fragsize achten da die Snippets nur so lang sind wie in hl.fragsize angegeben
-							//2. ist overrideWithHl nicht gesetzt dann werden die Highlighting Snippets
-							//in ein eigenes Feld nach folgendem Schema ins Dokument geschrieben: $Feldname_hl
-							//dabei wäre es dann möglich die Felder flexibel über TS überschrieben zu lassen
-							//indem bspw. ein TS wie content.override.field = content_hl angegeben wird ;)
-							$highlightField = ($options['overrideWithHl']) ? $docField : $docField.'_hl';
-
-							$doc->$highlightField = $highlightValue;
-						}
-					}
-					$hits[] = tx_rnbase::makeInstance('tx_mksearch_model_SolrHit', $doc);
-				}
-			$ret['items'] = $hits;
-			//Facets
-			if($response->facet_counts){
-				tx_rnbase::load('tx_mksearch_util_FacetBuilder');
-				$ret['facets'] = tx_mksearch_util_FacetBuilder::buildFacets($response->facet_counts->facet_fields);
-			}
-			
-			//Suggestions
-			if($response->spellcheck->suggestions){
-				tx_rnbase::load('tx_mksearch_util_SuggestionBuilder');
-				$ret['suggestions'] = tx_mksearch_util_SuggestionBuilder::buildSuggestions($response->spellcheck->suggestions);
-			}
 			
 			$ret['searchUrl'] = $solr->lastUrl;
 			$ret['searchTime'] = (microtime(true) - $start) . ' ms';
 			$ret['numFound'] = $response->response->numFound;
-			$ret['response'] = &$response;
+			$ret['response'] = &$response; // wichtig, wird im SolrResponseProcessor benötigt
+			
 			if($options['debug']) {
 				$ret['debug'] = get_object_vars($response->debug);
 				t3lib_div::debug(array($options, $ret), 'class.tx_mksearch_service_engine_Solr.php Line: '.__LINE__); // TODO: remove me
@@ -261,31 +223,6 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 		}
 
 		return $ret;
-	}
-
-	/**
-	 * Checks if we got highlightings and wraps them in case in an array
-	 *
-	 * @param Apache_Solr_Response $oResponse
-	 * @return array
-	 */
-	private function getHighlighting(Apache_Solr_Response $oResponse) {
-		$aHighlights = array();
-		//Highlighting für jedes gefundene Dokument
-		if(count($oResponse->highlighting)) {
-			foreach($oResponse->highlighting as $iHighlightId => $aHighlighting) {
-				//jedes Feld mit einem Highlighting
-				foreach($aHighlighting as $sHighlightFieldsName => $aHighlightFields) {
-					//jedes Highlighting
-					foreach($aHighlightFields as $sHighlightField) {
-						//wir nehmen als key die Dokument ID ($highlightId) zwecks Zuordnung
-						$aHighlights[$iHighlightId][$sHighlightFieldsName] = $sHighlightField;
-					}
-				}
-			}
-		}
-		
-		return $aHighlights;
 	}
 
 	/**
