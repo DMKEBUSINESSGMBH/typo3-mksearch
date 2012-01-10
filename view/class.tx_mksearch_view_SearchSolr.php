@@ -44,9 +44,9 @@ class tx_mksearch_view_SearchSolr extends tx_rnbase_view_Base {
 	private $configurations = null;
 	
 	/**
-	 * 
+	 *
 	 * @param string 						$template
-	 * @param array_object 					$viewData
+	 * @param ArrayObject 					$viewData
 	 * @param tx_rnbase_configurations 		$configurations
 	 * @param tx_rnbase_util_FormatUtil 	$formatter
 	 */
@@ -60,14 +60,24 @@ class tx_mksearch_view_SearchSolr extends tx_rnbase_view_Base {
 		//else
 
 		$items = $result ? $result['items'] : array();
-		$listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder', 
-				$viewData->offsetGet('filter') instanceof ListBuilderInfo ? $viewData->offsetGet('filter') : null);
+		/* @var $listBuilder tx_rnbase_util_ListBuilder */
+		$listBuilder = tx_rnbase::makeInstance(
+				'tx_rnbase_util_ListBuilder',
+				$viewData->offsetGet('filter') instanceof ListBuilderInfo ? $viewData->offsetGet('filter') : null
+			);
+		
+		// wurden options für die markerklassen gesetzt?
+		$markerParams = $viewData->offsetExists('markerParams') ? $viewData->offsetGet('markerParams') : array();
 
 		$markerClass = $configurations->get($this->confId.'mainmarkerclass');
 		$markerClass = $markerClass ? $markerClass : 'tx_mksearch_marker_Search';
 				
-		$out = $listBuilder->render($items, $viewData, 
-			$template, $markerClass, $this->confId.'hit.', 'SEARCHRESULT', $formatter);
+		$out = $listBuilder->render(
+				$items, $viewData,
+				$template, $markerClass,
+				$this->confId.'hit.', 'SEARCHRESULT',
+				$formatter, $markerParams
+		);
 			
 		//noch die Facetten parsen wenn da
 		$out = $this->handleFacets($out, $viewData, $configurations, $formatter, $listBuilder, $result);
@@ -77,14 +87,14 @@ class tx_mksearch_view_SearchSolr extends tx_rnbase_view_Base {
 	
 	/**
 	 * Kümmert sich um das Parsen der Facetten
-	 * 
+	 *
 	 * @param string $template
 	 * @param array_object $viewData
 	 * @param tx_rnbase_configurations $configurations
 	 * @param tx_rnbase_util_FormatUtil $formatter
 	 * @param tx_rnbase_util_ListBuilder $listBuilder
 	 * @param array $result
-	 * 
+	 *
 	 * @return string
 	 */
 	protected function handleFacets($template, &$viewData, &$configurations, &$formatter, $listBuilder, $result) {
@@ -94,7 +104,7 @@ class tx_mksearch_view_SearchSolr extends tx_rnbase_view_Base {
 
 		//dann Liste parsen
 		$aFacets = $result ? $result['facets'] : array();
-		$out = $listBuilder->render($aFacets, $viewData, 
+		$out = $listBuilder->render($aFacets, $viewData,
 			$template, $facetMarkerClass, $this->confId.'facet.', 'FACET', $formatter);
 			
 		//jetzt noch den zurücksetzen Link
@@ -119,7 +129,7 @@ class tx_mksearch_view_SearchSolr extends tx_rnbase_view_Base {
 	/**
 	 * Subpart der im HTML-Template geladen werden soll. Dieser wird der Methode
 	 * createOutput automatisch als $template übergeben.
-	 *  
+	 *
 	 * @param ArrayObject 					$viewData
 	 * @return string
 	 */
