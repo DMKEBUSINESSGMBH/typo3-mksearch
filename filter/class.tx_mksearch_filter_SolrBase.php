@@ -29,8 +29,8 @@ tx_rnbase::load('tx_rnbase_util_ListBuilderInfo');
 
 class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 	
-	private $sort = false;
-	private $sortOrder = 'asc';
+	protected $sort = false;
+	protected $sortOrder = 'asc';
 	
 	/**
 	 * Liefert die ConfId für den Filter
@@ -173,12 +173,17 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 	/**
 	 * Fügt die Sortierung zu dem Filter hinzu.
 	 *
+	 * @TODO: das klappt zurzeit nur bei einfacher sortierung!
+	 *
 	 * @param 	array 					$options
 	 * @param 	tx_rnbase_IParameters 	$parameters
 	 */
-	private function handleSorting(&$options, &$parameters){
-		if($sort = trim($parameters->get('sort'))) {
-			//@TODO: das klappt nur bei einfacher sortierung!
+	protected function handleSorting(&$options, &$parameters) {
+		// die parameter nach einer sortierung fragen
+		$sort = trim($parameters->get('sort'));
+		// wurden keine parameter gefunden, nutzen wir den default des filters
+		$sort = $sort ? $sort : $this->sort;
+		if($sort) {
 			list($sort, $sortOrder) = explode(' ', $sort);
 			// wenn order nicht mit gesetzt wurde, aus den parametern holen
 			$sortOrder = $sortOrder ? $sortOrder : $parameters->get('sortorder');
