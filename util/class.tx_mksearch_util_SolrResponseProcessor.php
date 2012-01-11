@@ -89,10 +89,10 @@ class tx_mksearch_util_SolrResponseProcessor {
 	 * @param unknown_type $result
 	 */
 	public function processSolrResponse(Apache_Solr_Response &$response, $result = array()) {
-		$ret['items'] = $this->processHits($response);
-		$ret['facets'] = $this->processFacets($response);
-		$ret['suggestions'] = $this->processSuggestions($response);
-		return $ret;
+		$result['items'] = $this->processHits($response);
+		$result['facets'] = $this->processFacets($response);
+		$result['suggestions'] = $this->processSuggestions($response);
+		return $result;
 	}
 	
 	/**
