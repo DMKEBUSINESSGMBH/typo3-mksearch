@@ -139,6 +139,9 @@ lib.mksearch.defaultsolrfilter {
 	### gesetzt ist, dann kann hier das Solr Feld für die Facetten angegeben werden. Es wird dann nachträglich
 	### im defaultFilter vorrangestellt wenn ein fq Parameter gesetzt wurde.
 	fqField = 
+	
+	### kommaseparierte liste mit den erlaubten fq feldern, welche über parameter gesetzt werden können
+	allowedFqParams = allowedfield
 }
 
 plugin.tx_mksearch {

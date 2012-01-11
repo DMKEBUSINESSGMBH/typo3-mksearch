@@ -165,9 +165,53 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 	protected function handleFq(&$options, &$parameters, &$configurations, $confId){
 		if($sFq = trim($parameters->get('fq'))) {
 			$sFqField = $configurations->get($confId.'fqField');
-			$sFq = $sFqField ? $sFqField.':'.$sFq : $sFq;
-			$options['fq'] = $sFq;
+			if ($sFqField) {
+				$sFq = $sFqField.':'.$sFq;
+			} else {
+				$sFq = $this->parseFildAndValue($sFq, $configurations, $confId);
+			}
+			if ($sFq) $options['fq'] = $sFq;
 		}
+	}
+	
+	/**
+	 * Prüft den fq parameter auf richtigkeit.
+	 * @param string $sFq
+	 * @return array
+	 */
+	private function parseFildAndValue($sFq, &$configurations, $confId) {
+		if (empty($sFq)) return $sFq;
+		
+		// die erlaubten felder holen
+		$allowedFqParams = t3lib_div::trimExplode(',', $configurations->get($confId.'allowedFqParams'));
+		// keine definiert?
+		if (empty($allowedFqParams)) return '';
+		
+		// wir trennen den string auf!
+		// field:value | field:"value"
+		$matches = array();
+		$pattern  = '(?P<field>([a-z_]*))'; // nur kleinbuchstaben und unterstrich für feldnamen erlauben.
+		$pattern .= ':'; // feld mit doppelpunkt vom wert getrennt.
+		$pattern .= '(["]*)'; // eventuelles anführungszeichen am anfang abschneiden.
+		$pattern .= '(?P<value>([a-zA-Z0-9_ ]*))'; // nur buchstaben, zahlen unterstrich und leerzeichen für wert erlauben.
+		if (
+			// wir splitten den string auf!
+			preg_match('/^'.$pattern.'/i', $sFq, $matches)
+			// wurde das feld gefunden?
+			&& isset($matches['field']) && !empty($matches['field'])
+			// wurde der wert gefunden?
+			&& isset($matches['value']) && !empty($matches['value'])
+			// das feld muss erlaubt sein!
+			&& in_array($matches['field'], $allowedFqParams)
+		) {
+			// fq wieder zusammensetzen
+			// @TODO sind die "" immer notwendig? evtl noch den wert prüfen (string, int, date, ...).
+			$sFq = $matches['field'] . ':"'. $matches['value'] .'"';
+		}
+		// kein feld und oder wert gefunden oder feld nicht erlaubt, wir lassen den qs leer!
+		else $sFq = '';
+		
+		return $sFq;
 	}
 
 	/**
