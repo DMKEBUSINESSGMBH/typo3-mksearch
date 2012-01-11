@@ -141,7 +141,7 @@ lib.mksearch.defaultsolrfilter {
 	fqField = 
 	
 	### kommaseparierte liste mit den erlaubten fq feldern, welche über parameter gesetzt werden können
-	allowedFqParams = allowedfield
+	allowedFqParams = 
 }
 
 plugin.tx_mksearch {
