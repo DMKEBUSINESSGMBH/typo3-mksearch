@@ -167,7 +167,7 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 			//also machen wir das manuell
 			if($addr = tx_rnbase_configurations::getExtensionCfgValue('rn_base', 'sendEmailOnException')) {
 				tx_rnbase::load('tx_rnbase_util_Misc');
-				tx_rnbase_util_Misc::sendErrorMail($addr, 'tx_mksearch_action_SearchSolr_searchSolr', $e, $aOptions);
+				tx_rnbase_util_Misc::sendErrorMail($addr, 'tx_mksearch_action_SearchSolr_searchSolr', $e);
 			}
 			tx_rnbase::load('tx_rnbase_util_Logger');
 			if(tx_rnbase_util_Logger::isFatalEnabled()) {
