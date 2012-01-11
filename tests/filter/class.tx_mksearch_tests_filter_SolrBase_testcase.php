@@ -192,6 +192,8 @@ class tx_mksearch_tests_filter_SolrBase_testcase extends tx_phpunit_testcase {
 		$aConfig['searchsolr.']['filter.']['default.'] = $aConfig['lib.']['mksearch.']['defaultsolrfilter.'];
 		//force noch setzen
 		$aConfig['searchsolr.']['filter.']['default.']['force'] = 1;
+		// das feld für den fq muss noch erlaubt werden
+		$aConfig['searchsolr.']['filter.']['default.']['allowedFqParams'] = 'facet_field';
 		//fq noch setzen
 		$this->oParameters->offsetSet('fq','facet_field:"facet value"');
 		$oFilter = tx_rnbase::makeInstance('tx_mksearch_filter_SolrBase',$this->oParameters,tx_mksearch_tests_Util::loadConfig4BE($aConfig),'searchsolr.');
@@ -223,6 +225,32 @@ class tx_mksearch_tests_filter_SolrBase_testcase extends tx_phpunit_testcase {
 		$oFilter->init($fields,$options);
 		
 		$this->assertEquals('facet_dummy:"facet value"',$options['fq'],'fq wuede falsch übernommen!');
+	}
+	
+	public function testAllowedFqParams(){
+		$aConfig = tx_mksearch_tests_Util::loadPageTS4BE();
+		//wir müssen fields extra kopieren da es über TS Anweisungen im BE nicht geht
+		$aConfig['searchsolr.']['filter.']['default.'] = $aConfig['lib.']['mksearch.']['defaultsolrfilter.'];
+		//force noch setzen
+		$aConfig['searchsolr.']['filter.']['default.']['force'] = 1;
+		//force noch setzen, das gegenteil wird bereits in testInitSetsCorrectFqIfSetAndNoFqFieldDefinedForWrapping geprüft
+		$aConfig['searchsolr.']['filter.']['default.']['allowedFqParams'] = 'allowedfield';
+		
+		//fq noch setzen
+		$this->oParameters->offsetSet('fq','field:"facet value"');
+		
+		$oFilter = tx_rnbase::makeInstance(
+			'tx_mksearch_filter_SolrBase',
+			$this->oParameters,
+			tx_mksearch_tests_Util::loadConfig4BE($aConfig),
+			'searchsolr.'
+		);
+		
+		$fields = array('term' => 'contentType:* ###PARAM_MKSEARCH_TERM###');
+		$options = array();
+		$oFilter->init($fields, $options);
+		
+		$this->assertEquals(false,isset($options['fq']),'fq wuede gesetzt!');
 	}
 }
 
