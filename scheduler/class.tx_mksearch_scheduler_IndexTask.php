@@ -51,7 +51,8 @@ class tx_mksearch_scheduler_IndexTask extends tx_scheduler_Task {
 			if(!empty($rows))//sonst gibts ne PHP Warning bei array_merge
 				$rows = count(call_user_func_array('array_merge', array_values($rows)));
 			$msg = sprintf($rows ? '%d item(s) indexed' : 'No items in indexing queue.' , $rows);
-			tx_rnbase_util_Logger::info($msg, 'mksearch');
+			if($rows) // TODO: Schalter im Task anlegen.
+				tx_rnbase_util_Logger::info($msg, 'mksearch');
 		} catch (Exception $e) {
 			tx_rnbase_util_Logger::fatal('Indexing failed!', 'mksearch', array('Exception' => $e->getMessage()));
 			//Da die Exception gefangen wird, würden die Entwickler keine Mail bekommen
