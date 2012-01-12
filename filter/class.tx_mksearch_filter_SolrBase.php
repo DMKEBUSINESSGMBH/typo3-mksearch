@@ -44,10 +44,11 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 		//$this->confId ist private, deswegen müssen wir deren methode aufrufen.
 		$confId = parent::getConfId();
 		if($extended) {
-			if (!$confIdExtended) {
+			// TODO: Statischer Cache sollte sich auf alle Filter ausweiten, nicht nur auf aktuellen
+			//if (!$confIdExtended) {
 				$confIdExtended = $this->getConfigurations()->get($confId.'filter.confid');
 				$confIdExtended = 'filter.'.($confIdExtended ? $confIdExtended : 'default').'.';
-			}
+			//}
 			$confId .= $confIdExtended;
 		}
 		return $confId;
