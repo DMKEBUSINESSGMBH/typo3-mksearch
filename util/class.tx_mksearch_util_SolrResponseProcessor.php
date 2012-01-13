@@ -89,7 +89,7 @@ class tx_mksearch_util_SolrResponseProcessor {
 	 * @param unknown_type $result
 	 */
 	public function processSolrResponse(Apache_Solr_Response &$response, $result = array()) {
-		$result['items'] = $this->processHits($response);
+		$result['items'] = $this->processHits($response, empty($result['items']) ? array() : $result['items']);
 		$result['facets'] = $this->processFacets($response);
 		$result['suggestions'] = $this->processSuggestions($response);
 		return $result;
@@ -101,24 +101,28 @@ class tx_mksearch_util_SolrResponseProcessor {
 	 * @param Apache_Solr_Response $response
 	 * @return array
 	 */
-	public function processHits(Apache_Solr_Response &$response) {
+	public function processHits(Apache_Solr_Response &$response, array $hits = array()) {
 		$confId = $this->getConfId().'hit.';
 		
 		//highlighting einfügen
 		$highlights = $this->getHighlighting($response);
 		
-		$hits = array();
+		// hier wird nur highlighting gesetzt
+		// wenn keins existiert brauchen nwir nichts machen
+		if (empty($highlights)) return $hits;
+		
 		// Gibt es docs?
 		// Im Fall eines Autocompletes, haben wir keinen Responce, nur Suggestions!
 		if($response->response->docs) {
-			// @TODO: sollte ei interface haben!?
-// 			$modelClass = $this->getConfigurations($confId.'modelClass');
-// 			$modelClass = $modelClass ? $modelClass : 'tx_mksearch_model_SolrHit';
-			$modelClass = 'tx_mksearch_model_SolrHit';
-			foreach($response->response->docs as $doc) {
+			if (empty($hits)) { // wir erzeugen die hits, sollte vom service allerdings schon geschehen sein.
+				foreach($response->response->docs as $doc) {
+					$hits[] = tx_rnbase::makeInstance('tx_mksearch_model_SolrHit', $doc);
+				}
+			}
+			foreach($hits as &$hit) {
 				//highlighting hinzufügen für alle Felder
-				if(!empty($highlights[$doc->id])){
-					foreach($highlights[$doc->id] as $docField => $highlightValue) {
+				if(!empty($highlights[$hit->record['id']])){
+					foreach($highlights[$hit->record['id']] as $docField => $highlightValue) {
 						//Solr liefert die Highlightings gesondert weshalb wir diese in das
 						//eigentliche Dokument bekommen müssen. Dafür gibts es 2 Möglichkeiten:
 						//1. wenn overrideWithHl auf true gesetzt ist werden die jeweiligen Inhaltsfelder
@@ -132,10 +136,9 @@ class tx_mksearch_util_SolrResponseProcessor {
 						$overrideWithHl = $overrideWithHl ? $overrideWithHl : (isset($options['overrideWithHl']) && $options['overrideWithHl']);
 						$highlightField = ($options['overrideWithHl']) ? $docField : $docField.'_hl';
 		
-						$doc->$highlightField = $highlightValue;
+						$hit->record[$highlightField] = $highlightValue;
 					}
 				}
-				$hits[] = tx_rnbase::makeInstance($modelClass, $doc);
 			}
 		}
 		return $hits;
