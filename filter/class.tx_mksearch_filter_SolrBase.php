@@ -22,7 +22,6 @@
  ***************************************************************/
 
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
-
 tx_rnbase::load('tx_rnbase_util_SearchBase');
 tx_rnbase::load('tx_rnbase_filter_BaseFilter');
 tx_rnbase::load('tx_rnbase_util_ListBuilderInfo');
@@ -163,16 +162,59 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 	 * @param 	tx_rnbase_configurations 	$configurations
 	 * @param 	string 						$confId
 	 */
-	protected function handleFq(&$options, &$parameters, &$configurations, $confId){
+	protected function handleFq(&$options, &$parameters, &$configurations, $confId) {
+		// die erlaubten felder holen
+		$allowedFqParams = t3lib_div::trimExplode(',', $configurations->get($confId.'allowedFqParams'));
+		
 		if($sFq = trim($parameters->get('fq'))) {
 			$sFqField = $configurations->get($confId.'fqField');
 			if ($sFqField) {
-				$sFq = $sFqField.':'.$sFq;
+				tx_rnbase::load('tx_mksearch_util_Misc');
+				$sFq = $sFqField.':'.tx_mksearch_util_Misc::sanitizeTerm($sFq);
 			} else {
-				$sFq = $this->parseFildAndValue($sFq, $configurations, $confId);
+				// field value konstelation prüfen
+				$sFq = $this->parseFieldAndValue($sFq, $allowedFqParams);
 			}
-			if ($sFq) $options['fq'] = $sFq;
+			$this->addFilterQuery($options, $sFq);
 		}
+		if($sAddFq = trim($parameters->get('addfq'))) {
+			// field value konstelation prüfen
+			$sAddFq = $this->parseFieldAndValue($sAddFq, $allowedFqParams);
+			$this->addFilterQuery($options, $sAddFq);
+		}
+		if($sRemoveFq = trim($parameters->get('remfq'))) {
+			$aFQ = isset($options['fq']) ? (is_array($options['fq']) ? $options['fq'] : array($options['fq'])) : array();
+			// hier stekt nur der feldname drinn
+			foreach ($aFQ as $iKey => $sFq) {
+				list($sfield) = explode(':', $sFq);
+				// wir löschend as feld
+				if(in_array($sRemoveFq, $allowedFqParams) && $sRemoveFq == $sfield)
+					unset($aFQ[$iKey]);
+			}
+			$options['fq'] = $aFQ;
+		}
+	}
+	/**
+	 * Fügt einen Parameter zu der FilterQuery hinzu
+	 * @TODO: kann die fq nicht immer ein array sein!?
+	 * @param array $options
+	 * @param unknown_type $sFQ
+	 */
+	protected function addFilterQuery(array &$options, $sFQ) {
+		if (empty($sFQ)) return ;
+		// vorhandene fq berücksichtigen
+		if (isset($options['fq'])) {
+			// den neuen wert anhängen
+			if (is_array($options['fq'])){
+				$options['fq'][] = $sFQ;
+			}
+			// aus fq ein array machen und den neuen wert anhängen
+			else {
+				$options['fq'] = array($options['fq'], $sFQ);
+			}
+		}
+		// fq schreiben
+		else $options['fq'] = $sFQ;
 	}
 	
 	/**
@@ -180,21 +222,16 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 	 * @param string $sFq
 	 * @return array
 	 */
-	private function parseFildAndValue($sFq, &$configurations, $confId) {
-		if (empty($sFq)) return $sFq;
-		
-		// die erlaubten felder holen
-		$allowedFqParams = t3lib_div::trimExplode(',', $configurations->get($confId.'allowedFqParams'));
-		// keine definiert?
-		if (empty($allowedFqParams)) return '';
+	private function parseFieldAndValue($sFq, $allowedFqParams) {
+		if (empty($sFq) || empty($allowedFqParams)) return '';
 		
 		// wir trennen den string auf!
 		// field:value | field:"value"
-		$matches = array();
 		$pattern  = '(?P<field>([a-z_]*))'; // nur kleinbuchstaben und unterstrich für feldnamen erlauben.
 		$pattern .= ':'; // feld mit doppelpunkt vom wert getrennt.
 		$pattern .= '(["]*)'; // eventuelles anführungszeichen am anfang abschneiden.
 		$pattern .= '(?P<value>([a-zA-Z0-9_ ]*))'; // nur buchstaben, zahlen unterstrich und leerzeichen für wert erlauben.
+		tx_rnbase::load('tx_mksearch_util_Misc');
 		if (
 			// wir splitten den string auf!
 			preg_match('/^'.$pattern.'/i', $sFq, $matches)
@@ -204,10 +241,12 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 			&& isset($matches['value']) && !empty($matches['value'])
 			// das feld muss erlaubt sein!
 			&& in_array($matches['field'], $allowedFqParams)
+			// werte reinigen
+			&& ($field = tx_mksearch_util_Misc::sanitizeTerm($matches['field']))
+			&& ($term = tx_mksearch_util_Misc::sanitizeTerm($matches['value']))
 		) {
 			// fq wieder zusammensetzen
-			// @TODO sind die "" immer notwendig? evtl noch den wert prüfen (string, int, date, ...).
-			$sFq = $matches['field'] . ':"'. $matches['value'] .'"';
+			$sFq = $field . ':"'. $term .'"';
 		}
 		// kein feld und oder wert gefunden oder feld nicht erlaubt, wir lassen den qs leer!
 		else $sFq = '';

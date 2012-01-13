@@ -387,6 +387,14 @@ plugin.tx_mksearch {
 				### Einschränkung rückgängig machen
 				reset.useKeepVars = 1
 				reset.useKeepVars.deny = fq
+				
+				### bei gruppierter facettierung notwendig (@TODO: groupedfaccets in mksearch integrieren)
+				add = 1
+				add {
+				}
+				remove = 1
+				remove {
+				}
 			}
 		}
 		

@@ -34,7 +34,7 @@ tx_rnbase::load('tx_mksearch_marker_SearchResultSimple');
 
 /**
  * Marker class for base facets
- * 
+ *
  * @author Hannes Bochmann
  * @package tx_mksearch
  * @subpackage tx_mksearch_marker
@@ -57,12 +57,22 @@ class tx_mksearch_marker_Facet extends tx_mksearch_marker_SearchResultSimple {
 		//so aus: mksearch[fq]=contentType:tt_content
 		
 		//ACHTUNG: im Live Einsatz sollte das Feld nicht im Link stehen sondern nur der Wert.
-		//Das Feld sollte dann erst im Filter hinzugefügt werden. In der TS Config sollte 
+		//Das Feld sollte dann erst im Filter hinzugefügt werden. In der TS Config sollte
 		//dazu facet.links.show.excludeFieldName auf 1 stehen!!!
+		//@TODO: den quote wrap entfernen und im filter prüfen.
 		$sFq = '"'.$item->record['id'].'"';//immer gewrapped in "" wegen evtl. mehrere Wörtern
-		if(!$formatter->getConfigurations()->get($confId.'links.show.excludeFieldName')) 
+		if(!$formatter->getConfigurations()->get($confId.'links.show.excludeFieldName'))
 					$sFq = $item->record['field'].':'.$sFq;
 		$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'show', $marker, array('fq' => $sFq), $template);
+		
+		// folgende links snind nur sinvoll, wenn die suchparameter gecached werden!
+		// add fq link, um einen filter zur suche hinzuzufügen
+		// remove fq link, um einen filter zur suche hinzuzufügen
+		// der parameter wird im format "mksearch[addfw]=title:home" übergeben.
+		// der filter muss sich dann darum kümmern, die parameter (field:value) auseinanderzu nehmen
+		// und in die query einzubauen
+		$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'add', $marker, array('NK_addfq' => $item->record['field'].':'.$item->record['id']), $template);
+		$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'remove', $marker, array('NK_remfq' => $item->record['field']), $template);
 	}
 }
 
