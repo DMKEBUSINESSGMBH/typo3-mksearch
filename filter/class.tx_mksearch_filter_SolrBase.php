@@ -170,7 +170,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 			$sFqField = $configurations->get($confId.'fqField');
 			if ($sFqField) {
 				tx_rnbase::load('tx_mksearch_util_Misc');
-				$sFq = $sFqField.':'.tx_mksearch_util_Misc::sanitizeTerm($sFq);
+				$sFq = $sFqField.':"'.tx_mksearch_util_Misc::sanitizeTerm($sFq).'"';
 			} else {
 				// field value konstelation prüfen
 				$sFq = $this->parseFieldAndValue($sFq, $allowedFqParams);
