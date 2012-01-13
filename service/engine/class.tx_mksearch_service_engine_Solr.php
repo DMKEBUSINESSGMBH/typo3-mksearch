@@ -208,6 +208,14 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 				throw new tx_mksearch_service_engine_SolrException('Error requesting solr. HTTP status:'.$response->getHttpStatus(), -1, $solr->lastUrl);
 			}
 			
+			// wir müssen hier schon die hits erzeugen.
+			// im tx_mksearch_util_SolrResponseProcessor werden Sie dann nurnoch bearbeidet!
+			$hits = array();
+			foreach($response->response->docs as $doc) {
+				$hits[] = tx_rnbase::makeInstance('tx_mksearch_model_SolrHit', $doc);
+			}
+			
+			$ret['items'] = $hits;
 			$ret['searchUrl'] = $solr->lastUrl;
 			$ret['searchTime'] = (microtime(true) - $start) . ' ms';
 			$ret['numFound'] = $response->response->numFound;
@@ -540,7 +548,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 	public function indexDeleteByContentUid($uid, $extKey, $contentType) {
 		$result = $this->getIndexDocumentByContentUid($uid, $extKey, $contentType);
 		// No document with passed uid found?
-		if ($result['numFound'] == 0) return false;
+		if ($result['numFound'] == 0 || empty($result['items'])) return false;
 		$hits = $result['items'];
 		foreach ($hits as $hit)
 			$this->getSolr()->deleteById($hit->getSolrId());
