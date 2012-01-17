@@ -142,7 +142,7 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc {
 			$content = $this->mod->doc->table($arr[0]);
 		}
 		else {
-	  		$content = '<p><strong>'.$configurations->getLL('label_no_indexers_found').'</strong></p><br/>';
+	  		$content = '<p><strong>###LABEL_NO_INDEXERS_FOUND###</strong></p><br/>';
 	  		$count = '';
 		}
 		
@@ -169,7 +169,8 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc {
 	}
 	
 	/**
-	 * Handle reset command from request
+	 * Handle clear command from request. This means all record of selected tables have to be removed from 
+	 * indexing queue.
 	 * @param tx_mksearch_service_internal_Index $oIntIndexSrv
 	 * @param 	tx_rnbase_configurations $configurations
 	 * @return string
