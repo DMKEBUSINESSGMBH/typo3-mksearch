@@ -211,8 +211,10 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 			// wir müssen hier schon die hits erzeugen.
 			// im tx_mksearch_util_SolrResponseProcessor werden Sie dann nurnoch bearbeidet!
 			$hits = array();
-			foreach($response->response->docs as $doc) {
-				$hits[] = tx_rnbase::makeInstance('tx_mksearch_model_SolrHit', $doc);
+			if ($response->response->docs) {
+				foreach($response->response->docs as $doc) {
+					$hits[] = tx_rnbase::makeInstance('tx_mksearch_model_SolrHit', $doc);
+				}
 			}
 			
 			$ret['items'] = $hits;
