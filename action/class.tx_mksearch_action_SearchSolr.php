@@ -157,7 +157,7 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 			// es werden hits, facets, uws. erzeugt.
 			tx_rnbase::load('tx_mksearch_util_SolrResponseProcessor');
 			tx_mksearch_util_SolrResponseProcessor::processSolrResult(
-					$result, $configurations,
+					$result, $options, $configurations,
 					$this->getConfId().'responseProcessor.'
 				);
 		}

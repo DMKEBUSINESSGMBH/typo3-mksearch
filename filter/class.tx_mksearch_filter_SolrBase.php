@@ -323,7 +323,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 		$sortFields = $configurations->get($confId.'fields');
 		$sortFields = $sortFields ? t3lib_div::trimExplode(',', $sortFields, true) : array();
 		
-		if(count($sortFields)) {
+		if(!empty($sortFields)) {
 			tx_rnbase::load('tx_rnbase_util_BaseMarker');
 		  	$token = md5(microtime());
 		  	$markOrders = array();

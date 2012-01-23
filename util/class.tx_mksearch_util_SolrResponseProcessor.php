@@ -45,11 +45,12 @@ class tx_mksearch_util_SolrResponseProcessor {
 	 *
 	 * Enter description here ...
 	 * @param array $response
+	 * @param array $options
 	 * @param tx_rnbase_configurations $configurations
 	 * @param string $confId
 	 * @return bool
 	 */
-	public static function processSolrResult(array &$result, &$configurations, $confId) {
+	public static function processSolrResult(array &$result, $options, &$configurations, $confId) {
 		static $instance = null;
 		
 		if(
@@ -61,7 +62,7 @@ class tx_mksearch_util_SolrResponseProcessor {
 			$instance = new tx_mksearch_util_SolrResponseProcessor($configurations, $confId);
 
 		$response = &$result['response'];
-		$result = $instance->processSolrResponse($response, $result);
+		$result = $instance->processSolrResponse($response, $options, $result);
 		return true;
 	}
 
@@ -88,8 +89,8 @@ class tx_mksearch_util_SolrResponseProcessor {
 	 * @param Apache_Solr_Response $response
 	 * @param unknown_type $result
 	 */
-	public function processSolrResponse(Apache_Solr_Response &$response, $result = array()) {
-		$result['items'] = $this->processHits($response, empty($result['items']) ? array() : $result['items']);
+	public function processSolrResponse(Apache_Solr_Response &$response, $options, $result = array()) {
+		$result['items'] = $this->processHits($response, $options, empty($result['items']) ? array() : $result['items']);
 		$result['facets'] = $this->processFacets($response);
 		$result['suggestions'] = $this->processSuggestions($response);
 		return $result;
@@ -101,14 +102,14 @@ class tx_mksearch_util_SolrResponseProcessor {
 	 * @param Apache_Solr_Response $response
 	 * @return array
 	 */
-	public function processHits(Apache_Solr_Response &$response, array $hits = array()) {
+	public function processHits(Apache_Solr_Response &$response, array $options, array $hits = array()) {
 		$confId = $this->getConfId().'hit.';
 		
 		//highlighting einfügen
 		$highlights = $this->getHighlighting($response);
 		
 		// hier wird nur highlighting gesetzt
-		// wenn keins existiert brauchen nwir nichts machen
+		// wenn keins existiert brauchen wir nichts machen
 		if (empty($highlights)) return $hits;
 		
 		// Gibt es docs?
@@ -132,10 +133,10 @@ class tx_mksearch_util_SolrResponseProcessor {
 						//in ein eigenes Feld nach folgendem Schema ins Dokument geschrieben: $Feldname_hl
 						//dabei wäre es dann möglich die Felder flexibel über TS überschrieben zu lassen
 						//indem bspw. ein TS wie content.override.field = content_hl angegeben wird ;)
-						$overrideWithHl = $this->getConfigurations($confId.'overrideWithHl');
+						$overrideWithHl = $this->getConfigurations()->get($confId.'overrideWithHl');
 						$overrideWithHl = $overrideWithHl ? $overrideWithHl : (isset($options['overrideWithHl']) && $options['overrideWithHl']);
-						$highlightField = ($options['overrideWithHl']) ? $docField : $docField.'_hl';
-		
+						$highlightField = ($overrideWithHl) ? $docField : $docField.'_hl';
+						
 						$hit->record[$highlightField] = $highlightValue;
 					}
 				}
