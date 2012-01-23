@@ -166,7 +166,7 @@ class tx_mksearch_util_SolrResponseProcessor {
 	 * @return array
 	 */
 	public function processSuggestions(Apache_Solr_Response &$response) {
-		$confId = $this->getConfId().'facet.';
+		$confId = $this->getConfId().'suggestions.';
 		//Suggestions
 		if($response->spellcheck->suggestions){
 			$builderClass = $this->getConfigurations()->get($confId.'builderClass');
