@@ -271,6 +271,8 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 			list($sort, $sortOrder) = explode(' ', $sort);
 			// wenn order nicht mit gesetzt wurde, aus den parametern holen
 			$sortOrder = $sortOrder ? $sortOrder : $parameters->get('sortorder');
+			// den default order nutzen!
+			$sortOrder = $sortOrder ? $sortOrder : $this->sortOrder;
 			// sicherstellen, das immer desc oder asc gesetzt ist
 			$sortOrder = ($sortOrder == 'asc') ? 'asc' : 'desc';
 			// wird beim parsetemplate benötigt
