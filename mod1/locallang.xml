@@ -22,6 +22,9 @@
             <label index="label_triger_queue_head">Trigger indexing queue</label>
             <label index="label_triger_queue_input">Trigger indexing queue</label>
             <label index="label_triger_queue_items">Items</label>
+            <label index="label_reset_options">Reset options</label>
+            <label index="label_reset_deleted">Add deleted records to queue</label>
+            <label index="label_reset_hidden">Add hidden records to queue</label>
             <label index="label_queue_cleared">The following tables are cleared in index queue: </label>
             <label index="label_queue_reseted">The following tables are reset for indexing: </label>
             <label index="label_queue_indexed">Indexing queue was triggered! Records processed: </label>

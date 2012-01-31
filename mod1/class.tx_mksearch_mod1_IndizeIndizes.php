@@ -169,7 +169,7 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc {
 	}
 	
 	/**
-	 * Handle clear command from request. This means all record of selected tables have to be removed from 
+	 * Handle clear command from request. This means all record of selected tables have to be removed from
 	 * indexing queue.
 	 * @param tx_mksearch_service_internal_Index $oIntIndexSrv
 	 * @param 	tx_rnbase_configurations $configurations
@@ -204,19 +204,29 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc {
 			&& (!is_array($aTables['global']) && empty($aTables['global']))
 		) return '';
 
+		$where = $options = array();
+		// deleted aussschließen, wenn nicht gesetzt
+		if (!t3lib_div::_GP('resetDeleted')) {
+			$where[] = 'deleted = 0';
+		}
+		// hidden aussschließen, wenn nicht gesetzt
+		if (!t3lib_div::_GP('resetHidden')) {
+			$where[] = 'hidden = 0';
+		}
+		if (!empty($where)) $options['where'] = implode(' AND ', $where);
 		$status = $configurations->getLL('label_queue_reseted');
 		foreach ($aTables as $key => $aResets) {
 			if (is_array($aResets)) {
 				foreach ($aResets as $sTable) {
-					$options = array();
+					$tableOptions = $options;
 					
 					if ($key == 'pid') {
 						// wir holen uns eine liste von page ids
 						// nur elemente dieser page id dürfen in der Queue landen
 						$pidList = $this->getPidList();
-						if (!empty($pidList)) $options['where'] = 'pid IN ('.$pidList.')';
+						if (!empty($pidList)) $tableOptions['where'] = 'pid IN ('.$pidList.')';
 					}
-					$oIntIndexSrv->resetIndexingQueueForTable($sTable, $options );
+					$oIntIndexSrv->resetIndexingQueueForTable($sTable, $tableOptions );
 				}
 			}
 		}

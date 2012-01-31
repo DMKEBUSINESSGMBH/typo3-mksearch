@@ -18,33 +18,44 @@
 		</style>
 
 		<div class="status">
-			<h2 class="bgColor2 t3-row-header ">###LABEL_core_status_head###</h2>
+			<h2 class="bgColor2 t3-row-header ">###LABEL_CORE_STATUS_HEAD###</h2>
 			<div class="graybox">
 				###CORE_STATUS###
 			</div>
 		</div>
 		
 		<div class="status" style="display:###ISSTATUS###">
-			<h2 class="bgColor2 t3-row-header ">###LABEL_queue_state_head###</h2>
+			<h2 class="bgColor2 t3-row-header ">###LABEL_QUEUE_STATE_HEAD###</h2>
 			<div class="graybox">
 				###STATUS###
 			</div>
 		</div>
 		
-		<h2 class="bgColor2 t3-row-header ">###LABEL_configured_indexer_tables_head###</h2>
+		<h2 class="bgColor2 t3-row-header ">###LABEL_CONFIGURED_INDEXER_TABLES_HEAD###</h2>
 		<div class="tables graybox">
 			###TABLES_TABLE###
-			<div class="count">###TABLES_COUNT### ###LABEL_table_count###</div>
+			<div class="count">###TABLES_COUNT### ###LABEL_TABLE_COUNT###</div>
+			<h3 class="t3-row-header ">###LABEL_RESET_OPTIONS###</h3>
+			<table class="ivtab">
+				<tr>
+					<td><input type="checkbox" name="resetDeleted" id="resetDeleted" checked="checked" /></td>
+					<td><label for="resetDeleted">###LABEL_RESET_DELETED###</label></td>
+				</tr>
+				<tr>
+					<td><input type="checkbox" name="resetHidden" id="resetHidden" checked="checked" /></td>
+					<td><label for="resetHidden">###LABEL_RESET_HIDDEN###</label></td>
+				</tr>
+			</table>
 		</div>
 		
-		<h2 class="bgColor2 t3-row-header ">###LABEL_triger_queue_head### (###LABEL_QUEUE_SIZE### ###QUEUESIZE###)</h2>
+		<h2 class="bgColor2 t3-row-header ">###LABEL_TRIGER_QUEUE_HEAD### (###LABEL_QUEUE_SIZE### ###QUEUESIZE###)</h2>
 		<div class="tables graybox">
 			<table class="ivtab">
 				<tr>
 					<td><input type="checkbox" name="triggerIndexingQueue" value="1" id="triggerIndexingQueue" /></td>
-					<td><label for="triggerIndexingQueue">###LABEL_triger_queue_input###</label></td>
+					<td><label for="triggerIndexingQueue">###LABEL_TRIGER_QUEUE_INPUT###</label></td>
 					<td><input type="text" name="triggerIndexingQueueCount" value="###INDEXITEMS###" id="triggerIndexingQueueCount" /></td>
-					<td><label for="triggerIndexingQueueCount">###LABEL_triger_queue_items###</label></td>
+					<td><label for="triggerIndexingQueueCount">###LABEL_TRIGER_QUEUE_ITEMS###</label></td>
 				</tr>
 			</table>
 		</div>
