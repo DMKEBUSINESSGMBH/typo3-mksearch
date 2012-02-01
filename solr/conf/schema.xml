@@ -29,7 +29,7 @@
 	in server mode, and use a higher logging level that avoids logging every 
 	request -->
 
-<schema name="tegut" version="1.2">
+<schema name="mksearch" version="1.2">
 	<!-- attribute "name" is the name of this schema and is only used for display 
 		purposes. Applications should change this to reflect the nature of the search 
 		collection. version="1.2" is Solr's version number for the schema syntax 
@@ -186,7 +186,7 @@
 			matching of words on case-change, alpha numeric boundaries, and non-alphanumeric 
 			chars, so that a query of "wifi" or "wi fi" could match a document containing 
 			"Wi-Fi". Synonyms and stopwords are customized by external files, and stemming 
-			is enabled. Wurde speziell für den tegut angepasst!!! -->
+			is enabled. -->
 		<fieldType name="text" class="solr.TextField"
 			positionIncrementGap="100">
 			<analyzer type="index">

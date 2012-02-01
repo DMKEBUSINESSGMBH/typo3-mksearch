@@ -1,7 +1,7 @@
 <?php
 /**
- * 	@package tx_mktegutfe
- *  @subpackage tx_mktegutfe_tests_filter
+ * 	@package tx_mksearch
+ *  @subpackage tx_mksearch_tests_filter
  *  @author Hannes Bochmann
  *
  *  Copyright notice
@@ -42,13 +42,13 @@ tx_rnbase::load('tx_mksearch_util_UserFunc');
  * Testfälle für tx_mksearch_filter_SolrBase
  *
  * @author hbochmann
- * @package tx_mktegutfe
- * @subpackage tx_mktegutfe_tests_filter
+ * @package tx_mksearch
+ * @subpackage tx_mksearch_tests_filter
  */
 class tx_mksearch_tests_filter_SolrBase_testcase extends tx_phpunit_testcase {
 
 	protected $oParameters;
-	
+
 	/**
 	 * setUp() = init DB etc.
 	 */
@@ -56,7 +56,7 @@ class tx_mksearch_tests_filter_SolrBase_testcase extends tx_phpunit_testcase {
 		$this->oParameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
 		$this->oParameters->setQualifier('mksearch');
 	}
-	
+
 	public function tearDown() {
 		unset($_GET['mksearch']);
 	}
@@ -68,18 +68,18 @@ class tx_mksearch_tests_filter_SolrBase_testcase extends tx_phpunit_testcase {
 		//set noHash as we don't need it in tests
 		$aConfig = tx_mksearch_tests_Util::loadPageTS4BE();
 		$oFilter = tx_rnbase::makeInstance('tx_mksearch_filter_SolrBase',$this->oParameters,tx_mksearch_tests_Util::loadConfig4BE($aConfig),'searchsolr.');
-		
+
 		$fields = array();
 		$options = array();
 		$this->assertFalse($oFilter->init($fields,$options),'Filter ist scheinbar doch durchgelaufen!');
-		
+
 		//noch prüfen ob bei submit true zurück gegeben wird
 		$this->oParameters->offsetSet('submit',true);
 		$fields = array();
 		$options = array();
 		$this->assertTrue($oFilter->init($fields,$options),'Filter ist scheinbar doch nicht durchgelaufen!');
 	}
-	
+
 	/**
 	 * prüft ob dier Angebote auf die aktuelle Woche beschränkt werden
 	 */
@@ -87,24 +87,24 @@ class tx_mksearch_tests_filter_SolrBase_testcase extends tx_phpunit_testcase {
 		$aConfig = tx_mksearch_tests_Util::loadPageTS4BE();
 		$aConfig['searchsolr.']['filter.']['default.']['force'] = 1;
 		$oFilter = tx_rnbase::makeInstance('tx_mksearch_filter_SolrBase',$this->oParameters,tx_mksearch_tests_Util::loadConfig4BE($aConfig),'searchsolr.');
-		
+
 		$fields = array();
 		$options = array();
 		$oFilter->init($fields,$options);
 		$this->assertEmpty($options['qt'],'Request Handler scheinbar doch gesetzt!');
-		
+
 		//set noHash as we don't need it in tests
 		$aConfig = tx_mksearch_tests_Util::loadPageTS4BE();
 		$aConfig['searchsolr.']['filter.']['default.']['force'] = 1;
 		$aConfig['searchsolr.']['requestHandler'] = 'testHandler';
 		$oFilter = tx_rnbase::makeInstance('tx_mksearch_filter_SolrBase',$this->oParameters,tx_mksearch_tests_Util::loadConfig4BE($aConfig),'searchsolr.');
-		
+
 		$fields = array();
 		$options = array();
 		$oFilter->init($fields,$options);
 		$this->assertEquals('testHandler',$options['qt'],'Request Handler scheinbar doch nicht gesetzt!');
 	}
-	
+
 	/**
 	 * prüft ob dier Angebote auf die aktuelle Woche beschränkt werden
 	 */
@@ -117,14 +117,14 @@ class tx_mksearch_tests_filter_SolrBase_testcase extends tx_phpunit_testcase {
 		//Test term setzen
 		$_GET['mksearch']['term'] = 'test term';
 		$oFilter = tx_rnbase::makeInstance('tx_mksearch_filter_SolrBase',$this->oParameters,tx_mksearch_tests_Util::loadConfig4BE($aConfig),'searchsolr.');
-		
+
 		$fields = array('term' => 'contentType:* ###PARAM_MKSEARCH_TERM###');
 		$options = array();
 		$oFilter->init($fields,$options);
 		//Der term bleibt so da die UserFunc die den term bildet im Test nicht aufgerufen wird da wir im BE sind
 		$this->assertEquals('contentType:* AND text:("test" "term")',$fields['term'],'Request Handler scheinbar doch nicht gesetzt!');
 	}
-	
+
 	/**
 	 * prüft ob dier Angebote auf die aktuelle Woche beschränkt werden
 	 */
@@ -137,14 +137,14 @@ class tx_mksearch_tests_filter_SolrBase_testcase extends tx_phpunit_testcase {
 		//Test term setzen
 		$_GET['mksearch']['term'] = '';
 		$oFilter = tx_rnbase::makeInstance('tx_mksearch_filter_SolrBase',$this->oParameters,tx_mksearch_tests_Util::loadConfig4BE($aConfig),'searchsolr.');
-		
+
 		$fields = array('term' => 'contentType:* ###PARAM_MKSEARCH_TERM###');
 		$options = array();
 		$oFilter->init($fields,$options);
 		//Der term bleibt so da die UserFunc die den term bildet im Test nicht aufgerufen wird da wir im BE sind
 		$this->assertEquals('contentType:* ',$fields['term'],'Request Handler scheinbar doch nicht gesetzt!');
 	}
-	
+
 	/**
 	 * prüft ob dier Angebote auf die aktuelle Woche beschränkt werden
 	 */
@@ -155,14 +155,14 @@ class tx_mksearch_tests_filter_SolrBase_testcase extends tx_phpunit_testcase {
 		//force noch setzen
 		$aConfig['searchsolr.']['filter.']['default.']['force'] = 1;
 		$oFilter = tx_rnbase::makeInstance('tx_mksearch_filter_SolrBase',$this->oParameters,tx_mksearch_tests_Util::loadConfig4BE($aConfig),'searchsolr.');
-		
+
 		$fields = array('term' => 'contentType:* ###PARAM_MKSEARCH_TERM###');
 		$options = array();
 		$oFilter->init($fields,$options);
 		//Der term bleibt so da die UserFunc die den term bildet im Test nicht aufgerufen wird da wir im BE sind
 		$this->assertEquals('contentType:* ',$fields['term'],'Request Handler scheinbar doch nicht gesetzt!');
 	}
-	
+
 	/**
 	 * prüft ob dier Angebote auf die aktuelle Woche beschränkt werden
 	 */
@@ -175,14 +175,14 @@ class tx_mksearch_tests_filter_SolrBase_testcase extends tx_phpunit_testcase {
 		//Test term setzen
 		$_GET['mksearch']['term'] = '*';
 		$oFilter = tx_rnbase::makeInstance('tx_mksearch_filter_SolrBase',$this->oParameters,tx_mksearch_tests_Util::loadConfig4BE($aConfig),'searchsolr.');
-		
+
 		$fields = array('term' => 'contentType:* ###PARAM_MKSEARCH_TERM###');
 		$options = array();
 		$oFilter->init($fields,$options);
 		//Der term bleibt so da die UserFunc die den term bildet im Test nicht aufgerufen wird da wir im BE sind
 		$this->assertEquals('contentType:* ',$fields['term'],'Request Handler scheinbar doch nicht gesetzt!');
 	}
-	
+
 	/**
 	 * prüft ob dier Angebote auf die aktuelle Woche beschränkt werden
 	 */
@@ -197,14 +197,14 @@ class tx_mksearch_tests_filter_SolrBase_testcase extends tx_phpunit_testcase {
 		//fq noch setzen
 		$this->oParameters->offsetSet('fq','facet_field:"facet value"');
 		$oFilter = tx_rnbase::makeInstance('tx_mksearch_filter_SolrBase',$this->oParameters,tx_mksearch_tests_Util::loadConfig4BE($aConfig),'searchsolr.');
-		
+
 		$fields = array('term' => 'contentType:* ###PARAM_MKSEARCH_TERM###');
 		$options = array();
 		$oFilter->init($fields,$options);
-		
+
 		$this->assertEquals('facet_field:"facet value"',$options['fq'],'fq wuede falsch übernommen!');
 	}
-	
+
 	/**
 	 * prüft ob dier Angebote auf die aktuelle Woche beschränkt werden
 	 */
@@ -219,14 +219,14 @@ class tx_mksearch_tests_filter_SolrBase_testcase extends tx_phpunit_testcase {
 		//fq noch setzen
 		$this->oParameters->offsetSet('fq','"facet value"');
 		$oFilter = tx_rnbase::makeInstance('tx_mksearch_filter_SolrBase',$this->oParameters,tx_mksearch_tests_Util::loadConfig4BE($aConfig),'searchsolr.');
-		
+
 		$fields = array('term' => 'contentType:* ###PARAM_MKSEARCH_TERM###');
 		$options = array();
 		$oFilter->init($fields,$options);
-		
+
 		$this->assertEquals('facet_dummy:"facet value"',$options['fq'],'fq wuede falsch übernommen!');
 	}
-	
+
 	public function testAllowedFqParams(){
 		$aConfig = tx_mksearch_tests_Util::loadPageTS4BE();
 		//wir müssen fields extra kopieren da es über TS Anweisungen im BE nicht geht
@@ -235,21 +235,21 @@ class tx_mksearch_tests_filter_SolrBase_testcase extends tx_phpunit_testcase {
 		$aConfig['searchsolr.']['filter.']['default.']['force'] = 1;
 		//force noch setzen, das gegenteil wird bereits in testInitSetsCorrectFqIfSetAndNoFqFieldDefinedForWrapping geprüft
 		$aConfig['searchsolr.']['filter.']['default.']['allowedFqParams'] = 'allowedfield';
-		
+
 		//fq noch setzen
 		$this->oParameters->offsetSet('fq','field:"facet value"');
-		
+
 		$oFilter = tx_rnbase::makeInstance(
 			'tx_mksearch_filter_SolrBase',
 			$this->oParameters,
 			tx_mksearch_tests_Util::loadConfig4BE($aConfig),
 			'searchsolr.'
 		);
-		
+
 		$fields = array('term' => 'contentType:* ###PARAM_MKSEARCH_TERM###');
 		$options = array();
 		$oFilter->init($fields, $options);
-		
+
 		$this->assertEquals(false,isset($options['fq']),'fq wuede gesetzt!');
 	}
 }
