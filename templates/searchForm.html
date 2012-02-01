@@ -10,7 +10,8 @@
 <!-- ###HEAD### START -->
 <form id="sitesearch-head" name="sitesearch-head" action="###FORM_ACTION###" method="post">
 	<input id="search" type="text" class="text" />
-	<input type="submit" value="" class="button" id="searchsubmit" name="mksearch[submit]" title="Suchen" />
+	<input type="hidden" value="###LABEL_search_submit###" class="text" name="mksearch[submit]" title="Suchen" />
+	<input type="submit" value="###LABEL_search_submit###" class="button" id="searchsubmit" name="mksearch[submit]" title="Suchen" />
 </form>
 <!-- ###HEAD### END -->
 
@@ -24,6 +25,7 @@
 		</div>
 	</fieldset>
 	<fieldset>
+		<input type="hidden" value="###LABEL_search_submit###" class="text" name="mksearch[submit]" title="Suchen" />
 		<input class="submit" type="submit" name="mksearch[submit]" value="###LABEL_search_submit###" />
 	</fieldset>
 </form>
@@ -76,6 +78,7 @@
 	</fieldset>
 	
 	<fieldset>
+		<input type="hidden" value="###LABEL_search_submit###" class="text" name="mksearch[submit]" title="Suchen" />
 		<input class="submit" type="submit" name="mksearch[submit]" value="###LABEL_search_submit###" />
 	</fieldset>
 </form>
