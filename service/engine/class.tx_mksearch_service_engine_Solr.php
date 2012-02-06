@@ -574,14 +574,11 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 		$solr = $this->getSolr();
 
 		try {
+			$ret = array();
 			$response = $solr->deleteByQuery($query);
 			if($response->getHttpStatus() != 200) {
 				throw new tx_mksearch_service_engine_SolrException('Error requesting solr. HTTP status:'.$response->getHttpStatus(), -1, $solr->lastUrl);
 			}
-			tx_rnbase_util_Debug::debug($response, 'tx_mksearch_service_engine_Solr Line: '.__Line__); // TODO: remove me
-			$ret['searchUrl'] = $solr->lastUrl;
-			$ret['searchTime'] = (microtime(true) - $start) . ' ms';
-			$ret['numFound'] = $response->response->numFound;
 			$ret['response'] = &$response; // wichtig, wird im SolrResponseProcessor benötigt
 			
 			if($options['debug']) {
