@@ -11,6 +11,7 @@
             <label index="func_keywords">Keywords</label>
             <label index="func_config_indizesdblist">Configure indizes (old db list)</label>
             <label index="func_indize_indizes">Indexing Queue</label>
+            <label index="func_solradmin">Solr Admin</label>
 
             <label index="label_handler_index">Indizes</label>
             <label index="label_handler_indexerconfig">Indexer Configuration</label>
@@ -37,9 +38,20 @@
             <label index="label_table_reset">Reset</label>
             <label index="label_table_resetG">Reset (Global)</label>
             <label index="label_table_clear">Clear (Global)</label>
+
+            <label index="label_solr_cores">Solr cores</label>
+            <label index="label_solr_nocores_found">No Solr cores found on current page.</label>
+            <label index="label_solr_nocore_found">No solr core found!</label>
+            <label index="label_solr_delete_query">Submit raw delete query</label>
+            <label index="label_solr_submit_delete">Submit delete</label>
+            
+            
             
 			<label index="label_common_start">Requestinfos</label>
 			<label index="label_common_end">Requestinfos</label>
+			<label index="label_common_warning">Warning</label>
+			<label index="label_common_error">Error</label>
+			<label index="label_common_info">Information</label>
 			<label index="label_search_form">Filter</label>
 			<label index="label_buttons">Functions</label>
 			<label index="label_pager">Navigation</label>

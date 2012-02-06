@@ -1,12 +1,15 @@
 mod {
 	mksearch {
 		qualifier = mksearch
-		
+
 		configindizes {
 			template = EXT:mksearch/mod1/templates/configindizes.html
 		}
 		keywords {
 			template = EXT:mksearch/mod1/templates/keywords.html
+		}
+		solradmin {
+			template = EXT:mksearch/mod1/templates/solradmin.html
 		}
 		configindizesdblist {
 			template = EXT:mksearch/mod1/templates/configindizesdblist.html

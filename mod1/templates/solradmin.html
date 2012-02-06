@@ -1,0 +1,47 @@
+<html>
+
+<body>
+
+<h1>Einfacher Zugriff auf Solr</h1>
+
+<!-- ###SOLRADMIN### START -->
+	<!-- Dieser Teil wird in allen Sub-Modulen integriert -->
+	<!-- ###COMMON_START### START -->
+	<!-- ###COMMON_START### END -->
+	
+	<!-- ###COMMON_END### START -->
+	<div class="mkcommon">
+		<h2 class="bgColor2 t3-row-header">###LABEL_COMMON_END###</h2>
+		<div class="tables graybox">
+<pre>Parsetime  ###MOD_PARSETIME###s
+Mem used   ###MOD_MEMUSED### Bytes
+Mem start  ###MOD_MEMSTART### Bytes
+Mem end    ###MOD_MEMEND### Bytes</pre>
+		</div>
+	</div>
+	<!-- ###COMMON_END### END -->
+
+
+
+	<!-- ###ADMINPANEL### START -->
+		###COMMON_START###
+		
+		<div class="tables graybox mksearchform">
+			<h2 class="bgColor2 t3-row-header">###LABEL_SOLR_CORES###</h2>
+			###SEL_CORES###
+		</div>
+		
+		<div class="cleardiv"></div>
+		
+		<h2 class="bgColor2 t3-row-header">###LABEL_SOLR_DELETE_QUERY###</h2>
+		<div class="graybox">###INPUT_DELETEQUERY###
+		###BTN_SEND###
+		</div>
+		
+		###COMMON_END###
+	<!-- ###ADMINPANEL### END -->
+
+<!-- ###SOLRADMIN### END -->
+
+</body>
+</html>
