@@ -91,6 +91,8 @@ class tx_mksearch_mod1_SolrAdmin extends tx_rnbase_mod_BaseModFunc {
 			$core = tx_rnbase::makeInstance('tx_mksearch_model_internal_Index', $core);
 			$searchEngine = tx_mksearch_util_ServiceRegistry::getSearchEngine($core);
 			$result = $searchEngine->indexDeleteByQuery($deleteQuery);
+			$searchEngine->commitIndex();
+			$this->getModule()->addMessage('###LABEL_SOLR_DELETE_SUCCESSFUL###','###LABEL_COMMON_INFO###');
 		}
 		catch (Exception $e) {
 			tx_rnbase::load('tx_rnbase_util_Logger');

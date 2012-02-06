@@ -44,8 +44,7 @@
             <label index="label_solr_nocore_found">No solr core found!</label>
             <label index="label_solr_delete_query">Submit raw delete query</label>
             <label index="label_solr_submit_delete">Submit delete</label>
-            
-            
+            <label index="label_solr_delete_successful">Delete successfully submitted.</label>
             
 			<label index="label_common_start">Requestinfos</label>
 			<label index="label_common_end">Requestinfos</label>
