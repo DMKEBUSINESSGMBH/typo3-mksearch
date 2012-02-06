@@ -138,7 +138,13 @@ interface tx_mksearch_interface_SearchEngine {
 	 * @return void
 	 */
 	public function indexDeleteByIndexId($id);
-	
+
+	/**
+	 * Delete documents specified by raw query
+	 * @param string $query
+	 */
+	public function indexDeleteByQuery($query, $options=array());
+
 	/**
 	 * Return an indexer document instance for the given content type
 	 * 

@@ -607,6 +607,14 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 		$this->index->delete($id);
 	}
 	/**
+	 * (non-PHPdoc)
+	 * @see tx_mksearch_interface_SearchEngine::indexDeleteByQuery()
+	 */
+	public function indexDeleteByQuery($query, $options=array()) {
+		// Not implemented!
+		return false;
+	}
+	/**
 	 * Return an indexer document instance for the given content type
 	 * 
 	 * @param string	$extKey			Extension key of records to be indexed

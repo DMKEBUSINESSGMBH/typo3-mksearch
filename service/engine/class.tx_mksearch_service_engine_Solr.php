@@ -566,6 +566,35 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 	public function indexDeleteByIndexId($id) {
 		$this->index->delete($id);
 	}
+	/**
+	 * (non-PHPdoc)
+	 * @see tx_mksearch_interface_SearchEngine::indexDeleteByQuery()
+	 */
+	public function indexDeleteByQuery($query, $options=array()) {
+		$solr = $this->getSolr();
+
+		try {
+			$response = $solr->deleteByQuery($query);
+			if($response->getHttpStatus() != 200) {
+				throw new tx_mksearch_service_engine_SolrException('Error requesting solr. HTTP status:'.$response->getHttpStatus(), -1, $solr->lastUrl);
+			}
+			tx_rnbase_util_Debug::debug($response, 'tx_mksearch_service_engine_Solr Line: '.__Line__); // TODO: remove me
+			$ret['searchUrl'] = $solr->lastUrl;
+			$ret['searchTime'] = (microtime(true) - $start) . ' ms';
+			$ret['numFound'] = $response->response->numFound;
+			$ret['response'] = &$response; // wichtig, wird im SolrResponseProcessor benötigt
+			
+			if($options['debug']) {
+				$ret['debug'] = get_object_vars($response->debug);
+				t3lib_div::debug(array($options, $ret), 'class.tx_mksearch_service_engine_Solr.php Line: '.__LINE__); // TODO: remove me
+			}
+		}
+		catch(Exception $e) {
+			throw new tx_mksearch_service_engine_SolrException('Exception caught from Solr:'.$e->getMessage(), -1, $solr->lastUrl, $e);
+		}
+
+		return $ret;
+	}
 	
 	/**
 	 * Return an indexer document instance for the given content type
