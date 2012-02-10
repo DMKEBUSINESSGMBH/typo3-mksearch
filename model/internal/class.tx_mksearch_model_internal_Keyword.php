@@ -35,14 +35,14 @@ tx_rnbase::load('tx_rnbase_model_base');
  * @author Michael Wagner <michael.wagner@das-medienkombinat.de>
  */
 class tx_mksearch_model_internal_Keyword extends tx_rnbase_model_base {
-	
+
 	/**
 	 * Return this model's table name
 	 *
 	 * @return string
 	 */
 	public function getTableName() {
-		return 'tx_mksearch_indices';
+		return 'tx_mksearch_keywords';
 	}
 }
 

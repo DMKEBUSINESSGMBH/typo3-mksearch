@@ -48,7 +48,7 @@ class tx_mksearch_mod1_decorator_Keyword {
 	 * @param array $item
 	 */
 	public function format($value, $colName, $record, $item) {
-		
+
 		switch($colName){
 			case 'link':
 				// dazu müssten wir erst fe virtualisieren, ist glaub ich nicht nötig!
@@ -71,7 +71,7 @@ class tx_mksearch_mod1_decorator_Keyword {
 			default:
 				$ret = $value;
 		}
-		
+
 		return $ret;
 	}
 
