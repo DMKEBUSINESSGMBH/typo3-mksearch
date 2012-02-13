@@ -109,6 +109,8 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base {
 
 		// At least one of the news' categories was found on black list
 		if ($abort) {
+			tx_rnbase::load('tx_rnbase_util_Logger');
+			tx_rnbase_util_Logger::info('News wurde nicht indiziert, weil Kategorie (Include/Exclude) nicht gesetzt ist.', 'mksearch');
 			if($options['deleteOnAbort']) {
 				$indexDoc->setDeleted(true);
 				return $indexDoc;
