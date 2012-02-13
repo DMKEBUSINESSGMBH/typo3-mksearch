@@ -72,20 +72,13 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base {
 		$aOptions = array(
 			'where' => 'tt_news_cat_mm.uid_local=' . $oModel->getUid(),
 			//as there is no tca for tt_news_cat_mm
-			'enablefieldsoff' => 1
+			'wrapperclass' => 'tx_rnbase_model_Base'
 		);
-		$aFrom = array('tt_news_cat_mm','tt_news_cat_mm');
-		$aRows = tx_rnbase_util_DB::doSelect('tt_news_cat_mm.uid_foreign', $aFrom, $aOptions);
-		//now wrap the found categories in models
-		$aModels = array();
-		if(!empty($aRows))
-			foreach ($aRows as $aRow) {
-				//so we can call getUid()
-				$aRow['uid'] = $aRow['uid_foreign'];
-				$aModels[] = $this->createModel($aRow);
-		}
+		$sJoin = ' JOIN tt_news_cat_mm ON tt_news_cat_mm.uid_foreign=tt_news_cat.uid AND tt_news_cat.deleted=0 ';
+		$aFrom = array('tt_news_cat'.$sJoin, 'tt_news_cat');
+		$aRows = tx_rnbase_util_DB::doSelect('tt_news_cat_mm.uid_foreign, tt_news_cat.title', $aFrom, $aOptions);
 		
-		return $aModels;
+		return $aRows;
 	}
 
 	/**
@@ -183,7 +176,15 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base {
 			$indexDoc->getMaxAbstractLength()
 		);
 		
-		
+		// Kategorieen hinzufügen, wenn Option gesetzt ist
+		if(!empty($options['addCategoryData']) && !empty($aCategories)) {
+			foreach($aCategories as $categorie) {
+				$aCategoryUid[] = $categorie->record['uid_foreign'];
+				$aCategoryTitle[] = $categorie->record['title'];
+			}
+			$indexDoc->addField('categories_mi', $aCategoryUid);
+			$indexDoc->addField('categoriesTitle_ms', $aCategoryTitle);
+		}
 		// Indexing of categories disabled for now, as "localisation" of tt_news categories REALLY sucks...
 //		$searcher = tx_rnbase_util_SearchBase::getInstance('tx_rnbase_util_SearchGeneric');
 //		$fields = array();
@@ -308,6 +309,8 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base {
 #      1 = second
 #   }
 # }
+
+addCategoryData = 0
 
 # Should the HTML Markup in indexed fields, the abstract and the content be kept?
 # by default every HTML Markup is removed
