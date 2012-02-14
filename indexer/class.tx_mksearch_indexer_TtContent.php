@@ -108,6 +108,16 @@ class tx_mksearch_indexer_TtContent extends tx_mksearch_indexer_Base {
 		$indexDoc->addField('pid', $oModel->record['pid'], 'keyword');
 		$indexDoc->addField('CType', $rawData['CType'], 'keyword');
 		
+		if($options['addPageMetaData']) {
+			$separator = (!empty($options['addPageMetaData.']['separator'])) ? $options['addPageMetaData.']['separator'] : ' ';
+			$pageData = $this->getPageContent($oModel->record['pid']);
+			if(!empty($pageData[0]['keywords'])) {
+				$keywords = explode($separator, $pageData[0]['keywords']);
+				foreach($keywords as $key => $keyword) $keywords[$key] = trim($keyword);
+				$indexDoc->addField('keywords_ms', $keywords, 'keyword');
+			}
+		}
+		
 		// Try to call hook for the current CType.
 		// A hook MUST call both $indexDoc->setContent and
 		// $indexDoc->setAbstract (respect $indexDoc->getMaxAbstractLength())!
@@ -357,6 +367,20 @@ class tx_mksearch_indexer_TtContent extends tx_mksearch_indexer_Base {
 	}
 	
 	/**
+	 * Returns the Pagecontent
+	 * 
+	 * @param int $pid
+	 */
+	protected function getPageContent($pid) {
+		$options = array(
+			'where' => 'pages.uid=' . $pid,
+			'enablefieldsfe' => true,
+		);
+		$from = array('pages', 'pages');
+		return tx_rnbase_util_DB::doSelect('*', $from, $options);
+	}
+	
+	/**
 	 * Return the default Typoscript configuration for this indexer.
 	 * 
 	 * Note that this config is not used for actual indexing
@@ -381,7 +405,10 @@ class tx_mksearch_indexer_TtContent extends tx_mksearch_indexer_Base {
 #      1 = second
 #   }
 # }
-		
+
+addPageMetaData = 0
+addPageMetaData.separator = ,
+
 # Configuration for each cType:
 CType {
 	# Default configuration for unconfigured cTypes:
