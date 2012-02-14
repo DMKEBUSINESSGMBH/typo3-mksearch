@@ -503,6 +503,18 @@ lib.mksearch.extrainfo {
 				show.pid.cObject.field = file_relpath_s
 				show.atagparams.rel = external
 			}
+			# Beispiel für korrekte Dateiverlinkung
+			dclink = TEXT
+			dclink.field = file_relpath_s
+			dclink.filelink {
+				jumpurl = 1
+				labelStdWrap = TEXT
+				labelStdWrap.field = title
+				icon = 1
+				size = 1
+				size.bytes = 1
+				size.noTrimWrap = | ||
+			}
 		}
 	}
 	
