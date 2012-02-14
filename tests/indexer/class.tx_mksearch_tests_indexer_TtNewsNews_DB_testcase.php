@@ -74,6 +74,7 @@ class tx_mksearch_tests_indexer_TtNewsNews_DB_testcase extends tx_phpunit_databa
 		$this->importExtensions($aExtensions,true);
 		
 		$this->importDataSet(tx_mksearch_tests_Util::getFixturePath('db/tt_news_cat_mm.xml'));
+		$this->importDataSet(tx_mksearch_tests_Util::getFixturePath('db/tt_news_cat.xml'));
 	}
 
 	/**

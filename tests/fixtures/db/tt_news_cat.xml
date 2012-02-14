@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dataset>
+	<tt_news_cat>
+		<uid>1</uid>
+		<title>Pressemitteilung</title>
+	</tt_news_cat>
+	<tt_news_cat>
+		<uid>2</uid>
+		<title>Praxis</title>
+	</tt_news_cat>
+</dataset>

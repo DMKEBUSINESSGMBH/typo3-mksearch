@@ -76,7 +76,7 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base {
 		);
 		$sJoin = ' JOIN tt_news_cat_mm ON tt_news_cat_mm.uid_foreign=tt_news_cat.uid AND tt_news_cat.deleted=0 ';
 		$aFrom = array('tt_news_cat'.$sJoin, 'tt_news_cat');
-		$aRows = tx_rnbase_util_DB::doSelect('tt_news_cat_mm.uid_foreign, tt_news_cat.title', $aFrom, $aOptions);
+		$aRows = tx_rnbase_util_DB::doSelect('tt_news_cat_mm.uid_foreign, tt_news_cat.uid, tt_news_cat.title', $aFrom, $aOptions);
 		
 		return $aRows;
 	}
