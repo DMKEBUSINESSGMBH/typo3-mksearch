@@ -546,7 +546,8 @@ mksearchAjaxPage {
   typeNum=540
   config.disableAllHeaderCode = 1
   config.metaCharset = utf-8
-  config.additionalHeaders = Content-Type: text/plain; charset=utf-8
+  ### X-Robots-Tag, wir wollen vermeiden, dass der inhalt des calls indiziert wird.
+  config.additionalHeaders = Content-Type: text/plain; charset=utf-8|X-Robots-Tag: noindex;
   config.xhtml_cleaning = 0
   config.admPanel = 0
   config.sendNoCacheHeaders = 1
