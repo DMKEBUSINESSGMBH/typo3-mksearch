@@ -39,6 +39,7 @@ $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users
 	// DEFAULT initialization of a module [END]
 
 tx_rnbase::load('tx_rnbase_mod_BaseModule');
+tx_rnbase::load('tx_mksearch_mod1_util_Misc');
 
 /**
  * Backend Modul für mksearch
@@ -69,6 +70,16 @@ class  tx_mksearch_module1 extends tx_rnbase_mod_BaseModule {
 	protected function getFormTag() {
 		return '<form action="index.php?id=' . $this->getPid() . '" method="POST" name="editform" id="editform">';
 	}
+	
+	
+	function moduleContent(){
+		$ret = tx_mksearch_mod1_util_Misc::checkPid($this);
+		if ($ret) {
+			return $ret;
+		}
+		return parent::moduleContent();
+	}
+	
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/index.php'])	{

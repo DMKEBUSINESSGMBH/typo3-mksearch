@@ -12,6 +12,8 @@
             <label index="func_config_indizesdblist">Configure indizes (old db list)</label>
             <label index="func_indize_indizes">Indexing Queue</label>
             <label index="func_solradmin">Solr Admin</label>
+            
+            <label index="label_no_page_selected">No Page selected.</label>
 
             <label index="label_handler_index">Indizes</label>
             <label index="label_handler_indexerconfig">Indexer Configuration</label>
