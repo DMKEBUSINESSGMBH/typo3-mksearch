@@ -38,18 +38,15 @@ class tx_mksearch_mod1_util_Misc {
 
 	/**
 	 *
-	 * @TODO: prüfen, ob wir uns auf der richtigen seite befinden.
-	 *
 	 * @param tx_rnbase_mod_IModule $mod
 	 * @return mixed null or string
 	 */
 	public static function checkPid(tx_rnbase_mod_IModule $mod) {
-		if ($mod->getPid()){
+		$pages = self::getStorageFolders();
+		if ($mod->getPid() && (empty($pages) || isset($pages[$mod->getPid()]))) {
 			return null;
 		}
-		$pages = self::getStorageFolders();
-		foreach($pages as &$page) {
-			$pid = intval($page);
+		foreach($pages as $pid => &$page) {
 			$pageinfo = t3lib_BEfunc::readPageAccess($pid, $mod->perms_clause);
 			$page  = '<a href="index.php?id=' . $pid . '">';
 			$page .= t3lib_iconWorks::getSpriteIconForRecord('pages', t3lib_BEfunc::getRecord('pages', $pid));
@@ -70,9 +67,19 @@ class tx_mksearch_mod1_util_Misc {
 	 * @return array
 	 */
 	private static function getStorageFolders() {
+		static $pids = false;
+		if (is_array($pids)) {
+			return $pids;
+		}
 		$pages = array_merge(
 			// wir holen alle seiten auf denen indexer liegen
 			tx_rnbase_util_DB::doSelect('pid as pageid', 'tx_mksearch_indices', array('enablefieldsoff' => 1)),
+			// wir holen alle seiten auf denen configs liegen
+			tx_rnbase_util_DB::doSelect('pid as pageid', 'tx_mksearch_indexerconfigs', array('enablefieldsoff' => 1)),
+			// wir holen alle seiten auf denen composites liegen
+			tx_rnbase_util_DB::doSelect('pid as pageid', 'tx_mksearch_configcomposites', array('enablefieldsoff' => 1)),
+			// wir holen alle seiten auf denen keywords liegen
+			tx_rnbase_util_DB::doSelect('pid as pageid', 'tx_mksearch_keywords', array('enablefieldsoff' => 1)),
 			// wir holen alle seiten die mksearch beinhalten
 			tx_rnbase_util_DB::doSelect('uid as pageid', 'pages', array('enablefieldsoff' => 1, 'where' => 'module=\'mksearch\''))
 		);
@@ -84,7 +91,14 @@ class tx_mksearch_mod1_util_Misc {
 		if (empty($pages['pageid'])) {
 			return array();
 		}
-		return array_keys(array_flip($pages['pageid']));
+		// wir machen aus den pid keys
+		$pages = array_flip($pages['pageid']);
+		// pid 0 schließ0en wir aus
+		if (isset($pages[0])) {
+			unset($pages[0]);
+		}
+		$pids = ($pages);
+		return $pids;
 	}
 
 }
