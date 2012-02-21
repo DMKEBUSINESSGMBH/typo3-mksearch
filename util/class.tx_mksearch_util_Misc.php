@@ -22,6 +22,7 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+require_once(t3lib_extMgm::extPath('mksearch').'lib/Apache/Solr/Service.php' );
 
 /**
  * Miscellaneous methods
@@ -86,7 +87,7 @@ class tx_mksearch_util_Misc {
 		tx_rnbase::load('tx_rnbase_util_Strings');
 		return tx_rnbase_util_Strings::isUtf8String($mixed) ? $mixed : utf8_encode($mixed);
 	}
-	
+
 	/**
 	 * Convert HTML to plain text
 	 *
@@ -107,13 +108,14 @@ class tx_mksearch_util_Misc {
 								'UTF-8'
 					);
 	}
-	
+
 	/**
 	 * Sanitizes the given term and removes all unwanted
 	 * chars. These are for example some for the solr
 	 * search syntax.
 	 * @param string $sTerm
 	 * @return string
+	 * @todo sollte hier nicht Apache_Solr_Service::escape() genutzt werden!?
 	 */
 	public static function sanitizeTerm($sTerm) {
 		//wir brauchen 3 backslashes (\\\) um einen einfachen zu entwerten.
@@ -128,7 +130,7 @@ class tx_mksearch_util_Misc {
 		//werden
 		return preg_replace('/[%,.&*+-\/\'!?#()\[\]\{\}"^|<>:\\\~]+/', '', $sTerm);
 	}
-	
+
 	/**
 	 * IP-based Access restrictions
 	 *
