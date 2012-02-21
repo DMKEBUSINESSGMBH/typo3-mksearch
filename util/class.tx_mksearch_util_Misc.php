@@ -116,6 +116,8 @@ class tx_mksearch_util_Misc {
 	 * @param string $sTerm
 	 * @return string
 	 * @todo sollte hier nicht Apache_Solr_Service::escape() genutzt werden!?
+	 * siehe auch die escape Methode aus der Apache Solr TYPO3 Extension wie Phrasen
+	 * unterstützt werden könnten? Sollte aber alles nur fir nicht dismax interessant sein.
 	 */
 	public static function sanitizeTerm($sTerm) {
 		//wir brauchen 3 backslashes (\\\) um einen einfachen zu entwerten.
