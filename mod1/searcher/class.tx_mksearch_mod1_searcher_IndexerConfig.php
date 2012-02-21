@@ -86,19 +86,19 @@ class tx_mksearch_mod1_searcher_IndexerConfig extends tx_mksearch_mod1_searcher_
 			),
 			'actions' => array(
 				'title' => 'label_tableheader_actions',
-				'decorator' => $oDecorator, 'width' => 90
+				'decorator' => $oDecorator,
 			),
 			'title' => array(
 				'title' => 'label_tableheader_title',
-				'decorator' => $oDecorator, 'width' => 90
+				'decorator' => $oDecorator,
 			),
 			'contenttype' => array(
 				'title' => 'label_tableheader_contenttype',
-				'decorator' => $oDecorator, 'width' => 90
+				'decorator' => $oDecorator,
 			),
 			'composites' => array(
 				'title' => 'label_tableheader_composites',
-				'decorator' => $oDecorator, 'width' => 90
+				'decorator' => $oDecorator,
 			),
 		);
 	}

@@ -68,6 +68,32 @@ class tx_mksearch_mod1_util_Template {
 		$out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray);
 		return $out;
 	}
+
+	/**
+	 * Setzt das Table Layout.
+	 * Im moment wird nur width bearbeidet
+	 *
+	 * @param array 					$columns
+	 * @param tx_rnbase_mod_IModule 	$mod
+	 * @return columns
+	 */
+	public static function getTableLayout(array $columns, tx_rnbase_mod_IModule $mod){
+		$aAllowed = array('width');
+		// default tablelayout of doc
+		$aTableLayout = $mod->getDoc()->tableLayout; // typo3/template.php
+		$iCol = 0;
+		foreach($columns as $column) {
+			$aAddParams = array();
+			foreach($aAllowed as $sAllowed) {
+				if(isset($column[$sAllowed])){
+					$aAddParams[] = $sAllowed.'="'.intval($column[$sAllowed]).'%"';
+				}
+			}
+			$aTableLayout[0][$iCol] = array('<td '. implode(' ', $aAddParams).'>','</td>');
+			$iCol++;
+		}
+		return $aTableLayout;
+	}
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/util/class.tx_mksearch_mod1_util_Template.php'])	{

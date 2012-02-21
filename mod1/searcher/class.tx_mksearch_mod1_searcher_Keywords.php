@@ -86,15 +86,15 @@ class tx_mksearch_mod1_searcher_Keywords extends tx_mksearch_mod1_searcher_abstr
 			),
 			'actions' => array(
 				'title' => 'label_tableheader_actions',
-				'decorator' => $oDecorator, 'width' => 90
+				'decorator' => $oDecorator,
 			),
 			'keyword' => array(
 				'title' => 'label_tableheader_keyword',
-				'decorator' => $oDecorator, 'width' => 90
+				'decorator' => $oDecorator,
 			),
 			'link' => array(
 				'title' => 'label_tableheader_link',
-				'decorator' => $oDecorator, 'width' => 90
+				'decorator' => $oDecorator,
 			),
 		);
 	}
