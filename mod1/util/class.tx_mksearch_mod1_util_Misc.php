@@ -91,13 +91,17 @@ class tx_mksearch_mod1_util_Misc {
 		if (empty($pages['pageid'])) {
 			return array();
 		}
+		// Wenn nur ein Eintrag existiert, haben wir hier einen String!
+		if (!is_array($pages['pageid'])) {
+			$pages['pageid'] = array($pages['pageid']);
+		}
 		// wir machen aus den pid keys
 		$pages = array_flip($pages['pageid']);
 		// pid 0 schließ0en wir aus
 		if (isset($pages[0])) {
 			unset($pages[0]);
 		}
-		$pids = ($pages);
+		$pids = $pages;
 		return $pids;
 	}
 
