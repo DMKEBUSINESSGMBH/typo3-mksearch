@@ -163,6 +163,8 @@ class Apache_Solr_HttpTransport_FileGetContents extends Apache_Solr_HttpTranspor
 		// Unfortunately, it will still create a notice in analyzers if we don't set it here
 		$http_response_header = null;
 		$responseBody = @file_get_contents($url, false, $this->_postContext);
+		// TODO: SOLR liefert z.T. einen leeren Response, obwohl der Zugriff erfolgreich war.
+		// Exception: '0' Status: Communication Error
 		
 		// reset content of post context to reclaim memory
 		stream_context_set_option($this->_postContext, 'http', 'content', '');
