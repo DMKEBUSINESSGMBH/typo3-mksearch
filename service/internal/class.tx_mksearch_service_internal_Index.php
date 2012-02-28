@@ -354,6 +354,15 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 										// die rootpage größer als 0 ist.
 										// Der Indexer muss sich darum kümmern, ob dieses Element indiziert werden soll.
 										// @see tx_mksearch_indexer_Base::checkPageTreeIncludes
+
+										// @todo das heißt sobald die rootpage konfiguriert ist,
+										// werden alle Datensätze eines Indexs als valide betrachtet.
+										// wenn bspw. nur einige Seiten indiziert werden sollen, müssten
+										// alle übrigen in die exclude.pageTrees Option aufgenommen werden.
+										// das ist insbesondere bei neu hinzukommenden Seiten nicht haltbar
+										// da die Konfiguration fortlaufend angepasst werden müsste. Es sollte
+										// besser eine zusätzliche Option im Index vorhanden sein, die erlaubt
+										// die rootpage hinzuzufügen!!!
 										if($rootpage['uid'] > 0){
 											$aConfigByContentType['include.']['pageTrees.'][] = $rootpage['uid'];
 										}
