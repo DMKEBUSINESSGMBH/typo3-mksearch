@@ -40,14 +40,14 @@ require_once(t3lib_extMgm::extPath('mksearch').'lib/Apache/Solr/Service.php' );
  * @subpackage	tx_mksearch
  */
 class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearch_interface_SearchEngine {
-	
+
 	/**
 	 * Index used for searching and indexing
 	 *
 	 * @var Apache_Solr_Service
 	 */
 	private $index;
-	
+
 	/**
 	 * Name of the currently open index
 	 *
@@ -76,12 +76,25 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 	private function setConnection($host, $port, $path) {
 		$this->index = new Apache_Solr_Service( $host, $port, $path);
 
+		//per default werden alle HTTP Aufrufe per file_get_contents erledigt.
+		//siehe Apache_Solr_Service::getHttpTransport()
+		//damit das funktioniert muss allerdings allow_url_fopen in den PHP
+		//Einstellungen aktiv sein. Das öffnet nun aber eine große
+		//Sicherheitslücke. Alternativ bieten wir daher an alle Http Aufrufe
+		//per Curl durchzuführen.
+		if(tx_rnbase_configurations::getExtensionCfgValue('mksearch', 'useCurlAsHttpTransport')){
+			require_once(t3lib_extMgm::extPath('mksearch').'lib/Apache/Solr/HttpTransport/Curl.php' );
+
+			$oHttpTransport = new Apache_Solr_HttpTransport_Curl();
+			$this->index->setHttpTransport($oHttpTransport);
+		}
+
 		if ( ! $this->index->ping() ) {
 			tx_rnbase_util_Logger::fatal('Solr service not responding.','mksearch',array($host, $port, $path));
 			throw new tx_mksearch_service_engine_SolrException('Solr service not responding.', -1, 'http://'.$host.':'.$port.$path);
 		}
 	}
-	
+
 	/**
 	 * Check if an index was opened
 	 *
@@ -94,7 +107,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 			throw new Exception('class.tx_mksearch_service_Solr.php - no open index available!');
 		return false;
 	}
-	
+
 	/**
 	 * Return index directory path
 	 * @param string	$name	Name of index
@@ -103,7 +116,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 	private function getIndexDirectory($name) {
 		return tx_rnbase_configurations::getExtensionCfgValue('mksearch', 'luceneIndexDir').DIRECTORY_SEPARATOR.$name;
 	}
-	
+
 	/**
 	 * Build query recursively from query array
 	 *
@@ -113,7 +126,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 	private function buildQuery(array $fields) {
 		$query = new Zend_Search_Lucene_Search_Query_Boolean;
 		$mtquery = new Zend_Search_Lucene_Search_Query_MultiTerm;
-		 
+
 		// Loop through all items of the field
 		foreach ($fields as $key=>$f) {
 			foreach ($f as $ff) {
@@ -127,7 +140,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 							array('term' => &$ff['term']),
 							$this
 						);
-			
+
 						// The term is really just a simple string
 						$mtquery->addTerm(
 										new Zend_Search_Lucene_Index_Term(
@@ -156,7 +169,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 										);
 							}
 						}
-						
+
 						$query->addSubquery($pq);
 					}
 				} else {
@@ -171,7 +184,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 		if ($mtquery->getTerms()) $query->addSubquery($mtquery);
 		return $query;
 	}
-	
+
 	/**
 	 * Search indexed data via Apache Solr
 	 *
@@ -207,7 +220,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 			if($response->getHttpStatus() != 200) {
 				throw new tx_mksearch_service_engine_SolrException('Error requesting solr. HTTP status:'.$response->getHttpStatus(), -1, $solr->lastUrl);
 			}
-			
+
 			// wir müssen hier schon die hits erzeugen.
 			// im tx_mksearch_util_SolrResponseProcessor werden Sie dann nurnoch bearbeidet!
 			$hits = array();
@@ -216,13 +229,13 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 					$hits[] = tx_rnbase::makeInstance('tx_mksearch_model_SolrHit', $doc);
 				}
 			}
-			
+
 			$ret['items'] = $hits;
 			$ret['searchUrl'] = $solr->lastUrl;
 			$ret['searchTime'] = (microtime(true) - $start) . ' ms';
 			$ret['numFound'] = $response->response->numFound;
 			$ret['response'] = &$response; // wichtig, wird im SolrResponseProcessor benötigt
-			
+
 			if($options['debug']) {
 				$ret['debug'] = get_object_vars($response->debug);
 				t3lib_div::debug(array($options, $ret), 'class.tx_mksearch_service_engine_Solr.php Line: '.__LINE__); // TODO: remove me
@@ -242,7 +255,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 	public function getOpenIndexName() {
 		return $this->indexName;
 	}
-	
+
 	/**
 	 * Open an index
 	 *
@@ -257,7 +270,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 	public function setIndexModel(tx_mksearch_model_internal_Index $index) {
 		$this->indexModel = $index;
 	}
-	
+
 	/**
 	 * Return credential array for string
 	 * @param string $data
@@ -273,7 +286,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 		return $ret;
 	}
 
-	
+
 	/**
 	 * Check if the specified index exists
 	 * @param string	$name	Name of index
@@ -282,7 +295,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 	public function indexExists($name) {
 		return is_dir($this->getIndexDirectory($name));
 	}
-	
+
 	/**
 	 * Commit index
 	 *
@@ -297,7 +310,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
     $this->getSolr()->optimize();
 	  return true;
 	}
-	
+
 	/**
 	 * Close index
 	 * @return void
@@ -306,7 +319,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 		$this->indexName = null;
 		unset($this->index);
 	}
-	
+
 	/**
 	 * Delete an entire index
 	 *
@@ -321,7 +334,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 		}
 
 		// @todo: treat index locking...
-		
+
 		$indexDir = $this->getIndexDirectory($name);
 		// Delete index directory recursively
 		$iterator = new RecursiveDirectoryIterator($indexDir);
@@ -331,7 +344,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 		}
 		rmdir($indexDir);
 	}
-	
+
 	/**
 	 * Optimize index
 	 *
@@ -342,7 +355,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 		// as the commit happens implictely on optimization by Zend_Lucene
 		$this->index->optimize();
 	}
-	
+
 	/**
 	 * Replace an index with another.
 	 *
@@ -356,13 +369,13 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 	public function replaceIndex($which, $by) {
 		if (!($this->indexExists($which) and $this->indexExists($by)))
 			throw new Exception('class.tx_mksearch_service_ZendLucene.php::replaceIndex() - at least one of the specified indexes doesn\'n exist!');
-		
+
 		// Delete index $which
 		$this->deleteIndex($which);
 		// Rename index $by to the just deleted $which
 		rename($this->getIndexDirectory($by), $this->getIndexDirectory($which));
 	}
-	
+
 	/**
 	 * Get a document from index
 	 * @param $uid
@@ -374,7 +387,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 		$searchTerm = "+uid:$uid +extKey:$extKey +contentType:$contentType";
 		return $this->search(array('term' => $searchTerm), array('rawFormat' => 1, 'rawOutput' => 1, 'limit'=>100));
 	}
-	
+
 	/**
 	 * Add a field to the given index document
 	 * TODO: wird hier in Solr vermutlich nicht verwendet! tx_mksearch_model_IndexerField gibt es nicht mehr...
@@ -423,7 +436,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
    			default:			throw new Exception('tx_mksearch_service_engine_Colr::_addFieldToIndexDoc(): Unknown storage type "'.$field->getStorageType().'"!');
 		}
 	}
-	
+
 	/**
 	 * Put a new record into index
 	 *
@@ -559,7 +572,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 			$this->getSolr()->deleteById($hit->getSolrId());
 		return true;
 	}
-	
+
 	/**
 	 * Delete index document specified by index id
 	 *
@@ -583,7 +596,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 				throw new tx_mksearch_service_engine_SolrException('Error requesting solr. HTTP status:'.$response->getHttpStatus(), -1, $solr->lastUrl);
 			}
 			$ret['response'] = &$response; // wichtig, wird im SolrResponseProcessor benötigt
-			
+
 			if($options['debug']) {
 				$ret['debug'] = get_object_vars($response->debug);
 				t3lib_div::debug(array($options, $ret), 'class.tx_mksearch_service_engine_Solr.php Line: '.__LINE__); // TODO: remove me
@@ -595,7 +608,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 
 		return $ret;
 	}
-	
+
 	/**
 	 * Return an indexer document instance for the given content type
 	 *
@@ -645,7 +658,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 		}
 		return $this->index;
 	}
-	
+
 	/**
 	 * Shall the autocomplete/spellcheck index be updated?
 	 *
@@ -657,7 +670,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 		if($aConfig['solr.']['builtSpellcheck'])
 			$this->builtSpellcheckIndex($aConfig['solr.']['builtSpellcheck']);
 	}
-	
+
 	/**
 	 * Build the autocomplete index
 	 *
