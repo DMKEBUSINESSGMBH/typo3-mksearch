@@ -294,20 +294,6 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 		try {
 			// Loop through all active indices, collecting all configurations
 			foreach ($indices as $index) {
-				/* @var $index tx_mksearch_model_internal_Index */
-				// Wir lesen die rootpage des indexers aus.
-				tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
-				$rootpage = tx_mksearch_service_indexer_core_Config::getSiteRootPage(
-								// die rootpage des indexers nutzen
-								$index->record['rootpage'] ? $index->record['rootpage'] :
-								(
-									// wurde eine pid übergeben?
-									$config['pid'] ? $config['pid'] :
-									// fallback ist die pid
-									$index->record['pid']
-								)
-					);
-
 				tx_rnbase_util_Logger::debug('[INDEXQUEUE] Next index is '.$index->getTitle(), 'mksearch');
 				// Container for all documents to be indexed / deleted
 				$indexDocs = array();
@@ -345,29 +331,6 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 								//isn't taken by both indexer configs as the doc of the element for
 								//the first config will be overwritten by the second one
 								foreach ($indexConfig[$extKey.'.'][$contentType.'.'] as $aConfigByContentType){
-
-									// die rootpage dem indexer zur verfügung stellen wenn vorhanden
-									if(!empty($rootpage)){
-										$aConfigByContentType['rootpage'] = $rootpage;
-
-										// Dem Indexer mitteilen, das dieser Record in Rootpage enthalten sein muss wenn
-										// die rootpage größer als 0 ist.
-										// Der Indexer muss sich darum kümmern, ob dieses Element indiziert werden soll.
-										// @see tx_mksearch_indexer_Base::checkPageTreeIncludes
-
-										// @todo das heißt sobald die rootpage konfiguriert ist,
-										// werden alle Datensätze eines Indexs als valide betrachtet.
-										// wenn bspw. nur einige Seiten indiziert werden sollen, müssten
-										// alle übrigen in die exclude.pageTrees Option aufgenommen werden.
-										// das ist insbesondere bei neu hinzukommenden Seiten nicht haltbar
-										// da die Konfiguration fortlaufend angepasst werden müsste. Es sollte
-										// besser eine zusätzliche Option im Index vorhanden sein, die erlaubt
-										// die rootpage hinzuzufügen!!!
-										if($rootpage['uid'] > 0){
-											$aConfigByContentType['include.']['pageTrees.'][] = $rootpage['uid'];
-										}
-									}
-
 									// indizieren!
 									$doc = $indexer->prepareSearchData($queueRecord['tablename'], $record, $searchEngine->makeIndexDocInstance($extKey, $contentType), $aConfigByContentType);
 									if($doc) {

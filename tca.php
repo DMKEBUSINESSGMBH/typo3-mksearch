@@ -45,27 +45,6 @@ $TCA['tx_mksearch_indices'] = array (
 				'eval' => 'required,trim',
 			)
 		),
-		'rootpage' => array(
-			'exclude' => 0,
-			'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices.rootpage',
-			'config' => array (
-					'type' => 'group',
-					'internal_type' => 'db',
-					'allowed' => 'pages',
-					'size' => 1,
-					'minitems' => 0,
-					'maxitems' => 1,
-					'wizards' => array (
-						'suggest' => array(
-							'type' => 'suggest',
-							'default' => array(
-								'maxItemsInResultList' => 5,
-								'searchWholePhrase' => true, // true: LIKE %term% false: LIKE term%
-							),
-						),
-					),
-				),
-		),
 		'composites' => array (
 			'exclude' => 0,
 			'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices.composites',
@@ -137,7 +116,7 @@ $TCA['tx_mksearch_indices'] = array (
 		)
 	),
 	'types' => array (
-		'0' => array('showitem' => 'hidden;;1, title, description, engine, rootpage, configuration, name, composites')
+		'0' => array('showitem' => 'hidden;;1, title, description, engine, configuration, name, composites')
 	),
 	'palettes' => array (
 		'1' => array('showitem' => '')

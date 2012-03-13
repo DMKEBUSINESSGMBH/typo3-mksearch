@@ -36,7 +36,6 @@
 			<label index="tx_mksearch_indices.title">Title</label>
 			<label index="tx_mksearch_indices.description">Description</label>
 			<label index="tx_mksearch_indices.name">Name of the index used for actual storage. Depending on the indexing engine this might be the file system directory path or similar.</label>
-			<label index="tx_mksearch_indices.rootpage">Root page</label>
 			<label index="tx_mksearch_indices.composites">Used configuration composites</label>
 			<label index="tx_mksearch_indices_engine">Search engine</label>
 			<label index="tx_mksearch_indices_engine_solr">Apache Solr</label>
