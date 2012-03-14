@@ -30,6 +30,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 	
 	protected $sort = false;
 	protected $sortOrder = 'asc';
+	protected $confIdExtended = '';
 	
 	/**
 	 * Liefert die ConfId für den Filter
@@ -39,16 +40,14 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 	 * @return string
 	 */
 	protected function getConfId($extended = true) {
-		static $confIdExtended = false;
 		//$this->confId ist private, deswegen müssen wir deren methode aufrufen.
 		$confId = parent::getConfId();
 		if($extended) {
-			// TODO: Statischer Cache sollte sich auf alle Filter ausweiten, nicht nur auf aktuellen
-			//if (!$confIdExtended) {
-				$confIdExtended = $this->getConfigurations()->get($confId.'filter.confid');
-				$confIdExtended = 'filter.'.($confIdExtended ? $confIdExtended : 'default').'.';
-			//}
-			$confId .= $confIdExtended;
+			if (empty($this->confIdExtended)) {
+				$this->confIdExtended = $this->getConfigurations()->get($confId.'filter.confid');
+				$this->confIdExtended = 'filter.'.($this->confIdExtended ? $this->confIdExtended : 'default').'.';
+			}
+			$confId .= $this->confIdExtended;
 		}
 		return $confId;
 	}
