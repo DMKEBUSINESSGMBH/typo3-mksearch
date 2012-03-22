@@ -440,6 +440,8 @@ lib.mksearch.extrainfo {
 			
 			### define for which fields no marker should be displayed if empty
 			### or not returned. meanigly which fields should be inited if empty.
+			### alternatively Solr can set a default value for each field except
+			### for dynamic fields. 
 			initFields {
 			}
 		}
