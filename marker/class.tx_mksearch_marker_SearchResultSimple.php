@@ -53,7 +53,11 @@ class tx_mksearch_marker_SearchResultSimple extends tx_rnbase_util_BaseMarker {
 		
 		// Fill MarkerArray
 		$ignore = self::findUnusedCols($item->record, $template, $marker);
-		$markerArray = $formatter->getItemMarkerArrayWrapped($item->record, $confId , $ignore, $marker.'_',$item->getColumnNames());
+		
+		//diese felder werden auch bei nicht vorhanden sein gesetzt damit die market nicht ausgegeben werden
+		$initFields = $formatter->getConfigurations()->get($confId.'initFields.');
+		
+		$markerArray = $formatter->getItemMarkerArrayWrapped($item->record, $confId , $ignore, $marker.'_',$initFields);
 		$subpartArray = array(); $wrappedSubpartArray = array();
 		
 		$this->prepareLinks($item, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter, $template);

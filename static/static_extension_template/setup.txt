@@ -437,6 +437,11 @@ lib.mksearch.extrainfo {
 				wrap = <div class="searchResultExtraInfo">|</div>
 				required = 1
 			}
+			
+			### define for which fields no marker should be displayed if empty
+			### or not returned. meanigly which fields should be inited if empty.
+			initFields {
+			}
 		}
 	}
 
