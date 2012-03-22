@@ -242,7 +242,7 @@
 				<filter class="solr.DictionaryCompoundWordTokenFilterFactory"
 					dictionary="dictionaryGerman.txt" />
 				<filter class="solr.NGramFilterFactory" minGramSize="3"
-					maxGramSize="15" />
+					maxGramSize="35" />
 				<!-- <filter class="solr.SnowballPorterFilterFactory" language="German"/> -->
 				<filter class="solr.RemoveDuplicatesTokenFilterFactory" />
 			</analyzer>
