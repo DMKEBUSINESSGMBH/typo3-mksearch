@@ -56,11 +56,11 @@ class tx_mksearch_marker_Facet extends tx_mksearch_marker_SearchResultSimple {
 		//z.B. wird nach contentType facettiert. Dann sieht der Link bei tt_content
 		//so aus: mksearch[fq]=contentType:tt_content
 		
+		$sFq = $item->record['id'];
+		
 		//ACHTUNG: im Live Einsatz sollte das Feld nicht im Link stehen sondern nur der Wert.
 		//Das Feld sollte dann erst im Filter hinzugefügt werden. In der TS Config sollte
 		//dazu facet.links.show.excludeFieldName auf 1 stehen!!!
-		//@TODO: den quote wrap entfernen und im filter prüfen.
-		$sFq = '"'.$item->record['id'].'"';//immer gewrapped in "" wegen evtl. mehrere Wörtern
 		if(!$formatter->getConfigurations()->get($confId.'links.show.excludeFieldName'))
 					$sFq = $item->record['field'].':'.$sFq;
 		$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'show', $marker, array('fq' => $sFq), $template);

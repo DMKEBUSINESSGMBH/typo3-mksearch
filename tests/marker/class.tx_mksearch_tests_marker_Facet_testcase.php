@@ -61,7 +61,7 @@ class tx_mksearch_tests_marker_Facet_testcase extends tx_phpunit_testcase {
 		$GLOBALS['TSFE']->id = 1;
 	}
 	
-/**
+	/**
 	 * prüfen ob die richtigen fields und options zurück gegeben werden
 	 */
 	public function testPrepareLinks() {
@@ -76,7 +76,7 @@ class tx_mksearch_tests_marker_Facet_testcase extends tx_phpunit_testcase {
 		$sTemplate = '###FACET_SHOWLINK######FACET_LABEL### (###FACET_COUNT###)###FACET_SHOWLINK###';
 		$sParsedTemplate = $this->oMarker->parseTemplate($sTemplate, $oItem, $this->oFormatter, 'searchsolr.facet.', 'FACET');
 		//Feld noch im Link drin?
-		$this->assertEquals('<a href="?id=1&amp;mksearch%5Bfq%5D=contentType%3A%22media%22" >media (2)</a>',$sParsedTemplate,'Die Filter Query wurde nicht korrekt gesetzt!');
+		$this->assertEquals('<a href="?id=1&amp;mksearch%5Bfq%5D=contentType%3Amedia" >media (2)</a>',$sParsedTemplate,'Die Filter Query wurde nicht korrekt gesetzt!');
 	}
 	
 	/**
@@ -94,7 +94,25 @@ class tx_mksearch_tests_marker_Facet_testcase extends tx_phpunit_testcase {
 		$sTemplate = '###FACET_SHOWLINK######FACET_LABEL### (###FACET_COUNT###)###FACET_SHOWLINK###';
 		$sParsedTemplate = $this->oMarker->parseTemplate($sTemplate, $oItem, $this->oFormatter, 'searchsolr.facet.', 'FACET');
 		//Feld noch im Link drin?
-		$this->assertEquals('<a href="?id=1&amp;mksearch%5Bfq%5D=%22media%22" >media (2)</a>',$sParsedTemplate,'In der Filter Query steht noch immer der Feldname!');
+		$this->assertEquals('<a href="?id=1&amp;mksearch%5Bfq%5D=media" >media (2)</a>',$sParsedTemplate,'In der Filter Query steht noch immer der Feldname!');
+	}
+	
+	/**
+	 * prüfen ob die paramater url enkodiert werden
+	 */
+	public function testPrepareLinksWithFacetIdContainingSeveralWordsAndUmlauts() {
+		//set noHash as we don't need it in tests
+		$aConfig = tx_mksearch_tests_Util::loadPageTS4BE();
+		$aConfig['searchsolr.']['facet.']['links.']['show.']['noHash'] = 1;
+		$aConfig['searchsolr.']['facet.']['links.']['show.']['excludeFieldName'] = 1;
+		$this->oConfig = tx_mksearch_tests_Util::loadConfig4BE($aConfig);
+		$this->oFormatter = $this->oConfig->getFormatter();
+		
+		$oItem = tx_rnbase::makeInstance('tx_mksearch_model_Facet', 'contentType', 'Über uns', 'Über uns', 2);
+		$sTemplate = '###FACET_SHOWLINK######FACET_LABEL### (###FACET_COUNT###)###FACET_SHOWLINK###';
+		$sParsedTemplate = $this->oMarker->parseTemplate($sTemplate, $oItem, $this->oFormatter, 'searchsolr.facet.', 'FACET');
+		//Feld noch im Link drin?
+		$this->assertEquals('<a href="?id=1&amp;mksearch%5Bfq%5D=%C3%9Cber%20uns" >Über uns (2)</a>',$sParsedTemplate,'In der Filter Query steht noch immer der Feldname!');
 	}
 }
 
