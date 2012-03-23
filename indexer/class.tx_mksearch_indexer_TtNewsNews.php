@@ -114,6 +114,16 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base {
 		$indexDoc->setTitle($rawData['title']);
 		$indexDoc->addField('pid', $rawData['pid']);
 
+		// Keywords
+		if($options['addPageMetaData']) {
+			$separator = (!empty($options['addPageMetaData.']['separator'])) ? $options['addPageMetaData.']['separator'] : ' ';
+			if(!empty($rawData['keywords'])) {
+				$keywords = explode($separator, $rawData['keywords']);
+				foreach($keywords as $key => $keyword) $keywords[$key] = trim($keyword);
+				$indexDoc->addField('keywords_ms', $keywords, 'keyword');
+			}
+		}
+		
 		// Build content
 		$content = '';
 		
@@ -311,6 +321,9 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base {
 # }
 
 addCategoryData = 0
+
+addPageMetaData = 0
+addPageMetaData.separator = ,
 
 # Should the HTML Markup in indexed fields, the abstract and the content be kept?
 # by default every HTML Markup is removed
