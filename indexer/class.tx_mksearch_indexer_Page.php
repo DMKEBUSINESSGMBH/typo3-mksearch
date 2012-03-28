@@ -76,21 +76,12 @@ class tx_mksearch_indexer_Page extends tx_mksearch_indexer_Base {
 
 			// Current page is a short cut? Follow up short-cutted page
 			if($aRawData['doktype'] == 4) {
-				$this->handleShortcut($aRawData);
+				$oIndexSrv->addRecordToIndex('pages', $aRawData['shortcut']);
 				return true;
 			}
 		}
 		//else
 		//don't stop
-	}
-
-	/**
-	 * Puts the sortcutted page into the queue
-	 * @param array $aModels
-	 */
-	protected function handleShortcut(array $aRawData) {
-		$oIndexSrv = tx_mksearch_util_ServiceRegistry::getIntIndexService();
-		$oIndexSrv->addRecordToIndex('pages', $aRawData['shortcut']);
 	}
 
 	/**
