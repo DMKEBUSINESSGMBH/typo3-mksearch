@@ -189,7 +189,7 @@ class tx_mksearch_indexer_TtContent extends tx_mksearch_indexer_Base {
 	 * @return bool
 	 */
 	protected function hasDocToBeDeleted(tx_rnbase_model_base $oModel, tx_mksearch_interface_IndexerDocument $oIndexDoc, $aOptions = array()) {
-		if ($oModel->record['deleted'] == 1 || $oModel->record['hidden'] == 1 || empty($this->aIndexableReferences)) {
+		if (parent::hasDocToBeDeleted($oModel,$oIndexDoc,$aOptions) || empty($this->aIndexableReferences)) {
 			return true;
 		}
 

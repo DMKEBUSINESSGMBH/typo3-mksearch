@@ -409,7 +409,6 @@ class tx_mksearch_tests_indexer_TtContent_DB_testcase extends tx_phpunit_databas
 
 		//damit es nicht an der Konfig scheitert
 		$options = $this->getDefaultConfig();
-		$options['deleteIfNotIndexable'] = true;
 
 		$indexer = new tx_mksearch_indexer_TtContent();
 		list($extKey, $cType) = $indexer->getContentType();

@@ -168,6 +168,16 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 		// wäre vlt. auch was für rn_base, das model könnte diese informationen ja bereit stellen!
 		if ($oModel->record['hidden'] == 1 || $oModel->record['deleted'] == 1)
 			return true;
+
+		// are our parent pages valid?
+		// as soon as one of the parent pages is hidden we return true.
+		// @todo support when a parent page is deleted! shouldn't be possible
+		// without further configuration for a BE user but it's still possible!
+		$aRootline = tx_mksearch_service_indexer_core_Config::getRootLine($oModel->record['pid']);
+		foreach ($aRootline as $aPage) {
+			if($aPage['hidden'])
+				return true;
+		}
 		//else
 		return false;
 	}
@@ -319,16 +329,6 @@ CONFIG;
 
 		if (!$this->checkPageTreeIncludes($sourceRecord, $options, $oDbUtil)) return false;
 		if ( $this->checkPageTreeExcludes($sourceRecord, $options, $oDbUtil)) return false;
-
-		// so we are in the correct page tree. but are our parent pages valid?
-		// as soon as one of the parent pages is hidden we return false.
-		// @todo support when a parent page is deleted! shouldn't be possible
-		// without further configuration for a BE user but it's still possible!
-		$aRootline = tx_mksearch_service_indexer_core_Config::getRootLine($sourceRecord['pid']);
-		foreach ($aRootline as $aPage) {
-			if($aPage['hidden'])
-				return false;
-		}
 
 		return true;
 	}

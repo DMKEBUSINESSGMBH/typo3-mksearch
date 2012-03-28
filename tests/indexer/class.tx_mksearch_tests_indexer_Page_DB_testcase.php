@@ -385,7 +385,7 @@ class tx_mksearch_tests_indexer_Page_DB_testcase extends tx_phpunit_database_tes
 		$record = array('uid'=> 10, 'doktype' => 1,);
 		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
 
-		$result = $indexer->prepareSearchData('pages', $record, $indexDoc, array('deleteIfNotIndexable' => true));
+		$result = $indexer->prepareSearchData('pages', $record, $indexDoc, array());
 
 		//nichtzs direkt indiziert?
 		$this->assertTrue($result->getDeleted(),'doc nicht deleted!');
