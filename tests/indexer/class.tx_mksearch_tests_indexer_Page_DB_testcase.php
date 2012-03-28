@@ -167,6 +167,12 @@ class tx_mksearch_tests_indexer_Page_DB_testcase extends tx_phpunit_database_tes
 		$record = array('uid'=> 10, 'pid' => 7, 'deleted' => 0, 'hidden' => 0, 'title' => 'test');
 		$indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
 		$this->assertEquals(true, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
+
+		//parent of parent is hidden
+		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
+		$record = array('uid'=> 127, 'pid' => 10, 'deleted' => 0, 'hidden' => 0, 'title' => 'test');
+		$indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
+		$this->assertEquals(true, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 	}
 
 	/**
