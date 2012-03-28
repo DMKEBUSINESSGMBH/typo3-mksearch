@@ -58,5 +58,11 @@
 		<pid>1</pid>
 		<doktype>1</doktype>
 		<title>Main1-Sub3</title>
-	</pages>		
+	</pages>
+<!-- parent versteckt -->	
+	<pages>
+		<uid>10</uid>
+		<pid>7</pid>
+		<doktype>1</doktype>
+	</pages>
 </dataset>

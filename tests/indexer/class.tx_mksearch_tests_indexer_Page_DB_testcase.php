@@ -377,6 +377,30 @@ class tx_mksearch_tests_indexer_Page_DB_testcase extends tx_phpunit_database_tes
 		$this->assertEquals('test page for tests :-D',$aIndexDoc['abstract']->getValue(),'Es wurde nicht das Feld [abstract] richtig gesetzt!');
 		$this->assertEquals('testPage',$aIndexDoc['title']->getValue(),'Es wurde nicht das Feld [title] richtig gesetzt!');
 	}
+
+	public function testPrepareSearchDataSetsDocToDeletedIfOneOfTheParentPagesIsHidden() {
+		$indexer = new tx_mksearch_indexer_Page();
+		list($extKey, $cType) = $indexer->getContentType();
+
+		$record = array('uid'=> 10, 'doktype' => 1,);
+		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
+
+		$result = $indexer->prepareSearchData('pages', $record, $indexDoc, array('deleteIfNotIndexable' => true));
+
+		//nichtzs direkt indiziert?
+		$this->assertTrue($result->getDeleted(),'doc nicht deleted!');
+
+		$aOptions = array(
+			'enablefieldsoff' => true
+		);
+		$aResult = tx_rnbase_util_DB::doSelect('*', 'tx_mksearch_queue', $aOptions);
+
+		$this->assertEquals(1,count($aResult),'Es wurde nicht der richtige Anzahl in die queue gelegt!');
+
+		//die anderen subpages sollten auch drin liegen
+		$this->assertEquals('pages',$aResult[0]['tablename'],'Es wurde nicht das richtige Element (tablename) in die queue gelegt! Element 1');
+		$this->assertEquals(2,$aResult[0]['recid'],'Es wurde nicht das richtige Element (recid) in die queue gelegt! Element 1');
+	}
 }
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']) {
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']);

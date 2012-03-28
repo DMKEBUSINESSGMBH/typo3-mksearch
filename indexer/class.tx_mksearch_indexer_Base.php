@@ -320,6 +320,16 @@ CONFIG;
 		if (!$this->checkPageTreeIncludes($sourceRecord, $options, $oDbUtil)) return false;
 		if ( $this->checkPageTreeExcludes($sourceRecord, $options, $oDbUtil)) return false;
 
+		// so we are in the correct page tree. but are our parent pages valid?
+		// as soon as one of the parent pages is hidden we return false.
+		// @todo support when a parent page is deleted! shouldn't be possible
+		// without further configuration for a BE user but it's still possible!
+		$aRootline = tx_mksearch_service_indexer_core_Config::getRootLine($sourceRecord['pid']);
+		foreach ($aRootline as $aPage) {
+			if($aPage['hidden'])
+				return false;
+		}
+
 		return true;
 	}
 

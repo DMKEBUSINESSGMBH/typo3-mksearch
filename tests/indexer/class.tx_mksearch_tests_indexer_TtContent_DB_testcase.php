@@ -63,21 +63,22 @@ class tx_mksearch_tests_indexer_TtContent_DB_testcase extends tx_phpunit_databas
 		// assuming that test-database can be created otherwise PHPUnit will skip the test
 		$this->db = $this->useTestDatabase();
 
-		//uninstall templavoila so the tests run without it as they used to
-		global $TYPO3_LOADED_EXT;
-		$this->aTvConfig = $TYPO3_LOADED_EXT['templavoila'];
-		$TYPO3_LOADED_EXT['templavoila'] = null;
-
 		//das devlog stört nur bei der Testausführung im BE und ist da auch
 		//vollkommen unnötig
 		$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['devlog']['nolog'] = true;
 
 		$this->importStdDB();
 		$aExtensions = array('cms','mksearch');
+		if(t3lib_extMgm::isLoaded('templavoila')) $aExtensions[] = 'templavoila';
 		//templavoila und realurl brauchen wir da es im BE sonst Warnungen hagelt
 		//und man die Testergebnisse nicht sieht
 		if(t3lib_extMgm::isLoaded('realurl')) $aExtensions[] = 'realurl';
 		$this->importExtensions($aExtensions);
+
+		//uninstall templavoila so the tests run without it as they used to
+		global $TYPO3_LOADED_EXT;
+		$this->aTvConfig = $TYPO3_LOADED_EXT['templavoila'];
+		$TYPO3_LOADED_EXT['templavoila'] = null;
 
 		$this->importDataSet(tx_mksearch_tests_Util::getFixturePath('db/pages.xml'));
 	}
@@ -408,15 +409,18 @@ class tx_mksearch_tests_indexer_TtContent_DB_testcase extends tx_phpunit_databas
 
 		//damit es nicht an der Konfig scheitert
 		$options = $this->getDefaultConfig();
+		$options['deleteIfNotIndexable'] = true;
 
 		$indexer = new tx_mksearch_indexer_TtContent();
 		list($extKey, $cType) = $indexer->getContentType();
 
+		//seite ist versteckt
 		$record = array('uid'=> 123, 'pid'=>7, 'deleted' => 0, 'hidden' => 0, 'CType'=>'list','bodytext' => 'test');
 		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
 		$result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
 		$this->assertTrue($result->getDeleted(),'Das Element wurde nicht auf gelöscht gesetzt! Pid: 7');
 
+		//seite ist gelöscht
 		$record = array('uid'=> 123, 'pid'=>8, 'deleted' => 0, 'hidden' => 0, 'CType'=>'list','bodytext' => 'test');
 		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
 		$result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
@@ -432,6 +436,12 @@ class tx_mksearch_tests_indexer_TtContent_DB_testcase extends tx_phpunit_databas
 		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
 		$result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
 		$this->assertTrue($result->getDeleted(),'Das Element wurde nicht auf gelöscht gesetzt! Pid: 8');
+
+		//seite ist nicht gelöscht aber der parent ist versteckt
+		$record = array('uid'=> 123, 'pid'=>10, 'deleted' => 0, 'hidden' => 0, 'CType'=>'list','bodytext' => 'test');
+		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
+		$result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
+		$this->assertTrue($result->getDeleted(),'Das Element wurde nicht auf gelöscht gesetzt! Pid: 10');
 	}
 
 	public function testPrepareSearchDataIndexesHeaderLayoutCorrect() {
