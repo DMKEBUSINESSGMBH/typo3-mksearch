@@ -37,6 +37,9 @@ tx_rnbase::load('tx_mksearch_util_Misc');
 
 /**
  * Indexer service for core.tt_content called by the "mksearch" extension.
+ * @todo wenn templavoila installiert ist, sollten allen elemente, die in einem tv
+ * container liegen in die queue gelegt werden. beim indizieren muss dann noch geprüft
+ * werden ob das element parents hat und diese nicht hidden sind.
  */
 class tx_mksearch_indexer_TtContent extends tx_mksearch_indexer_Base {
 	/**
