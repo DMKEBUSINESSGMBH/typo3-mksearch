@@ -295,6 +295,10 @@ class tx_mksearch_indexer_TtContent extends tx_mksearch_indexer_Base {
 					$aOptions = array(
 						'where' => 'tt_content.pid=' . $iPid,
 					);
+					// as the pid list can be very long, we don't risk to create a sql
+					// statement that is too long. we are fine with a database access
+					// for each pid in the list as we are in the BE and performance shouldn't
+					// be a big concern!
 					$aRows = tx_rnbase_util_DB::doSelect('tt_content.uid', $aFrom, $aOptions);
 
 					foreach ($aRows as $aRow){

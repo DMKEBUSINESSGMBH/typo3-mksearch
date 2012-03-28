@@ -69,8 +69,9 @@ class tx_mksearch_indexer_Page extends tx_mksearch_indexer_Base {
 			// the last element is always the page itself. so we can pop this.
 			array_pop($aPidList);
 
+			$oIndexSrv = tx_mksearch_util_ServiceRegistry::getIntIndexService();
 			foreach ($aPidList as $iUid) {
-				$this->addRecordToIndex($sTableName, $iUid);
+				$oIndexSrv->addRecordToIndex($sTableName, $iUid);
 			}
 
 			// Current page is a short cut? Follow up short-cutted page

@@ -46,6 +46,10 @@ tx_rnbase::load('tx_mksearch_util_Misc');
 abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer {
 
 	/**
+	 * @var tx_mksearch_service_internal_Index
+	 */
+	protected $oIndexSrv;
+	/**
 	 * (non-PHPdoc)
 	 * @see tx_mksearch_interface_Indexer::prepareSearchData()
 	 */
@@ -216,18 +220,10 @@ CONFIG;
 	 */
 	protected function addModelToIndex(tx_rnbase_model_base $oModel, $sTableName){
 		if(!empty($oModel) && $oModel->isValid()){
-			$this->addRecordToIndex($sTableName, $oModel->getUid());
+			if(!$this->oIndexSrv)
+				$this->oIndexSrv = tx_mksearch_util_ServiceRegistry::getIntIndexService();
+			$this->oIndexSrv->addRecordToIndex($sTableName, $oModel->getUid());
 		}
-	}
-
-	/**
-	 * @param string $sTableName
-	 * @param integer $iUid
-	 * @return void
-	 */
-	protected function addRecordToIndex($sTableName, $iUid) {
-		$oIndexSrv = tx_mksearch_util_ServiceRegistry::getIntIndexService();
-		$oIndexSrv->addRecordToIndex($sTableName, $iUid);
 	}
 
 	/**
