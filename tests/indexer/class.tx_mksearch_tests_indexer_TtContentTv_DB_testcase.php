@@ -117,6 +117,14 @@ class tx_mksearch_tests_indexer_TtContentTv_DB_testcase extends tx_phpunit_datab
 		$this->assertFalse($indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 		$aData = $indexDoc->getData();
 		$this->assertEquals(1,$aData['pid']->getValue(),'the new pid has not been set for '.$record['uid']);
+
+		//should be deleted as the element it is referenced on is on a valid page
+		$indexer = new tx_mksearch_indexer_TtContent();
+		list($extKey, $cType) = $indexer->getContentType();
+		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
+		$record = array('uid'=> 5, 'pid' => 0, 'CType'=>'list', 'bodytext' => 'Test 1');
+		$indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
+		$this->assertFalse($indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 	}
 
 	public function testPrepareSearchCheckDeleted() {
@@ -141,11 +149,11 @@ class tx_mksearch_tests_indexer_TtContentTv_DB_testcase extends tx_phpunit_datab
 		$this->assertTrue($indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 
 		$options = $this->getDefaultConfig();
-		//should be deleted as the element it is referenced on is on a invalid page
+		//should be deleted as the element it is referenced on is on a none existent page
 		$indexer = new tx_mksearch_indexer_TtContent();
 		list($extKey, $cType) = $indexer->getContentType();
 		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
-		$record = array('uid'=> 4, 'pid' => 0, 'CType'=>'list', 'bodytext' => 'Test 1');
+		$record = array('uid'=> 98, 'pid' => 99, 'CType'=>'list', 'bodytext' => 'Test 1');
 		$indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
 		$this->assertTrue($indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 	}

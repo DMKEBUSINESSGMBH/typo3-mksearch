@@ -57,5 +57,13 @@ as we only check they are existing -->
 		<recuid>6</recuid>
 		<ref_table>tt_content</ref_table>
 		<ref_uid>6</ref_uid>
-	</sys_refindex>		
+	</sys_refindex>
+<!-- page is not existent -->			
+	<sys_refindex>
+		<hash>9</hash>
+		<tablename>pages</tablename>
+		<recuid>99</recuid>
+		<ref_table>tt_content</ref_table>
+		<ref_uid>98</ref_uid>
+	</sys_refindex>	
 </dataset>
