@@ -32,9 +32,9 @@ require_once(t3lib_extMgm::extPath('mksearch') . 'lib/Apache/Solr/Document.php')
 
 /**
  * Wir müssen in diesem Fall mit der DB testen da wir die pages
- * Tabelle benötigen. in diesen tests haben die elemente mehrere 
- * referenzen. die grundlegenden Funktionalitäten werden in 
- * tx_mksearch_tests_indexer_TtContent_testcase und 
+ * Tabelle benötigen. in diesen tests haben die elemente mehrere
+ * referenzen. die grundlegenden Funktionalitäten werden in
+ * tx_mksearch_tests_indexer_TtContent_testcase und
  * tx_mksearch_tests_indexer_TtContent_DB_testcase geprüft
  * @author Hannes Bochmann
  */
@@ -64,18 +64,18 @@ class tx_mksearch_tests_indexer_TtContentTv_DB_testcase extends tx_phpunit_datab
 		$this->createDatabase();
 		// assuming that test-database can be created otherwise PHPUnit will skip the test
 		$this->db = $this->useTestDatabase();
-		
+
 		//das devlog stört nur bei der Testausführung im BE und ist da auch
 		//vollkommen unnötig
 		$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['devlog']['nolog'] = true;
-		
+
 		$this->importStdDB();
 		$aExtensions = array('cms','mksearch','templavoila');
 		//templavoila und realurl brauchen wir da es im BE sonst Warnungen hagelt
 		//und man die Testergebnisse nicht sieht
 		if(t3lib_extMgm::isLoaded('realurl')) $aExtensions[] = 'realurl';
 		$this->importExtensions($aExtensions);
-		
+
 		$this->importDataSet(tx_mksearch_tests_Util::getFixturePath('db/pages_tv.xml'));
 		$this->importDataSet(tx_mksearch_tests_Util::getFixturePath('db/tt_content_tv.xml'));
 		$this->importDataSet(tx_mksearch_tests_Util::getFixturePath('db/sys_refindex.xml'));
@@ -91,10 +91,10 @@ class tx_mksearch_tests_indexer_TtContentTv_DB_testcase extends tx_phpunit_datab
 
 		$GLOBALS['BE_USER']->setWorkspace($this->workspaceIdAtStart);
 	}
-	
+
 	public function testPrepareSearchSetsCorrectPidOfReference() {
 		$options = $this->getDefaultConfig();
-		
+
 		//should not be deleted as everything is correct with the page it is on
 		$indexer = new tx_mksearch_indexer_TtContent();
 		list($extKey, $cType) = $indexer->getContentType();
@@ -107,7 +107,7 @@ class tx_mksearch_tests_indexer_TtContentTv_DB_testcase extends tx_phpunit_datab
 		$this->assertFalse($indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 		$aData = $indexDoc->getData();
 		$this->assertEquals(1,$aData['pid']->getValue(),'the new pid has not been set for '.$record['uid']);
-		
+
 		//should not be deleted as the element it is referenced on is on a valid page
 		$indexer = new tx_mksearch_indexer_TtContent();
 		list($extKey, $cType) = $indexer->getContentType();
@@ -118,10 +118,10 @@ class tx_mksearch_tests_indexer_TtContentTv_DB_testcase extends tx_phpunit_datab
 		$aData = $indexDoc->getData();
 		$this->assertEquals(1,$aData['pid']->getValue(),'the new pid has not been set for '.$record['uid']);
 	}
-	
+
 	public function testPrepareSearchCheckDeleted() {
 		$options = $this->getDefaultConfig();
-		
+
 		//should be deleted as there is no reference
 		$indexer = new tx_mksearch_indexer_TtContent();
 		list($extKey, $cType) = $indexer->getContentType();
@@ -129,7 +129,7 @@ class tx_mksearch_tests_indexer_TtContentTv_DB_testcase extends tx_phpunit_datab
 		$record = array('uid'=> 99, 'pid' => 0, 'CType'=>'list', 'bodytext' => 'Test 1');
 		$indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
 		$this->assertTrue($indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
-		
+
 		//should be deleted as the page it is referenced on is hidden
 		$options = $this->getDefaultConfig();
 		$indexer = new tx_mksearch_indexer_TtContent();
@@ -139,7 +139,7 @@ class tx_mksearch_tests_indexer_TtContentTv_DB_testcase extends tx_phpunit_datab
 		$record = array('uid'=> 2, 'pid' => 0, 'CType'=>'list', 'bodytext' => 'Test 1');
 		$indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
 		$this->assertTrue($indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
-		
+
 		$options = $this->getDefaultConfig();
 		//should be deleted as the element it is referenced on is on a invalid page
 		$indexer = new tx_mksearch_indexer_TtContent();
@@ -149,10 +149,10 @@ class tx_mksearch_tests_indexer_TtContentTv_DB_testcase extends tx_phpunit_datab
 		$indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
 		$this->assertTrue($indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 	}
-	
+
 	public function testPrepareSearchSetsCorrectIsIndexable() {
 		$options = $this->getDefaultConfig();
-		
+
 		//should return null as the page the element is referenced on is excluded for indexing
 		$indexer = new tx_mksearch_indexer_TtContent();
 		list($extKey, $cType) = $indexer->getContentType();
@@ -161,7 +161,7 @@ class tx_mksearch_tests_indexer_TtContentTv_DB_testcase extends tx_phpunit_datab
 		$options['exclude.']['pageTrees.'] = array(4);//als array
 		$indexDoc = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
 		$this->assertNull($indexDoc, 'Index Doc not null for uid '.$record['uid']);
-		
+
 		//should return null as the page the element is referenced on is excluded for indexing
 		$indexer = new tx_mksearch_indexer_TtContent();
 		list($extKey, $cType) = $indexer->getContentType();
@@ -171,7 +171,7 @@ class tx_mksearch_tests_indexer_TtContentTv_DB_testcase extends tx_phpunit_datab
 		$indexDoc = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
 		$this->assertNull($indexDoc, 'Wrong deleted state for uid '.$record['uid']);
 	}
-	
+
 	/**
 	 * @return array
 	 */

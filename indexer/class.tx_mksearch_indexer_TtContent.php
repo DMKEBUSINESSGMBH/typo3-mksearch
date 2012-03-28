@@ -192,17 +192,19 @@ class tx_mksearch_indexer_TtContent extends tx_mksearch_indexer_Base {
 	 * @return bool
 	 */
 	protected function hasDocToBeDeleted(tx_rnbase_model_base $oModel, tx_mksearch_interface_IndexerDocument $oIndexDoc, $aOptions = array()) {
-		if (parent::hasDocToBeDeleted($oModel,$oIndexDoc,$aOptions) || empty($this->aIndexableReferences)) {
+		//if we got not a single reference, even not the element itself, it should be deleted
+		if (empty($this->aIndexableReferences)) {
 			return true;
 		}
 
-		//the element itself is okay. now we have to check if at least one reference remains
-		//that has not to be deleted.
+		//now we have to check if at least one reference remains that has not to be deleted.
 		$aStillIndexableReferences = array();
 		foreach($this->aIndexableReferences as $iPid) {
 			//set the pid
 			$oModel->record['pid'] = $iPid;
-			if ($this->checkPageRights($oModel))
+			//checkPageRights() considers deleted and parent::hasDocToBeDeleted() takes
+			//care of all possible hidden parent pages
+			if ($this->checkPageRights($oModel) && !parent::hasDocToBeDeleted($oModel,$oIndexDoc,$aOptions))
 				$aStillIndexableReferences[$iPid] = $iPid;//set value as key to avoid doubles
 		}
 
