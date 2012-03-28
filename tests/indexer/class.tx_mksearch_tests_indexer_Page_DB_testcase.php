@@ -61,11 +61,11 @@ class tx_mksearch_tests_indexer_Page_DB_testcase extends tx_phpunit_database_tes
 		$this->createDatabase();
 		// assuming that test-database can be created otherwise PHPUnit will skip the test
 		$this->db = $this->useTestDatabase();
-		
+
 		//das devlog stört nur bei der Testausführung im BE und ist da auch
 		//vollkommen unnötig
 		$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['devlog']['nolog'] = true;
-		
+
 		$this->importStdDB();
 		$aExtensions = array('cms','mksearch');
 		//templavoila und realurl brauchen wir da es im BE sonst Warnungen hagelt
@@ -73,7 +73,7 @@ class tx_mksearch_tests_indexer_Page_DB_testcase extends tx_phpunit_database_tes
 		if(t3lib_extMgm::isLoaded('realurl')) $aExtensions[] = 'realurl';
 		if(t3lib_extMgm::isLoaded('templavoila')) $aExtensions[] = 'templavoila';
 		$this->importExtensions($aExtensions);
-		
+
 		$this->importDataSet(tx_mksearch_tests_Util::getFixturePath('db/pages.xml'));
 	}
 
@@ -87,9 +87,9 @@ class tx_mksearch_tests_indexer_Page_DB_testcase extends tx_phpunit_database_tes
 
 		$GLOBALS['BE_USER']->setWorkspace($this->workspaceIdAtStart);
 	}
-	
-	
-	public function testPrepareSearchDataPutsCorrectElementsIntoTheQueueIfPageIsShortcut() {
+
+
+	public function testPrepareSearchDataPutsCorrectShortcutTargetAndSubpagesIntoTheQueue() {
 		$indexer = new tx_mksearch_indexer_Page();
 		list($extKey, $cType) = $indexer->getContentType();
 
@@ -97,27 +97,54 @@ class tx_mksearch_tests_indexer_Page_DB_testcase extends tx_phpunit_database_tes
 		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
 
 		$result = $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
-		
+
 		//nichtzs direkt indiziert?
 		$this->assertNull($result,'Es wurde nicht null zurück gegeben!');
-		
+
 		$aOptions = array(
 			'enablefieldsoff' => true
 		);
 		$aResult = tx_rnbase_util_DB::doSelect('*', 'tx_mksearch_queue', $aOptions);
-		
-		$this->assertEquals(1,count($aResult),'Es wurde nicht der richtige Anzahl in die queue gelegt!');
-		$this->assertEquals('pages',$aResult[0]['tablename'],'Es wurde nicht das richtige Element (tablename) in die queue gelegt!');
-		$this->assertEquals(2,$aResult[0]['recid'],'Es wurde nicht das richtige Element (recid) in die queue gelegt!');
+
+		$this->assertEquals(3,count($aResult),'Es wurde nicht der richtige Anzahl in die queue gelegt!');
+
+		//die anderen subpages sollten auch drin liegen
+		$this->assertEquals('pages',$aResult[0]['tablename'],'Es wurde nicht das richtige Element (tablename) in die queue gelegt! Element 1');
+		$this->assertEquals(3,$aResult[0]['recid'],'Es wurde nicht das richtige Element (recid) in die queue gelegt! Element 1');
+		$this->assertEquals('pages',$aResult[1]['tablename'],'Es wurde nicht das richtige Element (tablename) in die queue gelegt! Element 2');
+		$this->assertEquals(9,$aResult[1]['recid'],'Es wurde nicht das richtige Element (recid) in die queue gelegt! Element 2');
+
+		//und das shortcut ziel
+		$this->assertEquals('pages',$aResult[2]['tablename'],'Es wurde nicht das richtige Element (tablename) in die queue gelegt! Element 3');
+		$this->assertEquals(2,$aResult[2]['recid'],'Es wurde nicht das richtige Element (recid) in die queue gelegt! Element 3');
 	}
-	
+
+	public function testPrepareSearchDataPutsNoSubpagesIntoTheQueueIfPageHasNone() {
+		$indexer = new tx_mksearch_indexer_Page();
+		list($extKey, $cType) = $indexer->getContentType();
+
+		$record = array('uid'=> 2, 'doktype' => 1);
+		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
+
+		$oIndexDoc = $indexer->prepareSearchData('pages', $record, $indexDoc, array());
+
+		$this->assertEquals('core:page:2',$oIndexDoc->getPrimaryKey(true),'falsch indiziert!');
+
+		$aOptions = array(
+			'enablefieldsoff' => true
+		);
+		$aResult = tx_rnbase_util_DB::doSelect('*', 'tx_mksearch_queue', $aOptions);
+
+		$this->assertEmpty($aResult,'Es wurden doch Elemente in die queue gelegt!');
+	}
+
 	public function testPrepareSearchDataSetsDocToDeleted() {
 		$indexer = new tx_mksearch_indexer_Page();
 		$options = array();
-		
+
 		list($extKey, $cType) = $indexer->getContentType();
 		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
-		
+
 		//is deleted
 		$record = array('uid'=> 123, 'pid' => 0, 'deleted' => 1, 'title'=>'list');
 		$indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
@@ -128,14 +155,14 @@ class tx_mksearch_tests_indexer_Page_DB_testcase extends tx_phpunit_database_tes
 		$record = array('uid'=> 124, 'pid' => 0, 'deleted' => 0, 'hidden' => 1, 'title'=>'list');
 		$indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
 		$this->assertEquals(true, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
-		
+
 		//everything alright
 		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
 		$record = array('uid'=> 125, 'pid' => 1, 'deleted' => 0, 'hidden' => 0, 'title' => 'test');
 		$indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
 		$this->assertEquals(false, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 	}
-	
+
 	/**
 	 * Prüft ob nicht die Elemente indiziert werden, die im
 	 * angegebenen Seitenbaum liegen
@@ -145,22 +172,22 @@ class tx_mksearch_tests_indexer_Page_DB_testcase extends tx_phpunit_database_tes
 		list($extKey, $cType) = $indexer->getContentType();
 
 		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
-		
+
 		//testbeginn
 		$record = array('uid'=> 1,'title' => 'testPage');
 		$options['exclude.']['pageTrees.'] = array(1);//als array
 		$result = $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
 		$this->assertNull($result, 'Element sollte gelöscht werden, da nicht im richtigen Seitenbaum. 1');
-		
+
 		$options['exclude.']['pageTrees.'] = array(4);//als array
 		$result = $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
 		$this->assertNotNull($result, 'Element sollte nicht gelöscht werden, da im richtigen Seitenbaum. 1');
-		
+
 		$record = array('uid'=> 3,'title' => 'testPage');
 		$options['exclude.']['pageTrees.'] = array(1);//als array
 		$result = $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
 		$this->assertNull($result, 'Element sollte gelöscht werden, da nicht im richtigen Seitenbaum. 2');
-		
+
 		$record2 = array('uid'=> 5,'title' => 'testPage');
 		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
 		$options['exclude.']['pageTrees.'] = array(1,4);//als array
@@ -169,7 +196,7 @@ class tx_mksearch_tests_indexer_Page_DB_testcase extends tx_phpunit_database_tes
 		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
 		$result = $indexer->prepareSearchData('tt_content', $record2, $indexDoc, $options, 1);
 		$this->assertNull($result, 'Element sollte gelöscht werden, da im richtigen Seitenbaum. 4');
-		
+
 		//nichts explizit excluded also alles rein
 		unset($options['exclude.']['pageTrees.']);//zurücksetzen
 		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
@@ -179,7 +206,7 @@ class tx_mksearch_tests_indexer_Page_DB_testcase extends tx_phpunit_database_tes
 		$result = $indexer->prepareSearchData('tt_content', $record2, $indexDoc, $options, 1);
 		$this->assertNotNull($result, 'Element sollte nicht gelöscht werden, da nichts excluded. 2');
 	}
-	
+
 	/**
 	 * Prüft ob nicht die Elemente indiziert werden, die im
 	 * angegebenen Seitenbaum liegen
@@ -189,27 +216,27 @@ class tx_mksearch_tests_indexer_Page_DB_testcase extends tx_phpunit_database_tes
 		list($extKey, $cType) = $indexer->getContentType();
 
 		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
-		
+
 		//testbeginn
 		$record = array('uid'=> 1,'title' => 'testPage');
 		$options['include.']['pageTrees.'] = array(1);//als array
 		$result = $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
 		$this->assertNotNull($result, 'Element sollte nicht gelöscht werden, da im richtigen Seitenbaum. 1');
-		
+
 		$options['include.']['pageTrees.'] = array(4);//als array
 		$result = $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
 		$this->assertNull($result, 'Element sollte gelöscht werden, da nicht im richtigen Seitenbaum. 1');
-		
+
 		$record = array('uid'=> 4,'title' => 'testPage');
 		$options['include.']['pageTrees.'] = array(1);//als array
 		$result = $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
 		$this->assertNull($result, 'Element sollte gelöscht werden, da nicht im richtigen Seitenbaum. 2');
-		
+
 		$record = array('uid'=> 3,'title' => 'testPage');
 		$options['include.']['pageTrees.'] = array(1);//als array
 		$result = $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
 		$this->assertNotNull($result, 'Element sollte nicht gelöscht werden, da im richtigen Seitenbaum. 2');
-		
+
 		$record2 = array('uid'=> 5,'title' => 'testPage');
 		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
 		$options['include.']['pageTrees.'] = array(1,4);//als array
@@ -218,7 +245,7 @@ class tx_mksearch_tests_indexer_Page_DB_testcase extends tx_phpunit_database_tes
 		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
 		$result = $indexer->prepareSearchData('tt_content', $record2, $indexDoc, $options, 1);
 		$this->assertNotNull($result, 'Element sollte nicht gelöscht werden, da im richtigen Seitenbaum. 4');
-		
+
 		//nichts explizit included also alles rein
 		unset($options['include.']['pageTrees.']);//zurücksetzen
 		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
@@ -228,9 +255,9 @@ class tx_mksearch_tests_indexer_Page_DB_testcase extends tx_phpunit_database_tes
 		$result = $indexer->prepareSearchData('tt_content', $record2, $indexDoc, $options, 1);
 		$this->assertNotNull($result, 'Element sollte nicht gelöscht werden, da nichts included. 2');
 	}
-	
+
 	/**
-	 * 
+	 *
 	 */
 	public function testPrepareSearchDataCheckExcludePages() {
 		$indexer = new tx_mksearch_indexer_Page();
@@ -238,20 +265,20 @@ class tx_mksearch_tests_indexer_Page_DB_testcase extends tx_phpunit_database_tes
 		$options = array(
 			'exclude.'=>array('pages.' => array(2))
 		);
-		
+
 		$aRawData = array('uid' => 1, 'title' => 'test');
 		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
 		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
 		$this->assertNotNull($aIndexDoc,'Das Element wurde nicht indiziert!');
-		
+
 		$aRawData = array('uid' => 2, 'title' => 'test');
 		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
 		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
 		$this->assertNull($aIndexDoc,'Das Element wurde doch indiziert!');
 	}
-	
+
 	/**
-	 * 
+	 *
 	 */
 	public function testPrepareSearchDataCheckIncludePages() {
 		$indexer = new tx_mksearch_indexer_Page();
@@ -259,20 +286,20 @@ class tx_mksearch_tests_indexer_Page_DB_testcase extends tx_phpunit_database_tes
 		$options = array(
 			'include.'=>array('pages.' => array(2))
 		);
-		
+
 		$aRawData = array('uid' => 1, 'title' => 'test');
 		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
 		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
 		$this->assertNull($aIndexDoc,'Das Element wurde doch indiziert!');
-		
+
 		$aRawData = array('uid' => 2, 'title' => 'test');
 		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
 		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
 		$this->assertNotNull($aIndexDoc,'Das Element wurde nicht indiziert!');
 	}
-	
+
 	/**
-	 * 
+	 *
 	 */
 	public function testPrepareSearchDataProducesCorrectDocByMapping() {
 		$indexer = new tx_mksearch_indexer_Page();
@@ -285,11 +312,11 @@ class tx_mksearch_tests_indexer_Page_DB_testcase extends tx_phpunit_database_tes
 				'emptyDummyField' => 'emptyDummyField_s'
 			)
 		);
-		
+
 		$aRawData = array('uid' => 1, 'title' => 'testPage', 'abstract' => '<a href="http://www.test.de">test</a> test page for tests :-D', 'doktype' => 2);
-		
+
 		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options)->getData();
-		
+
 		$this->assertEquals('testPage',$aIndexDoc['title_s']->getValue(),'Es wurde nicht das Feld [title_s] richtig gesetzt!');
 		$this->assertEquals(' test  test page for tests :-D',$aIndexDoc['abstract_s']->getValue(),'Es wurde nicht das Feld [abstract_s] richtig gesetzt!');
 		$this->assertEquals(2,$aIndexDoc['doktype_i']->getValue(),'Es wurde nicht das Feld [doktype_i] richtig gesetzt!');
@@ -298,9 +325,9 @@ class tx_mksearch_tests_indexer_Page_DB_testcase extends tx_phpunit_database_tes
 		$this->assertEquals(' test  test page for tests :-D',$aIndexDoc['abstract']->getValue(),'Es wurde nicht das Feld [abstract] richtig gesetzt!');
 		$this->assertEquals('testPage',$aIndexDoc['title']->getValue(),'Es wurde nicht das Feld [title] richtig gesetzt!');
 	}
-	
+
 	/**
-	 * 
+	 *
 	 */
 	public function testPrepareSearchDataProducesCorrectDocByMappingWithKeepHtml() {
 		$indexer = new tx_mksearch_indexer_Page();
@@ -315,11 +342,11 @@ class tx_mksearch_tests_indexer_Page_DB_testcase extends tx_phpunit_database_tes
 			),
 			'keepHtml' => 1
 		);
-		
+
 		$aRawData = array('uid' => 1, 'title' => 'testPage', 'abstract' => '<a href="http://www.test.de">test</a> test page for tests :-D', 'doktype' => 2);
-		
+
 		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options)->getData();
-		
+
 		$this->assertEquals('testPage',$aIndexDoc['title_s']->getValue(),'Es wurde nicht das Feld [title_s] richtig gesetzt!');
 		$this->assertEquals('<a href="http://www.test.de">test</a> test page for tests :-D',$aIndexDoc['abstract_s']->getValue(),'Es wurde nicht das Feld [abstract_s] richtig gesetzt!');
 		$this->assertEquals(2,$aIndexDoc['doktype_i']->getValue(),'Es wurde nicht das Feld [doktype_i] richtig gesetzt!');
@@ -328,20 +355,20 @@ class tx_mksearch_tests_indexer_Page_DB_testcase extends tx_phpunit_database_tes
 		$this->assertEquals('<a href="http://www.test.de">test</a> test page for tests :-D',$aIndexDoc['abstract']->getValue(),'Es wurde nicht das Feld [abstract] richtig gesetzt!');
 		$this->assertEquals('testPage',$aIndexDoc['title']->getValue(),'Es wurde nicht das Feld [title] richtig gesetzt!');
 	}
-	
+
 	/**
-	 * 
+	 *
 	 */
 	public function testPrepareSearchDataProducesCorrectDocWithoutMapping() {
 		$indexer = new tx_mksearch_indexer_Page();
 		list($extKey, $cType) = $indexer->getContentType();
 		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
 		$options = array();
-		
+
 		$aRawData = array('uid' => 1, 'title' => 'testPage', 'abstract' => 'test page for tests :-D', 'doktype' => 2);
-		
+
 		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options)->getData();
-		
+
 		$this->assertTrue(empty($aIndexDoc['title_s']),'Es wurde nicht das Feld [title_s] richtig gesetzt!');
 		$this->assertTrue(empty($aIndexDoc['abstract_s']),'Es wurde nicht das Feld [abstract_s] richtig gesetzt!');
 		$this->assertTrue(empty($aIndexDoc['doktype_i']),'Es wurde nicht das Feld [doktype_i] richtig gesetzt!');

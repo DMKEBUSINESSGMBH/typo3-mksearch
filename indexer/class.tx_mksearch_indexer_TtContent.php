@@ -45,28 +45,28 @@ class tx_mksearch_indexer_TtContent extends tx_mksearch_indexer_Base {
 	 * @var array
 	 */
 	protected $aReferences = array();
-	
+
 	/**
 	 * The indexable references (pids) of this element. These references
 	 * are taken to check if the element has to be deleted.
 	 * @var array
 	 */
-	protected $aIndexableReferences = array();	
+	protected $aIndexableReferences = array();
 	/**
 	 * Return content type identification.
 	 * This identification is part of the indexed data
 	 * and is used on later searches to identify the search results.
 	 * You're completely free in the range of values, but take care
 	 * as you at the same time are responsible for
-	 * uniqueness (i.e. no overlapping with other content types) and 
-	 * consistency (i.e. recognition) on indexing and searching data. 
+	 * uniqueness (i.e. no overlapping with other content types) and
+	 * consistency (i.e. recognition) on indexing and searching data.
 	 *
 	 * @return array([extension key], [key of content type])
 	 */
 	public static function getContentType() {
 		return array('core', 'tt_content');
 	}
-	
+
 	/**
 	 * @see tx_mksearch_indexer_Base::indexData()
 	 */
@@ -85,7 +85,7 @@ class tx_mksearch_indexer_TtContent extends tx_mksearch_indexer_Base {
 			return $indexDoc;
 		}
 
-		//we added our own header_layout (101). as long as there is no 
+		//we added our own header_layout (101). as long as there is no
 		//additional config for this type (101) it isn't displayed in the FE
 		//but indexed for Solr. so use header_layout == 100 if the title
 		//should neither be indexed nor displayed in ther FE. use header_layout == 101
@@ -96,7 +96,7 @@ class tx_mksearch_indexer_TtContent extends tx_mksearch_indexer_Base {
 			$title = trim(tx_mksearch_util_Misc::html2plain($rawData['header']));
 		}
 		$indexDoc->setTitle($title);
-		
+
 		$indexDoc->setTimestamp($rawData['tstamp']);
 		$indexDoc->setFeGroups(
 			tx_mksearch_service_indexer_core_Config::getEffectiveContentElementFeGroups(
@@ -104,10 +104,10 @@ class tx_mksearch_indexer_TtContent extends tx_mksearch_indexer_Base {
 				t3lib_div::trimExplode(',', $rawData['fe_group'], true)
 			)
 		);
-		
+
 		$indexDoc->addField('pid', $oModel->record['pid'], 'keyword');
 		$indexDoc->addField('CType', $rawData['CType'], 'keyword');
-		
+
 		if($options['addPageMetaData']) {
 			$separator = (!empty($options['addPageMetaData.']['separator'])) ? $options['addPageMetaData.']['separator'] : ' ';
 			$pageData = $this->getPageContent($oModel->record['pid']);
@@ -117,7 +117,7 @@ class tx_mksearch_indexer_TtContent extends tx_mksearch_indexer_Base {
 				$indexDoc->addField('keywords_ms', $keywords, 'keyword');
 			}
 		}
-		
+
 		// Try to call hook for the current CType.
 		// A hook MUST call both $indexDoc->setContent and
 		// $indexDoc->setAbstract (respect $indexDoc->getMaxAbstractLength())!
@@ -137,7 +137,7 @@ class tx_mksearch_indexer_TtContent extends tx_mksearch_indexer_Base {
 			$fields = isset($options['CType.'][$rawData['CType'].'.']['indexedFields.']) ?
 						$options['CType.'][$rawData['CType'].'.']['indexedFields.'] :
 						$options['CType.']['_default_.']['indexedFields.'];
-			
+
 			$c = '';
 			foreach ($fields as $f) {
 				// Special dealing with diffent CTypes:
@@ -151,7 +151,7 @@ class tx_mksearch_indexer_TtContent extends tx_mksearch_indexer_Base {
 							$flex = t3lib_div::xml2array($rawData['pi_flexform']);
 							if (is_array($flex)) {
 								$flexParsingOptions = $flex['data']['s_parsing']['lDEF'];
-								
+
 								// Replace special parsing characters
 								if ($flexParsingOptions['tableparsing_quote']['vDEF'])
 									$tempContent = str_replace(chr($flexParsingOptions['tableparsing_quote']['vDEF']), '', $tempContent);
@@ -165,23 +165,23 @@ class tx_mksearch_indexer_TtContent extends tx_mksearch_indexer_Base {
 				}
 				$c .= $tempContent . ' ';
 			}
-			
-			// Decode HTML 
+
+			// Decode HTML
 			$c = trim(tx_mksearch_util_Misc::html2plain($c));
-			
+
 			// kein inhalt zum indizieren
 			if(empty($title) && empty($c)) {
 				$indexDoc->setDeleted(true);
 				return $indexDoc;
 			}
-			
+
 			// Include $title into indexed content
 			$indexDoc->setContent($title . ' ' . $c);
 			$indexDoc->setAbstract(empty($c) ? $title : $c, $indexDoc->getMaxAbstractLength());
 		}
 		return $indexDoc;
 	}
-	
+
 	/**
 	 * Sets the index doc to deleted if neccessary
 	 * @param tx_rnbase_model_base $oModel
@@ -192,9 +192,9 @@ class tx_mksearch_indexer_TtContent extends tx_mksearch_indexer_Base {
 		if ($oModel->record['deleted'] == 1 || $oModel->record['hidden'] == 1 || empty($this->aIndexableReferences)) {
 			return true;
 		}
-		
+
 		//the element itself is okay. now we have to check if at least one reference remains
-		//that has not to be deleted. 
+		//that has not to be deleted.
 		$aStillIndexableReferences = array();
 		foreach($this->aIndexableReferences as $iPid) {
 			//set the pid
@@ -202,7 +202,7 @@ class tx_mksearch_indexer_TtContent extends tx_mksearch_indexer_Base {
 			if ($this->checkPageRights($oModel))
 				$aStillIndexableReferences[$iPid] = $iPid;//set value as key to avoid doubles
 		}
-		
+
 		//any valid references left?
 		if(empty($aStillIndexableReferences)){
 			return true;
@@ -213,7 +213,7 @@ class tx_mksearch_indexer_TtContent extends tx_mksearch_indexer_Base {
 		//else
 		return false;
 	}
-	
+
 	/**
 	 * check if related data has changed and stop indexing in case
 	 * @see tx_mksearch_indexer_Base::stopIndexing()
@@ -226,11 +226,11 @@ class tx_mksearch_indexer_TtContent extends tx_mksearch_indexer_Base {
 		//else
 		//don't stop
 	}
-	
+
 	/**
 	 * Returns all references (pids)  this element has. if templavoila is
 	 * not installed we simply return the pid of the element
-	 *  
+	 *
 	 * @param tx_rnbase_model_base $oModel
 	 * @return array
 	 */
@@ -246,9 +246,9 @@ class tx_mksearch_indexer_TtContent extends tx_mksearch_indexer_Base {
 		);
 		$aFrom = array('sys_refindex', 'sys_refindex');
 		$aRows = tx_rnbase_util_DB::doSelect('*', $aFrom, $aSqlOptions);
-			
-		//now we need to collect the pids of all references. either a 
-		//reference is a page than we simply use it's pid or the 
+
+		//now we need to collect the pids of all references. either a
+		//reference is a page than we simply use it's pid or the
 		//reference is another tt_content. in the last case we take the pid of
 		//this element
 		$aReferences = array();
@@ -268,30 +268,43 @@ class tx_mksearch_indexer_TtContent extends tx_mksearch_indexer_Base {
 				}
 			}
 		}
-		
+
 		return $aReferences;
 	}
-	
+
 	/**
 	 * Adds all given models to the queue
 	 * @param array $aModels
 	 */
 	protected function handlePagesChanged(array $aRawData) {
-		//we need all content elements that reside on the given page
-		$aOptions = array(
-			'where' => 'tt_content.pid=' . $aRawData['uid'],
-		);
-		$aFrom = array('tt_content', 'tt_content');
-		$aRows = tx_rnbase_util_DB::doSelect('tt_content.uid', $aFrom, $aOptions);
-		
-		if(!empty($aRows)){
+		// every tt_content element on this page or it's
+		// subpages has to be put into the queue.
+		//@todo support deleted pages, too
+		$oDbUtil = tx_rnbase::makeInstance('tx_rnbase_util_DB');
+		$aPidList = explode(',',$oDbUtil->_getPidList($aRawData['uid'],999));
+
+		if(!empty($aPidList)){
 			$oIndexSrv = tx_mksearch_util_ServiceRegistry::getIntIndexService();
-			foreach ($aRows as $aRow){
-				$oIndexSrv->addRecordToIndex('tt_content', $aRow['uid']);
+			$aFrom = array('tt_content', 'tt_content');
+
+			foreach ($aPidList as $iPid) {
+				// if the site is not existent we have one empty entry.
+				if(!empty($iPid)){
+					// hidden/deleted datasets can be excluded as they are not indexed
+					// see isIndexableRecord()
+					$aOptions = array(
+						'where' => 'tt_content.pid=' . $iPid,
+					);
+					$aRows = tx_rnbase_util_DB::doSelect('tt_content.uid', $aFrom, $aOptions);
+
+					foreach ($aRows as $aRow){
+						$oIndexSrv->addRecordToIndex('tt_content', $aRow['uid']);
+					}
+				}
 			}
 		}
 	}
-	
+
 	/**
 	 * @see tx_mksearch_indexer_Base::isIndexableRecord()
 	 */
@@ -299,7 +312,7 @@ class tx_mksearch_indexer_TtContent extends tx_mksearch_indexer_Base {
 		$this->aIndexableReferences = array();//init
 
 		//we have to do the checks for all references and collect the indexable ones
-		$return = false;		
+		$return = false;
 		if(!empty($this->aReferences)){
 			foreach($this->aReferences as $iPid) {
 				//set the pid
@@ -318,13 +331,13 @@ class tx_mksearch_indexer_TtContent extends tx_mksearch_indexer_Base {
 			//without any references this element is indexable but will be
 			//deleted later
 			$return = true;
-	 
+
 		return $return;
 	}
-	
+
 	/**
 	 * Prüft ob das Element anhand des CType inkludiert oder ignoriert werden soll
-	 * 
+	 *
 	 * @param array $sourceRecord
 	 * @param array $options
 	 * @return bool
@@ -333,7 +346,7 @@ class tx_mksearch_indexer_TtContent extends tx_mksearch_indexer_Base {
 		$ctypes = $this->getConfigValue('ignoreCTypes', $options);
 		if(is_array($ctypes) && count($ctypes)) {
 			// Wenn das Element eines der definierten ContentTypen ist,
-			// NICHT indizieren 
+			// NICHT indizieren
 			if(in_array($sourceRecord['CType'],$ctypes))
 				return false;
 		}
@@ -342,33 +355,33 @@ class tx_mksearch_indexer_TtContent extends tx_mksearch_indexer_Base {
 			$ctypes = $this->getConfigValue('includeCTypes', $options);
 			if(is_array($ctypes) && count($ctypes)) {
 				// Wenn das Element keines der definierten ContentTypen ist,
-				// NICHT indizieren 
+				// NICHT indizieren
 				if(!in_array($sourceRecord['CType'],$ctypes))
 					return false;
 			}
 		}
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * Returns the model to be indexed
-	 * 
+	 *
 	 * @param array $aRawData
-	 * 
+	 *
 	 * @return tx_mksearch_model_irfaq_Question
 	 */
 	protected function createModel(array $aRawData) {
 		$oModel = tx_rnbase::makeInstance('tx_rnbase_model_Base', $aRawData);
 		//we need all references this element has for later checks
 		$this->aReferences = $this->getReferences($oModel);
-		
+
 		return $oModel;
 	}
-	
+
 	/**
 	 * Returns the Pagecontent
-	 * 
+	 *
 	 * @param int $pid
 	 */
 	protected function getPageContent($pid) {
@@ -379,17 +392,17 @@ class tx_mksearch_indexer_TtContent extends tx_mksearch_indexer_Base {
 		$from = array('pages', 'pages');
 		return tx_rnbase_util_DB::doSelect('*', $from, $options);
 	}
-	
+
 	/**
 	 * Return the default Typoscript configuration for this indexer.
-	 * 
+	 *
 	 * Note that this config is not used for actual indexing
 	 * but only serves as assistance when actually configuring an indexer!
 	 * Hence all possible configuration options should be set or
 	 * at least be mentioned to provide an easy-to-access inline documentation!
-	 * 
+	 *
 	 * @return string
-	 * 
+	 *
 	 */
 	public function getDefaultTSConfig() {
 		return <<<CONF
@@ -427,7 +440,7 @@ CType {
 	}
 }
 
-# cTypes of content elements to be excluded from indexing. 
+# cTypes of content elements to be excluded from indexing.
 # Obviously, the respective "indexedFields" option is ignored in this case.
 #includeCTypes = list,header,text,textpic,image,text,bullets,table,html
 ignoreCTypes = search,mailform,login,list,div
@@ -437,7 +450,7 @@ ignoreCTypes = search,mailform,login,list,div
 
 ### delete from or abort indexing for the record if isIndexableRecord or no record?
  deleteIfNotIndexable = 0
- 
+
 # White lists: Explicitely include items in indexing by various conditions.
 # Note that defining a white list deactivates implicite indexing of ALL pages,
 # i.e. only white-listed pages are defined yet!
@@ -447,9 +460,9 @@ include {
 #	elements {
 #		# Include tt_content #17
 #		0 = 17
-#		# Include tt_content #26	
+#		# Include tt_content #26
 #		1 = 26
-#	} 
+#	}
 # Include several pages in indexing:
 #		# Include page #18 and #27
 #	pages = 18,27

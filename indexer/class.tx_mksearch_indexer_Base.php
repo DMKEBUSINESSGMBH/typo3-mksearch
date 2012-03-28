@@ -44,7 +44,7 @@ tx_rnbase::load('tx_mksearch_util_Misc');
  * @subpackage tx_mksearch_indexer
  */
 abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer {
-	
+
 	/**
 	 * (non-PHPdoc)
 	 * @see tx_mksearch_interface_Indexer::prepareSearchData()
@@ -56,13 +56,13 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 		//do something different like putting a record into the queue.
 		if($this->stopIndexing($sTableName, $aRawData, $oIndexDoc, $aOptions))
 			return null;
-			
+
 		// get a model from the source array
 		$oModel = $this->createModel($aRawData);
-		
+
 		// set base id for specific indexer
 		$oIndexDoc->setUid($oModel->getUid());
-		
+
 		// Is the model valid and data indexable?
 		if (!$oModel->record || !$this->isIndexableRecord($oModel->record, $aOptions)) {
 			if(isset($aOptions['deleteIfNotIndexable']) && $aOptions['deleteIfNotIndexable']) {
@@ -70,19 +70,19 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 				return $oIndexDoc;
 			} else return null;
 		}
-		
+
 		//shall we break the indexing and set the doc to deleted?
 		if($this->hasDocToBeDeleted($oModel,$oIndexDoc,$aOptions)){
 			$oIndexDoc->setDeleted(true);
 			return $oIndexDoc;
 		}
-		
+
 		$oIndexDoc = $this->indexData($oModel, $sTableName, $aRawData, $oIndexDoc, $aOptions);
-		
+
 		//done
 		return $oIndexDoc;
 	}
-	
+
 	/**
 	 * Shall we break the indexing for the current data?
 	 *
@@ -103,7 +103,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 		//nothing to handle by default. continue indexing
 		return false;
 	}
-	
+
 	/**
 	 * Indexes all fields of the model according to the given mapping
 	 *
@@ -122,7 +122,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 				);
 		}
 	}
-	
+
 	/**
 	 * Collects the values of all models inside the given array
 	 * and adds them as multivalue (array)
@@ -141,7 +141,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 					$aTempIndexDoc[$sPrefix.$sIndexDocKey][] = $oModel->record[$sRecordKey];
 			}
 		}
-		
+
 		//and now add the fields
 		if(!empty($aTempIndexDoc)){
 			foreach ($aTempIndexDoc as $sIndexDocKey => $aValues){
@@ -149,7 +149,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 			}
 		}
 	}
-	
+
 	/**
 	 * Sets the index doc to deleted if neccessary
 	 * @param tx_rnbase_model_base $oModel
@@ -167,7 +167,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 		//else
 		return false;
 	}
-	
+
 	/**
 	 * Checks if the dataset is indexable at all
 	 * @param array $sourceRecord
@@ -178,7 +178,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 		$ret = tx_mksearch_util_Misc::isIndexable($sourceRecord, $options);
 		return $ret;
 	}
-	
+
 	/**
 	 * Return the default Typoscript configuration for an indexer.
 	 *
@@ -208,7 +208,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 # deleteIfNotIndexable = 0
 CONFIG;
 	}
-	
+
 	/**
 	 * Adds a element to the queue
 	 * @param tx_rnbase_model_base $oModel
@@ -216,11 +216,20 @@ CONFIG;
 	 */
 	protected function addModelToIndex(tx_rnbase_model_base $oModel, $sTableName){
 		if(!empty($oModel) && $oModel->isValid()){
-			$oIndexSrv = tx_mksearch_util_ServiceRegistry::getIntIndexService();
-			$oIndexSrv->addRecordToIndex($sTableName, $oModel->getUid());
+			$this->addRecordToIndex($sTableName, $oModel->getUid());
 		}
 	}
-	
+
+	/**
+	 * @param string $sTableName
+	 * @param integer $iUid
+	 * @return void
+	 */
+	protected function addRecordToIndex($sTableName, $iUid) {
+		$oIndexSrv = tx_mksearch_util_ServiceRegistry::getIntIndexService();
+		$oIndexSrv->addRecordToIndex($sTableName, $iUid);
+	}
+
 	/**
 	 * just a wrapper for addModelToIndex and an array of models
 	 * @param array $aRawData
@@ -234,7 +243,7 @@ CONFIG;
 				$this->addModelToIndex($oModel,$sTableName);
 		}
 	}
-	
+
 	/**
 	 * Checks if a include or exclude option was set for a
 	 * given option key
@@ -262,7 +271,7 @@ CONFIG;
 				$bHit = false;//if we have a hit
 				break;
 		}
-		
+
 		//should only element with a special category be indexed
 		if(!empty($aOptions[$sMode.'.']) && !empty($aModels)){
 			//include categories as array like
@@ -278,11 +287,11 @@ CONFIG;
 			elseif(!empty($aOptions[$sMode.'.'][$sOptionKey])){
 				$aIncludeCategories = explode(',',$aOptions[$sMode.'.'][$sOptionKey]);
 			}
-			
+
 			//if config is empty nothing to do and everything is alright
 			if(empty($aIncludeCategories))
 				return true;
-			
+
 			//check if at least one category of the current element
 			//is in the given include categories
 			$bIsValid = $bNoHit;//if we find nothing
@@ -295,7 +304,7 @@ CONFIG;
 			$bIsValid = true;//no option given
 		return $bIsValid;
 	}
-	
+
 	/**
 	 * Prüft ob die Seite speziell in einem Seitenbaum liegt,
 	 * der inkludiert oder ausgeschlossen werden soll
@@ -309,15 +318,15 @@ CONFIG;
 		//tslib_fe benötigen
 		tx_rnbase::load('tx_rnbase_util_Misc');
 		tx_rnbase_util_Misc::prepareTSFE();
-		
+
 		$oDbUtil = tx_rnbase::makeInstance('tx_rnbase_util_DB');
-		
+
 		if (!$this->checkPageTreeIncludes($sourceRecord, $options, $oDbUtil)) return false;
 		if ( $this->checkPageTreeExcludes($sourceRecord, $options, $oDbUtil)) return false;
-	
+
 		return true;
 	}
-	
+
 	/**
 	 * Wenn das Element im gegebenen Seitenbaum ist, wird NICHT indiziert
 	 *
@@ -349,7 +358,7 @@ CONFIG;
 		//else
 		return false;
 	}
-	
+
 	/**
 	 * Liefert ein Array mit allen Pids, die in den Seitenbäumen
 	 * vorhanden sind
@@ -373,10 +382,10 @@ CONFIG;
 			foreach ($aPidsByPageTree as $aPidsTemp)
 				$aPids = array_merge($aPids, $aPidsTemp);
 		}
-		
+
 		return $aPids;
 	}
-	
+
 	/**
 	 * Liefert einen Wert aus der Konfig
 	 * Beispiel: $key = test
@@ -396,7 +405,7 @@ CONFIG;
 		}
 		return $aConfig;
 	}
-	
+
 	/**
 	 * Get's the page of the content element if it's not hidden/deleted
 	 * @param tx_rnbase_model_base $oModel
@@ -412,7 +421,7 @@ CONFIG;
 		$aFrom = array('pages', 'pages');
 		return $aRows = tx_rnbase_util_DB::doSelect('*', $aFrom, $aSqlOptions);
 	}
-	
+
 	/**
 	 * Returns the model to be indexed
 	 *
