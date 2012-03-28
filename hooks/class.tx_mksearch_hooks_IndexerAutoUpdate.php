@@ -35,45 +35,6 @@ require_once(PATH_t3lib.'class.t3lib_tsparser.php');
 class tx_mksearch_hooks_IndexerAutoUpdate {
 
 	/**
-	 * (Try to) Render Typoscript recursively
-	 *
-	 * tslib_cObj::cObjGetSingle() renders a TS array
-	 * only if the passed array structure is directly
-	 * defined renderable Typoscript - it does however
-	 * not care for deep array structures.
-	 * This method heals this lack by traversing the
-	 * given TS array recursively and calling
-	 * tslib_cObj::cObjGetSingle() on each sub-array
-	 * which looks like being renderable.
-	 *
-	 * @param array			$data	Deep data array parsed from Typoscript text
-	 * @param tslib_cObj	$cObj
-	 * @return array				Data array with Typoscript rendered
-	 * @todo remove when this function is integrated in tx_rnbase_configurations::get()
-	 */
-	private function renderTS($data, tslib_cObj &$cObj) {
-		foreach ($data as $key=>$value) {
-			// Array key with trailing '.'?
-			if (substr($key, strlen($key)-1, 1) == '.') {
-				// Remove last character
-				$key_1 = substr($key, 0, strlen($key)-1);
-				// Same key WITHOUT '.' exists as well? Treat as renderable Typoscript!
-				if (isset($data[$key_1])) {
-					$data[$key_1] = $cObj->cObjGetSingle($data[$key_1], $data[$key]);
-					unset($data[$key]);
-				}
-				// Traverse recursively
-				else $data[$key] = $this->renderTS($data[$key], $cObj);
-			}
-		}
-		return $data;
-	}
-
-	private function cleanupTSFE($tmpTSFE) {
-		if ($tmpTSFE && isset($GLOBALS['TSFE']))
-			unset ($GLOBALS['TSFE']);
-	}
-	/**
 	 * Hook after saving a record in Typo3 backend:
 	 * Perform index update depending on given data
 	 *
@@ -88,8 +49,8 @@ class tx_mksearch_hooks_IndexerAutoUpdate {
 		if ($tce->BE_USER->workspace !== 0) return;
 
 		return $this->processDatamap_afterAllOperationsNew($tce);
-//		return $this->processDatamap_afterAllOperationsOld($tce);
 	}
+
 	private function processDatamap_afterAllOperationsNew(t3lib_TCEmain $tce) {
 		$intIndexSrv = tx_mksearch_util_ServiceRegistry::getIntIndexService();
 		// Cores suchen:
@@ -129,25 +90,6 @@ class tx_mksearch_hooks_IndexerAutoUpdate {
 				}
 		}
 	}
-
-	private function processDatamap_afterAllOperationsOld(t3lib_TCEmain $tce) {
-		// Collect uids of records to be updated
-		$updateUids = array();
-		foreach ($tce->datamap as $table=>$records) {
-			if(strstr($table, 'tx_mksearch_') != false)
-				continue; // Ignore internal tables
-			if (count($records)) {
-				if (!isset($updateUids[$table])) $updateUids[$table] = array();
-				foreach (array_keys($records) as $uid) {
-					// New element?
-					if (!is_numeric($uid)) $uid = $tce->substNEWwithIDs[$uid];
-					$updateUids[$table][] = $uid;
-				}
-			}
-		}
-		$this->updateAllIndices($updateUids);
-	}
-
 
 	/**
 	 * Hook after performing different record actions in Typo3 backend:
