@@ -113,6 +113,8 @@ class tx_mksearch_indexer_TtContent extends tx_mksearch_indexer_Base {
 
 		if($options['addPageMetaData']) {
 			$separator = (!empty($options['addPageMetaData.']['separator'])) ? $options['addPageMetaData.']['separator'] : ' ';
+			// @TODO: nur holen was wir benötigen (keywords)
+			//		  konfigurierbar machen: description, author könnte wichtig werden!
 			$pageData = $this->getPageContent($oModel->record['pid']);
 			if(!empty($pageData[0]['keywords'])) {
 				$keywords = explode($separator, $pageData[0]['keywords']);

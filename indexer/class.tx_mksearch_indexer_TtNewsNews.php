@@ -27,9 +27,9 @@ tx_rnbase::load('tx_mksearch_indexer_Base');
 
 /**
  * Indexer service for tt_news.news called by the "mksearch" extension.
- * 
+ *
  * Ich denke diese Optionen sind überflüssig!
- * 
+ *
  * Expected option for indexer configuration:
  * * [array] indexedFields (mandatory - set by default):
  *		Define which fields are used for building the index
@@ -45,7 +45,7 @@ tx_rnbase::load('tx_mksearch_indexer_Base');
  * 		* [array] categoryTrees:
  * 			Exclude complete category trees (i. e. categories with all their children) from indexing
  * 		 	E.g. $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['indexer']['config']['tt_news.news']['exclude']['categoryTrees'] = array(3, 5, 8);
- * 
+ *
  */
 class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base {
 	
@@ -55,8 +55,8 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base {
 	 * and is used on later searches to identify the search results.
 	 * You're completely free in the range of values, but take care
 	 * as you at the same time are responsible for
-	 * uniqueness (i.e. no overlapping with other content types) and 
-	 * consistency (i.e. recognition) on indexing and searching data. 
+	 * uniqueness (i.e. no overlapping with other content types) and
+	 * consistency (i.e. recognition) on indexing and searching data.
 	 *
 	 * @return array('extKey' => [extension key], 'name' => [key of content type]
 	 */
@@ -115,6 +115,10 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base {
 		$indexDoc->addField('pid', $rawData['pid']);
 
 		// Keywords
+		// @TODO: Page Meta data?
+		// laut code werden nur die keywords der news mit indiziert.
+		// das hätte sich über die indexedFields konfigurieren lassen!
+		// wieder entfernen!
 		if($options['addPageMetaData']) {
 			$separator = (!empty($options['addPageMetaData.']['separator'])) ? $options['addPageMetaData.']['separator'] : ' ';
 			if(!empty($rawData['keywords'])) {
@@ -138,19 +142,19 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base {
 		
 		//extra fields to index besides bodytext, timstamp and short?
 		if(is_array($aIndexedFields) && !empty($aIndexedFields)){
-			foreach ($aIndexedFields as $sDocKey => $sRecordKey){ 
+			foreach ($aIndexedFields as $sDocKey => $sRecordKey){
 				if(!empty($rawData[$sRecordKey])){//makes only sense if we have content
 					$content .= $rawData[$sRecordKey] . ' ';
 					//we add those fields also as own field and not just put it into content
 					if($bAddFields)//do we have a mapping?
 						$indexDoc->addField(
-							$sDocKey, 
+							$sDocKey,
 							$options['keepHtml'] ? $rawData[$sRecordKey] : tx_mksearch_util_Misc::html2plain($rawData[$sRecordKey])
 						);
 				}
 			}
 		}
-		// Decode HTML 
+		// Decode HTML
 		$content = $options['keepHtml'] ? $content : tx_mksearch_util_Misc::html2plain($content);
 		
 		// content besorgen
@@ -182,7 +186,7 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base {
 		// "abstractMaxLength_[your extkey]_[your content type]" as defined at $indexDoc constructor
 		$sAbstract = empty($rawData['short']) ? $bodyText : $rawData['short'];
 		$indexDoc->setAbstract(
-			$options['keepHtml'] ? $sAbstract : tx_mksearch_util_Misc::html2plain($sAbstract), 
+			$options['keepHtml'] ? $sAbstract : tx_mksearch_util_Misc::html2plain($sAbstract),
 			$indexDoc->getMaxAbstractLength()
 		);
 		
@@ -207,7 +211,7 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base {
 //						)
 //					);
 //		$categories = $searcher->search($fields, $options);
-//		
+//
 //		$fields = array();
 //		$options = array(
 //						'what' => 'CAT.uid',
@@ -221,21 +225,21 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base {
 //						'keyField' => 'uid',
 //						'parentField' => 'parent_category',
 //					);
-//					
+//
 		// Additional data
 		$addData = array();
-//					
+//
 //		foreach ($categories as $c) {
 //			$config['startingPoint'] = $c['uid'];
 //			$parents = tx_mksearch_util_Tree::getAncestors($fields, $options, $config);
 //			foreach (array_reverse($parents) as $p)
-//				// Localise records - is this even possible within the first db query cycle (via adjustment of $options)? 
+//				// Localise records - is this even possible within the first db query cycle (via adjustment of $options)?
 //				;
 //			$parentPath = '';
 //		}
 
 		$offset = 0; // TODO: einen offset aus der Config lesen
-		$indexDoc->addField('datetime_dt', 
+		$indexDoc->addField('datetime_dt',
 							tx_mksearch_util_Misc::getISODateFromTimestamp($rawData['datetime'], $offset),
 							'keyword', 1.0, 'date');
 
@@ -253,7 +257,7 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base {
 	 * @param array $aRawData
 	 * @param tx_mksearch_interface_IndexerDocument $oIndexDoc
 	 * @param array $aOptions
-	 * 
+	 *
 	 * @return bool
 	 */
 	protected function stopIndexing($sTableName, $aRawData, tx_mksearch_interface_IndexerDocument $oIndexDoc, $aOptions) {
@@ -285,9 +289,9 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base {
 	
 	/**
 	 * Returns the model to be indexed
-	 * 
+	 *
 	 * @param array $aRawData
-	 * 
+	 *
 	 * @return tx_mksearch_model_irfaq_Question
 	 */
 	protected function createModel(array $aRawData) {
@@ -337,7 +341,7 @@ addPageMetaData.separator = ,
 #
 # in this case the content of the given fields is merged into the "content" field
 # indexedFields = bodytext, short
-# 
+#
 # in this case the content of "image" is mapped to the solr field "image_s"
 # besides the content of the given fields is also merged into "content"
 # indexedFields {
@@ -348,7 +352,7 @@ addPageMetaData.separator = ,
 ### delete from indexing or abort indexing for the record?
  deleteOnAbort = 0
 #
-# Sometimes news with a certain category have specially to 
+# Sometimes news with a certain category have specially to
 # be in- or excluded
 #
 # include{
