@@ -347,7 +347,7 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 	 * @return tx_mksearch_service_internal_Index 
 	 */
 	protected function getIndex() {
-		$indexUid = $this->getConfigurations()->get($confId. 'usedIndex');
+		$indexUid = $this->getConfigurations()->get($this->getConfId(). 'usedIndex');
 		
 		//let's see if we got a index to use via parameters
 		if(empty($indexUid))
