@@ -112,9 +112,10 @@ class tx_mksearch_indexer_TtContent extends tx_mksearch_indexer_Base {
 		$indexDoc->addField('CType', $rawData['CType'], 'keyword');
 
 		if($options['addPageMetaData']) {
+			// @TODO: keywords werden doch immer kommasepariert angegeben, warum mit leerzeichen trennen?
 			$separator = (!empty($options['addPageMetaData.']['separator'])) ? $options['addPageMetaData.']['separator'] : ' ';
 			// @TODO: nur holen was wir benötigen (keywords)
-			//		  konfigurierbar machen: description, author könnte wichtig werden!
+			//		  konfigurierbar machen: description, author, etc. könnte wichtig werden!?
 			$pageData = $this->getPageContent($oModel->record['pid']);
 			if(!empty($pageData[0]['keywords'])) {
 				$keywords = explode($separator, $pageData[0]['keywords']);
