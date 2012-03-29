@@ -307,7 +307,6 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 			$configurations,
 			$confId.'actionLink.',
 			array(
-				'usedIndex' => $configurations->get($this->getConfId().'usedIndex'),
 				'ajax' => 1 //set always true
 			
 			)
