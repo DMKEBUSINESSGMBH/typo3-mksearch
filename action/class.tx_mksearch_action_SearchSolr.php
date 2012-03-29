@@ -78,14 +78,8 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 			if(!array_key_exists('term', $fields))
 				$fields['term'] = '*:*';
 			
-			$indexUid = $configurations->get($confId. 'usedIndex');
-			//let's see if we got a index to use via parameters
-			if(empty($indexUid))
-				$indexUid = $parameters->get('usedIndex');
-				
-			$index = tx_mksearch_util_ServiceRegistry::getIntIndexService()->get($indexUid);
-			if(!$index->isValid())
-				throw new Exception('Configured search index not found!');
+			//get the index we shall search in
+			$index = $this->getIndex();
 				
 			$pageBrowser = $this->handlePageBrowser($parameters, $configurations, $confId, $viewData, $fields, $options, $index);
 			
@@ -307,7 +301,6 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 			$configurations,
 			$confId.'actionLink.',
 			array(
-				'usedIndex' => $configurations->get($this->getConfId().'usedIndex'),
 				'ajax' => 1 //set always true
 			
 			)
@@ -345,6 +338,27 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 		';
 		
 		$GLOBALS['TSFE']->additionalHeaderData[md5($sAutocompleteJS)] = $sAutocompleteJS;
+	}
+	
+	/**
+	 * returns the dataset for the current used index
+	 * 
+	 * @throws Exception
+	 * @return tx_mksearch_service_internal_Index 
+	 */
+	protected function getIndex() {
+		$indexUid = $this->getConfigurations()->get($this->getConfId(). 'usedIndex');
+		
+		//let's see if we got a index to use via parameters
+		if(empty($indexUid))
+			$indexUid = $this->getConfigurations()->getParameters()->get('usedIndex');
+			
+		$index = tx_mksearch_util_ServiceRegistry::getIntIndexService()->get($indexUid);
+			
+		if(!$index->isValid())
+			throw new Exception('Configured search index not found!');
+			
+		return $index;		
 	}
 
 	function getTemplateName() { return 'searchsolr';}
