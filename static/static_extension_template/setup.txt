@@ -318,7 +318,6 @@ plugin.tx_mksearch {
 			actionLink {
 				# Additional parameters
 				# type should be the page type containing the search action
-				# qt is our request handler
 				useKeepVars = 1
 				useKeepVars.add = ::type=540
 				absurl = 1
