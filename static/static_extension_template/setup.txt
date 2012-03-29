@@ -546,6 +546,8 @@ lib.mksearch.extrainfo {
 	}
 }
 
+
+### the configuration for the search plugin on the ajax/autocomplete page
 lib.mksearchAjaxPage =< plugin.tx_mksearch
 lib.mksearchAjaxPage {
 	action = tx_mksearch_action_SearchSolr
