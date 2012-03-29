@@ -44,43 +44,6 @@ tx_rnbase::load('tx_mksearch_util_Misc');
 class tx_mksearch_filter_SolrAutocomplete extends tx_mksearch_filter_SolrBase {
 	
 	/**
-	 * Filter for search form
-	 *
-	 * @param array $fields
-	 * @param array $options
-	 * @param tx_rnbase_parameters $parameters
-	 * @param tx_rnbase_configurations $configurations
-	 * @param string $confId
-	 * @return bool	Should subsequent query be executed at all?
-	 *
-	 */
-	protected function initFilter(&$fields, &$options, &$parameters, &$configurations, $confId) {
-		
-		// @TODO: könnte auch über TS gesetzt sein
-		$usedIndex = $parameters->get('usedIndex');
-		$term = $parameters->get('term');
-		// Es muss ein Submit-Parameter im request liegen, damit der Filter greift
-		// für die solr abfrage benötigen wir dringend den usedIndex und term parameter
-		// sind beide nicht gegeben brauchen wir nicht suchen!
-		if(empty($usedIndex) || empty($term) || !($parameters->offsetExists('submit') || $configurations->get($confId.'force'))) {
-			return false;
-		}
-		
-		// set request handler
-		// should be a request handler dealing with suggestions. take a look in the
-		// default solrconfig.xml and search for a requestHandler named suggest and
-		// the appropiate search component suggest
-		if($requestHandler = $parameters->get('qt'))
-			$options['qt'] = $requestHandler;
-			
-		// suchstring beachten
-		$this->handleTerm($fields, $parameters, $configurations, $confId);
-		
-		
-		return true;
-	}
-
-	/**
 	 * Fügt den Suchstring zu dem Filter hinzu.
 	 *
 	 * @param 	array 						$fields

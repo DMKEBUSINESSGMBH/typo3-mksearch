@@ -999,24 +999,26 @@
     </lst>
   </requestHandler>
   
-  <!-- Autocomplete -->
-  <!-- the slash makes it possible to call this handler via an url, which is needed
-  if the autocomplete index shall be built -->
-<!-- for more information on how to configure autocomplete take a look into the Solr Wiki
+   <!-- Autocomplete -->
+<!-- for more information on how to configure autocomplete take a look into the Solr Wiki 
 (http://wiki.apache.org/solr/SpellCheckComponent) or here:
 http://solr.pl/en/2010/11/15/solr-and-autocomplete-part-2/ -->  
-  <requestHandler name="/suggest" class="org.apache.solr.handler.component.SearchHandler">
-	 <lst name="defaults">
-	  <str name="spellcheck">true</str>
-	  <str name="spellcheck.dictionary">suggest</str>
-	  <str name="spellcheck.count">10</str>
-	  <!-- shouldn't be taken as words like "ein" and so on are the most popular -->
-	  <!--str name="spellcheck.onlyMorePopular">true</str-->
-	 </lst>
-	 <arr name="components">
-	  <str>suggest</str>
-	 </arr>
-  </requestHandler>
+  <!-- the slash makes it possible to call this handler via an url, which is needed
+  if the autocomplete index shall be built -->
+	<requestHandler name="/suggest" class="org.apache.solr.handler.component.SearchHandler">
+		<lst name="defaults">
+			<str name="spellcheck">true</str>
+			<str name="spellcheck.dictionary">suggest_fst</str>
+			<str name="spellcheck.count">10</str>
+			<str name="spellcheck.collate">false</str>
+			<!-- NOTE: if this is false, results are alpha-ordered, not by weight! -->
+			<str name="spellcheck.onlyMorePopular">true</str>
+		</lst>
+		<!-- register the search component so we can use the suggest/autocomplete search component -->
+		<arr name="components">
+			<str>suggest_fst</str>
+		</arr>
+	</requestHandler>
   
   <!-- Solr Replication
 
@@ -1087,24 +1089,32 @@ http://solr.pl/en/2010/11/15/solr-and-autocomplete-part-2/ -->
      -->
 
 <!-- for more information on how to configure autocomplete take a look into the Solr Wiki 
-(http://wiki.apache.org/solr/SpellCheckComponent) or here:
+(http://wiki.apache.org/solr/SpellCheckComponent and http://wiki.apache.org/solr/Suggester) or here:
 http://solr.pl/en/2010/11/15/solr-and-autocomplete-part-2/ -->
-  <searchComponent name="suggest" class="solr.SpellCheckComponent">
-
-    <str name="queryAnalyzerFieldType">textSpell</str>
-
-    <lst name="spellchecker">
-      <str name="name">suggest</str>
-      <!-- the text field containing the text which should be searched for autocomplete purposes.
-      Take a look at the field type text_auto_word and lowercase in the schema.xml-->
-      <str name="field">text_auto</str>
-      <str name="spellcheckIndexDir">spellchecker</str>
-      <str name="classname">org.apache.solr.spelling.suggest.Suggester</str>
-  	  <str name="lookupImpl">org.apache.solr.spelling.suggest.tst.TSTLookup</str>
-  	  <str name="accuracy">0.7</str>
-  	  <!-- build on every commit/update? -->
-  	  <!--str name="buildOnCommit">true</str-->
-    </lst>
+	
+	<!-- is this thing just configured globally or wtf is going on here?! -->
+	<!-- our own query converter supports phrases. default contains a whitespace tokenizer so we
+		can not suggest phrases. place this .jar simply in $SOLRHOME/lib. If lib folder does not exist, create it! -->
+   <queryConverter name="queryConverter" class="org.dmk.solr.spelling.MultiWordSpellingQueryConverter"/>
+   
+   <searchComponent name="suggest_fst" class="solr.SpellCheckComponent">
+		<lst name="spellchecker">
+			<str name="name">suggest_fst</str>
+			<!-- the field we use for index building. should be filled with all the information
+				considered for autocomplete. -->
+			<str name="field">text_autocomplete_phrases</str>
+			<str name="classname">org.apache.solr.spelling.suggest.Suggester</str>
+			<!-- uses not much memory and is very fast -->
+			<str name="lookupImpl">org.apache.solr.spelling.suggest.fst.FSTLookup</str>
+			<!-- the directory we store our index data for suggestions. -->
+			<str name="storeDir">suggest_fst</str>
+			<str name="buildOnOptimize">true</str>
+			<!-- Suggester properties -->
+			<bool name="exactMatchFirst">true</bool>
+			<!-- what does this exactly mean? taken from Solr Book "Apache Solr 3 Enterprise Search Server"
+      			page 224 -->
+			<int name="weightBuckets">100</int>
+		</lst>
 
     <!-- a spellchecker that uses a different distance measure
     <lst name="spellchecker">

@@ -320,7 +320,7 @@ plugin.tx_mksearch {
 				# type should be the page type containing the search action
 				# qt is our request handler
 				useKeepVars = 1
-				useKeepVars.add = qt= , ::type=540
+				useKeepVars.add = ::type=540
 				absurl = 1
 				noHash = 1
 			}
@@ -546,25 +546,34 @@ lib.mksearch.extrainfo {
 	}
 }
 
+lib.mksearchAjaxPage =< plugin.tx_mksearch
+lib.mksearchAjaxPage {
+	action = tx_mksearch_action_SearchSolr
+	searchsolr{
+		filter = tx_mksearch_filter_SolrAutocomplete
+		filter{
+			### warum werden beide auf force gesetzt? von Hannes gefragt
+			default.force = 1
+			dismax.force = 1
+		}
+		requestHandler = /suggest
+		usedIndex = 1
+	}
+}
+
 ### our own page type for the autocomplete plugin so we dont have to init
 ### the complete TYPO3
 mksearchAjaxPage = PAGE
 mksearchAjaxPage {
-  typeNum=540
-  config.disableAllHeaderCode = 1
-  config.metaCharset = utf-8
-  ### X-Robots-Tag, wir wollen vermeiden, dass der inhalt des calls indiziert wird.
-  config.additionalHeaders = Content-Type: text/plain; charset=utf-8|X-Robots-Tag: noindex;
-  config.xhtml_cleaning = 0
-  config.admPanel = 0
-  config.sendNoCacheHeaders = 1
-  config.no_cache = 1
-
-	10 =< plugin.tx_mksearch
-	10 {
-		action = tx_mksearch_action_SearchSolr
-		searchsolr.filter = tx_mksearch_filter_SolrAutocomplete
-		searchsolr.filter.default.force = 1
-		searchsolr.filter.dismax.force = 1
-	}
+  	typeNum=540
+ 	config.disableAllHeaderCode = 1
+  	config.metaCharset = utf-8
+  	### X-Robots-Tag, wir wollen vermeiden, dass der inhalt des calls indiziert wird.
+  	config.additionalHeaders = Content-Type: text/plain; charset=utf-8|X-Robots-Tag: noindex;
+  	config.xhtml_cleaning = 0
+  	config.admPanel = 0
+  	config.sendNoCacheHeaders = 1
+  	config.no_cache = 1
+  	
+  	10 =< lib.mksearchAjaxPage
 }
