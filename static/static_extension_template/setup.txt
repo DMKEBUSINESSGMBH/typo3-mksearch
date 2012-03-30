@@ -553,7 +553,9 @@ lib.mksearchAjaxPage {
 	searchsolr{
 		filter = tx_mksearch_filter_SolrAutocomplete
 		filter{
-			### warum werden beide auf force gesetzt? von Hannes gefragt
+			### wir setzen beide varianten auf force,
+			## da wir im autocomplete immer eine suche ausführen wollen
+			## und nicht wissen welche genutzt wird.
 			default.force = 1
 			dismax.force = 1
 		}
