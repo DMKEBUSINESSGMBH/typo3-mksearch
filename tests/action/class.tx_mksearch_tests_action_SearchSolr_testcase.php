@@ -180,7 +180,7 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends Tx_Phpunit_TestCase {
 			jQuery(myElementSelector).autocomplete({
 				source: function( request, response ) {
 					jQuery.ajax({
-						url: "http://'.t3lib_div::getIndpEnv('TYPO3_HOST_ONLY').'/?id=1&type=540&mksearch%5Bajax%5D=1&mksearch[term]="+encodeURIComponent(request.term),
+						url: "'.t3lib_div::getIndpEnv('TYPO3_SITE_URL').'?id=1&type=540&mksearch%5Bajax%5D=1&mksearch[term]="+encodeURIComponent(request.term),
 						dataType: "json",
 						success: function( data ) {
 							var suggestions = [];
@@ -252,7 +252,7 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends Tx_Phpunit_TestCase {
 			jQuery(myElementSelector).autocomplete({
 				source: function( request, response ) {
 					jQuery.ajax({
-						url: "http://'.t3lib_div::getIndpEnv('TYPO3_HOST_ONLY').'/?id=1&type=540&mksearch%5Bajax%5D=1&mksearch[term]="+encodeURIComponent(request.term),
+						url: "'.t3lib_div::getIndpEnv('TYPO3_SITE_URL').'?id=1&type=540&mksearch%5Bajax%5D=1&mksearch[term]="+encodeURIComponent(request.term),
 						dataType: "json",
 						success: function( data ) {
 							var suggestions = [];
@@ -327,7 +327,7 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends Tx_Phpunit_TestCase {
 			jQuery(myElementSelector).autocomplete({
 				source: function( request, response ) {
 					jQuery.ajax({
-						url: "http://'.t3lib_div::getIndpEnv('TYPO3_HOST_ONLY').'/?id=1&type=540&mksearch%5Bajax%5D=1&mksearch[term]="+encodeURIComponent(request.term),
+						url: "'.t3lib_div::getIndpEnv('TYPO3_SITE_URL').'?id=1&type=540&mksearch%5Bajax%5D=1&mksearch[term]="+encodeURIComponent(request.term),
 						dataType: "json",
 						success: function( data ) {
 							var suggestions = [];
