@@ -43,7 +43,6 @@ tx_rnbase::load('Tx_Phpunit_Framework');
  */
 class tx_mksearch_tests_action_SearchSolr_testcase extends Tx_Phpunit_TestCase {
 	
-	protected $aBackups = array();
 	public function setUp() {
 		// logoff für phpmyadmin deaktivieren. ist nicht immer notwendig
 		// aber sollte auch nicht stören!
@@ -67,19 +66,14 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends Tx_Phpunit_TestCase {
 			}
 		}
 		
-		$this->aBackups['header'] = $GLOBALS['TSFE']->additionalHeaderData;
+		$framework = new Tx_Phpunit_Framework('dummy');
+		$framework->createFakeFrontEnd();
+		
+		//reset to see if filled correct
 		$GLOBALS['TSFE']->additionalHeaderData = null;
 		
 		//damit links generiert werden können
-		$this->aBackups['sysPage'] = $GLOBALS['TSFE']->sys_page;
 		$GLOBALS['TSFE']->sys_page = tx_rnbase_util_TYPO3::getSysPage();
-		$framework = new Tx_Phpunit_Framework('dummy');
-		$framework->createFakeFrontEnd();
-	}
-	
-	protected function tearDown() {
-		$GLOBALS['TSFE']->sys_page = $this->aBackups['sysPage'];
-		$GLOBALS['TSFE']->additionalHeaderData = $this->aBackups['header'];
 	}
 	
 	/**
