@@ -43,6 +43,12 @@ tx_rnbase::load('Tx_Phpunit_Framework');
  */
 class tx_mksearch_tests_action_SearchSolr_testcase extends Tx_Phpunit_TestCase {
 	
+	/**
+	 * unsere link id. entweder die id oder der alias wenn gesetzt
+	 * @var string or integer
+	 */
+	protected $linkId  = '';
+	
 	public function setUp() {
 		// logoff für phpmyadmin deaktivieren. ist nicht immer notwendig
 		// aber sollte auch nicht stören!
@@ -74,6 +80,11 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends Tx_Phpunit_TestCase {
 		
 		//damit links generiert werden können
 		$GLOBALS['TSFE']->sys_page = tx_rnbase_util_TYPO3::getSysPage();
+		
+		//wir brauchen noch die id/alias für den link, der genriert wird
+		$this->linkId = $GLOBALS['TSFE']->page['alias'] ? 
+						$GLOBALS['TSFE']->page['alias'] : 
+						$GLOBALS['TSFE']->page['uid'];
 	}
 	
 	/**
@@ -180,7 +191,7 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends Tx_Phpunit_TestCase {
 			jQuery(myElementSelector).autocomplete({
 				source: function( request, response ) {
 					jQuery.ajax({
-						url: "?id='.$GLOBALS['TSFE']->id.'&type=540&mksearch%5Bajax%5D=1&mksearch[term]="+encodeURIComponent(request.term),
+						url: "?id='.$this->linkId.'&type=540&mksearch%5Bajax%5D=1&mksearch[term]="+encodeURIComponent(request.term),
 						dataType: "json",
 						success: function( data ) {
 							var suggestions = [];
@@ -250,7 +261,7 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends Tx_Phpunit_TestCase {
 			jQuery(myElementSelector).autocomplete({
 				source: function( request, response ) {
 					jQuery.ajax({
-						url: "?id='.$GLOBALS['TSFE']->id.'&type=540&mksearch%5Bajax%5D=1&mksearch[term]="+encodeURIComponent(request.term),
+						url: "?id='.$this->linkId.'&type=540&mksearch%5Bajax%5D=1&mksearch[term]="+encodeURIComponent(request.term),
 						dataType: "json",
 						success: function( data ) {
 							var suggestions = [];
@@ -323,7 +334,7 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends Tx_Phpunit_TestCase {
 			jQuery(myElementSelector).autocomplete({
 				source: function( request, response ) {
 					jQuery.ajax({
-						url: "?id='.$GLOBALS['TSFE']->id.'&type=540&mksearch%5Bajax%5D=1&mksearch[term]="+encodeURIComponent(request.term),
+						url: "?id='.$this->linkId.'&type=540&mksearch%5Bajax%5D=1&mksearch[term]="+encodeURIComponent(request.term),
 						dataType: "json",
 						success: function( data ) {
 							var suggestions = [];
