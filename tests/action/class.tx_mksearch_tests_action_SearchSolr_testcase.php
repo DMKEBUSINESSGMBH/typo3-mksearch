@@ -151,8 +151,6 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends Tx_Phpunit_TestCase {
 				'minLength' => 2,
 				'elementSelector' => 'myElementSelector',
 				'actionLink.' => array(
-					'absurl' => 1,
-					'pid' => $GLOBALS['TSFE']->id,
 					'useKeepVars' => 1,
 					'useKeepVars.' => array(
 						'add' => '::type=540'
@@ -181,7 +179,7 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends Tx_Phpunit_TestCase {
 			jQuery(myElementSelector).autocomplete({
 				source: function( request, response ) {
 					jQuery.ajax({
-						url: "'.t3lib_div::getIndpEnv('TYPO3_SITE_URL').'?id='.$GLOBALS['TSFE']->id.'&type=540&mksearch%5Bajax%5D=1&mksearch[term]="+encodeURIComponent(request.term),
+						url: "?id='.$GLOBALS['TSFE']->id.'&type=540&mksearch%5Bajax%5D=1&mksearch[term]="+encodeURIComponent(request.term),
 						dataType: "json",
 						success: function( data ) {
 							var suggestions = [];
@@ -220,8 +218,6 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends Tx_Phpunit_TestCase {
 				'minLength' => 2,
 				'elementSelector' => 'myElementSelector',
 				'actionLink.' => array(
-					'absurl' => 1,
-					'pid' => $GLOBALS['TSFE']->id,
 					'useKeepVars' => 1,
 					'useKeepVars.' => array(
 						'add' => '::type=540'
@@ -253,7 +249,7 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends Tx_Phpunit_TestCase {
 			jQuery(myElementSelector).autocomplete({
 				source: function( request, response ) {
 					jQuery.ajax({
-						url: "'.t3lib_div::getIndpEnv('TYPO3_SITE_URL').'?id='.$GLOBALS['TSFE']->id.'&type=540&mksearch%5Bajax%5D=1&mksearch[term]="+encodeURIComponent(request.term),
+						url: "?id='.$GLOBALS['TSFE']->id.'&type=540&mksearch%5Bajax%5D=1&mksearch[term]="+encodeURIComponent(request.term),
 						dataType: "json",
 						success: function( data ) {
 							var suggestions = [];
@@ -295,8 +291,6 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends Tx_Phpunit_TestCase {
 				'minLength' => 2,
 				'elementSelector' => 'myElementSelector',
 				'actionLink.' => array(
-					'absurl' => 1,
-					'pid' => $GLOBALS['TSFE']->id,
 					'useKeepVars' => 1,
 					'useKeepVars.' => array(
 						'add' => '::type=540'
@@ -328,7 +322,7 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends Tx_Phpunit_TestCase {
 			jQuery(myElementSelector).autocomplete({
 				source: function( request, response ) {
 					jQuery.ajax({
-						url: "'.t3lib_div::getIndpEnv('TYPO3_SITE_URL').'?id='.$GLOBALS['TSFE']->id.'&type=540&mksearch%5Bajax%5D=1&mksearch[term]="+encodeURIComponent(request.term),
+						url: "?id='.$GLOBALS['TSFE']->id.'&type=540&mksearch%5Bajax%5D=1&mksearch[term]="+encodeURIComponent(request.term),
 						dataType: "json",
 						success: function( data ) {
 							var suggestions = [];
