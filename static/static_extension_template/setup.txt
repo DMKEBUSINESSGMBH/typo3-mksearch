@@ -400,7 +400,7 @@ plugin.tx_mksearch {
 		### aktueller Suchbegriff
 		plugin.dcsearchterm = TEXT
 		plugin.dcsearchterm {
-			data = GPvar:mksearch|term
+			data = GP:mksearch|term
 			stdWrap.htmlSpecialChars = 1
 			### nur wenn nicht leer ausgeben
 			required = 1
