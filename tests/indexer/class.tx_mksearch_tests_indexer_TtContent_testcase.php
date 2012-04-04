@@ -78,6 +78,9 @@ class tx_mksearch_tests_indexer_TtContent_testcase extends tx_phpunit_testcase {
 	function test_prepareSearchData_CheckIgnoreContentType() {
 		$indexer = new tx_mksearch_indexer_TtContent();
 		list($extKey, $cType) = $indexer->getContentType();
+		//content type correct?
+		$this->assertEquals('core',$extKey,'wrong ext key');
+		$this->assertEquals('tt_content',$cType,'wrong cType');
 
 		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
 		$record = array('uid'=> 123, 'pid' => 1, 'deleted' => 0, 'hidden' => 0, 'sectionIndex' => 1, 'CType'=>'list', 'header' => 'test');
