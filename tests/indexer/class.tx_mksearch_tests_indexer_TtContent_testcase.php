@@ -80,7 +80,7 @@ class tx_mksearch_tests_indexer_TtContent_testcase extends tx_phpunit_testcase {
 		list($extKey, $cType) = $indexer->getContentType();
 
 		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
-		$record = array('uid'=> 123, 'deleted' => 0, 'hidden' => 0, 'sectionIndex' => 1, 'CType'=>'list', 'header' => 'test');
+		$record = array('uid'=> 123, 'pid' => 1, 'deleted' => 0, 'hidden' => 0, 'sectionIndex' => 1, 'CType'=>'list', 'header' => 'test');
 		$options = self::getDefaultOptions();
 		$options['ignoreCTypes.'] = array('search','mailform','login');
 		$result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
@@ -108,7 +108,7 @@ class tx_mksearch_tests_indexer_TtContent_testcase extends tx_phpunit_testcase {
 		$indexer = new tx_mksearch_indexer_TtContent();
 		list($extKey, $cType) = $indexer->getContentType();
 
-		$record = array('uid'=> 123, 'deleted' => 0, 'hidden' => 0, 'sectionIndex' => 1, 'CType'=>'list', 'header' => 'test');
+		$record = array('uid'=> 123, 'pid' => 1, 'deleted' => 0, 'hidden' => 0, 'sectionIndex' => 1, 'CType'=>'list', 'header' => 'test');
 		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
 		$options = self::getDefaultOptions();
 		$options['includeCTypes.'] = array('search','mailform','login');
