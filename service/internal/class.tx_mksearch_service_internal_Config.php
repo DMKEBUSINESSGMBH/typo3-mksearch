@@ -29,14 +29,14 @@ tx_rnbase::load('tx_mksearch_service_internal_Base');
  * Service for accessing indexer configuration models from database
  */
 class tx_mksearch_service_internal_Config extends tx_mksearch_service_internal_Base {
-	
+
 	/**
 	 * Search class of this service
 	 *
 	 * @var string
 	 */
 	protected $searchClass = 'tx_mksearch_search_Config';
-	
+
 
 	/**
 	 * Search database for all configurated Indices
@@ -48,6 +48,38 @@ class tx_mksearch_service_internal_Config extends tx_mksearch_service_internal_B
 		$fields['CMPCFGMM.uid_local'][OP_EQ_INT] = $composite->getUid();
 // 		$options['debug']=1;
 		return $this->search($fields, $options);
+	}
+
+	/**
+	 *
+	 * Enter description here ...
+	 * @param tx_mksearch_model_internal_Index $index
+	 * @return array()
+	 */
+	public function getIndexerOptionsByIndex(tx_mksearch_model_internal_Index $index) {
+		$fields = array(
+			'CFG.hidden'	=> array(OP_EQ_INT => 0),
+			'CMP.hidden'	=> array(OP_EQ_INT => 0),
+			'INDX.hidden'	=> array(OP_EQ_INT => 0),
+			'INDX.uid' 		=> array(OP_EQ_INT => $index->uid),
+		);
+		$options = array(
+			'orderby' => array(
+				'INDXCMPMM.sorting' => 'ASC',
+				'CMPCFGMM.sorting' => 'ASC',
+			),
+// 			'debug' => 1,
+		);
+		$tmpCfg = $this->search($fields, $options);
+
+		//use the uid of the index config as key to be able to
+		//get different configs for the same contenttype
+		foreach ($tmpCfg as $oModel) {
+			$sTs .= $oModel->record['extkey'] . '.' . $oModel->record['contenttype'] . '.' . $oModel->record['uid'] . " {\n" .
+			$oModel->record['configuration'] . "\n}\n";
+		}
+
+		return tx_mksearch_util_Misc::parseTsConfig($sTs);
 	}
 }
 

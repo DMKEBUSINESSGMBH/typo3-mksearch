@@ -38,7 +38,7 @@ class tx_mksearch_model_internal_Index extends tx_rnbase_model_base {
 	 * @var tx_mksearch_interface_SearchEngine
 	 */
 	private $indexSrv = null;
-	
+
 	/**
 	 * Return this model's table name
 	 *
@@ -80,52 +80,26 @@ class tx_mksearch_model_internal_Index extends tx_rnbase_model_base {
 	public function getIndexerOptions() {
 		if(!$this->options) {
 			// Prepare search of configurations
-			$srv = tx_mksearch_util_ServiceRegistry::getIntConfigService();
-			$fields = array(
-					'CFG.hidden'	=> array(OP_EQ_INT => 0),
-					'CMP.hidden'	=> array(OP_EQ_INT => 0),
-					'INDX.hidden'	=> array(OP_EQ_INT => 0),
-					'INDX.uid' 		=> array(OP_EQ_INT => $this->uid),
-			);
-			$options = array(
-				'orderby' => array(
-								'INDXCMPMM.sorting' => 'ASC',
-								'CMPCFGMM.sorting' => 'ASC',
-							),
-	//			'debug' => 1,
-			);
-			$tmpCfg = $srv->search($fields, $options);
-			
-			//use the uid of the index config as key to be able to
-			//get different configs for the same contenttype
-			foreach ($tmpCfg as $oModel) {
-				$sTs .= $oModel->record['extkey'] . '.' . $oModel->record['contenttype'] . '.' . $oModel->record['uid'] . " {\n" .
-					$oModel->record['configuration'] . "\n}\n";
-			}
-			$this->options = $this->parseTsConfig($sTs);
+			$this->options = tx_mksearch_util_ServiceRegistry::getIntConfigService()
+				->getIndexerOptionsByIndex($this);
+
+			// get default configuation from composite
+			$this->options['default'] = tx_mksearch_util_ServiceRegistry::getIntCompositeService()
+				->getIndexerOptionsByIndex($this);
+
 		}
 		return $this->options;
 	}
-	
-	/**
-	 * Parse the configuration of the given models
-	 * @param string $sTs
-	 */
-	private function parseTsConfig($sTs) {
-		/* @var $TSparserObject t3lib_tsparser */
-		$TSparserObject = t3lib_div::makeInstance('t3lib_tsparser');
-		$TSparserObject->parse($sTs);
-		return $TSparserObject->setup;
-	}
-	
+
 	/**
 	 * Returns the confiration for this index
 	 * @param tx_mksearch_model_internal_Index $oIndex
 	 */
 	public function getIndexConfig() {
-		 return $this->parseTsConfig("{\n" . $this->record['configuration'] . "\n}");
+		tx_rnbase::load('tx_mksearch_util_Misc');
+		return tx_mksearch_util_Misc::parseTsConfig("{\n" . $this->record['configuration'] . "\n}");
 	}
-	
+
 	function __toString() {
 		$out = get_class($this). "\n\nRecord:\n";
 		while (list($key,$val)=each($this->record))	{
@@ -135,10 +109,10 @@ class tx_mksearch_model_internal_Index extends tx_rnbase_model_base {
 		while (list($key,$val)=each($this->getIndexerOptions()))	{
 			$out .= $key. ' = ' . $val . "\n";
 		}
-		
+
 		reset($this->record);
 		return $out; //t3lib_div::view_array($this->record);
-		
+
 	}
 }
 

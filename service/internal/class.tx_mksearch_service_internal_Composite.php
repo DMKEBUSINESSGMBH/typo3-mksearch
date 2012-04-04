@@ -29,14 +29,14 @@ tx_rnbase::load('tx_mksearch_service_internal_Base');
  * Service for accessing indexer configuration composite models from database
  */
 class tx_mksearch_service_internal_Composite extends tx_mksearch_service_internal_Base {
-	
+
 	/**
 	 * Search class of this service
 	 *
 	 * @var string
 	 */
 	protected $searchClass = 'tx_mksearch_search_Composite';
-	
+
 	/**
 	 * Search database for all configurated Indices
 	 *
@@ -58,6 +58,33 @@ class tx_mksearch_service_internal_Composite extends tx_mksearch_service_interna
 		$fields['INDXCMPMM.uid_local'][OP_EQ_INT] = $index->getUid();
 // 		$options['debug']=1;
 		return $this->search($fields, $options);
+	}
+
+	/**
+	 *
+	 * Enter description here ...
+	 * @param tx_mksearch_model_internal_Index $index
+	 * @return array()
+	 */
+	public function getIndexerOptionsByIndex(tx_mksearch_model_internal_Index $index) {
+		$fields = array(
+			'CMP.hidden'	=> array(OP_EQ_INT => 0),
+			'INDX.hidden'	=> array(OP_EQ_INT => 0),
+			'INDX.uid' 		=> array(OP_EQ_INT => $index->uid),
+		);
+		$options = array(
+			'orderby' => array(
+				'INDXCMPMM.sorting' => 'ASC',
+			),
+// 			'debug' => 1,
+		);
+		$tmpCfg = $this->search($fields, $options);
+		foreach ($tmpCfg as $oModel) {
+			$sTs .= "{\n" . $oModel->record['configuration'] . "\n}";
+		}
+
+		tx_rnbase::load('tx_mksearch_util_Misc');
+		return tx_mksearch_util_Misc::parseTsConfig($sTs);
 	}
 }
 

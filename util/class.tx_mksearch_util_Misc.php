@@ -145,6 +145,20 @@ class tx_mksearch_util_Misc {
 		$remoteAddress = trim(strcmp($remoteAddress, '') ? $remoteAddress : t3lib_div::getIndpEnv('REMOTE_ADDR'));
 		return t3lib_div::cmpIP($remoteAddress, $devIPmask);
 	}
+
+
+
+	/**
+	 * Parse the configuration of the given models
+	 * @param string $sTs
+	 */
+	public static function parseTsConfig($sTs) {
+		/* @var $TSparserObject t3lib_tsparser */
+		$TSparserObject = t3lib_div::makeInstance('t3lib_tsparser');
+		$TSparserObject->parse($sTs);
+		return $TSparserObject->setup;
+	}
+
 }
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_Misc.php'])	{
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_Misc.php']);

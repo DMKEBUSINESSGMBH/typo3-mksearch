@@ -47,6 +47,7 @@
 			<label index="tx_mksearch_configcomposites.description">Description</label>
 			<label index="tx_mksearch_configcomposites.indices">Assigned to indices</label>
 			<label index="tx_mksearch_configcomposites.configs">Connected index configurations</label>
+			<label index="tx_mksearch_configcomposites.configuration">Default Configuration for index configurations</label>
 			
 			<label index="tx_mksearch_indexerconfigs">Indexer configuration</label>
 			<label index="tx_mksearch_indexerconfigs.hidden">Hidden, i.e. configuration is disabled</label>

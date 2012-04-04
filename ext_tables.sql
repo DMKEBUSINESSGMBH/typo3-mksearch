@@ -38,6 +38,7 @@ CREATE TABLE tx_mksearch_configcomposites (
 	hidden tinyint(4) DEFAULT '0' NOT NULL,
 	title varchar(100) DEFAULT '' NOT NULL,
 	description text,
+	configuration text,
 	indices int(11) DEFAULT '0' NOT NULL,
 	configs int(11) DEFAULT '0' NOT NULL,
 	PRIMARY KEY (uid),

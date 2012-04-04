@@ -294,6 +294,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 		try {
 			// Loop through all active indices, collecting all configurations
 			foreach ($indices as $index) {
+				/* @var $index tx_mksearch_model_internal_Index */
 				tx_rnbase_util_Logger::debug('[INDEXQUEUE] Next index is '.$index->getTitle(), 'mksearch');
 				// Container for all documents to be indexed / deleted
 				$indexDocs = array();
@@ -331,6 +332,10 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 								//isn't taken by both indexer configs as the doc of the element for
 								//the first config will be overwritten by the second one
 								foreach ($indexConfig[$extKey.'.'][$contentType.'.'] as $aConfigByContentType){
+									// config mit der default config mergen, falls vorhanden
+									if (is_array($indexConfig['default'][$extKey.'.'][$contentType.'.']))
+										$aConfigByContentType = t3lib_div::array_merge_recursive_overrule(
+											$indexConfig['default'][$extKey.'.'][$contentType.'.'], $aConfigByContentType);
 									// indizieren!
 									$doc = $indexer->prepareSearchData($queueRecord['tablename'], $record, $searchEngine->makeIndexDocInstance($extKey, $contentType), $aConfigByContentType);
 									if($doc) {

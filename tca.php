@@ -126,7 +126,7 @@ $TCA['tx_mksearch_indices'] = array (
 $TCA['tx_mksearch_configcomposites'] = array (
 	'ctrl' => $TCA['tx_mksearch_configcomposites']['ctrl'],
 	'interface' => array (
-		'showRecordFieldList' => 'hidden,title,description,indices,configs'
+		'showRecordFieldList' => 'hidden,title,description,indices,configs,configuration'
 	),
 	'feInterface' => $TCA['tx_mksearch_configcomposites']['feInterface'],
 	'columns' => array (
@@ -250,9 +250,22 @@ $TCA['tx_mksearch_configcomposites'] = array (
 				),
 			)
 		),
+		'configuration' => array (
+			'exclude' => 0,
+			'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_configcomposites.configuration',
+			'config' => array (
+				'type' => 'text',
+				'cols' => '200',
+				'rows' => '50',
+				'default' => '### Insert the default indexer configuration here'.PHP_EOL.
+							'# extkey.contenttype {'.PHP_EOL.
+							'#     default config here.'.PHP_EOL.
+							'# }',
+			),
+		),
 	),
 	'types' => array (
-		'0' => array('showitem' => 'hidden;;1, title, description, indices, configs')
+		'0' => array('showitem' => 'hidden;;1, title, description, indices, configs, configuration')
 	),
 	'palettes' => array (
 		'1' => array('showitem' => '')
