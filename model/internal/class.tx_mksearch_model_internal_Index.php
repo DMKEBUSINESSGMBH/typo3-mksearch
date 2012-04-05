@@ -103,6 +103,7 @@ class tx_mksearch_model_internal_Index extends tx_rnbase_model_base {
 			 *  		composite 2 ist default für indexer 3 und 4
 			 *  		composite 3 ist default für indexer 1 und 3, aber ohne default von composite 1 und 2.
 			 *  @TODO: umstellen!
+			 *  @XXX: enthält self::getIndexConfig() ebenfalls default konfigurationen?
 			 */
 
 			// Prepare search of configurations

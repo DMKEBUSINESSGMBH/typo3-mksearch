@@ -45,7 +45,7 @@ class tx_mksearch_mod1_decorator_Index {
 	 * @param string $value
 	 * @param string $colName
 	 * @param array $record
-	 * @param array $item
+	 * @param tx_mksearch_model_internal_Index $item
 	 */
 	public function format($value, $colName, $record, $item) {
 		$ret = '';
@@ -86,7 +86,7 @@ class tx_mksearch_mod1_decorator_Index {
 			default:
 				$ret = $value;
 		}
-		
+
 		return $ret;
 	}
 
@@ -111,7 +111,7 @@ class tx_mksearch_mod1_decorator_Index {
 	 */
 	public function getIndexInfo(tx_mksearch_model_internal_Index $item, $options=array()){
 		$formtool = $this->getModule()->getFormTool();
-		
+
 		$out  = '';
 		$out .= $formtool->createEditLink($item->getTableName(), $item->getUid(), '');
 		$out .= $item->getTitle();

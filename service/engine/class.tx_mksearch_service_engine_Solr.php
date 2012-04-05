@@ -46,7 +46,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 	 *
 	 * @var Apache_Solr_Service
 	 */
-	private $index;
+	private $index = null;
 
 	/**
 	 * Name of the currently open index
@@ -54,6 +54,11 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 	 * @var string
 	 */
 	private $indexName;
+
+	/**
+	 * @var tx_mksearch_model_internal_Index
+	 */
+	private $indexModel = null;
 
 	/**
 	 * Constructor
@@ -238,7 +243,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 
 			if($options['debug']) {
 				$ret['debug'] = get_object_vars($response->debug);
-				t3lib_div::debug(array($options, $ret), 'class.tx_mksearch_service_engine_Solr.php Line: '.__LINE__); // TODO: remove me
+				tx_rnbase_util_Debug::debug(array($options, $ret), 'class.tx_mksearch_service_engine_Solr.php Line: '.__LINE__); // TODO: remove me
 			}
 		}
 		catch(Exception $e) {
@@ -489,8 +494,8 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 				$this->getSolr()->addDocument($solrDoc);
 			}
 		} catch (Apache_Solr_HttpTransportException $e) {
-			tx_rnbase_util_Logger::fatal('[SOLR] Adding document to Solr failed.', 'mksearch', 
-				array('Exception' => $e->getMessage(), 'lastUrl' => $this->getSolr()->lastUrl, 
+			tx_rnbase_util_Logger::fatal('[SOLR] Adding document to Solr failed.', 'mksearch',
+				array('Exception' => $e->getMessage(), 'lastUrl' => $this->getSolr()->lastUrl,
 						'doc' => $this->getFields4Doc($solrDoc),
 						'solrResponse'=>$e->getResponse()->getRawResponse()));
 			throw $e;
@@ -599,7 +604,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 
 			if($options['debug']) {
 				$ret['debug'] = get_object_vars($response->debug);
-				t3lib_div::debug(array($options, $ret), 'class.tx_mksearch_service_engine_Solr.php Line: '.__LINE__); // TODO: remove me
+				tx_rnbase_util_Debug::debug(array($options, $ret), 'class.tx_mksearch_service_engine_Solr.php Line: '.__LINE__); // TODO: remove me
 			}
 		}
 		catch(Exception $e) {
@@ -628,6 +633,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 	 * @return tx_mksearch_util_Status
 	 */
 	public function getStatus() {
+		/* @var $status tx_mksearch_util_Status */
 		$status = tx_rnbase::makeInstance('tx_mksearch_util_Status');
 		$id = 1;
 		$msg = 'Up and running';
@@ -692,6 +698,22 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 		//and execute the command
 		$oSolr->getHttpTransport()->performHeadRequest($sUrl,array(),'application/xml; charset=UTF-8');
 	}
+
+
+	/**
+	 * Resets the service!
+	 *
+	 * @return	void
+	 */
+	function reset() {
+		parent::reset();
+		unset($this->index);
+		unset($this->indexModel);
+		$this->index = null;
+		$this->indexName = null;
+		$this->indexModel = null;
+	}
+
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/service/engine/class.tx_mksearch_service_engine_Solr.php'])	{
