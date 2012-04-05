@@ -79,6 +79,32 @@ class tx_mksearch_model_internal_Index extends tx_rnbase_model_base {
 	 */
 	public function getIndexerOptions() {
 		if(!$this->options) {
+
+			/*
+			 * momentan werden hier normal die konfigurationen der indexer ausgelesen.
+			 * zusätzlich werden die konfigurationen der composites ausgelesen und später zusammen gemerged.
+			 *  1. besser wäre, dies hier zu mergen!
+			 *  2. haben wir das problem, das sich mehrere composites gegenseite ergänzen
+			 *     und sich auf alle indexer auswirken.
+			 *   Beispiel:
+			 *  	composite 1
+			 *  		indexer 1
+			 *  		indexer 2
+			 *  	composite 2
+			 *  		indexer 3
+			 *  		indexer 4
+			 *  	composite 3
+			 *  		indexer 1
+			 *  		indexer 3
+			 *  	die konfiguration von composite 1 - 3 werden zusammengeführt
+			 *  	und wirken sich auf alle indexer (1-4) aus.
+			 *  	richtig wäre:
+			 *  		composite 1 ist default für indexer 1 und 2
+			 *  		composite 2 ist default für indexer 3 und 4
+			 *  		composite 3 ist default für indexer 1 und 3, aber ohne default von composite 1 und 2.
+			 *  @TODO: umstellen!
+			 */
+
 			// Prepare search of configurations
 			$this->options = tx_mksearch_util_ServiceRegistry::getIntConfigService()
 				->getIndexerOptionsByIndex($this);
