@@ -137,6 +137,43 @@ class tx_mksearch_tests_indexer_TtNewsNews_DB_testcase extends tx_phpunit_databa
 		$aIndexDoc = $indexer->prepareSearchData('tt_news', $aResult, $indexDoc, $options);
 		$this->assertNotNull($aIndexDoc,'Das Element wurde doch nicht indziert!');
 	}
+	
+	public function testPrepareSearchDataWithSinglePid() {
+		$indexer = new tx_mksearch_indexer_TtNewsNews();
+		list($extKey, $cType) = $indexer->getContentType();
+		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
+		$options = array(
+			'addCategoryData' => 1,
+			'defaultSinglePid' => 0,
+		);
+		
+		$aResult = array('uid' => 3, 'title' => 'Testnews');
+		$aIndexDoc = $indexer->prepareSearchData('tt_news', $aResult, $indexDoc, $options);
+		$this->assertTrue(is_object($aIndexDoc),'Das Element wurde nicht indziert!');
+		
+		$aIndexData = $aIndexDoc->getData();
+		$this->assertArrayHasKey('categorySinglePid_i', $aIndexData, 'categorySinglePid_i ist nicht gesetzt!');
+		$this->assertEquals('334', $aIndexData['categorySinglePid_i']->getValue(), 'categorySinglePid_i ist falsch gesetzt!');
+		$this->assertEquals(array(2,3,1,4), $aIndexData['categories_mi']->getValue(), 'categories_mi hat die falsche Reihenfolge!');
+	}
+	
+	public function testPrepareSearchDataWithDefaultSinglePid() {
+		$indexer = new tx_mksearch_indexer_TtNewsNews();
+		list($extKey, $cType) = $indexer->getContentType();
+		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
+		$options = array(
+			'addCategoryData' => 1,
+			'defaultSinglePid' => 50,
+		);
+		
+		$aResult = array('uid' => 4, 'title' => 'Testnews');
+		$aIndexDoc = $indexer->prepareSearchData('tt_news', $aResult, $indexDoc, $options);
+		$this->assertTrue(is_object($aIndexDoc),'Das Element wurde nicht indziert!');
+		
+		$aIndexData = $aIndexDoc->getData();
+		$this->assertArrayHasKey('categorySinglePid_i', $aIndexData, 'categorySinglePid_i ist nicht gesetzt!');
+		$this->assertEquals('50', $aIndexData['categorySinglePid_i']->getValue(), 'categorySinglePid_i ist falsch gesetzt!');
+	}
 }
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']) {
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']);

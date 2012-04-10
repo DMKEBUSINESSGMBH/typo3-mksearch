@@ -5,7 +5,17 @@
 		<title>Pressemitteilung</title>
 	</tt_news_cat>
 	<tt_news_cat>
-		<uid>2</uid>
+		<uid>3</uid>
 		<title>Praxis</title>
+		<single_pid>334</single_pid>
+	</tt_news_cat>
+	<tt_news_cat>
+		<uid>2</uid>
+		<title>Startseite</title>
+	</tt_news_cat>
+	<tt_news_cat>
+		<uid>4</uid>
+		<title>Richtlinien</title>
+		<single_pid>335</single_pid>
 	</tt_news_cat>
 </dataset>
