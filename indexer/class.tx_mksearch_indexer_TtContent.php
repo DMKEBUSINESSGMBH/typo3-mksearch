@@ -40,14 +40,14 @@ tx_rnbase::load('tx_mksearch_util_Misc');
  * it's a facade.
  * @author Hannes Bochmann <hannes.bochmann@das-medienkombinat.de>
  */
-class tx_mksearch_indexer_TtContent {
+class tx_mksearch_indexer_TtContent implements tx_mksearch_interface_Indexer {
 
 	/**
 	 * the appropriate indexer depending on templavoila
 	 * @var tx_mksearch_indexer_Base
 	 */
 	protected $oIndexer;
-	
+
 	/**
 	 * load the appropriate indexer depending on templavoila
 	 */
@@ -58,7 +58,7 @@ class tx_mksearch_indexer_TtContent {
 			$this->oIndexer = tx_rnbase::makeInstance('tx_mksearch_indexer_ttcontent_Normal');
 		}
 	}
-	
+
 	/**
 	 * routes all method calls directly to the appropriate indexer.
 	 * we dont do anything here!
