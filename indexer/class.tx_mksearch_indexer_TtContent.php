@@ -83,7 +83,7 @@ class tx_mksearch_indexer_TtContent implements tx_mksearch_interface_Indexer {
 	*
 	* @return array([extension key], [key of content type])
 	*/
-	public static function getContentType(){
+	public static function getContentType() {
 		return $this->oIndexer->getContentType();
 	}
 
@@ -98,8 +98,88 @@ class tx_mksearch_indexer_TtContent implements tx_mksearch_interface_Indexer {
 	*
 	* @return string
 	*/
-	public function getDefaultTSConfig(){
-		return $this->oIndexer->getDefaultTSConfig();
+	public function getDefaultTSConfig() {
+		return <<<CONF
+# Fields which are set statically to the given value
+# Don't forget to add those fields to your Solr schema.xml
+# For example it can be used to define site areas this
+# contentType belongs to
+#
+# fixedFields{
+#	my_fixed_field_singlevalue = first
+#   my_fixed_field_multivalue{
+#      0 = first
+#      1 = second
+#   }
+# }
+
+addPageMetaData = 0
+addPageMetaData.separator = ,
+
+# Configuration for each cType:
+CType {
+	# Default configuration for unconfigured cTypes:
+	_default_ {
+		# Fields used for building the index:
+		indexedFields {
+			0 = bodytext
+			1 = imagecaption
+			2 = altText
+			3 = titleText
+		}
+	}
+	# cType "text":
+	text.indexedFields {
+		0 = bodytext
+	}
+}
+
+# cTypes of content elements to be excluded from indexing.
+# Obviously, the respective "indexedFields" option is ignored in this case.
+#includeCTypes = list,header,text,textpic,image,text,bullets,table,html
+ignoreCTypes = search,mailform,login,list,div
+
+# \$sys_language_uid of the desired language
+# lang = 1
+
+### delete from or abort indexing for the record if isIndexableRecord or no record?
+ deleteIfNotIndexable = 0
+
+# White lists: Explicitely include items in indexing by various conditions.
+# Note that defining a white list deactivates implicite indexing of ALL pages,
+# i.e. only white-listed pages are defined yet!
+# May also be combined with option "exclude"
+include {
+	# Include several content elements pages in indexing:
+#	elements {
+#		# Include tt_content #17
+#		0 = 17
+#		# Include tt_content #26
+#		1 = 26
+#	}
+# Include several pages in indexing:
+#		# Include page #18 and #27
+#	pages = 18,27
+# Include complete page trees (i. e. pages with all their children) in indexing:
+#	pageTrees {
+#		# Include page tree with root page #19
+#		0 = 19
+#		# Include page  tree with root page #28
+#		1 = 28
+#	}
+}
+# Black lists: Exclude pages from indexing by various conditions.
+# May also be combined with option "include", while "exclude" option
+# takes precedence over "include" option.
+exclude {
+	# Exclude several pages from indexing. @see respective include option
+#	pages ...
+ 	# Exclude complete page trees (i. e. pages with all their children) from indexing.
+ 	# @see respective include option
+#	pageTrees ...
+}
+
+CONF;
 	}
 
 	/**
