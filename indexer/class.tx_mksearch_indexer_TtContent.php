@@ -59,6 +59,49 @@ class tx_mksearch_indexer_TtContent implements tx_mksearch_interface_Indexer {
 		}
 	}
 
+
+	/**
+	* Prepare a searchable document from a source record.
+	*
+	* @param tx_mksearch_interface_IndexerDocument		$indexDoc	Indexer document to be "filled", instantiated based on self::getContentType()
+	* @return null|tx_mksearch_interface_IndexerDocument or null if nothing should be indexed.
+	*/
+	public function prepareSearchData($tableName, $sourceRecord, tx_mksearch_interface_IndexerDocument $indexDoc, $options){
+		return $this->oIndexer->prepareSearchData($tableName, $sourceRecord, $indexDoc, $options);
+	}
+
+
+	/**
+	* Return content type identification
+	*
+	* This identification is part of the indexed data
+	* and is used on later searches to identify the search results.
+	* You're completely free in the range of values, but take care
+	* as you at the same time are responsible for
+	* uniqueness (i.e. no overlapping with other content types) and
+	* consistency (i.e. recognition) on indexing and searching data.
+	*
+	* @return array([extension key], [key of content type])
+	*/
+	public static function getContentType(){
+		return $this->oIndexer->getContentType();
+	}
+
+	/**
+	* Return the default Typoscript configuration for this indexer
+	*
+	* This config is not used for actual indexing but serves only as assistance
+	* when actually configuring an indexer via Typo3 backend by creating
+	* a new indexer configuration record!
+	* Hence all possible configuration options should be set or at least
+	* be mentioned (i.e. commented out) to provide an easy-to-access inline documentation!
+	*
+	* @return string
+	*/
+	public function getDefaultTSConfig(){
+		return $this->oIndexer->getDefaultTSConfig();
+	}
+
 	/**
 	 * routes all method calls directly to the appropriate indexer.
 	 * we dont do anything here!
@@ -67,8 +110,12 @@ class tx_mksearch_indexer_TtContent implements tx_mksearch_interface_Indexer {
 	 * @return mixed
 	 */
 	public function __call($sMethod, $aArguments) {
+		// @TODO: wird das noch benötigt?
+		// der indexer hat ein interface zu implementieren und ist gezwungen, dessen methoden zu besitzen.
+		// alle weiteren methodenaufrufe sollten nicht direkt an den indexer gehen, womit __call unnötig ist.
 		return call_user_func_array(array($this->oIndexer, $sMethod), $aArguments);
 	}
+
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_TtContent.php'])	{
