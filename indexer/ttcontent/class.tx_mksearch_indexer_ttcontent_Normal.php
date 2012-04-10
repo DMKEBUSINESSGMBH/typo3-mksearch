@@ -293,6 +293,20 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 
 		return false;
 	}
+	
+	/**
+	 * @see tx_mksearch_indexer_TtContent::getContentType()
+	 */
+	public static function getContentType() {
+		return array();
+	}
+
+	/**
+	 * @see tx_mksearch_indexer_TtContent::getDefaultTSConfig()
+	 */
+	public function getDefaultTSConfig() {
+		return '';
+	}
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/ttcontent/class.tx_mksearch_indexer_ttcontent_Normal.php'])	{
