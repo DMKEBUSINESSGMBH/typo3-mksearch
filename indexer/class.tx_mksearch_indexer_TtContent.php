@@ -70,21 +70,19 @@ class tx_mksearch_indexer_TtContent implements tx_mksearch_interface_Indexer {
 		return $this->oIndexer->prepareSearchData($tableName, $sourceRecord, $indexDoc, $options);
 	}
 
-
 	/**
-	* Return content type identification
-	*
-	* This identification is part of the indexed data
-	* and is used on later searches to identify the search results.
-	* You're completely free in the range of values, but take care
-	* as you at the same time are responsible for
-	* uniqueness (i.e. no overlapping with other content types) and
-	* consistency (i.e. recognition) on indexing and searching data.
-	*
-	* @return array([extension key], [key of content type])
-	*/
+	 * Return content type identification.
+	 * This identification is part of the indexed data
+	 * and is used on later searches to identify the search results.
+	 * You're completely free in the range of values, but take care
+	 * as you at the same time are responsible for
+	 * uniqueness (i.e. no overlapping with other content types) and
+	 * consistency (i.e. recognition) on indexing and searching data.
+	 *
+	 * @return array([extension key], [key of content type])
+	 */
 	public static function getContentType() {
-		return $this->oIndexer->getContentType();
+		return array('core', 'tt_content');
 	}
 
 	/**
