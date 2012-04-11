@@ -183,8 +183,7 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 		// every tt_content element on this page or it's
 		// subpages has to be put into the queue.
 		//@todo support deleted pages, too
-		$oDbUtil = tx_rnbase::makeInstance('tx_rnbase_util_DB');
-		$aPidList = explode(',',$oDbUtil->_getPidList($aRawData['uid'],999));
+		$aPidList = explode(',', $this->_getPidList($aRawData['uid'], 999));
 
 		if(!empty($aPidList)){
 			$oIndexSrv = tx_mksearch_util_ServiceRegistry::getIntIndexService();
@@ -293,7 +292,7 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 
 		return false;
 	}
-	
+
 	/**
 	 * @see tx_mksearch_indexer_TtContent::getContentType()
 	 */

@@ -320,16 +320,10 @@ CONFIG;
 	 * @param array $options
 	 * @return bool
 	 */
-	protected function checkPageTree($sourceRecord,$options) {
-		//wir müssen das FE simulieren da wir die default fe_groups in
-		//tslib_fe benötigen
-		tx_rnbase::load('tx_rnbase_util_Misc');
-		tx_rnbase_util_Misc::prepareTSFE();
+	protected function checkPageTree($sourceRecord, $options) {
 
-		$oDbUtil = tx_rnbase::makeInstance('tx_rnbase_util_DB');
-
-		if (!$this->checkPageTreeIncludes($sourceRecord, $options, $oDbUtil)) return false;
-		if ( $this->checkPageTreeExcludes($sourceRecord, $options, $oDbUtil)) return false;
+		if (!$this->checkPageTreeIncludes($sourceRecord, $options)) return false;
+		if ( $this->checkPageTreeExcludes($sourceRecord, $options)) return false;
 
 		return true;
 	}
@@ -337,13 +331,13 @@ CONFIG;
 	/**
 	 * Wenn das Element im gegebenen Seitenbaum ist, wird NICHT indiziert
 	 *
-	 * @param unknown_type $sourceRecord
-	 * @param unknown_type $options
-	 * @param unknown_type $oDbUtil
+	 * @param array $sourceRecord
+	 * @param array $options
+	 * @return bool
 	 */
-	private function checkPageTreeExcludes($sourceRecord, $options, $oDbUtil) {
+	private function checkPageTreeExcludes($sourceRecord, $options) {
 		// Prüfen ob die Seite in den index darf sprich nicht in den gegebenen Seitenbäumen liegt
-		$aPids = $this->getPidList($sourceRecord,$options['exclude.'], $oDbUtil, 'pageTrees');
+		$aPids = $this->getPidList($sourceRecord, $options['exclude.'], 'pageTrees');
 		if (array_search($sourceRecord['pid'], $aPids) !== false)
 			return true;
 		//else
@@ -353,13 +347,13 @@ CONFIG;
 	/**
 	 * Nur wenn das Element im gegebenen Seitenbaum ist, wird indiziert
 	 *
-	 * @param unknown_type $sourceRecord
-	 * @param unknown_type $options
-	 * @param unknown_type $oDbUtil
+	 * @param array $sourceRecord
+	 * @param array $options
+	 * @return bool
 	 */
-	private function checkPageTreeIncludes($sourceRecord, $options, $oDbUtil) {
+	private function checkPageTreeIncludes($sourceRecord, $options) {
 		// Prüfen ob die Seite in den index darf sprich in den gegebenen Seitenbäumen liegt
-		$aPids = $this->getPidList($sourceRecord,$options['include.'],$oDbUtil,'pageTrees');
+		$aPids = $this->getPidList($sourceRecord, $options['include.'], 'pageTrees');
 		if (array_search($sourceRecord['pid'], $aPids) !== false || empty($aPids))
 			return true;
 		//else
@@ -367,21 +361,39 @@ CONFIG;
 	}
 
 	/**
+	 * Same method as tslib_pibase::pi_getPidList()
+	 */
+	protected function _getPidList($pid_list, $recursive=0) {
+		static $oDbUtil = null;
+		if (!is_object($oDbUtil)) {
+			/* @var $oDbUtil tx_rnbase_util_DB */
+			// @TODO: instanz ist nicht nötig,
+			// in rn_base als statische methode deklarieren!
+			$oDbUtil = tx_rnbase::makeInstance('tx_rnbase_util_DB');
+
+			// wir müssen das FE simulieren,
+			// wird in $oDbUtil->_getPidList benötigt
+			tx_rnbase::load('tx_rnbase_util_Misc');
+			tx_rnbase_util_Misc::prepareTSFE();
+		}
+		return $oDbUtil->_getPidList($pid_list, $recursive);
+	}
+
+	/**
 	 * Liefert ein Array mit allen Pids, die in den Seitenbäumen
 	 * vorhanden sind
 	 * @param array $sourceRecord
 	 * @param mixed $options
-	 * @param tx_rnbase_util_DB $oDbUtil
 	 * @param string $sKey
-	 *
 	 * @return array
 	 */
-	private function getPidList($sourceRecord, $options, tx_rnbase_util_DB $oDbUtil, $sKey) {
+	private function getPidList($sourceRecord, $options, $sKey) {
+
 		$aPids = array();
 		$aPageTrees = $this->getConfigValue($sKey, $options);
 		if (is_array($aPageTrees) && !empty($aPageTrees)){
 			foreach ($aPageTrees as $iUid)
-				$aPidsByPageTree[] = explode(',', $oDbUtil->_getPidList($iUid,999));
+				$aPidsByPageTree[] = explode(',', $this->_getPidList($iUid,999));
 		}
 
 		if (is_array($aPidsByPageTree) && count($aPidsByPageTree)) {
