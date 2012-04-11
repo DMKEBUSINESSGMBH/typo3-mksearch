@@ -67,11 +67,23 @@ class tx_mksearch_indexer_TtContent implements tx_mksearch_interface_Indexer {
 	* @return null|tx_mksearch_interface_IndexerDocument or null if nothing should be indexed.
 	*/
 	public function prepareSearchData($tableName, $sourceRecord, tx_mksearch_interface_IndexerDocument $indexDoc, $options){
-		//wir brauchen ein Frontend um die rootline für page tree checks etc. zu bekommen
-		tx_rnbase::load('tx_rnbase_util_Misc');
-		tx_rnbase_util_Misc::prepareTSFE();
+		//wir brauchen ein Frontend um die rootline für page tree checks etc. zu bekommen.
+		$this->prepareTsfeInTypo3Version45OrHigher();
 		
 		return $this->oIndexer->prepareSearchData($tableName, $sourceRecord, $indexDoc, $options);
+	}
+	
+	/**
+	 * wir brauchen ein Frontend um die rootline für page tree checks etc. zu bekommen.
+	 * @return void
+	 */
+	protected function prepareTsfeInTypo3Version45OrHigher() {
+		//scheinbar erst ab TYPO3 4.5.x notwendig.
+		tx_rnbase::load('tx_rnbase_util_TYPO3');
+		if(tx_rnbase_util_TYPO3::isTYPO45OrHigher()){
+			tx_rnbase::load('tx_rnbase_util_Misc');
+			tx_rnbase_util_Misc::prepareTSFE();
+		}
 	}
 
 	/**
