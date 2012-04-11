@@ -179,21 +179,6 @@ exclude {
 
 CONF;
 	}
-
-	/**
-	 * routes all method calls directly to the appropriate indexer.
-	 * we dont do anything here!
-	 * @param string $sMethod
-	 * @param array $aArguments
-	 * @return mixed
-	 */
-	public function __call($sMethod, $aArguments) {
-		// @TODO: wird das noch benötigt?
-		// der indexer hat ein interface zu implementieren und ist gezwungen, dessen methoden zu besitzen.
-		// alle weiteren methodenaufrufe sollten nicht direkt an den indexer gehen, womit __call unnötig ist.
-		return call_user_func_array(array($this->oIndexer, $sMethod), $aArguments);
-	}
-
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_TtContent.php'])	{
