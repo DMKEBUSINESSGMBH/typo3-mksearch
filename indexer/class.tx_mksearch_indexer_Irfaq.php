@@ -67,7 +67,7 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base {
 		//we would need to get the faq model and the categories
 		//twice
 		$aCategories = tx_mksearch_util_ServiceRegistry::getIrfaqCategoryService()->getByQuestion($oModel);
-		if(!$this->checkOptions($aCategories,$aOptions))
+		if(!$this->checkInOrExcludeOptions($aCategories,$aOptions))
 			return null;
 		//else go one with indexing
 		

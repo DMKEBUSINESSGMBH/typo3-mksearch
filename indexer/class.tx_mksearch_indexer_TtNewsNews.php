@@ -91,7 +91,7 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base {
 	public function indexData(tx_rnbase_model_base $oModel, $tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options) {
 		$aCategories = $this->getCategories($oModel);
 		// first check if certain categories should be included/excluded
-		if(!$this->checkOptions($aCategories,$options) || !$this->checkOptions($aCategories,$options,1))
+		if(!$this->checkInOrExcludeOptions($aCategories,$options) || !$this->checkInOrExcludeOptions($aCategories,$options,1))
 			$abort = true;
 			
 		// Hook to append indexer

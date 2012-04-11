@@ -91,10 +91,10 @@ class tx_mksearch_tests_fixtures_indexer_Dummy extends tx_mksearch_indexer_Base 
 			1 => $this->createModel(array('uid' => 2)),
 		);
 		//includes
-		if(!$this->checkOptions($aCategories,$aOptions))
+		if(!$this->checkInOrExcludeOptions($aCategories,$aOptions))
 			return null;
 		//excludes found
-		if(!$this->checkOptions($aCategories,$aOptions,1))
+		if(!$this->checkInOrExcludeOptions($aCategories,$aOptions,1))
 			return null;
 		
 		return $oIndexDoc;

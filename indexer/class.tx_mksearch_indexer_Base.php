@@ -118,6 +118,9 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 	 * @param tx_mksearch_interface_IndexerDocument $oIndexDoc
 	 * @param string $sPrefix
 	 * @param array $aOptions
+	 * 
+	 * @todo move function to a helper class as the method has nothing to do
+	 * with actual indexing. it's just a helper.
 	 */
 	protected function indexModelByMapping(tx_rnbase_model_base $oModel, array $aRecordIndexMapping, tx_mksearch_interface_IndexerDocument $oIndexDoc, $sPrefix = '', array $aOptions = array()) {
 		foreach ($aRecordIndexMapping as $sRecordKey => $sIndexDocKey) {
@@ -137,6 +140,9 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 	 * @param array $aMapping
 	 * @param tx_mksearch_interface_IndexerDocument $oIndexDoc
 	 * @param string $sPrefix
+	 * 
+	 * @todo move function to a helper class as the method has nothing to do
+	 * with actual indexing. it's just a helper.
 	 */
 	protected function indexArrayOfModelsByMapping(array $aModels, array $aRecordIndexMapping, tx_mksearch_interface_IndexerDocument $oIndexDoc, $sPrefix = '') {
 		//collect values
@@ -229,6 +235,9 @@ CONFIG;
 	 * Adds a element to the queue
 	 * @param tx_rnbase_model_base $oModel
 	 * @return void
+	 * 
+	 * @todo move function to a helper class as the method has nothing to do
+	 * with actual indexing. it's just a helper.
 	 */
 	protected function addModelToIndex(tx_rnbase_model_base $oModel, $sTableName){
 		if(!empty($oModel) && $oModel->isValid()){
@@ -244,6 +253,9 @@ CONFIG;
 	 * @param array $aModels
 	 * @param string $sTableName
 	 * @return void
+	 * 
+	 * @todo move function to a helper class as the method has nothing to do
+	 * with actual indexing. it's just a helper.
 	 */
 	protected function addModelsToIndex($aModels, $sTableName) {
 		if(!empty($aModels))
@@ -263,8 +275,11 @@ CONFIG;
 	 * @param array $aOptions
 	 * @param int $iMode	| 0 stands for "include" and 1 "exclude"
 	 * @return bool
+	 * 
+	 * @todo move function to a helper class as the method has nothing to do
+	 * with actual indexing. it's just a helper.
 	 */
-	protected function checkOptions($aModels,$aOptions, $iMode = 0, $sOptionKey = 'categories') {
+	protected function checkInOrExcludeOptions($aModels,$aOptions, $iMode = 0, $sOptionKey = 'categories') {
 		//set base returns depending on the mode
 		switch ($iMode) {
 			case 0:
@@ -320,6 +335,9 @@ CONFIG;
 	 * @param array $sourceRecord
 	 * @param array $options
 	 * @return bool
+	 * 
+	 * @todo move function to a helper class as the method has nothing to do
+	 * with actual indexing. it's just a helper.
 	 */
 	protected function checkPageTree($sourceRecord, $options) {
 
@@ -414,6 +432,9 @@ CONFIG;
 	 * @param string $sKey
 	 *
 	 * @return array
+	 * 
+	 * @todo move function to a helper class as the method has nothing to do
+	 * with actual indexing. it's just a helper.
 	 */
 	protected function getConfigValue($sKey, $options) {
 		if(is_array($options)){
@@ -430,6 +451,9 @@ CONFIG;
 	 * Get's the page of the content element if it's not hidden/deleted
 	 * @param tx_rnbase_model_base $oModel
 	 * @return null || array
+	 * 
+	 * @todo move function to a helper class as the method has nothing to do
+	 * with actual indexing. it's just a helper.
 	 */
 	protected function checkPageRights(tx_rnbase_model_base $oModel) {
 		//first of all we have to check if the page is not hidden/deleted
