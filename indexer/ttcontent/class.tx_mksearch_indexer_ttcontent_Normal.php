@@ -56,6 +56,12 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 		//@TODO: l18n_parent abprüfen, wenn $lang!=0 !?
 		$lang = isset($options['lang']) ? $options['lang'] : 0;
 		if($rawData['sys_language_uid'] != $lang) {
+			return null;
+			/**
+			 * löschen!?
+			 * Default -> wird indiziert, wenn default index
+			 * 	EN -> wird gelöscht, wenn nicht default index, somit fehlt nun das default doc.
+			 */
 			//wir löschen den record aus dem Indexer, falls er schon existiert.
 			$indexDoc->setDeleted(true);
 			return $indexDoc;
@@ -255,7 +261,7 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 
 	/**
 	 * Returns the Pagecontent
-	 *
+	 * @TODO: das selbe wie tx_mksearch_indexer_Base::checkPageRights
 	 * @param int $pid
 	 */
 	protected function getPageContent($pid) {
