@@ -33,6 +33,7 @@ require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_mksearch_marker_SearchResultSimple');
 require_once(t3lib_extMgm::extPath('mksearch') . 'lib/Apache/Solr/Document.php');
 tx_rnbase::load('tx_mksearch_tests_Util');
+tx_rnbase::load('tx_mksearch_util_TYPO3');
 
 /**
  * 
@@ -52,6 +53,8 @@ class tx_mksearch_tests_marker_SearchResultSimple_testcase extends tx_phpunit_te
 	 * setUp() = init DB etc.
 	 */
 	public function setUp(){
+		tx_mksearch_util_TYPO3::prepareTsfeInTypo3Version45OrHigher();
+		
 		$this->oParameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
 		$this->oMarker = tx_rnbase::makeInstance('tx_mksearch_marker_SearchResultSimple');
 	}
