@@ -51,23 +51,27 @@ class tx_mksearch_tests_indexer_Page_testcase extends tx_phpunit_testcase {
 		
 		//is deleted
 		$record = array('uid'=> 123, 'pid' => 0, 'deleted' => 1);
-		$indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
+		$indexer->prepareSearchData('pages', $record, $indexDoc, $options);
 		$this->assertEquals(true, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 
 		//is hidden
 		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
 		$record = array('uid'=> 124, 'pid' => 0, 'deleted' => 0, 'hidden' => 1);
-		$indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
+		$indexer->prepareSearchData('pages', $record, $indexDoc, $options);
 		$this->assertEquals(true, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 		
 		//everything alright
 		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
 		$record = array('uid'=> 125, 'pid' => 0, 'deleted' => 0, 'hidden' => 0);
-		$indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
+		$indexer->prepareSearchData('pages', $record, $indexDoc, $options);
 		$this->assertEquals(false, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 	}
 	
-	public function testPrepareSearchDataPreparesTsfe() {
+	public function testPrepareSearchDataPreparesTsfeInTypo345AndHigher() {
+		tx_rnbase::load('tx_rnbase_util_TYPO3');
+		if(!tx_rnbase_util_TYPO3::isTYPO45OrHigher())
+			$this->markTestSkipped('TYPO3 muss mindestens in Version 4.5.x installiert sein!');
+		
 		$this->assertNull($GLOBALS['TSFE'],'TSFE wurde bereits geladen!');
 		
 		$indexer = new tx_mksearch_indexer_Page();
@@ -78,9 +82,29 @@ class tx_mksearch_tests_indexer_Page_testcase extends tx_phpunit_testcase {
 		
 		//is deleted
 		$record = array('uid'=> 123, 'pid' => 0, 'deleted' => 1);
-		$indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
+		$indexer->prepareSearchData('pages', $record, $indexDoc, $options);
 		
 		$this->assertNotNull($GLOBALS['TSFE'],'TSFE wurde nicht geladen!');
+	}
+	
+	public function testPrepareSearchDataPreparesTsfeNotInTypo344AndLower() {
+		tx_rnbase::load('tx_rnbase_util_TYPO3');
+		if(tx_rnbase_util_TYPO3::isTYPO45OrHigher())
+			$this->markTestSkipped('TYPO3 darf nicht in Version 4.5.x installiert sein!');
+		
+		$this->assertNull($GLOBALS['TSFE'],'TSFE wurde bereits geladen!');
+		
+		$indexer = new tx_mksearch_indexer_Page();
+		$options = array();
+		
+		list($extKey, $cType) = $indexer->getContentType();
+		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
+		
+		//is deleted
+		$record = array('uid'=> 123, 'pid' => 0, 'deleted' => 1);
+		$indexer->prepareSearchData('pages', $record, $indexDoc, $options);
+		
+		$this->assertNull($GLOBALS['TSFE'],'TSFE wurde nicht geladen!');
 	}
 }
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']) {

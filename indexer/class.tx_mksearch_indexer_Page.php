@@ -34,6 +34,7 @@ tx_rnbase::load('tx_mksearch_indexer_Base');
 tx_rnbase::load('tx_rnbase_util_Misc');
 tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
 tx_rnbase::load('tx_mksearch_util_Misc');
+tx_rnbase::load('tx_mksearch_util_TYPO3');
 
 /**
  * Indexer service for core.tt_content called by the "mksearch" extension.
@@ -61,22 +62,10 @@ class tx_mksearch_indexer_Page extends tx_mksearch_indexer_Base {
 	 */
 	public function prepareSearchData($tableName, $sourceRecord, tx_mksearch_interface_IndexerDocument $indexDoc, $options) {
 		//wir brauchen ein Frontend um die rootline für page tree checks etc. zu bekommen.
-		$this->prepareTsfeInTypo3Version45OrHigher();
+		//scheinbar erst ab TYPO3 4.5.x notwendig.
+		tx_mksearch_util_TYPO3::prepareTsfeInTypo3Version45OrHigher();
 		
 		return parent::prepareSearchData($tableName, $sourceRecord, $indexDoc, $options);
-	}
-	
-	/**
-	 * wir brauchen ein Frontend um die rootline für page tree checks etc. zu bekommen.
-	 * @return void
-	 */
-	protected function prepareTsfeInTypo3Version45OrHigher() {
-		//scheinbar erst ab TYPO3 4.5.x notwendig.
-		tx_rnbase::load('tx_rnbase_util_TYPO3');
-		if(tx_rnbase_util_TYPO3::isTYPO45OrHigher()){
-			tx_rnbase::load('tx_rnbase_util_Misc');
-			tx_rnbase_util_Misc::prepareTSFE();
-		}
 	}
 
 	/**
