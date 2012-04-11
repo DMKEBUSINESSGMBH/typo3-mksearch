@@ -139,7 +139,7 @@ class tx_mksearch_tests_fixtures_indexer_Dummy extends tx_mksearch_indexer_Base 
 	}
 	
 	public function callGetPidList() {
-		return $this->_getPidList(array());
+		return $this->_getPidList('');
 	}
 }
 
