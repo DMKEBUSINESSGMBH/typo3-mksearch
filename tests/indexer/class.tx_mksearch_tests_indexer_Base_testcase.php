@@ -327,6 +327,15 @@ class tx_mksearch_tests_indexer_Base_testcase extends tx_phpunit_testcase {
 		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options2);
 		$this->assertNull($aIndexDoc,'Das Element wurde doch indiziert! Option 2');
 	}
+	
+	public function testGetPidListPreparesTsfe() {
+		$GLOBALS['TSFE'] = null;
+		
+		$indexer = new tx_mksearch_tests_fixtures_indexer_Dummy();
+		$indexer->callGetPidList();
+		
+		$this->assertNotNull($GLOBALS['TSFE'],'TSFE wurde nicht geladen!');
+	}
 }
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']) {
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']);

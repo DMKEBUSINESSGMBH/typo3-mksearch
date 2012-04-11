@@ -42,8 +42,6 @@ class tx_mksearch_tests_indexer_TtContent_testcase extends tx_phpunit_testcase {
 		$this->aTvConfig = $TYPO3_LOADED_EXT['templavoila'];
 		$TYPO3_LOADED_EXT['templavoila'] = null;
 		
-		//wir brauchen kein tsfe
-		$GLOBALS['TSFE'] = null;
 	}
 	
 	/**
@@ -63,21 +61,6 @@ class tx_mksearch_tests_indexer_TtContent_testcase extends tx_phpunit_testcase {
 		return $options;
 	}
 	
-//	function test_prepareSearchData() {
-//		$indexer = new tx_mksearch_indexer_TtContent();
-//
-//		list($extKey, $cType) = $indexer->getContentType();
-//		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
-//
-//		// Datumswerte werden immer in UTC in den Index gelegt
-//		$record = array('uid'=> 123, 'deleted' => 0, 'cType'=>'list');
-//
-//		$options = array();
-//		$indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
-//		$data = $indexDoc->getData();
-////		$this->assertEquals('2010-01-30T15:00:00Z', $data['datetime']->getValue());
-//	}
-
 	function test_prepareSearchData_CheckIgnoreContentType() {
 		$indexer = new tx_mksearch_indexer_TtContent();
 		list($extKey, $cType) = $indexer->getContentType();
@@ -127,40 +110,6 @@ class tx_mksearch_tests_indexer_TtContent_testcase extends tx_phpunit_testcase {
 		$result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
 		$this->assertNotNull($result, 'Null returned for uid '.$record['uid'].' when CType in includeCTypes');
 
-	}
-	
-	public function testPrepareSearchDataPreparesTsfeInTypo345AndHigher() {
-		tx_rnbase::load('tx_rnbase_util_TYPO3');
-		if(!tx_rnbase_util_TYPO3::isTYPO45OrHigher())
-			$this->markTestSkipped('TYPO3 muss mindestens in Version 4.5.x installiert sein!');
-		
-		$this->assertNull($GLOBALS['TSFE'],'TSFE wurde bereits geladen!');
-		
-		$indexer = new tx_mksearch_indexer_TtContent();
-		list($extKey, $cType) = $indexer->getContentType();
-		$record = array('uid'=> 123, 'pid' => 1, 'deleted' => 0, 'hidden' => 0, 'sectionIndex' => 1, 'CType'=>'list', 'header' => 'test');
-		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
-		$options = self::getDefaultOptions();
-		$result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
-		
-		$this->assertNotNull($GLOBALS['TSFE'],'TSFE wurde nicht geladen!');
-	}
-	
-	public function testPrepareSearchDataPreparesTsfeNotInTypo344AndLower() {
-		tx_rnbase::load('tx_rnbase_util_TYPO3');
-		if(tx_rnbase_util_TYPO3::isTYPO45OrHigher())
-			$this->markTestSkipped('TYPO3 darf nicht in Version 4.5.x installiert sein!');
-		
-		$this->assertNull($GLOBALS['TSFE'],'TSFE wurde bereits geladen!');
-		
-		$indexer = new tx_mksearch_indexer_TtContent();
-		list($extKey, $cType) = $indexer->getContentType();
-		$record = array('uid'=> 123, 'pid' => 1, 'deleted' => 0, 'hidden' => 0, 'sectionIndex' => 1, 'CType'=>'list', 'header' => 'test');
-		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
-		$options = self::getDefaultOptions();
-		$result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
-		
-		$this->assertNull($GLOBALS['TSFE'],'TSFE wurde nicht geladen!');
 	}
 }
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']) {

@@ -137,6 +137,10 @@ class tx_mksearch_tests_fixtures_indexer_Dummy extends tx_mksearch_indexer_Base 
 	public function getDefaultTSConfig() {
 		return '';
 	}
+	
+	public function callGetPidList() {
+		return $this->_getPidList(array());
+	}
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/seminars/class.tx_mksearch_indexer_seminars_Seminar.php'])	{
