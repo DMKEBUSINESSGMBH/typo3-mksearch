@@ -41,6 +41,9 @@ class tx_mksearch_tests_indexer_TtContent_testcase extends tx_phpunit_testcase {
 		global $TYPO3_LOADED_EXT;
 		$this->aTvConfig = $TYPO3_LOADED_EXT['templavoila'];
 		$TYPO3_LOADED_EXT['templavoila'] = null;
+		
+		//wir brauchen kein tsfe
+		$GLOBALS['TSFE'] = null;
 	}
 	
 	/**
@@ -124,6 +127,19 @@ class tx_mksearch_tests_indexer_TtContent_testcase extends tx_phpunit_testcase {
 		$result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
 		$this->assertNotNull($result, 'Null returned for uid '.$record['uid'].' when CType in includeCTypes');
 
+	}
+	
+	public function testPrepareSearchDataPreparesTsfe() {
+		$this->assertNull($GLOBALS['TSFE'],'TSFE wurde bereits geladen!');
+		
+		$indexer = new tx_mksearch_indexer_TtContent();
+		list($extKey, $cType) = $indexer->getContentType();
+		$record = array('uid'=> 123, 'pid' => 1, 'deleted' => 0, 'hidden' => 0, 'sectionIndex' => 1, 'CType'=>'list', 'header' => 'test');
+		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
+		$options = self::getDefaultOptions();
+		$result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
+		
+		$this->assertNotNull($GLOBALS['TSFE'],'TSFE wurde nicht geladen!');
 	}
 }
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']) {

@@ -37,6 +37,11 @@ require_once(t3lib_extMgm::extPath('mksearch') . 'lib/Apache/Solr/Document.php')
  */
 class tx_mksearch_tests_indexer_Page_testcase extends tx_phpunit_testcase {
 	
+	public function setUp() {
+		//wir brauchen kein tsfe
+		$GLOBALS['TSFE'] = null;
+	}
+	
 	public function testPrepareSearchDataSetsDocToDeleted() {
 		$indexer = new tx_mksearch_indexer_Page();
 		$options = array();
@@ -60,6 +65,22 @@ class tx_mksearch_tests_indexer_Page_testcase extends tx_phpunit_testcase {
 		$record = array('uid'=> 125, 'pid' => 0, 'deleted' => 0, 'hidden' => 0);
 		$indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
 		$this->assertEquals(false, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
+	}
+	
+	public function testPrepareSearchDataPreparesTsfe() {
+		$this->assertNull($GLOBALS['TSFE'],'TSFE wurde bereits geladen!');
+		
+		$indexer = new tx_mksearch_indexer_Page();
+		$options = array();
+		
+		list($extKey, $cType) = $indexer->getContentType();
+		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
+		
+		//is deleted
+		$record = array('uid'=> 123, 'pid' => 0, 'deleted' => 1);
+		$indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
+		
+		$this->assertNotNull($GLOBALS['TSFE'],'TSFE wurde nicht geladen!');
 	}
 }
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']) {

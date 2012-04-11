@@ -67,6 +67,10 @@ class tx_mksearch_indexer_TtContent implements tx_mksearch_interface_Indexer {
 	* @return null|tx_mksearch_interface_IndexerDocument or null if nothing should be indexed.
 	*/
 	public function prepareSearchData($tableName, $sourceRecord, tx_mksearch_interface_IndexerDocument $indexDoc, $options){
+		//wir brauchen ein Frontend um die rootline für page tree checks etc. zu bekommen
+		tx_rnbase::load('tx_rnbase_util_Misc');
+		tx_rnbase_util_Misc::prepareTSFE();
+		
 		return $this->oIndexer->prepareSearchData($tableName, $sourceRecord, $indexDoc, $options);
 	}
 

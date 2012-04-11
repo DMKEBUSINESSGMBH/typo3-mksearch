@@ -54,6 +54,18 @@ class tx_mksearch_indexer_Page extends tx_mksearch_indexer_Base {
 	public static function getContentType() {
 		return array('core', 'page');
 	}
+	
+/**
+	 * (non-PHPdoc)
+	 * @see tx_mksearch_interface_Indexer::prepareSearchData()
+	 */
+	public function prepareSearchData($tableName, $sourceRecord, tx_mksearch_interface_IndexerDocument $indexDoc, $options) {
+		//wir brauchen ein Frontend um die rootline für page tree checks etc. zu bekommen
+		tx_rnbase::load('tx_rnbase_util_Misc');
+		tx_rnbase_util_Misc::prepareTSFE();
+		
+		return parent::prepareSearchData($tableName, $sourceRecord, $indexDoc, $options);
+	}
 
 	/**
 	 * check if we have a shortcut and index the target instead

@@ -50,6 +50,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 	 * @var tx_mksearch_service_internal_Index
 	 */
 	protected $oIndexSrv;
+	
 	/**
 	 * (non-PHPdoc)
 	 * @see tx_mksearch_interface_Indexer::prepareSearchData()
