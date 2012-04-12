@@ -380,22 +380,15 @@ CONFIG;
 	}
 
 	/**
-	 * Same method as tslib_pibase::pi_getPidList()
+	 * wrapper for tx_rnbase_util_DB::_getPidList
+	 * we load the TSFE addtionaly
 	 */
 	protected function _getPidList($pid_list, $recursive=0) {
-		static $oDbUtil = null;
-		if (!is_object($oDbUtil)) {
-			/* @var $oDbUtil tx_rnbase_util_DB */
-			// @TODO: instanz ist nicht nötig,
-			// in rn_base als statische methode deklarieren!
-			$oDbUtil = tx_rnbase::makeInstance('tx_rnbase_util_DB');
-
-			// wir müssen das FE simulieren,
-			// wird in $oDbUtil->_getPidList benötigt
-			tx_rnbase::load('tx_rnbase_util_Misc');
-			tx_rnbase_util_Misc::prepareTSFE();
-		}
-		return $oDbUtil->_getPidList($pid_list, $recursive);
+		tx_rnbase::load('tx_rnbase_util_Misc');
+		tx_rnbase_util_Misc::prepareTSFE();
+		
+		tx_rnbase::load('tx_rnbase_util_DB');
+		return tx_rnbase_util_DB::_getPidList($pid_list, $recursive);
 	}
 
 	/**
