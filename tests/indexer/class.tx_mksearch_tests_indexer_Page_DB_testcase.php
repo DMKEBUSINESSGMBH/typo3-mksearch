@@ -88,6 +88,18 @@ class tx_mksearch_tests_indexer_Page_DB_testcase extends tx_phpunit_database_tes
 		$GLOBALS['BE_USER']->setWorkspace($this->workspaceIdAtStart);
 	}
 
+	public function testPrepareSearchDataPreparesTsfeIfTablePagesSoGetPidListWorks() {
+		$GLOBALS['TSFE'] = null;
+		$indexer = new tx_mksearch_indexer_Page();
+		list($extKey, $cType) = $indexer->getContentType();
+
+		$record = array('uid'=> 2, 'doktype' => 1);
+		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
+
+		$oIndexDoc = $indexer->prepareSearchData('pages', $record, $indexDoc, array());
+
+		$this->assertNotNull($GLOBALS['TSFE'],'TSFE wurde nicht geladen!');
+	}
 
 	public function testPrepareSearchDataPutsCorrectShortcutTargetAndSubpagesIntoTheQueue() {
 		$indexer = new tx_mksearch_indexer_Page();
@@ -97,7 +109,7 @@ class tx_mksearch_tests_indexer_Page_DB_testcase extends tx_phpunit_database_tes
 		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
 
 		$result = $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
-
+		
 		//nichtzs direkt indiziert?
 		$this->assertNull($result,'Es wurde nicht null zurück gegeben!');
 
@@ -138,29 +150,38 @@ class tx_mksearch_tests_indexer_Page_DB_testcase extends tx_phpunit_database_tes
 		$this->assertEmpty($aResult,'Es wurden doch Elemente in die queue gelegt!');
 	}
 
-	public function testPrepareSearchDataSetsDocToDeleted() {
+	public function testPrepareSearchDataSetsDocToDeletedConsideringStatesOfTheCurrentPage() {
 		$indexer = new tx_mksearch_indexer_Page();
 		$options = array();
 
 		list($extKey, $cType) = $indexer->getContentType();
-		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
 
 		//is deleted
+		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
 		$record = array('uid'=> 123, 'pid' => 0, 'deleted' => 1, 'title'=>'list');
 		$indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
 		$this->assertEquals(true, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 
 		//is hidden
+		$indexer = new tx_mksearch_indexer_Page();
 		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
 		$record = array('uid'=> 124, 'pid' => 0, 'deleted' => 0, 'hidden' => 1, 'title'=>'list');
 		$indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
 		$this->assertEquals(true, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 
 		//everything alright
+		$indexer = new tx_mksearch_indexer_Page();
 		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
 		$record = array('uid'=> 125, 'pid' => 1, 'deleted' => 0, 'hidden' => 0, 'title' => 'test');
 		$indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
 		$this->assertEquals(false, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
+	}
+	
+	public function testPrepareSearchDataSetsDocToDeletedConsideringStatesOfTheParentPages() {
+		$indexer = new tx_mksearch_indexer_Page();
+		$options = array();
+
+		list($extKey, $cType) = $indexer->getContentType();
 
 		//parent is hidden
 		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
@@ -169,10 +190,18 @@ class tx_mksearch_tests_indexer_Page_DB_testcase extends tx_phpunit_database_tes
 		$this->assertEquals(true, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 
 		//parent of parent is hidden
+		$indexer = new tx_mksearch_indexer_Page();
 		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
 		$record = array('uid'=> 127, 'pid' => 10, 'deleted' => 0, 'hidden' => 0, 'title' => 'test');
 		$indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
 		$this->assertEquals(true, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
+		
+		//everything alright with parents
+		$indexer = new tx_mksearch_indexer_Page();
+		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
+		$record = array('uid'=> 125, 'pid' => 3, 'deleted' => 0, 'hidden' => 0, 'title' => 'test');
+		$indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
+		$this->assertEquals(false, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 	}
 
 	/**

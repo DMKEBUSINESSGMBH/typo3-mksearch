@@ -71,8 +71,7 @@ class tx_mksearch_indexer_Page extends tx_mksearch_indexer_Base {
 		if($sTableName == 'pages') {
 			// this our first entry point. so we fetch all subpages and put them into
 			// the queue in case changes on this page have effects on subpages.
-			$oDbUtil = tx_rnbase::makeInstance('tx_rnbase_util_DB');
-			$aPidList = explode(',',$oDbUtil->_getPidList($aRawData['uid'],999));
+			$aPidList = explode(',',$this->_getPidList($aRawData['uid'],999));
 
 			// the last element is always the page itself. so we can pop this.
 			array_pop($aPidList);

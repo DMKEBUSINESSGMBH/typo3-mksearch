@@ -269,6 +269,23 @@ class tx_mksearch_tests_indexer_TtContent_DB_testcase extends tx_phpunit_databas
 		$result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
 		$this->assertNull($result, 'Element sollte gelöscht werden, da nicht im richtigen Seitenbaum. 1');
 	}
+	
+	public function testPrepareSearchDataPreparesTsfeIfTablePagesSoGetPidListWorks() {
+		$GLOBALS['TSFE'] = null;
+		$this->importDataSet(tx_mksearch_tests_Util::getFixturePath('db/tt_content.xml'));
+		//damit es nicht an der Konfig scheitert
+		$options = $this->getDefaultConfig();
+
+		$indexer = new tx_mksearch_indexer_TtContent();
+		list($extKey, $cType) = $indexer->getContentType();
+
+		$record = array('uid'=> 1);
+		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
+
+		$result = $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
+
+		$this->assertNotNull($GLOBALS['TSFE'],'TSFE wurde nicht geladen!');
+	}
 
 	public function testPrepareSearchDataPutsCorrectElementsIntoTheQueueIfTablePagesAndPageHasSubpages() {
 		$this->importDataSet(tx_mksearch_tests_Util::getFixturePath('db/tt_content.xml'));
