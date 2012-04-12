@@ -382,6 +382,22 @@ plugin.tx_mksearch {
 					### the name of the solr fields. The field name should be defined
 					### in the default filter config (fqField) so it can be added
 					excludeFieldName = 0
+					
+					paramName = fq
+					
+					### we need to put the resulting value dependend on
+					### excludeFieldName into the record. this can be left
+					### as it is as long as the facet record has not the field
+					### already in record.
+					paramField = fq
+					
+					### the generic link builder needs a pid. otherwise
+					### the link is disabled. by default we use the current page.
+					### feel free to change this!
+					pid{
+						data = TSFE:id
+						insertData = 1
+					}
 				}
 				### Einschränkung rückgängig machen
 				reset.useKeepVars = 1

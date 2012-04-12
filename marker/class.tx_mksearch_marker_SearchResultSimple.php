@@ -44,28 +44,28 @@ class tx_mksearch_marker_SearchResultSimple extends tx_rnbase_util_BaseMarker {
 			// On default use an empty instance.
 			$item = self::getEmptyInstance('tx_mkcontact_models_SearchHit');
 		}
-		
-		//wenn wir ein array haben, holen wir uns dazu eine 
+
+		//wenn wir ein array haben, holen wir uns dazu eine
 		//kommaseparierte Liste um damit einfach im FE arbeiten zu können
 		foreach ($item->record as &$mValue){
 			if(is_array($mValue)) $mValue = implode(', ', $mValue);
 		}
-		
+
 		// Fill MarkerArray
 		$ignore = self::findUnusedCols($item->record, $template, $marker);
-		
+
 		//diese felder werden auch bei nicht vorhanden sein gesetzt damit die market nicht ausgegeben werden
 		$initFields = $formatter->getConfigurations()->get($confId.'initFields.');
-		
+
 		$markerArray = $formatter->getItemMarkerArrayWrapped($item->record, $confId , $ignore, $marker.'_',$initFields);
 		$subpartArray = array(); $wrappedSubpartArray = array();
-		
+
 		$this->prepareLinks($item, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter, $template);
-		
+
 		$out = $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
 		return $out;
 	}
-	
+
 	/**
 	 * Prepare links
 	 *
@@ -79,32 +79,32 @@ class tx_mksearch_marker_SearchResultSimple extends tx_rnbase_util_BaseMarker {
 	 */
 	public function prepareLinks(&$item, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, &$formatter, $template) {
 		$config = $formatter->getConfigurations();
-		
+
 		$linkId = 'show';
 		$linkConfId = $confId.'links.'.$linkId.'.';
 		//cObject Daten sichern und durch unseren solr record ersetzen
 		$sCObjTempData = $config->getCObj()->data;
 		$config->getCObj()->data = $item->record;
-		
+
 		$pid = $config->getCObj()->stdWrap($config->get($linkConfId.'pid'), $config->get($linkConfId.'pid.'));
-		
+
 		// Link entfernen, wenn nicht gesetzt
 		if(empty($pid)) {
 			$linkMarker = $marker . '_' . strtoupper($linkId).'LINK';
 			self::disableLink($markerArray, $subpartArray, $wrappedSubpartArray, $linkMarker, true);
 		} else {
-		
+
 			// Try to get parameter name from TS
 			$paramName = $config->get($linkConfId.'paramName');
 			if (!$paramName) $paramName = $item->record['contentType'];
 			// Try to get value field name from TS
 			$paramField = $config->get($linkConfId.'paramField');
 			if (!$paramField) $paramField = 'uid';
-			
+
 			$addParams = $config->get($linkConfId.'additionalParams.');
 			if (!is_array($addParams)) $addParams = array();
 			$addParams[$paramName] = $item->record[$paramField];
-			
+
 			self::initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, $linkId, $marker, $addParams, $template);
 		}
 		//cObject Daten wieder zurück

@@ -55,16 +55,21 @@ class tx_mksearch_marker_Facet extends tx_mksearch_marker_SearchResultSimple {
 		//schränkt nach dem facettierten feld und dessen aktullen wert ein
 		//z.B. wird nach contentType facettiert. Dann sieht der Link bei tt_content
 		//so aus: mksearch[fq]=contentType:tt_content
-		
 		$sFq = $item->record['id'];
-		
+
 		//ACHTUNG: im Live Einsatz sollte das Feld nicht im Link stehen sondern nur der Wert.
 		//Das Feld sollte dann erst im Filter hinzugefügt werden. In der TS Config sollte
 		//dazu facet.links.show.excludeFieldName auf 1 stehen!!!
-		if(!$formatter->getConfigurations()->get($confId.'links.show.excludeFieldName'))
+		$configurations = $formatter->getConfigurations();
+		if(!$configurations->get($confId.'links.show.excludeFieldName'))
 					$sFq = $item->record['field'].':'.$sFq;
-		$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'show', $marker, array('fq' => $sFq), $template);
-		
+
+		//jetzt noch den fq parameter wert in den record schreiben
+		//damit er im TS zur Verfügung steht
+		$item->record[$configurations->get($confId.'links.show.paramField')] = $sFq;
+
+		parent::prepareLinks($item, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter, $template);
+
 		// folgende links snind nur sinvoll, wenn die suchparameter gecached werden!
 		// add fq link, um einen filter zur suche hinzuzufügen
 		// remove fq link, um einen filter zur suche hinzuzufügen
