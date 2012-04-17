@@ -39,17 +39,6 @@ class tx_mksearch_service_indexer_core_Config {
 	private static $page;
 
 	/**
-	 * Return page instance
-	 *
-	 * @return t3lib_pageSelect
-	 */
-	private static function page() {
-		if (!isset(self::$page))
-			self::$page = t3lib_div::makeInstance('t3lib_pageSelect');
-		return self::$page;
-	}
-	
-	/**
 	 * Cache for storing actually resulting fe groups of pages
 	 *
 	 * Note that this cache is used for both pages and tt_contents!
@@ -66,6 +55,28 @@ class tx_mksearch_service_indexer_core_Config {
 	 * @var array
 	 */
 	private static $groupCache = array();
+	
+	/**
+	* Return page instance
+	*
+	* @return t3lib_pageSelect
+	*/
+	private static function page() {
+		if (!isset(self::$page))
+			self::$page = t3lib_div::makeInstance('t3lib_pageSelect');
+		return self::$page;
+	}
+	
+	/**
+	 * clears the current $page instance
+	 * so it's renewed for the next call. can be neccassary
+	 * as t3lib_pageSelect for example caches getRootline()
+	 * calls which can be unwanted.
+	 * @return void
+	 */
+	public static function clearPageInstance() {
+		self::$page = null;
+	}
 	
 	/**
 	 * Returns the rootline of the given page id.
@@ -96,7 +107,7 @@ class tx_mksearch_service_indexer_core_Config {
 	public static function getPidListFromSiteRootPage($uid, $recursive = 0){
 		$rootPage = self::getSiteRootPage($uid);
 		if(empty($rootPage)) return '';
-		tx_rnbase::load('tx_rnbase_util_DB');
+			tx_rnbase::load('tx_rnbase_util_DB');
 		return tx_rnbase_util_DB::_getPidList($rootPage['uid'], $recursive);
 	}
 	
