@@ -74,7 +74,7 @@ class tx_mksearch_service_indexer_core_Config {
 	 * bug (http://forge.typo3.org/issues/36232) exists 
 	 */
 	public static function clearPageInstance() {
-		unset(self::$page);
+		self::$page = null;
 	}
 	
 	/**
