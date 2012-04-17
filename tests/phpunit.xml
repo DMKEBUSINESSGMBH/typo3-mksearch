@@ -2,7 +2,7 @@
 <phpunit backupGlobals="true" backupStaticAttributes="true"
 	convertErrorsToExceptions="true" convertNoticesToExceptions="true"
 	convertWarningsToExceptions="true" processIsolation="false"
-	stopOnFailure="false" syntaxCheck="true"
+	stopOnFailure="false" syntaxCheck="false"
 	testSuiteLoaderClass="PHPUnit_Runner_StandardTestSuiteLoader">
 
 <testsuites>
