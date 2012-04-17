@@ -32,7 +32,7 @@ require_once(t3lib_extMgm::extPath('mksearch') . 'lib/Apache/Solr/Document.php')
  * Wir müssen in diesem Fall mit der DB testen da wir die pages
  * Tabelle benötigen
  * @author Hannes Bochmann
- * @backupStaticAttributes enabled
+ * 
  */
 class tx_mksearch_tests_indexer_TtContent_DB_testcase extends tx_phpunit_database_testcase {
 	protected $workspaceIdAtStart;

@@ -25,6 +25,7 @@
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_mksearch_tests_fixtures_indexer_Dummy');
 tx_rnbase::load('tx_mksearch_tests_Util');
+tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
 
 /**
  * Wir müssen in diesem Fall mit der DB testen da wir definitiv 
@@ -35,7 +36,7 @@ tx_rnbase::load('tx_mksearch_tests_Util');
  * diese können auf jedem system unterschiedlich sein.
  * @author Hannes Bochmann
  * 
- * @backupStaticAttributes enabled
+ * 
  */
 class tx_mksearch_tests_indexer_Base_DB_testcase extends tx_phpunit_database_testcase {
 	
@@ -61,6 +62,12 @@ class tx_mksearch_tests_indexer_Base_DB_testcase extends tx_phpunit_database_tes
 	 * setUp() = init DB etc.
 	 */
 	public function setUp() {
+		//WORKAROUND: phpunit supports backupStaticAttributes (in phpunit.xml)
+		//from version 3.6.10 not before. But this version is buggy. (http://forge.typo3.org/issues/36232)
+		//as soon as this bug is fixed, we can use the new phpunit version
+		//and dont need this anymore
+		tx_mksearch_service_indexer_core_Config::clearPageInstance();
+		
 		//das devlog stört nur bei der Testausführung im BE und ist da auch
 		//vollkommen unnötig
 		$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['devlog']['nolog'] = true;

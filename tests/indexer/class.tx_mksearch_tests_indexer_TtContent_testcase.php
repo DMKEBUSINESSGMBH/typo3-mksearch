@@ -28,7 +28,7 @@ require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 require_once(t3lib_extMgm::extPath('mksearch') . 'lib/Apache/Solr/Document.php');
 
 /**
- * @backupStaticAttributes enabled
+ * 
  * @author Hannes Bochmann
  *
  */

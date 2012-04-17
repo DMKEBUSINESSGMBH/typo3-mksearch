@@ -24,7 +24,7 @@
 
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_mksearch_tests_Util');
-
+tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
 
 require_once(t3lib_extMgm::extPath('mksearch') . 'lib/Apache/Solr/Document.php');
 
@@ -32,7 +32,7 @@ require_once(t3lib_extMgm::extPath('mksearch') . 'lib/Apache/Solr/Document.php')
  * Wir müssen in diesem Fall mit der DB testen da wir die pages
  * Tabelle benötigen
  * @author Hannes Bochmann
- * @backupStaticAttributes enabled
+ * 
  */
 class tx_mksearch_tests_indexer_Page_DB_testcase extends tx_phpunit_database_testcase {
 	protected $workspaceIdAtStart;
@@ -57,6 +57,12 @@ class tx_mksearch_tests_indexer_Page_DB_testcase extends tx_phpunit_database_tes
 	 * setUp() = init DB etc.
 	 */
 	public function setUp() {
+		//WORKAROUND: phpunit supports backupStaticAttributes (in phpunit.xml)
+		//from version 3.6.10 not before. But this version is buggy. (http://forge.typo3.org/issues/36232)
+		//as soon as this bug is fixed, we can use the new phpunit version
+		//and dont need this anymore
+		tx_mksearch_service_indexer_core_Config::clearPageInstance();
+		
 		$this->createDatabase();
 		// assuming that test-database can be created otherwise PHPUnit will skip the test
 		$this->db = $this->useTestDatabase();

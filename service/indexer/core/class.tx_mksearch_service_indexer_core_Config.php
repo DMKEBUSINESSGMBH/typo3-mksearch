@@ -68,6 +68,16 @@ class tx_mksearch_service_indexer_core_Config {
 	}
 	
 	/**
+	 * clears the page instance so it is renewed
+	 * upon the next call.
+	 * @deprecated this function is only used in tests as long as a phpunit 
+	 * bug (http://forge.typo3.org/issues/36232) exists 
+	 */
+	public static function clearPageInstance() {
+		unset(self::$page);
+	}
+	
+	/**
 	 * Returns the rootline of the given page id.
 	 * @param 	int 	$uid
 	 * @return 	array
