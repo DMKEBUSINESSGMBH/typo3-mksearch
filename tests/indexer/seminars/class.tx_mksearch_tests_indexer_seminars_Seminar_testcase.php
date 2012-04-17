@@ -23,7 +23,6 @@
 ***************************************************************/
 
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
-tx_rnbase::load('tx_mksearch_model_IndexerDocumentBase');
 tx_rnbase::load('tx_mksearch_tests_Util');
 
 
@@ -111,9 +110,9 @@ class tx_mksearch_tests_indexer_seminars_Seminar_testcase extends tx_phpunit_dat
 		);
 		$aResult = tx_rnbase_util_DB::doSelect('*', 'tx_seminars_seminars', $aOptions);
 
-		$indexer = new tx_mksearch_indexer_seminars_Seminar();
+		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_seminars_Seminar');
 		list($extKey, $cType) = $indexer->getContentType();
-		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$options = array();
 		
 		$aIndexDoc = $indexer->prepareSearchData('tx_seminars_seminars', $aResult[0], $indexDoc, $options)->getData();
@@ -153,9 +152,9 @@ class tx_mksearch_tests_indexer_seminars_Seminar_testcase extends tx_phpunit_dat
 	 * Prüft ob das seminar auf gelöscht gesetzt wird
 	 */
 	public function testPrepareSearchDataWithTableSeminarsAndTypeIs0AndIsHiddenOrDeleted() {
-		$indexer = new tx_mksearch_indexer_seminars_Seminar();
+		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_seminars_Seminar');
 		list($extKey, $cType) = $indexer->getContentType();
-		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$options = array();
 		
 		//Testdaten aus DB holen
@@ -191,9 +190,9 @@ class tx_mksearch_tests_indexer_seminars_Seminar_testcase extends tx_phpunit_dat
 		);
 		$aResult = tx_rnbase_util_DB::doSelect('*', 'tx_seminars_seminars', $aOptions);
 
-		$indexer = new tx_mksearch_indexer_seminars_Seminar();
+		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_seminars_Seminar');
 		list($extKey, $cType) = $indexer->getContentType();
-		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$options = array();
 		
 		$aIndexDoc = $indexer->prepareSearchData('tx_seminars_seminars', $aResult[0], $indexDoc, $options)->getData();
@@ -240,9 +239,9 @@ class tx_mksearch_tests_indexer_seminars_Seminar_testcase extends tx_phpunit_dat
 		);
 		$aResult = tx_rnbase_util_DB::doSelect('*', 'tx_seminars_seminars', $aOptions);
 
-		$indexer = new tx_mksearch_indexer_seminars_Seminar();
+		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_seminars_Seminar');
 		list($extKey, $cType) = $indexer->getContentType();
-		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$options = array();
 		
 		$aIndexDoc = $indexer->prepareSearchData('tx_seminars_seminars', $aResult[0], $indexDoc, $options);
@@ -254,9 +253,9 @@ class tx_mksearch_tests_indexer_seminars_Seminar_testcase extends tx_phpunit_dat
 	 * Prüft ob das seminar auf gelöscht gesetzt wird
 	 */
 	public function testPrepareSearchDataWithTableSeminarsAndTypeIs1AndIsHiddenOrDeleted() {
-		$indexer = new tx_mksearch_indexer_seminars_Seminar();
+		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_seminars_Seminar');
 		list($extKey, $cType) = $indexer->getContentType();
-		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$options = array();
 		
 		//Testdaten aus DB holen
@@ -291,9 +290,9 @@ class tx_mksearch_tests_indexer_seminars_Seminar_testcase extends tx_phpunit_dat
 		);
 		$aResult = tx_rnbase_util_DB::doSelect('*', 'tx_seminars_seminars', $aOptions);
 
-		$indexer = new tx_mksearch_indexer_seminars_Seminar();
+		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_seminars_Seminar');
 		list($extKey, $cType) = $indexer->getContentType();
-		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$options = array();
 		
 		$aIndexDoc = $indexer->prepareSearchData('tx_seminars_seminars', $aResult[0], $indexDoc, $options);
@@ -315,9 +314,9 @@ class tx_mksearch_tests_indexer_seminars_Seminar_testcase extends tx_phpunit_dat
 	 */
 	public function testPrepareSearchDataPutsCorrectDocsInQueueWhenTableCategories() {
 		$aResult = array('uid'=>1);
-		$indexer = new tx_mksearch_indexer_seminars_Seminar();
+		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_seminars_Seminar');
 		list($extKey, $cType) = $indexer->getContentType();
-		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$options = array();
 		
 		$aIndexDoc = $indexer->prepareSearchData('tx_seminars_categories', $aResult, $indexDoc, $options);
@@ -341,9 +340,9 @@ class tx_mksearch_tests_indexer_seminars_Seminar_testcase extends tx_phpunit_dat
 	 */
 	public function testPrepareSearchDataPutsCorrectDocsInQueueWhenTableOrganizers() {
 		$aResult = array('uid'=>1);
-		$indexer = new tx_mksearch_indexer_seminars_Seminar();
+		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_seminars_Seminar');
 		list($extKey, $cType) = $indexer->getContentType();
-		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$options = array();
 		
 		$aIndexDoc = $indexer->prepareSearchData('tx_seminars_organizers', $aResult, $indexDoc, $options);
@@ -367,9 +366,9 @@ class tx_mksearch_tests_indexer_seminars_Seminar_testcase extends tx_phpunit_dat
 	 */
 	public function testPrepareSearchDataPutsCorrectDocsInQueueWhenTableSites() {
 		$aResult = array('uid'=>2);
-		$indexer = new tx_mksearch_indexer_seminars_Seminar();
+		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_seminars_Seminar');
 		list($extKey, $cType) = $indexer->getContentType();
-		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$options = array();
 		
 		$aIndexDoc = $indexer->prepareSearchData('tx_seminars_sites', $aResult, $indexDoc, $options);
@@ -393,9 +392,9 @@ class tx_mksearch_tests_indexer_seminars_Seminar_testcase extends tx_phpunit_dat
 	 */
 	public function testPrepareSearchDataPutsCorrectDocsInQueueWhenTableSpeakers() {
 		$aResult = array('uid'=>2);
-		$indexer = new tx_mksearch_indexer_seminars_Seminar();
+		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_seminars_Seminar');
 		list($extKey, $cType) = $indexer->getContentType();
-		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$options = array();
 		
 		$aIndexDoc = $indexer->prepareSearchData('tx_seminars_speakers', $aResult, $indexDoc, $options);
@@ -419,9 +418,9 @@ class tx_mksearch_tests_indexer_seminars_Seminar_testcase extends tx_phpunit_dat
 	 */
 	public function testPrepareSearchDataPutsCorrectDocsInQueueWhenTableTargetGroups() {
 		$aResult = array('uid'=>2);
-		$indexer = new tx_mksearch_indexer_seminars_Seminar();
+		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_seminars_Seminar');
 		list($extKey, $cType) = $indexer->getContentType();
-		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$options = array();
 		
 		$aIndexDoc = $indexer->prepareSearchData('tx_seminars_target_groups', $aResult, $indexDoc, $options);
@@ -445,9 +444,9 @@ class tx_mksearch_tests_indexer_seminars_Seminar_testcase extends tx_phpunit_dat
 	 */
 	public function testPrepareSearchDataPutsCorrectDocsInQueueWhenTableTimeslots() {
 		$aResult = array('uid'=>4,'seminar'=>4);
-		$indexer = new tx_mksearch_indexer_seminars_Seminar();
+		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_seminars_Seminar');
 		list($extKey, $cType) = $indexer->getContentType();
-		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$options = array();
 		
 		$aIndexDoc = $indexer->prepareSearchData('tx_seminars_timeslots', $aResult, $indexDoc, $options);

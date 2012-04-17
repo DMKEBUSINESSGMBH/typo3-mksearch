@@ -23,9 +23,7 @@
 ***************************************************************/
 
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
-tx_rnbase::load('tx_mksearch_model_IndexerDocumentBase');
 tx_rnbase::load('tx_mksearch_tests_Util');
-tx_rnbase::load('tx_mksearch_indexer_TtNewsNews');
 
 
 require_once(t3lib_extMgm::extPath('mksearch') . 'lib/Apache/Solr/Document.php');
@@ -93,9 +91,9 @@ class tx_mksearch_tests_indexer_TtNewsNews_DB_testcase extends tx_phpunit_databa
 	 * angegebenen Seitenbaum liegen
 	 */
 	public function testPrepareSearchDataWithIncludeCategoriesOption() {
-		$indexer = new tx_mksearch_indexer_TtNewsNews();
+		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtNewsNews');
 		list($extKey, $cType) = $indexer->getContentType();
-		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$options = array(
 			'include.' => array(
 				'categories.' => array(
@@ -118,9 +116,9 @@ class tx_mksearch_tests_indexer_TtNewsNews_DB_testcase extends tx_phpunit_databa
 	 * angegebenen Seitenbaum liegen
 	 */
 	public function testPrepareSearchDataWithExcludeCategoriesOption() {
-		$indexer = new tx_mksearch_indexer_TtNewsNews();
+		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtNewsNews');
 		list($extKey, $cType) = $indexer->getContentType();
-		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$options = array(
 			'exclude.' => array(
 				'categories.' => array(
@@ -139,9 +137,9 @@ class tx_mksearch_tests_indexer_TtNewsNews_DB_testcase extends tx_phpunit_databa
 	}
 	
 	public function testPrepareSearchDataWithSinglePid() {
-		$indexer = new tx_mksearch_indexer_TtNewsNews();
+		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtNewsNews');
 		list($extKey, $cType) = $indexer->getContentType();
-		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$options = array(
 			'addCategoryData' => 1,
 			'defaultSinglePid' => 0,
@@ -158,9 +156,9 @@ class tx_mksearch_tests_indexer_TtNewsNews_DB_testcase extends tx_phpunit_databa
 	}
 	
 	public function testPrepareSearchDataWithDefaultSinglePid() {
-		$indexer = new tx_mksearch_indexer_TtNewsNews();
+		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtNewsNews');
 		list($extKey, $cType) = $indexer->getContentType();
-		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$options = array(
 			'addCategoryData' => 1,
 			'defaultSinglePid' => 50,

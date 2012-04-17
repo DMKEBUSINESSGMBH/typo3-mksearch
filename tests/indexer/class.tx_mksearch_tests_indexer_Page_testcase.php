@@ -23,8 +23,6 @@
 ***************************************************************/
 
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
-tx_rnbase::load('tx_mksearch_indexer_Page');
-tx_rnbase::load('tx_mksearch_model_IndexerDocumentBase');
 tx_rnbase::load('tx_mksearch_tests_Util');
 
 
@@ -38,11 +36,11 @@ require_once(t3lib_extMgm::extPath('mksearch') . 'lib/Apache/Solr/Document.php')
 class tx_mksearch_tests_indexer_Page_testcase extends tx_phpunit_testcase {
 	
 	public function testPrepareSearchDataSetsDocToDeleted() {
-		$indexer = new tx_mksearch_indexer_Page();
+		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_Page');
 		$options = array();
 		
 		list($extKey, $cType) = $indexer->getContentType();
-		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		
 		//is deleted
 		$record = array('uid'=> 123, 'pid' => 0, 'deleted' => 1);
@@ -50,13 +48,13 @@ class tx_mksearch_tests_indexer_Page_testcase extends tx_phpunit_testcase {
 		$this->assertEquals(true, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 
 		//is hidden
-		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$record = array('uid'=> 124, 'pid' => 0, 'deleted' => 0, 'hidden' => 1);
 		$indexer->prepareSearchData('pages', $record, $indexDoc, $options);
 		$this->assertEquals(true, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 		
 		//everything alright
-		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$record = array('uid'=> 125, 'pid' => 0, 'deleted' => 0, 'hidden' => 0);
 		$indexer->prepareSearchData('pages', $record, $indexDoc, $options);
 		$this->assertEquals(false, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);

@@ -23,9 +23,7 @@
 ***************************************************************/
 
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
-tx_rnbase::load('tx_mksearch_model_IndexerDocumentBase');
 tx_rnbase::load('tx_mksearch_tests_Util');
-tx_rnbase::load('tx_mksearch_indexer_Irfaq');
 
 
 require_once(t3lib_extMgm::extPath('mksearch') . 'lib/Apache/Solr/Document.php');
@@ -102,9 +100,9 @@ class tx_mksearch_tests_indexer_Irfaq_testcase extends tx_phpunit_database_testc
 		);
 		$aResult = tx_rnbase_util_DB::doSelect('*', 'tx_irfaq_q', $aOptions);
 
-		$indexer = new tx_mksearch_indexer_Irfaq();
+		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_Irfaq');
 		list($extKey, $cType) = $indexer->getContentType();
-		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$options = array();
 		
 		$aIndexDoc = $indexer->prepareSearchData('tx_irfaq_q', $aResult[0], $indexDoc, $options)->getData();
@@ -140,9 +138,9 @@ class tx_mksearch_tests_indexer_Irfaq_testcase extends tx_phpunit_database_testc
 		);
 		$aResult = tx_rnbase_util_DB::doSelect('*', 'tx_irfaq_q', $aOptions);
 
-		$indexer = new tx_mksearch_indexer_Irfaq();
+		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_Irfaq');
 		list($extKey, $cType) = $indexer->getContentType();
-		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$options = array();
 		
 		$aIndexDoc = $indexer->prepareSearchData('tx_irfaq_q', $aResult[0], $indexDoc, $options)->getData();
@@ -178,9 +176,9 @@ class tx_mksearch_tests_indexer_Irfaq_testcase extends tx_phpunit_database_testc
 		);
 		$aResult = tx_rnbase_util_DB::doSelect('*', 'tx_irfaq_expert', $aOptions);
 
-		$indexer = new tx_mksearch_indexer_Irfaq();
+		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_Irfaq');
 		list($extKey, $cType) = $indexer->getContentType();
-		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$options = array();
 		
 		$aIndexDoc = $indexer->prepareSearchData('tx_irfaq_expert', $aResult[0], $indexDoc, $options);
@@ -211,9 +209,9 @@ class tx_mksearch_tests_indexer_Irfaq_testcase extends tx_phpunit_database_testc
 		);
 		$aResult = tx_rnbase_util_DB::doSelect('*', 'tx_irfaq_cat', $aOptions);
 
-		$indexer = new tx_mksearch_indexer_Irfaq();
+		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_Irfaq');
 		list($extKey, $cType) = $indexer->getContentType();
-		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$options = array();
 		
 		$aIndexDoc = $indexer->prepareSearchData('tx_irfaq_cat', $aResult[0], $indexDoc, $options);
@@ -244,9 +242,9 @@ class tx_mksearch_tests_indexer_Irfaq_testcase extends tx_phpunit_database_testc
 		);
 		$aResult = tx_rnbase_util_DB::doSelect('*', 'tx_irfaq_q', $aOptions);
 
-		$indexer = new tx_mksearch_indexer_Irfaq();
+		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_Irfaq');
 		list($extKey, $cType) = $indexer->getContentType();
-		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$options = array(
 			'include.' => array(
 				'categories.' => array(
@@ -275,7 +273,7 @@ class tx_mksearch_tests_indexer_Irfaq_testcase extends tx_phpunit_database_testc
 		);
 		$aResult = tx_rnbase_util_DB::doSelect('*', 'tx_irfaq_q', $aOptions);
 
-		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		
 		//with include categories as array 
 		$aIndexDoc = $indexer->prepareSearchData('tx_irfaq_q', $aResult[0], $indexDoc, $options);

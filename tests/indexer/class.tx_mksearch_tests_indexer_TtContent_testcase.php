@@ -23,8 +23,6 @@
 ***************************************************************/
 
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
-tx_rnbase::load('tx_mksearch_indexer_TtContent');
-tx_rnbase::load('tx_mksearch_model_IndexerDocumentBase');
 
 
 require_once(t3lib_extMgm::extPath('mksearch') . 'lib/Apache/Solr/Document.php');
@@ -62,49 +60,49 @@ class tx_mksearch_tests_indexer_TtContent_testcase extends tx_phpunit_testcase {
 	}
 	
 	function test_prepareSearchData_CheckIgnoreContentType() {
-		$indexer = new tx_mksearch_indexer_TtContent();
+		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtContent');
 		list($extKey, $cType) = $indexer->getContentType();
 		//content type correct?
 		$this->assertEquals('core',$extKey,'wrong ext key');
 		$this->assertEquals('tt_content',$cType,'wrong cType');
 
-		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$record = array('uid'=> 123, 'pid' => 1, 'deleted' => 0, 'hidden' => 0, 'sectionIndex' => 1, 'CType'=>'list', 'header' => 'test');
 		$options = self::getDefaultOptions();
 		$options['ignoreCTypes.'] = array('search','mailform','login');
 		$result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
 		$this->assertNotNull($result, 'Null returned for uid '.$record['uid']);
 
-		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$options = self::getDefaultOptions();
 		$options['ignoreCTypes.'] = array('search','mailform','list');
 		$result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
 		$this->assertNull($result, 'Not Null returned for uid '.$record['uid']);
 
-		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$options = self::getDefaultOptions();
 		$options['ignoreCTypes'] = 'search,mailform,login';
 		$result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
 		$this->assertNotNull($result, 'Null returned for uid '.$record['uid']);
 
-		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$options = self::getDefaultOptions();
 		$options['ignoreCTypes'] = 'search,mailform,list';
 		$result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
 		$this->assertNull($result, 'Not Null returned for uid '.$record['uid']);
 	}
 	function test_prepareSearchData_CheckIncludeContentType() {
-		$indexer = new tx_mksearch_indexer_TtContent();
+		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtContent');
 		list($extKey, $cType) = $indexer->getContentType();
 
 		$record = array('uid'=> 123, 'pid' => 1, 'deleted' => 0, 'hidden' => 0, 'sectionIndex' => 1, 'CType'=>'list', 'header' => 'test');
-		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$options = self::getDefaultOptions();
 		$options['includeCTypes.'] = array('search','mailform','login');
 		$result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
 		$this->assertNull($result, 'Not Null returned for uid '.$record['uid'].' when CType not in includeCTypes');
 
-		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$options = self::getDefaultOptions();
 		$options['includeCTypes.'] = array('search','mailform','list');
 		$result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);

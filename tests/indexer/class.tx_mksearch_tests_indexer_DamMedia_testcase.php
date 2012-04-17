@@ -175,7 +175,7 @@ class tx_mksearch_tests_indexer_DamMedia_testcase extends tx_phpunit_testcase {
 	 *
 	 */
 	public function testIsIndexableRecordWithoutDeleteIfNotIndexableOption() {
-		$indexer = new tx_mksearch_indexer_DamMedia();
+		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_DamMedia');
 		list($extKey, $cType) = $indexer->getContentType();
 		$options = array(
 			'filter.' => array(
@@ -185,7 +185,7 @@ class tx_mksearch_tests_indexer_DamMedia_testcase extends tx_phpunit_testcase {
 		);
 		
 		$aRawData = array('uid' => 1, 'file_type' => 'something_else');
-		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$oIndexDoc = $indexer->prepareSearchData('tx_dam', $aRawData, $indexDoc, $options);
 		$this->assertNull($oIndexDoc,'Es wurde nicht null geliefert!');
 	}
@@ -194,7 +194,7 @@ class tx_mksearch_tests_indexer_DamMedia_testcase extends tx_phpunit_testcase {
 	 *
 	 */
 	public function testIsIndexableRecordWithDeleteIfNotIndexableOption() {
-		$indexer = new tx_mksearch_indexer_DamMedia();
+		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_DamMedia');
 		list($extKey, $cType) = $indexer->getContentType();
 		$options = array(
 			'filter.' => array(
@@ -204,7 +204,7 @@ class tx_mksearch_tests_indexer_DamMedia_testcase extends tx_phpunit_testcase {
 		);
 		
 		$aRawData = array('uid' => 1, 'file_type' => 'something_else');
-		$indexDoc = new tx_mksearch_model_IndexerDocumentBase($extKey, $cType);
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$oIndexDoc = $indexer->prepareSearchData('tx_dam', $aRawData, $indexDoc, $options);
 		$this->assertTrue($oIndexDoc->getDeleted(),'Das Element wurde nich auf gelöscht gesetzt!');
 	}
