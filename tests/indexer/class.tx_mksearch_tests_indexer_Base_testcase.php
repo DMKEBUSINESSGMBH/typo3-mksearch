@@ -29,6 +29,7 @@ tx_rnbase::load('tx_mksearch_tests_fixtures_indexer_Dummy');
  * Wir müssen in diesem Fall mit der DB testen da wir die pages
  * Tabelle benötigen
  * @author Hannes Bochmann
+ * @backupStaticAttributes enabled
  */
 class tx_mksearch_tests_indexer_Base_testcase extends tx_phpunit_testcase {
 	

@@ -68,17 +68,6 @@ class tx_mksearch_service_indexer_core_Config {
 	}
 	
 	/**
-	 * clears the current $page instance
-	 * so it's renewed for the next call. can be neccassary
-	 * as t3lib_pageSelect for example caches getRootline()
-	 * calls which can be unwanted.
-	 * @return void
-	 */
-	public static function clearPageInstance() {
-		self::$page = null;
-	}
-	
-	/**
 	 * Returns the rootline of the given page id.
 	 * @param 	int 	$uid
 	 * @return 	array

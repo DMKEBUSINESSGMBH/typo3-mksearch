@@ -35,6 +35,8 @@ require_once(t3lib_extMgm::extPath('mksearch') . 'lib/Apache/Solr/Document.php')
  * tx_mksearch_tests_indexer_TtContent_testcase und
  * tx_mksearch_tests_indexer_TtContent_DB_testcase geprüft
  * @author Hannes Bochmann
+ * 
+ * @backupStaticAttributes enabled
  */
 class tx_mksearch_tests_indexer_TtContentTv_DB_testcase extends tx_phpunit_database_testcase {
 	protected $workspaceIdAtStart;

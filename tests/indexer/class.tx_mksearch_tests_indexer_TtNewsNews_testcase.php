@@ -28,6 +28,11 @@ tx_rnbase::load('tx_rnbase_util_Dates');
 
 require_once(t3lib_extMgm::extPath('mksearch') . 'lib/Apache/Solr/Document.php');
 
+/**
+ * @backupStaticAttributes enabled
+ * @author Hannes Bochmann
+ *
+ */
 class tx_mksearch_tests_indexer_TtNewsNews_testcase extends tx_phpunit_testcase {
 	
 	public function setUp() {

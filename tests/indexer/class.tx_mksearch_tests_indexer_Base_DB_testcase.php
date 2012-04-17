@@ -61,10 +61,6 @@ class tx_mksearch_tests_indexer_Base_DB_testcase extends tx_phpunit_database_tes
 	 * setUp() = init DB etc.
 	 */
 	public function setUp() {
-		//getRootline() calls are cached and we don't 
-		//want cache entries from previous tests
-		tx_mksearch_service_indexer_core_Config::clearPageInstance();
-		
 		//das devlog stört nur bei der Testausführung im BE und ist da auch
 		//vollkommen unnötig
 		$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['devlog']['nolog'] = true;
