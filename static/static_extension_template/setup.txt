@@ -545,6 +545,11 @@ lib.mksearch.extrainfo {
 	irfaq.question{
 		template = EXT:mksearch/templates/searchResultIrfaq.html
 	}
+	# Content type "irfaq.question"
+	efaq.faq < .default
+	efaq.faq {
+		template = EXT:mksearch/templates/searchResultEfaq.html
+	}
 	
 	# Content type "seminars.seminar"
 	seminars.seminar < .default

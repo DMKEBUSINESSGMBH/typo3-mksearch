@@ -108,6 +108,8 @@ tx_mksearch_util_Config::registerIndexer(
 	)
 );
 
+tx_mksearch_util_Config::registerIndexer('efaq', 'faq', 'tx_mksearch_indexer_Efaq', array('tx_efaq_faqs'));
+
 
 // Configure core page indexer service
 $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['indexer']['config']['core']['page']['indexedFields'] = array('subtitle', 'url', 'keywords', 'description', 'author', /*'author_email',*/ 'nav_title', 'alias', );
@@ -196,7 +198,7 @@ t3lib_extMgm::addService($_EXTKEY, 'mksearch', 'tx_mksearch_service_irfaq_Expert
 			'className' => 'tx_mksearch_service_irfaq_Expert',
 		)
 	);
-	
+
 t3lib_extMgm::addService($_EXTKEY, 'mksearch', 'tx_mksearch_service_irfaq_Category',
 		array(
 			'title' => 'Irfaq Category Service',
@@ -211,7 +213,7 @@ t3lib_extMgm::addService($_EXTKEY, 'mksearch', 'tx_mksearch_service_irfaq_Catego
 			'className' => 'tx_mksearch_service_irfaq_Category',
 		)
 	);
-	
+
 t3lib_extMgm::addService($_EXTKEY, 'mksearch', 'tx_mksearch_service_irfaq_Question',
 		array(
 			'title' => 'Irfaq Question Service',
