@@ -1,4 +1,4 @@
-# cat=mksearch/basic/file; type=string;label=Directory containing Zend Framework
+# cat=mksearch/basic/file; type=string;label=Directory containing Zend Framework library (absolute path)
 zendPath =
 # cat=mksearch/basic/file; type=string;label=Directory containing Lucene index directory / directories. Either absolute path or relative to PATH_site.
 luceneIndexDir =

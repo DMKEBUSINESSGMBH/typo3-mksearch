@@ -64,6 +64,17 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
     	if (strpos($zendPath, $iniPath) === false) {
     		set_include_path($iniPath . PATH_SEPARATOR . $zendPath);
     	}
+    	if(!file_exists($zendPath)) {
+    		tx_rnbase_util_Logger::fatal('Current path to Zend root does not exist!', 'mksearch', array('Path' => $zendPath));
+    		throw new Exception('Current path to Zend root does not exist!');
+    	}
+
+    	$autoLoaderPath = rtrim($zendPath,DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'Zend'.DIRECTORY_SEPARATOR.'Loader'.DIRECTORY_SEPARATOR.'Autoloader.php';
+    	if(!is_readable($autoLoaderPath)) {
+    		tx_rnbase_util_Logger::fatal('Zend auto loader class not found. Check extension settings!', 'mksearch', array('Path' => $autoLoaderPath));
+    		throw new Exception('Zend auto loader class not found. Check extension settings! More info in devlog.');
+    	}
+
     	// Trigger Zend autoloading mechanism
     	require_once 'Zend/Loader/Autoloader.php';
     	$autoloader = Zend_Loader_Autoloader::getInstance();
