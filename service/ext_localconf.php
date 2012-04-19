@@ -72,43 +72,59 @@ tx_mksearch_util_Config::registerIndexer(
 		'pages'
 	)
 );
-tx_mksearch_util_Config::registerIndexer('tt_news', 'news', 'tx_mksearch_indexer_TtNewsNews', array('tt_news'));
-tx_mksearch_util_Config::registerIndexer('tt_address', 'address', 'tx_mksearch_indexer_TtAddressAddress', array('tt_address'));
-tx_mksearch_util_Config::registerIndexer('dam', 'media', 'tx_mksearch_indexer_DamMedia', array('tx_dam'));
+
+
+if (t3lib_extMgm::isLoaded('tt_news')) {
+	tx_mksearch_util_Config::registerIndexer('tt_news', 'news', 'tx_mksearch_indexer_TtNewsNews', array('tt_news'));
+}
+
+if (t3lib_extMgm::isLoaded('tt_address')) {
+	tx_mksearch_util_Config::registerIndexer('tt_address', 'address', 'tx_mksearch_indexer_TtAddressAddress', array('tt_address'));
+}
+
+if (t3lib_extMgm::isLoaded('dam')) {
+	tx_mksearch_util_Config::registerIndexer('dam', 'media', 'tx_mksearch_indexer_DamMedia', array('tx_dam'));
+}
 
 // seminars Extension
-tx_mksearch_util_Config::registerIndexer(
-	'seminars',
-	'seminar',
-	'tx_mksearch_indexer_seminars_Seminar',
-	array(
-		//main table
-		'tx_seminars_seminars',
-		//tables with related data
-		'tx_seminars_categories',
-		'tx_seminars_organizers',
-		'tx_seminars_sites',
-		'tx_seminars_speakers',
-		'tx_seminars_target_groups',
-		'tx_seminars_timeslots',
-	)
-);
+if (t3lib_extMgm::isLoaded('seminars')) {
+	tx_mksearch_util_Config::registerIndexer(
+		'seminars',
+		'seminar',
+		'tx_mksearch_indexer_seminars_Seminar',
+		array(
+			//main table
+			'tx_seminars_seminars',
+			//tables with related data
+			'tx_seminars_categories',
+			'tx_seminars_organizers',
+			'tx_seminars_sites',
+			'tx_seminars_speakers',
+			'tx_seminars_target_groups',
+			'tx_seminars_timeslots',
+		)
+	);
+}
 
 // irfaq Extension
-tx_mksearch_util_Config::registerIndexer(
-	'irfaq',
-	'question',
-	'tx_mksearch_indexer_Irfaq',
-	array(
-		//main table
-		'tx_irfaq_q',
-		//tables with related data
-		'tx_irfaq_expert',
-		'tx_irfaq_cat',
-	)
-);
+if (t3lib_extMgm::isLoaded('irfaq')) {
+	tx_mksearch_util_Config::registerIndexer(
+		'irfaq',
+		'question',
+		'tx_mksearch_indexer_Irfaq',
+		array(
+			//main table
+			'tx_irfaq_q',
+			//tables with related data
+			'tx_irfaq_expert',
+			'tx_irfaq_cat',
+		)
+	);
+}
 
-tx_mksearch_util_Config::registerIndexer('efaq', 'faq', 'tx_mksearch_indexer_Efaq', array('tx_efaq_faqs'));
+if (t3lib_extMgm::isLoaded('efaq')) {
+	tx_mksearch_util_Config::registerIndexer('efaq', 'faq', 'tx_mksearch_indexer_Efaq', array('tx_efaq_faqs'));
+}
 
 
 // Configure core page indexer service
