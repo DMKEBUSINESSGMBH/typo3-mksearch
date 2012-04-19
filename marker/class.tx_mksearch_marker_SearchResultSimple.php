@@ -101,7 +101,12 @@ class tx_mksearch_marker_SearchResultSimple extends tx_rnbase_util_BaseMarker {
 			$paramField = $config->get($linkConfId.'paramField');
 			if (!$paramField) $paramField = 'uid';
 
-			$addParams = $config->get($linkConfId.'additionalParams.');
+			/* Wir lesen weitere Parameter aus dem TS aus. Dabei ist folgendes möglich:
+					backPid = TEXT
+					backPid.data = TSFE:id
+					backPid.require = 1
+			 */
+			$addParams = $config->get($linkConfId.'additionalParams.', true);
 			if (!is_array($addParams)) $addParams = array();
 			$addParams[$paramName] = $item->record[$paramField];
 
