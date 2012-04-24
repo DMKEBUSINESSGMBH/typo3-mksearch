@@ -53,6 +53,12 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 	private $indexName;
 
 	/**
+	 * Reference to index configuration
+	 * @var tx_mksearch_model_internal_Index
+	 */
+	private $indexModel;
+
+	/**
 	 * Constructor
 	 * 
 	 * @return void
@@ -647,6 +653,18 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 	public function getStatus() {
 		$status = tx_rnbase::makeInstance('tx_mksearch_util_Status');
 		// TODO: sinnvollen Test einfallen lassen...
+		//Läßt sich der Index öffnen?
+		if(!$this->indexModel) {
+			$status->setStatus(-1, 'Illegal State: No index model found!');
+			return $status;
+		}
+		$id = 1;
+		$this->openIndex($this->indexModel, true);
+		$this->closeIndex();
+
+		$msg = 'Up and running on directory ' . $this->getIndexDirectory($this->indexModel->getCredentialString());
+
+		$status->setStatus($id, $msg);
 		return $status;
 	}
 
