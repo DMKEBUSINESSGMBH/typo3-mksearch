@@ -24,6 +24,9 @@
 
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_mksearch_service_internal_Base');
+tx_rnbase::load('tx_mksearch_util_Misc');
+
+
 
 /**
  * Service for accessing indexer configuration models from database
