@@ -133,7 +133,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 	 * @return 	boolean 	true if record was successfully spooled
 	 */
 	public function addRecordToIndex($tableName, $uid, $prefer=false, $resolver=false, $data=false, array $options = array()) {
-		$record  = $this->buildRecordForIndex($tableName, $uid, $prefer, $resolver, $data);
+		$record  = $this->buildRecordForIndex($tableName, $uid, $prefer, $resolver, $data, $options);
 
 		if(!is_array($record)){
 			return;
