@@ -96,8 +96,10 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
 					// Process only non-empty tokens
 					if (strlen($t) > 1 or strlen($t) > 0 and $t[0] != '-') {
 						// "not" requested?
-						if ($t[0] == '-') $fields['__default__'][] = array('term' => substr($t, 1), 'sign' => false);
-						else $fields['__default__'][] = array('term' => $t, 'sign' => $sign);
+						if ($t[0] == '-')
+							$fields['__default__'][] = array('term' => substr($t, 1), 'sign' => false);
+						else
+							$fields['__default__'][] = array('term' => $t, 'sign' => $sign);
 					}
 				}
 			} else {
@@ -141,7 +143,8 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
 					$formData = $parameters->get('submit') ? $paramArray : self::$formData;
 					$formData['action'] = $link->makeUrl(false);
 					$formData['searchcount'] = $configurations->getViewData()->offsetGet('searchcount');
-					$formData['searchterm'] = $parameters->get('term');
+					$this->prepareFormFields($formData, $parameters);
+
 					$templateMarker = tx_rnbase::makeInstance('tx_mksearch_marker_General');
 					$formTxt = $templateMarker->parseTemplate($typeTemplate, $formData, $formatter, $confId.'form.', 'FORM');
 				} else {
@@ -154,6 +157,25 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
 			$template = str_replace('###'.$conf['config.']['marker'].'###', $formTxt, $template);
 		}
 		return $template;
+	}
+	/**
+	 * Werte für Formularfelder aufbereiten. Daten aus dem Request übernehmen und wieder füllen.
+	 * @param array $formData
+	 * @param tx_rnbase_parameters $parameters
+	 */
+	protected function prepareFormFields(&$formData, $parameters) {
+		$formData['searchterm'] = $parameters->get('term');
+		$combinations = array('or', 'and', 'exact');
+		$options = $parameters->get('options');
+		if($options['combination']) {
+			foreach ($combinations as $combination) {
+				$formData['combination_'.$combination.'_selected'] = $options['combination'] == $combination ? 'checked=checked' : '';
+			}
+		}
+		else {
+			// Default
+			$formData['combination_or_selected'] = 'checked=checked';
+		}
 	}
 	
 	/**
