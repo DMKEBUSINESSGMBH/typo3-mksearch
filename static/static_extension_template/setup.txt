@@ -25,10 +25,10 @@ lib.mksearch.pagebrowser {
 
 # Filter for Lucene search
 # TODO: code review!
-lib.mksearch.filter {
+lib.mksearch.lucenefilter {
 	# Default filter which provides a standard form
 	# to receive a search term
-	searchForm = tx_mksearch_filter_SearchForm
+	searchForm = tx_mksearch_filter_LuceneBase
 	searchForm {
 		# Configuration of the filter itself
 		config {
@@ -148,13 +148,13 @@ plugin.tx_mksearch {
 	# lucene search	
 	searchlucene {
 		# Filter configuration - default filter is the form filter
-		filter < lib.mksearch.filter.searchForm
+		filter < lib.mksearch.lucenefilter.searchForm
 		
 		# Alternative filter used for doing a search based on HTTP referer
 		# e.g. to search the recent Google search phrase within the page
 		# When this filter is used, another template without the 
 		# ###SEARCH_FORM### marker should be used.
-		# filter < lib.mksearch.filter.searchByReferer
+		# filter < lib.mksearch.lucenefilter.searchByReferer
 		
 		# For testing and debugging purposes the http referer can be set:
 		# filter.refererDebug = http://www.google.de/search?hl=de&q=Some+test+search+term

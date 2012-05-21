@@ -30,7 +30,7 @@ tx_rnbase::load('tx_rnbase_util_ListBuilderInfo');
  * Dieser Filter verarbeitet Anfragen für Lucene
  * @author rene
  */
-class tx_mksearch_filter_SearchForm extends tx_rnbase_filter_BaseFilter implements ListBuilderInfo {
+class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implements ListBuilderInfo {
 	
 	static private $formData = array();
 	
@@ -182,6 +182,6 @@ class tx_mksearch_filter_SearchForm extends tx_rnbase_filter_BaseFilter implemen
 
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/filter/class.tx_mksearch_filter_SearchForm.php']) {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/filter/class.tx_mksearch_filter_SearchForm.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/filter/class.tx_mksearch_filter_LuceneBase.php']) {
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/filter/class.tx_mksearch_filter_LuceneBase.php']);
 }
