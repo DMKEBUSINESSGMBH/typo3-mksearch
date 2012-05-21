@@ -26,6 +26,10 @@ require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_rnbase_util_SearchBase');
 tx_rnbase::load('tx_rnbase_util_ListBuilderInfo');
 
+/**
+ * Dieser Filter verarbeitet Anfragen für Lucene
+ * @author rene
+ */
 class tx_mksearch_filter_SearchForm extends tx_rnbase_filter_BaseFilter implements ListBuilderInfo {
 	
 	static private $formData = array();
@@ -118,7 +122,7 @@ class tx_mksearch_filter_SearchForm extends tx_rnbase_filter_BaseFilter implemen
 	function parseTemplate($template, &$formatter, $confId, $marker = 'FILTER') {
 		$configurations = $this->getConfigurations();
 		$conf = $configurations->get($confId);
-		
+
 		// Form template required?
 		if(tx_rnbase_util_BaseMarker::containsMarker($template, $conf['config']['marker'])) {
 			// Get template from TS
@@ -130,7 +134,7 @@ class tx_mksearch_filter_SearchForm extends tx_rnbase_filter_BaseFilter implemen
 				if($typeTemplate) {
 					$parameters = $this->getParameters();
 					$paramArray = $parameters->getArrayCopy();
-					
+
 					$link = $configurations->createLink();
 					$link->initByTS($configurations,$confId.'config.links.action.', array());
 					// Prepare some form data
@@ -139,7 +143,7 @@ class tx_mksearch_filter_SearchForm extends tx_rnbase_filter_BaseFilter implemen
 					$formData['searchcount'] = $configurations->getViewData()->offsetGet('searchcount');
 					$formData['searchterm'] = $parameters->get('term');
 					$templateMarker = tx_rnbase::makeInstance('tx_mksearch_marker_General');
-					$formTxt = $templateMarker->parseTemplate($typeTemplate, $formData, $formatter, $confId.'form.', $subpartName);
+					$formTxt = $templateMarker->parseTemplate($typeTemplate, $formData, $formatter, $confId.'form.', 'FORM');
 				} else {
 					$formTxt = '<!-- NO SUBPART '.$subpartName.' FOUND -->';
 				}

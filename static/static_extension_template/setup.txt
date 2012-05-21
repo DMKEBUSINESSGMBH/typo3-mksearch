@@ -39,7 +39,7 @@ lib.mksearch.filter {
 			# template containing the actual form
 			template = EXT:mksearch/templates/searchForm.html
 			# subpart in the form template
-			subpart = OLDFORM
+			subpart = LUCENEFORM
 			links {
 				action.pid = 0
 			}
@@ -146,7 +146,7 @@ lib.mksearch.defaultsolrfilter {
 
 plugin.tx_mksearch {
 	# lucene search	
-	search {
+	searchlucene {
 		# Filter configuration - default filter is the form filter
 		filter < lib.mksearch.filter.searchForm
 		

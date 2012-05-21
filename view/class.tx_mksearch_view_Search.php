@@ -42,7 +42,7 @@ class tx_mksearch_view_Search extends tx_rnbase_view_Base {
 				$viewData->offsetGet('filter') instanceof ListBuilderInfo ? $viewData->offsetGet('filter') : null);
 		
 		$params = array(
-			'confid' => 'search.',
+			'confid' => 'searchlucene.',
 			'marker' => 'SEARCHRESULT',
 		);
 		$template = $listBuilder->render($items, $viewData, 

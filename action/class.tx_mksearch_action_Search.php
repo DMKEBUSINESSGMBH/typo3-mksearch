@@ -29,8 +29,7 @@ tx_rnbase::load('tx_rnbase_filter_BaseFilter');
 tx_rnbase::load('tx_mksearch_util_ServiceRegistry');
 
 /**
- * Controller to show a list of modular products
- * 
+ * Controller to do search requests against lucene.
  */
 class tx_mksearch_action_Search extends tx_rnbase_action_BaseIOC {
 	
@@ -44,11 +43,9 @@ class tx_mksearch_action_Search extends tx_rnbase_action_BaseIOC {
 	 */
 	function handleRequest(&$parameters,&$configurations, &$viewData){
 
-		$filter = tx_rnbase_filter_BaseFilter::createFilter($parameters, $configurations, $viewData, 'search.');
+		$filter = tx_rnbase_filter_BaseFilter::createFilter($parameters, $configurations, $viewData, 'searchlucene.');
 		$fields = array();
 		$options = array();
-//		$options['debug'] = 1;
-
 		$items = array();
 		if($filter->init($fields, $options)) {
 			// @TODO: Adjust Pagebrowser
@@ -70,7 +67,7 @@ class tx_mksearch_action_Search extends tx_rnbase_action_BaseIOC {
 	}
 
 	function handlePageBrowser(&$parameters,&$configurations, &$viewdata, &$fields, &$options) {
-		if(is_array($configurations->get('search.pagebrowser.'))) {
+		if(is_array($configurations->get('searchlucene.pagebrowser.'))) {
 			$service = tx_mkmodularproducts_util_ServiceRegistry::getProductService();
 			// Mit Pagebrowser benötigen wir zwei Zugriffe, um die Gesamtanzahl der Teams zu ermitteln
 			$options['count']= 1;
@@ -90,7 +87,7 @@ class tx_mksearch_action_Search extends tx_rnbase_action_BaseIOC {
 		}
 	}
 
-	function getTemplateName() { return 'search';}
+	function getTemplateName() { return 'searchlucene';}
 	function getViewClassName() { return 'tx_mksearch_view_Search';}
 }
 

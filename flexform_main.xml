@@ -37,24 +37,33 @@
             </TCEforms>
           </action>
 
-          <usedIndex>
-            <TCEforms>
-              <exclude>1</exclude>
-              <label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.usedIndex</label>
-              <config>
-                <type>select</type>
-                <foreign_table>tx_mksearch_indices</foreign_table>
-                <foreign_table_where>AND engine='zend_lucene' ORDER BY name</foreign_table_where>
-                <multiple>0</multiple>
-                <maxitems>1</maxitems>
-                <size>1</size>
-              </config>
-            </TCEforms>
-          </usedIndex>
-
         </el>
       </ROOT>
     </sDEF>
+	<s_searchlucene>
+		<ROOT>
+			<TCEforms>
+				<sheetTitle>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.action.searchLucene</sheetTitle>
+			</TCEforms>
+			<type>array</type>
+			<el>
+				<searchlucene.usedIndex>
+					<TCEforms>
+						<exclude>1</exclude>
+						<label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.usedIndex</label>
+						<config>
+							<type>select</type>
+							<foreign_table>tx_mksearch_indices</foreign_table>
+							<foreign_table_where>AND engine='zend_lucene' ORDER BY name</foreign_table_where>
+							<multiple>0</multiple>
+							<maxitems>1</maxitems>
+							<size>1</size>
+						</config>
+					</TCEforms>
+				</searchlucene.usedIndex>
+			</el>
+		</ROOT>
+	</s_searchlucene>
 	<s_searchsolr>
 		<ROOT>
 			<TCEforms>
@@ -283,18 +292,7 @@
 								<type>text</type>
 								<cols>80</cols>
 								<rows>10</rows>
-								<default># Default index to be used
-usedIndex = default
-
-# Example: Use a given index with german content on URL parameter L=1
-# BEWARE: As conditions are not allowed within blocks
-# you need to source out the following code to a separate TS template!
-# [globalVar = GP:L = 1]
-# plugin.tx_mksearch.usedIndex = german
-# [global]
-					
-# Define the link targets of every content type. Example for core.tt_news:
-# search.render.core.tt_news.links.show.pid = [page id]
+								<default>
 								</default>
 							</config>
 						</TCEforms>
