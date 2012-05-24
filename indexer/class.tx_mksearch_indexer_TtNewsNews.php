@@ -117,7 +117,8 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base {
 		// Instantiate indexer document
 		$indexDoc->setTitle($rawData['title']);
 		$indexDoc->addField('pid', $rawData['pid']);
-
+		$indexDoc->setFeGroups(t3lib_div::intExplode(',', $rawData['fe_group']));
+		
 		// Keywords
 		// @TODO: Page Meta data?
 		// laut code werden nur die keywords der news mit indiziert.
