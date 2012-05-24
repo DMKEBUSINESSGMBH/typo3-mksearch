@@ -275,17 +275,16 @@ class tx_mksearch_model_IndexerDocumentBase implements tx_mksearch_interface_Ind
 	 * from the groups explicitely set for this record - e.g. caused by
 	 * superordinated records with the flag "Include subpages".
 	 * 
-	 * Calling this method is optional.
-	 * If it is not called, in self::getCoreData()
-	 * implicitely the fe_group "0"  is set, as
-	 * the field must NOT be empty to enable
+	 * Calling this method is mandatory.
+	 * The field must NOT be empty to enable
 	 * search for anonymous users!
 	 * 
 	 * @param array|csv $fe_groups
 	 * @return void
 	 */
 	public function setFeGroups($fe_groups=array(0)) {
-		if (!is_array($fe_groups)) $fe_groups = t3lib_div::trimExplode(',', $fe_groups);
+		if (!is_array($fe_groups)) 
+			$fe_groups = t3lib_div::trimExplode(',', $fe_groups);
 		$this->data['fe_groups'] = $this->getFieldInstance($fe_groups, 'keyword', 1.0, 'int');
 	}
 
