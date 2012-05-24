@@ -92,7 +92,14 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
     		t3lib_div::makeInstance('Zend_Search_Lucene_Analysis_Analyzer_Common_Utf8Num_CaseInsensitive')
     	);
 	}
-	
+	public function getFieldNames($indexed = false) {
+		$ret = array();
+		if(!$this->checkForOpenIndex(false))
+			return $ret;
+		$fieldNames = array_values($this->index->getFieldNames($indexed));
+		sort($fieldNames);
+		return $fieldNames;
+	}
 	/**
 	 * Check if an index was opened
 	 * 
@@ -307,8 +314,8 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 			}
 			$queryString = $this->buildQuery($fields);
 		}
-		
-		if($options['debug']) {
+		// Attention: $queryString may also be an object... 
+		if($options['debug'] && !is_string($queryString)) {
 			$queryString->debug = true;
 		}
 		
@@ -555,7 +562,6 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 
 		// Additional data
 		$data = $doc->getData();
-		
 		// Hook to manipulate data
 		tx_rnbase_util_Misc::callHook(
 				'mksearch',
@@ -588,12 +594,9 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 		}
 		// Is there still a former version of this document
 		else {
-			// Is the former version "older" respecting the timestamp?
-			if (isset($old[0]->tstamp) && $old[0]->tstamp < $data['tstamp']->getValue()) {
-				// Delete former version and create new version
-				$this->index->delete($old[0]->id);
-				$this->indexNew($doc);
-			}
+			// Delete former version and create new version
+			$this->index->delete($old[0]->id);
+			$this->indexNew($doc);
 		}
 	}
 
