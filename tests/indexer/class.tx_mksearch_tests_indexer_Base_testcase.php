@@ -60,6 +60,126 @@ class tx_mksearch_tests_indexer_Base_testcase extends tx_phpunit_testcase {
 		
 		$this->assertNotNull($GLOBALS['TSFE'],'TSFE wurde nicht geladen!');
 	}
+	
+	
+		
+	/**
+	 *
+	 */
+	public function testCheckOptionsInclude() {
+		$indexer =tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
+		list($extKey, $cType) = $indexer->getContentType();
+		$options = array(
+			'include.'=>array('categories.' => array(3))
+		);
+		$options2 = array(
+			'include.'=>array('categories' => 3)
+		);
+		
+		$aRawData = array('uid' => 1, 'pid' => 1);
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
+		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
+		$this->assertNull($aIndexDoc,'Das Element wurde indiziert! Option 1');
+		
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
+		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options2);
+		$this->assertNull($aIndexDoc,'Das Element wurde indiziert! Option 2');
+		
+		$options = array(
+			'include.'=>array('categories.' => array(2))
+		);
+		$options2 = array(
+			'include.'=>array('categories' => 2)
+		);
+		$aRawData = array('uid' => 1, 'pid' => 2);
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
+		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
+		$this->assertNotNull($aIndexDoc,'Das Element wurde nicht indiziert! Option 1');
+		
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
+		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options2);
+		$this->assertNotNull($aIndexDoc,'Das Element wurde nicht indiziert! Option 2');
+	}
+	
+	/**
+	 *
+	 */
+	public function testCheckOptionsExclude() {
+		$indexer =tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
+		list($extKey, $cType) = $indexer->getContentType();
+		$options = array(
+			'exclude.'=>array('categories.' => array(3))
+		);
+		$options2 = array(
+			'exclude.'=>array('categories' => 3)
+		);
+		
+		$aRawData = array('uid' => 1, 'pid' => 1);
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
+		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
+		$this->assertNotNull($aIndexDoc,'Das Element wurde nicht indiziert! Element 1 Option 1');
+		
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
+		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options2);
+		$this->assertNotNull($aIndexDoc,'Das Element wurde nicht indiziert! Element 1 Option 2');
+		
+		$options = array(
+			'exclude.'=>array('categories.' => array(2))
+		);
+		$options2 = array(
+			'exclude.'=>array('categories' => 2)
+		);
+		$aRawData = array('uid' => 1, 'pid' => 2);
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
+		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
+		$this->assertNull($aIndexDoc,'Das Element wurde doch indiziert! Element 2 Option 1');
+		
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
+		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options2);
+		$this->assertNull($aIndexDoc,'Das Element wurde doch indiziert! Element 2 Option 2');
+	}
+	/**
+	*
+	*/
+	public function testCheckOptionsIncludeReturnsCorrectDefaultValueWithEmptyCategory() {
+		$indexer = $this->getMock('tx_mksearch_tests_fixtures_indexer_Dummy',array('getTestCategories'));
+		
+		$indexer->expects($this->once())
+			->method('getTestCategories')
+			->will($this->returnValue(array()));
+		
+		list($extKey, $cType) = $indexer->getContentType();
+		$options = array(
+				'include.'=>array('categories.' => array(3))
+		);
+	
+		$aRawData = array('uid' => 1, 'pid' => 1);
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
+		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
+		$this->assertNull($aIndexDoc,'Das Element wurde indiziert! Option 1');
+	}
+	
+	/**
+	 *
+	 */
+	public function testCheckOptionsExcludeReturnsCorrectDefaultValueWithEmptyCategory() {
+		$indexer = $this->getMock('tx_mksearch_tests_fixtures_indexer_Dummy',array('getTestCategories'));
+		
+		$indexer->expects($this->once())
+			->method('getTestCategories')
+			->will($this->returnValue(array()));
+		
+		list($extKey, $cType) = $indexer->getContentType();
+		$options = array(
+				'exclude.'=>array('categories.' => array(3))
+		);
+	
+		$aRawData = array('uid' => 1, 'pid' => 1);
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
+		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
+		$this->assertNotNull($aIndexDoc,'Das Element wurde nicht indiziert! Option 1');
+	}
+	
 }
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']) {
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']);

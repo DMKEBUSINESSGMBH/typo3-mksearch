@@ -296,36 +296,40 @@ CONFIG;
 		}
 
 		//should only element with a special category be indexed
-		if(!empty($aOptions[$sMode.'.']) && !empty($aModels)){
-			//include categories as array like
-			//include.categories{
-			//	0 = 1
-			//	1 = 2
-			//}
-			if(!empty($aOptions[$sMode.'.'][$sOptionKey.'.'])){
-				$aIncludeCategories = $aOptions[$sMode.'.'][$sOptionKey.'.'];
-			}
-			//include categories as string like
-			//include.categories = 1,2
-			elseif(!empty($aOptions[$sMode.'.'][$sOptionKey])){
-				$aIncludeCategories = explode(',',$aOptions[$sMode.'.'][$sOptionKey]);
-			}
-
-			//if config is empty nothing to do and everything is alright
-			if(empty($aIncludeCategories))
-				return true;
-
-			//check if at least one category of the current element
-			//is in the given include categories
-			$bIsValid = $bNoHit;//if we find nothing
-			foreach ($aModels as $oModel){
-				if(in_array($oModel->getUid(),$aIncludeCategories)){
-					$bIsValid = $bHit;
+		if(!empty($aOptions[$sMode.'.'])){
+			$IsValid = $bNoHit;//no option given
+			if (!empty($aModels)) {
+				//include categories as array like
+				//include.categories{
+				//	0 = 1
+				//	1 = 2
+				//}
+				if(!empty($aOptions[$sMode.'.'][$sOptionKey.'.'])){
+					$aIncludeCategories = $aOptions[$sMode.'.'][$sOptionKey.'.'];
+				}
+				//include categories as string like
+				//include.categories = 1,2
+				elseif(!empty($aOptions[$sMode.'.'][$sOptionKey])){
+					$aIncludeCategories = explode(',',$aOptions[$sMode.'.'][$sOptionKey]);
+				}
+	
+				//if config is empty nothing to do and everything is alright
+				if(empty($aIncludeCategories))
+					return true;
+	
+				//check if at least one category of the current element
+				//is in the given include categories
+				foreach ($aModels as $oModel){
+					if(in_array($oModel->getUid(),$aIncludeCategories)){
+						$IsValid = $bHit;
+					}
 				}
 			}
-		}else
-			$bIsValid = true;//no option given
-		return $bIsValid;
+		}
+		else {
+			$IsValid = true;
+		}
+		return $IsValid;
 	}
 
 	/**

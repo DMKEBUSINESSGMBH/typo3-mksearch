@@ -28,15 +28,15 @@ tx_rnbase::load('tx_mksearch_tests_Util');
 tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
 
 /**
- * Wir müssen in diesem Fall mit der DB testen da wir definitiv 
+ * Wir müssen in diesem Fall mit der DB testen da wir definitiv
  * mindestens bis hasDocToBeDeleted() laufen. Dort wird die rootline geprüft
  * und daher benötigen wir für alle Tests, die Funktionalitäten
  * nach diesem Punkt testen eine leere DB um alles in einem erwarteten Zustand
- * zu haben. Sonst werden die tatsächlich vorhandenen pages geprüft und 
+ * zu haben. Sonst werden die tatsächlich vorhandenen pages geprüft und
  * diese können auf jedem system unterschiedlich sein.
  * @author Hannes Bochmann
- * 
- * 
+ *
+ *
  */
 class tx_mksearch_tests_indexer_Base_DB_testcase extends tx_phpunit_database_testcase {
 	
@@ -65,7 +65,7 @@ class tx_mksearch_tests_indexer_Base_DB_testcase extends tx_phpunit_database_tes
 		//WORKAROUND: phpunit seems to backup static attributes (in phpunit.xml)
 		//from version 3.6.10 not before. I'm not completely
 		//sure about that but from version 3.6.10 clearPageInstance is no
-		//more neccessary to have the complete test suite succeed. 
+		//more neccessary to have the complete test suite succeed.
 		//But this version is buggy. (http://forge.typo3.org/issues/36232)
 		//as soon as this bug is fixed, we can use the new phpunit version
 		//and dont need this anymore
@@ -247,82 +247,6 @@ class tx_mksearch_tests_indexer_Base_DB_testcase extends tx_phpunit_database_tes
 		$this->assertEquals(array(0=>'test value 2',1=>'test value 2'),$aIndexDoc['multivalue_test_field_2_s']->getValue(),'Es wurde nicht das zweite Feld richtig gesetzt!');
 	}
 	
-	
-	/**
-	 * 
-	 */
-	public function testCheckOptionsInclude() {
-		$indexer =tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
-		list($extKey, $cType) = $indexer->getContentType();
-		$options = array(
-			'include.'=>array('categories.' => array(3))
-		);
-		$options2 = array(
-			'include.'=>array('categories' => 3)
-		);
-		
-		$aRawData = array('uid' => 1, 'pid' => 1);
-		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
-		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
-		$this->assertNull($aIndexDoc,'Das Element wurde indiziert! Option 1');
-		
-		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
-		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options2);
-		$this->assertNull($aIndexDoc,'Das Element wurde indiziert! Option 2');
-		
-		$options = array(
-			'include.'=>array('categories.' => array(2))
-		);
-		$options2 = array(
-			'include.'=>array('categories' => 2)
-		);
-		$aRawData = array('uid' => 1, 'pid' => 2);
-		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
-		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
-		$this->assertNotNull($aIndexDoc,'Das Element wurde nicht indiziert! Option 1');
-		
-		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
-		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options2);
-		$this->assertNotNull($aIndexDoc,'Das Element wurde nicht indiziert! Option 2');
-	}
-	
-	/**
-	 * 
-	 */
-	public function testCheckOptionsExclude() {
-		$indexer =tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
-		list($extKey, $cType) = $indexer->getContentType();
-		$options = array(
-			'exclude.'=>array('categories.' => array(3))
-		);
-		$options2 = array(
-			'exclude.'=>array('categories' => 3)
-		);
-		
-		$aRawData = array('uid' => 1, 'pid' => 1);
-		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
-		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
-		$this->assertNotNull($aIndexDoc,'Das Element wurde nicht indiziert! Element 1 Option 1');
-		
-		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
-		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options2);
-		$this->assertNotNull($aIndexDoc,'Das Element wurde nicht indiziert! Element 1 Option 2');
-		
-		$options = array(
-			'exclude.'=>array('categories.' => array(2))
-		);
-		$options2 = array(
-			'exclude.'=>array('categories' => 2)
-		);
-		$aRawData = array('uid' => 1, 'pid' => 2);
-		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
-		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
-		$this->assertNull($aIndexDoc,'Das Element wurde doch indiziert! Element 2 Option 1');
-		
-		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
-		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options2);
-		$this->assertNull($aIndexDoc,'Das Element wurde doch indiziert! Element 2 Option 2');
-	}
 	
 	/**
 	 * Check if setting the doc to deleted works
