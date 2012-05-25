@@ -86,10 +86,7 @@ class tx_mksearch_tests_fixtures_indexer_Dummy extends tx_mksearch_indexer_Base 
 			);	
 		}
 		
-		$aCategories = array(
-			0 => $this->createModel(array('uid' => 1)),
-			1 => $this->createModel(array('uid' => 2)),
-		);
+		$aCategories = $this->getTestCategories();
 		//includes
 		if(!$this->checkInOrExcludeOptions($aCategories,$aOptions))
 			return null;
@@ -98,6 +95,13 @@ class tx_mksearch_tests_fixtures_indexer_Dummy extends tx_mksearch_indexer_Base 
 			return null;
 		
 		return $oIndexDoc;
+	}
+	
+	protected function getTestCategories() {
+		return array(
+			0 => $this->createModel(array('uid' => 1)),
+			1 => $this->createModel(array('uid' => 2)),
+		);
 	}
 	
 	/**
