@@ -40,6 +40,7 @@
 			
 			<label index="label_search_reset">reset Search</label>
 			
+			<label index="ERROR_default">There was an unexpected error!</label>			
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="label_search_foundresults">Anzahl der gefundenen Ergebnisse:</label>
@@ -74,6 +75,7 @@
 			
 			<label index="label_search_reset">Suche zurücksetzen</label>
 			
+			<label index="ERROR_default">Es gab einen unerwarteten Fehler!</label>
 		</languageKey>
 	</data>
 </T3locallang>
