@@ -89,7 +89,6 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 		//per Curl durchzuführen.
 		if(tx_rnbase_configurations::getExtensionCfgValue('mksearch', 'useCurlAsHttpTransport')){
 			require_once(t3lib_extMgm::extPath('mksearch').'lib/Apache/Solr/HttpTransport/Curl.php' );
-
 			$oHttpTransport = new Apache_Solr_HttpTransport_Curl();
 			$this->index->setHttpTransport($oHttpTransport);
 		}
@@ -643,12 +642,13 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 				$msg .= ' (Ping time: ' . $respTime .' ms)';
 			else {
 				$id = -1;
-				$msg = 'Could not connect to Solr!';
+				$msg = 'Ping to Solr failed! Url: ' . $this->getSolr()->getHost() . ':'. $this->getSolr()->getPort() . $this->getSolr()->getPath() . 'admin/ping';
 			}
 		}
 		catch(Exception $e) {
 			$id = -1;
 			$msg = 'Error connecting Solr: ' . $e->getMessage();
+			$msg .= " Url: ".$this->getSolr()->getHost() . ':'. $this->getSolr()->getPort() . $this->getSolr()->getPath() . 'admin/ping';
 		}
 		$status->setStatus($id, $msg);
 		return $status;
