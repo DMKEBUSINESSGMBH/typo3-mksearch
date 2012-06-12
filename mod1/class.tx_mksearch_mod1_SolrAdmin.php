@@ -28,6 +28,7 @@
 
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_rnbase_mod_BaseModFunc');
+tx_rnbase::load('tx_rnbase_util_SearchBase');
 
 /**
  * Mksearch backend module
@@ -123,7 +124,7 @@ class tx_mksearch_mod1_SolrAdmin extends tx_rnbase_mod_BaseModFunc {
 		// Solr-Core auf der aktuellen Seite suchen
 		$fields['INDX.PID'][OP_EQ_INT] = $this->getModule()->getPid();
 		$fields['INDX.ENGINE'][OP_EQ] = 'solr';
-		$cores = tx_mksearch_util_ServiceRegistry::getIntIndexService()->search($fields, $options);
+		$cores = tx_mksearch_util_ServiceRegistry::getIntIndexService()->search($fields, array());
 		return $cores;
 	}
 	/**
