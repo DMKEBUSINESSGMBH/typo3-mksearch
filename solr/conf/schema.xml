@@ -519,7 +519,7 @@
 
 		<!-- Autocomplete. copy all fields to "text_autocomplete_phrases" which should be used 
 			for a autocomplete search -->
-		<field name="text_autocomplete_phrases" type="text_autocomplete" indexed="true" stored="true" multiValued="true" />
+		<field name="text_autocomplete_phrases" type="text_autocomplete" indexed="true" stored="false" multiValued="true" />
 		<copyField source="title" dest="text_autocomplete_phrases" />
 
 		<!-- Dynamic field definitions. If a field name is not found, dynamicFields 
