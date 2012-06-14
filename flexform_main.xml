@@ -61,6 +61,58 @@
 						</config>
 					</TCEforms>
 				</searchlucene.usedIndex>
+				<searchlucene.filter.config.template>
+					<TCEforms>
+						<exclude>1</exclude>
+						<label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.searchFormTemplate</label>
+						<config>
+							<type>input</type>
+							<size>24</size>
+							<max>256</max>
+							<eval>trim</eval>
+							<wizards type="array">
+								<_PADDING>2</_PADDING>
+								<link type="array">
+									<type>popup</type>
+									<title>Link</title>
+									<icon>link_popup.gif</icon>
+									<script>browse_links.php?mode=wizard&amp;act=file</script>
+									<params type="array">
+										<blindLinkOptions>page,url,mail,spec</blindLinkOptions>
+										<allowedExtensions>htm,html,tmpl,tpl</allowedExtensions>
+									</params>
+									<JSopenParams>height=300,width=500,status=0,menubar=0,scrollbars=1</JSopenParams>
+								</link>
+							</wizards>
+						</config>
+					</TCEforms>
+				</searchlucene.filter.config.template>
+				<searchluceneTemplate>
+					<TCEforms>
+						<exclude>1</exclude>
+						<label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.resultListTemplate</label>
+						<config>
+							<type>input</type>
+							<size>24</size>
+							<max>256</max>
+							<eval>trim</eval>
+							<wizards type="array">
+								<_PADDING>2</_PADDING>
+								<link type="array">
+									<type>popup</type>
+									<title>Link</title>
+									<icon>link_popup.gif</icon>
+									<script>browse_links.php?mode=wizard&amp;act=file</script>
+									<params type="array">
+										<blindLinkOptions>page,url,mail,spec</blindLinkOptions>
+										<allowedExtensions>htm,html,tmpl,tpl</allowedExtensions>
+									</params>
+									<JSopenParams>height=300,width=500,status=0,menubar=0,scrollbars=1</JSopenParams>
+								</link>
+							</wizards>
+						</config>
+					</TCEforms>
+				</searchluceneTemplate>
 			</el>
 		</ROOT>
 	</s_searchlucene>

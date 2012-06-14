@@ -25,6 +25,8 @@
 			<label index="plugin.mksearch.flexform.mainmarkerclass">Main marker class</label>
 			<label index="plugin.mksearch.flexform.mainsubpart">Main subpart</label>
 			<label index="plugin.mksearch.flexform.template">Template</label>
+			<label index="plugin.mksearch.flexform.searchFormTemplate">Template for search formular</label>
+			<label index="plugin.mksearch.flexform.resultListTemplate">Template for result list</label>
 
 			<label index="scheduler_indexTask_name">MKSearch Indexing</label>
 			<label index="scheduler_indexTask_description">Start indexing process of documents</label>
