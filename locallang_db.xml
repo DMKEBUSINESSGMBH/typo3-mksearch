@@ -16,6 +16,7 @@
 			<label index="plugin.mksearch.flexform.action.searchLucene">Search Form for Lucene</label>
 			<label index="plugin.mksearch.flexform.action.searchSolr">Search view for Solr</label>
 			<label index="plugin.mksearch.flexform.usedIndex">Search Index to use</label>
+			<label index="plugin.mksearch.flexform.filter.debugQuery">Debug filter query</label>
 			<label index="plugin.mksearch.flexform.filter.confid">Filter</label>
 			<label index="plugin.mksearch.flexform.filter.confid.default">default</label>
 			<label index="plugin.mksearch.flexform.filter.confid.dismax">DisMax</label>
