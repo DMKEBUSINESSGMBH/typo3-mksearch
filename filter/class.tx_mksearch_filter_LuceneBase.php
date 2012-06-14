@@ -165,16 +165,26 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
 	 */
 	protected function prepareFormFields(&$formData, $parameters) {
 		$formData['searchterm'] = $parameters->get('term');
-		$combinations = array('or', 'and', 'exact');
+		$values = array('or', 'and', 'exact');
 		$options = $parameters->get('options');
 		if($options['combination']) {
-			foreach ($combinations as $combination) {
-				$formData['combination_'.$combination.'_selected'] = $options['combination'] == $combination ? 'checked=checked' : '';
+			foreach ($values as $value) {
+				$formData['combination_'.$value.'_selected'] = $options['combination'] == $value ? 'checked=checked' : '';
 			}
 		}
 		else {
 			// Default
 			$formData['combination_or_selected'] = 'checked=checked';
+		}
+		$values = array('standard', 'advanced');
+		if($options['mode']) {
+			foreach ($values as $value) {
+				$formData['mode_'.$value.'_selected'] = $options['mode'] == $value ? 'checked=checked' : '';
+			}
+		}
+		else {
+			// Default
+			$formData['combination_standard_selected'] = 'checked=checked';
 		}
 	}
 	
