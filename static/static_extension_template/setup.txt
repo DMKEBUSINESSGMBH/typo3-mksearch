@@ -37,7 +37,7 @@ lib.mksearch.lucenefilter {
 			# 		in the default main search template! 
 			marker = SEARCH_FORM
 			# template containing the actual form
-			template = EXT:mksearch/templates/searchForm.html
+			template = EXT:mksearch/templates/searchlucene.html
 			# subpart in the form template
 			subpart = LUCENEFORM
 			links {

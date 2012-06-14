@@ -56,5 +56,80 @@
 ###SEARCH###
 
 
+
+<!-- ----------------------- -->
+<!-- das Lucene Suchformular -->
+<!-- ----------------------- -->
+###LUCENEFORM###
+
+<form action="###FORM_ACTION###" method="post" id="sitesearch">
+<fieldset class="term">
+    <div>
+		<label for="mksearch[term]">###LABEL_search_searchterm###</label>
+		<input class="text" type="text" name="mksearch[term]" id="mksearch[term]" value="###FORM_SEARCHTERM###"/>
+	</div>
+</fieldset>
+<fieldset>
+	<legend>###LABEL_search_options###</legend>
+	
+	<fieldset>
+		<legend>###LABEL_search_options_standard###</legend>
+		<div>
+			<input class="radio" type="radio" name="mksearch[options][mode]" id="mksearch[options][mode][standard]" value="standard" ###FORM_MODE_STANDARD_SELECTED### />
+			<label for="mksearch[options][mode][standard]">###LABEL_search_options_standard_label###</label>
+		</div>
+		<div>###LABEL_search_options_standard_hint###</div>
+		
+		<fieldset>
+			<legend>###LABEL_search_options_standard_combination###</legend>
+			<div>
+				<input class="radio" type="radio" name="mksearch[options][combination]" id="mksearch[options][combination][or]" value="or" ###FORM_COMBINATION_OR_SELECTED### />
+				<label for="mksearch[options][combination][or]">###LABEL_search_options_standard_combination_or###</label> 
+			</div>
+			<div>
+				<input class="radio" type="radio" name="mksearch[options][combination]" id="mksearch[options][combination][and]" value="and" ###FORM_COMBINATION_AND_SELECTED### />
+				<label for="mksearch[options][combination][and]">###LABEL_search_options_standard_combination_and###</label>
+			</div>
+			<div>
+				<input class="radio" type="radio" name="mksearch[options][combination]" id="mksearch[options][combination][exact]" value="exact" ###FORM_COMBINATION_EXACT_SELECTED### />
+				<label for="mksearch[options][combination][exact]">###LABEL_search_options_standard_combination_exact###</label>
+			</div>
+		</fieldset>
+		
+		<fieldset>
+			<legend>###LABEL_search_options_standard_others###</legend>
+			<div>
+				<input class="checkbox" type="checkbox" name="mksearch[options][others][fuzzy]" id="mksearch[options][others][fuzzy]" disabled="disabled" />
+				<label for="mksearch[options][others][fuzzy]">###LABEL_search_options_standard_others_fuzzy_lucene###</label> 
+			</div>
+			
+			<div>
+				<label for="mksearch[options][others][contenttypes]">###LABEL_search_options_standard_others_contenttypes###</label> 
+				<select name="mksearch[options][others][contenttypes]" id="mksearch[options][others][contenttypes]" size="5" disabled="disabled">
+					<option>core.tt_content</option>
+					<option>core.tt_news</option>
+					<option>mkcontact.company</option>
+					<option>mkcontact.person</option>
+				</select>
+			</div>
+		</fieldset>
+	</fieldset>
+	
+	<fieldset>
+		<legend>###LABEL_search_options_advanced###</legend>
+		<div>
+			<input class="radio" type="radio" name="mksearch[options][mode]" id="mksearch[options][mode][advanced]" value="advanced" ###FORM_MODE_ADVANCED_SELECTED### />
+			<label for="mksearch[options][mode][advanced]">###LABEL_search_options_advanced_label###</label>
+		</div>
+	</fieldset>
+</fieldset>
+<fieldset>
+	<input class="submit" type="submit" name="mksearch[submit]" value="###LABEL_search_submit###" />
+</fieldset>
+</form>
+
+###FORM_DCSEARCHTERMHEADING###
+###LUCENEFORM###
+
 </body>
 </html>
