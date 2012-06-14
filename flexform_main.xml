@@ -176,15 +176,6 @@
 							</config>
 						</TCEforms>
 					</searchsolr.filter.confid>
-					<searchsolr.force>
-						<TCEforms>
-							<exclude>1</exclude>
-							<label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.force</label>
-							<config>
-								<type>check</type>
-							</config>
-						</TCEforms>
-					</searchsolr.force>
 					<searchsolr.requestHandler>
 						<TCEforms>
 							<exclude>1</exclude>
@@ -197,6 +188,61 @@
 							</config>
 						</TCEforms>
 					</searchsolr.requestHandler>
+					<searchsolr.filter._overwrite.force>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.force</label>
+							<config>
+								<type>check</type>
+							</config>
+						</TCEforms>
+					</searchsolr.filter._overwrite.force>
+					<searchsolr.autocomplete.enable>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.enableAutoComplete</label>
+							<config>
+								<type>check</type>
+							</config>
+						</TCEforms>
+					</searchsolr.autocomplete.enable>
+					<searchsolr.autocomplete.includeJquery>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.includeJquery</label>
+							<config>
+								<type>check</type>
+							</config>
+						</TCEforms>
+					</searchsolr.autocomplete.includeJquery>
+					<searchsolr.autocomplete.includeJqueryUiCore>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.includeJqueryUiCore</label>
+							<config>
+								<type>check</type>
+							</config>
+						</TCEforms>
+					</searchsolr.autocomplete.includeJqueryUiCore>
+					<searchsolr.autocomplete.includeJqueryUiAutocomplete>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.includeJqueryUiAutocomplete</label>
+							<config>
+								<type>check</type>
+							</config>
+						</TCEforms>
+					</searchsolr.autocomplete.includeJqueryUiAutocomplete>
+					
+					<searchsolr.filter._overwrite.options.debug>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.filter.debugQuery</label>
+							<config>
+							  <type>check</type>
+							</config>
+						</TCEforms>
+					</searchsolr.filter._overwrite.options.debug>
 					<searchsolr.filter>
 						<TCEforms>
 							<exclude>1</exclude>
@@ -223,10 +269,49 @@
 							</config>
 						</TCEforms>
 					</searchsolr.mainmarkerclass>
+					<searchsolr.filter._overwrite.template.subpart>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.mainsubpartForm</label>
+							<config>
+								<type>input</type>
+								<size>50</size>
+								<max>256</max>
+								<eval>trim</eval>
+								<default>###SIMPLE###</default>
+							</config>
+						</TCEforms>
+					</searchsolr.filter._overwrite.template.subpart>
+					<searchsolr.filter._overwrite.template.file>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.searchFormTemplate</label>
+							<config>
+								<type>input</type>
+								<size>24</size>
+								<max>256</max>
+								<eval>trim</eval>
+								<wizards type="array">
+									<_PADDING>2</_PADDING>
+									<link type="array">
+										<type>popup</type>
+										<title>Link</title>
+										<icon>link_popup.gif</icon>
+										<script>browse_links.php?mode=wizard&amp;act=file</script>
+										<params type="array">
+											<blindLinkOptions>page,url,mail,spec</blindLinkOptions>
+											<allowedExtensions>htm,html,tmpl,tpl</allowedExtensions>
+										</params>
+										<JSopenParams>height=300,width=500,status=0,menubar=0,scrollbars=1</JSopenParams>
+									</link>
+								</wizards>
+							</config>
+						</TCEforms>
+					</searchsolr.filter._overwrite.template.file>
 					<searchsolr.mainsubpart>
 						<TCEforms>
 							<exclude>1</exclude>
-							<label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.mainsubpart</label>
+							<label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.mainsubpartList</label>
 							<config>
 								<type>input</type>
 								<size>50</size>
@@ -239,7 +324,7 @@
 					<searchsolrTemplate>
 						<TCEforms>
 							<exclude>1</exclude>
-							<label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.template</label>
+							<label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.resultListTemplate</label>
 							<config>
 								<type>input</type>
 								<size>50</size>

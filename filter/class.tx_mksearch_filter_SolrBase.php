@@ -26,12 +26,35 @@ tx_rnbase::load('tx_rnbase_util_SearchBase');
 tx_rnbase::load('tx_rnbase_filter_BaseFilter');
 tx_rnbase::load('tx_rnbase_util_ListBuilderInfo');
 
+/**
+ * Der Filter liest seine Konfiguration passend zum Typ des Solr RequestHandlers. Der Typ 
+ * ist entweder "default" oder "dismax". Entsprechend baut sich auch die Typoscript-Konfiguration 
+ * auf:
+ * searchsolr.filter.default.
+ * searchsolr.filter.dismax.
+ * 
+ * Es gibt Optionen, die für beide Requesttypen identisch sind. Als Beispiel seien die Templates 
+ * genannt. Um diese Optionen zentral über das Flexform konfigurieren zu können, werden die
+ * betroffenen Werte zusätzlich noch über den Pfad
+ * 
+ * searchsolr.filter._overwrite.
+ * 
+ * ermittelt und wenn vorhanden bevorzugt verwendet.
+ * 
+ * @author René Nitzsche
+ *
+ */
 class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 	
 	protected $sort = false;
 	protected $sortOrder = 'asc';
 	protected $confIdExtended = '';
-	
+	/**
+	 * @return string
+	 */
+	protected function getConfIdOverwrite() {
+		return $this->getConfId(false).'filter._overwrite.';
+	}
 	/**
 	 * Liefert die ConfId für den Filter
 	 * Die ID ist hier jeweils dismax oder default.
@@ -65,7 +88,14 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 		
 		return $this->initFilter($fields, $options, $this->getParameters(), $this->getConfigurations(), $confId);
 	}
-	
+	protected function getConfValue($configurations, $confValue) {
+		$value = $configurations->get($this->getConfIdOverwrite().$confValue);
+//		tx_rnbase_util_Debug::debug(empty($value), $value.' - class.tx_mksearch_filter_SolrBase.php LINE: '.__LINE__); // TODO: remove me
+		if(empty($value)) {
+			$value = $configurations->get($this->getConfId().$confValue);
+		}
+		return $value;
+	}
 	/**
 	 * Filter for search form
 	 *
@@ -79,15 +109,14 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 	 */
 	protected function initFilter(&$fields, &$options, &$parameters, &$configurations, $confId) {
 		// Es muss ein Submit-Parameter im request liegen, damit der Filter greift
-		if(!($parameters->offsetExists('submit') || $configurations->get($confId.'force'))) {
+		if(!($parameters->offsetExists('submit') || $this->getConfValue($configurations, 'force'))) {
 			return false;
 		}
-		
 		// request handler setzen
 		if($requestHandler = $configurations->get($this->getConfId(false).'requestHandler')){
 			$options['qt'] = $requestHandler;
 		}
-		
+
 		// suchstring beachten
 		$this->handleTerm($fields, $parameters, $configurations, $confId);
 		
@@ -99,7 +128,10 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 		
 		// fq (filter query) beachten
 		$this->handleFq($options, $parameters, $configurations, $confId);
-		
+
+		// Debug prüfen
+		if($configurations->get($this->getConfIdOverwrite().'options.debug'))
+			$options['debug'] = 1;
 		return true;
 	}
 
@@ -379,8 +411,8 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 			
 		$configurations = $formatter->getConfigurations();
 		tx_rnbase::load('tx_rnbase_util_Templates');
-		$formTemplate = $configurations->get($confId.'template.file');
-		$subpart = $configurations->get($confId.'template.subpart');
+		$formTemplate = $this->getConfValue($configurations, 'template.file');
+		$subpart = $this->getConfValue($configurations, 'template.subpart');
 		$formTemplate = tx_rnbase_util_Templates::getSubpartFromFile($formTemplate, $subpart);
 
 		if($formTemplate) {

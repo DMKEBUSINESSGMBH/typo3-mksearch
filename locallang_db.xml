@@ -24,10 +24,15 @@
 			<label index="plugin.mksearch.flexform.requestHandler">Request handler</label>
 			<label index="plugin.mksearch.flexform.filterClass">Filter class</label>
 			<label index="plugin.mksearch.flexform.mainmarkerclass">Main marker class</label>
-			<label index="plugin.mksearch.flexform.mainsubpart">Main subpart</label>
+			<label index="plugin.mksearch.flexform.mainsubpartList">Subpart for result list</label>
+			<label index="plugin.mksearch.flexform.mainsubpartForm">Subpart for search formular</label>
 			<label index="plugin.mksearch.flexform.template">Template</label>
 			<label index="plugin.mksearch.flexform.searchFormTemplate">Template for search formular</label>
 			<label index="plugin.mksearch.flexform.resultListTemplate">Template for result list</label>
+			<label index="plugin.mksearch.flexform.enableAutoComplete">Enable autocomplete/suggest</label>
+			<label index="plugin.mksearch.flexform.includeJquery">Include jQuery main</label>
+			<label index="plugin.mksearch.flexform.includeJqueryUiCore">Include jQuery-UI Core</label>
+			<label index="plugin.mksearch.flexform.includeJqueryUiAutocomplete">Include JS for UI Autocomplete</label>
 
 			<label index="scheduler_indexTask_name">MKSearch Indexing</label>
 			<label index="scheduler_indexTask_description">Start indexing process of documents</label>
