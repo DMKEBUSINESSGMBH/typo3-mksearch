@@ -117,7 +117,7 @@ class tx_mksearch_util_TCA {
 	}
 	
 	/**
-	 * Insert indexes fot the current rootpage/domain
+	 * Insert solr indexes fot the current rootpage/domain
 	 *
 	 * @param array $params
 	 */
@@ -128,7 +128,12 @@ class tx_mksearch_util_TCA {
 		
 		// Wir suchen alle Indexes, da die aktuelle PageId oder die RootPageId
 		// nicht die der PageId des Indexes entsprechen muss.
-		$indexer = tx_mksearch_util_ServiceRegistry::getIntIndexService()->findAll();
+		$fields = array();
+		$fields['INDX.ENGINE'][OP_EQ] = 'solr';
+		$options = array();
+		//$options['debug'] = 1;
+		$options['enablefieldsfe'] = 1;
+		$indexer = tx_mksearch_util_ServiceRegistry::getIntIndexService()->search($fields, $options);
 		foreach($indexer as $index) {
 			/* @var $index tx_mksearch_model_internal_Index */
 			// rootpage des indexes
