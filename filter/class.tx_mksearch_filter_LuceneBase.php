@@ -79,9 +79,9 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
 		// Set fe_groups
 		global $GLOBALS;
 		$options['fe_groups'] = $GLOBALS['TSFE']->fe_user->groupData['uid'];
-		
 		// Is $fields['term'] a query which can be directly understood by the search engine?
 		$ooptions = $parameters->get('options');
+		// TODO: Diese Optionen müssen sich auch per TS setzen lassen!
 		if ($ooptions['mode'] == 'advanced') {
 			$options['rawFormat'] = true;
 			$fields['term'] = $term;
