@@ -53,7 +53,7 @@
 			
 			<label index="label_search_options_standard_combination">Kombination:</label>
 			<label index="label_search_options_standard_combination_none">Standard (zurzeit das selbe wie or)</label>
-			<label index="label_search_options_standard_combination_free">Freihe Syntax</label>
+			<label index="label_search_options_standard_combination_free">Freie Syntax</label>
 			<label index="label_search_options_standard_combination_or">Einzelne Wörter suchen</label>
 			<label index="label_search_options_standard_combination_and">Alle Wörter suchen</label>
 			<label index="label_search_options_standard_combination_exact">Den exakten Ausdruck</label>
