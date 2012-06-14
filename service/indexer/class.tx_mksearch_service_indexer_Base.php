@@ -36,7 +36,6 @@ tx_rnbase::load('tx_mksearch_interface_DataProvider');
  *
  * @package	TYPO3
  * @subpackage	tx_mksearch
- * @todo get fields / options / include / exclude handling from tx_mkhoga_solr_JobOffer
  * @deprecated Entfällt komplett.
  */
 abstract class tx_mksearch_service_indexer_Base extends t3lib_svbase

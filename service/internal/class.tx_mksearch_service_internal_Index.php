@@ -387,69 +387,6 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 			tx_rnbase_util_Logger::fatal('[INDEXQUEUE] Fatal error processing queue occured!', 'mksearch', array('Exception' => $e->getMessage(), 'Queue-Items'=> $data));
 		}
 		return 0;
-
-
-//
-//
-//		$relevantIndexers = tx_mksearch_util_Config::getIndexersForDatabaseTables(array_keys($data));
-//		foreach($cores As $core) {
-//			$cred = self::getCredentialsFromString($core->getCredentialString());
-//			$solrSrv = self::getSolrEngine($cred);
-//			foreach($relevantIndexers As $indexerData) {
-//				// Check if indexer is matches with core
-//				if(!$srv->isIndexerDefined($core, $indexerData)) continue;
-//
-//				// Extract data relevant for the current indexer
-//				$parameterData = array();
-//				foreach (tx_mksearch_util_Config::getDatabaseTablesForIndexer($indexerData['extKey'], $indexerData['contentType']) as $tableName) {
-//					if (array_key_exists($tableName, $data))
-//						$parameterData[$tableName] = $data[$tableName];
-//				}
-//
-//				$indexer = tx_mksearch_util_ServiceRegistry::getIndexerService($indexerData['extKey'], $indexerData['contentType']);
-//				// @todo When moved to EXT:mksearch => Fetch options for this indexer
-//				// Irgendwie kann das mit mehreren Tabellen nicht funktionieren!!
-//				$options = array();
-//				$indexer->prepare($options, $parameterData);
-//
-//				list($extKey, $contentType) = $indexer->getContentType();
-//				do {
-//					$e = null;
-//					try {
-//						$doc = $indexer->nextItem($solrSrv->makeIndexDocInstance($extKey, $contentType));
-//						try {
-//							if ($doc) {
-//								$solrSrv->indexUpdate($doc);
-//								if(tx_rnbase_util_Logger::isNoticeEnabled() && method_exists($doc, '__toString')) {
-//									tx_rnbase_util_Logger::notice('tx_mkhoga_srv_Search->updateIndex(): item indexed: '.$extKey.'/'.$contentType.'.', 'tx_mkhoga', array('Doc-PK' => $doc->__toString()));
-//								}
-//							}
-//							// In welchen Fällen bekommen wir kein Doc??
-//						}
-//						catch (Exception $e) {
-//							if(tx_rnbase_util_Logger::isWarningEnabled()) {
-//								if(!method_exists($doc, '__toString')) {
-//									$data = array();
-//									foreach ($doc->getPrimaryKey() as $key=>$value) {
-//										$data[$key] = $value->getValue();
-//									}
-//								}
-//								else
-//									$data = $doc->__toString();
-//								tx_rnbase_util_Logger::warn('tx_mkhoga_srv_Search->updateIndex() 1: Error on indexing item '.$extKey.'/'.$contentType.'.', 'tx_mkhoga', array('code' => $e->getCode(), 'msg' => $e->getMessage(), 'docid' => $data));
-//							}
-//						}
-//					}
-//					catch (Exception $e) {
-//						if(tx_rnbase_util_Logger::isWarningEnabled())
-//							tx_rnbase_util_Logger::warn('tx_mkhoga_srv_Search->updateIndex(): Error on indexing item '.$extKey.'/'.$contentType.'.', 'tx_mkhoga', array('code' => $e->getCode(), 'msg' => $e->getMessage()));
-//					}
-//				} while ($doc !== null || (!empty($e)));
-//			}
-//			$solrSrv->commitIndex();
-//		}
-//		return;
-
 	}
 
 	/**
@@ -538,7 +475,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 			', CONCAT(\''.$resolver.'\') FROM ' . $from . $where;
 
 		if($options['debug'])
-			t3lib_div::debug($query,'class.tx_mkhoga_srv_Search.php : ');
+			t3lib_div::debug($query,'class.tx_mksearch_srv_Search.php : '.__LINE__);
 		$GLOBALS['TYPO3_DB']->sql_query($query);
 	}
 }

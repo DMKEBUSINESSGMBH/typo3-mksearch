@@ -35,7 +35,6 @@ tx_rnbase::load('tx_rnbase_util_Logger');
  * @author	Lars Heber <lars.heber@das-medienkombinat.de>
  * @package	TYPO3
  * @subpackage	tx_mksearch
- * @todo get fields / options / include / exclude handling from tx_mkhoga_solr_JobOffer
  */
 abstract class tx_mksearch_service_indexer_BaseDataBase
 	extends t3lib_svbase

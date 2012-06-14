@@ -33,7 +33,6 @@ tx_rnbase::load('tx_mksearch_interface_Indexer');
  * @author	Lars Heber <lars.heber@das-medienkombinat.de>
  * @package	TYPO3
  * @subpackage	tx_mksearch
- * @todo get fields / options / include / exclude handling from tx_mkhoga_solr_JobOffer
  */
 abstract class tx_mksearch_service_indexer_BaseRnBaseSearch
 	extends t3lib_svbase
@@ -62,12 +61,6 @@ abstract class tx_mksearch_service_indexer_BaseRnBaseSearch
 	 * and calling nextItem() for the first time.
 	 * 
 	 * 
-	 * $uids:
-	 * Derzeit nur Indexer für die eigene Tabelle möglich!
-	 * Perspektivisch können Indexer für mehrere Tabellen zuständig sein.
-	 * So wird z.B. tx_mkhoga_solr_JobOffer auch die Kontakt-Tabelle überwachen,
-	 * um relevante Job-Angebote zu aktualisieren.
-	 * 
 	 * Um bei mehrfachen Daten-Speicherungs- und damit Index-Update-Anforderungen
 	 * innerhalb eines Requests mehrfaches Aktualisieren eines Records zu vermeiden,
 	 * muss eine Queue eingerichtet werden!
@@ -87,7 +80,6 @@ abstract class tx_mksearch_service_indexer_BaseRnBaseSearch
 		$searcher = tx_rnbase_util_SearchBase::getInstance($this->getSearchClass($this->options));
 		
 		
-		// @todo get fields / options / include / exclude handling from tx_mkhoga_solr_JobOffer
 		list($f, $o) = $this->getFieldsOptions($this->options, $data);
 		
 		// If no "enablefields*" option is explicitely set, implicitely force FE mode

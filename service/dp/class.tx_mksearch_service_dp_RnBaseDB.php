@@ -34,7 +34,6 @@ tx_rnbase::load('tx_mksearch_interface_DataProvider');
  * @author	Lars Heber <lars.heber@das-medienkombinat.de>
  * @package	TYPO3
  * @subpackage	tx_mksearch
- * @todo get fields / options / include / exclude handling from tx_mkhoga_solr_JobOffer
  */
 abstract class tx_mksearch_service_dp_RnBaseDB implements tx_mksearch_interface_DataProvider {
 
@@ -83,7 +82,6 @@ abstract class tx_mksearch_service_dp_RnBaseDB implements tx_mksearch_interface_
 
 		$searcher = tx_rnbase_util_SearchBase::getInstance($this->getSearchClass($this->options));
 
-		// @todo get fields / options / include / exclude handling from tx_mkhoga_solr_JobOffer
 		list($f, $o) = $this->getFieldsOptions($this->options, $data);
 
 		// If no "enablefields*" option is explicitely set, implicitely force FE mode
