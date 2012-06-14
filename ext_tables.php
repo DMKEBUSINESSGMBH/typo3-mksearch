@@ -29,18 +29,19 @@ t3lib_extMgm::addStaticFile($_EXTKEY,'static/static_extension_template/', 'MK Se
 require_once $_EXT_PATH.'res/help/ext_csh.php';
 
 if (TYPO3_MODE == 'BE') {
-    require_once($_EXT_PATH.'mod1/ext_tables.php');
+	require_once($_EXT_PATH.'mod1/ext_tables.php');
     
-    
-    // // icon für sysfolder registrieren
-    tx_rnbase::load('tx_rnbase_util_TYPO3');
-    $TCA['pages']['columns']['module']['config']['items'][] = array('MK Search', $_EXTKEY, $_EXT_RELPATH.'icons/icon_folder.gif');
-    if(tx_rnbase_util_TYPO3::isTYPO44OrHigher()) {
-    	t3lib_SpriteManager::addTcaTypeIcon('pages', 'contains-'.$_EXTKEY, $_EXT_RELPATH.'icons/icon_folder.gif');
-    } else {
-    	$ICON_TYPES[$_EXTKEY] = array('icon' => $_EXT_RELPATH.'icons/icon_folder.gif');
-    }
-    
+	# Add plugin wizards
+	$TBE_MODULES_EXT['xMOD_db_new_content_el']['addElClasses']['tx_mksearch_util_wizicon'] = t3lib_extMgm::extPath($_EXTKEY).'util/class.tx_mksearch_util_Wizicon.php';
+
+	// // icon für sysfolder registrieren
+	tx_rnbase::load('tx_rnbase_util_TYPO3');
+	$TCA['pages']['columns']['module']['config']['items'][] = array('MK Search', $_EXTKEY, $_EXT_RELPATH.'icons/icon_folder.gif');
+	if(tx_rnbase_util_TYPO3::isTYPO44OrHigher()) {
+		t3lib_SpriteManager::addTcaTypeIcon('pages', 'contains-'.$_EXTKEY, $_EXT_RELPATH.'icons/icon_folder.gif');
+	} else {
+		$ICON_TYPES[$_EXTKEY] = array('icon' => $_EXT_RELPATH.'icons/icon_folder.gif');
+	}
 }
 
 $TCA['tx_mksearch_indices'] = array (

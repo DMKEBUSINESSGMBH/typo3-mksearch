@@ -8,11 +8,11 @@
 		<languageKey index="default" type="array">
 			<label index="general.undef">Undefined</label>
 			<label index="plugin.mksearch.label">MK Search</label>
+			<label index="plugin.mksearch.description">Powerful search interface for various search engines.</label>
 			<label index="plugin.mksearch.flexform.tab.tssetup">TypoScript setup</label>
 			<label index="plugin.mksearch.flexform.tab.action">View</label>
 			<label index="plugin.mksearch.flexform.tab.softlink">Softlink</label>
 			<label index="plugin.mksearch.flexform.tssetup">TS config path: plugin.tx_mksearch.</label>
-			<label index="plugin.mksearch.label">MK Search</label>
 			<label index="plugin.mksearch.flexform.action.searchLucene">Search Form for Lucene</label>
 			<label index="plugin.mksearch.flexform.action.searchSolr">Search view for Solr</label>
 			<label index="plugin.mksearch.flexform.usedIndex">Search Index to use</label>

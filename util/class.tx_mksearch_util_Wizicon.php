@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2009 das Medienkombinat
+*  (c) 2009-2012 das Medienkombinat GmbH
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -37,17 +37,17 @@ class tx_mksearch_util_Wizicon {
 
 		$LL = $this->includeLocalLang();
 
-		$wizardItems['plugins_tx_mkmodularproducts'] = array(
-			'icon'=>t3lib_extMgm::extRelPath('mkmodularproducts').'/ext_icon.gif',
-			'title'=>$LANG->getLLL('plugin.mkmodularproducts.label',$LL),
-			'description'=>$LANG->getLLL('plugin.mkmodularproducts.description',$LL),
-			'params'=>'&defVals[tt_content][CType]=list&defVals[tt_content][list_type]=tx_mkmodularproducts'
+		$wizardItems['plugins_tx_mksearch'] = array(
+			'icon'=>t3lib_extMgm::extRelPath('mksearch').'/ext_icon.gif',
+			'title'=>$LANG->getLLL('plugin.mksearch.label',$LL),
+			'description'=>$LANG->getLLL('plugin.mksearch.description',$LL),
+			'params'=>'&defVals[tt_content][CType]=list&defVals[tt_content][list_type]=tx_mksearch'
 		);
 
 		return $wizardItems;
 	}
 	function includeLocalLang()	{
-		$llFile = t3lib_extMgm::extPath('mkmodularproducts').'locallang_db.xml';
+		$llFile = t3lib_extMgm::extPath('mksearch').'locallang_db.xml';
 		$LOCAL_LANG = t3lib_div::readLLXMLfile($llFile, $GLOBALS['LANG']->lang);
 		return $LOCAL_LANG;
 	}
