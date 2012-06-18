@@ -123,6 +123,9 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
 	 */
 	function parseTemplate($template, &$formatter, $confId, $marker = 'FILTER') {
 		$configurations = $this->getConfigurations();
+		// Aufpassen mit der confId. Der Listbuilder bekommt view.hit. übergeben,
+		// Der Filter ist aber in view.filter. konfiguriert. Darum die confId hier umbiegen:
+		$confId = $this->getConfId().'filter.';
 		$conf = $configurations->get($confId);
 
 		// Form template required?
