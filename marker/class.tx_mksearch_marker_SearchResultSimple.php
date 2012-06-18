@@ -90,8 +90,9 @@ class tx_mksearch_marker_SearchResultSimple extends tx_rnbase_util_BaseMarker {
 
 		// Link entfernen, wenn nicht gesetzt
 		if(empty($pid)) {
+			$remove = intval($formatter->getConfigurations()->get($linkConfId.'removeIfDisabled')); 
 			$linkMarker = $marker . '_' . strtoupper($linkId).'LINK';
-			self::disableLink($markerArray, $subpartArray, $wrappedSubpartArray, $linkMarker, true);
+			self::disableLink($markerArray, $subpartArray, $wrappedSubpartArray, $linkMarker, $remove>0);
 		} else {
 
 			// Try to get parameter name from TS

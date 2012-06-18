@@ -491,6 +491,7 @@ lib.mksearch.extrainfo {
 			links.show {
 				# PID of single news page
 				pid = 0
+				removeIfDisabled = 0
 				qualifier = tx_ttnews
 				paramName = tt_news
 				# Additional parameters
