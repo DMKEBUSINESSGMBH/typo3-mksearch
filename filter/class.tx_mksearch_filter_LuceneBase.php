@@ -184,7 +184,7 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
 		}
 		else {
 			// Default
-			$formData['combination_standard_selected'] = 'checked=checked';
+			$formData['mode_standard_selected'] = 'checked=checked';
 		}
 	}
 	
