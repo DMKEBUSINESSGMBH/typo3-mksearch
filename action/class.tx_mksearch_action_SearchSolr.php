@@ -36,7 +36,6 @@ tx_rnbase::load('tx_mksearch_util_Misc');
 class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 	
 	/**
-	 * Start the dance!
 	 *
 	 * @param array_object $parameters
 	 * @param tx_rnbase_configurations $configurations
@@ -204,12 +203,6 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 			$link = $configurations->createLink(false);
 			$link->destination($rows[0]['link']);
 			$link->redirect();
-//			$redirect_url = $this->pi_linkTP_keepPIvars_url(
-//				array('ux_tx_indexedsearch' => '', 'backPid' => '', 'sword' => ''),
-//				$this->allowCaching, $this->conf['dontUseBackPid']?1:0,
-//				$rows[0]['link']);
-//			$redirect_url = strtok($redirect_url,'?');
-//			header('Location: '.t3lib_div::locationHeaderUrl($redirect_url));
 		}
 	}
 

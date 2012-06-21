@@ -34,7 +34,6 @@ tx_rnbase::load('tx_mksearch_util_ServiceRegistry');
 class tx_mksearch_action_Search extends tx_rnbase_action_BaseIOC {
 	
 	/**
-	 * Start the dance!
 	 *
 	 * @param array_object $parameters
 	 * @param tx_rnbase_configurations $configurations
@@ -43,7 +42,9 @@ class tx_mksearch_action_Search extends tx_rnbase_action_BaseIOC {
 	 */
 	function handleRequest(&$parameters,&$configurations, &$viewData){
 
-		$filter = tx_rnbase_filter_BaseFilter::createFilter($parameters, $configurations, $viewData, 'searchlucene.');
+		$confId = $this->getConfId();
+		$this->handleSoftLink($parameters, $configurations, $confId);
+		$filter = tx_rnbase_filter_BaseFilter::createFilter($parameters, $configurations, $viewData, $confId);
 		$fields = array();
 		$options = array();
 		$items = array();
@@ -64,6 +65,32 @@ class tx_mksearch_action_Search extends tx_rnbase_action_BaseIOC {
 		$viewData->offsetSet('searchcount', count($items));
 		$viewData->offsetSet('search', $items);
 		return null;
+	}
+
+	/**
+	 * Special links for configured keywords.
+	 * @param tx_rnbase_IParameters $parameters
+	 * @param tx_rnbase_configurations $configurations
+	 *
+	 */
+	protected function handleSoftLink($parameters, $configurations, $confId) {
+		// Softlink Config beginnt direkt im Root, damit sie auch für andere
+		// Suchen genutzt werden kann
+		if(!$configurations->get('softlink.enable')) return;
+		$paramName = $configurations->get($confId.'softlink.parameter');
+		$paramName = $paramName ? $paramName : 'term';
+		$value = $parameters->get($paramName);
+		$value = $value ? substr($value, 0, 150) : '';
+		$options = array();
+		tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, 'softlink.options.');
+		$options['where'] = 'keyword=' . $GLOBALS['TYPO3_DB']->fullQuoteStr($value, 'tx_mksearch_keywords');
+		$rows = tx_rnbase_util_DB::doSelect('link', 'tx_mksearch_keywords', $options);
+	
+		if(count($rows) == 1){
+			$link = $configurations->createLink(false);
+			$link->destination($rows[0]['link']);
+			$link->redirect();
+		}
 	}
 
 	function handlePageBrowser(&$parameters,&$configurations, &$viewdata, &$fields, &$options) {
