@@ -48,19 +48,19 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 
 		//Filter erstellen (z.B. Formular parsen)
 		$filter = tx_rnbase_filter_BaseFilter::createFilter($parameters, $configurations, $viewData, $confId);
-		
+
 		//shall we prepare the javascript for the autocomplete feature
 		$this->prepareAutocomplete($configurations, $confId.'autocomplete.');
-		
+
 		//manchmal will man nur ein Suchformular auf jeder Seite im Header einbinden
 		//dieses soll dann aber nur auf eine Ergebnisseite verweisen ohne
 		//selbst zu suchen
 		if($configurations->get($confId.'nosearch')) return null;
 		//else
-		
+
 		$fields = array();
 		$options = array();
-		
+
 		// die ip muss im debug stehen
 		if($parameters->get('debug')) {
 			tx_rnbase::load('tx_mksearch_util_Misc');
@@ -69,7 +69,6 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 				$options['debug'] = 1; $options['debugQuery'] = 'true';
 			}
 		}
-		
 		$result = null;
 		if($filter->init($fields, $options)) {
 			// wenn der DisMaxRequestHandler genutzt wird, verursacht *:* ein leeres Ergebnis.
@@ -79,9 +78,8 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 			
 			//get the index we shall search in
 			$index = $this->getIndex();
-				
 			$pageBrowser = $this->handlePageBrowser($parameters, $configurations, $confId, $viewData, $fields, $options, $index);
-			
+
 			if($result = $this->searchSolr($fields, $options, $configurations, $index)) {
 				// Jetzt noch die echte Listengröße im PageBrowser setzen
 				if(is_object($pageBrowser)) {
@@ -272,7 +270,6 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 	protected function prepareAutocomplete(tx_rnbase_configurations $configurations, $confId) {
 		if(!$configurations->get($confId.'enable'))
 			return;
-			
 		$aConfig = $configurations->get($confId);
 		
 		$sJavascriptsPath = t3lib_extMgm::siteRelPath('mksearch').'res/js/';
@@ -287,18 +284,18 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 		if (!empty($aJsScripts))
 			foreach ($aJsScripts as $sJavaScriptFilename)
 				$GLOBALS['TSFE']->additionalHeaderData[$sJavaScriptFilename] = '<script type="text/javascript" src="'.$sJavascriptsPath.$sJavaScriptFilename.'"></script>';
-				
+
 		//now add the autocomplete call
 		$oLink = $configurations->createLink();
 		$oLink->initByTS(
 			$configurations,
 			$confId.'actionLink.',
 			array(
-				'ajax' => 1 //set always true
-			
+				'ajax' => 1, //set always true
+				'usedIndex' => intval($configurations->get($this->getConfId().'usedIndex'))
 			)
 		);
-		
+
 		$sAutocompleteJS = '
 		<script type="text/javascript">
 		jQuery(document).ready(function(){
@@ -341,7 +338,6 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 	 */
 	protected function getIndex() {
 		$indexUid = $this->getConfigurations()->get($this->getConfId(). 'usedIndex');
-		
 		//let's see if we got a index to use via parameters
 		if(empty($indexUid))
 			$indexUid = $this->getConfigurations()->getParameters()->get('usedIndex');
