@@ -47,6 +47,7 @@ lib.mksearch.lucenefilter {
 		# Configuration of form data used for displaying the form
 		form {
 			searchterm.stdWrap.htmlSpecialChars = 1
+			# Used for marker: ###FORM_DCSEARCHTERMHEADING###
 			dcsearchtermheading = TEXT
 			dcsearchtermheading {
 				wrap = <h1>###LABEL_search_yoursearchtermwas### <em>|</em></h1>
@@ -169,6 +170,16 @@ plugin.tx_mksearch {
 		hit {
 		  # Hier wird die Config für die jeweiligen Datentypen eingebunden
 			extrainfo =< lib.mksearch.extrainfo 
+		}
+
+		### Used for Marker: ###PLUGIN_DCSEARCHTERM###
+		plugin.dcsearchterm = TEXT
+		plugin.dcsearchterm {
+			data = GP:mksearch|term
+			stdWrap.htmlSpecialChars = 1
+			### nur wenn nicht leer ausgeben
+			required = 1
+			wrap = ###LABEL_search_term_was### "|"
 		}
 
 ####
@@ -412,7 +423,7 @@ plugin.tx_mksearch {
 				}
 			}
 		}
-		
+
 		### aktueller Suchbegriff
 		plugin.dcsearchterm = TEXT
 		plugin.dcsearchterm {
@@ -448,10 +459,10 @@ lib.mksearch.extrainfo {
 				required = 1
 				stdWrap.htmlSpecialChars = 1
 			}
-			extrainfo {
-				wrap = <div class="searchResultExtraInfo">|</div>
-				required = 1
-			}
+#			extrainfo {
+#				wrap = <div class="searchResultExtraInfo">|</div>
+#				required = 1
+#			}
 			
 			### define for which fields no marker should be displayed if empty
 			### or not returned. meanigly which fields should be inited if empty.

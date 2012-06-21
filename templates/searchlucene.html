@@ -11,14 +11,21 @@
 ###SEARCH_FORM###
 
 ###SEARCHRESULTS###
+	<!-- ###SEARCHRESULTEMPTYLIST### START -->
+			###LABEL_SEARCH_NORESULTSFOUND###
+	<!-- ###SEARCHRESULTEMPTYLIST### END -->
+
+	<ol>
 	###SEARCHRESULT###
+		<li id="searchresult-###SEARCHRESULT_TOTALLINE###">
 		<h2 class="searchResultTitle">###SEARCHRESULT_TITLE###</h2>
 		###SEARCHRESULT_ABSTRACT###
 		###SEARCHRESULT_EXTRAINFO###
+		</li>
 	###SEARCHRESULT###
-
+	</ol>
 ###LABEL_search_foundresults### ###SEARCHRESULTCOUNT###
-
+<div>###PLUGIN_DCSEARCHTERM###</div>
 
 
 <!-- ###PAGEBROWSER### START -->
@@ -119,7 +126,7 @@
 </fieldset>
 </form>
 
-###FORM_DCSEARCHTERMHEADING###
+
 ###LUCENEFORM###
 
 </body>
