@@ -33,10 +33,10 @@ if (TYPO3_MODE == 'BE') {
 		'LLL:EXT:mksearch/mod1/locallang.xml:func_solradmin'
 	);
 
-	t3lib_extMgm::insertModuleFunction(
-		'web_txmksearchM1',
-		'tx_mksearch_mod1_ConfigIndizesDbList',
-		t3lib_extMgm::extPath($_EXTKEY, 'mod1/class.tx_mksearch_mod1_ConfigIndizesDbList.php'),
-		'LLL:EXT:mksearch/mod1/locallang.xml:func_config_indizesdblist'
-	);
+// 	t3lib_extMgm::insertModuleFunction(
+// 		'web_txmksearchM1',
+// 		'tx_mksearch_mod1_ConfigIndizesDbList',
+// 		t3lib_extMgm::extPath($_EXTKEY, 'mod1/class.tx_mksearch_mod1_ConfigIndizesDbList.php'),
+// 		'LLL:EXT:mksearch/mod1/locallang.xml:func_config_indizesdblist'
+// 	);
 }
