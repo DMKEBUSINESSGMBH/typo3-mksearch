@@ -191,7 +191,7 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends Tx_Phpunit_TestCase {
 			jQuery(myElementSelector).autocomplete({
 				source: function( request, response ) {
 					jQuery.ajax({
-						url: "?id='.$this->linkId.'&type=540&mksearch%5Bajax%5D=1&mksearch[term]="+encodeURIComponent(request.term),
+						url: "?id='.$this->linkId.'&type=540&mksearch%5Bajax%5D=1&mksearch%5BusedIndex%5D=0&mksearch[term]="+encodeURIComponent(request.term),
 						dataType: "json",
 						success: function( data ) {
 							var suggestions = [];
@@ -239,7 +239,7 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends Tx_Phpunit_TestCase {
 				'includeJquery' => 1,
 				'includeJqueryUiCore' => 1,
 				'includeJqueryUiAutocomplete' => 0,
-			)
+			),
 		);
 		//mock getIndex() so its not called for real
 		$aMockFunctions = array(
@@ -261,7 +261,7 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends Tx_Phpunit_TestCase {
 			jQuery(myElementSelector).autocomplete({
 				source: function( request, response ) {
 					jQuery.ajax({
-						url: "?id='.$this->linkId.'&type=540&mksearch%5Bajax%5D=1&mksearch[term]="+encodeURIComponent(request.term),
+						url: "?id='.$this->linkId.'&type=540&mksearch%5Bajax%5D=1&mksearch%5BusedIndex%5D=0&mksearch[term]="+encodeURIComponent(request.term),
 						dataType: "json",
 						success: function( data ) {
 							var suggestions = [];
@@ -334,7 +334,7 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends Tx_Phpunit_TestCase {
 			jQuery(myElementSelector).autocomplete({
 				source: function( request, response ) {
 					jQuery.ajax({
-						url: "?id='.$this->linkId.'&type=540&mksearch%5Bajax%5D=1&mksearch[term]="+encodeURIComponent(request.term),
+						url: "?id='.$this->linkId.'&type=540&mksearch%5Bajax%5D=1&mksearch%5BusedIndex%5D=0&mksearch[term]="+encodeURIComponent(request.term),
 						dataType: "json",
 						success: function( data ) {
 							var suggestions = [];
@@ -364,5 +364,73 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends Tx_Phpunit_TestCase {
 		$this->assertEquals('<script type="text/javascript" src="typo3conf/ext/mksearch/res/js/jquery-1.6.2.min.js"></script>',$GLOBALS['TSFE']->additionalHeaderData['jquery-1.6.2.min.js'],'Daten für JS jquery falsch');
 		$this->assertEquals('<script type="text/javascript" src="typo3conf/ext/mksearch/res/js/jquery-ui-1.8.15.core.min.js"></script>',$GLOBALS['TSFE']->additionalHeaderData['jquery-ui-1.8.15.core.min.js'],'Daten für JS jquery ui falsch');
 		$this->assertEquals('<script type="text/javascript" src="typo3conf/ext/mksearch/res/js/jquery-ui-1.8.15.autocomplete.min.js"></script>',$GLOBALS['TSFE']->additionalHeaderData['jquery-ui-1.8.15.autocomplete.min.js'],'Daten für JS jquery ui falsch');
+	}
+	
+	/**
+	 */
+	public function testHandleRequestWithEnabledAutocompleteAndConfiguredUsedIndex(){
+		//action initialisieren
+		$aConfig['searchsolr.'] = array(
+			'nosearch' => 1,//keine echte Suche
+			'autocomplete.' => array(
+				'enable' => 1,
+				'minLength' => 2,
+				'elementSelector' => 'myElementSelector',
+				'actionLink.' => array(
+					'useKeepVars' => 1,
+					'useKeepVars.' => array(
+						'add' => '::type=540'
+					),
+					'noHash' => 1,
+				)
+			),
+			'usedIndex' => 2
+		);
+		//mock getIndex() so its not called for real
+		$aMockFunctions = array(
+			'getIndex' => array(
+				'expects' => $this->never(),
+				'returnValue' => true,
+			)
+		);
+		$out = true;
+		$action = $this->getAction($aMockFunctions,$aConfig,$out);
+		
+		$this->assertNull($out,'es wurde nicht null geliefert. vllt doch gesucht?');
+		//view daten sollten nicht gesetzt sein
+		$this->assertFalse($action->getConfigurations()->getViewData()->offsetExists('result'),'es wurde doch ein result gesetzt in den view daten. doch gesucht?');
+		
+		$sJs = '
+		<script type="text/javascript">
+		jQuery(document).ready(function(){
+			jQuery(myElementSelector).autocomplete({
+				source: function( request, response ) {
+					jQuery.ajax({
+						url: "?id='.$this->linkId.'&type=540&mksearch%5Bajax%5D=1&mksearch%5BusedIndex%5D=2&mksearch[term]="+encodeURIComponent(request.term),
+						dataType: "json",
+						success: function( data ) {
+							var suggestions = [];
+							jQuery.each(data.suggestions, function(key, value) {
+								jQuery.each(value, function(key, suggestion) {
+									suggestions.push(suggestion.uid);
+								});
+							});
+							response( jQuery.map( suggestions, function( item ) {
+								return {
+									label: item,
+									value: item
+								};
+							}));
+						}
+					});
+				},
+				minLength: 2
+			});
+		});
+		jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();
+		</script>
+		';
+		$this->assertEquals(1, count($GLOBALS['TSFE']->additionalHeaderData),'mehr header daten als erwartet!');
+		$this->assertEquals($sJs,$GLOBALS['TSFE']->additionalHeaderData[md5($sJs)],'Daten für JS falsch');
 	}
 }
