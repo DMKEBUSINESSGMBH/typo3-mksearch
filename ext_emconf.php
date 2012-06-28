@@ -14,11 +14,11 @@ $EM_CONF[$_EXTKEY] = array(
 	'title' => 'MK Search',
 	'description' => 'Generic highly adjustable and extendable search engine framework, using Zend Lucene or Apache Solr.',
 	'category' => 'plugin',
-	'author' => 'Rene Nitzsche',
-	'author_email' => 'nitzsche@das-medienkombinat.de',
+	'author' => 'Michael Wagner, Hannes Bochmann, Rene Nitzsche',
+	'author_email' => 'kontakt@das-medienkombinat.de',
 	'shy' => '',
 	'dependencies' => 'rn_base',
-	'version' => '0.9.62', // Version 1.0.0 wird die Version sein, die ins TER wandert!!!
+	'version' => '0.9.62',
 	'conflicts' => '',
 	'priority' => '',
 	'module' => '',
@@ -32,7 +32,7 @@ $EM_CONF[$_EXTKEY] = array(
 	'author_company' => 'das MedienKombinat GmbH',
 	'constraints' => array(
 		'depends' => array(
-			'rn_base' => '0.6.2',
+			'rn_base' => '0.11.13',
 		),
 		'conflicts' => array(
 		),
