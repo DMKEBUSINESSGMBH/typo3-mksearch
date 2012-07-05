@@ -29,8 +29,8 @@
 
 unset($MCONF);
 require_once('conf.php');
-require_once($BACK_PATH.'init.php');
-require_once($BACK_PATH.'template.php');
+require_once($REQUIRE_PATH.'init.php');
+require_once($REQUIRE_PATH.'template.php');
 
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 
@@ -70,8 +70,8 @@ class  tx_mksearch_module1 extends tx_rnbase_mod_BaseModule {
 	protected function getFormTag() {
 		return '<form action="index.php?id=' . $this->getPid() . '" method="POST" name="editform" id="editform">';
 	}
-	
-	
+
+
 	function moduleContent(){
 		$ret = tx_mksearch_mod1_util_Misc::checkPid($this);
 		if ($ret) {
@@ -79,7 +79,7 @@ class  tx_mksearch_module1 extends tx_rnbase_mod_BaseModule {
 		}
 		return parent::moduleContent();
 	}
-	
+
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/index.php'])	{
