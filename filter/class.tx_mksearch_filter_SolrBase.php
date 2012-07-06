@@ -229,7 +229,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 	}
 	
 	protected function getFilterQueryForFeGroups() {
-		$filterQuery = 'fe_group_mi (-fe_group_mi:0';
+		$filterQuery = 'fe_group_mi OR -fe_group_mi:0';
 
 		if(is_array($GLOBALS['TSFE']->fe_user->groupData['uid'])){
 			$filterQueriesByFeGroup = array();
@@ -241,7 +241,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 				$filterQuery .= ' OR ' . join(' OR ', $filterQueriesByFeGroup);
 		}
 		
-		return '-(' . $filterQuery . '))';
+		return '-(' . $filterQuery . ')';
 	}
 	
 	/**
