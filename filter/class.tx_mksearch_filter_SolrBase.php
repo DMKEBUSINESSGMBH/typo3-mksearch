@@ -194,11 +194,12 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 	 * @param 	string 						$confId
 	 */
 	protected function handleFq(&$options, &$parameters, &$configurations, $confId) {
-		$options['fq'] = $this->getFilterQueryForFeGroups();
+		$this->addFilterQuery($options, $this->getFilterQueryForFeGroups());
 		
 		// die erlaubten felder holen
 		$allowedFqParams = t3lib_div::trimExplode(',', $configurations->get($confId.'allowedFqParams'));
 		
+		//@todo die if blöcke in eigene funktionen auslagern
 		if($sFq = trim($parameters->get('fq'))) {
 			$sFqField = $configurations->get($confId.'fqField');
 			if ($sFqField) {
