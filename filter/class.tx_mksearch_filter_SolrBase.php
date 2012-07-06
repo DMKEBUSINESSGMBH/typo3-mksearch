@@ -194,7 +194,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 	 * @param 	string 						$confId
 	 */
 	protected function handleFq(&$options, &$parameters, &$configurations, $confId) {
-		$options['fq'] = $this->getFeGroupsForFilterQuery();
+		$options['fq'] = $this->getFilterQueryForFeGroups();
 		
 		// die erlaubten felder holen
 		$allowedFqParams = t3lib_div::trimExplode(',', $configurations->get($confId.'allowedFqParams'));
@@ -229,7 +229,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 		
 	}
 	
-	protected function getFeGroupsForFilterQuery() {
+	protected function getFilterQueryForFeGroups() {
 		$filterQuery = '-fe_group_mi OR fe_group_mi:0';
 		$feGroups = 
 			t3lib_div::trimExplode(',', $GLOBALS['TSFE']->fe_user->groupData['uid'], true);
