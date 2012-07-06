@@ -229,19 +229,19 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 	}
 	
 	protected function getFilterQueryForFeGroups() {
-		$filterQuery = '-fe_group_mi:[0 TO *]';
+		$filterQuery = 'fe_group_mi -fe_group_mi:0';
 
 		if(is_array($GLOBALS['TSFE']->fe_user->groupData['uid'])){
 			$filterQueriesByFeGroup = array();
 			foreach ($GLOBALS['TSFE']->fe_user->groupData['uid'] as $feGroup) {
-				$filterQueriesByFeGroup[] = 'fe_group_mi:' . $feGroup;
+				$filterQueriesByFeGroup[] = '-fe_group_mi:' . $feGroup;
 			}
 			
 			if(!empty($filterQueriesByFeGroup))
 				$filterQuery .= ' OR (' . join(' OR ', $filterQueriesByFeGroup). ')';
 		}
 		
-		return $filterQuery;
+		return '-(' . $filterQuery . ')';
 	}
 	
 	/**

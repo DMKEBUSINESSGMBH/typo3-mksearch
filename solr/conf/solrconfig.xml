@@ -711,8 +711,8 @@
      </lst>
      <lst name="appends">
 		<str name="fq">
-			-starttime_dt OR -starttime_dt:[NOW TO *] AND -endtime_dt OR -endtime_dt:[* TO NOW]
-			-page_starttime_dt OR -page_starttime_dt:[NOW TO *] AND -page_endtime_dt OR -page_endtime_dt:[* TO NOW]
+			-starttime_dt:[NOW TO *] AND -endtime_dt:[* TO NOW]
+			-page_starttime_dt:[NOW TO *] AND -page_endtime_dt:[* TO NOW]
 		</str>
 	</lst>
     <!-- In addition to defaults, "appends" params can be specified
