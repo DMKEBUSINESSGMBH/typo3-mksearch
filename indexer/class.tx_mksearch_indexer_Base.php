@@ -235,19 +235,26 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 				$indexDocFieldsPrefix.$enableColumnName . '_' . $fieldTypeMapping[$typo3InternalName]; 
 		}
 
-		$tempModel = $this->convertStartAndEndtimeToDates($model);
-		$this->indexModelByMapping($model, $recordIndexMapping, $indexDoc);
+		$tempModel = $model;
+		$tempModel = $this->convertStartAndEndtimeToDateTimes($tempModel);
+		$this->indexModelByMapping($tempModel, $recordIndexMapping, $indexDoc);
 		
 		return $indexDoc;
 	}
 	
-	private function convertStartAndEndtimeToDates($model) {
-		$model->record['starttime'] = 
-			tx_mksearch_util_Indexer::getDateTime('@' . $model->record['starttime']);
-		$model->record['endtime'] = 
-			tx_mksearch_util_Indexer::getDateTime('@' . $model->record['endtime']);
+	private function convertStartAndEndtimeToDateTimes($model) {
+		$model->record['starttime'] = $this->convertTimestampToDateTime($model->record['starttime']);
+		$model->record['endtime'] = $this->convertTimestampToDateTime($model->record['endtime']);
 		
 		return $model;
+	}
+	
+	private function convertTimestampToDateTime($timestamp) {
+		$dateTime = 0;
+		if(!empty($timestamp))
+			$dateTime = tx_mksearch_util_Indexer::getDateTime('@' . $timestamp);
+		
+		return $dateTime;
 	}
 	
 	/**

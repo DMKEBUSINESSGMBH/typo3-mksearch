@@ -224,6 +224,24 @@ class tx_mksearch_tests_indexer_Base_testcase extends tx_phpunit_testcase {
 		
 		$this->assertEmpty($indexDocData);
 	}
+	
+	/**
+	 *
+	 */
+	public function testIndexEnableColumnsWithEmptyStarttime() {
+		$indexer =tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
+		list($extKey, $cType) = $indexer->getContentType();
+		
+		$aRawData = array('uid' => 1, 'hidden' => 0,'starttime' => 0,'endtime' => 3,'fe_group' => 4);
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
+		$indexDocData = $indexer->prepareSearchData('tt_content', $aRawData, $indexDoc, array())->getData();
+		
+		//empty values are ignored
+		$this->assertFalse(isset($indexDocData['hidden_b']));
+		$this->assertFalse(isset($indexDocData['starttime_dt']));
+		$this->assertEquals('1970-01-01T00:00:03Z', $indexDocData['endtime_dt']->getValue());
+		$this->assertEquals(4, $indexDocData['fe_group_s']->getValue());
+	}
 }
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']) {
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']);
