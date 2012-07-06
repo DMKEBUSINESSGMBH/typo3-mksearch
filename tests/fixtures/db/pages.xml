@@ -6,6 +6,9 @@
 		<pid>0</pid>
 		<doktype>1</doktype>
 		<title>Main1</title>
+		<starttime>2</starttime>
+		<endtime>1909559623</endtime>
+		<fe_group>4</fe_group>
 	</pages>
 	<pages>
 		<uid>2</uid>

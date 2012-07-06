@@ -260,20 +260,6 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 	}
 
 	/**
-	 * Returns the Pagecontent
-	 * @TODO: das selbe wie tx_mksearch_indexer_Base::checkPageRights
-	 * @param int $pid
-	 */
-	protected function getPageContent($pid) {
-		$options = array(
-			'where' => 'pages.uid=' . $pid,
-			'enablefieldsfe' => true,
-		);
-		$from = array('pages', 'pages');
-		return tx_rnbase_util_DB::doSelect('*', $from, $options);
-	}
-
-	/**
 	* Sets the index doc to deleted if neccessary
 	* @param tx_rnbase_model_base $oModel
 	* @param tx_mksearch_interface_IndexerDocument $oIndexDoc
@@ -282,7 +268,7 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 	protected function hasDocToBeDeleted(tx_rnbase_model_base $oModel, tx_mksearch_interface_IndexerDocument $oIndexDoc, $aOptions = array()) {
 		//checkPageRights() considers deleted and parent::hasDocToBeDeleted() takes
 		//care of all possible hidden parent pages
-		return (!$this->checkPageRights($oModel) || parent::hasDocToBeDeleted($oModel,$oIndexDoc,$aOptions));
+		return (!$this->getPageContent($oModel->record['pid']) || parent::hasDocToBeDeleted($oModel,$oIndexDoc,$aOptions));
 	}
 
 	/**
@@ -297,6 +283,28 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 		}
 
 		return false;
+	}
+	
+	/**
+	 * wir brauchen auch noch die enable columns der page
+	 * 
+	 * @param tx_rnbase_model_base $model
+	 * @param string $tableName
+	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
+	 * 
+	 * @return tx_mksearch_interface_IndexerDocument
+	 */
+	protected function indexEnableColumns(
+		tx_rnbase_model_base $model, $tableName, 
+		tx_mksearch_interface_IndexerDocument $indexDoc
+	) {
+		$indexDoc = parent::indexEnableColumns($model, $tableName, $indexDoc);
+		
+		$page = $this->getPageContent($model->record['pid']);
+		$pageModel = tx_rnbase::makeInstance('tx_rnbase_model_base',$page);
+		$indexDoc = parent::indexEnableColumns($pageModel, 'pages', $indexDoc,'page_');
+		
+		return $indexDoc;
 	}
 
 	/**

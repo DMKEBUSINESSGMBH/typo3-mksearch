@@ -84,7 +84,7 @@ class tx_mksearch_indexer_TtContent implements tx_mksearch_interface_Indexer {
 	public static function getContentType() {
 		return array('core', 'tt_content');
 	}
-
+	
 	/**
 	* Return the default Typoscript configuration for this indexer
 	*

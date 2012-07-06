@@ -83,7 +83,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 			return $indexDoc;
 		}
 
-		$indexDoc = $this->indexEnableColumns($model, $tableName, $rawData, $indexDoc);
+		$indexDoc = $this->indexEnableColumns($model, $tableName, $indexDoc);
 		$indexDoc = $this->indexData($model, $tableName, $rawData, $indexDoc, $options);
 
 		//done
@@ -128,7 +128,8 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 			if(!empty($model->record[$recordKey]))
 				$indexDoc->addField(
 					$prefix.$indexDocKey,
-					$options['keepHtml'] ? $model->record[$recordKey] : tx_mksearch_util_Misc::html2plain($model->record[$recordKey])
+					$options['keepHtml'] ? $model->record[$recordKey] : 
+						tx_mksearch_util_Misc::html2plain($model->record[$recordKey])
 				);
 		}
 	}
@@ -183,6 +184,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 		// @todo support when a parent page is deleted! shouldn't be possible
 		// without further configuration for a BE user but it's still possible!
 		$rootline = tx_mksearch_service_indexer_core_Config::getRootLine($model->record['pid']);
+
 		foreach ($rootline as $page) {
 			if($page['hidden'])
 				return true;
@@ -204,15 +206,15 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 	
 	/**
 	 * @param tx_rnbase_model_base $model
-	 * @param unknown_type $tableName
-	 * @param unknown_type $rawData
+	 * @param string $tableName
 	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
+	 * @param string $indexDocFieldsPrefix
 	 * 
 	 * @return tx_mksearch_interface_IndexerDocument
 	 */
 	protected function indexEnableColumns(
 		tx_rnbase_model_base $model, $tableName, 
-		$rawData, tx_mksearch_interface_IndexerDocument $indexDoc
+		tx_mksearch_interface_IndexerDocument $indexDoc, $indexDocFieldsPrefix = ''
 	) {
 		global $TCA;
 		$enableColumns = $TCA[$tableName]['ctrl']['enablecolumns'];
@@ -223,9 +225,9 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 		$recordIndexMapping = array();
 		foreach ($enableColumns as $typo3InternalName => $enableColumnName) {
 			//we always use a string field as this can take every value
-			$recordIndexMapping[$enableColumnName] = $enableColumnName . '_s'; 
+			$recordIndexMapping[$enableColumnName] = $indexDocFieldsPrefix.$enableColumnName . '_s'; 
 		}
-		
+
 		$this->indexModelByMapping($model, $recordIndexMapping, $indexDoc);
 		
 		return $indexDoc;
@@ -476,21 +478,21 @@ CONFIG;
 
 	/**
 	 * Get's the page of the content element if it's not hidden/deleted
-	 * @param tx_rnbase_model_base $model
-	 * @return null || array
+	 * @return array
 	 * 
 	 * @todo move function to a helper class as the method has nothing to do
 	 * with actual indexing. it's just a helper.
 	 */
-	protected function checkPageRights(tx_rnbase_model_base $model) {
+	protected function getPageContent($pid) {
 		//first of all we have to check if the page is not hidden/deleted
 		$sqlOptions = array(
-			'where' => 'pages.uid=' . $model->record['pid'],
-			//so we get only pages that are valid for the FE
-			'enablefieldsfe' => true,
+			'where' => 'pages.uid=' . $pid . ' AND hidden=0 AND deleted=0',
+			'enablefieldsoff' => true,//ignore fe_group and so on
+			'limit' => 1
 		);
 		$from = array('pages', 'pages');
-		return $rows = tx_rnbase_util_DB::doSelect('*', $from, $sqlOptions);
+		$page = tx_rnbase_util_DB::doSelect('*', $from, $sqlOptions);
+		return !empty($page[0]) ? $page[0] : array();
 	}
 
 	/**

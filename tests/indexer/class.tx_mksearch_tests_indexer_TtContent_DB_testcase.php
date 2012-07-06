@@ -478,6 +478,40 @@ class tx_mksearch_tests_indexer_TtContent_DB_testcase extends tx_phpunit_databas
 		$result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options)->getData();
 		$this->assertEquals('',$result['title']->getValue(), 'Titel doch indiziert!');
 	}
+	
+	public function testPrepareSearchDataIndexesEnableColumnsOfThePageToo() {
+		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtContent');
+		$options = $this->getDefaultConfig();
+
+		list($extKey, $cType) = $indexer->getContentType();
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
+
+		//everything alright
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
+		$record = array(
+			'uid'=> 125, 
+			'pid' => 1, 
+			'deleted' => 0, 
+			'hidden' => 0, 
+			'header' => 'test', 
+			'CType'=>'list',
+			'starttime' => 5,
+			'endtime' => 6,
+			'fe_group' => 7
+		);
+		
+		$indexDoc = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
+		$indexedData = $indexDoc->getData();
+		
+		$this->assertEquals(5, $indexedData['starttime_s']->getValue());
+		$this->assertEquals(6, $indexedData['endtime_s']->getValue());
+		$this->assertEquals(7, $indexedData['fe_group_s']->getValue());
+		
+		$this->assertFalse(isset($indexedData['page_hidden_s']));
+		$this->assertEquals(2, $indexedData['page_starttime_s']->getValue());
+		$this->assertEquals(1909559623, $indexedData['page_endtime_s']->getValue());
+		$this->assertEquals(4, $indexedData['page_fe_group_s']->getValue());
+	}
 
 	/**
 	 * @return array
