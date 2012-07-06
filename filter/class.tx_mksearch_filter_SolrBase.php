@@ -226,11 +226,10 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 			}
 			$options['fq'] = $aFQ;
 		}
-		
 	}
 	
 	protected function getFilterQueryForFeGroups() {
-		$filterQuery = '-fe_group_mi OR fe_group_mi:0';
+		$filterQuery = '-fe_group_mi:[0 TO *]';
 
 		if(is_array($GLOBALS['TSFE']->fe_user->groupData['uid'])){
 			$filterQueriesByFeGroup = array();

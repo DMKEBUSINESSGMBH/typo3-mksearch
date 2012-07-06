@@ -203,7 +203,7 @@ class tx_mksearch_tests_filter_SolrBase_testcase extends tx_phpunit_testcase {
 		$oFilter->init($fields,$options);
 
 		$this->assertEquals(array(
-			0 => '(-fe_group_mi OR fe_group_mi:0)',
+			0 => '(-fe_group_mi:[0 TO *])',
 			1 => 'facet_field:"facet value"'
 		),$options['fq'],'fq wuede falsch übernommen!');
 	}
@@ -228,7 +228,7 @@ class tx_mksearch_tests_filter_SolrBase_testcase extends tx_phpunit_testcase {
 		$oFilter->init($fields,$options);
 
 		$this->assertEquals(array(
-			0 => '(-fe_group_mi OR fe_group_mi:0)',
+			0 => '(-fe_group_mi:[0 TO *])',
 			1 => 'facet_dummy:"facet value"'
 		),$options['fq'],'fq wuede falsch übernommen!');
 	}
@@ -256,7 +256,7 @@ class tx_mksearch_tests_filter_SolrBase_testcase extends tx_phpunit_testcase {
 		$options = array();
 		$oFilter->init($fields, $options);
 
-		$this->assertEquals('(-fe_group_mi OR fe_group_mi:0)',$options['fq'],'fq wuede gesetzt!');
+		$this->assertEquals('(-fe_group_mi:[0 TO *])',$options['fq'],'fq wuede gesetzt!');
 	}
 	
 	public function testSettingOfFeGroupsToFilterQuery(){
@@ -280,7 +280,7 @@ class tx_mksearch_tests_filter_SolrBase_testcase extends tx_phpunit_testcase {
 		$options = array();
 		$oFilter->init($fields, $options);
 
-		$this->assertEquals('(-fe_group_mi OR fe_group_mi:0 OR (fe_group_mi:1 OR fe_group_mi:2))',$options['fq'],'fq wuede gesetzt!');
+		$this->assertEquals('(-fe_group_mi:[0 TO *] OR (fe_group_mi:1 OR fe_group_mi:2))',$options['fq'],'fq wuede gesetzt!');
 		
 		$GLOBALS['TSFE']->fe_user->groupData['uid'] = $tsFeBackup;
 	}
