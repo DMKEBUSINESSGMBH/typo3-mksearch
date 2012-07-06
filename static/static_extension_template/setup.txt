@@ -593,7 +593,7 @@ lib.mksearchAjaxPage {
 			dismax.force = 1
 		}
 		requestHandler = /suggest
-		usedIndex = 
+		usedIndex = 1
 	}
 }
 
