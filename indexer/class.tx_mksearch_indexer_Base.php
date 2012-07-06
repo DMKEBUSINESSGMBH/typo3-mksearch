@@ -484,7 +484,7 @@ CONFIG;
 		tx_rnbase_util_Misc::prepareTSFE();
 		
 		tx_rnbase::load('tx_rnbase_util_DB');
-		return tx_rnbase_util_DB::_getPidList($pid_list, $recursive);
+		return tx_rnbase_util_DB::_getPidList($pid_list, $recursive, true);
 	}
 
 	/**
