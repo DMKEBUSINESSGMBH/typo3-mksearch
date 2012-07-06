@@ -228,7 +228,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 		$tempModel = $model;
 		foreach ($enableColumns as $typo3InternalName => $enableColumnName) {
 			$recordIndexMapping = $this->enhanceRecordIndexMappingForEnableColumn(
-				$recordIndexMapping, $typo3InternalName, $enableColumnName
+				$recordIndexMapping, $typo3InternalName, $enableColumnName, $indexDocFieldsPrefix
 			);
 			
 			$tempModel = $this->convertEnableColumnValue(
@@ -242,7 +242,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 	}
 	
 	private function enhanceRecordIndexMappingForEnableColumn(
-		$recordIndexMapping, $typo3InternalName, $enableColumnName
+		$recordIndexMapping, $typo3InternalName, $enableColumnName, $indexDocFieldsPrefix
 	) {
 		$fieldTypeMapping = array(
 			'starttime' => 'dt',
@@ -267,8 +267,9 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 					$this->convertTimestampToDateTime($model->record[$enableColumnName]);
 				break;
 			case 'fe_group':
-				$model->record[$enableColumnName] = 
-					$this->convertFeGroupListToArray($model->record[$enableColumnName]);
+				$model->record[$enableColumnName] = $this->getEffectiveFeGroups(
+						$model->record[$enableColumnName], $model->record['pid']
+				);
 				break;
 			default:
 				break;
@@ -285,8 +286,11 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 		return $dateTime;
 	}
 	
-	private function convertFeGroupListToArray($fegroups) {
-		return t3lib_div::intExplode(',', $fegroups);
+	private function getEffectiveFeGroups($fegroups, $pid) {
+		return tx_mksearch_service_indexer_core_Config::getEffectiveContentElementFeGroups(
+				$pid,
+				t3lib_div::trimExplode(',', $fegroups, true)
+			);
 	}
 	
 	/**
