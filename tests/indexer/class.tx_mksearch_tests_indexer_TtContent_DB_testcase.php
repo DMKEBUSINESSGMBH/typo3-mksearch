@@ -503,13 +503,13 @@ class tx_mksearch_tests_indexer_TtContent_DB_testcase extends tx_phpunit_databas
 		$indexDoc = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
 		$indexedData = $indexDoc->getData();
 		
-		$this->assertEquals(5, $indexedData['starttime_s']->getValue());
-		$this->assertEquals(6, $indexedData['endtime_s']->getValue());
+		$this->assertEquals('1970-01-01T00:00:05Z', $indexedData['starttime_dt']->getValue());
+		$this->assertEquals('1970-01-01T00:00:06Z', $indexedData['endtime_dt']->getValue());
 		$this->assertEquals(7, $indexedData['fe_group_s']->getValue());
 		
-		$this->assertFalse(isset($indexedData['page_hidden_s']));
-		$this->assertEquals(2, $indexedData['page_starttime_s']->getValue());
-		$this->assertEquals(1909559623, $indexedData['page_endtime_s']->getValue());
+		$this->assertFalse(isset($indexedData['page_hidden_b']));
+		$this->assertEquals('1970-01-01T00:00:02Z', $indexedData['page_starttime_dt']->getValue());
+		$this->assertEquals('2030-07-06T09:13:43Z', $indexedData['page_endtime_dt']->getValue());
 		$this->assertEquals(4, $indexedData['page_fe_group_s']->getValue());
 	}
 

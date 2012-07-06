@@ -33,6 +33,7 @@ require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_mksearch_interface_Indexer');
 tx_rnbase::load('tx_mksearch_util_Misc');
 tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
+tx_rnbase::load('tx_mksearch_util_Indexer');
 
 /**
  * Base indexer class offering some common methods
@@ -218,21 +219,37 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 	) {
 		global $TCA;
 		$enableColumns = $TCA[$tableName]['ctrl']['enablecolumns'];
-
+		
 		if(!is_array($enableColumns))
 			return $indexDoc;
 			 
 		$recordIndexMapping = array();
+		$fieldTypeMapping = array(
+			'disabled' => 'b',
+			'starttime' => 'dt',
+			'endtime' => 'dt',
+			'fe_group' => 's',
+		);
 		foreach ($enableColumns as $typo3InternalName => $enableColumnName) {
-			//we always use a string field as this can take every value
-			$recordIndexMapping[$enableColumnName] = $indexDocFieldsPrefix.$enableColumnName . '_s'; 
+			$recordIndexMapping[$enableColumnName] = 
+				$indexDocFieldsPrefix.$enableColumnName . '_' . $fieldTypeMapping[$typo3InternalName]; 
 		}
 
+		$tempModel = $this->convertStartAndEndtimeToDates($model);
 		$this->indexModelByMapping($model, $recordIndexMapping, $indexDoc);
 		
 		return $indexDoc;
 	}
-
+	
+	private function convertStartAndEndtimeToDates($model) {
+		$model->record['starttime'] = 
+			tx_mksearch_util_Indexer::getDateTime('@' . $model->record['starttime']);
+		$model->record['endtime'] = 
+			tx_mksearch_util_Indexer::getDateTime('@' . $model->record['endtime']);
+		
+		return $model;
+	}
+	
 	/**
 	 * Return the default Typoscript configuration for an indexer.
 	 *

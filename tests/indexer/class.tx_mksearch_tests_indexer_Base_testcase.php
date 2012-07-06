@@ -205,9 +205,9 @@ class tx_mksearch_tests_indexer_Base_testcase extends tx_phpunit_testcase {
 		$indexDocData = $indexer->prepareSearchData('tt_content', $aRawData, $indexDoc, array())->getData();
 		
 		//empty values are ignored
-		$this->assertFalse(isset($indexDocData['hidden_s']));
-		$this->assertEquals(2, $indexDocData['starttime_s']->getValue());
-		$this->assertEquals(3, $indexDocData['endtime_s']->getValue());
+		$this->assertFalse(isset($indexDocData['hidden_b']));
+		$this->assertEquals('1970-01-01T00:00:02Z', $indexDocData['starttime_dt']->getValue());
+		$this->assertEquals('1970-01-01T00:00:03Z', $indexDocData['endtime_dt']->getValue());
 		$this->assertEquals(4, $indexDocData['fe_group_s']->getValue());
 	}
 	
