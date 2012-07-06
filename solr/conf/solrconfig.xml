@@ -715,7 +715,11 @@
 				(-starttime_dt AND -endtime_dt) OR
 				(starttime_dt:[* TO NOW] AND -endtime_dt) OR
 				(-starttime_dt AND endtime_dt:[NOW TO *]) OR
-				(starttime_dt:[* TO NOW] AND endtime_dt:[NOW TO *])
+				(starttime_dt:[* TO NOW] AND endtime_dt:[NOW TO *]) OR
+				(-page_starttime_dt AND -page_endtime_dt) OR
+				(page_starttime_dt:[* TO NOW] AND -page_endtime_dt) OR
+				(-page_starttime_dt AND page_endtime_dt:[NOW TO *]) OR
+				(page_starttime_dt:[* TO NOW] AND page_endtime_dt:[NOW TO *])
 			)
 		</str>
 	</lst>
