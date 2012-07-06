@@ -164,24 +164,6 @@ interface tx_mksearch_interface_IndexerDocument {
 	public function setTimestamp($tstamp);
 	
 	/**
-	 * Set FE user groups
-	 * 
-	 * Provide the actually resulting FE user groups which can differ
-	 * from the groups explicitely set for this record - e.g. caused by
-	 * superordinated records with the flag "Include subpages".
-	 * 
-	 * Calling this method is optional.
-	 * If it is not called, in self::getCoreData()
-	 * implicitely the fe_group "0"  is set, as
-	 * the field must NOT be empty to enable
-	 * search for anonymous users!
-	 * 
-	 * @param array|csv $fe_groups
-	 * @return void
-	 */
-	public function setFeGroups($fe_groups=array(0));
-
-	/**
 	 * The document should be deleted from index
 	 * @param boolean $deleted
 	 */

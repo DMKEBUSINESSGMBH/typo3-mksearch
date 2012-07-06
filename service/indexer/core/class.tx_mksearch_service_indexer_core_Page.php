@@ -199,8 +199,6 @@ class tx_mksearch_service_indexer_core_Page implements tx_mksearch_interface_Ind
 		$indexDoc->setUid($rawData['uid']);
 		$indexDoc->setTitle($rawData['title']);
 		$indexDoc->setTimestamp($rawData['tstamp']);
-		if($aGroups = tx_mksearch_service_indexer_core_Config::getEffectivePageFeGroups($rawData['uid']))
-			$indexDoc->setFeGroups($aGroups);
 		
 		$content = '';
 		// Index all fields according to configuration

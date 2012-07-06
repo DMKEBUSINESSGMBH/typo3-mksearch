@@ -269,26 +269,6 @@ class tx_mksearch_model_IndexerDocumentBase implements tx_mksearch_interface_Ind
 	}
 	
 	/**
-	 * Set FE user groups
-	 * 
-	 * Provide the actually resulting FE user groups which can differ
-	 * from the groups explicitely set for this record - e.g. caused by
-	 * superordinated records with the flag "Include subpages".
-	 * 
-	 * Calling this method is mandatory.
-	 * The field must NOT be empty to enable
-	 * search for anonymous users!
-	 * 
-	 * @param array|csv $fe_groups
-	 * @return void
-	 */
-	public function setFeGroups($fe_groups=array(0)) {
-		if (!is_array($fe_groups)) 
-			$fe_groups = t3lib_div::trimExplode(',', $fe_groups);
-		$this->data['fe_groups'] = $this->getFieldInstance($fe_groups, 'keyword', 1.0, 'int');
-	}
-
-	/**
 	 * (non-PHPdoc)
 	 * @see tx_mksearch_interface_IndexerDocument::setDeleted()
 	 */

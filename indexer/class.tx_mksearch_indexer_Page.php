@@ -108,9 +108,6 @@ class tx_mksearch_indexer_Page extends tx_mksearch_indexer_Base {
 		$indexDoc->setUid($rawData['uid']);
 		$indexDoc->setTitle($rawData['title']);
 		$indexDoc->setTimestamp($rawData['tstamp']);
-		//@todo write tests considering the fe_groups
-		if($aGroups = tx_mksearch_service_indexer_core_Config::getEffectivePageFeGroups($rawData['uid']))
-			$indexDoc->setFeGroups($aGroups);
 
 		// You are strongly encouraged to use $doc->getMaxAbstractLength() to limit the length of your abstract!
 		// You are indeed free to ignore that limit if you have good reasons to do so, but always

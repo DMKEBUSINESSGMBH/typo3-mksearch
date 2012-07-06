@@ -80,12 +80,6 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 		$indexDoc->setTitle($title);
 
 		$indexDoc->setTimestamp($rawData['tstamp']);
-		$indexDoc->setFeGroups(
-			tx_mksearch_service_indexer_core_Config::getEffectiveContentElementFeGroups(
-				$rawData['pid'],
-				t3lib_div::trimExplode(',', $rawData['fe_group'], true)
-			)
-		);
 
 		$indexDoc->addField('pid', $oModel->record['pid'], 'keyword');
 		$indexDoc->addField('CType', $rawData['CType'], 'keyword');

@@ -94,13 +94,6 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
 		$indexDoc->setTimestamp($rawData['tstamp']);
 		$indexDoc->setTitle($rawData['name']);
 		
-		$indexDoc->setFeGroups(
-			tx_mksearch_service_indexer_core_Config::getEffectiveContentElementFeGroups(
-				$rawData['pid'],
-				t3lib_div::trimExplode(',', $rawData['fe_group'], true)
-			)
-		);
-		
 		$indexDoc->addField('pid', $rawData['pid'], 'keyword');
 		
 		//@TODO: adressgruppen integrieren!

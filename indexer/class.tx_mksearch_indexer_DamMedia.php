@@ -74,12 +74,6 @@ class tx_mksearch_indexer_DamMedia implements tx_mksearch_interface_Indexer {
 
 		$indexDoc->setTitle($sourceRecord['title']);
 		$indexDoc->setTimestamp($sourceRecord['tstamp']);
-		$indexDoc->setFeGroups(
-			tx_mksearch_service_indexer_core_Config::getEffectiveContentElementFeGroups(
-				$sourceRecord['pid'],
-				t3lib_div::trimExplode(',', $sourceRecord['fe_group'], true)
-			)
-		);
 
 		$content = $sourceRecord['description'] ? $sourceRecord['description'] : $sourceRecord['title'];
 		$indexDoc->setContent($content);
