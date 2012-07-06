@@ -252,7 +252,7 @@ class tx_mksearch_service_indexer_core_Config {
 		// Page's effective groups:
 		$groupsArr = self::calculateEffectiveFeGroups($pid);
 		$groupsArr = (isset($groupsArr['local'])) ? 	$groupsArr['local'] : $groupsArr['groups'];
-		$groupsArr = !empty($groupsArr) ? $groupsArr : array();
+		$groupsArr = !empty($groupsArr) ? $groupsArr : array(0);
 
 		// Explicite groups for content element?
 		if ($ceGroups)
