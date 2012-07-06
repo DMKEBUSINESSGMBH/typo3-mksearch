@@ -251,7 +251,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 		);
 		if(array_key_exists($typo3InternalName, $fieldTypeMapping)){
 			$recordIndexMapping[$enableColumnName] = 
-				$indexDocFieldsPrefix.$enableColumnName . '_' . $fieldTypeMapping[$typo3InternalName];
+				$indexDocFieldsPrefix.$typo3InternalName . '_' . $fieldTypeMapping[$typo3InternalName];
 		} 
 		
 		return $recordIndexMapping;

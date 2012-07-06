@@ -197,12 +197,14 @@ class tx_mksearch_tests_indexer_Base_testcase extends tx_phpunit_testcase {
 	 *
 	 */
 	public function testIndexEnableColumns() {
+		$this->setTcaEnableColumnsForMyTestTable1();
+		
 		$indexer =tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
 		list($extKey, $cType) = $indexer->getContentType();
 		
-		$aRawData = array('uid' => 1, 'hidden' => 0,'starttime' => 2,'endtime' => 3,'fe_group' => 4);
+		$aRawData = array('uid' => 1, 'hidden' => 0,'startdate' => 2,'enddate' => 3,'fe_groups' => 4);
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
-		$indexDocData = $indexer->prepareSearchData('tt_content', $aRawData, $indexDoc, array())->getData();
+		$indexDocData = $indexer->prepareSearchData('mytesttable_1', $aRawData, $indexDoc, array())->getData();
 		
 		//empty values are ignored
 		$this->assertEquals('1970-01-01T00:00:02Z', $indexDocData['starttime_dt']->getValue());
@@ -228,12 +230,14 @@ class tx_mksearch_tests_indexer_Base_testcase extends tx_phpunit_testcase {
 	 *
 	 */
 	public function testIndexEnableColumnsWithEmptyStarttime() {
+		$this->setTcaEnableColumnsForMyTestTable1();
+		
 		$indexer =tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
 		list($extKey, $cType) = $indexer->getContentType();
 		
-		$aRawData = array('uid' => 1, 'hidden' => 0,'starttime' => 0,'endtime' => 3,'fe_group' => 4);
+		$aRawData = array('uid' => 1, 'hidden' => 0,'startdate' => 0,'enddate' => 3,'fe_groups' => 4);
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
-		$indexDocData = $indexer->prepareSearchData('tt_content', $aRawData, $indexDoc, array())->getData();
+		$indexDocData = $indexer->prepareSearchData('mytesttable_1', $aRawData, $indexDoc, array())->getData();
 		
 		//empty values are ignored
 		$this->assertFalse(isset($indexDocData['starttime_dt']));
@@ -245,17 +249,28 @@ class tx_mksearch_tests_indexer_Base_testcase extends tx_phpunit_testcase {
 	 *
 	 */
 	public function testIndexEnableColumnsWithSeveralFeGroups() {
+		$this->setTcaEnableColumnsForMyTestTable1();
+		
 		$indexer =tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
 		list($extKey, $cType) = $indexer->getContentType();
 		
-		$aRawData = array('uid' => 1, 'hidden' => 0,'starttime' => 0,'endtime' => 3,'fe_group' => '4,5');
+		$aRawData = array('uid' => 1, 'hidden' => 0,'startdate' => 0,'enddate' => 3,'fe_groups' => '4,5');
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
-		$indexDocData = $indexer->prepareSearchData('tt_content', $aRawData, $indexDoc, array())->getData();
+		$indexDocData = $indexer->prepareSearchData('mytesttable_1', $aRawData, $indexDoc, array())->getData();
 		
 		//empty values are ignored
 		$this->assertFalse(isset($indexDocData['starttime_dt']));
 		$this->assertEquals('1970-01-01T00:00:03Z', $indexDocData['endtime_dt']->getValue());
 		$this->assertEquals(array(0=>4,1=>5), $indexDocData['fe_group_mi']->getValue());
+	}
+	
+	private function setTcaEnableColumnsForMyTestTable1() {
+		global $TCA;
+		$TCA['mytesttable_1']['ctrl']['enablecolumns'] = array(
+			'starttime' => 'startdate',
+			'endtime' => 'enddate',
+			'fe_group' => 'fe_groups',
+		);
 	}
 }
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']) {
