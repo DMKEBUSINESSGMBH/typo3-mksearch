@@ -241,7 +241,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 				$filterQuery .= ' OR (' . join(' OR ', $filterQueriesByFeGroup). ')';
 		}
 		
-		return '(' . $filterQuery . ')';
+		return $filterQuery;
 	}
 	
 	/**
