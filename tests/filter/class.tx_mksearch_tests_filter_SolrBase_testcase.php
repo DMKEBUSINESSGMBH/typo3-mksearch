@@ -261,7 +261,7 @@ class tx_mksearch_tests_filter_SolrBase_testcase extends tx_phpunit_testcase {
 	
 	public function testSettingOfFeGroupsToFilterQuery(){
 		$tsFeBackup = $GLOBALS['TSFE']->fe_user->groupData['uid'];
-		$GLOBALS['TSFE']->fe_user->groupData['uid'] = '1,2';
+		$GLOBALS['TSFE']->fe_user->groupData['uid'] = array(1,2);
 		
 		$aConfig = tx_mksearch_tests_Util::loadPageTS4BE();
 		//wir müssen fields extra kopieren da es über TS Anweisungen im BE nicht geht

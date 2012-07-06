@@ -231,17 +231,17 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 	
 	protected function getFilterQueryForFeGroups() {
 		$filterQuery = '-fe_group_mi OR fe_group_mi:0';
-		$feGroups = 
-			t3lib_div::trimExplode(',', $GLOBALS['TSFE']->fe_user->groupData['uid'], true);
+
+		if(is_array($GLOBALS['TSFE']->fe_user->groupData['uid'])){
+			$filterQueriesByFeGroup = array();
+			foreach ($GLOBALS['TSFE']->fe_user->groupData['uid'] as $feGroup) {
+				$filterQueriesByFeGroup[] = 'fe_group_mi:' . $feGroup;
+			}
 			
-		$filterQueriesByFeGroup = array();
-		foreach ($feGroups as $feGroup) {
-			$filterQueriesByFeGroup[] = 'fe_group_mi:' . $feGroup;
+			if(!empty($filterQueriesByFeGroup))
+				$filterQuery .= ' OR (' . join(' OR ', $filterQueriesByFeGroup). ')';
 		}
 		
-		if(!empty($filterQueriesByFeGroup))
-			$filterQuery .= ' OR (' . join(' OR ', $filterQueriesByFeGroup). ')';
-			
 		return '(' . $filterQuery . ')';
 	}
 	
