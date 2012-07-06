@@ -97,12 +97,14 @@ class tx_mksearch_util_Misc {
 	 * @param string	$t
 	 * @return string	Converted string (utf8-encoded)
 	 */
-	static function html2plain($t) {
+	static function html2plain($text) {
+		if(!is_string($text)) return $text;
+		
 		return html_entity_decode(
 					preg_replace(
 									array('/(\s+|(<.*?>)+)/', '/<!--.*?-->/'),
 									array(' ', ''),
-									$t
+									$text
 								),
 								ENT_QUOTES,
 								'UTF-8'

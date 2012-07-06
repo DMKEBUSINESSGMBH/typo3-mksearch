@@ -505,12 +505,11 @@ class tx_mksearch_tests_indexer_TtContent_DB_testcase extends tx_phpunit_databas
 		
 		$this->assertEquals('1970-01-01T00:00:05Z', $indexedData['starttime_dt']->getValue());
 		$this->assertEquals('1970-01-01T00:00:06Z', $indexedData['endtime_dt']->getValue());
-		$this->assertEquals(7, $indexedData['fe_group_s']->getValue());
+		$this->assertEquals(array(0=>7), $indexedData['fe_group_mi']->getValue());
 		
-		$this->assertFalse(isset($indexedData['page_hidden_b']));
 		$this->assertEquals('1970-01-01T00:00:02Z', $indexedData['page_starttime_dt']->getValue());
 		$this->assertEquals('2030-07-06T09:13:43Z', $indexedData['page_endtime_dt']->getValue());
-		$this->assertEquals(4, $indexedData['page_fe_group_s']->getValue());
+		$this->assertEquals(array(0=>4), $indexedData['page_fe_group_mi']->getValue());
 	}
 
 	/**

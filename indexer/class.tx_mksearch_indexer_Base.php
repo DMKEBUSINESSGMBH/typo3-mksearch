@@ -126,12 +126,13 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 	 */
 	protected function indexModelByMapping(tx_rnbase_model_base $model, array $recordIndexMapping, tx_mksearch_interface_IndexerDocument $indexDoc, $prefix = '', array $options = array()) {
 		foreach ($recordIndexMapping as $recordKey => $indexDocKey) {
-			if(!empty($model->record[$recordKey]))
+			if(!empty($model->record[$recordKey])){
 				$indexDoc->addField(
 					$prefix.$indexDocKey,
 					$options['keepHtml'] ? $model->record[$recordKey] : 
 						tx_mksearch_util_Misc::html2plain($model->record[$recordKey])
 				);
+			}
 		}
 	}
 
@@ -224,27 +225,54 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 			return $indexDoc;
 			 
 		$recordIndexMapping = array();
-		$fieldTypeMapping = array(
-			'disabled' => 'b',
-			'starttime' => 'dt',
-			'endtime' => 'dt',
-			'fe_group' => 's',
-		);
-		foreach ($enableColumns as $typo3InternalName => $enableColumnName) {
-			$recordIndexMapping[$enableColumnName] = 
-				$indexDocFieldsPrefix.$enableColumnName . '_' . $fieldTypeMapping[$typo3InternalName]; 
-		}
-
 		$tempModel = $model;
-		$tempModel = $this->convertStartAndEndtimeToDateTimes($tempModel);
+		foreach ($enableColumns as $typo3InternalName => $enableColumnName) {
+			$recordIndexMapping = $this->enhanceRecordIndexMappingForEnableColumn(
+				$recordIndexMapping, $typo3InternalName, $enableColumnName
+			);
+			
+			$tempModel = $this->convertEnableColumnValue(
+				$tempModel, $typo3InternalName, $enableColumnName
+			);
+		}
+		
 		$this->indexModelByMapping($tempModel, $recordIndexMapping, $indexDoc);
 		
 		return $indexDoc;
 	}
 	
-	private function convertStartAndEndtimeToDateTimes($model) {
-		$model->record['starttime'] = $this->convertTimestampToDateTime($model->record['starttime']);
-		$model->record['endtime'] = $this->convertTimestampToDateTime($model->record['endtime']);
+	private function enhanceRecordIndexMappingForEnableColumn(
+		$recordIndexMapping, $typo3InternalName, $enableColumnName
+	) {
+		$fieldTypeMapping = array(
+			'starttime' => 'dt',
+			'endtime' => 'dt',
+			'fe_group' => 'mi',
+		);
+		if(array_key_exists($typo3InternalName, $fieldTypeMapping)){
+			$recordIndexMapping[$enableColumnName] = 
+				$indexDocFieldsPrefix.$enableColumnName . '_' . $fieldTypeMapping[$typo3InternalName];
+		} 
+		
+		return $recordIndexMapping;
+	}
+	
+	private function convertEnableColumnValue(
+		$model, $typo3InternalName, $enableColumnName
+	) {
+		switch ($typo3InternalName) {
+			case 'starttime':
+			case 'endtime':
+				$model->record[$enableColumnName] = 
+					$this->convertTimestampToDateTime($model->record[$enableColumnName]);
+				break;
+			case 'fe_group':
+				$model->record[$enableColumnName] = 
+					$this->convertFeGroupListToArray($model->record[$enableColumnName]);
+				break;
+			default:
+				break;
+		}
 		
 		return $model;
 	}
@@ -255,6 +283,10 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 			$dateTime = tx_mksearch_util_Indexer::getDateTime('@' . $timestamp);
 		
 		return $dateTime;
+	}
+	
+	private function convertFeGroupListToArray($fegroups) {
+		return t3lib_div::intExplode(',', $fegroups);
 	}
 	
 	/**
