@@ -61,12 +61,10 @@ class tx_mksearch_tests_indexer_Base_testcase extends tx_phpunit_testcase {
 		$this->assertNotNull($GLOBALS['TSFE'],'TSFE wurde nicht geladen!');
 	}
 	
-	
-		
 	/**
 	 *
 	 */
-	public function testCheckOptionsInclude() {
+	public function testCheckOptionsIncludeDeletesDocs() {
 		$indexer =tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
 		list($extKey, $cType) = $indexer->getContentType();
 		$options = array(
@@ -84,7 +82,14 @@ class tx_mksearch_tests_indexer_Base_testcase extends tx_phpunit_testcase {
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options2);
 		$this->assertNull($aIndexDoc,'Das Element wurde indiziert! Option 2');
-		
+	}
+	
+	/**
+	 *
+	 */
+	public function testCheckOptionsIncludeDoesNotDeleteDocs() {
+		$indexer =tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
+		list($extKey, $cType) = $indexer->getContentType();
 		$options = array(
 			'include.'=>array('categories.' => array(2))
 		);
@@ -104,7 +109,7 @@ class tx_mksearch_tests_indexer_Base_testcase extends tx_phpunit_testcase {
 	/**
 	 *
 	 */
-	public function testCheckOptionsExclude() {
+	public function testCheckOptionsExcludeDoesNotDeleteDocs() {
 		$indexer =tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
 		list($extKey, $cType) = $indexer->getContentType();
 		$options = array(
@@ -122,7 +127,14 @@ class tx_mksearch_tests_indexer_Base_testcase extends tx_phpunit_testcase {
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options2);
 		$this->assertNotNull($aIndexDoc,'Das Element wurde nicht indiziert! Element 1 Option 2');
-		
+	}
+	
+/**
+	 *
+	 */
+	public function testCheckOptionsExcludeDeletesDocs() {
+		$indexer =tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
+		list($extKey, $cType) = $indexer->getContentType();
 		$options = array(
 			'exclude.'=>array('categories.' => array(2))
 		);
@@ -138,6 +150,7 @@ class tx_mksearch_tests_indexer_Base_testcase extends tx_phpunit_testcase {
 		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options2);
 		$this->assertNull($aIndexDoc,'Das Element wurde doch indiziert! Element 2 Option 2');
 	}
+	
 	/**
 	*
 	*/
@@ -180,6 +193,37 @@ class tx_mksearch_tests_indexer_Base_testcase extends tx_phpunit_testcase {
 		$this->assertNotNull($aIndexDoc,'Das Element wurde nicht indiziert! Option 1');
 	}
 	
+	/**
+	 *
+	 */
+	public function testIndexEnableColumns() {
+		$indexer =tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
+		list($extKey, $cType) = $indexer->getContentType();
+		
+		$aRawData = array('uid' => 1, 'hidden' => 0,'starttime' => 2,'endtime' => 3,'fe_group' => 4);
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
+		$indexDocData = $indexer->prepareSearchData('tt_content', $aRawData, $indexDoc, array())->getData();
+		
+		//empty values are ignored
+		$this->assertFalse(isset($indexDocData['hidden_s']));
+		$this->assertEquals(2, $indexDocData['starttime_s']->getValue());
+		$this->assertEquals(3, $indexDocData['endtime_s']->getValue());
+		$this->assertEquals(4, $indexDocData['fe_group_s']->getValue());
+	}
+	
+	/**
+	 *
+	 */
+	public function testIndexEnableColumnsIfTableHasNoEnableColumns() {
+		$indexer =tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
+		list($extKey, $cType) = $indexer->getContentType();
+		
+		$aRawData = array('uid' => 1);
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
+		$indexDocData = $indexer->prepareSearchData('doesn_t_matter', $aRawData, $indexDoc, array())->getData();
+		
+		$this->assertEmpty($indexDocData);
+	}
 }
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']) {
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']);

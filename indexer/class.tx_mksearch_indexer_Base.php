@@ -83,6 +83,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 			return $indexDoc;
 		}
 
+		$indexDoc = $this->indexEnableColumns($model, $tableName, $rawData, $indexDoc);
 		$indexDoc = $this->indexData($model, $tableName, $rawData, $indexDoc, $options);
 
 		//done
@@ -199,6 +200,35 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 	protected function isIndexableRecord(array $sourceRecord, array $options) {
 		$ret = tx_mksearch_util_Misc::isIndexable($sourceRecord, $options);
 		return $ret;
+	}
+	
+	/**
+	 * @param tx_rnbase_model_base $model
+	 * @param unknown_type $tableName
+	 * @param unknown_type $rawData
+	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
+	 * 
+	 * @return tx_mksearch_interface_IndexerDocument
+	 */
+	protected function indexEnableColumns(
+		tx_rnbase_model_base $model, $tableName, 
+		$rawData, tx_mksearch_interface_IndexerDocument $indexDoc
+	) {
+		global $TCA;
+		$enableColumns = $TCA[$tableName]['ctrl']['enablecolumns'];
+
+		if(!is_array($enableColumns))
+			return $indexDoc;
+			 
+		$recordIndexMapping = array();
+		foreach ($enableColumns as $typo3InternalName => $enableColumnName) {
+			//we always use a string field as this can take every value
+			$recordIndexMapping[$enableColumnName] = $enableColumnName . '_s'; 
+		}
+		
+		$this->indexModelByMapping($model, $recordIndexMapping, $indexDoc);
+		
+		return $indexDoc;
 	}
 
 	/**
