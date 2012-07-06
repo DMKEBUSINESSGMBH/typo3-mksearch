@@ -709,6 +709,16 @@
        <str name="echoParams">explicit</str>
        <int name="rows">10</int>
      </lst>
+     <lst name="appends">
+		<str name="fq">
+			(
+				(-starttime_dt AND -endtime_dt) OR
+				(starttime_dt:[* TO NOW] AND -endtime_dt) OR
+				(-starttime_dt AND endtime_dt:[NOW TO *]) OR
+				(starttime_dt:[* TO NOW] AND endtime_dt:[NOW TO *])
+			)
+		</str>
+	</lst>
     <!-- In addition to defaults, "appends" params can be specified
          to identify values which should be appended to the list of
          multi-val params from the query (or the existing "defaults").

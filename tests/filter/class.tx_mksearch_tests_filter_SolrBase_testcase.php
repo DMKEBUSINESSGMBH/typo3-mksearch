@@ -202,7 +202,10 @@ class tx_mksearch_tests_filter_SolrBase_testcase extends tx_phpunit_testcase {
 		$options = array();
 		$oFilter->init($fields,$options);
 
-		$this->assertEquals('facet_field:"facet value"',$options['fq'],'fq wuede falsch übernommen!');
+		$this->assertEquals(array(
+			0 => '(-fe_group_mi OR fe_group_mi:0)',
+			1 => 'facet_field:"facet value"'
+		),$options['fq'],'fq wuede falsch übernommen!');
 	}
 
 	/**
@@ -224,7 +227,10 @@ class tx_mksearch_tests_filter_SolrBase_testcase extends tx_phpunit_testcase {
 		$options = array();
 		$oFilter->init($fields,$options);
 
-		$this->assertEquals('facet_dummy:"facet value"',$options['fq'],'fq wuede falsch übernommen!');
+		$this->assertEquals(array(
+			0 => '(-fe_group_mi OR fe_group_mi:0)',
+			1 => 'facet_dummy:"facet value"'
+		),$options['fq'],'fq wuede falsch übernommen!');
 	}
 
 	public function testAllowedFqParams(){
@@ -250,7 +256,33 @@ class tx_mksearch_tests_filter_SolrBase_testcase extends tx_phpunit_testcase {
 		$options = array();
 		$oFilter->init($fields, $options);
 
-		$this->assertEquals(false,isset($options['fq']),'fq wuede gesetzt!');
+		$this->assertEquals('(-fe_group_mi OR fe_group_mi:0)',$options['fq'],'fq wuede gesetzt!');
+	}
+	
+	public function testSettingOfFeGroupsToFilterQuery(){
+		$tsFeBackup = $GLOBALS['TSFE']->fe_user->groupData['uid'];
+		$GLOBALS['TSFE']->fe_user->groupData['uid'] = '1,2';
+		
+		$aConfig = tx_mksearch_tests_Util::loadPageTS4BE();
+		//wir müssen fields extra kopieren da es über TS Anweisungen im BE nicht geht
+		$aConfig['searchsolr.']['filter.']['default.'] = $aConfig['lib.']['mksearch.']['defaultsolrfilter.'];
+		//force noch setzen
+		$aConfig['searchsolr.']['filter.']['default.']['force'] = 1;
+
+		$oFilter = tx_rnbase::makeInstance(
+			'tx_mksearch_filter_SolrBase',
+			$this->oParameters,
+			tx_mksearch_tests_Util::loadConfig4BE($aConfig),
+			'searchsolr.'
+		);
+
+		$fields = array('term' => 'contentType:* ###PARAM_MKSEARCH_TERM###');
+		$options = array();
+		$oFilter->init($fields, $options);
+
+		$this->assertEquals('(-fe_group_mi OR fe_group_mi:0 OR (fe_group_mi:1 OR fe_group_mi:2))',$options['fq'],'fq wuede gesetzt!');
+		
+		$GLOBALS['TSFE']->fe_user->groupData['uid'] = $tsFeBackup;
 	}
 }
 

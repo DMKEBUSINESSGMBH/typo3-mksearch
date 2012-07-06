@@ -194,6 +194,8 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 	 * @param 	string 						$confId
 	 */
 	protected function handleFq(&$options, &$parameters, &$configurations, $confId) {
+		$options['fq'] = $this->addFeGroupsForFilterQuery();
+		
 		// die erlaubten felder holen
 		$allowedFqParams = t3lib_div::trimExplode(',', $configurations->get($confId.'allowedFqParams'));
 		
@@ -224,7 +226,25 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 			}
 			$options['fq'] = $aFQ;
 		}
+		
 	}
+	
+	protected function addFeGroupsForFilterQuery() {
+		$filterQuery = '-fe_group_mi OR fe_group_mi:0';
+		$feGroups = 
+			t3lib_div::trimExplode(',', $GLOBALS['TSFE']->fe_user->groupData['uid'], true);
+			
+		$filterQueriesByFeGroup = array();
+		foreach ($feGroups as $feGroup) {
+			$filterQueriesByFeGroup[] = 'fe_group_mi:' . $feGroup;
+		}
+		
+		if(!empty($filterQueriesByFeGroup))
+			$filterQuery .= ' OR (' . join(' OR ', $filterQueriesByFeGroup). ')';
+			
+		return '(' . $filterQuery . ')';
+	}
+	
 	/**
 	 * Fügt einen Parameter zu der FilterQuery hinzu
 	 * @TODO: kann die fq nicht immer ein array sein!?
