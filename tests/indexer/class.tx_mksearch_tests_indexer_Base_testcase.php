@@ -24,6 +24,7 @@
 
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_mksearch_tests_fixtures_indexer_Dummy');
+tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
 
 /**
  * Wir müssen in diesem Fall mit der DB testen da wir die pages
@@ -32,6 +33,17 @@ tx_rnbase::load('tx_mksearch_tests_fixtures_indexer_Dummy');
  * 
  */
 class tx_mksearch_tests_indexer_Base_testcase extends tx_phpunit_testcase {
+	
+	public function setUp() {
+		//WORKAROUND: phpunit seems to backup static attributes (in phpunit.xml)
+		//from version 3.6.10 not before. I'm not completely
+		//sure about that but from version 3.6.10 clearPageInstance is no
+		//more neccessary to have the complete test suite succeed.
+		//But this version is buggy. (http://forge.typo3.org/issues/36232)
+		//as soon as this bug is fixed, we can use the new phpunit version
+		//and dont need this anymore
+		tx_mksearch_service_indexer_core_Config::clearPageInstance();
+	}
 	
 	/**
 	 * Check if the uid is set correct
