@@ -435,43 +435,33 @@ CONFIG;
 	 * @todo move function to a helper class as the method has nothing to do
 	 * with actual indexing. it's just a helper.
 	 */
-	protected function checkPageTree($sourceRecord, $options) {
-
-		if (!$this->checkPageTreeIncludes($sourceRecord, $options)) return false;
-		if ( $this->checkPageTreeExcludes($sourceRecord, $options)) return false;
-
-		return true;
+	protected function isInValidPageTree($sourceRecord, $options) {
+		$includePageTrees = $this->getConfigValue('pageTrees', $options['include.']);
+		$excludePageTrees = $this->getConfigValue('pageTrees', $options['exclude.']);
+		
+		return 
+			(
+				empty($includePageTrees) ||
+				$this->isInPageTrees($sourceRecord['pid'],$includePageTrees)
+			) &&
+			!$this->isInPageTrees($sourceRecord['pid'], $excludePageTrees)
+		;
 	}
-
+	
 	/**
-	 * Wenn das Element im gegebenen Seitenbaum ist, wird NICHT indiziert
-	 *
-	 * @param array $sourceRecord
-	 * @param array $options
-	 * @return bool
+	 * @param int $pid
+	 * @param array $pageTrees
+	 * 
+	 * @return boolean
 	 */
-	private function checkPageTreeExcludes($sourceRecord, $options) {
-		// Prüfen ob die Seite in den index darf sprich nicht in den gegebenen Seitenbäumen liegt
-		$pids = $this->getPidList($sourceRecord, $options['exclude.'], 'pageTrees');
-		if (array_search($sourceRecord['pid'], $pids) !== false)
-			return true;
-		//else
-		return false;
-	}
-
-	/**
-	 * Nur wenn das Element im gegebenen Seitenbaum ist, wird indiziert
-	 *
-	 * @param array $sourceRecord
-	 * @param array $options
-	 * @return bool
-	 */
-	private function checkPageTreeIncludes($sourceRecord, $options) {
-		// Prüfen ob die Seite in den index darf sprich in den gegebenen Seitenbäumen liegt
-		$pids = $this->getPidList($sourceRecord, $options['include.'], 'pageTrees');
-		if (array_search($sourceRecord['pid'], $pids) !== false || empty($pids))
-			return true;
-		//else
+	private function isInPageTrees($pid, $pageTrees) {
+		$rootline = tx_mksearch_service_indexer_core_Config::getRootLine($pid);
+		
+		foreach ($rootline as $page) {
+			if (in_array($page['uid'], $pageTrees))
+				return true;
+		}
+		
 		return false;
 	}
 
@@ -485,32 +475,6 @@ CONFIG;
 		
 		tx_rnbase::load('tx_rnbase_util_DB');
 		return tx_rnbase_util_DB::_getPidList($pid_list, $recursive, true);
-	}
-
-	/**
-	 * Liefert ein Array mit allen Pids, die in den Seitenbäumen
-	 * vorhanden sind
-	 * @param array $sourceRecord
-	 * @param mixed $options
-	 * @param string $key
-	 * @return array
-	 */
-	private function getPidList($sourceRecord, $options, $key) {
-
-		$pids = array();
-		$pageTrees = $this->getConfigValue($key, $options);
-		if (is_array($pageTrees) && !empty($pageTrees)){
-			foreach ($pageTrees as $iUid)
-				$pidsByPageTree[] = explode(',', $this->_getPidList($iUid,999));
-		}
-
-		if (is_array($pidsByPageTree) && count($pidsByPageTree)) {
-			//jetzt alle pids zusammenführen für alle angegebenen Seitenbäume
-			foreach ($pidsByPageTree as $pidsTemp)
-				$pids = array_merge($pids, $pidsTemp);
-		}
-
-		return $pids;
 	}
 
 	/**
