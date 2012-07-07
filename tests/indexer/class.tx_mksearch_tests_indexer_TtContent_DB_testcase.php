@@ -58,6 +58,15 @@ class tx_mksearch_tests_indexer_TtContent_DB_testcase extends tx_phpunit_databas
 	 * setUp() = init DB etc.
 	 */
 	public function setUp() {
+		//WORKAROUND: phpunit seems to backup static attributes (in phpunit.xml)
+		//from version 3.6.10 not before. I'm not completely
+		//sure about that but from version 3.6.10 clearPageInstance is no
+		//more neccessary to have the complete test suite succeed.
+		//But this version is buggy. (http://forge.typo3.org/issues/36232)
+		//as soon as this bug is fixed, we can use the new phpunit version
+		//and dont need this anymore
+		tx_mksearch_service_indexer_core_Config::clearPageInstance();
+		
 		$this->createDatabase();
 		// assuming that test-database can be created otherwise PHPUnit will skip the test
 		$this->db = $this->useTestDatabase();

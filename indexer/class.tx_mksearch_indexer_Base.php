@@ -46,11 +46,6 @@ tx_rnbase::load('tx_mksearch_util_Indexer');
  * @subpackage tx_mksearch_indexer
  */
 abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer {
-
-	/**
-	 * @var tx_mksearch_service_internal_Index
-	 */
-	protected $oIndexSrv;
 	
 	/**
 	 * (non-PHPdoc)
@@ -113,57 +108,30 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 	}
 
 	/**
-	 * Indexes all fields of the model according to the given mapping
-	 *
-	 * @param tx_rnbase_model_Base $model
-	 * @param array $aMapping
-	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
-	 * @param string $prefix
-	 * @param array $options
-	 * 
-	 * @todo move function to a helper class as the method has nothing to do
-	 * with actual indexing. it's just a helper.
+	 * @see tx_mksearch_util_Indexer::indexModelByMapping()
 	 */
-	protected function indexModelByMapping(tx_rnbase_model_base $model, array $recordIndexMapping, tx_mksearch_interface_IndexerDocument $indexDoc, $prefix = '', array $options = array()) {
-		foreach ($recordIndexMapping as $recordKey => $indexDocKey) {
-			if(!empty($model->record[$recordKey])){
-				$indexDoc->addField(
-					$prefix.$indexDocKey,
-					$options['keepHtml'] ? $model->record[$recordKey] : 
-						tx_mksearch_util_Misc::html2plain($model->record[$recordKey])
-				);
-			}
-		}
+	protected function indexModelByMapping(
+		tx_rnbase_model_base $model, array $recordIndexMapping, 
+		tx_mksearch_interface_IndexerDocument $indexDoc, 
+		$prefix = '', array $options = array()
+	) {
+		$indexDoc = 
+			tx_mksearch_util_Indexer::indexModelByMapping(
+				$model, $recordIndexMapping, $indexDoc, $prefix, $options
+			);
 	}
 
 	/**
-	 * Collects the values of all models inside the given array
-	 * and adds them as multivalue (array)
-	 *
-	 * @param tx_rnbase_model_Base $model
-	 * @param array $aMapping
-	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
-	 * @param string $prefix
-	 * 
-	 * @todo move function to a helper class as the method has nothing to do
-	 * with actual indexing. it's just a helper.
+	 * @see tx_mksearch_util_Indexer::indexArrayOfModelsByMapping()
 	 */
-	protected function indexArrayOfModelsByMapping(array $models, array $recordIndexMapping, tx_mksearch_interface_IndexerDocument $indexDoc, $prefix = '') {
-		//collect values
-		$tempIndexDoc = array();
-		foreach ($models as $model){
-			foreach ($recordIndexMapping as $recordKey => $indexDocKey) {
-				if(!empty($model->record[$recordKey]))
-					$tempIndexDoc[$prefix.$indexDocKey][] = $model->record[$recordKey];
-			}
-		}
-
-		//and now add the fields
-		if(!empty($tempIndexDoc)){
-			foreach ($tempIndexDoc as $indexDocKey => $values){
-				$indexDoc->addField($indexDocKey, $values);
-			}
-		}
+	protected function indexArrayOfModelsByMapping(
+		array $models, array $recordIndexMapping, 
+		tx_mksearch_interface_IndexerDocument $indexDoc, $prefix = ''
+	) {
+		$indexDoc =
+			tx_mksearch_util_Indexer::indexArrayOfModelsByMapping(
+				$models, $recordIndexMapping, $indexDoc, $prefix
+			);
 	}
 
 	/**
@@ -196,14 +164,10 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 	}
 
 	/**
-	 * Checks if the dataset is indexable at all
-	 * @param array $sourceRecord
-	 * @param array $options
-	 * @return bool
+	 * @see tx_mksearch_util_Misc::isIndexable()
 	 */
 	protected function isIndexableRecord(array $sourceRecord, array $options) {
-		$ret = tx_mksearch_util_Misc::isIndexable($sourceRecord, $options);
-		return $ret;
+		return tx_mksearch_util_Misc::isIndexable($sourceRecord, $options);
 	}
 	
 	/**
@@ -286,6 +250,9 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 		return $dateTime;
 	}
 	
+	/**
+	 * @see tx_mksearch_service_indexer_core_Config::getEffectiveContentElementFeGroups()
+	 */
 	private function getEffectiveFeGroups($fegroups, $pid) {
 		return tx_mksearch_service_indexer_core_Config::getEffectiveContentElementFeGroups(
 				$pid,
@@ -324,145 +291,37 @@ CONFIG;
 	}
 
 	/**
-	 * Adds a element to the queue
-	 * @param tx_rnbase_model_base $model
-	 * @return void
-	 * 
-	 * @todo move function to a helper class as the method has nothing to do
-	 * with actual indexing. it's just a helper.
+	 * @see tx_mksearch_util_Indexer::addModelToIndex()
 	 */
 	protected function addModelToIndex(tx_rnbase_model_base $model, $tableName){
-		if(!empty($model) && $model->isValid()){
-			if(!$this->oIndexSrv)
-				$this->oIndexSrv = tx_mksearch_util_ServiceRegistry::getIntIndexService();
-			$this->oIndexSrv->addRecordToIndex($tableName, $model->getUid());
-		}
+		tx_mksearch_util_Indexer::addModelToIndex($model, $tableName);
 	}
 
 	/**
-	 * just a wrapper for addModelToIndex and an array of models
-	 * @param array $rawData
-	 * @param array $models
-	 * @param string $tableName
-	 * @return void
-	 * 
-	 * @todo move function to a helper class as the method has nothing to do
-	 * with actual indexing. it's just a helper.
+	 * @see tx_mksearch_util_Indexer::addModelsToIndex()
 	 */
 	protected function addModelsToIndex($models, $tableName) {
-		if(!empty($models))
-			foreach ($models as $model) {
-				$this->addModelToIndex($model,$tableName);
-		}
+		tx_mksearch_util_Indexer::addModelsToIndex($models, $tableName);
 	}
 
 	/**
-	 * Checks if a include or exclude option was set for a
-	 * given option key
-	 * if set we check if at least one of the uids given in the options
-	 * is found in the given models
-	 * for the include option returning true means no option set or we have a hit
-	 * for the exclude option returning true means no option was set or we have no hit
-	 * @param array $models | array of models
-	 * @param array $options
-	 * @param int $mode	| 0 stands for "include" and 1 "exclude"
-	 * @return bool
-	 * 
-	 * @todo move function to a helper class as the method has nothing to do
-	 * with actual indexing. it's just a helper.
+	 * @see tx_mksearch_util_Indexer::checkInOrExcludeOptions()
 	 */
-	protected function checkInOrExcludeOptions($models,$options, $mode = 0, $optionKey = 'categories') {
-		//set base returns depending on the mode
-		switch ($mode) {
-			case 0:
-			default:
-				$mode = 'include';
-				$noHit = false;//if we have no hit
-				$isHit = true;//if we have a hit
-				break;
-			case 1:
-				$mode = 'exclude';
-				$noHit = true;//if we have no hit
-				$isHit = false;//if we have a hit
-				break;
-		}
-
-		//should only element with a special category be indexed
-		if(!empty($options[$mode.'.'])){
-			$isValid = $noHit;//no option given
-			if (!empty($models)) {
-				//include categories as array like
-				//include.categories{
-				//	0 = 1
-				//	1 = 2
-				//}
-				if(!empty($options[$mode.'.'][$optionKey.'.'])){
-					$includeCategories = $options[$mode.'.'][$optionKey.'.'];
-				}
-				//include categories as string like
-				//include.categories = 1,2
-				elseif(!empty($options[$mode.'.'][$optionKey])){
-					$includeCategories = explode(',',$options[$mode.'.'][$optionKey]);
-				}
-	
-				//if config is empty nothing to do and everything is alright
-				if(empty($includeCategories))
-					return true;
-	
-				//check if at least one category of the current element
-				//is in the given include categories
-				foreach ($models as $model){
-					if(in_array($model->getUid(),$includeCategories)){
-						$isValid = $isHit;
-					}
-				}
-			}
-		}
-		else {
-			$isValid = true;
-		}
-		return $isValid;
+	protected function checkInOrExcludeOptions(
+		$models,$options, $mode = 0, $optionKey = 'categories'
+	) {
+		return tx_mksearch_util_Indexer::checkInOrExcludeOptions(
+			$models, $options, $mode, $optionKey
+		);
 	}
 
 	/**
-	 * Prüft ob die Seite speziell in einem Seitenbaum liegt,
-	 * der inkludiert oder ausgeschlossen werden soll
-	 *
-	 * @param array $sourceRecord
-	 * @param array $options
-	 * @return bool
-	 * 
-	 * @todo move function to a helper class as the method has nothing to do
-	 * with actual indexing. it's just a helper.
+	 * @see tx_mksearch_util_Indexer::isInValidPageTree()
 	 */
 	protected function isInValidPageTree($sourceRecord, $options) {
-		$includePageTrees = $this->getConfigValue('pageTrees', $options['include.']);
-		$excludePageTrees = $this->getConfigValue('pageTrees', $options['exclude.']);
-		
-		return 
-			(
-				empty($includePageTrees) ||
-				$this->isInPageTrees($sourceRecord['pid'],$includePageTrees)
-			) &&
-			!$this->isInPageTrees($sourceRecord['pid'], $excludePageTrees)
-		;
-	}
-	
-	/**
-	 * @param int $pid
-	 * @param array $pageTrees
-	 * 
-	 * @return boolean
-	 */
-	private function isInPageTrees($pid, $pageTrees) {
-		$rootline = tx_mksearch_service_indexer_core_Config::getRootLine($pid);
-		
-		foreach ($rootline as $page) {
-			if (in_array($page['uid'], $pageTrees))
-				return true;
-		}
-		
-		return false;
+		return tx_mksearch_util_Indexer::isInValidPageTree(
+			$sourceRecord, $options
+		);	
 	}
 
 	/**
@@ -478,45 +337,17 @@ CONFIG;
 	}
 
 	/**
-	 * Liefert einen Wert aus der Konfig
-	 * Beispiel: $key = test
-	 * Dann wird geprüft ob test eine kommaseparierte Liste liegt
-	 * Ist das nicht der Fall wird noch geprüft ob test. ein array ist
-	 * @param string $key
-	 *
-	 * @return array
-	 * 
-	 * @todo move function to a helper class as the method has nothing to do
-	 * with actual indexing. it's just a helper.
+	 * @see tx_mksearch_util_Indexer::getConfigValue()
 	 */
 	protected function getConfigValue($key, $options) {
-		if(is_array($options)){
-			$config = array();
-			$config = (array_key_exists($key, $options) && strlen(trim($options[$key]))) ? t3lib_div::trimExplode(',', $options[$key]) : false;
-			if(!is_array($config) && array_key_exists($key.'.', $options)) {
-				$config = $options[$key.'.'];
-			}
-		}
-		return $config;
+		return tx_mksearch_util_Indexer::getConfigValue($key, $options);
 	}
 
 	/**
-	 * Get's the page of the content element if it's not hidden/deleted
-	 * @return array
-	 * 
-	 * @todo move function to a helper class as the method has nothing to do
-	 * with actual indexing. it's just a helper.
+	 * @see tx_mksearch_util_Indexer::getPageContent()
 	 */
 	protected function getPageContent($pid) {
-		//first of all we have to check if the page is not hidden/deleted
-		$sqlOptions = array(
-			'where' => 'pages.uid=' . $pid . ' AND hidden=0 AND deleted=0',
-			'enablefieldsoff' => true,//ignore fe_group and so on
-			'limit' => 1
-		);
-		$from = array('pages', 'pages');
-		$page = tx_rnbase_util_DB::doSelect('*', $from, $sqlOptions);
-		return !empty($page[0]) ? $page[0] : array();
+		return tx_mksearch_util_Indexer::getPageContent($pid);
 	}
 
 	/**
