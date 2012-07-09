@@ -205,6 +205,7 @@ class tx_mksearch_tests_SolrTestcase extends tx_phpunit_testcase {
 	protected function createInstanceDir($path) {
 		t3lib_div::mkdir($path);
 		t3lib_div::mkdir($path . '/conf');
+		t3lib_div::mkdir($path . '/lib');
 	}
 	
 	/**

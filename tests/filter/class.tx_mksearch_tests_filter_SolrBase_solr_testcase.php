@@ -39,21 +39,32 @@ class tx_mksearch_tests_filter_SolrBase_solr_testcase extends tx_mksearch_tests_
 		parent::initAbsolutePathsForConfigs();
 		
 		$this->copyNeccessaryConfigFiles();
+		$this->copyNeccessaryLibFiles();
 	}
 	
 	public function copyNeccessaryConfigFiles() {
-		$this->createInstanceDir($this->instanceDir);
-		
 		$neccessaryConfigFiles = array(
 			'elevate.xml','protwords.txt','stopwords.txt',
 			'stopwordsGerman.txt','synonyms.txt','dictionaryGerman.txt'
 		);
-		
-		foreach ($neccessaryConfigFiles as $neccessaryConfigFile) {
+		$this->copyNeccessaryFiles('conf/', $neccessaryConfigFiles);
+	}
+	
+	public function copyNeccessaryLibFiles() {
+		$neccessaryLibFiles = array(
+			'dmk-solr-core-3.5.0.jar'
+		);
+		$this->copyNeccessaryFiles('lib/', $neccessaryLibFiles);
+	}
+	
+	private function copyNeccessaryFiles($path, $neccessaryFiles) {
+		$this->createInstanceDir($this->instanceDir);
+	
+		foreach ($neccessaryFiles as $neccessaryFile) {
 			copy(
 				t3lib_div::getFileAbsFileName(
-					'EXT:mksearch/solr/conf/'.$neccessaryConfigFile
-				),$this->instanceDir . 'conf/'.$neccessaryConfigFile
+					'EXT:mksearch/solr/'. $path . $neccessaryFile
+				),$this->instanceDir . $path .$neccessaryFile
 			);
 		}
 	}

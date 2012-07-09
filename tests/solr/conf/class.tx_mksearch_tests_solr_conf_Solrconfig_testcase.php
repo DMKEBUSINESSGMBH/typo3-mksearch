@@ -24,6 +24,7 @@
 
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_mksearch_tests_SolrTestcase');
+require_once(t3lib_extMgm::extPath('mksearch') . 'tests/filter/class.tx_mksearch_tests_filter_SolrBase_solr_testcase.php');
 
 /**
  * @author Hannes Bochmann
@@ -38,24 +39,9 @@ class tx_mksearch_tests_solr_conf_Solrconfig_testcase extends tx_mksearch_tests_
 	protected function initAbsolutePathsForConfigs() {
 		parent::initAbsolutePathsForConfigs();
 		
-		$this->copyNeccessaryConfigFiles();
-	}
-	
-	public function copyNeccessaryConfigFiles() {
-		$this->createInstanceDir($this->instanceDir);
-		
-		$neccessaryConfigFiles = array(
-			'elevate.xml','protwords.txt','stopwords.txt',
-			'stopwordsGerman.txt','synonyms.txt','dictionaryGerman.txt'
-		);
-		
-		foreach ($neccessaryConfigFiles as $neccessaryConfigFile) {
-			copy(
-				t3lib_div::getFileAbsFileName(
-					'EXT:mksearch/solr/conf/'.$neccessaryConfigFile
-				),$this->instanceDir . 'conf/'.$neccessaryConfigFile
-			);
-		}
+		$filterTestcase = new tx_mksearch_tests_filter_SolrBase_solr_testcase();
+		$filterTestcase->copyNeccessaryConfigFiles();
+		$filterTestcase->copyNeccessaryLibFiles();
 	}
 	
 	/**
