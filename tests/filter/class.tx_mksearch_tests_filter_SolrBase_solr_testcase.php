@@ -23,13 +23,13 @@
 ***************************************************************/
 
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
-tx_rnbase::load('tx_mksearch_tests_SolrTestcase');
+tx_rnbase::load('tx_mksearch_tests_SolrTestcaseBase');
 
 /**
  * @author Hannes Bochmann
  * @integration
  */
-class tx_mksearch_tests_filter_SolrBase_solr_testcase extends tx_mksearch_tests_SolrTestcase {
+class tx_mksearch_tests_filter_SolrBase_solr_testcase extends tx_mksearch_tests_SolrTestcaseBase {
 
 	protected $instanceDir = 'EXT:mksearch/tests/solrtestcore/';
 	protected $configFile = 'EXT:mksearch/solr/conf/solrconfig.xml';
@@ -172,6 +172,6 @@ class tx_mksearch_tests_filter_SolrBase_solr_testcase extends tx_mksearch_tests_
 	}
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/tests/class.tx_mksearch_tests_SolrTestcase.php']) {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/tests/class.tx_mksearch_tests_SolrTestcase.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/tests/class.tx_mksearch_tests_SolrTestcaseBase.php']) {
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/tests/class.tx_mksearch_tests_SolrTestcaseBase.php']);
 }

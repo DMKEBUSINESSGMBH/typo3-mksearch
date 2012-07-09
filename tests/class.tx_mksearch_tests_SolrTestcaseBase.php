@@ -31,7 +31,7 @@ tx_rnbase::load('tx_mksearch_tests_Util');
  * Base test class for tests hitting Solr
  * @author Hannes Bochmann
  */
-class tx_mksearch_tests_SolrTestcase extends tx_phpunit_testcase {
+class tx_mksearch_tests_SolrTestcaseBase extends tx_phpunit_testcase {
 
 	/**
 	 * @var unknown_type
@@ -316,6 +316,6 @@ class tx_mksearch_tests_SolrTestcase extends tx_phpunit_testcase {
 	}
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/tests/class.tx_mksearch_tests_SolrTestcase.php']) {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/tests/class.tx_mksearch_tests_SolrTestcase.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/tests/class.tx_mksearch_tests_SolrTestcaseBase.php']) {
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/tests/class.tx_mksearch_tests_SolrTestcaseBase.php']);
 }
