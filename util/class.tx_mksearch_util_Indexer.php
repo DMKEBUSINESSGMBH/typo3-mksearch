@@ -250,7 +250,7 @@ class tx_mksearch_util_Indexer {
 	 *
 	 * @return array
 	 */
-	public static function getConfigValue($key, array $options) {
+	public static function getConfigValue($key, $options) {
 		$config = array();
 		if(is_array($options)){
 			$config = (array_key_exists($key, $options) && strlen(trim($options[$key])))
