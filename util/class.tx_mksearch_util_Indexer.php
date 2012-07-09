@@ -217,7 +217,7 @@ class tx_mksearch_util_Indexer {
 		return
 			(
 				empty($includePageTrees) ||
-				self::isInPageTrees($sourceRecord['pid'],$includePageTrees)
+				self::isInPageTrees($sourceRecord['pid'], $includePageTrees)
 			) &&
 			!self::isInPageTrees($sourceRecord['pid'], $excludePageTrees)
 		;
@@ -241,21 +241,22 @@ class tx_mksearch_util_Indexer {
 	}
 
 	/**
-	 * Liefert einen Wert aus der Konfig
-	 * Beispiel: $key = test
-	 * Dann wird geprüft ob test eine kommaseparierte Liste liegt
-	 * Ist das nicht der Fall wird noch geprüft ob test. ein array ist
-	 * @param string $key
-	 * @param array $options
-	 *
-	 * @return array
-	 */
+	* Liefert einen Wert aus der Konfig
+	* Beispiel: $key = test
+	* Dann wird geprüft ob test eine kommaseparierte Liste liegt
+	* Ist das nicht der Fall wird noch geprüft ob test. ein array ist
+	* @param string $key
+	* @param array $options
+	*
+	* @return array
+	*/
 	public static function getConfigValue($key, $options) {
 		$config = array();
-		if(is_array($options)){
-			$config = (array_key_exists($key, $options) && strlen(trim($options[$key])))
-						? t3lib_div::trimExplode(',', $options[$key]) : array();
-			if(!is_array($config) && array_key_exists($key.'.', $options)) {
+		if(is_array($options)) {
+			if (isset($options[$key]) && strlen(trim($options[$key]))) {
+				$config = t3lib_div::trimExplode(',', $options[$key]);
+			}
+			elseif(isset($options[$key.'.']) && is_array($options[$key.'.'])) {
 				$config = $options[$key.'.'];
 			}
 		}
