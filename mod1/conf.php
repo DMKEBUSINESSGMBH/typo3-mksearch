@@ -14,9 +14,14 @@ $BACK_PATH='../../../../typo3/';
  * Ist der REQUIRE_PATH allerdings nicht lesbar,
  * wird die Extension sicher über einen symbolischen Link im Typo3 integriert.
  * In diesem Fall müssen wir uns den Pfad speziell besorgen.
+ *
+ * is_readable wird absichtlich mit einem @ aufgerufen,
+ * da es sein kann, das sich der Pfad außerhalb der open_basedir befindet.
+ * In diesem Fall würde eine Warning geworfen werden.
+ * Das Prüfen des Pfades in open_basedir ist hier überflüssig/zu aufwendig.
  */
 $REQUIRE_PATH = $BACK_PATH;
-if (!is_readable($REQUIRE_PATH))
+if (!@is_readable($REQUIRE_PATH))
 {
 	$PATH_thisScript = str_replace('//', '/', str_replace('\\', '/',
 			(PHP_SAPI == 'fpm-fcgi' || PHP_SAPI == 'cgi' || PHP_SAPI == 'isapi' || PHP_SAPI == 'cgi-fcgi') &&
