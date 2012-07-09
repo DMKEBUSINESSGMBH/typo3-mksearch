@@ -27,6 +27,7 @@ tx_rnbase::load('tx_mksearch_tests_SolrTestcase');
 
 /**
  * @author Hannes Bochmann
+ * @integration
  */
 class tx_mksearch_tests_solr_conf_Solrconfig_testcase extends tx_mksearch_tests_SolrTestcase {
 
@@ -40,7 +41,7 @@ class tx_mksearch_tests_solr_conf_Solrconfig_testcase extends tx_mksearch_tests_
 		$this->copyNeccessaryConfigFiles();
 	}
 	
-	private function copyNeccessaryConfigFiles() {
+	public function copyNeccessaryConfigFiles() {
 		$this->createInstanceDir($this->instanceDir);
 		
 		$neccessaryConfigFiles = array(
@@ -57,12 +58,140 @@ class tx_mksearch_tests_solr_conf_Solrconfig_testcase extends tx_mksearch_tests_
 		}
 	}
 	
-	public function testDocIsFoundIf() {
-		$this->indexDocsFromYaml(tx_mksearch_tests_Util::getFixturePath('solr/docs.yaml'));
-		$this->assertTrue(true);
+	/**
+	 * @integration
+	 */
+	public function testDocIsFoundIfNoStarttimeSet() {
+		$this->indexDocsFromYaml(tx_mksearch_tests_Util::getFixturePath('solr/start-endtime/nostarttimeset.yaml'));
+		
+		$result = $this->search($this->getOptions());
+		
+		$this->assertEquals(1, $result['numFound'], 'nicht nur 1 doc gefunden.');
+		$this->assertEquals(1, $result['items'][0]->record['uid'], 'uid falsch');
+		$this->assertEquals(
+			'fegrouptest', 
+			$result['items'][0]->record['contentType'], 
+			'contentType falsch'
+		);
 	}
-}
-
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/tests/class.tx_mksearch_tests_SolrTestcase.php']) {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/tests/class.tx_mksearch_tests_SolrTestcase.php']);
+	
+	/**
+	 * @integration
+	 */
+	public function testDocIsFoundIfStarttimeSetToPast() {
+		$this->indexDocsFromYaml(tx_mksearch_tests_Util::getFixturePath('solr/start-endtime/starttimesettopast.yaml'));
+		
+		$result = $this->search($this->getOptions());
+		
+		$this->assertEquals(1, $result['numFound'], 'nicht nur 1 doc gefunden.');
+		$this->assertEquals(1, $result['items'][0]->record['uid'], 'uid falsch');
+		$this->assertEquals(
+			'fegrouptest', 
+			$result['items'][0]->record['contentType'], 
+			'contentType falsch'
+		);
+	}
+	
+	/**
+	 * @integration
+	 */
+	public function testDocIsNotFoundIfStarttimeSetToFuture() {
+		$this->indexDocsFromYaml(tx_mksearch_tests_Util::getFixturePath('solr/start-endtime/starttimesettofuture.yaml'));
+		
+		$result = $this->search($this->getOptions());
+		
+		$this->assertEquals(0, $result['numFound'], 'doch etwas gefunden');
+		$this->assertEmpty($result['items'], 'doch items etwas gefunden');
+	}
+	
+	/**
+	 * @integration
+	 */
+	public function testDocIsFoundIfNoEndtimeSet() {
+		$this->indexDocsFromYaml(tx_mksearch_tests_Util::getFixturePath('solr/start-endtime/noendtimeset.yaml'));
+		
+		$result = $this->search($this->getOptions());
+		
+		$this->assertEquals(1, $result['numFound'], 'nicht nur 1 doc gefunden.');
+		$this->assertEquals(1, $result['items'][0]->record['uid'], 'uid falsch');
+		$this->assertEquals(
+			'fegrouptest', 
+			$result['items'][0]->record['contentType'], 
+			'contentType falsch'
+		);
+	}
+	
+	/**
+	 * @integration
+	 */
+	public function testDocIsNotFoundIfEndtimeSetToPast() {
+		$this->indexDocsFromYaml(tx_mksearch_tests_Util::getFixturePath('solr/start-endtime/endtimesettopast.yaml'));
+		
+		$result = $this->search($this->getOptions());
+		
+		$this->assertEquals(0, $result['numFound'], 'doch etwas gefunden');
+		$this->assertEmpty($result['items'], 'doch items etwas gefunden');
+	}
+	
+	/**
+	 * @integration
+	 */
+	public function testDocIsFoundIfStarttimeSetToFuture() {
+		$this->indexDocsFromYaml(tx_mksearch_tests_Util::getFixturePath('solr/start-endtime/endtimesettofuture.yaml'));
+		
+		$result = $this->search($this->getOptions());
+		
+		$this->assertEquals(1, $result['numFound'], 'nicht nur 1 doc gefunden.');
+		$this->assertEquals(1, $result['items'][0]->record['uid'], 'uid falsch');
+		$this->assertEquals(
+			'fegrouptest', 
+			$result['items'][0]->record['contentType'], 
+			'contentType falsch'
+		);
+	}
+	
+	/**
+	 * @integration
+	 */
+	public function testDocIsNotFoundIfStarttimeOkayButEndtimeNot() {
+		$this->indexDocsFromYaml(tx_mksearch_tests_Util::getFixturePath('solr/start-endtime/starttimeokaybutendtimenot.yaml'));
+		
+		$result = $this->search($this->getOptions());
+		
+		$this->assertEquals(0, $result['numFound'], 'doch etwas gefunden');
+		$this->assertEmpty($result['items'], 'doch items etwas gefunden');
+	}
+	
+	/**
+	 * @integration
+	 */
+	public function testDocIsNotFoundIfEndtimeOkayButStarttimeNot() {
+		$this->indexDocsFromYaml(tx_mksearch_tests_Util::getFixturePath('solr/start-endtime/endtimeokaybutstarttimenot.yaml'));
+		
+		$result = $this->search($this->getOptions());
+		
+		$this->assertEquals(0, $result['numFound'], 'doch etwas gefunden');
+		$this->assertEmpty($result['items'], 'doch items etwas gefunden');
+	}
+	
+	/**
+	 * @integration
+	 */
+	public function testDocIsFoundIfStarttimeAndEndtimeOkay() {
+		$this->indexDocsFromYaml(tx_mksearch_tests_Util::getFixturePath('solr/start-endtime/starttimeandendtimeokay.yaml'));
+		
+		$result = $this->search($this->getOptions());
+		
+		$this->assertEquals(1, $result['numFound'], 'nicht nur 1 doc gefunden.');
+		$this->assertEquals(1, $result['items'][0]->record['uid'], 'uid falsch');
+		$this->assertEquals(
+			'fegrouptest', 
+			$result['items'][0]->record['contentType'], 
+			'contentType falsch'
+		);
+	}
+	
+	private function getOptions() {
+		return array('qt' => 'search');
+	}
 }

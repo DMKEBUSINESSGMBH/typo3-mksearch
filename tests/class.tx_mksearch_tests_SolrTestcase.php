@@ -40,6 +40,8 @@ class tx_mksearch_tests_SolrTestcase extends tx_phpunit_testcase {
 	
 	/**
 	 * Can be a TYPO3 path like EXT:mksearch/tests.....
+	 * will be created upon core creation.
+	 * 
 	 * @var string
 	 */
 	protected $instanceDir = '';
@@ -106,7 +108,7 @@ class tx_mksearch_tests_SolrTestcase extends tx_phpunit_testcase {
 		$httpResponse = $httpTransport->performGetRequest($url);
 		
 		if($httpResponse->getStatusCode() != 200){
-			$this->fail('Der Core (' . $this->getCoreName() . ') konnte nicht erstellt werden. URL: ' . $url . '. Bitte in die Solr Konsolte schauen bzgl. der Fehler!');
+			$this->fail('Der Core (' . $this->getCoreName() . ') konnte nicht erstellt werden. URL: ' . $url . '. Bitte in die Solr Konsole schauen bzgl. der Fehler!');
 		}
 		
 		$this->setSolrCredentialsForNewCore();
@@ -293,6 +295,24 @@ class tx_mksearch_tests_SolrTestcase extends tx_phpunit_testcase {
 			$ret = false;
 		}
 		return $ret;
+	}
+	
+	/**
+	 * es wird default nach *:* und einem limit von 10
+	 * gesucht
+	 * 
+	 * @param array $options
+	 * @param array $fields
+	 * @return array
+	 */
+	protected function search(array $options = array(), array $fields = array()) {
+		if(empty($fields['term']))
+			$fields['term'] = '*:*';
+
+		if(empty($options['limit']))
+			$options['limit'] = 10;
+			
+		return $this->getSolrEngine()->search($fields, $options);
 	}
 }
 
