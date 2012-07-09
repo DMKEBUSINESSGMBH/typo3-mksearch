@@ -57,7 +57,7 @@ class tx_mksearch_tests_solr_conf_Solrconfig_testcase extends tx_mksearch_tests_
 		}
 	}
 	
-	public function testSomething() {
+	public function testDocIsFoundIf() {
 		$this->indexDocsFromYaml(tx_mksearch_tests_Util::getFixturePath('solr/docs.yaml'));
 		$this->assertTrue(true);
 	}
