@@ -23,13 +23,13 @@
 ***************************************************************/
 
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
-tx_rnbase::load('tx_mksearch_tests_SolrTestcaseBase');
+tx_rnbase::load('tx_mksearch_tests_SolrTestcase');
 
 /**
  * @author Hannes Bochmann
  * @integration
  */
-class tx_mksearch_tests_solr_conf_Solrconfig_testcase extends tx_mksearch_tests_SolrTestcaseBase {
+class tx_mksearch_tests_solr_conf_Solrconfig_testcase extends tx_mksearch_tests_SolrTestcase {
 
 	protected $instanceDir = 'EXT:mksearch/tests/solrtestcore/';
 	protected $configFile = 'EXT:mksearch/solr/conf/solrconfig.xml';

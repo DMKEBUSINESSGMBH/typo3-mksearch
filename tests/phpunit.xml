@@ -10,4 +10,10 @@
 			<directory suffix="testcase.php">./</directory>
 		</testsuite>
 	</testsuites>
+	
+	<groups>
+	  <exclude>
+	    <group>dummytest</group>
+	  </exclude>
+	</groups>
 </phpunit>
