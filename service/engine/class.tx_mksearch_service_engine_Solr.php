@@ -78,7 +78,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 	 * @param string $path
 	 * @throws Exception
 	 */
-	private function setConnection($host, $port, $path) {
+	public function setConnection($host, $port, $path, $force = true) {
 		$this->index = new Apache_Solr_Service( $host, $port, $path);
 
 		//per default werden alle HTTP Aufrufe per file_get_contents erledigt.
@@ -93,7 +93,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 			$this->index->setHttpTransport($oHttpTransport);
 		}
 
-		if ( ! $this->index->ping() ) {
+		if ( ! $this->index->ping() && $force) {
 			tx_rnbase_util_Logger::fatal('Solr service not responding.','mksearch',array($host, $port, $path));
 			throw new tx_mksearch_service_engine_SolrException('Solr service not responding.', -1, 'http://'.$host.':'.$port.$path);
 		}
@@ -280,7 +280,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 	 * @param string $data
 	 * @return array
 	 */
-	private static function getCredentialsFromString($data) {
+	public static function getCredentialsFromString($data) {
 		$data = t3lib_div::trimExplode(',', $data);
 		if(count($data) != 3) throw new Exception('Wrong credentials for solr defined.');
 		$ret = array();
