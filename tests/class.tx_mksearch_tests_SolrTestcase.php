@@ -137,6 +137,9 @@ class tx_mksearch_tests_SolrTestcase extends tx_phpunit_testcase {
 				tx_mksearch_util_ServiceRegistry::getIntIndexService()->getRandomSolrIndex();
 		}
 		
+		if(!$this->defaultIndexModel)
+			$this->markTestSkipped('Es wurde kein Solr Index gefunden. Solr ist scheinbar nicht konfigruiert.');
+		
 		return $this->defaultIndexModel;
 	}
 	
