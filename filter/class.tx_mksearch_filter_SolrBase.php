@@ -27,25 +27,25 @@ tx_rnbase::load('tx_rnbase_filter_BaseFilter');
 tx_rnbase::load('tx_rnbase_util_ListBuilderInfo');
 
 /**
- * Der Filter liest seine Konfiguration passend zum Typ des Solr RequestHandlers. Der Typ 
- * ist entweder "default" oder "dismax". Entsprechend baut sich auch die Typoscript-Konfiguration 
+ * Der Filter liest seine Konfiguration passend zum Typ des Solr RequestHandlers. Der Typ
+ * ist entweder "default" oder "dismax". Entsprechend baut sich auch die Typoscript-Konfiguration
  * auf:
  * searchsolr.filter.default.
  * searchsolr.filter.dismax.
- * 
- * Es gibt Optionen, die für beide Requesttypen identisch sind. Als Beispiel seien die Templates 
+ *
+ * Es gibt Optionen, die für beide Requesttypen identisch sind. Als Beispiel seien die Templates
  * genannt. Um diese Optionen zentral über das Flexform konfigurieren zu können, werden die
  * betroffenen Werte zusätzlich noch über den Pfad
- * 
+ *
  * searchsolr.filter._overwrite.
- * 
+ *
  * ermittelt und wenn vorhanden bevorzugt verwendet.
- * 
+ *
  * @author René Nitzsche
  *
  */
 class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
-	
+
 	protected $sort = false;
 	protected $sortOrder = 'asc';
 	protected $confIdExtended = '';
@@ -74,7 +74,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 		}
 		return $confId;
 	}
-	
+
 	/**
 	 * Initialize filter
 	 *
@@ -85,7 +85,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 		$confId = $this->getConfId();
 		$fields = $this->getConfigurations()->get($confId.'fields.');
 		tx_rnbase_util_SearchBase::setConfigOptions($options, $this->getConfigurations(),$confId.'options.');
-		
+
 		return $this->initFilter($fields, $options, $this->getParameters(), $this->getConfigurations(), $confId);
 	}
 	protected function getConfValue($configurations, $confValue) {
@@ -119,13 +119,13 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 
 		// suchstring beachten
 		$this->handleTerm($fields, $parameters, $configurations, $confId);
-		
+
 		// Operatoren berücksichtigen
 		$this->handleOperators($fields, $options, $parameters, $configurations, $confId);
-		
+
 		// sortierung beachten
 		$this->handleSorting($options, $parameters);
-		
+
 		// fq (filter query) beachten
 		$this->handleFq($options, $parameters, $configurations, $confId);
 
@@ -184,7 +184,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 			tx_mksearch_util_SearchBuilder::handleDismaxFuzzySearch($fields, $options, $parameters, $configurations, $confId);
 		}
 	}
-	
+
 	/**
 	 * Fügt eine Filter Query (Einschränkung) zu dem Filter hinzu.
 	 *
@@ -194,11 +194,11 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 	 * @param 	string 						$confId
 	 */
 	protected function handleFq(&$options, &$parameters, &$configurations, $confId) {
-		$this->addFilterQuery($options, $this->getFilterQueryForFeGroups());
-		
+		self::addFilterQuery($options, $this->getFilterQueryForFeGroups());
+
 		// die erlaubten felder holen
 		$allowedFqParams = t3lib_div::trimExplode(',', $configurations->get($confId.'allowedFqParams'));
-		
+
 		//@todo die if blöcke in eigene funktionen auslagern
 		if($sFq = trim($parameters->get('fq'))) {
 			$sFqField = $configurations->get($confId.'fqField');
@@ -209,12 +209,12 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 				// field value konstelation prüfen
 				$sFq = $this->parseFieldAndValue($sFq, $allowedFqParams);
 			}
-			$this->addFilterQuery($options, $sFq);
+			self::addFilterQuery($options, $sFq);
 		}
 		if($sAddFq = trim($parameters->get('addfq'))) {
 			// field value konstelation prüfen
 			$sAddFq = $this->parseFieldAndValue($sAddFq, $allowedFqParams);
-			$this->addFilterQuery($options, $sAddFq);
+			self::addFilterQuery($options, $sAddFq);
 		}
 		if($sRemoveFq = trim($parameters->get('remfq'))) {
 			$aFQ = isset($options['fq']) ? (is_array($options['fq']) ? $options['fq'] : array($options['fq'])) : array();
@@ -228,7 +228,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 			$options['fq'] = $aFQ;
 		}
 	}
-	
+
 	protected function getFilterQueryForFeGroups() {
 		$filterQuery = 'fe_group_mi OR -fe_group_mi:0';
 
@@ -237,21 +237,21 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 			foreach ($GLOBALS['TSFE']->fe_user->groupData['uid'] as $feGroup) {
 				$filterQueriesByFeGroup[] = '-fe_group_mi:' . $feGroup;
 			}
-			
+
 			if(!empty($filterQueriesByFeGroup))
 				$filterQuery .= ' OR ' . join(' OR ', $filterQueriesByFeGroup);
 		}
-		
+
 		return '-(' . $filterQuery . ')';
 	}
-	
+
 	/**
 	 * Fügt einen Parameter zu der FilterQuery hinzu
-	 * @TODO: kann die fq nicht immer ein array sein!?
+	 * @TODO: kann die fq nicht immer ein array sein!? dann könnten wir uns das sparen!
 	 * @param array $options
 	 * @param unknown_type $sFQ
 	 */
-	protected function addFilterQuery(array &$options, $sFQ) {
+	public static function addFilterQuery(array &$options, $sFQ) {
 		if (empty($sFQ)) return ;
 		// vorhandene fq berücksichtigen
 		if (isset($options['fq'])) {
@@ -267,7 +267,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 		// fq schreiben
 		else $options['fq'] = $sFQ;
 	}
-	
+
 	/**
 	 * Prüft den fq parameter auf richtigkeit.
 	 * @param string $sFq
@@ -275,7 +275,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 	 */
 	private function parseFieldAndValue($sFq, $allowedFqParams) {
 		if (empty($sFq) || empty($allowedFqParams)) return '';
-		
+
 		// wir trennen den string auf!
 		// field:value | field:"value"
 		$pattern  = '(?P<field>([a-z_]*))'; // nur kleinbuchstaben und unterstrich für feldnamen erlauben.
@@ -301,7 +301,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 		}
 		// kein feld und oder wert gefunden oder feld nicht erlaubt, wir lassen den qs leer!
 		else $sFq = '';
-		
+
 		return $sFq;
 	}
 
@@ -343,14 +343,14 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 	 * @return string
 	 */
 	function parseTemplate($template, &$formatter, $confId, $marker = 'FILTER') {
-				
+
 		$markArray = $subpartArray  = $wrappedSubpartArray = array();
-		
+
 		// Formular einfügen
 		$this->parseSearchForm($template, $markArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, $marker);
 		// Sortierung einfügen
 		$this->parseSortFields($template, $markArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, $marker);
-		
+
 		$template = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markArray, $subpartArray, $wrappedSubpartArray);
 		return $template;
 	}
@@ -371,11 +371,11 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 		$marker = 'SORT';
 		$confId = $this->getConfId().'sort.';
 		$configurations = $formatter->getConfigurations();
-		
+
 		// die felder für die sortierung stehen kommasepariert im ts
 		$sortFields = $configurations->get($confId.'fields');
 		$sortFields = $sortFields ? t3lib_div::trimExplode(',', $sortFields, true) : array();
-		
+
 		if(!empty($sortFields)) {
 			tx_rnbase::load('tx_rnbase_util_BaseMarker');
 		  	$token = md5(microtime());
@@ -384,7 +384,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 				$isField = ($field == $this->sort);
 				// sortOrder ausgeben
 				$markOrders[$field.'_order'] = $isField ? $this->sortOrder : '';
-				
+
 				$fieldMarker = $marker.'_'.strtoupper($field).'_LINK';
 				$makeLink = tx_rnbase_util_BaseMarker::containsMarker($template, $fieldMarker);
 				$makeUrl = tx_rnbase_util_BaseMarker::containsMarker($template, $fieldMarker.'URL');
@@ -409,7 +409,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 			$markArray = array_merge($markArray, $markOrders);
 		}
 	}
-	
+
 	/**
 	 * Treat search form
 	 *
@@ -428,7 +428,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 			return $template;
 
 		$confId = $this->getConfId();
-			
+
 		$configurations = $formatter->getConfigurations();
 		tx_rnbase::load('tx_rnbase_util_Templates');
 		$formTemplate = $this->getConfValue($configurations, 'template.file');
@@ -443,24 +443,24 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 			$formData = $this->getParameters()->get('submit') ? $paramArray : $this->getFormData();
 			$formData['action'] = $link->makeUrl(false);
 			$formData['searchterm'] = htmlspecialchars( $this->getParameters()->get('term') );
-			
+
 			$combinations = array('none', 'free', 'or', 'and', 'exact');
 			$currentCombination = $this->getParameters()->get('combination');
 			$currentCombination = $currentCombination ? $currentCombination : 'none';
 			foreach($combinations as $combination)
 				// wenn anders benötigt, via ts ändern werden
 				$formData['combination_'.$combination] = ($combination == $currentCombination) ? ' checked="checked"' : '';
-			
+
 			$options = array('fuzzy');
 			$currentOptions = $this->getParameters()->get('options');
 			foreach($options as $option)
 				// wenn anders benötigt, via ts ändern werden
 				$formData['option_'.$option] = empty($currentOptions[$option]) ? '' : ' checked="checked"' ;
-				
+
 			$templateMarker = tx_rnbase::makeInstance('tx_mksearch_marker_General');
 			$formTemplate = $templateMarker->parseTemplate($formTemplate, $formData, $formatter, $confId.'form.', 'FORM');
 		}
-		
+
 		$markArray['###'.$markerName.'###'] = $formTemplate;
 		return $template;
 	}
