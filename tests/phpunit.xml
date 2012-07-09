@@ -8,6 +8,9 @@
 <testsuites>
   <testsuite name="MKSearchTestSuite">
     <directory suffix="testcase.php">./</directory>
+    <exclude>
+        <file>class.tx_mksearch_tests_SolrTestcase.php</file>
+	</exclude>
   </testsuite>
 </testsuites>
 </phpunit>
