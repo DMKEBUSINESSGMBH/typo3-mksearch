@@ -43,6 +43,8 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 	 * @var string
 	 */
 	private static $queueTable = 'tx_mksearch_queue';
+	
+	const TYPE_SOLR = 'solr';
 
 	/**
 	 * Search database for all configurated Indices
@@ -477,6 +479,16 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 		if($options['debug'])
 			t3lib_div::debug($query,'class.tx_mksearch_srv_Search.php : '.__LINE__);
 		$GLOBALS['TYPO3_DB']->sql_query($query);
+	}
+	
+	/**
+	 */
+	public function getRandomSolrIndex() {
+		$fields['INDX.engine'][OP_EQ] = self::TYPE_SOLR;
+		$options['limit'] = 1;
+		
+		$indexes = $this->search($fields, $options);
+		return !empty($indexes[0]) ? $indexes[0] : null;
 	}
 }
 

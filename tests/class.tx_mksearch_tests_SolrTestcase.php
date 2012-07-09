@@ -132,8 +132,9 @@ class tx_mksearch_tests_SolrTestcase extends tx_phpunit_testcase {
 	private function getDefaultIndexModel() {
 		if(!$this->defaultIndexModel){
 			$this->defaultIndexModel = 
-				tx_mksearch_util_ServiceRegistry::getIntIndexService()->get(1);
+				tx_mksearch_util_ServiceRegistry::getIntIndexService()->getRandomSolrIndex();
 		}
+		
 		return $this->defaultIndexModel;
 	}
 	
