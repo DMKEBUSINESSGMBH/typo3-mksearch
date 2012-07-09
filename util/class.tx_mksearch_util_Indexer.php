@@ -28,20 +28,19 @@ tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
 /**
  */
 class tx_mksearch_util_Indexer {
-	
+
 	/**
 	 * Liefert eine Datumsfeld für Solr
 	 * @param 	string 	$date | insert "@" before timestamps
-	 * @param 	string 	$type date or time
 	 * @return string
 	 */
-	public static function getDateTime($date,$type='time'){
+	public static function getDateTime($date){
 		$dateTime = tx_rnbase::makeInstance('DateTime', $date, tx_rnbase::makeInstance('DateTimeZone', 'GMT-0'));
 		$dateTime->setTimeZone(tx_rnbase::makeInstance('DateTimeZone', 'UTC'));
 
 		return $dateTime->format('Y-m-d\TH:i:s\Z');
 	}
-	
+
 	/**
 	* Indexes all fields of the model according to the given mapping
 	*
@@ -50,12 +49,12 @@ class tx_mksearch_util_Indexer {
 	* @param tx_mksearch_interface_IndexerDocument $indexDoc
 	* @param string $prefix
 	* @param array $options
-	* 
+	*
 	* @return tx_mksearch_interface_IndexerDocument
 	*/
 	public static function indexModelByMapping(
-		tx_rnbase_model_base $model, array $recordIndexMapping, 
-		tx_mksearch_interface_IndexerDocument $indexDoc, 
+		tx_rnbase_model_base $model, array $recordIndexMapping,
+		tx_mksearch_interface_IndexerDocument $indexDoc,
 		$prefix = '', array $options = array()
 	) {
 		foreach ($recordIndexMapping as $recordKey => $indexDocKey) {
@@ -67,10 +66,10 @@ class tx_mksearch_util_Indexer {
 				);
 			}
 		}
-		
+
 		return $indexDoc;
 	}
-	
+
 	/**
 	 * Collects the values of all models inside the given array
 	 * and adds them as multivalue (array)
@@ -79,11 +78,11 @@ class tx_mksearch_util_Indexer {
 	 * @param array $aMapping
 	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
 	 * @param string $prefix
-	 * 
+	 *
 	 * @return tx_mksearch_interface_IndexerDocument
 	 */
 	public static function indexArrayOfModelsByMapping(
-		array $models, array $recordIndexMapping, 
+		array $models, array $recordIndexMapping,
 		tx_mksearch_interface_IndexerDocument $indexDoc, $prefix = ''
 	) {
 		//collect values
@@ -94,25 +93,22 @@ class tx_mksearch_util_Indexer {
 					$tempIndexDoc[$prefix.$indexDocKey][] = $model->record[$recordKey];
 			}
 		}
-	
+
 		//and now add the fields
 		if(!empty($tempIndexDoc)){
 			foreach ($tempIndexDoc as $indexDocKey => $values){
 				$indexDoc->addField($indexDocKey, $values);
 			}
 		}
-		
+
 		return $indexDoc;
 	}
-	
+
 	/**
-	* Adds a element to the queue
-	* @param tx_rnbase_model_base $model
-	* @return void
-	*
-	* @todo move function to a helper class as the method has nothing to do
-	* with actual indexing. it's just a helper.
-	*/
+	 * Adds a element to the queue
+	 * @param tx_rnbase_model_base $model
+	 * @return void
+	 */
 	public static function addModelToIndex(
 		tx_rnbase_model_base $model, $tableName
 	){
@@ -123,24 +119,21 @@ class tx_mksearch_util_Indexer {
 			$indexSrv->addRecordToIndex($tableName, $model->getUid());
 		}
 	}
-	
+
 	/**
 	 * just a wrapper for addModelToIndex and an array of models
 	 * @param array $rawData
 	 * @param array $models
 	 * @param string $tableName
 	 * @return void
-	 *
-	 * @todo move function to a helper class as the method has nothing to do
-	 * with actual indexing. it's just a helper.
 	 */
 	public static function addModelsToIndex($models, $tableName) {
 		if(!empty($models))
 			foreach ($models as $model) {
-				$this->addModelToIndex($model,$tableName);
+				self::addModelToIndex($model,$tableName);
 			}
 	}
-	
+
 	/**
 	* Checks if a include or exclude option was set for a
 	* given option key
@@ -171,7 +164,7 @@ class tx_mksearch_util_Indexer {
 				$isHit = false;//if we have a hit
 				break;
 		}
-	
+
 		//should only element with a special category be indexed
 		if(!empty($options[$mode.'.'])){
 			$isValid = $noHit;//no option given
@@ -208,7 +201,7 @@ class tx_mksearch_util_Indexer {
 		}
 		return $isValid;
 	}
-	
+
 	/**
 	* Prüft ob die Seite speziell in einem Seitenbaum liegt,
 	* der inkludiert oder ausgeschlossen werden soll
@@ -229,7 +222,7 @@ class tx_mksearch_util_Indexer {
 			!self::isInPageTrees($sourceRecord['pid'], $excludePageTrees)
 		;
 	}
-	
+
 	/**
 	 * @param int $pid
 	 * @param array $pageTrees
@@ -238,15 +231,15 @@ class tx_mksearch_util_Indexer {
 	 */
 	private static function isInPageTrees($pid, $pageTrees) {
 		$rootline = tx_mksearch_service_indexer_core_Config::getRootLine($pid);
-	
+
 		foreach ($rootline as $page) {
 			if (in_array($page['uid'], $pageTrees))
 				return true;
 		}
-	
+
 		return false;
 	}
-	
+
 	/**
 	* Liefert einen Wert aus der Konfig
 	* Beispiel: $key = test
@@ -266,7 +259,7 @@ class tx_mksearch_util_Indexer {
 		}
 		return $config;
 	}
-	
+
 	/**
 	* Get's the page of the content element if it's not hidden/deleted
 	* @return array
