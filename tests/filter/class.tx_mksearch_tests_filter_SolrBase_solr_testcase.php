@@ -38,33 +38,33 @@ class tx_mksearch_tests_filter_SolrBase_solr_testcase extends tx_mksearch_tests_
 	protected function initAbsolutePathsForConfigs() {
 		parent::initAbsolutePathsForConfigs();
 		
-		$this->copyNeccessaryConfigFiles();
-		$this->copyNeccessaryLibFiles();
+		$this->copyNeccessaryConfigFiles($this->instanceDir);
+		$this->copyNeccessaryLibFiles($this->instanceDir);
 	}
 	
-	public function copyNeccessaryConfigFiles() {
+	public function copyNeccessaryConfigFiles($destPath) {
 		$neccessaryConfigFiles = array(
 			'elevate.xml','protwords.txt','stopwords.txt',
 			'stopwordsGerman.txt','synonyms.txt','dictionaryGerman.txt'
 		);
-		$this->copyNeccessaryFiles('conf/', $neccessaryConfigFiles);
+		$this->copyNeccessaryFiles($destPath, 'conf/', $neccessaryConfigFiles);
 	}
 	
-	public function copyNeccessaryLibFiles() {
+	public function copyNeccessaryLibFiles($destPath) {
 		$neccessaryLibFiles = array(
 			'dmk-solr-core-3.5.0.jar'
 		);
-		$this->copyNeccessaryFiles('lib/', $neccessaryLibFiles);
+		$this->copyNeccessaryFiles($destPath, 'lib/', $neccessaryLibFiles);
 	}
 	
-	private function copyNeccessaryFiles($path, $neccessaryFiles) {
-		$this->createInstanceDir($this->instanceDir);
+	private function copyNeccessaryFiles($destPath,$filesPath, $neccessaryFiles) {
+		$this->createInstanceDir($destPath);
 	
 		foreach ($neccessaryFiles as $neccessaryFile) {
 			copy(
 				t3lib_div::getFileAbsFileName(
-					'EXT:mksearch/solr/'. $path . $neccessaryFile
-				),$this->instanceDir . $path .$neccessaryFile
+					'EXT:mksearch/solr/'. $filesPath . $neccessaryFile
+				),$destPath . $filesPath .$neccessaryFile
 			);
 		}
 	}

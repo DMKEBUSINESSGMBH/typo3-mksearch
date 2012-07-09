@@ -40,8 +40,8 @@ class tx_mksearch_tests_solr_conf_Solrconfig_testcase extends tx_mksearch_tests_
 		parent::initAbsolutePathsForConfigs();
 		
 		$filterTestcase = new tx_mksearch_tests_filter_SolrBase_solr_testcase();
-		$filterTestcase->copyNeccessaryConfigFiles();
-		$filterTestcase->copyNeccessaryLibFiles();
+		$filterTestcase->copyNeccessaryConfigFiles($this->instanceDir);
+		$filterTestcase->copyNeccessaryLibFiles($this->instanceDir);
 	}
 	
 	/**
