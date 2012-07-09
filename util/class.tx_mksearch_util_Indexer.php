@@ -241,18 +241,20 @@ class tx_mksearch_util_Indexer {
 	}
 
 	/**
-	* Liefert einen Wert aus der Konfig
-	* Beispiel: $key = test
-	* Dann wird geprüft ob test eine kommaseparierte Liste liegt
-	* Ist das nicht der Fall wird noch geprüft ob test. ein array ist
-	* @param string $key
-	*
-	* @return array
-	*/
-	public static function getConfigValue($key, $options) {
+	 * Liefert einen Wert aus der Konfig
+	 * Beispiel: $key = test
+	 * Dann wird geprüft ob test eine kommaseparierte Liste liegt
+	 * Ist das nicht der Fall wird noch geprüft ob test. ein array ist
+	 * @param string $key
+	 * @param array $options
+	 *
+	 * @return array
+	 */
+	public static function getConfigValue($key, array $options) {
+		$config = array();
 		if(is_array($options)){
-			$config = array();
-			$config = (array_key_exists($key, $options) && strlen(trim($options[$key]))) ? t3lib_div::trimExplode(',', $options[$key]) : false;
+			$config = (array_key_exists($key, $options) && strlen(trim($options[$key])))
+						? t3lib_div::trimExplode(',', $options[$key]) : array();
 			if(!is_array($config) && array_key_exists($key.'.', $options)) {
 				$config = $options[$key.'.'];
 			}
