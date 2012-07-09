@@ -320,7 +320,7 @@ class tx_mksearch_tests_SolrTestcase extends tx_phpunit_testcase {
 	}
 	
 	/**
-	 * @dummytest
+	 * @group dummytest
 	 */
 	public function testDummy() {
 		$this->assertTrue(true);
