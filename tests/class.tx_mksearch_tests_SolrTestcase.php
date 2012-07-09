@@ -94,7 +94,7 @@ class tx_mksearch_tests_SolrTestcase extends tx_phpunit_testcase {
 	 */
 	protected function createCore() {
 		if(!$this->isSolrOkay()) 
-			$this->fail($this->getSolrNotRespondingMessage());
+			$this->markTestSkipped($this->getSolrNotRespondingMessage());
 			
 		$this->createInstanceDir($this->instanceDir);
 		
