@@ -35,11 +35,18 @@ class tx_mksearch_tests_filter_SolrBase_solr_testcase extends tx_mksearch_tests_
 	protected $configFile = 'EXT:mksearch/solr/conf/solrconfig.xml';
 	protected $schemaFile = 'EXT:mksearch/solr/conf/schema.xml';
 	
-	protected function initAbsolutePathsForConfigs() {
-		parent::initAbsolutePathsForConfigs();
+	/**
+	 * (non-PHPdoc)
+	 * @see PHPUnit_Framework_TestCase::setUp()
+	 */
+	public function setUp() {
+		$this->initAbsolutePathsForConfigs();
+		t3lib_div::rmdir($this->instanceDir,true);
 		
 		$this->copyNeccessaryConfigFiles($this->instanceDir);
 		$this->copyNeccessaryLibFiles($this->instanceDir);
+		
+		$this->createCore();
 	}
 	
 	public function copyNeccessaryConfigFiles($destPath) {
