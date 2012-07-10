@@ -79,6 +79,7 @@ class tx_mksearch_tests_SolrTestcase extends tx_phpunit_testcase {
 	 */
 	public function setUp() {
 		$this->initAbsolutePathsForConfigs();
+		t3lib_div::rmdir($this->instanceDir,true);
 		$this->createCore();
 	}
 	
@@ -203,9 +204,19 @@ class tx_mksearch_tests_SolrTestcase extends tx_phpunit_testcase {
 	 * @return void
 	 */
 	protected function createInstanceDir($path) {
+		//da auf den ordner auch der nutzer zugreift, der solr ausführt und das
+		//nicht der gleiche wie der nutzer von tyop3 sein sollte, müssen wir
+		//diesem zugriff auf den ordner geben. die default umask, die über setfacl
+		//gesetzt wird, wird von TYPO3 überschrieben. Also setzen wir die umask vorrübergehend wie 
+		//wir es brauchen
+		$umaskBackup = $GLOBALS['TYPO3_CONF_VARS']['BE']['folderCreateMask'];
+		$GLOBALS['TYPO3_CONF_VARS']['BE']['folderCreateMask'] = '0775';
+		
 		t3lib_div::mkdir($path);
 		t3lib_div::mkdir($path . '/conf');
 		t3lib_div::mkdir($path . '/lib');
+		
+		$GLOBALS['TYPO3_CONF_VARS']['BE']['folderCreateMask'] = $umaskBackup;
 	}
 	
 	/**
