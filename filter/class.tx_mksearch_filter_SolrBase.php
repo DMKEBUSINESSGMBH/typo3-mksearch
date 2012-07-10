@@ -194,7 +194,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 	 * @param 	string 						$confId
 	 */
 	protected function handleFq(&$options, &$parameters, &$configurations, $confId) {
-		self::addFilterQuery($options, $this->getFilterQueryForFeGroups());
+		self::addFilterQuery($options, self::getFilterQueryForFeGroups());
 
 		// die erlaubten felder holen
 		$allowedFqParams = t3lib_div::trimExplode(',', $configurations->get($confId.'allowedFqParams'));
@@ -229,10 +229,10 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 		}
 	}
 
-	protected function getFilterQueryForFeGroups() {
+	public static function getFilterQueryForFeGroups() {
 		//wenigstens ein teil der query muss matchen. bei prüfen auf
 		//nicht vorhandensein muss also noch auf ein feld geprüft werden
-		//das garantiert existiert und damit ein match generiert. 
+		//das garantiert existiert und damit ein match generiert.
 		$filterQuery = '(-fe_group_mi:[* TO *] AND uid:[* TO *]) OR fe_group_mi:0';
 
 		if(is_array($GLOBALS['TSFE']->fe_user->groupData['uid'])){
