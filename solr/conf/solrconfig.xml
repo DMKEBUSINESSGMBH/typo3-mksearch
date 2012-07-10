@@ -949,10 +949,6 @@ http://solr.pl/en/2010/11/15/solr-and-autocomplete-part-2/ -->
 			<str name="spellcheck">true</str>
 			<str name="spellcheck.dictionary">suggest_fst</str>
 			<str name="spellcheck.count">10</str>
-			<!-- collate needs to be true so we receive only hits
-					that match our filter query -->
-			<str name="spellcheck.collate">true</str>
-			<str name="spellcheck.maxCollationTries">5</str>
 			<!-- NOTE: if this is false, results are alpha-ordered, not by weight! -->
 			<str name="spellcheck.onlyMorePopular">true</str>
 		</lst>
