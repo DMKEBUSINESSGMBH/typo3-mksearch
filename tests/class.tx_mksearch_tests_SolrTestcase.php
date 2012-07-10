@@ -116,11 +116,18 @@ class tx_mksearch_tests_SolrTestcase extends tx_phpunit_testcase {
 	}
 
 	private function setSolrCredentialsForNewCore() {
-		$newCredentialsString = preg_replace(
-			'/(.*),(.*),(\/.*\/).*/',
-			'$1,$2,$3'.$this->getCoreName(),
-			$this->getDefaultIndexModel()->record['name']
-		);
+		//$this->getDefaultIndexModel()->record['name'] ist z.B.
+		//"localhost,8081,/solr-3.5.0/mycore"
+		$credentialsStringParts = 
+			t3lib_div::trimExplode(',',$this->getDefaultIndexModel()->record['name']);
+			
+		//damit ist also $credentialsStringParts[2] z.B.
+		//"/solr-3.5.0/mycore"
+		$solrPathParts = t3lib_div::trimExplode('/',$credentialsStringParts[2]);
+		
+		//build new credential string
+		$newCredentialsString = $credentialsStringParts[0] . ',' . $credentialsStringParts[1] . 
+			',/' . $solrPathParts[1] . '/' . $this->getCoreName();
 
 		$newCredentials = $this->getSolrEngine()->getCredentialsFromString($newCredentialsString);
 		$this->getSolrEngine()->setConnection(
