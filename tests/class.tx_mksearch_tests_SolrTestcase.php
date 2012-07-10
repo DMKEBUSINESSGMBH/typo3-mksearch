@@ -37,42 +37,42 @@ class tx_mksearch_tests_SolrTestcase extends tx_phpunit_testcase {
 	 * @var unknown_type
 	 */
 	private $solr;
-	
+
 	/**
 	 * Can be a TYPO3 path like EXT:mksearch/tests.....
 	 * will be created upon core creation.
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $instanceDir = '';
-	
+
 	/**
 	 * Can be a TYPO3 path like EXT:mksearch/tests.....
 	 * @var string
 	 */
 	protected $configFile = '';
-	
+
 	/**
 	 * Can be a TYPO3 path like EXT:mksearch/tests.....
 	 * @var string
 	 */
 	protected $schemaFile = '';
-	
+
 	/**
 	 * @var string
 	 */
 	private $coreName = '';
-	
+
 	/**
 	 * @var tx_mksearch_service_engine_Solr
 	 */
 	private $solrEngine;
-	
+
 	/**
 	 * @var unknown_type
 	 */
 	private $defaultIndexModel;
-	
+
 	/**
 	 * (non-PHPdoc)
 	 * @see PHPUnit_Framework_TestCase::setUp()
@@ -82,7 +82,7 @@ class tx_mksearch_tests_SolrTestcase extends tx_phpunit_testcase {
 		t3lib_div::rmdir($this->instanceDir,true);
 		$this->createCore();
 	}
-	
+
 	/**
 	 * @return void
 	 */
@@ -91,34 +91,34 @@ class tx_mksearch_tests_SolrTestcase extends tx_phpunit_testcase {
 		$this->configFile = t3lib_div::getFileAbsFileName($this->configFile);
 		$this->schemaFile = t3lib_div::getFileAbsFileName($this->schemaFile);
 	}
-	
+
 	/**
 	 * @return void
 	 */
 	protected function createCore() {
-		if(!$this->isSolrOkay()) 
+		if(!$this->isSolrOkay())
 			$this->markTestSkipped($this->getSolrNotRespondingMessage());
-			
+
 		$this->createInstanceDir($this->instanceDir);
-		
+
 		$solr = $this->getSolr();
 		$httpTransport = $solr->getHttpTransport();
-		$url = $this->getAdminCoresPath() . '?action=CREATE&name=' . $this->getCoreName() . 
-			'&instanceDir=' . $this->instanceDir . '&config=' . $this->configFile . '&schema=' . 
+		$url = $this->getAdminCoresPath() . '?action=CREATE&name=' . $this->getCoreName() .
+			'&instanceDir=' . $this->instanceDir . '&config=' . $this->configFile . '&schema=' .
 			$this->schemaFile;
 		$httpResponse = $httpTransport->performGetRequest($url);
-		
+
 		if($httpResponse->getStatusCode() != 200){
 			$this->fail('Der Core (' . $this->getCoreName() . ') konnte nicht erstellt werden. URL: ' . $url . '. Bitte in die Solr Konsole schauen bzgl. der Fehler!');
 		}
-		
+
 		$this->setSolrCredentialsForNewCore();
 	}
-	
+
 	private function setSolrCredentialsForNewCore() {
 		$newCredentialsString = preg_replace(
-			'/(.*),(.*),(\/.*\/).*/', 
-			'$1,$2,$3'.$this->getCoreName(), 
+			'/(.*),(.*),(\/.*\/).*/',
+			'$1,$2,$3'.$this->getCoreName(),
 			$this->getDefaultIndexModel()->record['name']
 		);
 
@@ -128,62 +128,62 @@ class tx_mksearch_tests_SolrTestcase extends tx_phpunit_testcase {
 		);
 		$this->solr = null;
 	}
-	
+
 	/**
 	 * Enter description here ...
 	 */
 	private function getDefaultIndexModel() {
 		if(!$this->defaultIndexModel){
-			$this->defaultIndexModel = 
+			$this->defaultIndexModel =
 				tx_mksearch_util_ServiceRegistry::getIntIndexService()->getRandomSolrIndex();
 		}
-		
+
 		if(!$this->defaultIndexModel)
 			$this->markTestSkipped('Es wurde kein Solr Index gefunden. Solr ist scheinbar nicht konfigruiert.');
-		
+
 		return $this->defaultIndexModel;
 	}
-	
-	
+
+
 	/**
 	 * @return string
 	 */
 	private function getSolrNotRespondingMessage() {
-		return 'Solr ist nicht erreichbar auf: ' . 
-				'Host: ' . $this->getSolr()->getHost() . ', Port: ' . 
+		return 'Solr ist nicht erreichbar auf: ' .
+				'Host: ' . $this->getSolr()->getHost() . ', Port: ' .
 				$this->getSolr()->getPort() . ', Path: ' . $this->getSolr()->getPath();
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @return Apache_Solr_Service
 	 */
 	protected function getSolr() {
-		if($this->solr) 
+		if($this->solr)
 			return $this->solr;
-			
+
 		try {
 			$this->solr = $this->getSolrEngine()->getSolr();
 		} catch (Exception $e) {
 			$this->markTestSkipped($this->getSolrNotRespondingMessage());
 		}
-		
+
 		return $this->solr;
 	}
-	
+
 	/**
 	 * @return string
 	 */
 	protected function getCoreName() {
 		if(!$this->coreName)
-			//muss mit einem buchstaben beginnen da der name 
+			//muss mit einem buchstaben beginnen da der name
 			//in setSolrCredentialsForNewCore in preg_replace
 			//nicht korrekt ersetzt wird
 			$this->coreName = 'a'. md5(microtime());
-			
+
 		return $this->coreName;
 	}
-	
+
 	/**
 	 * per default den ersten konfiguriereten index.
 	 * sollte so passen.
@@ -198,7 +198,7 @@ class tx_mksearch_tests_SolrTestcase extends tx_phpunit_testcase {
 		}
 		return $this->solrEngine;
 	}
-	
+
 	/**
 	 * @param string $path
 	 * @return void
@@ -207,25 +207,25 @@ class tx_mksearch_tests_SolrTestcase extends tx_phpunit_testcase {
 		//da auf den ordner auch der nutzer zugreift, der solr ausführt und das
 		//nicht der gleiche wie der nutzer von tyop3 sein sollte, müssen wir
 		//diesem zugriff auf den ordner geben. die default umask, die über setfacl
-		//gesetzt wird, wird von TYPO3 überschrieben. Also setzen wir die umask vorrübergehend wie 
+		//gesetzt wird, wird von TYPO3 überschrieben. Also setzen wir die umask vorrübergehend wie
 		//wir es brauchen
 		$umaskBackup = $GLOBALS['TYPO3_CONF_VARS']['BE']['folderCreateMask'];
 		$GLOBALS['TYPO3_CONF_VARS']['BE']['folderCreateMask'] = '0775';
-		
+
 		t3lib_div::mkdir($path);
 		t3lib_div::mkdir($path . '/conf');
 		t3lib_div::mkdir($path . '/lib');
-		
+
 		$GLOBALS['TYPO3_CONF_VARS']['BE']['folderCreateMask'] = $umaskBackup;
 	}
-	
+
 	/**
-	 * @return string 
+	 * @return string
 	 */
 	protected function getAdminCoresPath() {
 		return $this->getBaseUrl() . '/' . 'admin/cores';
 	}
-	
+
 	/**
 	 * @return string
 	 */
@@ -234,7 +234,7 @@ class tx_mksearch_tests_SolrTestcase extends tx_phpunit_testcase {
 		$baseSolrPath = explode('/', $solr->getPath());
 		return 'http://' . $solr->getHost() . ':' . $solr->getPort() . '/' . $baseSolrPath[1];
 	}
-	
+
 	/**
 	 * (non-PHPdoc)
 	 * @see PHPUnit_Framework_TestCase::tearDown()
@@ -243,28 +243,28 @@ class tx_mksearch_tests_SolrTestcase extends tx_phpunit_testcase {
 		$this->unloadCore();
 		t3lib_div::rmdir($this->instanceDir,true);
 	}
-	
+
 	/**
 	 * @return void
 	 */
 	protected function unloadCore() {
-		if(!$this->isSolrOkay()) 
+		if(!$this->isSolrOkay())
 			$this->fail($this->getSolrNotRespondingMessage());
-			
+
 		$url = $this->getAdminCoresPath() . '?action=UNLOAD&core=' . $this->getCoreName() . '&deleteIndex=true';
 		$httpResponse =  $this->getSolr()->getHttpTransport()->performGetRequest($url);
-		
+
 		if($httpResponse->getStatusCode() != 200){
 			$this->fail('Der Core (' . $this->getCoreName() . ') konnte nicht gelöscht werden. URL: ' . $url . '. Bitte in die Solr Konsolte schauen bzgl. der Fehler!');
 		}
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param string $yamlPath
 	 */
 	protected function indexDocsFromYaml($yamlPath) {
-		if(!$this->isSolrOkay()) 
+		if(!$this->isSolrOkay())
 			$this->fail($this->getSolrNotRespondingMessage());
 
 		// Erstmal komplett leer räumen
@@ -272,7 +272,7 @@ class tx_mksearch_tests_SolrTestcase extends tx_phpunit_testcase {
 
 		tx_rnbase::load('tx_rnbase_util_Spyc');
 		$data = tx_rnbase_util_Spyc::YAMLLoad($yamlPath);
-		
+
 		foreach($data['docs'] As $docArr) {
 			$extKey = $docArr['extKey']; unset($docArr['extKey']);
 			$cType = $docArr['contentType']; unset($docArr['contentType']);
@@ -285,10 +285,10 @@ class tx_mksearch_tests_SolrTestcase extends tx_phpunit_testcase {
 			}
 			$this->getSolrEngine()->indexUpdate($indexDoc);
 		}
-		
+
 		$this->getSolrEngine()->commitIndex();
 	}
-	
+
 	/**
 	 * @param unknown_type $extKey
 	 * @param unknown_type $cntType
@@ -298,7 +298,7 @@ class tx_mksearch_tests_SolrTestcase extends tx_phpunit_testcase {
 		$indexDoc = $this->getSolrEngine()->makeIndexDocInstance($extKey, $cntType);
 		return $indexDoc;
 	}
-	
+
 	/**
 	 * @return boolean
 	 */
@@ -311,11 +311,11 @@ class tx_mksearch_tests_SolrTestcase extends tx_phpunit_testcase {
 		}
 		return $ret;
 	}
-	
+
 	/**
 	 * es wird default nach *:* und einem limit von 10
 	 * gesucht
-	 * 
+	 *
 	 * @param array $options
 	 * @param array $fields
 	 * @return array
@@ -326,10 +326,15 @@ class tx_mksearch_tests_SolrTestcase extends tx_phpunit_testcase {
 
 		if(empty($options['limit']))
 			$options['limit'] = 10;
-			
+
 		return $this->getSolrEngine()->search($fields, $options);
 	}
-	
+
+	protected function assertNothingFound($result) {
+		$this->assertEquals(0, $result['numFound'], 'doch etwas gefunden');
+		$this->assertEmpty($result['items'], 'doch items etwas gefunden');
+	}
+
 	/**
 	 * @group dummytest
 	 */
