@@ -48,6 +48,7 @@ tx_rnbase::load('tx_mksearch_util_UserFunc');
 class tx_mksearch_tests_filter_SolrBase_testcase extends tx_phpunit_testcase {
 
 	protected $oParameters;
+	protected $groupDataBackup;
 
 	/**
 	 * setUp() = init DB etc.
@@ -258,11 +259,11 @@ class tx_mksearch_tests_filter_SolrBase_testcase extends tx_phpunit_testcase {
 
 		$this->assertEquals('(-fe_group_mi:[* TO *] AND uid:[* TO *]) OR fe_group_mi:0',$options['fq'],'fq wuede gesetzt!');
 	}
-	
+
 	public function testSettingOfFeGroupsToFilterQuery(){
 		$tsFeBackup = $GLOBALS['TSFE']->fe_user->groupData['uid'];
 		$GLOBALS['TSFE']->fe_user->groupData['uid'] = array(1,2);
-		
+
 		$aConfig = tx_mksearch_tests_Util::loadPageTS4BE();
 		//wir müssen fields extra kopieren da es über TS Anweisungen im BE nicht geht
 		$aConfig['searchsolr.']['filter.']['default.'] = $aConfig['lib.']['mksearch.']['defaultsolrfilter.'];
@@ -281,7 +282,7 @@ class tx_mksearch_tests_filter_SolrBase_testcase extends tx_phpunit_testcase {
 		$oFilter->init($fields, $options);
 
 		$this->assertEquals('(-fe_group_mi:[* TO *] AND uid:[* TO *]) OR fe_group_mi:0 OR fe_group_mi:1 OR fe_group_mi:2',$options['fq'],'fq wuede gesetzt!');
-		
+
 		$GLOBALS['TSFE']->fe_user->groupData['uid'] = $tsFeBackup;
 	}
 }

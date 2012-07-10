@@ -34,21 +34,32 @@ class tx_mksearch_tests_filter_SolrBase_solr_testcase extends tx_mksearch_tests_
 	protected $instanceDir = 'EXT:mksearch/tests/solrtestcore/';
 	protected $configFile = 'EXT:mksearch/solr/conf/solrconfig.xml';
 	protected $schemaFile = 'EXT:mksearch/solr/conf/schema.xml';
-	
+	protected $groupDataBackup;
+
 	/**
 	 * (non-PHPdoc)
 	 * @see PHPUnit_Framework_TestCase::setUp()
 	 */
 	public function setUp() {
+		$this->groupDataBackup = $GLOBALS['TSFE']->fe_user->groupData['uid'];
 		$this->initAbsolutePathsForConfigs();
 		t3lib_div::rmdir($this->instanceDir,true);
-		
+
 		$this->copyNeccessaryConfigFiles($this->instanceDir);
 		$this->copyNeccessaryLibFiles($this->instanceDir);
-		
+
 		$this->createCore();
 	}
-	
+
+	/**
+	 * (non-PHPdoc)
+	 * @see tx_mksearch_tests_SolrTestcase::tearDown()
+	 */
+	public function tearDown() {
+		parent::tearDown();
+		$GLOBALS['TSFE']->fe_user->groupData['uid'] = $this->groupDataBackup;
+	}
+
 	public function copyNeccessaryConfigFiles($destPath) {
 		$neccessaryConfigFiles = array(
 			'elevate.xml','protwords.txt','stopwords.txt',
@@ -56,17 +67,17 @@ class tx_mksearch_tests_filter_SolrBase_solr_testcase extends tx_mksearch_tests_
 		);
 		$this->copyNeccessaryFiles($destPath, 'conf/', $neccessaryConfigFiles);
 	}
-	
+
 	public function copyNeccessaryLibFiles($destPath) {
 		$neccessaryLibFiles = array(
 			'dmk-solr-core-3.5.0.jar'
 		);
 		$this->copyNeccessaryFiles($destPath, 'lib/', $neccessaryLibFiles);
 	}
-	
+
 	private function copyNeccessaryFiles($destPath,$filesPath, $neccessaryFiles) {
 		$this->createInstanceDir($destPath);
-	
+
 		foreach ($neccessaryFiles as $neccessaryFile) {
 			copy(
 				t3lib_div::getFileAbsFileName(
@@ -75,104 +86,104 @@ class tx_mksearch_tests_filter_SolrBase_solr_testcase extends tx_mksearch_tests_
 			);
 		}
 	}
-	
+
 	/**
 	 * @integration
 	 */
 	public function testDocIsFoundIfNoFeGroupSet() {
 		$this->indexDocsFromYaml(tx_mksearch_tests_Util::getFixturePath('solr/fegroup/nogroupset.yaml'));
-		
+
 		$options = $this->getOptionsFromFilter();
-		
+
 		$this->assertStringStartsWith(
-			'(-fe_group_mi:[* TO *] AND uid:[* TO *]) OR fe_group_mi:0', 
-			$options['fq'], 
+			'(-fe_group_mi:[* TO *] AND uid:[* TO *]) OR fe_group_mi:0',
+			$options['fq'],
 			'scheinbar falsche filter query'
 		);
-		
+
 		$result = $this->search($options);
-		
+
 		$this->assertEquals(1, $result['numFound'], 'nicht nur 1 doc gefunden.');
 		$this->assertEquals(1, $result['items'][0]->record['uid'], 'uid falsch');
 		$this->assertEquals(
-			'fegrouptest', 
-			$result['items'][0]->record['contentType'], 
+			'fegrouptest',
+			$result['items'][0]->record['contentType'],
 			'contentType falsch'
 		);
 	}
-	
+
 	/**
 	 * @integration
 	 */
 	public function testDocIsFoundIfFeGroupSetToZero() {
 		$this->indexDocsFromYaml(tx_mksearch_tests_Util::getFixturePath('solr/fegroup/groupsettozero.yaml'));
-		
+
 		$options = $this->getOptionsFromFilter();
-		
+
 		$this->assertStringStartsWith(
-			'(-fe_group_mi:[* TO *] AND uid:[* TO *]) OR fe_group_mi:0', 
-			$options['fq'], 
+			'(-fe_group_mi:[* TO *] AND uid:[* TO *]) OR fe_group_mi:0',
+			$options['fq'],
 			'scheinbar falsche filter query'
 		);
-		
+
 		$result = $this->search($options);
-		
+
 		$this->assertEquals(1, $result['numFound'], 'nicht nur 1 doc gefunden.');
 		$this->assertEquals(1, $result['items'][0]->record['uid'], 'uid falsch');
 		$this->assertEquals(
-			'fegrouptest', 
-			$result['items'][0]->record['contentType'], 
+			'fegrouptest',
+			$result['items'][0]->record['contentType'],
 			'contentType falsch'
 		);
 	}
-	
+
 	/**
 	 * @integration
 	 */
 	public function testDocIsFoundIfCorrectFeGroupSet() {
 		$this->indexDocsFromYaml(tx_mksearch_tests_Util::getFixturePath('solr/fegroup/groupsetto1.yaml'));
-		
+
 		$GLOBALS['TSFE']->fe_user->groupData['uid'] = array(1);
 		$options = $this->getOptionsFromFilter();
-		
+
 		$this->assertStringStartsWith(
-			'(-fe_group_mi:[* TO *] AND uid:[* TO *]) OR fe_group_mi:0', 
-			$options['fq'], 
+			'(-fe_group_mi:[* TO *] AND uid:[* TO *]) OR fe_group_mi:0',
+			$options['fq'],
 			'scheinbar falsche filter query'
 		);
-		
+
 		$result = $this->search($options);
-		
+
 		$this->assertEquals(1, $result['numFound'], 'nicht nur 1 doc gefunden.');
 		$this->assertEquals(1, $result['items'][0]->record['uid'], 'uid falsch');
 		$this->assertEquals(
-			'fegrouptest', 
-			$result['items'][0]->record['contentType'], 
+			'fegrouptest',
+			$result['items'][0]->record['contentType'],
 			'contentType falsch'
 		);
 	}
-	
+
 	/**
 	 * @integration
 	 */
 	public function testDocIsNotFoundIfIncorrectFeGroupSet() {
 		$this->indexDocsFromYaml(tx_mksearch_tests_Util::getFixturePath('solr/fegroup/groupsetto1.yaml'));
-		
+
 		$GLOBALS['TSFE']->fe_user->groupData['uid'] = array(2);
 		$options = $this->getOptionsFromFilter();
-		
+
 		$this->assertStringStartsWith(
-			'(-fe_group_mi:[* TO *] AND uid:[* TO *]) OR fe_group_mi:0', 
-			$options['fq'], 
+			'(-fe_group_mi:[* TO *] AND uid:[* TO *]) OR fe_group_mi:0',
+			$options['fq'],
 			'scheinbar falsche filter query'
 		);
 
 		$result = $this->search($options);
-		
+
 		$this->assertEquals(0, $result['numFound'], 'doch etwas gefunden');
 		$this->assertEmpty($result['items'], 'doch items etwas gefunden');
 	}
-	
+
 	private function getOptionsFromFilter() {
 		$parameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
 		$config = tx_mksearch_tests_Util::loadPageTS4BE();
@@ -185,7 +196,7 @@ class tx_mksearch_tests_filter_SolrBase_solr_testcase extends tx_mksearch_tests_
 		);
 		$fields = $options = array();
 		$filter->init($fields,$options);
-		
+
 		return $options;
 	}
 }
