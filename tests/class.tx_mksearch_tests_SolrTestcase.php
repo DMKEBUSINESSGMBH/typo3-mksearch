@@ -156,9 +156,13 @@ class tx_mksearch_tests_SolrTestcase extends tx_phpunit_testcase {
 	 * @return string
 	 */
 	private function getSolrNotRespondingMessage() {
-		return 'Solr ist nicht erreichbar auf: ' .
-				'Host: ' . $this->getSolr()->getHost() . ', Port: ' .
+		$additionalMessage = '';
+		if(!is_null($this->solr)){
+			$additionalMessage .= ' auf: Host: ' . $this->getSolr()->getHost() . ', Port: ' .
 				$this->getSolr()->getPort() . ', Path: ' . $this->getSolr()->getPath();
+		}
+		
+		return 'Solr ist nicht erreichbar' . $additionalMessage;
 	}
 
 	/**
@@ -198,7 +202,9 @@ class tx_mksearch_tests_SolrTestcase extends tx_phpunit_testcase {
 	 */
 	protected function getSolrEngine() {
 		if(!$this->solrEngine){
-			$defaultIndexModel = $this->getDefaultIndexModel();
+			if(!$defaultIndexModel = $this->getDefaultIndexModel())
+				$this->markTestSkipped($this->getSolrNotRespondingMessage());
+				
 			$this->solrEngine = tx_mksearch_util_ServiceRegistry::getSearchEngine(
 				$defaultIndexModel
 			);
