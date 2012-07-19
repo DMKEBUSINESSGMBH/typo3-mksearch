@@ -78,6 +78,8 @@ class tx_mksearch_tests_SolrTestcase extends tx_phpunit_testcase {
 	 * @see PHPUnit_Framework_TestCase::setUp()
 	 */
 	public function setUp() {
+		$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['devlog']['nolog'] = true;
+		
 		$this->initAbsolutePathsForConfigs();
 		t3lib_div::rmdir($this->instanceDir,true);
 		$this->createCore();
