@@ -294,7 +294,7 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
 	 * @param array $options
 	 */
 	protected function isIndexableRecord($sourceRecord, $options) {
-		$ret = tx_mksearch_util_Misc::isIndexable($sourceRecord, $options);
+		$ret = tx_mksearch_util_Misc::isOnValidPage($sourceRecord, $options);
 		return $ret;
 	}
 	

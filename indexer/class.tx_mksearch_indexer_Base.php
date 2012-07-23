@@ -164,10 +164,10 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 	}
 
 	/**
-	 * @see tx_mksearch_util_Misc::isIndexable()
+	 * @see tx_mksearch_util_Misc::isOnValidPage()
 	 */
 	protected function isIndexableRecord(array $sourceRecord, array $options) {
-		return tx_mksearch_util_Misc::isIndexable($sourceRecord, $options);
+		return tx_mksearch_util_Misc::isOnValidPage($sourceRecord, $options);
 	}
 	
 	/**

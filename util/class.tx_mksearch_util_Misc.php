@@ -45,7 +45,7 @@ class tx_mksearch_util_Misc {
 	 * @param array 	$options
 	 * @return boolean
 	 */
-	public static function isIndexable($sourceRecord, $options){
+	public static function isOnValidPage($sourceRecord, $options){
 		if(!is_array($options)) { return true; }
 		if(array_key_exists('include.', $options) && is_array($options['include.'])) {
 			$aPages = (array_key_exists('pages', $options['include.']) && strlen(trim($options['include.']['pages'])))

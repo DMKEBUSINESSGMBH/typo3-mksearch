@@ -147,7 +147,7 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
 	 * @return 	boolean
 	 */
 	protected function isIndexableRecord($sourceRecord, $options){
-		$ret = tx_mksearch_util_Misc::isIndexable($sourceRecord, $options);
+		$ret = tx_mksearch_util_Misc::isOnValidPage($sourceRecord, $options);
 		return $ret;
 	}
 	

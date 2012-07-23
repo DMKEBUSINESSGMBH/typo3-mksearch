@@ -64,51 +64,51 @@ class tx_mksearch_tests_util_Misc_testcase extends tx_phpunit_testcase {
 	public function test_isIndexable_NoConfig() {
 		$record = array('uid'=>123, 'pid'=>'1');
 		$options = array();
-		$this->assertEquals(true, tx_mksearch_util_Misc::isIndexable($record, $options));
+		$this->assertEquals(true, tx_mksearch_util_Misc::isOnValidPage($record, $options));
 	}
 
 	public function test_isIndexable_IncludeWrongSinglePid() {
 		$record = array('uid'=>123, 'pid'=>'1');
 		$options = array();
 		$options['include.']['pages.']['0'] = 2;
-		$this->assertEquals(false, tx_mksearch_util_Misc::isIndexable($record, $options));
+		$this->assertEquals(false, tx_mksearch_util_Misc::isOnValidPage($record, $options));
 
 		$options = array();
 		$options['include.']['pages'] = '2,10,145';
-		$this->assertEquals(false, tx_mksearch_util_Misc::isIndexable($record, $options));
+		$this->assertEquals(false, tx_mksearch_util_Misc::isOnValidPage($record, $options));
 	}
 
 	public function test_isIndexable_IncludeRightSinglePid() {
 		$record = array('uid'=>123, 'pid'=>'1');
 		$options = array();
 		$options['include.']['pages.'] = array(2,10,1,1145);
-		$this->assertEquals(true, tx_mksearch_util_Misc::isIndexable($record, $options));
+		$this->assertEquals(true, tx_mksearch_util_Misc::isOnValidPage($record, $options));
 
 		$options = array();
 		$options['include.']['pages'] = '2,10,1,145';
-		$this->assertEquals(true, tx_mksearch_util_Misc::isIndexable($record, $options));
+		$this->assertEquals(true, tx_mksearch_util_Misc::isOnValidPage($record, $options));
 	}
 
 	public function test_isIndexable_ExcludeWrongSinglePid() {
 		$record = array('uid'=>123, 'pid'=>'1');
 		$options = array();
 		$options['exclude.']['pages.']['0'] = 2;
-		$this->assertEquals(true, tx_mksearch_util_Misc::isIndexable($record, $options));
+		$this->assertEquals(true, tx_mksearch_util_Misc::isOnValidPage($record, $options));
 
 		$options = array();
 		$options['exclude.']['pages'] = '2,10,145';
-		$this->assertEquals(true, tx_mksearch_util_Misc::isIndexable($record, $options));
+		$this->assertEquals(true, tx_mksearch_util_Misc::isOnValidPage($record, $options));
 	}
 
 	public function test_isIndexable_ExcludeRightSinglePid() {
 		$record = array('uid'=>123, 'pid'=>'11');
 		$options = array();
 		$options['exclude.']['pages.'] = array(2,10,11,1145);
-		$this->assertEquals(false, tx_mksearch_util_Misc::isIndexable($record, $options));
+		$this->assertEquals(false, tx_mksearch_util_Misc::isOnValidPage($record, $options));
 
 		$options = array();
 		$options['exclude.']['pages'] = '2,10,11,145';
-		$this->assertEquals(false, tx_mksearch_util_Misc::isIndexable($record, $options));
+		$this->assertEquals(false, tx_mksearch_util_Misc::isOnValidPage($record, $options));
 	}
 
 	public function test_isIndexable_CheckMismachingConfig() {
@@ -116,17 +116,17 @@ class tx_mksearch_tests_util_Misc_testcase extends tx_phpunit_testcase {
 //		$options = array();
 //		$options['include.']['pages'] = '2,10,145';
 //		$options['exclude.']['pages.'] = array(2,10,1145);
-//		$this->assertEquals(false, tx_mksearch_util_Misc::isIndexable($record, $options), 'Element indexed but not in include');
+//		$this->assertEquals(false, tx_mksearch_util_Misc::isOnValidPage($record, $options), 'Element indexed but not in include');
 //
 //		$options = array();
 //		$options['include.']['pages'] = '';
 //		$options['exclude.']['pages'] = '2,10,11,145';
-//		$this->assertEquals(false, tx_mksearch_util_Misc::isIndexable($record, $options));
+//		$this->assertEquals(false, tx_mksearch_util_Misc::isOnValidPage($record, $options));
 
 		$options = array();
 		$options['include.']['pages'] = '';
 		$options['exclude.']['pages'] = '2,10,145';
-		$this->assertEquals(true, tx_mksearch_util_Misc::isIndexable($record, $options));
+		$this->assertEquals(true, tx_mksearch_util_Misc::isOnValidPage($record, $options));
 	}
 	
 	/**

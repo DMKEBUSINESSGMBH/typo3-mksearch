@@ -213,14 +213,16 @@ class tx_mksearch_util_Indexer {
 	public static function isInValidPageTree($sourceRecord, $options) {
 		$includePageTrees = self::getConfigValue('pageTrees', $options['include.']);
 		$excludePageTrees = self::getConfigValue('pageTrees', $options['exclude.']);
-
-		return
-			(
-				empty($includePageTrees) ||
-				self::isInPageTrees($sourceRecord['pid'], $includePageTrees)
-			) &&
-			!self::isInPageTrees($sourceRecord['pid'], $excludePageTrees)
-		;
+		
+		$isValid = true;
+		 
+		if(!empty($includePageTrees) && !self::isInPageTrees($sourceRecord['pid'], $includePageTrees))
+			$isValid = false;
+		
+		if($isValid && self::isInPageTrees($sourceRecord['pid'], $excludePageTrees))
+			$isValid = false;
+			
+		return $isValid;
 	}
 
 	/**
