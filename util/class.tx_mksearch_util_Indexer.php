@@ -203,43 +203,173 @@ class tx_mksearch_util_Indexer {
 	}
 
 	/**
-	* Prüft ob die Seite speziell in einem Seitenbaum liegt,
-	* der inkludiert oder ausgeschlossen werden soll
+	* Prüft ob das Element speziell in einem Seitenbaum oder auf einer Seite liegt,
+	* der/die inkludiert oder ausgeschlossen werden soll.
+	* Der Entscheidungsbaum dafür ist relativ, sollte aber durch den Code
+	* illustriert werden.
 	*
 	* @param array $sourceRecord
 	* @param array $options
 	* @return bool
 	*/
-	public static function isInValidPageTree($sourceRecord, $options) {
+	public static function isOnIndexablePage($sourceRecord, $options) {
+		$pid = $sourceRecord['pid'];
+		$includePages = self::getConfigValue('pages', $options['include.']);
+		
+		if(in_array($pid, $includePages))
+			return true;
+		else 
+			return self::pageIsNotInIncludePages($pid,$options);
+	}
+	
+	/**
+	 * entweder sind die include pages leer oder es wurde kein eintrag gefunden.
+	 * was der fall wird in 
+	 * @param integer $pid
+	 * @param array $options
+	 * 
+	 * @return boolean
+	 */
+	private static function pageIsNotInIncludePages($pid, array $options) {
 		$includePageTrees = self::getConfigValue('pageTrees', $options['include.']);
+		
+		if(empty($includePageTrees))
+			return self::includePageTreesNotSet($pid, $options);
+		else
+			return self::includePageTreesSet($pid, $options);
+	}
+	
+	/**
+	 * @param integer $pid
+	 * @param array $options
+	 * 
+	 * @return boolean
+	 */
+	private static function includePageTreesNotSet($pid, array $options) {
 		$excludePageTrees = self::getConfigValue('pageTrees', $options['exclude.']);
 		
-		$isValid = true;
-		 
-		if(!empty($includePageTrees) && !self::isInPageTrees($sourceRecord['pid'], $includePageTrees))
-			$isValid = false;
+		if(self::getFirstRootlineIndexInPageTrees($pid, $excludePageTrees) !== false){
+			return false;
+		} else {
+			return self::pageIsNotInExcludePageTrees($pid, $options);
+		}
+	}
+	
+	/**
+	 * @param integer $pid
+	 * @param array $options
+	 * 
+	 * @return boolean
+	 */
+	private static function pageIsNotInExcludePageTrees($pid, array $options) {
+		if(self::pageIsNotInExcludePages($pid, $options)){
+			$includePages = self::getConfigValue('pages', $options['include.']);
+			return empty($includePages);
+		} else {
+			return false;
+		} 
+	}
+	
+	/**
+	 * @param integer $pid
+	 * @param array $options
+	 * 
+	 * @return boolean
+	 */
+	private function pageIsNotInExcludePages($pid, array $options) {
+		$excludePages = self::getConfigValue('pages', $options['exclude.']);	
+		return !in_array($pid, $excludePages);
+	}
+	
+	/**
+	 * @param integer $pid
+	 * @param array $options
+	 * 
+	 * @return boolean
+	 */
+	private static function includePageTreesSet($pid, array $options) {
+		$includePageTrees = self::getConfigValue('pageTrees', $options['include.']);
+		$firstRootlineIndexInIncludePageTrees = 
+			self::getFirstRootlineIndexInPageTrees($pid, $includePageTrees);
 		
-		if($isValid && self::isInPageTrees($sourceRecord['pid'], $excludePageTrees))
-			$isValid = false;
+		if($firstRootlineIndexInIncludePageTrees === false){
+			return false;
+		} else {
+			return self::pageIsInIncludePageTrees($pid, $options, $firstRootlineIndexInIncludePageTrees);
+		}
 			
-		return $isValid;
+	}
+	
+	/**
+	 * @param integer $pid
+	 * @param array $options
+	 * @param integer || boolean $firstRootlineIndexInIncludePageTrees
+	 * 
+	 * @return boolean
+	 */
+	private static function pageIsInIncludePageTrees($pid, array $options, $firstRootlineIndexInIncludePageTrees) {
+		$excludePageTrees = self::getConfigValue('pageTrees', $options['exclude.']);
+		$firstRootlineIndexInExcludePageTrees = 
+			self::getFirstRootlineIndexInPageTrees($pid, $excludePageTrees);
+
+		if(
+			self::isExcludePageTreeCloserToThePidThanAnIncludePageTree(
+				$firstRootlineIndexInExcludePageTrees, $firstRootlineIndexInIncludePageTrees
+			)
+		) {
+			return false;
+		} else {
+			return self::pageIsNotInExcludePages($pid, $options);
+		}
+			
+	}
+	
+	/**
+	 * Desto höher der index desto näher sind wir an der pid dran.
+	 * warum? siehe doc von getRootlineByPid!
+	 * 
+	 * @param integer $excludePageTreesIndex
+	 * @param integer $includePageTreesIndex
+	 * 
+	 * @return boolean
+	 */
+	private static function isExcludePageTreeCloserToThePidThanAnIncludePageTree(
+		$excludePageTreesIndex, $includePageTreesIndex
+	) {
+		return $excludePageTreesIndex > $includePageTreesIndex;
 	}
 
 	/**
 	 * @param int $pid
 	 * @param array $pageTrees
 	 *
-	 * @return boolean
+	 * @return integer the index in the rootline of the hit || boolean
 	 */
-	private static function isInPageTrees($pid, $pageTrees) {
-		$rootline = tx_mksearch_service_indexer_core_Config::getRootLine($pid);
+	private static function getFirstRootlineIndexInPageTrees($pid, $pageTrees) {
+		//static:: statt self:: damit es gemocked werden kann
+		$rootline = static::getRootlineByPid($pid);
 
-		foreach ($rootline as $page) {
+		foreach ($rootline as $index => $page) {
 			if (in_array($page['uid'], $pageTrees))
-				return true;
+				return $index;
 		}
 
 		return false;
+	}
+	
+	/**
+	 * eigene methode damit wir mocken können.
+	 * 
+	 * die reihenfolge der einträge beginnt mit der pid selbst
+	 * und geht dann den seitenbaum nach oben. das heißt desto größer
+	 * der index desto näher sind wir an der pid dran.
+	 * 
+	 * @param integer $pid
+	 * 
+	 * @return array
+	 */
+	protected static function getRootlineByPid($pid) {
+		return tx_mksearch_service_indexer_core_Config::getRootLine($pid);
 	}
 
 	/**

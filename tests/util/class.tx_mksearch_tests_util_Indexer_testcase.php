@@ -28,8 +28,247 @@ tx_rnbase::load('tx_mksearch_util_Indexer');
 
 class tx_mksearch_tests_util_Indexer_testcase extends tx_phpunit_testcase {
 
+	/**
+	 * @group unit
+	 */
 	public function testGetDateTimeWithTimestamp() {
 		$dateTime = tx_mksearch_util_Indexer::getDateTime('@2');
 		$this->assertEquals('1970-01-01T00:00:02Z', $dateTime);
+	}
+	
+	/**
+	 * @group unit
+	 */
+	public function testIsOnIndexablePageReturnsTrueIfNoInOrExcludesSet() {
+		$sourceRecord = array('pid' => 2);
+		$options = array();
+		
+		$isOnIndexablePage = tx_mksearch_util_Indexer::isOnIndexablePage($sourceRecord, $options);
+		
+		$this->assertTrue($isOnIndexablePage,'Seite nicht indizierbar');
+	}
+	
+	/**
+	 * @group unit
+	 */
+	public function testIsOnIndexablePageReturnsTrueIfPidIsInIncludePages() {
+		$sourceRecord = array('pid' => 1);
+		$options = array(
+			'include.' => array(
+				'pages' => 1
+			)
+		);
+		
+		$isOnIndexablePage = tx_mksearch_util_Indexer::isOnIndexablePage($sourceRecord, $options);
+		
+		$this->assertTrue($isOnIndexablePage,'Seite nicht indizierbar');
+	}
+	
+	/**
+	 * @group unit
+	 */
+	public function testIsOnIndexablePageReturnsFalseIfPidIsNotInIncludePages() {
+		$sourceRecord = array('pid' => 2);
+		$options = array(
+			'include.' => array(
+				'pages' => 1
+			)
+		);
+		
+		$isOnIndexablePage = tx_mksearch_util_Indexer::isOnIndexablePage($sourceRecord, $options);
+		
+		$this->assertFalse($isOnIndexablePage,'Seite indizierbar');
+	}
+	
+	/**
+	 * @group unit
+	 */
+	public function testIsOnIndexablePageReturnsFalseIfPidIsInExcludePageTrees() {
+		$sourceRecord = array('pid' => 3);
+		$options = array(
+			'exclude.' => array(
+				'pageTrees' => 1
+			)
+		);
+		
+		$rootline = array(
+			2 => array('uid' => 3, 'pid' => 2),
+			1 => array('uid' => 2, 'pid' => 1),
+			0 => array('uid' => 1, 'pid' => 0),
+		);
+		$utilIndexer = $this->getMockClassForIsOnIndexablePageTests($rootline);
+		
+		$isOnIndexablePage = $utilIndexer::isOnIndexablePage($sourceRecord, $options);
+		
+		$this->assertFalse($isOnIndexablePage,'Seite indizierbar');
+	}
+	
+	/**
+	 * @group unit
+	 */
+	public function testIsOnIndexablePageReturnsTrueIfPidIsInIncludePageTrees() {
+		$sourceRecord = array('pid' => 3);
+		$options = array(
+			'include.' => array(
+				'pageTrees' => 2
+			)
+		);
+		
+		$rootline = array(
+			1 => array('uid' => 3, 'pid' => 2),
+			0 => array('uid' => 2, 'pid' => 0),
+		);
+		$utilIndexer = $this->getMockClassForIsOnIndexablePageTests($rootline);
+		
+		$isOnIndexablePage = $utilIndexer::isOnIndexablePage($sourceRecord, $options);
+		
+		$this->assertTrue($isOnIndexablePage,'Seite nicht indizierbar');
+	}
+	
+	/**
+	 * @group unit
+	 */
+	public function testIsOnIndexablePageReturnsFalseIfPidIsNotInIncludePageTrees() {
+		$sourceRecord = array('pid' => 3);
+		$options = array(
+			'include.' => array(
+				'pageTrees' => 1
+			)
+		);
+		
+		$rootline = array(
+			1 => array('uid' => 3, 'pid' => 2),
+			0 => array('uid' => 2, 'pid' => 0),
+		);
+		$utilIndexer = $this->getMockClassForIsOnIndexablePageTests($rootline);
+		
+		$isOnIndexablePage = $utilIndexer::isOnIndexablePage($sourceRecord, $options);
+		
+		$this->assertFalse($isOnIndexablePage,'Seite indizierbar');
+	}
+	
+	/**
+	 * @group unit
+	 */
+	public function testIsOnIndexablePageReturnsFalseIfPidIsInExcludePages() {
+		$sourceRecord = array('pid' => 1);
+		$options = array(
+			'exclude.' => array(
+				'pages' => 1
+			)
+		);
+		
+		$isOnIndexablePage = tx_mksearch_util_Indexer::isOnIndexablePage($sourceRecord, $options);
+		
+		$this->assertFalse($isOnIndexablePage,'Seite indizierbar');
+	}
+	
+	/**
+	 * @group unit
+	 */
+	public function testIsOnIndexablePageReturnsTrueIfPidIsNotInExcludePages() {
+		$sourceRecord = array('pid' => 2);
+		$options = array(
+			'exclude.' => array(
+				'pages' => 1
+			)
+		);
+		
+		$isOnIndexablePage = tx_mksearch_util_Indexer::isOnIndexablePage($sourceRecord, $options);
+		
+		$this->assertTrue($isOnIndexablePage,'Seite nicht indizierbar');
+	}
+	
+	/**
+	 * @group unit
+	 */
+	public function testIsOnIndexablePageReturnsFalseIfPidIsIncludePageTreesButAlsoInExcludePages() {
+		$sourceRecord = array('pid' => 3);
+		$options = array(
+			'include.' => array(
+				'pageTrees' => 1
+			),
+			'exclude.' => array(
+				'pages' => 3
+			)
+		);
+		
+		$rootline = array(
+			2 => array('uid' => 3, 'pid' => 2),
+			1 => array('uid' => 2, 'pid' => 1),
+			0 => array('uid' => 1, 'pid' => 0),
+		);
+		$utilIndexer = $this->getMockClassForIsOnIndexablePageTests($rootline);
+		
+		$isOnIndexablePage = $utilIndexer::isOnIndexablePage($sourceRecord, $options);
+		
+		$this->assertFalse($isOnIndexablePage,'Seite indizierbar');
+	}
+	
+	/**
+	 * @group unit
+	 */
+	public function testIsOnIndexablePageReturnsTrueIfPidIsIncludePageTreesAndNotExcludePages() {
+		$sourceRecord = array('pid' => 3);
+		$options = array(
+			'include.' => array(
+				'pageTrees' => 1
+			),
+			'exclude.' => array(
+				'pages' => 2
+			)
+		);
+		
+		$rootline = array(
+			2 => array('uid' => 3, 'pid' => 2),
+			1 => array('uid' => 2, 'pid' => 1),
+			0 => array('uid' => 1, 'pid' => 0),
+		);
+		$utilIndexer = $this->getMockClassForIsOnIndexablePageTests($rootline);
+		
+		$isOnIndexablePage = $utilIndexer::isOnIndexablePage($sourceRecord, $options);
+		
+		$this->assertTrue($isOnIndexablePage,'Seite indizierbar');
+	}
+	
+	/**
+	 * @group unit
+	 */
+	public function testIsOnIndexablePageReturnsFalseIfPidIsIncludePageTreesButAnExcludePageTreesIndexIsCloserToThePid() {
+		$sourceRecord = array('pid' => 3);
+		$options = array(
+			'include.' => array(
+				'pageTrees' => 1
+			),
+			'exclude.' => array(
+				'pageTrees' => 2
+			)
+		);
+		
+		$rootline = array(
+			2 => array('uid' => 3, 'pid' => 2),
+			1 => array('uid' => 2, 'pid' => 1),
+			0 => array('uid' => 1, 'pid' => 0),
+		);
+		$utilIndexer = $this->getMockClassForIsOnIndexablePageTests($rootline);
+		
+		$isOnIndexablePage = $utilIndexer::isOnIndexablePage($sourceRecord, $options);
+		
+		$this->assertFalse($isOnIndexablePage,'Seite indizierbar');
+	}
+	
+	/**
+	 * @param array $rootline
+	 * @return tx_mksearch_util_Indexer
+	 */
+	protected function getMockClassForIsOnIndexablePageTests(array $rootline) {
+		$utilIndexer = $this->getMockClass('tx_mksearch_util_Indexer',array('getRootlineByPid'));
+		
+		$utilIndexer::staticExpects($this->any())
+			->method('getRootlineByPid')
+			->with(3)
+			->will($this->returnValue($rootline));
+			
+		return $utilIndexer;
 	}
 }

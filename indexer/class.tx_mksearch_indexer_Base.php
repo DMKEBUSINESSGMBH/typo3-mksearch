@@ -164,10 +164,10 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 	}
 
 	/**
-	 * @see tx_mksearch_util_Misc::isOnValidPage()
+	 * @see tx_mksearch_util_Indexer::isOnIndexablePage()
 	 */
 	protected function isIndexableRecord(array $sourceRecord, array $options) {
-		return tx_mksearch_util_Misc::isOnValidPage($sourceRecord, $options);
+		return $this->isOnIndexablePage($sourceRecord, $options);
 	}
 	
 	/**
@@ -316,10 +316,10 @@ CONFIG;
 	}
 
 	/**
-	 * @see tx_mksearch_util_Indexer::isInValidPageTree()
+	 * @see tx_mksearch_util_Indexer::isOnIndexablePage()
 	 */
-	protected function isInValidPageTree($sourceRecord, $options) {
-		return tx_mksearch_util_Indexer::isInValidPageTree(
+	protected function isOnIndexablePage($sourceRecord, $options) {
+		return tx_mksearch_util_Indexer::isOnIndexablePage(
 			$sourceRecord, $options
 		);	
 	}

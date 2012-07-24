@@ -135,11 +135,7 @@ class tx_mksearch_indexer_Page extends tx_mksearch_indexer_Base {
 		//as those functions check via the pid we have to copy the uid of the
 		//current page into the pid this is what we want to check
 		$sourceRecord['pid'] = $sourceRecord['uid'];
-		if(	$this->isInValidPageTree($sourceRecord,$options)//is the element in a valid page tree?
-			&& tx_mksearch_util_Misc::isOnValidPage($sourceRecord, $options)//and is the element on a valid page?
-		) return true;
-		//else
-		return false;
+		return $this->isOnIndexablePage($sourceRecord,$options);
 	}
 
 	/**

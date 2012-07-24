@@ -269,9 +269,8 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 	 * @see tx_mksearch_indexer_Base::isIndexableRecord()
 	 */
 	protected function isIndexableRecord(array $sourceRecord, array $options) {
-		if(	$this->isInValidPageTree($sourceRecord,$options)//is the element in a valid page tree?
+		if(	$this->isOnIndexablePage($sourceRecord,$options)//is the element in a valid page tree?
 			&& $this->checkCTypes($sourceRecord,$options)//is it's CType valid?
-			&& tx_mksearch_util_Misc::isIndexable($sourceRecord, $options)//and is the element on a valid page?
 		) {
 			return true;
 		}

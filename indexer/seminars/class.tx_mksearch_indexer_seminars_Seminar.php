@@ -32,6 +32,7 @@
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_mksearch_interface_Indexer');
 tx_rnbase::load('tx_mksearch_util_Misc');
+tx_rnbase::load('tx_mksearch_util_Indexer');
 
 /**
  * Indexer service for seminars.seminar called by the "mksearch" extension.
@@ -294,7 +295,7 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
 	 * @param array $options
 	 */
 	protected function isIndexableRecord($sourceRecord, $options) {
-		$ret = tx_mksearch_util_Misc::isOnValidPage($sourceRecord, $options);
+		$ret = tx_mksearch_util_Indexer::isOnIndexablePage($sourceRecord, $options);
 		return $ret;
 	}
 	

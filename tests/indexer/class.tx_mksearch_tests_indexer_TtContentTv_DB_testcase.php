@@ -158,7 +158,7 @@ class tx_mksearch_tests_indexer_TtContentTv_DB_testcase extends tx_phpunit_datab
 		$this->assertTrue($indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 	}
 
-	public function testPrepareSearchSetsCorrectisOnValidPage() {
+	public function testPrepareSearchSetsCorrectisIndexableDependendOnPid() {
 		$options = $this->getDefaultConfig();
 
 		//should return null as the page the element is referenced on is excluded for indexing

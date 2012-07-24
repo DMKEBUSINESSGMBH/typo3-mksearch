@@ -25,6 +25,7 @@
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_mksearch_interface_Indexer');
 tx_rnbase::load('tx_mksearch_util_Misc');
+tx_rnbase::load('tx_mksearch_util_Indexer');
 tx_rnbase::load('tx_rnbase_util_Misc');
 tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
 
@@ -147,7 +148,7 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
 	 * @return 	boolean
 	 */
 	protected function isIndexableRecord($sourceRecord, $options){
-		$ret = tx_mksearch_util_Misc::isOnValidPage($sourceRecord, $options);
+		$ret = tx_mksearch_util_Indexer::isOnIndexablePage($sourceRecord, $options);
 		return $ret;
 	}
 	
