@@ -33,34 +33,34 @@ tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
  * Indexer service for core.tt_address called by the "mksearch" extension.
  */
 class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Indexer {
-	
+
 	/**
 	 * Return content type identification.
 	 * This identification is part of the indexed data
 	 * and is used on later searches to identify the search results.
 	 * You're completely free in the range of values, but take care
 	 * as you at the same time are responsible for
-	 * uniqueness (i.e. no overlapping with other content types) and 
-	 * consistency (i.e. recognition) on indexing and searching data. 
+	 * uniqueness (i.e. no overlapping with other content types) and
+	 * consistency (i.e. recognition) on indexing and searching data.
 	 *
 	 * @return array([extension key], [key of content type])
 	 */
 	public static function getContentType() {
 		return array('tt_address', 'address');
 	}
-	
+
 	/**
 	 * (non-PHPdoc)
 	 * @see tx_mksearch_interface_Indexer::prepareSearchData()
 	 */
 	public function prepareSearchData($tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options) {
-		
+
 		if($tableName != 'tt_address') {
 			if(tx_rnbase_util_Logger::isWarningEnabled())
 				tx_rnbase_util_Logger::warn(__METHOD__.': Unknown table "'.$tableName.'" given.', 'mksearch', array('tableName'=>$tableName,'sourceRecord'=>$sourceRecord));
 			return null;
 		}
-		
+
 		//include, exclude etc. prüfen
 		if(!$this->isIndexableRecord($rawData, $options)) {
 			return null;//no need to index
@@ -68,14 +68,14 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
 
 		$abort = false;
 		$boost = 1.0;
-		
+
 		$indexDoc->setUid($rawData['uid']);
-		
+
 		if($this->hasDocToBeDeleted($rawData, $options)) {
 			$indexDoc->setDeleted(true);
 			return $indexDoc;
 		}
-		
+
 		// Hook to append indexer
 		tx_rnbase_util_Misc::callHook('mksearch','indexer_TtAddress_prepareData_beforeAddFields',
 								array(
@@ -85,20 +85,20 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
 									'boost' => &$boost,
 									'abort' => &$abort,
 								), $this);
-		
+
 		// Abbrechen, wenn im Hook gesetzt.
 		if($abort !== false) return $abort;
-		
+
 		$indexDoc->addField('hidden', $rawData['hidden'], 'keyword', $boost, 'int');
 		$indexDoc->addField('deleted', $rawData['deleted'], 'keyword', $boost, 'int');
-		
+
 		$indexDoc->setTimestamp($rawData['tstamp']);
 		$indexDoc->setTitle($rawData['name']);
-		
+
 		$indexDoc->addField('pid', $rawData['pid'], 'keyword');
-		
+
 		//@TODO: adressgruppen integrieren!
-		
+
 		$indexDoc->addField('name_s', $rawData['name'], 'unindexed', $boost, 'string');
 		$indexDoc->addField('gender_s', $rawData['gender'], 'unindexed', $boost, 'string');
 		$indexDoc->addField('first_name_s', $rawData['first_name'], 'unindexed', $boost, 'string');
@@ -121,14 +121,14 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
 		$indexDoc->addField('fax_s', $rawData['fax'], 'unindexed', $boost, 'string');
 		$indexDoc->addField('description_s', $rawData['description'], 'unindexed', $boost, 'text');
 		$indexDoc->addField('addressgroup_i', $rawData['addressgroup'], 'unindexed', $boost, 'int');
-		
+
 		$sContent = $this->getContentFromFields($rawData, $options['content.']);
 		$indexDoc->setContent($sContent);
-		
-		
+
+
 		$sContent = $this->getContentFromFields($rawData, $options['abstract.']);
 		$indexDoc->setAbstract('', 1);
-		
+
 		// Hook to append indexer
 		tx_rnbase_util_Misc::callHook('mksearch','indexer_TtAddress_prepareData_afterAddFields',
 								array(
@@ -136,22 +136,23 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
 									'options' => $options,
 									'indexDoc' => &$indexDoc,
 								), $this);
-		
+
 		return $indexDoc;
 	}
-	
+
 
 	/**
-	 * 
+	 *
 	 * @param 	array 		$sourceRecord
 	 * @param 	array 		$options
 	 * @return 	boolean
 	 */
 	protected function isIndexableRecord($sourceRecord, $options){
-		$ret = tx_mksearch_util_Indexer::isOnIndexablePage($sourceRecord, $options);
+		$ret = tx_mksearch_util_Indexer::getInstance()
+				->isOnIndexablePage($sourceRecord, $options);
 		return $ret;
 	}
-	
+
 	/**
 	 * Sets the index doc to deleted if neccessary
 	 * @param 	array 		$sourceRecord
@@ -169,7 +170,7 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
 		//else
 		return false;
 	}
-	
+
 	/**
 	 * erzeugt Inhalt aus den feldern anhand der Konfiguration
 	 * @param 	array 	$sourceRecord
@@ -188,16 +189,16 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
 		$wrap =  t3lib_div::trimExplode('|', $options['wrap'], true);
 		if(count($wrap) !=2) $wrap = array('','');
 		$sContent = $wrap[0].implode($wrap[1].$wrap[0], $aContent).$wrap[1];
-					
-		// Decode HTML 
+
+		// Decode HTML
 		$sContent = trim(tx_mksearch_util_Misc::html2plain($sContent));
-		
+
 		return $sContent;
 	}
-	
+
 	/**
 	 * Return the default Typoscript configuration for this indexer.
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getDefaultTSConfig() {
@@ -206,7 +207,7 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
 # Don't forget to add those fields to your Solr schema.xml
 # For example it can be used to define site areas this
 # contentType belongs to
-# 
+#
 # fixedFields {
 #	my_fixed_field_singlevalue = first
 #   my_fixed_field_multivalue {
@@ -214,7 +215,7 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
 #      1 = second
 #   }
 # }
-		
+
 ### vom indexer entfernen, wenn auf Hidden gesetzt
 removeIfHidden = 1
 content {
@@ -230,7 +231,7 @@ abstract {
 
 ### delete from or abort indexing for the record if isIndexableRecord or no record?
  deleteIfNotIndexable = 0
- 
+
 ### White lists:
 include {
 	### Nur Einträge auf diesen Seiten werden indiziert. (Komma getrennt)

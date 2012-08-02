@@ -39,7 +39,7 @@ tx_rnbase::load('tx_mksearch_util_Indexer');
  * This is just a wrapper for the different object types of seminars. This
  * class doesnt do the actual indexing. this happens in the classes which are
  * responsible for the diffenrent types
- * 
+ *
  * @package tx_mksearch
  * @subpackage tx_mksearch_indexer_seminars
  */
@@ -49,15 +49,15 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
 	 * @var tx_seminars_seminar
 	 */
 	protected $oSeminar;
-	
+
 	/**
 	 * Return content type identification.
 	 * This identification is part of the indexed data
 	 * and is used on later searches to identify the search results.
 	 * You're completely free in the range of values, but take care
 	 * as you at the same time are responsible for
-	 * uniqueness (i.e. no overlapping with other content types) and 
-	 * consistency (i.e. recognition) on indexing and searching data. 
+	 * uniqueness (i.e. no overlapping with other content types) and
+	 * consistency (i.e. recognition) on indexing and searching data.
 	 *
 	 * @return array('extKey' => [extension key], 'name' => [key of content type]
 	 */
@@ -97,7 +97,7 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
 			return null;
 		}
 		//we seem to have a real seminar so let's go on with the work
-		
+
 		//init the seminar object to do common checks
 		//@todo load the TS config or simulate the FE so we have the correct timeFormat settings etc.
 		$this->oSeminar = $this->getSeminar($rawData);
@@ -109,7 +109,7 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
 			$indexDoc->setDeleted(true);
 			return $indexDoc;
 		}
-		
+
 		//redirect the indexing to the responsible class
 		if($rawData['object_type'] == 0){
 			$oIndexer = tx_rnbase::makeInstance('tx_mksearch_indexer_seminars_SeminarObjectType0');
@@ -123,15 +123,15 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
 			$this->addSeminarToIndex($rawData['topic']);
 			return null;
 		}
-		
+
 		return $oIndexer->prepareSearchData($tableName, $rawData, $indexDoc, $options);
 	}
-	
+
 	/**
 	 * Collects all seminar uids found via an MM Relation (given table)
 	 * and the given foreign uid (e.g. of a category). All seminars that
 	 * are found will be put into the queue
-	 * 
+	 *
 	 * @param string $sTable	| the MM Table
 	 * @param array $aRawData	| the record (non seminar; e.g. category) containing the foreign uid
 	 * @return void
@@ -149,7 +149,7 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
 			foreach ($aSeminarUids as $iUid)
 				$this->addSeminarToIndex($iUid);
 	}
-	
+
 	/**
 	 * Indexes everything about the seminar
 	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
@@ -179,7 +179,7 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
 				$indexDoc->addField($sKey, $mValue);
 		}
 	}
-	
+
 	/**
 	 * Indexes everything about the seminar categories
 	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
@@ -189,13 +189,13 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
 		//Mapping which function fills which field
 		$aCategories = $this->oSeminar->getCategories();
 		$aRecordFieldMapping = $this->getCategoriesMapping();
-		
+
 		$aTempIndexDoc = $this->getMultiValueFieldsByArray($aCategories,$aRecordFieldMapping);
-		
+
 		//now we index the collected fields
 		$this->indexArrayByMapping($indexDoc, $aRecordFieldMapping, $aTempIndexDoc);
 	}
-	
+
 	/**
 	 * Indexes everything about the seminar organizers
 	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
@@ -207,7 +207,7 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
 		if(!empty($aTargetGroups))
 			$indexDoc->addField('targetgroups_title_ms', $aTargetGroups);
 	}
-	
+
 	/**
 	 * Puts a seminar into the mksearch queue
 	 * @param int $iUid
@@ -216,11 +216,11 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
 		$oIndexSrv = tx_mksearch_util_ServiceRegistry::getIntIndexService();
 		$oIndexSrv->addRecordToIndex('tx_seminars_seminars', $iUid);
 	}
-	
+
 	/**
 	 * Collects the values from objects. the objects
 	 * reside inside an list object
-	 * 
+	 *
 	 * @param array $aValues	| array of objects
 	 * @param array $aMapping 	| the field key and the function name delivering the data
 	 * @return array
@@ -237,13 +237,13 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
 				}
 			}
 		}
-		
+
 		return $aTempIndexDoc;
 	}
-	
+
 	/**
 	 * Collects the values from an array
-	 * 
+	 *
 	 * @param array $aValues
 	 * @param array $aMapping
 	 */
@@ -258,25 +258,25 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
 					//handling of one dimensional arrays
 					if(is_array($aValue[$sRecordKey])){
 						foreach ($aValue[$sRecordKey] as $key => $mValue){
-							$aTempIndexDoc[$sIndexKey][$mValue] = $mValue;	
+							$aTempIndexDoc[$sIndexKey][$mValue] = $mValue;
 						}
 					}else{//just a value so put it in
-						$aTempIndexDoc[$sIndexKey][$aValue[$sRecordKey]] = $aValue[$sRecordKey];	
+						$aTempIndexDoc[$sIndexKey][$aValue[$sRecordKey]] = $aValue[$sRecordKey];
 					}
 				}
 			}
 		}
-		
+
 		//as result we want a simple numeric array
 		foreach ($aTempIndexDoc as &$aValue)
 			$aValue = array_values($aValue);
-		
+
 		return $aTempIndexDoc;
 	}
-	
+
 	/**
 	 * Indexes the given array by the mapping
-	 * 
+	 *
 	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
 	 * @param array $aMapping
 	 * @param array $aValues
@@ -287,7 +287,7 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
 				$indexDoc->addField($sIndexKey, $aValues[$sIndexKey]);
 		}
 	}
-	
+
 	/**
 	 * Prüft anhand der Konfiguration, ob der übergebene Datensatz indiziert werden soll.
 	 * TODO: implement
@@ -295,10 +295,11 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
 	 * @param array $options
 	 */
 	protected function isIndexableRecord($sourceRecord, $options) {
-		$ret = tx_mksearch_util_Indexer::isOnIndexablePage($sourceRecord, $options);
+		$ret = tx_mksearch_util_Indexer::getInstance()
+					->isOnIndexablePage($sourceRecord, $options);
 		return $ret;
 	}
-	
+
 	/**
 	 * Liefert das Seminar Objekt zur gegebenen Uid
 	 * @param array $rawData
@@ -307,10 +308,10 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
 	protected function getSeminar($rawData) {
 		return new tx_seminars_seminar($rawData['uid']);
 	}
-	
+
 	/**
 	 * This method is directly taken from tx_seminars_seminar. We have no
-	 * other possibility than to copy it to get the speakers bag as all methods 
+	 * other possibility than to copy it to get the speakers bag as all methods
 	 * delivering them are either protected or private.
 	 *
 	 * @param string the relation in which the speakers stand to this event:
@@ -343,7 +344,7 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
 			$mmTable
 		);
 	}
-	
+
 	/**
 	 * Provides the mapping for the fields in Solr
 	 * and the fields in the category object
@@ -354,10 +355,10 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
 			'title'=> 'categories_title_ms',
 		);
 	}
-	
+
 	/**
 	 * Provides the mapping for the fields in Solr
-	 * and the functions of the organizer object delivering 
+	 * and the functions of the organizer object delivering
 	 * the data
 	 * @return array
 	 */
@@ -369,10 +370,10 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
 			'getDescription' => 'organizers_description_ms',
 		);
 	}
-	
+
 	/**
 	 * Provides the mapping for the fields in Solr
-	 * and the functions of the places object delivering 
+	 * and the functions of the places object delivering
 	 * the data
 	 * @return array
 	 */
@@ -388,10 +389,10 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
 			'getTitle' => 'place_title_ms',
 		);
 	}
-	
+
 	/**
 	 * Provides the mapping for the fields in Solr
-	 * and the functions of the speakers object delivering 
+	 * and the functions of the speakers object delivering
 	 * the data
 	 * @return array
 	 */
@@ -410,7 +411,7 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
 			'getEmail' => 'speakers_email_ms',
 		);
 	}
-	
+
 	/**
 	 * Provides the mapping for the fields in Solr
 	 * and the fields in the timeslots object
@@ -426,7 +427,7 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
 			'speakers'=> 'timeslots_speakers_ms',
 		);
 	}
-	
+
 	/**
 	 * Return the default Typoscript configuration for this indexer.
 	 *

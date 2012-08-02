@@ -46,7 +46,7 @@ tx_rnbase::load('tx_mksearch_util_Indexer');
  * @subpackage tx_mksearch_indexer
  */
 abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer {
-	
+
 	/**
 	 * (non-PHPdoc)
 	 * @see tx_mksearch_interface_Indexer::prepareSearchData()
@@ -111,12 +111,13 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 	 * @see tx_mksearch_util_Indexer::indexModelByMapping()
 	 */
 	protected function indexModelByMapping(
-		tx_rnbase_model_base $model, array $recordIndexMapping, 
-		tx_mksearch_interface_IndexerDocument $indexDoc, 
+		tx_rnbase_model_base $model, array $recordIndexMapping,
+		tx_mksearch_interface_IndexerDocument $indexDoc,
 		$prefix = '', array $options = array()
 	) {
-		$indexDoc = 
-			tx_mksearch_util_Indexer::indexModelByMapping(
+		$indexDoc =
+			tx_mksearch_util_Indexer::getInstance()
+				->indexModelByMapping(
 				$model, $recordIndexMapping, $indexDoc, $prefix, $options
 			);
 	}
@@ -125,11 +126,12 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 	 * @see tx_mksearch_util_Indexer::indexArrayOfModelsByMapping()
 	 */
 	protected function indexArrayOfModelsByMapping(
-		array $models, array $recordIndexMapping, 
+		array $models, array $recordIndexMapping,
 		tx_mksearch_interface_IndexerDocument $indexDoc, $prefix = ''
 	) {
 		$indexDoc =
-			tx_mksearch_util_Indexer::indexArrayOfModelsByMapping(
+			tx_mksearch_util_Indexer::getInstance()
+				->indexArrayOfModelsByMapping(
 				$models, $recordIndexMapping, $indexDoc, $prefix
 			);
 	}
@@ -169,42 +171,42 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 	protected function isIndexableRecord(array $sourceRecord, array $options) {
 		return $this->isOnIndexablePage($sourceRecord, $options);
 	}
-	
+
 	/**
 	 * @param tx_rnbase_model_base $model
 	 * @param string $tableName
 	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
 	 * @param string $indexDocFieldsPrefix
-	 * 
+	 *
 	 * @return tx_mksearch_interface_IndexerDocument
 	 */
 	protected function indexEnableColumns(
-		tx_rnbase_model_base $model, $tableName, 
+		tx_rnbase_model_base $model, $tableName,
 		tx_mksearch_interface_IndexerDocument $indexDoc, $indexDocFieldsPrefix = ''
 	) {
 		global $TCA;
 		$enableColumns = $TCA[$tableName]['ctrl']['enablecolumns'];
-		
+
 		if(!is_array($enableColumns))
 			return $indexDoc;
-			 
+
 		$recordIndexMapping = array();
 		$tempModel = $model;
 		foreach ($enableColumns as $typo3InternalName => $enableColumnName) {
 			$recordIndexMapping = $this->enhanceRecordIndexMappingForEnableColumn(
 				$recordIndexMapping, $typo3InternalName, $enableColumnName, $indexDocFieldsPrefix
 			);
-			
+
 			$tempModel = $this->convertEnableColumnValue(
 				$tempModel, $typo3InternalName, $enableColumnName
 			);
 		}
-		
+
 		$this->indexModelByMapping($tempModel, $recordIndexMapping, $indexDoc);
-		
+
 		return $indexDoc;
 	}
-	
+
 	private function enhanceRecordIndexMappingForEnableColumn(
 		$recordIndexMapping, $typo3InternalName, $enableColumnName, $indexDocFieldsPrefix
 	) {
@@ -214,20 +216,20 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 			'fe_group' => 'mi',
 		);
 		if(array_key_exists($typo3InternalName, $fieldTypeMapping)){
-			$recordIndexMapping[$enableColumnName] = 
+			$recordIndexMapping[$enableColumnName] =
 				$indexDocFieldsPrefix.$typo3InternalName . '_' . $fieldTypeMapping[$typo3InternalName];
-		} 
-		
+		}
+
 		return $recordIndexMapping;
 	}
-	
+
 	private function convertEnableColumnValue(
 		$model, $typo3InternalName, $enableColumnName
 	) {
 		switch ($typo3InternalName) {
 			case 'starttime':
 			case 'endtime':
-				$model->record[$enableColumnName] = 
+				$model->record[$enableColumnName] =
 					$this->convertTimestampToDateTime($model->record[$enableColumnName]);
 				break;
 			case 'fe_group':
@@ -238,18 +240,18 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 			default:
 				break;
 		}
-		
+
 		return $model;
 	}
-	
+
 	private function convertTimestampToDateTime($timestamp) {
 		$dateTime = 0;
 		if(!empty($timestamp))
-			$dateTime = tx_mksearch_util_Indexer::getDateTime('@' . $timestamp);
-		
+			$dateTime = tx_mksearch_util_Indexer::getInstance()->getDateTime('@' . $timestamp);
+
 		return $dateTime;
 	}
-	
+
 	/**
 	 * @see tx_mksearch_service_indexer_core_Config::getEffectiveContentElementFeGroups()
 	 */
@@ -259,7 +261,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 				t3lib_div::trimExplode(',', $fegroups, true)
 			);
 	}
-	
+
 	/**
 	 * Return the default Typoscript configuration for an indexer.
 	 *
@@ -294,14 +296,16 @@ CONFIG;
 	 * @see tx_mksearch_util_Indexer::addModelToIndex()
 	 */
 	protected function addModelToIndex(tx_rnbase_model_base $model, $tableName){
-		tx_mksearch_util_Indexer::addModelToIndex($model, $tableName);
+		tx_mksearch_util_Indexer::getInstance()
+			->addModelToIndex($model, $tableName);
 	}
 
 	/**
 	 * @see tx_mksearch_util_Indexer::addModelsToIndex()
 	 */
 	protected function addModelsToIndex($models, $tableName) {
-		tx_mksearch_util_Indexer::addModelsToIndex($models, $tableName);
+		tx_mksearch_util_Indexer::getInstance()
+			->addModelsToIndex($models, $tableName);
 	}
 
 	/**
@@ -310,8 +314,9 @@ CONFIG;
 	protected function checkInOrExcludeOptions(
 		$models,$options, $mode = 0, $optionKey = 'categories'
 	) {
-		return tx_mksearch_util_Indexer::checkInOrExcludeOptions(
-			$models, $options, $mode, $optionKey
+		return tx_mksearch_util_Indexer::getInstance()
+			->checkInOrExcludeOptions(
+					$models, $options, $mode, $optionKey
 		);
 	}
 
@@ -319,9 +324,10 @@ CONFIG;
 	 * @see tx_mksearch_util_Indexer::isOnIndexablePage()
 	 */
 	protected function isOnIndexablePage($sourceRecord, $options) {
-		return tx_mksearch_util_Indexer::isOnIndexablePage(
-			$sourceRecord, $options
-		);	
+		return tx_mksearch_util_Indexer::getInstance()
+			->isOnIndexablePage(
+					$sourceRecord, $options
+		);
 	}
 
 	/**
@@ -331,7 +337,7 @@ CONFIG;
 	protected function _getPidList($pid_list, $recursive=0) {
 		tx_rnbase::load('tx_rnbase_util_Misc');
 		tx_rnbase_util_Misc::prepareTSFE();
-		
+
 		tx_rnbase::load('tx_rnbase_util_DB');
 		return tx_rnbase_util_DB::_getPidList($pid_list, $recursive, true);
 	}
@@ -340,14 +346,16 @@ CONFIG;
 	 * @see tx_mksearch_util_Indexer::getConfigValue()
 	 */
 	protected function getConfigValue($key, $options) {
-		return tx_mksearch_util_Indexer::getConfigValue($key, $options);
+		return tx_mksearch_util_Indexer::getInstance()
+			->getConfigValue($key, $options);
 	}
 
 	/**
 	 * @see tx_mksearch_util_Indexer::getPageContent()
 	 */
 	protected function getPageContent($pid) {
-		return tx_mksearch_util_Indexer::getPageContent($pid);
+		return tx_mksearch_util_Indexer::getInstance()
+			->getPageContent($pid);
 	}
 
 	/**

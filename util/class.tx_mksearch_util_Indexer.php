@@ -30,11 +30,22 @@ tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
 class tx_mksearch_util_Indexer {
 
 	/**
+	 * @return tx_mksearch_util_Indexer
+	 */
+	public static function getInstance() {
+		static $instance = null;
+		if (!is_object($instance)){
+			$instance = new self();
+		}
+		return $instance;
+	}
+
+	/**
 	 * Liefert eine Datumsfeld für Solr
 	 * @param 	string 	$date | insert "@" before timestamps
 	 * @return string
 	 */
-	public static function getDateTime($date){
+	public function getDateTime($date){
 		$dateTime = tx_rnbase::makeInstance('DateTime', $date, tx_rnbase::makeInstance('DateTimeZone', 'GMT-0'));
 		$dateTime->setTimeZone(tx_rnbase::makeInstance('DateTimeZone', 'UTC'));
 
@@ -52,7 +63,7 @@ class tx_mksearch_util_Indexer {
 	*
 	* @return tx_mksearch_interface_IndexerDocument
 	*/
-	public static function indexModelByMapping(
+	public function indexModelByMapping(
 		tx_rnbase_model_base $model, array $recordIndexMapping,
 		tx_mksearch_interface_IndexerDocument $indexDoc,
 		$prefix = '', array $options = array()
@@ -81,7 +92,7 @@ class tx_mksearch_util_Indexer {
 	 *
 	 * @return tx_mksearch_interface_IndexerDocument
 	 */
-	public static function indexArrayOfModelsByMapping(
+	public function indexArrayOfModelsByMapping(
 		array $models, array $recordIndexMapping,
 		tx_mksearch_interface_IndexerDocument $indexDoc, $prefix = ''
 	) {
@@ -109,7 +120,7 @@ class tx_mksearch_util_Indexer {
 	 * @param tx_rnbase_model_base $model
 	 * @return void
 	 */
-	public static function addModelToIndex(
+	public function addModelToIndex(
 		tx_rnbase_model_base $model, $tableName
 	){
 		static $indexSrv;
@@ -127,10 +138,10 @@ class tx_mksearch_util_Indexer {
 	 * @param string $tableName
 	 * @return void
 	 */
-	public static function addModelsToIndex($models, $tableName) {
+	public function addModelsToIndex($models, $tableName) {
 		if(!empty($models))
 			foreach ($models as $model) {
-				self::addModelToIndex($model,$tableName);
+				$this->addModelToIndex($model,$tableName);
 			}
 	}
 
@@ -149,7 +160,7 @@ class tx_mksearch_util_Indexer {
 	* @todo move function to a helper class as the method has nothing to do
 	* with actual indexing. it's just a helper.
 	*/
-	public static function checkInOrExcludeOptions($models,$options, $mode = 0, $optionKey = 'categories') {
+	public function checkInOrExcludeOptions($models,$options, $mode = 0, $optionKey = 'categories') {
 		//set base returns depending on the mode
 		switch ($mode) {
 			case 0:
@@ -212,128 +223,128 @@ class tx_mksearch_util_Indexer {
 	* @param array $options
 	* @return bool
 	*/
-	public static function isOnIndexablePage($sourceRecord, $options) {
+	public function isOnIndexablePage($sourceRecord, $options) {
 		$pid = $sourceRecord['pid'];
-		$includePages = self::getConfigValue('pages', $options['include.']);
-		
+		$includePages = $this->getConfigValue('pages', $options['include.']);
+
 		if(in_array($pid, $includePages))
 			return true;
-		else 
-			return self::pageIsNotInIncludePages($pid,$options);
+		else
+			return $this->pageIsNotInIncludePages($pid,$options);
 	}
-	
+
 	/**
 	 * entweder sind die include pages leer oder es wurde kein eintrag gefunden.
-	 * was der fall wird in 
+	 * was der fall wird in
 	 * @param integer $pid
 	 * @param array $options
-	 * 
+	 *
 	 * @return boolean
 	 */
-	private static function pageIsNotInIncludePages($pid, array $options) {
-		$includePageTrees = self::getConfigValue('pageTrees', $options['include.']);
-		
+	private function pageIsNotInIncludePages($pid, array $options) {
+		$includePageTrees = $this->getConfigValue('pageTrees', $options['include.']);
+
 		if(empty($includePageTrees))
-			return self::includePageTreesNotSet($pid, $options);
+			return $this->includePageTreesNotSet($pid, $options);
 		else
-			return self::includePageTreesSet($pid, $options);
+			return $this->includePageTreesSet($pid, $options);
 	}
-	
+
 	/**
 	 * @param integer $pid
 	 * @param array $options
-	 * 
+	 *
 	 * @return boolean
 	 */
-	private static function includePageTreesNotSet($pid, array $options) {
-		$excludePageTrees = self::getConfigValue('pageTrees', $options['exclude.']);
-		
-		if(self::getFirstRootlineIndexInPageTrees($pid, $excludePageTrees) !== false){
+	private function includePageTreesNotSet($pid, array $options) {
+		$excludePageTrees = $this->getConfigValue('pageTrees', $options['exclude.']);
+
+		if($this->getFirstRootlineIndexInPageTrees($pid, $excludePageTrees) !== false){
 			return false;
 		} else {
-			return self::pageIsNotInExcludePageTrees($pid, $options);
+			return $this->pageIsNotInExcludePageTrees($pid, $options);
 		}
 	}
-	
+
 	/**
 	 * @param integer $pid
 	 * @param array $options
-	 * 
+	 *
 	 * @return boolean
 	 */
-	private static function pageIsNotInExcludePageTrees($pid, array $options) {
-		if(self::pageIsNotInExcludePages($pid, $options)){
-			$includePages = self::getConfigValue('pages', $options['include.']);
+	private function pageIsNotInExcludePageTrees($pid, array $options) {
+		if($this->pageIsNotInExcludePages($pid, $options)){
+			$includePages = $this->getConfigValue('pages', $options['include.']);
 			return empty($includePages);
 		} else {
 			return false;
-		} 
+		}
 	}
-	
+
 	/**
 	 * @param integer $pid
 	 * @param array $options
-	 * 
+	 *
 	 * @return boolean
 	 */
 	private function pageIsNotInExcludePages($pid, array $options) {
-		$excludePages = self::getConfigValue('pages', $options['exclude.']);	
+		$excludePages = $this->getConfigValue('pages', $options['exclude.']);
 		return !in_array($pid, $excludePages);
 	}
-	
+
 	/**
 	 * @param integer $pid
 	 * @param array $options
-	 * 
+	 *
 	 * @return boolean
 	 */
-	private static function includePageTreesSet($pid, array $options) {
-		$includePageTrees = self::getConfigValue('pageTrees', $options['include.']);
-		$firstRootlineIndexInIncludePageTrees = 
-			self::getFirstRootlineIndexInPageTrees($pid, $includePageTrees);
-		
+	private function includePageTreesSet($pid, array $options) {
+		$includePageTrees = $this->getConfigValue('pageTrees', $options['include.']);
+		$firstRootlineIndexInIncludePageTrees =
+			$this->getFirstRootlineIndexInPageTrees($pid, $includePageTrees);
+
 		if($firstRootlineIndexInIncludePageTrees === false){
 			return false;
 		} else {
-			return self::pageIsInIncludePageTrees($pid, $options, $firstRootlineIndexInIncludePageTrees);
+			return $this->pageIsInIncludePageTrees($pid, $options, $firstRootlineIndexInIncludePageTrees);
 		}
-			
+
 	}
-	
+
 	/**
 	 * @param integer $pid
 	 * @param array $options
 	 * @param integer || boolean $firstRootlineIndexInIncludePageTrees
-	 * 
+	 *
 	 * @return boolean
 	 */
-	private static function pageIsInIncludePageTrees($pid, array $options, $firstRootlineIndexInIncludePageTrees) {
-		$excludePageTrees = self::getConfigValue('pageTrees', $options['exclude.']);
-		$firstRootlineIndexInExcludePageTrees = 
-			self::getFirstRootlineIndexInPageTrees($pid, $excludePageTrees);
+	private function pageIsInIncludePageTrees($pid, array $options, $firstRootlineIndexInIncludePageTrees) {
+		$excludePageTrees = $this->getConfigValue('pageTrees', $options['exclude.']);
+		$firstRootlineIndexInExcludePageTrees =
+			$this->getFirstRootlineIndexInPageTrees($pid, $excludePageTrees);
 
 		if(
-			self::isExcludePageTreeCloserToThePidThanAnIncludePageTree(
+			$this->isExcludePageTreeCloserToThePidThanAnIncludePageTree(
 				$firstRootlineIndexInExcludePageTrees, $firstRootlineIndexInIncludePageTrees
 			)
 		) {
 			return false;
 		} else {
-			return self::pageIsNotInExcludePages($pid, $options);
+			return $this->pageIsNotInExcludePages($pid, $options);
 		}
-			
+
 	}
-	
+
 	/**
 	 * Desto höher der index desto näher sind wir an der pid dran.
 	 * warum? siehe doc von getRootlineByPid!
-	 * 
+	 *
 	 * @param integer $excludePageTreesIndex
 	 * @param integer $includePageTreesIndex
-	 * 
+	 *
 	 * @return boolean
 	 */
-	private static function isExcludePageTreeCloserToThePidThanAnIncludePageTree(
+	private function isExcludePageTreeCloserToThePidThanAnIncludePageTree(
 		$excludePageTreesIndex, $includePageTreesIndex
 	) {
 		return $excludePageTreesIndex > $includePageTreesIndex;
@@ -345,9 +356,8 @@ class tx_mksearch_util_Indexer {
 	 *
 	 * @return integer the index in the rootline of the hit || boolean
 	 */
-	private static function getFirstRootlineIndexInPageTrees($pid, $pageTrees) {
-		//static:: statt self:: damit es gemocked werden kann
-		$rootline = static::getRootlineByPid($pid);
+	private function getFirstRootlineIndexInPageTrees($pid, $pageTrees) {
+		$rootline = $this->getRootlineByPid($pid);
 
 		foreach ($rootline as $index => $page) {
 			if (in_array($page['uid'], $pageTrees))
@@ -356,19 +366,19 @@ class tx_mksearch_util_Indexer {
 
 		return false;
 	}
-	
+
 	/**
 	 * eigene methode damit wir mocken können.
-	 * 
+	 *
 	 * die reihenfolge der einträge beginnt mit der pid selbst
 	 * und geht dann den seitenbaum nach oben. das heißt desto größer
 	 * der index desto näher sind wir an der pid dran.
-	 * 
+	 *
 	 * @param integer $pid
-	 * 
+	 *
 	 * @return array
 	 */
-	protected static function getRootlineByPid($pid) {
+	protected function getRootlineByPid($pid) {
 		return tx_mksearch_service_indexer_core_Config::getRootLine($pid);
 	}
 
@@ -382,7 +392,7 @@ class tx_mksearch_util_Indexer {
 	*
 	* @return array
 	*/
-	public static function getConfigValue($key, $options) {
+	public function getConfigValue($key, $options) {
 		$config = array();
 		if(is_array($options)) {
 			if (isset($options[$key]) && strlen(trim($options[$key]))) {
@@ -399,7 +409,7 @@ class tx_mksearch_util_Indexer {
 	* Get's the page of the content element if it's not hidden/deleted
 	* @return array
 	*/
-	public static function getPageContent($pid) {
+	public function getPageContent($pid) {
 		//first of all we have to check if the page is not hidden/deleted
 		$sqlOptions = array(
 			'where' => 'pages.uid=' . $pid . ' AND hidden=0 AND deleted=0',
