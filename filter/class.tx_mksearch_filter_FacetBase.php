@@ -28,7 +28,7 @@ tx_rnbase::load('tx_mksearch_filter_SolrBase');
 /**
  * Die eigentlich nur dazu fq immer leer zu lassen
  * und limit auf 0 zu setzen da wir alle facetten wollen, mehr nicht
- * 
+ *
  * @author Hannes Bochmann
  *
  */
@@ -53,7 +53,8 @@ class tx_mksearch_filter_FacetBase extends tx_mksearch_filter_SolrBase {
 			//noch eingeschränkt werden wollen. Sollen sie doch eingeschränkt werden
 			//dann einfach einen Filter verwenden der "fq" nicht statisch auf nichts setzt
 			$options['limit'] = 0;//nie wirklich suchen
-			$options['fq'] = '';//nie einschränken		
+			$options['fq'] = '';//nie einschränken
+			$options['facet'] = 'true';
 
 			return true;//damit der Filter als valide betrachtet wird
 		}
