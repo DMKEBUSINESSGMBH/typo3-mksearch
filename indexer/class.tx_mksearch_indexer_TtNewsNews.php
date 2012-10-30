@@ -67,6 +67,8 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base {
 	/**
 	 * get all categories of the news record
 	 * @param tx_rnbase_model_base $oModel
+	 * 
+	 * @todo support parent categories
 	 */
 	private function getCategories($oModel) {
 		$aOptions = array(
