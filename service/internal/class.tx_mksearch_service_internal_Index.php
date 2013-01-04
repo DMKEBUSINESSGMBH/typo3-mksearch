@@ -257,7 +257,9 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 		if (empty($data)) return 0;
 
 		// Trigger update for the found items
-		self::executeQueueData($data, $config);
+		if(!self::executeQueueData($data, $config)) {
+			return array();
+		}
 
 		$uids = array();
 		$rows = array();
@@ -386,9 +388,18 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 			}
 		}
 		catch (Exception $e) {
-			tx_rnbase_util_Logger::fatal('[INDEXQUEUE] Fatal error processing queue occured!', 'mksearch', array('Exception' => $e->getMessage(), 'Queue-Items'=> $data));
+			tx_rnbase_util_Logger::fatal(
+				'[INDEXQUEUE] Fatal error processing queue occured! The queue is left as it is so the indexing can be tried again.', 
+				'mksearch', 
+				array(
+					'Exception' => $e->getMessage(), 
+					'Queue-Items'=> $data
+				)
+			);
+			return false;
 		}
-		return 0;
+		
+		return true;
 	}
 
 	/**
