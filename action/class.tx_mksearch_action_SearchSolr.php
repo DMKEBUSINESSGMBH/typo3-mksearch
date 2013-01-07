@@ -285,24 +285,55 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 			foreach ($aJsScripts as $sJavaScriptFilename)
 				$GLOBALS['TSFE']->additionalHeaderData[$sJavaScriptFilename] = '<script type="text/javascript" src="'.$sJavascriptsPath.$sJavaScriptFilename.'"></script>';
 
-		//now add the autocomplete call
-		$oLink = $configurations->createLink();
-		$oLink->initByTS(
+		$link = self::getAutocompleteActionLinkByConfigurationsAndConfId(
+			$configurations, $confId
+		);
+		
+		$autocompleteJS = self::getAutocompleteJsByConfigArrayAndLink(
+			$aConfig, $link
+		);
+		
+		$GLOBALS['TSFE']->additionalHeaderData[md5($autocompleteJS)] = $autocompleteJS;
+	}
+	
+	/**
+	 * @param tx_rnbase_configurations $configurations
+	 * @param string $confId
+	 * 
+	 * @return tx_rnbase_util_Link
+	 */
+	public static function getAutocompleteActionLinkByConfigurationsAndConfId(
+		tx_rnbase_configurations $configurations, $confId
+	) {
+		$link = $configurations->createLink();
+		$link->initByTS(
 			$configurations,
 			$confId.'actionLink.',
 			array(
 				'ajax' => 1, //set always true
-				'usedIndex' => intval($configurations->get($this->getConfId().'usedIndex'))
+				'usedIndex' => intval($configurations->get(self::getConfId().'usedIndex'))
 			)
 		);
-
-		$sAutocompleteJS = '
+		
+		return $link;
+	}
+	
+	/**
+	 * @param array $configArray
+	 * @param tx_rnbase_util_Link $link
+	 * 
+	 * @return string
+	 */
+	public static function getAutocompleteJsByConfigArrayAndLink(
+		array $configArray, tx_rnbase_util_Link $link
+	) {
+		return '
 		<script type="text/javascript">
 		jQuery(document).ready(function(){
-			jQuery('.$aConfig['elementSelector'].').autocomplete({
+			jQuery('.$configArray['elementSelector'].').autocomplete({
 				source: function( request, response ) {
 					jQuery.ajax({
-						url: "'.$oLink->makeUrl(false).'&mksearch[term]="+encodeURIComponent(request.term),
+						url: "'.$link->makeUrl(false).'&mksearch[term]="+encodeURIComponent(request.term),
 						dataType: "json",
 						success: function( data ) {
 							var suggestions = [];
@@ -320,14 +351,12 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 						}
 					});
 				},
-				minLength: '.$aConfig['minLength'].'
+				minLength: '.$configArray['minLength'].'
 			});
 		});
 		jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();
 		</script>
 		';
-		
-		$GLOBALS['TSFE']->additionalHeaderData[md5($sAutocompleteJS)] = $sAutocompleteJS;
 	}
 	
 	/**
@@ -348,6 +377,16 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 			throw new Exception('Configured search index not found!');
 			
 		return $index;		
+	}
+	
+	/**
+	 * damit das static aufgerufen werden kann
+	 * 
+	 * (non-PHPdoc)
+	 * @see tx_rnbase_action_BaseIOC::getConfId()
+	 */
+	public function getConfId() {
+		return self::getTemplateName().'.';
 	}
 
 	function getTemplateName() { return 'searchsolr';}
