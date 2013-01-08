@@ -301,7 +301,10 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 		$autocompleteJS = tx_mksearch_util_SolrAutocomplete::getAutocompleteJsByConfigurationsConfIdAndLink(
 			$configurations->get($this->getConfId() . $this->autocompleteConfId), $link
 		);
-		
+		tx_rnbase::load('tx_rnbase_util_Debug');
+		tx_rnbase_util_Debug::debug(array(
+		$autocompleteJS
+		),__METHOD__.' Line: '.__LINE__); // @TODO: remove me
 		$GLOBALS['TSFE']->additionalHeaderData[md5($autocompleteJS)] = $autocompleteJS;
 	}
 	

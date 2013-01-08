@@ -169,7 +169,8 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends Tx_Phpunit_TestCase {
 					),
 					'noHash' => 1,
 				)
-			)
+			),
+			'usedIndex' => 1
 		);
 		//mock getIndex() so its not called for real
 		$aMockFunctions = array(
@@ -191,7 +192,7 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends Tx_Phpunit_TestCase {
 			jQuery(myElementSelector).autocomplete({
 				source: function( request, response ) {
 					jQuery.ajax({
-						url: "?id='.$this->linkId.'&type=540&mksearch%5Bajax%5D=1&mksearch%5BusedIndex%5D=0&mksearch[term]="+encodeURIComponent(request.term),
+						url: "?id='.$this->linkId.'&type=540&mksearch%5Bajax%5D=1&mksearch%5BusedIndex%5D=1&mksearch[term]="+encodeURIComponent(request.term),
 						dataType: "json",
 						success: function( data ) {
 							var suggestions = [];
@@ -241,6 +242,7 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends Tx_Phpunit_TestCase {
 				'includeJqueryUiCore' => 1,
 				'includeJqueryUiAutocomplete' => 0,
 			),
+			'usedIndex' => 1
 		);
 		//mock getIndex() so its not called for real
 		$aMockFunctions = array(
@@ -262,7 +264,7 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends Tx_Phpunit_TestCase {
 			jQuery(myElementSelector).autocomplete({
 				source: function( request, response ) {
 					jQuery.ajax({
-						url: "?id='.$this->linkId.'&type=540&mksearch%5Bajax%5D=1&mksearch%5BusedIndex%5D=0&mksearch[term]="+encodeURIComponent(request.term),
+						url: "?id='.$this->linkId.'&type=540&mksearch%5Bajax%5D=1&mksearch%5BusedIndex%5D=1&mksearch[term]="+encodeURIComponent(request.term),
 						dataType: "json",
 						success: function( data ) {
 							var suggestions = [];
@@ -313,7 +315,8 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends Tx_Phpunit_TestCase {
 				'includeJquery' => 1,
 				'includeJqueryUiCore' => 1,
 				'includeJqueryUiAutocomplete' => 1,
-			)
+			),
+			'usedIndex' => 1
 		);
 		//mock getIndex() so its not called for real
 		$aMockFunctions = array(
@@ -335,7 +338,7 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends Tx_Phpunit_TestCase {
 			jQuery(myElementSelector).autocomplete({
 				source: function( request, response ) {
 					jQuery.ajax({
-						url: "?id='.$this->linkId.'&type=540&mksearch%5Bajax%5D=1&mksearch%5BusedIndex%5D=0&mksearch[term]="+encodeURIComponent(request.term),
+						url: "?id='.$this->linkId.'&type=540&mksearch%5Bajax%5D=1&mksearch%5BusedIndex%5D=1&mksearch[term]="+encodeURIComponent(request.term),
 						dataType: "json",
 						success: function( data ) {
 							var suggestions = [];
