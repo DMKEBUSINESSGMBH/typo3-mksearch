@@ -215,6 +215,7 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends Tx_Phpunit_TestCase {
 		jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();
 		</script>
 		';
+		
 		$this->assertEquals(1, count($GLOBALS['TSFE']->additionalHeaderData),'mehr header daten als erwartet!');
 		$this->assertEquals($sJs,$GLOBALS['TSFE']->additionalHeaderData[md5($sJs)],'Daten für JS falsch');
 	}

@@ -28,12 +28,18 @@ tx_rnbase::load('tx_rnbase_action_BaseIOC');
 tx_rnbase::load('tx_rnbase_filter_BaseFilter');
 tx_rnbase::load('tx_mksearch_util_ServiceRegistry');
 tx_rnbase::load('tx_mksearch_util_Misc');
+tx_rnbase::load('tx_mksearch_util_SolrAutocomplete');
 
 /**
  * Controller to show a list of modular products
  *
  */
 class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
+	
+	/**
+	 * @var string
+	 */
+	protected $autocompleteConfId = 'autocomplete.';
 	
 	/**
 	 *
@@ -50,7 +56,7 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 		$filter = tx_rnbase_filter_BaseFilter::createFilter($parameters, $configurations, $viewData, $confId);
 
 		//shall we prepare the javascript for the autocomplete feature
-		$this->prepareAutocomplete($configurations, $confId.'autocomplete.');
+		$this->prepareAutocomplete();
 
 		//manchmal will man nur ein Suchformular auf jeder Seite im Header einbinden
 		//dieses soll dann aber nur auf eine Ergebnisseite verweisen ohne
@@ -264,13 +270,16 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 	
 	/**
 	 * Include the neccessary javascripts for the autocomplete feature
-	 * @param tx_rnbase_configurations $configurations
+	 * 
 	 * @return void
 	 */
-	protected function prepareAutocomplete(tx_rnbase_configurations $configurations, $confId) {
-		if(!$configurations->get($confId.'enable'))
+	protected function prepareAutocomplete() {
+		$configurations = $this->getConfigurations();
+		$autocompleteTsPath = $this->getConfId() . $this->autocompleteConfId;
+		
+		if(!$configurations->get($autocompleteTsPath.'enable'))
 			return;
-		$aConfig = $configurations->get($confId);
+		$aConfig = $configurations->get($autocompleteTsPath);
 		
 		$sJavascriptsPath = t3lib_extMgm::siteRelPath('mksearch').'res/js/';
 		$aJsScripts = array();
@@ -285,78 +294,15 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 			foreach ($aJsScripts as $sJavaScriptFilename)
 				$GLOBALS['TSFE']->additionalHeaderData[$sJavaScriptFilename] = '<script type="text/javascript" src="'.$sJavascriptsPath.$sJavaScriptFilename.'"></script>';
 
-		$link = self::getAutocompleteActionLinkByConfigurationsAndConfId(
-			$configurations, $confId
+		$link = tx_mksearch_util_SolrAutocomplete::getAutocompleteActionLinkByConfigurationsAndConfId(
+			$configurations, $this->getConfId()
 		);
 		
-		$autocompleteJS = self::getAutocompleteJsByConfigArrayAndLink(
-			$aConfig, $link
+		$autocompleteJS = tx_mksearch_util_SolrAutocomplete::getAutocompleteJsByConfigurationsConfIdAndLink(
+			$configurations, $this->getConfId(), $link
 		);
 		
 		$GLOBALS['TSFE']->additionalHeaderData[md5($autocompleteJS)] = $autocompleteJS;
-	}
-	
-	/**
-	 * @param tx_rnbase_configurations $configurations
-	 * @param string $confId
-	 * 
-	 * @return tx_rnbase_util_Link
-	 */
-	public static function getAutocompleteActionLinkByConfigurationsAndConfId(
-		tx_rnbase_configurations $configurations, $confId
-	) {
-		$link = $configurations->createLink();
-		$link->initByTS(
-			$configurations,
-			$confId.'actionLink.',
-			array(
-				'ajax' => 1, //set always true
-				'usedIndex' => intval($configurations->get(self::getConfId().'usedIndex'))
-			)
-		);
-		
-		return $link;
-	}
-	
-	/**
-	 * @param array $configArray
-	 * @param tx_rnbase_util_Link $link
-	 * 
-	 * @return string
-	 */
-	public static function getAutocompleteJsByConfigArrayAndLink(
-		array $configArray, tx_rnbase_util_Link $link
-	) {
-		return '
-		<script type="text/javascript">
-		jQuery(document).ready(function(){
-			jQuery('.$configArray['elementSelector'].').autocomplete({
-				source: function( request, response ) {
-					jQuery.ajax({
-						url: "'.$link->makeUrl(false).'&mksearch[term]="+encodeURIComponent(request.term),
-						dataType: "json",
-						success: function( data ) {
-							var suggestions = [];
-							jQuery.each(data.suggestions, function(key, value) {
-								jQuery.each(value, function(key, suggestion) {
-									suggestions.push(suggestion.uid);
-								});
-							});
-							response( jQuery.map( suggestions, function( item ) {
-								return {
-									label: item,
-									value: item
-								};
-							}));
-						}
-					});
-				},
-				minLength: '.$configArray['minLength'].'
-			});
-		});
-		jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();
-		</script>
-		';
 	}
 	
 	/**
@@ -377,16 +323,6 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 			throw new Exception('Configured search index not found!');
 			
 		return $index;		
-	}
-	
-	/**
-	 * damit das static aufgerufen werden kann
-	 * 
-	 * (non-PHPdoc)
-	 * @see tx_rnbase_action_BaseIOC::getConfId()
-	 */
-	public function getConfId() {
-		return self::getTemplateName().'.';
 	}
 
 	function getTemplateName() { return 'searchsolr';}
