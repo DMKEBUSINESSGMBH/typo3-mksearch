@@ -39,6 +39,9 @@ class tx_mksearch_util_SolrAutocomplete {
 	protected static $autocompleteConfId = 'autocomplete.';
 	
 	/**
+	 * @param tx_rnbase_configurations $configurations
+	 * @param string $confId 
+	 * 
 	 * example TS config:
 	 * myConfId {
 	 * 	usedIndex = 1
@@ -52,46 +55,41 @@ class tx_mksearch_util_SolrAutocomplete {
 	 * 	}
 	 * }
 	 * 
-	 * 
-	 * @param tx_rnbase_configurations $configurations
-	 * @param string $confId
-	 * 
 	 * @return tx_rnbase_util_Link
 	 */
 	public static function getAutocompleteActionLinkByConfigurationsAndConfId(
 		tx_rnbase_configurations $configurations, $confId
 	) {
+		$linkParameters = array('ajax' => 1);
+		$usedIndex = intval($configurations->get($confId.'usedIndex'));
+		if ($usedIndex === 0 || $usedIndex > 0) {
+			$linkParameters['usedIndex'] = $usedIndex;
+		}
+		
 		$link = $configurations->createLink();
 		$link->initByTS(
 			$configurations,
 			$confId . self::$autocompleteConfId . 'actionLink.',
-			array(
-				'ajax' => 1, //set always true
-				'usedIndex' => intval($configurations->get($confId.'usedIndex'))
-			)
+			$linkParameters
 		);
 		
 		return $link;
 	}
 	
 	/**
-	 * example TS config:
-	 * myConfId {
-	 * 	autocomplete {
-	 * 		minLength = 2
-	 * 		elementSelector = "#mksearch_term"
-	 * 	}
-	 * }
-	 * @param array $configArray
+	 * @param array $configArray example:
+	 * array (
+	 * 	minLength = 2
+	 * 	elementSelector = "#mksearch_term"
+	 * )
+	 * 
 	 * @param tx_rnbase_util_Link $link
 	 * 
 	 * @return string
 	 */
 	public static function getAutocompleteJsByConfigurationsConfIdAndLink(
-		tx_rnbase_configurations $configurations, $confId, tx_rnbase_util_Link $link
+		$configArray, tx_rnbase_util_Link $link
 	) {
-		$configArray = $configurations->get($confId . self::$autocompleteConfId);
-		
 		return '
 		<script type="text/javascript">
 		jQuery(document).ready(function(){
