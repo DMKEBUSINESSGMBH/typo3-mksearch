@@ -67,7 +67,7 @@ class tx_mksearch_indexer_DamMedia implements tx_mksearch_interface_Indexer {
 			} else return null;
 		}
 
-		if($sourceRecord['deleted']) {
+		if($sourceRecord['deleted'] || $sourceRecord['hidden']) {
 			$indexDoc->setDeleted(true);
 			return $indexDoc;
 		}
