@@ -79,7 +79,7 @@ class tx_mksearch_util_SuggestionBuilder {
 	 * @param string $field
 	 * @return tx_mksearch_model_Suggestion
 	 */
-	private function getSimpleSuggestion($aSuggestion) {
+	protected function getSimpleSuggestion($aSuggestion) {
 		return tx_rnbase::makeInstance('tx_mksearch_model_Suggestion', $aSuggestion);
 	}
 }
