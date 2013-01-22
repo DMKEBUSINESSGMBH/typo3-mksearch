@@ -104,11 +104,16 @@ $TCA['tx_mksearch_indices'] = array (
 				'default' => 'zend_lucene'
 			)
 		),
-		'issolr4' => array (
+		'solrversion' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices_issolr4',
+			'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices_solrversion',
 			'config' => array (
-				'type' => 'check',
+				'type' => 'radio',
+				'items' => array(
+					array('LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices_solrversion_35',35),
+					array('LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices_solrversion_40',40),
+				),
+				'default' => 35
 			),
 			'displayCond' => 'FIELD:engine:=:solr'
 		),
@@ -124,7 +129,7 @@ $TCA['tx_mksearch_indices'] = array (
 		)
 	),
 	'types' => array (
-		'0' => array('showitem' => 'hidden;;1, title, description, engine, issolr4, configuration, name, composites')
+		'0' => array('showitem' => 'hidden;;1, title, description, engine, solrversion, configuration, name, composites')
 	),
 	'palettes' => array (
 		'1' => array('showitem' => '')

@@ -143,10 +143,10 @@ class tx_mksearch_model_internal_Index extends tx_rnbase_model_base {
 	}
 	
 	/**
-	 * @return boolean
+	 * @return int
 	 */
-	public function isSolr4() {
-		return $this->record['issolr4'];
+	public function getSolrVersion() {
+		return $this->record['solrversion'];
 	}
 }
 

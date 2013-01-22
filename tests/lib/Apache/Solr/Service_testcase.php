@@ -38,6 +38,7 @@ class Apache_Solr_Service_testcase extends tx_phpunit_database_testcase {
 		$service = $this->getMock(
 			'Apache_Solr_Service', array('_sendRawPost')
 		);
+		$service->setSolrVersion(30);
 		
 		$expectedUrl = 'http://localhost:8180/solr/update?wt=json';
 		$expectedRawPostWithWaitFlushParameter = 
@@ -58,7 +59,7 @@ class Apache_Solr_Service_testcase extends tx_phpunit_database_testcase {
 		$service = $this->getMock(
 			'Apache_Solr_Service', array('_sendRawPost')
 		);
-		$service->isSolr4(true);
+		$service->setSolrVersion(40);
 		
 		$expectedUrl = 'http://localhost:8180/solr/update?wt=json';
 		$expectedRawPostWithWaitFlushParameter = 
@@ -79,6 +80,7 @@ class Apache_Solr_Service_testcase extends tx_phpunit_database_testcase {
 		$service = $this->getMock(
 			'Apache_Solr_Service', array('_sendRawPost')
 		);
+		$service->setSolrVersion(30);
 		
 		$expectedUrl = 'http://localhost:8180/solr/update?wt=json';
 		$expectedRawPostWithWaitFlushParameter = 
@@ -99,7 +101,7 @@ class Apache_Solr_Service_testcase extends tx_phpunit_database_testcase {
 		$service = $this->getMock(
 			'Apache_Solr_Service', array('_sendRawPost')
 		);
-		$service->isSolr4(true);
+		$service->setSolrVersion(40);
 		
 		$expectedUrl = 'http://localhost:8180/solr/update?wt=json';
 		$expectedRawPostWithWaitFlushParameter = 

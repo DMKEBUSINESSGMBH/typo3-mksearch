@@ -184,9 +184,9 @@ class Apache_Solr_Service
 	/**
 	 * abhängig davon wird waitFlush beim commit/optimize gesetzt
 	 * 
-	 * @var boolean
+	 * @var integer
 	 */
-	protected $isSolr4 = false;
+	protected $solrVersion = 30;
 
 	/**
 	 * Escape a value for special query characters such as ':', '(', ')', '*', '?', etc.
@@ -840,16 +840,26 @@ class Apache_Solr_Service
 	}
 	
 	/**
-	 * @param boolean $isSolr4
-	 * 
 	 * @return boolean || void
 	 */
-	public function isSolr4($isSolr4 = null) {#
-		if($isSolr4 !== null) {
-			$this->isSolr4 = $isSolr4;
-		} else {
-			return $this->isSolr4;
-		}
+	public function isSolr4() {
+		return $this->getSolrVersion() == 40;
+	}
+	
+	/**
+	 * @return int
+	 */
+	public function getSolrVersion() {
+		return $this->solrVersion;
+	}
+	
+	/**
+	 * @param boolean $isSolr4
+	 * 
+	 * @return void
+	 */
+	public function setSolrVersion($solrVersion) {
+		$this->solrVersion = $solrVersion;
 	}
 	
 	/**
