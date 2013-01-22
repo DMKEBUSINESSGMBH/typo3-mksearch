@@ -182,6 +182,13 @@ class Apache_Solr_Service
 	protected $_httpTransport = false;
 
 	/**
+	 * abhängig davon wird waitFlush beim commit/optimize gesetzt
+	 * 
+	 * @var boolean
+	 */
+	protected $isSolr4 = false;
+
+	/**
 	 * Escape a value for special query characters such as ':', '(', ')', '*', '?', etc.
 	 *
 	 * NOTE: inside a phrase fewer characters need escaped, use {@link Apache_Solr_Service::escapePhrase()} instead
@@ -825,10 +832,33 @@ class Apache_Solr_Service
 		$expungeValue = $expungeDeletes ? 'true' : 'false';
 		$flushValue = $waitFlush ? 'true' : 'false';
 		$searcherValue = $waitSearcher ? 'true' : 'false';
+		$waitFlushParameter = $this->getWaitFlushParameter($flushValue);
 
-		$rawPost = '<commit expungeDeletes="' . $expungeValue . '" waitFlush="' . $flushValue . '" waitSearcher="' . $searcherValue . '" />';
+		$rawPost = '<commit expungeDeletes="' . $expungeValue . '"' . $waitFlushParameter . ' waitSearcher="' . $searcherValue . '" />';
 
 		return $this->_sendRawPost($this->_updateUrl, $rawPost, $timeout);
+	}
+	
+	/**
+	 * @param boolean $isSolr4
+	 * 
+	 * @return boolean || void
+	 */
+	public function isSolr4($isSolr4 = null) {#
+		if($isSolr4 !== null) {
+			$this->isSolr4 = $isSolr4;
+		} else {
+			return $this->isSolr4;
+		}
+	}
+	
+	/**
+	 * @param string $flushValue
+	 * 
+	 * @return string
+	 */
+	private function getWaitFlushParameter($flushValue) {
+		return $this->isSolr4() ? '' : ' waitFlush="' . $flushValue . '"';
 	}
 
 	/**
@@ -1120,8 +1150,9 @@ class Apache_Solr_Service
 	{
 		$flushValue = $waitFlush ? 'true' : 'false';
 		$searcherValue = $waitSearcher ? 'true' : 'false';
+		$waitFlushParameter = $this->getWaitFlushParameter($flushValue);
 
-		$rawPost = '<optimize waitFlush="' . $flushValue . '" waitSearcher="' . $searcherValue . '" />';
+		$rawPost = '<optimize' . $waitFlushParameter . ' waitSearcher="' . $searcherValue . '" />';
 
 		return $this->_sendRawPost($this->_updateUrl, $rawPost, $timeout);
 	}

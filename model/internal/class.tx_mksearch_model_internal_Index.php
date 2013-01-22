@@ -141,6 +141,13 @@ class tx_mksearch_model_internal_Index extends tx_rnbase_model_base {
 		return $out; //t3lib_div::view_array($this->record);
 
 	}
+	
+	/**
+	 * @return boolean
+	 */
+	public function isSolr4() {
+		return $this->record['issolr4'];
+	}
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/model/internal/class.tx_mksearch_model_internal_Index.php']) {

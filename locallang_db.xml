@@ -48,6 +48,7 @@
 			<label index="tx_mksearch_indices_engine">Search engine</label>
 			<label index="tx_mksearch_indices_engine_solr">Apache Solr</label>
 			<label index="tx_mksearch_indices_engine_zendlucene">Zend Lucene (PHP)</label>
+			<label index="tx_mksearch_indices_issolr4">is at least Solr 4?</label>
 			
 			<label index="tx_mksearch_configcomposites">Indexer configuration composite</label>
 			<label index="tx_mksearch_configcomposites.hidden">Hidden, i.e. composite is disabled</label>

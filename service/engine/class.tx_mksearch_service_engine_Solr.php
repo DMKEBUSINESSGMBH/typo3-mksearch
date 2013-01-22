@@ -81,6 +81,8 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 	public function setConnection($host, $port, $path, $force = true) {
 		$this->index = new Apache_Solr_Service( $host, $port, $path);
 
+		$this->index->isSolr4($this->indexModel->isSolr4());
+		
 		//per default werden alle HTTP Aufrufe per file_get_contents erledigt.
 		//siehe Apache_Solr_Service::getHttpTransport()
 		//damit das funktioniert muss allerdings allow_url_fopen in den PHP

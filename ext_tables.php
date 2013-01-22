@@ -58,6 +58,7 @@ $TCA['tx_mksearch_indices'] = array (
 		),
 		'dynamicConfigFile' => $_EXT_PATH.'tca.php',
 		'iconfile'          => $_EXT_RELPATH.'icons/icon_tx_mksearch_indices.gif',
+		'requestUpdate'		=> 'engine'
 	),
 );
 
