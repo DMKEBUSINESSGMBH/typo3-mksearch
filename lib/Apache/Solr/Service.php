@@ -842,8 +842,8 @@ class Apache_Solr_Service
 	/**
 	 * @return boolean || void
 	 */
-	public function isSolr4() {
-		return $this->getSolrVersion() == 40;
+	public function isAtLeastSolr4() {
+		return $this->getSolrVersion() >= 40;
 	}
 	
 	/**
@@ -854,7 +854,7 @@ class Apache_Solr_Service
 	}
 	
 	/**
-	 * @param boolean $isSolr4
+	 * @param boolean $isAtLeastSolr4
 	 * 
 	 * @return void
 	 */
@@ -868,7 +868,7 @@ class Apache_Solr_Service
 	 * @return string
 	 */
 	private function getWaitFlushParameter($flushValue) {
-		return $this->isSolr4() ? '' : ' waitFlush="' . $flushValue . '"';
+		return $this->isAtLeastSolr4() ? '' : ' waitFlush="' . $flushValue . '"';
 	}
 
 	/**
