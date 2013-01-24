@@ -148,6 +148,13 @@ class tx_mksearch_model_internal_Index extends tx_rnbase_model_base {
 	public function getSolrVersion() {
 		return $this->record['solrversion'];
 	}
+	
+	/**
+	 * @return boolean
+	 */
+	public function isSolr4() {
+		return $this->getSolrVersion() == 40;
+	}
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/model/internal/class.tx_mksearch_model_internal_Index.php']) {

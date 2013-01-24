@@ -48,9 +48,19 @@ class tx_mksearch_tests_SolrTestcase extends tx_phpunit_testcase {
 
 	/**
 	 * Can be a TYPO3 path like EXT:mksearch/tests.....
+	 * used for all solr version below 4.0
+	 * 
 	 * @var string
 	 */
 	protected $configFile = '';
+	
+	/**
+	 * Can be a TYPO3 path like EXT:mksearch/tests.....
+	 * Is used when the solr index model is set to solr version 4.0
+	 * 
+	 * @var string
+	 */
+	protected $configFileForSolr4 = '';
 
 	/**
 	 * Can be a TYPO3 path like EXT:mksearch/tests.....
@@ -89,9 +99,22 @@ class tx_mksearch_tests_SolrTestcase extends tx_phpunit_testcase {
 	 * @return void
 	 */
 	protected function initAbsolutePathsForConfigs() {
+		$this->setConfigFileDependendOnSolrVersion();
 		$this->instanceDir = t3lib_div::getFileAbsFileName($this->instanceDir);
 		$this->configFile = t3lib_div::getFileAbsFileName($this->configFile);
 		$this->schemaFile = t3lib_div::getFileAbsFileName($this->schemaFile);
+	}
+	
+	/**
+	 * 
+	 * @return void
+	 */
+	private function setConfigFileDependendOnSolrVersion() {
+		$defaultIndexModel = $this->getDefaultIndexModel();
+		
+		if($defaultIndexModel->isSolr4()){
+			$this->configFile = $this->configFileForSolr4;
+		}
 	}
 
 	/**
