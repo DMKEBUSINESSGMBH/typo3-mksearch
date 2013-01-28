@@ -87,6 +87,8 @@
             <label index="label_add_index">add Index</label>
             <label index="label_add_indexerconfig">add Indexer Configuration</label>
             <label index="label_add_composite">add Indexer Composite</label>
+            
+            <label index="allow_url_fopen_deactivated_hint"><![CDATA[<div class="message-error" style="width:16px; height:16px; float:left;"></div><strong><div style="background-color: #F6D3CF; height:16px; font-size: 15px;">allow_url_fopen is not activated but mksearch is not configured to use curl for HTTP transport!</div></strong>]]></label>
         </languageKey>
     </data>
 </T3locallang>

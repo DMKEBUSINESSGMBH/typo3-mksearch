@@ -77,7 +77,34 @@ class tx_mksearch_mod1_ConfigIndizes extends tx_rnbase_mod_ExtendedModFunc {
 				$out = tx_rnbase_util_Templates::substituteSubpart($out, '###ROOTPAGE###', '<pre>No page selected.</pre>');
 			}
 		}
+		
+		$out = $this->handleAllowUrlFopenDeactivatedHint($out);
+		
 		return $out;
+	}
+
+	/**
+	 * @param string $template
+	 * 
+	 * @return string
+	 */
+	private function handleAllowUrlFopenDeactivatedHint($template) {
+		if(tx_rnbase_util_BaseMarker::containsMarker($template, 'ALLOW_URL_FOPEN_DEACTIVATED_HINT')) {
+			$allowUrlFopen = ini_get('allow_url_fopen');
+			$useCurlAsHttpTransport = 
+				tx_rnbase_configurations::getExtensionCfgValue('mksearch', 'useCurlAsHttpTransport');
+			
+			$markerArray = array();
+			if(!$allowUrlFopen && !$useCurlAsHttpTransport){
+				$markerArray['###ALLOW_URL_FOPEN_DEACTIVATED_HINT###'] = $GLOBALS['LANG']->getLL('allow_url_fopen_deactivated_hint');
+			} else {
+				$markerArray['###ALLOW_URL_FOPEN_DEACTIVATED_HINT###'] = '';
+			}
+			
+			$template = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray);
+		}
+		
+		return $template;
 	}
 	
 	/**
