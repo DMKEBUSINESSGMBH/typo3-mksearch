@@ -15,4 +15,4 @@ defaultIndex = default
 abstractMaxLength_fallback = 200
 
 # cat=mksearch/basic/file; type=boolean; label= Curl usage: Shall Curl be used for saver Http Transport? Default is file_get_contents which needs allow_url_fopen to be active which in turn is unsafe!
-useCurlAsHttpTransport = 0
+useCurlAsHttpTransport = 1
