@@ -34,7 +34,7 @@ tx_rnbase::load('tx_mksearch_indexer_ttcontent_Normal');
 
 /**
  * takes care of tt_content with templavoila support.
- * 
+ *
  * @todo wenn templavoila installiert ist, sollten allen elemente, die in einem tv
  * container liegen in die queue gelegt werden. beim indizieren muss dann noch geprüft
  * werden ob das element parents hat und diese nicht hidden sind.
@@ -72,7 +72,7 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
 		foreach($this->aIndexableReferences as $iPid) {
 			//set the pid
 			$oModel->record['pid'] = $iPid;
-			
+
 			if (!parent::hasDocToBeDeleted($oModel, $oIndexDoc, $aOptions))
 				$aStillIndexableReferences[$iPid] = $iPid;//set value as key to avoid doubles
 		}

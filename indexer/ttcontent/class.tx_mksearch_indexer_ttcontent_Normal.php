@@ -103,19 +103,19 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 		$hookKey = 'indexer_core_TtContent_prepareData_CType_'.$rawData['CType'];
 		if (isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch'][$hookKey]) and is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch'][$hookKey]))
 			tx_rnbase_util_Misc::callHook(
-											'mksearch',
-											$hookKey,
-											array(
-												'rawData' => &$rawData,
-												'options' => isset($options['CType.'][$rawData['CType'].'.'])?$options['CType'][$rawData['CType'].'.']:array(),
-												'indexDoc' => &$indexDoc,
-											)
-										);
+				'mksearch',
+				$hookKey,
+				array(
+					'rawData' => &$rawData,
+					'options' => isset($options['CType.'][$rawData['CType'].'.'])?$options['CType'][$rawData['CType'].'.']:array(),
+					'indexDoc' => &$indexDoc,
+				)
+			);
 		else {
 			// No hook found - we have to take care for content and abstract by ourselves...
-			$fields = isset($options['CType.'][$rawData['CType'].'.']['indexedFields.']) ?
-						$options['CType.'][$rawData['CType'].'.']['indexedFields.'] :
-						$options['CType.']['_default_.']['indexedFields.'];
+			$fields = isset($options['CType.'][$rawData['CType'].'.']['indexedFields.'])
+				? $options['CType.'][$rawData['CType'].'.']['indexedFields.']
+				: $options['CType.']['_default_.']['indexedFields.'];
 
 			$c = '';
 			foreach ($fields as $f) {
@@ -130,7 +130,6 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 							$flex = t3lib_div::xml2array($rawData['pi_flexform']);
 							if (is_array($flex)) {
 								$flexParsingOptions = $flex['data']['s_parsing']['lDEF'];
-
 								// Replace special parsing characters
 								if ($flexParsingOptions['tableparsing_quote']['vDEF'])
 									$tempContent = str_replace(chr($flexParsingOptions['tableparsing_quote']['vDEF']), '', $tempContent);
@@ -277,26 +276,26 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 
 		return false;
 	}
-	
+
 	/**
 	 * wir brauchen auch noch die enable columns der page
-	 * 
+	 *
 	 * @param tx_rnbase_model_base $model
 	 * @param string $tableName
 	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
-	 * 
+	 *
 	 * @return tx_mksearch_interface_IndexerDocument
 	 */
 	protected function indexEnableColumns(
-		tx_rnbase_model_base $model, $tableName, 
+		tx_rnbase_model_base $model, $tableName,
 		tx_mksearch_interface_IndexerDocument $indexDoc
 	) {
 		$indexDoc = parent::indexEnableColumns($model, $tableName, $indexDoc);
-		
+
 		$page = $this->getPageContent($model->record['pid']);
 		$pageModel = tx_rnbase::makeInstance('tx_rnbase_model_base',$page);
 		$indexDoc = parent::indexEnableColumns($pageModel, 'pages', $indexDoc,'page_');
-		
+
 		return $indexDoc;
 	}
 
