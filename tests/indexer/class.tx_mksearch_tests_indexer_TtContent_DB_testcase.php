@@ -81,6 +81,9 @@ class tx_mksearch_tests_indexer_TtContent_DB_testcase extends tx_phpunit_databas
 		//templavoila und realurl brauchen wir da es im BE sonst Warnungen hagelt
 		//und man die Testergebnisse nicht sieht
 		if(t3lib_extMgm::isLoaded('realurl')) $aExtensions[] = 'realurl';
+		// fügt felder bei datenbank abfragen hinzu in $TYPO3_CONF_VARS['FE']['pageOverlayFields']
+		// und $TYPO3_CONF_VARS['FE']['addRootLineFields']
+		if(t3lib_extMgm::isLoaded('tq_seo')) $aExtensions[] = 'tq_seo';
 		$this->importExtensions($aExtensions);
 
 		//uninstall templavoila so the tests run without it as they used to

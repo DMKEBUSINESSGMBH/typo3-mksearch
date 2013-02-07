@@ -74,6 +74,9 @@ class tx_mksearch_tests_indexer_TtContentTv_DB_testcase extends tx_phpunit_datab
 		//templavoila und realurl brauchen wir da es im BE sonst Warnungen hagelt
 		//und man die Testergebnisse nicht sieht
 		if(t3lib_extMgm::isLoaded('realurl')) $aExtensions[] = 'realurl';
+		// fügt felder bei datenbank abfragen hinzu in $TYPO3_CONF_VARS['FE']['pageOverlayFields']
+		// und $TYPO3_CONF_VARS['FE']['addRootLineFields']
+		if(t3lib_extMgm::isLoaded('tq_seo')) $aExtensions[] = 'tq_seo';
 		$this->importExtensions($aExtensions);
 
 		$this->importDataSet(tx_mksearch_tests_Util::getFixturePath('db/pages_tv.xml'));

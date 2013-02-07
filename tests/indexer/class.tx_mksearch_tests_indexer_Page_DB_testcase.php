@@ -80,6 +80,10 @@ class tx_mksearch_tests_indexer_Page_DB_testcase extends tx_phpunit_database_tes
 		//und man die Testergebnisse nicht sieht
 		if(t3lib_extMgm::isLoaded('realurl')) $aExtensions[] = 'realurl';
 		if(t3lib_extMgm::isLoaded('templavoila')) $aExtensions[] = 'templavoila';
+		// fügt felder bei datenbank abfragen hinzu in $TYPO3_CONF_VARS['FE']['pageOverlayFields']
+		// und $TYPO3_CONF_VARS['FE']['addRootLineFields']
+		if(t3lib_extMgm::isLoaded('tq_seo')) $aExtensions[] = 'tq_seo';
+		
 		$this->importExtensions($aExtensions);
 
 		$this->importDataSet(tx_mksearch_tests_Util::getFixturePath('db/pages.xml'));
