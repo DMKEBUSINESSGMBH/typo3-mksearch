@@ -23,13 +23,14 @@
 ***************************************************************/
 
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
-tx_rnbase::load('tx_rnbase_util_BaseMarker');
+tx_rnbase::load('tx_rnbase_util_SimpleMarker');
 
 /**
  * Renders a search result straightforward with all its data, adding a link, if available
  * This class can be extended for other content types e.g. to change the behavior of $this->prepareLinks().
  */
-class tx_mksearch_marker_SearchResultSimple extends tx_rnbase_util_BaseMarker {
+class tx_mksearch_marker_SearchResultSimple
+	extends tx_rnbase_util_SimpleMarker {
 
 	/**
 	 * @param string $template HTML template
@@ -80,6 +81,19 @@ class tx_mksearch_marker_SearchResultSimple extends tx_rnbase_util_BaseMarker {
 	public function prepareLinks(&$item, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, &$formatter, $template) {
 		$config = $formatter->getConfigurations();
 
+		/*
+		 * Wenn linkMethod auf generic steht,
+		 * werden die Links über den SimpleMarker gerendert.
+		 * Damit sind mehrere Links für das ergebnis möglich.
+		 *
+		 * Andernfalls wird der Alte Weg genutzt.
+		 * Hier wurd nur der SHOWLINK gerendert und alle anderen ignoriert.
+		 */
+		$linkMethod	= $config->get($confId.'linkMethod');
+		if ($linkMethod == 'generic') {
+			parent::prepareLinks($item, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter, $template);
+		}
+
 		$linkId = 'show';
 		$linkConfId = $confId.'links.'.$linkId.'.';
 		//cObject Daten sichern und durch unseren solr record ersetzen
@@ -90,7 +104,7 @@ class tx_mksearch_marker_SearchResultSimple extends tx_rnbase_util_BaseMarker {
 
 		// Link entfernen, wenn nicht gesetzt
 		if(empty($pid)) {
-			$remove = intval($formatter->getConfigurations()->get($linkConfId.'removeIfDisabled')); 
+			$remove = intval($formatter->getConfigurations()->get($linkConfId.'removeIfDisabled'));
 			$linkMarker = $marker . '_' . strtoupper($linkId).'LINK';
 			self::disableLink($markerArray, $subpartArray, $wrappedSubpartArray, $linkMarker, $remove>0);
 		} else {
@@ -111,7 +125,7 @@ class tx_mksearch_marker_SearchResultSimple extends tx_rnbase_util_BaseMarker {
 			if (!is_array($addParams)) $addParams = array();
 			$addParams[$paramName] = $item->record[$paramField];
 
-			self::initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, $linkId, $marker, $addParams, $template);
+			$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, $linkId, $marker, $addParams, $template);
 		}
 		//cObject Daten wieder zurück
 		$config->getCObj()->data = $sCObjTempData;

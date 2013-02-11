@@ -454,6 +454,16 @@ lib.mksearch.extrainfo {
 		# This key is optional - fallback is "ITEM"
 		subpartName = ITEM
 		hit {
+			### Wenn linkMethod auf generic steht,
+			### werden die Links über den SimpleMarker gerendert.
+			### Damit sind mehrere Links für das Ergebnis möglich.
+			### Andernfalls wird der alte Weg genutzt.
+			### Hier wurde nur der SHOWLINK gerendert und alle anderen ignoriert.
+			### Default lassen wir dies auf mksearch,
+			### um bestehende Indexer kompatibel zu halten.
+			linkMethod = mksearch
+			links {}
+			
 			abstract {
 				wrap = <div class="searchResultAbstract">|</div>
 				required = 1
