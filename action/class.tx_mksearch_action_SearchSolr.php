@@ -35,12 +35,12 @@ tx_rnbase::load('tx_mksearch_util_SolrAutocomplete');
  *
  */
 class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
-	
+
 	/**
 	 * @var string
 	 */
 	protected $autocompleteConfId = 'autocomplete.';
-	
+
 	/**
 	 *
 	 * @param array_object $parameters
@@ -81,7 +81,7 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 			// Hier muss sich dringend der Filter darum kümmern, was im Term steht!
 			if(!array_key_exists('term', $fields))
 				$fields['term'] = '*:*';
-			
+
 			//get the index we shall search in
 			$index = $this->getIndex();
 			$pageBrowser = $this->handlePageBrowser($parameters, $configurations, $confId, $viewData, $fields, $options, $index);
@@ -103,7 +103,7 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 		$viewData->offsetSet('result', $result);
 		return null;
 	}
-	
+
 	/**
 	 * Generiert den Cache-Schlüssel für die aktuelle Anfrage
 	 *
@@ -116,10 +116,10 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 		//Funktion nutzen zu können
 		foreach (array_merge($fields, $options) as $key => $value)
 			$aHashParams[] = $key.$value;
-		
+
 		return tx_rnbase_util_Misc::createHash($aHashParams);
 	}
-	
+
 	/**
 	 * Sucht in Solr
 	 *
@@ -141,7 +141,7 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 		if($result = $oCache->get($sCacheKey))
 			return $result;
 		//else nix im cache also Solr suchen lassen
-		
+
 		try {
 			// in unserem fall sollte es der solr service sein!
 			/* @var $searchEngine tx_mksearch_service_engine_Solr */
@@ -149,7 +149,7 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 			$searchEngine->openIndex($index);
 			$result = $searchEngine->search($fields, $options);
 			$searchEngine->closeIndex();
-			
+
 			//der solr responce processor bearbeidet die results
 			// es werden hits, facets, uws. erzeugt.
 			tx_rnbase::load('tx_mksearch_util_SolrResponseProcessor');
@@ -176,11 +176,11 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 			}
 			return false;
 		}
-		
+
 		//alles gut gegangen. dann noch das ergebnis für den aktuellen
 		//request in den cache
 		$oCache->set($sCacheKey, $result);
-		
+
 		return $result;
 	}
 
@@ -236,7 +236,7 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 				// welche ihren Status anhand der Parameter erkennen.
 				// Dabei müssen wir die bisherigen Parameter mergen,
 				// da diese sonst überschrieben werden.
-				
+
 				//@todo limit über setRegsiter setzen um im TS darauf zugreifen
 				//zu können. Dann werden hier auch nicht alle Parameter von
 				//anderen Plugins überschrieben
@@ -254,33 +254,33 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 			// Dafür reicht uns der Count, also setzen wir limit auf 0 zwecks performanz.
 			$aOptionsForCountOnly = $options;
 			$aOptionsForCountOnly['limit'] = 0;
-			
+
 			$listSize = 0;
 			if($result = $this->searchSolr($fields, $aOptionsForCountOnly, $configurations, $index)) {
 				$listSize = $result['numFound'];
 			}
 			$pageBrowser->setState($parameters, $listSize, $pageSize);
 			$limit = $pageBrowser->getState();
-			
+
 			$options = array_merge($options, $limit);
 			$viewdata->offsetSet('pagebrowser', $pageBrowser);
 			return $pageBrowser;
 		}
 	}
-	
+
 	/**
 	 * Include the neccessary javascripts for the autocomplete feature
-	 * 
+	 *
 	 * @return void
 	 */
 	protected function prepareAutocomplete() {
 		$configurations = $this->getConfigurations();
 		$autocompleteTsPath = $this->getConfId() . $this->autocompleteConfId;
-		
+
 		if(!$configurations->get($autocompleteTsPath.'enable'))
 			return;
 		$aConfig = $configurations->get($autocompleteTsPath);
-		
+
 		$sJavascriptsPath = t3lib_extMgm::siteRelPath('mksearch').'res/js/';
 		$aJsScripts = array();
 		if($aConfig['includeJquery'])
@@ -289,7 +289,7 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 			$aJsScripts[] = 'jquery-ui-1.8.15.core.min.js';
 		if($aConfig['includeJqueryUiAutocomplete'])
 			$aJsScripts[] = 'jquery-ui-1.8.15.autocomplete.min.js';
-		
+
 		if (!empty($aJsScripts))
 			foreach ($aJsScripts as $sJavaScriptFilename)
 				$GLOBALS['TSFE']->additionalHeaderData[$sJavaScriptFilename] = '<script type="text/javascript" src="'.$sJavascriptsPath.$sJavaScriptFilename.'"></script>';
@@ -297,32 +297,32 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 		$link = tx_mksearch_util_SolrAutocomplete::getAutocompleteActionLinkByConfigurationsAndConfId(
 			$configurations, $this->getConfId()
 		);
-		
+
 		$autocompleteJS = tx_mksearch_util_SolrAutocomplete::getAutocompleteJsByConfigurationsConfIdAndLink(
 			$configurations->get($this->getConfId() . $this->autocompleteConfId), $link
 		);
-		
+
 		$GLOBALS['TSFE']->additionalHeaderData[md5($autocompleteJS)] = $autocompleteJS;
 	}
-	
+
 	/**
 	 * returns the dataset for the current used index
-	 * 
+	 *
 	 * @throws Exception
-	 * @return tx_mksearch_service_internal_Index 
+	 * @return tx_mksearch_service_internal_Index
 	 */
 	protected function getIndex() {
 		$indexUid = $this->getConfigurations()->get($this->getConfId(). 'usedIndex');
 		//let's see if we got a index to use via parameters
 		if(empty($indexUid))
 			$indexUid = $this->getConfigurations()->getParameters()->get('usedIndex');
-			
+
 		$index = tx_mksearch_util_ServiceRegistry::getIntIndexService()->get($indexUid);
-			
+
 		if(!$index->isValid())
 			throw new Exception('Configured search index not found!');
-			
-		return $index;		
+
+		return $index;
 	}
 
 	function getTemplateName() { return 'searchsolr';}

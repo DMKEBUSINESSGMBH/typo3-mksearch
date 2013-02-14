@@ -82,7 +82,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 		$this->index = new Apache_Solr_Service( $host, $port, $path);
 
 		$this->index->setSolrVersion($this->indexModel->getSolrVersion());
-		
+
 		//per default werden alle HTTP Aufrufe per file_get_contents erledigt.
 		//siehe Apache_Solr_Service::getHttpTransport()
 		//damit das funktioniert muss allerdings allow_url_fopen in den PHP
@@ -243,7 +243,8 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 			$ret['response'] = &$response; // wichtig, wird im SolrResponseProcessor benötigt
 
 			if($options['debug']) {
-				$ret['debug'] = get_object_vars($response->debug);
+				if (is_object($response->debug))
+					$ret['debug'] = get_object_vars($response->debug);
 				tx_rnbase_util_Debug::debug(array($options, $ret), 'class.tx_mksearch_service_engine_Solr.php Line: '.__LINE__); // TODO: remove me
 			}
 		}

@@ -113,9 +113,9 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 			);
 		} else {
 			// No hook found - we have to take care for content and abstract by ourselves...
-			$fields = isset($options['CType.'][$rawData['CType'].'.']['indexedFields.']) ?
-						$options['CType.'][$rawData['CType'].'.']['indexedFields.'] :
-						$options['CType.']['_default_.']['indexedFields.'];
+			$fields = isset($options['CType.'][$rawData['CType'].'.']['indexedFields.'])
+				? $options['CType.'][$rawData['CType'].'.']['indexedFields.']
+				: $options['CType.']['_default_.']['indexedFields.'];
 
 			$c = '';
 			foreach ($fields as $f) {
@@ -130,7 +130,6 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 							$flex = t3lib_div::xml2array($rawData['pi_flexform']);
 							if (is_array($flex)) {
 								$flexParsingOptions = $flex['data']['s_parsing']['lDEF'];
-
 								// Replace special parsing characters
 								if ($flexParsingOptions['tableparsing_quote']['vDEF'])
 									$tempContent = str_replace(chr($flexParsingOptions['tableparsing_quote']['vDEF']), '', $tempContent);
@@ -280,26 +279,26 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 
 		return false;
 	}
-	
+
 	/**
 	 * wir brauchen auch noch die enable columns der page
-	 * 
+	 *
 	 * @param tx_rnbase_model_base $model
 	 * @param string $tableName
 	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
-	 * 
+	 *
 	 * @return tx_mksearch_interface_IndexerDocument
 	 */
 	protected function indexEnableColumns(
-		tx_rnbase_model_base $model, $tableName, 
+		tx_rnbase_model_base $model, $tableName,
 		tx_mksearch_interface_IndexerDocument $indexDoc
 	) {
 		$indexDoc = parent::indexEnableColumns($model, $tableName, $indexDoc);
-		
+
 		$page = $this->getPageContent($model->record['pid']);
 		$pageModel = tx_rnbase::makeInstance('tx_rnbase_model_base',$page);
 		$indexDoc = parent::indexEnableColumns($pageModel, 'pages', $indexDoc,'page_');
-		
+
 		return $indexDoc;
 	}
 

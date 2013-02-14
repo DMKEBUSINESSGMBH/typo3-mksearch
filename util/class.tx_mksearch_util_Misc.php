@@ -104,14 +104,14 @@ class tx_mksearch_util_Misc {
 		if(!is_string($text)) return $text;
 
 		return html_entity_decode(
-					preg_replace(
-									array('/(\s+|(<.*?>)+)/', '/<!--.*?-->/'),
-									array(' ', ''),
-									$text
-								),
-								ENT_QUOTES,
-								'UTF-8'
-					);
+			preg_replace(
+				array('/(\s+|(<.*?>)+)/', '/<!--.*?-->/'),
+				array(' ', ''),
+				$text
+			),
+			ENT_QUOTES,
+			'UTF-8'
+		);
 	}
 
 	/**
