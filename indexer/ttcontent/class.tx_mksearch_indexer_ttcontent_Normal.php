@@ -101,17 +101,17 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 		// A hook MUST call both $indexDoc->setContent and
 		// $indexDoc->setAbstract (respect $indexDoc->getMaxAbstractLength())!
 		$hookKey = 'indexer_core_TtContent_prepareData_CType_'.$rawData['CType'];
-		if (isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch'][$hookKey]) and is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch'][$hookKey]))
+		if (isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch'][$hookKey]) and is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch'][$hookKey])){
 			tx_rnbase_util_Misc::callHook(
-											'mksearch',
-											$hookKey,
-											array(
-												'rawData' => &$rawData,
-												'options' => isset($options['CType.'][$rawData['CType'].'.'])?$options['CType'][$rawData['CType'].'.']:array(),
-												'indexDoc' => &$indexDoc,
-											)
-										);
-		else {
+				'mksearch',
+				$hookKey,
+				array(
+					'rawData' => &$rawData,
+					'options' => isset($options['CType.'][$rawData['CType'].'.'])?$options['CType'][$rawData['CType'].'.']:array(),
+					'indexDoc' => &$indexDoc,
+				)
+			);
+		} else {
 			// No hook found - we have to take care for content and abstract by ourselves...
 			$fields = isset($options['CType.'][$rawData['CType'].'.']['indexedFields.']) ?
 						$options['CType.'][$rawData['CType'].'.']['indexedFields.'] :
@@ -138,6 +138,9 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 									$tempContent = str_replace(chr($flexParsingOptions['tableparsing_delimiter']['vDEF']), ' ', $tempContent);
 							}
 						}
+						break;
+					case 'templavoila_pi1':
+						$tempContent = $this->renderTemplavoilaContent($rawData, $indexDoc);
 						break;
 					default:
 						$tempContent = $rawData[$f];
@@ -312,6 +315,50 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 	 */
 	public function getDefaultTSConfig() {
 		return '';
+	}
+	
+	/**
+	 * @param array $rawData
+	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
+	 * 
+	 * @return string
+	 */
+	protected function renderTemplavoilaContent(
+		array $rawData, tx_mksearch_interface_IndexerDocument $indexDoc
+	) {
+		$this->initTsForFrontend($rawData['pid']);
+		$this->adjustIncludeLibsPathForBe();
+			
+		$templavoilaPlugin = tx_rnbase::makeInstance('tx_templavoila_pi1');
+		$templavoilaPlugin->cObj->data = $rawData;
+		$templavoilaPlugin->cObj->currentRecord = 'tt_content:' . $rawData['uid'];
+		
+		return $templavoilaPlugin->renderElement($rawData, 'tt_content');
+	}
+	
+	/**
+	 * 
+	 * @param int $pid
+	 * 
+	 * @return void
+	 */
+	private function initTsForFrontend($pid) {
+		tx_rnbase::load('tx_rnbase_util_Misc');
+		tx_rnbase_util_Misc::prepareTSFE();
+		
+		$GLOBALS['TSFE']->tmpl->start(
+			tx_mksearch_service_indexer_core_Config::getRootLine($pid)
+		);
+	}
+	
+	/**
+	 * @return void
+	 */
+	private function adjustIncludeLibsPathForBe() {
+		$filehash = 
+			md5($GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_templavoila_pi1.']['includeLibs']);
+		$GLOBALS['TSFE']->tmpl->fileCache[$filehash] = 
+			'../../../../' . $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_templavoila_pi1.']['includeLibs'];
 	}
 }
 
