@@ -139,7 +139,7 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 						}
 						break;
 					case 'templavoila_pi1':
-						$tempContent = $this->renderTemplavoilaContent($rawData, $indexDoc);
+						$tempContent = $this->renderTemplavoilaContent($oModel);
 						break;
 					default:
 						$tempContent = $rawData[$f];
@@ -317,22 +317,20 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 	}
 	
 	/**
-	 * @param array $rawData
-	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
+	 * @param tx_rnbase_model_base $oModel
 	 * 
 	 * @return string
 	 */
-	protected function renderTemplavoilaContent(
-		array $rawData, tx_mksearch_interface_IndexerDocument $indexDoc
-	) {
-		$this->initTsForFrontend($rawData['pid']);
+	protected function renderTemplavoilaContent(tx_rnbase_model_base $ttContentModel) {
+		$record = $ttContentModel->getRecord();
+		$this->initTsForFrontend($record['pid']);
 		$this->adjustIncludeLibsPathForBe();
 			
 		$templavoilaPlugin = tx_rnbase::makeInstance('tx_templavoila_pi1');
-		$templavoilaPlugin->cObj->data = $rawData;
-		$templavoilaPlugin->cObj->currentRecord = 'tt_content:' . $rawData['uid'];
+		$templavoilaPlugin->cObj->data = $record;
+		$templavoilaPlugin->cObj->currentRecord = 'tt_content:' . $ttContentModel->getUid();
 		
-		return $templavoilaPlugin->renderElement($rawData, 'tt_content');
+		return $templavoilaPlugin->renderElement($record, 'tt_content');
 	}
 	
 	/**
