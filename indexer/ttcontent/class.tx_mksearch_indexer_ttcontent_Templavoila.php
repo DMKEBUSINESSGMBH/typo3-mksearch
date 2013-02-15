@@ -200,9 +200,11 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
 		tx_rnbase_util_Misc::prepareTSFE();
 
 		tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
-		$GLOBALS['TSFE']->tmpl->start(
-			tx_mksearch_service_indexer_core_Config::getRootLine($pid)
-		);
+		$rootlineByPid = 
+			tx_mksearch_service_indexer_core_Config::getRootLine($pid);
+			
+		$GLOBALS['TSFE']->tmpl->start($rootlineByPid);
+		$GLOBALS['TSFE']->rootLine = $rootlineByPid;
 	}
 	
 	/**
