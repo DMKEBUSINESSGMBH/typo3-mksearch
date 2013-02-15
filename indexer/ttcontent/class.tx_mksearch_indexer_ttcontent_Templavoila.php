@@ -189,6 +189,31 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
 		
 		return $templavoilaPlugin->renderElement($record, 'tt_content');
 	}
+
+	/**
+	 * @param int $pid
+	 * 
+	 * @return void
+	 */
+	private function initTsForFrontend($pid) {
+		tx_rnbase::load('tx_rnbase_util_Misc');
+		tx_rnbase_util_Misc::prepareTSFE();
+
+		tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
+		$GLOBALS['TSFE']->tmpl->start(
+			tx_mksearch_service_indexer_core_Config::getRootLine($pid)
+		);
+	}
+	
+	/**
+	 * @return void
+	 */
+	private function adjustIncludeLibsPathForBe() {
+		$filehash = 
+			md5($GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_templavoila_pi1.']['includeLibs']);
+		$GLOBALS['TSFE']->tmpl->fileCache[$filehash] = 
+			'../../../../' . $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_templavoila_pi1.']['includeLibs'];
+	}
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/ttcontent/class.tx_mksearch_indexer_ttcontent_Templavoila.php'])	{
