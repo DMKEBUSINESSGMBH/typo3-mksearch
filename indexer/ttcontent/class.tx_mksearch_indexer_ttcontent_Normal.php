@@ -44,6 +44,21 @@ tx_rnbase::load('tx_mksearch_util_Misc');
 class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 
 	/**
+	 * @var int
+	 */
+	const USE_INDEXER_CONFIGURATION = 0;
+	
+	/**
+	 * @var int
+	 */
+	const IS_INDEXABLE = 1;
+	
+	/**
+	 * @var int
+	 */
+	const IS_NOT_INDEXABLE = -1;
+	
+	/**
 	 * @see tx_mksearch_indexer_Base::indexData()
 	 */
 	public function indexData(tx_rnbase_model_base $oModel, $tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options) {
@@ -285,11 +300,18 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 	 * @see tx_mksearch_indexer_Base::isIndexableRecord()
 	 */
 	protected function isIndexableRecord(array $sourceRecord, array $options) {
-		if(	$this->isOnIndexablePage($sourceRecord,$options)//is the element in a valid page tree?
-			&& $this->checkCTypes($sourceRecord,$options)//is it's CType valid?
+		if(	
+			!isset($sourceRecord['tx_mksearch_is_indexable']) ||
+			($sourceRecord['tx_mksearch_is_indexable'] == self::USE_INDEXER_CONFIGURATION)
 		) {
-			return true;
+			return 
+				$this->isOnIndexablePage($sourceRecord,$options) && 
+				$this->checkCTypes($sourceRecord,$options);
+		} else {
+			$isIndexable = ($sourceRecord['tx_mksearch_is_indexable'] == self::IS_INDEXABLE);
+			return $isIndexable ? true : false;
 		}
+		
 
 		return false;
 	}

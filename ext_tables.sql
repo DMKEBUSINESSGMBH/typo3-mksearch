@@ -134,3 +134,10 @@ CREATE TABLE tx_mksearch_keywords (
 	PRIMARY KEY (uid),
 	KEY parent (pid)
 );
+
+#
+# Table structure for table 'tt_content'
+#
+CREATE TABLE tt_content (
+	tx_mksearch_is_indexable tinyint(1) unsigned DEFAULT '0' NOT NULL
+);

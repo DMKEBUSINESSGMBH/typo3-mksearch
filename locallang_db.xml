@@ -76,6 +76,10 @@
 			<label index="plugin_common_enable">Enable</label>
 			
 			<label index="plugin.mksearch.tt_content.header_layout">Hidden (but indexed via mksearch)</label>
+			<label index="tt_content.tx_mksearch_is_indexable">indexable through mksearch?</label>
+			<label index="tt_content.tx_mksearch_is_indexable.use_indexer_config">use configuration of indexer</label>
+			<label index="tt_content.tx_mksearch_is_indexable.yes">yes</label>
+			<label index="tt_content.tx_mksearch_is_indexable.no">no</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="general.undef">Undefiniert</label>
@@ -86,6 +90,10 @@
 
 			<label index="plugin_common_enable">Aktivieren</label>
 			<label index="plugin.mksearch.tt_content.header_layout">Verborgen (aber via mksearch indiziert)</label>
+			<label index="tt_content.tx_mksearch_is_indexable">durch mksearch indizierbar?</label>
+			<label index="tt_content.tx_mksearch_is_indexable.use_indexer_config">Konfiguration des Indexer verwenden</label>
+			<label index="tt_content.tx_mksearch_is_indexable.yes">Ja</label>
+			<label index="tt_content.tx_mksearch_is_indexable.no">Nein</label>
 		</languageKey>
 	</data>
 </T3locallang>
