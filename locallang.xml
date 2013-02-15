@@ -10,6 +10,7 @@
 		<languageKey index="default" type="array">
 			<label index="label_search_foundresults">Number of search results found:</label>
 			<label index="label_search_term_was">term was:</label>
+			<label index="label_search_term">term</label>
 			<label index="label_search_searchterm">Search for:</label>
 			<label index="label_search_options">Options:</label>
 			<label index="label_search_options_standard">Standard search:</label>
@@ -45,6 +46,7 @@
 		<languageKey index="de" type="array">
 			<label index="label_search_foundresults">Anzahl der gefundenen Ergebnisse:</label>
 			<label index="label_search_term_was">Suchbegriff war:</label>
+			<label index="label_search_term">Suchbegriff</label>
 			<label index="label_search_searchterm">Suche</label>
 			<label index="label_search_options">Optionen:</label>
 			<label index="label_search_options_standard">Standardsuche:</label>
