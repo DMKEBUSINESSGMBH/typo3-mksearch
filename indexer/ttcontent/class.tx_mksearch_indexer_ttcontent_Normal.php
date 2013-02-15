@@ -139,7 +139,11 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 						}
 						break;
 					case 'templavoila_pi1':
-						$tempContent = $this->renderTemplavoilaContent($oModel);
+						if(method_exists($this, 'renderTemplavoilaContent')){
+							$tempContent = $this->renderTemplavoilaContent($oModel);	
+						} else {
+							$tempContent = $rawData[$f];
+						}
 						break;
 					default:
 						$tempContent = $rawData[$f];
@@ -314,23 +318,6 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 	 */
 	public function getDefaultTSConfig() {
 		return '';
-	}
-	
-	/**
-	 * @param tx_rnbase_model_base $oModel
-	 * 
-	 * @return string
-	 */
-	protected function renderTemplavoilaContent(tx_rnbase_model_base $ttContentModel) {
-		$record = $ttContentModel->getRecord();
-		$this->initTsForFrontend($record['pid']);
-		$this->adjustIncludeLibsPathForBe();
-			
-		$templavoilaPlugin = tx_rnbase::makeInstance('tx_templavoila_pi1');
-		$templavoilaPlugin->cObj->data = $record;
-		$templavoilaPlugin->cObj->currentRecord = 'tt_content:' . $ttContentModel->getUid();
-		
-		return $templavoilaPlugin->renderElement($record, 'tt_content');
 	}
 	
 	/**

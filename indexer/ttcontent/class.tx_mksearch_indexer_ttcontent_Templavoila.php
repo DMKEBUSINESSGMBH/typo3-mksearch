@@ -173,6 +173,23 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
 
 		return $oModel;
 	}
+	
+	/**
+	 * @param tx_rnbase_model_base $oModel
+	 * 
+	 * @return string
+	 */
+	protected function renderTemplavoilaContent(tx_rnbase_model_base $ttContentModel) {
+		$record = $ttContentModel->getRecord();
+		$this->initTsForFrontend($record['pid']);
+		$this->adjustIncludeLibsPathForBe();
+			
+		$templavoilaPlugin = tx_rnbase::makeInstance('tx_templavoila_pi1');
+		$templavoilaPlugin->cObj->data = $record;
+		$templavoilaPlugin->cObj->currentRecord = 'tt_content:' . $ttContentModel->getUid();
+		
+		return $templavoilaPlugin->renderElement($record, 'tt_content');
+	}
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/ttcontent/class.tx_mksearch_indexer_ttcontent_Templavoila.php'])	{
