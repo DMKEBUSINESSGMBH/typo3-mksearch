@@ -48,6 +48,11 @@ tx_rnbase::load('tx_mksearch_util_Indexer');
 abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer {
 
 	/**
+	 * @var tx_rnbase_model_base
+	 */
+	private $modelToIndex;
+	
+	/**
 	 * (non-PHPdoc)
 	 * @see tx_mksearch_interface_Indexer::prepareSearchData()
 	 */
@@ -60,13 +65,13 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 			return null;
 
 		// get a model from the source array
-		$model = $this->createModel($rawData);
+		$this->modelToIndex = $this->createModel($rawData);
 
 		// set base id for specific indexer
-		$indexDoc->setUid($model->getUid());
+		$indexDoc->setUid($this->modelToIndex->getUid());
 
 		// Is the model valid and data indexable?
-		if (!$model->record || !$this->isIndexableRecord($model->record, $options)) {
+		if (!$this->modelToIndex->record || !$this->isIndexableRecord($this->modelToIndex->record, $options)) {
 			if(isset($options['deleteIfNotIndexable']) && $options['deleteIfNotIndexable']) {
 				$indexDoc->setDeleted(true);
 				return $indexDoc;
@@ -74,13 +79,13 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 		}
 
 		//shall we break the indexing and set the doc to deleted?
-		if($this->hasDocToBeDeleted($model,$indexDoc,$options)){
+		if($this->hasDocToBeDeleted($this->modelToIndex,$indexDoc,$options)){
 			$indexDoc->setDeleted(true);
 			return $indexDoc;
 		}
 
-		$indexDoc = $this->indexEnableColumns($model, $tableName, $indexDoc);
-		$indexDoc = $this->indexData($model, $tableName, $rawData, $indexDoc, $options);
+		$indexDoc = $this->indexEnableColumns($this->modelToIndex, $tableName, $indexDoc);
+		$indexDoc = $this->indexData($this->modelToIndex, $tableName, $rawData, $indexDoc, $options);
 
 		//done
 		return $indexDoc;
@@ -377,6 +382,13 @@ CONFIG;
 	 * @param array $options
 	 */
 	protected abstract function indexData(tx_rnbase_model_base $model, $tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options);
+	
+	/**
+	 * @return tx_rnbase_model_base
+	 */
+	protected function getModelToIndex() {
+		return $this->modelToIndex;
+	}
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_Base.php'])	{

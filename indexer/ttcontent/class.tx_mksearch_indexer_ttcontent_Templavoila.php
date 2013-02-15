@@ -175,11 +175,10 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
 	}
 	
 	/**
-	 * @param tx_rnbase_model_base $oModel
-	 * 
 	 * @return string
 	 */
-	protected function renderTemplavoilaContent(tx_rnbase_model_base $ttContentModel) {
+	protected function getTemplavoilaElementContent() {
+		$ttContentModel = $this->getModelToIndex();
 		$record = $ttContentModel->getRecord();
 		$this->initTsForFrontend($record['pid']);
 		$this->adjustIncludeLibsPathForBe();

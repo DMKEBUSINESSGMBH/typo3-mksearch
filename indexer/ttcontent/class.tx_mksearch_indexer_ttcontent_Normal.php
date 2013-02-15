@@ -118,37 +118,8 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 				: $options['CType.']['_default_.']['indexedFields.'];
 
 			$c = '';
-			foreach ($fields as $f) {
-				// Special dealing with diffent CTypes:
-				switch ($rawData['CType']) {
-					case 'table':
-						$tempContent = $rawData[$f];
-						// explode bodytext containing table cells separated
-						// by the character defined in flexform
-						if ($f == 'bodytext') {
-							// Get table parsing options from flexform
-							$flex = t3lib_div::xml2array($rawData['pi_flexform']);
-							if (is_array($flex)) {
-								$flexParsingOptions = $flex['data']['s_parsing']['lDEF'];
-								// Replace special parsing characters
-								if ($flexParsingOptions['tableparsing_quote']['vDEF'])
-									$tempContent = str_replace(chr($flexParsingOptions['tableparsing_quote']['vDEF']), '', $tempContent);
-								if ($flexParsingOptions['tableparsing_delimiter']['vDEF'])
-									$tempContent = str_replace(chr($flexParsingOptions['tableparsing_delimiter']['vDEF']), ' ', $tempContent);
-							}
-						}
-						break;
-					case 'templavoila_pi1':
-						if(method_exists($this, 'renderTemplavoilaContent')){
-							$tempContent = $this->renderTemplavoilaContent($oModel);	
-						} else {
-							$tempContent = $rawData[$f];
-						}
-						break;
-					default:
-						$tempContent = $rawData[$f];
-				}
-				$c .= $tempContent . ' ';
+			foreach ($fields as $field) {
+				$c .= $this->getContentByFieldAndCType($field, $rawData) . ' ';
 			}
 
 			// Decode HTML
@@ -165,6 +136,45 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 			$indexDoc->setAbstract(empty($c) ? $title : $c, $indexDoc->getMaxAbstractLength());
 		}
 		return $indexDoc;
+	}
+	
+	/**
+	 * @param mixed $field
+	 * @param array $rawData
+	 * 
+	 * @return string
+	 */
+	protected function getContentByFieldAndCType($field, array $rawData) {
+		switch ($rawData['CType']) {
+			case 'table':
+				$tempContent = $rawData[$field];
+				// explode bodytext containing table cells separated
+				// by the character defined in flexform
+				if ($field == 'bodytext') {
+					// Get table parsing options from flexform
+					$flex = t3lib_div::xml2array($rawData['pi_flexform']);
+					if (is_array($flex)) {
+						$flexParsingOptions = $flex['data']['s_parsing']['lDEF'];
+						// Replace special parsing characters
+						if ($flexParsingOptions['tableparsing_quote']['vDEF'])
+							$tempContent = str_replace(chr($flexParsingOptions['tableparsing_quote']['vDEF']), '', $tempContent);
+						if ($flexParsingOptions['tableparsing_delimiter']['vDEF'])
+							$tempContent = str_replace(chr($flexParsingOptions['tableparsing_delimiter']['vDEF']), ' ', $tempContent);
+					}
+				}
+				break;
+			case 'templavoila_pi1':
+				if(method_exists($this, 'getTemplavoilaElementContent')){
+					$tempContent = $this->getTemplavoilaElementContent();	
+				} else {
+					$tempContent = $rawData[$field];
+				}
+				break;
+			default:
+				$tempContent = $rawData[$field];
+		}
+		
+		return $tempContent;
 	}
 
 	/**
