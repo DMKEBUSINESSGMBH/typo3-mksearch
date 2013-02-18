@@ -213,8 +213,16 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
 	private function adjustIncludeLibsPathForBe() {
 		$filehash = 
 			md5($GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_templavoila_pi1.']['includeLibs']);
+			
+		if (defined('TYPO3_cliMode')) {//indexing via Scheduler
+			$relativePathPrefixFromExecutionDir = ''; //script executed in webroot
+		} else {//indexing in BE
+			$relativePathPrefixFromExecutionDir = '../../../../'; //script executed in /typo3/sysext/cms/tslib
+		}
+		
 		$GLOBALS['TSFE']->tmpl->fileCache[$filehash] = 
-			'../../../../' . $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_templavoila_pi1.']['includeLibs'];
+			$relativePathPrefixFromExecutionDir . 
+			$GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_templavoila_pi1.']['includeLibs'];
 	}
 }
 
