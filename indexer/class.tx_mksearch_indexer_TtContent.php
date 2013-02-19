@@ -135,7 +135,15 @@ CType {
 # cTypes of content elements to be excluded from indexing.
 # Obviously, the respective "indexedFields" option is ignored in this case.
 #includeCTypes = list,header,text,textpic,image,text,bullets,table,html
-ignoreCTypes = search,mailform,login,list,div
+ignoreCTypes {
+	0 = search
+	1 = mailform
+	2 = login
+	3 = list
+    4 = powermail_pi1
+    5 = templavoila_pi1
+    6 = html
+}
 
 # \$sys_language_uid of the desired language
 # lang = 1
