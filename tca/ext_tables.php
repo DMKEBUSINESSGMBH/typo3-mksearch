@@ -7,6 +7,8 @@ require_once(t3lib_extMgm::extPath($_EXTKEY).'tca/hooks/ext_tables.php');
 $_EXT_PATH = t3lib_extMgm::extPath($_EXTKEY);
 $_EXT_RELPATH = t3lib_extMgm::extRelPath($_EXTKEY);
 
+global $TCA;
+
 $TCA['tx_mksearch_indices'] = array (
 	'ctrl' => array (
 		'title'     => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices',
