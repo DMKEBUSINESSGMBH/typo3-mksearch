@@ -197,7 +197,12 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
 	 */
 	private function initTsForFrontend($pid) {
 		tx_rnbase::load('tx_rnbase_util_Misc');
-		tx_rnbase_util_Misc::prepareTSFE();
+		tx_rnbase_util_Misc::prepareTSFE(
+			array(
+				'force' => true,
+				'pid'	=> $pid
+			)
+		);
 
 		tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
 		$rootlineByPid = 
@@ -208,21 +213,56 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
 	}
 	
 	/**
+	 * Die Indizierung wird von verschiedenen Pfaden aus aufgerufen. (CLI, BE Modul, Scheduler) 
+	 * Im FE ist der Pfad immer tslib worauf alle includeLibs Pfade ausgerichtet sind. 
+	 * Wir haben aber nicht den immer gleichen Pfad beim
+	 * TV rendering im BE und daher müssen wir die relativen includeLibs Pfade 
+	 * um einen Prefix ergänzen damit das inkludieren fkt.
+	 * 
 	 * @return void
 	 */
 	private function adjustIncludeLibsPathForBe() {
-		$filehash = 
-			md5($GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_templavoila_pi1.']['includeLibs']);
+		foreach ($GLOBALS['TSFE']->tmpl->setup['plugin.'] as $pluginConfigPath => $pluginConfig) {
+			if(
+				!is_array($pluginConfig) || 
+				!isset($pluginConfig['includeLibs']) ||
+				//solche pfade werden später von TYPO3 korrekt aufgelöst
+				strpos($pluginConfig['includeLibs'],'EXT:') !== false
+			) {
+				continue;
+			}
 			
-		if (defined('TYPO3_cliMode')) {//indexing via Scheduler
-			$relativePathPrefixFromExecutionDir = ''; //script executed in webroot
-		} else {//indexing in BE
-			$relativePathPrefixFromExecutionDir = '../../../../'; //script executed in /typo3/sysext/cms/tslib
+			//vom fileCache werden Dateien zu erst abgerufen
+			$filehash = md5($pluginConfig['includeLibs']);
+			$GLOBALS['TSFE']->tmpl->fileCache[$filehash] = 
+				$this->getRelativePathPrefixFromCurrentExecutionDirToWebroot() . $pluginConfig['includeLibs'];
+		}
+	}
+	
+	/**
+	 * @return string
+	 */
+	private function getRelativePathPrefixFromCurrentExecutionDirToWebroot() {
+		//indexing via Scheduler in CLI
+		//script executed in webroot
+		if (defined('TYPO3_cliMode')) 
+		{
+			$relativePathPrefixFromExecutionDir = ''; 
+		}
+		//indexing via Scheduler in BE
+		//script executed in /typo3
+		elseif(strpos(PATH_thisScript,'typo3/mod.php') !== false)
+		{
+			$relativePathPrefixFromExecutionDir = '../'; 
+		}
+		//indexing via mksearch BE module
+		//script executed in /typo3/sysext/cms/tslib 
+		else 
+		{
+			$relativePathPrefixFromExecutionDir = '../../../../'; 
 		}
 		
-		$GLOBALS['TSFE']->tmpl->fileCache[$filehash] = 
-			$relativePathPrefixFromExecutionDir . 
-			$GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_templavoila_pi1.']['includeLibs'];
+		return $relativePathPrefixFromExecutionDir;
 	}
 }
 
