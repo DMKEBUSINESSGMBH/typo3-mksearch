@@ -218,7 +218,7 @@
 					generateWordParts="1" generateNumberParts="1" catenateWords="0"
 					catenateNumbers="0" catenateAll="0" splitOnCaseChange="1" />
 				<filter class="solr.LowerCaseFilterFactory" />
-				<filter class="solr.SnowballPorterFilterFactory" language="German" />
+<!-- 				<filter class="solr.SnowballPorterFilterFactory" language="German" /> -->
 			</analyzer>
 		</fieldType>
 
