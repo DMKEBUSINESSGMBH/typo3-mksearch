@@ -45,4 +45,4 @@ if (TYPO3_MODE == 'BE') {
 }
 
 //TCA registrieren
-require_once(t3lib_extMgm::extPath($_EXTKEY).'tca/ext_tables.php');
+require(t3lib_extMgm::extPath($_EXTKEY).'tca/ext_tables.php');
