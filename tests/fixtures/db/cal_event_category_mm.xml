@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dataset>
+	<tx_cal_event_category_mm>
+		<uid_local>1</uid_local>
+		<uid_foreign>1</uid_foreign>
+	</tx_cal_event_category_mm>
+	<tx_cal_event_category_mm>
+		<uid_local>1</uid_local>
+		<uid_foreign>2</uid_foreign>
+	</tx_cal_event_category_mm>
+	<!-- sollte nicht gefunden werden da category hidden-->
+	<tx_cal_event_category_mm>
+		<uid_local>1</uid_local>
+		<uid_foreign>3</uid_foreign>
+	</tx_cal_event_category_mm>
+	<!-- sollte nicht gefunden werden da anderer event-->
+	<tx_cal_event_category_mm>
+		<uid_local>2</uid_local>
+		<uid_foreign>4</uid_foreign>
+	</tx_cal_event_category_mm>
+</dataset>

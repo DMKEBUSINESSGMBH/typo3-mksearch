@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dataset>
+	<tx_cal_category>
+		<uid>1</uid>
+		<title>First Category</title>
+	</tx_cal_category>
+	<tx_cal_category>
+		<uid>2</uid>
+		<title>Second Category</title>
+	</tx_cal_category>
+	<tx_cal_category>
+		<uid>3</uid>
+		<title>Third Category</title>
+		<hidden>1</hidden>
+	</tx_cal_category>
+	<tx_cal_category>
+		<uid>4</uid>
+		<title>Fourth Category</title>
+	</tx_cal_category>
+</dataset>

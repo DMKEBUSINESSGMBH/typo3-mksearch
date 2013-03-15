@@ -646,6 +646,11 @@
 			-(starttime_dt:[NOW TO *] OR endtime_dt:[* TO NOW] OR
 			page_starttime_dt:[NOW TO *] OR page_endtime_dt:[* TO NOW])
 		</str>
+		<!-- für cal
+			contentType:event AND (
+				start_date_dt:[NOW TO *] OR end_date_dt:[* TO NOW]
+			)
+		 -->
 	</lst>
     <!-- In addition to defaults, "appends" params can be specified
          to identify values which should be appended to the list of

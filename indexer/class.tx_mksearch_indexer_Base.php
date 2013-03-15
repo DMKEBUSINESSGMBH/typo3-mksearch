@@ -212,7 +212,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 		return $indexDoc;
 	}
 
-	private function enhanceRecordIndexMappingForEnableColumn(
+	protected function enhanceRecordIndexMappingForEnableColumn(
 		$recordIndexMapping, $typo3InternalName, $enableColumnName, $indexDocFieldsPrefix
 	) {
 		$fieldTypeMapping = array(
@@ -228,7 +228,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 		return $recordIndexMapping;
 	}
 
-	private function convertEnableColumnValue(
+	protected function convertEnableColumnValue(
 		$model, $typo3InternalName, $enableColumnName
 	) {
 		switch ($typo3InternalName) {
@@ -249,7 +249,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 		return $model;
 	}
 
-	private function convertTimestampToDateTime($timestamp) {
+	protected function convertTimestampToDateTime($timestamp) {
 		$dateTime = 0;
 		if(!empty($timestamp))
 			$dateTime = tx_mksearch_util_Indexer::getInstance()->getDateTime('@' . $timestamp);
@@ -260,7 +260,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 	/**
 	 * @see tx_mksearch_service_indexer_core_Config::getEffectiveContentElementFeGroups()
 	 */
-	private function getEffectiveFeGroups($fegroups, $pid) {
+	protected function getEffectiveFeGroups($fegroups, $pid) {
 		return tx_mksearch_service_indexer_core_Config::getEffectiveContentElementFeGroups(
 				$pid,
 				t3lib_div::trimExplode(',', $fegroups, true)

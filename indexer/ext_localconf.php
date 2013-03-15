@@ -95,6 +95,22 @@ if (t3lib_extMgm::isLoaded('efaq')) {
 	tx_mksearch_util_Config::registerIndexer('efaq', 'faq', 'tx_mksearch_indexer_Efaq', array('tx_efaq_faqs'));
 }
 
+// cal Extension
+if (t3lib_extMgm::isLoaded('cal')) {
+	tx_mksearch_util_Config::registerIndexer(
+		'cal',
+		'event',
+		'tx_mksearch_indexer_seminars_Cal',
+		array(
+			//main table
+			'tx_cal_event',
+			//tables with related data
+			'tx_cal_category',
+			'tx_cal_calendar',
+		)
+	);
+}
+
 
 // Configure core page indexer service
 $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['indexer']['config']['core']['page']['indexedFields'] = array('subtitle', 'url', 'keywords', 'description', 'author', /*'author_email',*/ 'nav_title', 'alias', );

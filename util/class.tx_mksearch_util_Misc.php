@@ -103,7 +103,7 @@ class tx_mksearch_util_Misc {
 	static function html2plain($text) {
 		if(!is_string($text)) return $text;
 
-		return html_entity_decode(
+		return trim(html_entity_decode(
 			preg_replace(
 				array('/(\s+|(<.*?>)+)/', '/<!--.*?-->/'),
 				array(' ', ''),
@@ -111,7 +111,7 @@ class tx_mksearch_util_Misc {
 			),
 			ENT_QUOTES,
 			'UTF-8'
-		);
+		));
 	}
 
 	/**
