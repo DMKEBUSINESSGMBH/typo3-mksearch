@@ -226,7 +226,7 @@ class tx_mksearch_tests_indexer_Base_DB_testcase extends tx_phpunit_database_tes
 		
 		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options)->getData();
 		
-		$this->assertEquals(' test value 1 ',$aIndexDoc['test_field_1_s']->getValue(),'Es wurde nicht das erste Feld richtig gesetzt!');
+		$this->assertEquals('test value 1',$aIndexDoc['test_field_1_s']->getValue(),'Es wurde nicht das erste Feld richtig gesetzt!');
 		$this->assertEquals('test value 2',$aIndexDoc['test_field_2_s']->getValue(),'Es wurde nicht das zweite Feld richtig gesetzt!');
 		//with keep html
 		$this->assertEquals('<a href="http://www.test.de">test value 1</a>',$aIndexDoc['keepHtml_test_field_1_s']->getValue(),'Es wurde nicht das erste Feld richtig gesetzt!');

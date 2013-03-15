@@ -62,7 +62,7 @@ class tx_mksearch_tests_indexer_TtNewsNews_testcase extends tx_phpunit_testcase 
 		$this->assertEquals('some test', $data['bodytext_s']->getValue());
 		$this->assertEquals(123, $data['uid_i']->getValue());
 		//merging into content worked?
-		$this->assertEquals('123 some test ', $data['content']->getValue());
+		$this->assertEquals('123 some test', $data['content']->getValue());
 		//indexing of standard fields worked?
 		$this->assertEquals('some test', $data['news_text_s']->getValue(),'news_text_s falsch');
 		$this->assertEquals('some test', $data['news_text_t']->getValue(),'news_text_t falsch');
@@ -87,13 +87,13 @@ class tx_mksearch_tests_indexer_TtNewsNews_testcase extends tx_phpunit_testcase 
 		$data = $indexDoc->getData();
 		$this->assertEquals('2010-01-30T15:00:00Z', $data['datetime_dt']->getValue(),'datetime falsch');
 		//indexing of extra fields worked?
-		$this->assertEquals('some test  with html markup ', $data['bodytext_s']->getValue(),'bodytext falsch');
+		$this->assertEquals('some test  with html markup', $data['bodytext_s']->getValue(),'bodytext falsch');
 		$this->assertEquals(123, $data['uid_i']->getValue());
 		//merging into content worked?
-		$this->assertEquals('123 some test  with html markup  ', $data['content']->getValue(),'content falsch');
+		$this->assertEquals('123 some test  with html markup', $data['content']->getValue(),'content falsch');
 		//indexing of standard fields worked?
-		$this->assertEquals('some test  with html markup ', $data['news_text_s']->getValue(),'news_text_s falsch');
-		$this->assertEquals('some test  with html markup ', $data['news_text_t']->getValue(),'news_text_t falsch');
+		$this->assertEquals('some test  with html markup', $data['news_text_s']->getValue(),'news_text_s falsch');
+		$this->assertEquals('some test  with html markup', $data['news_text_t']->getValue(),'news_text_t falsch');
 	}
 	
 	function test_prepareSearchDataWithHtmlMarkupInBodytextAndkeepHtmlOption() {
@@ -149,7 +149,7 @@ class tx_mksearch_tests_indexer_TtNewsNews_testcase extends tx_phpunit_testcase 
 		$this->assertEquals(false, $indexDoc->getDeleted());
 		$data = $indexDoc->getData();
 		//merging into content worked?
-		$this->assertEquals('123 some test ', $data['content']->getValue());
+		$this->assertEquals('123 some test', $data['content']->getValue());
 		//no extra fields added?
 		$this->assertFalse(array_key_exists('uid_i', $data),'uid_i Field is existent!');
 		$this->assertFalse(array_key_exists('uid', $data),'uid Field is existent!');
@@ -172,8 +172,8 @@ class tx_mksearch_tests_indexer_TtNewsNews_testcase extends tx_phpunit_testcase 
 		$data = $indexDoc->getData();
 		$this->assertEquals('2010-01-30T15:00:00Z', $data['datetime_dt']->getValue(),'datetime falsch');
 		//indexing of standard fields worked?
-		$this->assertEquals('some test  with html markup ', $data['news_text_s']->getValue(),'news_text_s falsch');
-		$this->assertEquals('some test  with html markup ', $data['news_text_t']->getValue(),'news_text_t falsch');
+		$this->assertEquals('some test  with html markup', $data['news_text_s']->getValue(),'news_text_s falsch');
+		$this->assertEquals('some test  with html markup', $data['news_text_t']->getValue(),'news_text_t falsch');
 		//merging into content ignored as nothing?
 		$this->assertTrue(empty($data['content']),'content falsch');
 	}
