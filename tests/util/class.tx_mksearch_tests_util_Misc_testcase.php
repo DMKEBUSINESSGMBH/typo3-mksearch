@@ -53,7 +53,7 @@ class tx_mksearch_tests_util_Misc_testcase extends tx_phpunit_testcase {
 					),
 				__LINE__ => array(
 						'<br>Hallo</br> <i>Welt</i>',
-						' Hallo   Welt',
+						'Hallo   Welt',
 					),
 			) as $key => $row) {
 			$key = 'Line:'.$key;
