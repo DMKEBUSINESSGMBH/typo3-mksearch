@@ -100,7 +100,7 @@ if (t3lib_extMgm::isLoaded('cal')) {
 	tx_mksearch_util_Config::registerIndexer(
 		'cal',
 		'event',
-		'tx_mksearch_indexer_seminars_Cal',
+		'tx_mksearch_indexer_Cal',
 		array(
 			//main table
 			'tx_cal_event',
