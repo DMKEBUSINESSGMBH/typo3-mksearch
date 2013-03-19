@@ -589,7 +589,7 @@ lib.mksearch.extrainfo {
 	}
 	
 	# Content type "cal.event"
-	cal.event < .default
+	cal.event =< lib.mksearch.extrainfo.default
 	cal.event{
 		template = EXT:mksearch/templates/searchResultCal.html
 		hit {
