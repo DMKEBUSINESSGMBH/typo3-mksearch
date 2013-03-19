@@ -587,6 +587,22 @@ lib.mksearch.extrainfo {
 			}
 		}
 	}
+	
+	# Content type "cal.event"
+	cal.event < .default
+	cal.event{
+		template = EXT:mksearch/templates/searchResultCal.html
+		hit {
+			links.show {
+				### pid for the single view of a seminar
+				pid = 0
+				qualifier = tx_cal_controller
+				paramName = uid
+				useKeepVars = 1
+				useKeepVars.add = type=tx_cal_phpicalendar
+			}
+		}
+	}
 }
 
 
