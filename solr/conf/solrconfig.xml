@@ -714,10 +714,8 @@
 			-(starttime_dt:[NOW TO *] OR endtime_dt:[* TO NOW] OR
 			page_starttime_dt:[NOW TO *] OR page_endtime_dt:[* TO NOW])
 		</str>
-		<!-- für cal
-			contentType:event AND (
-				start_date_dt:[NOW TO *] OR end_date_dt:[* TO NOW]
-			)
+		<!-- für Events, die nicht in der Vergangenheit liegen
+			contentType:event AND end_date_dt:[NOW TO *]
 		 -->
 	</lst>
     <!-- In addition to defaults, "appends" params can be specified
