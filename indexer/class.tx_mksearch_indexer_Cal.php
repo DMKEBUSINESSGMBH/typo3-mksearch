@@ -229,7 +229,7 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base {
 	 */
 	private function getCalendarMapping() {
 		return array(
-			'title' => 'title'
+			'title' => 'title_s'
 		);
 	}
 	

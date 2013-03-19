@@ -186,7 +186,7 @@ class tx_mksearch_tests_indexer_Cal_testcase extends Tx_Phpunit_Testcase {
 			$this->getIndexDocFieldArrayByCalRecord($calEventRecord, $indexer);
 	
 		$this->assertEquals(
-			'First Calendar',$indexDocFieldArray['calendar_title']->getValue(),
+			'First Calendar',$indexDocFieldArray['calendar_title_s']->getValue(),
 			'calendar_title falsch indiziert!'
 		);
 	}

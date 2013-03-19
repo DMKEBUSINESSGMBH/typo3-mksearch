@@ -598,6 +598,14 @@
 			error. alternately, change the type="ignored" to some other type e.g. "text" 
 			if you want unknown fields indexed and/or stored by default -->
 		<!--dynamicField name="*" type="ignored" multiValued="true" / -->
+		
+		<!-- Cal Event -->
+   		<!-- <copyField source="organizer_s" dest="text"/>
+   		<copyField source="organizer_link_s" dest="text"/>
+   		<copyField source="location_s" dest="text"/>
+   		<copyField source="description_s" dest="text"/>
+   		<copyField source="calendar_title_s" dest="text"/>
+   		<copyField source="category_title_ms" dest="text"/> -->
 
 	</fields>
 
