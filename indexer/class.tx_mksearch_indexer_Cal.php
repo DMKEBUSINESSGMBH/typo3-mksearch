@@ -37,6 +37,8 @@ tx_rnbase::load('tx_mksearch_util_Misc');
  * @package TYPO3
  * @subpackage tx_mksearch
  * @author Hannes Bochmann
+ * 
+ * @todo Bilder indizieren; alles übrige wie Organisator indizieren
  */
 class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base {
 
