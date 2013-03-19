@@ -711,8 +711,10 @@
      </lst>
      <lst name="appends">
 		<str name="fq">
-			-(starttime_dt:[NOW TO *] OR endtime_dt:[* TO NOW] OR
-			page_starttime_dt:[NOW TO *] OR page_endtime_dt:[* TO NOW])
+			-(
+				starttime_dt:[NOW TO *] OR endtime_dt:[* TO NOW] OR
+				page_starttime_dt:[NOW TO *] OR page_endtime_dt:[* TO NOW]
+			)
 		</str>
 		<!-- für Events, die nicht in der Vergangenheit liegen
 			contentType:event AND end_date_dt:[NOW TO *]
