@@ -268,8 +268,6 @@ plugin.tx_mksearch {
 			tt_address.address < plugin.tx_mksearch.search.default
 			tt_address.address {
 				links.show.pid = 0
-				email_s.typolink = 1
-				email_s.typolink.parameter.field = email_s
 			}
 		}
 		
