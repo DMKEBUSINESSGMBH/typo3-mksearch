@@ -583,6 +583,7 @@ lib.mksearch.extrainfo {
 			
 			initFields{
 				0 = file_name_s
+				1 = file_relpath_s
 			}
 		}
 	}
