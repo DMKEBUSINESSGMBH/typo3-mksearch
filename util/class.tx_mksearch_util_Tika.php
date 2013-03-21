@@ -89,7 +89,7 @@ class tx_mksearch_util_Tika {
 	 * @return void
 	 */
 	private function resetLocaleType() {
-		setlocale(LC_CTYPE, locale_get_default());
+		setlocale(LC_CTYPE, '');
 	}
 
 	/**
@@ -197,7 +197,8 @@ class tx_mksearch_util_Tika {
 		if(!@is_readable($absFile)) {
 			throw new Exception('File is not readable: '.$absFile);
 		}
-		return $absFile;
+		//ohne UTF-8 kann JAVA nicht mit mit Umlauten im Dateiname umgehen
+		return utf8_encode($absFile);
 	}
 
 }
