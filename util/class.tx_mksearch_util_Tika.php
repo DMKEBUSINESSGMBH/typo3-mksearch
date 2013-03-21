@@ -31,7 +31,6 @@ class tx_mksearch_util_Tika {
 	private $tikaJar = null;
 	private $tikaAvailable = -1;
 	private $tikaLocaleType;
-	private $localeTypeBackup;
 
 	/**
 	 * @return tx_mksearch_util_Tika
@@ -82,8 +81,6 @@ class tx_mksearch_util_Tika {
 	 */
 	private function setLocaleType() {
 		if($this->tikaLocaleType){
-			//@see http://www.php.net/manual/en/function.setlocale.php#106811
-			$this->localeTypeBackup = setlocale(LC_CTYPE, 0);
 			setlocale(LC_CTYPE, $this->tikaLocaleType);
 		}
 	}
@@ -92,9 +89,7 @@ class tx_mksearch_util_Tika {
 	 * @return void
 	 */
 	private function resetLocaleType() {
-		if($this->localeTypeBackup) {
-			setlocale(LC_CTYPE, $this->localeTypeBackup);
-		}
+		setlocale(LC_CTYPE, locale_get_default());
 	}
 
 	/**
