@@ -28,27 +28,52 @@ tx_rnbase::load('tx_mksearch_util_Tika');
 
 class tx_mksearch_tests_util_Tika_testcase extends tx_phpunit_testcase {
 
-	public function test_getContent() {
-		if(!tx_mksearch_util_Tika::getInstance()->isAvailable())
+	protected function setUp() {
+		if(!tx_mksearch_util_Tika::getInstance()->isAvailable()){
 			$this->markTestSkipped('Tika is not available!');
-		
-		$content = tx_mksearch_util_Tika::getInstance()->extractContent('EXT:mksearch/doc/wizard_form.html');
+		}
+	}
+	
+	/**
+	 * @group integration
+	 */
+	public function test_getContent() {
+		$content = tx_mksearch_util_Tika::getInstance()->extractContent(
+			'EXT:mksearch/doc/wizard_form.html'
+		);
 		$this->assertTrue(strlen($content) > 100);
 	}
+	
+	/**
+	 * @group integration
+	 */
+	public function test_getContentFromFileWithUmlautsInName() {
+		$this->markTestIncomplete('Noch keine Zeit den Bug zu fixen');
+		$content = tx_mksearch_util_Tika::getInstance()->extractContent(
+			'EXT:mksearch/tests/fixtures/txt/ä.txt'
+		);
+		$this->assertEquals(
+			'test text',trim($content), 'content falsch extrahiert'
+		);
+	}
 
+	/**
+	 * @group integration
+	 */
 	public function test_getLanguage() {
-		if(!tx_mksearch_util_Tika::getInstance()->isAvailable())
-			$this->markTestSkipped('Tika is not available!');
-		
-		$lang = tx_mksearch_util_Tika::getInstance()->extractLanguage('EXT:mksearch/doc/wizard_form.html');
+		$lang = tx_mksearch_util_Tika::getInstance()->extractLanguage(
+			'EXT:mksearch/doc/wizard_form.html'
+		);
 		$this->assertEquals('en', $lang);
 	}
 
+	/**
+	 * @group integration
+	 */
 	public function test_getMeta() {
-		if(!tx_mksearch_util_Tika::getInstance()->isAvailable())
-			$this->markTestSkipped('Tika is not available!');
-
-		$meta = tx_mksearch_util_Tika::getInstance()->extractMetaData('EXT:mksearch/doc/wizard_form.html');
+		$meta = tx_mksearch_util_Tika::getInstance()->extractMetaData(
+			'EXT:mksearch/doc/wizard_form.html'
+		);
 		$this->assertTrue(is_array($meta));
 	}
 
