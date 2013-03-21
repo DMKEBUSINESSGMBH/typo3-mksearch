@@ -117,7 +117,8 @@ class tx_mksearch_util_Tika {
 			
 		$this->resetLocaleType();
 		
-		$ret = shell_exec($tikaCommand);
+		$ret = shell_exec($tikaCommand . ' 2> /srv/www/misc/stderr.txt');
+		exit;
 		return $ret;
 	}
 
@@ -197,8 +198,8 @@ class tx_mksearch_util_Tika {
 		if(!@is_readable($absFile)) {
 			throw new Exception('File is not readable: '.$absFile);
 		}
-		//ohne UTF-8 kann JAVA nicht mit mit Umlauten im Dateiname umgehen
-		return utf8_encode($absFile);
+
+		return $absFile;
 	}
 
 }
