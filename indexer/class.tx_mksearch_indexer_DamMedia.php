@@ -129,7 +129,18 @@ class tx_mksearch_indexer_DamMedia implements tx_mksearch_interface_Indexer {
 		$tikaFields = is_array($tikaFields) ? $tikaFields : array();
 		$contentField = $tikaFields['content'];
 		if($contentField) {
-			$content = tx_mksearch_util_Tika::getInstance()->extractContent($file);
+			$tikaCommand = '';
+			if(!$content = tx_mksearch_util_Tika::getInstance()->extractContent($file, $tikaCommand)) {
+				tx_rnbase_util_Logger::warn(
+					'Apache Tika returned empty content!', 
+					'mksearch',
+					array(
+						'file' 			=> $file,
+						'tikaCommand' 	=> $tikaCommand
+					)
+				);
+			}
+			
 			$indexDoc->addField($contentField, $content);
 			if(empty($sourceRecord['abstract']))
 				$indexDoc->setAbstract($content, $indexDoc->getMaxAbstractLength());

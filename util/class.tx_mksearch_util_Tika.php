@@ -101,7 +101,7 @@ class tx_mksearch_util_Tika {
 	 * @return string
 	 * @throws Exception
 	 */
-	public function extractContent($file) {
+	public function extractContent($file, &$tikaCommand = null) {
 		if(!$this->isAvailable())
 			throw new Exception('Tika not available!');
 
