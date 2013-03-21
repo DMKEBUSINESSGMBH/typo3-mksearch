@@ -30,6 +30,8 @@ class tx_mksearch_util_Tika {
 	private static $instance = null;
 	private $tikaJar = null;
 	private $tikaAvailable = -1;
+	private $tikaLocaleType;
+	private $localeTypeBackup;
 
 	/**
 	 * @return tx_mksearch_util_Tika
@@ -41,6 +43,7 @@ class tx_mksearch_util_Tika {
 	}
 	private function __construct($tikaJar) {
 		$this->setTikaJar($tikaJar);
+		$this->tikaLocaleType = tx_rnbase_configurations::getExtensionCfgValue('mksearch', 'tikaLocaleType');
 	}
 	/**
 	 * Whether or not Tika is available on server.
@@ -67,6 +70,32 @@ class tx_mksearch_util_Tika {
 	private function setTikaJar($tikaJar) {
 		$this->tikaJar = $tikaJar;
 	}
+	
+	/**
+	 * Umlaute in Dateinamen werden durch escapeshellarg entfernt
+	 * außer es ist der korrekte LC_CTYPE gesetzt. Sollte auf de_DE.UTF-8
+	 * stehen 
+	 * 
+	 * @see http://www.php.net/manual/de/function.escapeshellarg.php#99213
+	 * 
+	 * @return void
+	 */
+	private function setLocaleType() {
+		if($this->tikaLocaleType){
+			//@see http://www.php.net/manual/en/function.setlocale.php#106811
+			$this->localeTypeBackup = setlocale(LC_CTYPE, 0);
+			setlocale(LC_CTYPE, $this->tikaLocaleType);
+		}
+	}
+	
+	/**
+	 * @return void
+	 */
+	private function resetLocaleType() {
+		if($this->localeTypeBackup) {
+			setlocale(LC_CTYPE, $this->localeTypeBackup);
+		}
+	}
 
 	/**
 	 * Extracs text from a file using Apache Tika
@@ -83,10 +112,16 @@ class tx_mksearch_util_Tika {
 
 		$ret = '';
 		$absFile = self::checkFile($file);
+		
+		$this->setLocaleType();
+		
 		$tikaCommand = t3lib_exec::getCommand('java')
 			. ' -Dfile.encoding=UTF8' // forces UTF8 output
 			. ' -jar ' . escapeshellarg($this->tikaJar)
 			. ' -t ' . escapeshellarg($absFile);
+			
+		$this->resetLocaleType();
+		
 		$ret = shell_exec($tikaCommand);
 		return $ret;
 	}
@@ -106,10 +141,16 @@ class tx_mksearch_util_Tika {
 
 		$ret = '';
 		$absFile = self::checkFile($file);
+		
+		$this->setLocaleType();
+		
 		$tikaCommand = t3lib_exec::getCommand('java')
 			. ' -Dfile.encoding=UTF8' // forces UTF8 output
 			. ' -jar ' . escapeshellarg($this->tikaJar)
 			. ' -l ' . escapeshellarg($absFile);
+			
+		$this->resetLocaleType();
+		
 		$ret = shell_exec($tikaCommand);
 		return trim($ret);
 	}
@@ -126,10 +167,15 @@ class tx_mksearch_util_Tika {
 			throw new Exception('Tika not available!');
 
 		$absFile = self::checkFile($file);
+		
+		$this->setLocaleType();
+		
 		$tikaCommand = t3lib_exec::getCommand('java')
 			. ' -Dfile.encoding=UTF8' // forces UTF8 output
 			. ' -jar ' . escapeshellarg($this->tikaJar)
 			. ' -m ' . escapeshellarg($absFile);
+			
+		$this->resetLocaleType();
 
 		$shellOutput = array();
 		exec($tikaCommand, $shellOutput);
