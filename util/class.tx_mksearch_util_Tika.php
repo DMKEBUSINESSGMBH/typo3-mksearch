@@ -117,8 +117,7 @@ class tx_mksearch_util_Tika {
 			
 		$this->resetLocaleType();
 		
-		$ret = shell_exec($tikaCommand . ' 2> /srv/www/misc/stderr.txt');
-		exit;
+		$ret = shell_exec($tikaCommand);
 		return $ret;
 	}
 
