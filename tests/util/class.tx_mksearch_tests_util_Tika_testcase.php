@@ -48,7 +48,6 @@ class tx_mksearch_tests_util_Tika_testcase extends tx_phpunit_testcase {
 	 * @group integration
 	 */
 	public function test_getContentFromFileWithUmlautsInName() {
-		$this->markTestIncomplete('Noch keine Zeit den Bug zu fixen');
 		$content = tx_mksearch_util_Tika::getInstance()->extractContent(
 			'EXT:mksearch/tests/fixtures/txt/ä.txt'
 		);

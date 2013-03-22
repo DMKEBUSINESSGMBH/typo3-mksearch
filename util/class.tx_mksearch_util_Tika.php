@@ -79,8 +79,8 @@ class tx_mksearch_util_Tika {
 	 * 
 	 * @return void
 	 */
-	private function setLocaleType() {
-		if($this->tikaLocaleType){
+	private function setLocaleTypeForNonWindowsSystems() {
+		if(TYPO3_OS != 'WIN' && $this->tikaLocaleType){
 			setlocale(LC_CTYPE, $this->tikaLocaleType);
 		}
 	}
@@ -105,20 +105,7 @@ class tx_mksearch_util_Tika {
 		if(!$this->isAvailable())
 			throw new Exception('Tika not available!');
 
-		$ret = '';
-		$absFile = self::checkFile($file);
-		
-		$this->setLocaleType();
-		
-		$tikaCommand = t3lib_exec::getCommand('java')
-			. ' -Dfile.encoding=UTF8' // forces UTF8 output
-			. ' -jar ' . escapeshellarg($this->tikaJar)
-			. ' -t ' . escapeshellarg($absFile);
-			
-		$this->resetLocaleType();
-		
-		$ret = shell_exec($tikaCommand);
-		return $ret;
+		return $this->shell_exec($file, 't');
 	}
 
 	/**
@@ -134,20 +121,7 @@ class tx_mksearch_util_Tika {
 		if(!$this->isAvailable())
 			throw new Exception('Tika not available!');
 
-		$ret = '';
-		$absFile = self::checkFile($file);
-		
-		$this->setLocaleType();
-		
-		$tikaCommand = t3lib_exec::getCommand('java')
-			. ' -Dfile.encoding=UTF8' // forces UTF8 output
-			. ' -jar ' . escapeshellarg($this->tikaJar)
-			. ' -l ' . escapeshellarg($absFile);
-			
-		$this->resetLocaleType();
-		
-		$ret = shell_exec($tikaCommand);
-		return trim($ret);
+		return $this->shell_exec($file, 'l');
 	}
 
 	/**
@@ -163,7 +137,7 @@ class tx_mksearch_util_Tika {
 
 		$absFile = self::checkFile($file);
 		
-		$this->setLocaleType();
+		$this->setLocaleTypeForNonWindowsSystems();
 		
 		$tikaCommand = t3lib_exec::getCommand('java')
 			. ' -Dfile.encoding=UTF8' // forces UTF8 output
@@ -173,6 +147,7 @@ class tx_mksearch_util_Tika {
 		$this->resetLocaleType();
 
 		$shellOutput = array();
+		$tikaCommand = $this->getTikaCommandWithLocaleTypePrefixForNonWindowsSystems($tikaCommand);
 		exec($tikaCommand, $shellOutput);
 
 		$ret = array();
@@ -181,6 +156,44 @@ class tx_mksearch_util_Tika {
 			$ret[$meta] = trim($value);
 		}
 		return $ret;
+	}
+	
+	/**
+	 * @param string $file
+	 * @param string $tikaCmdType
+	 * 
+	 * @return string
+	 */
+	private function shell_exec($file, $tikaCmdType) {
+		$absFile = self::checkFile($file);
+		
+		$this->setLocaleTypeForNonWindowsSystems();
+		
+		$tikaCommand = t3lib_exec::getCommand('java')
+			. ' -Dfile.encoding=UTF-8' // forces UTF8 output
+			. ' -jar ' . escapeshellarg($this->tikaJar)
+			. ' -' . $tikaCmdType . ' ' . escapeshellarg($absFile);
+			
+		$this->resetLocaleType();
+		
+		return trim(shell_exec(
+			$this->getTikaCommandWithLocaleTypePrefixForNonWindowsSystems(
+				$tikaCommand
+			)
+		));
+	}
+	
+	/**
+	 * @param string $tikaCommand
+	 * 
+	 * @return string
+	 */
+	private function getTikaCommandWithLocaleTypePrefixForNonWindowsSystems($tikaCommand) {
+		if(TYPO3_OS != 'WIN' && $this->tikaLocaleType){
+			$tikaCommand = 'LANG=' . $this->tikaLocaleType . ' ' . $tikaCommand;
+		}
+		
+		return $tikaCommand;
 	}
 
 	/**
@@ -191,6 +204,7 @@ class tx_mksearch_util_Tika {
 	 */
 	private static function checkFile ($fName)	{
 		$absFile = t3lib_div::getFileAbsFileName($fName);
+		$absFile = self::fixFilenameWithPossibleUmlautsForWindows($absFile);
 		if(!(t3lib_div::isAllowedAbsPath($absFile) && @is_file($absFile))) {
 			throw new Exception('File not found: '.$absFile);
 		}
@@ -199,6 +213,21 @@ class tx_mksearch_util_Tika {
 		}
 
 		return $absFile;
+	}
+	
+	/**
+	 * Umlaute werden unter Windows in Dateinamen nicht korrekt interpretiert!
+	 * 
+	 * @param string $fileName
+	 * 
+	 * @return string
+	 */
+	private static function fixFilenameWithPossibleUmlautsForWindows($fileName) {
+		if(TYPO3_OS == 'WIN') {
+			$fileName = utf8_decode($fileName);
+		}
+		
+		return $fileName;
 	}
 
 }

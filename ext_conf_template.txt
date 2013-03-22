@@ -6,7 +6,7 @@ luceneIndexDir =
   # cat=mksearch/basic/file; type=string; label= Tika jar-file: Absolute path to Apache Tika jarfile (optional)
 tikaJar =
 
-  # cat=mksearch/basic/file; type=string; label= When sending a file to tika with umlauts in the filename, the LC_CTYPE must be set so umlauts are not removed and the file can be read correct. Leave empty if setting the locale is not desired.
+  # cat=mksearch/basic/file; type=string; label= When sending a file to tika with umlauts in the filename, the LC_CTYPE must be set so umlauts are not removed and the file can be read correct. Leave empty if setting the locale is not desired. On Windows systems this is ignored!
 tikaLocaleType = de_DE.UTF-8
 
 # cat=mksearch/basic/file; type=string;label=Default index to use for search
