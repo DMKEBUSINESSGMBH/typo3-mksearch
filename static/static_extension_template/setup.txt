@@ -629,7 +629,7 @@ lib.mksearch.extrainfo {
 		template = EXT:mksearch/templates/searchResultCal.html
 		hit {
 			links.show {
-				### pid for the single view of a seminar
+				### pid for the single view of a calendar event
 				pid = 0
 				qualifier = tx_cal_controller
 				paramName = uid
@@ -639,10 +639,14 @@ lib.mksearch.extrainfo {
 			initFields{
 				0 = calendar_title_s
 				1 = category_title_ms
-				3 = description_s
+				2 = description_s
+				3 = start_date_i
+				4 = end_date_i
 			}
 			
 			description_s.cropHTML = 150|...|1
+			start_date_i.strftime = %d.%m.%Y
+			end_date_i.strftime = %d.%m.%Y
 		}
 	}
 }

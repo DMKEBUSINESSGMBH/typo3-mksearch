@@ -154,6 +154,14 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base {
 		tx_mksearch_model_cal_Event $calEvent,
 		tx_mksearch_interface_IndexerDocument $indexDoc
 	) {
+		$calEvent->record['start_date_timestamp'] = $this->getTimestampFromCalDateString(
+			$calEvent->record['start_date'], $calEvent->record['timezone']
+		);
+
+		$calEvent->record['end_date_timestamp'] = $this->getTimestampFromCalDateString(
+			$calEvent->record['end_date'], $calEvent->record['timezone']
+		);
+		
 		$calEvent->record['start_date'] = $this->getCalDateStringAsSolrDateTimeString(
 			$calEvent->record['start_date'], $calEvent->record['timezone']
 		);
@@ -172,6 +180,7 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base {
 
 	/**
 	 * @param string $calDateString YYYYMMDD
+	 * @param string $timezone e.g. UTC
 	 *
 	 * @return string
 	 */
@@ -182,11 +191,29 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base {
 			return;
 		}
 
-		$calDateStringWithPossibleTimeZone = $timezone ?
-			$calDateString . ' ' . $timezone : $calDateString;
-		$calDateAsTimestamp = strtotime($calDateStringWithPossibleTimeZone);
+		$calDateAsTimestamp = $this->getTimestampFromCalDateString(
+			$calDateString, $timezone
+		);
 		
 		return $this->convertTimestampToDateTime($calDateAsTimestamp);
+	}
+	
+	/**
+	 * @param string $calDateString YYYYMMDD
+	 * @param string $timezone e.g. UTC
+	 *
+	 * @return int
+	 */
+	private function getTimestampFromCalDateString(
+		$calDateString, $timezone = ''
+	) {
+		if(empty($calDateString)) {
+			return 0;
+		}
+
+		$calDateStringWithPossibleTimeZone = $timezone ?
+			$calDateString . ' ' . $timezone : $calDateString;
+		return strtotime($calDateStringWithPossibleTimeZone);
 	}
 
 	/**
@@ -194,18 +221,20 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base {
 	 */
 	private function getEventMapping() {
 		return array(
-			'start_time' 		=> 'start_time_i',
-			'end_time' 			=> 'end_time_i',
-			'allday' 			=> 'allday_b',
-			'timezone' 			=> 'timezone_s',
-			'title' 			=> 'title',
-			'organizer' 		=> 'organizer_s',
-			'organizer_link' 	=> 'organizer_link_s',
-			'location' 			=> 'location_s',
-			'type' 				=> 'type_i',
-			'start_date'		=> 'start_date_dt',
-			'end_date'			=> 'end_date_dt',
-			'description'		=> 'description_s'
+			'start_time' 			=> 'start_time_i',
+			'end_time' 				=> 'end_time_i',
+			'allday' 				=> 'allday_b',
+			'timezone' 				=> 'timezone_s',
+			'title' 				=> 'title',
+			'organizer' 			=> 'organizer_s',
+			'organizer_link' 		=> 'organizer_link_s',
+			'location' 				=> 'location_s',
+			'type' 					=> 'type_i',
+			'start_date'			=> 'start_date_dt',
+			'end_date'				=> 'end_date_dt',
+			'start_date_timestamp'	=> 'start_date_i',
+			'end_date_timestamp'	=> 'end_date_i',
+			'description'			=> 'description_s'
 		);
 	}
 

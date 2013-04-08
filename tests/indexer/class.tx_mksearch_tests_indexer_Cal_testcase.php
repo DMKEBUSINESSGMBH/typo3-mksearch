@@ -104,11 +104,19 @@ class tx_mksearch_tests_indexer_Cal_testcase extends Tx_Phpunit_Testcase {
 	
 		$this->assertEquals(
 			'2013-03-02T23:00:00Z',$indexDocFieldArray['start_date_dt']->getValue(),
-			'start_date falsch indiziert!'
+			'start_date_dt falsch indiziert!'
 		);
 		$this->assertEquals(
 			'2013-03-04T23:00:00Z',$indexDocFieldArray['end_date_dt']->getValue(),
-			'end_date falsch indiziert!'
+			'end_date_dt falsch indiziert!'
+		);
+		$this->assertEquals(
+			1362265200,$indexDocFieldArray['start_date_i']->getValue(),
+			'start_date_i falsch indiziert!'
+		);
+		$this->assertEquals(
+			1362438000,$indexDocFieldArray['end_date_i']->getValue(),
+			'end_date_i falsch indiziert!'
 		);
 	}
 	
@@ -126,12 +134,20 @@ class tx_mksearch_tests_indexer_Cal_testcase extends Tx_Phpunit_Testcase {
 			$this->getIndexDocFieldArrayByCalRecord($calRecord);
 	
 		$this->assertEquals(
-				'2013-03-03T00:00:00Z',$indexDocFieldArray['start_date_dt']->getValue(),
-				'start_date falsch indiziert!'
+			'2013-03-03T00:00:00Z',$indexDocFieldArray['start_date_dt']->getValue(),
+			'start_date_dt falsch indiziert!'
 		);
 		$this->assertEquals(
-				'2013-03-05T00:00:00Z',$indexDocFieldArray['end_date_dt']->getValue(),
-				'end_date falsch indiziert!'
+			'2013-03-05T00:00:00Z',$indexDocFieldArray['end_date_dt']->getValue(),
+			'end_date_dt falsch indiziert!'
+		);
+		$this->assertEquals(
+			1362268800,$indexDocFieldArray['start_date_i']->getValue(),
+			'start_date_i falsch indiziert!'
+		);
+		$this->assertEquals(
+			1362441600,$indexDocFieldArray['end_date_i']->getValue(),
+			'end_date_i falsch indiziert!'
 		);
 	}
 	
