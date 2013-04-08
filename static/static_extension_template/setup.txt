@@ -641,6 +641,8 @@ lib.mksearch.extrainfo {
 				1 = category_title_ms
 				3 = description_s
 			}
+			
+			description_s.cropHTML = 150|...|1
 		}
 	}
 }
