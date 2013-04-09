@@ -392,7 +392,13 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 	 */
 	private function getIndexDocumentByContentUid($uid, $extKey, $contentType) {
 		$searchTerm = "+uid:$uid +extKey:$extKey +contentType:$contentType";
-		return $this->search(array('term' => $searchTerm), array('rawFormat' => 1, 'rawOutput' => 1, 'limit'=>100));
+		return $this->search(
+			array('term' => $searchTerm), 
+			//we set the defType to "edismax" as this defType works with
+			//standard and disMax request handlers. so deleting works
+			//when the default request handler is standard or dismax.
+			array('defType' => 'edismax', 'rawFormat' => 1, 'rawOutput' => 1, 'limit'=>100)
+		);
 	}
 
 	/**
@@ -572,6 +578,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 	 */
 	public function indexDeleteByContentUid($uid, $extKey, $contentType) {
 		$result = $this->getIndexDocumentByContentUid($uid, $extKey, $contentType);
+		
 		// No document with passed uid found?
 		if ($result['numFound'] == 0 || empty($result['items'])) return false;
 		$hits = $result['items'];
