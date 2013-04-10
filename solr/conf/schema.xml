@@ -534,6 +534,8 @@
 			highlighting for (dynamic) string fields will not work.
 			in this case the type *_s should not be string but text. this should
 			be fine.
+			If parts of a word should be highlighted the field type
+			must contain some sort of ngram filter.
 		 -->
 		<dynamicField name="*_s" type="string" indexed="true"
 			stored="true" />
