@@ -633,7 +633,28 @@
        of SearchComponents (see below) and supports distributed
        queries across multiple shards
     -->
-  <requestHandler name="search" class="solr.SearchHandler" default="true">
+    
+  <!--  
+    	Attention!!! Please take over the default/standard request handler into
+    	your own solconfig.xml. Please dont change the default request handler. it is
+    	used for some actions during indexing and in the backend module of mksearch.
+   	-->
+   <requestHandler name="standard" class="solr.SearchHandler" default="true">
+    <!-- default values for query parameters -->
+     <lst name="defaults">
+       <str name="echoParams">explicit</str>
+       <!--
+       <int name="rows">10</int>
+       <str name="fl">*</str>
+       <str name="version">2.1</str>
+        -->
+     </lst>
+  </requestHandler>
+  
+  <!-- 
+  	Example/base for a request handler used in a frontend search
+   -->
+  <requestHandler name="search" class="solr.SearchHandler">
     <!-- default values for query parameters can be specified, these
          will be overridden by parameters in the request
       -->
@@ -648,9 +669,16 @@
 				page_starttime_dt:[NOW TO *] OR page_endtime_dt:[* TO NOW]
 			)
 		</str>
-		<!-- für Events, die nicht in der Vergangenheit liegen
+		<!-- for Cal Events that are not in the past
 			contentType:event AND end_date_dt:[NOW TO *]
 		 -->
+		 <!-- Highlighting
+		 	<str name="hl">true</str>
+			<str name="hl.fl">abstract,content,news_text_t,news_town_t,title</str>
+		  -->
+		  <!--  sorting
+		  	<str name="sort">relevance_i desc,tstamp desc,score desc</str>
+		   -->
 	</lst>
     <!-- In addition to defaults, "appends" params can be specified
          to identify values which should be appended to the list of
@@ -705,6 +733,24 @@
        </arr>
       -->
     </requestHandler>
+    
+    <requestHandler name="facets" class="solr.SearchHandler">
+    <!-- default values for query parameters -->
+		<lst name="defaults">
+			<str name="echoParams">explicit</str>
+		</lst>
+		<lst name="appends">
+			<str name="facet">true</str>
+			<str name="facet.mincount">1</str>
+			<str name="facet.sort">lex</str>
+			<str name="facet.limit">-1</str>
+			<str name="facet.field">contentType</str>
+			<str name="fq">
+				-(starttime_dt:[NOW TO *] OR endtime_dt:[* TO NOW] OR
+				page_starttime_dt:[NOW TO *] OR page_endtime_dt:[* TO NOW])
+			</str>
+		</lst>
+  </requestHandler>
 
 
   <!-- XML Update Request Handler.  

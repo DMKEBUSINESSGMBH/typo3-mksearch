@@ -394,10 +394,10 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 		$searchTerm = "+uid:$uid +extKey:$extKey +contentType:$contentType";
 		return $this->search(
 			array('term' => $searchTerm), 
-			//we set the defType to "edismax" as this defType works with
-			//standard and disMax request handlers. so deleting works
-			//when the default request handler is standard or dismax.
-			array('defType' => 'edismax', 'rawFormat' => 1, 'rawOutput' => 1, 'limit'=>100)
+			//we set the defType to "lucene" in case the default request handler
+			//is dismax or something else. please note that the default request handler
+			//shouldn't set a fq or something else!
+			array('defType' => 'lucene', 'rawFormat' => 1, 'rawOutput' => 1, 'limit'=>100)
 		);
 	}
 
