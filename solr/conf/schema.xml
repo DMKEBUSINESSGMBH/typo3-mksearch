@@ -530,6 +530,11 @@
 			the first appearing in the schema will be used. -->
 		<dynamicField name="*_i" type="int" indexed="true"
 			stored="true" />
+		<!-- 
+			highlighting for (dynamic) string fields will not work.
+			in this case the type *_s should not be string but text. this should
+			be fine.
+		 -->
 		<dynamicField name="*_s" type="string" indexed="true"
 			stored="true" />
 		<dynamicField name="*_l" type="long" indexed="true"

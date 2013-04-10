@@ -741,6 +741,8 @@
 			contentType:event AND end_date_dt:[NOW TO *]
 		 -->
 		 <!-- Highlighting
+		 	Fields of the string type cant be highlighted. The type needs to be 
+			tokenized for highlighting which is not the case for string fields.
 		 	<str name="hl">true</str>
 			<str name="hl.fl">abstract,content,news_text_t,news_town_t,title</str>
 		  -->
