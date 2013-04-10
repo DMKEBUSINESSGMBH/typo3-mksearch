@@ -55,6 +55,10 @@ class tx_mksearch_tests_util_Misc_testcase extends tx_phpunit_testcase {
 						'<br>Hallo</br> <i>Welt</i>',
 						'Hallo   Welt',
 					),
+				__LINE__ => array(
+						'Umlaute encoded F&ouml;rderm&ouml;glichkeiten',
+						'Umlaute encoded Fördermöglichkeiten',
+					),
 			) as $key => $row) {
 			$key = 'Line:'.$key;
 			$return[$key] = $row;
