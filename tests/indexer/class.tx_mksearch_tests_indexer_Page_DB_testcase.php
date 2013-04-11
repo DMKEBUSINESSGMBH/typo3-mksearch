@@ -355,7 +355,8 @@ class tx_mksearch_tests_indexer_Page_DB_testcase extends tx_phpunit_database_tes
 		$this->assertEquals(2,$aIndexDoc['doktype_i']->getValue(),'Es wurde nicht das Feld [doktype_i] richtig gesetzt!');
 		$this->assertTrue(empty($aIndexDoc['emptyDummyField_s']),'Es wurde nicht das Feld [emptyDummyField_s] richtig gesetzt!');
 		//common fields
-		$this->assertEquals('test  test page for tests :-D',$aIndexDoc['abstract']->getValue(),'Es wurde nicht das Feld [abstract] richtig gesetzt!');
+		
+		$this->assertEquals('test test page for tests :-D',$aIndexDoc['abstract']->getValue(),'Es wurde nicht das Feld [abstract] richtig gesetzt!');
 		$this->assertEquals('testPage',$aIndexDoc['title']->getValue(),'Es wurde nicht das Feld [title] richtig gesetzt!');
 	}
 
@@ -385,7 +386,7 @@ class tx_mksearch_tests_indexer_Page_DB_testcase extends tx_phpunit_database_tes
 		$this->assertEquals(2,$aIndexDoc['doktype_i']->getValue(),'Es wurde nicht das Feld [doktype_i] richtig gesetzt!');
 		$this->assertTrue(empty($aIndexDoc['emptyDummyField_s']),'Es wurde nicht das Feld [emptyDummyField_s] richtig gesetzt!');
 		//common fields
-		$this->assertEquals('<a href="http://www.test.de">test</a> test page for tests :-D',$aIndexDoc['abstract']->getValue(),'Es wurde nicht das Feld [abstract] richtig gesetzt!');
+		$this->assertEquals('test  test page for tests :-D',$aIndexDoc['abstract']->getValue(),'Es wurde nicht das Feld [abstract] richtig gesetzt!');
 		$this->assertEquals('testPage',$aIndexDoc['title']->getValue(),'Es wurde nicht das Feld [title] richtig gesetzt!');
 	}
 
