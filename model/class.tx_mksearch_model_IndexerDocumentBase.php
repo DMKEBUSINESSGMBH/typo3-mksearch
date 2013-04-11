@@ -218,7 +218,9 @@ class tx_mksearch_model_IndexerDocumentBase implements tx_mksearch_interface_Ind
 	 * @return void
 	 */
 	public function setAbstract($abstract, $length=null, $wordCut=true, $encoding='utf-8') {
-		if ($length) {
+		$abstract = tx_mksearch_util_Misc::html2plain($abstract);
+		
+		if ($length || ($length = $this->getMaxAbstractLength())) {
 			// @TODO implement wordCut
 			$abstract = substr($abstract, 0, $length);
 		}

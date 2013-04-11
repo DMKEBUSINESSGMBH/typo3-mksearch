@@ -468,7 +468,6 @@ lib.mksearch.extrainfo {
 			abstract {
 				wrap = <div class="searchResultAbstract">|...</div>
 				required = 1
-				stdWrap.htmlSpecialChars = 1
 			}
 #			extrainfo {
 #				wrap = <div class="searchResultExtraInfo">|</div>
