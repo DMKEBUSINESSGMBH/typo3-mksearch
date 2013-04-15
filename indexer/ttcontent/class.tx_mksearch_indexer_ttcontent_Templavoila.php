@@ -244,10 +244,24 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
 	 */
 	private function getRelativePathPrefixFromCurrentExecutionDirToWebroot() {
 		//indexing via Scheduler in CLI
-		//script executed in webroot
 		if (defined('TYPO3_cliMode')) 
 		{
-			$relativePathPrefixFromExecutionDir = ''; 
+			//somewhere inside typo3 but not in webroot
+			if(strlen(getcwd()) > strlen(PATH_site)) {
+				$relativePathInsideTypo3 = str_replace(PATH_site, '', getcwd());
+				//we need to find out how many levels we need to go up from here
+				//to the webroot
+				$pathParts = explode('/', $relativePathInsideTypo3);
+				$relativePathPrefixFromExecutionDir = str_repeat('../', count($pathParts));
+			} 
+			// somewhere outside typo3
+			elseif(strlen(getcwd()) < strlen(PATH_site)) {
+				$relativePathPrefixFromExecutionDir = str_replace(getcwd(), '', PATH_site);
+			}
+			// inside typo3 webroot
+			else {
+				$relativePathPrefixFromExecutionDir = '';
+			}
 		}
 		//indexing via Scheduler in BE
 		//script executed in /typo3
