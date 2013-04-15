@@ -44,3 +44,8 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['tx_mksearch_sch
 	'description'      => 'LLL:EXT:' . $_EXTKEY . '/locallang_db.xml:scheduler_indexTask_description',
 	'additionalFields' => 'tx_mksearch_scheduler_IndexTaskAddFieldProvider'
 );
+
+
+if(t3lib_extMgm::isLoaded('mksanitizedparameters')) {
+	require_once(t3lib_extMgm::extPath($_EXTKEY).'ext_mksanitizedparameter_rules.php');	
+}
