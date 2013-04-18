@@ -203,9 +203,8 @@
 					generateWordParts="1" generateNumberParts="1" catenateWords="0"
 					catenateNumbers="0" catenateAll="0" splitOnCaseChange="1" preserveOriginal="1"/>
 				<filter class="solr.LowerCaseFilterFactory" />
-				<!-- <filter class="solr.NGramFilterFactory" minGramSize="3" maxGramSize="15" 
-					/> -->
-				<!-- <filter class="solr.SnowballPorterFilterFactory" language="German"/> -->
+				<!-- German2 macht aus ä->ae und German macht aus ä->a daher ist German2 vorzuziehen -->
+				<filter class="solr.SnowballPorterFilterFactory" language="German2"/>
 			</analyzer>
 
 			<analyzer type="query">
@@ -218,10 +217,15 @@
 					generateWordParts="1" generateNumberParts="1" catenateWords="0"
 					catenateNumbers="0" catenateAll="0" splitOnCaseChange="1" />
 				<filter class="solr.LowerCaseFilterFactory" />
+				<!-- German2 macht aus ä->ae und German macht aus ä->a daher ist German2 vorzuziehen -->
+				<filter class="solr.SnowballPorterFilterFactory" language="German2"/>
 			</analyzer>
 		</fieldType>
 
-		<!-- a field providing some basis stemming for the german language -->
+		<!-- 
+			a field providing some basis stemming for the german language
+			liefert viele Ergebnisse da unschärfer auf grund von Ngram 
+		-->
 		<fieldType name="textNGram" class="solr.TextField"
 			positionIncrementGap="100">
 			<analyzer type="index">
@@ -240,8 +244,10 @@
 				<filter class="solr.LowerCaseFilterFactory" />
 				<filter class="solr.DictionaryCompoundWordTokenFilterFactory"
 					dictionary="dictionaryGerman.txt" />
-				<filter class="solr.NGramFilterFactory" minGramSize="3"
-					maxGramSize="35" />
+				<!-- German2 macht aus ä->ae und German macht aus ä->a daher ist German2 vorzuziehen -->
+				<filter class="solr.SnowballPorterFilterFactory" language="German2"/>
+				<!-- für Wortstämme, die SnowballPorterFilterFactory nicht kennt -->
+				<filter class="solr.NGramFilterFactory" minGramSize="3" maxGramSize="35" />
 				<!-- <filter class="solr.SnowballPorterFilterFactory" language="German"/> -->
 				<filter class="solr.RemoveDuplicatesTokenFilterFactory" />
 			</analyzer>
@@ -255,6 +261,8 @@
 					generateWordParts="1" generateNumberParts="1" catenateWords="0"
 					catenateNumbers="0" catenateAll="0" splitOnCaseChange="1" />
 				<filter class="solr.LowerCaseFilterFactory" />
+				<!-- German2 macht aus ä->ae und German macht aus ä->a daher ist German2 vorzuziehen -->
+				<filter class="solr.SnowballPorterFilterFactory" language="German2"/>
 				<filter class="solr.RemoveDuplicatesTokenFilterFactory" />
 			</analyzer>
 		</fieldType>
