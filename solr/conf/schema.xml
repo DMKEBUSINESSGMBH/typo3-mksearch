@@ -246,9 +246,13 @@
 					dictionary="dictionaryGerman.txt" />
 				<!-- German2 macht aus ä->ae und German macht aus ä->a daher ist German2 vorzuziehen -->
 				<filter class="solr.SnowballPorterFilterFactory" language="German2"/>
-				<!-- für Wortstämme, die SnowballPorterFilterFactory nicht kennt -->
+				<!-- 
+					für Wortstämme, die SnowballPorterFilterFactory nicht kennt/erstellt.
+					gibt es z.B. im Text das Wort Professionalität und man sucht nach
+					profession wird dies ohne NGram nicht gefunden da SnowballPorterFilterFactory
+					nicht die richtigen Wortstämme bildet
+				-->
 				<filter class="solr.NGramFilterFactory" minGramSize="3" maxGramSize="35" />
-				<!-- <filter class="solr.SnowballPorterFilterFactory" language="German"/> -->
 				<filter class="solr.RemoveDuplicatesTokenFilterFactory" />
 			</analyzer>
 			<analyzer type="query">
