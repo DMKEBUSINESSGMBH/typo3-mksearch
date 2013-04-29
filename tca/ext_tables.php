@@ -3,7 +3,7 @@ if (!defined ('TYPO3_MODE')) {
 	die ('Access denied.');
 }
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
-require_once(t3lib_extMgm::extPath($_EXTKEY).'tca/hooks/ext_tables.php');
+require(t3lib_extMgm::extPath($_EXTKEY).'tca/hooks/ext_tables.php');
 $_EXT_PATH = t3lib_extMgm::extPath($_EXTKEY);
 $_EXT_RELPATH = t3lib_extMgm::extRelPath($_EXTKEY);
 
