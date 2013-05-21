@@ -89,6 +89,8 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base {
 
 	/**
 	 * @see tx_mksearch_indexer_Base::indexData()
+	 * @todo index FE Group of category
+	 * @todo index target page of category for single view
 	 */
 	public function indexData(tx_rnbase_model_base $oModel, $tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options) {
 		$aCategories = $this->getCategories($oModel);
