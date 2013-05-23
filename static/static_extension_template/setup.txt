@@ -644,8 +644,14 @@ lib.mksearch.extrainfo {
 			}
 			
 			description_s.cropHTML = 150|...|1
-			start_date_i.strftime = %d.%m.%Y
-			end_date_i.strftime = %d.%m.%Y
+			start_date_i{
+				strftime = %d.%m.%Y
+				required = 1
+			}
+			end_date_i{
+				strftime = %d.%m.%Y
+				required = 1
+			}
 		}
 	}
 }
