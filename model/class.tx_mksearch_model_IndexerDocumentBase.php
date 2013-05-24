@@ -221,8 +221,8 @@ class tx_mksearch_model_IndexerDocumentBase implements tx_mksearch_interface_Ind
 		$abstract = tx_mksearch_util_Misc::html2plain($abstract);
 		
 		if ($length || ($length = $this->getMaxAbstractLength())) {
-			// @TODO implement wordCut
-			$abstract = substr($abstract, 0, $length);
+			$csConvObj = tx_rnbase::makeInstance('t3lib_cs');
+			$abstract = $csConvObj->substr($encoding, $abstract, 0, $length);
 		}
 		$this->data['abstract'] = $this->getFieldInstance($abstract, 'unindexed', 1.0, 'string', $encoding);
 	}

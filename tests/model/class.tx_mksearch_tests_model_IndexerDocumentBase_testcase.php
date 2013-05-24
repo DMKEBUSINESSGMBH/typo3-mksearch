@@ -71,6 +71,19 @@ class tx_mksearch_tests_model_IndexerDocumentBase_testcase extends tx_phpunit_te
 	}
 	
 	/**
+	 * @group unit
+	 */
+	public function testSetAbstractHandlesMultiByteCharsCorrectWithGivenLength() {
+		$indexerDocument = $this->getIndexerDocument();
+		
+		$abstract = 'Rückantwort';
+		$indexerDocument->setAbstract($abstract, 4);
+		$data = $indexerDocument->getData();
+		$expectedAbstract = 'Rück'; 
+		$this->assertEquals($expectedAbstract, $data['abstract']->getValue(), 'multibyte string in abstract not correct handled');
+	}
+	
+	/**
 	 * @return tx_mksearch_model_IndexerDocumentBase
 	 */
 	private function getIndexerDocument() {
