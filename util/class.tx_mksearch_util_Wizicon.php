@@ -48,7 +48,13 @@ class tx_mksearch_util_Wizicon {
 	}
 	function includeLocalLang()	{
 		$llFile = t3lib_extMgm::extPath('mksearch').'locallang_db.xml';
-		$LOCAL_LANG = t3lib_div::readLLXMLfile($llFile, $GLOBALS['LANG']->lang);
+		if (tx_rnbase_util_TYPO3::isTYPO46OrHigher()) {
+			$llXmlParser = tx_rnbase::makeInstance('t3lib_l10n_parser_Llxml');
+			$LOCAL_LANG =  $llXmlParser->getParsedData($llFile, $GLOBALS['LANG']->lang);
+		}
+		else {
+			$LOCAL_LANG = t3lib_div::readLLXMLfile($llFile, $GLOBALS['LANG']->lang);
+		}
 		return $LOCAL_LANG;
 	}
 }
