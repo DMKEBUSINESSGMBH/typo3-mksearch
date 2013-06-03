@@ -55,7 +55,7 @@ class tx_mksearch_util_Indexer {
 	/**
 	* Indexes all fields of the model according to the given mapping
 	*
-	* @param tx_rnbase_model_Base $model
+	* @param tx_rnbase_IModel $model
 	* @param array $aMapping
 	* @param tx_mksearch_interface_IndexerDocument $indexDoc
 	* @param string $prefix
@@ -64,7 +64,7 @@ class tx_mksearch_util_Indexer {
 	* @return tx_mksearch_interface_IndexerDocument
 	*/
 	public function indexModelByMapping(
-		tx_rnbase_model_base $model, array $recordIndexMapping,
+		tx_rnbase_IModel $model, array $recordIndexMapping,
 		tx_mksearch_interface_IndexerDocument $indexDoc,
 		$prefix = '', array $options = array()
 	) {
@@ -85,7 +85,7 @@ class tx_mksearch_util_Indexer {
 	 * Collects the values of all models inside the given array
 	 * and adds them as multivalue (array)
 	 *
-	 * @param tx_rnbase_model_Base $model
+	 * @param tx_rnbase_IModel $model
 	 * @param array $aMapping
 	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
 	 * @param string $prefix
@@ -117,11 +117,11 @@ class tx_mksearch_util_Indexer {
 
 	/**
 	 * Adds a element to the queue
-	 * @param tx_rnbase_model_base $model
+	 * @param tx_rnbase_IModel $model
 	 * @return void
 	 */
 	public function addModelToIndex(
-		tx_rnbase_model_base $model, $tableName
+		tx_rnbase_IModel $model, $tableName
 	){
 		static $indexSrv;
 		if(!empty($model) && $model->isValid()){

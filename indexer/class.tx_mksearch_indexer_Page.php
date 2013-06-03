@@ -54,7 +54,7 @@ class tx_mksearch_indexer_Page extends tx_mksearch_indexer_Base {
 	public static function getContentType() {
 		return array('core', 'page');
 	}
-	
+
 /**
 	 * (non-PHPdoc)
 	 * @see tx_mksearch_interface_Indexer::prepareSearchData()
@@ -94,7 +94,7 @@ class tx_mksearch_indexer_Page extends tx_mksearch_indexer_Base {
 	/**
 	 * @see tx_mksearch_indexer_Base::indexData()
 	 */
-	public function indexData(tx_rnbase_model_base $oModel, $tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options) {
+	public function indexData(tx_rnbase_IModel $oModel, $tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options) {
 		$lang = isset($this->options['lang'])? $this->options['lang'] : 0;
 
 		// Localize record, if necessary

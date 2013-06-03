@@ -47,21 +47,21 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 	 * @var int
 	 */
 	const USE_INDEXER_CONFIGURATION = 0;
-	
+
 	/**
 	 * @var int
 	 */
 	const IS_INDEXABLE = 1;
-	
+
 	/**
 	 * @var int
 	 */
 	const IS_NOT_INDEXABLE = -1;
-	
+
 	/**
 	 * @see tx_mksearch_indexer_Base::indexData()
 	 */
-	public function indexData(tx_rnbase_model_base $oModel, $tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options) {
+	public function indexData(tx_rnbase_IModel $oModel, $tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options) {
 		//@todo indexing via mapping so we dont have all field in the content
 
 		// Set uid. Take care for localized records where uid of original record
@@ -152,11 +152,11 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 		}
 		return $indexDoc;
 	}
-	
+
 	/**
 	 * @param mixed $field
 	 * @param array $rawData
-	 * 
+	 *
 	 * @return string
 	 */
 	protected function getContentByFieldAndCType($field, array $rawData) {
@@ -180,7 +180,7 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 				break;
 			case 'templavoila_pi1':
 				if(method_exists($this, 'getTemplavoilaElementContent')){
-					$tempContent = $this->getTemplavoilaElementContent();	
+					$tempContent = $this->getTemplavoilaElementContent();
 				} else {
 					$tempContent = $rawData[$field];
 				}
@@ -188,7 +188,7 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 			default:
 				$tempContent = $rawData[$field];
 		}
-		
+
 		return $tempContent;
 	}
 
@@ -286,11 +286,11 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 
 	/**
 	* Sets the index doc to deleted if neccessary
-	* @param tx_rnbase_model_base $oModel
+	* @param tx_rnbase_IModel $oModel
 	* @param tx_mksearch_interface_IndexerDocument $oIndexDoc
 	* @return bool
 	*/
-	protected function hasDocToBeDeleted(tx_rnbase_model_base $oModel, tx_mksearch_interface_IndexerDocument $oIndexDoc, $aOptions = array()) {
+	protected function hasDocToBeDeleted(tx_rnbase_IModel $oModel, tx_mksearch_interface_IndexerDocument $oIndexDoc, $aOptions = array()) {
 		//checkPageRights() considers deleted and parent::hasDocToBeDeleted() takes
 		//care of all possible hidden parent pages
 		return (!$this->getPageContent($oModel->record['pid']) || parent::hasDocToBeDeleted($oModel,$oIndexDoc,$aOptions));
@@ -300,18 +300,18 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 	 * @see tx_mksearch_indexer_Base::isIndexableRecord()
 	 */
 	protected function isIndexableRecord(array $sourceRecord, array $options) {
-		if(	
+		if(
 			!isset($sourceRecord['tx_mksearch_is_indexable']) ||
 			($sourceRecord['tx_mksearch_is_indexable'] == self::USE_INDEXER_CONFIGURATION)
 		) {
-			return 
-				$this->isOnIndexablePage($sourceRecord,$options) && 
+			return
+				$this->isOnIndexablePage($sourceRecord,$options) &&
 				$this->checkCTypes($sourceRecord,$options);
 		} else {
 			$isIndexable = ($sourceRecord['tx_mksearch_is_indexable'] == self::IS_INDEXABLE);
 			return $isIndexable ? true : false;
 		}
-		
+
 
 		return false;
 	}
@@ -319,14 +319,14 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 	/**
 	 * wir brauchen auch noch die enable columns der page
 	 *
-	 * @param tx_rnbase_model_base $model
+	 * @param tx_rnbase_IModel $model
 	 * @param string $tableName
 	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
 	 *
 	 * @return tx_mksearch_interface_IndexerDocument
 	 */
 	protected function indexEnableColumns(
-		tx_rnbase_model_base $model, $tableName,
+		tx_rnbase_IModel $model, $tableName,
 		tx_mksearch_interface_IndexerDocument $indexDoc
 	) {
 		$indexDoc = parent::indexEnableColumns($model, $tableName, $indexDoc);

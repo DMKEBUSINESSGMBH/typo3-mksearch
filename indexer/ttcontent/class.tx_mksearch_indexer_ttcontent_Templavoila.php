@@ -57,11 +57,11 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
 
 	/**
 	 * Sets the index doc to deleted if neccessary
-	 * @param tx_rnbase_model_base $oModel
+	 * @param tx_rnbase_IModel $oModel
 	 * @param tx_mksearch_interface_IndexerDocument $oIndexDoc
 	 * @return bool
 	 */
-	protected function hasDocToBeDeleted(tx_rnbase_model_base $oModel, tx_mksearch_interface_IndexerDocument $oIndexDoc, $aOptions = array()) {
+	protected function hasDocToBeDeleted(tx_rnbase_IModel $oModel, tx_mksearch_interface_IndexerDocument $oIndexDoc, $aOptions = array()) {
 		//if we got not a single reference, even not the element itself, it should be deleted
 		if (empty($this->aIndexableReferences)) {
 			return true;
@@ -92,10 +92,10 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
 	 * Returns all references (pids)  this element has. if templavoila is
 	 * not installed we simply return the pid of the element
 	 *
-	 * @param tx_rnbase_model_base $oModel
+	 * @param tx_rnbase_IModel $oModel
 	 * @return array
 	 */
-	private function getReferences(tx_rnbase_model_base $oModel) {
+	private function getReferences(tx_rnbase_IModel $oModel) {
 		//so we have to fetch all references
 		//we just need to check this table for entries for this element
 		$aSqlOptions = array(
@@ -173,7 +173,7 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
 
 		return $oModel;
 	}
-	
+
 	/**
 	 * @return string
 	 */
@@ -182,17 +182,17 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
 		$record = $ttContentModel->getRecord();
 		$this->initTsForFrontend($record['pid']);
 		$this->adjustIncludeLibsPathForBe();
-			
+
 		$templavoilaPlugin = tx_rnbase::makeInstance('tx_templavoila_pi1');
 		$templavoilaPlugin->cObj->data = $record;
 		$templavoilaPlugin->cObj->currentRecord = 'tt_content:' . $ttContentModel->getUid();
-		
+
 		return $templavoilaPlugin->renderElement($record, 'tt_content');
 	}
 
 	/**
 	 * @param int $pid
-	 * 
+	 *
 	 * @return void
 	 */
 	private function initTsForFrontend($pid) {
@@ -205,46 +205,46 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
 		);
 
 		tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
-		$rootlineByPid = 
+		$rootlineByPid =
 			tx_mksearch_service_indexer_core_Config::getRootLine($pid);
-			
+
 		$GLOBALS['TSFE']->tmpl->start($rootlineByPid);
 		$GLOBALS['TSFE']->rootLine = $rootlineByPid;
 	}
-	
+
 	/**
-	 * Die Indizierung wird von verschiedenen Pfaden aus aufgerufen. (CLI, BE Modul, Scheduler) 
-	 * Im FE ist der Pfad immer tslib worauf alle includeLibs Pfade ausgerichtet sind. 
+	 * Die Indizierung wird von verschiedenen Pfaden aus aufgerufen. (CLI, BE Modul, Scheduler)
+	 * Im FE ist der Pfad immer tslib worauf alle includeLibs Pfade ausgerichtet sind.
 	 * Wir haben aber nicht den immer gleichen Pfad beim
-	 * TV rendering im BE und daher müssen wir die relativen includeLibs Pfade 
+	 * TV rendering im BE und daher müssen wir die relativen includeLibs Pfade
 	 * um einen Prefix ergänzen damit das inkludieren fkt.
-	 * 
+	 *
 	 * @return void
 	 */
 	private function adjustIncludeLibsPathForBe() {
 		foreach ($GLOBALS['TSFE']->tmpl->setup['plugin.'] as $pluginConfigPath => $pluginConfig) {
 			if(
-				!is_array($pluginConfig) || 
+				!is_array($pluginConfig) ||
 				!isset($pluginConfig['includeLibs']) ||
 				//solche pfade werden später von TYPO3 korrekt aufgelöst
 				strpos($pluginConfig['includeLibs'],'EXT:') !== false
 			) {
 				continue;
 			}
-			
+
 			//vom fileCache werden Dateien zu erst abgerufen
 			$filehash = md5($pluginConfig['includeLibs']);
-			$GLOBALS['TSFE']->tmpl->fileCache[$filehash] = 
+			$GLOBALS['TSFE']->tmpl->fileCache[$filehash] =
 				$this->getRelativePathPrefixFromCurrentExecutionDirToWebroot() . $pluginConfig['includeLibs'];
 		}
 	}
-	
+
 	/**
 	 * @return string
 	 */
 	private function getRelativePathPrefixFromCurrentExecutionDirToWebroot() {
 		//indexing via Scheduler in CLI
-		if (defined('TYPO3_cliMode')) 
+		if (defined('TYPO3_cliMode'))
 		{
 			//somewhere inside typo3 but not in webroot
 			if(strlen(getcwd()) > strlen(PATH_site)) {
@@ -253,7 +253,7 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
 				//to the webroot
 				$pathParts = explode('/', $relativePathInsideTypo3);
 				$relativePathPrefixFromExecutionDir = str_repeat('../', count($pathParts));
-			} 
+			}
 			// somewhere outside typo3
 			elseif(strlen(getcwd()) < strlen(PATH_site)) {
 				$relativePathPrefixFromExecutionDir = str_replace(getcwd(), '', PATH_site);
@@ -267,15 +267,15 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
 		//script executed in /typo3
 		elseif(strpos(PATH_thisScript,'typo3/mod.php') !== false)
 		{
-			$relativePathPrefixFromExecutionDir = '../'; 
+			$relativePathPrefixFromExecutionDir = '../';
 		}
 		//indexing via mksearch BE module
-		//script executed in /typo3/sysext/cms/tslib 
-		else 
+		//script executed in /typo3/sysext/cms/tslib
+		else
 		{
-			$relativePathPrefixFromExecutionDir = '../../../../'; 
+			$relativePathPrefixFromExecutionDir = '../../../../';
 		}
-		
+
 		return $relativePathPrefixFromExecutionDir;
 	}
 }

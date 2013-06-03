@@ -37,7 +37,7 @@ tx_rnbase::load('tx_mksearch_util_Misc');
  * @package TYPO3
  * @subpackage tx_mksearch
  * @author Hannes Bochmann
- * 
+ *
  * @todo Bilder indizieren; alles übrige wie Organisator indizieren
  */
 class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base {
@@ -80,7 +80,7 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base {
 		}else if($tableName == 'tx_cal_calendar') {
 			$events = $this->getEventsByCalendarUid($rawData['uid']);
 		}
-		
+
 		if($events) {
 			foreach($events as $event) {
 				$this->addEventToIndex($event['uid']);
@@ -88,14 +88,14 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base {
 			return true;
 		}
 	}
-	
+
 	/**
 	 * @param int $categoryUid
 	 */
 	protected function getEventsByCategoryUid($categoryUid) {
 		return tx_rnbase_util_DB::doSelect(
 			'uid_local as uid',
-			'tx_cal_event_category_mm', 
+			'tx_cal_event_category_mm',
 			array(
 				//da MM keine TCA hat
 				'enablefieldsoff' => true,
@@ -103,20 +103,20 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base {
 			)
 		);
 	}
-	
+
 	/**
 	 * @param int $calendarUid
 	 */
 	protected function getEventsByCalendarUid($calendarUid) {
 		return tx_rnbase_util_DB::doSelect(
-			'uid','tx_cal_event', 
+			'uid','tx_cal_event',
 			array(
 				'enablefieldsfe' => true,
 				'where'	=> 'calendar_id = ' . intval($calendarUid)
 			)
 		);
 	}
-	
+
 	/**
 	 * @param int $eventUid
 	 */
@@ -131,7 +131,7 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base {
 	 * @see tx_mksearch_interface_Indexer::prepareSearchData()
 	 */
 	protected function indexData(
-		tx_rnbase_model_base $model,
+		tx_rnbase_IModel $model,
 		$tableName,
 		$rawData,
 		tx_mksearch_interface_IndexerDocument $indexDoc,
@@ -161,7 +161,7 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base {
 		$calEvent->record['end_date_timestamp'] = $this->getTimestampFromCalDateString(
 			$calEvent->record['end_date'], $calEvent->record['timezone']
 		);
-		
+
 		$calEvent->record['start_date'] = $this->getCalDateStringAsSolrDateTimeString(
 			$calEvent->record['start_date'], $calEvent->record['timezone']
 		);
@@ -194,10 +194,10 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base {
 		$calDateAsTimestamp = $this->getTimestampFromCalDateString(
 			$calDateString, $timezone
 		);
-		
+
 		return $this->convertTimestampToDateTime($calDateAsTimestamp);
 	}
-	
+
 	/**
 	 * @param string $calDateString YYYYMMDD
 	 * @param string $timezone e.g. UTC
@@ -254,7 +254,7 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base {
 			$indexDoc,'calendar_'
 		);
 	}
-	
+
 	/**
 	 * @return array
 	 */
@@ -263,7 +263,7 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base {
 			'title' => 'title_s'
 		);
 	}
-	
+
 	/**
 	 * @param tx_mksearch_model_cal_Event $calEvent
 	 * @param tx_mksearch_interface_IndexerDocument- $indexDoc
@@ -280,8 +280,8 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base {
 			$indexDoc,'category_'
 		);
 	}
-	
-	
+
+
 	/**
 	 * @return array
 	 */

@@ -34,21 +34,21 @@ tx_rnbase::load('tx_mksearch_indexer_Base');
 
 /**
  * Indexer service for irfaq.question called by the "mksearch" extension.
- * 
- * 
+ *
+ *
  * @package tx_mksearch
  * @subpackage tx_mksearch_indexer
  */
 class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base {
-	
+
 	/**
 	 * Return content type identification.
 	 * This identification is part of the indexed data
 	 * and is used on later searches to identify the search results.
 	 * You're completely free in the range of values, but take care
 	 * as you at the same time are responsible for
-	 * uniqueness (i.e. no overlapping with other content types) and 
-	 * consistency (i.e. recognition) on indexing and searching data. 
+	 * uniqueness (i.e. no overlapping with other content types) and
+	 * consistency (i.e. recognition) on indexing and searching data.
 	 *
 	 * @return array('extKey' => [extension key], 'name' => [key of content type]
 	 */
@@ -60,7 +60,7 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base {
 	 * (non-PHPdoc)
 	 * @see tx_mksearch_interface_Indexer::prepareSearchData()
 	 */
-	public function indexData(tx_rnbase_model_base $oModel, $sTableName, $aRawData, tx_mksearch_interface_IndexerDocument $oIndexDoc, $aOptions) {
+	public function indexData(tx_rnbase_IModel $oModel, $sTableName, $aRawData, tx_mksearch_interface_IndexerDocument $oIndexDoc, $aOptions) {
 		//check if at least one category of the current faq
 		//is in the given include categories if this option is used
 		//we could also extend the isIndexableRecord method but than
@@ -70,35 +70,35 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base {
 		if(!$this->checkInOrExcludeOptions($aCategories,$aOptions))
 			return null;
 		//else go one with indexing
-		
+
 		//index everything about the categories
 		$this->indexArrayOfModelsByMapping(
 			$aCategories,
 			$this->getCategoryMapping(),
 			$oIndexDoc,'category_'
 		);
-			
+
 		// index everything about the question
 		$this->indexModelByMapping($oModel,$this->getQuestionMapping(),$oIndexDoc);
-		
+
 		//index everything about the expert
 		$this->indexModelByMapping(
 			tx_mksearch_util_ServiceRegistry::getIrfaqExpertService()->get($oModel->record['expert']),
 			$this->getExpertMapping(),
 			$oIndexDoc,'expert_'
 		);
-		
+
 		//done
 		return $oIndexDoc;
 	}
-	
+
 	/**
 	 * check if related data has changed
 	 * @param string $sTableName
 	 * @param array $aRawData
 	 * @param tx_mksearch_interface_IndexerDocument $oIndexDoc
 	 * @param array $aOptions
-	 * 
+	 *
 	 * @return bool
 	 */
 	protected function stopIndexing($sTableName, $aRawData, tx_mksearch_interface_IndexerDocument $oIndexDoc, $aOptions) {
@@ -110,7 +110,7 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base {
 			return true;
 		}
 	}
-	
+
 	/**
 	 * Adds all given models to the queue
 	 * @param array $aModels
@@ -118,13 +118,13 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base {
 	protected function handleRelatedTableChanged(array $aRawData, $sCallback) {
 		$oSrv = tx_mksearch_util_ServiceRegistry::getIrfaqQuestionService();
 		$sCallback = 'getBy'.$sCallback;
-		
+
 		$this->addModelsToIndex(
 				$oSrv->$sCallback($aRawData['uid']),
 				'tx_irfaq_q'
 			);
 	}
-	
+
 	/**
 	 * Returns the mapping of the record fields to the
 	 * solr doc fields
@@ -140,7 +140,7 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base {
 			'faq_files' => 'faq_files_s',
 		);
 	}
-	
+
 	/**
 	 * Returns the mapping of the record fields to the
 	 * solr doc fields
@@ -154,7 +154,7 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base {
 			'url' => 'url_s',
 		);
 	}
-	
+
 	/**
 	 * Returns the mapping of the record fields to the
 	 * solr doc fields
@@ -168,18 +168,18 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base {
 			'shortcut' => 'shortcut_ms',
 		);
 	}
-	
+
 	/**
 	 * Returns the model to be indexed
-	 * 
+	 *
 	 * @param array $aRawData
-	 * 
+	 *
 	 * @return tx_mksearch_model_irfaq_Question
 	 */
 	protected function createModel(array $aRawData) {
 		return tx_rnbase::makeInstance('tx_mksearch_model_irfaq_Question', $aRawData);
 	}
-	
+
 	/**
 	 * Return the default Typoscript configuration for an indexer.
 	 *

@@ -43,7 +43,14 @@ class tx_mksearch_model_SolrHit extends tx_rnbase_model_base {
 	 * @param $rowOrUid
 	 * @return void
 	 */
-	public function init(Apache_Solr_Document $solrDoc) {
+	public function init($rowOrUid) {
+		if (!$solrDoc instanceof Apache_Solr_Document) {
+			throw new InvalidArgumentException(
+				'The solr doc has to be an object instance of "Apache_Solr_Document",'
+				. '"' . (is_object($solrDoc) ? get_class($solrDoc) : gettype($solrDoc)) . '" given.',
+				1370252783
+			);
+		}
 		$this->solrDoc = $solrDoc;
 		$uidField = $solrDoc->getField('uid');
 		$this->uid = is_array($uidField) ? $uidField['value'] : 0;
@@ -68,8 +75,8 @@ class tx_mksearch_model_SolrHit extends tx_rnbase_model_base {
 	 * @return string
 	 */
 	public function getTableName(){return '';}
-	
-	
+
+
 	/**
 	 * Return $TCA defined table column names.
 	 * As this model doesn't have a $TCA defined name,
@@ -78,7 +85,7 @@ class tx_mksearch_model_SolrHit extends tx_rnbase_model_base {
 	 * @return 0
 	 */
 	public function getColumnNames() {return 0;}
-	
+
 	/**
 	 * @see #getColumnNames()
 	 */

@@ -48,10 +48,10 @@ tx_rnbase::load('tx_mksearch_util_Indexer');
 abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer {
 
 	/**
-	 * @var tx_rnbase_model_base
+	 * @var tx_rnbase_IModel
 	 */
 	private $modelToIndex;
-	
+
 	/**
 	 * (non-PHPdoc)
 	 * @see tx_mksearch_interface_Indexer::prepareSearchData()
@@ -116,7 +116,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 	 * @see tx_mksearch_util_Indexer::indexModelByMapping()
 	 */
 	protected function indexModelByMapping(
-		tx_rnbase_model_base $model, array $recordIndexMapping,
+		tx_rnbase_IModel $model, array $recordIndexMapping,
 		tx_mksearch_interface_IndexerDocument $indexDoc,
 		$prefix = '', array $options = array()
 	) {
@@ -143,11 +143,11 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 
 	/**
 	 * Sets the index doc to deleted if neccessary
-	 * @param tx_rnbase_model_base $model
+	 * @param tx_rnbase_IModel $model
 	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
 	 * @return bool
 	 */
-	protected function hasDocToBeDeleted(tx_rnbase_model_base $model, tx_mksearch_interface_IndexerDocument $indexDoc, $options = array()) {
+	protected function hasDocToBeDeleted(tx_rnbase_IModel $model, tx_mksearch_interface_IndexerDocument $indexDoc, $options = array()) {
 		// @FIXME hidden und deleted sind enablecolumns, können jeden belibigen Namen tragen und stehen in der tca.
 		// @see tx_mklib_util_TCA::getEnableColumn
 		// $deletedField = $GLOBALS['TCA'][$model->getTableName()]['ctrl']['enablecolumns']['delete'];
@@ -178,7 +178,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 	}
 
 	/**
-	 * @param tx_rnbase_model_base $model
+	 * @param tx_rnbase_IModel $model
 	 * @param string $tableName
 	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
 	 * @param string $indexDocFieldsPrefix
@@ -186,7 +186,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 	 * @return tx_mksearch_interface_IndexerDocument
 	 */
 	protected function indexEnableColumns(
-		tx_rnbase_model_base $model, $tableName,
+		tx_rnbase_IModel $model, $tableName,
 		tx_mksearch_interface_IndexerDocument $indexDoc, $indexDocFieldsPrefix = ''
 	) {
 		global $TCA;
@@ -300,7 +300,7 @@ CONFIG;
 	/**
 	 * @see tx_mksearch_util_Indexer::addModelToIndex()
 	 */
-	protected function addModelToIndex(tx_rnbase_model_base $model, $tableName){
+	protected function addModelToIndex(tx_rnbase_IModel $model, $tableName){
 		tx_mksearch_util_Indexer::getInstance()
 			->addModelToIndex($model, $tableName);
 	}
@@ -368,23 +368,23 @@ CONFIG;
 	 *
 	 * @param array $rawData
 	 *
-	 * @return tx_rnbase_model_base
+	 * @return tx_rnbase_IModel
 	 */
 	protected abstract function createModel(array $rawData);
 
 	/**
 	 * Do the actual indexing for the given model
 	 *
-	 * @param tx_rnbase_model_base $model
+	 * @param tx_rnbase_IModel $model
 	 * @param string $tableName
 	 * @param array $rawData
 	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
 	 * @param array $options
 	 */
-	protected abstract function indexData(tx_rnbase_model_base $model, $tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options);
-	
+	protected abstract function indexData(tx_rnbase_IModel $model, $tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options);
+
 	/**
-	 * @return tx_rnbase_model_base
+	 * @return tx_rnbase_IModel
 	 */
 	protected function getModelToIndex() {
 		return $this->modelToIndex;
