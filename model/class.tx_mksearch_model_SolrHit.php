@@ -44,6 +44,7 @@ class tx_mksearch_model_SolrHit extends tx_rnbase_model_base {
 	 * @return void
 	 */
 	public function init($rowOrUid) {
+		$solrDoc = $rowOrUid;
 		if (!$solrDoc instanceof Apache_Solr_Document) {
 			throw new InvalidArgumentException(
 				'The solr doc has to be an object instance of "Apache_Solr_Document",'
