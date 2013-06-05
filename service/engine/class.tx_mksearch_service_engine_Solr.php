@@ -393,12 +393,38 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 	private function getIndexDocumentByContentUid($uid, $extKey, $contentType) {
 		$searchTerm = "+uid:$uid +extKey:$extKey +contentType:$contentType";
 		return $this->search(
-			array('term' => $searchTerm), 
+			array('term' => $searchTerm),
 			//we set the defType to "lucene" in case the default request handler
 			//is dismax or something else. please note that the default request handler
 			//shouldn't set a fq or something else!
 			array('defType' => 'lucene', 'rawFormat' => 1, 'rawOutput' => 1, 'limit'=>100)
 		);
+	}
+
+	/**
+	 * Get a document from index
+	 * @param string $uid
+	 * @param string $extKey
+	 * @param string $contentType
+	 * @return tx_mksearch_model_SearchHit
+	 */
+	public function getByContentUid($uid, $extKey, $contentType) {
+		$response = $this->getIndexDocumentByContentUid($uid, $extKey, $contentType);
+		if (empty($response['items']) || !is_array($response['items'])) {
+			return NULL;
+		}
+		if (count($response['items']) > 1) {
+			tx_rnbase_util_Logger::warn(
+				'getByContentUid has returned more than one element.',
+				'mksearch', array(
+					'service' => get_class($this),
+					'uid' => $uid,
+					'extKey' => $extKey,
+					'contentType' => $contentType,
+				)
+			);
+		}
+		return reset($response['items']);
 	}
 
 	/**
@@ -578,7 +604,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 	 */
 	public function indexDeleteByContentUid($uid, $extKey, $contentType) {
 		$result = $this->getIndexDocumentByContentUid($uid, $extKey, $contentType);
-		
+
 		// No document with passed uid found?
 		if ($result['numFound'] == 0 || empty($result['items'])) return false;
 		$hits = $result['items'];

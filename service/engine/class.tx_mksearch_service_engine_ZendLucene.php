@@ -37,14 +37,14 @@ tx_rnbase::load('tx_rnbase_util_Logger');
  * @subpackage	tx_mksearch
  */
 class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_mksearch_interface_SearchEngine {
-	
+
 	/**
 	 * Index used for searching and indexing
 	 *
 	 * @var Zend_Search_Lucene_Interface
 	 */
 	private $index;
-	
+
 	/**
 	 * Name of the currently open index
 	 *
@@ -60,7 +60,7 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @return void
 	 */
 	public function __construct() {
@@ -84,8 +84,8 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
     	// Trigger Zend autoloading mechanism
     	require_once 'Zend/Loader/Autoloader.php';
     	$autoloader = Zend_Loader_Autoloader::getInstance();
-    	$autoloader->registerNamespace('Zend_');  
-    	
+    	$autoloader->registerNamespace('Zend_');
+
     	// Set utf-8-able analyzer
     	// @todo: Make configurable
     	Zend_Search_Lucene_Analysis_Analyzer::setDefault(
@@ -102,7 +102,7 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 	}
 	/**
 	 * Check if an index was opened
-	 * 
+	 *
 	 * @param bool $throwException	throw exception in case of error
 	 * @return bool
 	 */
@@ -112,7 +112,7 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 			throw new Exception('class.tx_mksearch_service_ZendLucene.php - no open index available!');
 		return false;
 	}
-	
+
 	/**
 	 * Return index directory path
 	 * @param string	$name	Name of index
@@ -125,17 +125,17 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 		}
 		return $path;
 	}
-	
+
 	/**
 	 * Build query recursively from query array
-	 * 
+	 *
 	 * @param $fields
 	 * @return Zend_Search_Lucene_Search_Query_Boolean
 	 */
 	private function buildQuery(array $fields) {
 		$query = new Zend_Search_Lucene_Search_Query_Boolean;
 		$mtquery = new Zend_Search_Lucene_Search_Query_MultiTerm;
-		 
+
 		// Loop through all items of the field
 		foreach ($fields as $key=>$f) {
 			foreach ($f as $ff) {
@@ -145,7 +145,7 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 						// Call hook to manipulate search term. Term is utf8-encoded!
 						tx_rnbase_util_Misc::callHook('mksearch',	'engine_ZendLucene_buildQuery_manipulateSingleTerm',
 							array('term' => &$ff['term']),	$this);
-			
+
 						// The term is really just a simple string
 						$mtquery->addTerm(
 										new Zend_Search_Lucene_Index_Term($ff['term'],$key=='__default__'?null:$key),
@@ -170,13 +170,13 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 										);
 							}
 						}
-						
+
 						$query->addSubquery($pq);
 					}
 				} else {
 					// The term represents a subquery - step down recursively
 					$query->addSubquery(
-									$this->buildQuery($ff['term']), 
+									$this->buildQuery($ff['term']),
 									isset($ff['sign']) ? $ff['sign'] : null
 								);
 				}
@@ -185,37 +185,37 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 		if ($mtquery->getTerms()) $query->addSubquery($mtquery);
 		return $query;
 	}
-	
+
 	/**
 	 * Search indexed data via Zend Lucene
 	 *
 	 * Search term must be charset-encoded identically like data was indexed (utf-8 by default)!
 	 * NOTE: Search results are always utf8-encoded!
-	 *  
+	 *
 	 * Provide fields in a recursive array.
 	 * A search token is defined by an array with several keys or by an array of tokens:
-	 * 
+	 *
 	 * 1.*
 	 * ***
 	 * token =>	array(
 	 * 					'term' => string
-	 *					, 
-	 *					'sign' [optional] 	=> 	true [field required, i.e. AND] | 
-	 * 											false [field prohibited, i. e. AND NOT] | 
+	 *					,
+	 *					'sign' [optional] 	=> 	true [field required, i.e. AND] |
+	 * 											false [field prohibited, i. e. AND NOT] |
 	 * 											null [field optional, i. e. OR]
 	 *					,
-	 *					'phrase' [optional] =>	treat search term as phrase which is to be found completely 
+	 *					'phrase' [optional] =>	treat search term as phrase which is to be found completely
 	 * 				)
-	 * 
+	 *
 	 * 2.*
 	 * ***
 	 * token => array(
 	 * 					'term' => token,
 	 * 					'sign' => ...
 	 * 				)
-	 * 
-	 * 
-	 * Have a look at the following example where we are searching for 
+	 *
+	 *
+	 * Have a look at the following example where we are searching for
 	 * shoes classified as sneaker of the brand either adidas or puma, but not nike,
 	 * in the size 42 and in color yellow or red.
 	 * In technical terms this means we search for documents:
@@ -225,15 +225,15 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 	 * * which meets the following condition:
 	 *   * let the indexed attribute 'color' be "yellow" or "red" AND
 	 *   * let the indexed attribute 'size' be "42"
-	 *   
+	 *
 	 * Note: It is not necessary to implement the "subquery" part in this example as sub-array,
-	 * but of course there are cases you really need self-contained subqueries. 
-	 * 
- 	 *	$fields = 
+	 * but of course there are cases you really need self-contained subqueries.
+	 *
+ 	 *	$fields =
 	 *		array(
 	 *			// [document text contains:] 'sneaker'
 	 *			// -> use reserved fieldname '__default__'!
-	 *			'__default__'=>	array(	
+	 *			'__default__'=>	array(
 	 *								array('term' => 'sneaker', 'sign' => true),
 	 *							),
 	 *
@@ -241,7 +241,7 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 	 *			// -> use field name as array key
 	 *			'clothing'	=>	array(array('term' => 'shoe', 'sign' => true)),
 	 *
-	 *			// OR brand='adidas' OR brand='puma' AND NOT brand='nike' 
+	 *			// OR brand='adidas' OR brand='puma' AND NOT brand='nike'
 	 *			'brand'		=>	array(
 	 *								array('term' => 'adidas', 'sign' => null),
 	 *								array('term' => 'puma', 'sign' => null),
@@ -251,7 +251,7 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 	 *			// AND ((color='yellow' OR color='red') AND size=42)
 	 *			// -> use an arbitrary fieldname, it's not needed for the subquery
 	 *			'subquery'	=>	array(
-	 *								array( 
+	 *								array(
 	 *									'term' => array(
 	 *												'color'	=> array(
 	 *																array('term' => 'yellow', 'sign' => null),
@@ -264,7 +264,7 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 	 *							),
 	 *	);
 	 *
-	 * 
+	 *
 	 * @param array		$fields		Structure of fields - see example above
 	 * @param array		$options	Options for search:
 	 * 								* [bool] rawFormat:		Pass through $fields['term'] as raw search
@@ -273,7 +273,7 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 	 */
 	public function search(array $fields=array(), array $options=array()) {
 		$this->checkForOpenIndex();
-		
+
 		// Advanced search, i. e. search term follows lucene query syntax?
 		if (isset($options['rawFormat']) and $options['rawFormat']) {
 			// Add access rights to search query
@@ -283,25 +283,25 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 				foreach ($options['fe_groups'] as &$f) $f = 'fe_groups:'.$f;
 				$queryString = '(' . implode(' OR ', $options['fe_groups']) . ') AND (' . $fields['term'] . ')';
 			}
-			else $queryString = $fields['term']; 
+			else $queryString = $fields['term'];
 
 			// @TODO: Check syntax etc.
 		} else {
 			// @TODO: Change to $docIds  = $index->termDocs($term) => use filters
-			
+
 			// Add access rights to search query
 			if (array_key_exists('fe_groups', $options)) {
 				// Explicitely add 0 to fe_groups to enable searches of anonymous users
 				if (!in_array(0, $options['fe_groups'])) $options['fe_groups'][] = 0;
-				
+
 				$fe_groups = array();
 				// Combine the given fe_groups by "OR"
 				foreach ($options['fe_groups'] as $f) $fe_groups[] = array('term' => $f, 'sign' => null);
-				
+
 				// Re-Build new $fields by "AND"ing fe_groups
 				$fields = array('fe_groups_aware' =>
 					array(
-						array(					
+						array(
 							'term' => array('fe_groups' => $fe_groups),
 							'sign' => true
 						),
@@ -314,18 +314,18 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 			}
 			$queryString = $this->buildQuery($fields);
 		}
-		// Attention: $queryString may also be an object... 
+		// Attention: $queryString may also be an object...
 		if($options['debug'] && !is_string($queryString)) {
 			$queryString->debug = true;
 		}
-		
+
 		$hits = $this->index->find($queryString);
 		if($options['debug']) {
 			t3lib_div::debug(array('Fields'=>$fields ,'Query'=>$queryString, 'Hits'=>count($hits)), 'class.tx_mksearch_service_engine_ZendLucene.php '); // TODO: remove me
 		}
 
 		if (isset($options['rawOutput']) and $options['rawOutput'])	return $hits;
-		
+
 		// else
 		tx_rnbase::load('tx_mksearch_model_SearchHit');
 		$results = array();
@@ -342,7 +342,7 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 		}
 		return $results;
 	}
-	
+
 	/**
 	 * Return the index opened at the moment
 	 * @return string
@@ -350,10 +350,10 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 	public function getOpenIndexName() {
 		return $this->indexName;
 	}
-	
+
 	/**
 	 * Open an index
-	 * 
+	 *
 	 * @param tx_mksearch_model_internal_Index	$name			Name of the index to open
 	 * @param bool 		$forceCreation	Force creation of index if it doesn't exist
 	 * @return void
@@ -375,22 +375,22 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 			if ($forceCreation) {
 				$this->index = Zend_Search_Lucene::create($indexDir);
 				tx_rnbase_util_Logger::warn('New Lucene index created!','mksearch',array('indexDir'=>$indexDir));
-			} 
+			}
 			// No? Then re-throw the Exception:
-			else 
+			else
 				throw $e;
 		}
 
-		if ($this->index) 
+		if ($this->index)
 			$this->indexName = $name;
 		// This never should happen:
 		else
 			throw new Exception('class.tx_mksearch_service_ZendLucene.php::openIndex() - could not open / create index!');
-		
+
 		// Set encoding
 		Zend_Search_Lucene_Search_QueryParser::setDefaultEncoding('utf-8');
 	}
-	
+
 	public function setIndexModel(tx_mksearch_model_internal_Index $index) {
 		$this->indexModel = $index;
 	}
@@ -403,19 +403,19 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 	public function indexExists($name) {
 		return is_dir($this->getIndexDirectory($name));
 	}
-	
+
 	/**
 	 * Commit index
-	 * 
-	 * Explicite commits are not needed for Zend_Lucene, as commit commit happens implicitely on 
+	 *
+	 * Explicite commits are not needed for Zend_Lucene, as commit commit happens implicitely on
 	 * close of index and prior to all other operations which depend on a clean data state.
-	 * 
+	 *
 	 * @return bool success
 	 */
 	public function commitIndex() {
-		return true;	
+		return true;
 	}
-	
+
 	/**
 	 * Close index
 	 * @return void
@@ -424,10 +424,10 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 		$this->indexName = null;
 		unset($this->index);
 	}
-	
+
 	/**
 	 * Delete an entire index
-	 * 
+	 *
 	 * @param optional string $name	Name of index to delete, if not the open index is meant to be deleted
 	 * @return void
 	 */
@@ -439,7 +439,7 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 		}
 
 		// @todo: treat index locking...
-		
+
 		$indexDir = $this->getIndexDirectory($name);
 		// Delete index directory recursively
 		$iterator = new RecursiveDirectoryIterator($indexDir);
@@ -449,23 +449,23 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 		}
 		rmdir($indexDir);
 	}
-	
+
 	/**
 	 * Optimize index
-	 * 
+	 *
 	 * @return void
 	 */
 	public function optimizeIndex() {
-		// Committing the index before doing the actual optimization is not necessary 
+		// Committing the index before doing the actual optimization is not necessary
 		// as the commit happens implictely on optimization by Zend_Lucene
 		$this->index->optimize();
 	}
-	
+
 	/**
 	 * Replace an index with another.
-	 * 
+	 *
 	 * The index to be replaced will be deleted.
-	 * This actually means that the old's index's directory will be deleted recursively!  
+	 * This actually means that the old's index's directory will be deleted recursively!
 	 *
 	 * @param string	$which	Name of index to be replaced i. e. deleted
 	 * @param string	$by		Name of index which replaces the index named $which
@@ -474,13 +474,13 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 	public function replaceIndex($which, $by) {
 		if (!($this->indexExists($which) and $this->indexExists($by)))
 			throw new Exception('class.tx_mksearch_service_ZendLucene.php::replaceIndex() - at least one of the specified indexes doesn\'n exist!');
-		
+
 		// Delete index $which
 		$this->deleteIndex($which);
-		// Rename index $by to the just deleted $which 
+		// Rename index $by to the just deleted $which
 		rename($this->getIndexDirectory($by), $this->getIndexDirectory($which));
 	}
-	
+
 	/**
 	 * Get a document from index
 	 * @param $uid
@@ -492,7 +492,30 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 		$searchTerm = "+uid:$uid +extKey:$extKey +contentType:$contentType";
 		return $this->search(array('term' => $searchTerm), array('rawFormat' => 1, 'rawOutput' => 1));
 	}
-	
+
+	/**
+	 * Get a document from index
+	 * @param string $uid
+	 * @param string $extKey
+	 * @param string $contentType
+	 * @return tx_mksearch_model_SearchHit
+	 */
+	public function getByContentUid($uid, $extKey, $contentType) {
+		$results = $this->getIndexDocumentByContentUid($uid, $extKey, $contentType);
+		if (count($results) > 1) {
+			tx_rnbase_util_Logger::warn(
+				'getByContentUid has returned more than one element.',
+				'mksearch', array(
+					'service' => get_class($this),
+					'uid' => $uid,
+					'extKey' => $extKey,
+					'contentType' => $contentType,
+				)
+			);
+		}
+		return empty($results) ?  NULL : reset($results);
+	}
+
 	/**
 	 * Add a field to the given index document
 	 *
@@ -517,10 +540,10 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 				$zf = Zend_Search_Lucene_Field::Keyword($key, $value, $field->getEncoding());
 				$doc->addField($zf);
    			break;
-   		case 'unindexed':	
+   		case 'unindexed':
    			$doc->addField(Zend_Search_Lucene_Field::UnIndexed($key, $value, $field->getEncoding()));
    			break;
-   		case 'unstored':	
+   		case 'unstored':
    			$doc->addField(Zend_Search_Lucene_Field::UnStored($key, $value, $field->getEncoding()));
    			break;
    		case 'binary':
@@ -530,20 +553,20 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
    			throw new Exception('tx_mksearch_service_engine_ZendLucene::_addFieldToIndexDoc(): Unknown storage type "'.$field->getStorageType().'"!');
 		}
 	}
-	
+
 	/**
 	 * Put a new record into index
-	 * 
-	 * @param tx_mksearch_model_IndexerDocument	$doc	"Document" to index 
+	 *
+	 * @param tx_mksearch_model_IndexerDocument	$doc	"Document" to index
 	 * @return void
 	 */
 	public function indexNew(tx_mksearch_interface_IndexerDocument $doc) {
 		$zlDoc = new Zend_Search_Lucene_Document();
-		
+
 		// Core data
 		$data = $doc->getPrimaryKey();
 		//$data = $doc->getCoreData();
-		
+
 		// Hook to manipulate data
 		// Note that manipulating data not only influences the indexing itself
 		// but also the search result data at search time.
@@ -569,20 +592,20 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 				array('data' => &$data),
 				$this
 			);
-		
+
 		foreach ($data as $key=>$field) {
 			$this->addFieldToIndexDoc($key, $field, $zlDoc);
 		}
-		
+
 		// There's intentionally no test if $this->index is valid for performance reasons.
 		// You should not have made it to this point without a valid index anyway...
 		$this->index->addDocument($zlDoc);
 	}
-	
+
 	/**
 	 * Update or create an index record
-	 * 
-	 * @param tx_mksearch_model_IndexerDocument	$doc	"Document" to index 
+	 *
+	 * @param tx_mksearch_model_IndexerDocument	$doc	"Document" to index
 	 * @return void
 	 */
 	public function indexUpdate(tx_mksearch_interface_IndexerDocument $doc) {
@@ -602,7 +625,7 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 
 	/**
 	 * Delete index document specified by content uid
-	 * 
+	 *
 	 * @param int		$uid			Unique identifier of data record - unique within the scope of $extKey and $content_type
 	 * @param string	$extKey			Key of extension the data record belongs to
 	 * @param string	$contentType	Name of semantic content type
@@ -616,10 +639,10 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 		foreach ($hits as $h) $this->index->delete($h->id);
 		return true;
 	}
-	
+
 	/**
 	 * Delete index document specified by index id
-	 * 
+	 *
 	 * @param int $id
 	 * @return void
 	 */
@@ -636,7 +659,7 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 	}
 	/**
 	 * Return an indexer document instance for the given content type
-	 * 
+	 *
 	 * @param string	$extKey			Extension key of records to be indexed
 	 * @param string	$contentType	Content type of records to be indexed
 	 * @return tx_mksearch_interface_IndexerDocument
@@ -647,7 +670,7 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 //			$extKey, $contentType,'tx_mksearch_model_engineSpecific_lucene_IndexerField');
 		return tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',
 			$extKey, $contentType);
-			
+
 
 	}
 	/**
@@ -673,7 +696,7 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 
 	/**
 	 * Nothing to do
-	 * 
+	 *
 	 * @see tx_mksearch_interface_SearchEngine::postProcessIndexing()
 	 */
 	public function postProcessIndexing(tx_mksearch_model_internal_Index $oIndex) {

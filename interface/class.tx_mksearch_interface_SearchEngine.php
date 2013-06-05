@@ -33,107 +33,117 @@ interface tx_mksearch_interface_SearchEngine {
 
 	/**
 	 * Search indexed data
-	 * 
+	 *
 	 * @param array		$fields
 	 * @param array		$options
 	 * @return array[tx_mksearch_model_SearchResult]	search results
 	 */
 	public function search(array $fields=array(), array $options=array());
-	
+
+	/**
+	 * Get a document from index
+	 * @param string $uid
+	 * @param string $extKey
+	 * @param string $contentType
+	 * @return tx_mksearch_model_SearchHit
+	 */
+	public function getByContentUid($uid, $extKey, $contentType);
+
+
 	/**
 	 * Return name of the index currently opened
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getOpenIndexName();
-	
+
 	/**
 	 * Open an index
-	 * 
+	 *
 	 * @param tx_mksearch_model_internal_Index	$index Instance of the index to open
 	 * @param bool 		$forceCreation	Force creation of index if it doesn't exist
 	 * @return void
 	 */
 	public function openIndex(tx_mksearch_model_internal_Index $index, $forceCreation=false);
-		
+
 	/**
 	 * Check if the specified index exists
-	 * 
+	 *
 	 * @param string	$name	Name of index
 	 * @return bool
 	 */
 	public function indexExists($name);
-	
+
 	/**
 	 * Commit index
-	 * 
+	 *
 	 * @return bool success
 	 */
 	public function commitIndex();
-	
+
 	/**
 	 * Close index
-	 * 
+	 *
 	 * @return void
 	 */
 	public function closeIndex();
-	
+
 	/**
 	 * Delete an entire index
-	 * 
+	 *
 	 * @param optional string $name	Name of index to delete, if not the open index is meant to be deleted
 	 * @return void
 	 */
 	public function deleteIndex($name=null);
-	
+
 	/**
 	 * Optimize index
-	 * 
+	 *
 	 * @return void
 	 */
 	public function optimizeIndex();
-	
+
 	/**
 	 * Replace an index with another.
-	 * 
+	 *
 	 * The index to be replaced will be deleted.
-	 * This actually means that the old's index's directory will be deleted recursively!  
+	 * This actually means that the old's index's directory will be deleted recursively!
 	 *
 	 * @param string	$which	Name of index to be replaced i. e. deleted
 	 * @param string	$by		Name of index which replaces the index named $which
 	 * @return void
 	 */
 	public function replaceIndex($which, $by);
-	
+
 	/**
 	 * Put a new record into index
-	 * 
-	 * @param tx_mksearch_interface_IndexerDocument	$doc	"Document" to index 
+	 *
+	 * @param tx_mksearch_interface_IndexerDocument	$doc	"Document" to index
 	 * @return bool		$success
 	 */
 	public function indexNew(tx_mksearch_interface_IndexerDocument $doc);
-	
+
 	/**
 	 * Update or create an index record
-	 * 
-	 * @param tx_mksearch_interface_IndexerDocument	$doc	"Document" to index 
+	 *
+	 * @param tx_mksearch_interface_IndexerDocument	$doc	"Document" to index
 	 * @return bool		$success
 	 */
 	public function indexUpdate(tx_mksearch_interface_IndexerDocument $doc);
-		
+
 	/**
 	 * Delete index document specified by content uid
-	 * 
+	 *
 	 * @param int		$uid			Unique identifier of data record - unique within the scope of $extKey and $content_type
 	 * @param string	$extKey			Key of extension the data record belongs to
 	 * @param string	$contentType	Name of semantic content type
 	 * @return bool success
 	 */
 	public function indexDeleteByContentUid($uid, $extKey, $contentType);
-	
+
 	/**
 	 * Delete index document specified by index id
-	 * 
+	 *
 	 * @param string $id
 	 * @return void
 	 */
@@ -147,7 +157,7 @@ interface tx_mksearch_interface_SearchEngine {
 
 	/**
 	 * Return an indexer document instance for the given content type
-	 * 
+	 *
 	 * @param string	$extKey			Extension key of records to be indexed
 	 * @param string	$contentType	Content type of records to be indexed
 	 * @return tx_mksearch_interface_IndexerDocument
@@ -156,22 +166,22 @@ interface tx_mksearch_interface_SearchEngine {
 
 	/**
 	 * Returns a index status object.
-	 * 
+	 *
 	 * @return tx_mksearch_util_Status
 	 */
 	public function getStatus();
 	/**
 	 * Set index model with credential data
-	 * 
+	 *
 	 * @param tx_mksearch_model_internal_Index	$index Instance of the index to open
 	 * @return void
 	 */
 	public function setIndexModel(tx_mksearch_model_internal_Index $index);
-	
+
 	/**
 	 * This function is called for each index after the indexing
 	 * is done.
-	 * 
+	 *
 	 * @param tx_mksearch_model_internal_Index $oIndex
 	 * @return void
 	 */
