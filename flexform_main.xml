@@ -13,7 +13,7 @@
 
 				<type>array</type>
 				<el>
-    
+	
 					<action> <!-- Bezeichner ist frei wählbar -->
 						<TCEforms>
 							<exclude>1</exclude>
@@ -28,6 +28,10 @@
 									<numIndex index="10" type="array">
 										<numIndex index="0">LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.action.searchSolr</numIndex>
 										<numIndex index="1">tx_mksearch_action_SearchSolr</numIndex>
+									</numIndex>
+									<numIndex index="100" type="array">
+										<numIndex index="0">LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.action.showHit</numIndex>
+										<numIndex index="1">tx_mksearch_action_ShowHit</numIndex>
 									</numIndex>
 								</items>
 								<multiple>0</multiple>
@@ -138,12 +142,12 @@
 							<label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.usedIndex</label>
 							<config>
 								<type>select</type>
-				                <items type="array">
-				                  <numIndex index="0" type="array">
-				                    <numIndex index="0"></numIndex>
-				                    <numIndex index="1"></numIndex>
-				                  </numIndex>
-				                </items>
+								<items type="array">
+								  <numIndex index="0" type="array">
+									<numIndex index="0"></numIndex>
+									<numIndex index="1"></numIndex>
+								  </numIndex>
+								</items>
 								<itemsProcFunc>EXT:mksearch/util/class.tx_mksearch_util_TCA.php:tx_mksearch_util_TCA->getIndexes</itemsProcFunc>
 								<!--foreign_table>tx_mksearch_indices</foreign_table>
 								<foreign_table_where>AND engine='solr' ORDER BY name</foreign_table_where-->
@@ -159,16 +163,16 @@
 							<label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.filter.confid</label>
 							<config>
 								<type>select</type>
-				                <items type="array">
-				                  <numIndex index="0" type="array">
-				                    <numIndex index="0">LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.filter.confid.default</numIndex>
-				                    <numIndex index="1">default</numIndex>
-				                  </numIndex>
-				                  <numIndex index="10" type="array">
-				                    <numIndex index="0">LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.filter.confid.dismax</numIndex>
-				                    <numIndex index="1">dismax</numIndex>
-				                  </numIndex>
-				                </items>
+								<items type="array">
+								  <numIndex index="0" type="array">
+									<numIndex index="0">LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.filter.confid.default</numIndex>
+									<numIndex index="1">default</numIndex>
+								  </numIndex>
+								  <numIndex index="10" type="array">
+									<numIndex index="0">LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.filter.confid.dismax</numIndex>
+									<numIndex index="1">dismax</numIndex>
+								  </numIndex>
+								</items>
 								<multiple>0</multiple>
 								<minitems>1</minitems>
 								<maxitems>1</maxitems>
@@ -352,7 +356,126 @@
 			</ROOT>
 		</s_searchsolr>
 
-	    <s_softlink>
+		<s_showhit>
+			<ROOT>
+				<TCEforms>
+					<sheetTitle>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.action.showHit</sheetTitle>
+				</TCEforms>
+				<type>array</type>
+				<el>
+					<showhit.usedIndex>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.usedIndex</label>
+							<config>
+								<type>select</type>
+								<items type="array">
+								  <numIndex index="0" type="array">
+									<numIndex index="0"></numIndex>
+									<numIndex index="1"></numIndex>
+								  </numIndex>
+								</items>
+								<itemsProcFunc>EXT:mksearch/util/class.tx_mksearch_util_TCA.php:tx_mksearch_util_TCA->getIndexes</itemsProcFunc>
+								<multiple>0</multiple>
+								<maxitems>1</maxitems>
+								<size>1</size>
+							</config>
+						</TCEforms>
+					</showhit.usedIndex>
+					<showhit.extkey>
+						<TCEforms>
+							<label>LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indexerconfigs.extkey</label>
+							<config>
+								<type>select</type>
+								<items type="array">
+									<numIndex index="0" type="array">
+										<numIndex index="0"></numIndex>
+										<numIndex index="1"></numIndex>
+									</numIndex>
+								</items>
+								<itemsProcFunc>EXT:mksearch/util/class.tx_mksearch_util_TCA.php:tx_mksearch_util_TCA->getIndexerExtKeys</itemsProcFunc>
+								<size>1</size>
+								<maxitems>1</maxitems>
+								<eval>required,trim</eval>
+							</config>
+						</TCEforms>
+					</showhit.extkey>
+					<showhit.contenttype>
+						<TCEforms>
+							<label>LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indexerconfigs.contenttype</label>
+							<config>
+								<type>select</type>
+								<items type="array">
+									<numIndex index="0" type="array">
+										<numIndex index="0"></numIndex>
+										<numIndex index="1"></numIndex>
+									</numIndex>
+								</items>
+								<itemsProcFunc>EXT:mksearch/util/class.tx_mksearch_util_TCA.php:tx_mksearch_util_TCA->getIndexerContentTypes</itemsProcFunc>
+								<extKeySection>s_showhit</extKeySection>
+								<extKeyField>showhit.extkey</extKeyField>
+								<size>1</size>
+								<maxitems>1</maxitems>
+								<eval>required,trim</eval>
+							</config>
+						</TCEforms>
+					</showhit.contenttype>
+					<showhit.template.markerclass>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.mainmarkerclass</label>
+							<config>
+								<type>input</type>
+								<size>50</size>
+								<max>256</max>
+								<eval>trim</eval>
+								<default>tx_mksearch_marker_Search</default>
+							</config>
+						</TCEforms>
+					</showhit.template.markerclass>
+					<showhit.template.subpart>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.mainsubpartList</label>
+							<config>
+								<type>input</type>
+								<size>50</size>
+								<max>256</max>
+								<eval>trim</eval>
+								<default>###SHOWHIT###</default>
+							</config>
+						</TCEforms>
+					</showhit.template.subpart>
+					<showhitTemplate>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.showHitTemplate</label>
+							<config>
+								<type>input</type>
+								<size>50</size>
+								<max>256</max>
+								<eval>trim</eval>
+								<wizards type="array">
+									<_PADDING>2</_PADDING>
+									<link type="array">
+										<type>popup</type>
+										<title>Link</title>
+										<icon>link_popup.gif</icon>
+										<script>browse_links.php?mode=wizard&amp;act=file</script>
+										<params type="array">
+											<blindLinkOptions>page,url,mail,spec</blindLinkOptions>
+											<allowedExtensions>htm,html</allowedExtensions>
+										</params>
+										<JSopenParams>height=300,width=500,status=0,menubar=0,scrollbars=1</JSopenParams>
+									</link>
+								</wizards>
+							</config>
+						</TCEforms>
+					</showhitTemplate>
+				</el>
+			</ROOT>
+		</s_showhit>
+		<s_softlink>
 			<ROOT>
 				<TCEforms>
 					<sheetTitle>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.tab.softlink</sheetTitle>

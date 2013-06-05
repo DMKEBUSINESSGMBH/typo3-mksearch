@@ -15,6 +15,7 @@
 			<label index="plugin.mksearch.flexform.tssetup">TS config path: plugin.tx_mksearch.</label>
 			<label index="plugin.mksearch.flexform.action.searchLucene">Search Form for Lucene</label>
 			<label index="plugin.mksearch.flexform.action.searchSolr">Search view for Solr</label>
+			<label index="plugin.mksearch.flexform.action.showHit">Detail view for contenttype</label>
 			<label index="plugin.mksearch.flexform.usedIndex">Search Index to use</label>
 			<label index="plugin.mksearch.flexform.filter.debugQuery">Debug filter query</label>
 			<label index="plugin.mksearch.flexform.filter.confid">Filter</label>
@@ -29,6 +30,7 @@
 			<label index="plugin.mksearch.flexform.template">Template</label>
 			<label index="plugin.mksearch.flexform.searchFormTemplate">Template for search formular</label>
 			<label index="plugin.mksearch.flexform.resultListTemplate">Template for result list</label>
+			<label index="plugin.mksearch.flexform.showHitTemplate">Template for detail view</label>
 			<label index="plugin.mksearch.flexform.enableAutoComplete">Enable autocomplete/suggest</label>
 			<label index="plugin.mksearch.flexform.includeJquery">Include jQuery main</label>
 			<label index="plugin.mksearch.flexform.includeJqueryUiCore">Include jQuery-UI Core</label>

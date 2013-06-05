@@ -28,7 +28,7 @@ tx_rnbase::load('tx_mksearch_util_Config');
  * Tools for use in TCA
  */
 class tx_mksearch_util_TCA {
-	
+
 	/**
 	 * Convert HTML to plain text
 	 *
@@ -64,7 +64,7 @@ class tx_mksearch_util_TCA {
 			$params['items'][] = array($k,$k);
 		}
 	}
-	
+
 	/**
 	 * Get content types keys of the given indexer extension
 	 *
@@ -72,16 +72,34 @@ class tx_mksearch_util_TCA {
 	 * @return array
 	 */
 	public static function getIndexerContentTypes(array &$params) {
-		if (!$params['row']['extkey']) return;
+		$extKey = $params['row']['extkey'];
+		// im flexform nachsehen
+		if (!$extKey && !empty($params['config']['extKeyField']) && !empty($params['config']['extKeySection'])) {
+			if ($params['table'] == 'tt_content' && !empty($params['row']['pi_flexform'])) {
+				$flexform = t3lib_div::xml2array($params['row']['pi_flexform']);
+			}
+			if (!empty($flexform)) {
+				$section = $params['config']['extKeySection'];
+				$field  = $params['config']['extKeyField'];
+				if (!empty($flexform['data'][$section])
+					&& !empty($flexform['data'][$section]['lDEF'][$field])) {
+					$extKey = $flexform['data'][$section]['lDEF'][$field]['vDEF'];
+				}
+			}
+		}
 
-		$config = tx_mksearch_util_Config::getIndexerConfigs($params['row']['extkey']);
+		if (!$extKey) {
+			return;
+		}
+
+		$config = tx_mksearch_util_Config::getIndexerConfigs($extKey);
 		// wir sortieren vorher, damit bestehende items nicht mit sortiert werden!
 		sort($config);
 		foreach ($config as $k) {
 			$params['items'][] = array($k,$k);
 		}
 	}
-	
+
 	/**
 	 * Insert default TS configuration of the given indexer
 	 *
@@ -91,7 +109,7 @@ class tx_mksearch_util_TCA {
 		if (!(isset($params['params']['insertBetween']) && is_array($params['params']['insertBetween']) &&
 					!empty($params['row']['extkey']) && !empty($params['row']['contenttype'])))
 			return;
-		
+
 		try {
 			$ts = tx_mksearch_util_Config::getIndexerDefaultTSConfig($params['row']['extkey'], $params['row']['contenttype']);
 		}
@@ -107,7 +125,7 @@ class tx_mksearch_util_TCA {
 
 		$lpos += strlen($params['params']['insertBetween'][0]);
 		$rpos = strrpos($params['item'], $params['params']['insertBetween'][1]);
-		
+
 		if ($rpos === false or $lpos > $rpos) return;
 
 		$between = substr($params['item'], $lpos, $rpos-$lpos);
@@ -115,7 +133,7 @@ class tx_mksearch_util_TCA {
 			$params['item'] = substr($params['item'], 0, $lpos) . $ts . substr($params['item'], $rpos, strlen($params['item'])-$rpos);
 		}
 	}
-	
+
 	/**
 	 * Insert solr indexes fot the current rootpage/domain
 	 *
@@ -125,7 +143,7 @@ class tx_mksearch_util_TCA {
 		// rootpage des aktuellen plugins
 		tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
 		$rootOfPlugin = tx_mksearch_service_indexer_core_Config::getSiteRootPage($params['row']['pid']);
-		
+
 		// Wir suchen alle Indexes, da die aktuelle PageId oder die RootPageId
 		// nicht die der PageId des Indexes entsprechen muss.
 		$fields = array();
@@ -143,7 +161,7 @@ class tx_mksearch_util_TCA {
 			if(empty($rootOfIndex['uid']) || $rootOfIndex['uid'] == $rootOfPlugin['uid'])
 				$params['items'][] = array($index->getTitle(), $index->getUid());
 		}
-		
+
 	}
 }
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_TCA.php'])	{

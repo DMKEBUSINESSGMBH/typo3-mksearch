@@ -434,6 +434,17 @@ plugin.tx_mksearch {
 			wrap = ###LABEL_search_term_was### "|"
 		}
 	}
+	
+	showhit {
+		usedIndex = 0
+		template {
+			itempath = hit
+			markerclass = tx_mksearch_marker_Search
+		}
+		hit {
+			extrainfo =< lib.mksearch.extrainfo
+		}
+	}
 }
 
 

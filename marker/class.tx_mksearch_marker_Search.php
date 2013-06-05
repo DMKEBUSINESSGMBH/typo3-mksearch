@@ -47,15 +47,16 @@ class tx_mksearch_marker_Search extends tx_rnbase_util_BaseMarker {
 		if($this->containsMarker($template, $marker.'_EXTRAINFO')) {
 			$template = $this->addInfo($template, $item, $formatter, $confId.'extrainfo.', $marker.'_EXTRAINFO');
 		}
-		
+
 		// Fill MarkerArray
-		$markerArray = $formatter->getItemMarkerArrayWrapped($item->record, $confId, 0, $marker.'_',$item->getColumnNames());
+		$unused = $this->findUnusedCols($item->record, $template, $marker);
+		$markerArray = $formatter->getItemMarkerArrayWrapped($item->record, $confId, $unused, $marker.'_', $item->getColumnNames());
 		$subpartArray = array(); $wrappedSubpartArray = array();
-		
+
 		$out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
 		return $out;
 	}
-	
+
 
 	/**
 	 * Diese Methode ersetzt im HTML-Template der Marker ###..._EXTRAINFO###. Es wird dafür nach einem konfigurierten
@@ -68,7 +69,7 @@ class tx_mksearch_marker_Search extends tx_rnbase_util_BaseMarker {
 	 * @param string $markerPrefix
 	 */
 	protected function addInfo($template, &$item, $formatter, $confId, $markerPrefix) {
-		
+
 		$typeConfId = $confId . $item->record['extKey'].'.'.$item->record['contentType'].'.';
 		$markerClass = $formatter->getConfigurations()->get($typeConfId.'markerClass');
 		if($markerClass) {
@@ -97,10 +98,10 @@ class tx_mksearch_marker_Search extends tx_rnbase_util_BaseMarker {
 		} else {
 			$extraInfo = '<!-- NO MARKER-CLASS FOUND: '.$typeConfId.'markerClass'.' -->';
 		}
-		
+
 		$markerArray = array('###'.$markerPrefix.'###' => $extraInfo);
 		$template = tx_rnbase_util_Templates::substituteMarkerArrayCached($template,$markerArray);
-		
+
 		return $template;
 	}
 }
