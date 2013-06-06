@@ -341,13 +341,6 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 										$aConfigByContentType = t3lib_div::array_merge_recursive_overrule(
 											$indexConfig['default.'][$extKey.'.'][$contentType.'.'], $aConfigByContentType);
 									// indizieren!
-									echo '<pre>'.var_export(array(
-									       $aConfigByContentType,
-										$indexConfig,
-									       #\TYPO3\CMS\Core\Utility\DebugUtility::debugTrail(),
-									        'DEBUG: '.__METHOD__.' Line: '.__LINE__
-									    ), true).'</pre>'; // @TODO: remove me
-									exit;
 									$doc = $indexer->prepareSearchData($queueRecord['tablename'], $record, $searchEngine->makeIndexDocInstance($extKey, $contentType), $aConfigByContentType);
 									if($doc) {
 										//add fixed_fields from indexer config if defined
