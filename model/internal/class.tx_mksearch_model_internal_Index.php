@@ -110,9 +110,15 @@ class tx_mksearch_model_internal_Index extends tx_rnbase_model_base {
 			$this->options = tx_mksearch_util_ServiceRegistry::getIntConfigService()
 				->getIndexerOptionsByIndex($this);
 
+			if (empty($this->options['default.']) || !is_array($this->options['default.'])) {
+				$this->options['default.'] = array();
+			}
+
 			// get default configuation from composite
-			$this->options['default'] = tx_mksearch_util_ServiceRegistry::getIntCompositeService()
+			$compositeConfig = tx_mksearch_util_ServiceRegistry::getIntCompositeService()
 				->getIndexerOptionsByIndex($this);
+			$this->options['default.'] = t3lib_div::array_merge_recursive_overrule(
+				$this->options['default.'], $compositeConfig);
 
 		}
 		return $this->options;
@@ -141,14 +147,14 @@ class tx_mksearch_model_internal_Index extends tx_rnbase_model_base {
 		return $out; //t3lib_div::view_array($this->record);
 
 	}
-	
+
 	/**
 	 * @return int
 	 */
 	public function getSolrVersion() {
 		return $this->record['solrversion'];
 	}
-	
+
 	/**
 	 * @return boolean
 	 */

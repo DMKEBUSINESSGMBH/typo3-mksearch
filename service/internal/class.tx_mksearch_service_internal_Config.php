@@ -75,6 +75,8 @@ class tx_mksearch_service_internal_Config extends tx_mksearch_service_internal_B
 		);
 		$tmpCfg = $this->search($fields, $options);
 
+		$sTs = $index->record['configuration'] . "\n";
+
 		//use the uid of the index config as key to be able to
 		//get different configs for the same contenttype
 		foreach ($tmpCfg as $oModel) {

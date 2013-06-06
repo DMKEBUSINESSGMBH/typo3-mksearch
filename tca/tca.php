@@ -124,7 +124,7 @@ $TCA['tx_mksearch_indices'] = array (
 				'type' => 'text',
 				'cols' => '200',
 				'rows' => '50',
-				'default' => '# Insert the default config for this index.'
+				'default' => '# Insert the default config for this index.'.PHP_EOL.PHP_EOL.'default {'.PHP_EOL.'	# insert default configuration for indexers here.'.PHP_EOL.'	# core.tt_content.lang = 1'.PHP_EOL.'}'
 			)
 		)
 	),

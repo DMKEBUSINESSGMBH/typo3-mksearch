@@ -43,7 +43,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 	 * @var string
 	 */
 	private static $queueTable = 'tx_mksearch_queue';
-	
+
 	const TYPE_SOLR = 'solr';
 
 	/**
@@ -337,10 +337,17 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 								//the first config will be overwritten by the second one
 								foreach ($indexConfig[$extKey.'.'][$contentType.'.'] as $aConfigByContentType){
 									// config mit der default config mergen, falls vorhanden
-									if (is_array($indexConfig['default'][$extKey.'.'][$contentType.'.']))
+									if (is_array($indexConfig['default.'][$extKey.'.'][$contentType.'.']))
 										$aConfigByContentType = t3lib_div::array_merge_recursive_overrule(
-											$indexConfig['default'][$extKey.'.'][$contentType.'.'], $aConfigByContentType);
+											$indexConfig['default.'][$extKey.'.'][$contentType.'.'], $aConfigByContentType);
 									// indizieren!
+									echo '<pre>'.var_export(array(
+									       $aConfigByContentType,
+										$indexConfig,
+									       #\TYPO3\CMS\Core\Utility\DebugUtility::debugTrail(),
+									        'DEBUG: '.__METHOD__.' Line: '.__LINE__
+									    ), true).'</pre>'; // @TODO: remove me
+									exit;
 									$doc = $indexer->prepareSearchData($queueRecord['tablename'], $record, $searchEngine->makeIndexDocInstance($extKey, $contentType), $aConfigByContentType);
 									if($doc) {
 										//add fixed_fields from indexer config if defined
@@ -389,16 +396,16 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 		}
 		catch (Exception $e) {
 			tx_rnbase_util_Logger::fatal(
-				'[INDEXQUEUE] Fatal error processing queue occured! The queue is left as it is so the indexing can be tried again.', 
-				'mksearch', 
+				'[INDEXQUEUE] Fatal error processing queue occured! The queue is left as it is so the indexing can be tried again.',
+				'mksearch',
 				array(
-					'Exception' => $e->getMessage(), 
+					'Exception' => $e->getMessage(),
 					'Queue-Items'=> $data
 				)
 			);
 			return false;
 		}
-		
+
 		return true;
 	}
 
@@ -491,13 +498,13 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 			t3lib_div::debug($query,'class.tx_mksearch_srv_Search.php : '.__LINE__);
 		$GLOBALS['TYPO3_DB']->sql_query($query);
 	}
-	
+
 	/**
 	 */
 	public function getRandomSolrIndex() {
 		$fields['INDX.engine'][OP_EQ] = self::TYPE_SOLR;
 		$options['limit'] = 1;
-		
+
 		$indexes = $this->search($fields, $options);
 		return !empty($indexes[0]) ? $indexes[0] : null;
 	}
