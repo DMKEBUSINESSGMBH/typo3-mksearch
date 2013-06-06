@@ -32,6 +32,7 @@
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_mksearch_interface_Indexer');
 tx_rnbase::load('tx_mksearch_util_Misc');
+tx_rnbase::load('tx_mksearch_util_TCA');
 tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
 tx_rnbase::load('tx_mksearch_util_Indexer');
 
@@ -68,12 +69,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 		$this->modelToIndex = $this->createModel($rawData);
 
 		// Set base id for specific indexer.
-		// Take care for localized records where uid of original record
-		// is stored in $rawData['l18n_parent'] instead of $rawData['uid']!
-		$indexDoc->setUid(
-			isset($rawData['sys_language_uid']) && $rawData['sys_language_uid']
-				? $rawData['l18n_parent'] : $rawData['uid']
-		);
+		$indexDoc->setUid($this->getUid($tableName, $rawData, $options));
 
 		// Is the model valid and data indexable?
 		if (!$this->modelToIndex->record || !$this->isIndexableRecord($this->modelToIndex->record, $options)) {
@@ -97,6 +93,25 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 	}
 
 	/**
+	 * Liefert die UID des Datensatzes
+	 *
+	 * @param string $tableName
+	 * @param array $rawData
+	 * @param array $options
+	 * @return int
+	 */
+	protected function getUid($tableName, $rawData, $options) {
+		// Take care for localized records where uid of original record
+		// is stored in $rawData['l18n_parent'] instead of $rawData['uid']!
+		$sysLanguageUidField = tx_mksearch_util_TCA::getLanguageFieldForTable($tableName);
+		$lnParentField = tx_mksearch_util_TCA::getTransOrigPointerFieldForTable($tableName);
+		return isset($rawData[$sysLanguageUidField]) && $rawData[$sysLanguageUidField] && isset($rawData[$lnParentField])
+			? $rawData[$lnParentField]
+			: $rawData['uid']
+		;
+	}
+
+	/**
 	 * Shall we break the indexing for the current data?
 	 *
 	 * when an indexer is configured for more than one table
@@ -114,10 +129,11 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 	 */
 	protected function stopIndexing($tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options) {
 		// Wir prüfen, ob die zu indizierende Sprache stimmt.
-		if (!empty($rawData['sys_language_uid'])) {
-			// @TODO: l18n_parent abprüfen, wenn $lang!=0 !?
+		$sysLanguageUidField = tx_mksearch_util_TCA::getLanguageFieldForTable($tableName);
+		if (isset($rawData[$sysLanguageUidField])) {
+			// @TODO: getTransOrigPointerFieldForTable abprüfen, wenn $lang!=0 !
 			$lang = isset($options['lang']) ? (int) $options['lang'] : 0;
-			if($rawData['sys_language_uid'] != $lang) {
+			if($rawData[$sysLanguageUidField] != $lang) {
 				return true;
 			}
 		}

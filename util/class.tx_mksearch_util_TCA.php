@@ -161,8 +161,35 @@ class tx_mksearch_util_TCA {
 			if(empty($rootOfIndex['uid']) || $rootOfIndex['uid'] == $rootOfPlugin['uid'])
 				$params['items'][] = array($index->getTitle(), $index->getUid());
 		}
-
 	}
+
+	/**
+	 * Liefert den Spaltennamen für das Parent der aktuellen lokalisierung
+	 *
+	 * @param string $tableName
+	 * @return string
+	 */
+	public static function getTransOrigPointerFieldForTable($tableName) {
+		global $TCA;
+		if (empty($TCA[$tableName]) || empty($TCA[$tableName]['ctrl']['transOrigPointerField'])) {
+			return '';
+		}
+		return $TCA[$tableName]['ctrl']['transOrigPointerField'];
+	}
+	/**
+	 * Liefert den Spaltennamen für das Parent der aktuellen lokalisierung
+	 *
+	 * @param string $tableName
+	 * @return string
+	 */
+	public static function getLanguageFieldForTable($tableName) {
+		global $TCA;
+		if (empty($TCA[$tableName]) || empty($TCA[$tableName]['ctrl']['languageField'])) {
+			return '';
+		}
+		return $TCA[$tableName]['ctrl']['languageField'];
+	}
+
 }
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_TCA.php'])	{
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_TCA.php']);
