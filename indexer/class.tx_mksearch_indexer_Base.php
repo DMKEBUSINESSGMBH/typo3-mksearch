@@ -67,8 +67,13 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 		// get a model from the source array
 		$this->modelToIndex = $this->createModel($rawData);
 
-		// set base id for specific indexer
-		$indexDoc->setUid($this->modelToIndex->getUid());
+		// Set base id for specific indexer.
+		// Take care for localized records where uid of original record
+		// is stored in $rawData['l18n_parent'] instead of $rawData['uid']!
+		$indexDoc->setUid(
+			isset($rawData['sys_language_uid']) && $rawData['sys_language_uid']
+				? $rawData['l18n_parent'] : $rawData['uid']
+		);
 
 		// Is the model valid and data indexable?
 		if (!$this->modelToIndex->record || !$this->isIndexableRecord($this->modelToIndex->record, $options)) {
@@ -108,7 +113,14 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 	 * @return bool
 	 */
 	protected function stopIndexing($tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options) {
-		//nothing to handle by default. continue indexing
+		// Wir prüfen, ob die zu indizierende Sprache stimmt.
+		if (!empty($rawData['sys_language_uid'])) {
+			// @TODO: l18n_parent abprüfen, wenn $lang!=0 !?
+			$lang = isset($options['lang']) ? (int) $options['lang'] : 0;
+			if($rawData['sys_language_uid'] != $lang) {
+				return true;
+			}
+		}
 		return false;
 	}
 
