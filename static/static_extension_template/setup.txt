@@ -481,8 +481,8 @@ lib.mksearch.extrainfo {
 			### Default lassen wir dies auf mksearch,
 			### um bestehende Indexer kompatibel zu halten.
 			linkMethod = mksearch
-			links {
-			}
+			###links {
+			###}
 			
 			abstract {
 				wrap = <div class="searchResultAbstract">|...</div>
