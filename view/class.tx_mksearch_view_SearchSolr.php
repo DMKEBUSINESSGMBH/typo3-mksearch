@@ -42,7 +42,7 @@ class tx_mksearch_view_SearchSolr extends tx_rnbase_view_Base {
 	 * @var tx_rnbase_configurations
 	 */
 	private $configurations = null;
-	
+
 	/**
 	 *
 	 * @param string 						$template
@@ -53,7 +53,7 @@ class tx_mksearch_view_SearchSolr extends tx_rnbase_view_Base {
 	function createOutput($template, &$viewData, &$configurations, &$formatter) {
 		// Get data from action
 		$result =& $viewData->offsetGet('result');
-		
+
 		//shall we parse the content just as json
 		if($configurations->getParameters()->get('ajax'))
 			return json_encode($result);
@@ -65,26 +65,26 @@ class tx_mksearch_view_SearchSolr extends tx_rnbase_view_Base {
 				'tx_rnbase_util_ListBuilder',
 				$viewData->offsetGet('filter') instanceof ListBuilderInfo ? $viewData->offsetGet('filter') : null
 			);
-		
+
 		// wurden options für die markerklassen gesetzt?
 		$markerParams = $viewData->offsetExists('markerParams') ? $viewData->offsetGet('markerParams') : array();
 
 		$markerClass = $configurations->get($this->confId.'mainmarkerclass');
 		$markerClass = $markerClass ? $markerClass : 'tx_mksearch_marker_Search';
-				
+
 		$out = $listBuilder->render(
 				$items, $viewData,
 				$template, $markerClass,
 				$this->confId.'hit.', 'SEARCHRESULT',
 				$formatter, $markerParams
 		);
-			
+
 		//noch die Facetten parsen wenn da
 		$out = $this->handleFacets($out, $viewData, $configurations, $formatter, $listBuilder, $result);
 
 		return $out;
 	}
-	
+
 	/**
 	 * Kümmert sich um das Parsen der Facetten
 	 *
@@ -106,7 +106,7 @@ class tx_mksearch_view_SearchSolr extends tx_rnbase_view_Base {
 		$aFacets = $result ? $result['facets'] : array();
 		$out = $listBuilder->render($aFacets, $viewData,
 			$template, $facetMarkerClass, $this->confId.'facet.', 'FACET', $formatter);
-			
+
 		//jetzt noch den zurücksetzen Link
 		$oBaseMarker = tx_rnbase::makeInstance('tx_rnbase_util_BaseMarker');
 		$wrappedSubpartArray = array();
@@ -125,7 +125,7 @@ class tx_mksearch_view_SearchSolr extends tx_rnbase_view_Base {
 		$this->confId = $this->getController()->getConfId();
 		$this->configurations = &$configurations;
 	}
-	
+
 	/**
 	 * Subpart der im HTML-Template geladen werden soll. Dieser wird der Methode
 	 * createOutput automatisch als $template übergeben.

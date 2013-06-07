@@ -85,14 +85,28 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 		$confId = $this->getConfId();
 		$fields = $this->getConfigurations()->get($confId.'fields.');
 		tx_rnbase_util_SearchBase::setConfigOptions($options, $this->getConfigurations(),$confId.'options.');
-
 		return $this->initFilter($fields, $options, $this->getParameters(), $this->getConfigurations(), $confId);
 	}
-	protected function getConfValue($configurations, $confValue) {
-		$value = $configurations->get($this->getConfIdOverwrite().$confValue);
-//		tx_rnbase_util_Debug::debug(empty($value), $value.' - class.tx_mksearch_filter_SolrBase.php LINE: '.__LINE__); // TODO: remove me
+
+	/**
+	 * Liefert entweder die Konfiguration aus dem Flexform
+	 * oder aus dem Typoscript.
+	 *
+	 * @param string $confId
+	 * @return Ambigous <multitype:, unknown>
+	 */
+	protected function getConfValue($confId) {
+		$configurations = $this->getConfigurations();
+		// fallback: ursprünglich musste das configurationsobject als erster parameter übergeben werden.
+		if (!is_scalar($confId)) {
+			$configurations = $confId;
+			$confId = func_get_arg(1);
+		}
+		// wert aus flexform holen (_override)
+		$value = $configurations->get($this->getConfIdOverwrite().$confId);
 		if(empty($value)) {
-			$value = $configurations->get($this->getConfId().$confValue);
+			// wert aus normalem ts holen.
+			$value = $configurations->get($this->getConfId().$confId);
 		}
 		return $value;
 	}
@@ -117,6 +131,9 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 			$options['qt'] = $requestHandler;
 		}
 
+		// das Limit setzen
+		$this->handleLimit($options);
+
 		// suchstring beachten
 		$this->handleTerm($fields, $parameters, $configurations, $confId);
 
@@ -133,6 +150,24 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 		if($configurations->get($this->getConfIdOverwrite().'options.debug'))
 			$options['debug'] = 1;
 		return true;
+	}
+
+
+
+	/**
+	 * Fügt den Suchstring zu dem Filter hinzu.
+	 *
+	 * @param 	array 						$fields
+	 * @param 	array 						$options
+	 * @param 	tx_rnbase_IParameters 		$parameters
+	 * @param 	tx_rnbase_configurations 	$configurations
+	 * @param 	string 						$confId
+	 */
+	protected function handleLimit(&$options) {
+		// wir können das limit im flexform setzen
+		$options['limit'] = (int) $this->getConfValue('options.limit');
+		// wenn es auf -1 steht, entfernen wir das limit
+		if ($options['limit'] < 0) unset($options['limit']);
 	}
 
 	/**

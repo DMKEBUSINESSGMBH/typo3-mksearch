@@ -192,6 +192,19 @@
 							</config>
 						</TCEforms>
 					</searchsolr.requestHandler>
+					<searchsolr.filter._overwrite.options.limit>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.limit</label>
+							<config>
+								<type>input</type>
+								<size>5</size>
+								<max>5</max>
+								<eval>int, trim</eval>
+								<default>10</default>
+							</config>
+						</TCEforms>
+					</searchsolr.filter._overwrite.options.limit>
 					<searchsolr.filter._overwrite.force>
 						<TCEforms>
 							<exclude>1</exclude>
