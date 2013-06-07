@@ -37,7 +37,7 @@
             <label index="label_table_count">tables found.</label>
             <label index="label_table_name">Table</label>
             <label index="label_table_queuecount">Queue (Global)</label>
-            <label index="label_table_reset">Reset</label>
+            <label index="label_table_reset">Reset (In this Root Page)</label>
             <label index="label_table_resetG">Reset (Global)</label>
             <label index="label_table_clear">Clear (Global)</label>
 

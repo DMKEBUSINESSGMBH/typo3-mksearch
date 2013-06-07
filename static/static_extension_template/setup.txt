@@ -436,6 +436,14 @@ plugin.tx_mksearch {
 	}
 	
 	showhit {
+		_caching {
+			class = tx_mksearch_action_CacheHandler
+			### für den cachekey werden folgende parameter mit genutzt.
+			params.allowed = item
+			name = mksearch
+			### für vorerst 1h cachen
+			expire = 3600
+		}
 		usedIndex = 0
 		template {
 			itempath = hit

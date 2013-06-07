@@ -117,7 +117,7 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 		foreach (array_merge($fields, $options) as $key => $value)
 			$aHashParams[] = $key.$value;
 
-		return tx_rnbase_util_Misc::createHash($aHashParams);
+		return 'search_'.md5(serialize($aHashParams));
 	}
 
 	/**
