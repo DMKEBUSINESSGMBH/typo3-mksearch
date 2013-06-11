@@ -370,14 +370,7 @@ plugin.tx_mksearch {
 			suggestions.builderClass = tx_mksearch_util_SuggestionBuilder
 		}
 		
-		hit {
-			pagebrowser =< lib.mksearch.pagebrowser
-			extrainfo =< lib.mksearch.extrainfo 
-			totalline.startValue = 1
-			# TODO: Für Highlighting testen
-			content.override.cObject = TEXT
-			content.override.cObject.field = content_hl
-		}
+		hit = < lib.mksearch.hit
 		
 		facet{
 			markerClass = tx_mksearch_marker_Facet
@@ -449,12 +442,24 @@ plugin.tx_mksearch {
 			itempath = hit
 			markerclass = tx_mksearch_marker_Search
 		}
-		hit {
-			extrainfo =< lib.mksearch.extrainfo
-		}
+		hit = < lib.mksearch.hit
 	}
 }
 
+
+lib.mksearch.hit {
+	pagebrowser =< lib.mksearch.pagebrowser
+	extrainfo =< lib.mksearch.extrainfo 
+	totalline.startValue = 1
+	# TODO: Für Highlighting testen
+	content.override.cObject = TEXT
+	content.override.cObject.field = content_hl
+	
+	multiValuedGlue = |, |
+	multiValuedGlue.noTrim = 1
+	#multiValuedGlue = 0| 0
+	#multiValuedGlue.noTrim.splitChar = 0
+}
 
 ###
 # Konfiguration für Ausgabe verschiedener Treffertypen

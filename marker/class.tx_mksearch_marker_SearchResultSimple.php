@@ -46,12 +46,6 @@ class tx_mksearch_marker_SearchResultSimple
 			$item = self::getEmptyInstance('tx_mkcontact_models_SearchHit');
 		}
 
-		//wenn wir ein array haben, holen wir uns dazu eine
-		//kommaseparierte Liste um damit einfach im FE arbeiten zu können
-		foreach ($item->record as &$mValue){
-			if(is_array($mValue)) $mValue = implode(', ', $mValue);
-		}
-
 		// Fill MarkerArray
 		$ignore = self::findUnusedCols($item->record, $template, $marker);
 

@@ -43,6 +43,8 @@ class tx_mksearch_marker_Search extends tx_rnbase_util_BaseMarker {
 	public function parseTemplate($template, &$item, &$formatter, $confId, $marker = 'SEARCHRESULT') {
 		if(!is_object($item)) return '';
 
+		$this->prepareHit($template, $item, $formatter, $confId, $marker);
+
 		// Render extra info if needed...
 		if($this->containsMarker($template, $marker.'_EXTRAINFO')) {
 			$template = $this->addInfo($template, $item, $formatter, $confId.'extrainfo.', $marker.'_EXTRAINFO');
@@ -55,6 +57,31 @@ class tx_mksearch_marker_Search extends tx_rnbase_util_BaseMarker {
 
 		$out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
 		return $out;
+	}
+
+	/**
+	 * @param string $template HTML template
+	 * @param tx_mksearch_model_SearchHit $item
+	 * @param tx_rnbase_util_FormatUtil $formatter Formatter to use
+	 * @param string $confId Path in TS config of the item, e. g. 'search.hit.'
+	 * @param string $marker name of marker
+	 * @return void
+	 */
+	protected function prepareHit($template, &$item, &$formatter, $confId, $marker) {
+		$configurations = $formatter->getConfigurations();
+		$glue = $configurations->get($confId.'multiValuedGlue');
+		if ($configurations->getBool($confId.'multiValuedGlue.noTrim')) {
+			$splitter = $configurations->get($confId.'multiValuedGlue.noTrim.splitChar');
+			$splitter = $splitter ? $splitter : '|';
+			$glue = explode($splitter, $glue);
+			$glue = $glue[1];
+		}
+
+		//wenn wir ein array haben, holen wir uns dazu eine
+		//kommaseparierte Liste um damit einfach im FE arbeiten zu können
+		foreach ($item->record as &$mValue){
+		    if(is_array($mValue)) $mValue = implode($glue, $mValue);
+		}
 	}
 
 
