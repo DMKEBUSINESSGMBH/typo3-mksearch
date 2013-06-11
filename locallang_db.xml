@@ -28,6 +28,7 @@
 			<label index="plugin.mksearch.flexform.mainmarkerclass">Main marker class</label>
 			<label index="plugin.mksearch.flexform.mainsubpartList">Subpart for result list</label>
 			<label index="plugin.mksearch.flexform.mainsubpartForm">Subpart for search formular</label>
+			<label index="plugin.mksearch.flexform.uidParamName">Parameter identifiername (item = &amp;mksearch[item])</label>
 			<label index="plugin.mksearch.flexform.template">Template</label>
 			<label index="plugin.mksearch.flexform.searchFormTemplate">Template for search formular</label>
 			<label index="plugin.mksearch.flexform.resultListTemplate">Template for result list</label>

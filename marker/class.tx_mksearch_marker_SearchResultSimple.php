@@ -52,7 +52,7 @@ class tx_mksearch_marker_SearchResultSimple
 		//diese felder werden auch bei nicht vorhanden sein gesetzt damit die market nicht ausgegeben werden
 		$initFields = $formatter->getConfigurations()->get($confId.'initFields.');
 
-		$markerArray = $formatter->getItemMarkerArrayWrapped($item->record, $confId , $ignore, $marker.'_',$initFields);
+		$markerArray = $formatter->getItemMarkerArrayWrapped($item->record, $confId , $ignore, $marker.'_', $initFields);
 		$subpartArray = array(); $wrappedSubpartArray = array();
 
 		$this->prepareLinks($item, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter, $template);

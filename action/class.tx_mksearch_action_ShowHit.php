@@ -46,8 +46,6 @@ class tx_mksearch_action_ShowHit extends tx_rnbase_action_BaseIOC {
 	 * @return string error msg or null
 	 */
 	function handleRequest(&$parameters,&$configurations, &$viewData){
-		$confId = $this->getConfId();
-
 		$index = $this->getIndex();
 		$item = $this->findItem($index);
 
@@ -62,7 +60,11 @@ class tx_mksearch_action_ShowHit extends tx_rnbase_action_BaseIOC {
 		$extKey = $configurations->get($confId.'extkey');
 		$contentType = $configurations->get($confId.'contenttype');
 		$uid = $configurations->get($confId.'uid');
-		$uid = $uid ? $uid : $configurations->getParameters()->getInt('item');
+		if (!$uid) {
+			$uidParamName = $configurations->get($confId.'uidParamName');
+			$uidParamName = $uidParamName ? $uidParamName : 'item';
+			$uid = $configurations->getParameters()->getInt($uidParamName);
+		}
 
 		if (!($extKey && $contentType && $uid)) {
 			throw new InvalidArgumentException(
