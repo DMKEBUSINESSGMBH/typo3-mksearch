@@ -32,7 +32,7 @@ $EM_CONF[$_EXTKEY] = array(
 	'author_company' => 'das MedienKombinat GmbH',
 	'constraints' => array(
 		'depends' => array(
-			'rn_base' => '0.11.13',
+			'rn_base' => '0.13.2',
 		),
 		'conflicts' => array(
 		),
