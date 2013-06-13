@@ -459,6 +459,25 @@ lib.mksearch.hit {
 	multiValuedGlue.noTrim = 1
 	#multiValuedGlue = 0| 0
 	#multiValuedGlue.noTrim.splitChar = 0
+	
+	subparts {
+		is_ttcontent {
+			### definiert die marker (optional).
+			marker {
+				### Definiert den Marker für den Subpart, der angezeigt werden soll (optional). Default ist VISIBLE
+				visible = VISIBLE
+				### Definiert den Marker für den Subpart, der ausgeblendet werden soll (optional). Default ist HIDDEN
+				hidden = HIDDEN
+			}
+			### Definiert, welcher marker gerendert werden soll, der visible (venn true) oder der hidden (wenn false)
+			visible = TEXT
+			visible.value = 1
+			visible.if {
+				value = tt_content
+				equals.data = field:contentType
+			}
+		}
+	}
 }
 
 ###

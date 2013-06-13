@@ -23,13 +23,12 @@
 ***************************************************************/
 
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
-
-tx_rnbase::load('tx_rnbase_util_BaseMarker');
+tx_rnbase::load('tx_rnbase_util_SimpleMarker');
 
 /**
  * Renders a search result
  */
-class tx_mksearch_marker_Search extends tx_rnbase_util_BaseMarker {
+class tx_mksearch_marker_Search extends tx_rnbase_util_SimpleMarker {
 
 	/**
 	 * @param string $template HTML template
@@ -53,7 +52,10 @@ class tx_mksearch_marker_Search extends tx_rnbase_util_BaseMarker {
 		// Fill MarkerArray
 		$unused = $this->findUnusedCols($item->record, $template, $marker);
 		$markerArray = $formatter->getItemMarkerArrayWrapped($item->record, $confId, $unused, $marker.'_', $item->getColumnNames());
-		$subpartArray = array(); $wrappedSubpartArray = array();
+
+		// subparts erzeugen
+		$subpartArray = $wrappedSubpartArray = array();
+		$this->prepareSubparts($wrappedSubpartArray, $subpartArray, $template, $item, $formatter, $confId, $marker);
 
 		$out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
 		return $out;

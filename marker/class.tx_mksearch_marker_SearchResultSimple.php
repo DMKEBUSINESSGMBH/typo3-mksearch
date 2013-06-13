@@ -53,10 +53,15 @@ class tx_mksearch_marker_SearchResultSimple
 		$initFields = $formatter->getConfigurations()->get($confId.'initFields.');
 
 		$markerArray = $formatter->getItemMarkerArrayWrapped($item->record, $confId , $ignore, $marker.'_', $initFields);
-		$subpartArray = array(); $wrappedSubpartArray = array();
 
+		// subparts erzeugen
+		$wrappedSubpartArray = $subpartArray = array();
+		$this->prepareSubparts($wrappedSubpartArray, $subpartArray, $template, $item, $formatter, $confId, $marker);
+
+		// Links erzeugen
 		$this->prepareLinks($item, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter, $template);
 
+		// das Template rendern
 		$out = $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
 		return $out;
 	}
