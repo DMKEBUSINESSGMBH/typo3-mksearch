@@ -4,10 +4,11 @@ if (!defined ('TYPO3_MODE')) {
 }
 
 // Include service configuration
-require(t3lib_extMgm::extPath('mksearch').'service/ext_localconf.php');
+tx_rnbase::load('tx_mksearch_util_ServiceRegistry');
+require_once(t3lib_extMgm::extPath('mksearch').'service/ext_localconf.php');
 
 // Include indexer registrations
-require(t3lib_extMgm::extPath('mksearch').'indexer/ext_localconf.php');
+require_once(t3lib_extMgm::extPath('mksearch').'indexer/ext_localconf.php');
 
 // Setting up scripts that can be run from the cli_dispatch.phpsh script.
 $TYPO3_CONF_VARS['SC_OPTIONS']['GLOBAL']['cliKeys'][$_EXTKEY] = array('EXT:'.$_EXTKEY.'/cli/crawler.php','_CLI_mksearch_luceneindexer');
