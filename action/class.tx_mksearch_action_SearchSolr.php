@@ -1,26 +1,26 @@
 <?php
 /***************************************************************
-*  Copyright notice
-*
-*  (c) 2011 das Medienkombinat
-*  All rights reserved
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
+ *  Copyright notice
+ *
+ *  (c) 2011-2013 das Medienkombinat
+ *  All rights reserved
+ *
+ *  This script is part of the TYPO3 project. The TYPO3 project is
+ *  free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  The GNU General Public License can be found at
+ *  http://www.gnu.org/copyleft/gpl.html.
+ *
+ *  This script is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  This copyright notice MUST APPEAR in all copies of the script!
+ ***************************************************************/
 
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 
@@ -50,7 +50,7 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 	 */
 	function handleRequest(&$parameters,&$configurations, &$viewData){
 		$confId = $this->getConfId();
-		$this->handleSoftLink($parameters, $configurations, $confId);
+		self::handleSoftLink($parameters, $configurations, $confId);
 
 		//Filter erstellen (z.B. Formular parsen)
 		$filter = tx_rnbase_filter_BaseFilter::createFilter($parameters, $configurations, $viewData, $confId);
@@ -190,7 +190,7 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 	 * @param tx_rnbase_configurations $configurations
 	 *
 	 */
-	protected function handleSoftLink($parameters, $configurations, $confId) {
+	public static function handleSoftLink($parameters, $configurations, $confId) {
 		// Softlink Config beginnt direkt im Root, damit sie auch für andere
 		// Suchen genutzt werden kann
 		if(!$configurations->get('softlink.enable')) return;
