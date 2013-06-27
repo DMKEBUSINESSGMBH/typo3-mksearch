@@ -47,7 +47,7 @@
        that you fully re-index after changing this setting as it can
        affect both how text is indexed and queried.
     -->
-  <luceneMatchVersion>LUCENE_33</luceneMatchVersion>
+  <luceneMatchVersion>LUCENE_40</luceneMatchVersion>
 
   <!-- lib directives can be used to instruct Solr to load an Jars
        identified and use them to resolve any "plugins" specified in
@@ -116,7 +116,7 @@
        WARNING: See also the <mainIndex> section below for parameters
        that overfor Solr's main Lucene index.
     -->
-  <indexDefaults>
+  <indexConfig>
 
     <useCompoundFile>false</useCompoundFile>
 
@@ -189,75 +189,7 @@
          Default is 128 and is likely good for most everyone.
       -->
     <!-- <termIndexInterval>256</termIndexInterval> -->
-  </indexDefaults>
-
-  <!-- Main Index
-
-       Values here override the values in the <indexDefaults> section
-       for the main on disk index.
-    -->
-  <mainIndex>
-
-    <useCompoundFile>false</useCompoundFile>
-    <ramBufferSizeMB>32</ramBufferSizeMB>
-    <mergeFactor>10</mergeFactor>
-
-    <!-- Unlock On Startup
-
-         If true, unlock any held write or commit locks on startup.
-         This defeats the locking mechanism that allows multiple
-         processes to safely access a lucene index, and should be used
-         with care.
-
-         This is not needed if lock type is 'none' or 'single'
-     -->
-    <unlockOnStartup>false</unlockOnStartup>
-    
-    <!-- If true, IndexReaders will be reopened (often more efficient)
-         instead of closed and then opened.
-      -->
-    <reopenReaders>true</reopenReaders>
-
-    <!-- Commit Deletion Policy
-
-         Custom deletion policies can specified here. The class must
-         implement org.apache.lucene.index.IndexDeletionPolicy.
-
-         http://lucene.apache.org/java/2_9_1/api/all/org/apache/lucene/index/IndexDeletionPolicy.html
-
-         The standard Solr IndexDeletionPolicy implementation supports
-         deleting index commit points on number of commits, age of
-         commit point and optimized status.
-         
-         The latest commit point should always be preserved regardless
-         of the criteria.
-    -->
-    <deletionPolicy class="solr.SolrDeletionPolicy">
-      <!-- The number of commit points to be kept -->
-      <str name="maxCommitsToKeep">1</str>
-      <!-- The number of optimized commit points to be kept -->
-      <str name="maxOptimizedCommitsToKeep">0</str>
-      <!--
-          Delete all commit points once they have reached the given age.
-          Supports DateMathParser syntax e.g.
-        -->
-      <!--
-         <str name="maxCommitAge">30MINUTES</str>
-         <str name="maxCommitAge">1DAY</str>
-      -->
-    </deletionPolicy>
-
-    <!-- Lucene Infostream
-       
-         To aid in advanced debugging, Lucene provides an "InfoStream"
-         of detailed information when indexing.
-
-         Setting The value to true will instruct the underlying Lucene
-         IndexWriter to write its debugging info the specified file
-      -->
-     <infoStream file="INFOSTREAM.txt">false</infoStream> 
-
-  </mainIndex>
+  </indexConfig>
 
   <!-- JMX
        
@@ -702,7 +634,7 @@
        queries across multiple shards
     -->
     
-    <!--  
+  <!--  
     	Attention!!! Please take over the default/standard request handler into
     	your own solconfig.xml. Please dont change the default request handler. it is
     	used for some actions during indexing and in the backend module of mksearch.
@@ -741,7 +673,7 @@
 			contentType:event AND end_date_dt:[NOW TO *]
 		 -->
 		 <!-- Highlighting
-		 	Fields of the string type cant be highlighted. The type needs to be 
+			Fields of the string type cant be highlighted. The type needs to be 
 			tokenized for highlighting which is not the case for string fields.
 			If parts of a word should be highlighted the field type
 			must contain some sort of ngram filter.
@@ -993,25 +925,25 @@
     </lst>
   </requestHandler>
   
-   <!-- Autocomplete -->
+   <!-- Autocomplete dies muss für Solr 4 noch angepasst werden da es aktuell nicht funktioniert -->
 <!-- for more information on how to configure autocomplete take a look into the Solr Wiki 
 (http://wiki.apache.org/solr/SpellCheckComponent) or here:
 http://solr.pl/en/2010/11/15/solr-and-autocomplete-part-2/ -->  
   <!-- the slash makes it possible to call this handler via an url, which is needed
   if the autocomplete index shall be built -->
-	<requestHandler name="/suggest" class="org.apache.solr.handler.component.SearchHandler">
+	<!-- <requestHandler name="/suggest" class="org.apache.solr.handler.component.SearchHandler">
 		<lst name="defaults">
 			<str name="spellcheck">true</str>
 			<str name="spellcheck.dictionary">suggest_fst</str>
 			<str name="spellcheck.count">10</str>
-			<!-- NOTE: if this is false, results are alpha-ordered, not by weight! -->
+			NOTE: if this is false, results are alpha-ordered, not by weight!
 			<str name="spellcheck.onlyMorePopular">true</str>
 		</lst>
-		<!-- register the search component so we can use the suggest/autocomplete search component -->
+		register the search component so we can use the suggest/autocomplete search component
 		<arr name="components">
 			<str>suggest_fst</str>
 		</arr>
-	</requestHandler>
+	</requestHandler> -->
   
   <!-- Solr Replication
 
@@ -1093,35 +1025,36 @@ http://solr.pl/en/2010/11/15/solr-and-autocomplete-part-2/ -->
 		and check the output on what $SOLRHOME is set. If lib folder does not exist, create it! -->
    <queryConverter name="queryConverter" class="org.dmk.solr.spelling.MultiWordSpellingQueryConverter"/>
    
-   <searchComponent name="suggest_fst" class="solr.SpellCheckComponent">
+   <!-- dies muss für Solr 4 noch angepasst werden da es aktuell nicht funktioniert  -->
+   <!-- <searchComponent name="suggest_fst" class="solr.SpellCheckComponent">
 		<lst name="spellchecker">
 			<str name="name">suggest_fst</str>
-			<!-- the field we use for index building. should be filled with all the information
-				considered for autocomplete. -->
+			the field we use for index building. should be filled with all the information
+				considered for autocomplete.
 			<str name="field">text_autocomplete_phrases</str>
 			<str name="classname">org.apache.solr.spelling.suggest.Suggester</str>
-			<!-- uses not much memory and is very fast -->
+			uses not much memory and is very fast
 			<str name="lookupImpl">org.apache.solr.spelling.suggest.fst.FSTLookup</str>
-			<!-- the directory we store our index data for suggestions. -->
+			the directory we store our index data for suggestions.
 			<str name="storeDir">suggest_fst</str>
 			<str name="buildOnOptimize">true</str>
-			<!-- Suggester properties -->
+			Suggester properties
 			<bool name="exactMatchFirst">true</bool>
-			<!-- what does this exactly mean? taken from Solr Book "Apache Solr 3 Enterprise Search Server"
-      			page 224 -->
+			what does this exactly mean? taken from Solr Book "Apache Solr 3 Enterprise Search Server"
+      			page 224
 			<int name="weightBuckets">100</int>
 		</lst>
 
-    <!-- a spellchecker that uses a different distance measure
+    a spellchecker that uses a different distance measure
     <lst name="spellchecker">
       <str name="name">jarowinkler</str>
       <str name="field">spell</str>
       <str name="distanceMeasure">org.apache.lucene.search.spell.JaroWinklerDistance</str>
       <str name="spellcheckIndexDir">./spellchecker2</str>
     </lst>
-     -->
+    
 
-    <!-- a file based spell checker
+    a file based spell checker
     <lst name="spellchecker">
       <str name="classname">solr.FileBasedSpellChecker</str>
       <str name="name">file</str>
@@ -1129,8 +1062,8 @@ http://solr.pl/en/2010/11/15/solr-and-autocomplete-part-2/ -->
       <str name="characterEncoding">UTF-8</str>
       <str name="spellcheckIndexDir">./spellcheckerFile</str>
     </lst>
-    -->
-  </searchComponent>
+   
+  </searchComponent> -->
   
    <!-- Spell Check
 
@@ -1374,30 +1307,6 @@ http://solr.pl/en/2010/11/15/solr-and-autocomplete-part-2/ -->
     </arr>
   </requestHandler>
 
-
-  <!-- Query Elevation Component
-
-       http://wiki.apache.org/solr/QueryElevationComponent
-
-       a search component that enables you to configure the top
-       results for a given query regardless of the normal lucene
-       scoring.
-    -->
-  <searchComponent name="elevator" class="solr.QueryElevationComponent" >
-    <!-- pick a fieldType to analyze queries -->
-    <str name="queryFieldType">string</str>
-    <str name="config-file">elevate.xml</str>
-  </searchComponent>
-
-  <!-- A request handler for demonstrating the elevator component -->
-  <requestHandler name="/elevate" class="solr.SearchHandler" startup="lazy">
-    <lst name="defaults">
-      <str name="echoParams">explicit</str>
-    </lst>
-    <arr name="last-components">
-      <str>elevator</str>
-    </arr>
-  </requestHandler>
 
   <!-- Highlighting Component
 
