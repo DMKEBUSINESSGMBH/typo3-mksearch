@@ -31,15 +31,15 @@ tx_rnbase::load('tx_rnbase_util_ListBuilderInfo');
  * @author rene
  */
 class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implements ListBuilderInfo {
-	
+
 	static private $formData = array();
-	
+
 	/**
 	 * Store info if a search request was submitted - needed for empty list message
 	 * @var bool
 	 */
 	private $isSearch = false;
-	
+
 	/**
 	 * Initialize filter
 	 *
@@ -52,7 +52,7 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
 
 		return $this->initFilter($fields, $options, $this->getParameters(), $this->getConfigurations(), $this->getConfId());
 	}
-	
+
 	/**
 	 * Filter for search form
 	 *
@@ -68,7 +68,7 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
 		// Only the searchform was displayed
 		if($configurations->get('formOnly'))
 			return false;
-			
+
 		// Form still filled in?
 		$term = $parameters->get('term');
 		if (!$term)
@@ -146,6 +146,8 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
 					$formData = $parameters->get('submit') ? $paramArray : self::$formData;
 					$formData['action'] = $link->makeUrl(false);
 					$formData['searchcount'] = $configurations->getViewData()->offsetGet('searchcount');
+					tx_rnbase::load('tx_rnbase_util_FormUtil');
+					$formData['hiddenfields'] = tx_rnbase_util_FormUtil::getHiddenFieldsForUrlParams($formData['action']);
 					$this->prepareFormFields($formData, $parameters);
 
 					$templateMarker = tx_rnbase::makeInstance('tx_mksearch_marker_General');
@@ -190,7 +192,7 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
 			$formData['mode_standard_selected'] = 'checked=checked';
 		}
 	}
-	
+
 	/**
 	 * Get a message string for empty list. This is an language string. The key is
 	 * taken from ts-config: [item].listinfo.llkeyEmpty
@@ -210,9 +212,9 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
 		}
 		return '';
 	}
-	
+
 	function setMarkerArrays(&$markerArray, &$subpartArray, &$wrappedSubpartArray) {}
-	
+
 	function getListMarkerInfo() {return null;}
 
 }

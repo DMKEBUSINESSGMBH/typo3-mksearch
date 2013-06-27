@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2011 das Medienkombinat
+*  (c) 2011-2013 das Medienkombinat
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -27,6 +27,8 @@ require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 
 tx_rnbase::load('tx_rnbase_view_Base');
 tx_rnbase::load('tx_rnbase_util_BaseMarker');
+tx_rnbase::load('tx_rnbase_util_Templates');
+
 
 
 /**
@@ -113,7 +115,7 @@ class tx_mksearch_view_SearchSolr extends tx_rnbase_view_Base {
 		$subpartArray = array();
 		$markerArray = array();
 		$oBaseMarker->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $this->confId.'facet.', 'reset', 'FACET', array(), $out);
-		return $formatter->cObj->substituteMarkerArrayCached($out, $markerArray, $subpartArray, $wrappedSubpartArray);
+		return tx_rnbase_util_Templates::substituteMarkerArrayCached($out, $markerArray, $subpartArray, $wrappedSubpartArray);
 	}
 
 	/**
