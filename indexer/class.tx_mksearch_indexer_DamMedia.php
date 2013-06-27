@@ -272,7 +272,7 @@ indexMode = solr
 
 
 ### delete from or abort indexing for the record if isIndexableRecord or no record?
- deleteIfNotIndexable = 0
+deleteIfNotIndexable = 1
 
 # define filters for DAM records. All filters must match to index a record.
 filter.tx_dam {
