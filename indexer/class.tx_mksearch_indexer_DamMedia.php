@@ -34,7 +34,7 @@ tx_rnbase::load('tx_rnbase_util_Logger');
  * Indexer service for dam.media called by the "mksearch" extension.
  */
 class tx_mksearch_indexer_DamMedia implements tx_mksearch_interface_Indexer {
-	
+
 	/**
 	 * Return content type identification.
 	 * This identification is part of the indexed data
@@ -49,16 +49,16 @@ class tx_mksearch_indexer_DamMedia implements tx_mksearch_interface_Indexer {
 	public static function getContentType() {
 		return array('dam', 'media');
 	}
-	
+
 	/**
 	 * (non-PHPdoc)
 	 * @see tx_mksearch_interface_Indexer::prepareSearchData()
 	 */
 	public function prepareSearchData($tableName, $sourceRecord, tx_mksearch_interface_IndexerDocument $indexDoc, $options) {
-		
+
 		// die uid muss vor dem setDeleted gesetzt sein
 		$indexDoc->setUid($sourceRecord['sys_language_uid'] ? $sourceRecord['l18n_parent'] : $sourceRecord['uid']);
-		
+
 		// Check if record is configured to be indexed
 		if(!$this->isIndexableRecord($tableName, $sourceRecord, $options['filter.'])) {
 			if(isset($options['deleteIfNotIndexable']) && $options['deleteIfNotIndexable']) {
@@ -78,7 +78,7 @@ class tx_mksearch_indexer_DamMedia implements tx_mksearch_interface_Indexer {
 		$content = $sourceRecord['description'] ? $sourceRecord['description'] : $sourceRecord['title'];
 		$indexDoc->setContent($content);
 		$indexDoc->setAbstract($sourceRecord['abstract'] ? $sourceRecord['abstract'] : $content);
-		
+
 		$fields = $options['fields.'];
 		foreach($fields AS $localFieldName => $indexFieldName) {
 			$indexDoc->addField($indexFieldName, $sourceRecord[$localFieldName], 'keyword');
@@ -89,12 +89,17 @@ class tx_mksearch_indexer_DamMedia implements tx_mksearch_interface_Indexer {
 			tx_rnbase_util_Logger::warn('Configured index method not supported: ' . $indexMethod, 'mksearch');
 			return false;
 		}
-		
+
 		//den kompletten, relativen Pfad zum Dam Dokument indizieren
 		$indexDoc->addField('file_relpath_s', $sourceRecord['file_path'] . $sourceRecord['file_name']);
-		
+
 		$this->$indexMethod($tableName, $sourceRecord, $indexDoc, $options);
 		return $indexDoc;
+	}
+	/**
+	 * Do not do anything here.
+	 */
+	private function indexNone($tableName, $sourceRecord, tx_mksearch_interface_IndexerDocument $indexDoc, $options) {
 	}
 	/**
 	 * Indexing binary data by Solr CELL
@@ -132,7 +137,7 @@ class tx_mksearch_indexer_DamMedia implements tx_mksearch_interface_Indexer {
 			$tikaCommand = '';
 			if(!$content = tx_mksearch_util_Tika::getInstance()->extractContent($file, $tikaCommand)) {
 				tx_rnbase_util_Logger::warn(
-					'Apache Tika returned empty content!', 
+					'Apache Tika returned empty content!',
 					'mksearch',
 					array(
 						'file' 			=> $file,
@@ -140,7 +145,7 @@ class tx_mksearch_indexer_DamMedia implements tx_mksearch_interface_Indexer {
 					)
 				);
 			}
-			
+
 			$indexDoc->addField($contentField, $content);
 			if(empty($sourceRecord['abstract']))
 				$indexDoc->setAbstract($content, $indexDoc->getMaxAbstractLength());
@@ -226,6 +231,9 @@ class tx_mksearch_indexer_DamMedia implements tx_mksearch_interface_Indexer {
 		if(array_key_exists('indexMode', $options) && strtolower($options['indexMode']) == 'tika') {
 			$ret = 'indexTika';
 		}
+		elseif(array_key_exists('indexMode', $options) && strtolower($options['indexMode']) == 'none') {
+					$ret = 'indexNone';
+		}
 		return $ret;
 	}
 
@@ -274,15 +282,15 @@ filter.tx_dam {
   byDirectory {
     # Dateien dürfen auch in Unterordnern liegen.
     checkSubFolder = 1
-    1 = fileadmin/denied/
+    # fileadmin global verbieten
+    1 = fileadmin/
     1.disallow = 1
+    # einzelne Ordner (inkl. Unterordner) erlauben
     2 = fileadmin/allowed/
     2.disallow = 0
   }
   # commaseparated strings
   byFileExtension = pdf, html
-  byFileExtension {
-  }
   # TODO: Workspace
 }
 
