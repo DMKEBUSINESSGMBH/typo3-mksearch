@@ -6,7 +6,7 @@
  *
  *  Copyright notice
  *
- *  (c) 2011 das MedienKombinat GmbH <kontakt@das-medienkombinat.de>
+ *  (c) 2011-2013 das MedienKombinat GmbH <kontakt@das-medienkombinat.de>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -47,7 +47,7 @@ class tx_mksearch_mod1_SolrAdmin extends tx_rnbase_mod_BaseModFunc {
 	protected function getFuncId() {
 		return 'solradmin';
 	}
-	
+
 	/**
 	* Kindklassen implementieren diese Methode um den Modulinhalt zu erzeugen
 	* @param string $template
@@ -58,7 +58,7 @@ class tx_mksearch_mod1_SolrAdmin extends tx_rnbase_mod_BaseModFunc {
 	*/
 	protected function getContent($template, &$configurations, &$formatter, $formTool) {
 		$markerArray = array();
-		
+
 		$markerArray['###COMMON_START###'] = $markerArray['###COMMON_END###'] = '';
 		if($GLOBALS['BE_USER']->isAdmin()) {
 			$markerArray['###COMMON_START###'] = tx_rnbase_util_Templates::getSubpart($template,'###COMMON_START###');
@@ -70,7 +70,7 @@ class tx_mksearch_mod1_SolrAdmin extends tx_rnbase_mod_BaseModFunc {
 		$cores = $this->findSolrCores();
 		if(empty($cores))
 			return '###LABEL_SOLR_NOCORES_FOUND### Hab nix';
-		
+
 		$templateMod = tx_rnbase_util_Templates::getSubpart($template,'###ADMINPANEL###');
 		$out = $this->showAdminPanel($templateMod, $cores, $configurations, $formTool, $markerArray);
 		return $out;
@@ -128,18 +128,37 @@ class tx_mksearch_mod1_SolrAdmin extends tx_rnbase_mod_BaseModFunc {
 		return $cores;
 	}
 	/**
-	 * 
+	 *
 	 * @param tx_rnbase_util_FormTool $formTool
 	 */
 	protected function getCoreSelector($cores, $formTool) {
 		$entries = array();
 		foreach ($cores As $core) {
-			$entries[$core->getUid()] = $core->getTitle() .' ('. $core->getName().')';
+			$entries[$core->getUid()] = $core->getTitle() .' ('. $core->getName().') ' . $this->countDocs($core);
 		}
 		$menu = $formTool->showMenu($this->getModule()->getPid(), 'solr_core', $this->getModule()->getName(), $entries);
 		return $menu['menu'];
 	}
 
+	/**
+	 *
+	 * @param tx_mksearch_model_internal_Index $core
+	 */
+	protected function countDocs($core) {
+		$searchEngine = tx_mksearch_util_ServiceRegistry::getSearchEngine($core);
+
+		$fields['term'] = '*:*';
+		$options['rows'] = '0';
+		$info = '';
+		try {
+			$ret = $result = $searchEngine->search($fields, $options);
+			$info = $ret['numFound'] . ' docs found';
+		}
+		catch(Exception $e) {
+			$info = $e->getMessage();
+		}
+		return '('.$info.')';
+	}
 }
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/class.tx_mksearch_mod1_SolrAdmin.php'])	{
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/class.tx_mksearch_mod1_SolrAdmin.php']);
