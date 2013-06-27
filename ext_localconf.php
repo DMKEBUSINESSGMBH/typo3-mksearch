@@ -4,23 +4,23 @@ if (!defined ('TYPO3_MODE')) {
 }
 
 // Include service configuration
-require_once(t3lib_extMgm::extPath('mksearch').'service/ext_localconf.php');
+require(t3lib_extMgm::extPath('mksearch').'service/ext_localconf.php');
 
 // Include indexer registrations
-require_once(t3lib_extMgm::extPath('mksearch').'indexer/ext_localconf.php');
+require(t3lib_extMgm::extPath('mksearch').'indexer/ext_localconf.php');
 
 // Setting up scripts that can be run from the cli_dispatch.phpsh script.
 $TYPO3_CONF_VARS['SC_OPTIONS']['GLOBAL']['cliKeys'][$_EXTKEY] = array('EXT:'.$_EXTKEY.'/cli/crawler.php','_CLI_mksearch_luceneindexer');
 
 // Register hooks
 // Hooks for converting Zend_Lucene index data
-//$GLOBALS ['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['engine_ZendLucene_indexNew_beforeAddingCoreDataToDocument'][] =	
+//$GLOBALS ['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['engine_ZendLucene_indexNew_beforeAddingCoreDataToDocument'][] =
 //	'EXT:' . $_EXTKEY . '/hooks/class.tx_mksearch_hooks_EngineZendLucene.php:tx_mksearch_hooks_EngineZendLucene->convertFields';
-//$GLOBALS ['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['engine_ZendLucene_indexNew_beforeAddingAdditionalDataToDocument'][] =	
+//$GLOBALS ['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['engine_ZendLucene_indexNew_beforeAddingAdditionalDataToDocument'][] =
 //	'EXT:' . $_EXTKEY . '/hooks/class.tx_mksearch_hooks_EngineZendLucene.php:tx_mksearch_hooks_EngineZendLucene->convertFields';
 
 // Hook for manipulating a single search term used with Zend_Lucene
-$GLOBALS ['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['engine_ZendLucene_buildQuery_manipulateSingleTerm'][] =	
+$GLOBALS ['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['engine_ZendLucene_buildQuery_manipulateSingleTerm'][] =
 	'EXT:' . $_EXTKEY . '/hooks/class.tx_mksearch_hooks_EngineZendLucene.php:tx_mksearch_hooks_EngineZendLucene->manipulateSingleTerm';
 
 // Hooks for auto-updating search indices
@@ -47,5 +47,5 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['tx_mksearch_sch
 
 
 if(t3lib_extMgm::isLoaded('mksanitizedparameters')) {
-	require_once(t3lib_extMgm::extPath($_EXTKEY).'ext_mksanitizedparameter_rules.php');	
+	require_once(t3lib_extMgm::extPath($_EXTKEY).'ext_mksanitizedparameter_rules.php');
 }
