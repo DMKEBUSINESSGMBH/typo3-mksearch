@@ -559,6 +559,7 @@ lib.mksearch.extrainfo {
 			links.show {
 				# PID of single news page
 				pid = 0
+				noHash = 0
 				removeIfDisabled = 0
 				qualifier = tx_ttnews
 				paramName = tt_news
@@ -586,6 +587,7 @@ lib.mksearch.extrainfo {
 		subpartName = 
 		hit {
 			links.show.pid = 0
+			links.show.noHash = 0
 			www_s.typolink = 1
 			www_s.typolink.parameter.field = www_s
 			email_s.typolink = 1
@@ -673,6 +675,7 @@ lib.mksearch.extrainfo {
 			links.show {
 				### pid for the single view of a calendar event
 				pid = 0
+				noHash = 0
 				qualifier = tx_cal_controller
 				paramName = uid
 				useKeepVars = 1
