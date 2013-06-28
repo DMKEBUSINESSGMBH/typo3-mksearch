@@ -32,7 +32,7 @@ tx_rnbase::load('tx_mksearch_tests_SolrTestcase');
 class tx_mksearch_tests_filter_SolrBase_solr_testcase extends tx_mksearch_tests_SolrTestcase {
 
 	protected $instanceDir = 'EXT:mksearch/tests/solrtestcore/';
-	protected $configFile = 'EXT:mksearch/solr/conf/solrconfig.xml';
+	protected $configFile = 'EXT:mksearch/solr/conf/solrconfig-3.x.xml';
 	protected $configFileForSolr4 = 'EXT:mksearch/solr/conf/solrconfig-4.0.xml';
 	protected $schemaFile = 'EXT:mksearch/solr/conf/schema.xml';
 	protected $groupDataBackup;

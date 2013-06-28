@@ -33,7 +33,7 @@ require_once(t3lib_extMgm::extPath('mksearch') . 'tests/filter/class.tx_mksearch
 class tx_mksearch_tests_solr_conf_Solrconfig_testcase extends tx_mksearch_tests_SolrTestcase {
 
 	protected $instanceDir = 'EXT:mksearch/tests/solrtestcore/';
-	protected $configFile = 'EXT:mksearch/solr/conf/solrconfig.xml';
+	protected $configFile = 'EXT:mksearch/solr/conf/solrconfig-3.x.xml';
 	protected $configFileForSolr4 = 'EXT:mksearch/solr/conf/solrconfig-4.0.xml';
 	protected $schemaFile = 'EXT:mksearch/solr/conf/schema.xml';
 	protected $defaultContentType = 'fegrouptest';
