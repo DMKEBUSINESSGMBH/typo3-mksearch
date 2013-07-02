@@ -50,11 +50,11 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc {
 	protected function getFuncId() {
 		return 'indizeindizes';
 	}
-	
+
 	protected function getPageId() {
 		return $this->getModule()->id;
 	}
-	
+
 	/**
 	 * Return the actual html content
 	 *
@@ -73,13 +73,13 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc {
 			return '';
 
 		$oIntIndexSrv = tx_mksearch_util_ServiceRegistry::getIntIndexService();
-			
+
 		if(t3lib_div::_GP('updateIndex')) {
 			$status[] = $this->handleReset($oIntIndexSrv, $configurations);
 			$status[] = $this->handleClear($oIntIndexSrv, $configurations);
 			$status[] = $this->handleTrigger($oIntIndexSrv, $configurations);
 		}
-		
+
 		$markerArray = array();
 		$bIsStatus = count($status=array_filter($status)) ? true : false;
 		$markerArray['###ISSTATUS###'] = $bIsStatus ? 'block' : 'none';
@@ -91,9 +91,9 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc {
 		$markerArray['###CORE_STATUS###'] = tx_mksearch_mod1_util_IndexStatusHandler::getInstance()->handleRequest();
 
 		$this->showTables($template, $configurations, $formTool, $markerArray, $oIntIndexSrv);
-		
+
 		$out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray);
-		
+
 		return $out;
 	}
 	/**
@@ -110,7 +110,7 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc {
 		$aIndices = $oIntIndexSrv->getByPageId($this->getPageId());
 
 		$aDefinedTables = array();
-		
+
 		foreach($aIndices as $oIndex){
 			foreach($aIndexers as $indexer){
 				if(!$oIntIndexSrv->isIndexerDefined($oIndex, $indexer))
@@ -126,7 +126,7 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc {
 				}
 			}
 		}
-		
+
 		$decor = tx_rnbase::makeInstance('tx_mksearch_mod1_decorator_Indizes', $this->getModule());
 		$columns = array(
 			'name' => array('title' => 'label_table_name', 'decorator' => $decor),
@@ -145,7 +145,7 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc {
 	  		$content = '<p><strong>###LABEL_NO_INDEXERS_FOUND###</strong></p><br/>';
 	  		$count = '';
 		}
-		
+
 		$markerArray['###TABLES_TABLE###'] = $content;
 		$markerArray['###TABLES_COUNT###'] = count($aDefinedTables);
 	}
@@ -157,9 +157,9 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc {
 		$pidList = tx_mksearch_service_indexer_core_Config::getPidListFromSiteRootPage($this->getPageId(), 999);
 
 		if(empty($pidList)) return $pidList;
-		
+
 		// ausnahmen
-		
+
 		// pageids für dam
 		if (t3lib_extMgm::isLoaded('dam')) {
 			$pages = tx_rnbase_util_DB::doSelect('uid', 'pages', array('where' => 'pages.module=\'dam\''));
@@ -167,7 +167,7 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc {
 		}
 		return $pidList;
 	}
-	
+
 	/**
 	 * Handle clear command from request. This means all record of selected tables have to be removed from
 	 * indexing queue.
@@ -178,7 +178,7 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc {
 	private function handleClear($oIntIndexSrv, &$configurations) {
 		$aTables = t3lib_div::_GP('clearTables');
 		if (!(is_array($aTables) && (!empty($aTables)))) return '';
-		
+
 		$status = $configurations->getLL('label_queue_cleared');
 		foreach ($aTables as $sTable) {
 			$oIntIndexSrv->clearIndexingQueueForTable($sTable);
@@ -219,7 +219,7 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc {
 			if (is_array($aResets)) {
 				foreach ($aResets as $sTable) {
 					$tableOptions = $options;
-					
+
 					if ($key == 'pid') {
 						// wir holen uns eine liste von page ids
 						// nur elemente dieser page id dürfen in der Queue landen
@@ -230,7 +230,7 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc {
 				}
 			}
 		}
-		
+
 		$status .= 	'<ul><li>'.
 					implode('</li><li/>',
 						array_unique(
@@ -243,7 +243,7 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc {
 					'</li></ul>';
 		return $status;
 	}
-	
+
 	/**
 	 * Handle trigger command from request
 	 * @param tx_mksearch_service_internal_Index $oIntIndexSrv
@@ -253,6 +253,9 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc {
 	private function handleTrigger($oIntIndexSrv, &$configurations) {
 		$triggerIndexingQueue = t3lib_div::_GP('triggerIndexingQueue');
 		if (!$triggerIndexingQueue) return '';
+
+		// wir entfernen das time limit, da die indizierung ziemlich lange dauern kann.
+		set_time_limit(0);
 
 		$status = '';
 		$indexItems = intval(t3lib_div::_GP('triggerIndexingQueueCount'));
