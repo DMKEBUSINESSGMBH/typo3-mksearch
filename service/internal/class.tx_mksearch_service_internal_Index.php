@@ -375,7 +375,18 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 
 						}
 						catch(Exception $e) {
-							tx_rnbase_util_Logger::fatal('[INDEXQUEUE] Fatal error processing search document!', 'mksearch', array('Exception' => $e->getMessage(), 'document'=> $doc->__toString() , 'data'=> $doc->getData()));
+							tx_rnbase_util_Logger::fatal(
+								'[INDEXQUEUE] Fatal error processing search document!',
+								'mksearch',
+								array(
+									'Exception' => $e->getMessage(),
+									'document'=> $doc->__toString(),
+									// getData liefert die IndexerField Objekte.
+									// Diese wandeln wir in Strings um, da sonst die Objekte
+									// nicht wiederhergesetllt werden können und Serialisiert auch zu viel Speicher rauben!
+									'data'=> array_map('strval', $doc->getData()),
+								)
+							);
 						}
 					}
 					$searchEngine->commitIndex();
