@@ -103,7 +103,7 @@ class tx_mksearch_marker_Search extends tx_rnbase_util_SimpleMarker {
 		$markerClass = $formatter->getConfigurations()->get($typeConfId.'markerClass');
 		if($markerClass) {
 			// Jetzt das Template laden
-			$file = $formatter->getConfigurations()->get($typeConfId.'template');
+			$file = $formatter->getConfigurations()->get($typeConfId.'template', true);
 			$templateCode = $formatter->getConfigurations()->getCObj()->fileResource($file);
 			if($templateCode) {
 				$subpartName = $formatter->getConfigurations()->get($typeConfId.'subpartName');
