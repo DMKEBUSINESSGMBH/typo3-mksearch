@@ -34,7 +34,7 @@ class tx_mksearch_tests_util_SuggestionBuilder_testcase extends tx_phpunit_testc
 		$this->assertTrue(is_array($suggestionData),'es wurde kein array zurück gegeben!');
 		$this->assertTrue(empty($suggestionData),'es wurde kein leeres array zurück gegeben!');
 	}
-	
+
 	public function testBuildSuggestions() {
 		$suggestionData = new stdClass();
 		$suggestionData->searchWord = new stdClass();
@@ -45,8 +45,10 @@ class tx_mksearch_tests_util_SuggestionBuilder_testcase extends tx_phpunit_testc
 			0 => searchWordFoundOnce,
 			1 => searchWordFoundTwice
 		);
+		$suggestionData->collation = 'test collation should be ignored.';
+
 		$suggestionData = tx_mksearch_util_SuggestionBuilder::getInstance()->buildSuggestions($suggestionData);
-		
+
 		$this->assertTrue(is_array($suggestionData),'es wurde kein array zurück gegeben!');
 		$this->assertEquals(1,count($suggestionData),'Das array hat nicht die richtige Größe!');
 		$this->assertEquals('searchWordFoundOnce',$suggestionData['searchWord'][0]->getUid(),'Datensatz 1 - getUid() hat den falschen Wert!');
