@@ -10,6 +10,7 @@
 		<related>something related</related>
 		<related_links>some related links</related_links>
 		<faq_files>some files</faq_files>
+		<tstamp>123</tstamp>
 	</tx_irfaq_q>
 	<tx_irfaq_q>
 		<uid>2</uid>

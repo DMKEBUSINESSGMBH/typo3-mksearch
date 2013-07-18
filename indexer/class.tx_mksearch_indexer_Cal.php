@@ -176,6 +176,8 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base {
 		$this->indexModelByMapping(
 			$calEvent,$this->getEventMapping(),$indexDoc
 		);
+
+		$indexDoc->setTimestamp($calEvent->record['start_date_timestamp']);
 	}
 
 	/**

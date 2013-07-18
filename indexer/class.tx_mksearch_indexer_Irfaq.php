@@ -138,6 +138,7 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base {
 			'related' => 'related_s',
 			'related_links' => 'related_links_s',
 			'faq_files' => 'faq_files_s',
+			'tstamp' => 'tstamp',
 		);
 	}
 
