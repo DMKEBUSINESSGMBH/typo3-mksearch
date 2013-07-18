@@ -1058,13 +1058,6 @@ http://solr.pl/en/2010/11/15/solr-and-autocomplete-part-2/ -->
 http://solr.pl/en/2010/11/15/solr-and-autocomplete-part-2/ -->
 	
 	<!-- is this thing just configured globally or wtf is going on here?! -->
-	<!-- our own query converter supports phrases. default contains a whitespace tokenizer so we
-		can not suggest phrases. place this .jar simply in $SOLRHOME/lib 
-		and Solr will find it automatically. $SOLRHOME is either the "real" Solr Home containing the solr.xml 
-		or it is the core home. Just open the Solr management console, select the appropiate core
-		and check the output on what $SOLRHOME is set. If lib folder does not exist, create it! -->
-   <queryConverter name="queryConverter" class="org.dmk.solr4.MultiWordSpellingQueryConverter"/>
-   
    <searchComponent name="suggest_fst" class="solr.SpellCheckComponent">
 		<lst name="spellchecker">
 			<str name="name">suggest_fst</str>
