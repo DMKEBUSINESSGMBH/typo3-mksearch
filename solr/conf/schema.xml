@@ -424,6 +424,7 @@
 		 	<analyzer>
 				<tokenizer class="solr.WhitespaceTokenizerFactory" />
 				<filter class="solr.LowerCaseFilterFactory" />
+				<filter class="solr.TrimFilterFactory" />
 					<!-- 
 						build groups of words to support phrases.
 						if we don't do this, we get the complete text after the hit.
