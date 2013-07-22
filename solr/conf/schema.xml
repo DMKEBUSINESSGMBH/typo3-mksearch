@@ -422,6 +422,8 @@
 		<!-- suggesting single words and phrases up to 4 words -->
 		<fieldType class="solr.TextField" name="text_autocomplete" positionIncrementGap="100">
 		 	<analyzer>
+		 		<!-- remove single and double quotes -->
+		 		<charFilter class="solr.PatternReplaceCharFilterFactory" pattern="[&quot;']" replacement="" />
 				<tokenizer class="solr.WhitespaceTokenizerFactory" />
 				<filter class="solr.LowerCaseFilterFactory" />
 				<filter class="solr.TrimFilterFactory" />
@@ -439,8 +441,11 @@
 		</fieldType>
 		<fieldType class="solr.TextField" name="text_autocomplete_for_solr4" positionIncrementGap="100">
 		 	<analyzer>
+		 		<!-- remove single and double quotes -->
+		 		<charFilter class="solr.PatternReplaceCharFilterFactory" pattern="[&quot;']" replacement="" />
 				<tokenizer class="solr.WhitespaceTokenizerFactory" />
 				<filter class="solr.LowerCaseFilterFactory" />
+				<filter class="solr.TrimFilterFactory" />
 					<!-- 
 						build groups of words to support phrases.
 						if we don't do this, we get the complete text after the hit.
