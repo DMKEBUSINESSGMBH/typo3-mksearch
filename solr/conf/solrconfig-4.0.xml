@@ -966,25 +966,24 @@
 	</lst>
   </requestHandler>
   
-   <!-- Autocomplete dies muss für Solr 4 noch angepasst werden da es aktuell nicht funktioniert -->
 <!-- for more information on how to configure autocomplete take a look into the Solr Wiki 
 (http://wiki.apache.org/solr/SpellCheckComponent) or here:
 http://solr.pl/en/2010/11/15/solr-and-autocomplete-part-2/ -->  
   <!-- the slash makes it possible to call this handler via an url, which is needed
   if the autocomplete index shall be built -->
-	<!-- <requestHandler name="/suggest" class="org.apache.solr.handler.component.SearchHandler">
+	<requestHandler name="/suggest" class="org.apache.solr.handler.component.SearchHandler">
 		<lst name="defaults">
 			<str name="spellcheck">true</str>
 			<str name="spellcheck.dictionary">suggest_fst</str>
 			<str name="spellcheck.count">10</str>
-			NOTE: if this is false, results are alpha-ordered, not by weight!
+<!-- 			NOTE: if this is false, results are alpha-ordered, not by weight! -->
 			<str name="spellcheck.onlyMorePopular">true</str>
 		</lst>
-		register the search component so we can use the suggest/autocomplete search component
+<!-- 		register the search component so we can use the suggest/autocomplete search component -->
 		<arr name="components">
 			<str>suggest_fst</str>
 		</arr>
-	</requestHandler> -->
+	</requestHandler>
   
   <!-- Solr Replication
 
@@ -1059,33 +1058,25 @@ http://solr.pl/en/2010/11/15/solr-and-autocomplete-part-2/ -->
 http://solr.pl/en/2010/11/15/solr-and-autocomplete-part-2/ -->
 	
 	<!-- is this thing just configured globally or wtf is going on here?! -->
-	<!-- our own query converter supports phrases. default contains a whitespace tokenizer so we
-		can not suggest phrases. place this .jar simply in $SOLRHOME/lib 
-		and Solr will find it automatically. $SOLRHOME is either the "real" Solr Home containing the solr.xml 
-		or it is the core home. Just open the Solr management console, select the appropiate core
-		and check the output on what $SOLRHOME is set. If lib folder does not exist, create it! -->
-   <queryConverter name="queryConverter" class="org.dmk.solr.spelling.MultiWordSpellingQueryConverter"/>
-   
-   <!-- dies muss für Solr 4 noch angepasst werden da es aktuell nicht funktioniert  -->
-   <!-- <searchComponent name="suggest_fst" class="solr.SpellCheckComponent">
+   <searchComponent name="suggest_fst" class="solr.SpellCheckComponent">
 		<lst name="spellchecker">
 			<str name="name">suggest_fst</str>
-			the field we use for index building. should be filled with all the information
-				considered for autocomplete.
+<!-- 			the field we use for index building. should be filled with all the information -->
+<!-- 				considered for autocomplete. -->
 			<str name="field">text_autocomplete_phrases</str>
 			<str name="classname">org.apache.solr.spelling.suggest.Suggester</str>
-			uses not much memory and is very fast
+<!-- 			uses not much memory and is very fast -->
 			<str name="lookupImpl">org.apache.solr.spelling.suggest.fst.FSTLookup</str>
-			the directory we store our index data for suggestions.
+<!-- 			the directory we store our index data for suggestions. -->
 			<str name="storeDir">suggest_fst</str>
 			<str name="buildOnOptimize">true</str>
-			Suggester properties
+<!-- 			Suggester properties -->
 			<bool name="exactMatchFirst">true</bool>
-			what does this exactly mean? taken from Solr Book "Apache Solr 3 Enterprise Search Server"
-	  			page 224
+<!-- 			what does this exactly mean? taken from Solr Book "Apache Solr 3 Enterprise Search Server" -->
+<!-- 	  			page 224 -->
 			<int name="weightBuckets">100</int>
 		</lst>
-
+<!-- 
 	a spellchecker that uses a different distance measure
 	<lst name="spellchecker">
 	  <str name="name">jarowinkler</str>
@@ -1102,9 +1093,9 @@ http://solr.pl/en/2010/11/15/solr-and-autocomplete-part-2/ -->
 	  <str name="sourceLocation">spellings.txt</str>
 	  <str name="characterEncoding">UTF-8</str>
 	  <str name="spellcheckIndexDir">./spellcheckerFile</str>
-	</lst>
+	</lst>-->
    
-  </searchComponent> -->
+  </searchComponent> 
   
    <!-- Spell Check
 

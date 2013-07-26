@@ -32,7 +32,7 @@ require_once(t3lib_extMgm::extPath('mksearch') . 'lib/Apache/Solr/Document.php')
  * Wir müssen in diesem Fall mit der DB testen da wir die pages
  * Tabelle benötigen
  * @author Hannes Bochmann
- * 
+ *
  */
 class tx_mksearch_tests_indexer_Irfaq_testcase extends tx_phpunit_database_testcase {
 	protected $workspaceIdAtStart;
@@ -60,7 +60,7 @@ class tx_mksearch_tests_indexer_Irfaq_testcase extends tx_phpunit_database_testc
 		//das devlog stört nur bei der Testausführung im BE und ist da auch
 		//vollkommen unnötig
 		$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['devlog']['nolog'] = true;
-		
+
 		$this->createDatabase();
 		// assuming that test-database can be created otherwise PHPUnit will skip the test
 		$this->db = $this->useTestDatabase();
@@ -71,7 +71,7 @@ class tx_mksearch_tests_indexer_Irfaq_testcase extends tx_phpunit_database_testc
 		if(t3lib_extMgm::isLoaded('templavoila')) $aExtensions[] = 'templavoila';
 		if(t3lib_extMgm::isLoaded('realurl')) $aExtensions[] = 'realurl';
 		$this->importExtensions($aExtensions);
-		
+
 		$this->importDataSet(tx_mksearch_tests_Util::getFixturePath('db/irfaq_q.xml'));
 		$this->importDataSet(tx_mksearch_tests_Util::getFixturePath('db/irfaq_cat.xml'));
 		$this->importDataSet(tx_mksearch_tests_Util::getFixturePath('db/irfaq_q_cat_mm.xml'));
@@ -88,7 +88,7 @@ class tx_mksearch_tests_indexer_Irfaq_testcase extends tx_phpunit_database_testc
 
 		$GLOBALS['BE_USER']->setWorkspace($this->workspaceIdAtStart);
 	}
-	
+
 	/**
 	 * Prüft ob nur die Elemente indiziert werden, die im
 	 * angegebenen Seitenbaum liegen
@@ -105,9 +105,9 @@ class tx_mksearch_tests_indexer_Irfaq_testcase extends tx_phpunit_database_testc
 		list($extKey, $cType) = $indexer->getContentType();
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$options = array();
-		
+
 		$aIndexDoc = $indexer->prepareSearchData('tx_irfaq_q', $aResult[0], $indexDoc, $options)->getData();
-		
+
 		//Common
 		$this->assertEquals(87,$aIndexDoc['sorting_i']->getValue(),'Es wurde nicht die richtige Sortierung indiziert!');
 		$this->assertEquals('1. FAQ',$aIndexDoc['q_s']->getValue(),'Es wurde nicht die richtige Frage indiziert!');
@@ -115,6 +115,7 @@ class tx_mksearch_tests_indexer_Irfaq_testcase extends tx_phpunit_database_testc
 		$this->assertEquals('something related',$aIndexDoc['related_s']->getValue(),'Es wurde nicht das richtige related indiziert!');
 		$this->assertEquals('some related links',$aIndexDoc['related_links_s']->getValue(),'Es wurden nicht die richtigen related Links indiziert!');
 		$this->assertEquals('some files',$aIndexDoc['faq_files_s']->getValue(),'Es wurde nicht der richtige Dateien indiziert!');
+		$this->assertEquals(123,$aIndexDoc['tstamp']->getValue(),'Es wurde nicht der richtige tstamp indiziert!');
 		//Expert
 		$this->assertEquals(1,$aIndexDoc['expert_i']->getValue(),'Es wurde nicht der richtige Experte indiziert!');
 		$this->assertEquals('1. Expert',$aIndexDoc['expert_name_s']->getValue(),'Es wurde nicht der richtige Expertenname indiziert!');
@@ -126,7 +127,7 @@ class tx_mksearch_tests_indexer_Irfaq_testcase extends tx_phpunit_database_testc
 		$this->assertEquals(array(0=>'1. FAQ Category',1=>'2. FAQ Category'),$aIndexDoc['category_title_ms']->getValue(),'Es wurden nicht die richtigen Kategorie-Titel indiziert!');
 		$this->assertEquals(array(0=>'1. Shortcut',1=>'2. Shortcut'),$aIndexDoc['category_shortcut_ms']->getValue(),'Es wurden nicht die richtigen Kategorie-Shortcuts indiziert!');
 	}
-	
+
 	/**
 	 * Prüft ob nur die Elemente indiziert werden, die im
 	 * angegebenen Seitenbaum liegen
@@ -143,9 +144,9 @@ class tx_mksearch_tests_indexer_Irfaq_testcase extends tx_phpunit_database_testc
 		list($extKey, $cType) = $indexer->getContentType();
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$options = array();
-		
+
 		$aIndexDoc = $indexer->prepareSearchData('tx_irfaq_q', $aResult[0], $indexDoc, $options)->getData();
-		
+
 		//Common
 		$this->assertEquals(99,$aIndexDoc['sorting_i']->getValue(),'Es wurde nicht die richtige Sortierung indiziert!');
 		$this->assertEquals('3. FAQ',$aIndexDoc['q_s']->getValue(),'Es wurde nicht die richtige Frage indiziert!');
@@ -164,7 +165,7 @@ class tx_mksearch_tests_indexer_Irfaq_testcase extends tx_phpunit_database_testc
 		$this->assertEquals(array(0=>'2. FAQ Category'),$aIndexDoc['category_title_ms']->getValue(),'Es wurden nicht die richtigen Kategorie-Titel indiziert!');
 		$this->assertEquals(array(0=>'2. Shortcut'),$aIndexDoc['category_shortcut_ms']->getValue(),'Es wurden nicht die richtigen Kategorie-Shortcuts indiziert!');
 	}
-	
+
 	/**
 	 * Prüft ob nur die Elemente indiziert werden, die im
 	 * angegebenen Seitenbaum liegen
@@ -181,23 +182,23 @@ class tx_mksearch_tests_indexer_Irfaq_testcase extends tx_phpunit_database_testc
 		list($extKey, $cType) = $indexer->getContentType();
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$options = array();
-		
+
 		$aIndexDoc = $indexer->prepareSearchData('tx_irfaq_expert', $aResult[0], $indexDoc, $options);
 		//nichtzs direkt indiziert?
 		$this->assertNull($aIndexDoc,'Es wurde nicht null zurück gegeben!');
-		
+
 		$aOptions = array(
 			'enablefieldsoff' => true
 		);
 		$aResult = tx_rnbase_util_DB::doSelect('*', 'tx_mksearch_queue', $aOptions);
-		
+
 		$this->assertEquals(2,count($aResult),'Es wurde nicht der richtige Anzahl in die queue gelegt!');
 		$this->assertEquals('tx_irfaq_q',$aResult[0]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
 		$this->assertEquals(1,$aResult[0]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
 		$this->assertEquals('tx_irfaq_q',$aResult[1]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
 		$this->assertEquals(2,$aResult[1]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
 	}
-	
+
 /**
 	 * Prüft ob nur die Elemente indiziert werden, die im
 	 * angegebenen Seitenbaum liegen
@@ -214,23 +215,23 @@ class tx_mksearch_tests_indexer_Irfaq_testcase extends tx_phpunit_database_testc
 		list($extKey, $cType) = $indexer->getContentType();
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$options = array();
-		
+
 		$aIndexDoc = $indexer->prepareSearchData('tx_irfaq_cat', $aResult[0], $indexDoc, $options);
 		//nichtzs direkt indiziert?
 		$this->assertNull($aIndexDoc,'Es wurde nicht null zurück gegeben!');
-		
+
 		$aOptions = array(
 			'enablefieldsoff' => true
 		);
 		$aResult = tx_rnbase_util_DB::doSelect('*', 'tx_mksearch_queue', $aOptions);
-		
+
 		$this->assertEquals(2,count($aResult),'Es wurde nicht der richtige Anzahl in die queue gelegt!');
 		$this->assertEquals('tx_irfaq_q',$aResult[0]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
 		$this->assertEquals(1,$aResult[0]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
 		$this->assertEquals('tx_irfaq_q',$aResult[1]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
 		$this->assertEquals(3,$aResult[1]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
 	}
-	
+
 	/**
 	 * Prüft ob nur die Elemente indiziert werden, die im
 	 * angegebenen Seitenbaum liegen
@@ -255,18 +256,18 @@ class tx_mksearch_tests_indexer_Irfaq_testcase extends tx_phpunit_database_testc
 		);
 		$options2 = array(
 			'include.' => array(
-				'categories' => 1,3 
+				'categories' => 1,3
 			)
 		);
 
-		//with include categories as array 
+		//with include categories as array
 		$aIndexDoc = $indexer->prepareSearchData('tx_irfaq_q', $aResult[0], $indexDoc, $options);
 		$this->assertNotNull($aIndexDoc,'Das Element wurde doch nicht indziert! Option 1');
-		
-		//with include categories as string 
+
+		//with include categories as string
 		$aIndexDoc = $indexer->prepareSearchData('tx_irfaq_q', $aResult[0], $indexDoc, $options2);
 		$this->assertNotNull($aIndexDoc,'Das Element wurde doch nicht indziert! Option 2');
-		
+
 		//and now with a faq that a the worng category
 		$aOptions = array(
 			'where' => 'tx_irfaq_q.uid=3',
@@ -275,11 +276,11 @@ class tx_mksearch_tests_indexer_Irfaq_testcase extends tx_phpunit_database_testc
 		$aResult = tx_rnbase_util_DB::doSelect('*', 'tx_irfaq_q', $aOptions);
 
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
-		
-		//with include categories as array 
+
+		//with include categories as array
 		$aIndexDoc = $indexer->prepareSearchData('tx_irfaq_q', $aResult[0], $indexDoc, $options);
 		$this->assertNull($aIndexDoc,'Das Element wurde doch indziert! Option 1');
-		
+
 		//with include categories as string
 		$aIndexDoc = $indexer->prepareSearchData('tx_irfaq_q', $aResult[0], $indexDoc, $options2);
 		$this->assertNull($aIndexDoc,'Das Element wurde doch indziert! Option 2');

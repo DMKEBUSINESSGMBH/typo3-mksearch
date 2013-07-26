@@ -29,10 +29,10 @@ tx_rnbase::load('tx_mksearch_model_cal_Event');
 
 /**
  * @author Hannes Bochmann
- * 
+ *
  */
 class tx_mksearch_tests_indexer_Cal_testcase extends Tx_Phpunit_Testcase {
-	
+
 	/**
 	 * @group unit
 	 */
@@ -48,10 +48,10 @@ class tx_mksearch_tests_indexer_Cal_testcase extends Tx_Phpunit_Testcase {
 			'location' 			=> 'Springfield',
 			'type' 				=> 1
 		);
-		
-		$indexDocFieldArray = 
+
+		$indexDocFieldArray =
 			$this->getIndexDocFieldArrayByCalRecord($calRecord);
-		
+
 		$this->assertEquals(
 			45660,$indexDocFieldArray['start_time_i']->getValue(),
 			'start_time falsch indiziert!'
@@ -89,7 +89,7 @@ class tx_mksearch_tests_indexer_Cal_testcase extends Tx_Phpunit_Testcase {
 			'type falsch indiziert!'
 		);
 	}
-	
+
 	/**
 	* @group unit
 	*/
@@ -98,10 +98,10 @@ class tx_mksearch_tests_indexer_Cal_testcase extends Tx_Phpunit_Testcase {
 			'start_date' 	=> 20130303,
 			'end_date' 		=> 20130305,
 		);
-	
+
 		$indexDocFieldArray =
 			$this->getIndexDocFieldArrayByCalRecord($calRecord);
-	
+
 		$this->assertEquals(
 			'2013-03-02T23:00:00Z',$indexDocFieldArray['start_date_dt']->getValue(),
 			'start_date_dt falsch indiziert!'
@@ -118,8 +118,12 @@ class tx_mksearch_tests_indexer_Cal_testcase extends Tx_Phpunit_Testcase {
 			1362438000,$indexDocFieldArray['end_date_i']->getValue(),
 			'end_date_i falsch indiziert!'
 		);
+		$this->assertEquals(
+			1362265200,$indexDocFieldArray['tstamp']->getValue(),
+			'tstamp nicht gleich start_date_i falsch indiziert!'
+		);
 	}
-	
+
 	/**
 	* @group unit
 	*/
@@ -129,10 +133,10 @@ class tx_mksearch_tests_indexer_Cal_testcase extends Tx_Phpunit_Testcase {
 			'end_date' 		=> 20130305,
 			'timezone'		=> 'UTC'
 		);
-	
+
 		$indexDocFieldArray =
 			$this->getIndexDocFieldArrayByCalRecord($calRecord);
-	
+
 		$this->assertEquals(
 			'2013-03-03T00:00:00Z',$indexDocFieldArray['start_date_dt']->getValue(),
 			'start_date_dt falsch indiziert!'
@@ -150,7 +154,7 @@ class tx_mksearch_tests_indexer_Cal_testcase extends Tx_Phpunit_Testcase {
 			'end_date_i falsch indiziert!'
 		);
 	}
-	
+
 	/**
 	* @group unit
 	*/
@@ -158,16 +162,16 @@ class tx_mksearch_tests_indexer_Cal_testcase extends Tx_Phpunit_Testcase {
 		$calRecord = array(
 			'description' 	=> '<p>my description</p>',
 		);
-	
+
 		$indexDocFieldArray =
 			$this->getIndexDocFieldArrayByCalRecord($calRecord);
-	
+
 		$this->assertEquals(
 			'my description',$indexDocFieldArray['description_s']->getValue(),
 			'description falsch indiziert!'
 		);
 	}
-	
+
 	/**
 	* @group unit
 	*/
@@ -175,38 +179,38 @@ class tx_mksearch_tests_indexer_Cal_testcase extends Tx_Phpunit_Testcase {
 		$calRecord = array(
 			'title' => 'First Calendar',
 		);
-		
+
 		$calendarModel = tx_rnbase::makeInstance(
 			'tx_mksearch_model_cal_Calendar', $calRecord
 		);
-		
+
 		$calEventRecord = array(
 			'calendar_id' 	=> 1,
 		);
 		$calendarEventMock = $this->getMock(
-			'tx_mksearch_model_cal_Event', 
+			'tx_mksearch_model_cal_Event',
 			array('getCalendar'), array($calEventRecord)
 		);
 		$calendarEventMock->expects($this->once())
 			->method('getCalendar')
 			->will($this->returnValue($calendarModel));
-		
+
 		$indexer = $this->getMock(
 			'tx_mksearch_indexer_Cal', array('createModel')
 		);
 		$indexer->expects($this->once())
 			->method('createModel')
 			->will($this->returnValue($calendarEventMock));
-	
+
 		$indexDocFieldArray =
 			$this->getIndexDocFieldArrayByCalRecord($calEventRecord, $indexer);
-	
+
 		$this->assertEquals(
 			'First Calendar',$indexDocFieldArray['calendar_title_s']->getValue(),
 			'calendar_title falsch indiziert!'
 		);
 	}
-	
+
 	/**
 	* @group unit
 	*/
@@ -219,28 +223,28 @@ class tx_mksearch_tests_indexer_Cal_testcase extends Tx_Phpunit_Testcase {
 				'tx_mksearch_model_cal_Category', array('title' => 'Second Category')
 			)
 		);
-	
+
 		$calEventRecord = array(
 			'category_id' 	=> 1,
 		);
 		$calendarEventMock = $this->getMock(
-			'tx_mksearch_model_cal_Event', 
+			'tx_mksearch_model_cal_Event',
 			array('getCategories'), array($calEventRecord)
 		);
 		$calendarEventMock->expects($this->once())
 			->method('getCategories')
 			->will($this->returnValue($categoryModels));
-	
+
 		$indexer = $this->getMock(
 			'tx_mksearch_indexer_Cal', array('createModel')
 		);
 		$indexer->expects($this->once())
 			->method('createModel')
 			->will($this->returnValue($calendarEventMock));
-	
+
 		$indexDocFieldArray =
 			$this->getIndexDocFieldArrayByCalRecord($calEventRecord, $indexer);
-	
+
 		$expectedCategoryTitles = array(
 			0 => 'First Category',
 			1 => 'Second Category'
@@ -250,74 +254,74 @@ class tx_mksearch_tests_indexer_Cal_testcase extends Tx_Phpunit_Testcase {
 			'categoy_title falsch indiziert!'
 		);
 	}
-	
+
 	/**
 	 * @group unit
 	 */
 	public function testPrepareSearchDataStopsIndexingAndPutsEventsToTheIndexIfTableCalendarHasChanged() {
 		$indexer = $this->getMock(
-			'tx_mksearch_indexer_Cal', 
+			'tx_mksearch_indexer_Cal',
 			array('getEventsByCalendarUid','addEventToIndex')
 		);
-		
+
 		$eventsByCalendarUid = array(
 			array('uid' => 1),array('uid' => 2)
 		);
 		$indexer->expects($this->once())
 			->method('getEventsByCalendarUid')
 			->will($this->returnValue($eventsByCalendarUid));
-		
+
 		$indexer->expects($this->at(1))
 			->method('addEventToIndex')
 			->with(1);
-		
+
 		$indexer->expects($this->at(2))
 			->method('addEventToIndex')
 			->with(2);
-	
+
 		$this->assertNull($this->getIndexDocFieldArrayByCalRecord(
 				array(), $indexer, 'tx_cal_calendar'
 			),
 			'Die Indizierung wurde nicht abgebrochen'
 		);
 	}
-	
+
 	/**
 	 * @group unit
 	 */
 	public function testPrepareSearchDataStopsIndexingAndPutsEventsToTheIndexIfTableCategoryHasChanged() {
 		$indexer = $this->getMock(
-			'tx_mksearch_indexer_Cal', 
+			'tx_mksearch_indexer_Cal',
 			array('getEventsByCategoryUid','addEventToIndex')
 		);
-	
+
 		$eventsByCategoryUid = array(
 			array('uid' => 1),array('uid' => 2)
 		);
 		$indexer->expects($this->once())
 			->method('getEventsByCategoryUid')
 			->will($this->returnValue($eventsByCategoryUid));
-	
+
 		$indexer->expects($this->at(1))
 			->method('addEventToIndex')
 			->with(1);
-	
+
 		$indexer->expects($this->at(2))
 			->method('addEventToIndex')
 			->with(2);
-	
+
 		$this->assertNull($this->getIndexDocFieldArrayByCalRecord(
 				array(), $indexer, 'tx_cal_category'
 			),
 			'Die Indizierung wurde nicht abgebrochen'
 		);
 	}
-	
+
 	/**
 	 * @param array $calRecord
 	 * @param tx_mksearch_indexer_Cal $indexer
 	 * @param string $table
-	 * 
+	 *
 	 * @return tx_mksearch_model_IndexerDocumentBase
 	 */
 	private function getIndexDocFieldArrayByCalRecord(
@@ -328,19 +332,19 @@ class tx_mksearch_tests_indexer_Cal_testcase extends Tx_Phpunit_Testcase {
 		if($indexer === null) {
 			$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_Cal');
 		}
-		
+
 		list($extKey, $cType) = $indexer->getContentType();
 		$indexDoc = tx_rnbase::makeInstance(
 			'tx_mksearch_model_IndexerDocumentBase',$extKey, $cType
 		);
-		
+
 		$options = array();
 		$indexDoc = $indexer->prepareSearchData(
 			$table, $calRecord, $indexDoc, $options
 		);
-		
+
 		$return = is_object($indexDoc) ? $indexDoc->getData() : $indexDoc;
-		
+
 		return $return;
 	}
 }

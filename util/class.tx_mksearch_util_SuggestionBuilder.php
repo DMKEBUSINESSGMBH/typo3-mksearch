@@ -39,7 +39,7 @@ require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
  * @author Michael Wagner <michael.wagner@das-medienkombinat.de>
  */
 class tx_mksearch_util_SuggestionBuilder {
-	
+
 	/**
 	 * @param string $class
 	 * @return tx_mksearch_util_SuggestionBuilder
@@ -51,7 +51,7 @@ class tx_mksearch_util_SuggestionBuilder {
 			$instance[$class] = tx_rnbase::makeInstance($class);
 		return $instance[$class];
 	}
-	
+
 	/**
 	 * Baut die Daten für die Suggestions zusammen
 	 * @param array $aSuggestionData Daten von Solr
@@ -61,14 +61,16 @@ class tx_mksearch_util_SuggestionBuilder {
 		$aSuggestions = array();
 		if(!$aSuggestionData) return $aSuggestions;
 		foreach ($aSuggestionData as $sSearchWord => $oSearchWord) {
-			foreach ($oSearchWord->suggestion as $sSuggestion){
-				//sorted by search word
-				$aSuggestions[$sSearchWord][] = $this->getSimpleSuggestion(
-					array(
-						'value' => $sSuggestion,
-						'searchWord' => $sSearchWord,
-					)
-				);
+			if(isset($oSearchWord->suggestion) && is_array($oSearchWord->suggestion)) {
+				foreach ($oSearchWord->suggestion as $sSuggestion){
+					//sorted by search word
+					$aSuggestions[$sSearchWord][] = $this->getSimpleSuggestion(
+						array(
+							'value' => $sSuggestion,
+							'searchWord' => $sSearchWord,
+						)
+					);
+				}
 			}
 		}
 		return $aSuggestions;

@@ -422,11 +422,30 @@
 		<!-- suggesting single words and phrases up to 4 words -->
 		<fieldType class="solr.TextField" name="text_autocomplete" positionIncrementGap="100">
 		 	<analyzer>
+		 		<!-- remove single and double quotes -->
+		 		<charFilter class="solr.PatternReplaceCharFilterFactory" pattern="[&quot;']" replacement="" />
 				<tokenizer class="solr.WhitespaceTokenizerFactory" />
-				<filter class="solr.WordDelimiterFilterFactory"
-					generateWordParts="1" generateNumberParts="1" catenateWords="1"
-					catenateNumbers="1" catenateAll="0" splitOnCaseChange="1" />
 				<filter class="solr.LowerCaseFilterFactory" />
+				<filter class="solr.TrimFilterFactory" />
+					<!-- 
+						build groups of words to support phrases.
+						if we don't do this, we get the complete text after the hit.
+						in some cases this text can be too long.
+						imagine you index the text "the quick brown fox jumps over the lazy frog"
+						and search for "the quick". without the shingle filter we would get as result
+						"the quick brown fox jumps over the lazy frog" and with the shingle filter we would get 
+						"the quick brown fox".
+					-->
+				<filter class="solr.ShingleFilterFactory" maxShingleSize="4" outputUnigrams="true" />
+			</analyzer>
+		</fieldType>
+		<fieldType class="solr.TextField" name="text_autocomplete_for_solr4" positionIncrementGap="100">
+		 	<analyzer>
+		 		<!-- remove single and double quotes -->
+		 		<charFilter class="solr.PatternReplaceCharFilterFactory" pattern="[&quot;']" replacement="" />
+				<tokenizer class="solr.WhitespaceTokenizerFactory" />
+				<filter class="solr.LowerCaseFilterFactory" />
+				<filter class="solr.TrimFilterFactory" />
 					<!-- 
 						build groups of words to support phrases.
 						if we don't do this, we get the complete text after the hit.
@@ -533,6 +552,9 @@
 			for a autocomplete search -->
 		<field name="text_autocomplete_phrases" type="text_autocomplete" indexed="true" stored="false" multiValued="true" />
 		<copyField source="title" dest="text_autocomplete_phrases" />
+		
+		<field name="text_autocomplete_phrases_for_solr4" type="text_autocomplete_for_solr4" indexed="true" stored="false" multiValued="true" />
+		<copyField source="title" dest="text_autocomplete_phrases_for_solr4" />
 
 		<!-- Dynamic field definitions. If a field name is not found, dynamicFields 
 			will be used if the name matches any of the patterns. RESTRICTION: the glob-like 
