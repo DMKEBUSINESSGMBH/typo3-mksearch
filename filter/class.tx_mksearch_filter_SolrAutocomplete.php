@@ -40,6 +40,7 @@ tx_rnbase::load('tx_mksearch_util_Misc');
  * @author hbochmann
  * @package tx_mksearch
  * @subpackage tx_mksearch_filter
+ * @TODO Unit Test ob das hinzufügen der FE Gruppen funktioniert.
  */
 class tx_mksearch_filter_SolrAutocomplete extends tx_mksearch_filter_SolrBase {
 	
