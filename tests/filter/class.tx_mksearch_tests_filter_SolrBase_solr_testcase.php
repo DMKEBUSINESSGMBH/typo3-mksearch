@@ -64,7 +64,7 @@ class tx_mksearch_tests_filter_SolrBase_solr_testcase extends tx_mksearch_tests_
 	public function copyNeccessaryConfigFiles($destPath) {
 		$neccessaryConfigFiles = array(
 			'elevate.xml','protwords.txt','stopwords.txt',
-			'stopwordsGerman.txt','synonyms.txt','dictionaryGerman.txt'
+			'stopwordsGerman.txt','synonyms.txt','dictionaryGerman.txt','synonymsGerman.txt',
 		);
 		$this->copyNeccessaryFiles($destPath, 'conf/', $neccessaryConfigFiles);
 	}
