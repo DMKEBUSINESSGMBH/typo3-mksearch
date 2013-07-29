@@ -676,9 +676,12 @@
 			Fields of the string type cant be highlighted. The type needs to be 
 			tokenized for highlighting which is not the case for string fields.
 			If parts of a word should be highlighted the field type
-			must contain some sort of ngram filter.
+			must contain some sort of ngram filter or stemming like text_german type.
 		 	<str name="hl">true</str>
 			<str name="hl.fl">abstract,content,news_text_t,news_town_t,title</str>
+			<int name="hl.snippets">3</int>
+			<str name="hl.mergeContiguous">true</str>
+			<str name="hl.requireFieldMatch">true</str>
 		  -->
 		  <!--  sorting
 		  	<str name="sort">relevance_i desc,tstamp desc,score desc</str>

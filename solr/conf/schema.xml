@@ -222,54 +222,74 @@
 			</analyzer>
 		</fieldType>
 
-		<!-- 
-			a field providing some basis stemming for the german language
-			liefert viele Ergebnisse da unschärfer auf grund von Ngram 
-		-->
-		<fieldType name="textNGram" class="solr.TextField"
-			positionIncrementGap="100">
+		<!-- A text field that uses WordDelimiterFilter to enable splitting and matching of
+			words on case-change, alpha numeric boundaries, and non-alphanumeric chars,
+			so that a query of "wifi" or "wi fi" could match a document containing "Wi-Fi".
+			Synonyms and stopwords are customized by external files, and stemming is enabled.
+			Duplicate tokens at the same position (which may result from Stemmed Synonyms or
+			WordDelim parts) are removed.
+			-->
+		<fieldType name="text_german" class="solr.TextField" positionIncrementGap="100">
 			<analyzer type="index">
-				<tokenizer class="solr.WhitespaceTokenizerFactory" />
-				<!-- in this example, we will only use synonyms at query time <filter 
-					class="solr.SynonymFilterFactory" synonyms="index_synonyms.txt" ignoreCase="true" 
-					expand="false"/> -->
-				<!-- Case insensitive stop word removal. add enablePositionIncrements=true 
-					in both the index and query analyzers to leave a 'gap' for more accurate 
-					phrase queries. -->
-				<filter class="solr.StopFilterFactory" ignoreCase="true"
-					words="stopwordsGerman.txt" enablePositionIncrements="true" />
+				<tokenizer class="solr.WhitespaceTokenizerFactory"/>
+
 				<filter class="solr.WordDelimiterFilterFactory"
-					generateWordParts="1" generateNumberParts="1" catenateWords="0"
-					catenateNumbers="0" catenateAll="0" splitOnCaseChange="1" preserveOriginal="1"/>
-				<filter class="solr.DictionaryCompoundWordTokenFilterFactory"
-					dictionary="dictionaryGerman.txt" />
-				<filter class="solr.LowerCaseFilterFactory" />
-				<!-- German2 macht aus ä->ae und German macht aus ä->a daher ist German2 vorzuziehen -->
-				<filter class="solr.SnowballPorterFilterFactory" language="German2"/>
-				<!-- 
-					für Wortstämme, die SnowballPorterFilterFactory nicht kennt/erstellt.
-					gibt es z.B. im Text das Wort Professionalität und man sucht nach
-					profession wird dies ohne NGram nicht gefunden da SnowballPorterFilterFactory
-					nicht die richtigen Wortstämme bildet
+					generateWordParts="1"
+					generateNumberParts="1"
+					catenateWords="1"
+					catenateNumbers="1"
+					catenateAll="0"
+					splitOnCaseChange="1"
+					preserveOriginal="1"
+				/>
+
+				<filter class="solr.LowerCaseFilterFactory"/>
+
+				<!-- best practice (currently) for synonyms is to add them by
+					expansions during index time
 				-->
-				<filter class="solr.NGramFilterFactory" minGramSize="3" maxGramSize="35" />
-				<filter class="solr.RemoveDuplicatesTokenFilterFactory" />
+				<filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
+
+				<!--
+					minWordSize : only words longer than this get processed
+					minSubwordSize : only subwords longer than this get to the output stream
+					maxSubwordSize : only subwords shorter than this get to the output stream
+					onlyLongestMatch : add only the longest matching subword to the stream
+				-->
+				<filter class="solr.DictionaryCompoundWordTokenFilterFactory"
+					dictionary="dictionaryGerman.txt"
+					minWordSize="5"
+					minSubwordSize="4"
+					maxSubwordSize="15"
+					onlyLongestMatch="false"
+				/>
+
+				<!-- Case insensitive stop word removal.
+					add enablePositionIncrements=true in both the index and query
+					analyzers to leave a 'gap' for more accurate phrase queries.
+				-->
+				<filter class="solr.StopFilterFactory" words="stopwordsGerman.txt" ignoreCase="true" enablePositionIncrements="true"/>
+				<filter class="solr.GermanNormalizationFilterFactory"/>
+				<filter class="solr.SnowballPorterFilterFactory" language="German2" protected="protwords.txt"/>
+				<filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
 			</analyzer>
 			<analyzer type="query">
-				<tokenizer class="solr.WhitespaceTokenizerFactory" />
-				<filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt"
-					ignoreCase="true" expand="true" />
-				<filter class="solr.StopFilterFactory" ignoreCase="true"
-					words="stopwordsGerman.txt" enablePositionIncrements="true" />
+				<tokenizer class="solr.WhitespaceTokenizerFactory"/>
+
 				<filter class="solr.WordDelimiterFilterFactory"
-					generateWordParts="1" generateNumberParts="1" catenateWords="0"
-					catenateNumbers="0" catenateAll="0" splitOnCaseChange="1" />
-				<filter class="solr.DictionaryCompoundWordTokenFilterFactory"
-					dictionary="dictionaryGerman.txt" />
-				<filter class="solr.LowerCaseFilterFactory" />
-				<!-- German2 macht aus ä->ae und German macht aus ä->a daher ist German2 vorzuziehen -->
-				<filter class="solr.SnowballPorterFilterFactory" language="German2"/>
-				<filter class="solr.RemoveDuplicatesTokenFilterFactory" />
+					generateWordParts="1"
+					generateNumberParts="1"
+					catenateWords="0"
+					catenateNumbers="0"
+					catenateAll="0"
+					splitOnCaseChange="1"
+					preserveOriginal="1"
+				/>
+				<filter class="solr.LowerCaseFilterFactory"/>
+				<filter class="solr.StopFilterFactory" words="stopwordsGerman.txt" ignoreCase="true" enablePositionIncrements="true"/>
+				<filter class="solr.GermanNormalizationFilterFactory"/>
+				<filter class="solr.SnowballPorterFilterFactory" language="German2" protected="protwords.txt"/>
+				<filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
 			</analyzer>
 		</fieldType>
 
@@ -419,14 +439,25 @@
 			</analyzer>
 		</fieldType>
 
-		<!-- suggesting single words and phrases up to 4 words -->
+		<!-- suggesting single words and phrases up to 4 words in german language -->
 		<fieldType class="solr.TextField" name="text_autocomplete" positionIncrementGap="100">
-		 	<analyzer>
-		 		<!-- remove single and double quotes -->
-		 		<charFilter class="solr.PatternReplaceCharFilterFactory" pattern="[&quot;']" replacement="" />
+			<analyzer type="index">
 				<tokenizer class="solr.WhitespaceTokenizerFactory" />
 				<filter class="solr.LowerCaseFilterFactory" />
 				<filter class="solr.TrimFilterFactory" />
+				<filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
+				<filter class="solr.DictionaryCompoundWordTokenFilterFactory"
+					dictionary="dictionaryGerman.txt"
+					minWordSize="5"
+					minSubwordSize="4"
+					maxSubwordSize="15"
+					onlyLongestMatch="false"
+				/>
+				<!-- so we have umlauts transformend (ä => ae, etc.) etc. -->
+				<filter class="solr.GermanNormalizationFilterFactory"/>
+				<!-- only alpha num and whitespaces -->
+				<filter class="solr.PatternReplaceFilterFactory" pattern="([^a-z0-9 ])"
+					replacement="" replace="all" />
 					<!-- 
 						build groups of words to support phrases.
 						if we don't do this, we get the complete text after the hit.
@@ -437,25 +468,57 @@
 						"the quick brown fox".
 					-->
 				<filter class="solr.ShingleFilterFactory" maxShingleSize="4" outputUnigrams="true" />
+				<filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
+			</analyzer>
+			<analyzer type="query">
+				<tokenizer class="solr.WhitespaceTokenizerFactory" />
+
+				<filter class="solr.LowerCaseFilterFactory"/>
+				<filter class="solr.StopFilterFactory" words="stopwordsGerman.txt" ignoreCase="true"/>
+				<filter class="solr.TrimFilterFactory" />
+				<!-- so we have umlauts transformend (ä => ae, etc.) etc. -->
+				<filter class="solr.GermanNormalizationFilterFactory"/>
+				<!-- only alpha num and whitespaces -->
+				<filter class="solr.PatternReplaceFilterFactory" pattern="([^a-z0-9 ])"
+					replacement="" replace="all" />
+				<filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
 			</analyzer>
 		</fieldType>
-		<fieldType class="solr.TextField" name="text_autocomplete_for_solr4" positionIncrementGap="100">
-		 	<analyzer>
-		 		<!-- remove single and double quotes -->
-		 		<charFilter class="solr.PatternReplaceCharFilterFactory" pattern="[&quot;']" replacement="" />
-				<tokenizer class="solr.WhitespaceTokenizerFactory" />
+		
+		<!-- This is an example of using the KeywordTokenizer along
+			With various TokenFilterFactories to produce a sortable field
+			that does not include some properties of the source text
+			for the german language
+		-->
+		<fieldType name="text_sort" class="solr.TextField" sortMissingLast="true" omitNorms="true">
+			<analyzer>
+				<!-- KeywordTokenizer does no actual tokenizing, so the entire
+					input string is preserved as a single token
+				-->
+				<tokenizer class="solr.KeywordTokenizerFactory"/>
+	
+				<!-- The LowerCase TokenFilter does what you expect, which can be
+					when you want your sorting to be case insensitive
+				-->
 				<filter class="solr.LowerCaseFilterFactory" />
+				<!-- The TrimFilter removes any leading or trailing whitespace -->
 				<filter class="solr.TrimFilterFactory" />
-					<!-- 
-						build groups of words to support phrases.
-						if we don't do this, we get the complete text after the hit.
-						in some cases this text can be too long.
-						imagine you index the text "the quick brown fox jumps over the lazy frog"
-						and search for "the quick". without the shingle filter we would get as result
-						"the quick brown fox jumps over the lazy frog" and with the shingle filter we would get 
-						"the quick brown fox".
-					-->
-				<filter class="solr.ShingleFilterFactory" maxShingleSize="4" outputUnigrams="true" />
+				<!-- The PatternReplaceFilter gives you the flexibility to use
+					Java Regular expression to replace any sequence of characters
+					matching a pattern with an arbitrary replacement string,
+					which may include back refrences to portions of the orriginal
+					string matched by the pattern.
+	
+					See the Java Regular Expression documentation for more
+					infomation on pattern and replacement string syntax.
+	
+					http://java.sun.com/j2se/1.5.0/docs/api/java/util/regex/package-summary.html
+				-->
+				<!-- so we have umlauts transformend (ä => ae, etc.) etc. -->
+				<filter class="solr.GermanNormalizationFilterFactory"/>
+				<!-- only alpha num and whitespaces -->
+				<filter class="solr.PatternReplaceFilterFactory" pattern="([^a-z0-9 ])"
+					replacement="" replace="all" />
 			</analyzer>
 		</fieldType>
 
@@ -502,11 +565,11 @@
 		<!-- Common metadata fields, named specifically to match up with SolrCell 
 			metadata when parsing rich documents such as Word, PDF. Some fields are multiValued 
 			only because Tika currently may return multiple values for them. -->
-		<field name="title" type="text" indexed="true" stored="true"
+		<field name="title" type="text_german" indexed="true" stored="true"
 			multiValued="true" />
-		<field name="subject" type="text" indexed="true" stored="true" />
-		<field name="description" type="text" indexed="true" stored="true" />
-		<field name="comments" type="text" indexed="true" stored="true" />
+		<field name="subject" type="text_german" indexed="true" stored="true" />
+		<field name="description" type="text_german" indexed="true" stored="true" />
+		<field name="comments" type="text_german" indexed="true" stored="true" />
 		<field name="author" type="textgen" indexed="true" stored="true" />
 		<field name="keywords" type="textgen" indexed="true" stored="true" />
 		<field name="category" type="textgen" indexed="true" stored="true" />
@@ -519,7 +582,7 @@
 
 		<!-- catchall field, containing all other searchable text fields (implemented 
 			via copyField further on in this schema -->
-		<field name="text" type="textNGram" indexed="true" stored="false"
+		<field name="text" type="text_german" indexed="true" stored="false"
 			multiValued="true" />
 
 		<!-- catchall text field that indexes tokens both normally and in reverse 
@@ -538,8 +601,8 @@
 		<field name="fe_groups" type="int" indexed="true" stored="false" />
 		<field name="pid" type="int" indexed="true" stored="true" />
 		<field name="CType" type="string" indexed="true" stored="true" />
-		<field name="content" type="text" indexed="true" stored="true" />
-		<field name="abstract" type="text" indexed="true" stored="true" />
+		<field name="content" type="text_german" indexed="true" stored="true" />
+		<field name="abstract" type="text_german" indexed="true" stored="true" />
 
 		<!-- FIXME: Bitte ein ordentliches Datumsformat verwenden!! -->
 		<field name="datetime" type="date" indexed="true" stored="true" />
@@ -553,9 +616,6 @@
 		<field name="text_autocomplete_phrases" type="text_autocomplete" indexed="true" stored="false" multiValued="true" />
 		<copyField source="title" dest="text_autocomplete_phrases" />
 		
-		<field name="text_autocomplete_phrases_for_solr4" type="text_autocomplete_for_solr4" indexed="true" stored="false" multiValued="true" />
-		<copyField source="title" dest="text_autocomplete_phrases_for_solr4" />
-
 		<!-- Dynamic field definitions. If a field name is not found, dynamicFields 
 			will be used if the name matches any of the patterns. RESTRICTION: the glob-like 
 			pattern in the name attribute must have a "*" only at the start or the end. 
@@ -571,11 +631,15 @@
 			If parts of a word should be highlighted the field type
 			must contain some sort of ngram filter.
 		 -->
-		<dynamicField name="*_s" type="string" indexed="true"
+		 <!-- 
+			many extensions use the *_s field as text field and not as string field. that's why the 
+			default type is text_german so highlighting on these fields works at all and supports stemming etc.
+		 -->
+		<dynamicField name="*_s" type="text_german" indexed="true"
 			stored="true" />
 		<dynamicField name="*_l" type="long" indexed="true"
 			stored="true" />
-		<dynamicField name="*_t" type="text" indexed="true"
+		<dynamicField name="*_t" type="text_german" indexed="true"
 			stored="true" />
 		<dynamicField name="*_b" type="boolean" indexed="true"
 			stored="true" />
@@ -592,7 +656,7 @@
 			stored="true" multiValued="true" />
 		<dynamicField name="*_ml" type="long" indexed="true"
 			stored="true" multiValued="true" />
-		<dynamicField name="*_mt" type="text" indexed="true"
+		<dynamicField name="*_mt" type="text_german" indexed="true"
 			stored="true" multiValued="true" />
 		<dynamicField name="*_mb" type="boolean" indexed="true"
 			stored="true" multiValued="true" />
