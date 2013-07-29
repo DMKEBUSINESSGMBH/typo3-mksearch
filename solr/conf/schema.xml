@@ -209,7 +209,7 @@
 
 			<analyzer type="query">
 				<tokenizer class="solr.WhitespaceTokenizerFactory" />
-				<filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt"
+				<filter class="solr.SynonymFilterFactory" synonyms="synonymsGerman.txt"
 					ignoreCase="true" expand="true" />
 				<filter class="solr.StopFilterFactory" ignoreCase="true"
 					words="stopwordsGerman.txt" enablePositionIncrements="true" />
@@ -248,7 +248,7 @@
 				<!-- best practice (currently) for synonyms is to add them by
 					expansions during index time
 				-->
-				<filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
+				<filter class="solr.SynonymFilterFactory" synonyms="synonymsGerman.txt" ignoreCase="true" expand="true"/>
 
 				<!--
 					minWordSize : only words longer than this get processed
@@ -300,7 +300,7 @@
 			positionIncrementGap="100">
 			<analyzer>
 				<tokenizer class="solr.WhitespaceTokenizerFactory" />
-				<filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt"
+				<filter class="solr.SynonymFilterFactory" synonyms="synonymsGerman.txt"
 					ignoreCase="true" expand="false" />
 				<filter class="solr.StopFilterFactory" ignoreCase="true"
 					words="stopwordsGerman.txt" />
@@ -333,7 +333,7 @@
 			</analyzer>
 			<analyzer type="query">
 				<tokenizer class="solr.WhitespaceTokenizerFactory" />
-				<filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt"
+				<filter class="solr.SynonymFilterFactory" synonyms="synonymsGerman.txt"
 					ignoreCase="true" expand="true" />
 				<filter class="solr.StopFilterFactory" ignoreCase="true"
 					words="stopwordsGerman.txt" enablePositionIncrements="true" />
@@ -364,7 +364,7 @@
 			</analyzer>
 			<analyzer type="query">
 				<tokenizer class="solr.WhitespaceTokenizerFactory" />
-				<filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt"
+				<filter class="solr.SynonymFilterFactory" synonyms="synonymsGerman.txt"
 					ignoreCase="true" expand="true" />
 				<filter class="solr.StopFilterFactory" ignoreCase="true"
 					words="stopwordsGerman.txt" enablePositionIncrements="true" />
@@ -445,7 +445,7 @@
 				<tokenizer class="solr.WhitespaceTokenizerFactory" />
 				<filter class="solr.LowerCaseFilterFactory" />
 				<filter class="solr.TrimFilterFactory" />
-				<filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
+				<filter class="solr.SynonymFilterFactory" synonyms="synonymsGerman.txt" ignoreCase="true" expand="true"/>
 				<filter class="solr.DictionaryCompoundWordTokenFilterFactory"
 					dictionary="dictionaryGerman.txt"
 					minWordSize="5"
