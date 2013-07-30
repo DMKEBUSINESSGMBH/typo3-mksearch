@@ -590,7 +590,7 @@
 
 		<!-- catchall field, containing all other searchable text fields (implemented 
 			via copyField further on in this schema -->
-		<field name="text" type="full_text_german" indexed="true" stored="false"
+		<field name="fulltext" type="full_text_german" indexed="true" stored="false"
 			multiValued="true" />
 
 		<!-- catchall text field that indexes tokens both normally and in reverse 
@@ -620,7 +620,8 @@
 
 		<!-- fulltext search. copy all fields to "text" which should be used for 
 			a fulltext search -->
-		<copyField source="title" dest="text" />
+		<copyField source="title" dest="fulltext" />
+		<copyField source="content" dest="fulltext" />
 
 		<!-- Autocomplete. copy all fields to "text_autocomplete_phrases" which should be used 
 			for a autocomplete search -->
@@ -716,23 +717,23 @@
 		<!--dynamicField name="*" type="ignored" multiValued="true" / -->
 		
 		<!-- Cal Event -->
-   		<!-- <copyField source="organizer_s" dest="text"/>
-   		<copyField source="organizer_link_s" dest="text"/>
-   		<copyField source="location_s" dest="text"/>
-   		<copyField source="description_s" dest="text"/>
-   		<copyField source="calendar_title_s" dest="text"/>
-   		<copyField source="category_title_ms" dest="text"/> -->
+   		<!-- <copyField source="organizer_s" dest="fulltext"/>
+   		<copyField source="organizer_link_s" dest="fulltext"/>
+   		<copyField source="location_s" dest="fulltext"/>
+   		<copyField source="description_s" dest="fulltext"/>
+   		<copyField source="calendar_title_s" dest="fulltext"/>
+   		<copyField source="category_title_ms" dest="fulltext"/> -->
    		
    		<!-- News -->
-   		<!-- <copyField source="news_text_s" dest="text"/> -->
+   		<!-- <copyField source="news_text_s" dest="fulltext"/> -->
    		
    		<!-- irfaq -->
-   		<!-- <copyField source="q_s" dest="text"/>
-   		<copyField source="a_s" dest="text"/>
-   		<copyField source="related_s" dest="text"/>
-   		<copyField source="related_links_s" dest="text"/>
-   		<copyField source="expert_name_s" dest="text"/>
-   		<copyField source="category_title_ms" dest="text"/> -->
+   		<!-- <copyField source="q_s" dest="fulltext"/>
+   		<copyField source="a_s" dest="fulltext"/>
+   		<copyField source="related_s" dest="fulltext"/>
+   		<copyField source="related_links_s" dest="fulltext"/>
+   		<copyField source="expert_name_s" dest="fulltext"/>
+   		<copyField source="category_title_ms" dest="fulltext"/> -->
 
 	</fields>
 
@@ -754,7 +755,7 @@
 		way to map multiple source fields to the same destination field is to use 
 		the dynamic field syntax. copyField also supports a maxChars to copy setting. -->
 
-	<!-- <copyField source="*_t" dest="text" maxChars="3000"/> -->
+	<!-- <copyField source="*_t" dest="fulltext" maxChars="3000"/> -->
 
 	<!-- copy name to alphaNameSort, a field designed for sorting by name -->
 	<!-- <copyField source="name" dest="alphaNameSort"/> -->

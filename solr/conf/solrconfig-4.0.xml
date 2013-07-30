@@ -753,7 +753,7 @@
 				Wir  bewerten funde im titel höher als funde im content, gefolgt von den restlichen feldern.
 				Wir suchen auch immer fuzzy, allerdings mit einer niedrigen Bewertung!
 			-->
-			<str name="qf">title^1.5 content^0.9 text^0.4 text~0.2^0.1</str>
+			<str name="qf">title^1.5 fulltext^0.4 fulltext~0.2^0.1</str>
 			<!--  
 				Boosten von bestimmten contentTypen
 			-->
