@@ -590,6 +590,9 @@
 		<field name="CType" type="string" indexed="true" stored="true" />
 		<field name="content" type="text_german" indexed="true" stored="true" />
 		<field name="abstract" type="text_german" indexed="true" stored="true" />
+		
+		<!-- Sortierung. see solrconfig-x.xml updateRequestProcessorChain name="clone-for-sort-title" -->
+   		<!-- <field name="sort_title" type="text_sort" indexed="true" stored="false" /> -->
 
 		<!-- FIXME: Bitte ein ordentliches Datumsformat verwenden!! -->
 		<field name="datetime" type="date" indexed="true" stored="true" />

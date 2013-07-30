@@ -812,18 +812,42 @@
 	   type header if posted in the body. For example, curl now
 	   requires: -H 'Content-type:text/xml; charset=utf-8'
 	-->
-  <requestHandler name="/update" 
-				  class="solr.XmlUpdateRequestHandler">
+  <requestHandler name="/update" class="solr.XmlUpdateRequestHandler">
 	<!-- See below for information on defining 
 		 updateRequestProcessorChains that can be used by name 
 		 on each Update Request
 	  -->
 	<!--
 	   <lst name="defaults">
-		 <str name="update.chain">dedupe</str>
+		 <str name="update.chain">clone-for-sort-title</str>
 	   </lst>
 	   -->
 	</requestHandler>
+	<!-- 
+  		following problem: different document types have their "title"
+  		in different fields. (e.g. one in the field name, the other in the field company)
+  		but we want to sort over a single field, so we have to put all fields in one field.
+  		copyField is not option as it requires not be multivalue for copying different fields.
+  		so we use the solr.CloneFieldUpdateProcessorFactory
+  		take a look at the "/update" request handler how to integrate.
+  		@see http://lucene.apache.org/solr/4_3_0/solr-core/org/apache/solr/update/processor/CloneFieldUpdateProcessorFactory.html
+	-->
+  <!-- <updateRequestProcessorChain name="clone-for-sort-title">
+	<processor class="solr.CloneFieldUpdateProcessorFactory">
+       <arr name="source">
+         	<str>company_s</str>
+         	<str>first_name_s</str>
+			<str>last_name_s</str>
+       </arr>
+       <str name="dest">sort_title</str>
+     </processor>-->
+     <!-- 
+     	otherwise the update is not executed
+     	@see https://lucene.apache.org/solr/4_2_1/solr-core/org/apache/solr/update/processor/RunUpdateProcessorFactory.html 
+     -->
+     <!-- <processor class="solr.RunUpdateProcessorFactory" />
+   </updateRequestProcessorChain> -->
+	
   <!-- Binary Update Request Handler
 	   http://wiki.apache.org/solr/javabin
 	-->
