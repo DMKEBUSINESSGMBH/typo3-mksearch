@@ -445,7 +445,6 @@
 				<tokenizer class="solr.WhitespaceTokenizerFactory" />
 				<filter class="solr.LowerCaseFilterFactory" />
 				<filter class="solr.TrimFilterFactory" />
-				<filter class="solr.SynonymFilterFactory" synonyms="synonymsGerman.txt" ignoreCase="true" expand="true"/>
 				<!-- only alpha num and whitespaces -->
 				<filter class="solr.PatternReplaceFilterFactory" pattern="([^a-z0-9 ])"
 					replacement="" replace="all" />
