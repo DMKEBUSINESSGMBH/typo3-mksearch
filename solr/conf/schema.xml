@@ -445,10 +445,7 @@
 				<tokenizer class="solr.WhitespaceTokenizerFactory" />
 				<filter class="solr.LowerCaseFilterFactory" />
 				<filter class="solr.TrimFilterFactory" />
-				<filter class="solr.StopFilterFactory" words="stopwordsGerman.txt" ignoreCase="true"/>
 				<filter class="solr.SynonymFilterFactory" synonyms="synonymsGerman.txt" ignoreCase="true" expand="true"/>
-				<!-- so we have umlauts transformend (ä => ae, etc.) etc. -->
-				<filter class="solr.GermanNormalizationFilterFactory"/>
 				<!-- only alpha num and whitespaces -->
 				<filter class="solr.PatternReplaceFilterFactory" pattern="([^a-z0-9 ])"
 					replacement="" replace="all" />
@@ -466,12 +463,8 @@
 			</analyzer>
 			<analyzer type="query">
 				<tokenizer class="solr.WhitespaceTokenizerFactory" />
-
 				<filter class="solr.LowerCaseFilterFactory"/>
-				<filter class="solr.StopFilterFactory" words="stopwordsGerman.txt" ignoreCase="true"/>
 				<filter class="solr.TrimFilterFactory" />
-				<!-- so we have umlauts transformend (ä => ae, etc.) etc. -->
-				<filter class="solr.GermanNormalizationFilterFactory"/>
 				<!-- only alpha num and whitespaces -->
 				<filter class="solr.PatternReplaceFilterFactory" pattern="([^a-z0-9 ])"
 					replacement="" replace="all" />
