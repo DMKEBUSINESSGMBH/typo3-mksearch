@@ -220,8 +220,7 @@
 					analyzers to leave a 'gap' for more accurate phrase queries.
 				-->
 				<filter class="solr.StopFilterFactory" words="stopwordsGerman.txt" ignoreCase="true" enablePositionIncrements="true"/>
-				<!-- since Solr 4.x use the following filter -->
-				<!-- <filter class="solr.GermanNormalizationFilterFactory"/> -->
+				<filter class="solr.GermanNormalizationFilterFactory"/>
 				<filter class="solr.SnowballPorterFilterFactory" language="German2" protected="protwords.txt"/>
 				<filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
 			</analyzer>
@@ -239,8 +238,7 @@
 				/>
 				<filter class="solr.LowerCaseFilterFactory"/>
 				<filter class="solr.StopFilterFactory" words="stopwordsGerman.txt" ignoreCase="true" enablePositionIncrements="true"/>
-				<!-- since Solr 4.x use the following filter -->
-				<!-- <filter class="solr.GermanNormalizationFilterFactory"/> -->
+				<filter class="solr.GermanNormalizationFilterFactory"/>
 				<filter class="solr.SnowballPorterFilterFactory" language="German2" protected="protwords.txt"/>
 				<filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
 			</analyzer>
@@ -293,8 +291,7 @@
 					analyzers to leave a 'gap' for more accurate phrase queries.
 				-->
 				<filter class="solr.StopFilterFactory" words="stopwordsGerman.txt" ignoreCase="true" enablePositionIncrements="true"/>
-				<!-- since Solr 4.x use the following filter -->
-				<!-- <filter class="solr.GermanNormalizationFilterFactory"/> -->
+				<filter class="solr.GermanNormalizationFilterFactory"/>
 				<filter class="solr.SnowballPorterFilterFactory" language="German2" protected="protwords.txt"/>
 				<filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
 			</analyzer>
@@ -312,8 +309,7 @@
 				/>
 				<filter class="solr.LowerCaseFilterFactory"/>
 				<filter class="solr.StopFilterFactory" words="stopwordsGerman.txt" ignoreCase="true" enablePositionIncrements="true"/>
-				<!-- since Solr 4.x use the following filter -->
-				<!-- <filter class="solr.GermanNormalizationFilterFactory"/> -->
+				<filter class="solr.GermanNormalizationFilterFactory"/>
 				<filter class="solr.SnowballPorterFilterFactory" language="German2" protected="protwords.txt"/>
 				<filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
 			</analyzer>
@@ -527,8 +523,7 @@
 					http://java.sun.com/j2se/1.5.0/docs/api/java/util/regex/package-summary.html
 				-->
 				<!-- so we have umlauts transformend (ä => ae, etc.) etc. -->
-				<!-- since Solr 4.x use the following filter -->
-				<!-- <filter class="solr.GermanNormalizationFilterFactory"/> -->
+				<filter class="solr.GermanNormalizationFilterFactory"/>
 				<!-- only alpha num and whitespaces -->
 				<filter class="solr.PatternReplaceFilterFactory" pattern="([^a-zäöüÄÖÜß0-9 ])"
 					replacement="" replace="all" />
@@ -747,7 +742,7 @@
 	<uniqueKey>id</uniqueKey>
 
 	<!-- field for the QueryParser to use when an explicit fieldname is absent -->
-	<defaultSearchField>text</defaultSearchField>
+	<defaultSearchField>fulltext</defaultSearchField>
 
 	<!-- SolrQueryParser configuration: defaultOperator="AND|OR" -->
 	<solrQueryParser defaultOperator="OR" />
