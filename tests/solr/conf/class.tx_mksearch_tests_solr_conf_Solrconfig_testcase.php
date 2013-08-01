@@ -34,7 +34,7 @@ class tx_mksearch_tests_solr_conf_Solrconfig_testcase extends tx_mksearch_tests_
 
 	protected $instanceDir = 'EXT:mksearch/tests/solrtestcore/';
 	protected $configFile = 'EXT:mksearch/solr/conf/solrconfig-3.x.xml';
-	protected $configFileForSolr4 = 'EXT:mksearch/solr/conf/solrconfig-4.0.xml';
+	protected $configFileForSolr4 = 'EXT:mksearch/solr/conf/solrconfig-4.x.xml';
 	protected $schemaFile = 'EXT:mksearch/solr/conf/schema.xml';
 	protected $defaultContentType = 'fegrouptest';
 
