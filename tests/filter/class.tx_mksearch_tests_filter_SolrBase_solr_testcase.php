@@ -71,7 +71,8 @@ class tx_mksearch_tests_filter_SolrBase_solr_testcase extends tx_mksearch_tests_
 
 	public function copyNeccessaryLibFiles($destPath) {
 		$neccessaryLibFiles = array(
-			'dmk-solr-core-3.5.0.jar'
+			'dmk-solr-core-3.5.0.jar',
+			'Dmk-MultiWordSpellingQueryConverter-Solr4.jar'
 		);
 		$this->copyNeccessaryFiles($destPath, 'lib/', $neccessaryLibFiles);
 	}
