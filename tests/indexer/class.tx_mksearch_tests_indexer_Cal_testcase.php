@@ -95,8 +95,8 @@ class tx_mksearch_tests_indexer_Cal_testcase extends Tx_Phpunit_Testcase {
 	*/
 	public function testPrepareSearchDataReturnsCorrectDocForStartAndEnddateFieldsWithoutTimezone() {
 		$calRecord = array(
-			'start_date' 	=> 20130303,
-			'end_date' 		=> 20130305,
+			'start_date' 	=> '20130303',
+			'end_date' 		=> '20130305',
 		);
 
 		$indexDocFieldArray =
@@ -117,6 +117,14 @@ class tx_mksearch_tests_indexer_Cal_testcase extends Tx_Phpunit_Testcase {
 		$this->assertEquals(
 			1362438000,$indexDocFieldArray['end_date_i']->getValue(),
 			'end_date_i falsch indiziert!'
+		);
+		$this->assertEquals(
+			'20130303',$indexDocFieldArray['start_date_s']->getValue(),
+			'start_date_s falsch indiziert!'
+		);
+		$this->assertEquals(
+			'20130305',$indexDocFieldArray['end_date_s']->getValue(),
+			'end_date_s falsch indiziert!'
 		);
 		$this->assertEquals(
 			1362265200,$indexDocFieldArray['tstamp']->getValue(),
@@ -152,6 +160,14 @@ class tx_mksearch_tests_indexer_Cal_testcase extends Tx_Phpunit_Testcase {
 		$this->assertEquals(
 			1362441600,$indexDocFieldArray['end_date_i']->getValue(),
 			'end_date_i falsch indiziert!'
+		);
+		$this->assertEquals(
+			'20130303',$indexDocFieldArray['start_date_s']->getValue(),
+			'start_date_s falsch indiziert!'
+		);
+		$this->assertEquals(
+			'20130305',$indexDocFieldArray['end_date_s']->getValue(),
+			'end_date_s falsch indiziert!'
 		);
 	}
 

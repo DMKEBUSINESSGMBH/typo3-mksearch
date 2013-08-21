@@ -162,11 +162,11 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base {
 			$calEvent->record['end_date'], $calEvent->record['timezone']
 		);
 
-		$calEvent->record['start_date'] = $this->getCalDateStringAsSolrDateTimeString(
+		$calEvent->record['start_date_datetime'] = $this->getCalDateStringAsSolrDateTimeString(
 			$calEvent->record['start_date'], $calEvent->record['timezone']
 		);
 
-		$calEvent->record['end_date'] = $this->getCalDateStringAsSolrDateTimeString(
+		$calEvent->record['end_date_datetime'] = $this->getCalDateStringAsSolrDateTimeString(
 			$calEvent->record['end_date'], $calEvent->record['timezone']
 		);
 
@@ -232,8 +232,10 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base {
 			'organizer_link' 		=> 'organizer_link_s',
 			'location' 				=> 'location_s',
 			'type' 					=> 'type_i',
-			'start_date'			=> 'start_date_dt',
-			'end_date'				=> 'end_date_dt',
+			'start_date'			=> 'start_date_s',
+			'end_date'				=> 'end_date_s',
+			'start_date_datetime'	=> 'start_date_dt',
+			'end_date_datetime'		=> 'end_date_dt',
 			'start_date_timestamp'	=> 'start_date_i',
 			'end_date_timestamp'	=> 'end_date_i',
 			'description'			=> 'description_s'
