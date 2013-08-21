@@ -466,7 +466,6 @@
 			<analyzer type="index">
 				<tokenizer class="solr.WhitespaceTokenizerFactory" />
 				<filter class="solr.LowerCaseFilterFactory" />
-				<filter class="solr.TrimFilterFactory" />
 				<!-- only alpha num and whitespaces -->
 				<filter class="solr.PatternReplaceFilterFactory" pattern="([^a-zäöüÄÖÜß0-9 ])"
 					replacement="" replace="all" />
@@ -480,6 +479,7 @@
 						"the quick brown fox".
 					-->
 				<filter class="solr.ShingleFilterFactory" maxShingleSize="4" outputUnigrams="true" />
+				<filter class="solr.TrimFilterFactory" />
 				<filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
 			</analyzer>
 			<analyzer type="query">
