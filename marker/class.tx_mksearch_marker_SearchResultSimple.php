@@ -106,7 +106,7 @@ class tx_mksearch_marker_SearchResultSimple
 			$remove = intval($formatter->getConfigurations()->get($linkConfId.'removeIfDisabled'));
 			$linkMarker = $marker . '_' . strtoupper($linkId).'LINK';
 			self::disableLink($markerArray, $subpartArray, $wrappedSubpartArray, $linkMarker, $remove>0);
-		} else {
+		} else if(self::checkLinkExistence($linkId, $marker, $template)) {
 
 			// Try to get parameter name from TS
 			$paramName = $config->get($linkConfId.'paramName');
