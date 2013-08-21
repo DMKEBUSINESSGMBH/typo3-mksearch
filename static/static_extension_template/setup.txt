@@ -637,9 +637,17 @@ lib.mksearch.extrainfo {
 	irfaq.question{
 		template = EXT:mksearch/templates/searchResultIrfaq.html
 		hit {
+			linkMethod = generic
+			links.showfirstcategory {
+				removeIfDisabled = 1
+				noHash = 1
+				pid = TEXT
+				pid.field = category_first_shortcut_s
+			}
 			initFields{
 				0 = q_s
 				1 = a_s
+				2 = a_with_html_s
 			}
 		}
 	}

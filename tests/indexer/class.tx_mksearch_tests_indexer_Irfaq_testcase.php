@@ -191,6 +191,11 @@ class tx_mksearch_tests_indexer_Irfaq_testcase extends tx_phpunit_database_testc
 			$aIndexDoc['category_shortcut_ms']->getValue(),
 			'Es wurden nicht die richtigen Kategorie-Shortcuts indiziert!'
 		);
+		$this->assertEquals(
+			'1. Shortcut',
+			$aIndexDoc['category_first_shortcut_s']->getValue(),
+			'Es wurden nicht der richtige erste Kategorie-Shortcut indiziert!'
+		);
 	}
 
 	/**

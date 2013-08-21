@@ -37,6 +37,7 @@
 			<label index="label_search_submit">Submit search</label>
 			<label index="label_search_yoursearchtermwas">Your search term was:</label>
 			<label index="label_search_readmore">read more</label>
+			<label index="label_search_readmorefaqs">read more related questions</label>
 			<label index="label_search_noresultsfound"><![CDATA[<div class="noResultsFound">Your search did not return any results.</div>]]></label>
 			
 			<label index="label_search_reset">reset Search</label>
@@ -73,6 +74,7 @@
 			<label index="label_search_submit">Suche abschicken</label>
 			<label index="label_search_yoursearchtermwas">Ihr Suchbegriff war:</label>
 			<label index="label_search_readmore">mehr lesen</label>
+			<label index="label_search_readmorefaqs">mehr verwandte Fragen</label>
 			<label index="label_search_noresultsfound"><![CDATA[<div class="noResultsFound">Ihre Suche brachte keine Ergebnisse.</div>]]></label>
 			
 			<label index="label_search_reset">Suche zurücksetzen</label>
