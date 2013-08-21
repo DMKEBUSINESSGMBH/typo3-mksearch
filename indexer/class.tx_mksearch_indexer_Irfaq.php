@@ -81,6 +81,9 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base {
 		// index everything about the question
 		$this->indexModelByMapping($oModel,$this->getQuestionMapping(),$oIndexDoc);
 
+		//add the question keeping html
+		$oIndexDoc->addField('a_with_html_s', $oModel->record['a']);
+
 		//index everything about the expert
 		$this->indexModelByMapping(
 			tx_mksearch_util_ServiceRegistry::getIrfaqExpertService()->get($oModel->record['expert']),

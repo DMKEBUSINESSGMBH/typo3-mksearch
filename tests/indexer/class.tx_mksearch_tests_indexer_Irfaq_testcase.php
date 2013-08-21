@@ -109,23 +109,88 @@ class tx_mksearch_tests_indexer_Irfaq_testcase extends tx_phpunit_database_testc
 		$aIndexDoc = $indexer->prepareSearchData('tx_irfaq_q', $aResult[0], $indexDoc, $options)->getData();
 
 		//Common
-		$this->assertEquals(87,$aIndexDoc['sorting_i']->getValue(),'Es wurde nicht die richtige Sortierung indiziert!');
-		$this->assertEquals('1. FAQ',$aIndexDoc['q_s']->getValue(),'Es wurde nicht die richtige Frage indiziert!');
-		$this->assertEquals('You have to know this and this',$aIndexDoc['a_s']->getValue(),'Es wurde nicht der richtige Fragetext indiziert!');
-		$this->assertEquals('something related',$aIndexDoc['related_s']->getValue(),'Es wurde nicht das richtige related indiziert!');
-		$this->assertEquals('some related links',$aIndexDoc['related_links_s']->getValue(),'Es wurden nicht die richtigen related Links indiziert!');
-		$this->assertEquals('some files',$aIndexDoc['faq_files_s']->getValue(),'Es wurde nicht der richtige Dateien indiziert!');
-		$this->assertEquals(123,$aIndexDoc['tstamp']->getValue(),'Es wurde nicht der richtige tstamp indiziert!');
+		$this->assertEquals(
+			87,
+			$aIndexDoc['sorting_i']->getValue(),
+			'Es wurde nicht die richtige Sortierung indiziert!'
+		);
+		$this->assertEquals(
+			'1. FAQ',
+		$aIndexDoc['q_s']->getValue(),
+			'Es wurde nicht die richtige Frage indiziert!'
+		);
+		$this->assertEquals(
+			'You have to know this and this',
+			$aIndexDoc['a_s']->getValue(),
+			'Es wurde nicht der richtige Fragetext indiziert!'
+		);
+		$this->assertEquals(
+			'<span>You have to know this and this</span>',
+			$aIndexDoc['a_with_html_s']->getValue(),
+			'Es wurde nicht der richtige Fragetext mit HTML indiziert!'
+		);
+		$this->assertEquals(
+			'something related',
+			$aIndexDoc['related_s']->getValue(),
+			'Es wurde nicht das richtige related indiziert!'
+		);
+		$this->assertEquals(
+			'some related links',
+			$aIndexDoc['related_links_s']->getValue(),
+			'Es wurden nicht die richtigen related Links indiziert!'
+		);
+		$this->assertEquals(
+			'some files',
+			$aIndexDoc['faq_files_s']->getValue(),
+			'Es wurde nicht der richtige Dateien indiziert!'
+		);
+		$this->assertEquals(
+			123,
+			$aIndexDoc['tstamp']->getValue(),
+			'Es wurde nicht der richtige tstamp indiziert!'
+		);
 		//Expert
-		$this->assertEquals(1,$aIndexDoc['expert_i']->getValue(),'Es wurde nicht der richtige Experte indiziert!');
-		$this->assertEquals('1. Expert',$aIndexDoc['expert_name_s']->getValue(),'Es wurde nicht der richtige Expertenname indiziert!');
-		$this->assertEquals('mail@expert.de',$aIndexDoc['expert_email_s']->getValue(),'Es wurde nicht die richtige Expertenmail indiziert!');
-		$this->assertEquals('some url',$aIndexDoc['expert_url_s']->getValue(),'Es wurde nicht die richtige Expertenurl indiziert!');
+		$this->assertEquals(
+			1,
+			$aIndexDoc['expert_i']->getValue(),
+			'Es wurde nicht der richtige Experte indiziert!'
+		);
+		$this->assertEquals(
+			'1. Expert',
+			$aIndexDoc['expert_name_s']->getValue(),
+			'Es wurde nicht der richtige Expertenname indiziert!'
+		);
+		$this->assertEquals(
+			'mail@expert.de',
+			$aIndexDoc['expert_email_s']->getValue(),
+			'Es wurde nicht die richtige Expertenmail indiziert!'
+		);
+		$this->assertEquals(
+			'some url',
+			$aIndexDoc['expert_url_s']->getValue(),
+			'Es wurde nicht die richtige Expertenurl indiziert!'
+		);
 		//Categories
-		$this->assertEquals(array(0=>'1',1=>'2'),$aIndexDoc['category_mi']->getValue(),'Es wurden nicht die richtigen Kategorie-Uids indiziert!');
-		$this->assertEquals(array(0=>'47',1=>'48'),$aIndexDoc['category_sorting_mi']->getValue(),'Es wurden nicht die richtigen Kategorie-Sortierungen indiziert!');
-		$this->assertEquals(array(0=>'1. FAQ Category',1=>'2. FAQ Category'),$aIndexDoc['category_title_ms']->getValue(),'Es wurden nicht die richtigen Kategorie-Titel indiziert!');
-		$this->assertEquals(array(0=>'1. Shortcut',1=>'2. Shortcut'),$aIndexDoc['category_shortcut_ms']->getValue(),'Es wurden nicht die richtigen Kategorie-Shortcuts indiziert!');
+		$this->assertEquals(
+			array(0=>'1',1=>'2'),
+			$aIndexDoc['category_mi']->getValue(),
+			'Es wurden nicht die richtigen Kategorie-Uids indiziert!'
+		);
+		$this->assertEquals(
+			array(0=>'47',1=>'48'),
+			$aIndexDoc['category_sorting_mi']->getValue(),
+			'Es wurden nicht die richtigen Kategorie-Sortierungen indiziert!'
+		);
+		$this->assertEquals(
+			array(0=>'1. FAQ Category',1=>'2. FAQ Category'),
+			$aIndexDoc['category_title_ms']->getValue(),
+			'Es wurden nicht die richtigen Kategorie-Titel indiziert!'
+		);
+		$this->assertEquals(
+			array(0=>'1. Shortcut',1=>'2. Shortcut'),
+			$aIndexDoc['category_shortcut_ms']->getValue(),
+			'Es wurden nicht die richtigen Kategorie-Shortcuts indiziert!'
+		);
 	}
 
 	/**
