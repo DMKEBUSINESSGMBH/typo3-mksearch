@@ -672,6 +672,7 @@ lib.mksearch.extrainfo {
 	cal.event{
 		template = EXT:mksearch/templates/searchResultCal.html
 		hit {
+			linkMethod = generic
 			links.show {
 				### pid for the single view of a calendar event
 				pid = 0
@@ -679,7 +680,12 @@ lib.mksearch.extrainfo {
 				qualifier = tx_cal_controller
 				paramName = uid
 				useKeepVars = 1
-				useKeepVars.add = type=tx_cal_phpicalendar
+				useKeepVars.add = view=event,type=tx_cal_phpicalendar
+				_cfg.params{
+					year = start_date_year_i
+					month = start_date_month_i 
+					day = start_date_day_i
+				}
 			}
 			initFields{
 				0 = calendar_title_s

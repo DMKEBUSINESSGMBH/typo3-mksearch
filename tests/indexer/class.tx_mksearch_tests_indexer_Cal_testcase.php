@@ -127,6 +127,30 @@ class tx_mksearch_tests_indexer_Cal_testcase extends Tx_Phpunit_Testcase {
 			'end_date_s falsch indiziert!'
 		);
 		$this->assertEquals(
+			2013,$indexDocFieldArray['start_date_year_i']->getValue(),
+			'start_date_year_i falsch indiziert!'
+		);
+		$this->assertEquals(
+			3,$indexDocFieldArray['start_date_month_i']->getValue(),
+			'start_date_month_i falsch indiziert!'
+		);
+		$this->assertEquals(
+			3,$indexDocFieldArray['start_date_day_i']->getValue(),
+			'start_date_day_i falsch indiziert!'
+		);
+		$this->assertEquals(
+			2013,$indexDocFieldArray['end_date_year_i']->getValue(),
+			'end_date_year_i falsch indiziert!'
+		);
+		$this->assertEquals(
+			3,$indexDocFieldArray['end_date_month_i']->getValue(),
+			'end_date_month_i falsch indiziert!'
+		);
+		$this->assertEquals(
+			5,$indexDocFieldArray['end_date_day_i']->getValue(),
+			'end_date_day_i falsch indiziert!'
+		);
+		$this->assertEquals(
 			1362265200,$indexDocFieldArray['tstamp']->getValue(),
 			'tstamp nicht gleich start_date_i falsch indiziert!'
 		);
@@ -168,6 +192,30 @@ class tx_mksearch_tests_indexer_Cal_testcase extends Tx_Phpunit_Testcase {
 		$this->assertEquals(
 			'20130305',$indexDocFieldArray['end_date_s']->getValue(),
 			'end_date_s falsch indiziert!'
+		);
+		$this->assertEquals(
+			2013,$indexDocFieldArray['start_date_year_i']->getValue(),
+			'start_date_year_i falsch indiziert!'
+		);
+		$this->assertEquals(
+			3,$indexDocFieldArray['start_date_month_i']->getValue(),
+			'start_date_month_i falsch indiziert!'
+		);
+		$this->assertEquals(
+			3,$indexDocFieldArray['start_date_day_i']->getValue(),
+			'start_date_day_i falsch indiziert!'
+		);
+		$this->assertEquals(
+			2013,$indexDocFieldArray['end_date_year_i']->getValue(),
+			'end_date_year_i falsch indiziert!'
+		);
+		$this->assertEquals(
+			3,$indexDocFieldArray['end_date_month_i']->getValue(),
+			'end_date_month_i falsch indiziert!'
+		);
+		$this->assertEquals(
+			5,$indexDocFieldArray['end_date_day_i']->getValue(),
+			'end_date_day_i falsch indiziert!'
 		);
 	}
 

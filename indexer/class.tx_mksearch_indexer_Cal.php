@@ -154,21 +154,7 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base {
 		tx_mksearch_model_cal_Event $calEvent,
 		tx_mksearch_interface_IndexerDocument $indexDoc
 	) {
-		$calEvent->record['start_date_timestamp'] = $this->getTimestampFromCalDateString(
-			$calEvent->record['start_date'], $calEvent->record['timezone']
-		);
-
-		$calEvent->record['end_date_timestamp'] = $this->getTimestampFromCalDateString(
-			$calEvent->record['end_date'], $calEvent->record['timezone']
-		);
-
-		$calEvent->record['start_date_datetime'] = $this->getCalDateStringAsSolrDateTimeString(
-			$calEvent->record['start_date'], $calEvent->record['timezone']
-		);
-
-		$calEvent->record['end_date_datetime'] = $this->getCalDateStringAsSolrDateTimeString(
-			$calEvent->record['end_date'], $calEvent->record['timezone']
-		);
+		$calEvent = $this->prepareDates($calEvent);
 
 		$calEvent->record['description'] =
 			tx_mksearch_util_Misc::html2plain($calEvent->record['description']);
@@ -178,6 +164,30 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base {
 		);
 
 		$indexDoc->setTimestamp($calEvent->record['start_date_timestamp']);
+	}
+
+	/**
+	 * @param tx_mksearch_model_cal_Event $calEvent
+	 *
+	 * @return tx_mksearch_model_cal_Event
+	 */
+	private function prepareDates(tx_mksearch_model_cal_Event $calEvent) {
+		$datePrefixes = array('start', 'end');
+		foreach ($datePrefixes as $datePrefix) {
+			$calEvent->record[$datePrefix . '_date_timestamp'] = $this->getTimestampFromCalDateString(
+				$calEvent->record[$datePrefix . '_date'], $calEvent->record['timezone']
+			);
+			$calEvent->record[$datePrefix . '_date_datetime'] = $this->getCalDateStringAsSolrDateTimeString(
+				$calEvent->record[$datePrefix . '_date'], $calEvent->record['timezone']
+			);
+
+			$calDate = tx_rnbase::makeInstance('tx_cal_date', $calEvent->record[$datePrefix . '_date']);
+			$calEvent->record[$datePrefix . '_date_year'] = $calDate->getYear();
+			$calEvent->record[$datePrefix . '_date_month'] = $calDate->getMonth();
+			$calEvent->record[$datePrefix . '_date_day'] = $calDate->getDay();
+		}
+
+		return $calEvent;
 	}
 
 	/**
@@ -238,6 +248,12 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base {
 			'end_date_datetime'		=> 'end_date_dt',
 			'start_date_timestamp'	=> 'start_date_i',
 			'end_date_timestamp'	=> 'end_date_i',
+			'start_date_year'		=> 'start_date_year_i',
+			'start_date_month'		=> 'start_date_month_i',
+			'start_date_day'		=> 'start_date_day_i',
+			'end_date_year'			=> 'end_date_year_i',
+			'end_date_month'		=> 'end_date_month_i',
+			'end_date_day'			=> 'end_date_day_i',
 			'description'			=> 'description_s'
 		);
 	}
