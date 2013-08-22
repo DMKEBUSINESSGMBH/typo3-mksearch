@@ -24,8 +24,6 @@
 
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_mksearch_tests_Util');
-tx_rnbase::load('tx_mksearch_indexer_Cal');
-tx_rnbase::load('tx_mksearch_model_cal_Event');
 
 /**
  * @author Hannes Bochmann
@@ -33,6 +31,19 @@ tx_rnbase::load('tx_mksearch_model_cal_Event');
  */
 class tx_mksearch_tests_indexer_Cal_testcase extends Tx_Phpunit_Testcase {
 
+	/**
+	 * (non-PHPdoc)
+	 * @see PHPUnit_Framework_TestCase::setUp()
+	 */
+	protected function setUp() {
+		if(!t3lib_extMgm::isLoaded('cal')) {
+			$this->markTestSkipped('cal nicht geladen.');
+		}
+		
+		tx_rnbase::load('tx_mksearch_indexer_Cal');
+		tx_rnbase::load('tx_mksearch_model_cal_Event');
+	}
+	
 	/**
 	 * @group unit
 	 */
