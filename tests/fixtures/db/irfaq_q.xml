@@ -5,7 +5,7 @@
 		<sorting>87</sorting>
 		<q>1. FAQ</q>
 		<cat>1</cat>
-		<a>You have to know this and this</a>
+		<a><![CDATA[<span>You have to know this and this</span>]]></a>
 		<expert>1</expert>
 		<related>something related</related>
 		<related_links>some related links</related_links>

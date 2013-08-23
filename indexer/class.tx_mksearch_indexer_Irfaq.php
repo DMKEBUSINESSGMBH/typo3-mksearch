@@ -60,53 +60,91 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base {
 	 * (non-PHPdoc)
 	 * @see tx_mksearch_interface_Indexer::prepareSearchData()
 	 */
-	public function indexData(tx_rnbase_IModel $oModel, $sTableName, $aRawData, tx_mksearch_interface_IndexerDocument $oIndexDoc, $aOptions) {
+	public function indexData(tx_rnbase_IModel $model, $tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options) {
 		//check if at least one category of the current faq
 		//is in the given include categories if this option is used
 		//we could also extend the isIndexableRecord method but than
 		//we would need to get the faq model and the categories
 		//twice
-		$aCategories = tx_mksearch_util_ServiceRegistry::getIrfaqCategoryService()->getByQuestion($oModel);
-		if(!$this->checkInOrExcludeOptions($aCategories,$aOptions))
+		$categories = tx_mksearch_util_ServiceRegistry::getIrfaqCategoryService()->getByQuestion($model);
+		if(!$this->checkInOrExcludeOptions($categories,$options))
 			return null;
 		//else go one with indexing
 
 		//index everything about the categories
 		$this->indexArrayOfModelsByMapping(
-			$aCategories,
+			$categories,
 			$this->getCategoryMapping(),
-			$oIndexDoc,'category_'
+			$indexDoc,'category_'
 		);
 
 		// index everything about the question
-		$this->indexModelByMapping($oModel,$this->getQuestionMapping(),$oIndexDoc);
+		$this->indexModelByMapping($model,$this->getQuestionMapping(),$indexDoc);
+
+		$indexDoc = $this->indexAnswerTextKeepingHtml($model, $indexDoc);
+		$indexDoc = $this->indexShortcutOfFirstCategory($categories, $indexDoc);
 
 		//index everything about the expert
 		$this->indexModelByMapping(
-			tx_mksearch_util_ServiceRegistry::getIrfaqExpertService()->get($oModel->record['expert']),
+			tx_mksearch_util_ServiceRegistry::getIrfaqExpertService()->get($model->record['expert']),
 			$this->getExpertMapping(),
-			$oIndexDoc,'expert_'
+			$indexDoc,'expert_'
 		);
 
 		//done
-		return $oIndexDoc;
+		return $indexDoc;
+	}
+
+	/**
+	 * @param tx_rnbase_IModel $model
+	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
+	 *
+	 * @return tx_mksearch_interface_IndexerDocument
+	 */
+	private function indexAnswerTextKeepingHtml(
+		tx_rnbase_IModel $model,
+		tx_mksearch_interface_IndexerDocument $indexDoc
+	) {
+		$indexDoc->addField('a_with_html_s', $model->record['a']);
+
+		return $indexDoc;
+	}
+
+	/**
+	 * @param array $categories
+	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
+	 *
+	 * @return tx_mksearch_interface_IndexerDocument
+	 */
+	private function indexShortcutOfFirstCategory(
+		array $categories,
+		tx_mksearch_interface_IndexerDocument $indexDoc
+	) {
+		if(
+			isset($categories[0]) &&
+			$categories[0] instanceof tx_mksearch_model_irfaq_Category
+		) {
+			$indexDoc->addField('category_first_shortcut_s', $categories[0]->record['shortcut']);
+		}
+
+		return $indexDoc;
 	}
 
 	/**
 	 * check if related data has changed
-	 * @param string $sTableName
-	 * @param array $aRawData
-	 * @param tx_mksearch_interface_IndexerDocument $oIndexDoc
-	 * @param array $aOptions
+	 * @param string $tableName
+	 * @param array $rawData
+	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
+	 * @param array $options
 	 *
 	 * @return bool
 	 */
-	protected function stopIndexing($sTableName, $aRawData, tx_mksearch_interface_IndexerDocument $oIndexDoc, $aOptions) {
-		if($sTableName == 'tx_irfaq_expert') {
-			$this->handleRelatedTableChanged($aRawData,'Expert');
+	protected function stopIndexing($tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options) {
+		if($tableName == 'tx_irfaq_expert') {
+			$this->handleRelatedTableChanged($rawData,'Expert');
 			return true;
-		}else if($sTableName == 'tx_irfaq_cat') {
-			$this->handleRelatedTableChanged($aRawData,'Category');
+		}else if($tableName == 'tx_irfaq_cat') {
+			$this->handleRelatedTableChanged($rawData,'Category');
 			return true;
 		}
 	}
@@ -115,12 +153,12 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base {
 	 * Adds all given models to the queue
 	 * @param array $aModels
 	 */
-	protected function handleRelatedTableChanged(array $aRawData, $sCallback) {
-		$oSrv = tx_mksearch_util_ServiceRegistry::getIrfaqQuestionService();
-		$sCallback = 'getBy'.$sCallback;
+	protected function handleRelatedTableChanged(array $rawData, $callback) {
+		$service = tx_mksearch_util_ServiceRegistry::getIrfaqQuestionService();
+		$callback = 'getBy'.$callback;
 
 		$this->addModelsToIndex(
-				$oSrv->$sCallback($aRawData['uid']),
+				$service->$callback($rawData['uid']),
 				'tx_irfaq_q'
 			);
 	}
@@ -173,12 +211,12 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base {
 	/**
 	 * Returns the model to be indexed
 	 *
-	 * @param array $aRawData
+	 * @param array $rawData
 	 *
 	 * @return tx_mksearch_model_irfaq_Question
 	 */
-	protected function createModel(array $aRawData) {
-		return tx_rnbase::makeInstance('tx_mksearch_model_irfaq_Question', $aRawData);
+	protected function createModel(array $rawData) {
+		return tx_rnbase::makeInstance('tx_mksearch_model_irfaq_Question', $rawData);
 	}
 
 	/**

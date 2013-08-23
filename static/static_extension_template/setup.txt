@@ -637,9 +637,17 @@ lib.mksearch.extrainfo {
 	irfaq.question{
 		template = EXT:mksearch/templates/searchResultIrfaq.html
 		hit {
+			linkMethod = generic
+			links.showfirstcategory {
+				removeIfDisabled = 1
+				noHash = 1
+				pid = TEXT
+				pid.field = category_first_shortcut_s
+			}
 			initFields{
 				0 = q_s
 				1 = a_s
+				2 = a_with_html_s
 			}
 		}
 	}
@@ -672,14 +680,20 @@ lib.mksearch.extrainfo {
 	cal.event{
 		template = EXT:mksearch/templates/searchResultCal.html
 		hit {
-			links.show {
+			linkMethod = generic
+			links.showevent {
 				### pid for the single view of a calendar event
 				pid = 0
 				noHash = 0
 				qualifier = tx_cal_controller
-				paramName = uid
 				useKeepVars = 1
-				useKeepVars.add = type=tx_cal_phpicalendar
+				useKeepVars.add = view=event,type=tx_cal_phpicalendar
+				_cfg.params{
+					year = start_date_year_i
+					month = start_date_month_i 
+					day = start_date_day_i
+					uid = uid
+				}
 			}
 			initFields{
 				0 = calendar_title_s
