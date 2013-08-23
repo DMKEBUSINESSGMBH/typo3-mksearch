@@ -181,8 +181,13 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 		// $deletedField = $GLOBALS['TCA'][$model->getTableName()]['ctrl']['enablecolumns']['delete'];
 		// $disabledField = $GLOBALS['TCA'][$model->getTableName()]['ctrl']['enablecolumns']['disabled'];
 		// wäre vlt. auch was für rn_base, das model könnte diese informationen ja bereit stellen!
-		if ($model->record['hidden'] == 1 || $model->record['deleted'] == 1)
+		if (
+			!$model->isValid() || 
+			$model->record['hidden'] == 1 || 
+			$model->record['deleted'] == 1
+		) {
 			return true;
+		}
 
 		// are our parent pages valid?
 		// as soon as one of the parent pages is hidden we return true.
