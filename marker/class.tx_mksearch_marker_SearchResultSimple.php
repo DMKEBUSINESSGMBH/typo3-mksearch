@@ -50,7 +50,7 @@ class tx_mksearch_marker_SearchResultSimple
 		$ignore = self::findUnusedCols($item->record, $template, $marker);
 
 		//diese felder werden auch bei nicht vorhanden sein gesetzt damit die market nicht ausgegeben werden
-		$initFields = $formatter->getConfigurations()->get($confId.'initFields.');
+		$initFields = $this->getInitFields($template, $item, $formatter, $confId, $marker);
 
 		$markerArray = $formatter->getItemMarkerArrayWrapped($item->record, $confId , $ignore, $marker.'_', $initFields);
 
@@ -128,6 +128,21 @@ class tx_mksearch_marker_SearchResultSimple
 		}
 		//cObject Daten wieder zurück
 		$config->getCObj()->data = $sCObjTempData;
+	}
+
+	/**
+	 * Liefert alle Felder, welche im Template zwingend erforderlich sind.
+	 *
+	 * @param string $template HTML template
+	 * @param tx_mksearch_model_SearchHit $item search hit
+	 * @param tx_rnbase_util_FormatUtil $formatter
+	 * @param string $confId path of typoscript configuration
+	 * @param string $marker name of marker
+	 * @return array
+	 */
+	protected function getInitFields($template, &$item, &$formatter, $confId, $marker) {
+		$fields = $formatter->getConfigurations()->get($confId.'initFields.');
+		return is_array($fields) ? $fields : array();
 	}
 }
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/marker/class.tx_mksearch_marker_SearchResultSimple.php'])	{
