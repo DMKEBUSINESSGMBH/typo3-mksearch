@@ -182,6 +182,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 		// $disabledField = $GLOBALS['TCA'][$model->getTableName()]['ctrl']['enablecolumns']['disabled'];
 		// wäre vlt. auch was für rn_base, das model könnte diese informationen ja bereit stellen!
 		if (
+			!$model ||
 			!$model->isValid() || 
 			$model->record['hidden'] == 1 || 
 			$model->record['deleted'] == 1
