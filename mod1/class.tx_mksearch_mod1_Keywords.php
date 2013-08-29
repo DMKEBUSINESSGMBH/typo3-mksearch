@@ -46,7 +46,17 @@ class tx_mksearch_mod1_Keywords extends tx_rnbase_mod_BaseModFunc {
 	protected function getFuncId() {
 		return 'keywords';
 	}
-	
+
+	public function getPid() {
+		return $this->getModule()->getPid();
+	}
+
+	public function main() {
+		$out = parent::main();
+		$out = tx_mksearch_mod1_util_Template::parseBasics($out, $this);
+		return $out;
+	}
+
 	/**
 	* Kindklassen implementieren diese Methode um den Modulinhalt zu erzeugen
 	* @param string $template
@@ -57,14 +67,14 @@ class tx_mksearch_mod1_Keywords extends tx_rnbase_mod_BaseModFunc {
 	*/
 	protected function getContent($template, &$configurations, &$formatter, $formTool) {
 		$markerArray = array();
-		
+
 		$markerArray['###COMMON_START###'] = $markerArray['###COMMON_END###'] = '';
 		if($GLOBALS['BE_USER']->isAdmin()) {
 			$markerArray['###COMMON_START###'] = tx_rnbase_util_Templates::getSubpart($template,'###COMMON_START###');
 			$markerArray['###COMMON_END###'] = tx_rnbase_util_Templates::getSubpart($template,'###COMMON_END###');
 		}
-		
-		
+
+
 		$templateMod = tx_rnbase_util_Templates::getSubpart($template,'###SEARCHPART###');
 		$out = $this->showSearch($templateMod, $configurations, $formTool, $markerArray);
 		return $out;
@@ -87,7 +97,7 @@ class tx_mksearch_mod1_Keywords extends tx_rnbase_mod_BaseModFunc {
 					'KEYWORD'
 				);
 	}
-	
+
 	/**
 	 * Method to get a company searcher
 	 *

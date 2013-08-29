@@ -28,6 +28,7 @@
 
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_rnbase_mod_BaseModFunc');
+tx_rnbase::load('tx_mksearch_mod1_util_Template');
 tx_rnbase::load('tx_rnbase_util_Templates');
 tx_rnbase::load('tx_mksearch_util_ServiceRegistry');
 tx_rnbase::load('tx_mksearch_mod1_util_IndexStatusHandler');
@@ -51,8 +52,14 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc {
 		return 'indizeindizes';
 	}
 
-	protected function getPageId() {
+	public function getPid() {
 		return $this->getModule()->getPid();
+	}
+
+	public function main() {
+		$out = parent::main();
+		$out = tx_mksearch_mod1_util_Template::parseBasics($out, $this);
+		return $out;
 	}
 
 	/**
@@ -89,7 +96,7 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc {
 		$markerArray['###INDEXITEMS###'] = $indexItems > 0 ? $indexItems : 100;
 
 		$markerArray['###CORE_STATUS###'] = tx_mksearch_mod1_util_IndexStatusHandler
-			::getInstance()->handleRequest(array('pid' => $this->getPageId()));
+			::getInstance()->handleRequest(array('pid' => $this->getPid()));
 
 		$this->showTables($template, $configurations, $formTool, $markerArray, $oIntIndexSrv);
 
@@ -108,7 +115,7 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc {
 	protected function showTables($template, $configurations, $formTool, &$markerArray, $oIntIndexSrv) {
 		tx_rnbase::load('tx_mksearch_util_Config');
 		$aIndexers = tx_mksearch_util_Config::getIndexers();
-		$aIndices = $oIntIndexSrv->getByPageId($this->getPageId());
+		$aIndices = $oIntIndexSrv->getByPageId($this->getPid());
 
 		$aDefinedTables = array();
 
@@ -155,7 +162,7 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc {
 		// wir holen uns eine liste von page ids
 		// nur elemente dieser page id dürfen in der Queue landen
 		tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
-		$pidList = tx_mksearch_service_indexer_core_Config::getPidListFromSiteRootPage($this->getPageId(), 999);
+		$pidList = tx_mksearch_service_indexer_core_Config::getPidListFromSiteRootPage($this->getPid(), 999);
 
 		if(empty($pidList)) return $pidList;
 
@@ -261,7 +268,7 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc {
 		$status = '';
 		$indexItems = intval(t3lib_div::_GP('triggerIndexingQueueCount'));
 		$options['limit'] = $indexItems > 0 ? $indexItems : 100;
-		$options['pid'] = $this->getPageId();
+		$options['pid'] = $this->getPid();
 		$rows = $oIntIndexSrv->triggerQueueIndexing($options);
 		if ($rows) {
 			$status .= $configurations->getLL('label_queue_indexed');

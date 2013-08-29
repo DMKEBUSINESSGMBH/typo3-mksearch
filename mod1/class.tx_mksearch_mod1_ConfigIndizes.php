@@ -28,6 +28,7 @@
 
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_rnbase_mod_ExtendedModFunc');
+tx_rnbase::load('tx_mksearch_mod1_util_Template');
 
 /**
  * Mksearch backend module
@@ -46,67 +47,17 @@ class tx_mksearch_mod1_ConfigIndizes extends tx_rnbase_mod_ExtendedModFunc {
 	protected function getFuncId() {
 		return 'configindizes';
 	}
-	
-	protected function getPageId(){
-		return $this->getModule()->id;
+
+	public function getPid(){
+		return $this->getModule()->getPid();
 	}
-	
+
 	public function main() {
 		$out = parent::main();
-
-		// rootpage marker hinzufügen
-		if(tx_rnbase_util_BaseMarker::containsMarker($out, 'ROOTPAGE_')) {
-			// Marker für Rootpage integrieren
-			tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
-			$rootPage = tx_mksearch_service_indexer_core_Config::getSiteRootPage($this->getPageId());
-			
-			// keine rootpage, dann die erste seite im baum
-			if(empty($rootPage))
-				$rootPage = array_pop(tx_mksearch_service_indexer_core_Config::getRootLine($this->getPageId() ? $this->getPageId() : 0));
-			
-			$rootPage = is_array($rootPage) ? t3lib_BEfunc::readPageAccess($rootPage['uid'], $GLOBALS['BE_USER']->getPagePermsClause(1)) : false;
-			
-			if (is_array($rootPage)) {
-				
-				// felder erzeugen
-				foreach($rootPage as $field => $value)
-					$markerArr['###ROOTPAGE_'.strtoupper($field).'###'] = $value;
-				
-				$out = tx_rnbase_util_Templates::substituteMarkerArrayCached($out, $markerArr);
-			} else {
-				$out = tx_rnbase_util_Templates::substituteSubpart($out, '###ROOTPAGE###', '<pre>No page selected.</pre>');
-			}
-		}
-		
-		$out = $this->handleAllowUrlFopenDeactivatedHint($out);
-		
+		$out = tx_mksearch_mod1_util_Template::parseBasics($out, $this);
 		return $out;
 	}
 
-	/**
-	 * @param string $template
-	 * 
-	 * @return string
-	 */
-	private function handleAllowUrlFopenDeactivatedHint($template) {
-		if(tx_rnbase_util_BaseMarker::containsMarker($template, 'ALLOW_URL_FOPEN_DEACTIVATED_HINT')) {
-			$allowUrlFopen = ini_get('allow_url_fopen');
-			$useCurlAsHttpTransport = 
-				tx_rnbase_configurations::getExtensionCfgValue('mksearch', 'useCurlAsHttpTransport');
-			
-			$markerArray = array();
-			if(!$allowUrlFopen && !$useCurlAsHttpTransport){
-				$markerArray['###ALLOW_URL_FOPEN_DEACTIVATED_HINT###'] = $GLOBALS['LANG']->getLL('allow_url_fopen_deactivated_hint');
-			} else {
-				$markerArray['###ALLOW_URL_FOPEN_DEACTIVATED_HINT###'] = '';
-			}
-			
-			$template = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray);
-		}
-		
-		return $template;
-	}
-	
 	/**
 	 * Liefert die Einträge für das Tab-Menü.
 	 * @return 	array
@@ -118,7 +69,7 @@ class tx_mksearch_mod1_ConfigIndizes extends tx_rnbase_mod_ExtendedModFunc {
 				tx_rnbase::makeInstance('tx_mksearch_mod1_handler_IndexerConfig'),
 			);
 	}
-	
+
 	/**
 	 *
 	 */

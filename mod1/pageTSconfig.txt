@@ -8,8 +8,8 @@ mod {
 		keywords {
 			template = EXT:mksearch/mod1/templates/keywords.html
 		}
-		solradmin {
-			template = EXT:mksearch/mod1/templates/solradmin.html
+		admin {
+			template = EXT:mksearch/mod1/templates/admin.html
 		}
 		configindizesdblist {
 			template = EXT:mksearch/mod1/templates/configindizesdblist.html

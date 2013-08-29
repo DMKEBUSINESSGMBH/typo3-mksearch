@@ -11,13 +11,15 @@
             <label index="func_keywords">Keywords</label>
             <label index="func_config_indizesdblist">Configure indizes (old db list)</label>
             <label index="func_indize_indizes">Indexing Queue</label>
-            <label index="func_solradmin">Solr Admin</label>
+            <label index="func_solradmin">Admin Panel</label>
             
             <label index="label_no_page_selected">No Page selected.</label>
 
             <label index="label_handler_index">Indizes</label>
             <label index="label_handler_indexerconfig">Indexer Configuration</label>
             <label index="label_handler_composite">Indexer Composites</label>
+            
+            <label index="label_handler_adminsolr">Solr</label>
             
             <label index="label_no_indexers_found">No indexers defined on this page!</label>
             <label index="label_configured_indexer_tables_head">Tables from configured indexers</label>
