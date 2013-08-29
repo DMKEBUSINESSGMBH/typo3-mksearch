@@ -22,9 +22,10 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+require_once t3lib_extMgm::extPath('mksearch', 'lib/Apache/Solr/Document.php');
+require_once t3lib_extMgm::extPath('rn_base', 'class.tx_rnbase.php');
+tx_rnbase::load('tx_mksearch_interface_SearchHit');
 tx_rnbase::load('tx_rnbase_model_base');
-require_once(t3lib_extMgm::extPath('mksearch').'lib/Apache/Solr/Document.php' );
 
 /**
  * Model for search hits from solt
@@ -35,7 +36,7 @@ require_once(t3lib_extMgm::extPath('mksearch').'lib/Apache/Solr/Document.php' );
  * functions like automatic marker filling etc.
  *
  */
-class tx_mksearch_model_SolrHit extends tx_rnbase_model_base {
+class tx_mksearch_model_SolrHit extends tx_rnbase_model_base implements tx_mksearch_interface_SearchHit {
 	private $solrDoc;
 	/**
 	 * Initialiaze model and fill it with data if provided

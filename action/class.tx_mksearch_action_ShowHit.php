@@ -40,20 +40,32 @@ class tx_mksearch_action_ShowHit extends tx_rnbase_action_BaseIOC {
 
 	/**
 	 *
-	 * @param array_object $parameters
-	 * @param tx_rnbase_configurations $configurations
-	 * @param array_object $viewData
-	 * @return string error msg or null
+	 * @var tx_mksearch_model_internal_Index
 	 */
-	function handleRequest(&$parameters,&$configurations, &$viewData){
-		$index = $this->getIndex();
-		$item = $this->findItem($index);
+	private $index = false;
 
-		$viewData->offsetSet('item', $item);
+	/**
+	 *
+	 *
+	 * @param tx_rnbase_IParameters $parameters
+	 * @param tx_rnbase_configurations $configurations
+	 * @param ArrayObject $viewdata
+	 * @return string Errorstring or null
+	 */
+	protected function handleRequest(&$parameters, &$configurations, &$viewdata) {
+		$item = $this->findItem();
+		$viewdata->offsetSet('item', $item);
 		return null;
 	}
 
-	protected function findItem($index) {
+	/**
+	 *
+	 * @throws InvalidArgumentException
+	 * @throws Ambigous <Exception, LogicException, LogicException, tx_mksearch_service_engine_SolrException>
+	 * @return tx_mksearch_interface_SearchHit
+	 */
+	protected function findItem() {
+		$item = null;
 		$configurations = $this->getConfigurations();
 		$confId = $this->getConfId();
 
@@ -66,16 +78,71 @@ class tx_mksearch_action_ShowHit extends tx_rnbase_action_BaseIOC {
 			$uid = $configurations->getParameters()->getInt($uidParamName);
 		}
 
+		tx_rnbase_util_Misc::callHook(
+			'mksearch',
+			'action_showhit_finditem_pre',
+			array(
+				'ext_key' => &$extKey,
+				'content_type' => &$contentType,
+				'uid' => &$uid,
+			),
+			$this
+		);
+
+		$item = $this->searchByContentUid($uid, $extKey, $contentType);
+
+		tx_rnbase_util_Misc::callHook(
+			'mksearch',
+			'action_showhit_finditem_post',
+			array(
+				'ext_key' => &$extKey,
+				'content_type' => &$contentType,
+				'uid' => &$uid,
+				'item' => &$item,
+			),
+			$this
+		);
+
+		if (is_null($item)) {
+			throw new LogicException(
+				'No hit found for "'.$extKey.':'.$contentType.':'.$uid.'" in index "'.$this->getIndex()->getUid().'".',
+				1377774172
+			);
+		}
+		if (!$item instanceof tx_mksearch_interface_SearchHit) {
+			throw new LogicException(
+				'The hit has to be an object instance of "tx_mksearch_interface_SearchHit",'
+				. '"' . (is_object($item) ? get_class($item) : gettype($item)) . '" given.',
+				1377774178
+			);
+		}
+
+		return $item;
+	}
+
+	/**
+	 *
+	 * @param integer $uid
+	 * @param string $extKey
+	 * @param string $contentType
+	 * @throws Ambigous <Exception, InvalidArgumentException, tx_mksearch_service_engine_SolrException>
+	 * @return
+	 */
+	protected function searchByContentUid($uid, $extKey, $contentType) {
+		$item = null;
+
 		if (!($extKey && $contentType && $uid)) {
 			throw new InvalidArgumentException(
-				'Missing Parameters. extkey, contenttype and item are required.', 1370429706);
+				'Missing Parameters. extkey, contenttype and item are required.',
+				1370429706
+			);
 		}
 
 		try {
 			// in unserem fall sollte es der solr service sein!
 			/* @var $searchEngine tx_mksearch_service_engine_Solr */
-			$searchEngine = tx_mksearch_util_ServiceRegistry::getSearchEngine($index);
-			$searchEngine->openIndex($index);
+			$searchEngine = tx_mksearch_util_ServiceRegistry::getSearchEngine($this->getIndex());
+			$searchEngine->openIndex($this->getIndex());
 			$item = $searchEngine->getByContentUid($uid, $extKey, $contentType);
 			$searchEngine->closeIndex();
 		}
@@ -100,8 +167,8 @@ class tx_mksearch_action_ShowHit extends tx_rnbase_action_BaseIOC {
 			if($configurations->getBool($confId.'throwSolrSearchException')) {
 				throw $e;
 			}
-			return null;
 		}
+
 		return $item;
 	}
 
@@ -109,24 +176,32 @@ class tx_mksearch_action_ShowHit extends tx_rnbase_action_BaseIOC {
 	 * returns the dataset for the current used index
 	 *
 	 * @throws Exception
-	 * @return tx_mksearch_service_internal_Index
+	 * @return tx_mksearch_model_internal_Index
 	 */
 	protected function getIndex() {
-		$indexUid = $this->getConfigurations()->get($this->getConfId(). 'usedIndex');
-		//let's see if we got a index to use via parameters
-		if(empty($indexUid))
-			$indexUid = $this->getConfigurations()->getParameters()->get('usedIndex');
+		if ($this->index === false) {
+			$indexUid = $this->getConfigurations()->get($this->getConfId(). 'usedIndex');
+			//let's see if we got a index to use via parameters
+			if(empty($indexUid))
+				$indexUid = $this->getConfigurations()->getParameters()->get('usedIndex');
 
-		$index = tx_mksearch_util_ServiceRegistry::getIntIndexService()->get($indexUid);
+			$index = tx_mksearch_util_ServiceRegistry::getIntIndexService()->get($indexUid);
 
-		if(!$index->isValid())
-			throw new Exception('Configured search index not found!');
+			if(!$index->isValid())
+				throw new Exception('Configured search index not found!');
 
-		return $index;
+			$this->index = $index;
+		}
+		return $this->index;
 	}
 
-	function getTemplateName() { return 'showhit';}
-	function getViewClassName() { return 'tx_mksearch_view_ShowHit';}
+	function getTemplateName() {
+		return 'showhit';
+	}
+
+	function getViewClassName() {
+		return 'tx_mksearch_view_ShowHit';
+	}
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/action/class.tx_mksearch_action_ShowHit.php'])	{

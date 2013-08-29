@@ -22,23 +22,24 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+require_once t3lib_extMgm::extPath('rn_base', 'class.tx_rnbase.php');
+tx_rnbase::load('tx_mksearch_interface_SearchHit');
 tx_rnbase::load('tx_rnbase_model_base');
 
 /**
  * Model for search hits
- * 
+ *
  * As the base data doesn't come from a real table but gets filled
- * by the search engine some things are different from an usual 
+ * by the search engine some things are different from an usual
  * rn_base model. We use it anyway to keep all the remaining nice
- * functions like automatic marker filling etc. 
- *  
+ * functions like automatic marker filling etc.
+ *
  */
-class tx_mksearch_model_SearchHit extends tx_rnbase_model_base {
-	
+class tx_mksearch_model_SearchHit extends tx_rnbase_model_base implements tx_mksearch_interface_SearchHit {
+
 	/**
 	 * Initialiaze model and fill it with data if provided
-	 * 
+	 *
 	 * @param $rowOrUid
 	 * @return void
 	 */
@@ -51,36 +52,36 @@ class tx_mksearch_model_SearchHit extends tx_rnbase_model_base {
 			$this->uid = $rowOrUid;
 		}
 	}
-	
+
 	/**
 	 * Fill model with data
-	 * 
+	 *
 	 * @param array	$data
 	 * @param bool optional	$merge	Merge existing data with new data with precedence to the new data
 	 * @return void
 	 */
 	public function fillData(array $data, $merge=true) {
 		if ($merge) $this->record = array_merge($this->record, $data);
-		else $this->record = $data; 
+		else $this->record = $data;
 	}
-	
+
 	/**
-	 * Return name of model's base table - not used in this model. 
-	 * 
+	 * Return name of model's base table - not used in this model.
+	 *
 	 * @return string
 	 */
 	public function getTableName(){return '';}
-	
-	
+
+
 	/**
 	 * Return $TCA defined table column names.
-	 * As this model doesn't have a $TCA defined name, 
+	 * As this model doesn't have a $TCA defined name,
 	 * return 0 like the original function, when no columns were found.
-	 * 
+	 *
 	 * @return 0
 	 */
 	public function getColumnNames() {return 0;}
-	
+
 	/**
 	 * @see #getColumnNames()
 	 */
