@@ -64,10 +64,13 @@ class tx_mksearch_mod1_util_IndexStatusHandler {
 	/**
 	 * Handle request
 	 */
-	public function handleRequest() {
-		$states = array();
-		$srv = tx_mksearch_util_ServiceRegistry::getIntIndexService();
-		$indices = $srv->findAll();
+	public function handleRequest(array $options = array()) {
+		$fields = $states = array();
+		if (!empty($options['pid'])) {
+			$fields['INDX.PID'][OP_EQ_INT] = $options['pid'];
+		}
+		$options['enablefieldsfe'] = 1;
+		$indices = tx_mksearch_util_ServiceRegistry::getIntIndexService()->search($fields, $options);
 
 		// Loop through all active indices, collecting all configurations
 		foreach ($indices as $index) {

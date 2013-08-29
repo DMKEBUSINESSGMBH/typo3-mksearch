@@ -29,14 +29,14 @@ require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
  * Service for accessing models from database
  */
 class tx_mksearch_service_internal_Base extends t3lib_svbase {
-	
+
 	/**
 	 * Search class - set this to the search class name
 	 *
 	 * @var string
 	 */
 	protected $searchClass;
-	
+
 	/**
 	* @return tx_rnbase_util_SearchBase
 	*/
@@ -75,7 +75,7 @@ class tx_mksearch_service_internal_Base extends t3lib_svbase {
 		}
 		return $ret;
 	}
-	
+
 	/**
 	 * Search database for all configurated Indices
 	 *
@@ -84,13 +84,12 @@ class tx_mksearch_service_internal_Base extends t3lib_svbase {
 	 * @return array[tx_mksearch_model_internal_Index]
 	 */
 	public function findAll() {
-		$fields = array();
-		$options = array();
+		$fields = $options = array();
 		//$options['debug'] = 1;
 		$options['enablefieldsfe'] = 1;
 		return $this->search($fields, $options);
 	}
-	
+
 	/**
 	 * Search database for all configurated Indices
 	 *
@@ -105,7 +104,7 @@ class tx_mksearch_service_internal_Base extends t3lib_svbase {
 		$options['enablefieldsfe'] = 1;
 		return $this->search($fields, $options);
 	}
-		
+
 	/**
 	 * Get model from database by its uid
 	 *
@@ -116,7 +115,7 @@ class tx_mksearch_service_internal_Base extends t3lib_svbase {
 	public function get($uid) {
 		return tx_rnbase::makeInstance($this->getSearcher()->getWrapperClass(), $uid);
 	}
-	
+
 //	/**
 //	 * Pass through search class's table mappings
 //	 *

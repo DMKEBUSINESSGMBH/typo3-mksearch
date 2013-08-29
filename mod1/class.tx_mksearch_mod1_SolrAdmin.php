@@ -120,6 +120,7 @@ class tx_mksearch_mod1_SolrAdmin extends tx_rnbase_mod_BaseModFunc {
 		$out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray);
 		return $out;
 	}
+
 	protected function findSolrCores() {
 		// Solr-Core auf der aktuellen Seite suchen
 		$fields['INDX.PID'][OP_EQ_INT] = $this->getModule()->getPid();
@@ -127,6 +128,7 @@ class tx_mksearch_mod1_SolrAdmin extends tx_rnbase_mod_BaseModFunc {
 		$cores = tx_mksearch_util_ServiceRegistry::getIntIndexService()->search($fields, array());
 		return $cores;
 	}
+
 	/**
 	 *
 	 * @param tx_rnbase_util_FormTool $formTool

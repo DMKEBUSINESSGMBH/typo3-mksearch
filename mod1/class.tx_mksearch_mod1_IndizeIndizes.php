@@ -52,7 +52,7 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc {
 	}
 
 	protected function getPageId() {
-		return $this->getModule()->id;
+		return $this->getModule()->getPid();
 	}
 
 	/**
@@ -88,7 +88,8 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc {
 		$indexItems = intval(t3lib_div::_GP('triggerIndexingQueueCount'));
 		$markerArray['###INDEXITEMS###'] = $indexItems > 0 ? $indexItems : 100;
 
-		$markerArray['###CORE_STATUS###'] = tx_mksearch_mod1_util_IndexStatusHandler::getInstance()->handleRequest();
+		$markerArray['###CORE_STATUS###'] = tx_mksearch_mod1_util_IndexStatusHandler
+			::getInstance()->handleRequest(array('pid' => $this->getPageId()));
 
 		$this->showTables($template, $configurations, $formTool, $markerArray, $oIntIndexSrv);
 
