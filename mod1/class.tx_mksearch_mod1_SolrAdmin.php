@@ -122,10 +122,12 @@ class tx_mksearch_mod1_SolrAdmin extends tx_rnbase_mod_BaseModFunc {
 	}
 
 	protected function findSolrCores() {
+		$fields = $options = array();
+		$options['enablefieldsfe'] = 1;
 		// Solr-Core auf der aktuellen Seite suchen
 		$fields['INDX.PID'][OP_EQ_INT] = $this->getModule()->getPid();
 		$fields['INDX.ENGINE'][OP_EQ] = 'solr';
-		$cores = tx_mksearch_util_ServiceRegistry::getIntIndexService()->search($fields, array());
+		$cores = tx_mksearch_util_ServiceRegistry::getIntIndexService()->search($fields, $options);
 		return $cores;
 	}
 
