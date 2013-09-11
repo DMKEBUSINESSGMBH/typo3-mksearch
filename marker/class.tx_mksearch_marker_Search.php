@@ -81,8 +81,18 @@ class tx_mksearch_marker_Search extends tx_rnbase_util_SimpleMarker {
 
 		//wenn wir ein array haben, holen wir uns dazu eine
 		//kommaseparierte Liste um damit einfach im FE arbeiten zu können
-		foreach ($item->record as &$mValue){
-		    if(is_array($mValue)) $mValue = implode($glue, $mValue);
+		foreach ($item->record as $field => $value){
+			// wir sichern den originalen Wert von 'field' nach '_field'
+			// beser wäre gewesen, den originalen wert beizubehalten
+			// und das array von 'field' nach 'field_s' zu parsen
+			// Problem dabei, wir wissen nicht, ob es ein multiValued ist oder nicht.
+			// Wenn ein multiValued nur einen Wert hat, wird es als String,
+			// anstelle eines Arrays geliefert.
+			// Hier scheint die ApacheSolrLib nicht richtig zu arbeiten.
+			if(is_array($value)){
+				$item->record['_'.$field] = $value;
+				$item->record[$field] = implode($glue, $value);
+			}
 		}
 	}
 
