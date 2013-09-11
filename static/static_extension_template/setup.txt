@@ -636,10 +636,10 @@ lib.mksearch.extrainfo {
 	irfaq.question < .default
 	irfaq.question{
 		template = EXT:mksearch/templates/searchResultIrfaq.html
+		markerClass = tx_mksearch_marker_Irfaq
 		hit {
 			linkMethod = generic
 			links.showfirstcategory {
-				removeIfDisabled = 1
 				noHash = 1
 				pid = TEXT
 				pid.field = category_first_shortcut_s
@@ -649,6 +649,8 @@ lib.mksearch.extrainfo {
 				1 = a_s
 				2 = a_with_html_s
 			}
+			
+			a_with_html_s.parseFunc =< lib.parseFunc_RTE
 		}
 	}
 	# Content type "irfaq.question"
