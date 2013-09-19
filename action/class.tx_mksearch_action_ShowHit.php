@@ -164,6 +164,7 @@ class tx_mksearch_action_ShowHit extends tx_rnbase_action_BaseIOC {
 					'URL'=> $lastUrl
 				)
 			);
+			$configurations = $this->getConfigurations();
 			if($configurations->getBool($confId.'throwSolrSearchException')) {
 				throw $e;
 			}
