@@ -98,7 +98,8 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 		}
 		// auch einen debug ausgeben, wenn nichts gesucht wird
 		elseif ($options['debug']) {
-			t3lib_div::debug(array('Filter returns false, no search done.', $fields, $options), 'class.tx_mksearch_action_SearchSolr.php Line: '.__LINE__); // TODO: remove me
+			tx_rnbase::load('tx_rnbase_util_Debug');
+			tx_rnbase_util_Debug::debug(array('Filter returns false, no search done.', $fields, $options), 'class.tx_mksearch_action_SearchSolr.php Line: '.__LINE__); // TODO: remove me
 		}
 		$viewData->offsetSet('result', $result);
 		return null;
