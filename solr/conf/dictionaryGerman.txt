@@ -11250,6 +11250,7 @@ bio
 biochemie
 biochemiker
 biochemisch
+bioenergie
 biogen
 biografie
 biografisch
@@ -26906,6 +26907,7 @@ geohrfeigt
 geologe
 geologie
 geologisch
+geothermie 
 geölt
 geometer
 geometrie
