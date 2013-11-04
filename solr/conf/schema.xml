@@ -211,8 +211,8 @@
 				<filter class="solr.DictionaryCompoundWordTokenFilterFactory"
 					dictionary="dictionaryGerman.txt"
 					minWordSize="5"
-					minSubwordSize="4"
-					maxSubwordSize="15"
+					minSubwordSize="3"
+					maxSubwordSize="30"
 					onlyLongestMatch="false"
 				/>
 				<!-- Case insensitive stop word removal.
@@ -281,8 +281,8 @@
 				<filter class="solr.DictionaryCompoundWordTokenFilterFactory"
 					dictionary="dictionaryGerman.txt"
 					minWordSize="5"
-					minSubwordSize="4"
-					maxSubwordSize="15"
+					minSubwordSize="3"
+					maxSubwordSize="30"
 					onlyLongestMatch="false"
 				/>
 
