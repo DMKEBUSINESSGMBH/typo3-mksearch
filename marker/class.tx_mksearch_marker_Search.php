@@ -72,6 +72,7 @@ class tx_mksearch_marker_Search extends tx_rnbase_util_SimpleMarker {
 	protected function prepareHit($template, &$item, &$formatter, $confId, $marker) {
 		$configurations = $formatter->getConfigurations();
 		$glue = $configurations->get($confId.'multiValuedGlue');
+		$removeEmptyValues = $configurations->getBool($confId.'multiValuedGlue.removeEmptyValues');
 		if ($configurations->getBool($confId.'multiValuedGlue.noTrim')) {
 			$splitter = $configurations->get($confId.'multiValuedGlue.noTrim.splitChar');
 			$splitter = $splitter ? $splitter : '|';
@@ -91,6 +92,9 @@ class tx_mksearch_marker_Search extends tx_rnbase_util_SimpleMarker {
 			// Hier scheint die ApacheSolrLib nicht richtig zu arbeiten.
 			if(is_array($value)){
 				$item->record['_'.$field] = $value;
+				if ($removeEmptyValues) {
+					$value = tx_mksearch_util_Misc::removeEmptyValues($value);
+				}
 				$item->record[$field] = implode($glue, $value);
 			}
 		}
