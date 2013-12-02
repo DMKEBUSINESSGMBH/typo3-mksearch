@@ -147,6 +147,8 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base {
 			$this->handleRelatedTableChanged($rawData,'Category');
 			return true;
 		}
+
+		return parent::stopIndexing($tableName, $rawData, $indexDoc, $options);
 	}
 
 	/**

@@ -164,6 +164,24 @@ class tx_mksearch_util_Misc {
 		return $TSparserObject->setup;
 	}
 
+	/**
+	* Bereinigt ein Array von allen Werten die leer sind.
+	* Leere Arrays innerhalb des zu bereinigenden Arrays bleiben unberührt.
+	* Die Keys werden by default nicht zurückgesetzt!
+	*
+	* @author 2011 mwagner
+	*
+	* @param array 	$aArray
+	* @param boolean 	$bResetIndex	Setzt die Array Keys zurück, falls sie numerisch sind.
+	* @return array
+	*/
+	public static function removeEmptyValues(array $aArray, $bResetIndex=false) {
+		$aEmptyElements = array_keys($aArray, '');
+		foreach($aEmptyElements as $key)
+		unset($aArray[$key]);
+		return $bResetIndex ? array_merge($aArray) : $aArray;
+	}
+	
 }
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_Misc.php'])	{
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_Misc.php']);

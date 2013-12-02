@@ -67,28 +67,28 @@ class tx_mksearch_indexer_Page extends tx_mksearch_indexer_Base {
 	 * check if we have a shortcut and index the target instead
 	 * @see tx_mksearch_indexer_Base::stopIndexing()
 	 */
-	protected function stopIndexing($sTableName, $aRawData, tx_mksearch_interface_IndexerDocument $oIndexDoc, $aOptions) {
-		if($sTableName == 'pages') {
+	protected function stopIndexing($tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options) {
+		if($tableName == 'pages') {
 			// this our first entry point. so we fetch all subpages and put them into
 			// the queue in case changes on this page have effects on subpages.
-			$aPidList = explode(',',$this->_getPidList($aRawData['uid'],999));
+			$aPidList = explode(',',$this->_getPidList($rawData['uid'],999));
 
 			// the last element is always the page itself. so we can pop this.
 			array_pop($aPidList);
 
 			$oIndexSrv = tx_mksearch_util_ServiceRegistry::getIntIndexService();
 			foreach ($aPidList as $iUid) {
-				$oIndexSrv->addRecordToIndex($sTableName, $iUid);
+				$oIndexSrv->addRecordToIndex($tableName, $iUid);
 			}
 
 			// Current page is a short cut? Follow up short-cutted page
-			if($aRawData['doktype'] == 4) {
-				$oIndexSrv->addRecordToIndex('pages', $aRawData['shortcut']);
+			if($rawData['doktype'] == 4) {
+				$oIndexSrv->addRecordToIndex('pages', $rawData['shortcut']);
 				return true;
 			}
 		}
 		//else
-		//don't stop
+		return parent::stopIndexing($tableName, $rawData, $indexDoc, $options);
 	}
 
 	/**

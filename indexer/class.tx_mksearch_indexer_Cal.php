@@ -88,6 +88,8 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base {
 			}
 			return true;
 		}
+
+		return parent::stopIndexing($tableName, $rawData, $indexDoc, $options);
 	}
 
 	/**

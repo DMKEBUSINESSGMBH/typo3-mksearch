@@ -262,13 +262,15 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base {
 	 *
 	 * @return bool
 	 */
-	protected function stopIndexing($sTableName, $aRawData, tx_mksearch_interface_IndexerDocument $oIndexDoc, $aOptions) {
-		if($sTableName == 'tt_news_cat') {
+	protected function stopIndexing($tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options) {
+		if($tableName == 'tt_news_cat') {
 			// Eine Kategorie wurde verändert
 			// Alle News müssen neu indiziert werden.
-			$this->handleCategoryChanged($aRawData);
+			$this->handleCategoryChanged($rawData);
 			return true;
 		}
+		//else
+		return parent::stopIndexing($tableName, $rawData, $indexDoc, $options);
 	}
 
 	/**
