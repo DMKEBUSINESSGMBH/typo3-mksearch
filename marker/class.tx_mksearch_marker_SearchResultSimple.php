@@ -23,14 +23,14 @@
 ***************************************************************/
 
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
-tx_rnbase::load('tx_rnbase_util_SimpleMarker');
+tx_rnbase::load('tx_mksearch_marker_Search');
 
 /**
  * Renders a search result straightforward with all its data, adding a link, if available
  * This class can be extended for other content types e.g. to change the behavior of $this->prepareLinks().
  */
 class tx_mksearch_marker_SearchResultSimple
-	extends tx_rnbase_util_SimpleMarker {
+	extends tx_mksearch_marker_Search {
 
 	/**
 	 * @param string $template HTML template
@@ -128,21 +128,6 @@ class tx_mksearch_marker_SearchResultSimple
 		}
 		//cObject Daten wieder zurück
 		$config->getCObj()->data = $sCObjTempData;
-	}
-
-	/**
-	 * Liefert alle Felder, welche im Template zwingend erforderlich sind.
-	 *
-	 * @param string $template HTML template
-	 * @param tx_mksearch_model_SearchHit $item search hit
-	 * @param tx_rnbase_util_FormatUtil $formatter
-	 * @param string $confId path of typoscript configuration
-	 * @param string $marker name of marker
-	 * @return array
-	 */
-	protected function getInitFields($template, &$item, &$formatter, $confId, $marker) {
-		$fields = $formatter->getConfigurations()->get($confId.'initFields.');
-		return is_array($fields) ? $fields : array();
 	}
 }
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/marker/class.tx_mksearch_marker_SearchResultSimple.php'])	{
