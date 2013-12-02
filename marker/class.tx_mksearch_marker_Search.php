@@ -51,7 +51,8 @@ class tx_mksearch_marker_Search extends tx_rnbase_util_SimpleMarker {
 
 		// Fill MarkerArray
 		$unused = $this->findUnusedCols($item->record, $template, $marker);
-		$markerArray = $formatter->getItemMarkerArrayWrapped($item->record, $confId, $unused, $marker.'_', $item->getColumnNames());
+		$initFields = $this->getInitFields($template, $item, $formatter, $confId, $marker);
+		$markerArray = $formatter->getItemMarkerArrayWrapped($item->record, $confId, $unused, $marker.'_', $initFields);
 
 		// subparts erzeugen
 		$subpartArray = $wrappedSubpartArray = array();
@@ -72,6 +73,7 @@ class tx_mksearch_marker_Search extends tx_rnbase_util_SimpleMarker {
 	protected function prepareHit($template, &$item, &$formatter, $confId, $marker) {
 		$configurations = $formatter->getConfigurations();
 		$glue = $configurations->get($confId.'multiValuedGlue');
+		$removeEmptyValues = $configurations->getBool($confId.'multiValuedGlue.removeEmptyValues');
 		if ($configurations->getBool($confId.'multiValuedGlue.noTrim')) {
 			$splitter = $configurations->get($confId.'multiValuedGlue.noTrim.splitChar');
 			$splitter = $splitter ? $splitter : '|';
@@ -91,6 +93,9 @@ class tx_mksearch_marker_Search extends tx_rnbase_util_SimpleMarker {
 			// Hier scheint die ApacheSolrLib nicht richtig zu arbeiten.
 			if(is_array($value)){
 				$item->record['_'.$field] = $value;
+				if ($removeEmptyValues) {
+					$value = tx_mksearch_util_Misc::removeEmptyValues($value);
+				}
 				$item->record[$field] = implode($glue, $value);
 			}
 		}
@@ -142,6 +147,21 @@ class tx_mksearch_marker_Search extends tx_rnbase_util_SimpleMarker {
 		$template = tx_rnbase_util_Templates::substituteMarkerArrayCached($template,$markerArray);
 
 		return $template;
+	}
+
+	/**
+	 * Liefert alle Felder, welche im Template zwingend erforderlich sind.
+	 *
+	 * @param string $template HTML template
+	 * @param tx_mksearch_model_SearchHit $item search hit
+	 * @param tx_rnbase_util_FormatUtil $formatter
+	 * @param string $confId path of typoscript configuration
+	 * @param string $marker name of marker
+	 * @return array
+	 */
+	protected function getInitFields($template, &$item, &$formatter, $confId, $marker) {
+		$fields = $formatter->getConfigurations()->get($confId.'initFields.');
+		return is_array($fields) ? $fields : array();
 	}
 }
 
