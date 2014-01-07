@@ -1094,7 +1094,8 @@ http://solr.pl/en/2010/11/15/solr-and-autocomplete-part-2/ -->
    <queryConverter name="queryConverter" class="org.dmk.solr4.spelling.MultiWordSpellingQueryConverter"/>
    <searchComponent name="suggest_fst" class="solr.SpellCheckComponent">
 		<lst name="spellchecker">
-		     <!-- From Solr 4.1.x on the AnalyzingLookupFactory should be tried
+		     <!-- From Solr 4.1.x on the AnalyzingLookupFactory should be tried cause
+		        this one seems to provide case sensitive suggestions
 		        @see http://lucene.apache.org/core/4_4_0/suggest/org/apache/lucene/search/suggest/analyzing/AnalyzingSuggester.html
 		        @see http://www.norconex.com/serving-autocomplete-suggestions-fast/
 		        @see http://svn.apache.org/repos/asf/lucene/dev/trunk/solr/core/src/test-files/solr/collection1/conf/solrconfig-phrasesuggest.xml
