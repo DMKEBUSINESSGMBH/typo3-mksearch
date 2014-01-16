@@ -69,7 +69,7 @@ class tx_mksearch_indexer_TtContent implements tx_mksearch_interface_Indexer {
 	public function prepareSearchData($tableName, $sourceRecord, tx_mksearch_interface_IndexerDocument $indexDoc, $options){
 		return $this->oIndexer->prepareSearchData($tableName, $sourceRecord, $indexDoc, $options);
 	}
-	
+
 	/**
 	 * Return content type identification.
 	 * This identification is part of the indexed data
@@ -84,7 +84,7 @@ class tx_mksearch_indexer_TtContent implements tx_mksearch_interface_Indexer {
 	public static function getContentType() {
 		return array('core', 'tt_content');
 	}
-	
+
 	/**
 	* Return the default Typoscript configuration for this indexer
 	*
@@ -134,16 +134,16 @@ CType {
 
 # cTypes of content elements to be excluded from indexing.
 # Obviously, the respective "indexedFields" option is ignored in this case.
-#includeCTypes = list,header,text,textpic,image,text,bullets,table,html
-ignoreCTypes {
-	0 = search
-	1 = mailform
-	2 = login
-	3 = list
-    4 = powermail_pi1
-    5 = templavoila_pi1
-    6 = html
-}
+includeCTypes = text,textpic,bullets
+#ignoreCTypes {
+#	0 = search
+#	1 = mailform
+#	2 = login
+#	3 = list
+#    4 = powermail_pi1
+#    5 = templavoila_pi1
+#    6 = html
+#}
 
 # \$sys_language_uid of the desired language
 # lang = 1
