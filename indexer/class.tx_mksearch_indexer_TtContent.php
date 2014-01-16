@@ -134,7 +134,7 @@ CType {
 
 # cTypes of content elements to be in-/excluded from indexing.
 # Obviously, the respective "indexedFields" option is ignored in this case.
-includeCTypes = text,textpic,bullets
+includeCTypes = text,textpic,bullets,image,table
 #ignoreCTypes {
 #	0 = search
 #	1 = mailform
