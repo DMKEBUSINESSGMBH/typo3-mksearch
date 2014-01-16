@@ -134,6 +134,7 @@ CType {
 
 # cTypes of content elements to be in-/excluded from indexing.
 # Obviously, the respective "indexedFields" option is ignored in this case.
+# templavoila_pi1 should in most cases be too, indexed, but requires some more configuration
 includeCTypes = text,textpic,bullets,image,table
 #ignoreCTypes {
 #	0 = search
