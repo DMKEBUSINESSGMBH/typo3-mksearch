@@ -196,13 +196,13 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 	 * check if related data has changed and stop indexing in case
 	 * @see tx_mksearch_indexer_Base::stopIndexing()
 	 */
-	protected function stopIndexing($sTableName, $aRawData, tx_mksearch_interface_IndexerDocument $oIndexDoc, $aOptions) {
-		if($sTableName == 'pages') {
-			$this->handlePagesChanged($aRawData);
+	protected function stopIndexing($tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options) {
+		if($tableName == 'pages') {
+			$this->handlePagesChanged($rawData);
 			return true;
 		}
 		//else
-		//don't stop
+		return parent::stopIndexing($tableName, $rawData, $indexDoc, $options);
 	}
 
 

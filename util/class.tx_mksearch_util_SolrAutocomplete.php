@@ -24,7 +24,7 @@
 
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_rnbase_configurations');
-tx_rnbase::load('tx_mksearch_util_ServiceRegistry');		
+tx_rnbase::load('tx_mksearch_util_ServiceRegistry');
 
 /**
  * @author Hannes Bochmann <hannes.bochmann@das-medienkombinat.de>
@@ -32,16 +32,16 @@ tx_rnbase::load('tx_mksearch_util_ServiceRegistry');
  * @subpackage tx_mksearch
  */
 class tx_mksearch_util_SolrAutocomplete {
-	
+
 	/**
 	 * @var string
 	 */
 	protected static $autocompleteConfId = 'autocomplete.';
-	
+
 	/**
 	 * @param tx_rnbase_configurations $configurations
-	 * @param string $confId 
-	 * 
+	 * @param string $confId
+	 *
 	 * example TS config:
 	 * myConfId {
 	 * 	usedIndex = 1
@@ -54,7 +54,7 @@ class tx_mksearch_util_SolrAutocomplete {
 	 * 		}
 	 * 	}
 	 * }
-	 * 
+	 *
 	 * @return tx_rnbase_util_Link
 	 */
 	public static function getAutocompleteActionLinkByConfigurationsAndConfId(
@@ -65,26 +65,26 @@ class tx_mksearch_util_SolrAutocomplete {
 		if ($usedIndex === 0 || $usedIndex > 0) {
 			$linkParameters['usedIndex'] = intval($usedIndex);
 		}
-		
+
 		$link = $configurations->createLink();
 		$link->initByTS(
 			$configurations,
 			$confId . self::$autocompleteConfId . 'actionLink.',
 			$linkParameters
 		);
-		
+
 		return $link;
 	}
-	
+
 	/**
 	 * @param array $configArray example:
 	 * array (
 	 * 	minLength = 2
 	 * 	elementSelector = "#mksearch_term"
 	 * )
-	 * 
+	 *
 	 * @param tx_rnbase_util_Link $link
-	 * 
+	 *
 	 * @return string
 	 */
 	public static function getAutocompleteJsByConfigurationsConfIdAndLink(

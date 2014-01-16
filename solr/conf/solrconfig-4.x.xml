@@ -1090,9 +1090,25 @@ http://solr.pl/en/2010/11/15/solr-and-autocomplete-part-2/ -->
 		and Solr will find it automatically. $SOLRHOME is either the "real" Solr Home containing the solr.xml 
 		or it is the core home. Just open the Solr management console, select the appropiate core
 		and check the output on what $SOLRHOME is set. If lib folder does not exist, create it! -->
+	<!-- @TODO integrate spellcheck for suggest -->
+		
    <queryConverter name="queryConverter" class="org.dmk.solr4.spelling.MultiWordSpellingQueryConverter"/>
    <searchComponent name="suggest_fst" class="solr.SpellCheckComponent">
 		<lst name="spellchecker">
+		     <!-- From Solr 4.1.x on the AnalyzingLookupFactory should be tried cause
+		        this one seems to provide case sensitive suggestions
+		        @see http://lucene.apache.org/core/4_4_0/suggest/org/apache/lucene/search/suggest/analyzing/AnalyzingSuggester.html
+		        @see http://www.norconex.com/serving-autocomplete-suggestions-fast/
+		        @see http://svn.apache.org/repos/asf/lucene/dev/trunk/solr/core/src/test-files/solr/collection1/conf/solrconfig-phrasesuggest.xml
+		        <str name="name">suggest_fst</str>
+                <str name="classname">org.apache.solr.spelling.suggest.Suggester</str>
+                <str name="lookupImpl">org.apache.solr.spelling.suggest.fst.AnalyzingLookupFactory</str>
+                <str name="storeDir">suggest_fst</str>
+                <str name="buildOnOptimize">true</str>
+                <bool name="exactMatchFirst">true</bool>
+                <int name="weightBuckets">100</int>
+                <str name="suggestAnalyzerFieldType">text_autocomplete_phrases</str>
+		     -->
 			<str name="name">suggest_fst</str>
 <!-- 			the field we use for index building. should be filled with all the information -->
 <!-- 				considered for autocomplete. -->
