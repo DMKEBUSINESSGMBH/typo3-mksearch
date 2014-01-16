@@ -132,7 +132,7 @@ CType {
 	}
 }
 
-# cTypes of content elements to be excluded from indexing.
+# cTypes of content elements to be in-/excluded from indexing.
 # Obviously, the respective "indexedFields" option is ignored in this case.
 includeCTypes = text,textpic,bullets
 #ignoreCTypes {
