@@ -453,6 +453,11 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
 #      1 = second
 #   }
 # }
+#
+# you should always configure the root pageTree for this indexer in the includes. mostly the domain
+# include.pageTrees {
+# 	0 = $pid-of-domain
+# }
 
 LH;
 	}

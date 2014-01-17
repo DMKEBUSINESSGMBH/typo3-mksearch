@@ -245,6 +245,7 @@ class tx_mksearch_indexer_Page extends tx_mksearch_indexer_Base {
 ### delete from or abort indexing for the record if isIndexableRecord or no record?
 deleteIfNotIndexable = 0
 
+# Note: you should always configure the root pageTree for this indexer in the includes. mostly the domain
 # White lists: Explicitely include items in indexing by various conditions.
 # Note that defining a white list deactivates implicite indexing of ALL pages,
 # i.e. only white-listed pages are defined yet!

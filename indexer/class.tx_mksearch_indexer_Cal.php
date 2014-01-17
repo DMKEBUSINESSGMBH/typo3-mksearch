@@ -333,6 +333,11 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base {
 #   }
 # }
 # }
+
+# you should always configure the root pageTree for this indexer in the includes. mostly the domain
+# include.pageTrees {
+# 	0 = $pid-of-domain
+# }
 CONFIG;
 	}
 }

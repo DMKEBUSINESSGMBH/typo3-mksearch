@@ -255,6 +255,11 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base {
 #	or as string
 #	categories = 1,23
 # }
+#
+# you should always configure the root pageTree for this indexer in the includes. mostly the domain
+# include.pageTrees {
+# 	0 = $pid-of-domain
+# }
 CONFIG;
 	}
 }
