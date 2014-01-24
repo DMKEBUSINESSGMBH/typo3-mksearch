@@ -50,9 +50,10 @@
     
     <!--    
         Note - put in the lucence version of your solr
-        so you will use all features of the current version
+        so you will use all features of the current version.
+        important for updates to avoid unwanted side effects.
     -->
-  <luceneMatchVersion>LUCENE_33</luceneMatchVersion>
+  <luceneMatchVersion>LUCENE_CURRENT</luceneMatchVersion>
  
  
   <!-- lib directives can be used to instruct Solr to load an Jars
