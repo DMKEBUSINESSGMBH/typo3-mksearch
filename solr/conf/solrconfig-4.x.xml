@@ -47,6 +47,10 @@
 	   that you fully re-index after changing this setting as it can
 	   affect both how text is indexed and queried.
 	-->
+	<!--    
+        Note - put in the lucence version of your solr
+        so you will use all features of the current version
+    -->
   <luceneMatchVersion>LUCENE_40</luceneMatchVersion>
 
   <!-- lib directives can be used to instruct Solr to load an Jars
