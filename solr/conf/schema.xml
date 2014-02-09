@@ -522,8 +522,11 @@
 	
 					http://java.sun.com/j2se/1.5.0/docs/api/java/util/regex/package-summary.html
 				-->
-				<!-- so we have umlauts transformend (ä => ae, etc.) etc. -->
+				<!-- 
+					so we have umlauts transformend (ä => ae, etc.) 
+					try around with this configuration
 				<filter class="solr.GermanNormalizationFilterFactory"/>
+				-->
 				<!-- only alpha num and whitespaces -->
 				<filter class="solr.PatternReplaceFilterFactory" pattern="([^a-zäöüÄÖÜß0-9 ])"
 					replacement="" replace="all" />
