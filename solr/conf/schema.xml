@@ -277,6 +277,9 @@
 					minSubwordSize : only subwords longer than this get to the output stream
 					maxSubwordSize : only subwords shorter than this get to the output stream
 					onlyLongestMatch : add only the longest matching subword to the stream
+					used to split words, containing of several words into the partial words
+					e.g. get donau, dampf, schiff, fahrt from donaudampfschifffahrt to have results
+					containing donaudampfschifffahrt when searching after schiff
 				-->
 				<filter class="solr.DictionaryCompoundWordTokenFilterFactory"
 					dictionary="dictionaryGerman.txt"
