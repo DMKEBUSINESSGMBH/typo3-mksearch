@@ -31,8 +31,8 @@ class tx_mksearch_tests_util_Misc_testcase extends tx_phpunit_testcase {
 	/**
 	 * @dataProvider providerHtml2Plain
 	 */
-	public function testHtml2Plain($before, $after) {
-		$res = tx_mksearch_util_Misc::html2plain($before);
+	public function testHtml2Plain($before, $options, $after) {
+		$res = tx_mksearch_util_Misc::html2plain($before, $options);
 		$this->assertEquals($res, $after);
 	}
 	public function providerHtml2Plain() {
@@ -41,23 +41,38 @@ class tx_mksearch_tests_util_Misc_testcase extends tx_phpunit_testcase {
 //				array($before, $after),
 				__LINE__ => array(
 						'Kapstadt Messetrailer <object width="5" height="5"><param name="movie" value="hier muss eigentlich die url rein ^^" /><param name="allowFullScreen" value="true" /><param name="allowscriptaccess" value="always" /><embed src="hier gehts zum player" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="5" height="5"></embed></object> Eternit Schönes Beschützen',
+						array(), // emty option
 						'Kapstadt Messetrailer   Eternit Schönes Beschützen',
 					),
 				__LINE__ => array(
 						'Hallo Welt',
+						array(), // emty option
 						'Hallo Welt',
 					),
 				__LINE__ => array(
 						'Hallo <!-- Kommentar --> Welt',
+						array(), // emty option
 						'Hallo   Welt',
 					),
 				__LINE__ => array(
 						'<br>Hallo</br> <i>Welt</i>',
+						array(), // emty option
 						'Hallo   Welt',
 					),
 				__LINE__ => array(
 						'Umlaute encoded F&ouml;rderm&ouml;glichkeiten',
+						array(), // emty option
 						'Umlaute encoded Fördermöglichkeiten',
+					),
+				__LINE__ => array(
+						'Zeile1' . PHP_EOL . 'Zeile2',
+						array(), // emty option
+						'Zeile1 Zeile2',
+					),
+				__LINE__ => array(
+						'Zeile1' . PHP_EOL . 'Zeile2',
+						array('lineendings' => true),
+						'Zeile1' . PHP_EOL . 'Zeile2',
 					),
 			) as $key => $row) {
 			$key = 'Line:'.$key;
@@ -132,7 +147,7 @@ class tx_mksearch_tests_util_Misc_testcase extends tx_phpunit_testcase {
 		$options['exclude.']['pages'] = '2,10,145';
 		$this->assertEquals(true, tx_mksearch_util_Misc::isOnValidPage($record, $options));
 	}
-	
+
 	/**
 	 * @dataProvider termProvider
 	 */
@@ -150,5 +165,3 @@ class tx_mksearch_tests_util_Misc_testcase extends tx_phpunit_testcase {
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/tests/util/class.tx_mksearch_tests_util_Misc_testcase.php']) {
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/tests/util/class.tx_mksearch_tests_util_Misc_testcase.php']);
 }
-
-?>

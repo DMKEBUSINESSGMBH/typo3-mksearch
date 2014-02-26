@@ -97,21 +97,35 @@ class tx_mksearch_util_Misc {
 	 * Removes HTML tags and HTML comments and converts HTML entities
 	 * to their applicable characters.
 	 *
-	 * @param string	$t
-	 * @return string	Converted string (utf8-encoded)
+	 * @param string $text
+	 * @param array $options
+	 * @return string Converted string (utf8-encoded)
 	 */
-	static function html2plain($text) {
+	public static function html2plain($text, array $options = array()) {
 		if(!is_string($text)) return $text;
 
-		return trim(html_entity_decode(
-			preg_replace(
-				array('/(\s+|(<.*?>)+)/', '/<!--.*?-->/'),
-				array(' ', ''),
-				$text
-			),
-			ENT_QUOTES,
-			'UTF-8'
-		));
+		// sollen zeilenumbrüche übernommen werden? default is OFF
+		$whitespaces = isset($options['lineendings']) && $options['lineendings'] ? true : false;
+		$whitespaces = $whitespaces ? '[ \t\f]' : '\s';
+
+		$replaces = array(
+			// whitespaces durch leerzeichen ersetzen
+			'/('.$whitespaces.'+|(<.*?>)+)/' => ' ',
+			// html kommentare entfernen
+			'/<!--.*?-->/' => ' ',
+		);
+
+		return trim(
+			html_entity_decode(
+				preg_replace(
+					array_keys($replaces),
+					array_values($replaces),
+					$text
+				),
+				ENT_QUOTES,
+				'UTF-8'
+			)
+		);
 	}
 
 	/**
@@ -181,7 +195,7 @@ class tx_mksearch_util_Misc {
 		unset($aArray[$key]);
 		return $bResetIndex ? array_merge($aArray) : $aArray;
 	}
-	
+
 }
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_Misc.php'])	{
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_Misc.php']);
