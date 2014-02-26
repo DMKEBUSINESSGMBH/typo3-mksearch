@@ -69,7 +69,7 @@ class tx_mksearch_util_Indexer {
 		$prefix = '', array $options = array()
 	) {
 		foreach ($recordIndexMapping as $recordKey => $indexDocKey) {
-			if(!empty($model->record[$recordKey])){
+			if(!empty($model->record[$recordKey]) || $options['keepEmpty']){
 				$indexDoc->addField(
 					$prefix.$indexDocKey,
 					$options['keepHtml'] ? $model->record[$recordKey] :
