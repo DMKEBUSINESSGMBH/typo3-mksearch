@@ -567,6 +567,12 @@
 		<field name="id" type="string" indexed="true" stored="true"
 			required="true" />
 
+		<!--
+			It is used internally by Solr, for example by features like partial
+			update functionality and update log.  
+		 -->
+		<field name="_version_" type="long" indexed="true" stored="true"/>
+
 		<!-- common mksearch fields -->
 		<field name="extKey" type="string" indexed="true" stored="true"
 			required="false" />
