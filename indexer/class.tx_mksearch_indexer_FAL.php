@@ -33,7 +33,7 @@ tx_rnbase::load('tx_rnbase_util_Logger');
 /**
  * Indexer service for dam.media called by the "mksearch" extension.
  */
-class tx_mksearch_indexer_DamMedia
+class tx_mksearch_indexer_FAL
 	extends tx_mksearch_indexer_BaseMedia {
 
 	/**
@@ -48,7 +48,7 @@ class tx_mksearch_indexer_DamMedia
 	 * @return array([extension key], [key of content type])
 	 */
 	public static function getContentType() {
-		return array('dam', 'media');
+		return array('core', 'file');
 	}
 
 	/**
@@ -57,7 +57,7 @@ class tx_mksearch_indexer_DamMedia
 	 * @return string
 	 */
 	protected function getBaseTableName() {
-		return 'tx_dam';
+		return 'sys_file';
 	}
 
 	/**
@@ -68,7 +68,17 @@ class tx_mksearch_indexer_DamMedia
 	 * @return string
 	 */
 	protected function getRelFileName($tableName, $sourceRecord) {
-		return $sourceRecord['file_path'] . $sourceRecord['file_name'];
+		// wir haben ein indiziertes dokument
+		if (isset($sourceRecord['uid']) && intval($sourceRecord['uid']) > 0) {
+			$file = new \TYPO3\CMS\Core\Resource\File($sourceRecord);
+			$storage = $file->getStorage();
+			// wir holen uns die url von dem storage, falls vorhanden
+			if ($storage instanceof \TYPO3\CMS\Core\Resource\ResourceStorage) {
+				return $storage->getPublicUrl($file);
+			}
+		}
+		// wenn wir keine ressource haben, bauen die url selbst zusammen.
+		return $GLOBALS['TYPO3_CONF_VARS']['BE']['fileadminDir'] . $sourceRecord['identifier'];
 	}
 
 	/**
@@ -79,7 +89,7 @@ class tx_mksearch_indexer_DamMedia
 	 * @return string
 	 */
 	protected function getFileExtension($tableName, $sourceRecord) {
-		return $sourceRecord['file_type'];
+		return $sourceRecord['extension'];
 	}
 
 	/**
@@ -90,9 +100,9 @@ class tx_mksearch_indexer_DamMedia
 	 * @return string
 	 */
 	protected function getFilePath($tableName, $sourceRecord) {
-		return $sourceRecord['file_path'];
+		$path = $this->getRelFileName($tableName, $sourceRecord);
+		return dirname($path) . '/';
 	}
-
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_DamMedia.php'])	{

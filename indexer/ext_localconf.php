@@ -55,6 +55,10 @@ if (t3lib_extMgm::isLoaded('dam')) {
 	tx_mksearch_util_Config::registerIndexer('dam', 'media', 'tx_mksearch_indexer_DamMedia', array('tx_dam'));
 }
 
+if (tx_rnbase_util_TYPO3::isTYPO60OrHigher()) {
+	tx_mksearch_util_Config::registerIndexer('core', 'file', 'tx_mksearch_indexer_FAL', array('sys_file'));
+}
+
 // seminars Extension
 if (t3lib_extMgm::isLoaded('seminars')) {
 	tx_mksearch_util_Config::registerIndexer(
