@@ -41,6 +41,25 @@ class tx_mksearch_util_Indexer {
 	}
 
 	/**
+	 * Liefert die UID des Datensatzes
+	 *
+	 * @param string $tableName
+	 * @param array $rawData
+	 * @param array $options
+	 * @return int
+	 */
+	public function getRecordsUid($tableName, array $rawData, array $options) {
+		// Take care for localized records where uid of original record
+		// is stored in $rawData['l18n_parent'] instead of $rawData['uid']!
+		$sysLanguageUidField = tx_mksearch_util_TCA::getLanguageFieldForTable($tableName);
+		$lnParentField = tx_mksearch_util_TCA::getTransOrigPointerFieldForTable($tableName);
+		return isset($rawData[$sysLanguageUidField]) && $rawData[$sysLanguageUidField] && isset($rawData[$lnParentField])
+			? $rawData[$lnParentField]
+			: $rawData['uid']
+		;
+	}
+
+	/**
 	 * Liefert eine Datumsfeld für Solr
 	 * @param 	string 	$date | insert "@" before timestamps
 	 * @return string

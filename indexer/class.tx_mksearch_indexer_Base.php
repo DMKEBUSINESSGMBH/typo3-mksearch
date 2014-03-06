@@ -58,6 +58,25 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 	 * @see tx_mksearch_interface_Indexer::prepareSearchData()
 	 */
 	public function prepareSearchData($tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options) {
+
+		// Set base id for specific indexer.
+		$indexDoc->setUid($this->getUid($tableName, $rawData, $options));
+
+		// pre process hoock
+		tx_rnbase_util_Misc::callHook('mksearch', 'indexerBase_preProcessSearchData',
+			array(
+				'table' => $tableName,
+				'rawData' => &$rawData,
+				'indexDoc' => &$indexDoc,
+				'options' => $options,
+			),
+			$this
+		);
+		// check, if the doc was skiped or has to deleted
+		if (is_null($indexDoc) || $indexDoc->getDeleted()) {
+			return $indexDoc;
+		}
+
 		//when an indexer is configured for more than one table
 		//the index process may be different for the tables.
 		//overwrite this method in your child class to stop processing and
@@ -67,9 +86,6 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 
 		// get a model from the source array
 		$this->modelToIndex = $this->createModel($rawData);
-
-		// Set base id for specific indexer.
-		$indexDoc->setUid($this->getUid($tableName, $rawData, $options));
 
 		// Is the model valid and data indexable?
 		if (!$this->modelToIndex->record || !$this->isIndexableRecord($this->modelToIndex->record, $options)) {
@@ -88,6 +104,18 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 		$indexDoc = $this->indexEnableColumns($this->modelToIndex, $tableName, $indexDoc);
 		$indexDoc = $this->indexData($this->modelToIndex, $tableName, $rawData, $indexDoc, $options);
 
+		// post precess hock
+		tx_rnbase_util_Misc::callHook('mksearch', 'indexerBase_postProcessSearchData',
+			array(
+				'table' => $tableName,
+				'rawData' => &$rawData,
+				'indexDoc' => &$indexDoc,
+				'options' => $options,
+				'model' => &$this->modelToIndex,
+			),
+			$this
+		);
+
 		//done
 		return $indexDoc;
 	}
@@ -99,16 +127,11 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 	 * @param array $rawData
 	 * @param array $options
 	 * @return int
+	 *
+	 * @deprecated use tx_mksearch_util_Indexer::getInstance()->getRecordsUid
 	 */
 	protected function getUid($tableName, $rawData, $options) {
-		// Take care for localized records where uid of original record
-		// is stored in $rawData['l18n_parent'] instead of $rawData['uid']!
-		$sysLanguageUidField = tx_mksearch_util_TCA::getLanguageFieldForTable($tableName);
-		$lnParentField = tx_mksearch_util_TCA::getTransOrigPointerFieldForTable($tableName);
-		return isset($rawData[$sysLanguageUidField]) && $rawData[$sysLanguageUidField] && isset($rawData[$lnParentField])
-			? $rawData[$lnParentField]
-			: $rawData['uid']
-		;
+		return tx_mksearch_util_Indexer::getInstance()->getRecordsUid($tableName, $rawData, $options);
 	}
 
 	/**
@@ -183,8 +206,8 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 		// wäre vlt. auch was für rn_base, das model könnte diese informationen ja bereit stellen!
 		if (
 			!$model ||
-			!$model->isValid() || 
-			$model->record['hidden'] == 1 || 
+			!$model->isValid() ||
+			$model->record['hidden'] == 1 ||
 			$model->record['deleted'] == 1
 		) {
 			return true;
