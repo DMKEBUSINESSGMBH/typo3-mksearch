@@ -45,7 +45,7 @@ class tx_mksearch_indexer_DamMediaTest extends tx_mksearch_indexer_DamMedia {
  */
 class tx_mksearch_tests_indexer_DamMedia_testcase extends tx_phpunit_testcase {
 	private static $oDamMediaTest = null;
-	
+
 	/**
 	 * Constructs a test case with the given name.
 	 *
@@ -57,7 +57,29 @@ class tx_mksearch_tests_indexer_DamMedia_testcase extends tx_phpunit_testcase {
 		parent::__construct($name, $data, $dataName);
 		self::$oDamMediaTest = new tx_mksearch_indexer_DamMediaTest();
 	}
-	
+
+	/**
+	 * (non-PHPdoc)
+	 * @see PHPUnit_Framework_TestCase::setUp()
+	 */
+	protected function setUp() {
+		// eventuelle hooks entfernen
+		tx_mksearch_tests_Util::hooksSetUp(
+			array(
+				'indexerBase_preProcessSearchData',
+				'indexerBase_postProcessSearchData',
+			)
+		);
+	}
+
+	/**
+	 * tearDown() = destroy DB etc.
+	 */
+	public function tearDown () {
+		// hooks zurücksetzen
+		tx_mksearch_tests_Util::hooksTearDown();
+	}
+
 	/**
 	 * @dataProvider providerIsIndexableRecord
 	 */
@@ -170,7 +192,7 @@ class tx_mksearch_tests_indexer_DamMedia_testcase extends tx_phpunit_testcase {
 				),
 			);
 	}
-	
+
 	/**
 	 *
 	 */
@@ -183,13 +205,13 @@ class tx_mksearch_tests_indexer_DamMedia_testcase extends tx_phpunit_testcase {
 			),
 			'deleteIfNotIndexable' => 0
 		);
-		
+
 		$aRawData = array('uid' => 1, 'file_type' => 'something_else');
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$oIndexDoc = $indexer->prepareSearchData('tx_dam', $aRawData, $indexDoc, $options);
 		$this->assertNull($oIndexDoc,'Es wurde nicht null geliefert!');
 	}
-	
+
 	/**
 	 *
 	 */
@@ -202,7 +224,7 @@ class tx_mksearch_tests_indexer_DamMedia_testcase extends tx_phpunit_testcase {
 			),
 			'deleteIfNotIndexable' => 1
 		);
-		
+
 		$aRawData = array('uid' => 1, 'file_type' => 'something_else');
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$oIndexDoc = $indexer->prepareSearchData('tx_dam', $aRawData, $indexDoc, $options);

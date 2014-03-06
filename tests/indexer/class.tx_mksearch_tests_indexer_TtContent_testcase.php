@@ -28,14 +28,14 @@ require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 require_once(t3lib_extMgm::extPath('mksearch') . 'lib/Apache/Solr/Document.php');
 
 /**
- * 
+ *
  * @author Hannes Bochmann
  *
  */
 class tx_mksearch_tests_indexer_TtContent_testcase extends tx_phpunit_testcase {
 
 	protected $aTvConfig;
-	
+
 	/**
 	 * unset templavoila
 	 */
@@ -44,9 +44,16 @@ class tx_mksearch_tests_indexer_TtContent_testcase extends tx_phpunit_testcase {
 		global $TYPO3_LOADED_EXT;
 		$this->aTvConfig = $TYPO3_LOADED_EXT['templavoila'];
 		$TYPO3_LOADED_EXT['templavoila'] = null;
-		
+
+		// eventuelle hooks entfernen
+		tx_mksearch_tests_Util::hooksSetUp(
+			array(
+				'indexerBase_preProcessSearchData',
+				'indexerBase_postProcessSearchData',
+			)
+		);
 	}
-	
+
 	/**
 	 * set templavoila
 	 */
@@ -54,8 +61,11 @@ class tx_mksearch_tests_indexer_TtContent_testcase extends tx_phpunit_testcase {
 		//re-install templavoila so the tests run without it as they used to
 		global $TYPO3_LOADED_EXT;
 		$TYPO3_LOADED_EXT['templavoila'] = $this->aTvConfig;
+
+		// hooks zurücksetzen
+		tx_mksearch_tests_Util::hooksTearDown();
 	}
-	
+
 	private static function getDefaultOptions(){
 		$options = array();
 		$options['CType.']['_default_.']['indexedFields.'] = array(
@@ -63,7 +73,7 @@ class tx_mksearch_tests_indexer_TtContent_testcase extends tx_phpunit_testcase {
 		);
 		return $options;
 	}
-	
+
 	function test_prepareSearchData_CheckIgnoreContentType() {
 		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtContent');
 		list($extKey, $cType) = $indexer->getContentType();

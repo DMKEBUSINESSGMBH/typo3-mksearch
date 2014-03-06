@@ -61,6 +61,28 @@ class tx_mksearch_tests_indexer_FAL_testcase
 	}
 
 	/**
+	 * (non-PHPdoc)
+	 * @see PHPUnit_Framework_TestCase::setUp()
+	 */
+	protected function setUp() {
+		// eventuelle hooks entfernen
+		tx_mksearch_tests_Util::hooksSetUp(
+			array(
+				'indexerBase_preProcessSearchData',
+				'indexerBase_postProcessSearchData',
+			)
+		);
+	}
+
+	/**
+	 * tearDown() = destroy DB etc.
+	 */
+	public function tearDown () {
+		// hooks zurücksetzen
+		tx_mksearch_tests_Util::hooksTearDown();
+	}
+
+	/**
 	 * @dataProvider providerIsIndexableRecord
 	 */
 	public function testIsIndexableRecord($aSourceRecord, $aOptions, $bIndexable) {

@@ -30,10 +30,10 @@ tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
  * Wir müssen in diesem Fall mit der DB testen da wir die pages
  * Tabelle benötigen
  * @author Hannes Bochmann
- * 
+ *
  */
 class tx_mksearch_tests_indexer_Base_testcase extends tx_phpunit_testcase {
-	
+
 	public function setUp() {
 		//WORKAROUND: phpunit seems to backup static attributes (in phpunit.xml)
 		//from version 3.6.10 not before. I'm not completely
@@ -43,8 +43,24 @@ class tx_mksearch_tests_indexer_Base_testcase extends tx_phpunit_testcase {
 		//as soon as this bug is fixed, we can use the new phpunit version
 		//and dont need this anymore
 		tx_mksearch_service_indexer_core_Config::clearPageInstance();
+
+		// eventuelle hooks entfernen
+		tx_mksearch_tests_Util::hooksSetUp(
+			array(
+				'indexerBase_preProcessSearchData',
+				'indexerBase_postProcessSearchData',
+			)
+		);
 	}
-	
+
+	/**
+	 * tearDown() = destroy DB etc.
+	 */
+	public function tearDown () {
+		// hooks zurücksetzen
+		tx_mksearch_tests_Util::hooksTearDown();
+	}
+
 	/**
 	 * Check if the uid is set correct
 	 */
@@ -53,26 +69,26 @@ class tx_mksearch_tests_indexer_Base_testcase extends tx_phpunit_testcase {
 		list($extKey, $cType) = $indexer->getContentType();
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$options = array();
-		
+
 		$aRawData = array('uid' => 1, 'test_field_1' => 'test value 1');
-		
+
 		$oIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
-		
+
 		$aPrimaryKey = $oIndexDoc->getPrimaryKey();
 		$this->assertEquals('mksearch',$aPrimaryKey['extKey']->getValue(),'Es wurde nicht der richtige extKey gesetzt!');
 		$this->assertEquals('dummy',$aPrimaryKey['contentType']->getValue(),'Es wurde nicht der richtige contentType gesetzt!');
 		$this->assertEquals(1,$aPrimaryKey['uid']->getValue(),'Es wurde nicht die richtige Uid gesetzt!');
 	}
-	
+
 	public function testGetPidListPreparesTsfe() {
 		$GLOBALS['TSFE'] = null;
-		
+
 		$indexer =tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
 		$indexer->callGetPidList();
-		
+
 		$this->assertNotNull($GLOBALS['TSFE'],'TSFE wurde nicht geladen!');
 	}
-	
+
 	/**
 	 *
 	 */
@@ -85,17 +101,17 @@ class tx_mksearch_tests_indexer_Base_testcase extends tx_phpunit_testcase {
 		$options2 = array(
 			'include.'=>array('categories' => 3)
 		);
-		
+
 		$aRawData = array('uid' => 1, 'pid' => 1);
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
 		$this->assertNull($aIndexDoc,'Das Element wurde indiziert! Option 1');
-		
+
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options2);
 		$this->assertNull($aIndexDoc,'Das Element wurde indiziert! Option 2');
 	}
-	
+
 	/**
 	 *
 	 */
@@ -112,12 +128,12 @@ class tx_mksearch_tests_indexer_Base_testcase extends tx_phpunit_testcase {
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
 		$this->assertNotNull($aIndexDoc,'Das Element wurde nicht indiziert! Option 1');
-		
+
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options2);
 		$this->assertNotNull($aIndexDoc,'Das Element wurde nicht indiziert! Option 2');
 	}
-	
+
 	/**
 	 *
 	 */
@@ -130,17 +146,17 @@ class tx_mksearch_tests_indexer_Base_testcase extends tx_phpunit_testcase {
 		$options2 = array(
 			'exclude.'=>array('categories' => 3)
 		);
-		
+
 		$aRawData = array('uid' => 1, 'pid' => 1);
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
 		$this->assertNotNull($aIndexDoc,'Das Element wurde nicht indiziert! Element 1 Option 1');
-		
+
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options2);
 		$this->assertNotNull($aIndexDoc,'Das Element wurde nicht indiziert! Element 1 Option 2');
 	}
-	
+
 /**
 	 *
 	 */
@@ -157,125 +173,125 @@ class tx_mksearch_tests_indexer_Base_testcase extends tx_phpunit_testcase {
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
 		$this->assertNull($aIndexDoc,'Das Element wurde doch indiziert! Element 2 Option 1');
-		
+
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options2);
 		$this->assertNull($aIndexDoc,'Das Element wurde doch indiziert! Element 2 Option 2');
 	}
-	
+
 	/**
 	*
 	*/
 	public function testCheckOptionsIncludeReturnsCorrectDefaultValueWithEmptyCategory() {
 		$indexer = $this->getMock('tx_mksearch_tests_fixtures_indexer_Dummy',array('getTestCategories'));
-		
+
 		$indexer->expects($this->once())
 			->method('getTestCategories')
 			->will($this->returnValue(array()));
-		
+
 		list($extKey, $cType) = $indexer->getContentType();
 		$options = array(
 				'include.'=>array('categories.' => array(3))
 		);
-	
+
 		$aRawData = array('uid' => 1, 'pid' => 1);
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
 		$this->assertNull($aIndexDoc,'Das Element wurde indiziert! Option 1');
 	}
-	
+
 	/**
 	 *
 	 */
 	public function testCheckOptionsExcludeReturnsCorrectDefaultValueWithEmptyCategory() {
 		$indexer = $this->getMock('tx_mksearch_tests_fixtures_indexer_Dummy',array('getTestCategories'));
-		
+
 		$indexer->expects($this->once())
 			->method('getTestCategories')
 			->will($this->returnValue(array()));
-		
+
 		list($extKey, $cType) = $indexer->getContentType();
 		$options = array(
 				'exclude.'=>array('categories.' => array(3))
 		);
-	
+
 		$aRawData = array('uid' => 1, 'pid' => 1);
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
 		$this->assertNotNull($aIndexDoc,'Das Element wurde nicht indiziert! Option 1');
 	}
-	
+
 	/**
 	 *
 	 */
 	public function testIndexEnableColumns() {
 		$this->setTcaEnableColumnsForMyTestTable1();
-		
+
 		$indexer =tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
 		list($extKey, $cType) = $indexer->getContentType();
-		
+
 		$aRawData = array('uid' => 1, 'hidden' => 0,'startdate' => 2,'enddate' => 3,'fe_groups' => 4);
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$indexDocData = $indexer->prepareSearchData('mytesttable_1', $aRawData, $indexDoc, array())->getData();
-		
+
 		//empty values are ignored
 		$this->assertEquals('1970-01-01T00:00:02Z', $indexDocData['starttime_dt']->getValue());
 		$this->assertEquals('1970-01-01T00:00:03Z', $indexDocData['endtime_dt']->getValue());
 		$this->assertEquals(array(0=>4), $indexDocData['fe_group_mi']->getValue());
 	}
-	
+
 	/**
 	 *
 	 */
 	public function testIndexEnableColumnsIfTableHasNoEnableColumns() {
 		$indexer =tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
 		list($extKey, $cType) = $indexer->getContentType();
-		
+
 		$aRawData = array('uid' => 1);
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$indexDocData = $indexer->prepareSearchData('doesn_t_matter', $aRawData, $indexDoc, array())->getData();
-		
+
 		$this->assertEmpty($indexDocData);
 	}
-	
+
 	/**
 	 *
 	 */
 	public function testIndexEnableColumnsWithEmptyStarttime() {
 		$this->setTcaEnableColumnsForMyTestTable1();
-		
+
 		$indexer =tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
 		list($extKey, $cType) = $indexer->getContentType();
-		
+
 		$aRawData = array('uid' => 1, 'hidden' => 0,'startdate' => 0,'enddate' => 3,'fe_groups' => 4);
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$indexDocData = $indexer->prepareSearchData('mytesttable_1', $aRawData, $indexDoc, array())->getData();
-		
+
 		//empty values are ignored
 		$this->assertFalse(isset($indexDocData['starttime_dt']));
 		$this->assertEquals('1970-01-01T00:00:03Z', $indexDocData['endtime_dt']->getValue());
 		$this->assertEquals(array(0=>4), $indexDocData['fe_group_mi']->getValue());
 	}
-	
+
 	/**
 	 *
 	 */
 	public function testIndexEnableColumnsWithSeveralFeGroups() {
 		$this->setTcaEnableColumnsForMyTestTable1();
-		
+
 		$indexer =tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
 		list($extKey, $cType) = $indexer->getContentType();
-		
+
 		$aRawData = array('uid' => 1, 'hidden' => 0,'startdate' => 0,'enddate' => 3,'fe_groups' => '4,5');
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$indexDocData = $indexer->prepareSearchData('mytesttable_1', $aRawData, $indexDoc, array())->getData();
-		
+
 		//empty values are ignored
 		$this->assertFalse(isset($indexDocData['starttime_dt']));
 		$this->assertEquals('1970-01-01T00:00:03Z', $indexDocData['endtime_dt']->getValue());
 		$this->assertEquals(array(0=>4,1=>5), $indexDocData['fe_group_mi']->getValue());
 	}
-	
+
 	private function setTcaEnableColumnsForMyTestTable1() {
 		global $TCA;
 		$TCA['mytesttable_1']['ctrl']['enablecolumns'] = array(

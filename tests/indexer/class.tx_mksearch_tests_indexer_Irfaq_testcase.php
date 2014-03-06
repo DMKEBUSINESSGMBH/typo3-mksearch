@@ -76,6 +76,14 @@ class tx_mksearch_tests_indexer_Irfaq_testcase extends tx_phpunit_database_testc
 		$this->importDataSet(tx_mksearch_tests_Util::getFixturePath('db/irfaq_cat.xml'));
 		$this->importDataSet(tx_mksearch_tests_Util::getFixturePath('db/irfaq_q_cat_mm.xml'));
 		$this->importDataSet(tx_mksearch_tests_Util::getFixturePath('db/irfaq_expert.xml'));
+
+		// eventuelle hooks entfernen
+		tx_mksearch_tests_Util::hooksSetUp(
+			array(
+				'indexerBase_preProcessSearchData',
+				'indexerBase_postProcessSearchData',
+			)
+		);
 	}
 
 	/**
@@ -87,6 +95,9 @@ class tx_mksearch_tests_indexer_Irfaq_testcase extends tx_phpunit_database_testc
 		$GLOBALS['TYPO3_DB']->sql_select_db(TYPO3_db);
 
 		$GLOBALS['BE_USER']->setWorkspace($this->workspaceIdAtStart);
+
+		// hooks zurücksetzen
+		tx_mksearch_tests_Util::hooksTearDown();
 	}
 
 	/**

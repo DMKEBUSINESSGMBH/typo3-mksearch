@@ -35,8 +35,8 @@ require_once(t3lib_extMgm::extPath('mksearch') . 'lib/Apache/Solr/Document.php')
  * tx_mksearch_tests_indexer_TtContent_testcase und
  * tx_mksearch_tests_indexer_TtContent_DB_testcase geprüft
  * @author Hannes Bochmann
- * 
- * 
+ *
+ *
  */
 class tx_mksearch_tests_indexer_TtContentTv_DB_testcase extends tx_phpunit_database_testcase {
 	protected $workspaceIdAtStart;
@@ -82,6 +82,14 @@ class tx_mksearch_tests_indexer_TtContentTv_DB_testcase extends tx_phpunit_datab
 		$this->importDataSet(tx_mksearch_tests_Util::getFixturePath('db/pages_tv.xml'));
 		$this->importDataSet(tx_mksearch_tests_Util::getFixturePath('db/tt_content_tv.xml'));
 		$this->importDataSet(tx_mksearch_tests_Util::getFixturePath('db/sys_refindex.xml'));
+
+		// eventuelle hooks entfernen
+		tx_mksearch_tests_Util::hooksSetUp(
+			array(
+				'indexerBase_preProcessSearchData',
+				'indexerBase_postProcessSearchData',
+			)
+		);
 	}
 
 	/**
@@ -93,6 +101,9 @@ class tx_mksearch_tests_indexer_TtContentTv_DB_testcase extends tx_phpunit_datab
 		$GLOBALS['TYPO3_DB']->sql_select_db(TYPO3_db);
 
 		$GLOBALS['BE_USER']->setWorkspace($this->workspaceIdAtStart);
+
+		// hooks zurücksetzen
+		tx_mksearch_tests_Util::hooksTearDown();
 	}
 
 	public function testPrepareSearchSetsCorrectPidOfReference() {

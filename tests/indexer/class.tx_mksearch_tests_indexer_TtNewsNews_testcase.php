@@ -29,24 +29,40 @@ tx_rnbase::load('tx_rnbase_util_Dates');
 require_once(t3lib_extMgm::extPath('mksearch') . 'lib/Apache/Solr/Document.php');
 
 /**
- * 
+ *
  * @author Hannes Bochmann
  *
  */
 class tx_mksearch_tests_indexer_TtNewsNews_testcase extends tx_phpunit_testcase {
-	
+
 	public function setUp() {
 		if(!t3lib_extMgm::isLoaded('tt_news'))
 			$this->markTestSkipped('tt_news is not installed!');
+
+		// eventuelle hooks entfernen
+		tx_mksearch_tests_Util::hooksSetUp(
+			array(
+				'indexerBase_preProcessSearchData',
+				'indexerBase_postProcessSearchData',
+			)
+		);
 	}
-	
+
+	/**
+	 * tearDown() = destroy DB etc.
+	 */
+	public function tearDown () {
+		// hooks zurücksetzen
+		tx_mksearch_tests_Util::hooksTearDown();
+	}
+
 	function test_prepareSearchData() {
 		$options = array();
 		$options['indexedFields.'] = array(
 			'uid_i' => 'uid',
 			'bodytext_s' => 'bodytext'
 		);
-		
+
 		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtNewsNews');
 
 		list($extKey, $cType) = $indexer->getContentType();
@@ -67,14 +83,14 @@ class tx_mksearch_tests_indexer_TtNewsNews_testcase extends tx_phpunit_testcase 
 		$this->assertEquals('some test', $data['news_text_s']->getValue(),'news_text_s falsch');
 		$this->assertEquals('some test', $data['news_text_t']->getValue(),'news_text_t falsch');
 	}
-	
+
 	function test_prepareSearchDataWithHtmlMarkupInBodytext() {
 		$options = array();
 		$options['indexedFields.'] = array(
 			'uid_i' => 'uid',
 			'bodytext_s' => 'bodytext'
 		);
-		
+
 		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtNewsNews');
 
 		list($extKey, $cType) = $indexer->getContentType();
@@ -95,7 +111,7 @@ class tx_mksearch_tests_indexer_TtNewsNews_testcase extends tx_phpunit_testcase 
 		$this->assertEquals('some test  with html markup', $data['news_text_s']->getValue(),'news_text_s falsch');
 		$this->assertEquals('some test  with html markup', $data['news_text_t']->getValue(),'news_text_t falsch');
 	}
-	
+
 	function test_prepareSearchDataWithHtmlMarkupInBodytextAndkeepHtmlOption() {
 		$options = array(
 			'indexedFields.' => array(
@@ -104,7 +120,7 @@ class tx_mksearch_tests_indexer_TtNewsNews_testcase extends tx_phpunit_testcase 
 			),
 			'keepHtml' => 1
 		);
-		
+
 		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtNewsNews');
 
 		list($extKey, $cType) = $indexer->getContentType();
@@ -125,11 +141,11 @@ class tx_mksearch_tests_indexer_TtNewsNews_testcase extends tx_phpunit_testcase 
 		$this->assertEquals('some test <p>with html markup</p>', $data['news_text_s']->getValue(),'news_text_s falsch');
 		$this->assertEquals('some test <p>with html markup</p>', $data['news_text_t']->getValue(),'news_text_t falsch');
 	}
-	
+
 	function test_prepareSearchDataDeleted() {
 		$options = array();
 		$options['indexedFields'] = 'uid,bodytext';
-		
+
 		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtNewsNews');
 
 		list($extKey, $cType) = $indexer->getContentType();
@@ -156,10 +172,10 @@ class tx_mksearch_tests_indexer_TtNewsNews_testcase extends tx_phpunit_testcase 
 		$this->assertFalse(array_key_exists('bodytext_s', $data),'bodytext_s Field is existent!');
 		$this->assertFalse(array_key_exists('bodytext', $data),'bodytext Field is existent!');
 	}
-	
+
 	function test_prepareSearchDataWithoutIndexedFieldsOption() {
 		$options = array();
-		
+
 		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtNewsNews');
 
 		list($extKey, $cType) = $indexer->getContentType();

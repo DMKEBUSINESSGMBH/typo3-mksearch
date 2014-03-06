@@ -32,17 +32,17 @@ require_once(t3lib_extMgm::extPath('mksearch') . 'lib/Apache/Solr/Document.php')
  * Wir müssen in diesem Fall mit der DB testen da wir die pages
  * Tabelle benötigen
  * @author Hannes Bochmann
- * 
+ *
  */
 class tx_mksearch_tests_indexer_Page_testcase extends tx_phpunit_testcase {
-	
+
 	public function testPrepareSearchDataSetsDocToDeleted() {
 		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_Page');
 		$options = array();
-		
+
 		list($extKey, $cType) = $indexer->getContentType();
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
-		
+
 		//is deleted
 		$record = array('uid'=> 123, 'pid' => 0, 'deleted' => 1);
 		$indexer->prepareSearchData('pages', $record, $indexDoc, $options);
@@ -53,12 +53,34 @@ class tx_mksearch_tests_indexer_Page_testcase extends tx_phpunit_testcase {
 		$record = array('uid'=> 124, 'pid' => 0, 'deleted' => 0, 'hidden' => 1);
 		$indexer->prepareSearchData('pages', $record, $indexDoc, $options);
 		$this->assertEquals(true, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
-		
+
 		//everything alright
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$record = array('uid'=> 125, 'pid' => 0, 'deleted' => 0, 'hidden' => 0);
 		$indexer->prepareSearchData('pages', $record, $indexDoc, $options);
 		$this->assertEquals(false, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
+	}
+
+	/**
+	 * (non-PHPdoc)
+	 * @see PHPUnit_Framework_TestCase::setUp()
+	 */
+	protected function setUp() {
+		// eventuelle hooks entfernen
+		tx_mksearch_tests_Util::hooksSetUp(
+			array(
+				'indexerBase_preProcessSearchData',
+				'indexerBase_postProcessSearchData',
+			)
+		);
+	}
+
+	/**
+	 * tearDown() = destroy DB etc.
+	 */
+	public function tearDown () {
+		// hooks zurücksetzen
+		tx_mksearch_tests_Util::hooksTearDown();
 	}
 }
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']) {

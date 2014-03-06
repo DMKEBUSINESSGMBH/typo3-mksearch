@@ -32,7 +32,7 @@ require_once(t3lib_extMgm::extPath('mksearch') . 'lib/Apache/Solr/Document.php')
  * Wir müssen in diesem Fall mit der DB testen da wir die pages
  * Tabelle benötigen
  * @author Hannes Bochmann
- * 
+ *
  */
 class tx_mksearch_tests_indexer_TtContent_DB_testcase extends tx_phpunit_database_testcase {
 	protected $workspaceIdAtStart;
@@ -66,7 +66,7 @@ class tx_mksearch_tests_indexer_TtContent_DB_testcase extends tx_phpunit_databas
 		//as soon as this bug is fixed, we can use the new phpunit version
 		//and dont need this anymore
 		tx_mksearch_service_indexer_core_Config::clearPageInstance();
-		
+
 		$this->createDatabase();
 		// assuming that test-database can be created otherwise PHPUnit will skip the test
 		$this->db = $this->useTestDatabase();
@@ -92,6 +92,14 @@ class tx_mksearch_tests_indexer_TtContent_DB_testcase extends tx_phpunit_databas
 		$TYPO3_LOADED_EXT['templavoila'] = null;
 
 		$this->importDataSet(tx_mksearch_tests_Util::getFixturePath('db/pages.xml'));
+
+		// eventuelle hooks entfernen
+		tx_mksearch_tests_Util::hooksSetUp(
+			array(
+				'indexerBase_preProcessSearchData',
+				'indexerBase_postProcessSearchData',
+			)
+		);
 	}
 
 	/**
@@ -107,6 +115,9 @@ class tx_mksearch_tests_indexer_TtContent_DB_testcase extends tx_phpunit_databas
 		//re-install templavoila so the tests run without it as they used to
 		global $TYPO3_LOADED_EXT;
 		$TYPO3_LOADED_EXT['templavoila'] = $this->aTvConfig;
+
+		// hooks zurücksetzen
+		tx_mksearch_tests_Util::hooksTearDown();
 	}
 
 	public function testPrepareSearchDataAndCheckDeleted() {
@@ -280,7 +291,7 @@ class tx_mksearch_tests_indexer_TtContent_DB_testcase extends tx_phpunit_databas
 		$result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
 		$this->assertNull($result, 'Element sollte gelöscht werden, da nicht im richtigen Seitenbaum. 1');
 	}
-	
+
 	public function testPrepareSearchDataPreparesTsfeIfTablePagesSoGetPidListWorks() {
 		$GLOBALS['TSFE'] = null;
 		$this->importDataSet(tx_mksearch_tests_Util::getFixturePath('db/tt_content.xml'));
@@ -473,7 +484,7 @@ class tx_mksearch_tests_indexer_TtContent_DB_testcase extends tx_phpunit_databas
 		$result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
 		$this->assertTrue($result->getDeleted(),'Das Element wurde nicht auf gelöscht gesetzt! Pid: 10');
 	}
-	
+
 	/**
 	 * @depends testPrepareSearchDataSetsDocToDeletedIfPageIsNotValid
 	 */
@@ -484,24 +495,24 @@ class tx_mksearch_tests_indexer_TtContent_DB_testcase extends tx_phpunit_databas
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$options = $this->getDefaultConfig();
 
-		// nicht im richtigen Seitenbaum und 
+		// nicht im richtigen Seitenbaum und
 		//tx_mksearch_is_indexable = tx_mksearch_indexer_ttcontent_Normal::USE_INDEXER_CONFIGURATION
 		$record = array(
-			'uid'=> 123, 'deleted' => 0, 'hidden' => 0, 
+			'uid'=> 123, 'deleted' => 0, 'hidden' => 0,
 			'pid' => 3, 'CType'=>'list','bodytext' => 'test',
 			'tx_mksearch_is_indexable' => tx_mksearch_indexer_ttcontent_Normal::USE_INDEXER_CONFIGURATION
 		);
 		$options['exclude.']['pageTrees'] = '1';//als string
 		$result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
 		$this->assertNull($result, 'Element sollte gelöscht werden, da nicht im richtigen Seitenbaum. 1');
-		
-		//nicht im richtigen Seitenbaum aber 
+
+		//nicht im richtigen Seitenbaum aber
 		//tx_mksearch_is_indexable = tx_mksearch_indexer_ttcontent_Normal::IS_INDEXABLE
 		$record['tx_mksearch_is_indexable'] = tx_mksearch_indexer_ttcontent_Normal::IS_INDEXABLE;
 		$options['exclude.']['pageTrees'] = '1';//als string
 		$result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
 		$this->assertNotNull($result, 'Element sollte nicht gelöscht werden, da zwar nicht im richtigen Seitenbaum aber tx_mksearch_indexer_ttcontent_Normal::IS_INDEXABLE.');
-		
+
 		//ist zwar im richtigen Seitenbaum aber
 		//tx_mksearch_is_indexable = tx_mksearch_indexer_ttcontent_Normal::IS_NOT_INDEXABLE
 		$record['tx_mksearch_is_indexable'] = tx_mksearch_indexer_ttcontent_Normal::IS_NOT_INDEXABLE;
@@ -528,7 +539,7 @@ class tx_mksearch_tests_indexer_TtContent_DB_testcase extends tx_phpunit_databas
 		$result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options)->getData();
 		$this->assertEquals('',$result['title']->getValue(), 'Titel doch indiziert!');
 	}
-	
+
 	public function testPrepareSearchDataIndexesEnableColumnsOfThePageToo() {
 		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtContent');
 		$options = $this->getDefaultConfig();
@@ -539,24 +550,24 @@ class tx_mksearch_tests_indexer_TtContent_DB_testcase extends tx_phpunit_databas
 		//everything alright
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$record = array(
-			'uid'=> 125, 
-			'pid' => 1, 
-			'deleted' => 0, 
-			'hidden' => 0, 
-			'header' => 'test', 
+			'uid'=> 125,
+			'pid' => 1,
+			'deleted' => 0,
+			'hidden' => 0,
+			'header' => 'test',
 			'CType'=>'list',
 			'starttime' => 5,
 			'endtime' => 6,
 			'fe_group' => 7
 		);
-		
+
 		$indexDoc = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
 		$indexedData = $indexDoc->getData();
-		
+
 		$this->assertEquals('1970-01-01T00:00:05Z', $indexedData['starttime_dt']->getValue());
 		$this->assertEquals('1970-01-01T00:00:06Z', $indexedData['endtime_dt']->getValue());
 		$this->assertEquals(array(0=>7), $indexedData['fe_group_mi']->getValue());
-		
+
 		$this->assertEquals('1970-01-01T00:00:02Z', $indexedData['page_starttime_dt']->getValue());
 		$this->assertEquals('2030-07-06T09:13:43Z', $indexedData['page_endtime_dt']->getValue());
 		$this->assertEquals(array(0=>4), $indexedData['page_fe_group_mi']->getValue());

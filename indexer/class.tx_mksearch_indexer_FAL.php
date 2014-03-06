@@ -61,7 +61,7 @@ class tx_mksearch_indexer_FAL
 	}
 
 	/**
-	 * Den Absoluten Server-Pfad zur Datei.
+	 * Den Relativen Server-Pfad zur Datei.
 	 *
 	 * @param string $tableName
 	 * @param array $sourceRecord
@@ -105,6 +105,6 @@ class tx_mksearch_indexer_FAL
 	}
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_DamMedia.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_DamMedia.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_FAL.php'])	{
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_FAL.php']);
 }

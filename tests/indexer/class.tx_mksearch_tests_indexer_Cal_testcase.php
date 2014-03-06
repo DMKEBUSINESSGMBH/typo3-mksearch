@@ -39,11 +39,27 @@ class tx_mksearch_tests_indexer_Cal_testcase extends Tx_Phpunit_Testcase {
 		if(!t3lib_extMgm::isLoaded('cal')) {
 			$this->markTestSkipped('cal nicht geladen.');
 		}
-		
+
 		tx_rnbase::load('tx_mksearch_indexer_Cal');
 		tx_rnbase::load('tx_mksearch_model_cal_Event');
+
+		// eventuelle hooks entfernen
+		tx_mksearch_tests_Util::hooksSetUp(
+			array(
+				'indexerBase_preProcessSearchData',
+				'indexerBase_postProcessSearchData',
+			)
+		);
 	}
-	
+
+	/**
+	 * tearDown() = destroy DB etc.
+	 */
+	public function tearDown () {
+		// hooks zurücksetzen
+		tx_mksearch_tests_Util::hooksTearDown();
+	}
+
 	/**
 	 * @group unit
 	 */

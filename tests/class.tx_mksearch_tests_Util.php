@@ -43,6 +43,37 @@ tx_rnbase::load('tx_rnbase_util_Spyc');
 class tx_mksearch_tests_Util {
 
 	/**
+	 * Sicherung von hoocks
+	 *
+	 * @var array
+	 */
+	private static $hooks = array();
+
+	/**
+	 * Sichert die hoocks unt entfernt diese in der globalconf.
+	 *
+	 * @param array $hocks
+	 * @return void
+	 */
+	public static function hooksSetUp(array $hocks = array()) {
+		foreach ($hocks as $hock) {
+			self::$hooks[$hock] = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch'][$hock];
+			$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch'][$hock] = array();
+		}
+	}
+	/**
+	 * Setzt die im setUp gesetzten Hooks zurück
+	 *
+	 * @return void
+	 */
+	public static function hooksTearDown() {
+		foreach(self::$hooks as $hook) {
+			$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch'][$hock] = self::$hooks[$hock];
+		}
+		self::$hooks = array();
+	}
+
+	/**
 	 * Liefert einen kompletten Dateipfad für eine Datei in einer Extension
 	 * @param $filename
 	 * @param $dir
@@ -52,7 +83,7 @@ class tx_mksearch_tests_Util {
 	public static function getFixturePath($filename, $dir = 'tests/fixtures/', $extKey = 'mksearch') {
 		return t3lib_extMgm::extPath($extKey).$dir.$filename;
 	}
-	
+
 	/**
    	 * Lädt ein COnfigurations Objekt nach mit der TS aus der Extension
    	 * Dabei wird alles geholt was in "plugin.tx_$extKey", "lib.$extKey." und
@@ -61,9 +92,9 @@ class tx_mksearch_tests_Util {
    	 */
   	public static function loadPageTS4BE() {
   		$extKeyTS = $extKey = 'mksearch';
-  		
+
 	    t3lib_extMgm::addPageTSConfig('<INCLUDE_TYPOSCRIPT: source="FILE:EXT:mksearch/static/static_extension_template/setup.txt">');
-	
+
 	    $pageTSconfig = t3lib_BEfunc::getPagesTSconfig(0);
 	    $tempConfig = $pageTSconfig['plugin.']['tx_'.$extKeyTS.'.'];
 	    $tempConfig['lib.'][$extKeyTS.'.'] = $pageTSconfig['lib.'][$extKeyTS.'.'];
@@ -71,10 +102,10 @@ class tx_mksearch_tests_Util {
 	    $pageTSconfig = $tempConfig;
 
 	    $qualifier = $pageTSconfig['qualifier'] ? $pageTSconfig['qualifier'] : $extKeyTS;
-	
+
 	  	return $pageTSconfig;
   	}
-  	
+
 /**
    	 * Lädt ein COnfigurations Objekt nach mit der TS aus der Extension
    	 * Dabei wird alles geholt was in "plugin.tx_$extKey", "lib.$extKey." und
@@ -84,14 +115,14 @@ class tx_mksearch_tests_Util {
   	public static function loadConfig4BE($pageTSconfig) {
 	    tx_rnbase::load('tx_rnbase_configurations');
 	    tx_rnbase::load('tx_rnbase_util_Misc');
-	
+
 	    tx_rnbase_util_Misc::prepareTSFE(); // Ist bei Aufruf aus BE notwendig!
 	    $GLOBALS['TSFE']->config = array();
 	    $cObj = t3lib_div::makeInstance('tslib_cObj');
-	    
+
 	    $configurations = new tx_rnbase_configurations();
 	    $configurations->init($pageTSconfig, $cObj, 'mksearch', 'mksearch');
-	
+
 	  	return $configurations;
   	}
 }

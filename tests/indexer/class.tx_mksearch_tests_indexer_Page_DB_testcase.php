@@ -32,7 +32,7 @@ require_once(t3lib_extMgm::extPath('mksearch') . 'lib/Apache/Solr/Document.php')
  * Wir müssen in diesem Fall mit der DB testen da wir die pages
  * Tabelle benötigen
  * @author Hannes Bochmann
- * 
+ *
  */
 class tx_mksearch_tests_indexer_Page_DB_testcase extends tx_phpunit_database_testcase {
 	protected $workspaceIdAtStart;
@@ -60,12 +60,12 @@ class tx_mksearch_tests_indexer_Page_DB_testcase extends tx_phpunit_database_tes
 		//WORKAROUND: phpunit seems to backup static attributes (in phpunit.xml)
 		//from version 3.6.10 not before. I'm not completely
 		//sure about that but from version 3.6.10 clearPageInstance is no
-		//more neccessary to have the complete test suite succeed. 
+		//more neccessary to have the complete test suite succeed.
 		//But this version is buggy. (http://forge.typo3.org/issues/36232)
 		//as soon as this bug is fixed, we can use the new phpunit version
 		//and dont need this anymore
 		tx_mksearch_service_indexer_core_Config::clearPageInstance();
-		
+
 		$this->createDatabase();
 		// assuming that test-database can be created otherwise PHPUnit will skip the test
 		$this->db = $this->useTestDatabase();
@@ -83,10 +83,18 @@ class tx_mksearch_tests_indexer_Page_DB_testcase extends tx_phpunit_database_tes
 		// fügt felder bei datenbank abfragen hinzu in $TYPO3_CONF_VARS['FE']['pageOverlayFields']
 		// und $TYPO3_CONF_VARS['FE']['addRootLineFields']
 		if(t3lib_extMgm::isLoaded('tq_seo')) $aExtensions[] = 'tq_seo';
-		
+
 		$this->importExtensions($aExtensions);
 
 		$this->importDataSet(tx_mksearch_tests_Util::getFixturePath('db/pages.xml'));
+
+		// eventuelle hooks entfernen
+		tx_mksearch_tests_Util::hooksSetUp(
+			array(
+				'indexerBase_preProcessSearchData',
+				'indexerBase_postProcessSearchData',
+			)
+		);
 	}
 
 	/**
@@ -98,6 +106,9 @@ class tx_mksearch_tests_indexer_Page_DB_testcase extends tx_phpunit_database_tes
 		$GLOBALS['TYPO3_DB']->sql_select_db(TYPO3_db);
 
 		$GLOBALS['BE_USER']->setWorkspace($this->workspaceIdAtStart);
+
+		// hooks zurücksetzen
+		tx_mksearch_tests_Util::hooksTearDown();
 	}
 
 	public function testPrepareSearchDataPreparesTsfeIfTablePagesSoGetPidListWorks() {
@@ -121,7 +132,7 @@ class tx_mksearch_tests_indexer_Page_DB_testcase extends tx_phpunit_database_tes
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 
 		$result = $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
-		
+
 		//nichtzs direkt indiziert?
 		$this->assertNull($result,'Es wurde nicht null zurück gegeben!');
 
@@ -181,13 +192,13 @@ class tx_mksearch_tests_indexer_Page_DB_testcase extends tx_phpunit_database_tes
 		$record = array('uid'=> 125, 'pid' => 1, 'deleted' => 0, 'hidden' => 0, 'title' => 'test');
 		$indexer->prepareSearchData('pages', $record, $indexDoc, $options);
 		$this->assertEquals(false, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
-		
+
 		//parent is hidden
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$record = array('uid'=> 10, 'pid' => 7, 'deleted' => 0, 'hidden' => 0, 'title' => 'test');
 		$indexer->prepareSearchData('pages', $record, $indexDoc, $options);
 		$this->assertEquals(true, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
-		
+
 		//everything alright with parents
 		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_Page');
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
@@ -355,7 +366,7 @@ class tx_mksearch_tests_indexer_Page_DB_testcase extends tx_phpunit_database_tes
 		$this->assertEquals(2,$aIndexDoc['doktype_i']->getValue(),'Es wurde nicht das Feld [doktype_i] richtig gesetzt!');
 		$this->assertTrue(empty($aIndexDoc['emptyDummyField_s']),'Es wurde nicht das Feld [emptyDummyField_s] richtig gesetzt!');
 		//common fields
-		
+
 		$this->assertEquals('test test page for tests :-D',$aIndexDoc['abstract']->getValue(),'Es wurde nicht das Feld [abstract] richtig gesetzt!');
 		$this->assertEquals('testPage',$aIndexDoc['title']->getValue(),'Es wurde nicht das Feld [title] richtig gesetzt!');
 	}
