@@ -65,6 +65,11 @@ class tx_mksearch_tests_indexer_FAL_testcase
 	 * @see PHPUnit_Framework_TestCase::setUp()
 	 */
 	protected function setUp() {
+		// der indexer greift beispielsweise auf \TYPO3\CMS\Core\Resource\File zu
+		// das gibts nur bei typo3 6 oder höher
+		if (!tx_rnbase_util_TYPO3::isTYPO60OrHigher()) {
+			$this->markTestSkipped('Only relevant for Typo3 6 or higher.');
+		}
 		// eventuelle hooks entfernen
 		tx_mksearch_tests_Util::hooksSetUp(
 			array(
