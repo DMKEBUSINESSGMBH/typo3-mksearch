@@ -37,6 +37,7 @@ class tx_mksearch_util_Tika {
 	 */
 	public static function getInstance() {
 		$tikaJar = tx_rnbase_configurations::getExtensionCfgValue('mksearch', 'tikaJar');
+		$tikaJar = t3lib_div::getFileAbsFileName($tikaJar);
 		self::$instance = new tx_mksearch_util_Tika($tikaJar);
 		return self::$instance;
 	}
@@ -57,7 +58,7 @@ class tx_mksearch_util_Tika {
 			$this->tikaAvailable = 0;
 			return $this->tikaAvailable;
 		}
-		
+
 		if (!t3lib_exec::checkCommand('java')) {
 			tx_rnbase_util_Logger::warn('Java not found! Java is required to run Apache Tika.', 'mksearch');
 			$this->tikaAvailable = 0;
@@ -69,14 +70,14 @@ class tx_mksearch_util_Tika {
 	private function setTikaJar($tikaJar) {
 		$this->tikaJar = $tikaJar;
 	}
-	
+
 	/**
 	 * Umlaute in Dateinamen werden durch escapeshellarg entfernt
 	 * außer es ist der korrekte LC_CTYPE gesetzt. Sollte auf de_DE.UTF-8
-	 * stehen 
-	 * 
+	 * stehen
+	 *
 	 * @see http://www.php.net/manual/de/function.escapeshellarg.php#99213
-	 * 
+	 *
 	 * @return void
 	 */
 	private function setLocaleTypeForNonWindowsSystems() {
@@ -84,7 +85,7 @@ class tx_mksearch_util_Tika {
 			setlocale(LC_CTYPE, $this->tikaLocaleType);
 		}
 	}
-	
+
 	/**
 	 * @return void
 	 */
@@ -136,14 +137,14 @@ class tx_mksearch_util_Tika {
 			throw new Exception('Tika not available!');
 
 		$absFile = self::checkFile($file);
-		
+
 		$this->setLocaleTypeForNonWindowsSystems();
-		
+
 		$tikaCommand = t3lib_exec::getCommand('java')
 			. ' -Dfile.encoding=UTF8' // forces UTF8 output
 			. ' -jar ' . escapeshellarg($this->tikaJar)
 			. ' -m ' . escapeshellarg($absFile);
-			
+
 		$this->resetLocaleType();
 
 		$shellOutput = array();
@@ -157,42 +158,42 @@ class tx_mksearch_util_Tika {
 		}
 		return $ret;
 	}
-	
+
 	/**
 	 * @param string $file
 	 * @param string $tikaCmdType
-	 * 
+	 *
 	 * @return string
 	 */
 	private function shell_exec($file, $tikaCmdType) {
 		$absFile = self::checkFile($file);
-		
+
 		$this->setLocaleTypeForNonWindowsSystems();
-		
+
 		$tikaCommand = t3lib_exec::getCommand('java')
 			. ' -Dfile.encoding=UTF-8' // forces UTF8 output
 			. ' -jar ' . escapeshellarg($this->tikaJar)
 			. ' -' . $tikaCmdType . ' ' . escapeshellarg($absFile);
-			
+
 		$this->resetLocaleType();
-		
+
 		return trim(shell_exec(
 			$this->getTikaCommandWithLocaleTypePrefixForNonWindowsSystems(
 				$tikaCommand
 			)
 		));
 	}
-	
+
 	/**
 	 * @param string $tikaCommand
-	 * 
+	 *
 	 * @return string
 	 */
 	private function getTikaCommandWithLocaleTypePrefixForNonWindowsSystems($tikaCommand) {
 		if(TYPO3_OS != 'WIN' && $this->tikaLocaleType){
 			$tikaCommand = 'LANG=' . $this->tikaLocaleType . ' ' . $tikaCommand;
 		}
-		
+
 		return $tikaCommand;
 	}
 
@@ -214,19 +215,19 @@ class tx_mksearch_util_Tika {
 
 		return $absFile;
 	}
-	
+
 	/**
 	 * Umlaute werden unter Windows in Dateinamen nicht korrekt interpretiert!
-	 * 
+	 *
 	 * @param string $fileName
-	 * 
+	 *
 	 * @return string
 	 */
 	private static function fixFilenameWithPossibleUmlautsForWindows($fileName) {
 		if(TYPO3_OS == 'WIN') {
 			$fileName = utf8_decode($fileName);
 		}
-		
+
 		return $fileName;
 	}
 
