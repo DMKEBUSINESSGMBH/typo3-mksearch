@@ -111,12 +111,19 @@ abstract class tx_mksearch_indexer_BaseMedia
 			return $indexDoc;
 		}
 
-		$indexDoc->setTitle($sourceRecord['title']);
+		// titel aus dem feld titel oder name holen, als fallback den dateinamen nutzen!
+		$title = $sourceRecord['title'] ? $sourceRecord['title'] : $sourceRecord['name'];
+		$title = $title ? $title : basename($this->getRelFileName($tableName, $sourceRecord));
+		$indexDoc->setTitle($title);
 		$indexDoc->setTimestamp($sourceRecord['tstamp']);
 
-		$content = $sourceRecord['description'] ? $sourceRecord['description'] : $sourceRecord['title'];
+		$content = $sourceRecord['description'] ? $sourceRecord['description'] : $sourceRecord['alternative'];
+		$content = $content ? $content : $title;
 		$indexDoc->setContent($content);
-		$indexDoc->setAbstract($sourceRecord['abstract'] ? $sourceRecord['abstract'] : $content);
+
+		$abstract = $sourceRecord['abstract'] ? $sourceRecord['abstract'] : $sourceRecord['alternative'];
+		$abstract = $abstract ? $abstract : $content;
+		$indexDoc->setAbstract($abstract);
 
 		//den kompletten, relativen Pfad zum Dam Dokument indizieren
 		$indexDoc->addField('file_relpath_s', $this->getRelFileName($tableName, $sourceRecord));
@@ -206,8 +213,10 @@ abstract class tx_mksearch_indexer_BaseMedia
 			}
 
 			$indexDoc->addField($contentField, $content);
-			if(empty($sourceRecord['abstract']))
+			$indexFields = $indexDoc->getData();
+			if(empty($indexFields['abstract']) || !$indexFields['abstract']->getValue()) {
 				$indexDoc->setAbstract($content, $indexDoc->getMaxAbstractLength());
+			}
 		}
 		$langField = $tikaFields['language'];
 		if($langField) {
@@ -299,12 +308,17 @@ abstract class tx_mksearch_indexer_BaseMedia
 	}
 
 	private function getIndexMethod($options) {
-		$ret = 'indexSolr';
-		if(array_key_exists('indexMode', $options) && strtolower($options['indexMode']) == 'tika') {
-			$ret = 'indexTika';
-		}
-		elseif(array_key_exists('indexMode', $options) && strtolower($options['indexMode']) == 'none') {
-					$ret = 'indexNone';
+		$mode = empty($options['indexMode'])
+			? 'solr'
+			: strtolower($options['indexMode']);
+		switch ($mode) {
+			case 'tika':
+				return 'indexTika';
+			case 'none':
+				return 'indexNone';
+			case 'solr':
+			default:
+				return 'indexSolr';
 		}
 		return $ret;
 	}
@@ -367,10 +381,12 @@ filter.$table {
   # TODO: Workspace
 }
 
-# Define which DAM fields to index and to which fields
+# Define which fields to index and to which fields
 fields {
-  file_name = file_name_s
-  abstract = abstract_s
+  ### name field for DAM
+  #file_name = file_name_s
+  ### name field for FAL
+  #name = file_name_s
 }
 tikafields {
   # tikafield = indexfield
@@ -378,6 +394,7 @@ tikafields {
   language = lang_s
   meta.Content-Encoding = encoding_s
   meta.Content-Length = filesize_i
+  meta.resourceName = resource_name_s
 }
 
 CFG;
