@@ -131,6 +131,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 	 * @deprecated use tx_mksearch_util_Indexer::getInstance()->getRecordsUid
 	 */
 	protected function getUid($tableName, $rawData, $options) {
+		$options = is_array($options) ? $options : array();
 		return tx_mksearch_util_Indexer::getInstance()->getRecordsUid($tableName, $rawData, $options);
 	}
 
