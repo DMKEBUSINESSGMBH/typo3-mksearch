@@ -475,7 +475,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 
 		if($formTemplate) {
 			$link = $configurations->createLink();
-			$link->initByTS($configurations,$confId.'template.links.action.', array());
+			$link->initByTS($configurations, $confId.'template.links.action.', array());
 			// Prepare some form data
 			$paramArray = $this->getParameters()->getArrayCopy();
 			$formData = $this->getParameters()->get('submit') ? $paramArray : $this->getFormData();

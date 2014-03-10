@@ -549,6 +549,10 @@ lib.mksearch.extrainfo {
 			links.show.pid.data = register : mksearch.core.tt_content
 		}
 	}
+	
+	core.file < .default
+	core.file {
+	}
 
 
 	# Content type "tt_news.news"

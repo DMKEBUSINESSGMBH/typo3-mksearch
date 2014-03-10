@@ -29,21 +29,21 @@ tx_rnbase::load('tx_mksearch_interface_IndexerDocument');
  * Generic class for indexer documents
  */
 class tx_mksearch_model_IndexerDocumentBase implements tx_mksearch_interface_IndexerDocument {
-	
+
 	/**
 	 * Extension key of indexed data
 	 *
 	 * @var tx_mksearch_interface_IndexerField
 	 */
 	private $extKey=null;
-	
+
 	/**
 	 * Content type of indexed data
 	 *
 	 * @var tx_mksearch_interface_IndexerField
 	 */
 	private $contentType=null;
-	
+
 	/**
 	 * UID field
 	 *
@@ -64,40 +64,40 @@ class tx_mksearch_model_IndexerDocumentBase implements tx_mksearch_interface_Ind
 	 * @var string
 	 */
 	private $fieldClass = null;
-	
+
 	/**
 	 * All content fields (except primary key fields) of the indexer document
 	 *
 	 * @var array[tx_mksearch_interface_IndexerField]
 	 */
 	private $data = array();
-	
+
 	/**
 	 * Factory for getting a new field object instance
-	 * 
+	 *
 	 * @param mixed		$value					Either a scalar or an array value. Possibly not supported by every implementation!
-	 * @param mixed		$storageOptionsOrType	Array (@see self::$_storageOptions) OR short cut string (@see self::$_storageType) 
+	 * @param mixed		$storageOptionsOrType	Array (@see self::$_storageOptions) OR short cut string (@see self::$_storageType)
 	 * @param string	$boost					Boost of that $value
 	 * @param string	$dataType				Data type of $value (@see self::$_dataType)
 	 * @param string	$encoding
 	 *
 	 * @return tx_mksearch_interface_IndexerField
-	 * 
+	 *
 	 */
 	protected function getFieldInstance($value, $storageOptionsOrType, $boost=1.0, $dataType=null, $encoding=null) {
 		return tx_rnbase::makeInstance($this->fieldClass, $value, $storageOptionsOrType, $boost, $dataType, $encoding);
 	}
-	
+
 	/***********************************
 	 * Basic functions
 	 ***********************************/
-	
+
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * Instantiate a new indexer document by defining the document's primary key
 	 * consisting of $extKey, $contentType, and $uid.
-	 * 
+	 *
 	 * @param string	$extKey			Key of the extension the indexed data belongs to
 	 * @param string	$contentType	Name of content type the indexed data represents
 	 * @param string	$fieldClass		Indexer field class name to be instantiated for each indexer field (must implement tx_mksearch_interface_IndexerField!)
@@ -106,16 +106,18 @@ class tx_mksearch_model_IndexerDocumentBase implements tx_mksearch_interface_Ind
 	public function __construct($extKey, $contentType, $fieldClass='tx_mksearch_model_IndexerFieldBase') {
 		$this->fieldClass = $fieldClass;
 		$this->extKey = $this->getFieldInstance($extKey, 'keyword');
-		
+
 		if (!$this->extKey instanceof tx_mksearch_interface_IndexerField)
 			throw new Exception('tx_mksearch_model_IndexerDocumentBase->__construct(): Given class in $fieldClass must implement tx_mksearch_interface_IndexerField!');
-			
+
 		$this->contentType = $this->getFieldInstance($contentType, 'keyword');
+
+		$this->addField('content_ident_s', $extKey . '.' . $contentType, 'keyword');
 	}
 
 	/**
 	 * Set uid
-	 * 
+	 *
 	 * Setting the uid is not possible on instantiating since
 	 * instantiating takes place PRIOR to actually collecting
 	 * records to be indexed!
@@ -125,10 +127,10 @@ class tx_mksearch_model_IndexerDocumentBase implements tx_mksearch_interface_Ind
 	public function setUid($uid) {
 		$this->uid = $this->getFieldInstance($uid, 'keyword', 1.0, 'int');
 	}
-	
+
 	/**
 	 * Add field to indexer document
-	 * 
+	 *
 	 * @param string	$key Field name
 	 * @param string	$data
 	 * @param string	$storageOptionsOrType -> @see tx_mksearch_model_IndexerFieldBase::$_storageOptions and tx_mksearch_model_IndexerFieldBase::$_storageType
@@ -140,10 +142,10 @@ class tx_mksearch_model_IndexerDocumentBase implements tx_mksearch_interface_Ind
 	public function addField($key, $data, $storageOptionsOrType='keyword', $boost=1.0, $dataType=null, $encoding=null) {
 		$this->data[$key] = $this->getFieldInstance($data, $storageOptionsOrType, $boost, $dataType, $encoding);
 	}
-	
+
 	/**
 	 * Return primary key fields of index document
-	 * 
+	 *
 	 * @return array[
 	 * 		'extKey' => tx_mksearch_interface_IndexerField,
 	 *		'contentType'	=> tx_mksearch_interface_IndexerField,
@@ -151,7 +153,7 @@ class tx_mksearch_model_IndexerDocumentBase implements tx_mksearch_interface_Ind
 	 * 		]
 	 */
 	public function getPrimaryKey($flat = false) {
-		if (empty($this->uid)) 
+		if (empty($this->uid))
 			throw new Exception('tx_mksearch_model_IndexerDocumentBase->getPrimaryKey(): uid not yet set!');
 
 		return !$flat ? array('extKey' => $this->extKey,'contentType' => $this->contentType,'uid' => $this->uid,) :
@@ -163,7 +165,7 @@ class tx_mksearch_model_IndexerDocumentBase implements tx_mksearch_interface_Ind
 	}
 	/**
 	 * Return data of indexer document
-	 * 
+	 *
 	 * @return array[tx_mksearch_interface_IndexerField]
 	 */
 	public function getData() {
@@ -191,9 +193,9 @@ class tx_mksearch_model_IndexerDocumentBase implements tx_mksearch_interface_Ind
 
 	/**
 	 * Set title
-	 * 
+	 *
 	 * Shortcut for setting a 'title' field as indexed and stored text.
-	 * 
+	 *
 	 * @param string	$title
 	 * @param string	$encoding='utf-8'
 	 * @return void
@@ -204,13 +206,13 @@ class tx_mksearch_model_IndexerDocumentBase implements tx_mksearch_interface_Ind
 
 	/**
 	 * Set abstract
-	 * 
+	 *
 	 * Shortcut for setting an 'abstract' field as UNINDEXED text.
-	 * 
+	 *
 	 * The abstract of a document just stores data, which is basically used
 	 * for display on textual search results page, but is however NOT taken into account
 	 * in terms of indexing!
-	 * 
+	 *
 	 * @param string	$abstract
 	 * @param int		$length		Cut abstract to that length - if 0, no cut takes place
 	 * @param bool		$wordCut	Cut at last full word
@@ -219,37 +221,37 @@ class tx_mksearch_model_IndexerDocumentBase implements tx_mksearch_interface_Ind
 	 */
 	public function setAbstract($abstract, $length=null, $wordCut=true, $encoding='utf-8') {
 		$abstract = tx_mksearch_util_Misc::html2plain($abstract);
-		
+
 		if ($length || ($length = $this->getMaxAbstractLength())) {
 			$csConvObj = tx_rnbase::makeInstance('t3lib_cs');
 			$abstract = $csConvObj->substr($encoding, $abstract, 0, $length);
 		}
 		$this->data['abstract'] = $this->getFieldInstance($abstract, 'unindexed', 1.0, 'string', $encoding);
 	}
-	
+
 	/**
 	 * Return maximum allowed length of abstract text
 	 *
-	 * @todo make configurable somehow - is this class the correct place for this function at all? 
+	 * @todo make configurable somehow - is this class the correct place for this function at all?
 	 * @return int Max. length of abstract as defined in mksearch extension config parameter abstractMaxLength_[your extkey]_[your content type]
 	 */
 	public function getMaxAbstractLength() {
 		return 200;
 //		tx_rn_base::load('tx_rnbase_configurations');
 //		return tx_rnbase_configurations::getExtensionCfgValue(
-//				'mksearch', 
+//				'mksearch',
 //				'abstractMaxLength_'.$this->extKey->getValue().'_'.$this->contentType->getValue()
 //				);
 	}
-	
+
 	/**
 	 * Set content of indexed document
-	 * 
+	 *
 	 * Shortcut for setting a 'content' field as indexed, but UNSTORED text.
-	 * 
+	 *
 	 * This is used for indexing large textual data which does not need
 	 * to be stored for being returned within the search results.
-	 * 
+	 *
 	 * @param string	$content
 	 * @param string	$encoding='utf-8'
 	 * @return void
@@ -257,19 +259,19 @@ class tx_mksearch_model_IndexerDocumentBase implements tx_mksearch_interface_Ind
 	public function setContent($content, $encoding='utf-8') {
 		$this->data['content'] = $this->getFieldInstance($content, 'unstored', 1.0, 'text', $encoding);
 	}
-	
+
 	/**
 	 * Set timestamp
-	 * 
+	 *
 	 * Shortcut for setting a 'tstamp' field as indexed and stored keyword.
-	 * 
+	 *
 	 * @param $title
 	 * @return void
 	 */
 	public function setTimestamp($tstamp) {
 		$this->data['tstamp'] = $this->getFieldInstance(intval($tstamp), 'keyword', 1.0, 'int');
 	}
-	
+
 	/**
 	 * (non-PHPdoc)
 	 * @see tx_mksearch_interface_IndexerDocument::setDeleted()
