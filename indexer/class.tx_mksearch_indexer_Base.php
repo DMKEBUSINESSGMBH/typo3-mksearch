@@ -69,6 +69,7 @@ abstract class tx_mksearch_indexer_Base
 	public function prepareSearchData($tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options) {
 
 		// Set base id for specific indexer.
+		// @TODO use getUid of the model as it will return the correct uid in respect of localisation
 		$indexDoc->setUid($this->getUid($tableName, $rawData, $options));
 
 		// pre process hoock

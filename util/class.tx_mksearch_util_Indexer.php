@@ -47,6 +47,7 @@ class tx_mksearch_util_Indexer {
 	 * @param array $rawData
 	 * @param array $options
 	 * @return int
+	 * @deprecated use getUid of the rnbase model as it will return the correct uid in respect of localisation
 	 */
 	public function getRecordsUid($tableName, array $rawData, array $options) {
 		// Take care for localized records where uid of original record
