@@ -509,6 +509,7 @@ CONFIG;
 	 * @return string with list of pids
 	 */
 	protected function _getPidList($pidList, $recursive=0) {
+		tx_rnbase_util_Misc::prepareTSFE();
 		return tx_rnbase_util_Misc::getPidList($pidList, $recursive);
 	}
 
