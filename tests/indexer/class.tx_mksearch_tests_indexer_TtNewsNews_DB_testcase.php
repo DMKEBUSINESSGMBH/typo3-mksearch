@@ -34,7 +34,9 @@ require_once(t3lib_extMgm::extPath('mksearch') . 'lib/Apache/Solr/Document.php')
  * @author Hannes Bochmann
  *
  */
-class tx_mksearch_tests_indexer_TtNewsNews_DB_testcase extends tx_phpunit_database_testcase {
+class tx_mksearch_tests_indexer_TtNewsNews_DB_testcase
+	extends tx_phpunit_database_testcase {
+
 	protected $workspaceIdAtStart;
 	protected $db;
 
@@ -65,7 +67,7 @@ class tx_mksearch_tests_indexer_TtNewsNews_DB_testcase extends tx_phpunit_databa
 		// assuming that test-database can be created otherwise PHPUnit will skip the test
 		$this->db = $this->useTestDatabase();
 		$this->importStdDB();
-		$aExtensions = array('cms','mksearch','tt_news');
+		$aExtensions = array('cms', 'mksearch', 'tt_news');
 		//templavoila und realurl brauchen wir da es im BE sonst Warnungen hagelt
 		//und man die Testergebnisse nicht sieht ;-)
 		if(t3lib_extMgm::isLoaded('templavoila')) $aExtensions[] = 'templavoila';
@@ -103,9 +105,8 @@ class tx_mksearch_tests_indexer_TtNewsNews_DB_testcase extends tx_phpunit_databa
 	 * angegebenen Seitenbaum liegen
 	 */
 	public function testPrepareSearchDataWithIncludeCategoriesOption() {
+		/* @var $indexer tx_mksearch_indexer_TtNewsNews */
 		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtNewsNews');
-		list($extKey, $cType) = $indexer->getContentType();
-		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$options = array(
 			'include.' => array(
 				'categories.' => array(
@@ -114,23 +115,29 @@ class tx_mksearch_tests_indexer_TtNewsNews_DB_testcase extends tx_phpunit_databa
 			)
 		);
 
-		$aResult = array('uid' => 1);
-		$aIndexDoc = $indexer->prepareSearchData('tt_news', $aResult, $indexDoc, $options);
-		$this->assertNotNull($aIndexDoc,'Das Element wurde doch nicht indziert!');
+		$result = array('uid' => 1);
+		$indexDoc = $indexer->prepareSearchData(
+			'tt_news', $result,
+			tx_mksearch_tests_Util::getIndexerDocument($indexer),
+			$options
+		);
+		$this->assertNotNull($indexDoc, 'Das Element wurde nicht indziert!');
 
-		$aResult = array('uid' => 2);
-		$aIndexDoc = $indexer->prepareSearchData('tt_news', $aResult, $indexDoc, $options);
-		$this->assertNull($aIndexDoc,'Das Element wurde doch indziert!');
+		$result = array('uid' => 2);
+		$indexDoc = $indexer->prepareSearchData(
+			'tt_news', $result,
+			tx_mksearch_tests_Util::getIndexerDocument($indexer),
+			$options
+		);
+		$this->assertNull($indexDoc, 'Das Element wurde indziert!');
 	}
 
-/**
+	/**
 	 * Prüft ob nur die Elemente indiziert werden, die im
 	 * angegebenen Seitenbaum liegen
 	 */
 	public function testPrepareSearchDataWithExcludeCategoriesOption() {
 		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtNewsNews');
-		list($extKey, $cType) = $indexer->getContentType();
-		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$options = array(
 			'exclude.' => array(
 				'categories.' => array(
@@ -139,29 +146,36 @@ class tx_mksearch_tests_indexer_TtNewsNews_DB_testcase extends tx_phpunit_databa
 			)
 		);
 
-		$aResult = array('uid' => 1);
-		$aIndexDoc = $indexer->prepareSearchData('tt_news', $aResult, $indexDoc, $options);
-		$this->assertNull($aIndexDoc,'Das Element wurde doch indziert!');
+		$result = array('uid' => 1);
+		$indexDoc = $indexer->prepareSearchData(
+			'tt_news', $result,
+			tx_mksearch_tests_Util::getIndexerDocument($indexer),
+			$options
+		);
+		$this->assertNull($indexDoc,'Das Element wurde doch indziert!');
 
-		$aResult = array('uid' => 2);
-		$aIndexDoc = $indexer->prepareSearchData('tt_news', $aResult, $indexDoc, $options);
-		$this->assertNotNull($aIndexDoc,'Das Element wurde doch nicht indziert!');
+		$result = array('uid' => 2);
+		$indexDoc = $indexer->prepareSearchData(
+			'tt_news', $result,
+			tx_mksearch_tests_Util::getIndexerDocument($indexer),
+			$options
+		);
+		$this->assertNotNull($indexDoc,'Das Element wurde doch nicht indziert!');
 	}
 
 	public function testPrepareSearchDataWithSinglePid() {
 		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtNewsNews');
-		list($extKey, $cType) = $indexer->getContentType();
-		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
+		$indexDoc = tx_mksearch_tests_Util::getIndexerDocument($indexer);
 		$options = array(
 			'addCategoryData' => 1,
 			'defaultSinglePid' => 0,
 		);
 
 		$aResult = array('uid' => 3, 'title' => 'Testnews');
-		$aIndexDoc = $indexer->prepareSearchData('tt_news', $aResult, $indexDoc, $options);
-		$this->assertTrue(is_object($aIndexDoc),'Das Element wurde nicht indziert!');
+		$indexDoc = $indexer->prepareSearchData('tt_news', $aResult, $indexDoc, $options);
+		$this->assertTrue(is_object($indexDoc),'Das Element wurde nicht indziert!');
 
-		$aIndexData = $aIndexDoc->getData();
+		$aIndexData = $indexDoc->getData();
 		$this->assertArrayHasKey('categorySinglePid_i', $aIndexData, 'categorySinglePid_i ist nicht gesetzt!');
 		$this->assertEquals('334', $aIndexData['categorySinglePid_i']->getValue(), 'categorySinglePid_i ist falsch gesetzt!');
 		$this->assertEquals(array(2,3,1,4), $aIndexData['categories_mi']->getValue(), 'categories_mi hat die falsche Reihenfolge!');
@@ -169,21 +183,21 @@ class tx_mksearch_tests_indexer_TtNewsNews_DB_testcase extends tx_phpunit_databa
 
 	public function testPrepareSearchDataWithDefaultSinglePid() {
 		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtNewsNews');
-		list($extKey, $cType) = $indexer->getContentType();
-		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
+		$indexDoc = tx_mksearch_tests_Util::getIndexerDocument($indexer);
 		$options = array(
 			'addCategoryData' => 1,
 			'defaultSinglePid' => 50,
 		);
 
 		$aResult = array('uid' => 4, 'title' => 'Testnews');
-		$aIndexDoc = $indexer->prepareSearchData('tt_news', $aResult, $indexDoc, $options);
-		$this->assertTrue(is_object($aIndexDoc),'Das Element wurde nicht indziert!');
+		$indexDoc = $indexer->prepareSearchData('tt_news', $aResult, $indexDoc, $options);
+		$this->assertTrue(is_object($indexDoc),'Das Element wurde nicht indziert!');
 
-		$aIndexData = $aIndexDoc->getData();
+		$aIndexData = $indexDoc->getData();
 		$this->assertArrayHasKey('categorySinglePid_i', $aIndexData, 'categorySinglePid_i ist nicht gesetzt!');
 		$this->assertEquals('50', $aIndexData['categorySinglePid_i']->getValue(), 'categorySinglePid_i ist falsch gesetzt!');
 	}
+
 }
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']) {
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']);

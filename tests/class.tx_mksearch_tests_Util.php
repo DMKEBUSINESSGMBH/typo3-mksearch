@@ -124,7 +124,40 @@ class tx_mksearch_tests_Util {
 	    $configurations->init($pageTSconfig, $cObj, 'mksearch', 'mksearch');
 
 	  	return $configurations;
-  	}
+	}
+
+	/**
+	 * Erzeugt ein neues Indexer Dokument.
+	 *
+	 * @param string $extKeyOrIndexer
+	 * @param string $cType
+	 * @param string $documentClass
+	 * @return tx_mksearch_model_IndexerDocumentBase
+	 */
+	public static function getIndexerDocument(
+		$extKeyOrIndexer, $cType = NULL,
+		$documentClass = 'tx_mksearch_model_IndexerDocumentBase'
+	) {
+		// extkey und contenttype vom indexer holen
+		if ($extKeyOrIndexer instanceof tx_mksearch_interface_Indexer) {
+			list($extKey, $cType) = $extKeyOrIndexer->getContentType();
+		}
+		// extkey und contenttype von den parametern nutzen
+		elseif (is_string($extKeyOrIndexer)) {
+			$extKey = $extKeyOrIndexer;
+		}
+		// falscher datentyp
+		else {
+			throw new Exception(
+				'First argument of getIndexerDocument has to be an "string"'
+				. ' or instance of "tx_mksearch_interface_Indexer", '
+				. (is_object($extKeyOrIndexer) ? get_class($extKeyOrIndexer) : gettype($extKeyOrIndexer))
+				.' given.'
+			);
+		}
+		return tx_rnbase::makeInstance($documentClass, $extKey, $cType);
+	}
+
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/tests/class.tx_mksearch_tests_Util.php']) {

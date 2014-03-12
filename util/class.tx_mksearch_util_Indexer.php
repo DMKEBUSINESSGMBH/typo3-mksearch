@@ -79,7 +79,6 @@ class tx_mksearch_util_Indexer {
 	* @param tx_mksearch_interface_IndexerDocument $indexDoc
 	* @param string $prefix
 	* @param array $options
-	*
 	* @return tx_mksearch_interface_IndexerDocument
 	*/
 	public function indexModelByMapping(
@@ -108,7 +107,6 @@ class tx_mksearch_util_Indexer {
 	 * @param array $aMapping
 	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
 	 * @param string $prefix
-	 *
 	 * @return tx_mksearch_interface_IndexerDocument
 	 */
 	public function indexArrayOfModelsByMapping(
@@ -136,7 +134,9 @@ class tx_mksearch_util_Indexer {
 
 	/**
 	 * Adds a element to the queue
+	 *
 	 * @param tx_rnbase_IModel $model
+	 * @param string $tableName
 	 * @return void
 	 */
 	public function addModelToIndex(
@@ -152,7 +152,7 @@ class tx_mksearch_util_Indexer {
 
 	/**
 	 * just a wrapper for addModelToIndex and an array of models
-	 * @param array $rawData
+	 *
 	 * @param array $models
 	 * @param string $tableName
 	 * @return void
@@ -402,15 +402,15 @@ class tx_mksearch_util_Indexer {
 	}
 
 	/**
-	* Liefert einen Wert aus der Konfig
-	* Beispiel: $key = test
-	* Dann wird geprüft ob test eine kommaseparierte Liste liegt
-	* Ist das nicht der Fall wird noch geprüft ob test. ein array ist
-	* @param string $key
-	* @param array $options
-	*
-	* @return array
-	*/
+	 * Liefert einen Wert aus der Konfig
+	 * Beispiel: $key = test
+	 * Dann wird geprüft ob test eine kommaseparierte Liste liegt
+	 * Ist das nicht der Fall wird noch geprüft ob test. ein array ist
+	 *
+	 * @param string $key
+	 * @param array $options
+	 * @return array
+	 */
 	public function getConfigValue($key, $options) {
 		$config = array();
 		if(is_array($options)) {
@@ -425,9 +425,11 @@ class tx_mksearch_util_Indexer {
 	}
 
 	/**
-	* Get's the page of the content element if it's not hidden/deleted
-	* @return array
-	*/
+	 * Get's the page of the content element if it's not hidden/deleted
+	 *
+	 * @param int $pid
+	 * @return array
+	 */
 	public function getPageContent($pid) {
 		//first of all we have to check if the page is not hidden/deleted
 		$sqlOptions = array(

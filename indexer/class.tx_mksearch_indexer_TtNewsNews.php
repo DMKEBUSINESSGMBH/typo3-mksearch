@@ -21,8 +21,7 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
-
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+require_once t3lib_extMgm::extPath('rn_base', 'class.tx_rnbase.php');
 tx_rnbase::load('tx_mksearch_indexer_Base');
 
 /**
@@ -31,23 +30,12 @@ tx_rnbase::load('tx_mksearch_indexer_Base');
  * Ich denke diese Optionen sind überflüssig!
  *
  * Expected option for indexer configuration:
- * * [array] indexedFields (mandatory - set by default):
- *		Define which fields are used for building the index
- *		E.g. $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['indexer']['config']['tt_news.news']['indexedFields'] = array('imagealttext', 'imagetitletext', 'short', 'bodytext', 'keywords');
- * * [int] lang (optional):
- *		$sys_language_uid of the desired language
- * 		E.g. $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['indexer']['config']['tt_news.news']['lang'] = 1;
- * * exclude (optional):
- *		Several black lists: Exclude news from indexing by various conditions
- * 		* [array] categories:
- * 			Exclude single categories from indexing.
- * 		 	E.g. $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['indexer']['config']['tt_news.news']['exclude']['categories'] = array(2, 4);
- * 		* [array] categoryTrees:
- * 			Exclude complete category trees (i. e. categories with all their children) from indexing
- * 		 	E.g. $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['indexer']['config']['tt_news.news']['exclude']['categoryTrees'] = array(3, 5, 8);
  *
+ * @package tx_mksearch
+ * @subpackage tx_mksearch_indexer
  */
-class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base {
+class tx_mksearch_indexer_TtNewsNews
+	extends tx_mksearch_indexer_Base {
 
 	/**
 	 * Return content type identification.
@@ -65,57 +53,80 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base {
 	}
 
 	/**
-	 * get all categories of the news record
-	 * @param tx_rnbase_IModel $oModel
+	 * Get all categories of the news record
+	 *
+	 * @param tx_rnbase_IModel $model
+	 * @return array
 	 *
 	 * @todo support parent categories
 	 */
-	private function getCategories($oModel) {
-		$aOptions = array(
-			'where' => 'tt_news_cat_mm.uid_local=' . $oModel->getUid(),
-			//as there is no tca for tt_news_cat_mm
+	private function getCategories(tx_rnbase_IModel $model) {
+		$options = array(
+			'where' => 'tt_news_cat_mm.uid_local=' . $model->getUid(),
+			// as there is no tca for tt_news_cat_mm
 			'wrapperclass' => 'tx_rnbase_model_Base',
 			'orderby' => 'tt_news_cat_mm.sorting ASC'
 		);
-		$sJoin = ' JOIN tt_news_cat_mm ON tt_news_cat_mm.uid_foreign=tt_news_cat.uid AND tt_news_cat.deleted=0 ';
-		$aFrom = array('tt_news_cat'.$sJoin, 'tt_news_cat');
-		$aRows = tx_rnbase_util_DB::doSelect(
+		$join = ' JOIN tt_news_cat_mm ON tt_news_cat_mm.uid_foreign=tt_news_cat.uid AND tt_news_cat.deleted=0 ';
+		$from = array('tt_news_cat' . $join, 'tt_news_cat');
+		$rows = tx_rnbase_util_DB::doSelect(
 			'tt_news_cat_mm.uid_foreign, tt_news_cat.uid, tt_news_cat.title, tt_news_cat.single_pid',
-			$aFrom, $aOptions
+			$from, $options
 		);
-
-		return $aRows;
+		return $rows;
 	}
 
 	/**
-	 * @see tx_mksearch_indexer_Base::indexData()
+	 * Do the actual indexing for the given model
+	 *
+	 * @param tx_rnbase_IModel $oModel
+	 * @param string $tableName
+	 * @param array $rawData
+	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
+	 * @param array $options
+	 * @return tx_mksearch_interface_IndexerDocument|null
 	 * @todo index FE Group of category
 	 * @todo index target page of category for single view
 	 */
-	public function indexData(tx_rnbase_IModel $oModel, $tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options) {
-		$aCategories = $this->getCategories($oModel);
+	public function indexData(
+		tx_rnbase_IModel $oModel,
+		$tableName, $rawData,
+		tx_mksearch_interface_IndexerDocument $indexDoc,
+		$options
+	) {
+		$categories = $this->getCategories($oModel);
 		// first check if certain categories should be included/excluded
-		if(!$this->checkInOrExcludeOptions($aCategories,$options) || !$this->checkInOrExcludeOptions($aCategories,$options,1))
-			$abort = true;
+		if (
+			!$this->checkInOrExcludeOptions($categories, $options)
+			|| !$this->checkInOrExcludeOptions($categories, $options, 1)
+		) {
+			$abort = TRUE;
+		}
 
 		// Hook to append indexer
-		tx_rnbase_util_Misc::callHook('mksearch','indexer_TtNews_prepareDataBeforeAddFields',
-								array(
-									'rawData' => &$rawData,
-									'options' => $options,
-									'indexDoc' => &$indexDoc,
-									'boost' => &$boost,
-									'abort' => &$abort,
-								), $this);
+		tx_rnbase_util_Misc::callHook(
+			'mksearch',
+			'indexer_TtNews_prepareDataBeforeAddFields',
+			array(
+				'rawData' => &$rawData,
+				'options' => $options,
+				'indexDoc' => &$indexDoc,
+				'boost' => &$boost,
+				'abort' => &$abort,
+			),
+			$this
+		);
 
 		// At least one of the news' categories was found on black list
 		if ($abort) {
 			tx_rnbase::load('tx_rnbase_util_Logger');
 			tx_rnbase_util_Logger::info('News wurde nicht indiziert, weil Kategorie (Include/Exclude) nicht gesetzt ist.', 'mksearch');
-			if($options['deleteOnAbort']) {
-				$indexDoc->setDeleted(true);
+			if ($options['deleteOnAbort']) {
+				$indexDoc->setDeleted(TRUE);
 				return $indexDoc;
-			} else return null;
+			} else {
+				return NULL;
+			}
 		}
 
 		// Instantiate indexer document
@@ -127,11 +138,14 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base {
 		// laut code werden nur die keywords der news mit indiziert.
 		// das hätte sich über die indexedFields konfigurieren lassen!
 		// wieder entfernen!
-		if($options['addPageMetaData']) {
-			$separator = (!empty($options['addPageMetaData.']['separator'])) ? $options['addPageMetaData.']['separator'] : ' ';
-			if(!empty($rawData['keywords'])) {
+		if ($options['addPageMetaData']) {
+			$separator = !empty($options['addPageMetaData.']['separator'])
+				? $options['addPageMetaData.']['separator'] : ' ';
+			if (!empty($rawData['keywords'])) {
 				$keywords = explode($separator, $rawData['keywords']);
-				foreach($keywords as $key => $keyword) $keywords[$key] = trim($keyword);
+				foreach ($keywords as $key => $keyword) {
+					$keywords[$key] = trim($keyword);
+				}
 				$indexDoc->addField('keywords_ms', $keywords, 'keyword');
 			}
 		}
@@ -139,26 +153,32 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base {
 		// Build content
 		$content = '';
 
-		//comma-separated list
-		$bAddFields = false;
-		if(!empty($options['indexedFields'])) $aIndexedFields = explode(',', $options['indexedFields']);
-		//array
+		// comma-separated list
+		$bAddFields = FALSE;
+		if (!empty($options['indexedFields'])) {
+			$aIndexedFields = explode(',', $options['indexedFields']);
+		}
+		// array
 		else{
 			$aIndexedFields = $options['indexedFields.'];
-			$bAddFields = true;//only in this case it is possible to have a mapping for the doc key and record key
+			// only in this case it is possible to have a mapping for the doc key and record key
+			$bAddFields = TRUE;
 		}
 
-		//extra fields to index besides bodytext, timstamp and short?
-		if(is_array($aIndexedFields) && !empty($aIndexedFields)){
-			foreach ($aIndexedFields as $sDocKey => $sRecordKey){
-				if(!empty($rawData[$sRecordKey])){//makes only sense if we have content
+		// extra fields to index besides bodytext, timstamp and short?
+		if (is_array($aIndexedFields) && !empty($aIndexedFields)) {
+			foreach ($aIndexedFields as $sDocKey => $sRecordKey) {
+				// makes only sense if we have content
+				if (!empty($rawData[$sRecordKey])) {
 					$content .= $rawData[$sRecordKey] . ' ';
-					//we add those fields also as own field and not just put it into content
-					if($bAddFields)//do we have a mapping?
+					// we add those fields also as own field and not just put it into content
+					// do we have a mapping?
+					if ($bAddFields) {
 						$indexDoc->addField(
 							$sDocKey,
 							$options['keepHtml'] ? $rawData[$sRecordKey] : tx_mksearch_util_Misc::html2plain($rawData[$sRecordKey])
 						);
+					}
 				}
 			}
 		}
@@ -175,23 +195,28 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base {
 		$bodyText = $options['keepHtml'] ? $bodyText : tx_mksearch_util_Misc::html2plain($bodyText);
 
 		// wir indizieren nicht, wenn kein content für die news da ist.
-		if(empty($bodyText)){
-			$indexDoc->setDeleted(true);
+		if (empty($bodyText)) {
+			$indexDoc->setDeleted(TRUE);
 			return $indexDoc;
 		}
 
 		// Feed the indexer document
 		$indexDoc->setTimestamp($rawData['tstamp']);
 
-		//bei leerem content gibts in Solr Fehler
-		if(!empty($content))
+		// bei leerem content gibts in Solr Fehler
+		if (!empty($content)) {
 			$indexDoc->setContent($content);
+		}
 
-		// You are strongly encouraged to use $indexDoc->getMaxAbstractLength() to limit the length of your abstract!
-		// You are indeed free to ignore that limit if you have good reasons to do so, but always
-		// keep in mind that the abstract data is stored with the indexed document - so think about your data traffic!
+		// You are strongly encouraged to use $indexDoc->getMaxAbstractLength()
+		// to limit the length of your abstract!
+		// You are indeed free to ignore that limit
+		// if you have good reasons to do so, but always
+		// keep in mind that the abstract data is stored with the indexed document
+		// - so think about your data traffic!
 		// You may define the limit for your content type centrally with the key
-		// "abstractMaxLength_[your extkey]_[your content type]" as defined at $indexDoc constructor
+		// "abstractMaxLength_[your extkey]_[your content type]"
+		// as defined at $indexDoc constructor
 		$sAbstract = empty($rawData['short']) ? $bodyText : $rawData['short'];
 		$indexDoc->setAbstract(
 			$options['keepHtml'] ? $sAbstract : tx_mksearch_util_Misc::html2plain($sAbstract),
@@ -199,54 +224,21 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base {
 		);
 
 		// Kategorieen hinzufügen, wenn Option gesetzt ist
-		$this->addCategoryData($indexDoc, $aCategories, $options);
+		$this->addCategoryData($indexDoc, $categories, $options);
 
-		// Indexing of categories disabled for now, as "localisation" of tt_news categories REALLY sucks...
-//		$searcher = tx_rnbase_util_SearchBase::getInstance('tx_rnbase_util_SearchGeneric');
-//		$fields = array();
-//		$options = array(
-//						'what' => 'NCMM.uid',
-//						'searchdef' => array(
-//							'basetable' => 'tt_news_cat_mm',
-//							'basetablealias' => 'NCMM',
-//							'usealias' => 1,
-//						)
-//					);
-//		$categories = $searcher->search($fields, $options);
-//
-//		$fields = array();
-//		$options = array(
-//						'what' => 'CAT.uid',
-//						'searchdef' => array(
-//							'basetable' => 'tt_news_cat',
-//							'basetablealias' => 'CAT',
-//							'usealias' => 1,
-//						)
-//					);
-//		$config = array(
-//						'keyField' => 'uid',
-//						'parentField' => 'parent_category',
-//					);
-//
-		// Additional data
-		$addData = array();
-//
-//		foreach ($categories as $c) {
-//			$config['startingPoint'] = $c['uid'];
-//			$parents = tx_mksearch_util_Tree::getAncestors($fields, $options, $config);
-//			foreach (array_reverse($parents) as $p)
-//				// Localise records - is this even possible within the first db query cycle (via adjustment of $options)?
-//				;
-//			$parentPath = '';
-//		}
+		// Indexing of categories removed for now,
+		// as 'localisation' of tt_news categories REALLY sucks ...
+		// see Commit on 12.03.2014 from mwagner
 
-		$offset = 0; // TODO: einen offset aus der Config lesen
-		$indexDoc->addField('datetime_dt',
-							tx_mksearch_util_Misc::getISODateFromTimestamp($rawData['datetime'], $offset),
-							'keyword', 1.0, 'date');
+		// TODO: einen offset aus der Config lesen
+		$offset = 0;
+		$indexDoc->addField(
+			'datetime_dt',
+			tx_mksearch_util_Misc::getISODateFromTimestamp($rawData['datetime'], $offset),
+			'keyword', 1.0, 'date'
+		);
 
 		// Index datetime of news item so news can be filtered by datetime
-//		$indexDoc->addField('datetime', $rawData['datetime'], 'keyword');
 		$indexDoc->addField('news_text_s', $bodyText, 'keyword');
 		$indexDoc->addField('news_text_t', $bodyText, 'keyword');
 
@@ -255,27 +247,33 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base {
 
 	/**
 	 * check if related data has changed
-	 * @param string $sTableName
-	 * @param array $aRawData
-	 * @param tx_mksearch_interface_IndexerDocument $oIndexDoc
-	 * @param array $aOptions
 	 *
+	 * @param string $tableName
+	 * @param array $rawData
+	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
+	 * @param array $options
 	 * @return bool
 	 */
-	protected function stopIndexing($tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options) {
-		if($tableName == 'tt_news_cat') {
+	protected function stopIndexing(
+		$tableName, $rawData,
+		tx_mksearch_interface_IndexerDocument $indexDoc,
+		$options
+	) {
+		if ($tableName == 'tt_news_cat') {
 			// Eine Kategorie wurde verändert
 			// Alle News müssen neu indiziert werden.
 			$this->handleCategoryChanged($rawData);
-			return true;
+			return TRUE;
 		}
-		//else
+		// else
 		return parent::stopIndexing($tableName, $rawData, $indexDoc, $options);
 	}
 
 	/**
 	 * Handle data change for category. All connected news should be updated
+	 *
 	 * @param array $catRecord
+	 * @return void
 	 */
 	private function handleCategoryChanged($catRecord) {
 		$catUid = $catRecord['uid'];
@@ -286,7 +284,7 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base {
 		$rows = tx_rnbase_util_DB::doSelect('tt_news.uid AS uid', $from, $options);
 		// Alle gefundenen News für die Neuindizierung anmelden.
 		$srv = tx_mksearch_util_ServiceRegistry::getIntIndexService();
-		foreach($rows As $row) {
+		foreach ($rows As $row) {
 			$srv->addRecordToIndex('tt_news', $row['uid']);
 		}
 	}
@@ -294,28 +292,41 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base {
 	/**
 	 * Returns the model to be indexed
 	 *
-	 * @param array $aRawData
-	 *
+	 * @param array $rawData
 	 * @return tx_mksearch_model_irfaq_Question
 	 */
-	protected function createModel(array $aRawData) {
-		return tx_rnbase::makeInstance('tx_rnbase_model_Base', $aRawData);
+	protected function createModel(array $rawData) {
+		return tx_rnbase::makeInstance('tx_rnbase_model_Base', $rawData);
 	}
 
 	/**
 	 * Adds Categories
-	 * @param $indexDoc
-	 * @param $aCategories
+	 *
+	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
+	 * @param array $categories
+	 * @param array $options
+	 * @return void
 	 */
-	private function addCategoryData($indexDoc, $aCategories, $aOptions) {
-		if(empty($aOptions['addCategoryData']) || empty($aCategories)) return;
-
-		foreach($aCategories as $categorie) {
-			$aCategoryUid[] = $categorie->record['uid_foreign'];
-			$aCategoryTitle[] = $categorie->record['title'];
-			if(!$iCategorySinglePid) $iCategorySinglePid = intval($categorie->record['single_pid']);
+	private function addCategoryData(
+		tx_mksearch_interface_IndexerDocument $indexDoc,
+		$categories, $options
+	) {
+		if (
+			empty($options['addCategoryData'])
+			|| empty($categories)) {
+			return;
 		}
-		if(!$iCategorySinglePid) $iCategorySinglePid = intval($aOptions['defaultSinglePid']);
+
+		foreach ($categories as $category) {
+			$aCategoryUid[] = $category->record['uid_foreign'];
+			$aCategoryTitle[] = $category->record['title'];
+			if (!$iCategorySinglePid) {
+				$iCategorySinglePid = (int) $category->record['single_pid'];
+			}
+		}
+		if (!$iCategorySinglePid) {
+			$iCategorySinglePid = (int) $options['defaultSinglePid'];
+		}
 
 		$indexDoc->addField('categories_mi', $aCategoryUid);
 		$indexDoc->addField('categoriesTitle_ms', $aCategoryTitle);
@@ -372,9 +383,9 @@ addPageMetaData.separator = ,
 #	image_s = image
 # }
 ### delete from or abort indexing for the record if isIndexableRecord or no record?
- deleteIfNotIndexable = 0
+deleteIfNotIndexable = 0
 ### delete from indexing or abort indexing for the record?
- deleteOnAbort = 0
+deleteOnAbort = 0
 #
 # Sometimes news with a certain category have specially to
 # be in- or excluded
@@ -402,6 +413,6 @@ CONF;
 	}
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_TtNewsNews.php'])	{
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_TtNewsNews.php']) {
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_TtNewsNews.php']);
 }
