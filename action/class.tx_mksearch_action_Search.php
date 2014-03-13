@@ -46,15 +46,21 @@ class tx_mksearch_action_Search extends tx_rnbase_action_BaseIOC {
 
 		$confId = $this->getConfId();
 		tx_mksearch_action_SearchSolr::handleSoftLink($parameters, $configurations, $confId);
+
 		$filter = tx_rnbase_filter_BaseFilter::createFilter($parameters, $configurations, $viewData, $confId);
+
+		//manchmal will man nur ein Suchformular auf jeder Seite im Header einbinden
+		//dieses soll dann aber nur auf eine Ergebnisseite verweisen ohne
+		//selbst zu suchen
+		if($configurations->get($confId.'nosearch')) return null;
+
 		$fields = array();
 		$options = array();
 		$items = array();
 		if($filter->init($fields, $options)) {
 			// @TODO: Adjust Pagebrowser
 //			$this->handlePageBrowser($parameters,$configurations, $viewData, $fields, $options);
-			$indexUid = $configurations->get('usedIndex');
-			$index = tx_mksearch_util_ServiceRegistry::getIntIndexService()->get($indexUid);
+			$index = tx_mksearch_action_SearchSolr::findSearchIndex($configurations, $confId);
 			if(!$index->isValid())
 				throw new Exception('Configured search index not found!');
 
@@ -89,6 +95,7 @@ class tx_mksearch_action_Search extends tx_rnbase_action_BaseIOC {
 			$viewdata->offsetSet('pagebrowser', $pageBrowser);
 		}
 	}
+
 
 	function getTemplateName() { return 'searchlucene';}
 	function getViewClassName() { return 'tx_mksearch_view_Search';}
