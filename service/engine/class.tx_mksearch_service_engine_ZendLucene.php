@@ -73,6 +73,8 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 	public function __construct() {
     	// Explicitely include zend path if necessary
     	$zendPath = tx_rnbase_configurations::getExtensionCfgValue('mksearch', 'zendPath');
+    	$zendPath = t3lib_div::getFileAbsFileName($zendPath);
+
     	$iniPath = get_include_path();
     	if (strpos($zendPath, $iniPath) === false) {
     		set_include_path($iniPath . PATH_SEPARATOR . $zendPath);
