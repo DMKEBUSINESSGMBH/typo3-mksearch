@@ -251,7 +251,12 @@ class tx_mksearch_tests_indexer_Base_testcase extends tx_phpunit_testcase {
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$indexDocData = $indexer->prepareSearchData('doesn_t_matter', $aRawData, $indexDoc, array())->getData();
 
-		$this->assertEmpty($indexDocData);
+		$this->assertEquals(
+			1, count($indexDocData), 'es sollte nur 1 Feld (content_ident_s) indiziert werden.'
+		);
+		$this->assertArrayHasKey(
+			'content_ident_s', $indexDocData, 'content_ident_s nicht enthalten.'
+		);
 	}
 
 	/**
