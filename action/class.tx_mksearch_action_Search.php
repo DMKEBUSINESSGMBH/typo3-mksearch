@@ -2,7 +2,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2009-2013 das Medienkombinat
+ *  (c) 2009-2014 DMK E-BUSINESS GmbH
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -48,7 +48,6 @@ class tx_mksearch_action_Search extends tx_rnbase_action_BaseIOC {
 		tx_mksearch_action_SearchSolr::handleSoftLink($parameters, $configurations, $confId);
 
 		$filter = tx_rnbase_filter_BaseFilter::createFilter($parameters, $configurations, $viewData, $confId);
-
 		//manchmal will man nur ein Suchformular auf jeder Seite im Header einbinden
 		//dieses soll dann aber nur auf eine Ergebnisseite verweisen ohne
 		//selbst zu suchen

@@ -3,7 +3,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2009 das Medienkombinat
+ *  (c) 2009-2014 DMK E-BUSINESS GmbH
  *  All rights reserved
  *
  * This library is free software; you can redistribute it and/or

@@ -40,6 +40,8 @@ tx_rnbase::load('tx_mksearch_service_engine_lucene_DataTypeMapper');
  */
 class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_mksearch_interface_SearchEngine {
 
+	const FE_GROUP_FIELD = 'fe_group_mi';
+
 	/**
 	 * Index used for searching and indexing
 	 *
@@ -299,7 +301,7 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 			if (array_key_exists('fe_groups', $options)) {
 				// Explicitely add 0 to fe_groups to enable searches of anonymous users
 				if (!in_array(0, $options['fe_groups'])) $options['fe_groups'][] = 0;
-				foreach ($options['fe_groups'] as &$f) $f = 'fe_groups:'.$f;
+				foreach ($options['fe_groups'] as &$f) $f = self::FE_GROUP_FIELD.':'.$f;
 				$queryString = '(' . implode(' OR ', $options['fe_groups']) . ') AND (' . $fields['term'] . ')';
 			}
 			else $queryString = $fields['term'];
@@ -321,7 +323,7 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 				$fields = array('fe_groups_aware' =>
 					array(
 						array(
-							'term' => array('fe_groups' => $fe_groups),
+							'term' => array(self::FE_GROUP_FIELD => $fe_groups),
 							'sign' => true
 						),
 						array(
