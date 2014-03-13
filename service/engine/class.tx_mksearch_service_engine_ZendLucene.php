@@ -28,6 +28,8 @@ tx_rnbase::load('tx_mksearch_interface_SearchEngine');
 tx_rnbase::load('tx_rnbase_configurations');
 tx_rnbase::load('tx_rnbase_util_Misc');
 tx_rnbase::load('tx_rnbase_util_Logger');
+tx_rnbase::load('tx_mksearch_service_engine_lucene_DataTypeMapper');
+
 
 /**
  * Service "ZendLucene search engine" for the "mksearch" extension.
@@ -57,6 +59,9 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 	 * @var tx_mksearch_model_internal_Index
 	 */
 	private $indexModel;
+
+	/* @var tx_mksearch_service_engine_lucene_DataTypeMapper */
+	private $dataTypeMapper;
 
 	/**
 	 * Constructor
@@ -91,6 +96,20 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
     	Zend_Search_Lucene_Analysis_Analyzer::setDefault(
     		t3lib_div::makeInstance('Zend_Search_Lucene_Analysis_Analyzer_Common_Utf8Num_CaseInsensitive')
     	);
+	}
+	/**
+	 * @return tx_mksearch_service_engine_lucene_DataTypeMapper
+	 */
+	protected function getDataTypeMapper() {
+		if(!is_object($this->dataTypeMapper)) {
+			// Der Mapper sollte noch mit einer Config gefüttert werden, aus der er
+			// weitere Informationen zu den gewünschten Typen gesetzt bekommt. Das wäre
+			// dann eine Art schema.xml für Lucene...
+			$data = $this->indexModel->getIndexConfig();
+			$mapperCfg = isset($data['lucene.']['schema.']) ? $data['lucene.']['schema.'] : array();
+			$this->dataTypeMapper = tx_rnbase::makeInstance('tx_mksearch_service_engine_lucene_DataTypeMapper', $mapperCfg);
+		}
+		return $this->dataTypeMapper;
 	}
 	public function getFieldNames($indexed = false) {
 		$ret = array();
@@ -530,9 +549,10 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 			$value = implode(' ', $value);
 		}
 //		$boost = is_array($mixedValue) ? $valueArr['boost'] : 1.0;
-		// TODO: Der Type muss hier raus. Das sollte über die Indexer-Config gesetzt werden.
-
-		switch ($field->getStorageType()) {
+		// Den Type über den DataTypeMapper ermitteln. Dieser ersetzt die schema.xml von Solr...
+		$storageType = $this->getDataTypeMapper()->getDataType($key);
+		// switch ($field->getStorageType()) {
+		switch ($storageType) {
 			case 'text':
 				$doc->addField(Zend_Search_Lucene_Field::Text($key, $value, $field->getEncoding()));
 				break;
@@ -582,7 +602,6 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 		foreach ($data as $key=>$field) {
 			$this->addFieldToIndexDoc($key, $field, $zlDoc);
 		}
-
 		// Additional data
 		$data = $doc->getData();
 		// Hook to manipulate data

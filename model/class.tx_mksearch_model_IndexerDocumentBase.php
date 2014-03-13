@@ -133,7 +133,7 @@ class tx_mksearch_model_IndexerDocumentBase implements tx_mksearch_interface_Ind
 	 *
 	 * @param string	$key Field name
 	 * @param string	$data
-	 * @param string	$storageOptionsOrType -> @see tx_mksearch_model_IndexerFieldBase::$_storageOptions and tx_mksearch_model_IndexerFieldBase::$_storageType
+	 * @param string	$storageOptionsOrType don't use id anymore! -> @see tx_mksearch_model_IndexerFieldBase::$_storageOptions and tx_mksearch_model_IndexerFieldBase::$_storageType
 	 * @param float		$boost
 	 * @param string	$dataType
 	 * @param string	$encoding=null

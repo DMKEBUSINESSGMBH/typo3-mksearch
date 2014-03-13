@@ -127,6 +127,7 @@ class tx_mksearch_model_internal_Index extends tx_rnbase_model_base {
 	/**
 	 * Returns the confiration for this index
 	 * @param tx_mksearch_model_internal_Index $oIndex
+	 * @return array configuration array
 	 */
 	public function getIndexConfig() {
 		tx_rnbase::load('tx_mksearch_util_Misc');

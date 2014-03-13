@@ -39,7 +39,7 @@ class tx_mksearch_model_IndexerFieldBase implements tx_mksearch_interface_Indexe
 
 	/**
 	 * Field boost
-	 * 
+	 *
 	 * If self::$_value is an array, self::$_boost may be a scalar
 	 * (meaning same boost for all values) or an array of the same size
 	 * like self::$_value.
@@ -47,7 +47,7 @@ class tx_mksearch_model_IndexerFieldBase implements tx_mksearch_interface_Indexe
 	 * @var mixed
 	 */
 	private $_boost;
-	
+
 	/**
 	 * Default storage options
 	 *
@@ -56,7 +56,7 @@ class tx_mksearch_model_IndexerFieldBase implements tx_mksearch_interface_Indexe
 	 * * indexed (bool):				Field is to be indexed, so that it may be searched on.
 	 * * tokenized (bool):				Field should be tokenized as text prior to indexing.
 	 * * binary (bool):					Field is stored as binary.
-	 * 
+	 *
 	 * @var array
 	 */
 	private $defaultStorageOptions = array(
@@ -65,18 +65,18 @@ class tx_mksearch_model_IndexerFieldBase implements tx_mksearch_interface_Indexe
 										'tokenized'	=> true,
 										'binary'	=> false,
 									);
-	
+
 	/**
 	 * Storage options
-	 * 
+	 *
 	 * @var array
 	 * @see self::$defaultStorageOptions
 	 */
 	private $_storageOptions = array();
-	
+
 	/**
 	 * Define a storage type which as a shortcut replaces a fixed set of storage options and data type.
-	 * 
+	 *
 	 * Alternatively to giving a complete array of storage options in self::$_storageOptions,
 	 * a few textual shortcuts can be used instead which shall be mapped to the respective
 	 * self::$_storageOptions by the concrete implementation.
@@ -101,14 +101,14 @@ class tx_mksearch_model_IndexerFieldBase implements tx_mksearch_interface_Indexe
      * 					that is not tokenized, but is indexed and stored.
 	 *
 	 * @var string
-	 */						
-	private $_storageType = null;				
+	 */
+	private $_storageType = null;
 
 	/**
 	 * Data type of the given field
-	 * 
+	 *
 	 * Defines the basic data type of the payload.
-	 * 
+	 *
 	 * If a concrete implementation uses data types at all,
 	 * the following values shall be respected:
 	 * * int
@@ -121,15 +121,15 @@ class tx_mksearch_model_IndexerFieldBase implements tx_mksearch_interface_Indexe
 	 * * date		-> DateTime object
 	 * * datetime	-> DateTime object
 	 * * time		-> DateTime object
-	 * 
+	 *
 	 * As each item of array typed fields have to be of the same scalar type,
 	 * just give this scalar type - "array" is recognized implicitely from
 	 * the field value.
-	 * 
+	 *
 	 * @var string
 	 */
 	private $_dataType = null;
-	
+
 	/**
 	 * Charset encoding
 	 *
@@ -139,7 +139,7 @@ class tx_mksearch_model_IndexerFieldBase implements tx_mksearch_interface_Indexe
 
 	/**
 	 * Split storage option / storage type
-	 * 
+	 *
 	 * @param mixed	$storageOptionsOrType
 	 */
 	private function processStorageOptionsOrType($storageOptionsOrType) {
@@ -152,22 +152,22 @@ class tx_mksearch_model_IndexerFieldBase implements tx_mksearch_interface_Indexe
 				// Nothing to do for text & tinytext - default options are just right.
 				case 'text':
 				case 'tinytext': break;
-				
+
 				case 'keyword':
 				case 'uid':
 					$this->updateStorageOption('tokenized', false);
 					break;
-					
+
 				case 'unindexed':
 				case 'binary':
 					$this->updateStorageOption('indexed', false);
 					$this->updateStorageOption('tokenized', false);
 					break;
-					
+
 				case 'unstored':
 					$this->updateStorageOption('stored', false);
 					break;
-					
+
 				default:
 					;
 			}
@@ -177,54 +177,55 @@ class tx_mksearch_model_IndexerFieldBase implements tx_mksearch_interface_Indexe
 					case 'text':
 					case 'unstored':
 						$this->updateDataType('text'); break;
-						
+
 					case 'keyword':
 					case 'tinytext':
 					case 'unindexed':
 						$this->updateDataType('string'); break;
-						
+
 					case 'binary':
 						$this->updateDataType('blob'); break;
-					
+
 					case 'uid':
 						$this->updateDataType('int'); break;
-						
+
 					default:
 						;
 				}
 			}
 		}
 		// No short cut: Just normal storage options
-		else $this->updateStorageOptions($storageOptionsOrType); 
+		else $this->updateStorageOptions($storageOptionsOrType);
 	}
-	
+
 	/**
 	 * Constructor
+	 * $storageOptionsOrType should be turned to deprecated.
 	 *
 	 * @param mixed		$value					Either a scalar or an array value. Possibly not supported by every implementation!
-	 * @param mixed		$storageOptionsOrType	Array (@see self::$_storageOptions) OR short cut string (@see self::$_storageType) 
+	 * @param mixed		$storageOptionsOrType	Array (@see self::$_storageOptions) OR short cut string (@see self::$_storageType)
 	 * @param string	$boost					Boost of that $value
 	 * @param string	$dataType				Data type of $value (@see self::$_dataType)
 	 * @param string	$encoding
-	 * 
+	 *
 	 */
 	public function __construct($value, $storageOptionsOrType, $boost=1.0, $dataType=null, $encoding=null) {
-		$this->processStorageOptionsOrType($storageOptionsOrType);
-		
 		$this->updateDataType($dataType);
+		$this->processStorageOptionsOrType($storageOptionsOrType);
+
 		$this->updateEncoding($encoding);
 		// Call this one at last to enable deriving classes
 		// to finally adjust options dependent on $value
 		$this->updateValue($value, $boost);
 	}
-	
+
 	/**
 	 * Stellt sicher, das keine Integer Werte gesetzt werden,
 	 * da diese Warnings verursachen.
 	 * (htmlspecialchars in Apache_Solr_Service::_documentToXmlFragment())
-	 * 
+	 *
 	 * @param mixed 	$value
-	 * @return mixed 	
+	 * @return mixed
 	 */
 	private function fixValue($value){
 		if(is_array($value)){
@@ -241,7 +242,7 @@ class tx_mksearch_model_IndexerFieldBase implements tx_mksearch_interface_Indexe
 //		}
 		return $value;
 	}
-	
+
 	/**
 	 * Return the field's value
 	 *
@@ -253,17 +254,17 @@ class tx_mksearch_model_IndexerFieldBase implements tx_mksearch_interface_Indexe
 	public function setValue($value) {
 		$this->_value = $this->fixValue($value);
 	}
-	
+
 	/**
 	 * Return the field's boost
-	 * 
+	 *
 	 * Returned value has / should always have the cardinality like self::$_value.
 	 *
 	 * @return mixed
 	 */
 	public function getBoost() {
 		$val = $this->getValue();
-		
+
 		// Both value and boost are scalar
 		if (!is_array($val) && !is_array($this->_boost))
 			return $this->_boost;
@@ -278,13 +279,13 @@ class tx_mksearch_model_IndexerFieldBase implements tx_mksearch_interface_Indexe
 		// Error: value is scalar, but boost is array? Fallback to first boost value
 		if (!is_array($val) && is_array($this->_boost))
 			return $this->_boost[0];
-		
+
 		// else
 		// Both value and boost are arrays
 		// @todo: Check if $this->_value and $this->_boost have the same size
 		return $this->_boost;
 	}
-	
+
 	/**
 	 * Update the field's value
 	 *
@@ -295,7 +296,7 @@ class tx_mksearch_model_IndexerFieldBase implements tx_mksearch_interface_Indexe
 		$this->_value = $this->fixValue($value);
 		$this->_boost = $boost;
 	}
-	
+
 	/**
 	 * Return storage options
 	 *
@@ -303,10 +304,10 @@ class tx_mksearch_model_IndexerFieldBase implements tx_mksearch_interface_Indexe
 	 * @see self::$_storageOptions
 	 */
 	public function getStorageOptions() {return $this->_storageOptions;}
-	
+
 	/**
 	 * Update storage options
-	 * 
+	 *
 	 * Given storage options are merged with self::$defaultStorageOptions.
 	 * Storage type is not touched, so storage options can be set additionally
 	 * after having defined a storage type.
@@ -317,7 +318,7 @@ class tx_mksearch_model_IndexerFieldBase implements tx_mksearch_interface_Indexe
 	public function updateStorageOptions($storageOptions) {
 		$this->_storageOptions = array_merge($this->defaultStorageOptions, $storageOptions);
 	}
-	
+
 	/**
 	 * Return requested storage option or null, if option does not exist
 	 *
@@ -330,10 +331,10 @@ class tx_mksearch_model_IndexerFieldBase implements tx_mksearch_interface_Indexe
 			$this->_storageOptions[$key] :
 			null;
 	}
-	
+
 	/**
 	 * Update storage option
-	 * 
+	 *
 	 * @param string $key
 	 * @param mixed $storageOption
 	 * @see self::$_storageOptions
@@ -341,7 +342,7 @@ class tx_mksearch_model_IndexerFieldBase implements tx_mksearch_interface_Indexe
 	public function updateStorageOption($key, $storageOption) {
 		$this->_storageOptions[$key] = $storageOption;
 	}
-	
+
 	/**
 	 * Return storage type (shortcut)
 	 *
@@ -349,39 +350,39 @@ class tx_mksearch_model_IndexerFieldBase implements tx_mksearch_interface_Indexe
 	 * @see self::$_storageType
 	 */
 	public function getStorageType() {return $this->_storageType;}
-	
+
 	/**
 	 * Update storage type (shortcut)
-	 * 
+	 *
 	 * Storage options are set automagically, overwriting still existing ones.
 	 * If not still explicitely defined, data type is also set.
 	 *
 	 * @param mixed		$type
 	 * @see self::$_storageType
 	 */
-	public function updateStorageType($type) {$this->processStorageOptionsOrType($type);} 
-	
+	public function updateStorageType($type) {$this->processStorageOptionsOrType($type);}
+
 	/**
 	 * Return data type
 	 *
 	 * @return string
 	 */
 	public function getDataType() {return $this->_dataType;}
-	
+
 	/**
 	 * Update data type
 	 *
 	 * @param string $dataType
 	 */
 	public function updateDataType($dataType) {$this->_dataType = $dataType;}
-	
+
 	/**
 	 * Return encoding
 	 *
 	 * @return string
 	 */
 	public function getEncoding() {return $this->_encoding;}
-	
+
 	/**
 	 * Update encoding
 	 *
