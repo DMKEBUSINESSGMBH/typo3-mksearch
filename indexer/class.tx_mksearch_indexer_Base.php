@@ -510,6 +510,8 @@ CONFIG;
 	 * @return string with list of pids
 	 */
 	protected function _getPidList($pidList, $recursive=0) {
+		// @TODO: BUG in rn_base. dort sollte sichergestellt werden,
+		//        das die TSFE existiert.
 		tx_rnbase_util_Misc::prepareTSFE();
 		return tx_rnbase_util_Misc::getPidList($pidList, $recursive);
 	}
