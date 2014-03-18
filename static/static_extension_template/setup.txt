@@ -164,6 +164,7 @@ plugin.tx_mksearch {
 		listinfo.llkeyEmpty = label_search_noresultsfound
 		
 		# Only the searchform was displayed, no search was done
+		# FormOnly funktioniert nicht!!! Stattdessen nosearch = 0 bzw 1 verwenden
 		formOnly = 0
 
 		# Konfig für die Darstellung des Treffers über den allgemeinen Marker
