@@ -417,27 +417,59 @@ plugin.tx_mksearch {
 				reset.useKeepVars = 1
 				reset.useKeepVars.deny = fq
 				
-				### bei gruppierter facettierung notwendig (@TODO: groupedfaccets in mksearch integrieren)
+				### bei gruppierter facettierung notwendig
 				add = 1
 				add {
 				}
 				remove = 1
 				remove {
 				}
-			}
-			
-			active = TEXT
-			active.value = checked="checked"
-			active.fieldRequired = active 
+			} 
 		}
+		
 		groupedfacet {
-			linkMethod = generic
-			links {
-				### Einschränkung rückgängig machen
-				reset.useKeepVars = 1
-				reset.useKeepVars.deny = fq
-			}
 			hit = < plugin.tx_mksearch.searchsolr.facet
+			hit {
+				dataMap {
+					### wir mappen das feld und ersetzen den punkt durch einen unterstrich
+					### das ist beispielsweise für den case label notwendig
+					dotValueFields = label
+				}
+			
+				active = TEXT
+				active.value = checked="checked"
+				active.fieldRequired = active
+			
+				count.noTrimWrap = | (|)|
+				count.required = 1
+				
+				dclabel = CASE
+				dclabel {
+					### im feld _label ist der wert enthalten, wo der punkt
+					### durch einen unterstrich ersetzt wurde
+					### core.tt_content > core_tt_content
+					key.field = _label
+					core_tt_content = TEXT
+					core_tt_content.value = Inhalte
+					tt_news_news = TEXT
+					tt_news_news.value = News
+					core_file = TEXT
+					core_file.value = Multimedia-Objekte
+					default = TEXT
+					default.field = label
+				}
+			}
+			### die Gruppenbezeichnung
+			dcfield = CASE
+			dcfield {
+				key.field = field
+				content_ident_s = TEXT
+				content_ident_s.value = Datentypen
+				mkkeywords_tag_names_ms = TEXT
+				mkkeywords_tag_names_ms.value = Schlagworte
+				default = TEXT
+				default.value.field = field
+			}
 		}
 
 		### aktueller Suchbegriff

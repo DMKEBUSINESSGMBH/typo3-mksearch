@@ -71,6 +71,13 @@ class tx_mksearch_marker_Facet extends tx_mksearch_marker_SearchResultSimple {
 			// wir setzen den wert direkt fertig für den filter zusammen
 			$item->record['form_value'] = $field . ':' . $label;
 
+			// wir setzen den wert direkt fertig für den filter zusammen
+			$formId  = $configurations->getQualifier();
+			$formId .= '-' . $field;
+			$formId .= '-' . $label;
+			$formId = preg_replace('/[^\da-z-]/i', '', strtolower($formId));
+			$item->record['form_id'] = $formId;
+
 			// den status setzen
 			$params = $configurations->getParameters()->get('fq');
 			$params = empty($params[$field]) ? array() : $params[$field];
