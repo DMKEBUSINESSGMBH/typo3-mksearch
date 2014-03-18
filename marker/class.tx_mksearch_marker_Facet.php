@@ -42,6 +42,43 @@ tx_rnbase::load('tx_mksearch_marker_SearchResultSimple');
 class tx_mksearch_marker_Facet extends tx_mksearch_marker_SearchResultSimple {
 
 	/**
+	 * Führt vor dem parsen Änderungen am Model durch.
+	 *
+	 * @param tx_rnbase_model_base &$item
+	 * @param tx_rnbase_configurations &$configurations
+	 * @param string &$confId
+	 * @return void
+	 */
+	protected function prepareItem(
+			tx_rnbase_model_base &$item,
+			tx_rnbase_configurations &$configurations,
+			$confId
+	) {
+		parent::prepareItem($item, $configurations, $confId);
+
+		// wir setzen automatisch den status und den formularnamen!
+		// aber nur, wenn wir ein label (facettenwert) haben
+		$label = $item->getLabel();
+		if ($label) {
+			$field = $item->getField();
+			// den Formularnamen setzen
+			$formName  = $configurations->getQualifier();
+			$formName .= '[fq]';
+			$formName .= '[' . $field . ']';
+			$formName .= '[' . $label . ']';
+			$item->record['form_name'] = $formName;
+
+			// wir setzen den wert direkt fertig für den filter zusammen
+			$item->record['form_value'] = $field . ':' . $label;
+
+			// den status setzen
+			$params = $configurations->getParameters()->get('fq');
+			$params = empty($params[$field]) ? array() : $params[$field];
+			$item->record['active'] = empty($params[$label]) ? 0 : 1;
+		}
+	}
+
+	/**
 	 * Links vorbereiten
 	 *
 	 * @param tx_a4base_models_organisation $item

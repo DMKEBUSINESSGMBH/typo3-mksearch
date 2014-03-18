@@ -160,6 +160,18 @@ class tx_mksearch_tests_util_Misc_testcase extends tx_phpunit_testcase {
 			array('\'test\'+-&|!(){}\[]^"~+*?<>:', 'test'),
 		);
 	}
+	/**
+	 * @dataProvider sanitizeFqProvider
+	 */
+	public function testSanitizeFq($sTerm, $sExpected) {
+		$this->assertEquals($sExpected, tx_mksearch_util_Misc::sanitizeFq($sTerm));
+	}
+	public function sanitizeFqProvider() {
+		return array(
+			__LINE__ => array('test', 'test'),
+			__LINE__ => array('core.pages', 'core.pages'),
+		);
+	}
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/tests/util/class.tx_mksearch_tests_util_Misc_testcase.php']) {

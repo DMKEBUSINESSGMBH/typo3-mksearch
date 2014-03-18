@@ -153,6 +153,22 @@ class tx_mksearch_util_Misc {
 	}
 
 	/**
+	 * Sanitizes the given term and removes all unwanted
+	 * chars. These are for example some for the solr
+	 * search syntax.
+	 *
+	 * does the same as sanitizeTerm, but dows not escape
+	 * , . / # ' % < >
+	 *
+	 * @param string $sTerm
+	 * @return string
+	 * @see Apache_Solr_Service::escape()
+	 */
+	public static function sanitizeFq($value) {
+		return preg_replace('/(\+|-|&&|\|\||!|\(|\)|\{|}|\[|]|\^|"|~|\*|\?|:|\\\)/', '', $value);
+	}
+
+	/**
 	 * IP-based Access restrictions
 	 *
 	 * @param 	string 		$remoteAddress

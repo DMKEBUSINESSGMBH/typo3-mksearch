@@ -40,7 +40,7 @@ class tx_mksearch_util_SolrResponseProcessor {
 	 */
 	private $configurations = null;
 	private $confId = 'responseProcessor.';
-	
+
 	/**
 	 *
 	 * Enter description here ...
@@ -52,7 +52,7 @@ class tx_mksearch_util_SolrResponseProcessor {
 	 */
 	public static function processSolrResult(array &$result, $options, &$configurations, $confId) {
 		static $instance = null;
-		
+
 		if(
 			!array_key_exists('response', $result)
 		|| !($result['response'] instanceof Apache_Solr_Response)
@@ -95,7 +95,7 @@ class tx_mksearch_util_SolrResponseProcessor {
 		$result['suggestions'] = $this->processSuggestions($response);
 		return $result;
 	}
-	
+
 	/**
 	 * @TODO: sollte es hierfür nicht auch eine klasse wie tx_mksearch_util_HitBuilder geben?
 	 *
@@ -104,14 +104,14 @@ class tx_mksearch_util_SolrResponseProcessor {
 	 */
 	public function processHits(Apache_Solr_Response &$response, array $options, array $hits = array()) {
 		$confId = $this->getConfId().'hit.';
-		
+
 		//highlighting einfügen
 		$highlights = $this->getHighlighting($response);
-		
+
 		// hier wird nur highlighting gesetzt
 		// wenn keins existiert brauchen wir nichts machen
 		if (empty($highlights)) return $hits;
-		
+
 		// Gibt es docs?
 		// Im Fall eines Autocompletes, haben wir keinen Responce, nur Suggestions!
 		if($response->response->docs) {
@@ -136,7 +136,7 @@ class tx_mksearch_util_SolrResponseProcessor {
 						$overrideWithHl = $this->getConfigurations()->get($confId.'overrideWithHl');
 						$overrideWithHl = $overrideWithHl ? $overrideWithHl : (isset($options['overrideWithHl']) && $options['overrideWithHl']);
 						$highlightField = ($overrideWithHl) ? $docField : $docField.'_hl';
-						
+
 						$hit->record[$highlightField] = $highlightValue;
 					}
 				}
@@ -200,11 +200,11 @@ class tx_mksearch_util_SolrResponseProcessor {
 				}
 			}
 		}
-		
+
 		return $aHighlights;
 	}
-	
-	
+
+
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_SolrResponseProcessor.php'])	{

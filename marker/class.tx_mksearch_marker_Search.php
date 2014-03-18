@@ -71,6 +71,7 @@ class tx_mksearch_marker_Search extends tx_rnbase_util_SimpleMarker {
 	 * @return void
 	 */
 	protected function prepareHit($template, &$item, &$formatter, $confId, $marker) {
+		$this->prepareItem($item, $formatter->getConfigurations(), $confId);
 		$configurations = $formatter->getConfigurations();
 		$glue = $configurations->get($confId.'multiValuedGlue');
 		$removeEmptyValues = $configurations->getBool($confId.'multiValuedGlue.removeEmptyValues');

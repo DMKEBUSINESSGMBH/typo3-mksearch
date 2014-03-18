@@ -18,6 +18,7 @@
 			<label index="plugin.mksearch.flexform.action.showHit">Detail view for contenttype</label>
 			<label index="plugin.mksearch.flexform.usedIndex">Search Index to use</label>
 			<label index="plugin.mksearch.flexform.filter.debugQuery">Debug filter query</label>
+			<label index="plugin.mksearch.flexform.facetfields">Facet fields (as comma-separated list)</label>
 			<label index="plugin.mksearch.flexform.filter.confid">Filter</label>
 			<label index="plugin.mksearch.flexform.filter.confid.default">default</label>
 			<label index="plugin.mksearch.flexform.filter.confid.dismax">DisMax</label>

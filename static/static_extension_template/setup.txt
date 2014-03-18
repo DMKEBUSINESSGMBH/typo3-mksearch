@@ -141,6 +141,14 @@ lib.mksearch.defaultsolrfilter {
 	### im defaultFilter vorrangestellt wenn ein fq Parameter gesetzt wurde.
 	fqField = 
 	
+	### hier werden alle felder angegeben, die facetiert werden sollen
+	options.facet.fields = mkkeywords_tag_names_ms, content_ident_s
+	
+	### hier kann der operator, für bestimmte facet fields gesetzt werden. default ist AND!
+	filterQuery {
+		#content_ident_s.operator = OR
+	}
+	
 	### kommaseparierte liste mit den erlaubten fq feldern, welche über parameter gesetzt werden können
 	allowedFqParams = 
 }
@@ -375,7 +383,8 @@ plugin.tx_mksearch {
 		
 		facet{
 			markerClass = tx_mksearch_marker_Facet
-			links{
+			linkMethod = generic
+			links {
 				### bestehende Suche soll eingeschränkt werden
 				### dabei wird direkt mksearch[fq] gesetzt
 				show{
@@ -399,7 +408,7 @@ plugin.tx_mksearch {
 					### the generic link builder needs a pid. otherwise
 					### the link is disabled. by default we use the current page.
 					### feel free to change this!
-					pid{
+					pid {
 						data = TSFE:id
 						insertData = 1
 					}
@@ -416,6 +425,19 @@ plugin.tx_mksearch {
 				remove {
 				}
 			}
+			
+			active = TEXT
+			active.value = checked="checked"
+			active.fieldRequired = active 
+		}
+		groupedfacet {
+			linkMethod = generic
+			links {
+				### Einschränkung rückgängig machen
+				reset.useKeepVars = 1
+				reset.useKeepVars.deny = fq
+			}
+			hit = < plugin.tx_mksearch.searchsolr.facet
 		}
 
 		### aktueller Suchbegriff

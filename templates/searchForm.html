@@ -34,9 +34,6 @@
 <!-- ###SIMPLE### END -->
 
 
-
-
-
 <!-- ###FORM### START -->
 <form action="###FORM_ACTION###" method="get" id="sitesearch">
 	###FORM_HIDDENFIELDS###
@@ -44,7 +41,8 @@
 		<label for="mksearch_term">###LABEL_search_searchterm###</label>
 		<input class="text" type="text" name="mksearch[term]" id="mksearch_term" value="###FORM_SEARCHTERM###"/>
 	</fieldset>
-	
+
+
 	<fieldset>
 		<legend>###LABEL_search_options###</legend>
 			<div>###LABEL_search_options_standard_hint###</div>
@@ -79,7 +77,40 @@
 				</div>
 			</fieldset>
 	</fieldset>
-	
+
+
+	<!-- ###GROUPEDFACETS### START -->
+	<fieldset class="facets">
+		<legend>Filter</legend>
+		<ul class="mksearch-facets">
+		<!-- ###GROUPEDFACET### START -->
+			<!-- ###GROUPEDFACET_HITS### START -->
+			<li class="###GROUPEDFACET_FIELD###">
+				###GROUPEDFACET_DCNAME###
+				<ul class="###GROUPEDFACET_FIELD###">
+					<!-- ###GROUPEDFACET_HIT### START -->
+					<li>
+						<input
+							type="checkbox"
+							name="###GROUPEDFACET_HIT_FORM_NAME###"
+							value="###GROUPEDFACET_HIT_FORM_VALUE###"
+							id="filter-###GROUPEDFACET_HIT_FIELD###-###GROUPEDFACET_HIT_LABEL###"
+							###GROUPEDFACET_HIT_ACTIVE### 
+						/>
+						<label for="filter-###GROUPEDFACET_HIT_FIELD###-###GROUPEDFACET_HIT_LABEL###">
+							###GROUPEDFACET_HIT_DCNAME### ###GROUPEDFACET_HIT_COUNT###
+						</label>
+					</li>
+					<!-- ###GROUPEDFACET_HIT### END -->
+				</ul>
+			</li>
+			<!-- ###GROUPEDFACET_HITS### END -->
+		<!-- ###GROUPEDFACET### END -->
+		</ul>
+	</fieldset>
+	<!-- ###GROUPEDFACETS### END -->
+
+
 	<fieldset>
 		<input type="hidden" value="###LABEL_search_submit###" class="text" name="mksearch[submit]" title="Suchen" />
 		<input class="submit" type="submit" name="mksearch[submit]" value="###LABEL_search_submit###" />

@@ -52,31 +52,32 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 		$confId = $this->getConfId();
 		self::handleSoftLink($parameters, $configurations, $confId);
 
-		//Filter erstellen (z.B. Formular parsen)
+		// Filter erstellen (z.B. Formular parsen)
 		$filter = tx_rnbase_filter_BaseFilter::createFilter($parameters, $configurations, $viewData, $confId);
 
-		//shall we prepare the javascript for the autocomplete feature
+		// shall we prepare the javascript for the autocomplete feature
 		$this->prepareAutocomplete();
 
-		//manchmal will man nur ein Suchformular auf jeder Seite im Header einbinden
-		//dieses soll dann aber nur auf eine Ergebnisseite verweisen ohne
-		//selbst zu suchen
-		if($configurations->get($confId.'nosearch')) return null;
-		//else
+		// manchmal will man nur ein Suchformular auf jeder Seite im Header einbinden
+		// dieses soll dann aber nur auf eine Ergebnisseite verweisen ohne
+		// selbst zu suchen
+		if($configurations->get($confId.'nosearch')) {
+			return null;
+		}
 
 		$fields = array();
 		$options = array();
 
 		// die ip muss im debug stehen
-		if($parameters->get('debug')) {
+		if ($parameters->get('debug')) {
 			tx_rnbase::load('tx_mksearch_util_Misc');
-			if(	$parameters->get('debug') == t3lib_div::getIndpEnv('REMOTE_ADDR')
+			if ($parameters->get('debug') == t3lib_div::getIndpEnv('REMOTE_ADDR')
 				|| tx_mksearch_util_Misc::isDevIpMask()) {
 				$options['debug'] = 1; $options['debugQuery'] = 'true';
 			}
 		}
 		$result = null;
-		if($filter->init($fields, $options)) {
+		if ($filter->init($fields, $options)) {
 			// wenn der DisMaxRequestHandler genutzt wird, verursacht *:* ein leeres Ergebnis.
 			// Hier muss sich dringend der Filter darum kümmern, was im Term steht!
 			if(!array_key_exists('term', $fields))
@@ -86,9 +87,9 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 			$index = self::findSearchIndex($configurations, $confId);
 			$pageBrowser = $this->handlePageBrowser($parameters, $configurations, $confId, $viewData, $fields, $options, $index);
 
-			if($result = $this->searchSolr($fields, $options, $configurations, $index)) {
+			if ($result = $this->searchSolr($fields, $options, $configurations, $index)) {
 				// Jetzt noch die echte Listengröße im PageBrowser setzen
-				if(is_object($pageBrowser)) {
+				if (is_object($pageBrowser)) {
 					$listSize = $result['numFound'];
 					$pageBrowser->setState($parameters, $listSize, $pageBrowser->getPageSize());
 				}
@@ -102,6 +103,7 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 			tx_rnbase_util_Debug::debug(array('Filter returns false, no search done.', $fields, $options), 'class.tx_mksearch_action_SearchSolr.php Line: '.__LINE__); // TODO: remove me
 		}
 		$viewData->offsetSet('result', $result);
+
 		return null;
 	}
 
@@ -255,6 +257,8 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 			// Dafür reicht uns der Count, also setzen wir limit auf 0 zwecks performanz.
 			$aOptionsForCountOnly = $options;
 			$aOptionsForCountOnly['limit'] = 0;
+			// die facetten benötigen wir nicht, für den count
+			$aOptionsForCountOnly['facet'] = 'false';
 
 			$listSize = 0;
 			if($result = $this->searchSolr($fields, $aOptionsForCountOnly, $configurations, $index)) {

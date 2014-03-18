@@ -46,6 +46,8 @@ class tx_mksearch_marker_SearchResultSimple
 			$item = self::getEmptyInstance('tx_mkcontact_models_SearchHit');
 		}
 
+		$this->prepareItem($item, $formatter->getConfigurations(), $confId);
+
 		// Fill MarkerArray
 		$ignore = self::findUnusedCols($item->record, $template, $marker);
 

@@ -260,6 +260,18 @@
 							</config>
 						</TCEforms>
 					</searchsolr.filter._overwrite.options.debug>
+					<searchsolr.filter._overwrite.options.facet.fields>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.facetfields</label>
+							<config>
+								<type>input</type>
+								<size>50</size>
+								<max>256</max>
+								<eval>trim</eval>
+							</config>
+						</TCEforms>
+					</searchsolr.filter._overwrite.options.facet.fields>
 					<searchsolr.filter>
 						<TCEforms>
 							<exclude>1</exclude>

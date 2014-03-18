@@ -21,15 +21,10 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
-
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
-
-
 tx_rnbase::load('tx_rnbase_view_Base');
 tx_rnbase::load('tx_rnbase_util_BaseMarker');
 tx_rnbase::load('tx_rnbase_util_Templates');
-
-
 
 /**
  * View class for displaying a list of solr search results
@@ -75,11 +70,12 @@ class tx_mksearch_view_SearchSolr extends tx_rnbase_view_Base {
 		$markerClass = $markerClass ? $markerClass : 'tx_mksearch_marker_Search';
 
 		$out = $listBuilder->render(
-				$items, $viewData,
-				$template, $markerClass,
-				$this->confId.'hit.', 'SEARCHRESULT',
-				$formatter, $markerParams
+			$items, $viewData,
+			$template, $markerClass,
+			$this->confId.'hit.', 'SEARCHRESULT',
+			$formatter, $markerParams
 		);
+
 
 		//noch die Facetten parsen wenn da
 		$out = $this->handleFacets($out, $viewData, $configurations, $formatter, $listBuilder, $result);
@@ -100,22 +96,57 @@ class tx_mksearch_view_SearchSolr extends tx_rnbase_view_Base {
 	 * @return string
 	 */
 	protected function handleFacets($template, &$viewData, &$configurations, &$formatter, $listBuilder, $result) {
-		//erstmal die Markerklasse holen
-		$facetMarkerClass = $configurations->get($this->confId.'facet.markerClass');
-		$facetMarkerClass = $facetMarkerClass ? $facetMarkerClass : 'tx_mksearch_marker_Facet';
+		$out = $template;
 
-		//dann Liste parsen
-		$aFacets = $result ? $result['facets'] : array();
-		$out = $listBuilder->render($aFacets, $viewData,
-			$template, $facetMarkerClass, $this->confId.'facet.', 'FACET', $formatter);
+		// dann Liste parsen
+		$facets = $result ? $result['facets'] : array();
 
-		//jetzt noch den zurücksetzen Link
-		$oBaseMarker = tx_rnbase::makeInstance('tx_rnbase_util_BaseMarker');
-		$wrappedSubpartArray = array();
-		$subpartArray = array();
-		$markerArray = array();
-		$oBaseMarker->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $this->confId.'facet.', 'reset', 'FACET', array(), $out);
-		return tx_rnbase_util_Templates::substituteMarkerArrayCached($out, $markerArray, $subpartArray, $wrappedSubpartArray);
+		// the old way!
+		if (tx_rnbase_util_BaseMarker::containsMarker($out, 'FACETS')) {
+			//erstmal die Markerklasse holen
+			$facetMarkerClass = $configurations->get($this->confId.'facet.markerClass');
+			$facetMarkerClass = $facetMarkerClass ? $facetMarkerClass : 'tx_mksearch_marker_Facet';
+
+			// früher wurden alle facetten in einer liste nacheinander herausgerendert!
+			// dies muss aus kompatibilitätsgründen beibehalten werden.
+			$mergedFacets = array();
+			foreach ($facets as $group) {
+				$mergedFacets = array_merge($mergedFacets, $group->getItems());
+			}
+			$out = $listBuilder->render(
+				$mergedFacets, $viewData, $out,
+				$facetMarkerClass, $this->confId.'facet.', 'FACET', $formatter
+			);
+
+			// den alten zurücklink
+			/* @var $baseMarker tx_rnbase_util_BaseMarker */
+			$baseMarker = tx_rnbase::makeInstance('tx_rnbase_util_BaseMarker');
+			$wrappedSubpartArray = $subpartArray = $markerArray = array();
+			$baseMarker->initLink(
+				$markerArray, $subpartArray, $wrappedSubpartArray,
+				$formatter, $this->confId.'facet.', 'reset', 'FACET', array(), $out
+			);
+			$out = tx_rnbase_util_Templates::substituteMarkerArrayCached(
+				$out, $markerArray, $subpartArray, $wrappedSubpartArray
+			);
+		}
+
+		// wir geben die facetten grupiert aus.
+		if (tx_rnbase_util_BaseMarker::containsMarker($out, 'GROUPEDFACETS')) {
+			//erstmal die Markerklasse holen
+			$groupedMarkerClass = $configurations->get($this->confId.'facet.groupedMarkerClass');
+			$groupedMarkerClass = $groupedMarkerClass ? $groupedMarkerClass : 'tx_mksearch_marker_GroupedFacet';
+
+			$out = $listBuilder->render(
+				$facets, $viewData, $out,
+				$groupedMarkerClass,
+				$this->confId . 'groupedfacet.',
+				'GROUPEDFACET',
+				$formatter
+			);
+		}
+
+		return $out;
 	}
 
 	/**

@@ -23,6 +23,7 @@
 
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_rnbase_util_SearchBase');
+tx_rnbase::load('tx_mksearch_util_Misc');
 tx_rnbase::load('tx_rnbase_filter_BaseFilter');
 tx_rnbase::load('tx_rnbase_util_ListBuilderInfo');
 
@@ -137,6 +138,9 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 		// suchstring beachten
 		$this->handleTerm($fields, $parameters, $configurations, $confId);
 
+		// facetten setzen beachten
+		$this->handleFacet($options, $parameters, $configurations, $confId);
+
 		// Operatoren berücksichtigen
 		$this->handleOperators($fields, $options, $parameters, $configurations, $confId);
 
@@ -145,6 +149,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 
 		// fq (filter query) beachten
 		$this->handleFq($options, $parameters, $configurations, $confId);
+
 
 		// Debug prüfen
 		if($configurations->get($this->getConfIdOverwrite().'options.debug'))
@@ -167,7 +172,9 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 		// wir können das limit im flexform setzen
 		$options['limit'] = (int) $this->getConfValue('options.limit');
 		// wenn es auf -1 steht, entfernen wir das limit
-		if ($options['limit'] < 0) unset($options['limit']);
+		if ($options['limit'] < 0) {
+			unset($options['limit']);
+		}
 	}
 
 	/**
@@ -196,6 +203,39 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 		// wenn der DisMaxRequestHandler genutzt muss der term leer sein, sonst wird nach *:* gesucht!
 		elseif(!$configurations->get($confId.'useDisMax')) {
 			$fields['term'] = '*:*';
+		}
+	}
+
+	/**
+	 *
+	 * @param array $options
+	 * @param tx_rnbase_IParameters $parameters
+	 * @param tx_rnbase_configurations $configurations
+	 * @param string $confId
+	 * @return void
+	 */
+	protected function handleFacet(&$options, &$parameters, &$configurations, $confId) {
+		$fields = $this->getConfValue('options.facet.fields');
+		$fields = t3lib_div::trimExplode(',', $fields, TRUE);
+
+		if (empty($fields)) {
+			return;
+		}
+
+		// die felder für die facetierung setzen
+		$options['facet.field'] = $fields;
+
+		// facetten aktivieren, falls nicht explizit gesetzt.
+		if (empty($options['facet']) || is_array($options['facet'])) {
+			$options['facet'] = 'true';
+		}
+		// nur einträge, wleche zu einem ergebnis führen würden.
+		if (empty($options['facet.mincount'])) {
+			$options['facet.mincount'] = '1';
+		}
+		// immer nach der anzahl sortieren, die alternative wäre index.
+		if (empty($options['facet.sort'])) {
+			$options['facet.sort'] = 'count';
 		}
 	}
 
@@ -232,19 +272,46 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 		self::addFilterQuery($options, self::getFilterQueryForFeGroups());
 
 		// die erlaubten felder holen
-		$allowedFqParams = t3lib_div::trimExplode(',', $configurations->get($confId.'allowedFqParams'));
+		$allowedFqParams = $configurations->getExploded($confId.'allowedFqParams');
+		// wenn keine konfiguriert sind, nehmen wir automatisch die faccet fields
+		if (empty($allowedFqParams) && !empty($options['facet.field'])) {
+			$allowedFqParams = $options['facet.field'];
+		}
 
+		// parameter der filterquery prüfen
+		// @see tx_mksearch_marker_Facet::prepareItem
+		$fqParams = $parameters->get('fq');
+		$fqParams = is_array($fqParams) ? $fqParams : array(trim($fqParams));
 		//@todo die if blöcke in eigene funktionen auslagern
-		if($sFq = trim($parameters->get('fq'))) {
+		if(!empty($fqParams)) {
+			// FQ field, for single queries
 			$sFqField = $configurations->get($confId.'fqField');
-			if ($sFqField) {
-				tx_rnbase::load('tx_mksearch_util_Misc');
-				$sFq = $sFqField.':"'.tx_mksearch_util_Misc::sanitizeTerm($sFq).'"';
-			} else {
-				// field value konstelation prüfen
-				$sFq = $this->parseFieldAndValue($sFq, $allowedFqParams);
+			foreach ($fqParams as $fqField => $fqValues) {
+				$fieldOptions = array();
+				$fqValues = is_array($fqValues) ? $fqValues : array(trim($fqValues));
+				if (empty($fqValues)) {
+					continue;
+				}
+				foreach ($fqValues as $fqNameValue => $fqValue) {
+					$fqValue = trim($fqValue);
+					if ($sFqField) {
+						$fq = $sFqField . ':"' . tx_mksearch_util_Misc::sanitizeFq($fqValue) . '"';
+					} else {
+						// field value konstelation prüfen
+						$fq = $this->parseFieldAndValue($fqValue, $allowedFqParams);
+						if (empty($fq) && !empty($fqField)) {
+							$fq  = tx_mksearch_util_Misc::sanitizeFq($fqField);
+							$fq .= ':"' . tx_mksearch_util_Misc::sanitizeFq($fqValue) . '"';
+						}
+					}
+					self::addFilterQuery($fieldOptions, $fq);
+				}
+				if (!empty($fieldOptions['fq'])) {
+					$fqOperator = $configurations->get($confId . 'filterQuery.' . $fqField . '.operator');
+					$fqOperator = $fqOperator == 'OR' ? 'OR' : 'AND';
+					self::addFilterQuery($options, implode(' ' . $fqOperator . ' ', $fieldOptions['fq']));
+				}
 			}
-			self::addFilterQuery($options, $sFq);
 		}
 		if($sAddFq = trim($parameters->get('addfq'))) {
 			// field value konstelation prüfen
@@ -316,10 +383,14 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 
 		// wir trennen den string auf!
 		// field:value | field:"value"
-		$pattern  = '(?P<field>([a-z_]*))'; // nur kleinbuchstaben und unterstrich für feldnamen erlauben.
-		$pattern .= ':'; // feld mit doppelpunkt vom wert getrennt.
-		$pattern .= '(["]*)'; // eventuelles anführungszeichen am anfang abschneiden.
-		$pattern .= '(?P<value>([a-zA-Z0-9_ ]*))'; // nur buchstaben, zahlen unterstrich und leerzeichen für wert erlauben.
+		// nur kleinbuchstaben und unterstrich für feldnamen erlauben.
+		$pattern  = '(?P<field>([a-z_]*))';
+		// feld mit doppelpunkt vom wert getrennt.
+		$pattern .= ':';
+		// eventuelles anführungszeichen am anfang abschneiden.
+		$pattern .= '(["]*)';
+		// nur buchstaben, zahlen unterstrich, leerzeichen und punkt für wert erlauben.
+		$pattern .= '(?P<value>([a-zA-Z0-9_. ]*))';
 		tx_rnbase::load('tx_mksearch_util_Misc');
 		if (
 			// wir splitten den string auf!
@@ -331,8 +402,8 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 			// das feld muss erlaubt sein!
 			&& in_array($matches['field'], $allowedFqParams)
 			// werte reinigen
-			&& ($field = tx_mksearch_util_Misc::sanitizeTerm($matches['field']))
-			&& ($term = tx_mksearch_util_Misc::sanitizeTerm($matches['value']))
+			&& ($field = tx_mksearch_util_Misc::sanitizeFq($matches['field']))
+			&& ($term = tx_mksearch_util_Misc::sanitizeFq($matches['value']))
 		) {
 			// fq wieder zusammensetzen
 			$sFq = $field . ':"'. $term .'"';

@@ -32,47 +32,72 @@
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 
 /**
- * Der FacetBuilder erstellt aus den Rohdaten der Facets passende Objekte für das Rendering.
+ * Der FacetBuilder erstellt aus den Rohdaten
+ * der Facets passende Objekte für das Rendering.
+ *
  * @package tx_mksearch
  * @subpackage tx_mksearch_util
  * @author Hannes Bochmann <hannes.bochmann@das-medienkombinat.de>
  * @author Michael Wagner <michael.wagner@das-medienkombinat.de>
  */
 class tx_mksearch_util_FacetBuilder {
-	
+
 	/**
+	 * get singelton
+	 *
 	 * @param string $class
 	 * @return tx_mksearch_util_FacetBuilder
 	 */
-	public static function getInstance($class='') {
+	public static function getInstance($class = '') {
 		static $instance;
 		$class = empty($class) ? 'tx_mksearch_util_FacetBuilder' : $class;
-		if(!$instance[$class])
+		if (!$instance[$class]) {
 			$instance[$class] = tx_rnbase::makeInstance($class);
+		}
 		return $instance[$class];
 	}
-	
+
 	/**
 	 * Baut die Daten für die Facets zusammen
-	 * @param array $facetData Daten von Solr
+	 *
+	 * @param array|stdClass $facetData Daten von Solr
 	 * @return array Ausgabedaten
 	 */
 	public function buildFacets($facetData) {
 		$facetGroups = array();
-		if(!$facetData) return $facetGroups;
+		if (!$facetData) {
+			return $facetGroups;
+		}
+		$uid = 0;
 		foreach ($facetData As $field => $facetGroup) {
-			foreach($facetGroup As $id => $count) {
-				$facetGroups[] = $this->getSimpleFacet($field, $id, $count);
+			if (empty($facetGroups[$field])) {
+				$facetGroups[$field] = tx_rnbase::makeInstance(
+					'tx_rnbase_model_base',
+					array(
+						'uid' => ++$uid,
+						'field' => $field,
+						'items' => array(),
+					)
+				);
+			}
+			foreach ($facetGroup As $id => $count) {
+				$facetGroups[$field]->record['items'][] = $this->getSimpleFacet($field, $id, $count);
 			}
 		}
-		return $facetGroups;
+		return array_values($facetGroups);
+	}
+
+	protected function buildGroupedFacet() {
+
 	}
 
 	/**
 	 * Liefert eine simple Facette zurück
+	 *
 	 * @param string $field
 	 * @param int $id
 	 * @param int $count
+	 * @return tx_mksearch_model_Facet
 	 */
 	private function getSimpleFacet($field, $id, $count) {
 		$title = $id;
@@ -80,6 +105,6 @@ class tx_mksearch_util_FacetBuilder {
 	}
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_FacetBuilder.php'])	{
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_FacetBuilder.php']) {
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_FacetBuilder.php']);
 }
