@@ -85,6 +85,11 @@ class tx_mksearch_marker_Facet extends tx_mksearch_marker_SearchResultSimple {
 				$item->record['form_id'] = $formId;
 			}
 
+			// deaktiviert?
+			if (!isset($item->record['disabled'])) {
+				$item->record['disabled'] = (int) $item->record['count'] > 0 ? 0 : 1;
+			}
+
 			// den status setzen
 			if (!isset($item->record['active'])) {
 				$params = $configurations->getParameters()->get('fq');

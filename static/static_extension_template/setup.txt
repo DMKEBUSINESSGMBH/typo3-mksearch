@@ -439,6 +439,10 @@ plugin.tx_mksearch {
 				active = TEXT
 				active.value = checked="checked"
 				active.fieldRequired = active
+				
+				disabled = TEXT
+				disabled.value = disabled="disabled"
+				disabled.fieldRequired = disabled
 			
 				count.noTrimWrap = | (|)|
 				count.required = 1
@@ -457,6 +461,8 @@ plugin.tx_mksearch {
 					core_file.value = Multimedia-Objekte
 					default = TEXT
 					default.field = label
+					
+					stdWrap.dataWrap = |&nbsp;({field:count})
 				}
 			}
 			### die Gruppenbezeichnung
@@ -465,8 +471,6 @@ plugin.tx_mksearch {
 				key.field = field
 				content_ident_s = TEXT
 				content_ident_s.value = Datentypen
-				mkkeywords_tag_names_ms = TEXT
-				mkkeywords_tag_names_ms.value = Schlagworte
 				default = TEXT
 				default.value.field = field
 			}
