@@ -134,7 +134,7 @@ class tx_mksearch_view_SearchSolr extends tx_rnbase_view_Base {
 		// wir geben die facetten grupiert aus.
 		if (tx_rnbase_util_BaseMarker::containsMarker($out, 'GROUPEDFACETS')) {
 			//erstmal die Markerklasse holen
-			$groupedMarkerClass = $configurations->get($this->confId.'facet.groupedMarkerClass');
+			$groupedMarkerClass = $configurations->get($this->confId.'groupedfacet.markerClass');
 			$groupedMarkerClass = $groupedMarkerClass ? $groupedMarkerClass : 'tx_mksearch_marker_GroupedFacet';
 
 			$out = $listBuilder->render(

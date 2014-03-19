@@ -51,6 +51,7 @@ class tx_mksearch_marker_GroupedFacet
 			return $template;
 		}
 
+
 		// das Template rendern
 		$out = parent::parseTemplate($template, $item, $formatter, $confId, $marker);
 

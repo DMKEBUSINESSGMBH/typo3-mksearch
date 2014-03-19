@@ -58,30 +58,39 @@ class tx_mksearch_marker_Facet extends tx_mksearch_marker_SearchResultSimple {
 
 		// wir setzen automatisch den status und den formularnamen!
 		// aber nur, wenn wir ein label (facettenwert) haben
-		$label = $item->getLabel();
-		if ($label) {
+		if ($item->getLabel()) {
 			$field = $item->getField();
+			$value = $item->getId();
+
 			// den Formularnamen setzen
-			$formName  = $configurations->getQualifier();
-			$formName .= '[fq]';
-			$formName .= '[' . $field . ']';
-			$formName .= '[' . $label . ']';
-			$item->record['form_name'] = $formName;
+			if (!isset($item->record['form_name'])) {
+				$formName  = $configurations->getQualifier();
+				$formName .= '[fq]';
+				$formName .= '[' . $field . ']';
+				$formName .= '[' . $value . ']';
+				$item->record['form_name'] = $formName;
+			}
 
 			// wir setzen den wert direkt fertig für den filter zusammen
-			$item->record['form_value'] = $field . ':' . $label;
+			if (!isset($item->record['form_value'])) {
+				$item->record['form_value'] = $field . ':' . $value;
+			}
 
 			// wir setzen den wert direkt fertig für den filter zusammen
-			$formId  = $configurations->getQualifier();
-			$formId .= '-' . $field;
-			$formId .= '-' . $label;
-			$formId = preg_replace('/[^\da-z-]/i', '', strtolower($formId));
-			$item->record['form_id'] = $formId;
+			if (!isset($item->record['form_id'])) {
+				$formId  = $configurations->getQualifier();
+				$formId .= '-' . $field;
+				$formId .= '-' . $value;
+				$formId = preg_replace('/[^\da-z-]/i', '', strtolower($formId));
+				$item->record['form_id'] = $formId;
+			}
 
 			// den status setzen
-			$params = $configurations->getParameters()->get('fq');
-			$params = empty($params[$field]) ? array() : $params[$field];
-			$item->record['active'] = empty($params[$label]) ? 0 : 1;
+			if (!isset($item->record['active'])) {
+				$params = $configurations->getParameters()->get('fq');
+				$params = empty($params[$field]) ? array() : $params[$field];
+				$item->record['active'] = empty($params[$value]) ? 0 : 1;
+			}
 		}
 	}
 
