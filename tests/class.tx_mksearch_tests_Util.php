@@ -125,6 +125,7 @@ class tx_mksearch_tests_Util {
 
 	    $configurations = new tx_rnbase_configurations();
 	    $configurations->init($pageTSconfig, $cObj, 'mksearch', 'mksearch');
+	    $configurations->setParameters(tx_rnbase::makeInstance('tx_rnbase_parameters'));
 
 	  	return $configurations;
 	}
