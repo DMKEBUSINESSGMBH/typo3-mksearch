@@ -64,12 +64,7 @@ class tx_mksearch_tests_indexer_DamMedia_testcase extends tx_phpunit_testcase {
 	 */
 	protected function setUp() {
 		// eventuelle hooks entfernen
-		tx_mksearch_tests_Util::hooksSetUp(
-			array(
-				'indexerBase_preProcessSearchData',
-				'indexerBase_postProcessSearchData',
-			)
-		);
+		tx_mksearch_tests_Util::hooksSetUp();
 	}
 
 	/**

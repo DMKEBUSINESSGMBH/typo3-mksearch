@@ -44,12 +44,7 @@ class tx_mksearch_tests_indexer_Cal_testcase extends Tx_Phpunit_Testcase {
 		tx_rnbase::load('tx_mksearch_model_cal_Event');
 
 		// eventuelle hooks entfernen
-		tx_mksearch_tests_Util::hooksSetUp(
-			array(
-				'indexerBase_preProcessSearchData',
-				'indexerBase_postProcessSearchData',
-			)
-		);
+		tx_mksearch_tests_Util::hooksSetUp();
 	}
 
 	/**

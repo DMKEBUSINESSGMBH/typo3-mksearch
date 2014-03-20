@@ -78,12 +78,7 @@ class tx_mksearch_tests_indexer_Irfaq_testcase extends tx_phpunit_database_testc
 		$this->importDataSet(tx_mksearch_tests_Util::getFixturePath('db/irfaq_expert.xml'));
 
 		// eventuelle hooks entfernen
-		tx_mksearch_tests_Util::hooksSetUp(
-			array(
-				'indexerBase_preProcessSearchData',
-				'indexerBase_postProcessSearchData',
-			)
-		);
+		tx_mksearch_tests_Util::hooksSetUp();
 	}
 
 	/**

@@ -55,7 +55,10 @@ class tx_mksearch_tests_Util {
 	 * @param array $hocks
 	 * @return void
 	 */
-	public static function hooksSetUp(array $hocks = array()) {
+	public static function hooksSetUp($hocks = NULL) {
+		if (!is_array($hocks)) {
+			$hocks = array_keys($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch']);
+		}
 		foreach ($hocks as $hock) {
 			self::$hooks[$hock] = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch'][$hock];
 			$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch'][$hock] = array();

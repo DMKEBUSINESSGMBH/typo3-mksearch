@@ -89,12 +89,7 @@ class tx_mksearch_tests_indexer_Page_DB_testcase extends tx_phpunit_database_tes
 		$this->importDataSet(tx_mksearch_tests_Util::getFixturePath('db/pages.xml'));
 
 		// eventuelle hooks entfernen
-		tx_mksearch_tests_Util::hooksSetUp(
-			array(
-				'indexerBase_preProcessSearchData',
-				'indexerBase_postProcessSearchData',
-			)
-		);
+		tx_mksearch_tests_Util::hooksSetUp();
 	}
 
 	/**

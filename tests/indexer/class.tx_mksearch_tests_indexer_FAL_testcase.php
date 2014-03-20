@@ -71,12 +71,7 @@ class tx_mksearch_tests_indexer_FAL_testcase
 			$this->markTestSkipped('Only relevant for Typo3 6 or higher.');
 		}
 		// eventuelle hooks entfernen
-		tx_mksearch_tests_Util::hooksSetUp(
-			array(
-				'indexerBase_preProcessSearchData',
-				'indexerBase_postProcessSearchData',
-			)
-		);
+		tx_mksearch_tests_Util::hooksSetUp();
 	}
 
 	/**

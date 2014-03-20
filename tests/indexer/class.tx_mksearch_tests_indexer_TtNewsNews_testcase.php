@@ -40,12 +40,7 @@ class tx_mksearch_tests_indexer_TtNewsNews_testcase extends tx_phpunit_testcase 
 			$this->markTestSkipped('tt_news is not installed!');
 
 		// eventuelle hooks entfernen
-		tx_mksearch_tests_Util::hooksSetUp(
-			array(
-				'indexerBase_preProcessSearchData',
-				'indexerBase_postProcessSearchData',
-			)
-		);
+		tx_mksearch_tests_Util::hooksSetUp();
 	}
 
 	/**

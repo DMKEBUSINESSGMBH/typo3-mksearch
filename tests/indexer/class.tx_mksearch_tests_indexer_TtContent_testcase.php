@@ -46,12 +46,7 @@ class tx_mksearch_tests_indexer_TtContent_testcase extends tx_phpunit_testcase {
 		$TYPO3_LOADED_EXT['templavoila'] = null;
 
 		// eventuelle hooks entfernen
-		tx_mksearch_tests_Util::hooksSetUp(
-			array(
-				'indexerBase_preProcessSearchData',
-				'indexerBase_postProcessSearchData',
-			)
-		);
+		tx_mksearch_tests_Util::hooksSetUp();
 	}
 
 	/**

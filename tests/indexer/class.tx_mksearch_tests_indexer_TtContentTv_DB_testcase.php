@@ -84,12 +84,7 @@ class tx_mksearch_tests_indexer_TtContentTv_DB_testcase extends tx_phpunit_datab
 		$this->importDataSet(tx_mksearch_tests_Util::getFixturePath('db/sys_refindex.xml'));
 
 		// eventuelle hooks entfernen
-		tx_mksearch_tests_Util::hooksSetUp(
-			array(
-				'indexerBase_preProcessSearchData',
-				'indexerBase_postProcessSearchData',
-			)
-		);
+		tx_mksearch_tests_Util::hooksSetUp();
 	}
 
 	/**

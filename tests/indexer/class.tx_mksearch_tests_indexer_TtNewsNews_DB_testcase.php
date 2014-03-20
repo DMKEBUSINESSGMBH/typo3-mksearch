@@ -78,12 +78,7 @@ class tx_mksearch_tests_indexer_TtNewsNews_DB_testcase
 		$this->importDataSet(tx_mksearch_tests_Util::getFixturePath('db/tt_news_cat.xml'));
 
 		// eventuelle hooks entfernen
-		tx_mksearch_tests_Util::hooksSetUp(
-			array(
-				'indexerBase_preProcessSearchData',
-				'indexerBase_postProcessSearchData',
-			)
-		);
+		tx_mksearch_tests_Util::hooksSetUp();
 	}
 
 	/**
