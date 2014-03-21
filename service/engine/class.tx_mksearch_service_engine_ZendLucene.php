@@ -353,6 +353,7 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 		tx_rnbase::load('tx_mksearch_model_SearchHit');
 		$results = array();
 		foreach ($hits as $h) {
+			// Das wird teuer!
 			$d = $h->getDocument();
 			$data = array();
 			foreach ($d->getFieldNames() as $fn) {
@@ -555,23 +556,24 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 //		$boost = is_array($mixedValue) ? $valueArr['boost'] : 1.0;
 		// Den Type über den DataTypeMapper ermitteln. Dieser ersetzt die schema.xml von Solr...
 		$storageType = $this->getDataTypeMapper()->getDataType($key);
+		$encoding = $field->getEncoding() != '' ? $field->getEncoding() : 'utf8'; // Lucene unterstützt nur UTF-8.
 		// switch ($field->getStorageType()) {
 		switch ($storageType) {
 			case 'text':
-				$doc->addField(Zend_Search_Lucene_Field::Text($key, $value, $field->getEncoding()));
+				$doc->addField(Zend_Search_Lucene_Field::Text($key, $value, $encoding ));
 				break;
 			case 'keyword':
-				$zf = Zend_Search_Lucene_Field::Keyword($key, $value, $field->getEncoding());
+				$zf = Zend_Search_Lucene_Field::Keyword($key, $value, $encoding);
 				$doc->addField($zf);
    			break;
    		case 'unindexed':
-   			$doc->addField(Zend_Search_Lucene_Field::UnIndexed($key, $value, $field->getEncoding()));
+   			$doc->addField(Zend_Search_Lucene_Field::UnIndexed($key, $value, $encoding));
    			break;
    		case 'unstored':
-   			$doc->addField(Zend_Search_Lucene_Field::UnStored($key, $value, $field->getEncoding()));
+   			$doc->addField(Zend_Search_Lucene_Field::UnStored($key, $value, $encoding));
    			break;
    		case 'binary':
-   			$doc->addField(Zend_Search_Lucene_Field::Binary($key, $value, $field->getEncoding()));
+   			$doc->addField(Zend_Search_Lucene_Field::Binary($key, $value, $encoding));
    			break;
    		default:
    			throw new Exception('tx_mksearch_service_engine_ZendLucene::_addFieldToIndexDoc(): Unknown storage type "'.$field->getStorageType().'"!');
@@ -619,7 +621,6 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 		foreach ($data as $key=>$field) {
 			$this->addFieldToIndexDoc($key, $field, $zlDoc);
 		}
-
 		// There's intentionally no test if $this->index is valid for performance reasons.
 		// You should not have made it to this point without a valid index anyway...
 		$this->index->addDocument($zlDoc);
