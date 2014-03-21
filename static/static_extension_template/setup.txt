@@ -176,10 +176,8 @@ plugin.tx_mksearch {
 		formOnly = 0
 
 		# Konfig für die Darstellung des Treffers über den allgemeinen Marker
-		hit {
-		  # Hier wird die Config für die jeweiligen Datentypen eingebunden
-			extrainfo =< lib.mksearch.extrainfo 
-		}
+		# Die Config von Solr sollte auch für Lucene passen
+		hit = < lib.mksearch.hit
 
 		### Used for Marker: ###PLUGIN_DCSEARCHTERM###
 		plugin.dcsearchterm = TEXT

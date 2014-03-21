@@ -349,22 +349,42 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 
 		if (isset($options['rawOutput']) and $options['rawOutput'])	return $hits;
 
+		$offset = 0;
+		$limit = count($hits);
+		// Jetzt den PageBrowser setzen
+		if(is_object($pb = $options['pb'])) {
+			/* @var $pb tx_rnbase_util_PageBrowser */
+			$pb->setListSize($limit);
+			$state = $pb->getState();
+			$offset = $state['offset'];
+			$limit = $state['limit'];
+		}
+
 		// else
 		tx_rnbase::load('tx_mksearch_model_SearchHit');
 		$results = array();
-		foreach ($hits as $h) {
-			// Das wird teuer!
-			$d = $h->getDocument();
-			$data = array();
-			foreach ($d->getFieldNames() as $fn) {
-				$field = $d->getField($fn);
-				// Get all fields except binary ones utf8-encoded
-				if (!$field->isBinary) $data[$fn] = $d->getFieldUtf8Value($fn);
-				else $data[$fn] = $d->getFieldValue($fn);
+		for($i=$offset; $i< $limit + $offset; $i++) {
+			if(array_key_exists($i, $hits)){
+				$searchHit = $this->buildSearchHit($hits[$i]);
+				if($searchHit)
+					$results[] = $searchHit;
+			}else{
+				break;
 			}
-			if ($data) $results[] = new tx_mksearch_model_SearchHit($data);
 		}
+
 		return $results;
+	}
+	private function buildSearchHit($hit) {
+		$doc = $hit->getDocument();
+		$data = array();
+		foreach ($doc->getFieldNames() as $fn) {
+			$field = $doc->getField($fn);
+			// Get all fields except binary ones utf8-encoded
+			if (!$field->isBinary) $data[$fn] = $doc->getFieldUtf8Value($fn);
+			else $data[$fn] = $doc->getFieldValue($fn);
+		}
+		return $data ? new tx_mksearch_model_SearchHit($data) : null;
 	}
 
 	/**

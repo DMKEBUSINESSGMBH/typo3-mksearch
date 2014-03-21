@@ -57,8 +57,8 @@ class tx_mksearch_action_Search extends tx_rnbase_action_BaseIOC {
 		$options = array();
 		$items = array();
 		if($filter->init($fields, $options)) {
-			// @TODO: Adjust Pagebrowser
-//			$this->handlePageBrowser($parameters,$configurations, $viewData, $fields, $options);
+			// Adjust Pagebrowser
+			$this->handlePageBrowser($parameters,$configurations, $viewData, $fields, $options);
 			$index = tx_mksearch_action_SearchSolr::findSearchIndex($configurations, $confId);
 			if(!$index->isValid())
 				throw new Exception('Configured search index not found!');
@@ -74,23 +74,33 @@ class tx_mksearch_action_Search extends tx_rnbase_action_BaseIOC {
 		return null;
 	}
 
-	function handlePageBrowser(&$parameters,&$configurations, &$viewdata, &$fields, &$options) {
-		if(is_array($configurations->get('searchlucene.pagebrowser.'))) {
-			$service = tx_mkmodularproducts_util_ServiceRegistry::getProductService();
-			// Mit Pagebrowser benötigen wir zwei Zugriffe, um die Gesamtanzahl der Teams zu ermitteln
-			$options['count']= 1;
-			$listSize = $service->search($fields, $options);
-			// 'count'-Option wieder deaktivieren, um "normale" Suche zu ermöglichen
-			unset($options['count']);
+	/**
+	 * In Lucene funktioniert die Pagination etwas anders. Lucene liefert nämlich immer alle
+	 * Suchergebnisse. Daher muss man selbst den passenden Ausschnitt auswählen. Damit das trotzdem
+	 * performant bleibt, liefert Lucene nur kleine Flyweight-Objekte für die Treffer. Der Abruf der
+	 * eigentlichen Dokumente erfolgt erst in einem zweiten Schritt. Somit wird für die Pagination nur
+	 * mit den Flyweights gearbeitet. Und das übernimmt der Lucene-Engine gleich selbst, wenn man ihr
+	 * eine Instanz des PageBrowsers übergibt.
+	 *
+	 * @param unknown $parameters
+	 * @param unknown $configurations
+	 * @param unknown $viewdata
+	 * @param unknown $fields
+	 * @param unknown $options
+	 */
+	protected function handlePageBrowser($parameters, $configurations, $viewdata, &$fields, &$options) {
+		//if($_SERVER['REMOTE_ADDR']  == '178.15.114.146')
+		$confId = $this->getConfId();
+		if(is_array($conf = $configurations->get($confId.'hit.pagebrowser.'))) {
 			// PageBrowser initialisieren
-			$pageBrowser = tx_rnbase::makeInstance('tx_rnbase_util_PageBrowser', 'search');
-			$pageSize = intval($configurations->get('search.pagebrowser.limit'));
-			$pageBrowser->setState($parameters, $listSize, $pageSize);
-			$limit = $pageBrowser->getState();
-			// Ist schon ein Limit per TS < PB-Limit gesetzt, dann hat dieses Vorrang
-			if(intval($options['limit']) && (intval($options['limit']) < intval($limit['limit'])))
-				$limit['limit'] = intval($options['limit']);
-			$options = array_merge($options, $limit);
+			$pageBrowserId = $conf['pbid'] ? $conf['pbid'] : 'search'.$configurations->getPluginId();
+			/* @var $pageBrowser tx_rnbase_util_PageBrowser */
+			$pageBrowser = tx_rnbase::makeInstance('tx_rnbase_util_PageBrowser', $pageBrowserId);
+			$pageSize = intval($conf['limit']);
+			// Den PageBrowser mit PageSize und der aktuellen Seite füllen
+			$pageBrowser->setPageSize($pageSize);
+			$pageBrowser->setPointerByParameters($parameters);
+			$options['pb'] = $pageBrowser;
 			$viewdata->offsetSet('pagebrowser', $pageBrowser);
 		}
 	}
