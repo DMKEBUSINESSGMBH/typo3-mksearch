@@ -307,9 +307,13 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 					self::addFilterQuery($fieldOptions, $fq);
 				}
 				if (!empty($fieldOptions['fq'])) {
-					$fqOperator = $configurations->get($confId . 'filterQuery.' . $fqField . '.operator');
-					$fqOperator = $fqOperator == 'OR' ? 'OR' : 'AND';
-					self::addFilterQuery($options, implode(' ' . $fqOperator . ' ', $fieldOptions['fq']));
+					$fieldQuery = $fieldOptions['fq'];
+					if (is_array($fieldQuery)) {
+						$fqOperator = $configurations->get($confId . 'filterQuery.' . $fqField . '.operator');
+						$fqOperator = $fqOperator == 'OR' ? 'OR' : 'AND';
+						$fieldQuery = implode(' ' . $fqOperator . ' ', $fieldQuery);
+					}
+					self::addFilterQuery($options, $fieldQuery);
 				}
 			}
 		}

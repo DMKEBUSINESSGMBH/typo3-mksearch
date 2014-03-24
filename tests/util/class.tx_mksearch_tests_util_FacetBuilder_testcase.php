@@ -34,29 +34,41 @@ class tx_mksearch_tests_util_FacetBuilder_testcase extends tx_phpunit_testcase {
 		$this->assertTrue(is_array($facetData),'es wurde kein array zurück gegeben!');
 		$this->assertTrue(empty($facetData),'es wurde kein leeres array zurück gegeben!');
 	}
-	
+
 	public function testBuildFacets() {
 		$facetData = new stdClass();
 		$facetData->contentType = new stdClass();
 		$facetData->contentType->news = 2;
 		$facetData->contentType->offer = 34;
 		$facetData->contentType->product = 6;
-		$facetData = tx_mksearch_util_FacetBuilder::getInstance()->buildFacets($facetData);
-		
-		$this->assertTrue(is_array($facetData),'es wurde kein array zurück gegeben!');
-		$this->assertEquals(3,count($facetData),'Das array hat nicht die richtige Größe!');
-		$this->assertEquals('contentType',$facetData[0]->record['field'],'Datensatz 1 - Feld:field hat den falschen Wert!');
-		$this->assertEquals('news',$facetData[0]->record['id'],'Datensatz 1 - Feld:id hat den falschen Wert!');
-		$this->assertEquals('news',$facetData[0]->record['label'],'Datensatz 1 - Feld:label hat den falschen Wert!');
-		$this->assertEquals(2,$facetData[0]->record['count'],'Datensatz 1 - Feld:count hat den falschen Wert!');
-		$this->assertEquals('contentType',$facetData[1]->record['field'],'Datensatz 2 - Feld:field hat den falschen Wert!');
-		$this->assertEquals('offer',$facetData[1]->record['id'],'Datensatz 2 - Feld:id hat den falschen Wert!');
-		$this->assertEquals('offer',$facetData[1]->record['label'],'Datensatz 2 - Feld:label hat den falschen Wert!');
-		$this->assertEquals(34,$facetData[1]->record['count'],'Datensatz 2 - Feld:count hat den falschen Wert!');
-		$this->assertEquals('contentType',$facetData[2]->record['field'],'Datensatz 3 - Feld:field hat den falschen Wert!');
-		$this->assertEquals('product',$facetData[2]->record['id'],'Datensatz 3 - Feld:id hat den falschen Wert!');
-		$this->assertEquals('product',$facetData[2]->record['label'],'Datensatz 3 - Feld:label hat den falschen Wert!');
-		$this->assertEquals(6,$facetData[2]->record['count'],'Datensatz 3 - Feld:count hat den falschen Wert!');
+		// die facetten kommen immer grupiert!
+		$facetGroups = tx_mksearch_util_FacetBuilder::getInstance()->buildFacets($facetData);
+
+
+		$this->assertTrue(is_array($facetGroups), 'es wurde kein array zurück gegeben!');
+		$this->assertEquals(1, count($facetGroups), 'Das array hat nicht die richtige Größe!');
+
+		$facetGroup = reset($facetGroups);
+		$this->assertInstanceOf('tx_rnbase_model_base', $facetGroup);
+		$this->assertEquals('contentType', $facetGroup->getField());
+
+		// in einer gruppe sind die eigentlichen facetten enthalten
+		$array = $facetGroup->getItems();
+
+		$this->assertTrue(is_array($array), 'es wurde kein array zurück gegeben!');
+		$this->assertEquals(3, count($array), 'Das array hat nicht die richtige Größe!');
+		$this->assertEquals('contentType', $array[0]->record['field'], 'Datensatz 1 - Feld:field hat den falschen Wert!');
+		$this->assertEquals('news', $array[0]->record['id'], 'Datensatz 1 - Feld:id hat den falschen Wert!');
+		$this->assertEquals('news', $array[0]->record['label'], 'Datensatz 1 - Feld:label hat den falschen Wert!');
+		$this->assertEquals(2, $array[0]->record['count'], 'Datensatz 1 - Feld:count hat den falschen Wert!');
+		$this->assertEquals('contentType', $array[1]->record['field'], 'Datensatz 2 - Feld:field hat den falschen Wert!');
+		$this->assertEquals('offer', $array[1]->record['id'], 'Datensatz 2 - Feld:id hat den falschen Wert!');
+		$this->assertEquals('offer', $array[1]->record['label'], 'Datensatz 2 - Feld:label hat den falschen Wert!');
+		$this->assertEquals(34, $array[1]->record['count'], 'Datensatz 2 - Feld:count hat den falschen Wert!');
+		$this->assertEquals('contentType', $array[2]->record['field'], 'Datensatz 3 - Feld:field hat den falschen Wert!');
+		$this->assertEquals('product', $array[2]->record['id'], 'Datensatz 3 - Feld:id hat den falschen Wert!');
+		$this->assertEquals('product', $array[2]->record['label'], 'Datensatz 3 - Feld:label hat den falschen Wert!');
+		$this->assertEquals(6, $array[2]->record['count'], 'Datensatz 3 - Feld:count hat den falschen Wert!');
 	}
 }
 
