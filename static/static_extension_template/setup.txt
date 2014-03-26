@@ -188,6 +188,10 @@ plugin.tx_mksearch {
 			required = 1
 			wrap = ###LABEL_search_term_was### "|"
 		}
+		
+		### wir eigentlich über Flexform gesetzt. d.h wenn es dort gesetzt wurde,
+		### wird das auch vorgezogen
+		forceSearch = 0
 
 ####
 # Ab hier wird der Code für diesen View nicht mehr verwendet!!

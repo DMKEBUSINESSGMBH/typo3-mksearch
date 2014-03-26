@@ -126,6 +126,15 @@
 							</config>
 						</TCEforms>
 					</searchluceneTemplate>
+					<searchlucene.forceSearch>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.force</label>
+							<config>
+								<type>check</type>
+							</config>
+						</TCEforms>
+					</searchlucene.forceSearch>
 				</el>
 			</ROOT>
 		</s_searchlucene>

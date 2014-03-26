@@ -71,8 +71,9 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
 
 		// Form still filled in?
 		$term = $parameters->get('term');
-		if (!$term)
+		if (!$term && !$configurations->get($confId . 'forceSearch')) {
 			return false;
+		}
 
 		$this->isSearch = true;
 
