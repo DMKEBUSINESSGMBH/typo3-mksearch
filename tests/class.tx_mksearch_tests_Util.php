@@ -52,16 +52,18 @@ class tx_mksearch_tests_Util {
 	/**
 	 * Sichert die hoocks unt entfernt diese in der globalconf.
 	 *
-	 * @param array $hocks
+	 * @param array $hooks
 	 * @return void
 	 */
-	public static function hooksSetUp($hocks = NULL) {
-		if (!is_array($hocks)) {
-			$hocks = array_keys($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch']);
+	public static function hooksSetUp($hooks = NULL) {
+		if (!is_array($hooks)) {
+			$hooks = array_keys($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch']);
 		}
-		foreach ($hocks as $hock) {
-			self::$hooks[$hock] = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch'][$hock];
-			$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch'][$hock] = array();
+		foreach ($hooks as $hook) {
+			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch'][$hook])) {
+				self::$hooks[$hook] = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch'][$hook];
+			}
+			$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch'][$hook] = array();
 		}
 	}
 	/**
@@ -71,7 +73,7 @@ class tx_mksearch_tests_Util {
 	 */
 	public static function hooksTearDown() {
 		foreach(self::$hooks as $hook) {
-			$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch'][$hock] = self::$hooks[$hock];
+			$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch'][$hook] = self::$hooks[$hook];
 		}
 		self::$hooks = array();
 	}
