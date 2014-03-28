@@ -72,8 +72,8 @@ class tx_mksearch_tests_Util {
 	 * @return void
 	 */
 	public static function hooksTearDown() {
-		foreach(self::$hooks as $hook) {
-			$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch'][$hook] = self::$hooks[$hook];
+		foreach(self::$hooks as $hookName => $hookConfig) {
+			$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch'][$hookName] = $hookConfig;
 		}
 		self::$hooks = array();
 	}
