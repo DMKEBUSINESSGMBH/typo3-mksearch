@@ -192,6 +192,13 @@ plugin.tx_mksearch {
 		### wir eigentlich über Flexform gesetzt. d.h wenn es dort gesetzt wurde,
 		### wird das auch vorgezogen
 		forceSearch = 0
+		
+		### kommaspearierte Liste von Feldern, die im Formular leer vorbefüllt werden
+		### wenn Formular noch nicht abgeschickt. sonst werden die Marker ausgegeben
+		requiredFormFields = 
+		
+		### contentType query
+		contentType = 
 
 ####
 # Ab hier wird der Code für diesen View nicht mehr verwendet!!

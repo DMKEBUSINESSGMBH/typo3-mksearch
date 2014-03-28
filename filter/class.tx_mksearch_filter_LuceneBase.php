@@ -110,8 +110,25 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
 			}
 
 			// @todo: Restrict content types - according to search form options
+			$fields = $this->setContentTypeFromConfigurations($fields);
 		}
+
+
 		return true;
+	}
+
+	/**
+	 *
+	 * @param array $fields
+	 *
+	 * @return array
+	 */
+	protected function setContentTypeFromConfigurations(array $fields) {
+		if ($contentType = $this->getConfigurations()->get($this->getConfId() . 'contentType')) {
+			$fields['contentType']	=	array(array('term' => $contentType, 'sign' => true));
+		}
+
+		return $fields;
 	}
 
 	/**
@@ -193,6 +210,37 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
 			// Default
 			$formData['mode_standard_selected'] = 'checked=checked';
 		}
+
+		$formData = $this->fillFormDataWithRequiredfFormFieldsIfNoSet(
+			$formData, $parameters
+		);
+	}
+
+	/**
+	 * ist notwendig weil sonst die Marker, welche die Formulardaten
+	 * enthalten ungeparsed rauskommen, falls das Formular noch
+	 * nicht abgeschickt wurde
+	 *
+	 * @param array $formData
+	 * @param tx_rnbase_parameters $parameters
+	 *
+	 * @return array
+	 */
+	private function fillFormDataWithRequiredfFormFieldsIfNoSet(
+		array $formData, tx_rnbase_parameters $parameters
+	) {
+		$formFields = t3lib_div::trimExplode(
+			',',
+			$this->getConfigurations()->get($this->getConfId() . 'requiredFormFields')
+		);
+
+		foreach ($formFields as $formField) {
+			if (!array_key_exists($formField, $formData)) {
+				$formData[$formField] = '';
+			}
+		}
+
+		return $formData;
 	}
 
 	/**
