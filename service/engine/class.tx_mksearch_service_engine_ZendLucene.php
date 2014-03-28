@@ -638,6 +638,13 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 				$this
 			);
 
+		// add default fe_group field if not present
+		if(!array_key_exists('fe_group_mi', $data)) {
+			$doc->addField('fe_group_mi', 0);
+		}
+
+		$data = $doc->getData();
+
 		foreach ($data as $key=>$field) {
 			$this->addFieldToIndexDoc($key, $field, $zlDoc);
 		}
