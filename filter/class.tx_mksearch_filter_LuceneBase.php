@@ -211,7 +211,7 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
 			$formData['mode_standard_selected'] = 'checked=checked';
 		}
 
-		$formData = $this->fillFormDataWithRequiredfFormFieldsIfNoSet(
+		$formData = $this->fillFormDataWithRequiredFormFieldsIfNoSet(
 			$formData, $parameters
 		);
 	}
@@ -226,7 +226,7 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
 	 *
 	 * @return array
 	 */
-	private function fillFormDataWithRequiredfFormFieldsIfNoSet(
+	private function fillFormDataWithRequiredFormFieldsIfNoSet(
 		array $formData, tx_rnbase_parameters $parameters
 	) {
 		$formFields = t3lib_div::trimExplode(
