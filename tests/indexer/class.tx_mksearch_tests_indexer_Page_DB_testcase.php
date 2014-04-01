@@ -57,6 +57,8 @@ class tx_mksearch_tests_indexer_Page_DB_testcase extends tx_phpunit_database_tes
 	 * setUp() = init DB etc.
 	 */
 	public function setUp() {
+		tx_mksearch_tests_Util::tcaSetUp();
+
 		//WORKAROUND: phpunit seems to backup static attributes (in phpunit.xml)
 		//from version 3.6.10 not before. I'm not completely
 		//sure about that but from version 3.6.10 clearPageInstance is no
@@ -96,6 +98,8 @@ class tx_mksearch_tests_indexer_Page_DB_testcase extends tx_phpunit_database_tes
 	 * tearDown() = destroy DB etc.
 	 */
 	public function tearDown () {
+		tx_mksearch_tests_Util::hooksTearDown();
+
 		$this->cleanDatabase();
 		$this->dropDatabase();
 		$GLOBALS['TYPO3_DB']->sql_select_db(TYPO3_db);
