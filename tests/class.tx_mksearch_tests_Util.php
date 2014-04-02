@@ -102,7 +102,8 @@ class tx_mksearch_tests_Util {
 		if (tx_rnbase_util_TYPO3::isTYPO60OrHigher()) {
 			self::$TCA = $GLOBALS['TCA'];
 			$GLOBALS['TCA'] = array();
-			\TYPO3\CMS\Core\Core\Bootstrap::getInstance()->loadExtensionTables(FALSE);
+			// \TYPO3\CMS\Core\Core\Bootstrap::getInstance()->loadExtensionTables(FALSE);
+			\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::loadBaseTca(FALSE);
 		}
 	}
 

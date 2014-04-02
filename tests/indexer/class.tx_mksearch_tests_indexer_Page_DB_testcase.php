@@ -98,7 +98,7 @@ class tx_mksearch_tests_indexer_Page_DB_testcase extends tx_phpunit_database_tes
 	 * tearDown() = destroy DB etc.
 	 */
 	public function tearDown () {
-		tx_mksearch_tests_Util::hooksTearDown();
+		tx_mksearch_tests_Util::tcaTearDown();
 
 		$this->cleanDatabase();
 		$this->dropDatabase();
