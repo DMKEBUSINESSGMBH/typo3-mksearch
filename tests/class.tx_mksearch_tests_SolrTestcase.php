@@ -22,16 +22,24 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+require_once t3lib_extMgm::extPath('rn_base', 'class.tx_rnbase.php');
+tx_rnbase::load('tx_mksearch_tests_Testcase');
 tx_rnbase::load('tx_mksearch_util_ServiceRegistry');
 tx_rnbase::load('tx_rnbase_util_Spyc');
 tx_rnbase::load('tx_mksearch_tests_Util');
 
 /**
  * Base test class for tests hitting Solr
- * @author Hannes Bochmann
+ *
+ * @package tx_mksearch
+ * @subpackage tx_mksearch_tests
+ * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
+ * @author Michael Wagner <michael.wagner@dmk-ebusiness.de>
+ * @license http://www.gnu.org/licenses/lgpl.html
+ *          GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_tests_SolrTestcase extends tx_phpunit_testcase {
+abstract class tx_mksearch_tests_SolrTestcase
+	extends tx_mksearch_tests_Testcase {
 
 	/**
 	 * @var unknown_type
@@ -49,15 +57,15 @@ class tx_mksearch_tests_SolrTestcase extends tx_phpunit_testcase {
 	/**
 	 * Can be a TYPO3 path like EXT:mksearch/tests.....
 	 * used for all solr version below 4.0
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $configFile = '';
-	
+
 	/**
 	 * Can be a TYPO3 path like EXT:mksearch/tests.....
 	 * Is used when the solr index model is set to solr version 4.0
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $configFileForSolr4 = '';
@@ -87,12 +95,23 @@ class tx_mksearch_tests_SolrTestcase extends tx_phpunit_testcase {
 	 * (non-PHPdoc)
 	 * @see PHPUnit_Framework_TestCase::setUp()
 	 */
-	public function setUp() {
+	protected function setUp() {
+		parent::setUp();
 		$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['devlog']['nolog'] = true;
-		
+
 		$this->initAbsolutePathsForConfigs();
 		t3lib_div::rmdir($this->instanceDir,true);
 		$this->createCore();
+	}
+
+	/**
+	 * (non-PHPdoc)
+	 * @see PHPUnit_Framework_TestCase::tearDown()
+	 */
+	protected function tearDown() {
+		parent::tearDown();
+		$this->unloadCore();
+		t3lib_div::rmdir($this->instanceDir,true);
 	}
 
 	/**
@@ -104,14 +123,14 @@ class tx_mksearch_tests_SolrTestcase extends tx_phpunit_testcase {
 		$this->configFile = t3lib_div::getFileAbsFileName($this->configFile);
 		$this->schemaFile = t3lib_div::getFileAbsFileName($this->schemaFile);
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @return void
 	 */
 	private function setConfigFileDependendOnSolrVersion() {
 		$defaultIndexModel = $this->getDefaultIndexModel();
-		
+
 		if($defaultIndexModel->isSolr4()){
 			$this->configFile = $this->configFileForSolr4;
 		}
@@ -143,15 +162,15 @@ class tx_mksearch_tests_SolrTestcase extends tx_phpunit_testcase {
 	private function setSolrCredentialsForNewCore() {
 		//$this->getDefaultIndexModel()->record['name'] ist z.B.
 		//"localhost,8081,/solr-3.5.0/mycore"
-		$credentialsStringParts = 
+		$credentialsStringParts =
 			t3lib_div::trimExplode(',',$this->getDefaultIndexModel()->record['name']);
-			
+
 		//damit ist also $credentialsStringParts[2] z.B.
 		//"/solr-3.5.0/mycore"
 		$solrPathParts = t3lib_div::trimExplode('/',$credentialsStringParts[2]);
-		
+
 		//build new credential string
-		$newCredentialsString = $credentialsStringParts[0] . ',' . $credentialsStringParts[1] . 
+		$newCredentialsString = $credentialsStringParts[0] . ',' . $credentialsStringParts[1] .
 			',/' . $solrPathParts[1] . '/' . $this->getCoreName();
 
 		$newCredentials = $this->getSolrEngine()->getCredentialsFromString($newCredentialsString);
@@ -186,7 +205,7 @@ class tx_mksearch_tests_SolrTestcase extends tx_phpunit_testcase {
 			$additionalMessage .= ' auf: Host: ' . $this->getSolr()->getHost() . ', Port: ' .
 				$this->getSolr()->getPort() . ', Path: ' . $this->getSolr()->getPath();
 		}
-		
+
 		return 'Solr ist nicht erreichbar' . $additionalMessage;
 	}
 
@@ -229,7 +248,7 @@ class tx_mksearch_tests_SolrTestcase extends tx_phpunit_testcase {
 		if(!$this->solrEngine){
 			if(!$defaultIndexModel = $this->getDefaultIndexModel())
 				$this->markTestSkipped($this->getSolrNotRespondingMessage());
-				
+
 			$this->solrEngine = tx_mksearch_util_ServiceRegistry::getSearchEngine(
 				$defaultIndexModel
 			);
@@ -271,15 +290,6 @@ class tx_mksearch_tests_SolrTestcase extends tx_phpunit_testcase {
 		$solr = $this->getSolr();
 		$baseSolrPath = explode('/', $solr->getPath());
 		return 'http://' . $solr->getHost() . ':' . $solr->getPort() . '/' . $baseSolrPath[1];
-	}
-
-	/**
-	 * (non-PHPdoc)
-	 * @see PHPUnit_Framework_TestCase::tearDown()
-	 */
-	public function tearDown(){
-		$this->unloadCore();
-		t3lib_div::rmdir($this->instanceDir,true);
 	}
 
 	/**
@@ -371,13 +381,6 @@ class tx_mksearch_tests_SolrTestcase extends tx_phpunit_testcase {
 	protected function assertNothingFound($result) {
 		$this->assertEquals(0, $result['numFound'], 'doch etwas gefunden');
 		$this->assertEmpty($result['items'], 'doch items etwas gefunden');
-	}
-
-	/**
-	 * @group dummytest
-	 */
-	public function testDummy() {
-		$this->assertTrue(true);
 	}
 }
 

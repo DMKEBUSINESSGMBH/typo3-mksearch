@@ -56,6 +56,45 @@ lib.mksearch.lucenefilter {
 				stdWrap.htmlSpecialChars = 1
 			}
 		}
+		
+		# Die hier konfigurierten Parameter werden als Marker im Term-String verwendet
+		# Es sind verschiedene Extensions möglich
+		params.mksearch {
+			term = TEXT
+			term {
+				field = term
+				# "-" vor ein Feld um den Wert auszuschließen, "+" um es zu einzuschließen
+				# bzw. mit und zu verknüpfen. alternativ kann auch combination
+				# in der preUserFunc auf "and" gesetzt werden. allerdings funtkioniert das
+				# nur wenn die fields nicht explizit gesetzt sind
+				#wrap = +|
+				required = 1
+				preUserFunc = tx_mksearch_util_UserFunc->searchLuceneOptions
+				preUserFunc {
+					### wo steckt der combination parameter?
+					qualifier = mksearch
+					## in Anführungszeichen setzen? sollte nicht in verbindung mit wildcard suchen 
+					## verwendet werden
+					quote = 0
+					### remove lucene control characters?
+					sanitize = 1
+					### wie sollen die einzelnen wörter im suchterm verbunden werden
+					combination = and
+					### sollen wildcards vor und dem term gesetzt werden?
+					wildcard = 1
+				}
+			}
+		}
+		# So wurden auch alle Parameter von tt_news ausgelesen
+		#params.tt_news {
+		#}
+		
+		fields {
+			# Die Marker haben das Format ###PARAM_EXTQUALIFIER_PARAMNAME###
+			# "-" vor ein Feld um den Wert auszuschließen, "+" um es zu einzuschließen
+			# bzw. mit und zu verknüpfen
+			term = +contentType:* ###PARAM_MKSEARCH_TERM###
+		}
 	}
 	
 	# Alternative filter which receives the search term from the
@@ -124,6 +163,10 @@ lib.mksearch.defaultsolrfilter {
 				sanitize = 1
 				### wie sollen die einzelnen wörter im suchterm verbunden werden
 				combination = or
+				### sollen wildcards vor und dem term gesetzt werden?
+				### besser durch eine ordentliche filter chain in der schema.xml
+				### realisieren
+				wildcard = 0
 			}
 		}
 	}

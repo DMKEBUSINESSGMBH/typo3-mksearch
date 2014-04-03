@@ -22,35 +22,39 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+require_once t3lib_extMgm::extPath('rn_base', 'class.tx_rnbase.php');
+require_once t3lib_extMgm::extPath('mksearch', 'lib/Apache/Solr/Document.php');
+tx_rnbase::load('tx_mksearch_tests_DbTestcase');
 tx_rnbase::load('tx_mksearch_tests_Util');
 
 
-require_once(t3lib_extMgm::extPath('mksearch') . 'lib/Apache/Solr/Document.php');
 
 /**
  * Wir müssen in diesem Fall mit der DB testen da wir die pages
  * Tabelle benötigen
- * @author Hannes Bochmann
- * 
+ *
+ * @package tx_mksearch
+ * @subpackage tx_mksearch_tests
+ * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
+ * @author Michael Wagner <michael.wagner@dmk-ebusiness.de>
+ * @license http://www.gnu.org/licenses/lgpl.html
+ *          GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_tests_model_cal_Event_testcase extends tx_phpunit_database_testcase {
-	protected $workspaceIdAtStart;
-	protected $db;
+class tx_mksearch_tests_model_cal_Event_testcase
+	extends tx_mksearch_tests_DbTestcase {
 
 	/**
-	 * Klassenkonstruktor
+	 * Constructs a test case with the given name.
 	 *
-	 * @param string $name
+	 * @param string $name the name of a testcase
+	 * @param array $data ?
+	 * @param string $dataName ?
 	 */
-	public function __construct ($name=null) {
-		global $TYPO3_DB, $BE_USER;
+	public function __construct($name = NULL, array $data = array(), $dataName = '') {
+		parent::__construct($name, $data, $dataName);
 
-		parent::__construct ($name);
-		$TYPO3_DB->debugOutput = TRUE;
-
-		$this->workspaceIdAtStart = $BE_USER->workspace;
-		$BE_USER->setWorkspace(0);
+		$this->importDataSets[] = tx_mksearch_tests_Util::getFixturePath('db/cal_event_category_mm.xml');
+		$this->importDataSets[] = tx_mksearch_tests_Util::getFixturePath('db/cal_category.xml');
 	}
 
 	/**
@@ -60,46 +64,18 @@ class tx_mksearch_tests_model_cal_Event_testcase extends tx_phpunit_database_tes
 		if(!t3lib_extMgm::isLoaded('cal')) {
 			$this->markTestSkipped('cal ist nicht installiert');
 		}
-		
-		//das devlog stört nur bei der Testausführung im BE und ist da auch
-		//vollkommen unnötig
-		$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['devlog']['nolog'] = true;
-		
-		$this->createDatabase();
-		$this->db = $this->useTestDatabase();
-		$this->importStdDB();
-		$extensions = array('cms','mksearch','cal');
-		
-		//templavoila und realurl brauchen wir da es im BE sonst Warnungen hagelt
-		//und man die Testergebnisse nicht sieht ;-)
-		if(t3lib_extMgm::isLoaded('templavoila')) $extensions[] = 'templavoila';
-		if(t3lib_extMgm::isLoaded('realurl')) $extensions[] = 'realurl';
-		$this->importExtensions($extensions);
-		
-		$this->importDataSet(tx_mksearch_tests_Util::getFixturePath('db/cal_event_category_mm.xml'));
-		$this->importDataSet(tx_mksearch_tests_Util::getFixturePath('db/cal_category.xml'));
+		parent::setUp();
 	}
 
-	/**
-	 * tearDown() = destroy DB etc.
-	 */
-	protected function tearDown () {
-		$this->cleanDatabase();
-		$this->dropDatabase();
-		$GLOBALS['TYPO3_DB']->sql_select_db(TYPO3_db);
-
-		$GLOBALS['BE_USER']->setWorkspace($this->workspaceIdAtStart);
-	}
-	
 	/**
 	 */
 	public function testgetCategoriesReturnsCorrectCategories() {
 		$event = tx_rnbase::makeInstance(
 			'tx_mksearch_model_cal_Event',array('uid' => 1)
 		);
-		
+
 		$categories = $event->getCategories();
-		
+
 		$this->assertEquals(2, count($categories), 'Mehr Kategorien als erwartet.');
 		$this->assertEquals(
 			'First Category',

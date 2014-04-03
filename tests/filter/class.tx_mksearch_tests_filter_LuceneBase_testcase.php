@@ -41,6 +41,30 @@ tx_rnbase::load('tx_rnbase_tests_BaseTestCase');
 class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_rnbase_tests_BaseTestCase {
 
 	/**
+	 *
+	 * @var unknown
+	 */
+	private $feGroupsBackup;
+
+	/**
+	 * (non-PHPdoc)
+	 * @see PHPUnit_Framework_TestCase::setUp()
+	 */
+	protected function setUp() {
+		$this->feGroupsBackup = $GLOBALS['TSFE']->fe_user->groupData['uid'];
+	}
+
+	/**
+	 * (non-PHPdoc)
+	 * @see PHPUnit_Framework_TestCase::tearDown()
+	 */
+	protected function tearDown() {
+		$GLOBALS['TSFE']->fe_user->groupData['uid'] = $this->feGroupsBackup;
+
+		unset($_GET['mksearch']);
+	}
+
+	/**
 	 * @var string
 	 */
 	private $confId = 'searchlucene.';
@@ -87,69 +111,186 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_rnbase_tests_BaseT
 	}
 
 	/**
-	 * @group uinit
+	 * @group unit
 	 */
-	public function testInitAddsNoContentTypeIfNotDefinedInConfigurations() {
+	public function testInitReturnsFalseIfFormOnly() {
+		$configArray = array($this->confId => array('formOnly' => true));
+
+		$filter = $this->getFilter($configArray);
+		$fields = $options = array();
+		$this->assertFalse($filter->init($fields, $options), 'filter liefert nicht false');
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testInitReturnsFalseIfNoSubmit() {
+		$configArray = array($this->confId => array('forceSearch' => false));
+
+		$filter = $this->getFilter($configArray);
+		$fields = $options = array();
+		$this->assertFalse($filter->init($fields, $options), 'filter liefert nicht false');
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testInitReturnsTrueIfNoSubmitButForceSearch() {
+		$this->markTestSkippedIfNoZend();
+
+		$configArray = array($this->confId => array('forceSearch' => true));
+
+		$filter = $this->getFilter($configArray);
+		$fields = $options = array();
+		$this->assertTrue($filter->init($fields, $options), 'filter liefert nicht true');
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testInitReturnsTrueIfSubmit() {
+		$this->markTestSkippedIfNoZend();
+
+		$configArray = array($this->confId => array('forceSearch' => false));
+
+		$filter = $this->getFilter($configArray, array('submit' => true));
+		$fields = $options = array();
+		$this->assertTrue($filter->init($fields, $options), 'filter liefert nicht true');
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testInitSetFeGroupsToOptions() {
+		$this->markTestSkippedIfNoZend();
+
+		$GLOBALS['TSFE']->fe_user->groupData['uid'] = 'someUids';
 		$filter = $this->getFilter();
+		$fields = $options = array();
+		$filter->init($fields, $options);
 
-		$fields = array();
-		$options = array();
-		$filterReturn = $filter->init($fields,$options);
-		$this->assertTrue($filterReturn, 'filter gibt nicht true zurück.');
-
-		$expectedFields = $this->getDefaultFields();
-		$this->assertEquals($expectedFields, $fields, 'fields nicht leer');
+		$this->assertEquals('someUids', $options['fe_groups'], 'fe gruppen nicht in options');
 	}
 
 	/**
-	 * @group uinit
+	 * @group unit
 	 */
-	public function testInitAddsContentTypeIfDefinedInConfigurations() {
-		$configArray = array($this->confId => array('contentType' => 'test'));
-		$filter = $this->getFilter($configArray);
+	public function testInitSetsRawFormatToOptionsIfTermTemplate() {
+		$this->markTestSkippedIfNoZend();
 
-		$fields = array();
-		$options = array();
-		$filterReturn = $filter->init($fields,$options);
-		$this->assertTrue($filterReturn, 'filter gibt nicht true zurück.');
+		$filter = $this->getFilter();
+		$fields = $options = array();
+		$filter->init($fields, $options);
 
-		$expectedFields = $this->getDefaultFields();
-		$expectedFields['contentType']	=	array(array('term' => 'test', 'sign' => true));
-		$this->assertEquals($expectedFields, $fields, 'fields nicht leer');
+		$this->assertEquals(
+			true,
+			$options['rawFormat'],
+			'rawFormat nicht in options auf true'
+		);
 	}
 
 	/**
-	 * @group uinit
+	 * @group unit
 	 */
-	public function testInitAddsNoContentTypeIfDefinedInConfigurationsButModeIsAdvanced() {
-		$configArray = array($this->confId => array('contentType' => 'test'));
-		$filter = $this->getFilter($configArray);
+	public function testInitSetsMinimalPrefixLengthToZero() {
+		$this->markTestSkippedIfNoZend();
 
-		$fields = array();
-		$options = array();
-		$filterReturn = $filter->init($fields,$options);
-		$this->assertTrue($filterReturn, 'filter gibt nicht true zurück.');
+		$filter = $this->getFilter();
+		$fields = $options = array();
+		$filter->init($fields, $options);
 
-		$expectedFields = $this->getDefaultFields();
-		$expectedFields['contentType']	=	array(array('term' => 'test', 'sign' => true));
-		$this->assertEquals($expectedFields, $fields, 'fields nicht leer');
+		$lengthProperty = new ReflectionProperty(
+			'Zend_Search_Lucene_Search_Query_Wildcard', '_minPrefixLength'
+		);
+		$lengthProperty->setAccessible(true);
+		$this->assertEquals(
+			0, $lengthProperty->getValue(Zend_Search_Lucene_Search_Query_Wildcard),
+			'minimale term länge in lucene nicht auf 0 gesetzt'
+		);
 	}
+
+	/**
+	 * @group unit
+	 */
+	public function testInitSetsCorrectTerm() {
+		$this->markTestSkippedIfNoZend();
+
+		$_GET['mksearch']['term'] = 'test term';
+
+		$fields = array('term' => 'contentType:* ###PARAM_MKSEARCH_TERM###');
+		$options = array();
+		$filter = $this->getFilter();
+		$filter->init($fields, $options);
+		$this->assertEquals(
+			'+contentType:* (+*test* +*term*)',
+			$fields['term'],
+			'term template falsch geparsed!'
+		);
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testInitSetsCorrectTermIfTermEmpty() {
+		$this->markTestSkippedIfNoZend();
+
+		$_GET['mksearch']['term'] = '';
+
+		$fields = array('term' => 'contentType:* ###PARAM_MKSEARCH_TERM###');
+		$options = array();
+		$filter = $this->getFilter();
+		$filter->init($fields, $options);
+		$this->assertEquals('+contentType:*', $fields['term'], 'term template falsch geparsed!');
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testInitSetsCorrectTermIfNoTermParamSet() {
+		$this->markTestSkippedIfNoZend();
+
+		$fields = array('term' => 'contentType:* ###PARAM_MKSEARCH_TERM###');
+		$options = array();
+		$filter = $this->getFilter();
+		$filter->init($fields, $options);
+		$this->assertEquals('+contentType:*', $fields['term'], 'term template falsch geparsed!');
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testInitSetsCorrectTermIfTermContainsSolrControlCharacters() {
+		$this->markTestSkippedIfNoZend();
+
+		$_GET['mksearch']['term'] = '*';
+
+		$fields = array('term' => 'contentType:* ###PARAM_MKSEARCH_TERM###');
+		$options = array();
+		$filter = $this->getFilter();
+		$filter->init($fields, $options);
+		$this->assertEquals('+contentType:*', $fields['term'], 'term template falsch geparsed!');
+	}
+
 
 	/**
 	 * @param array $configArray
+	 * @param array $parametersArray
 	 *
 	 * @return tx_mksearch_filter_LuceneBase
 	 */
-	private function getFilter(array $configArray = array()) {
-		$configArray[$this->confId]['forceSearch'] = true;
+	private function getFilter(array $configArray = array(), $parametersArray =array()) {
+		if(!isset($configArray[$this->confId]['forceSearch'])) {
+			$configArray[$this->confId]['forceSearch'] = true;
+		}
+		$configArray = t3lib_div::array_merge_recursive_overrule(
+			tx_mksearch_tests_Util::loadPageTS4BE(), $configArray
+		);
 		$configArray[$this->confId]['requiredFormFields'] = 'zip,company,city';
-		$configurations = tx_mklib_util_TS::loadConfig4BE(
-			'mksearch', 'mksearch',
-			'/static/static_extensions_template/setup.txt',
+		$configurations = tx_mksearch_tests_Util::loadConfig4BE(
 			$configArray
 		);
 
-		$parameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
+		$parameters = tx_rnbase::makeInstance('tx_rnbase_parameters', $parametersArray);
 		$configurations = $this->createConfigurations(
 			$configurations->getConfigArray(), 'mksearch', 'mksearch',
 			$parameters,
@@ -163,9 +304,13 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_rnbase_tests_BaseT
 	}
 
 	/**
-	 * @return array
+	 *
+	 * @return boolean
 	 */
-	private function getDefaultFields() {
-		return array( '__default__' => array ());
+	private function markTestSkippedIfNoZend() {
+		$zendPath = tx_rnbase_configurations::getExtensionCfgValue('mksearch', 'zendPath');
+		if(empty($zendPath)) {
+			$this->markTestSkipped('Pfad zu Zend nicht konfiguriert.');
+		}
 	}
 }

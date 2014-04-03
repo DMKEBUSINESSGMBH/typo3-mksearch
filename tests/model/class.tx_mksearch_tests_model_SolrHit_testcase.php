@@ -22,12 +22,23 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+require_once t3lib_extMgm::extPath('rn_base', 'class.tx_rnbase.php');
+require_once t3lib_extMgm::extPath('mksearch', 'lib/Apache/Solr/Document.php');
+tx_rnbase::load('tx_mksearch_tests_Testcase');
 tx_rnbase::load('tx_mksearch_model_SolrHit');
 
-require_once(t3lib_extMgm::extPath('mksearch') . 'lib/Apache/Solr/Document.php');
 
-class tx_mksearch_tests_model_SolrHit_testcase extends tx_phpunit_testcase {
+/**
+ *
+ * @package tx_mksearch
+ * @subpackage tx_mksearch_tests
+ * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
+ * @author Michael Wagner <michael.wagner@dmk-ebusiness.de>
+ * @license http://www.gnu.org/licenses/lgpl.html
+ *          GNU Lesser General Public License, version 3 or later
+ */
+class tx_mksearch_tests_model_SolrHit_testcase
+	extends tx_mksearch_tests_Testcase {
 
 	function test_getSolrId() {
 		$doc = new Apache_Solr_Document();

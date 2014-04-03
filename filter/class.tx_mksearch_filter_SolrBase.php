@@ -26,6 +26,7 @@ tx_rnbase::load('tx_rnbase_util_SearchBase');
 tx_rnbase::load('tx_mksearch_util_Misc');
 tx_rnbase::load('tx_rnbase_filter_BaseFilter');
 tx_rnbase::load('tx_rnbase_util_ListBuilderInfo');
+tx_rnbase::load('tx_mksearch_util_Filter');
 
 /**
  * Der Filter liest seine Konfiguration passend zum Typ des Solr RequestHandlers. Der Typ
@@ -188,16 +189,9 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 	 */
 	protected function handleTerm(&$fields, &$parameters, &$configurations, $confId) {
 		if($termTemplate = $fields['term']) {
-			$templateMarker = tx_rnbase::makeInstance('tx_mksearch_marker_General');
-			// Welche Extension-Parameter werden verwendet?
-			$extQualifiers = $configurations->getKeyNames($confId.'params.');
-			foreach($extQualifiers As $qualifier) {
-				$params = $parameters->getAll($qualifier);
-				$termTemplate = $templateMarker->parseTemplate($termTemplate, $params, $configurations->getFormatter(), $confId.'params.'.$qualifier.'.', 'PARAM_'.strtoupper($qualifier));
-				//wenn keine params gesetzt sind, kommt der marker ungeparsed raus.
-				//also ersetzen wir diesen prinzipiell am ende durch ein leeren string.
-				$termTemplate = preg_replace('/(###PARAM_'.strtoupper($qualifier).'_)\w.*###/', '', $termTemplate);
-			}
+			$termTemplate = tx_mksearch_util_Filter::parseTermTemplate(
+				$termTemplate, $parameters, $configurations, $confId
+			);
 			$fields['term'] = $termTemplate;
 		}
 		// wenn der DisMaxRequestHandler genutzt muss der term leer sein, sonst wird nach *:* gesucht!

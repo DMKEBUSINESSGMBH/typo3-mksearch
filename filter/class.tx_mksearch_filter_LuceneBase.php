@@ -26,6 +26,7 @@ require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_rnbase_util_SearchBase');
 tx_rnbase::load('tx_rnbase_util_ListBuilderInfo');
 tx_rnbase::load('tx_rnbase_filter_BaseFilter');
+tx_rnbase::load('tx_mksearch_util_Filter');
 
 /**
  * Dieser Filter verarbeitet Anfragen für Lucene
@@ -48,10 +49,10 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
 	 * @param array $options
 	 */
 	public function init(&$fields, &$options) {
-		tx_rnbase_util_SearchBase::setConfigFields($fields, $this->getConfigurations(), $this->getConfId().'filter.fields.');
-		tx_rnbase_util_SearchBase::setConfigOptions($options, $this->getConfigurations(), $this->getConfId().'filter.options.');
-
-		return $this->initFilter($fields, $options, $this->getParameters(), $this->getConfigurations(), $this->getConfId());
+		$confId = $this->getConfId();
+		$fields = $this->getConfigurations()->get($confId.'filter.fields.');
+		tx_rnbase_util_SearchBase::setConfigOptions($options, $this->getConfigurations(),$confId.'filter.options.');
+		return $this->initFilter($fields, $options, $this->getParameters(), $this->getConfigurations(), $confId);
 	}
 
 	/**
@@ -66,69 +67,52 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
 	 *
 	 */
 	protected function initFilter(&$fields, &$options, &$parameters, &$configurations, $confId) {
-		// Only the searchform was displayed
-		if($configurations->get('formOnly'))
-			return false;
-
-		// Form still filled in?
-		$term = $parameters->get('term');
-		if (!$term && !$configurations->get($confId . 'forceSearch')) {
+		if(
+			$configurations->get($confId . 'formOnly') ||
+			!($parameters->offsetExists('submit') ||
+			$configurations->get($confId . 'forceSearch'))
+		) {
 			return false;
 		}
 
 		$this->isSearch = true;
 
-		// Set fe_groups
-		global $GLOBALS;
-		$options['fe_groups'] = $GLOBALS['TSFE']->fe_user->groupData['uid'];
-		// Is $fields['term'] a query which can be directly understood by the search engine?
-		$ooptions = $parameters->get('options');
-		// TODO: Diese Optionen müssen sich auch per TS setzen lassen!
-		if ($ooptions['mode'] == 'advanced') {
+		$options = $this->setFeGroupsToOptions($options);
+
+		if($termTemplate = $fields['term']) {
 			$options['rawFormat'] = true;
-			$fields['term'] = $term;
-		} else {
-			// Standard search
-			$fields['__default__'] = array();
+			$this->fixMinimalPrefixLengthInZend();
 
-			if (!isset($ooptions['combination']) or $ooptions['combination'] == 'or' or $ooptions['combination'] == 'and') {
-				// Simple or / and combination
-				$sign = $ooptions['combination'] == 'or' ? null : true;
-				foreach (explode(' ', $term) as $t) {
-					// Process only non-empty tokens
-					if (strlen($t) > 1 or strlen($t) > 0 and $t[0] != '-') {
-						// "not" requested?
-						if ($t[0] == '-')
-							$fields['__default__'][] = array('term' => substr($t, 1), 'sign' => false);
-						else
-							$fields['__default__'][] = array('term' => $t, 'sign' => $sign);
-					}
-				}
-			} else {
-				// Phrase
-				$fields['__default__'][] = array('term' => $term, 'phrase' => true);
-			}
+			$termTemplate = tx_mksearch_util_Filter::parseTermTemplate(
+				$termTemplate, $parameters, $configurations, $confId . 'filter.'
+			);
 
-			// @todo: Restrict content types - according to search form options
-			$fields = $this->setContentTypeFromConfigurations($fields);
+			$fields['term'] = trim($termTemplate);
 		}
-
 
 		return true;
 	}
 
 	/**
 	 *
-	 * @param array $fields
+	 * @param array $options
 	 *
 	 * @return array
 	 */
-	protected function setContentTypeFromConfigurations(array $fields) {
-		if ($contentType = $this->getConfigurations()->get($this->getConfId() . 'contentType')) {
-			$fields['contentType']	=	array(array('term' => $contentType, 'sign' => true));
-		}
+	protected function setFeGroupsToOptions(array $options) {
+		$options['fe_groups'] = $GLOBALS['TSFE']->fe_user->groupData['uid'];
 
-		return $fields;
+		return $options;
+	}
+
+	/**
+	 * sonst kommt es in Zend_Search_Lucene_Search_Query_Wildcard::rewrite
+	 * zu einer exception bei führenden wildcards.
+	 * allgemein sollte das auch im formular validiert werden wenn gewünscht.
+	 */
+	protected function fixMinimalPrefixLengthInZend() {
+		tx_rnbase::makeInstance('tx_mksearch_service_engine_ZendLucene');
+		Zend_Search_Lucene_Search_Query_Wildcard::setMinPrefixLength(0);
 	}
 
 	/**

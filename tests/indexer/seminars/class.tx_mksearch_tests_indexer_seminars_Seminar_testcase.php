@@ -22,83 +22,63 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+require_once t3lib_extMgm::extPath('rn_base', 'class.tx_rnbase.php');
+require_once t3lib_extMgm::extPath('mksearch', 'lib/Apache/Solr/Document.php');
+tx_rnbase::load('tx_mksearch_tests_DbTestcase');
 tx_rnbase::load('tx_mksearch_tests_Util');
 
 
-require_once(t3lib_extMgm::extPath('mksearch') . 'lib/Apache/Solr/Document.php');
 
 /**
- * @author Hannes Bochmann
+ *
+ * @package tx_mksearch
+ * @subpackage tx_mksearch_tests
+ * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
+ * @author Michael Wagner <michael.wagner@dmk-ebusiness.de>
+ * @license http://www.gnu.org/licenses/lgpl.html
+ *          GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_tests_indexer_seminars_Seminar_testcase extends tx_phpunit_database_testcase {
-	protected $workspaceIdAtStart;
-	protected $db;
+class tx_mksearch_tests_indexer_seminars_Seminar_testcase
+	extends tx_mksearch_tests_DbTestcase {
 
 	/**
-	 * Klassenkonstruktor
+	 * Constructs a test case with the given name.
 	 *
-	 * @param string $name
+	 * @param string $name the name of a testcase
+	 * @param array $data ?
+	 * @param string $dataName ?
 	 */
-	public function __construct ($name=null) {
-		global $TYPO3_DB, $BE_USER;
+	public function __construct($name = NULL, array $data = array(), $dataName = '') {
+		parent::__construct($name, $data, $dataName);
+		$this->importExtensions[] = 'seminars';
 
-		parent::__construct ($name);
-		$TYPO3_DB->debugOutput = TRUE;
-
-		$this->workspaceIdAtStart = $BE_USER->workspace;
-		$BE_USER->setWorkspace(0);
+		$this->importDataSets[] = tx_mksearch_tests_Util::getFixturePath('db/pages.xml');
+		$this->importDataSets[] = tx_mksearch_tests_Util::getFixturePath('db/seminars.xml');
+		$this->importDataSets[] = tx_mksearch_tests_Util::getFixturePath('db/seminars_speakers.xml');
+		$this->importDataSets[] = tx_mksearch_tests_Util::getFixturePath('db/seminars_speakers_mm.xml');
+		$this->importDataSets[] = tx_mksearch_tests_Util::getFixturePath('db/seminars_target_groups.xml');
+		$this->importDataSets[] = tx_mksearch_tests_Util::getFixturePath('db/seminars_target_groups_mm.xml');
+		$this->importDataSets[] = tx_mksearch_tests_Util::getFixturePath('db/seminars_sites.xml');
+		$this->importDataSets[] = tx_mksearch_tests_Util::getFixturePath('db/seminars_place_mm.xml');
+		$this->importDataSets[] = tx_mksearch_tests_Util::getFixturePath('db/seminars_categories.xml');
+		$this->importDataSets[] = tx_mksearch_tests_Util::getFixturePath('db/seminars_categories_mm.xml');
+		$this->importDataSets[] = tx_mksearch_tests_Util::getFixturePath('db/seminars_organizers.xml');
+		$this->importDataSets[] = tx_mksearch_tests_Util::getFixturePath('db/seminars_organizers_mm.xml');
+		$this->importDataSets[] = tx_mksearch_tests_Util::getFixturePath('db/seminars_timeslots.xml');
+		$this->importDataSets[] = tx_mksearch_tests_Util::getFixturePath('db/seminars_timeslots_speakers_mm.xml');
 	}
 
 	/**
 	 * setUp() = init DB etc.
 	 */
-	public function setUp() {
-		$this->createDatabase();
-		// assuming that test-database can be created otherwise PHPUnit will skip the test
-		$this->db = $this->useTestDatabase();
-		$this->importStdDB();
-		$aExtensions = array('cms','mksearch','seminars');
-		//templavoila und realurl brauchen wir da es im BE sonst Warnungen hagelt
-		//und man die Testergebnisse nicht sieht
-		if(t3lib_extMgm::isLoaded('templavoila')) $aExtensions[] = 'templavoila';
-		if(t3lib_extMgm::isLoaded('realurl')) $aExtensions[] = 'realurl';
-		$this->importExtensions($aExtensions,true);
-		
+	protected function setUp() {
+		parent::setUp();
+
 		//if we got here all extensions got successfully imported
 		//so now we can load the appropriate classes
 		tx_rnbase::load('tx_seminars_objectfromdb');
-		
-		//das devlog stört nur bei der Testausführung im BE und ist da auch
-		//vollkommen unnötig
-		$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['devlog']['nolog'] = true;
-		
-		$this->importDataSet(tx_mksearch_tests_Util::getFixturePath('db/seminars.xml'));
-		$this->importDataSet(tx_mksearch_tests_Util::getFixturePath('db/seminars_speakers.xml'));
-		$this->importDataSet(tx_mksearch_tests_Util::getFixturePath('db/seminars_speakers_mm.xml'));
-		$this->importDataSet(tx_mksearch_tests_Util::getFixturePath('db/seminars_target_groups.xml'));
-		$this->importDataSet(tx_mksearch_tests_Util::getFixturePath('db/seminars_target_groups_mm.xml'));
-		$this->importDataSet(tx_mksearch_tests_Util::getFixturePath('db/seminars_sites.xml'));
-		$this->importDataSet(tx_mksearch_tests_Util::getFixturePath('db/seminars_place_mm.xml'));
-		$this->importDataSet(tx_mksearch_tests_Util::getFixturePath('db/seminars_categories.xml'));
-		$this->importDataSet(tx_mksearch_tests_Util::getFixturePath('db/seminars_categories_mm.xml'));
-		$this->importDataSet(tx_mksearch_tests_Util::getFixturePath('db/seminars_organizers.xml'));
-		$this->importDataSet(tx_mksearch_tests_Util::getFixturePath('db/seminars_organizers_mm.xml'));
-		$this->importDataSet(tx_mksearch_tests_Util::getFixturePath('db/seminars_timeslots.xml'));
-		$this->importDataSet(tx_mksearch_tests_Util::getFixturePath('db/seminars_timeslots_speakers_mm.xml'));
 	}
 
-	/**
-	 * tearDown() = destroy DB etc.
-	 */
-	public function tearDown () {
-		$this->cleanDatabase();
-		$this->dropDatabase();
-		$GLOBALS['TYPO3_DB']->sql_select_db(TYPO3_db);
-
-		$GLOBALS['BE_USER']->setWorkspace($this->workspaceIdAtStart);
-	}
-	
 	/**
 	 * prüft ob ein seminar vom typ 0 richtig indiziert wird
 	 */
@@ -114,9 +94,9 @@ class tx_mksearch_tests_indexer_seminars_Seminar_testcase extends tx_phpunit_dat
 		list($extKey, $cType) = $indexer->getContentType();
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$options = array();
-		
+
 		$aIndexDoc = $indexer->prepareSearchData('tx_seminars_seminars', $aResult[0], $indexDoc, $options)->getData();
-		
+
 		$this->assertEquals('1. Fortbildung',$aIndexDoc['title_s']->getValue(),'Es wurde nicht der richtige Titel indiziert!');
 		$this->assertEquals('1. Fortbildung Untertitel',$aIndexDoc['subtitle_s']->getValue(),'Es wurde nicht der richtige Untertitel indiziert!');
 		$this->assertEquals('1. Fortbildung',$aIndexDoc['realtitle_s']->getValue(),'Es wurde nicht der richtige Realtitel indiziert!');
@@ -147,7 +127,7 @@ class tx_mksearch_tests_indexer_seminars_Seminar_testcase extends tx_phpunit_dat
 		$this->assertEquals(array(0=>'1. Site',1=>'2. Site'),$aIndexDoc['timeslots_place_ms']->getValue(),'Es wurden nicht die richtigen Timeslot Places indiziert!');
 		$this->assertEquals(array(0=>'1. Referent',1=>'2. Referent'),$aIndexDoc['timeslots_speakers_ms']->getValue(),'Es wurden nicht die richtigen Timeslot Speakers indiziert!');
 	}
-	
+
 	/**
 	 * Prüft ob das seminar auf gelöscht gesetzt wird
 	 */
@@ -156,7 +136,7 @@ class tx_mksearch_tests_indexer_seminars_Seminar_testcase extends tx_phpunit_dat
 		list($extKey, $cType) = $indexer->getContentType();
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$options = array();
-		
+
 		//Testdaten aus DB holen
 		$aOptions = array(
 			'where' => 'tx_seminars_seminars.uid=1',
@@ -166,18 +146,18 @@ class tx_mksearch_tests_indexer_seminars_Seminar_testcase extends tx_phpunit_dat
 
 		//manipulate the seminar and set it to deleted
 		$aResult[0]['deleted'] = 1;
-		
+
 		$oIndexDoc = $indexer->prepareSearchData('tx_seminars_seminars', $aResult[0], $indexDoc, $options);
 		$this->assertTrue($oIndexDoc->getDeleted(), 'Element sollte gelöscht werden, da auf deleted');
-		
+
 		//manipulate the seminar and set it to hidden
 		$aResult[0]['deleted'] = 0;
 		$aResult[0]['hidden'] = 1;
-		
+
 		$oIndexDoc = $indexer->prepareSearchData('tx_seminars_seminars', $aResult[0], $indexDoc, $options);
 		$this->assertTrue($oIndexDoc->getDeleted(), 'Element sollte gelöscht werden, da auf deleted');
 	}
-	
+
 	/**
 	 * Prüft ob nur die Elemente indiziert werden, die im
 	 * angegebenen Seitenbaum liegen
@@ -194,9 +174,9 @@ class tx_mksearch_tests_indexer_seminars_Seminar_testcase extends tx_phpunit_dat
 		list($extKey, $cType) = $indexer->getContentType();
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$options = array();
-		
+
 		$aIndexDoc = $indexer->prepareSearchData('tx_seminars_seminars', $aResult[0], $indexDoc, $options)->getData();
-		
+
 		$this->assertEquals('1. Fortbildungsthema',$aIndexDoc['title_s']->getValue(),'Es wurde nicht der richtige Titel indiziert!');
 		$this->assertEquals('1. Fortbildungsthema Untertitel',$aIndexDoc['subtitle_s']->getValue(),'Es wurde nicht der richtige Untertitel indiziert!');
 		$this->assertEquals('1. Fortbildungsthema',$aIndexDoc['realtitle_s']->getValue(),'Es wurde nicht der richtige Realtitel indiziert!');
@@ -226,7 +206,7 @@ class tx_mksearch_tests_indexer_seminars_Seminar_testcase extends tx_phpunit_dat
 		$this->assertEquals(array(0=>'1. Site',1=>'2. Site'),$aIndexDoc['timeslots_place_ms']->getValue(),'Es wurden nicht die richtigen Timeslot Places indiziert!');
 		$this->assertEquals(array(0=>'1. Referent',1=>'2. Referent'),$aIndexDoc['timeslots_speakers_ms']->getValue(),'Es wurden nicht die richtigen Timeslot Speakers indiziert!');
 	}
-	
+
 	/**
 	 * Prüft ob nur die Elemente indiziert werden, die im
 	 * angegebenen Seitenbaum liegen
@@ -243,12 +223,12 @@ class tx_mksearch_tests_indexer_seminars_Seminar_testcase extends tx_phpunit_dat
 		list($extKey, $cType) = $indexer->getContentType();
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$options = array();
-		
+
 		$aIndexDoc = $indexer->prepareSearchData('tx_seminars_seminars', $aResult[0], $indexDoc, $options);
-		
+
 		$this->assertNull($aIndexDoc,'Es wurde nicht null zurück gegeben!');
 	}
-	
+
 	/**
 	 * Prüft ob das seminar auf gelöscht gesetzt wird
 	 */
@@ -257,7 +237,7 @@ class tx_mksearch_tests_indexer_seminars_Seminar_testcase extends tx_phpunit_dat
 		list($extKey, $cType) = $indexer->getContentType();
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$options = array();
-		
+
 		//Testdaten aus DB holen
 		$aOptions = array(
 			'where' => 'tx_seminars_seminars.uid=1',
@@ -267,18 +247,18 @@ class tx_mksearch_tests_indexer_seminars_Seminar_testcase extends tx_phpunit_dat
 
 		//manipulate the seminar and set it to deleted
 		$aResult[0]['deleted'] = 1;
-		
+
 		$oIndexDoc = $indexer->prepareSearchData('tx_seminars_seminars', $aResult[0], $indexDoc, $options);
 		$this->assertTrue($oIndexDoc->getDeleted(), 'Element sollte gelöscht werden, da auf deleted');
-		
+
 		//manipulate the seminar and set it to hidden
 		$aResult[0]['deleted'] = 0;
 		$aResult[0]['hidden'] = 1;
-		
+
 		$oIndexDoc = $indexer->prepareSearchData('tx_seminars_seminars', $aResult[0], $indexDoc, $options);
 		$this->assertTrue($oIndexDoc->getDeleted(), 'Element sollte gelöscht werden, da auf deleted');
 	}
-	
+
 	/**
 	 * Prüft ob das richtige seminar in die queue gelegt wurde
 	 */
@@ -294,21 +274,21 @@ class tx_mksearch_tests_indexer_seminars_Seminar_testcase extends tx_phpunit_dat
 		list($extKey, $cType) = $indexer->getContentType();
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$options = array();
-		
+
 		$aIndexDoc = $indexer->prepareSearchData('tx_seminars_seminars', $aResult[0], $indexDoc, $options);
 		//nichtzs direkt indiziert?
 		$this->assertNull($aIndexDoc,'Es wurde nicht null zurück gegeben!');
-		
+
 		$aOptions = array(
 			'enablefieldsoff' => true
 		);
 		$aResult = tx_rnbase_util_DB::doSelect('*', 'tx_mksearch_queue', $aOptions);
-		
+
 		$this->assertEquals(1,count($aResult),'Es wurde nicht der richtige Anzahl in die queue gelegt!');
 		$this->assertEquals('tx_seminars_seminars',$aResult[0]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
 		$this->assertEquals(2,$aResult[0]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
 	}
-	
+
 	/**
 	 * Prüft ob der indexer den korrekten Bereich in die queue legt bei geänderten Typ
 	 */
@@ -318,23 +298,23 @@ class tx_mksearch_tests_indexer_seminars_Seminar_testcase extends tx_phpunit_dat
 		list($extKey, $cType) = $indexer->getContentType();
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$options = array();
-		
+
 		$aIndexDoc = $indexer->prepareSearchData('tx_seminars_categories', $aResult, $indexDoc, $options);
 		//nichtzs direkt indiziert?
 		$this->assertNull($aIndexDoc,'Es wurde nicht null zurück gegeben!');
-		
+
 		$aOptions = array(
 			'enablefieldsoff' => true
 		);
 		$aResult = tx_rnbase_util_DB::doSelect('*', 'tx_mksearch_queue', $aOptions);
-		
+
 		$this->assertEquals(2,count($aResult),'Es wurde nicht der richtige Anzahl in die queue gelegt!');
 		$this->assertEquals('tx_seminars_seminars',$aResult[0]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
 		$this->assertEquals(1,$aResult[0]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
 		$this->assertEquals('tx_seminars_seminars',$aResult[1]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
 		$this->assertEquals(2,$aResult[1]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
 	}
-	
+
 	/**
 	 * Prüft ob der indexer den korrekten Bereich in die queue legt bei geänderten Typ
 	 */
@@ -344,23 +324,23 @@ class tx_mksearch_tests_indexer_seminars_Seminar_testcase extends tx_phpunit_dat
 		list($extKey, $cType) = $indexer->getContentType();
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$options = array();
-		
+
 		$aIndexDoc = $indexer->prepareSearchData('tx_seminars_organizers', $aResult, $indexDoc, $options);
 		//nichtzs direkt indiziert?
 		$this->assertNull($aIndexDoc,'Es wurde nicht null zurück gegeben!');
-		
+
 		$aOptions = array(
 			'enablefieldsoff' => true
 		);
 		$aResult = tx_rnbase_util_DB::doSelect('*', 'tx_mksearch_queue', $aOptions);
-		
+
 		$this->assertEquals(2,count($aResult),'Es wurde nicht der richtige Anzahl in die queue gelegt!');
 		$this->assertEquals('tx_seminars_seminars',$aResult[0]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
 		$this->assertEquals(1,$aResult[0]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
 		$this->assertEquals('tx_seminars_seminars',$aResult[1]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
 		$this->assertEquals(3,$aResult[1]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
 	}
-	
+
 	/**
 	 * Prüft ob der indexer den korrekten Bereich in die queue legt bei geänderten Typ
 	 */
@@ -370,23 +350,23 @@ class tx_mksearch_tests_indexer_seminars_Seminar_testcase extends tx_phpunit_dat
 		list($extKey, $cType) = $indexer->getContentType();
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$options = array();
-		
+
 		$aIndexDoc = $indexer->prepareSearchData('tx_seminars_sites', $aResult, $indexDoc, $options);
 		//nichtzs direkt indiziert?
 		$this->assertNull($aIndexDoc,'Es wurde nicht null zurück gegeben!');
-		
+
 		$aOptions = array(
 			'enablefieldsoff' => true
 		);
 		$aResult = tx_rnbase_util_DB::doSelect('*', 'tx_mksearch_queue', $aOptions);
-		
+
 		$this->assertEquals(2,count($aResult),'Es wurde nicht der richtige Anzahl in die queue gelegt!');
 		$this->assertEquals('tx_seminars_seminars',$aResult[0]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
 		$this->assertEquals(1,$aResult[0]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
 		$this->assertEquals('tx_seminars_seminars',$aResult[1]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
 		$this->assertEquals(4,$aResult[1]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
 	}
-	
+
 	/**
 	 * Prüft ob der indexer den korrekten Bereich in die queue legt bei geänderten Typ
 	 */
@@ -396,23 +376,23 @@ class tx_mksearch_tests_indexer_seminars_Seminar_testcase extends tx_phpunit_dat
 		list($extKey, $cType) = $indexer->getContentType();
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$options = array();
-		
+
 		$aIndexDoc = $indexer->prepareSearchData('tx_seminars_speakers', $aResult, $indexDoc, $options);
 		//nichtzs direkt indiziert?
 		$this->assertNull($aIndexDoc,'Es wurde nicht null zurück gegeben!');
-		
+
 		$aOptions = array(
 			'enablefieldsoff' => true
 		);
 		$aResult = tx_rnbase_util_DB::doSelect('*', 'tx_mksearch_queue', $aOptions);
-		
+
 		$this->assertEquals(2,count($aResult),'Es wurde nicht der richtige Anzahl in die queue gelegt!');
 		$this->assertEquals('tx_seminars_seminars',$aResult[0]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
 		$this->assertEquals(1,$aResult[0]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
 		$this->assertEquals('tx_seminars_seminars',$aResult[1]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
 		$this->assertEquals(4,$aResult[1]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
 	}
-	
+
 	/**
 	 * Prüft ob der indexer den korrekten Bereich in die queue legt bei geänderten Typ
 	 */
@@ -422,23 +402,23 @@ class tx_mksearch_tests_indexer_seminars_Seminar_testcase extends tx_phpunit_dat
 		list($extKey, $cType) = $indexer->getContentType();
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$options = array();
-		
+
 		$aIndexDoc = $indexer->prepareSearchData('tx_seminars_target_groups', $aResult, $indexDoc, $options);
 		//nichtzs direkt indiziert?
 		$this->assertNull($aIndexDoc,'Es wurde nicht null zurück gegeben!');
-		
+
 		$aOptions = array(
 			'enablefieldsoff' => true
 		);
 		$aResult = tx_rnbase_util_DB::doSelect('*', 'tx_mksearch_queue', $aOptions);
-		
+
 		$this->assertEquals(2,count($aResult),'Es wurde nicht der richtige Anzahl in die queue gelegt!');
 		$this->assertEquals('tx_seminars_seminars',$aResult[0]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
 		$this->assertEquals(1,$aResult[0]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
 		$this->assertEquals('tx_seminars_seminars',$aResult[1]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
 		$this->assertEquals(2,$aResult[1]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
 	}
-	
+
 /**
 	 * Prüft ob der indexer den korrekten Bereich in die queue legt bei geänderten Typ
 	 */
@@ -448,16 +428,16 @@ class tx_mksearch_tests_indexer_seminars_Seminar_testcase extends tx_phpunit_dat
 		list($extKey, $cType) = $indexer->getContentType();
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$options = array();
-		
+
 		$aIndexDoc = $indexer->prepareSearchData('tx_seminars_timeslots', $aResult, $indexDoc, $options);
 		//nichtzs direkt indiziert?
 		$this->assertNull($aIndexDoc,'Es wurde nicht null zurück gegeben!');
-		
+
 		$aOptions = array(
 			'enablefieldsoff' => true
 		);
 		$aResult = tx_rnbase_util_DB::doSelect('*', 'tx_mksearch_queue', $aOptions);
-		
+
 		$this->assertEquals(1,count($aResult),'Es wurde nicht der richtige Anzahl in die queue gelegt!');
 		$this->assertEquals('tx_seminars_seminars',$aResult[0]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
 		$this->assertEquals(4,$aResult[0]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
@@ -466,5 +446,3 @@ class tx_mksearch_tests_indexer_seminars_Seminar_testcase extends tx_phpunit_dat
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']) {
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']);
 }
-
-?>

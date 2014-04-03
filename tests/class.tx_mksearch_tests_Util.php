@@ -50,6 +50,13 @@ class tx_mksearch_tests_Util {
 	private static $hooks = array();
 
 	/**
+	 * Sicherung der TCA
+	 *
+	 * @var array
+	 */
+	private static $TCA = NULL;
+
+	/**
 	 * Sichert die hoocks unt entfernt diese in der globalconf.
 	 *
 	 * @param array $hooks
@@ -76,6 +83,40 @@ class tx_mksearch_tests_Util {
 			$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch'][$hookName] = $hookConfig;
 		}
 		self::$hooks = array();
+	}
+
+	/**
+	 * Setzt die TCA zurück.
+	 *
+	 * Durch den Typo3 Relation Manager werden alle Relationen aufgelöst,
+	 * welche in der TCA Definiert sind.
+	 * So kann es vorkommen, das auf Tabellen zugegriffen wird,
+	 * welche in einem DB-TestCase nicht existieren.
+	 *
+	 * @TODO: ab Typo3 6 oder 6.1
+	 *
+	 * @return void
+	 */
+	public static function tcaSetUp() {
+		self::$TCA = NULL;
+		if (tx_rnbase_util_TYPO3::isTYPO60OrHigher()) {
+			self::$TCA = $GLOBALS['TCA'];
+			$GLOBALS['TCA'] = array();
+			// \TYPO3\CMS\Core\Core\Bootstrap::getInstance()->loadExtensionTables(FALSE);
+			\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::loadBaseTca(FALSE);
+		}
+	}
+
+	/**
+	 * Setzt die TCA zurück
+	 *
+	 * @return void
+	 */
+	public static function tcaTearDown() {
+		if (self::$TCA !== NULL) {
+			$GLOBALS['TCA'] = self::$TCA;
+			self::$TCA = NULL;
+		}
 	}
 
 	/**
@@ -162,6 +203,17 @@ class tx_mksearch_tests_Util {
 			);
 		}
 		return tx_rnbase::makeInstance($documentClass, $extKey, $cType);
+	}
+
+	/**
+	 * Disabled das Logging über die Devlog Extension für die
+	 * gegebene Extension
+	 *
+	 * @param 	string 	$extKey
+	 * @param 	boolean 	$bDisable
+	 */
+	public static function disableDevlog($extKey = 'devlog', $bDisable = true) {
+		$GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$extKey]['nolog'] = $bDisable;
 	}
 
 }

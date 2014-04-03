@@ -29,36 +29,42 @@
 /**
  * benötigte Klassen einbinden
  */
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+require_once t3lib_extMgm::extPath('rn_base', 'class.tx_rnbase.php');
+require_once t3lib_extMgm::extPath('mksearch', 'lib/Apache/Solr/Document.php');
+tx_rnbase::load('tx_mksearch_tests_Testcase');
 tx_rnbase::load('tx_mksearch_marker_SearchResultSimple');
-require_once(t3lib_extMgm::extPath('mksearch') . 'lib/Apache/Solr/Document.php');
-tx_rnbase::load('tx_mksearch_tests_Util');
 
 /**
- * 
- * @author Hannes Bochmann
  *
+ * @package tx_mksearch
+ * @subpackage tx_mksearch_tests
+ * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
+ * @author Michael Wagner <michael.wagner@dmk-ebusiness.de>
+ * @license http://www.gnu.org/licenses/lgpl.html
+ *          GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_tests_marker_SearchResultSimple_testcase extends tx_phpunit_testcase {
+class tx_mksearch_tests_marker_SearchResultSimple_testcase
+	extends tx_mksearch_tests_Testcase {
 
 	/**
-	 * 
+	 *
 	 * Enter description here ...
 	 * @var tx_mksearch_marker_Facet
 	 */
 	protected $oMarker;
-	
+
 	/**
 	 * setUp() = init DB etc.
 	 */
-	public function setUp(){
+	protected function setUp(){
+		parent::setUp();
 		tx_rnbase::load('tx_rnbase_util_Misc');
 		tx_rnbase_util_Misc::prepareTSFE();
-		
+
 		$this->oParameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
 		$this->oMarker = tx_rnbase::makeInstance('tx_mksearch_marker_SearchResultSimple');
 	}
-	
+
 	/**
 	 * prüfen ob die richtigen fields und options zurück gegeben werden
 	 */
@@ -68,16 +74,16 @@ class tx_mksearch_tests_marker_SearchResultSimple_testcase extends tx_phpunit_te
 		$aConfig['searchsolr.']['hit.']['extrainfo.']['default.']['hit.']['initFields.'] = array('secondField');
 		$this->oConfig = tx_mksearch_tests_Util::loadConfig4BE($aConfig);
 		$this->oFormatter = $this->oConfig->getFormatter();
-		
+
 		//now test
 		$doc = new Apache_Solr_Document();
 		$doc->firstField = 'firstValue';
-		
+
 		$oItem = tx_rnbase::makeInstance('tx_mksearch_model_SolrHit',$doc);
-		
+
 		$sTemplate = '###ITEM_FIRSTFIELD### ###ITEM_SECONDFIELD### ###ITEM_THIRDFIELD###';
 		$sParsedTemplate = $this->oMarker->parseTemplate($sTemplate, $oItem, $this->oFormatter, 'searchsolr.hit.extrainfo.default.hit.', 'ITEM');
-		
+
 		//erster Marker sollte mit wert ersetzt werden, 2. leer und 3. gar nicht
 		$this->assertEquals('firstValue  ###ITEM_THIRDFIELD###',$sParsedTemplate,'Die Marker wurden nicht korrekt ersetzt!');
 	}

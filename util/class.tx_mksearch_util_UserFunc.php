@@ -34,9 +34,9 @@ class tx_mksearch_util_UserFunc {
 	 */
 	public static function searchSolrOptions($term = '', $conf = array()){
 		if(empty($term)) { return ''; }
-		
+
 		tx_rnbase::load('tx_mksearch_util_SearchBuilder');
-		
+
 		/* @var $parameters tx_rnbase_parameters */
 		$parameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
 		$combination = $parameters->get('combination', $conf['qualifier']);
@@ -48,10 +48,18 @@ class tx_mksearch_util_UserFunc {
 			return $term;
 
 		$options = $parameters->get('options', $conf['qualifier']);
-		
+
 		$options = is_array($options) ? array_merge($conf, $options) : $conf;
-		
+
 		return tx_mksearch_util_SearchBuilder::searchSolrOptions($term, $combination, $options);
+	}
+
+	/**
+	 * vorerst machen wir nichts anders als bei SOLR
+	 * @see 	tx_mksearch_util_SearchBuilder::searchSolrOptions
+	 */
+	public static function searchLuceneOptions($term = '', $conf = array()){
+		return self::searchSolrOptions($term, $conf);
 	}
 
 }

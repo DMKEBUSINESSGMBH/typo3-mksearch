@@ -22,19 +22,24 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
-tx_rnbase::load('tx_mksearch_tests_Util');
+require_once t3lib_extMgm::extPath('rn_base', 'class.tx_rnbase.php');
+require_once t3lib_extMgm::extPath('mksearch', 'lib/Apache/Solr/Document.php');
+tx_rnbase::load('tx_mksearch_tests_Testcase');
 
-
-require_once(t3lib_extMgm::extPath('mksearch') . 'lib/Apache/Solr/Document.php');
 
 /**
  * Wir müssen in diesem Fall mit der DB testen da wir die pages
  * Tabelle benötigen
- * @author Hannes Bochmann
  *
+ * @package tx_mksearch
+ * @subpackage tx_mksearch_tests
+ * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
+ * @author Michael Wagner <michael.wagner@dmk-ebusiness.de>
+ * @license http://www.gnu.org/licenses/lgpl.html
+ *          GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_tests_indexer_Page_testcase extends tx_phpunit_testcase {
+class tx_mksearch_tests_indexer_Page_testcase
+	extends tx_mksearch_tests_Testcase {
 
 	public function testPrepareSearchDataSetsDocToDeleted() {
 		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_Page');
@@ -59,23 +64,6 @@ class tx_mksearch_tests_indexer_Page_testcase extends tx_phpunit_testcase {
 		$record = array('uid'=> 125, 'pid' => 0, 'deleted' => 0, 'hidden' => 0);
 		$indexer->prepareSearchData('pages', $record, $indexDoc, $options);
 		$this->assertEquals(false, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
-	}
-
-	/**
-	 * (non-PHPdoc)
-	 * @see PHPUnit_Framework_TestCase::setUp()
-	 */
-	protected function setUp() {
-		// eventuelle hooks entfernen
-		tx_mksearch_tests_Util::hooksSetUp();
-	}
-
-	/**
-	 * tearDown() = destroy DB etc.
-	 */
-	public function tearDown () {
-		// hooks zurücksetzen
-		tx_mksearch_tests_Util::hooksTearDown();
 	}
 }
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']) {

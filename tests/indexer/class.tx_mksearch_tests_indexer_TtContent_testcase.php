@@ -22,44 +22,21 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
-
-
-require_once(t3lib_extMgm::extPath('mksearch') . 'lib/Apache/Solr/Document.php');
+require_once t3lib_extMgm::extPath('rn_base', 'class.tx_rnbase.php');
+require_once t3lib_extMgm::extPath('mksearch', 'lib/Apache/Solr/Document.php');
+tx_rnbase::load('tx_mksearch_tests_Testcase');
 
 /**
  *
- * @author Hannes Bochmann
- *
+ * @package tx_mksearch
+ * @subpackage tx_mksearch_tests
+ * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
+ * @author Michael Wagner <michael.wagner@dmk-ebusiness.de>
+ * @license http://www.gnu.org/licenses/lgpl.html
+ *          GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_tests_indexer_TtContent_testcase extends tx_phpunit_testcase {
-
-	protected $aTvConfig;
-
-	/**
-	 * unset templavoila
-	 */
-	public function setUp() {
-		//uninstall templavoila so the tests run without it as they used to
-		global $TYPO3_LOADED_EXT;
-		$this->aTvConfig = $TYPO3_LOADED_EXT['templavoila'];
-		$TYPO3_LOADED_EXT['templavoila'] = null;
-
-		// eventuelle hooks entfernen
-		tx_mksearch_tests_Util::hooksSetUp();
-	}
-
-	/**
-	 * set templavoila
-	 */
-	public function tearDown () {
-		//re-install templavoila so the tests run without it as they used to
-		global $TYPO3_LOADED_EXT;
-		$TYPO3_LOADED_EXT['templavoila'] = $this->aTvConfig;
-
-		// hooks zurücksetzen
-		tx_mksearch_tests_Util::hooksTearDown();
-	}
+class tx_mksearch_tests_indexer_TtContent_testcase
+	extends tx_mksearch_tests_Testcase {
 
 	private static function getDefaultOptions(){
 		$options = array();

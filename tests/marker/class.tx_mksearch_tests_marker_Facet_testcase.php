@@ -25,35 +25,36 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
-
-/**
- * benötigte Klassen einbinden
- */
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+require_once t3lib_extMgm::extPath('rn_base', 'class.tx_rnbase.php');
+tx_rnbase::load('tx_mksearch_tests_Testcase');
 tx_rnbase::load('tx_mksearch_marker_Facet');
-tx_rnbase::load('tx_mksearch_tests_Util');
 
 /**
- * 
- * @author Hannes Bochmann
  *
+ * @package tx_mksearch
+ * @subpackage tx_mksearch_tests
+ * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
+ * @author Michael Wagner <michael.wagner@dmk-ebusiness.de>
+ * @license http://www.gnu.org/licenses/lgpl.html
+ *          GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_tests_marker_Facet_testcase extends tx_phpunit_testcase {
+class tx_mksearch_tests_marker_Facet_testcase
+	extends tx_mksearch_tests_Testcase {
 
 	/**
-	 * 
+	 *
 	 * Enter description here ...
 	 * @var tx_mksearch_marker_Facet
 	 */
 	protected $oMarker;
-	
+
 	/**
 	 * setUp() = init DB etc.
 	 */
-	public function setUp(){
+	protected function setUp(){
 		tx_rnbase::load('tx_rnbase_util_Misc');
 		tx_rnbase_util_Misc::prepareTSFE();
-		
+
 		$this->oParameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
 		$this->oMarker = tx_rnbase::makeInstance('tx_mksearch_marker_Facet');
 		//muss gesetzt werden damit ein link erstellt werden kann
@@ -63,8 +64,9 @@ class tx_mksearch_tests_marker_Facet_testcase extends tx_phpunit_testcase {
 		//$aConfig['searchsolr.']['facet.']['links.']['show.']['pid'] = 1;
 		//ergänzt werden
 		$GLOBALS['TSFE']->id = 1;
+		parent::setUp();
 	}
-	
+
 	/**
 	 * prüfen ob die richtigen fields und options zurück gegeben werden
 	 */
@@ -74,7 +76,7 @@ class tx_mksearch_tests_marker_Facet_testcase extends tx_phpunit_testcase {
 		$aConfig['searchsolr.']['facet.']['links.']['show.']['noHash'] = 1;
 		$this->oConfig = tx_mksearch_tests_Util::loadConfig4BE($aConfig);
 		$this->oFormatter = $this->oConfig->getFormatter();
-		
+
 		//now test
 		$oItem = tx_rnbase::makeInstance('tx_mksearch_model_Facet', 'contentType', 'media', 'media', 2);
 		$sTemplate = '###FACET_SHOWLINK######FACET_LABEL### (###FACET_COUNT###)###FACET_SHOWLINK###';
@@ -82,7 +84,7 @@ class tx_mksearch_tests_marker_Facet_testcase extends tx_phpunit_testcase {
 		//Feld noch im Link drin?
 		$this->assertEquals('<a href="?id=1&amp;mksearch%5Bfq%5D=contentType%3Amedia" >media (2)</a>',$sParsedTemplate,'Die Filter Query wurde nicht korrekt gesetzt!');
 	}
-	
+
 	/**
 	 * prüfen ob die richtigen fields und options zurück gegeben werden
 	 */
@@ -93,14 +95,14 @@ class tx_mksearch_tests_marker_Facet_testcase extends tx_phpunit_testcase {
 		$aConfig['searchsolr.']['facet.']['links.']['show.']['excludeFieldName'] = 1;
 		$this->oConfig = tx_mksearch_tests_Util::loadConfig4BE($aConfig);
 		$this->oFormatter = $this->oConfig->getFormatter();
-		
+
 		$oItem = tx_rnbase::makeInstance('tx_mksearch_model_Facet', 'contentType', 'media', 'media', 2);
 		$sTemplate = '###FACET_SHOWLINK######FACET_LABEL### (###FACET_COUNT###)###FACET_SHOWLINK###';
 		$sParsedTemplate = $this->oMarker->parseTemplate($sTemplate, $oItem, $this->oFormatter, 'searchsolr.facet.', 'FACET');
 		//Feld noch im Link drin?
 		$this->assertEquals('<a href="?id=1&amp;mksearch%5Bfq%5D=media" >media (2)</a>',$sParsedTemplate,'In der Filter Query steht noch immer der Feldname!');
 	}
-	
+
 	/**
 	 * prüfen ob die paramater url enkodiert werden
 	 */
@@ -111,7 +113,7 @@ class tx_mksearch_tests_marker_Facet_testcase extends tx_phpunit_testcase {
 		$aConfig['searchsolr.']['facet.']['links.']['show.']['excludeFieldName'] = 1;
 		$this->oConfig = tx_mksearch_tests_Util::loadConfig4BE($aConfig);
 		$this->oFormatter = $this->oConfig->getFormatter();
-		
+
 		$oItem = tx_rnbase::makeInstance('tx_mksearch_model_Facet', 'contentType', 'Über uns', 'Über uns', 2);
 		$sTemplate = '###FACET_SHOWLINK######FACET_LABEL### (###FACET_COUNT###)###FACET_SHOWLINK###';
 		$sParsedTemplate = $this->oMarker->parseTemplate($sTemplate, $oItem, $this->oFormatter, 'searchsolr.facet.', 'FACET');
