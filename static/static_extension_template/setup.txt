@@ -44,6 +44,11 @@ lib.mksearch.lucenefilter {
 				action.pid = 0
 			}
 		}
+		
+		# Only the searchform was displayed, no search was done
+		# FormOnly funktioniert nicht!!! Stattdessen nosearch = 0 bzw 1 verwenden
+		formOnly = 0
+		
 		# Configuration of form data used for displaying the form
 		form {
 			searchterm.stdWrap.htmlSpecialChars = 1
@@ -214,10 +219,6 @@ plugin.tx_mksearch {
 		# Name of label for the "no results found" message
 		listinfo.llkeyEmpty = label_search_noresultsfound
 		
-		# Only the searchform was displayed, no search was done
-		# FormOnly funktioniert nicht!!! Stattdessen nosearch = 0 bzw 1 verwenden
-		formOnly = 0
-
 		# Konfig für die Darstellung des Treffers über den allgemeinen Marker
 		# Die Config von Solr sollte auch für Lucene passen
 		hit = < lib.mksearch.hit
