@@ -86,7 +86,7 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
 		$options = $this->setFeGroupsToOptions($options);
 		$this->handleTerm($fields, $options);
 		$this->handleSorting($options);
-		$options['debug']=true;
+
 		return true;
 	}
 
