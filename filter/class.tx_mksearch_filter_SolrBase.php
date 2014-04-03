@@ -48,9 +48,14 @@ tx_rnbase::load('tx_mksearch_util_Filter');
  */
 class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 
-	protected $sort = false;
-	protected $sortOrder = 'asc';
 	protected $confIdExtended = '';
+
+	/**
+	 *
+	 * @var tx_mksearch_util_Filter
+	 */
+	protected $filterUtility;
+
 	/**
 	 * @return string
 	 */
@@ -146,7 +151,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 		$this->handleOperators($fields, $options, $parameters, $configurations, $confId);
 
 		// sortierung beachten
-		$this->handleSorting($options, $parameters);
+		$this->handleSorting($options);
 
 		// fq (filter query) beachten
 		$this->handleFq($options, $parameters, $configurations, $confId);
@@ -189,7 +194,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 	 */
 	protected function handleTerm(&$fields, &$parameters, &$configurations, $confId) {
 		if($termTemplate = $fields['term']) {
-			$termTemplate = tx_mksearch_util_Filter::parseTermTemplate(
+			$termTemplate = $this->getFilterUtility()->parseTermTemplate(
 				$termTemplate, $parameters, $configurations, $confId
 			);
 			$fields['term'] = $termTemplate;
@@ -420,24 +425,9 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 	 * @param 	array 					$options
 	 * @param 	tx_rnbase_IParameters 	$parameters
 	 */
-	protected function handleSorting(&$options, &$parameters) {
-		// die parameter nach einer sortierung fragen
-		$sort = trim($parameters->get('sort'));
-		// wurden keine parameter gefunden, nutzen wir den default des filters
-		$sort = $sort ? $sort : $this->sort;
-		if($sort) {
-			list($sort, $sortOrder) = explode(' ', $sort);
-			// wenn order nicht mit gesetzt wurde, aus den parametern holen
-			$sortOrder = $sortOrder ? $sortOrder : $parameters->get('sortorder');
-			// den default order nutzen!
-			$sortOrder = $sortOrder ? $sortOrder : $this->sortOrder;
-			// sicherstellen, das immer desc oder asc gesetzt ist
-			$sortOrder = ($sortOrder == 'asc') ? 'asc' : 'desc';
-			// wird beim parsetemplate benötigt
-			$this->sort = $sort;
-			$this->sortOrder = $sortOrder;
-			// sort setzen
-			$options['sort'] = $sort.' '.$sortOrder;
+	protected function handleSorting(&$options) {
+		if($sortString = $this->getFilterUtility()->getSortString($options, $this->getParameters())) {
+			$options['sort'] = $sortString;
 		}
 	}
 
@@ -453,68 +443,19 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 
 		$markArray = $subpartArray  = $wrappedSubpartArray = array();
 
-		// Formular einfügen
-		$this->parseSearchForm($template, $markArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, $marker);
-		// Sortierung einfügen
-		$this->parseSortFields($template, $markArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, $marker);
+		$this->parseSearchForm(
+			$template, $markArray, $subpartArray, $wrappedSubpartArray,
+			$formatter, $confId, $marker
+		);
 
-		$template = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markArray, $subpartArray, $wrappedSubpartArray);
-		return $template;
-	}
+		$this->parseSortFields(
+			$template, $markArray, $subpartArray, $wrappedSubpartArray,
+			$formatter, $confId, $marker
+		);
 
-	/**
-	 * Treat search form
-	 *
-	 * @param string $template HTML template
-	 * @param array $markArray
-	 * @param array $subpartArray
-	 * @param array $wrappedSubpartArray
-	 * @param tx_rnbase_util_FormatUtil $formatter
-	 * @param string $confId
-	 * @param string $marker
-	 * @return string
-	 */
-	function parseSortFields($template, &$markArray, &$subpartArray, &$wrappedSubpartArray, &$formatter, $confId, $marker = 'FILTER') {
-		$marker = 'SORT';
-		$confId = $this->getConfId().'sort.';
-		$configurations = $formatter->getConfigurations();
-
-		// die felder für die sortierung stehen kommasepariert im ts
-		$sortFields = $configurations->get($confId.'fields');
-		$sortFields = $sortFields ? t3lib_div::trimExplode(',', $sortFields, true) : array();
-
-		if(!empty($sortFields)) {
-			tx_rnbase::load('tx_rnbase_util_BaseMarker');
-		  	$token = md5(microtime());
-		  	$markOrders = array();
-			foreach($sortFields as $field) {
-				$isField = ($field == $this->sort);
-				// sortOrder ausgeben
-				$markOrders[$field.'_order'] = $isField ? $this->sortOrder : '';
-
-				$fieldMarker = $marker.'_'.strtoupper($field).'_LINK';
-				$makeLink = tx_rnbase_util_BaseMarker::containsMarker($template, $fieldMarker);
-				$makeUrl = tx_rnbase_util_BaseMarker::containsMarker($template, $fieldMarker.'URL');
-				// link generieren
-				if($makeLink || $makeUrl) {
-					// sortierungslinks ausgeben
-					$params = array(
-							'sort' => $field,
-							'sortorder' => $isField && $this->sortOrder == 'asc' ? 'desc' : 'asc',
-						);
-					$link = $configurations->createLink();
-					$link->label($token);
-					$link->initByTS($configurations, $confId.'link.', $params);
-					if($makeLink)
-						$wrappedSubpartArray['###'.$fieldMarker.'###'] = explode($token, $link->makeTag());
-					if($makeUrl)
-						$markArray['###'.$fieldMarker.'URL###'] = $link->makeUrl(false);
-				}
-			}
-			// die sortOrders parsen
-			$markOrders = $formatter->getItemMarkerArrayWrapped($markOrders, $confId, 0,$marker.'_', array_keys($markOrders));
-			$markArray = array_merge($markArray, $markOrders);
-		}
+		return tx_rnbase_util_Templates::substituteMarkerArrayCached(
+			$template, $markArray, $subpartArray, $wrappedSubpartArray
+		);
 	}
 
 	/**
@@ -574,8 +515,42 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 		return $template;
 	}
 
+
+	/**
+	 * die methode ist nur noch da für abwärtskompatiblität
+	 *
+	 * @param string $template HTML template
+	 * @param array $markArray
+	 * @param array $subpartArray
+	 * @param array $wrappedSubpartArray
+	 * @param tx_rnbase_util_FormatUtil $formatter
+	 * @param string $confId
+	 * @param string $marker
+	 */
+	function parseSortFields($template, &$markArray, &$subpartArray, &$wrappedSubpartArray, &$formatter, $confId, $marker = 'FILTER') {
+		$this->getFilterUtility()->parseSortFields(
+			$template, $markArray, $subpartArray,
+			$wrappedSubpartArray, $formatter, $confId, $marker
+		);
+	}
+
+	/**
+	 * @return array
+	 */
 	private function getFormData() {
 		return array();
+	}
+
+	/**
+	 *
+	 * @return tx_mksearch_util_Filter
+	 */
+	protected function getFilterUtility() {
+		if(!$this->filterUtility) {
+			$this->filterUtility = tx_rnbase::makeInstance('tx_mksearch_util_Filter');
+		}
+
+		return $this->filterUtility;
 	}
 }
 

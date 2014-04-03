@@ -342,7 +342,14 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 			$queryString->debug = true;
 		}
 
-		$hits = $this->index->find($queryString);
+		if($options['sort']) {
+			$sortParts = explode(' ', $options['sort']);
+			list($sortField, $sortOrder) = explode(' ', $options['sort']);
+			$sortOrder = (strtolower($sortOrder) == 'asc') ? SORT_ASC : SORT_DESC;
+			$hits = $this->index->find($queryString, $sortField, SORT_REGULAR, $sortOrder);
+		} else {
+			$hits = $this->index->find($queryString);
+		}
 		if($options['debug']) {
 			t3lib_div::debug(array('Fields'=>$fields ,'Query'=>$queryString, 'Hits'=>count($hits)), 'class.tx_mksearch_service_engine_ZendLucene.php '); // TODO: remove me
 		}

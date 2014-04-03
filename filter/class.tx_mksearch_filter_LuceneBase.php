@@ -37,6 +37,12 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
 	static private $formData = array();
 
 	/**
+	 *
+	 * @var tx_mksearch_util_Filter
+	 */
+	protected $filterUtility;
+
+	/**
 	 * Store info if a search request was submitted - needed for empty list message
 	 * @var bool
 	 */
@@ -68,9 +74,9 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
 	 */
 	protected function initFilter(&$fields, &$options, &$parameters, &$configurations, $confId) {
 		if(
-			$configurations->get($confId . 'formOnly') ||
+			$configurations->get($confId . 'filter.formOnly') ||
 			!($parameters->offsetExists('submit') ||
-			$configurations->get($confId . 'forceSearch'))
+			$configurations->get($confId . 'filter.forceSearch'))
 		) {
 			return false;
 		}
@@ -78,19 +84,44 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
 		$this->isSearch = true;
 
 		$options = $this->setFeGroupsToOptions($options);
+		$this->handleTerm($fields, $options);
+		$this->handleSorting($options);
+		$options['debug']=true;
+		return true;
+	}
 
+	/**
+	 * @param array $fields
+	 * @param array $options
+	 */
+	protected function handleTerm(&$fields, &$options) {
 		if($termTemplate = $fields['term']) {
 			$options['rawFormat'] = true;
 			$this->fixMinimalPrefixLengthInZend();
 
-			$termTemplate = tx_mksearch_util_Filter::parseTermTemplate(
-				$termTemplate, $parameters, $configurations, $confId . 'filter.'
+			$termTemplate = $this->getFilterUtility()->parseTermTemplate(
+				$termTemplate,
+				$this->getParameters(),
+				$this->getConfigurations(),
+				$this->getConfId() . 'filter.'
 			);
 
 			$fields['term'] = trim($termTemplate);
 		}
+	}
 
-		return true;
+	/**
+	 * Fügt die Sortierung zu dem Filter hinzu.
+	 *
+	 * @TODO: das klappt zurzeit nur bei einfacher sortierung!
+	 *
+	 * @param 	array 					$options
+	 * @param 	tx_rnbase_IParameters 	$parameters
+	 */
+	protected function handleSorting(&$options) {
+		if($sortString = $this->getFilterUtility()->getSortString($options, $this->getParameters())) {
+			$options['sort'] = $sortString;
+		}
 	}
 
 	/**
@@ -116,7 +147,7 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
 	}
 
 	/**
-	 * Treat search form
+	 * Treat search form, sorting fields etc.
 	 *
 	 * @param string $template HTML template
 	 * @param tx_rnbase_util_FormatUtil $formatter
@@ -125,10 +156,35 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
 	 * @return string
 	 */
 	function parseTemplate($template, &$formatter, $confId, $marker = 'FILTER') {
+		$confId = $this->getConfId().'filter.';
+
+		$template = $this->parseSearchForm($template, $formatter, $confId, $marker);
+
+		$markArray = $subpartArray  = $wrappedSubpartArray = array();
+
+		$this->getFilterUtility()->parseSortFields(
+			$template, $markArray, $subpartArray,
+			$wrappedSubpartArray, $formatter, $confId, $marker
+		);
+
+		return tx_rnbase_util_Templates::substituteMarkerArrayCached(
+			$template, $markArray, $subpartArray, $wrappedSubpartArray
+		);
+	}
+
+	/**
+	 * Treat search form
+	 *
+	 * @param string $template HTML template
+	 * @param tx_rnbase_util_FormatUtil $formatter
+	 * @param string $confId
+	 * @param string $marker
+	 * @return string
+	 */
+	protected function parseSearchForm($template, &$formatter, $confId, $marker = 'FILTER') {
 		$configurations = $this->getConfigurations();
 		// Aufpassen mit der confId. Der Listbuilder bekommt view.hit. übergeben,
 		// Der Filter ist aber in view.filter. konfiguriert. Darum die confId hier umbiegen:
-		$confId = $this->getConfId().'filter.';
 		$conf = $configurations->get($confId);
 
 		// Form template required?
@@ -166,6 +222,7 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
 		}
 		return $template;
 	}
+
 	/**
 	 * Werte für Formularfelder aufbereiten. Daten aus dem Request übernehmen und wieder füllen.
 	 * @param array $formData
@@ -215,7 +272,7 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
 	) {
 		$formFields = t3lib_div::trimExplode(
 			',',
-			$this->getConfigurations()->get($this->getConfId() . 'requiredFormFields')
+			$this->getConfigurations()->get($this->getConfId() . 'filter.requiredFormFields')
 		);
 
 		foreach ($formFields as $formField) {
@@ -251,6 +308,17 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
 
 	function getListMarkerInfo() {return null;}
 
+	/**
+	 *
+	 * @return tx_mksearch_util_Filter
+	 */
+	protected function getFilterUtility() {
+		if(!$this->filterUtility) {
+			$this->filterUtility = tx_rnbase::makeInstance('tx_mksearch_util_Filter');
+		}
+
+		return $this->filterUtility;
+	}
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/filter/class.tx_mksearch_filter_LuceneBase.php']) {

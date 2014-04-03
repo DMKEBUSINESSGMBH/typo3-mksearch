@@ -114,7 +114,7 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_rnbase_tests_BaseT
 	 * @group unit
 	 */
 	public function testInitReturnsFalseIfFormOnly() {
-		$configArray = array($this->confId => array('formOnly' => true));
+		$configArray = array($this->confId => array('filter.' => array('formOnly' => true)));
 
 		$filter = $this->getFilter($configArray);
 		$fields = $options = array();
@@ -125,7 +125,7 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_rnbase_tests_BaseT
 	 * @group unit
 	 */
 	public function testInitReturnsFalseIfNoSubmit() {
-		$configArray = array($this->confId => array('forceSearch' => false));
+		$configArray = array($this->confId => array('filter.' => array('forceSearch' => false)));
 
 		$filter = $this->getFilter($configArray);
 		$fields = $options = array();
@@ -138,7 +138,7 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_rnbase_tests_BaseT
 	public function testInitReturnsTrueIfNoSubmitButForceSearch() {
 		$this->markTestSkippedIfNoZend();
 
-		$configArray = array($this->confId => array('forceSearch' => true));
+		$configArray = array($this->confId => array('filter.' => array('forceSearch' => true)));
 
 		$filter = $this->getFilter($configArray);
 		$fields = $options = array();
@@ -151,7 +151,7 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_rnbase_tests_BaseT
 	public function testInitReturnsTrueIfSubmit() {
 		$this->markTestSkippedIfNoZend();
 
-		$configArray = array($this->confId => array('forceSearch' => false));
+		$configArray = array($this->confId => array('filter.' => array('forceSearch' => false)));
 
 		$filter = $this->getFilter($configArray, array('submit' => true));
 		$fields = $options = array();
@@ -271,6 +271,166 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_rnbase_tests_BaseT
 		$this->assertEquals('+contentType:*', $fields['term'], 'term template falsch geparsed!');
 	}
 
+	/**
+	 * @group unit
+	 */
+	public function testGetFilterUtility() {
+		$filter = $this->getFilter();
+		$method = new ReflectionMethod('tx_mksearch_filter_LuceneBase', 'getFilterUtility');
+		$method->setAccessible(true);
+
+		$this->assertInstanceOf(
+			'tx_mksearch_util_Filter', $method->invoke($filter),
+			'filter utility falsch'
+		);
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testInitSetsSortingToOptionsCorrectFromParameter() {
+		$filter = $this->getFilter(array(), array('sort' => 'uid desc'));
+
+		$fields = $options = array();
+		$filter->init($fields, $options);
+
+		$this->assertEquals('uid desc', $options['sort'], 'sort falsch in options');
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testInitSetsSortingToOptionsCorrectIfSortOrderAsc() {
+		$filter = $this->getFilter(array(), array('sort' => 'uid asc'));
+
+		$fields = $options = array();
+		$filter->init($fields, $options);
+
+		$this->assertEquals('uid asc', $options['sort'], 'sort falsch in options');
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testInitSetsSortingToOptionsCorrectWithUnknownSortOrder() {
+		$filter = $this->getFilter(array(), array('sort' => 'uid unknown'));
+
+		$fields = $options = array();
+		$filter->init($fields, $options);
+
+		$this->assertEquals('uid desc', $options['sort'], 'sort falsch in options');
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testInitSetsSortingToOptionsCorrectIfSortOrderInSortOrderParameter() {
+		$filter = $this->getFilter(array(), array('sort' => 'uid', 'sortorder' => 'asc'));
+
+		$fields = $options = array();
+		$filter->init($fields, $options);
+
+		$this->assertEquals('uid asc', $options['sort'], 'sort falsch in options');
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testInitSetsSortingToOptionsCorrectIfNoSortOrderUsesClassPropertyForSortOrder() {
+		$filter = $this->getFilter(array(), array('sort' => 'uid'));
+
+		$filterUtil = $this->getMock('tx_mksearch_util_Filter', array('parseTermTemplate'));
+
+		$order = new ReflectionProperty('tx_mksearch_util_Filter', 'sortOrder');
+		$order->setAccessible(true);
+		$order->setValue($filterUtil, 'asc');
+
+		$filterUtilProperty = new ReflectionProperty(
+			'tx_mksearch_filter_LuceneBase', 'filterUtility'
+		);
+		$filterUtilProperty->setAccessible(true);
+		$filterUtilProperty->setValue($filter, $filterUtil);
+
+		$fields = $options = array();
+		$filter->init($fields, $options);
+
+		$this->assertEquals('uid asc', $options['sort'], 'sort falsch in options');
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testInitSetsSortingToOptionsCorrectIfNoSortFieldUsesClassPropertyForSortField() {
+		$filter = $this->getFilter();
+		$filterUtil = $this->getMock('tx_mksearch_util_Filter', array('parseTermTemplate'));
+
+		$field = new ReflectionProperty('tx_mksearch_util_Filter', 'sortField');
+		$field->setAccessible(true);
+		$field->setValue($filterUtil, 'uid');
+
+		$filterUtilProperty = new ReflectionProperty(
+			'tx_mksearch_filter_LuceneBase', 'filterUtility'
+		);
+		$filterUtilProperty->setAccessible(true);
+		$filterUtilProperty->setValue($filter, $filterUtil);
+
+		$fields = $options = array();
+		$filter->init($fields, $options);
+
+		$this->assertEquals('uid desc', $options['sort'], 'sort falsch in options');
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testParseTemplateParsesSortMarkerCorrect() {
+		tx_rnbase_util_Misc::prepareTSFE();
+
+		$config = array($this->confId => array('filter.' => array(
+			'sort.' => array(
+				'fields' => 'uid, title',
+				'link.' => array('noHash' => true)
+			),
+			'config.' => array('template' => '')
+		)));
+
+		$filter = $this->getFilter($config);
+
+		$filterUtil = $this->getMock('tx_mksearch_util_Filter', array('getSortString'));
+
+		$field = new ReflectionProperty('tx_mksearch_util_Filter', 'sortField');
+		$field->setAccessible(true);
+		$field->setValue($filterUtil, 'uid');
+
+		$order = new ReflectionProperty('tx_mksearch_util_Filter', 'sortOrder');
+		$order->setAccessible(true);
+		$order->setValue($filterUtil, 'asc');
+
+		$filterUtilProperty = new ReflectionProperty(
+			'tx_mksearch_filter_LuceneBase', 'filterUtility'
+		);
+		$filterUtilProperty->setAccessible(true);
+		$filterUtilProperty->setValue($filter, $filterUtil);
+
+		$fields = $options = array();
+		$filter->init($fields, $options);
+
+		$method = new ReflectionMethod('tx_mksearch_filter_LuceneBase', 'getConfigurations');
+		$method->setAccessible(true);
+		$formatter = $method->invoke($filter)->getFormatter();
+
+		// eine kleine auswahl der möglichen marker
+		$template = '###SORT_UID_ORDER### ###SORT_TITLE_LINKURL###';
+		$parsedTemplate = $filter->parseTemplate(
+			$template, $formatter, 'searchsolr.filter.default.'
+		);
+
+		$this->assertEquals(
+			'asc ?id=1&mksearch%5Bsort%5D=title&mksearch%5Bsortorder%5D=asc',
+			$parsedTemplate,
+			'sort marker falsch geparsed'
+		);
+	}
 
 	/**
 	 * @param array $configArray
@@ -279,13 +439,13 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_rnbase_tests_BaseT
 	 * @return tx_mksearch_filter_LuceneBase
 	 */
 	private function getFilter(array $configArray = array(), $parametersArray =array()) {
-		if(!isset($configArray[$this->confId]['forceSearch'])) {
-			$configArray[$this->confId]['forceSearch'] = true;
+		if(!isset($configArray[$this->confId]['filter.']['forceSearch'])) {
+			$configArray[$this->confId]['filter.']['forceSearch'] = true;
 		}
 		$configArray = t3lib_div::array_merge_recursive_overrule(
 			tx_mksearch_tests_Util::loadPageTS4BE(), $configArray
 		);
-		$configArray[$this->confId]['requiredFormFields'] = 'zip,company,city';
+		$configArray[$this->confId]['filter.']['requiredFormFields'] = 'zip,company,city';
 		$configurations = tx_mksearch_tests_Util::loadConfig4BE(
 			$configArray
 		);

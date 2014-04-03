@@ -51,7 +51,7 @@ tx_rnbase::load('tx_mksearch_util_UserFunc');
 class tx_mksearch_tests_filter_SolrBase_testcase
 	extends tx_mksearch_tests_Testcase {
 
-	protected $oParameters;
+	protected $parameters;
 	protected $groupDataBackup;
 
 	/**
@@ -59,8 +59,8 @@ class tx_mksearch_tests_filter_SolrBase_testcase
 	 */
 	protected function setUp(){
 		parent::setUp();
-		$this->oParameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
-		$this->oParameters->setQualifier('mksearch');
+		$this->parameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
+		$this->parameters->setQualifier('mksearch');
 	}
 
 	protected function tearDown() {
@@ -73,42 +73,40 @@ class tx_mksearch_tests_filter_SolrBase_testcase
 	 */
 	public function testInitReturnsFalseIfNothingSubmittedAndNotForced() {
 		//set noHash as we don't need it in tests
-		$aConfig = tx_mksearch_tests_Util::loadPageTS4BE();
-		$oFilter = tx_rnbase::makeInstance('tx_mksearch_filter_SolrBase',$this->oParameters,tx_mksearch_tests_Util::loadConfig4BE($aConfig),'searchsolr.');
+		$config = tx_mksearch_tests_Util::loadPageTS4BE();
+		$filter = $this->getFilter($config);
 
 		$fields = array();
 		$options = array();
-		$this->assertFalse($oFilter->init($fields,$options),'Filter ist scheinbar doch durchgelaufen!');
+		$this->assertFalse($filter->init($fields,$options),'Filter ist scheinbar doch durchgelaufen!');
 
 		//noch prüfen ob bei submit true zurück gegeben wird
-		$this->oParameters->offsetSet('submit',true);
+		$this->parameters->offsetSet('submit',true);
 		$fields = array();
 		$options = array();
-		$this->assertTrue($oFilter->init($fields,$options),'Filter ist scheinbar doch nicht durchgelaufen!');
+		$this->assertTrue($filter->init($fields,$options),'Filter ist scheinbar doch nicht durchgelaufen!');
 	}
 
 	/**
 	 * @group unit
 	 */
 	public function testInitSetsCorrectRequestHandler() {
-		$aConfig = tx_mksearch_tests_Util::loadPageTS4BE();
-		$aConfig['searchsolr.']['filter.']['default.']['force'] = 1;
-		$oFilter = tx_rnbase::makeInstance('tx_mksearch_filter_SolrBase',$this->oParameters,tx_mksearch_tests_Util::loadConfig4BE($aConfig),'searchsolr.');
+		$config = $this->getDefaultConfig();
+		$filter = $this->getFilter($config);
 
 		$fields = array();
 		$options = array();
-		$oFilter->init($fields,$options);
+		$filter->init($fields,$options);
 		$this->assertEmpty($options['qt'],'Request Handler scheinbar doch gesetzt!');
 
 		//set noHash as we don't need it in tests
-		$aConfig = tx_mksearch_tests_Util::loadPageTS4BE();
-		$aConfig['searchsolr.']['filter.']['default.']['force'] = 1;
-		$aConfig['searchsolr.']['requestHandler'] = 'testHandler';
-		$oFilter = tx_rnbase::makeInstance('tx_mksearch_filter_SolrBase',$this->oParameters,tx_mksearch_tests_Util::loadConfig4BE($aConfig),'searchsolr.');
+		$config = $this->getDefaultConfig();
+		$config['searchsolr.']['requestHandler'] = 'testHandler';
+		$filter = $this->getFilter($config);
 
 		$fields = array();
 		$options = array();
-		$oFilter->init($fields,$options);
+		$filter->init($fields,$options);
 		$this->assertEquals('testHandler',$options['qt'],'Request Handler scheinbar doch nicht gesetzt!');
 	}
 
@@ -116,18 +114,14 @@ class tx_mksearch_tests_filter_SolrBase_testcase
 	 * @group unit
 	 */
 	public function testInitSetsCorrectTerm() {
-		$aConfig = tx_mksearch_tests_Util::loadPageTS4BE();
-		//wir müssen fields extra kopieren da es über TS Anweisungen im BE nicht geht
-		$aConfig['searchsolr.']['filter.']['default.'] = $aConfig['lib.']['mksearch.']['defaultsolrfilter.'];
-		//force noch setzen
-		$aConfig['searchsolr.']['filter.']['default.']['force'] = 1;
+		$config = $this->getDefaultConfig();
 		//Test term setzen
 		$_GET['mksearch']['term'] = 'test term';
-		$oFilter = tx_rnbase::makeInstance('tx_mksearch_filter_SolrBase',$this->oParameters,tx_mksearch_tests_Util::loadConfig4BE($aConfig),'searchsolr.');
+		$filter = $this->getFilter($config);
 
 		$fields = array('term' => 'contentType:* ###PARAM_MKSEARCH_TERM###');
 		$options = array();
-		$oFilter->init($fields,$options);
+		$filter->init($fields,$options);
 		$this->assertEquals('contentType:* AND text:("test" "term")',$fields['term'],'Request Handler scheinbar doch nicht gesetzt!');
 	}
 
@@ -135,18 +129,14 @@ class tx_mksearch_tests_filter_SolrBase_testcase
 	 * @group unit
 	 */
 	public function testInitSetsCorrectTermIfTermEmpty() {
-		$aConfig = tx_mksearch_tests_Util::loadPageTS4BE();
-		//wir müssen fields extra kopieren da es über TS Anweisungen im BE nicht geht
-		$aConfig['searchsolr.']['filter.']['default.'] = $aConfig['lib.']['mksearch.']['defaultsolrfilter.'];
-		//force noch setzen
-		$aConfig['searchsolr.']['filter.']['default.']['force'] = 1;
+		$config = $this->getDefaultConfig();
 		//Test term setzen
 		$_GET['mksearch']['term'] = '';
-		$oFilter = tx_rnbase::makeInstance('tx_mksearch_filter_SolrBase',$this->oParameters,tx_mksearch_tests_Util::loadConfig4BE($aConfig),'searchsolr.');
+		$filter = $this->getFilter($config);
 
 		$fields = array('term' => 'contentType:* ###PARAM_MKSEARCH_TERM###');
 		$options = array();
-		$oFilter->init($fields,$options);
+		$filter->init($fields,$options);
 		$this->assertEquals('contentType:* ',$fields['term'],'Request Handler scheinbar doch nicht gesetzt!');
 	}
 
@@ -154,16 +144,12 @@ class tx_mksearch_tests_filter_SolrBase_testcase
 	 * @group unit
 	 */
 	public function testInitSetsCorrectTermIfNoTermParamSet() {
-		$aConfig = tx_mksearch_tests_Util::loadPageTS4BE();
-		//wir müssen fields extra kopieren da es über TS Anweisungen im BE nicht geht
-		$aConfig['searchsolr.']['filter.']['default.'] = $aConfig['lib.']['mksearch.']['defaultsolrfilter.'];
-		//force noch setzen
-		$aConfig['searchsolr.']['filter.']['default.']['force'] = 1;
-		$oFilter = tx_rnbase::makeInstance('tx_mksearch_filter_SolrBase',$this->oParameters,tx_mksearch_tests_Util::loadConfig4BE($aConfig),'searchsolr.');
+		$config = $this->getDefaultConfig();
+		$filter = $this->getFilter($config);
 
 		$fields = array('term' => 'contentType:* ###PARAM_MKSEARCH_TERM###');
 		$options = array();
-		$oFilter->init($fields,$options);
+		$filter->init($fields,$options);
 		$this->assertEquals('contentType:* ',$fields['term'],'Request Handler scheinbar doch nicht gesetzt!');
 	}
 
@@ -171,18 +157,14 @@ class tx_mksearch_tests_filter_SolrBase_testcase
 	 * @group unit
 	 */
 	public function testInitSetsCorrectTermIfTermContainsSolrControlCharacters() {
-		$aConfig = tx_mksearch_tests_Util::loadPageTS4BE();
-		//wir müssen fields extra kopieren da es über TS Anweisungen im BE nicht geht
-		$aConfig['searchsolr.']['filter.']['default.'] = $aConfig['lib.']['mksearch.']['defaultsolrfilter.'];
-		//force noch setzen
-		$aConfig['searchsolr.']['filter.']['default.']['force'] = 1;
+		$config = $this->getDefaultConfig();
 		//Test term setzen
 		$_GET['mksearch']['term'] = '*';
-		$oFilter = tx_rnbase::makeInstance('tx_mksearch_filter_SolrBase',$this->oParameters,tx_mksearch_tests_Util::loadConfig4BE($aConfig),'searchsolr.');
+		$filter = $this->getFilter($config);
 
 		$fields = array('term' => 'contentType:* ###PARAM_MKSEARCH_TERM###');
 		$options = array();
-		$oFilter->init($fields,$options);
+		$filter->init($fields,$options);
 		$this->assertEquals('contentType:* ',$fields['term'],'Request Handler scheinbar doch nicht gesetzt!');
 	}
 
@@ -190,20 +172,16 @@ class tx_mksearch_tests_filter_SolrBase_testcase
 	 * @group unit
 	 */
 	public function testInitSetsCorrectFqIfSetAndNoFqFieldDefinedForWrapping() {
-		$aConfig = tx_mksearch_tests_Util::loadPageTS4BE();
-		//wir müssen fields extra kopieren da es über TS Anweisungen im BE nicht geht
-		$aConfig['searchsolr.']['filter.']['default.'] = $aConfig['lib.']['mksearch.']['defaultsolrfilter.'];
-		//force noch setzen
-		$aConfig['searchsolr.']['filter.']['default.']['force'] = 1;
+		$config = $this->getDefaultConfig();
 		// das feld für den fq muss noch erlaubt werden
-		$aConfig['searchsolr.']['filter.']['default.']['allowedFqParams'] = 'facet_field';
+		$config['searchsolr.']['filter.']['default.']['allowedFqParams'] = 'facet_field';
 		//fq noch setzen
-		$this->oParameters->offsetSet('fq','facet_field:"facet value"');
-		$oFilter = tx_rnbase::makeInstance('tx_mksearch_filter_SolrBase',$this->oParameters,tx_mksearch_tests_Util::loadConfig4BE($aConfig),'searchsolr.');
+		$this->parameters->offsetSet('fq','facet_field:"facet value"');
+		$filter = $this->getFilter($config);
 
 		$fields = array('term' => 'contentType:* ###PARAM_MKSEARCH_TERM###');
 		$options = array();
-		$oFilter->init($fields,$options);
+		$filter->init($fields,$options);
 
 		$this->assertEquals(array(
 			0 => '(-fe_group_mi:[* TO *] AND uid:[* TO *]) OR fe_group_mi:0',
@@ -215,20 +193,16 @@ class tx_mksearch_tests_filter_SolrBase_testcase
 	 * @group unit
 	 */
 	public function testInitSetsCorrectFqIfSetAndFqFieldDefinedForWrapping() {
-		$aConfig = tx_mksearch_tests_Util::loadPageTS4BE();
-		//wir müssen fields extra kopieren da es über TS Anweisungen im BE nicht geht
-		$aConfig['searchsolr.']['filter.']['default.'] = $aConfig['lib.']['mksearch.']['defaultsolrfilter.'];
-		//force noch setzen
-		$aConfig['searchsolr.']['filter.']['default.']['force'] = 1;
+		$config = $this->getDefaultConfig();
 		//fqField setzen
-		$aConfig['searchsolr.']['filter.']['default.']['fqField'] = 'facet_dummy';
+		$config['searchsolr.']['filter.']['default.']['fqField'] = 'facet_dummy';
 		//fq noch setzen
-		$this->oParameters->offsetSet('fq','"facet value"');
-		$oFilter = tx_rnbase::makeInstance('tx_mksearch_filter_SolrBase',$this->oParameters,tx_mksearch_tests_Util::loadConfig4BE($aConfig),'searchsolr.');
+		$this->parameters->offsetSet('fq','"facet value"');
+		$filter = $this->getFilter($config);
 
 		$fields = array('term' => 'contentType:* ###PARAM_MKSEARCH_TERM###');
 		$options = array();
-		$oFilter->init($fields,$options);
+		$filter->init($fields,$options);
 
 		$this->assertEquals(array(
 			0 => '(-fe_group_mi:[* TO *] AND uid:[* TO *]) OR fe_group_mi:0',
@@ -236,56 +210,252 @@ class tx_mksearch_tests_filter_SolrBase_testcase
 		),$options['fq'],'fq wuede falsch übernommen!');
 	}
 
+	/**
+	 * @group unit
+	 */
 	public function testAllowedFqParams(){
-		$aConfig = tx_mksearch_tests_Util::loadPageTS4BE();
-		//wir müssen fields extra kopieren da es über TS Anweisungen im BE nicht geht
-		$aConfig['searchsolr.']['filter.']['default.'] = $aConfig['lib.']['mksearch.']['defaultsolrfilter.'];
-		//force noch setzen
-		$aConfig['searchsolr.']['filter.']['default.']['force'] = 1;
+		$config = $this->getDefaultConfig();
 		//force noch setzen, das gegenteil wird bereits in testInitSetsCorrectFqIfSetAndNoFqFieldDefinedForWrapping geprüft
-		$aConfig['searchsolr.']['filter.']['default.']['allowedFqParams'] = 'allowedfield';
+		$config['searchsolr.']['filter.']['default.']['allowedFqParams'] = 'allowedfield';
 
 		//fq noch setzen
-		$this->oParameters->offsetSet('fq','field:"facet value"');
+		$this->parameters->offsetSet('fq','field:"facet value"');
 
-		$oFilter = tx_rnbase::makeInstance(
-			'tx_mksearch_filter_SolrBase',
-			$this->oParameters,
-			tx_mksearch_tests_Util::loadConfig4BE($aConfig),
-			'searchsolr.'
-		);
+		$filter = $this->getFilter($config);
 
 		$fields = array('term' => 'contentType:* ###PARAM_MKSEARCH_TERM###');
 		$options = array();
-		$oFilter->init($fields, $options);
+		$filter->init($fields, $options);
 
 		$this->assertEquals('(-fe_group_mi:[* TO *] AND uid:[* TO *]) OR fe_group_mi:0',$options['fq'],'fq wuede gesetzt!');
 	}
 
+	/**
+	 * @group unit
+	 */
 	public function testSettingOfFeGroupsToFilterQuery(){
 		$tsFeBackup = $GLOBALS['TSFE']->fe_user->groupData['uid'];
 		$GLOBALS['TSFE']->fe_user->groupData['uid'] = array(1,2);
 
-		$aConfig = tx_mksearch_tests_Util::loadPageTS4BE();
-		//wir müssen fields extra kopieren da es über TS Anweisungen im BE nicht geht
-		$aConfig['searchsolr.']['filter.']['default.'] = $aConfig['lib.']['mksearch.']['defaultsolrfilter.'];
-		//force noch setzen
-		$aConfig['searchsolr.']['filter.']['default.']['force'] = 1;
+		$config = $this->getDefaultConfig();
 
-		$oFilter = tx_rnbase::makeInstance(
-			'tx_mksearch_filter_SolrBase',
-			$this->oParameters,
-			tx_mksearch_tests_Util::loadConfig4BE($aConfig),
-			'searchsolr.'
-		);
+		$filter = $this->getFilter($config);
 
 		$fields = array('term' => 'contentType:* ###PARAM_MKSEARCH_TERM###');
 		$options = array();
-		$oFilter->init($fields, $options);
+		$filter->init($fields, $options);
 
 		$this->assertEquals('(-fe_group_mi:[* TO *] AND uid:[* TO *]) OR fe_group_mi:0 OR fe_group_mi:1 OR fe_group_mi:2',$options['fq'],'fq wuede gesetzt!');
 
 		$GLOBALS['TSFE']->fe_user->groupData['uid'] = $tsFeBackup;
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testGetFilterUtility() {
+		$filter = $this->getFilter($config);
+		$method = new ReflectionMethod('tx_mksearch_filter_SolrBase', 'getFilterUtility');
+		$method->setAccessible(true);
+
+		$this->assertInstanceOf(
+				'tx_mksearch_util_Filter', $method->invoke($filter),
+				'filter utility falsch'
+		);
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testInitSetsSortingToOptionsCorrectFromParameter() {
+		$config = $this->getDefaultConfig();
+
+		$this->parameters->offsetSet('sort', 'uid desc');
+
+		$filter = $this->getFilter($config);
+
+		$fields = $options = array();
+		$filter->init($fields, $options);
+
+		$this->assertEquals('uid desc', $options['sort'], 'sort falsch in options');
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testInitSetsSortingToOptionsCorrectIfSortOrderAsc() {
+		$config = $this->getDefaultConfig();
+
+		$this->parameters->offsetSet('sort', 'uid asc');
+
+		$filter = $this->getFilter($config);
+
+		$fields = $options = array();
+		$filter->init($fields, $options);
+
+		$this->assertEquals('uid asc', $options['sort'], 'sort falsch in options');
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testInitSetsSortingToOptionsCorrectWithUnknownSortOrder() {
+		$config = $this->getDefaultConfig();
+
+		$this->parameters->offsetSet('sort', 'uid unknown');
+
+		$filter = $this->getFilter($config);
+
+		$fields = $options = array();
+		$filter->init($fields, $options);
+
+		$this->assertEquals('uid desc', $options['sort'], 'sort falsch in options');
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testInitSetsSortingToOptionsCorrectIfSortOrderInSortOrderParameter() {
+		$config = $this->getDefaultConfig();
+
+		$this->parameters->offsetSet('sort', 'uid');
+		$this->parameters->offsetSet('sortorder', 'asc');
+
+		$filter = $this->getFilter($config);
+
+		$fields = $options = array();
+		$filter->init($fields, $options);
+
+		$this->assertEquals('uid asc', $options['sort'], 'sort falsch in options');
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testInitSetsSortingToOptionsCorrectIfNoSortOrderUsesClassPropertyForSortOrder() {
+		$config = $this->getDefaultConfig();
+
+		$this->parameters->offsetSet('sort', 'uid');
+
+		$filter = $this->getFilter($config);
+
+		$filterUtil = $this->getMock('tx_mksearch_util_Filter', array('parseTermTemplate'));
+
+		$order = new ReflectionProperty('tx_mksearch_util_Filter', 'sortOrder');
+		$order->setAccessible(true);
+		$order->setValue($filterUtil, 'asc');
+
+		$filterUtilProperty = new ReflectionProperty(
+			'tx_mksearch_filter_SolrBase', 'filterUtility'
+		);
+		$filterUtilProperty->setAccessible(true);
+		$filterUtilProperty->setValue($filter, $filterUtil);
+
+		$fields = $options = array();
+		$filter->init($fields, $options);
+
+		$this->assertEquals('uid asc', $options['sort'], 'sort falsch in options');
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testInitSetsSortingToOptionsCorrectIfNoSortFieldUsesClassPropertyForSortField() {
+		$config = $this->getDefaultConfig();
+
+		$filter = $this->getFilter($config);
+		$filterUtil = $this->getMock('tx_mksearch_util_Filter', array('parseTermTemplate'));
+
+		$field = new ReflectionProperty('tx_mksearch_util_Filter', 'sortField');
+		$field->setAccessible(true);
+		$field->setValue($filterUtil, 'uid');
+
+		$filterUtilProperty = new ReflectionProperty(
+			'tx_mksearch_filter_SolrBase', 'filterUtility'
+		);
+		$filterUtilProperty->setAccessible(true);
+		$filterUtilProperty->setValue($filter, $filterUtil);
+
+		$fields = $options = array();
+		$filter->init($fields, $options);
+
+		$this->assertEquals('uid desc', $options['sort'], 'sort falsch in options');
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testParseTemplateParsesSortMarkerCorrect() {
+		tx_rnbase_util_Misc::prepareTSFE();
+
+		$config = $this->getDefaultConfig();
+		$config['searchsolr.']['filter.']['default.']['sort.']['fields'] = 'uid, title';
+		$config['searchsolr.']['filter.']['default.']['sort.']['link.']['noHash'] = true;
+
+		$filter = $this->getFilter($config);
+
+		$filterUtil = $this->getMock('tx_mksearch_util_Filter', array('getSortString'));
+
+		$field = new ReflectionProperty('tx_mksearch_util_Filter', 'sortField');
+		$field->setAccessible(true);
+		$field->setValue($filterUtil, 'uid');
+
+		$order = new ReflectionProperty('tx_mksearch_util_Filter', 'sortOrder');
+		$order->setAccessible(true);
+		$order->setValue($filterUtil, 'asc');
+
+		$filterUtilProperty = new ReflectionProperty(
+			'tx_mksearch_filter_SolrBase', 'filterUtility'
+		);
+		$filterUtilProperty->setAccessible(true);
+		$filterUtilProperty->setValue($filter, $filterUtil);
+
+		$fields = $options = array();
+		$filter->init($fields, $options);
+
+		$method = new ReflectionMethod('tx_mksearch_filter_SolrBase', 'getConfigurations');
+		$method->setAccessible(true);
+		$formatter = $method->invoke($filter)->getFormatter();
+
+		// eine kleine auswahl der möglichen marker
+		$template = '###SORT_UID_ORDER### ###SORT_TITLE_LINKURL###';
+		$parsedTemplate = $filter->parseTemplate(
+			$template, $formatter, 'searchsolr.filter.default.'
+		);
+
+		$this->assertEquals(
+			'asc ?id=1&mksearch%5Bsort%5D=title&mksearch%5Bsortorder%5D=asc',
+			$parsedTemplate,
+			'sort marker falsch geparsed'
+		);
+	}
+
+	/**
+	 * @return array
+	 */
+	private function getDefaultConfig() {
+		$config = tx_mksearch_tests_Util::loadPageTS4BE();
+		//wir müssen fields extra kopieren da es über TS Anweisungen im BE nicht geht
+		$config['searchsolr.']['filter.']['default.'] = $config['lib.']['mksearch.']['defaultsolrfilter.'];
+		//force noch setzen
+		$config['searchsolr.']['filter.']['default.']['force'] = 1;
+
+		return $config;
+	}
+
+	/**
+	 * @param array $config
+	 * @return tx_mksearch_filter_SolrBase
+	 */
+	private function getFilter($config = array()) {
+		$filter = tx_rnbase::makeInstance(
+			'tx_mksearch_filter_SolrBase',
+			$this->parameters,
+			tx_mksearch_tests_Util::loadConfig4BE($config),
+			'searchsolr.'
+		);
+
+		return $filter;
 	}
 }
 

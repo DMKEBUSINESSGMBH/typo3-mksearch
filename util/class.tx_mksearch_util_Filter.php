@@ -32,6 +32,18 @@ require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 class tx_mksearch_util_Filter {
 
 	/**
+	 *
+	 * @var string
+	 */
+	protected $sortField = false;
+
+	/**
+	 *
+	 * @var string
+	 */
+	protected $sortOrder = 'asc';
+
+	/**
 	 * Fügt den Suchstring zu dem Filter hinzu.
 	 *
 	 * dazu folgendes TS Setup
@@ -82,6 +94,107 @@ class tx_mksearch_util_Filter {
 		}
 
 		return $termTemplate;
+	}
+
+	/**
+	 * Fügt die Sortierung zu dem Filter hinzu.
+	 *
+	 * @TODO: das klappt zurzeit nur bei einfacher sortierung!
+	 *
+	 * @param 	array 					$options
+	 * @param 	tx_rnbase_IParameters 	$parameters
+	 *
+	 * @return string
+	 */
+	public function getSortString(array &$options, tx_rnbase_IParameters &$parameters) {
+		$sortString = '';
+		// die parameter nach einer sortierung fragen
+		$sort = trim($parameters->get('sort'));
+		// wurden keine parameter gefunden, nutzen wir den default des filters
+		$sort = $sort ? $sort : $this->sortField;
+		if($sort) {
+			list($sort, $sortOrder) = explode(' ', $sort);
+			// wenn order nicht mit gesetzt wurde, aus den parametern holen
+			$sortOrder = $sortOrder ? $sortOrder : $parameters->get('sortorder');
+			// den default order nutzen!
+			$sortOrder = $sortOrder ? $sortOrder : $this->sortOrder;
+			// sicherstellen, das immer desc oder asc gesetzt ist
+			$sortOrder = ($sortOrder == 'asc') ? 'asc' : 'desc';
+			// wird beim parsetemplate benötigt
+			$this->sortField = $sort;
+			$this->sortOrder = $sortOrder;
+
+			$sortString = $sort.' '.$sortOrder;
+		}
+
+		return $sortString;
+	}
+
+	/**
+	 * Sortierungslinks bereitstellen
+	 *
+	 	Folgende Marker werden im Template anhand der Beispiel TS Konfiguration bereitgestellt:
+		###SORT_UID_ORDER### = asc
+		###SORT_UID_LINKURL### = index.php?mksearch[sort]=uid&mksearch[sortorder]=asc
+		###SORT_UID_LINK### = wrappedArray mit dem A-Tag
+		###SORT_TITLE_ORDER### = asc
+		###SORT_TITLE_LINKURL### = index.php?mksearch[sort]=title&mksearch[sortorder]=asc
+		###SORT_TITLE_LINK### = wrappedArray mit dem A-Tag
+	 *
+	 * @param string $template HTML template
+	 * @param array $markArray
+	 * @param array $subpartArray
+	 * @param array $wrappedSubpartArray
+	 * @param tx_rnbase_util_FormatUtil $formatter
+	 * @param string $confId
+	 * @param string $marker
+	 */
+	public function parseSortFields(
+		$template, &$markArray, &$subpartArray, &$wrappedSubpartArray,
+		&$formatter, $confId, $marker = 'FILTER'
+	) {
+		$marker = 'SORT';
+		$confId = $confId . 'sort.';
+		$configurations = $formatter->getConfigurations();
+
+		// die felder für die sortierung stehen kommasepariert im ts
+		$sortFields = $configurations->get($confId.'fields');
+		$sortFields = $sortFields ? t3lib_div::trimExplode(',', $sortFields, true) : array();
+
+		if(!empty($sortFields)) {
+			tx_rnbase::load('tx_rnbase_util_BaseMarker');
+			$token = md5(microtime());
+			$markOrders = array();
+			foreach($sortFields as $field) {
+				$isField = ($field == $this->sortField);
+				// sortOrder ausgeben
+				$markOrders[$field.'_order'] = $isField ? $this->sortOrder : '';
+
+				$fieldMarker = $marker.'_'.strtoupper($field).'_LINK';
+				$makeLink = tx_rnbase_util_BaseMarker::containsMarker($template, $fieldMarker);
+				$makeUrl = tx_rnbase_util_BaseMarker::containsMarker($template, $fieldMarker.'URL');
+				// link generieren
+				if($makeLink || $makeUrl) {
+					// sortierungslinks ausgeben
+					$params = array(
+						'sort' => $field,
+						'sortorder' => $isField && $this->sortOrder == 'asc' ? 'desc' : 'asc',
+					);
+					$link = $configurations->createLink();
+					$link->label($token);
+					$link->initByTS($configurations, $confId.'link.', $params);
+					if($makeLink)
+						$wrappedSubpartArray['###'.$fieldMarker.'###'] = explode($token, $link->makeTag());
+					if($makeUrl)
+						$markArray['###'.$fieldMarker.'URL###'] = $link->makeUrl(false);
+				}
+			}
+			// die sortOrders parsen
+			$markOrders = $formatter->getItemMarkerArrayWrapped(
+				$markOrders, $confId, 0,$marker.'_', array_keys($markOrders)
+			);
+			$markArray = array_merge($markArray, $markOrders);
+		}
 	}
 }
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_Filter.php'])	{

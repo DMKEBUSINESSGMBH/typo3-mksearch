@@ -80,13 +80,13 @@ lib.mksearch.lucenefilter {
 					qualifier = mksearch
 					## in Anführungszeichen setzen? sollte nicht in verbindung mit wildcard suchen 
 					## verwendet werden
-					quote = 0
+					quote = 1
 					### remove lucene control characters?
 					sanitize = 1
 					### wie sollen die einzelnen wörter im suchterm verbunden werden
 					combination = and
 					### sollen wildcards vor und dem term gesetzt werden?
-					wildcard = 1
+					wildcard = 0
 				}
 			}
 		}
@@ -100,6 +100,44 @@ lib.mksearch.lucenefilter {
 			# bzw. mit und zu verknüpfen
 			term = +contentType:* ###PARAM_MKSEARCH_TERM###
 		}
+		
+		### wir eigentlich über Flexform gesetzt. d.h wenn es dort gesetzt wurde,
+		### wird das auch vorgezogen
+		forceSearch = 0
+		
+		### kommaspearierte Liste von Feldern, die im Formular leer vorbefüllt werden
+		### wenn Formular noch nicht abgeschickt. sonst werden die Marker ausgegeben
+		requiredFormFields = 
+		
+		### sorting beispiel
+		sort {
+			### Definiert Felder, für die zusätzliche Marker für die Sortierung integriert werden sollen
+#			fields = uid, title
+			### Konfiguration für die Sortierungs-Links
+			link{
+#				pid = 0
+				useKeepVars = 1
+			}
+			### TS für die Order-Felder
+#			uid_order = CASE
+#			uid_order {
+#				key.field = uid_order
+#				default = TEXT
+#				desc = TEXT
+#				desc.value = headerSortDown
+#				asc = TEXT
+#				asc.value = headerSortUp
+#			}
+#			title_order < .uid_order
+#			title_order.key.field = title_order
+		}
+#Folgende Marker werden im Template anhand der Konfiguration oben bereitgestellt:
+###SORT_UID_ORDER### = asc
+###SORT_UID_LINKURL### = index.php?mksearch[sort]=uid&mksearch[sortorder]=asc
+###SORT_UID_LINK### = wrappedArray mit dem A-Tag
+###SORT_TITLE_ORDER### = asc
+###SORT_TITLE_LINKURL### = index.php?mksearch[sort]=title&mksearch[sortorder]=asc
+###SORT_TITLE_LINK### = wrappedArray mit dem A-Tag
 	}
 	
 	# Alternative filter which receives the search term from the
@@ -199,6 +237,36 @@ lib.mksearch.defaultsolrfilter {
 	
 	### kommaseparierte liste mit den erlaubten fq feldern, welche über parameter gesetzt werden können
 	allowedFqParams = 
+	
+	### sorting beispiel
+#	sort {
+		### Definiert Felder, für die zusätzliche Marker für die Sortierung integriert werden sollen
+#		fields = uid, title
+		### Konfiguration für die Sortierungs-Links
+#		link{
+#			pid = 0
+#			useKeepVars = 1
+#		}
+		### TS für die Order-Felder
+#		uid_order = CASE
+#		uid_order {
+#			key.field = uid_order
+#			default = TEXT
+#			desc = TEXT
+#			desc.value = headerSortDown
+#			asc = TEXT
+#			asc.value = headerSortUp
+#		}
+#		title_order < .uid_order
+#		title_order.key.field = title_order
+#	}
+#Folgende Marker werden im Template anhand der Konfiguration oben bereitgestellt:
+###SORT_UID_ORDER### = asc
+###SORT_UID_LINKURL### = index.php?mksearch[sort]=uid&mksearch[sortorder]=asc
+###SORT_UID_LINK### = wrappedArray mit dem A-Tag
+###SORT_TITLE_ORDER### = asc
+###SORT_TITLE_LINKURL### = index.php?mksearch[sort]=title&mksearch[sortorder]=asc
+###SORT_TITLE_LINK### = wrappedArray mit dem A-Tag
 }
 
 plugin.tx_mksearch {
@@ -232,17 +300,6 @@ plugin.tx_mksearch {
 			required = 1
 			wrap = ###LABEL_search_term_was### "|"
 		}
-		
-		### wir eigentlich über Flexform gesetzt. d.h wenn es dort gesetzt wurde,
-		### wird das auch vorgezogen
-		forceSearch = 0
-		
-		### kommaspearierte Liste von Feldern, die im Formular leer vorbefüllt werden
-		### wenn Formular noch nicht abgeschickt. sonst werden die Marker ausgegeben
-		requiredFormFields = 
-		
-		### contentType query
-		contentType = 
 
 ####
 # Ab hier wird der Code für diesen View nicht mehr verwendet!!
