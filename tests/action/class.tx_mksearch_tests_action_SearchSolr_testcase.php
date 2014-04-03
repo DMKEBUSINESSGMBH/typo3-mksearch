@@ -25,31 +25,32 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
-
-/**
- * benötigte Klassen einbinden
- */
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
-tx_rnbase::load('Tx_Phpunit_TestCase');
+require_once t3lib_extMgm::extPath('rn_base', 'class.tx_rnbase.php');
+tx_rnbase::load('tx_mksearch_tests_Testcase');
 tx_rnbase::load('tx_mksearch_action_SearchSolr');
 tx_rnbase::load('Tx_Phpunit_Framework');
 
 /**
- * Testfälle für tx_mkkvbb_action_Substitution
+ * Testfälle
  *
- * @author hbochmann
- * @package tx_mkkvbb
- * @subpackage tx_mkkvbb_tests_action
+ * @package tx_mksearch
+ * @subpackage tx_mksearch_tests
+ * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
+ * @author Michael Wagner <michael.wagner@dmk-ebusiness.de>
+ * @license http://www.gnu.org/licenses/lgpl.html
+ *          GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_tests_action_SearchSolr_testcase extends Tx_Phpunit_TestCase {
-	
+class tx_mksearch_tests_action_SearchSolr_testcase
+	extends tx_mksearch_tests_Testcase {
+
 	/**
 	 * unsere link id. entweder die id oder der alias wenn gesetzt
 	 * @var string or integer
 	 */
 	protected $linkId  = '';
-	
-	public function setUp() {
+
+	protected function setUp() {
+		parent::setUp();
 		// logoff für phpmyadmin deaktivieren. ist nicht immer notwendig
 		// aber sollte auch nicht stören!
 		/*
@@ -71,39 +72,39 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends Tx_Phpunit_TestCase {
 				}
 			}
 		}
-		
+
 		$framework = new Tx_Phpunit_Framework('dummy');
 		$framework->createFakeFrontEnd();
-		
+
 		//reset to see if filled correct
 		$GLOBALS['TSFE']->additionalHeaderData = null;
-		
+
 		//damit links generiert werden können
 		$GLOBALS['TSFE']->sys_page = tx_rnbase_util_TYPO3::getSysPage();
-		
+
 		//wir brauchen noch die id/alias für den link, der genriert wird
-		$this->linkId = $GLOBALS['TSFE']->page['alias'] ? 
-						$GLOBALS['TSFE']->page['alias'] : 
+		$this->linkId = $GLOBALS['TSFE']->page['alias'] ?
+						$GLOBALS['TSFE']->page['alias'] :
 						$GLOBALS['TSFE']->page['uid'];
 	}
-	
+
 	/**
 	 * @param unknown_type $aParams
 	 */
 	private function getAction($aMockFunctions = array(),$aConfig = array(), &$out = '', $aParams = array()) {
 		//build mock
 		$action = $this->getMock('tx_mksearch_action_SearchSolr',array_keys($aMockFunctions));
-		
+
 		foreach ($aMockFunctions as $sMockFunction => $aMockFunctionConfig) {
 			$action->expects($aMockFunctionConfig['expects'])
 			->method($sMockFunction)
 			->will($this->returnValue($aMockFunctionConfig['returnValue']));
 		}
-		
+
 		//configure action
 		$configurations = tx_rnbase::makeInstance('tx_rnbase_configurations');
 		$parameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
-		
+
 		//@TODO: warum wird die klasse tslib_cObj nicht gefunden!? (mw: eternit local)
 		require_once(t3lib_extMgm::extPath('cms', 'tslib/class.tslib_content.php'));
 		$configurations->init(
@@ -111,17 +112,17 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends Tx_Phpunit_TestCase {
 				$configurations->getCObj(1),
 				'mksearch','mksearch'
 			);
-			
+
 		//noch extra params?
 		if(!empty($aParams))
 			foreach ($aParams as $sName => $mValue)
 				$parameters->offsetSet($sName,$mValue);
-			
+
 		$configurations->setParameters($parameters);
 		$action->setConfigurations($configurations);
-		
+
 		$out = $action->handleRequest($parameters, $configurations, $configurations->getViewData());
-			
+
 		return $action;
 	}
 
@@ -144,14 +145,14 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends Tx_Phpunit_TestCase {
 		);
 		$out = true;
 		$action = $this->getAction($aMockFunctions,$aConfig,$out);
-		
+
 		$this->assertNull($out,'es wurde nicht null geliefert. vllt doch gesucht?');
 		//view daten sollten nicht gesetzt sein
 		$this->assertFalse($action->getConfigurations()->getViewData()->offsetExists('result'),'es wurde doch ein result gesetzt in den view daten. doch gesucht?');
-		
+
 		$this->assertEmpty($GLOBALS['TSFE']->additionalHeaderData,'Daten für JS doch gesetzt?');
 	}
-	
+
 	/**
 	 */
 	public function testHandleRequestWithEnabledAutocomplete(){
@@ -181,11 +182,11 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends Tx_Phpunit_TestCase {
 		);
 		$out = true;
 		$action = $this->getAction($aMockFunctions,$aConfig,$out);
-		
+
 		$this->assertNull($out,'es wurde nicht null geliefert. vllt doch gesucht?');
 		//view daten sollten nicht gesetzt sein
 		$this->assertFalse($action->getConfigurations()->getViewData()->offsetExists('result'),'es wurde doch ein result gesetzt in den view daten. doch gesucht?');
-		
+
 		$sJs = '
 		<script type="text/javascript">
 		jQuery(document).ready(function(){
@@ -216,11 +217,11 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends Tx_Phpunit_TestCase {
 		jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();
 		</script>
 		';
-		
+
 		$this->assertEquals(1, count($GLOBALS['TSFE']->additionalHeaderData),'mehr header daten als erwartet!');
 		$this->assertEquals($sJs,$GLOBALS['TSFE']->additionalHeaderData[md5($sJs)],'Daten für JS falsch');
 	}
-	
+
 	/**
 	 */
 	public function testHandleRequestWithEnabledAutocompleteAndInclusionOfSomeJqueryLibs(){
@@ -253,11 +254,11 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends Tx_Phpunit_TestCase {
 		);
 		$out = true;
 		$action = $this->getAction($aMockFunctions,$aConfig,$out);
-		
+
 		$this->assertNull($out,'es wurde nicht null geliefert. vllt doch gesucht?');
 		//view daten sollten nicht gesetzt sein
 		$this->assertFalse($action->getConfigurations()->getViewData()->offsetExists('result'),'es wurde doch ein result gesetzt in den view daten. doch gesucht?');
-		
+
 		$sJs = '
 		<script type="text/javascript">
 		jQuery(document).ready(function(){
@@ -288,13 +289,13 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends Tx_Phpunit_TestCase {
 		jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();
 		</script>
 		';
-		
+
 		$this->assertEquals(3, count($GLOBALS['TSFE']->additionalHeaderData),'mehr header daten als erwartet!');
 		$this->assertEquals($sJs,$GLOBALS['TSFE']->additionalHeaderData[md5($sJs)],'Daten für JS falsch');
 		$this->assertEquals('<script type="text/javascript" src="typo3conf/ext/mksearch/res/js/jquery-1.6.2.min.js"></script>',$GLOBALS['TSFE']->additionalHeaderData['jquery-1.6.2.min.js'],'Daten für JS jquery falsch');
 		$this->assertEquals('<script type="text/javascript" src="typo3conf/ext/mksearch/res/js/jquery-ui-1.8.15.core.min.js"></script>',$GLOBALS['TSFE']->additionalHeaderData['jquery-ui-1.8.15.core.min.js'],'Daten für JS jquery ui falsch');
 	}
-	
+
 	/**
 	 */
 	public function testHandleRequestWithEnabledAutocompleteAndInclusionOfAllJqueryLibs(){
@@ -327,11 +328,11 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends Tx_Phpunit_TestCase {
 		);
 		$out = true;
 		$action = $this->getAction($aMockFunctions,$aConfig,$out);
-		
+
 		$this->assertNull($out,'es wurde nicht null geliefert. vllt doch gesucht?');
 		//view daten sollten nicht gesetzt sein
 		$this->assertFalse($action->getConfigurations()->getViewData()->offsetExists('result'),'es wurde doch ein result gesetzt in den view daten. doch gesucht?');
-		
+
 		$sJs = '
 		<script type="text/javascript">
 		jQuery(document).ready(function(){
@@ -362,14 +363,14 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends Tx_Phpunit_TestCase {
 		jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();
 		</script>
 		';
-		
+
 		$this->assertEquals(4, count($GLOBALS['TSFE']->additionalHeaderData),'mehr header daten als erwartet!');
 		$this->assertEquals($sJs,$GLOBALS['TSFE']->additionalHeaderData[md5($sJs)],'Daten für JS falsch');
 		$this->assertEquals('<script type="text/javascript" src="typo3conf/ext/mksearch/res/js/jquery-1.6.2.min.js"></script>',$GLOBALS['TSFE']->additionalHeaderData['jquery-1.6.2.min.js'],'Daten für JS jquery falsch');
 		$this->assertEquals('<script type="text/javascript" src="typo3conf/ext/mksearch/res/js/jquery-ui-1.8.15.core.min.js"></script>',$GLOBALS['TSFE']->additionalHeaderData['jquery-ui-1.8.15.core.min.js'],'Daten für JS jquery ui falsch');
 		$this->assertEquals('<script type="text/javascript" src="typo3conf/ext/mksearch/res/js/jquery-ui-1.8.15.autocomplete.min.js"></script>',$GLOBALS['TSFE']->additionalHeaderData['jquery-ui-1.8.15.autocomplete.min.js'],'Daten für JS jquery ui falsch');
 	}
-	
+
 	/**
 	 */
 	public function testHandleRequestWithEnabledAutocompleteAndConfiguredUsedIndex(){
@@ -399,11 +400,11 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends Tx_Phpunit_TestCase {
 		);
 		$out = true;
 		$action = $this->getAction($aMockFunctions,$aConfig,$out);
-		
+
 		$this->assertNull($out,'es wurde nicht null geliefert. vllt doch gesucht?');
 		//view daten sollten nicht gesetzt sein
 		$this->assertFalse($action->getConfigurations()->getViewData()->offsetExists('result'),'es wurde doch ein result gesetzt in den view daten. doch gesucht?');
-		
+
 		$sJs = '
 		<script type="text/javascript">
 		jQuery(document).ready(function(){
@@ -434,7 +435,7 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends Tx_Phpunit_TestCase {
 		jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();
 		</script>
 		';
-		
+
 		$this->assertEquals(1, count($GLOBALS['TSFE']->additionalHeaderData),'mehr header daten als erwartet!');
 		$this->assertEquals($sJs,$GLOBALS['TSFE']->additionalHeaderData[md5($sJs)],'Daten für JS falsch');
 	}

@@ -21,12 +21,21 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
-
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+require_once t3lib_extMgm::extPath('rn_base', 'class.tx_rnbase.php');
+tx_rnbase::load('tx_mksearch_tests_Testcase');
 tx_rnbase::load('tx_mksearch_util_SearchBuilder');
 
-
-class tx_mksearch_tests_util_SearchBuilder_testcase extends tx_phpunit_testcase {
+/**
+ *
+ * @package tx_mksearch
+ * @subpackage tx_mksearch_tests
+ * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
+ * @author Michael Wagner <michael.wagner@dmk-ebusiness.de>
+ * @license http://www.gnu.org/licenses/lgpl.html
+ *          GNU Lesser General Public License, version 3 or later
+ */
+class tx_mksearch_tests_util_SearchBuilder_testcase
+	extends tx_mksearch_tests_Testcase {
 
 	/**
 	 * @dataProvider providerSearchSolrOptions
@@ -45,28 +54,28 @@ class tx_mksearch_tests_util_SearchBuilder_testcase extends tx_phpunit_testcase 
 				__LINE__ => array('Hallo  Welt', MKSEARCH_OP_FREE, array('quote' => 1, 'dismax' => 0, 'fuzzy' => 0), 'Hallo Welt'),
 				__LINE__ => array('Hallo  Welt', MKSEARCH_OP_NONE, array('quote' => 1, 'dismax' => 0, 'fuzzy' => 0), '("Hallo" "Welt")'),
 				__LINE__ => array('Hallo  Welt', NULL, array('quote' => 1, 'dismax' => 0, 'fuzzy' => 0), '("Hallo" "Welt")'),
-				
+
 				__LINE__ => array('Hallo  Welt', MKSEARCH_OP_AND, array('quote' => 0, 'dismax' => 0, 'fuzzy' => 0), '(+Hallo +Welt)'),
 				__LINE__ => array('Hallo  Welt', MKSEARCH_OP_OR, array('quote' => 0, 'dismax' => 0, 'fuzzy' => 0), '(Hallo Welt)'),
 				__LINE__ => array('Hallo  Welt', MKSEARCH_OP_EXACT, array('quote' => 0, 'dismax' => 0, 'fuzzy' => 0), '("Hallo Welt")'),
 				__LINE__ => array('Hallo  Welt', MKSEARCH_OP_FREE, array('quote' => 0, 'dismax' => 0, 'fuzzy' => 0), 'Hallo Welt'),
 				__LINE__ => array('Hallo  Welt', MKSEARCH_OP_NONE, array('quote' => 0, 'dismax' => 0, 'fuzzy' => 0), '(Hallo Welt)'),
 				__LINE__ => array('Hallo  Welt', NULL, array('quote' => 0, 'dismax' => 0), '(Hallo Welt)'),
-				
+
 				__LINE__ => array('Hallo  Welt', MKSEARCH_OP_AND, array('quote' => 1, 'dismax' => 1, 'fuzzy' => 0), '+"Hallo" +"Welt"'),
 				__LINE__ => array('Hallo  Welt', MKSEARCH_OP_OR, array('quote' => 1, 'dismax' => 1, 'fuzzy' => 0), '"Hallo" "Welt"'),
 				__LINE__ => array('Hallo  Welt', MKSEARCH_OP_EXACT, array('quote' => 1, 'dismax' => 1, 'fuzzy' => 0), '"Hallo Welt"'),
 				__LINE__ => array('Hallo  Welt', MKSEARCH_OP_FREE, array('quote' => 1, 'dismax' => 1, 'fuzzy' => 0), 'Hallo Welt'),
 				__LINE__ => array('Hallo  Welt', MKSEARCH_OP_NONE, array('quote' => 1, 'dismax' => 1, 'fuzzy' => 0), '"Hallo" "Welt"'),
 				__LINE__ => array('Hallo  Welt', NULL, array('quote' => 1, 'dismax' => 1, 'fuzzy' => 0), '"Hallo" "Welt"'),
-				
+
 				__LINE__ => array('Hallo  Welt', MKSEARCH_OP_AND, array('quote' => 0, 'dismax' => 1, 'fuzzy' => 0), '+Hallo +Welt'),
 				__LINE__ => array('Hallo  Welt', MKSEARCH_OP_OR, array('quote' => 0, 'dismax' => 1, 'fuzzy' => 0), 'Hallo Welt'),
 				__LINE__ => array('Hallo  Welt', MKSEARCH_OP_EXACT, array('quote' => 0, 'dismax' => 1, 'fuzzy' => 0), '"Hallo Welt"'),
 				__LINE__ => array('Hallo  Welt', MKSEARCH_OP_FREE, array('quote' => 0, 'dismax' => 1, 'fuzzy' => 0), 'Hallo Welt'),
 				__LINE__ => array('Hallo  Welt', MKSEARCH_OP_NONE, array('quote' => 0, 'dismax' => 1, 'fuzzy' => 0), 'Hallo Welt'),
 				__LINE__ => array('Hallo  Welt', NULL, array('quote' => 0, 'dismax' => 1, 'fuzzy' => 0), 'Hallo Welt'),
-				
+
 				//@TODO: doppelte operatoren müssen verhindert werden!
 //				__LINE__ => array('+Hallo  -Welt', MKSEARCH_OP_AND, array('quote' => 1, 'dismax' => 0, 'fuzzy' => 0), '(+"Hallo" -"Welt")'),
 				__LINE__ => array('+Hallo  -Welt', MKSEARCH_OP_OR, array('quote' => 1, 'dismax' => 0, 'fuzzy' => 0), '(+"Hallo" -"Welt")'),
@@ -74,7 +83,7 @@ class tx_mksearch_tests_util_SearchBuilder_testcase extends tx_phpunit_testcase 
 				__LINE__ => array('+Hallo  -Welt', MKSEARCH_OP_FREE, array('quote' => 1, 'dismax' => 0, 'fuzzy' => 0), '+Hallo -Welt'),
 				__LINE__ => array('+Hallo  -Welt', MKSEARCH_OP_NONE, array('quote' => 1, 'dismax' => 0, 'fuzzy' => 0), '(+"Hallo" -"Welt")'),
 				__LINE__ => array('+Hallo  -Welt', NULL, array('quote' => 1, 'dismax' => 0, 'fuzzy' => 0), '(+"Hallo" -"Welt")'),
-				
+
 				__LINE__ => array('Hallo  Welt', MKSEARCH_OP_AND, array('quote' => 1, 'dismax' => 0, 'fuzzy' => 1), '(+"Hallo"~0.2 +"Welt"~0.2)'),
 				__LINE__ => array('Hallo  Welt', MKSEARCH_OP_OR, array('quote' => 1, 'dismax' => 0, 'fuzzy' => 1), '("Hallo"~0.2 "Welt"~0.2)'),
 				__LINE__ => array('Hallo  Welt', MKSEARCH_OP_EXACT, array('quote' => 1, 'dismax' => 0, 'fuzzy' => 1), '("Hallo Welt"~0.2)'),
@@ -82,7 +91,7 @@ class tx_mksearch_tests_util_SearchBuilder_testcase extends tx_phpunit_testcase 
 				__LINE__ => array('Hallo  Welt', MKSEARCH_OP_FREE, array('quote' => 1, 'dismax' => 0, 'fuzzy' => 1), 'Hallo Welt'),
 				__LINE__ => array('Hallo  Welt', MKSEARCH_OP_NONE, array('quote' => 1, 'dismax' => 0, 'fuzzy' => 1), '("Hallo"~0.2 "Welt"~0.2)'),
 				__LINE__ => array('Hallo  Welt', NULL, array('quote' => 1, 'dismax' => 0, 'fuzzy' => 1), '("Hallo"~0.2 "Welt"~0.2)'),
-				
+
 				__LINE__ => array('Hallo  Welt', MKSEARCH_OP_AND, array('quote' => 0, 'dismax' => 0, 'fuzzy' => 1), '(+Hallo~0.2 +Welt~0.2)'),
 				__LINE__ => array('Hallo  Welt', MKSEARCH_OP_OR, array('quote' => 0, 'dismax' => 0, 'fuzzy' => 1), '(Hallo~0.2 Welt~0.2)'),
 				__LINE__ => array('Hallo  Welt', MKSEARCH_OP_EXACT, array('quote' => 0, 'dismax' => 0, 'fuzzy' => 1), '("Hallo Welt"~0.2)'),
@@ -91,7 +100,7 @@ class tx_mksearch_tests_util_SearchBuilder_testcase extends tx_phpunit_testcase 
 				__LINE__ => array('Hallo  Welt', NULL, array('quote' => 0, 'dismax' => 0, 'fuzzy' => 1), '(Hallo~0.2 Welt~0.2)'),
 				__LINE__ => array(' Hallo  Welt texti:something "\' <script>', MKSEARCH_OP_AND, array('quote' => 1, 'dismax' => 0, 'fuzzy' => 0, 'sanitize' => 1), '(+"Hallo" +"Welt" +"textisomething" +"script")'),
 				__LINE__ => array('*', MKSEARCH_OP_AND, array('quote' => 1, 'dismax' => 0, 'fuzzy' => 0, 'sanitize' => 1), ''),
-				
+
 			) as $key => $row) {
 			$key = 'Line:'.$key.' Term:'.$row[0].' OP:'.$row[1].' Quote:'.$row[2]['quote'].' DisMax:'.$row[2]['dismax'].' Fuzzy:'.$row[2]['fuzzy'].' Result:'.$row[3];
 			$return[$key] = $row;

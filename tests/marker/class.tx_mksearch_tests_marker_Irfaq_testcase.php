@@ -32,14 +32,19 @@
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_mksearch_marker_Irfaq');
 require_once(t3lib_extMgm::extPath('mksearch') . 'lib/Apache/Solr/Document.php');
-tx_rnbase::load('tx_mksearch_tests_Util');
+tx_rnbase::load('tx_mksearch_tests_Testcase');
 
 /**
  *
- * @author Hannes Bochmann
- *
+ * @package tx_mksearch
+ * @subpackage tx_mksearch_tests
+ * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
+ * @author Michael Wagner <michael.wagner@dmk-ebusiness.de>
+ * @license http://www.gnu.org/licenses/lgpl.html
+ *          GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_tests_marker_Irfaq_testcase extends tx_phpunit_testcase {
+class tx_mksearch_tests_marker_Irfaq_testcase
+	extends tx_mksearch_tests_Testcase {
 
 	/**
 	 * @var tx_mksearch_marker_Irfaq
@@ -49,11 +54,13 @@ class tx_mksearch_tests_marker_Irfaq_testcase extends tx_phpunit_testcase {
 	/**
 	 * setUp() = init DB etc.
 	 */
-	public function setUp(){
+	protected function setUp(){
 		tx_rnbase::load('tx_rnbase_util_Misc');
 		tx_rnbase_util_Misc::prepareTSFE();
 
 		$this->marker = tx_rnbase::makeInstance('tx_mksearch_marker_Irfaq');
+
+		parent::setUp();
 	}
 
 	/**

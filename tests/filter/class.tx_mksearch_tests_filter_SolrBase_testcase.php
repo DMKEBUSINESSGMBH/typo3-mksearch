@@ -29,8 +29,8 @@
 /**
  * benötigte Klassen einbinden
  */
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
-
+require_once t3lib_extMgm::extPath('rn_base', 'class.tx_rnbase.php');
+tx_rnbase::load('tx_mksearch_tests_Testcase');
 tx_rnbase::load('tx_mksearch_filter_SolrBase');
 //damit die User func ausgeführt werden kann, muss sie geladen werden, was auf dem
 //CLI und TYPO3 < 4.5 nicht der Fall ist
@@ -41,11 +41,15 @@ tx_rnbase::load('tx_mksearch_util_UserFunc');
 /**
  * Testfälle für tx_mksearch_filter_SolrBase
  *
- * @author hbochmann
  * @package tx_mksearch
- * @subpackage tx_mksearch_tests_filter
+ * @subpackage tx_mksearch_tests
+ * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
+ * @author Michael Wagner <michael.wagner@dmk-ebusiness.de>
+ * @license http://www.gnu.org/licenses/lgpl.html
+ *          GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_tests_filter_SolrBase_testcase extends tx_phpunit_testcase {
+class tx_mksearch_tests_filter_SolrBase_testcase
+	extends tx_mksearch_tests_Testcase {
 
 	protected $oParameters;
 	protected $groupDataBackup;
@@ -53,12 +57,14 @@ class tx_mksearch_tests_filter_SolrBase_testcase extends tx_phpunit_testcase {
 	/**
 	 * setUp() = init DB etc.
 	 */
-	public function setUp(){
+	protected function setUp(){
+		parent::setUp();
 		$this->oParameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
 		$this->oParameters->setQualifier('mksearch');
 	}
 
-	public function tearDown() {
+	protected function tearDown() {
+		parent::tearDown();
 		unset($_GET['mksearch']);
 	}
 

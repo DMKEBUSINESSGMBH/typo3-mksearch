@@ -22,46 +22,54 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+require_once t3lib_extMgm::extPath('rn_base', 'class.tx_rnbase.php');
+tx_rnbase::load('tx_mksearch_tests_Testcase');
 tx_rnbase::load('tx_mksearch_model_IndexerDocumentBase');
 
 /**
- * @author Hannes Bochmann
+ *
+ * @package tx_mksearch
+ * @subpackage tx_mksearch_tests
+ * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
+ * @author Michael Wagner <michael.wagner@dmk-ebusiness.de>
+ * @license http://www.gnu.org/licenses/lgpl.html
+ *          GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_tests_model_IndexerDocumentBase_testcase extends tx_phpunit_testcase {
+class tx_mksearch_tests_model_IndexerDocumentBase_testcase
+	extends tx_mksearch_tests_Testcase {
 
 	/**
 	 * @group unit
 	 */
 	public function testSetAbstractRemovesHtml() {
 		$indexerDocument = $this->getIndexerDocument();
-		
+
 		$abstract = '<p>test</p>';
 		$indexerDocument->setAbstract($abstract);
 		$data = $indexerDocument->getData();
-		
+
 		$this->assertEquals('test', $data['abstract']->getValue(), 'html not removed');
 	}
-	
+
 	/**
 	 * @group unit
 	 */
 	public function testSetAbstractUsesGivenLengthEvenIfMaxAbstractLengthIsSet() {
 		$indexerDocument = $this->getIndexerDocument();
-		
+
 		$abstract = 'test';
 		$indexerDocument->setAbstract($abstract, 3);
 		$data = $indexerDocument->getData();
-		
+
 		$this->assertEquals('tes', $data['abstract']->getValue(), 'abstract not shortened');
 	}
-	
+
 	/**
 	 * @group unit
 	 */
 	public function testSetAbstractUsesMaxAbstractLengthIfNoLengthGiven() {
 		$indexerDocument = $this->getIndexerDocument();
-		
+
 		$abstract = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores sasd';
 		$indexerDocument->setAbstract($abstract);
 		$data = $indexerDocument->getData();
@@ -69,20 +77,20 @@ class tx_mksearch_tests_model_IndexerDocumentBase_testcase extends tx_phpunit_te
 		$expectedShortenedAbstract = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores ';
 		$this->assertEquals($expectedShortenedAbstract, $data['abstract']->getValue(), 'abstract not shortened');
 	}
-	
+
 	/**
 	 * @group unit
 	 */
 	public function testSetAbstractHandlesMultiByteCharsCorrectWithGivenLength() {
 		$indexerDocument = $this->getIndexerDocument();
-		
+
 		$abstract = 'Rückantwort';
 		$indexerDocument->setAbstract($abstract, 4);
 		$data = $indexerDocument->getData();
-		$expectedAbstract = 'Rück'; 
+		$expectedAbstract = 'Rück';
 		$this->assertEquals($expectedAbstract, $data['abstract']->getValue(), 'multibyte string in abstract not correct handled');
 	}
-	
+
 	/**
 	 * @return tx_mksearch_model_IndexerDocumentBase
 	 */
