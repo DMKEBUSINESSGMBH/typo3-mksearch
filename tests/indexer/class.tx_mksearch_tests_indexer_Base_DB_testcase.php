@@ -197,7 +197,6 @@ class tx_mksearch_tests_indexer_Base_DB_testcase
 
 	/**
 	 * Check if setting the doc to deleted works
-	 * @dataProvider someProvider
 	 */
 	public function testHasDocToBeDeletedConsideringOnlyTheModelItself() {
 		$indexer =tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
