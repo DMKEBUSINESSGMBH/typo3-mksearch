@@ -38,7 +38,7 @@ abstract class tx_mksearch_tests_DbTestcase
 	extends tx_phpunit_database_testcase {
 
 	protected $workspaceBackup;
-	protected $templaVoilaConfigBackup;
+	protected $templaVoilaConfigBackup = NULL;
 	protected $db;
 
 	/**
@@ -146,8 +146,9 @@ abstract class tx_mksearch_tests_DbTestcase
 		$GLOBALS['BE_USER']->setWorkspace($this->workspaceBackup);
 
 		// tear down tv
-		if (t3lib_extMgm::isLoaded('templavoila')) {
+		if ($this->templaVoilaConfigBackup !== NULL) {
 			$GLOBALS['TYPO3_LOADED_EXT']['templavoila'] = $this->templaVoilaConfigBackup;
+			$this->templaVoilaConfigBackup = NULL;
 		}
 	}
 
