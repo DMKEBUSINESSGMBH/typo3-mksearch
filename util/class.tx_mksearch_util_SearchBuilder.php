@@ -41,14 +41,14 @@ class tx_mksearch_util_SearchBuilder {
 	/**
 	 * Setzt jedes Wort in Anführungszeichen.
 	 * Dabei werden operatoren wie + und - beachtet
-	 * 
+	 *
 	 * @param  	mixed  	$terms
 	 * @return 	array
 	 */
 	private static function quoteTerms($terms) {
 		if(!is_array($terms))
 			$terms = t3lib_div::trimExplode(' ', $terms, 1);
-		
+
 		foreach($terms as &$term) {
 			// minus und plus dürfen nicht mit in die quotes
 			$operator = $term{0};
@@ -60,32 +60,32 @@ class tx_mksearch_util_SearchBuilder {
 				default:
 					$term = '"'.$term.'"';
 					break;
-			} 
+			}
 		}
-		
+
 		return $terms;
 	}
-	
+
 	/**
 	 * Setzt hinter jedes Wort eine tilde für die fuzzy search.
-	 * 
+	 *
 	 * @param  	mixed  	$terms
 	 * @return 	array
 	 */
 	private static function fuzzyTerms($terms, $slop='0.2') {
 		if(!is_array($terms))
 			$terms = t3lib_div::trimExplode(' ', $terms, 1);
-		
+
 		foreach($terms as &$term) {
 			$term = $term.'~'.$slop;
 		}
-		
+
 		return $terms;
 	}
-	
+
 	/**
 	 * Removes all solr control characters
-	 * 
+	 *
 	 * @param  	mixed  	$terms
 	 * @return 	array
 	 */
@@ -94,22 +94,41 @@ class tx_mksearch_util_SearchBuilder {
 		tx_rnbase::load('tx_mksearch_util_Misc');
 		if(!is_array($terms))
 			$terms = t3lib_div::trimExplode(' ', $terms, 1);
-		
+
 		foreach($terms as $key => &$term) {
 			//remove empty strings. can happen when the term contains only control chars
 			if(!$term = tx_mksearch_util_Misc::sanitizeTerm($term))
 				unset($terms[$key]);
 		}
-		
+
+		return $terms;
+	}
+
+	/**
+	 *wraps terms in wildcards
+	 *
+	 * @param  	mixed  	$terms
+	 * @return 	array
+	 */
+	private static function wrapTermsInWildcards($terms) {
+		if(empty($terms)) return $terms;//nothing to do
+		tx_rnbase::load('tx_mksearch_util_Misc');
+		if(!is_array($terms))
+			$terms = t3lib_div::trimExplode(' ', $terms, 1);
+
+		foreach($terms as $key => &$term) {
+			$term = '*' . $term . '*';
+		}
+
 		return $terms;
 	}
 
 	/**
 	 * Wurde nach OR gesucht?
 	 * Dann müssen wir beim DisMaxRequestHandler Min-should-match reduzieren.
-	 * 
+	 *
 	 * @todo: tests schreiben
-	 * 
+	 *
 	 * @param 	array 						$fields
 	 * @param 	array 						$options
 	 * @param 	tx_rnbase_IParameters 		$parameters
@@ -140,9 +159,9 @@ class tx_mksearch_util_SearchBuilder {
 	/**
 	 * Bei aktiviertem DisMaxRequestHandler und fuzzy muss die query leer sein.
 	 * Der term muss dann im filter query stehen ( fq=text:fuzzystring~0.2^1.0 )
-	 * 
+	 *
 	 * @todo: tests schreiben
-	 * 
+	 *
 	 * @param 	array 						$fields
 	 * @param 	array 						$options
 	 * @param 	tx_rnbase_IParameters 		$parameters
@@ -165,9 +184,9 @@ class tx_mksearch_util_SearchBuilder {
 	/**
 	 * Setzt den Term entsprechend des combination parameters zusammen.
 	 * Mögliche Werte: 'none', 'free', 'or', 'and', 'exact'.
-	 * 
+	 *
 	 * Wurde nichts oder none übergeben wird die auswertung solr überlassen
-	 * 
+	 *
 	 * @param 	string 	$content
 	 * @param 	array 	$options
 	 * @return 	string
@@ -181,21 +200,31 @@ class tx_mksearch_util_SearchBuilder {
 		if(empty($terms)) {
 			return '';
 		}
-		
+
 		$quote = intval($options['quote']);
 		$dismax = intval($options['dismax']);
 		$fuzzy = intval($options['fuzzy']) || !empty($options['fuzzy']);
-		$bSanitize = intval($options['sanitize']);
-		
+		$sanitize = intval($options['sanitize']);
+		$wildcard = intval($options['wildcard']);
+
 		// sanitize term?
-		if($bSanitize){
+		if($sanitize){
 			switch($combination) {
 				// sanitize nie bei free
 				case MKSEARCH_OP_FREE: break;
 				default: $terms = self::sanitizeTerms($terms); break;
 			}
 		}
-		
+
+		// wrap in wildcards?
+		if($wildcard){
+			switch($combination) {
+				// wildcards nie bei free
+				case MKSEARCH_OP_FREE: break;
+				default: $terms = self::wrapTermsInWildcards($terms); break;
+			}
+		}
+
 		// quotes
 		if($quote) {
 			switch($combination) {
@@ -204,7 +233,7 @@ class tx_mksearch_util_SearchBuilder {
 				default: $terms = self::quoteTerms($terms); break;
 			}
 		}
-		
+
 		// fuzzy
 		if($fuzzy){
 			$fuzzySlop = $options['fuzzySlop'] ? $options['fuzzySlop'] : '0.2';
@@ -222,7 +251,7 @@ class tx_mksearch_util_SearchBuilder {
 					// @TODO: wenn vor dem term bereits ein + steht und wir noch eines anfügen, bekommen wir eine exception von solr!
 					$return = '+'.implode(' +', $terms);
 					// wenn nicht dismax, klammern drum rum
-					$return = $dismax ? $return : '('.$return.')'; 
+					$return = $dismax ? $return : '('.$return.')';
 					break;
 				case MKSEARCH_OP_EXACT:
 					// in anführungszeichen setzen, bei fuzzy auch die tilde anfügen!
@@ -245,7 +274,7 @@ class tx_mksearch_util_SearchBuilder {
 		}else{
 			$return = null;
 		}
-		
+
 		return $return;
 	}
 
