@@ -86,7 +86,11 @@ lib.mksearch.lucenefilter {
 					### wie sollen die einzelnen wörter im suchterm verbunden werden
 					combination = and
 					### sollen wildcards vor und dem term gesetzt werden?
-					wildcard = 0
+					wildcard = 1
+					### sollen klammern um den term? das nur nutzen wenn in einem konkreten
+					### feld gesucht wird. wenn die default fields verwendet werden, dann keine
+					### klammern
+					dismax = 1
 				}
 			}
 		}
