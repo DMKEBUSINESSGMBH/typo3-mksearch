@@ -66,6 +66,13 @@ class tx_mksearch_tests_filter_SolrBase_testcase
 	protected function tearDown() {
 		parent::tearDown();
 		unset($_GET['mksearch']);
+
+		if(isset($GLOBALS['TSFE']->id)) {
+			unset($GLOBALS['TSFE']->id);
+		}
+		if(isset($GLOBALS['TSFE']->rootLine[0]['uid'])) {
+			unset($GLOBALS['TSFE']->rootLine[0]['uid']);
+		}
 	}
 
 	/**
@@ -387,6 +394,8 @@ class tx_mksearch_tests_filter_SolrBase_testcase
 	 */
 	public function testParseTemplateParsesSortMarkerCorrect() {
 		tx_rnbase_util_Misc::prepareTSFE();
+		$GLOBALS['TSFE']->id = 1;
+		$GLOBALS['TSFE']->rootLine[0]['uid'] = 1; //wenn tq_seo kommt sonst ein error
 
 		$config = $this->getDefaultConfig();
 		$config['searchsolr.']['filter.']['default.']['sort.']['fields'] = 'uid, title';
@@ -423,14 +432,8 @@ class tx_mksearch_tests_filter_SolrBase_testcase
 			$template, $formatter, 'searchsolr.filter.default.'
 		);
 
-		$this->assertContains(
-			'asc ',
-			$parsedTemplate,
-			'sort marker falsch geparsed'
-		);
-
-		$this->assertContains(
-			'&mksearch%5Bsort%5D=title&mksearch%5Bsortorder%5D=asc',
+		$this->assertEquals(
+			'asc ?id=1&mksearch%5Bsort%5D=title&mksearch%5Bsortorder%5D=asc',
 			$parsedTemplate,
 			'sort marker falsch geparsed'
 		);

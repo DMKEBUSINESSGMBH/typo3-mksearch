@@ -31,14 +31,14 @@
  */
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_mksearch_filter_LuceneBase');
-tx_rnbase::load('tx_rnbase_tests_BaseTestCase');
+tx_rnbase::load('tx_mksearch_tests_Testcase');
 
 /**
  * @package TYPO3
  * @subpackage tx_mksearch
  * @author Hannes Bochmann <hannes.bochmann@das-medienkombinat.de>
  */
-class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_rnbase_tests_BaseTestCase {
+class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Testcase {
 
 	/**
 	 *
@@ -51,6 +51,7 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_rnbase_tests_BaseT
 	 * @see PHPUnit_Framework_TestCase::setUp()
 	 */
 	protected function setUp() {
+		parent::setUp();
 		$this->feGroupsBackup = $GLOBALS['TSFE']->fe_user->groupData['uid'];
 	}
 
@@ -62,6 +63,14 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_rnbase_tests_BaseT
 		$GLOBALS['TSFE']->fe_user->groupData['uid'] = $this->feGroupsBackup;
 
 		unset($_GET['mksearch']);
+
+
+		if(isset($GLOBALS['TSFE']->id)) {
+			unset($GLOBALS['TSFE']->id);
+		}
+		if(isset($GLOBALS['TSFE']->rootLine[0]['uid'])) {
+			unset($GLOBALS['TSFE']->rootLine[0]['uid']);
+		}
 	}
 
 	/**
@@ -400,6 +409,9 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_rnbase_tests_BaseT
 
 		tx_rnbase_util_Misc::prepareTSFE();
 
+		$GLOBALS['TSFE']->id = 1;
+		$GLOBALS['TSFE']->rootLine[0]['uid'] = 1; //wenn tq_seo kommt sonst ein error
+
 		$config = array($this->confId => array('filter.' => array(
 			'sort.' => array(
 				'fields' => 'uid, title',
@@ -439,14 +451,8 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_rnbase_tests_BaseT
 			$template, $formatter, 'searchsolr.filter.default.'
 		);
 
-		$this->assertContains(
-			'asc ',
-			$parsedTemplate,
-			'sort marker falsch geparsed'
-		);
-
-		$this->assertContains(
-			'&mksearch%5Bsort%5D=title&mksearch%5Bsortorder%5D=asc',
+		$this->assertEquals(
+			'asc ?id=1&mksearch%5Bsort%5D=title&mksearch%5Bsortorder%5D=asc',
 			$parsedTemplate,
 			'sort marker falsch geparsed'
 		);
