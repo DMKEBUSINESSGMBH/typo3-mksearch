@@ -423,8 +423,14 @@ class tx_mksearch_tests_filter_SolrBase_testcase
 			$template, $formatter, 'searchsolr.filter.default.'
 		);
 
-		$this->assertEquals(
-			'asc ?id=1&mksearch%5Bsort%5D=title&mksearch%5Bsortorder%5D=asc',
+		$this->assertContains(
+			'asc ',
+			$parsedTemplate,
+			'sort marker falsch geparsed'
+		);
+
+		$this->assertContains(
+			'&mksearch%5Bsort%5D=title&mksearch%5Bsortorder%5D=asc',
 			$parsedTemplate,
 			'sort marker falsch geparsed'
 		);
