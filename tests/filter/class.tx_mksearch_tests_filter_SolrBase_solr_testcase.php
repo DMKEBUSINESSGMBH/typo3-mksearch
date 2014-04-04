@@ -42,7 +42,6 @@ class tx_mksearch_tests_filter_SolrBase_solr_testcase extends tx_mksearch_tests_
 	 * @see PHPUnit_Framework_TestCase::setUp()
 	 */
 	protected function setUp() {
-		parent::setUp();
 		$this->groupDataBackup = $GLOBALS['TSFE']->fe_user->groupData['uid'];
 		$this->initAbsolutePathsForConfigs();
 		t3lib_div::rmdir($this->instanceDir,true);
