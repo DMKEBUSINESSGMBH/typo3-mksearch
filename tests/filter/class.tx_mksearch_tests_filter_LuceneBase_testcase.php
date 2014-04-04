@@ -289,6 +289,8 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_rnbase_tests_BaseT
 	 * @group unit
 	 */
 	public function testInitSetsSortingToOptionsCorrectFromParameter() {
+		$this->markTestSkippedIfNoZend();
+
 		$filter = $this->getFilter(array(), array('sort' => 'uid desc'));
 
 		$fields = $options = array();
@@ -301,6 +303,8 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_rnbase_tests_BaseT
 	 * @group unit
 	 */
 	public function testInitSetsSortingToOptionsCorrectIfSortOrderAsc() {
+		$this->markTestSkippedIfNoZend();
+
 		$filter = $this->getFilter(array(), array('sort' => 'uid asc'));
 
 		$fields = $options = array();
@@ -313,6 +317,8 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_rnbase_tests_BaseT
 	 * @group unit
 	 */
 	public function testInitSetsSortingToOptionsCorrectWithUnknownSortOrder() {
+		$this->markTestSkippedIfNoZend();
+
 		$filter = $this->getFilter(array(), array('sort' => 'uid unknown'));
 
 		$fields = $options = array();
@@ -325,6 +331,8 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_rnbase_tests_BaseT
 	 * @group unit
 	 */
 	public function testInitSetsSortingToOptionsCorrectIfSortOrderInSortOrderParameter() {
+		$this->markTestSkippedIfNoZend();
+
 		$filter = $this->getFilter(array(), array('sort' => 'uid', 'sortorder' => 'asc'));
 
 		$fields = $options = array();
@@ -337,6 +345,8 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_rnbase_tests_BaseT
 	 * @group unit
 	 */
 	public function testInitSetsSortingToOptionsCorrectIfNoSortOrderUsesClassPropertyForSortOrder() {
+		$this->markTestSkippedIfNoZend();
+
 		$filter = $this->getFilter(array(), array('sort' => 'uid'));
 
 		$filterUtil = $this->getMock('tx_mksearch_util_Filter', array('parseTermTemplate'));
@@ -361,6 +371,8 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_rnbase_tests_BaseT
 	 * @group unit
 	 */
 	public function testInitSetsSortingToOptionsCorrectIfNoSortFieldUsesClassPropertyForSortField() {
+		$this->markTestSkippedIfNoZend();
+
 		$filter = $this->getFilter();
 		$filterUtil = $this->getMock('tx_mksearch_util_Filter', array('parseTermTemplate'));
 
@@ -384,6 +396,8 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_rnbase_tests_BaseT
 	 * @group unit
 	 */
 	public function testParseTemplateParsesSortMarkerCorrect() {
+		$this->markTestSkippedIfNoZend();
+
 		tx_rnbase_util_Misc::prepareTSFE();
 
 		$config = array($this->confId => array('filter.' => array(
