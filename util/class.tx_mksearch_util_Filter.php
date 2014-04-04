@@ -41,7 +41,7 @@ class tx_mksearch_util_Filter {
 	 *
 	 * @var string
 	 */
-	protected $sortOrder = 'asc';
+	protected $sortOrder = 'desc';
 
 	/**
 	 * Fügt den Suchstring zu dem Filter hinzu.
