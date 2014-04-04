@@ -24,6 +24,7 @@
 
 require_once t3lib_extMgm::extPath('rn_base', 'class.tx_rnbase.php');
 tx_rnbase::load('tx_mksearch_tests_Util');
+tx_rnbase::load('tx_rnbase_tests_BaseTestCase');
 
 /**
  * Base Testcase
@@ -35,7 +36,7 @@ tx_rnbase::load('tx_mksearch_tests_Util');
  *          GNU Lesser General Public License, version 3 or later
  */
 abstract class tx_mksearch_tests_Testcase
-	extends tx_phpunit_testcase {
+	extends tx_rnbase_tests_BaseTestCase {
 
 	protected $templaVoilaConfigBackup;
 
