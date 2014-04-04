@@ -530,7 +530,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 	function parseSortFields($template, &$markArray, &$subpartArray, &$wrappedSubpartArray, &$formatter, $confId, $marker = 'FILTER') {
 		$this->getFilterUtility()->parseSortFields(
 			$template, $markArray, $subpartArray,
-			$wrappedSubpartArray, $formatter, $confId, $marker
+			$wrappedSubpartArray, $formatter, $this->getConfId(), $marker
 		);
 	}
 

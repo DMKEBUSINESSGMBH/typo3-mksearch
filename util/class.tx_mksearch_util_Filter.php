@@ -154,7 +154,7 @@ class tx_mksearch_util_Filter {
 		&$formatter, $confId, $marker = 'FILTER'
 	) {
 		$marker = 'SORT';
-		$confId = $confId . 'sort.';
+		$confId .= 'sort.';
 		$configurations = $formatter->getConfigurations();
 
 		// die felder für die sortierung stehen kommasepariert im ts
