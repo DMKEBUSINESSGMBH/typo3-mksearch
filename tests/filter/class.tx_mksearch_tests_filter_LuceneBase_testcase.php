@@ -33,6 +33,12 @@ require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_mksearch_filter_LuceneBase');
 tx_rnbase::load('tx_mksearch_tests_Testcase');
 
+//damit die User func ausgeführt werden kann, muss sie geladen werden, was auf dem
+//CLI und TYPO3 < 4.5 nicht der Fall ist
+//im FE geschieht dies durch includeLibs im TS bzw. ab TYPO3 4.5 auch automatisch
+//auf dem CLI
+tx_rnbase::load('tx_mksearch_util_UserFunc');
+
 /**
  * @package TYPO3
  * @subpackage tx_mksearch
@@ -407,7 +413,9 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
 	public function testParseTemplateParsesSortMarkerCorrect() {
 		$this->markTestSkippedIfNoZend();
 
-		tx_rnbase_util_Misc::prepareTSFE();
+		tx_rnbase_util_Misc::prepareTSFE(
+			array('force' => true, 'pid' => 1)
+		);
 
 		$GLOBALS['TSFE']->id = 1;
 		$GLOBALS['TSFE']->rootLine[0]['uid'] = 1; //wenn tq_seo kommt sonst ein error
