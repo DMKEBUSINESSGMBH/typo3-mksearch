@@ -107,20 +107,33 @@ class tx_mksearch_hooks_IndexerAutoUpdate {
 		$indexer = tx_mksearch_util_Config::getIndexersForDatabaseTable($table);
 		if (!count($indexer)) return;
 
+		$srv = tx_mksearch_util_ServiceRegistry::getIntIndexService();
 		switch ($command) {
 			case 'delete':
 			case 'undelete':
 			case 'move':
-				$srv = tx_mksearch_util_ServiceRegistry::getIntIndexService();
 				$srv->addRecordToIndex($table, $id, true);
 				break;
 			case 'copy':
 				// This task is still done by $this->processDatamap_afterAllOperations().
 				break;
+			// workspace action
+			case 'version':
+				if ($this->isPublishedToLiveWorkspace($value)) {
+					$srv->addRecordToIndex($table, $id);
+				}
+				break;
 			default:
 //				t3lib_div::debug($command, 'tx_mksearch_hooks_IndexerAutoUpdate->processCmdmap_postProcess(): other (still unhandled) command:');
 				break;
 		}
+	}
+
+	/**
+	 * @return boolean
+	 */
+	private function isPublishedToLiveWorkspace($commandValues) {
+		return ($commandValues['action'] === 'swap' && $commandValues['swapWith'] > 0);
 	}
 }
 
