@@ -43,7 +43,6 @@ class tx_mksearch_tests_solr_conf_Solrconfig_testcase extends tx_mksearch_tests_
 	 * @see PHPUnit_Framework_TestCase::setUp()
 	 */
 	protected function setUp() {
-		parent::setUp();
 		$this->initAbsolutePathsForConfigs();
 		t3lib_div::rmdir($this->instanceDir,true);
 
