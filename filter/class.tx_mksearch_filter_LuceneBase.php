@@ -86,7 +86,6 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
 		$options = $this->setFeGroupsToOptions($options);
 		$this->handleTerm($fields, $options);
 		$this->handleSorting($options);
-
 		return true;
 	}
 
@@ -241,7 +240,7 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
 			// Default
 			$formData['combination_or_selected'] = 'checked=checked';
 		}
-		$values = array('standard', 'advanced');
+		$values = $this->getModeValuesAvailable();
 		if($options['mode']) {
 			foreach ($values as $value) {
 				$formData['mode_'.$value.'_selected'] = $options['mode'] == $value ? 'checked=checked' : '';
@@ -257,6 +256,14 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
 		);
 	}
 
+	/**
+	 * Returns all values possible for form field mksearch[options][mode].
+	 * Makes it possible to easily add more modes in other filters/forms.
+	 * @return multitype:string
+	 */
+	protected function getModeValuesAvailable() {
+		return array('standard', 'advanced');
+	}
 	/**
 	 * ist notwendig weil sonst die Marker, welche die Formulardaten
 	 * enthalten ungeparsed rauskommen, falls das Formular noch

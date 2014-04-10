@@ -296,7 +296,6 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 	 */
 	public function search(array $fields=array(), array $options=array()) {
 		$this->checkForOpenIndex();
-
 		// Advanced search, i. e. search term follows lucene query syntax?
 		if (isset($options['rawFormat']) and $options['rawFormat']) {
 			// Add access rights to search query
@@ -351,7 +350,7 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 			$hits = $this->index->find($queryString);
 		}
 		if($options['debug']) {
-			t3lib_div::debug(array('Fields'=>$fields ,'Query'=>$queryString, 'Hits'=>count($hits)), 'class.tx_mksearch_service_engine_ZendLucene.php '); // TODO: remove me
+			t3lib_div::debug(array('Fields'=>$fields, 'Options'=>$options ,'Query'=>$queryString, 'Hits'=>count($hits)), 'class.tx_mksearch_service_engine_ZendLucene.php '); // TODO: remove me
 		}
 
 		if (isset($options['rawOutput']) and $options['rawOutput'])	return $hits;
