@@ -744,11 +744,11 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 		}
 		$id = 1;
 		$this->openIndex($this->indexModel, true);
-		$this->closeIndex();
 
 		$msg = 'Up and running on directory ' . $this->getIndexDirectory($this->indexModel->getCredentialString());
-
+		$msg .= '<br/> Number of indexed documents: ' .	$this->index->numDocs();
 		$status->setStatus($id, $msg);
+		$this->closeIndex();
 		return $status;
 	}
 

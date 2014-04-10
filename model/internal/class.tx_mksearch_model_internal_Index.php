@@ -125,7 +125,7 @@ class tx_mksearch_model_internal_Index extends tx_rnbase_model_base {
 	}
 
 	/**
-	 * Returns the confiration for this index
+	 * Returns the configuration for this index
 	 * @param tx_mksearch_model_internal_Index $oIndex
 	 * @return array configuration array
 	 */
@@ -150,14 +150,24 @@ class tx_mksearch_model_internal_Index extends tx_rnbase_model_base {
 	}
 
 	/**
+	 * Returns version number of search engine
 	 * @return int
 	 */
-	public function getSolrVersion() {
+	public function getEngineVersion() {
+		// FIXME: Das Feld in der db neutral gestalten
 		return $this->record['solrversion'];
+	}
+	/**
+	 * @return int
+	 * @deprecated use getEngineVersion()
+	 */
+	public function getSolrVersion() {
+		return $this->getEngineVersion();
 	}
 
 	/**
 	 * @return boolean
+	 * @deprecated wrong place for engine specific version check
 	 */
 	public function isSolr4() {
 		return $this->getSolrVersion() == 40;
