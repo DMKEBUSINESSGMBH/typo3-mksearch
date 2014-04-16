@@ -220,6 +220,9 @@ class tx_mksearch_tests_Util {
 	 * Setzt eine XCLASS, um den Relationmanager von Typo3 > 6 zu deaktivieren
 	 */
 	public static function disableRelationManager() {
+		if (!tx_rnbase_util_TYPO3::isTYPO60OrHigher()) {
+			return ;
+		}
 		tx_rnbase::load('tx_mksearch_tests_fixtures_typo3_CoreDbRelationHandler');
 		$GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Core\\Database\\RelationHandler'] = array(
 			'className' => 'tx_mksearch_tests_fixtures_typo3_CoreDbRelationHandler',
