@@ -216,6 +216,25 @@ class tx_mksearch_tests_Util {
 		$GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$extKey]['nolog'] = $bDisable;
 	}
 
+	/**
+	 * Setzt eine XCLASS, um den Relationmanager von Typo3 > 6 zu deaktivieren
+	 */
+	public static function disableRelationManager() {
+		if (!tx_rnbase_util_TYPO3::isTYPO60OrHigher()) {
+			return ;
+		}
+		tx_rnbase::load('tx_mksearch_tests_fixtures_typo3_CoreDbRelationHandler');
+		$GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Core\\Database\\RelationHandler'] = array(
+			'className' => 'tx_mksearch_tests_fixtures_typo3_CoreDbRelationHandler',
+		);
+	}
+	/**
+	 * entfernt eine XCLASS, um den Relationmanager von Typo3 > 6 zu deaktivieren
+	 */
+	public static function restoreRelationManager() {
+		unset($GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Core\\Database\\RelationHandler']);
+	}
+
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/tests/class.tx_mksearch_tests_Util.php']) {

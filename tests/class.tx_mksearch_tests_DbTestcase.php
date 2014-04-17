@@ -89,6 +89,9 @@ abstract class tx_mksearch_tests_DbTestcase
 		// set up hooks
 		tx_mksearch_tests_Util::hooksSetUp();
 
+		// wir deaktivieren den relation manager
+		tx_mksearch_tests_Util::disableRelationManager();
+
 		// set up the workspace
 		$this->workspaceBackup = $GLOBALS['BE_USER']->workspace;
 		$GLOBALS['BE_USER']->setWorkspace(0);
@@ -136,6 +139,9 @@ abstract class tx_mksearch_tests_DbTestcase
 
 		// tear down hooks
 		tx_mksearch_tests_Util::hooksTearDown();
+
+		// wir aktivieren den relation manager wieder
+		tx_mksearch_tests_Util::restoreRelationManager();
 
 		// tear down DB
 		$this->cleanDatabase();
