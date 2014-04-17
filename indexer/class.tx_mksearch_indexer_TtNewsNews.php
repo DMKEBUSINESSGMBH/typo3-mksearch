@@ -223,7 +223,7 @@ class tx_mksearch_indexer_TtNewsNews
 			$indexDoc->getMaxAbstractLength()
 		);
 
-		// Kategorieen hinzufügen, wenn Option gesetzt ist
+		// News-Kategorien hinzufügen, wenn Option gesetzt ist
 		$this->addCategoryData($indexDoc, $categories, $options);
 
 		// Indexing of categories removed for now,
@@ -320,6 +320,7 @@ class tx_mksearch_indexer_TtNewsNews
 		foreach ($categories as $category) {
 			$aCategoryUid[] = $category->record['uid_foreign'];
 			$aCategoryTitle[] = $category->record['title'];
+			// Die erste Kategorie mit einer Single-PID wird gewinnen
 			if (!$iCategorySinglePid) {
 				$iCategorySinglePid = (int) $category->record['single_pid'];
 			}
