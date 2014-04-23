@@ -50,6 +50,7 @@ class tx_mksearch_tests_indexer_Irfaq_testcase
 	 */
 	public function __construct($name = NULL, array $data = array(), $dataName = '') {
 		parent::__construct($name, $data, $dataName);
+		$this->importExtensions[] = 'irfaq';
 		$this->importDataSets[] = tx_mksearch_tests_Util::getFixturePath('db/irfaq_q.xml');
 		$this->importDataSets[] = tx_mksearch_tests_Util::getFixturePath('db/irfaq_cat.xml');
 		$this->importDataSets[] = tx_mksearch_tests_Util::getFixturePath('db/irfaq_q_cat_mm.xml');
