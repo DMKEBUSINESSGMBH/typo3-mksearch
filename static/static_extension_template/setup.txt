@@ -105,6 +105,9 @@ lib.mksearch.lucenefilter {
 			term = +contentType:* ###PARAM_MKSEARCH_TERM###
 		}
 		
+		availableModes = standard,advanced
+		
+		
 		### wir eigentlich über Flexform gesetzt. d.h wenn es dort gesetzt wurde,
 		### wird das auch vorgezogen
 		forceSearch = 0

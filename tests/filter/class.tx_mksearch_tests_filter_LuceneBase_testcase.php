@@ -126,6 +126,68 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
 	}
 
 	/**
+	 * @group uinit
+	 */
+	public function testGetModeValuesAvailable() {
+		$configArray = array($this->confId => array(
+			'filter.' => array('availableModes' => 'newCheckedMode,newNotCheckedMode'))
+		);
+		$filter = $this->getFilter($configArray);
+
+		$this->assertEquals(
+			array('newCheckedMode','newNotCheckedMode'),
+			$this->callInaccessibleMethod($filter, 'getModeValuesAvailable'),
+			'return falsch'
+		);
+	}
+
+	/**
+	 * @group uinit
+	 */
+	public function testPrepareFormFieldsSetsCorrectModeChecked() {
+		$_GET['mksearch']['options']['mode'] = 'newCheckedMode';
+		$parameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
+		$parameters->init('mksearch');
+		$formData = array();
+		$configArray = array($this->confId => array(
+			'filter.' => array('availableModes' => 'newCheckedMode,newNotCheckedMode'))
+		);
+		$filter = $this->getFilter($configArray);
+		$reflectionObject = new ReflectionObject($filter);
+		$reflectionMethod = $reflectionObject->getMethod('prepareFormFields');
+		$reflectionMethod->setAccessible(TRUE);
+		$reflectionMethod->invokeArgs($filter, array(&$formData, $parameters));
+
+		$this->assertEquals(
+			'checked=checked', $formData['mode_newCheckedMode_selected'], 'mode_newCheckedMode_selected nicht selected'
+		);
+		$this->assertEquals(
+			'', $formData['mode_newNotCheckedMode_selected'], 'mode_newNotCheckedMode_selected nicht selected'
+		);
+	}
+
+	/**
+	 * @group uinit
+	 */
+	public function testPrepareFormFieldsSetsStandardModeCheckedAsDefault() {
+		$parameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
+		$formData = array();
+		$configArray = array($this->confId => array('filter.' => array('availableModes' => 'standard,advanced')));
+		$filter = $this->getFilter($configArray);
+		$reflectionObject = new ReflectionObject($filter);
+		$reflectionMethod = $reflectionObject->getMethod('prepareFormFields');
+		$reflectionMethod->setAccessible(TRUE);
+		$reflectionMethod->invokeArgs($filter, array(&$formData, $parameters));
+
+		$this->assertEquals(
+			'checked=checked', $formData['mode_standard_selected'], 'mode_standard_selected nicht selected'
+		);
+		$this->assertEquals(
+			'', $formData['mode_advanced_selected'], 'mode_advanced_selected doch selected'
+		);
+	}
+
+	/**
 	 * @group unit
 	 */
 	public function testInitReturnsFalseIfFormOnly() {

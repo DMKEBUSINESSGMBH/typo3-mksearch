@@ -259,10 +259,13 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
 	/**
 	 * Returns all values possible for form field mksearch[options][mode].
 	 * Makes it possible to easily add more modes in other filters/forms.
-	 * @return multitype:string
+	 * @return array
 	 */
 	protected function getModeValuesAvailable() {
-		return array('standard', 'advanced');
+		$availableModes = t3lib_div::trimExplode(',',
+			$this->getConfigurations()->get($this->getConfId() . 'filter.availableModes')
+		);
+		return (array) $availableModes;
 	}
 	/**
 	 * ist notwendig weil sonst die Marker, welche die Formulardaten
