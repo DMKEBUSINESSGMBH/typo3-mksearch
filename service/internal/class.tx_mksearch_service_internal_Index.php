@@ -81,7 +81,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 				'data' => is_array($data) ? serialize($data) : $data,
 			);
 		// Indizierung starten
-		self::executeQueueData(array($record));
+		$this->executeQueueData(array($record));
 	}
 
 	/**
@@ -238,16 +238,13 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 	 * 						pid: 	trigger only records for this pageid
 	 * @return 	array	indexed tables array(array('tablename' => 'count'))
 	 */
-	public function triggerQueueIndexing($config=array()) {
+	public function triggerQueueIndexing($config = array()) {
 		if (!is_array($config)){
-			$limit = $config;
-			$config = array();
-		} else {
-			$limit = $config['limit'] ? $config['limit'] : 100;
+			$config = array('limit' => $config);
 		}
 		$options = array();
 		$options['orderby'] = 'prefer desc, cr_date asc, uid asc';
-		$options['limit'] = $limit;
+		$options['limit'] = isset($config['limit']) ? (int) $config['limit'] : 100;
 		$options['where'] = 'deleted=0';
 		$options['enablefieldsoff'] = 1;
 
@@ -257,7 +254,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 		if (empty($data)) return 0;
 
 		// Trigger update for the found items
-		if(!self::executeQueueData($data, $config)) {
+		if(!$this->executeQueueData($data, $config)) {
 			return array();
 		}
 
@@ -283,7 +280,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 	 * 						pid: 	trigger only records for this pageid
 	 * @return 	void
 	 */
-	private function executeQueueData($data, $config) {
+	private function executeQueueData($data, array $config = array()) {
 		$rootline = 0;
 		// alle indexer fragen oder nur von der aktuellen pid?
 		if($config['pid']) {
