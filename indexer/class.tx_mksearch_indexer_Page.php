@@ -238,9 +238,11 @@ class tx_mksearch_indexer_Page extends tx_mksearch_indexer_Base {
 # }
 
 # the mapping which record field should be put into which solr field
-# mapping {
+ mapping {
+	nav_title = nav_title_s
+	subtitle = subtitle_s
 #	my_record_field = my_solr_field
-# }
+}
 
 ### delete from or abort indexing for the record if isIndexableRecord or no record?
 deleteIfNotIndexable = 0
