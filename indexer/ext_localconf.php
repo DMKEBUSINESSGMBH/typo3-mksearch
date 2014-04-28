@@ -17,6 +17,7 @@ $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['indexer']['active'][] = 'tt_
 
 // Define table to content type mappings
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+tx_rnbase::load('tx_rnbase_util_TYPO3');
 tx_rnbase::load('tx_mksearch_util_Config');
 
 tx_mksearch_util_Config::registerIndexer(
