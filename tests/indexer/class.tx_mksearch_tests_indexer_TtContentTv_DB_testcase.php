@@ -57,6 +57,15 @@ class tx_mksearch_tests_indexer_TtContentTv_DB_testcase
 		$this->importDataSets[] = tx_mksearch_tests_Util::getFixturePath('db/sys_refindex.xml');
 	}
 
+	/**
+	 * setUp() = init DB etc.
+	 */
+	protected function setUp() {
+		if (!t3lib_extMgm::isLoaded('templavoila')) {
+			$this->markTestSkipped('templavoila ist nicht Installiert.');
+		}
+		parent::setUp();
+	}
 	public function testPrepareSearchSetsCorrectPidOfReference() {
 		$options = $this->getDefaultConfig();
 
