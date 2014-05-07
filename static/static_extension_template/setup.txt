@@ -235,7 +235,7 @@ lib.mksearch.defaultsolrfilter {
 	fqField = 
 	
 	### hier werden alle felder angegeben, die facetiert werden sollen
-	options.facet.fields = mkkeywords_tag_names_ms, content_ident_s
+	#options.facet.fields = mkkeywords_tag_names_ms, content_ident_s
 	
 	### hier kann der operator, für bestimmte facet fields gesetzt werden. default ist AND!
 	filterQuery {
