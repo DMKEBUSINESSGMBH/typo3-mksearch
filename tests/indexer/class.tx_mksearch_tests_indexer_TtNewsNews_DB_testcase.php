@@ -52,6 +52,7 @@ class tx_mksearch_tests_indexer_TtNewsNews_DB_testcase
 	 */
 	public function __construct($name = NULL, array $data = array(), $dataName = '') {
 		parent::__construct($name, $data, $dataName);
+		$this->importExtensions[] = 'tt_news';
 		$this->importDataSets[] = tx_mksearch_tests_Util::getFixturePath('db/tt_news_cat_mm.xml');
 		$this->importDataSets[] = tx_mksearch_tests_Util::getFixturePath('db/tt_news_cat.xml');
 	}
