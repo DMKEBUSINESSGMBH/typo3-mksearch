@@ -80,7 +80,7 @@ lib.mksearch.lucenefilter {
 					qualifier = mksearch
 					## in Anführungszeichen setzen? sollte nicht in verbindung mit wildcard suchen 
 					## verwendet werden
-					quote = 1
+					quote = 0
 					### remove lucene control characters?
 					sanitize = 1
 					### wie sollen die einzelnen wörter im suchterm verbunden werden
