@@ -96,7 +96,7 @@ class tx_mksearch_tests_Util {
 	 * @param array $extensions
 	 * @return void
 	 */
-	public static function tcaSetUp(array $extensions) {
+	public static function tcaSetUp(array $extensions = array()) {
 		self::$TCA = NULL;
 		if (tx_rnbase_util_TYPO3::isTYPO60OrHigher()) {
 			self::$TCA = $GLOBALS['TCA'];
