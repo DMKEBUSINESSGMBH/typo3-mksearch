@@ -93,17 +93,18 @@ class tx_mksearch_tests_Util {
 	 * So kann es vorkommen, das auf Tabellen zugegriffen wird,
 	 * welche in einem DB-TestCase nicht existieren.
 	 *
-	 * @TODO: ab Typo3 6 oder 6.1
-	 *
+	 * @param array $extensions
 	 * @return void
 	 */
-	public static function tcaSetUp() {
+	public static function tcaSetUp(array $extensions) {
 		self::$TCA = NULL;
 		if (tx_rnbase_util_TYPO3::isTYPO60OrHigher()) {
 			self::$TCA = $GLOBALS['TCA'];
 			$GLOBALS['TCA'] = array();
 			// \TYPO3\CMS\Core\Core\Bootstrap::getInstance()->loadExtensionTables(FALSE);
 			\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::loadBaseTca(FALSE);
+			// spezielle Extension TCA's laden!?
+			tx_mksearch_tests_Util::loadSingleExtTablesFiles($extensions);
 		}
 	}
 
@@ -116,6 +117,40 @@ class tx_mksearch_tests_Util {
 		if (self::$TCA !== NULL) {
 			$GLOBALS['TCA'] = self::$TCA;
 			self::$TCA = NULL;
+		}
+	}
+
+	/**
+	 * Load ext_tables.php as single files
+	 *
+	 * This Method is taken from
+	 *     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::loadSingleExtTablesFiles
+	 *
+	 * @param array $extensions
+	 * @return void
+	 */
+	public static function loadSingleExtTablesFiles(array $extensions) {
+		// In general it is recommended to not rely on it to be globally defined in that
+		// scope, but we can not prohibit this without breaking backwards compatibility
+		global $T3_SERVICES, $T3_VAR, $TYPO3_CONF_VARS;
+		global $TBE_MODULES, $TBE_MODULES_EXT, $TCA;
+		global $PAGES_TYPES, $TBE_STYLES, $FILEICONS;
+		global $_EXTKEY;
+		// Load each ext_tables.php file of loaded extensions
+		foreach ($extensions as $_EXTKEY) {
+			if (empty($GLOBALS['TYPO3_LOADED_EXT'][$_EXTKEY])) {
+				continue;
+			}
+			$extensionInformation = $GLOBALS['TYPO3_LOADED_EXT'][$_EXTKEY];
+			if (is_array($extensionInformation) && $extensionInformation['ext_tables.php']) {
+				// $_EXTKEY and $_EXTCONF are available in ext_tables.php
+				// and are explicitly set in cached file as well
+				$_EXTCONF = $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$_EXTKEY];
+				require $extensionInformation['ext_tables.php'];
+				// loads the dynamicConfigFile
+				// @TODO: implement, if needet!
+				// static::loadNewTcaColumnsConfigFiles();
+			}
 		}
 	}
 

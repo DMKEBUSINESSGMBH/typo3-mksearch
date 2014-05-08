@@ -84,7 +84,7 @@ abstract class tx_mksearch_tests_DbTestcase
 	 */
 	protected function setUp() {
 		// set up the TCA
-		tx_mksearch_tests_Util::tcaSetUp();
+		tx_mksearch_tests_Util::tcaSetUp($this->importExtensions);
 
 		// set up hooks
 		tx_mksearch_tests_Util::hooksSetUp();
