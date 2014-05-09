@@ -299,7 +299,7 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
 		$filter = $this->getFilter();
 		$filter->init($fields, $options);
 		$this->assertEquals(
-			'+contentType:* +"*test*" +"*term*"',
+			'+contentType:* +*test* +*term*',
 			$fields['term'],
 			'term template falsch geparsed!'
 		);
