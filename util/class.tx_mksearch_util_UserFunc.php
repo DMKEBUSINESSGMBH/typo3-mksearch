@@ -23,6 +23,7 @@
  ***************************************************************/
 
 require_once(t3lib_extMgm::extPath('rn_base', 'class.tx_rnbase.php'));
+tx_rnbase::load('tx_mksearch_util_SearchBuilder');
 
 /**
  * userFunc Methoden
@@ -33,9 +34,9 @@ class tx_mksearch_util_UserFunc {
 	 * @see 	tx_mksearch_util_SearchBuilder::searchSolrOptions
 	 */
 	public static function searchSolrOptions($term = '', $conf = array()){
-		if(empty($term)) { return ''; }
-
-		tx_rnbase::load('tx_mksearch_util_SearchBuilder');
+		if(tx_mksearch_util_SearchBuilder::emptyTerm($term)) {
+			return '';
+		}
 
 		/* @var $parameters tx_rnbase_parameters */
 		$parameters = tx_rnbase::makeInstance('tx_rnbase_parameters');

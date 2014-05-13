@@ -42,13 +42,10 @@ class tx_mksearch_util_SearchBuilder {
 	 * Setzt jedes Wort in Anführungszeichen.
 	 * Dabei werden operatoren wie + und - beachtet
 	 *
-	 * @param  	mixed  	$terms
+	 * @param  	array  	$terms
 	 * @return 	array
 	 */
-	private static function quoteTerms($terms) {
-		if(!is_array($terms))
-			$terms = t3lib_div::trimExplode(' ', $terms, 1);
-
+	private static function quoteTerms(array $terms) {
 		foreach($terms as &$term) {
 			// minus und plus dürfen nicht mit in die quotes
 			$operator = $term{0};
@@ -69,13 +66,10 @@ class tx_mksearch_util_SearchBuilder {
 	/**
 	 * Setzt hinter jedes Wort eine tilde für die fuzzy search.
 	 *
-	 * @param  	mixed  	$terms
+	 * @param  	array  	$terms
 	 * @return 	array
 	 */
-	private static function fuzzyTerms($terms, $slop='0.2') {
-		if(!is_array($terms))
-			$terms = t3lib_div::trimExplode(' ', $terms, 1);
-
+	private static function fuzzyTerms(array $terms, $slop='0.2') {
 		foreach($terms as &$term) {
 			$term = $term.'~'.$slop;
 		}
@@ -86,35 +80,37 @@ class tx_mksearch_util_SearchBuilder {
 	/**
 	 * Removes all solr control characters
 	 *
-	 * @param  	mixed  	$terms
+	 * @param  	array  	$terms
 	 * @return 	array
 	 */
-	private static function sanitizeTerms($terms) {
-		if(empty($terms)) return $terms;//nothing to do
+	private static function sanitizeTerms(array $terms) {
+		if(self::emptyTerm($terms)) {
+			return $terms;
+		}
+
 		tx_rnbase::load('tx_mksearch_util_Misc');
-		if(!is_array($terms))
-			$terms = t3lib_div::trimExplode(' ', $terms, 1);
 
 		foreach($terms as $key => &$term) {
 			//remove empty strings. can happen when the term contains only control chars
-			if(!$term = tx_mksearch_util_Misc::sanitizeTerm($term))
+			$term = tx_mksearch_util_Misc::sanitizeTerm($term);
+			if(self::emptyTerm($term)) {
 				unset($terms[$key]);
+			}
 		}
 
 		return $terms;
 	}
 
 	/**
-	 *wraps terms in wildcards
+	 * wraps terms in wildcards
 	 *
-	 * @param  	mixed  	$terms
+	 * @param  	array  	$terms
 	 * @return 	array
 	 */
-	private static function wrapTermsInWildcards($terms) {
-		if(empty($terms)) return $terms;//nothing to do
-		tx_rnbase::load('tx_mksearch_util_Misc');
-		if(!is_array($terms))
-			$terms = t3lib_div::trimExplode(' ', $terms, 1);
+	private static function wrapTermsInWildcards(array $terms) {
+		if(self::emptyTerm($terms)) {
+			return $terms;
+		}
 
 		foreach($terms as $key => &$term) {
 			$term = '*' . $term . '*';
@@ -137,7 +133,7 @@ class tx_mksearch_util_SearchBuilder {
 	 */
 	public static  function handleMinShouldMatch(&$fields, &$options, &$parameters, &$configurations, $confId) {
 		// brauchen wir nur wen ein term angegeben wurde
-		if(!empty($fields['term'])) {
+		if(!self::emptyTerm($fields['term'])) {
 			//@todo: in generiche methode auslagern, welche werte anhand combination und confid ausliest!
 			$combination = $parameters->get('combination');
 			if($combination) {
@@ -169,7 +165,11 @@ class tx_mksearch_util_SearchBuilder {
 	 * @param 	string 						$confId
 	 */
 	public static  function handleDismaxFuzzySearch(&$fields, &$options, &$parameters, &$configurations, $confId) {
-		if(!empty($fields['term']) && is_array($params = $parameters->get('options')) && $params['fuzzy']) {
+		if(
+			!self::emptyTerm($fields['term']) &&
+			is_array($params = $parameters->get('options')) &&
+			$params['fuzzy']
+		) {
 			switch($parameters->get('combination')) {
 				case MKSEARCH_OP_FREE: break;
 				default:
@@ -192,12 +192,12 @@ class tx_mksearch_util_SearchBuilder {
 	 * @return 	string
 	 */
 	public static function searchSolrOptions($term='', $combination, $options = array()){
-		if(empty($term)) {
+		if(self::emptyTerm($term)) {
 			return '';
 		}
 		// die wörter aufsplitten
 		$terms = t3lib_div::trimExplode(' ', $term, 1);
-		if(empty($terms)) {
+		if(self::emptyTerm($terms)) {
 			return '';
 		}
 
@@ -244,7 +244,7 @@ class tx_mksearch_util_SearchBuilder {
 			}
 		}
 		//ist ein Suchstring übrig geblieben?
-		if(!empty($terms)){
+		if(!self::emptyTerm($terms)){
 			switch($combination) {
 				case MKSEARCH_OP_AND:
 					// alle mit einem plus verbinden
@@ -278,6 +278,19 @@ class tx_mksearch_util_SearchBuilder {
 		return $return;
 	}
 
+	/**
+	 *
+	 * @param mixed $term
+	 * @return boolean
+	 */
+	public static function emptyTerm($term) {
+		if(is_array($term)) {
+			return count($term) == 0;
+		} else {
+			// wir nutzen strlen und nicht empty damit auch bei "0" gesucht wird
+			return strlen($term) == 0;
+		}
+	}
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_SearchBuilder.php'])	{
