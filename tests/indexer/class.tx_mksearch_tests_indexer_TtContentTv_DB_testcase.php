@@ -65,7 +65,14 @@ class tx_mksearch_tests_indexer_TtContentTv_DB_testcase
 			$this->markTestSkipped('templavoila ist nicht Installiert.');
 		}
 		parent::setUp();
+
+		// hier sollte TV installiert bleiben. (wir in parent::setUp() entfernt)
+		$GLOBALS['TYPO3_LOADED_EXT']['templavoila'] = $this->templaVoilaConfigBackup;
 	}
+
+	/**
+	 * @group integration
+	 */
 	public function testPrepareSearchSetsCorrectPidOfReference() {
 		$options = $this->getDefaultConfig();
 
@@ -101,6 +108,9 @@ class tx_mksearch_tests_indexer_TtContentTv_DB_testcase
 		$this->assertFalse($indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 	}
 
+	/**
+	 * @group integration
+	 */
 	public function testPrepareSearchCheckDeleted() {
 		$options = $this->getDefaultConfig();
 
@@ -132,6 +142,9 @@ class tx_mksearch_tests_indexer_TtContentTv_DB_testcase
 		$this->assertTrue($indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 	}
 
+	/**
+	 * @group integration
+	 */
 	public function testPrepareSearchSetsCorrectisIndexableDependendOnPid() {
 		$options = $this->getDefaultConfig();
 
