@@ -75,7 +75,7 @@ abstract class tx_mksearch_tests_Testcase
 		tx_mksearch_tests_Util::hooksTearDown();
 
 		// tear down tv
-		if (t3lib_extMgm::isLoaded('templavoila')) {
+		if ($this->templaVoilaConfigBackup) {
 			$GLOBALS['TYPO3_LOADED_EXT']['templavoila'] = $this->templaVoilaConfigBackup;
 		}
 	}
