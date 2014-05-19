@@ -63,7 +63,7 @@ abstract class tx_mksearch_tests_Testcase
 		// set up tv
 		if (t3lib_extMgm::isLoaded('templavoila')) {
 			$this->templaVoilaConfigBackup = $GLOBALS['TYPO3_LOADED_EXT']['templavoila'];
-			$GLOBALS['TYPO3_LOADED_EXT']['templavoila'] = null;
+			$GLOBALS['TYPO3_LOADED_EXT']['templavoila'] = NULL;
 		}
 	}
 
@@ -75,8 +75,9 @@ abstract class tx_mksearch_tests_Testcase
 		tx_mksearch_tests_Util::hooksTearDown();
 
 		// tear down tv
-		if ($this->templaVoilaConfigBackup) {
+		if ($this->templaVoilaConfigBackup !== NULL) {
 			$GLOBALS['TYPO3_LOADED_EXT']['templavoila'] = $this->templaVoilaConfigBackup;
+			$this->templaVoilaConfigBackup = NULL;
 		}
 	}
 

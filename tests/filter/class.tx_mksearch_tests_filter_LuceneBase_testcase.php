@@ -66,6 +66,7 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
 	 * @see PHPUnit_Framework_TestCase::tearDown()
 	 */
 	protected function tearDown() {
+		parent::tearDown();
 		$GLOBALS['TSFE']->fe_user->groupData['uid'] = $this->feGroupsBackup;
 
 		unset($_GET['mksearch']);

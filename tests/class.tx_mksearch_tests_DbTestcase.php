@@ -125,7 +125,7 @@ abstract class tx_mksearch_tests_DbTestcase
 		// set up tv
 		if (t3lib_extMgm::isLoaded('templavoila')) {
 			$this->templaVoilaConfigBackup = $GLOBALS['TYPO3_LOADED_EXT']['templavoila'];
-			$GLOBALS['TYPO3_LOADED_EXT']['templavoila'] = null;
+			$GLOBALS['TYPO3_LOADED_EXT']['templavoila'] = NULL;
 		}
 
 	}
