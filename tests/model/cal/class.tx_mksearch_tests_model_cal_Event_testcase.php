@@ -61,9 +61,7 @@ class tx_mksearch_tests_model_cal_Event_testcase
 	 * setUp() = init DB etc.
 	 */
 	protected function setUp() {
-		if(!t3lib_extMgm::isLoaded('cal')) {
-			$this->markTestSkipped('cal ist nicht installiert');
-		}
+		$this->importExtensions[] = 'cal';
 		parent::setUp();
 	}
 

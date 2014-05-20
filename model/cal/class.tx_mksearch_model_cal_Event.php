@@ -37,17 +37,17 @@ tx_rnbase::load('tx_rnbase_model_base');
  * @subpackage tx_mksearch
  */
 class tx_mksearch_model_cal_Event extends tx_rnbase_model_base  {
-	
+
 	/**
 	 * @var tx_mksearch_model_cal_Calendar
 	 */
 	private $calendar = null;
-	
+
 	/**
 	* @var array[tx_mksearch_model_cal_Category]
 	*/
 	private $categories = array();
-	
+
 	/**
 	 * (non-PHPdoc)
 	 * @see tx_rnbase_model_base::getTableName()
@@ -55,7 +55,7 @@ class tx_mksearch_model_cal_Event extends tx_rnbase_model_base  {
 	public function getTableName(){
 		return 'tx_cal_event';
 	}
-	
+
 	/**
 	 * @return tx_mksearch_model_cal_Calendar
 	 */
@@ -67,36 +67,36 @@ class tx_mksearch_model_cal_Event extends tx_rnbase_model_base  {
 		}
 		return $this->calendar;
 	}
-	
+
 	/**
 	 * @return array[tx_mksearch_model_cal_Category] || null
 	 */
 	public function getCategories() {
 		if(empty($this->categories)) {
 			$categoriesByEvent = $this->getCategoriesByEvent();
-			
+
 			foreach($categoriesByEvent as $categoryByEvent) {
 				$this->categories[] = tx_rnbase::makeInstance(
 					'tx_mksearch_model_cal_Category', $categoryByEvent['uid_foreign']
-				);	
+				);
 			}
 		}
 		return $this->categories;
 	}
-	
+
 	/**
 	 * @return array
 	 */
 	private function getCategoriesByEvent() {
 		return tx_rnbase_util_DB::doSelect(
 			'uid_foreign',
-			'tx_cal_event_category_mm AS MM JOIN tx_cal_category AS CAT ON ' . 
-			'MM.uid_foreign = CAT.uid', 
+			'tx_cal_event_category_mm AS MM JOIN tx_cal_category AS CAT ON ' .
+			'MM.uid_foreign = CAT.uid',
 			array(
 				//da MM keine TCA hat
 				'enablefieldsoff' => true,
 				//keine versteckten kategorien
-				'where'	=> 'MM.uid_local = ' . intval($this->getUid()) . 
+				'where'	=> 'MM.uid_local = ' . intval($this->getUid()) .
 					' AND CAT.hidden = 0'
 			)
 		);
