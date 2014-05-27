@@ -140,6 +140,6 @@ class tx_mksearch_model_engineSpecific_lucene_IndexerField extends tx_mksearch_m
 	public function updateEncoding($encoding) {$this->_encoding = $encoding;}
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/model/engineSpecific/lucene/class.tx_mksearch_model_engineSpecific_lucene_IndexerField.php']) {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/model/engineSpecific/lucene/class.tx_mksearch_model_engineSpecific_lucene_IndexerField.php']);
+if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/engineSpecific/lucene/class.tx_mksearch_model_engineSpecific_lucene_IndexerField.php']) {
+	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/engineSpecific/lucene/class.tx_mksearch_model_engineSpecific_lucene_IndexerField.php']);
 }

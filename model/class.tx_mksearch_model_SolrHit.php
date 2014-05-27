@@ -94,6 +94,6 @@ class tx_mksearch_model_SolrHit extends tx_rnbase_model_base implements tx_mksea
 	public function getTCAColumns() {return 0;}
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/model/class.tx_mksearch_model_SolrHit.php']) {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/model/class.tx_mksearch_model_SolrHit.php']);
+if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/class.tx_mksearch_model_SolrHit.php']) {
+	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/class.tx_mksearch_model_SolrHit.php']);
 }

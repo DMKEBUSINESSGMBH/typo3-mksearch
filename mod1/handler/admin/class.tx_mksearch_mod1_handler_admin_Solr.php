@@ -167,6 +167,6 @@ class tx_mksearch_mod1_handler_admin_Solr implements tx_rnbase_mod_IModHandler {
 
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/handler/admin/class.tx_mksearch_mod1_handler_admin_Solr.php']) {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/handler/admin/class.tx_mksearch_mod1_handler_admin_Solr.php']);
+if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/handler/admin/class.tx_mksearch_mod1_handler_admin_Solr.php']) {
+	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/handler/admin/class.tx_mksearch_mod1_handler_admin_Solr.php']);
 }

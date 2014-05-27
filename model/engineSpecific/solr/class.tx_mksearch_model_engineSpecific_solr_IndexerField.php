@@ -115,6 +115,6 @@ class tx_mksearch_model_engineSpecific_solr_IndexerField extends tx_mksearch_mod
 	}
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/model/engineSpecific/solr/class.tx_mksearch_model_engineSpecific_solr_IndexerField']) {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/model/engineSpecific/solr/class.tx_mksearch_model_engineSpecific_solr_IndexerField.php']);
+if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/engineSpecific/solr/class.tx_mksearch_model_engineSpecific_solr_IndexerField']) {
+	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/engineSpecific/solr/class.tx_mksearch_model_engineSpecific_solr_IndexerField.php']);
 }

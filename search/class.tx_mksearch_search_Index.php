@@ -80,6 +80,6 @@ class tx_mksearch_search_Index extends tx_rnbase_util_SearchBase {
 	}
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/search/class.tx_mksearch_search_Index.php']) {
-  include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/search/class.tx_mksearch_search_Index.php']);
+if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/search/class.tx_mksearch_search_Index.php']) {
+  include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/search/class.tx_mksearch_search_Index.php']);
 }

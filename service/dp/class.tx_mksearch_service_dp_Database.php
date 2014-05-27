@@ -230,6 +230,6 @@ abstract class tx_mksearch_service_dp_Database implements tx_mksearch_interface_
 
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/service/dp/class.tx_mksearch_service_dp_Database.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/service/dp/class.tx_mksearch_service_dp_Database.php']);
+if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/dp/class.tx_mksearch_service_dp_Database.php'])	{
+	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/dp/class.tx_mksearch_service_dp_Database.php']);
 }

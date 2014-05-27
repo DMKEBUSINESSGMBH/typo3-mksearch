@@ -189,6 +189,6 @@ interface tx_mksearch_interface_SearchEngine {
 }
 
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/interface/class.tx_mksearch_interface_SearchEngine.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/interface/class.tx_mksearch_interface_SearchEngine.php']);
+if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/interface/class.tx_mksearch_interface_SearchEngine.php'])	{
+	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/interface/class.tx_mksearch_interface_SearchEngine.php']);
 }
