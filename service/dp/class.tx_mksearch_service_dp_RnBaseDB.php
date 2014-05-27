@@ -23,8 +23,6 @@
 ***************************************************************/
 
 
-require_once(PATH_t3lib.'class.t3lib_svbase.php');
-require_once(PATH_t3lib.'class.t3lib_page.php');
 require_once t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php';
 tx_rnbase::load('tx_mksearch_interface_DataProvider');
 
@@ -85,7 +83,7 @@ abstract class tx_mksearch_service_dp_RnBaseDB implements tx_mksearch_interface_
 		list($f, $o) = $this->getFieldsOptions($this->options, $data);
 
 		// If no "enablefields*" option is explicitely set, implicitely force FE mode
-		$isSomeEnableFieldsOptionSet = false; 
+		$isSomeEnableFieldsOptionSet = false;
 		foreach ($o as $key=>$value)
 			if (substr($key, 0, 12) == 'enablefields') {
 				$isSomeEnableFieldsOptionSet = true;
@@ -103,7 +101,7 @@ abstract class tx_mksearch_service_dp_RnBaseDB implements tx_mksearch_interface_
 
 	/**
 	 * Return next item which is to be indexed
-	 * 
+	 *
 	 * @return array
 	 */
 	public function getNextItem() {
@@ -143,22 +141,22 @@ abstract class tx_mksearch_service_dp_RnBaseDB implements tx_mksearch_interface_
 	}
 
 	/**
-	 * Get name of rn_base based search class 
+	 * Get name of rn_base based search class
 	 *
 	 * @param array $options
 	 * @return string
 	 */
 	abstract protected function getSearchClass(array $options);
-	
+
 	/**
-	 * Get parameters $fields and $options for rn_base based search 
+	 * Get parameters $fields and $options for rn_base based search
 	 *
 	 * @param array $options	from service configuration
 	 * @param array $data		Tablename <-> uids matrix of records to be indexed (array('tab1' => array(2,5,6), 'tab2' => array(4,5,8))
-	 * @return array: 
-	 * 				* array	$fields  
+	 * @return array:
+	 * 				* array	$fields
 	 * 				* array	$options
-	 * 
+	 *
 	 */
 	abstract protected function getFieldsOptions(array $options, array $data=array());
 }

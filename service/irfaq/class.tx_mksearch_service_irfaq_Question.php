@@ -22,7 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(PATH_t3lib.'class.t3lib_svbase.php');
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_mksearch_service_Base');
 
@@ -30,7 +29,7 @@ tx_rnbase::load('tx_mksearch_service_Base');
  * Service for accessing models from database
  */
 class tx_mksearch_service_irfaq_Question extends tx_mksearch_service_Base {
-	
+
 	/**
 	 * returns all categories of the given question
 	 *
@@ -43,7 +42,7 @@ class tx_mksearch_service_irfaq_Question extends tx_mksearch_service_Base {
 	    $fields['IRFAQ_QUESTION.expert'][OP_EQ_INT] = $iExpert;
 	    return $this->search($fields, $options);
 	}
-	
+
 	/**
 	 * returns all questions with the given category
 	 *
@@ -56,13 +55,13 @@ class tx_mksearch_service_irfaq_Question extends tx_mksearch_service_Base {
 	    $fields['IRFAQ_QUESTION_CATEGORY_MM.uid_foreign'][OP_EQ_INT] = $iCategory;
 	    return $this->search($fields, $options);
 	}
-	
+
 	/**
 	 * Liefert die zugehörige Search-Klasse zurück
 	 *
 	 * @return string
 	 */
-	public function getSearchClass(){return 'tx_mksearch_search_irfaq_Question';}	
+	public function getSearchClass(){return 'tx_mksearch_search_irfaq_Question';}
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/internal/class.tx_mksearch_service_internal_Base.php']) {

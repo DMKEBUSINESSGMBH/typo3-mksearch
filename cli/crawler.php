@@ -27,12 +27,11 @@ if (!defined('TYPO3_cliMode'))  die('You cannot run this script directly!');
 tx_rnbase::load('tx_rnbase_util_Logger');
 
 // Include basis cli class
-require_once(PATH_t3lib.'class.t3lib_cli.php');
 
 class tx_mksearch_cli_crawler extends t3lib_cli {
-    
+
 	private $_cliKey = 'mksearch';
-	
+
 	/**
 	 * Constructor
 	 */
@@ -56,7 +55,7 @@ For an example configuration have a look at ext:mksearch/cli/configuration.php.'
 		$this->cli_help['author'] = '(c) 2009-2011 das Medienkombinat';
 
 		// Merge tasks into cli_help array on desired position...
-		$tasks = 
+		$tasks =
 'build	Create or update index, if still one exists
 renew	Renew complete index, i. e. delete old index and re-create it';
 //        $this->cli_help['tasks'] = $tasks;
@@ -75,7 +74,7 @@ renew	Renew complete index, i. e. delete old index and re-create it';
 
 	private function exitWithError($error = 'General Error', $showHelp=true) {
 		$this->cli_echo("\nERROR:\t$error\n\n");
-		if ($showHelp) 
+		if ($showHelp)
 			$this->cli_help();
 		exit(1);
 	}
@@ -90,18 +89,18 @@ renew	Renew complete index, i. e. delete old index and re-create it';
 
 		if ($this->cli_isArg('-h')) {
 			$this->cli_help(); exit;
-		} 
+		}
 
 		$task = 'update';
 		// get task (function)
 //		$task = (string)$this->cli_args['_DEFAULT'][1];
-//		if (!$task) 
+//		if (!$task)
 //			$this->exitWithError("No task given.", true);
 		// FIXME: Das kann nicht mehr so funktionieren. Hier kann höchstens die UID eines konfigurierten
 		// Index aus der DB übergeben werden!
 		// Anschließend den Index laden und darüber die Engine ermitteln
 //		$indexName = (string)$this->cli_args['_DEFAULT'][2];
-//		if (!$indexName) 
+//		if (!$indexName)
 //			$this->exitWithError("No index given.", true);
 
 		// Explicitely switch errors on / off
@@ -113,7 +112,7 @@ renew	Renew complete index, i. e. delete old index and re-create it';
 		}
 
 		$this->cli_echo("Start processing of indexing queue.\n", true);
-		
+
 		// Read configuration file
 		if ($this->cli_isArg('-c')) {
 			foreach ($this->cli_args['-c'] as $filename) {
@@ -125,9 +124,9 @@ renew	Renew complete index, i. e. delete old index and re-create it';
 					$this->exitWithError("Could not read configuration file!", false);
 				}
 				$this->cli_echo(" done.\n");
-			} 
+			}
 		}
-		
+
 		switch($task) {
 			case 'update':
 				$status = $this->updateQueue();
@@ -135,13 +134,13 @@ renew	Renew complete index, i. e. delete old index and re-create it';
 //			case 'renew':
 //				$status = $this->crawl($indexName, true, $this->cli_isArg('-o'), $this->cli_isArg('-dd'));
 //				break;
-//			case 'build':	
+//			case 'build':
 //				$status = $this->crawl($indexName, false, $this->cli_isArg('-o'), $this->cli_isArg('-dd'));
 //				break;
-			default:		
+			default:
 				$this->exitWithError('Unknown task.', true);
 		}
-		if (isset($this->cli_args['-ss'])) 
+		if (isset($this->cli_args['-ss']))
 			exit($status);
 	}
 	private function updateQueue() {

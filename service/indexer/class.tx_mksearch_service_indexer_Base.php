@@ -23,8 +23,6 @@
 ***************************************************************/
 
 
-require_once(PATH_t3lib.'class.t3lib_svbase.php');
-require_once(PATH_t3lib.'class.t3lib_page.php');
 require_once t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php';
 tx_rnbase::load('tx_mksearch_interface_Indexer');
 tx_rnbase::load('tx_mksearch_interface_DataProvider');
@@ -32,7 +30,7 @@ tx_rnbase::load('tx_mksearch_interface_DataProvider');
 
 
 /**
- * Base indexer class. It uses DataProviders to lookup data to be indexed. 
+ * Base indexer class. It uses DataProviders to lookup data to be indexed.
  *
  * @package	TYPO3
  * @subpackage	tx_mksearch
@@ -79,7 +77,7 @@ abstract class tx_mksearch_service_indexer_Base extends t3lib_svbase
 
 	/**
 	 * Return next item which is to be indexed
-	 * 
+	 *
 	 * @param tx_mksearch_interface_IndexerDocument		$indexDoc	Indexer document to be "filled", instantiated based on self::getContentType()
 	 * @return null|tx_mksearch_interface_IndexerDocument
 	 */
@@ -98,9 +96,9 @@ abstract class tx_mksearch_service_indexer_Base extends t3lib_svbase
 //			$this->deleteList = array_diff($this->deleteList, array($tmp['uid']->getValue()));
 			return $indexDocResult;
 		}
-		
+
 		return null;
-		
+
 		// @todo Re-factor follow-up query!
 //		// else: No more records
 //		// Try to initiate a follow-up db query
@@ -126,7 +124,7 @@ abstract class tx_mksearch_service_indexer_Base extends t3lib_svbase
 	 * @return array	Matrix of records to be deleted
 	 */
 	public function cleanup() {
-		
+
 		return $this->getDataProvider()->cleanupData();
 
 //		// Reset things
@@ -154,7 +152,7 @@ abstract class tx_mksearch_service_indexer_Base extends t3lib_svbase
 	 * @return tx_mksearch_interface_DataProvider
 	 */
 	abstract protected function getDataProvider();
-	
+
 	/**
 	 * Get sql data for an optional follow-up data base query
 	 *

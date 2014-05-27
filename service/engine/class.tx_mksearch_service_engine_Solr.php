@@ -22,7 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once PATH_t3lib.'class.t3lib_svbase.php';
 require_once t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php';
 tx_rnbase::load('tx_mksearch_interface_SearchEngine');
 tx_rnbase::load('tx_rnbase_configurations');

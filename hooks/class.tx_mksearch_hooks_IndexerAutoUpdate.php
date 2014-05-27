@@ -27,7 +27,6 @@ tx_rnbase::load('tx_mksearch_util_ServiceRegistry');
 tx_rnbase::load('tx_mksearch_util_Config');
 tx_rnbase::load('tx_mksearch_util_Tree');
 tx_rnbase::load('tx_rnbase_util_Misc');
-require_once(PATH_t3lib.'class.t3lib_tsparser.php');
 
 /**
  * Hooks for auto-updating search indices

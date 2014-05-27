@@ -23,8 +23,6 @@
 ***************************************************************/
 
 
-require_once(PATH_t3lib.'class.t3lib_svbase.php');
-require_once(PATH_t3lib.'class.t3lib_page.php');
 require_once t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php';
 tx_rnbase::load('tx_mksearch_interface_Indexer');
 tx_rnbase::load('tx_rnbase_util_Logger');
@@ -151,7 +149,7 @@ abstract class tx_mksearch_service_indexer_BaseDataBase
 
 	/**
 	 * Return next item which is to be indexed
-	 * 
+	 *
 	 * @param tx_mksearch_interface_IndexerDocument		$indexDoc	Indexer document to be "filled", instantiated based on self::getContentType()
 	 * @return null|tx_mksearch_interface_IndexerDocument
 	 */
@@ -173,9 +171,9 @@ abstract class tx_mksearch_service_indexer_BaseDataBase
 //			$this->deleteList = array_diff($this->deleteList, array($tmp['uid']->getValue()));
 			return $indexDocResult;
 		}
-		
+
 		return null;
-		
+
 		// @todo Re-factor follow-up query!
 //		// else: No more records
 //		// Try to initiate a follow-up db query

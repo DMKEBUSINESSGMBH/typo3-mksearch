@@ -22,8 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-//require_once(PATH_t3lib.'class.t3lib_page.php');
-require_once(PATH_t3lib.'class.t3lib_svbase.php');
 require_once t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php';
 tx_rnbase::load('tx_mksearch_interface_Indexer');
 
@@ -37,30 +35,30 @@ tx_rnbase::load('tx_mksearch_interface_Indexer');
 abstract class tx_mksearch_service_indexer_BaseRnBaseSearch
 	extends t3lib_svbase
 	implements tx_mksearch_interface_Indexer {
-	
+
 	/**
 	 * Options used for indexing
 	 *
 	 * @var array
 	 */
 	protected $options = array();
-	
+
 	/**
 	 * Container for sql resource
 	 *
 	 * @var sql resource
 	 */
 	protected $sqlRes;
-	
+
 	/**
 	 * Prepare indexer
-	 * 
+	 *
 	 * This method prepares things for indexing,
 	 * i. e. evaluate options, prepare db query etc.
 	 * It must be called between instatiating the class
 	 * and calling nextItem() for the first time.
-	 * 
-	 * 
+	 *
+	 *
 	 * Um bei mehrfachen Daten-Speicherungs- und damit Index-Update-Anforderungen
 	 * innerhalb eines Requests mehrfaches Aktualisieren eines Records zu vermeiden,
 	 * muss eine Queue eingerichtet werden!
@@ -68,29 +66,29 @@ abstract class tx_mksearch_service_indexer_BaseRnBaseSearch
 	 * Werden Personen- und Kontakt-Daten innerhalb eines einzigen HTTP-Requests
 	 * gespeichert, würde derselbe Datensatz zwei mal gespeichert!
 	 * => Aktivierung des Index-Updates erst beim "Herunterfahren" des ganzen Typo3-
-	 * Prozesses / Beendigung des HTTP-Requests (evtl. im Destructor?) 
-	 * 
+	 * Prozesses / Beendigung des HTTP-Requests (evtl. im Destructor?)
+	 *
 	 * @param array $options	Indexer options
 	 * @param array $data		Tablename <-> uids matrix of records to be indexed (array('tab1' => array(2,5,6), 'tab2' => array(4,5,8))
 	 * @return void
 	 */
 	public function prepare(array $options=array(), array $data=array()) {
 		$this->options = $options;
-		
+
 		$searcher = tx_rnbase_util_SearchBase::getInstance($this->getSearchClass($this->options));
-		
-		
+
+
 		list($f, $o) = $this->getFieldsOptions($this->options, $data);
-		
+
 		// If no "enablefields*" option is explicitely set, implicitely force FE mode
-		$isSomeEnableFieldsOptionSet = false; 
+		$isSomeEnableFieldsOptionSet = false;
 		foreach ($o as $key=>$value)
 			if (substr($key, 0, 12) == 'enablefields') {
 				$isSomeEnableFieldsOptionSet = true;
 				break;
 			}
 		if (!$isSomeEnableFieldsOptionSet) $o['enablefieldsfe'] = 1;
-		
+
 		// We need the plain sql here!
 		$o['sqlonly'] = 1;
 
@@ -98,36 +96,36 @@ abstract class tx_mksearch_service_indexer_BaseRnBaseSearch
 
 		$this->sqlRes = $GLOBALS['TYPO3_DB']->sql_query($sql);
 	}
-	
+
 	/**
 	 * Return next item which is to be indexed
-	 * 
+	 *
 	 * @param tx_mksearch_interface_IndexerDocument		$indexDoc	Indexer document to be "filled", instantiated based on self::getContentType()
 	 * @return null|tx_mksearch_interface_IndexerDocument
 	 */
 	public function nextItem(tx_mksearch_interface_IndexerDocument $indexDoc) {
-		// Iterate until valid data is found or all records are consumed ;-) 
+		// Iterate until valid data is found or all records are consumed ;-)
 		do {
 			$record = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($this->sqlRes);
-			
+
 		} while ($record and !($indexDocResult = $this->prepareData($record, $this->options, $indexDoc)));
 		if (isset($indexDocResult)) return $indexDocResult;
 		// else
 		return null;
 	}
-		
+
 	/**
 	 * Quasi-destructor
-	 * 
+	 *
 	 * Nothing to do here... @todo: REALLY???
-	 * @return array	Matrix of records to be deleted 
+	 * @return array	Matrix of records to be deleted
 	 */
 	public function cleanup() {}
-	
-		
+
+
 	/**
 	 * Prepare / transform raw data from database for indexing
-	 * 
+	 *
 	 * @param array									$rawData from SQL query, NOT the model!
 	 * @param array 								$options from service configuration
 	 * @param tx_mksearch_interface_IndexerDocument	$indexDoc Model to be filled
@@ -138,24 +136,24 @@ abstract class tx_mksearch_service_indexer_BaseRnBaseSearch
 		array $options,
 		tx_mksearch_interface_IndexerDocument $indexDoc
 		);
-	
+
 	/**
-	 * Get name of rn_base based search class 
+	 * Get name of rn_base based search class
 	 *
 	 * @param array $options
 	 * @return string
 	 */
 	abstract protected function getSearchClass(array $options);
-	
+
 	/**
-	 * Get parameters $fields and $options for rn_base based search 
+	 * Get parameters $fields and $options for rn_base based search
 	 *
 	 * @param array $options	from service configuration
 	 * @param array $data		Tablename <-> uids matrix of records to be indexed (array('tab1' => array(2,5,6), 'tab2' => array(4,5,8))
-	 * @return array: 
-	 * 				* array	$fields  
+	 * @return array:
+	 * 				* array	$fields
 	 * 				* array	$options
-	 * 
+	 *
 	 */
 	abstract protected function getFieldsOptions(array $options, array $data=array());
 }

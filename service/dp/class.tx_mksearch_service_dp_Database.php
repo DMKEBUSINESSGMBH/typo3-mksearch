@@ -23,8 +23,6 @@
 ***************************************************************/
 
 
-require_once(PATH_t3lib.'class.t3lib_svbase.php');
-require_once(PATH_t3lib.'class.t3lib_page.php');
 require_once t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php';
 tx_rnbase::load('tx_mksearch_interface_Indexer');
 tx_rnbase::load('tx_mksearch_interface_DataProvider');
@@ -150,7 +148,7 @@ abstract class tx_mksearch_service_dp_Database implements tx_mksearch_interface_
 
 	/**
 	 * Return next item which is to be indexed
-	 * 
+	 *
 	 * @return array
 	 */
 	public function getNextItem() {

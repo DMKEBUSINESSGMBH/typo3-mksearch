@@ -22,7 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(PATH_t3lib.'class.t3lib_div.php');
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_rnbase_util_Misc');
 
@@ -45,7 +44,7 @@ class tx_mksearch_util_ServiceRegistry {
 			throw new Exception('Service mksearch_engine not found for type: ' . $type);
 		if (!$srv instanceof tx_mksearch_interface_SearchEngine)
 			throw new Exception('Service "' . $srv->info['className'] . '" does not implement tx_mksearch_interface_SearchEngine!');
-		
+
 		$srv->setIndexModel($index);
 		return $srv;
 	}
@@ -61,11 +60,11 @@ class tx_mksearch_util_ServiceRegistry {
 		// else
 		if (!$srv instanceof tx_mksearch_interface_SearchEngine)
 			throw new Exception('Service "' . $srv->info['className'] . '" does not implement tx_mksearch_interface_SearchEngine!');
-		
+
 		// else
 		return $srv;
 	}
-	
+
 	/**
 	 * Return best search engine service which implements tx_mksearch_interface_Indexer
 	 *
@@ -87,7 +86,7 @@ class tx_mksearch_util_ServiceRegistry {
 		// else
 		return $srv;
 	}
-	
+
 	/**
 	 * Return internal index service
 	 *
@@ -105,7 +104,7 @@ class tx_mksearch_util_ServiceRegistry {
 	public static function getIntCompositeService() {
 		return tx_rnbase_util_Misc::getService('mksearch', 'int_composite');
 	}
-	
+
 	/**
 	 * Return internal indexer configuration service
 	 *
@@ -122,7 +121,7 @@ class tx_mksearch_util_ServiceRegistry {
 	public static function getKeywordService() {
 		return tx_rnbase_util_Misc::getService('mksearch', 'keyword');
 	}
-	
+
 	/**
 	 * Return tx_irfaq expert service
 	 * as the extension offers none
@@ -132,7 +131,7 @@ class tx_mksearch_util_ServiceRegistry {
 	public static function getIrfaqExpertService() {
 		return tx_rnbase_util_Misc::getService('mksearch', 'irfaq_expert');
 	}
-	
+
 	/**
 	 * Return tx_irfaq category service
 	 * as the extension offers none
@@ -142,7 +141,7 @@ class tx_mksearch_util_ServiceRegistry {
 	public static function getIrfaqCategoryService() {
 		return tx_rnbase_util_Misc::getService('mksearch', 'irfaq_category');
 	}
-	
+
 	/**
 	 * Return tx_irfaq category service
 	 * as the extension offers none
