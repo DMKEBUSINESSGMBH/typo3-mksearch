@@ -30,7 +30,9 @@
 unset($MCONF);
 require_once('conf.php');
 require_once($REQUIRE_PATH.'init.php');
-require_once($REQUIRE_PATH.'template.php');
+if (!class_exists('template')) {
+	require_once($REQUIRE_PATH . 'template.php');
+}
 
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 
