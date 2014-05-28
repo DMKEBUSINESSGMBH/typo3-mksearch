@@ -70,15 +70,30 @@ class tx_mksearch_indexer_FAL
 	protected function getRelFileName($tableName, $sourceRecord) {
 		// wir haben ein indiziertes dokument
 		if (isset($sourceRecord['uid']) && intval($sourceRecord['uid']) > 0) {
-			$file = new \TYPO3\CMS\Core\Resource\File($sourceRecord);
-			$storage = $file->getStorage();
+			$resourceStorage = $this->getResourceStorage($sourceRecord['storage']);
+			$file = new \TYPO3\CMS\Core\Resource\File($sourceRecord, $resourceStorage);
 			// wir holen uns die url von dem storage, falls vorhanden
-			if ($storage instanceof \TYPO3\CMS\Core\Resource\ResourceStorage) {
-				return $storage->getPublicUrl($file);
+			if ($resourceStorage instanceof \TYPO3\CMS\Core\Resource\ResourceStorage) {
+				return $resourceStorage->getPublicUrl($file);
 			}
 		}
 		// wenn wir keine ressource haben, bauen die url selbst zusammen.
 		return $GLOBALS['TYPO3_CONF_VARS']['BE']['fileadminDir'] . $sourceRecord['identifier'];
+	}
+
+	/**
+	 * @param int $storageUid
+	 *
+	 * @return \TYPO3\CMS\Core\Resource\ResourceStorage
+	 */
+	protected function getResourceStorage($storageUid) {
+		if (\TYPO3\CMS\Core\Utility\MathUtility::canBeInterpretedAsInteger($storageUid)) {
+			/** @var $fileFactory ResourceFactory */
+			$fileFactory = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\ResourceFactory');
+			return $fileFactory->getStorageObject($storageUid);
+		}
+
+		return NULL;
 	}
 
 	/**

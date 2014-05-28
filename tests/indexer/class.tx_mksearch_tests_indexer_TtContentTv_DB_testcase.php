@@ -44,6 +44,11 @@ class tx_mksearch_tests_indexer_TtContentTv_DB_testcase
 	extends tx_mksearch_tests_DbTestcase {
 
 	/**
+	 * @var boolean
+	 */
+	protected $unloadTemplavoila = false;
+
+	/**
 	 * Constructs a test case with the given name.
 	 *
 	 * @param string $name the name of a testcase
@@ -65,9 +70,6 @@ class tx_mksearch_tests_indexer_TtContentTv_DB_testcase
 			$this->markTestSkipped('templavoila ist nicht Installiert.');
 		}
 		parent::setUp();
-
-		// hier sollte TV installiert bleiben. (wir in parent::setUp() entfernt)
-		$GLOBALS['TYPO3_LOADED_EXT']['templavoila'] = $this->templaVoilaConfigBackup;
 	}
 
 	/**

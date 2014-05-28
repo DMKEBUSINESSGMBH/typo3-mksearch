@@ -59,6 +59,9 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
 	protected function setUp() {
 		parent::setUp();
 		$this->feGroupsBackup = $GLOBALS['TSFE']->fe_user->groupData['uid'];
+
+		// damit Zend Framework geladen wird
+		tx_rnbase::makeInstance('tx_mksearch_service_engine_ZendLucene');
 	}
 
 	/**

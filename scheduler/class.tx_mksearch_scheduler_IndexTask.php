@@ -23,10 +23,12 @@
 ***************************************************************/
 
 require_once t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php';
-require_once t3lib_extMgm::extPath('scheduler', 'class.tx_scheduler_task.php');
+if (!class_exists('tx_scheduler_Task')) {
+	require_once t3lib_extMgm::extPath('scheduler', 'class.tx_scheduler_task.php');
+}
 
 /**
- * 
+ *
  */
 class tx_mksearch_scheduler_IndexTask extends tx_scheduler_Task {
 
@@ -65,7 +67,7 @@ class tx_mksearch_scheduler_IndexTask extends tx_scheduler_Task {
 			}
 			$success = false;
 		}
-			
+
 		return $success;
 	}
 
@@ -77,7 +79,7 @@ class tx_mksearch_scheduler_IndexTask extends tx_scheduler_Task {
 	public function getAmountOfItems() {
 		return $this->amountOfItems;
 	}
-	
+
 	/**
 	 * Set amount of items
 	 *

@@ -176,7 +176,7 @@ class tx_mksearch_tests_Util {
 
 	    t3lib_extMgm::addPageTSConfig('<INCLUDE_TYPOSCRIPT: source="FILE:EXT:mksearch/static/static_extension_template/setup.txt">');
 
-	    $pageTSconfig = t3lib_BEfunc::getPagesTSconfig(0);
+	    $pageTSconfig = self::getPagesTSconfig(0);
 	    $tempConfig = $pageTSconfig['plugin.']['tx_'.$extKeyTS.'.'];
 	    $tempConfig['lib.'][$extKeyTS.'.'] = $pageTSconfig['lib.'][$extKeyTS.'.'];
 	    $tempConfig['lib.']['links.'] = $pageTSconfig['lib.']['links.'];
@@ -185,6 +185,23 @@ class tx_mksearch_tests_Util {
 	    $qualifier = $pageTSconfig['qualifier'] ? $pageTSconfig['qualifier'] : $extKeyTS;
 
 	  	return $pageTSconfig;
+  	}
+
+  	/**
+  	 * wrapper funktion
+  	 *
+  	 * @param number $pageId
+  	 *
+  	 * @return array
+  	 */
+  	public static function getPagesTSconfig($pageId = 0) {
+  		// ab TYPO3 6.2.x wird die TS config gecached wenn nicht direkt eine
+  		// rootline ungleich NULL übergeben wird.
+  		// wir müssen die rootline auf nicht NULL setzen und kein array damit
+  		// die rootline korrekt geholt wird und nichts aus dem Cache. Sonst werden
+  		// die gerade hinzugefügten TS Dateien nicht beachtet
+  		$rootLine = 1;
+  		return t3lib_BEfunc::getPagesTSconfig($pageId, $rootLine);
   	}
 
 /**

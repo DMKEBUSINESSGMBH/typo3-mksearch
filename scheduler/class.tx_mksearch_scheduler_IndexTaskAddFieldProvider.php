@@ -23,7 +23,11 @@
 ***************************************************************/
 
 require_once t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php';
-require_once t3lib_extMgm::extPath('scheduler', 'interfaces/interface.tx_scheduler_additionalfieldprovider.php');
+if (!interface_exists('tx_scheduler_AdditionalFieldProvider')) {
+	require_once t3lib_extMgm::extPath(
+		'scheduler', '/interfaces/interface.tx_scheduler_additionalfieldprovider.php'
+	);
+}
 
 define('FIELD_ITEMS', 'amountOfItems');
 
@@ -49,7 +53,7 @@ class tx_mksearch_scheduler_IndexTaskAddFieldProvider implements tx_scheduler_Ad
 	 */
 	public function getAdditionalFields(array &$taskInfo, $task, tx_scheduler_Module $parentObject) {
 
-		
+
 		// Initialize extra field value
 		if (!array_key_exists(FIELD_ITEMS, $taskInfo) || empty($taskInfo[FIELD_ITEMS])) {
 			if ($parentObject->CMD == 'add') {
@@ -77,7 +81,7 @@ class tx_mksearch_scheduler_IndexTaskAddFieldProvider implements tx_scheduler_Ad
 			'cshKey'   => '_MOD_web_txschedulerM1',
 //			'cshLabel' => $fieldID
 		);
-		
+
 		return $additionalFields;
 
 
@@ -118,9 +122,9 @@ class tx_mksearch_scheduler_IndexTaskAddFieldProvider implements tx_scheduler_Ad
 	 * @return	boolean					True if validation was ok (or selected class is not relevant), false otherwise
 	 */
 	public function validateAdditionalFields(array &$submittedData, tx_scheduler_Module $parentObject) {
-		
+
 		return true;
-		
+
 		$submittedData[FIELD_ITEMS] = trim($submittedData[FIELD_ITEMS]);
 		if (empty($submittedData[FIELD_ITEMS])) {
 			$parentObject->addMessage($GLOBALS['LANG']->sL('LLL:EXT:scheduler/mod1/locallang.xml:msg.noEmail'), t3lib_FlashMessage::ERROR);

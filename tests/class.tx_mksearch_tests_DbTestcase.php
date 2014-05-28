@@ -24,6 +24,7 @@
 
 require_once t3lib_extMgm::extPath('rn_base', 'class.tx_rnbase.php');
 tx_rnbase::load('tx_mksearch_tests_Util');
+tx_rnbase::load('tx_rnbase_util_TYPO3');
 
 /**
  * Base Testcase for DB Tests
@@ -40,6 +41,11 @@ abstract class tx_mksearch_tests_DbTestcase
 	protected $workspaceBackup;
 	protected $templaVoilaConfigBackup = NULL;
 	protected $db;
+
+	/**
+	 * @var boolean
+	 */
+	protected $unloadTemplavoila = true;
 
 	/**
 	 * Liste der extensions, welche in die test DB importiert werden müssen.
@@ -64,6 +70,12 @@ abstract class tx_mksearch_tests_DbTestcase
 	 */
 	public function __construct($name = NULL, array $data = array(), $dataName = '') {
 		parent::__construct($name, $data, $dataName);
+
+		if (tx_rnbase_util_TYPO3::isTYPO62OrHigher()) {
+			$this->importExtensions[] = 'core';
+			$this->importExtensions[] = 'frontend';
+		}
+
 		// templavoila und realurl brauchen wir da es im BE sonst Warnungen hagelt
 		// und man die Testergebnisse nicht sieht
 		if (t3lib_extMgm::isLoaded('realurl')) {
@@ -123,9 +135,14 @@ abstract class tx_mksearch_tests_DbTestcase
 		tx_mksearch_tests_Util::disableDevlog();
 
 		// set up tv
-		if (t3lib_extMgm::isLoaded('templavoila')) {
+		if (t3lib_extMgm::isLoaded('templavoila') && $this->unloadTemplavoila) {
 			$this->templaVoilaConfigBackup = $GLOBALS['TYPO3_LOADED_EXT']['templavoila'];
 			$GLOBALS['TYPO3_LOADED_EXT']['templavoila'] = NULL;
+
+			if (tx_rnbase_util_TYPO3::isTYPO62OrHigher()) {
+				$extensionManagementUtility = new TYPO3\CMS\Core\Utility\ExtensionManagementUtility();
+				$extensionManagementUtility->unloadExtension('templavoila');
+			}
 		}
 
 	}
@@ -155,6 +172,11 @@ abstract class tx_mksearch_tests_DbTestcase
 		if ($this->templaVoilaConfigBackup !== NULL) {
 			$GLOBALS['TYPO3_LOADED_EXT']['templavoila'] = $this->templaVoilaConfigBackup;
 			$this->templaVoilaConfigBackup = NULL;
+
+			if (tx_rnbase_util_TYPO3::isTYPO62OrHigher()) {
+				$extensionManagementUtility = new TYPO3\CMS\Core\Utility\ExtensionManagementUtility();
+				$extensionManagementUtility->loadExtension('templavoila');
+			}
 		}
 	}
 

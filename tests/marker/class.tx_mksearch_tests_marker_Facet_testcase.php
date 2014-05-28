@@ -82,7 +82,16 @@ class tx_mksearch_tests_marker_Facet_testcase
 		$sTemplate = '###FACET_SHOWLINK######FACET_LABEL### (###FACET_COUNT###)###FACET_SHOWLINK###';
 		$sParsedTemplate = $this->oMarker->parseTemplate($sTemplate, $oItem, $this->oFormatter, 'searchsolr.facet.', 'FACET');
 		//Feld noch im Link drin?
-		$this->assertEquals('<a href="?id=1&amp;mksearch%5Bfq%5D=contentType%3Amedia" >media (2)</a>',$sParsedTemplate,'Die Filter Query wurde nicht korrekt gesetzt!');
+		$expectedParsedTemplate = '<a href="?id=1&amp;mksearch%5Bfq%5D=contentType%3Amedia" >media (2)</a>';
+		// leerzeichen ab 6.2.3 nicht mehr vorhanden
+		if (tx_rnbase_util_TYPO3::isTYPO62OrHigher()) {
+			$expectedParsedTemplate = str_replace('" >', '">', $expectedParsedTemplate);
+		}
+		$this->assertEquals(
+			$expectedParsedTemplate,
+			$sParsedTemplate,
+			'Die Filter Query wurde nicht korrekt gesetzt!'
+		);
 	}
 
 	/**
@@ -100,7 +109,16 @@ class tx_mksearch_tests_marker_Facet_testcase
 		$sTemplate = '###FACET_SHOWLINK######FACET_LABEL### (###FACET_COUNT###)###FACET_SHOWLINK###';
 		$sParsedTemplate = $this->oMarker->parseTemplate($sTemplate, $oItem, $this->oFormatter, 'searchsolr.facet.', 'FACET');
 		//Feld noch im Link drin?
-		$this->assertEquals('<a href="?id=1&amp;mksearch%5Bfq%5D=media" >media (2)</a>',$sParsedTemplate,'In der Filter Query steht noch immer der Feldname!');
+		$expectedParsedTemplate = '<a href="?id=1&amp;mksearch%5Bfq%5D=media" >media (2)</a>';
+		// leerzeichen ab 6.2.3 nicht mehr vorhanden
+		if (tx_rnbase_util_TYPO3::isTYPO62OrHigher()) {
+			$expectedParsedTemplate = str_replace('" >', '">', $expectedParsedTemplate);
+		}
+		$this->assertEquals(
+			$expectedParsedTemplate,
+			$sParsedTemplate,
+			'In der Filter Query steht noch immer der Feldname!'
+		);
 	}
 
 	/**
@@ -118,7 +136,17 @@ class tx_mksearch_tests_marker_Facet_testcase
 		$sTemplate = '###FACET_SHOWLINK######FACET_LABEL### (###FACET_COUNT###)###FACET_SHOWLINK###';
 		$sParsedTemplate = $this->oMarker->parseTemplate($sTemplate, $oItem, $this->oFormatter, 'searchsolr.facet.', 'FACET');
 		//Feld noch im Link drin?
-		$this->assertEquals('<a href="?id=1&amp;mksearch%5Bfq%5D=%C3%9Cber%20uns" >Über uns (2)</a>',$sParsedTemplate,'In der Filter Query steht noch immer der Feldname!');
+		//Feld noch im Link drin?
+		$expectedParsedTemplate = '<a href="?id=1&amp;mksearch%5Bfq%5D=%C3%9Cber%20uns" >Über uns (2)</a>';
+		// leerzeichen ab 6.2.3 nicht mehr vorhanden
+		if (tx_rnbase_util_TYPO3::isTYPO62OrHigher()) {
+			$expectedParsedTemplate = str_replace('" >', '">', $expectedParsedTemplate);
+		}
+		$this->assertEquals(
+			$expectedParsedTemplate,
+			$sParsedTemplate,
+			'In der Filter Query steht noch immer der Feldname!'
+		);
 	}
 }
 

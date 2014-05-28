@@ -64,6 +64,11 @@ abstract class tx_mksearch_tests_Testcase
 		if (t3lib_extMgm::isLoaded('templavoila')) {
 			$this->templaVoilaConfigBackup = $GLOBALS['TYPO3_LOADED_EXT']['templavoila'];
 			$GLOBALS['TYPO3_LOADED_EXT']['templavoila'] = NULL;
+
+			if (tx_rnbase_util_TYPO3::isTYPO62OrHigher()) {
+				$extensionManagementUtility = new TYPO3\CMS\Core\Utility\ExtensionManagementUtility();
+				$extensionManagementUtility->unloadExtension('templavoila');
+			}
 		}
 	}
 
@@ -78,6 +83,11 @@ abstract class tx_mksearch_tests_Testcase
 		if ($this->templaVoilaConfigBackup !== NULL) {
 			$GLOBALS['TYPO3_LOADED_EXT']['templavoila'] = $this->templaVoilaConfigBackup;
 			$this->templaVoilaConfigBackup = NULL;
+
+			if (tx_rnbase_util_TYPO3::isTYPO62OrHigher()) {
+				$extensionManagementUtility = new TYPO3\CMS\Core\Utility\ExtensionManagementUtility();
+				$extensionManagementUtility->loadExtension('templavoila');
+			}
 		}
 	}
 
