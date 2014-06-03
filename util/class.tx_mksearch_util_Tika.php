@@ -37,7 +37,7 @@ class tx_mksearch_util_Tika {
 	 */
 	public static function getInstance() {
 		$tikaJar = tx_rnbase_configurations::getExtensionCfgValue('mksearch', 'tikaJar');
-		$tikaJar = t3lib_div::getFileAbsFileName($tikaJar);
+		$tikaJar = t3lib_div::getFileAbsFileName($tikaJar, FALSE);
 		self::$instance = new tx_mksearch_util_Tika($tikaJar);
 		return self::$instance;
 	}
