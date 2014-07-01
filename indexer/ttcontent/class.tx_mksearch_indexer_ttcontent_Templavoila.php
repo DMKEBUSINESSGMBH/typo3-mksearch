@@ -95,7 +95,7 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
 	 * @param tx_rnbase_IModel $oModel
 	 * @return array
 	 */
-	private function getReferences(tx_rnbase_IModel $oModel) {
+	protected function getReferences(tx_rnbase_IModel $oModel) {
 		//so we have to fetch all references
 		//we just need to check this table for entries for this element
 		$aSqlOptions = array(
