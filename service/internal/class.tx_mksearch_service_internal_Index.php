@@ -135,6 +135,20 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 	 * @return 	boolean 	true if record was successfully spooled
 	 */
 	public function addRecordToIndex($tableName, $uid, $prefer=false, $resolver=false, $data=false, array $options = array()) {
+		if (empty($uid) || empty($tableName)) {
+			tx_rnbase::load('tx_rnbase_util_Logger');
+			tx_rnbase_util_Logger::warn(
+				'Could not add record to index. No table or uid given.',
+				'mksearch',
+				array(
+					'tablename' => '[' . gettype($tableName) . '] ' . $tableName,
+					'uid' => '[' . gettype($uid) . '] ' . $uid,
+					'trace' => t3lib_utility_Debug::debugTrail(),
+				)
+			);
+			return false;
+		}
+
 		$record  = $this->buildRecordForIndex($tableName, $uid, $prefer, $resolver, $data, $options);
 
 		if(!is_array($record)){
