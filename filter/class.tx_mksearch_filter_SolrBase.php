@@ -177,9 +177,17 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 	protected function handleLimit(&$options) {
 		// wir können das limit im flexform setzen
 		$options['limit'] = (int) $this->getConfValue('options.limit');
-		// wenn es auf -1 steht, entfernen wir das limit
-		if ($options['limit'] < 0) {
-			unset($options['limit']);
+		// -1 = unlimited
+		if ($options['limit'] === -1) {
+			// ein unset führt durch den default von 10 in Apache_Solr_Service::search nicht zum erfolg,
+			// wir müssen zwingend ein limit setzen
+			$options['limit'] = 999999;
+		}
+		// -2 = 0
+		// durch typo3 und das casten von werten,
+		// kann im flexform 0 nicht explizit angegeben werden.
+		elseif ($options['limit'] === -2) {
+			$options['limit'] = 0;
 		}
 	}
 

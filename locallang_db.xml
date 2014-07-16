@@ -23,7 +23,7 @@
 			<label index="plugin.mksearch.flexform.filter.confid.default">default</label>
 			<label index="plugin.mksearch.flexform.filter.confid.dismax">DisMax</label>
 			<label index="plugin.mksearch.flexform.force">Force search</label>
-			<label index="plugin.mksearch.flexform.limit">Limit Search Results (-1 for unlimited)</label>
+			<label index="plugin.mksearch.flexform.limit">Limit Search Results (-1 for unlimited, -2 for an empty result)</label>
 			<label index="plugin.mksearch.flexform.requestHandler">Request handler</label>
 			<label index="plugin.mksearch.flexform.filterClass">Filter class</label>
 			<label index="plugin.mksearch.flexform.mainmarkerclass">Main marker class</label>
