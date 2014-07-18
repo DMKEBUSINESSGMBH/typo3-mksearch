@@ -279,6 +279,9 @@
 		 <arr name="env"> <str>MYVAR=val1</str> </arr>
 	   </listener>
 	  -->
+	    <autoSoftCommit>
+	     	<maxTime>10000</maxTime>
+	    </autoSoftCommit>
   </updateHandler>
   
   <!-- IndexReaderFactory
