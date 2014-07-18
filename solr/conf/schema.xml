@@ -301,6 +301,7 @@
 				<filter class="solr.StopFilterFactory" words="stopwordsGerman.txt" ignoreCase="true" enablePositionIncrements="true"/>
 				<filter class="solr.GermanNormalizationFilterFactory"/>
 				<filter class="solr.SnowballPorterFilterFactory" language="German2" protected="protwords.txt"/>
+				<filter class="solr.RemoveDuplicatesTokenFilterFactory" />
 			</analyzer>
 		</fieldType>
 		
@@ -373,6 +374,7 @@
 				<filter class="solr.StopFilterFactory" words="stopwordsGerman.txt" ignoreCase="true" enablePositionIncrements="true"/>
 				<filter class="solr.GermanNormalizationFilterFactory"/>
 				<filter class="solr.SnowballPorterFilterFactory" language="German2" protected="protwords.txt"/>
+				<filter class="solr.RemoveDuplicatesTokenFilterFactory" />
 			</analyzer>
 		</fieldType>
 
