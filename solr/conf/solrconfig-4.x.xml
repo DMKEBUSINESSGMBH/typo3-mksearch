@@ -130,7 +130,8 @@
 	<!-- Sets the amount of RAM that may be used by Lucene indexing
 		 for buffering added documents and deletions before they are
 		 flushed to the Directory.  -->
-	<ramBufferSizeMB>32</ramBufferSizeMB>
+	<ramBufferSizeMB>100</ramBufferSizeMB>
+	<maxBufferedDocs>100000</maxBufferedDocs>
 	<!-- If both ramBufferSizeMB and maxBufferedDocs is set, then
 		 Lucene will flush based on whichever limit is hit first.  
 	  -->
@@ -139,6 +140,13 @@
 	<maxFieldLength>2147483647</maxFieldLength>
 	<writeLockTimeout>1000</writeLockTimeout>
 	<commitLockTimeout>10000</commitLockTimeout>
+	
+	<unlockOnStartup>false</unlockOnStartup>
+	<reopenReaders>true</reopenReaders>
+	<deletionPolicy class="solr.SolrDeletionPolicy">
+		<str name="maxCommitsToKeep">1</str>
+		<str name="maxOptimizedCommitsToKeep">0</str>
+	</deletionPolicy>
 
 	<!-- Expert: Merge Policy 
 
