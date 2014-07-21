@@ -29,7 +29,14 @@
 	in server mode, and use a higher logging level that avoids logging every 
 	request -->
 
-<schema name="mksearch">
+
+<!-- 
+	die Version sollte entfernt werden wenn diese Schema als Vorlage dient für neuere Solr Version (>= 4.6.x).
+	In diesem schema sollte es aber bleiben da die Unit Tests mit Solr 4.0 laufen und dort kommt die folgende
+	Fehlermeldung:
+	org.apache.solr.common.SolrException:org.apache.solr.common.SolrException: uniqueKey field (null) can not be configured to be multivalued 
+-->
+<schema name="mksearch" version="1.2">
 	<!-- attribute "name" is the name of this schema and is only used for display 
 		purposes. Applications should change this to reflect the nature of the search 
 		collection. version="1.2" is Solr's version number for the schema syntax 
