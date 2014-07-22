@@ -138,16 +138,23 @@ class tx_mksearch_util_Indexer {
 	 *
 	 * @param tx_rnbase_IModel $model
 	 * @param string $tableName
+	 * @param 	boolean 	$prefer
+	 * @param 	string 		$resolver class name of record resolver
+	 * @param 	array 		$data
+	 * @param 	array 		$options
 	 * @return void
 	 */
 	public function addModelToIndex(
-		tx_rnbase_IModel $model, $tableName
+		tx_rnbase_IModel $model, $tableName, $prefer=false, $resolver=false,
+		$data=false, array $options = array()
 	){
 		static $indexSrv;
 		if(!empty($model) && $model->isValid()){
 			if(!$indexSrv)
 				$indexSrv = tx_mksearch_util_ServiceRegistry::getIntIndexService();
-			$indexSrv->addRecordToIndex($tableName, $model->getUid());
+			$indexSrv->addRecordToIndex(
+				$tableName, $model->getUid(), $prefer, $resolver, $data, $options
+			);
 		}
 	}
 
@@ -156,12 +163,21 @@ class tx_mksearch_util_Indexer {
 	 *
 	 * @param array $models
 	 * @param string $tableName
+	 * @param 	boolean 	$prefer
+	 * @param 	string 		$resolver class name of record resolver
+	 * @param 	array 		$data
+	 * @param 	array 		$options
 	 * @return void
 	 */
-	public function addModelsToIndex($models, $tableName) {
+	public function addModelsToIndex(
+		$models, $tableName, $prefer=false, $resolver=false,
+		$data=false, array $options = array()
+	) {
 		if(!empty($models))
 			foreach ($models as $model) {
-				$this->addModelToIndex($model,$tableName);
+				$this->addModelToIndex(
+					$model,$tableName, $prefer, $resolver, $data, $options
+				);
 			}
 	}
 
