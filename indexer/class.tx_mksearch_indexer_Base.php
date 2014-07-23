@@ -62,7 +62,7 @@ abstract class tx_mksearch_indexer_Base
 	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
 	 *        Indexer document to be "filled",
 	 *        instantiated based on self::getContentType()
-	 * @param array $options
+	 * @param array $options | enthält die indexer konfig aber auch den queueRecord
 	 * @return tx_mksearch_interface_IndexerDocument|null
 	 *         return null if nothing should be indexed!
 	 */
@@ -488,11 +488,18 @@ CONFIG;
 	 *
 	 * @param array $models
 	 * @param string $tableName
+	 * @param 	boolean 	$prefer
+	 * @param 	string 		$resolver class name of record resolver
+	 * @param 	array 		$data
+	 * @param 	array 		$options
 	 * @return void
 	 */
-	protected function addModelsToIndex($models, $tableName) {
+	protected function addModelsToIndex(
+		$models, $tableName, $prefer=false, $resolver=false,
+		$data=false, array $options = array()
+	) {
 		tx_mksearch_util_Indexer::getInstance()
-			->addModelsToIndex($models, $tableName);
+			->addModelsToIndex($models, $tableName, $prefer, $resolver, $data, $options);
 	}
 
 	/**
