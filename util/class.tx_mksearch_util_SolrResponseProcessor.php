@@ -153,7 +153,7 @@ class tx_mksearch_util_SolrResponseProcessor {
 		$confId = $this->getConfId().'facet.';
 		//Facets
 		if($response->facet_counts) {
-			$builderClass = $this->getConfigurations()->get($confId.'builderClass');
+			$builderClass = $this->getConfigurations()->get($confId . 'builderClass');
 			$builderClass = $builderClass ? $builderClass : 'tx_mksearch_util_FacetBuilder';
 			tx_rnbase::load('tx_mksearch_util_FacetBuilder');
 			$facetBuilder = tx_mksearch_util_FacetBuilder::getInstance($builderClass);
