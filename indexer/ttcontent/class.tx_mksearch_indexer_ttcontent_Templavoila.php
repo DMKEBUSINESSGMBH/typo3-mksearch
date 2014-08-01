@@ -184,6 +184,7 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
 		$this->adjustIncludeLibsPathForBe();
 
 		$templavoilaPlugin = tx_rnbase::makeInstance('tx_templavoila_pi1');
+		$templavoilaPlugin->cObj = tx_rnbase::makeInstance('tslib_cObj');
 		$templavoilaPlugin->cObj->data = $record;
 		$templavoilaPlugin->cObj->currentRecord = 'tt_content:' . $ttContentModel->getUid();
 
