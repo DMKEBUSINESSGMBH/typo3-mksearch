@@ -745,6 +745,10 @@
    		
    		<!-- News -->
    		<!-- <copyField source="news_text_s" dest="fulltext"/> -->
+   		<!-- <copyField source="categoriesTitle_ms" dest="fulltext"/> -->
+		<!-- <copyField source="short_t" dest="fulltext"/> -->
+		<!-- <copyField source="keywords_s" dest="fulltext"/> -->
+		<!-- <copyField source="author_s" dest="fulltext"/> -->
    		
    		<!-- irfaq -->
    		<!-- <copyField source="q_s" dest="fulltext"/>

@@ -382,6 +382,9 @@ addPageMetaData.separator = ,
 # besides the content of the given fields is also merged into "content"
 # indexedFields {
 #	image_s = image
+#	short_t = short
+#	keywords_s = keywords
+#	author_s = author
 # }
 ### delete from or abort indexing for the record if isIndexableRecord or no record?
 deleteIfNotIndexable = 0
