@@ -96,6 +96,37 @@ class tx_mksearch_tests_indexer_TtContent_testcase
 		$this->assertNotNull($result, 'Null returned for uid '.$record['uid'].' when CType in includeCTypes');
 
 	}
+
+	public function testPrepareSearchDataIncludesPageMetaKeywords() {
+		$indexer = $this->getMock(
+			'tx_mksearch_indexer_ttcontent_Normal',
+			array('getPageContent', 'isIndexableRecord', 'hasDocToBeDeleted')
+		);
+		$indexer->expects($this->once())
+			->method('isIndexableRecord')
+			->will($this->returnValue(TRUE));
+		$indexer->expects($this->once())
+			->method('hasDocToBeDeleted')
+			->will($this->returnValue(FALSE));
+		$indexer->expects($this->any())
+			->method('getPageContent')
+			->with(456)
+			->will($this->returnValue(array('keywords' => 'first,second')));
+
+		list($extKey, $cType) = $indexer->getContentType();
+
+		$record = array('uid'=> 123, 'pid' => 456, 'CType'=>'list', 'bodytext' => 'lorem');
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
+		$options = self::getDefaultOptions();
+		$options['addPageMetaData'] = 1;
+		$options['addPageMetaData.']['separator'] = ',';
+		$options['includeCTypes.'] = array('search','mailform','list');
+		$indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
+		$indexDocData = $indexDoc->getData();
+
+		$this->assertEquals(array('first', 'second'), $indexDocData['keywords_ms']->getValue());
+
+	}
 }
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']) {
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']);
