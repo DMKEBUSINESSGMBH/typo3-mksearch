@@ -45,7 +45,7 @@ tx_mksearch_util_Config::registerIndexer(
 
 
 if (t3lib_extMgm::isLoaded('tt_news')) {
-	tx_mksearch_util_Config::registerIndexer('tt_news', 'news', 'tx_mksearch_indexer_TtNewsNews', array('tt_news'));
+	tx_mksearch_util_Config::registerIndexer('tt_news', 'news', 'tx_mksearch_indexer_TtNewsNews', array('tt_news', 'tt_news_cat'));
 }
 
 if (t3lib_extMgm::isLoaded('tt_address')) {
