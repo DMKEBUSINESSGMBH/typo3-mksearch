@@ -185,6 +185,92 @@ class tx_mksearch_tests_indexer_TtNewsNews_testcase
 		//merging into content ignored as nothing?
 		$this->assertTrue(empty($data['content']),'content falsch');
 	}
+
+	/**
+	 * @group unit
+	 */
+	public function testGetDbUtil() {
+		$this->assertEquals(
+			'tx_rnbase_util_DB',
+			$this->callInaccessibleMethod(
+				tx_rnbase::makeInstance('tx_mksearch_indexer_TtNewsNews'),
+				'getDbUtil'
+			)
+		);
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testGetIntIndexService() {
+		$this->assertInstanceOf(
+			'tx_mksearch_service_internal_Index',
+			$this->callInaccessibleMethod(
+				tx_rnbase::makeInstance('tx_mksearch_indexer_TtNewsNews'),
+				'getIntIndexService'
+			)
+		);
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testStopIndexingWhenTtNewsCatChangedThrowsNoException() {
+		$options = array();
+
+		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtNewsNews');
+
+		list($extKey, $cType) = $indexer->getContentType();
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType, 'tx_mksearch_model_IndexerFieldBase');
+
+		$record = array('uid' => 123);
+		$indexer->prepareSearchData('tt_news_cat', $record, $indexDoc, $options);
+		$this->assertTrue(TRUE);
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testStopIndexingWhenTtNewsCatChangedPutsREcordsCorrectToQueue() {
+		$options = array();
+
+		$dbUtil = $this->getMockClass('tx_rnbase_util_DB',array('doSelect'));
+		$dbUtil::staticExpects($this->once())
+			->method('doSelect')
+			->with(
+				'tt_news.uid AS uid',
+				array('tt_news_cat_mm JOIN tt_news ON tt_news.uid=tt_news_cat_mm.uid_local AND tt_news.deleted=0', 'tt_news_cat_mm'),
+				array('where' => 'tt_news_cat_mm.uid_foreign=123', 'enablefieldsoff' => TRUE)
+			)
+			->will($this->returnValue(array(0 => array('uid' => 456), 1 => array('uid' => 789))));
+
+		$indexService = $this->getMock(
+			'tx_mksearch_service_internal_Index', array('addRecordToIndex')
+		);
+		$indexService->expects($this->at(0))
+			->method('addRecordToIndex')
+			->with('tt_news', 456);
+		$indexService->expects($this->at(1))
+			->method('addRecordToIndex')
+			->with('tt_news', 789);
+
+		$indexer = $this->getMock(
+			'tx_mksearch_indexer_TtNewsNews', array('getDbUtil', 'getIntIndexService')
+		);
+		$indexer->expects($this->once())
+			->method('getDbUtil')
+			->will($this->returnValue($dbUtil));
+		$indexer->expects($this->once())
+			->method('getIntIndexService')
+			->will($this->returnValue($indexService));
+
+		list($extKey, $cType) = $indexer->getContentType();
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType, 'tx_mksearch_model_IndexerFieldBase');
+
+		$record = array('uid' => 123);
+		$indexerReturn = $indexer->prepareSearchData('tt_news_cat', $record, $indexDoc, $options);
+		$this->assertNull($indexerReturn);
+	}
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtNewsNews_testcase.php']) {

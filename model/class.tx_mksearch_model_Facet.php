@@ -40,14 +40,14 @@ tx_rnbase::load('tx_rnbase_model_base');
 class tx_mksearch_model_Facet extends tx_rnbase_model_base  {
 	/**
 	 * Gibt ein Facet Model zurück
-	 * @param string $field 
+	 * @param string $field
 	 * @param string $id
-	 * @param mixed $label Das Label kann ein String, oder ein Array sein 
+	 * @param mixed $label Das Label kann ein String, oder ein Array sein
 	 * @return void
 	 */
 	public function __construct($field, $id, $label, $count, $head=false) {
 		$this->record['field'] = $field;
-		$this->record['id'] = $id;
+		$this->record['id'] = $this->record['uid'] = $this->uid = $id;
 		if(is_array($label)) {
 			// Bei den gruppierten Facets gibt es nicht nur ein Label, sondern mehrere Datenfelder
 			$this->record = array_merge($this->record, $label);

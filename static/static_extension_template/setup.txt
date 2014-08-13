@@ -114,7 +114,11 @@ lib.mksearch.lucenefilter {
 		
 		### kommaspearierte Liste von Feldern, die im Formular leer vorbefüllt werden
 		### wenn Formular noch nicht abgeschickt. sonst werden die Marker ausgegeben
-		requiredFormFields = 
+		requiredFormFields =
+		
+		### wenn das auf 1 steht, dann werden alle anderen Sortierungen ignoriert und es wird
+		### nach Zufall sortiert
+		options.sortRandom =  
 		
 		### sorting beispiel
 		sort {

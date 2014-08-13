@@ -105,8 +105,8 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 			// @TODO: nur holen was wir benötigen (keywords)
 			//		  konfigurierbar machen: description, author, etc. könnte wichtig werden!?
 			$pageData = $this->getPageContent($oModel->record['pid']);
-			if(!empty($pageData[0]['keywords'])) {
-				$keywords = explode($separator, $pageData[0]['keywords']);
+			if(!empty($pageData['keywords'])) {
+				$keywords = explode($separator, $pageData['keywords']);
 				foreach($keywords as $key => $keyword) $keywords[$key] = trim($keyword);
 				$indexDoc->addField('keywords_ms', $keywords, 'keyword');
 			}

@@ -43,6 +43,12 @@ require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 class tx_mksearch_util_FacetBuilder {
 
 	/**
+	 *
+	 * @var tx_mksearch_util_KeyValueFacet|NULL
+	 */
+	private $keyValueFacetInstance = NULL;
+
+	/**
 	 * get singelton
 	 *
 	 * @param string $class
@@ -55,6 +61,18 @@ class tx_mksearch_util_FacetBuilder {
 			$instance[$class] = tx_rnbase::makeInstance($class);
 		}
 		return $instance[$class];
+	}
+
+	/**
+	 * @return tx_mksearch_util_KeyValueFacet
+	 */
+	protected function getKeyValueFacetInstance() {
+		if ($this->keyValueFacetInstance === NULL) {
+			$this->keyValueFacetInstance = tx_rnbase::makeInstance(
+				'tx_mksearch_util_KeyValueFacet'
+			);
+		}
+		return $this->keyValueFacetInstance;
 	}
 
 	/**
@@ -100,7 +118,14 @@ class tx_mksearch_util_FacetBuilder {
 	 * @return tx_mksearch_model_Facet
 	 */
 	private function getSimpleFacet($field, $id, $count) {
-		$title = $id;
+		if ($this->getKeyValueFacetInstance()->checkValue($id)) {
+			$exploded = $this->getKeyValueFacetInstance()->explodeFacetValue($id);
+			$id = $exploded['key'];
+			$title = $exploded['value'];
+		}
+		else {
+			$title = $id;
+		}
 		return tx_rnbase::makeInstance('tx_mksearch_model_Facet', $field, $id, $title, $count);
 	}
 }

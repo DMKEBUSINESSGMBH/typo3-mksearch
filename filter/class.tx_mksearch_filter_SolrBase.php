@@ -177,9 +177,17 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 	protected function handleLimit(&$options) {
 		// wir können das limit im flexform setzen
 		$options['limit'] = (int) $this->getConfValue('options.limit');
-		// wenn es auf -1 steht, entfernen wir das limit
-		if ($options['limit'] < 0) {
-			unset($options['limit']);
+		// -1 = unlimited
+		if ($options['limit'] === -1) {
+			// ein unset führt durch den default von 10 in Apache_Solr_Service::search nicht zum erfolg,
+			// wir müssen zwingend ein limit setzen
+			$options['limit'] = 999999;
+		}
+		// -2 = 0
+		// durch typo3 und das casten von werten,
+		// kann im flexform 0 nicht explizit angegeben werden.
+		elseif ($options['limit'] === -2) {
+			$options['limit'] = 0;
 		}
 	}
 
@@ -507,6 +515,18 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 				// wenn anders benötigt, via ts ändern werden
 				$formData['option_'.$option] = empty($currentOptions[$option]) ? '' : ' checked="checked"' ;
 
+			$availableModes = $this->getModeValuesAvailable();
+			if($currentOptions['mode']) {
+				foreach ($availableModes as $availableMode) {
+					$formData['mode_' . $availableMode . '_selected'] =
+						$currentOptions['mode'] == $availableMode ? 'checked=checked' : '';
+				}
+			}
+			else {
+				// Default
+				$formData['mode_standard_selected'] = 'checked=checked';
+			}
+
 			$templateMarker = tx_rnbase::makeInstance('tx_mksearch_marker_General');
 			$formTemplate = $templateMarker->parseTemplate($formTemplate, $formData, $formatter, $confId.'form.', 'FORM');
 		}
@@ -515,6 +535,17 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 		return $template;
 	}
 
+	/**
+	 * Returns all values possible for form field mksearch[options][mode].
+	 * Makes it possible to easily add more modes in other filters/forms.
+	 * @return array
+	 */
+	protected function getModeValuesAvailable() {
+		$availableModes = t3lib_div::trimExplode(',',
+			$this->getConfValue($this->getConfigurations(), 'availableModes')
+		);
+		return (array) $availableModes;
+	}
 
 	/**
 	 * die methode ist nur noch da für abwärtskompatiblität

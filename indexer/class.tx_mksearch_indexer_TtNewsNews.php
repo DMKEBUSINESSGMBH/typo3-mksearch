@@ -280,13 +280,30 @@ class tx_mksearch_indexer_TtNewsNews
 		// Die UIDs aller betroffenen News holen
 		$options = array();
 		$options['where'] = 'tt_news_cat_mm.uid_foreign=' . $catUid;
+		$options['enablefieldsoff'] = TRUE;
 		$from = array('tt_news_cat_mm JOIN tt_news ON tt_news.uid=tt_news_cat_mm.uid_local AND tt_news.deleted=0', 'tt_news_cat_mm');
-		$rows = tx_rnbase_util_DB::doSelect('tt_news.uid AS uid', $from, $options);
+		$dbUtil = $this->getDbUtil();
+		$rows = $dbUtil::doSelect('tt_news.uid AS uid', $from, $options);
 		// Alle gefundenen News für die Neuindizierung anmelden.
-		$srv = tx_mksearch_util_ServiceRegistry::getIntIndexService();
+		$srv = $this->getIntIndexService();
 		foreach ($rows As $row) {
 			$srv->addRecordToIndex('tt_news', $row['uid']);
 		}
+	}
+
+	/**
+	 * @return string
+	 */
+	protected function getDbUtil() {
+		tx_rnbase::load('tx_rnbase_util_DB');
+		return tx_rnbase_util_DB;
+	}
+
+	/**
+	 * @return tx_mksearch_service_internal_Index
+	 */
+	protected function getIntIndexService() {
+		return tx_mksearch_util_ServiceRegistry::getIntIndexService();
 	}
 
 	/**
@@ -382,6 +399,9 @@ addPageMetaData.separator = ,
 # besides the content of the given fields is also merged into "content"
 # indexedFields {
 #	image_s = image
+#	short_t = short
+#	keywords_s = keywords
+#	author_s = author
 # }
 ### delete from or abort indexing for the record if isIndexableRecord or no record?
 deleteIfNotIndexable = 0

@@ -222,7 +222,8 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 	 * @return tx_rnbase_util_PageBrowser
 	 */
 	function handlePageBrowser($parameters,$configurations, $confId, $viewdata, &$fields, &$options, $index) {
-		if(is_array($conf = $configurations->get($confId.'hit.pagebrowser.'))) {
+		// handle page browser only, if configured and the limit is greater than one.
+		if($options['limit'] > 1 && is_array($conf = $configurations->get($confId.'hit.pagebrowser.'))) {
 			// PageBrowser initialisieren
 			$pageBrowserId = $conf['pbid'] ? $conf['pbid'] : 'search'.$configurations->getPluginId();
 			/* @var $pageBrowser tx_rnbase_util_PageBrowser */

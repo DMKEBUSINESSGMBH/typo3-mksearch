@@ -48,6 +48,11 @@ abstract class tx_mksearch_tests_DbTestcase
 	protected $unloadTemplavoila = true;
 
 	/**
+	 * @var array
+	 */
+	protected $addRootLineFieldsBackup = array();
+
+	/**
 	 * Liste der extensions, welche in die test DB importiert werden müssen.
 	 *
 	 * @var array
@@ -95,6 +100,12 @@ abstract class tx_mksearch_tests_DbTestcase
 	 * setUp() = init DB etc.
 	 */
 	protected function setUp() {
+		// wenn in addRootLineFields Felder stehen, die von anderen Extensions bereitgestellt werden,
+		// aber nicht importiert wurden, führt das zu Testfehlern. Also machen wir die einfach leer.
+		// sollte nicht stören.
+		$this->addRootLineFieldsBackup = $GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'];
+		$GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'] = '';
+
 		// set up the TCA
 		tx_mksearch_tests_Util::tcaSetUp($this->importExtensions);
 
@@ -178,6 +189,8 @@ abstract class tx_mksearch_tests_DbTestcase
 				$extensionManagementUtility->loadExtension('templavoila');
 			}
 		}
+
+		$GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'] = $this->addRootLineFieldsBackup;
 	}
 
 }

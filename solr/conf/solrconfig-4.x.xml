@@ -130,7 +130,8 @@
 	<!-- Sets the amount of RAM that may be used by Lucene indexing
 		 for buffering added documents and deletions before they are
 		 flushed to the Directory.  -->
-	<ramBufferSizeMB>32</ramBufferSizeMB>
+	<ramBufferSizeMB>100</ramBufferSizeMB>
+	<maxBufferedDocs>100000</maxBufferedDocs>
 	<!-- If both ramBufferSizeMB and maxBufferedDocs is set, then
 		 Lucene will flush based on whichever limit is hit first.  
 	  -->
@@ -139,6 +140,13 @@
 	<maxFieldLength>2147483647</maxFieldLength>
 	<writeLockTimeout>1000</writeLockTimeout>
 	<commitLockTimeout>10000</commitLockTimeout>
+	
+	<unlockOnStartup>false</unlockOnStartup>
+	<reopenReaders>true</reopenReaders>
+	<deletionPolicy class="solr.SolrDeletionPolicy">
+		<str name="maxCommitsToKeep">1</str>
+		<str name="maxOptimizedCommitsToKeep">0</str>
+	</deletionPolicy>
 
 	<!-- Expert: Merge Policy 
 
@@ -271,6 +279,9 @@
 		 <arr name="env"> <str>MYVAR=val1</str> </arr>
 	   </listener>
 	  -->
+	    <autoSoftCommit>
+	     	<maxTime>10000</maxTime>
+	    </autoSoftCommit>
   </updateHandler>
   
   <!-- IndexReaderFactory
@@ -760,6 +771,11 @@
 				Wir suchen auch immer fuzzy, allerdings mit einer niedrigen Bewertung!
 			-->
 			<str name="qf">title^1.5 fulltext^0.4 fulltext~0.2^0.1</str>
+			<!-- Boost hits one phrases -->
+			<str name="pf">title^1.5 fulltext^0.4 fulltext~0.2^0.1</str>
+			<str name="mm">
+				2&lt;-1 5&lt;-2 6&lt;90%
+			</str>
 			<!--  
 				Boosten von bestimmten contentTypen
 			-->
@@ -776,7 +792,10 @@
 			 
 			<str name="q.alt">*:*</str>
 			<str name="fq">
-				-deleted:1 AND -hidden:1
+				-deleted:1 AND -hidden:1 AND (
+					-(starttime_dt:[NOW TO *] OR endtime_dt:[* TO NOW] OR
+					page_starttime_dt:[NOW TO *] OR page_endtime_dt:[* TO NOW])
+				)
 			</str>
 			<str name="facet.mincount">1</str>
 			<str name="facet.sort">count</str>

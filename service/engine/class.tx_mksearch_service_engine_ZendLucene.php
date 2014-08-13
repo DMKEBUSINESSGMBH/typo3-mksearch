@@ -291,6 +291,8 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 	 * @param array		$options	Options for search:
 	 * 								* [bool] rawFormat:		Pass through $fields['term'] as raw search
 	 * 								* [array] fe_groups:	Allowed FE groups
+	 * 								* [string] sort:		Sort Field and Sort Order e.g. name desc
+	 * 								* [boolean] sortRandom:	random sorting no matter what sorting was set
 	 * @return array[tx_mksearch_model_SearchHit] or array[Zend_Search_Lucene_Search_QueryHit]	search results - format according to $options['rawOutput'] (usually not for public use as raw output depends on used search engine!)
 	 */
 	public function search(array $fields=array(), array $options=array()) {
@@ -348,6 +350,11 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 		} else {
 			$hits = $this->index->find($queryString);
 		}
+
+		if ($options['sortRandom']) {
+			shuffle($hits);
+		}
+
 		if($options['debug']) {
 			t3lib_div::debug(array('Fields'=>$fields, 'Options'=>$options ,'Query'=>$queryString, 'Hits'=>count($hits)), 'class.tx_mksearch_service_engine_ZendLucene.php '); // TODO: remove me
 		}

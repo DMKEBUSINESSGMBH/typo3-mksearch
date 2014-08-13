@@ -62,7 +62,7 @@ abstract class tx_mksearch_indexer_Base
 	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
 	 *        Indexer document to be "filled",
 	 *        instantiated based on self::getContentType()
-	 * @param array $options
+	 * @param array $options | enthält die indexer konfig aber auch den queueRecord
 	 * @return tx_mksearch_interface_IndexerDocument|null
 	 *         return null if nothing should be indexed!
 	 */
@@ -440,6 +440,34 @@ abstract class tx_mksearch_indexer_Base
 # }
 ### delete from or abort indexing for the record if isIndexableRecord or no record?
 # deleteIfNotIndexable = 0
+
+# Note: you should always configure the root pageTree for this indexer in the includes. mostly the domain
+# White lists: Explicitely include items in indexing by various conditions.
+# Note that defining a white list deactivates implicite indexing of ALL pages,
+# i.e. only white-listed pages are defined yet!
+# May also be combined with option "exclude"
+include {
+# Include several pages in indexing:
+#		# Include page #18 and #27
+#	pages = 18,27
+# Include complete page trees (i. e. pages with all their children) in indexing:
+#	pageTrees {
+#		# Include page tree with root page #19
+#		0 = 19
+#		# Include page  tree with root page #28
+#		1 = 28
+#	}
+}
+# Black lists: Exclude pages from indexing by various conditions.
+# May also be combined with option "include", while "exclude" option
+# takes precedence over "include" option.
+exclude {
+	# Exclude several pages from indexing. @see respective include option
+#	pages ...
+ 	# Exclude complete page trees (i. e. pages with all their children) from indexing.
+ 	# @see respective include option
+#	pageTrees ...
+}
 CONFIG;
 	}
 
@@ -460,11 +488,18 @@ CONFIG;
 	 *
 	 * @param array $models
 	 * @param string $tableName
+	 * @param 	boolean 	$prefer
+	 * @param 	string 		$resolver class name of record resolver
+	 * @param 	array 		$data
+	 * @param 	array 		$options
 	 * @return void
 	 */
-	protected function addModelsToIndex($models, $tableName) {
+	protected function addModelsToIndex(
+		$models, $tableName, $prefer=false, $resolver=false,
+		$data=false, array $options = array()
+	) {
 		tx_mksearch_util_Indexer::getInstance()
-			->addModelsToIndex($models, $tableName);
+			->addModelsToIndex($models, $tableName, $prefer, $resolver, $data, $options);
 	}
 
 	/**
