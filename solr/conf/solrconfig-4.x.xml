@@ -771,6 +771,8 @@
 				Wir suchen auch immer fuzzy, allerdings mit einer niedrigen Bewertung!
 			-->
 			<str name="qf">title^1.5 fulltext^0.4 fulltext~0.2^0.1</str>
+			<!-- Boost hits one phrases -->
+			<str name="pf">title^1.5 fulltext^0.4 fulltext~0.2^0.1</str>
 			<!--  
 				Boosten von bestimmten contentTypen
 			-->
