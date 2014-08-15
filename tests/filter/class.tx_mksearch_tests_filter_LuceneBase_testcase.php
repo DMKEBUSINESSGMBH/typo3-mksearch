@@ -57,6 +57,11 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
 	 * @see PHPUnit_Framework_TestCase::setUp()
 	 */
 	protected function setUp() {
+		$zendPath = tx_rnbase_configurations::getExtensionCfgValue('mksearch', 'zendPath');
+		if(empty($zendPath)) {
+			$this->markTestSkipped('Pfad zu Zend nicht konfiguriert.');
+		}
+
 		parent::setUp();
 		$this->feGroupsBackup = $GLOBALS['TSFE']->fe_user->groupData['uid'];
 
@@ -217,8 +222,6 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
 	 * @group unit
 	 */
 	public function testInitReturnsTrueIfNoSubmitButForceSearch() {
-		$this->markTestSkippedIfNoZend();
-
 		$configArray = array($this->confId => array('filter.' => array('forceSearch' => true)));
 
 		$filter = $this->getFilter($configArray);
@@ -230,8 +233,6 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
 	 * @group unit
 	 */
 	public function testInitReturnsTrueIfSubmit() {
-		$this->markTestSkippedIfNoZend();
-
 		$configArray = array($this->confId => array('filter.' => array('forceSearch' => false)));
 
 		$filter = $this->getFilter($configArray, array('submit' => true));
@@ -243,8 +244,6 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
 	 * @group unit
 	 */
 	public function testInitSetFeGroupsToOptions() {
-		$this->markTestSkippedIfNoZend();
-
 		$GLOBALS['TSFE']->fe_user->groupData['uid'] = 'someUids';
 		$filter = $this->getFilter();
 		$fields = $options = array();
@@ -257,8 +256,6 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
 	 * @group unit
 	 */
 	public function testInitSetsRawFormatToOptionsIfTermTemplate() {
-		$this->markTestSkippedIfNoZend();
-
 		$filter = $this->getFilter();
 		$fields = $options = array();
 		$filter->init($fields, $options);
@@ -274,8 +271,6 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
 	 * @group unit
 	 */
 	public function testInitSetsMinimalPrefixLengthToZero() {
-		$this->markTestSkippedIfNoZend();
-
 		$filter = $this->getFilter();
 		$fields = $options = array();
 		$filter->init($fields, $options);
@@ -294,8 +289,6 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
 	 * @group unit
 	 */
 	public function testInitSetsCorrectTerm() {
-		$this->markTestSkippedIfNoZend();
-
 		$_GET['mksearch']['term'] = 'test term';
 
 		$fields = array('term' => 'contentType:* ###PARAM_MKSEARCH_TERM###');
@@ -313,8 +306,6 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
 	 * @group unit
 	 */
 	public function testInitSetsCorrectTermIfTermEmpty() {
-		$this->markTestSkippedIfNoZend();
-
 		$_GET['mksearch']['term'] = '';
 
 		$fields = array('term' => 'contentType:* ###PARAM_MKSEARCH_TERM###');
@@ -328,8 +319,6 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
 	 * @group unit
 	 */
 	public function testInitSetsCorrectTermIfNoTermParamSet() {
-		$this->markTestSkippedIfNoZend();
-
 		$fields = array('term' => 'contentType:* ###PARAM_MKSEARCH_TERM###');
 		$options = array();
 		$filter = $this->getFilter();
@@ -341,8 +330,6 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
 	 * @group unit
 	 */
 	public function testInitSetsCorrectTermIfTermContainsSolrControlCharacters() {
-		$this->markTestSkippedIfNoZend();
-
 		$_GET['mksearch']['term'] = '*';
 
 		$fields = array('term' => 'contentType:* ###PARAM_MKSEARCH_TERM###');
@@ -370,8 +357,6 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
 	 * @group unit
 	 */
 	public function testInitSetsSortingToOptionsCorrectFromParameter() {
-		$this->markTestSkippedIfNoZend();
-
 		$filter = $this->getFilter(array(), array('sort' => 'uid desc'));
 
 		$fields = $options = array();
@@ -384,8 +369,6 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
 	 * @group unit
 	 */
 	public function testInitSetsSortingToOptionsCorrectIfSortOrderAsc() {
-		$this->markTestSkippedIfNoZend();
-
 		$filter = $this->getFilter(array(), array('sort' => 'uid asc'));
 
 		$fields = $options = array();
@@ -398,8 +381,6 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
 	 * @group unit
 	 */
 	public function testInitSetsSortingToOptionsCorrectWithUnknownSortOrder() {
-		$this->markTestSkippedIfNoZend();
-
 		$filter = $this->getFilter(array(), array('sort' => 'uid unknown'));
 
 		$fields = $options = array();
@@ -412,8 +393,6 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
 	 * @group unit
 	 */
 	public function testInitSetsSortingToOptionsCorrectIfSortOrderInSortOrderParameter() {
-		$this->markTestSkippedIfNoZend();
-
 		$filter = $this->getFilter(array(), array('sort' => 'uid', 'sortorder' => 'asc'));
 
 		$fields = $options = array();
@@ -426,8 +405,6 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
 	 * @group unit
 	 */
 	public function testInitSetsSortingToOptionsCorrectIfNoSortOrderUsesClassPropertyForSortOrder() {
-		$this->markTestSkippedIfNoZend();
-
 		$filter = $this->getFilter(array(), array('sort' => 'uid'));
 
 		$filterUtil = $this->getMock('tx_mksearch_util_Filter', array('parseTermTemplate'));
@@ -452,8 +429,6 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
 	 * @group unit
 	 */
 	public function testInitSetsSortingToOptionsCorrectIfNoSortFieldUsesClassPropertyForSortField() {
-		$this->markTestSkippedIfNoZend();
-
 		$filter = $this->getFilter();
 		$filterUtil = $this->getMock('tx_mksearch_util_Filter', array('parseTermTemplate'));
 
@@ -477,8 +452,6 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
 	 * @group unit
 	 */
 	public function testParseTemplateParsesSortMarkerCorrect() {
-		$this->markTestSkippedIfNoZend();
-
 		tx_rnbase_util_Misc::prepareTSFE(
 			array('force' => true, 'pid' => 1)
 		);
@@ -561,16 +534,5 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
 			'tx_mksearch_filter_LuceneBase',
 			$parameters, $configurations, $this->confId
 		);
-	}
-
-	/**
-	 *
-	 * @return boolean
-	 */
-	private function markTestSkippedIfNoZend() {
-		$zendPath = tx_rnbase_configurations::getExtensionCfgValue('mksearch', 'zendPath');
-		if(empty($zendPath)) {
-			$this->markTestSkipped('Pfad zu Zend nicht konfiguriert.');
-		}
 	}
 }
