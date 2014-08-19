@@ -145,7 +145,7 @@ class tx_mksearch_model_internal_Index extends tx_rnbase_model_base {
 		}
 
 		reset($this->record);
-		return $out; //t3lib_div::view_array($this->record);
+		return $out;
 
 	}
 

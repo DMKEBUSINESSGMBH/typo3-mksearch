@@ -123,7 +123,6 @@ class tx_mksearch_hooks_IndexerAutoUpdate {
 				}
 				break;
 			default:
-//				t3lib_div::debug($command, 'tx_mksearch_hooks_IndexerAutoUpdate->processCmdmap_postProcess(): other (still unhandled) command:');
 				break;
 		}
 	}

@@ -356,7 +356,14 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 		}
 
 		if($options['debug']) {
-			t3lib_div::debug(array('Fields'=>$fields, 'Options'=>$options ,'Query'=>$queryString, 'Hits'=>count($hits)), 'class.tx_mksearch_service_engine_ZendLucene.php '); // TODO: remove me
+			tx_rnbase::load('tx_rnbase_util_Debug');
+			tx_rnbase_util_Debug::debug(
+				array(
+					'Fields'=>$fields, 'Options'=>$options ,
+					'Query'=>$queryString, 'Hits'=>count($hits)
+				),
+				'class.tx_mksearch_service_engine_ZendLucene.php'
+			);
 		}
 
 		if (isset($options['rawOutput']) and $options['rawOutput'])	return $hits;

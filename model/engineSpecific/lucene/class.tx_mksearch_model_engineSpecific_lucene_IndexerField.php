@@ -37,17 +37,17 @@ class tx_mksearch_model_engineSpecific_lucene_IndexerField extends tx_mksearch_m
 	 * @see self::$_possibleStorageTypes
 	 */
 	private $_storageType;
-	
+
 	/**
 	 * Charset encoding
 	 *
 	 * @var string
 	 */
 	private $_encoding;
-	
+
 	/**
 	 * Possible storage types for Zend Lucene:
-	 * 
+	 *
 	 * The storage type defines how a field is indexed / stored. Possible values are (borrowed from Zend_Lucene):
 	 * 			* 'text':		Constructs a String-valued Field that is tokenized and indexed,
 	 *							and is stored in the index, for return with hits.  Useful for short text
@@ -60,21 +60,21 @@ class tx_mksearch_model_engineSpecific_lucene_IndexerField extends tx_mksearch_m
      *							but that is not stored in the index.
      *			* 'binary':		Constructs a Binary String valued Field that is not tokenized nor indexed,
      *							but is stored in the index, for return with hits.
-	 * 
+	 *
 	 * Actually, this attribute is not needed any longer here.
 	 * In order to make specific storage types possible, no checks take place in the layer
 	 * of the index field itself (for now...). Rather is this check out-sourced to the engine service
 	 * which actually is responsible for dealing with the given storage types.
-	 * 
+	 *
 	 * @todo: Create a nice interface for storage types which can be dependent from the search engine.
 	 *        The search engine might become responsible for providing both indexer document and indexer fields
-	 *        which both have to implement a (@todo) given interface. 
-	 * 
+	 *        which both have to implement a (@todo) given interface.
+	 *
 	 * @var array
 	 */
 	private static $_possibleStorageTypes = array('text', 'keyword', 'unindexed', 'unstored', 'binary');
 
-	
+
 	/**
 	 * Constructor
 	 *
@@ -92,26 +92,30 @@ class tx_mksearch_model_engineSpecific_lucene_IndexerField extends tx_mksearch_m
 		$this->_encoding = $encoding;
 
 		if($value == 33) {
-			t3lib_div::debug($encoding, 'class.tx_mksearch_model_engineSpecific_lucene_IndexerField.php '); // TODO: remove me
-		exit();
+			tx_rnbase::load('tx_rnbase_util_Debug');
+			tx_rnbase_util_Debug::debug(
+				$encoding,
+				'class.tx_mksearch_model_engineSpecific_lucene_IndexerField.php'
+			);
+			exit();
 		}
 
 	}
-	
+
 	/**
 	 * Update value
 	 *
 	 * @param string $value
 	 */
 	public function updateValue($value, $boost=1.0) {$this->_value = $value;}
-	
+
 	/**
 	 * Return storage type
 	 *
 	 * @return string
 	 */
 	public function getStorageType() {return $this->_storageType;}
-	
+
 	/**
 	 * Update storage type
 	 *
@@ -124,14 +128,14 @@ class tx_mksearch_model_engineSpecific_lucene_IndexerField extends tx_mksearch_m
 //		// else:
 		$this->_storageType = $storageType;
 	}
-	
+
 	/**
 	 * Return encoding
 	 *
 	 * @return string
 	 */
 	public function getEncoding() {return $this->_encoding;}
-	
+
 	/**
 	 * Update encoding
 	 *

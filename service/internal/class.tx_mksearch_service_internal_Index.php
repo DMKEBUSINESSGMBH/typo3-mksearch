@@ -516,8 +516,12 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 		$query .= 'SELECT DISTINCT ' . $fullQuoted . ', '. $uidName .
 			', CONCAT(\''.$resolver.'\') FROM ' . $from . $where;
 
-		if($options['debug'])
-			t3lib_div::debug($query,'class.tx_mksearch_srv_Search.php : '.__LINE__);
+		if($options['debug']) {
+			tx_rnbase::load('tx_rnbase_util_Debug');
+			tx_rnbase_util_Debug::debug(
+				$query, 'class.tx_mksearch_srv_Search.php : ' . __LINE__
+			);
+		}
 		$GLOBALS['TYPO3_DB']->sql_query($query);
 	}
 

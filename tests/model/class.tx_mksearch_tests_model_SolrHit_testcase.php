@@ -45,8 +45,6 @@ class tx_mksearch_tests_model_SolrHit_testcase
 		$doc->id = 'myid';
 		$hit = tx_rnbase::makeInstance('tx_mksearch_model_SolrHit', $doc);
 
-//		$sDate = gmstrftime("%d.%m.%Y", $tstamp1);
-//		t3lib_div::debug($sDate, 'tx_rnbase_tests_dates_testcase :: test_dateConv'); // TODO: remove me
 		$this->assertEquals('myid', $hit->getSolrId());
 	}
 }
