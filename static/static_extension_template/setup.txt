@@ -730,7 +730,36 @@ lib.mksearch.extrainfo {
 		}
 	}
 	
-	core.file < .default
+	# Content type "dam.media"
+	defaultMedia < .default
+	defaultMedia {
+		hit {
+			links{
+				show.pid.cObject = TEXT
+				show.pid.cObject.field = file_relpath_s
+				show.atagparams.rel = external
+			}
+			# Beispiel für korrekte Dateiverlinkung
+			dclink = TEXT
+			dclink.field = file_relpath_s
+			dclink.filelink {
+				jumpurl = 1
+				labelStdWrap = TEXT
+				labelStdWrap.field = title
+				icon = 1
+				size = 1
+				size.bytes = 1
+				size.noTrimWrap = | ||
+			}
+			
+			initFields{
+				0 = file_name_s
+				1 = file_relpath_s
+			}
+		}
+	}
+	
+	core.file < .defaultMedia
 	core.file {
 	}
 
@@ -788,32 +817,8 @@ lib.mksearch.extrainfo {
 	}
 
 	# Content type "dam.media"
-	dam.media < .default
+	dam.media < .defaultMedia
 	dam.media {
-		hit {
-			links{
-				show.pid.cObject = TEXT
-				show.pid.cObject.field = file_relpath_s
-				show.atagparams.rel = external
-			}
-			# Beispiel für korrekte Dateiverlinkung
-			dclink = TEXT
-			dclink.field = file_relpath_s
-			dclink.filelink {
-				jumpurl = 1
-				labelStdWrap = TEXT
-				labelStdWrap.field = title
-				icon = 1
-				size = 1
-				size.bytes = 1
-				size.noTrimWrap = | ||
-			}
-			
-			initFields{
-				0 = file_name_s
-				1 = file_relpath_s
-			}
-		}
 	}
 	
 	# Content type "irfaq.question"
