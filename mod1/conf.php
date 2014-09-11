@@ -21,7 +21,7 @@ $BACK_PATH='../../../../typo3/';
  * Das Prüfen des Pfades in open_basedir ist hier überflüssig/zu aufwendig.
  */
 $REQUIRE_PATH = $BACK_PATH;
-if (!@is_readable($REQUIRE_PATH))
+if (!@is_readable($REQUIRE_PATH . 'sysext/'))
 {
 	$PATH_thisScript = str_replace('//', '/', str_replace('\\', '/',
 			(PHP_SAPI == 'fpm-fcgi' || PHP_SAPI == 'cgi' || PHP_SAPI == 'isapi' || PHP_SAPI == 'cgi-fcgi') &&
