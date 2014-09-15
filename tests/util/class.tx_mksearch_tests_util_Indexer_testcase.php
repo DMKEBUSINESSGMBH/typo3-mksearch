@@ -273,6 +273,280 @@ class tx_mksearch_tests_util_Indexer_testcase
 		$this->assertFalse($isOnIndexablePage,'Seite indizierbar');
 	}
 
+
+	/**
+	 *
+	 */
+	public function testIndexModelByMapping() {
+		$indexDoc = tx_rnbase::makeInstance(
+			'tx_mksearch_model_IndexerDocumentBase', '', ''
+		);
+		$indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
+		$model = tx_rnbase::makeInstance(
+			'tx_rnbase_model_base', array('recordField' => 123)
+		);
+
+		tx_mksearch_util_Indexer::getInstance()->indexModelByMapping(
+			$model, array('recordField' => 'documentField'), $indexDoc
+		);
+		$docData = $indexDoc->getData();
+
+		$this->assertEquals(
+			123, $docData['documentField']->getValue(), 'model falsch indiziert'
+		);
+	}
+
+	/**
+	 *
+	 */
+	public function testIndexModelByMappingDoesNotIndexHiddenModelsByDefault() {
+		$indexDoc = tx_rnbase::makeInstance(
+			'tx_mksearch_model_IndexerDocumentBase', '', ''
+		);
+		$indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
+		$model = tx_rnbase::makeInstance(
+			'tx_rnbase_model_base', array('recordField' => 123, 'hidden' => 1)
+		);
+
+		tx_mksearch_util_Indexer::getInstance()->indexModelByMapping(
+			$model, array('recordField' => 'documentField'), $indexDoc
+		);
+		$docData = $indexDoc->getData();
+
+		$this->assertFalse(
+			isset($docData['documentField']), 'model doch indiziert'
+		);
+	}
+
+	/**
+	 *
+	 */
+	public function testIndexModelByMappingIndexesHiddenModelsIfSet() {
+		$indexDoc = tx_rnbase::makeInstance(
+			'tx_mksearch_model_IndexerDocumentBase', '', ''
+		);
+		$indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
+		$model = tx_rnbase::makeInstance(
+			'tx_rnbase_model_base', array('recordField' => 123, 'hidden' => 1)
+		);
+
+		tx_mksearch_util_Indexer::getInstance()->indexModelByMapping(
+			$model, array('recordField' => 'documentField'), $indexDoc, '',
+			array(), FALSE
+		);
+		$docData = $indexDoc->getData();
+
+		$this->assertEquals(
+			123, $docData['documentField']->getValue(), 'model falsch indiziert'
+		);
+	}
+
+	/**
+	 *
+	 */
+	public function testIndexModelByMappingWithPrefix() {
+		$indexDoc = tx_rnbase::makeInstance(
+			'tx_mksearch_model_IndexerDocumentBase', '', ''
+		);
+		$indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
+		$model = tx_rnbase::makeInstance(
+			'tx_rnbase_model_base', array('recordField' => 123)
+		);
+
+		tx_mksearch_util_Indexer::getInstance()->indexModelByMapping(
+			$model, array('recordField' => 'documentField'), $indexDoc, 'test_'
+		);
+		$docData = $indexDoc->getData();
+
+		$this->assertEquals(
+			123, $docData['test_documentField']->getValue(), 'model falsch indiziert'
+		);
+	}
+
+	/**
+	 *
+	 */
+	public function testIndexModelByMappingMapsNotEmptyFields() {
+		$indexDoc = tx_rnbase::makeInstance(
+			'tx_mksearch_model_IndexerDocumentBase', '', ''
+		);
+		$indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
+		$model = tx_rnbase::makeInstance(
+			'tx_rnbase_model_base', array('recordField' => '')
+		);
+
+		tx_mksearch_util_Indexer::getInstance()->indexModelByMapping(
+			$model, array('recordField' => 'documentField'), $indexDoc
+		);
+		$docData = $indexDoc->getData();
+
+		$this->assertFalse(
+			isset($docData['documentField']), 'model doch indiziert'
+		);
+	}
+
+	/**
+	 *
+	 */
+	public function testIndexModelByMappingMapsEmptyFieldsIfKeepEmptyOption() {
+		$indexDoc = tx_rnbase::makeInstance(
+				'tx_mksearch_model_IndexerDocumentBase', '', ''
+		);
+		$indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
+		$model = tx_rnbase::makeInstance(
+				'tx_rnbase_model_base', array('recordField' => '')
+		);
+
+		tx_mksearch_util_Indexer::getInstance()->indexModelByMapping(
+			$model, array('recordField' => 'documentField'), $indexDoc, '',
+			array('keepEmpty' => 1)
+		);
+		$docData = $indexDoc->getData();
+
+		$this->assertEquals(
+			'', $docData['documentField']->getValue(), 'model falsch indiziert'
+		);
+	}
+
+	/**
+	 *
+	 */
+	public function testIndexArrayOfModelsByMapping() {
+		$indexDoc = tx_rnbase::makeInstance(
+			'tx_mksearch_model_IndexerDocumentBase', '', ''
+		);
+		$indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
+		$models = array(
+			tx_rnbase::makeInstance(
+				'tx_rnbase_model_base', array('recordField' => 123)
+			),
+			tx_rnbase::makeInstance(
+				'tx_rnbase_model_base', array('recordField' => 456)
+			)
+		);
+
+		tx_mksearch_util_Indexer::getInstance()->indexArrayOfModelsByMapping(
+			$models, array('recordField' => 'documentField'), $indexDoc
+		);
+		$docData = $indexDoc->getData();
+
+		$this->assertEquals(
+			array(123, 456), $docData['documentField']->getValue(),
+			'models falsch indiziert'
+		);
+	}
+
+	/**
+	 *
+	 */
+	public function testIndexArrayOfModelsByMappingDoesNotIndexHiddenModelsByDefault() {
+		$indexDoc = tx_rnbase::makeInstance(
+			'tx_mksearch_model_IndexerDocumentBase', '', ''
+		);
+		$indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
+		$models = array(
+			tx_rnbase::makeInstance(
+				'tx_rnbase_model_base', array('recordField' => 123)
+			),
+			tx_rnbase::makeInstance(
+				'tx_rnbase_model_base', array('recordField' => 456, 'hidden' => 1)
+			)
+		);
+
+		tx_mksearch_util_Indexer::getInstance()->indexArrayOfModelsByMapping(
+			$models, array('recordField' => 'documentField'), $indexDoc
+		);
+		$docData = $indexDoc->getData();
+
+		$this->assertEquals(
+			array(123), $docData['documentField']->getValue(),
+			'models falsch indiziert'
+		);
+	}
+
+	/**
+	 *
+	 */
+	public function testIndexArrayOfModelsByMappingIndexesHiddenModelsIfSet() {
+		$indexDoc = tx_rnbase::makeInstance(
+			'tx_mksearch_model_IndexerDocumentBase', '', ''
+		);
+		$indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
+		$models = array(
+			tx_rnbase::makeInstance(
+				'tx_rnbase_model_base', array('recordField' => 123)
+			),
+			tx_rnbase::makeInstance(
+				'tx_rnbase_model_base', array('recordField' => 456, 'hidden' => 1)
+			)
+		);
+
+		tx_mksearch_util_Indexer::getInstance()->indexArrayOfModelsByMapping(
+			$models, array('recordField' => 'documentField'), $indexDoc, '',
+			array(), FALSE
+		);
+		$docData = $indexDoc->getData();
+
+		$this->assertEquals(
+			array(123, 456), $docData['documentField']->getValue(),
+			'models falsch indiziert'
+		);
+	}
+
+	/**
+	 *
+	 */
+	public function testIndexArrayOfModelsByMappingWithPrefix() {
+		$indexDoc = tx_rnbase::makeInstance(
+			'tx_mksearch_model_IndexerDocumentBase', '', ''
+		);
+		$indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
+		$models = array(
+			tx_rnbase::makeInstance(
+				'tx_rnbase_model_base', array('recordField' => 123)
+			),
+			tx_rnbase::makeInstance(
+				'tx_rnbase_model_base', array('recordField' => 456)
+			)
+		);
+
+		tx_mksearch_util_Indexer::getInstance()->indexArrayOfModelsByMapping(
+			$models, array('recordField' => 'documentField'), $indexDoc, 'test_'
+		);
+		$docData = $indexDoc->getData();
+
+		$this->assertEquals(
+			array(123, 456), $docData['test_documentField']->getValue(), 'model falsch indiziert'
+		);
+	}
+
+	/**
+	 *
+	 */
+	public function testIndexArrayOfModelsByMappingMapsNotEmptyFields() {
+		$indexDoc = tx_rnbase::makeInstance(
+			'tx_mksearch_model_IndexerDocumentBase', '', ''
+		);
+		$indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
+		$models = array(
+			tx_rnbase::makeInstance(
+				'tx_rnbase_model_base', array('recordField' => '')
+			),
+			tx_rnbase::makeInstance(
+				'tx_rnbase_model_base', array('recordField' => '')
+			)
+		);
+
+		tx_mksearch_util_Indexer::getInstance()->indexArrayOfModelsByMapping(
+			$models, array('recordField' => 'documentField'), $indexDoc
+		);
+		$docData = $indexDoc->getData();
+
+		$this->assertFalse(
+			isset($docData['documentField']), 'model doch indiziert'
+		);
+	}
+
 	/**
 	 * @param array $rootline
 	 * @return tx_mksearch_util_Indexer

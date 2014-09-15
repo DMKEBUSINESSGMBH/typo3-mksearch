@@ -80,15 +80,19 @@ class tx_mksearch_util_Indexer {
 	* @param tx_mksearch_interface_IndexerDocument $indexDoc
 	* @param string $prefix
 	* @param array $options
+	* @param boolean $dontIndexHidden
 	* @return tx_mksearch_interface_IndexerDocument
 	*/
 	public function indexModelByMapping(
 		tx_rnbase_IModel $model, array $recordIndexMapping,
 		tx_mksearch_interface_IndexerDocument $indexDoc,
-		$prefix = '', array $options = array()
+		$prefix = '', array $options = array(), $dontIndexHidden = TRUE
 	) {
 		foreach ($recordIndexMapping as $recordKey => $indexDocKey) {
-			if(!empty($model->record[$recordKey]) || $options['keepEmpty']){
+			if ($dontIndexHidden && $model->isHidden()) {
+				continue;
+			}
+			if (!empty($model->record[$recordKey]) || $options['keepEmpty']){
 				$indexDoc->addField(
 					$prefix.$indexDocKey,
 					$options['keepHtml'] ? $model->record[$recordKey] :
@@ -108,18 +112,25 @@ class tx_mksearch_util_Indexer {
 	 * @param array $aMapping
 	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
 	 * @param string $prefix
+	 * @param array $options
+	 * @param boolean $dontIndexHidden
 	 * @return tx_mksearch_interface_IndexerDocument
 	 */
 	public function indexArrayOfModelsByMapping(
 		array $models, array $recordIndexMapping,
-		tx_mksearch_interface_IndexerDocument $indexDoc, $prefix = ''
+		tx_mksearch_interface_IndexerDocument $indexDoc, $prefix = '',
+		array $options = array(), $dontIndexHidden = TRUE
 	) {
 		//collect values
 		$tempIndexDoc = array();
 		foreach ($models as $model){
 			foreach ($recordIndexMapping as $recordKey => $indexDocKey) {
-				if(!empty($model->record[$recordKey]))
+				if ($dontIndexHidden && $model->isHidden()) {
+					continue;
+				}
+				if (!empty($model->record[$recordKey])) {
 					$tempIndexDoc[$prefix.$indexDocKey][] = $model->record[$recordKey];
+				}
 			}
 		}
 

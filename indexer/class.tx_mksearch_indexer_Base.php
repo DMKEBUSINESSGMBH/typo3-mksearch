@@ -198,17 +198,18 @@ abstract class tx_mksearch_indexer_Base
 	* @param tx_mksearch_interface_IndexerDocument $indexDoc
 	* @param string $prefix
 	* @param array $options
+	* @param boolean $dontIndexHidden
 	* @return void
 	*/
 	protected function indexModelByMapping(
 		tx_rnbase_IModel $model, array $recordIndexMapping,
 		tx_mksearch_interface_IndexerDocument $indexDoc,
-		$prefix = '', array $options = array()
+		$prefix = '', array $options = array(), $dontIndexHidden = TRUE
 	) {
 		$indexDoc =
-			tx_mksearch_util_Indexer::getInstance()
-				->indexModelByMapping(
-				$model, $recordIndexMapping, $indexDoc, $prefix, $options
+			tx_mksearch_util_Indexer::getInstance()->indexModelByMapping(
+				$model, $recordIndexMapping, $indexDoc,
+				$prefix, $options, $dontIndexHidden
 			);
 	}
 
@@ -221,17 +222,19 @@ abstract class tx_mksearch_indexer_Base
 	 * @param array $recordIndexMapping
 	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
 	 * @param string $prefix
+	 * @param array $options
+	 * @param boolean $dontIndexHidden
 	 * @return void
 	 */
 	protected function indexArrayOfModelsByMapping(
 		array $models, array $recordIndexMapping,
 		tx_mksearch_interface_IndexerDocument $indexDoc,
-		$prefix = ''
+		$prefix = '', array $options = array(), $dontIndexHidden = TRUE
 	) {
 		$indexDoc =
-			tx_mksearch_util_Indexer::getInstance()
-				->indexArrayOfModelsByMapping(
-				$models, $recordIndexMapping, $indexDoc, $prefix
+			tx_mksearch_util_Indexer::getInstance()->indexArrayOfModelsByMapping(
+				$models, $recordIndexMapping, $indexDoc,
+				$prefix, $options, $dontIndexHidden
 			);
 	}
 
