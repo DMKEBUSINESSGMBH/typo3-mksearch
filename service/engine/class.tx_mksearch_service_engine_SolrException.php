@@ -3,7 +3,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2011 René Nitzche <nitzsche@das-medienkombinat.de>
+ *  (c) 2011 René Nitzche <dev@dmk-ebusiness.de>
  *  All rights reserved
  *
  * This library is free software; you can redistribute it and/or

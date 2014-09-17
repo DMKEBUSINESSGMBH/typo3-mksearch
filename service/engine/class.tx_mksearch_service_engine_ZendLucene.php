@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2009 Lars Heber <lars.heber@das-medienkombinat.de>
+*  (c) 2009 Lars Heber <dev@dmk-ebusiness.de>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -33,7 +33,7 @@ tx_rnbase::load('tx_mksearch_service_engine_lucene_DataTypeMapper');
 /**
  * Service "ZendLucene search engine" for the "mksearch" extension.
  *
- * @author	Lars Heber <lars.heber@das-medienkombinat.de>
+ * @author	Lars Heber <dev@dmk-ebusiness.de>
  * @package	TYPO3
  * @subpackage	tx_mksearch
  */

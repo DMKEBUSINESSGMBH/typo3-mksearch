@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2010 Lars Heber <lars.heber@das-medienkombinat.de>
+*  (c) 2010 Lars Heber <dev@dmk-ebusiness.de>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,7 +29,7 @@ tx_rnbase::load('tx_mksearch_interface_DataProvider');
 /**
  * DataProvider class to lookup data from database
  *
- * @author	Lars Heber <lars.heber@das-medienkombinat.de>
+ * @author	Lars Heber <dev@dmk-ebusiness.de>
  * @package	TYPO3
  * @subpackage	tx_mksearch
  */

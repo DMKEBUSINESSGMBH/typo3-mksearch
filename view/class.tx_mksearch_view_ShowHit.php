@@ -5,7 +5,7 @@
  *
  * Copyright notice
  *
- * (c) 2013 das MedienKombinat GmbH <kontakt@das-medienkombinat.de>
+ * (c) 2013 DMK E-Business GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
  *
  * This script is part of the TYPO3 project. The TYPO3 project is
@@ -34,7 +34,7 @@ tx_rnbase::load('tx_rnbase_view_Single');
  *
  * @package tx_mksearch
  * @subpackage tx_mksearch_view
- * @author Michael Wagner <michael.wagner@das-medienkombinat.de>
+ * @author Michael Wagner <dev@dmk-ebusiness.de>
  */
 class tx_mksearch_view_ShowHit extends tx_rnbase_view_Single {
 

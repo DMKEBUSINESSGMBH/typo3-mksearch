@@ -5,7 +5,7 @@
  *
  *  Copyright notice
  *
- *  (c) 2011 das MedienKombinat GmbH <kontakt@das-medienkombinat.de>
+ *  (c) 2011 DMK E-Business GmbH <dev@dmk-ebusiness.de>
  *  All rights reserved
  *
  * This library is free software; you can redistribute it and/or
@@ -31,7 +31,7 @@ tx_rnbase::load('tx_rnbase_util_SearchBase');
  *
  * @package tx_mksearch
  * @subpackage tx_mksearch_search
- * @author Michael Wagner <michael.wagner@das-medienkombinat.de>
+ * @author Michael Wagner <dev@dmk-ebusiness.de>
  */
 class tx_mksearch_search_Keyword extends tx_rnbase_util_SearchBase {
 

@@ -2,11 +2,11 @@
 /**
  * 	@package tx_mksearch
  *  @subpackage tx_mksearch_indexer
- *  @author Hannes Bochmann <hannes.bochmann@das-medienkombinat.de>
+ *  @author Hannes Bochmann <dev@dmk-ebusiness.de>
  *
  *  Copyright notice
  *
- *  (c) 2011 Hannes Bochmann <hannes.bochmann@das-medienkombinat.de>
+ *  (c) 2011 Hannes Bochmann <dev@dmk-ebusiness.de>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -38,7 +38,7 @@ tx_rnbase::load('tx_mksearch_util_Misc');
 /**
  * Just a wrapper for the different tt_content indexers.
  * it's a facade.
- * @author Hannes Bochmann <hannes.bochmann@das-medienkombinat.de>
+ * @author Hannes Bochmann <dev@dmk-ebusiness.de>
  */
 class tx_mksearch_indexer_TtContent implements tx_mksearch_interface_Indexer {
 

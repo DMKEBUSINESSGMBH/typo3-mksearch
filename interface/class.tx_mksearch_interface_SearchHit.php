@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2013 Michael Wagner <michael.wagner@das-medienkombinat.de>
+*  (c) 2013 Michael Wagner <dev@dmk-ebusiness.de>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -25,7 +25,7 @@
 /**
  * Interface for search engine services for the "mksearch" extension.
  *
- * @author Michael Wagner <michael.wagner@das-medienkombinat.de>
+ * @author Michael Wagner <dev@dmk-ebusiness.de>
  * @package TYPO3
  * @subpackage tx_mksearch
  */

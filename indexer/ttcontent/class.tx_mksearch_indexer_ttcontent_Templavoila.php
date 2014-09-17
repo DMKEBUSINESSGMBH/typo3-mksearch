@@ -2,11 +2,11 @@
 /**
  * 	@package tx_mksearch
  *  @subpackage tx_mksearch_indexer
- *  @author Hannes Bochmann <hannes.bochmann@das-medienkombinat.de>
+ *  @author Hannes Bochmann <dev@dmk-ebusiness.de>
  *
  *  Copyright notice
  *
- *  (c) 2011 Hannes Bochmann <hannes.bochmann@das-medienkombinat.de>
+ *  (c) 2011 Hannes Bochmann <dev@dmk-ebusiness.de>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -38,7 +38,7 @@ tx_rnbase::load('tx_mksearch_indexer_ttcontent_Normal');
  * @todo wenn templavoila installiert ist, sollten allen elemente, die in einem tv
  * container liegen in die queue gelegt werden. beim indizieren muss dann noch geprüft
  * werden ob das element parents hat und diese nicht hidden sind.
- * @author Hannes Bochmann <hannes.bochmann@das-medienkombinat.de>
+ * @author Hannes Bochmann <dev@dmk-ebusiness.de>
  */
 class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttcontent_Normal {
 	/**

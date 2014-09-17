@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2012 das Medienkombinat <kontakt@das-medienkombinat.de>
+*  (c) 2012 das Medienkombinat <dev@dmk-ebusiness.de>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -27,7 +27,7 @@ tx_rnbase::load('tx_rnbase_configurations');
 tx_rnbase::load('tx_mksearch_util_ServiceRegistry');
 
 /**
- * @author Hannes Bochmann <hannes.bochmann@das-medienkombinat.de>
+ * @author Hannes Bochmann <dev@dmk-ebusiness.de>
  * @package TYPO3
  * @subpackage tx_mksearch
  */
