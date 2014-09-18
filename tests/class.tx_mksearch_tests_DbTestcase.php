@@ -50,7 +50,7 @@ abstract class tx_mksearch_tests_DbTestcase
 	/**
 	 * @var array
 	 */
-	protected $addRootLineFieldsBackup = array();
+	protected $addRootLineFieldsBackup = '';
 
 	/**
 	 * Liste der extensions, welche in die test DB importiert werden müssen.
