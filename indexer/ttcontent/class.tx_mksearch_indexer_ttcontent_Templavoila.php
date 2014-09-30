@@ -57,35 +57,50 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
 
 	/**
 	 * Sets the index doc to deleted if neccessary
+	 *
 	 * @param tx_rnbase_IModel $oModel
 	 * @param tx_mksearch_interface_IndexerDocument $oIndexDoc
+	 * @param array $aOptions
 	 * @return bool
 	 */
-	protected function hasDocToBeDeleted(tx_rnbase_IModel $oModel, tx_mksearch_interface_IndexerDocument $oIndexDoc, $aOptions = array()) {
-		//if we got not a single reference, even not the element itself, it should be deleted
+	protected function hasDocToBeDeleted(
+		tx_rnbase_IModel $oModel,
+		tx_mksearch_interface_IndexerDocument $oIndexDoc,
+		$aOptions = array()
+	) {
+
+		// if we got not a single reference,
+		// even not the element itself, it should be deleted
 		if (empty($this->aIndexableReferences)) {
-			return true;
+			return TRUE;
 		}
 
-		//now we have to check if at least one reference remains that has not to be deleted.
+		// now we have to check if at least one reference
+		// remains that has not to be deleted.
 		$aStillIndexableReferences = array();
-		foreach($this->aIndexableReferences as $iPid) {
-			//set the pid
+		foreach ($this->aIndexableReferences as $iPid) {
+				// set the pid
 			$oModel->record['pid'] = $iPid;
 
-			if (!parent::hasDocToBeDeleted($oModel, $oIndexDoc, $aOptions))
-				$aStillIndexableReferences[$iPid] = $iPid;//set value as key to avoid doubles
+			if (!parent::hasDocToBeDeleted($oModel, $oIndexDoc, $aOptions)) {
+					// set value as key to avoid doubles
+				$aStillIndexableReferences[$iPid] = $iPid;
+			}
 		}
 
-		//any valid references left?
-		if(empty($aStillIndexableReferences)){
-			return true;
-		}else//finally set the pid of the first reference to our element
-			//as we can not know which array index is the first we simply use
-			//array_shift which returns the first off shifted element, our desired first one
+			// any valid references left?
+		if (empty($aStillIndexableReferences)) {
+			return TRUE;
+		}
+			// finally set the pid of the first reference to our element
+			// as we can not know which array index is the first we simply use
+			// array_shift which returns the first off shifted element,
+			// our desired first one
+		else {
 			$oModel->record['pid'] = array_shift($aStillIndexableReferences);
-		//else
-		return false;
+		}
+
+		return FALSE;
 	}
 
 	/**
@@ -96,31 +111,31 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
 	 * @return array
 	 */
 	protected function getReferences(tx_rnbase_IModel $oModel) {
-		//so we have to fetch all references
-		//we just need to check this table for entries for this element
+			// so we have to fetch all references
+			// we just need to check this table for entries for this element
 		$aSqlOptions = array(
-			'where' => 'ref_table='.$GLOBALS['TYPO3_DB']->fullQuoteStr('tt_content','sys_refindex').
-					' AND ref_uid='.intval($oModel->getUid()).
+			'where' => 'ref_table=' . $GLOBALS['TYPO3_DB']->fullQuoteStr('tt_content', 'sys_refindex') .
+					' AND ref_uid=' . (int) $oModel->getUid() .
 					' AND deleted=0',
-			'enablefieldsoff' => TRUE
+			'enablefieldsoff' => TRUE,
 		);
 		$aFrom = array('sys_refindex', 'sys_refindex');
-		$aRows = tx_rnbase_util_DB::doSelect('*', $aFrom, $aSqlOptions);
+		$aRows = tx_rnbase_util_DB::doSelect('tablename, recuid', $aFrom, $aSqlOptions);
 
-		//now we need to collect the pids of all references. either a
-		//reference is a page than we simply use it's pid or the
-		//reference is another tt_content. in the last case we take the pid of
-		//this element
+			// now we need to collect the pids of all references. either a
+			// reference is a page than we simply use it's pid or the
+			// reference is another tt_content.
+			// in the last case we take the pid of this element
 		$aReferences = array();
-		if(!empty($aRows)){
-			foreach ($aRows as $aRow){
-				if($aRow['tablename'] == 'pages'){
+		if (!empty($aRows)) {
+			foreach ($aRows as $aRow) {
+				if ($aRow['tablename'] == 'pages') {
 					$aReferences[] = $aRow['recuid'];
 				}
-				elseif ($aRow['tablename'] == 'tt_content'){
+				elseif ($aRow['tablename'] == 'tt_content') {
 					$aSqlOptions = array(
 						'where' => 'tt_content.uid=' . $aRow['recuid'],
-						//checks for being hidden/deleted are made later
+							// checks for being hidden/deleted are made later
 						'enablefieldsoff' => TRUE,
 					);
 					$aFrom = array('tt_content', 'tt_content');
@@ -133,8 +148,16 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
 		return $aReferences;
 	}
 
+
 	/**
-	 * @see tx_mksearch_indexer_Base::isIndexableRecord()
+	 * Prüft ob das Element speziell in einem Seitenbaum oder auf einer Seite liegt,
+	 * der/die inkludiert oder ausgeschlossen werden soll.
+	 * Der Entscheidungsbaum dafür ist relativ, sollte aber durch den Code
+	 * illustriert werden.
+	 *
+	 * @param array $sourceRecord
+	 * @param array $options
+	 * @return bool
 	 */
 	protected function isIndexableRecord(array $sourceRecord, array $options) {
 		$this->aIndexableReferences = array();
@@ -165,18 +188,23 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
 	/**
 	 * Returns the model to be indexed
 	 *
-	 * @param array $aRawData
+	 * @param array $rawData
+	 * @param string $tableName
+	 * @param array $options
 	 * @return tx_mksearch_model_irfaq_Question
 	 */
-	protected function createModel(array $aRawData) {
-		$oModel = parent::createModel($aRawData);
-			// we need all references this element has for later checks
-		$this->aReferences = $this->getReferences($oModel);
+	protected function createModel(array $rawData, $tableName = NULL, $options = array()) {
+		$model = parent::createModel($rawData, $tableName, $options);
 
-		return $oModel;
+			// we need all references this element has for later checks
+		$this->aReferences = $this->getReferences($model);
+
+		return $model;
 	}
 
 	/**
+	 * fetches the content of an tv element
+	 *
 	 * @return string
 	 */
 	protected function getTemplavoilaElementContent() {
@@ -194,8 +222,9 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
 	}
 
 	/**
-	 * @param int $pid
+	 * initializes the tsfe for the tv elements
 	 *
+	 * @param int $pid
 	 * @return void
 	 */
 	private function initTsForFrontend($pid) {
@@ -217,8 +246,10 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
 	}
 
 	/**
-	 * Die Indizierung wird von verschiedenen Pfaden aus aufgerufen. (CLI, BE Modul, Scheduler)
-	 * Im FE ist der Pfad immer tslib worauf alle includeLibs Pfade ausgerichtet sind.
+	 * Die Indizierung wird von verschiedenen Pfaden aus aufgerufen.
+	 * (CLI, BE Modul, Scheduler)
+	 * Im FE ist der Pfad immer tslib
+	 * worauf alle includeLibs Pfade ausgerichtet sind.
 	 * Wir haben aber nicht den immer gleichen Pfad beim
 	 * TV rendering im BE und daher müssen wir die relativen includeLibs Pfade
 	 * um einen Prefix ergänzen damit das inkludieren fkt.
@@ -226,17 +257,18 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
 	 * @return void
 	 */
 	private function adjustIncludeLibsPathForBe() {
-		foreach ($GLOBALS['TSFE']->tmpl->setup['plugin.'] as $pluginConfigPath => $pluginConfig) {
-			if(
+		$ts = &$GLOBALS['TSFE']->tmpl->setup['plugin.'];
+		foreach ($ts as $pluginConfig) {
+			if (
 				!is_array($pluginConfig) ||
 				!isset($pluginConfig['includeLibs']) ||
-				//solche pfade werden später von TYPO3 korrekt aufgelöst
+				// solche pfade werden später von TYPO3 korrekt aufgelöst
 				strpos($pluginConfig['includeLibs'],'EXT:') !== false
 			) {
 				continue;
 			}
 
-			//vom fileCache werden Dateien zu erst abgerufen
+				// vom fileCache werden Dateien zu erst abgerufen
 			$filehash = md5($pluginConfig['includeLibs']);
 			$GLOBALS['TSFE']->tmpl->fileCache[$filehash] =
 				$this->getRelativePathPrefixFromCurrentExecutionDirToWebroot() . $pluginConfig['includeLibs'];
@@ -244,17 +276,19 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
 	}
 
 	/**
+	 * get the relative path prefix from current execution dir to webroot
+	 *
 	 * @return string
 	 */
 	private function getRelativePathPrefixFromCurrentExecutionDirToWebroot() {
-		//indexing via Scheduler in CLI
+		// indexing via Scheduler in CLI
 		if (defined('TYPO3_cliMode'))
 		{
-			//somewhere inside typo3 but not in webroot
+			// somewhere inside typo3 but not in webroot
 			if(strlen(getcwd()) > strlen(PATH_site)) {
 				$relativePathInsideTypo3 = str_replace(PATH_site, '', getcwd());
-				//we need to find out how many levels we need to go up from here
-				//to the webroot
+				// we need to find out how many levels we need to go up from here
+				// to the webroot
 				$pathParts = explode('/', $relativePathInsideTypo3);
 				$relativePathPrefixFromExecutionDir = str_repeat('../', count($pathParts));
 			}
@@ -267,14 +301,14 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
 				$relativePathPrefixFromExecutionDir = '';
 			}
 		}
-		//indexing via Scheduler in BE
-		//script executed in /typo3
+		// indexing via Scheduler in BE
+		// script executed in /typo3
 		elseif(strpos(PATH_thisScript,'typo3/mod.php') !== false)
 		{
 			$relativePathPrefixFromExecutionDir = '../';
 		}
-		//indexing via mksearch BE module
-		//script executed in /typo3/sysext/cms/tslib
+		// indexing via mksearch BE module
+		// script executed in /typo3/sysext/cms/tslib
 		else
 		{
 			$relativePathPrefixFromExecutionDir = '../../../../';

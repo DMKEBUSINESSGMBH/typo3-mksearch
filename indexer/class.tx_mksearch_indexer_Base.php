@@ -98,7 +98,7 @@ abstract class tx_mksearch_indexer_Base
 		}
 
 		// get a model from the source array
-		$this->modelToIndex = $this->createModel($rawData);
+		$this->modelToIndex = $this->createModel($rawData, $tableName, $options);
 
 		// Is the model valid and data indexable?
 		if (
@@ -241,24 +241,17 @@ abstract class tx_mksearch_indexer_Base
 	/**
 	 * Sets the index doc to deleted if neccessary
 	 *
-	 * @param tx_rnbase_IModel $model
+	 * @param tx_rnbase_model_base $model
 	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
 	 * @param array $options
 	 * @return bool
 	 */
 	protected function hasDocToBeDeleted(tx_rnbase_IModel $model, tx_mksearch_interface_IndexerDocument $indexDoc, $options = array()) {
-		// @FIXME hidden und deleted sind enablecolumns,
-		// können jeden belibigen Namen tragen und stehen in der tca.
-		// @see tx_mklib_util_TCA::getEnableColumn
-		// $deletedField = $GLOBALS['TCA'][$model->getTableName()]['ctrl']['enablecolumns']['delete'];
-		// $disabledField = $GLOBALS['TCA'][$model->getTableName()]['ctrl']['enablecolumns']['disabled'];
-		// wäre vlt. auch was für rn_base,
-		// das model könnte diese informationen ja bereit stellen!
 		if (
 			!$model ||
 			!$model->isValid() ||
-			$model->record['hidden'] == 1 ||
-			$model->record['deleted'] == 1
+			$model->isHidden() ||
+			$model->isDeleted()
 		) {
 			return TRUE;
 		}
@@ -581,12 +574,25 @@ CONFIG;
 	}
 
 	/**
-	 * Returns the model to be indexed
+	 * Returns the model to be indexed,
+	 * The indexer should override this method to return a specific model
 	 *
 	 * @param array $rawData
+	 * @param string $tableName
+	 * @param array $options
 	 * @return tx_rnbase_IModel
 	 */
-	protected abstract function createModel(array $rawData);
+	protected function createModel(array $rawData, $tableName = NULL, $options = array()) {
+		/* @var $model tx_rnbase_model_Base */
+		$model = tx_rnbase::makeInstance(
+			'tx_rnbase_model_Base',
+			$rawData
+		);
+		if (!empty($tableName)) {
+			$model->setTableName($tableName);
+		}
+		return $model;
+	}
 
 	/**
 	 * Do the actual indexing for the given model
