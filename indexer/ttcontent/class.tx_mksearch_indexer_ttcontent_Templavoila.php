@@ -102,7 +102,7 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
 			'where' => 'ref_table='.$GLOBALS['TYPO3_DB']->fullQuoteStr('tt_content','sys_refindex').
 					' AND ref_uid='.intval($oModel->getUid()).
 					' AND deleted=0',
-			'enablefieldsoff' => true
+			'enablefieldsoff' => TRUE
 		);
 		$aFrom = array('sys_refindex', 'sys_refindex');
 		$aRows = tx_rnbase_util_DB::doSelect('*', $aFrom, $aSqlOptions);
@@ -120,7 +120,8 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
 				elseif ($aRow['tablename'] == 'tt_content'){
 					$aSqlOptions = array(
 						'where' => 'tt_content.uid=' . $aRow['recuid'],
-						'enablefieldsoff' => true//checks for being hidden/deleted are made later
+						//checks for being hidden/deleted are made later
+						'enablefieldsoff' => TRUE,
 					);
 					$aFrom = array('tt_content', 'tt_content');
 					$aNewRows = tx_rnbase_util_DB::doSelect('tt_content.pid', $aFrom, $aSqlOptions);
@@ -136,25 +137,27 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
 	 * @see tx_mksearch_indexer_Base::isIndexableRecord()
 	 */
 	protected function isIndexableRecord(array $sourceRecord, array $options) {
-		$this->aIndexableReferences = array();//init
+		$this->aIndexableReferences = array();
 
-		//we have to do the checks for all references and collect the indexable ones
-		$return = false;
-		if(!empty($this->aReferences)){
-			foreach($this->aReferences as $iPid) {
-				//set the pid
+			// we have to do the checks for all references and collect the indexable ones
+		$return = FALSE;
+		if (!empty($this->aReferences)) {
+			foreach ($this->aReferences as $iPid) {
+					// set the pid
 				$sourceRecord['pid'] = $iPid;
 
-				if(	parent::isIndexableRecord($sourceRecord, $options) ) {
-					$return = true;//as soon as we have a indexable reference we are fine
-					//collect this pid as indexable
+				if (parent::isIndexableRecord($sourceRecord, $options)) {
+						// as soon as we have a indexable reference we are fine
+					$return = TRUE;
+						// collect this pid as indexable
 					$this->aIndexableReferences[$iPid] = $iPid;
 				}
 			}
-		}else
-			//without any references this element is indexable but will be
-			//deleted later
-			$return = true;
+		} else {
+				// without any references this element is indexable but will be
+				// deleted later
+			$return = TRUE;
+		}
 
 		return $return;
 	}
@@ -163,12 +166,11 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
 	 * Returns the model to be indexed
 	 *
 	 * @param array $aRawData
-	 *
 	 * @return tx_mksearch_model_irfaq_Question
 	 */
 	protected function createModel(array $aRawData) {
 		$oModel = parent::createModel($aRawData);
-		//we need all references this element has for later checks
+			// we need all references this element has for later checks
 		$this->aReferences = $this->getReferences($oModel);
 
 		return $oModel;
@@ -198,19 +200,20 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
 	 */
 	private function initTsForFrontend($pid) {
 		tx_rnbase::load('tx_rnbase_util_Misc');
-		tx_rnbase_util_Misc::prepareTSFE(
+		$tsfe = tx_rnbase_util_Misc::prepareTSFE(
 			array(
-				'force' => true,
+				'force' => TRUE,
 				'pid'	=> $pid
 			)
 		);
 
 		tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
-		$rootlineByPid =
-			tx_mksearch_service_indexer_core_Config::getRootLine($pid);
+		$rootlineByPid = tx_mksearch_service_indexer_core_Config::getRootLine($pid);
 
-		$GLOBALS['TSFE']->tmpl->start($rootlineByPid);
-		$GLOBALS['TSFE']->rootLine = $rootlineByPid;
+			// disable cache for be indexing!
+		$tsfe->no_cache = TRUE;
+		$tsfe->tmpl->start($rootlineByPid);
+		$tsfe->rootLine = $rootlineByPid;
 	}
 
 	/**
