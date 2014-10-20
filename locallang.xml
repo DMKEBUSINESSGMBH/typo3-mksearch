@@ -81,5 +81,42 @@
 			
 			<label index="ERROR_default">Es gab einen unerwarteten Fehler!</label>
 		</languageKey>
+		<languageKey index="nl" type="array">
+			<label index="label_search_foundresults">Aantal resultaten gevonden:</label>
+			<label index="label_search_term_was">Termijn was:</label>
+			<label index="label_search_term">Term</label>
+			<label index="label_search_searchterm">Zoeken</label>
+			<label index="label_search_options">Opties:</label>
+			<label index="label_search_options_standard">standaard zoek:</label>
+			<label index="label_search_options_standard_label">Gebruik dit type voor de standaard zoekopties.</label>
+			<label index="label_search_options_standard_hint">Let op: U kunt afzonderlijke woorden prepend met een "-" om documenten met dit woord uit te sluiten.</label>
+			
+			<label index="label_search_options_standard_combination">Combinatie:</label>
+			<label index="label_search_options_standard_combination_none">None</label>
+			<label index="label_search_options_standard_combination_free">Vrije syntaxis</label>
+			<label index="label_search_options_standard_combination_or">Zoek ofwel woord</label>
+			<label index="label_search_options_standard_combination_and">Zoek naar alle woorden</label>
+			<label index="label_search_options_standard_combination_exact">Zoek exacte zin</label>
+
+			<label index="label_search_options_standard_others">Anderen:</label>
+			<label index="label_search_options_standard_others_fuzzy">Fuzzy zoeken</label>
+			<label index="label_search_options_standard_others_fuzzy_lucene">Fuzzy zoeken (not yet implemented!)</label>
+			
+			<label index="label_search_options_standard_others_contenttypes">Zoeken binnen slechts types inhoud (not yet implemented!)</label>
+
+			
+			<label index="label_search_options_advanced">Aeavanceerd zoeken:</label>
+			<label index="label_search_options_advanced_label">Gebruik dit type als u complexe (boolean) zoekopdrachten vormen.</label>
+
+			<label index="label_search_submit">Zoek indienen</label>
+			<label index="label_search_yoursearchtermwas">Uw zoekterm was:</label>
+			<label index="label_search_readmore">lees meer</label>
+			<label index="label_search_readmorefaqs">lees meer gerelateerde vragen</label>
+			<label index="label_search_noresultsfound"><![CDATA[<div class="noResultsFound">Uw zoekopdracht heeft geen resultaten.</div>]]></label>
+			
+			<label index="label_search_reset">reset Zoeken</label>
+			
+			<label index="ERROR_default">Er is een onverwachte fout opgetreden!</label>
+		</languageKey>
 	</data>
 </T3locallang>
