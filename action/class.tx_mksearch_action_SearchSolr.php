@@ -100,7 +100,13 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 		// auch einen debug ausgeben, wenn nichts gesucht wird
 		elseif ($options['debug']) {
 			tx_rnbase::load('tx_rnbase_util_Debug');
-			tx_rnbase_util_Debug::debug(array('Filter returns false, no search done.', $fields, $options), 'class.tx_mksearch_action_SearchSolr.php Line: '.__LINE__); // TODO: remove me
+			tx_rnbase_util_Debug::debug(
+				array(
+					'Filter returns false, no search done.',
+					$fields, $options
+				),
+				'class.tx_mksearch_action_SearchSolr.php Line: '.__LINE__
+			);
 		}
 		$viewData->offsetSet('result', $result);
 
@@ -173,6 +179,18 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 			if(tx_rnbase_util_Logger::isFatalEnabled()) {
 				tx_rnbase_util_Logger::fatal('Solr search failed with Exception!', 'mksearch',
 					array('Exception' => $e->getMessage(), 'fields'=>$fields, 'options' => $options, 'URL'=> $lastUrl));
+			}
+			if ($options['debug'])  {
+				tx_rnbase::load('tx_rnbase_util_Debug');
+				tx_rnbase_util_Debug::debug(
+					array(
+						'Exception' => $e->getMessage(),
+						'fields'=>$fields,
+						'options' => $options,
+						'URL'=> $lastUrl
+					),
+					'class.tx_mksearch_action_SearchSolr.php Line: '.__LINE__
+				);
 			}
 			if($configurations->getBool($this->getConfId().'throwSolrSearchException')) {
 				throw $e;
