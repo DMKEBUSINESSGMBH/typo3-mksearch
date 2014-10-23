@@ -628,7 +628,6 @@ plugin.tx_mksearch {
 	}
 }
 
-
 lib.mksearch.hit {
 	pagebrowser =< lib.mksearch.pagebrowser
 	extrainfo =< lib.mksearch.extrainfo 
@@ -643,6 +642,8 @@ lib.mksearch.hit {
 	#multiValuedGlue.noTrim.splitChar = 0
 	
 	subparts {
+		### set this to 0, to deactivate the simple template, to use only the extrainfo
+		simple.visible = 1
 		is_ttcontent {
 			### definiert die marker (optional).
 			marker {
