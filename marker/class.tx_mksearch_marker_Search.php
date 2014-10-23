@@ -162,7 +162,10 @@ class tx_mksearch_marker_Search extends tx_rnbase_util_SimpleMarker {
 	 */
 	protected function getInitFields($template, &$item, &$formatter, $confId, $marker) {
 		$fields = $formatter->getConfigurations()->get($confId.'initFields.');
-		return is_array($fields) ? $fields : array();
+		return array_merge(
+			$formatter->getConfigurations()->getExploded($confId.'initFields'),
+			is_array($fields) ? $fields : array()
+		);
 	}
 }
 
