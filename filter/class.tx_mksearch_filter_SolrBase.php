@@ -277,7 +277,6 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 	 */
 	protected function handleFq(&$options, &$parameters, &$configurations, $confId) {
 		self::addFilterQuery($options, self::getFilterQueryForFeGroups());
-
 		// die erlaubten felder holen
 		$allowedFqParams = $configurations->getExploded($confId.'allowedFqParams');
 		// wenn keine konfiguriert sind, nehmen wir automatisch die faccet fields
@@ -306,7 +305,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 					} else {
 						// field value konstelation prüfen
 						$fq = $this->parseFieldAndValue($fqValue, $allowedFqParams);
-						if (empty($fq) && !empty($fqField)) {
+						if (empty($fq) && !empty($fqField) && in_array($fqField, $allowedFqParams)) {
 							$fq  = tx_mksearch_util_Misc::sanitizeFq($fqField);
 							$fq .= ':"' . tx_mksearch_util_Misc::sanitizeFq($fqValue) . '"';
 						}
