@@ -117,7 +117,7 @@ class tx_mksearch_util_FacetBuilder {
 	 * @param int $count
 	 * @return tx_mksearch_model_Facet
 	 */
-	private function getSimpleFacet($field, $id, $count) {
+	protected function getSimpleFacet($field, $id, $count) {
 		if ($this->getKeyValueFacetInstance()->checkValue($id)) {
 			$exploded = $this->getKeyValueFacetInstance()->explodeFacetValue($id);
 			$id = $exploded['key'];
