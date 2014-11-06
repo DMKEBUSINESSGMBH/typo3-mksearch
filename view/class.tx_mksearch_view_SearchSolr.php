@@ -52,8 +52,16 @@ class tx_mksearch_view_SearchSolr extends tx_rnbase_view_Base {
 		$result =& $viewData->offsetGet('result');
 
 		//shall we parse the content just as json
-		if($configurations->getParameters()->get('ajax'))
+		if($configurations->getParameters()->get('ajax')) {
+			// if the frontend debug is enabled, so the json will be invalid.
+			// so we has to disable the debug.
+			$GLOBALS['TYPO3_CONF_VARS']['FE']['debug'] = 0;
+			tx_rnbase::load('tx_rnbase_util_TYPO3');
+			if (tx_rnbase_util_TYPO3::isTYPO60OrHigher()) {
+				$GLOBALS['TSFE']->TYPO3_CONF_VARS['FE']['debug'] = 0;
+			}
 			return json_encode($result);
+		}
 		//else
 
 		$items = $result ? $result['items'] : array();
