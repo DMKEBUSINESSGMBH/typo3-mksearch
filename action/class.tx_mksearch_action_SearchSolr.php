@@ -241,12 +241,16 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 	 */
 	function handlePageBrowser($parameters,$configurations, $confId, $viewdata, &$fields, &$options, $index) {
 		// handle page browser only, if configured and the limit is greater than one.
-		if($options['limit'] > 1 && is_array($conf = $configurations->get($confId.'hit.pagebrowser.'))) {
+		if(
+			(isset($options['limit']) || $options['limit'] > 1)
+			&& is_array($conf = $configurations->get($confId.'hit.pagebrowser.'))
+		) {
 			// PageBrowser initialisieren
 			$pageBrowserId = $conf['pbid'] ? $conf['pbid'] : 'search'.$configurations->getPluginId();
 			/* @var $pageBrowser tx_rnbase_util_PageBrowser */
 			$pageBrowser = tx_rnbase::makeInstance('tx_rnbase_util_PageBrowser', $pageBrowserId);
-			$pageSize = intval($conf['limit']);
+			// wenn bereits ein limit gesetzt ist, dann nutzen wir dieses, nicht das des pagebrowsers
+			$pageSize = isset($options['limit']) ? $options['limit'] : intval($conf['limit']);
 			if($conf['limitFromRequest']) {
 				$limitParam = $conf['limitFromRequest.']['param'] ? $conf['limitFromRequest.']['param'] : 'limit';
 				$limitQualifier = $conf['limitFromRequest.']['qualifier'] ? $conf['limitFromRequest.']['qualifier'] : '';
@@ -284,9 +288,9 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 				$listSize = $result['numFound'];
 			}
 			$pageBrowser->setState($parameters, $listSize, $pageSize);
-			$limit = $pageBrowser->getState();
+			$state = $pageBrowser->getState();
 
-			$options = array_merge($options, $limit);
+			$options = array_merge($options, $state);
 			$viewdata->offsetSet('pagebrowser', $pageBrowser);
 			return $pageBrowser;
 		}
