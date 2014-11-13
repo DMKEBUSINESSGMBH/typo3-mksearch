@@ -278,6 +278,16 @@ lib.mksearch.defaultsolrfilter {
 ###SORT_TITLE_ORDER### = asc
 ###SORT_TITLE_LINKURL### = index.php?mksearch[sort]=title&mksearch[sortorder]=asc
 ###SORT_TITLE_LINK### = wrappedArray mit dem A-Tag
+
+	### Konfiguration für die Umkreissuche
+	spatial {
+		### das feld in dem die koordinaten im solr doc zu finden sind (location_latlon).
+		sfield = 
+		default {
+			### die distanz für die Umkreissuche, falls der parameter mksearch[distance] leer ist.
+			distance = 50
+		}
+	}
 }
 
 plugin.tx_mksearch {

@@ -156,6 +156,8 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 		// fq (filter query) beachten
 		$this->handleFq($options, $parameters, $configurations, $confId);
 
+		// umkreissuche prüfen
+		$this->handleSpatial($fields, $options);
 
 		// Debug prüfen
 		if($configurations->get($this->getConfIdOverwrite().'options.debug'))
@@ -422,6 +424,87 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 		else $sFq = '';
 
 		return $sFq;
+	}
+
+	/**
+	 * Liefert die Koordinaten,
+	 * anhand der eine Umkreissuche durchgeführt werden soll.
+	 *
+	 * Dies muss Kommagetrennt ohne Leerzeichen geliefert werden:
+	 * "lat,lon" bzw. "50.83,12.93"
+	 *
+	 * Diese Methode sollte die Kindklasse überschreiben,
+	 * um Koordinaten zu liefern.
+	 *
+	 * @return string or false for no spatial search
+	 */
+	protected function getSpatialPoint() {
+		return FALSE;
+	}
+
+	/**
+	 * Liefert die Distanz in KM für die Umkreissuche.
+	 * Wird 0 geliefert, so wird der default value aus dem TS gezogen.
+	 *
+	 * @return integer
+	 */
+	protected function getSpatialDistance() {
+		return $this->getParameters()->getInt('distance');
+	}
+
+	/**
+	 * Prüft Filter for eine Umkreissuche.
+	 * Damit dies Funktioniert, muss in den Solr-Dokumenten ein Feld
+	 * mit den Koordionaten existieren. Siehe schema.xml dynamicField *_latlon
+	 *
+	 * Dieses Feld muss konfiguriert werden,
+	 * da darin die Umkreissuche stattfindet.
+	 *
+	 * @param array &$fields
+	 * @param array &$options
+	 */
+	protected function handleSpatial(&$fields, &$options) {
+		// Die Koordinaten, anhand der gesucht werden soll.
+		$point = $this->getSpatialPoint();
+		if (!$point) {
+			return;
+		}
+
+		$confId = $this->getConfId() . 'spatial.';
+		$configurations = $this->getConfigurations();
+
+		// wir prüfen das feld wo die koordinaten im solr liegen
+		$coordField = $configurations->get($confId . 'sfield');
+		if (empty($coordField)) {
+			return;
+		}
+		$options['sfield'] = $coordField;
+
+		// die distanz bzw. den umkreis für die umkreissuche ermitteln
+		$options['d'] = (int) $this->getSpatialDistance();
+		if (empty($options['d'])) {
+			$options['d'] = (int) $configurations->get($confId . 'default.distance');
+		}
+
+		$options['pt'] = $point;
+
+		// in die filter query muss nun noch der funktionsaufruf,
+		// um die ergebnisse zu filtern.
+		// @TODO: methode konfigurierbar machen ({!bbox}, {!geofilt}, ...)
+		self::addFilterQuery($options, '{!geofilt}');
+
+		// damit die ergebnisse auch nach umkreis sortiert werden können,
+		// muss eine distanzberechnung mit in die query
+		// &q={!func}recip(geodist(), 2, 200, 20)
+		// dabei müssen wir aufpassen, ob wir uns im dismax befinden oder nicht.
+		// wir schreiben die funktion direkt mit in den term,
+		// ggf. als neuen parameter.
+		$func = '{!func}recip(geodist(), 2, 200, 20)';
+		if (empty($fields['term'])) {
+			$fields['term'] = $func;
+		} else {
+			$fields['term'] = array($fields['term'], $func);
+		}
 	}
 
 	/**
