@@ -42,33 +42,65 @@ class tx_mksearch_hooks_IndexerAutoUpdate {
 	 */
 	public function processDatamap_afterAllOperations(t3lib_TCEmain $tce) {
 		// Nothing to do?
-		if (!count($tce->datamap)) return;
+		if (empty($tce->datamap)) return;
 
 		// @todo Make sensible for workspaces!
 		if ($tce->BE_USER->workspace !== 0) return;
 
-		return $this->processDatamap_afterAllOperationsNew($tce);
+		// daten sammeln
+		$records = array();
+		foreach ($tce->datamap as $table => $uids) {
+			$records[$table] = array();
+			foreach (array_keys($uids) as $uid) {
+				// New element?
+				if (!is_numeric($uid)) $uid = $tce->substNEWwithIDs[$uid];
+				$records[$table][] = (int) $uid;
+			}
+		}
+
+		return $this->processAutoUpdate($records);
 	}
 
-	private function processDatamap_afterAllOperationsNew(t3lib_TCEmain $tce) {
-		$intIndexSrv = tx_mksearch_util_ServiceRegistry::getIntIndexService();
-		// Cores suchen:
-		$indices = $intIndexSrv->findAll();
-		// Es ist nichts zu tun, da keine Cores definiert sind!
-		if(empty($indices))
-			return;
+	/**
+	 * check for updatable records and fill queue
+	 *
+	 * @param array $records
+	 *     array(
+	 *         'pages' => array('1', '2', '3'. '5', '8', '13'),
+	 *         'tt_content' => array('1', '2', '3'. '5', '8', '13'),
+	 *     );
+	 * @return NULL
+	 */
+	protected function processAutoUpdate(array $records) {
 
-		foreach ($tce->datamap as $table=>$records) {
-			if(strstr($table, 'tx_mksearch_') != false)
-				continue; // Ignore internal tables
-			if (empty($records))
+		if (empty($records)) {
+			return NULL;
+		}
+
+		// Cores suchen:
+		$intIndexSrv = $this->getIntIndexService();
+		$indices = $intIndexSrv->findAll();
+
+		// Es ist nichts zu tun, da keine Cores definiert sind!
+		if(empty($indices)) {
+			return NULL;
+		}
+
+		foreach ($records as $table => $uidList) {
+			if(strstr($table, 'tx_mksearch_') !== FALSE) {
+				// Ignore internal tables
 				continue;
+			}
+			if (empty($records)) {
+				continue;
+			}
 
 			// indexer besorgen
-			$indexers = tx_mksearch_util_Config::getIndexersForTable($table);
+			$indexers = $this->getIndexersForTable($table);
 			// Keine Indexer für diese Tabelle vorhanden.
-			if(empty($indexers))
+			if(empty($indexers)) {
 				continue;
+			}
 
 			// Prüfen, ob für diese Tabelle ein Indexer Definiert wurden.
 			$isDefined = false;
@@ -81,13 +113,13 @@ class tx_mksearch_hooks_IndexerAutoUpdate {
 				}
 			}
 			// In die Queue legen, wenn Indexer für die Tabelle existieren.
-			if($isDefined)
-				foreach (array_keys($records) as $uid) {
-					// New element?
-					if (!is_numeric($uid)) $uid = $tce->substNEWwithIDs[$uid];
+			if($isDefined) {
+				foreach ($uidList as $uid) {
 					$intIndexSrv->addRecordToIndex($table, $uid);
 				}
+			}
 		}
+		return NULL;
 	}
 
 	/**
@@ -132,6 +164,21 @@ class tx_mksearch_hooks_IndexerAutoUpdate {
 	 */
 	private function isPublishedToLiveWorkspace($commandValues) {
 		return ($commandValues['action'] === 'swap' && $commandValues['swapWith'] > 0);
+	}
+
+	/**
+	 * @param string $table
+	 * @return array
+	 */
+	protected function getIndexersForTable($table) {
+		return tx_mksearch_util_Config::getIndexersForTable($table);
+	}
+	/**
+	 *
+	 * @return tx_mksearch_service_internal_Index
+	 */
+	protected function getIntIndexService() {
+		return tx_mksearch_util_ServiceRegistry::getIntIndexService();
 	}
 }
 
