@@ -211,7 +211,11 @@ class tx_mksearch_hooks_IndexerAutoUpdate {
 		);
 		$rows = call_user_func_array('array_merge_recursive', $rows);
 
-		return $rows['uid'];
+		if (empty($rows['uid'])) {
+			return array();
+		}
+
+		return is_array($rows['uid']) ? $rows['uid'] : array($rows['uid']);
 	}
 
 	/**
