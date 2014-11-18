@@ -483,7 +483,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 		// die distanz bzw. den umkreis für die umkreissuche ermitteln
 		$options['d'] = (int) $this->getSpatialDistance();
 		if (empty($options['d'])) {
-			$options['d'] = (int) $configurations->get($confId . 'default.distance');
+			$options['d'] = $configurations->getInt($confId . 'default.distance');
 		}
 
 		$options['pt'] = $point;
