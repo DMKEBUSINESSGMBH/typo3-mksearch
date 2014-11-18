@@ -115,6 +115,108 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdate_testcase
 			array('tt_content' => array_keys($tce->datamap['tt_content']))
 		);
 	}
+	/**
+	 * @unit
+	 */
+	public function testRnBaseDoInsertPost() {
+		$hook = $this->getHookMock(
+			$service = $this->getMock('tx_mksearch_service_internal_Index')
+		);
+
+		$hookParams = array('tablename' => 'tt_content', 'uid' => 1);
+
+		$indices = array(
+			$this->getMock(
+				'tx_mksearch_model_internal_Index',
+				NULL,
+				array(
+					array('uid'=>1)
+				)
+			),
+		);
+
+		$service
+			->expects($this->once())
+			->method('findAll')
+			->will($this->returnValue($indices))
+		;
+		$service
+			->expects($this->once())
+			->method('isIndexerDefined')
+			->will($this->returnValue(TRUE))
+		;
+		$service
+			->expects($this->once())
+			->method('addRecordToIndex')
+			->with(
+				$this->equalTo($hookParams['tablename']),
+				$this->equalTo($hookParams['uid'])
+			)
+		;
+
+		$hook->rnBaseDoInsertPost($hookParams);
+	}
+	/**
+	 * @unit
+	 */
+	public function testRnBaseDoUpdatePost() {
+		$hook = $this->getHookMock(
+			$service = $this->getMock('tx_mksearch_service_internal_Index')
+		);
+
+		$hookParams = array(
+			'tablename' => 'tt_content',
+			'where' => 'deleted = 0'
+		);
+
+		$hook
+			->expects($this->once())
+			->method('getUidsByWhereClause')
+			->with(
+				$this->equalTo($hookParams['tablename']),
+				$this->equalTo($hookParams['where'])
+			)
+			->will($this->returnValue(array('1', '2')))
+		;
+
+		$indices = array(
+			$this->getMock(
+				'tx_mksearch_model_internal_Index',
+				NULL,
+				array(
+					array('uid'=>1)
+				)
+			),
+		);
+
+		$service
+			->expects($this->once())
+			->method('findAll')
+			->will($this->returnValue($indices))
+		;
+		$service
+			->expects($this->once())
+			->method('isIndexerDefined')
+			->will($this->returnValue(TRUE))
+		;
+		$service
+			->expects($this->exactly(2))
+			->method('addRecordToIndex')
+			->with(
+				$this->equalTo($hookParams['tablename']),
+				$this->logicalOr($this->equalTo(1), $this->equalTo(2))
+			)
+		;
+
+		$hook->rnBaseDoUpdatePost($hookParams);
+	}
+	/**
+	 * @unit
+	 */
+	public function testRnBaseDoDeletePre() {
+		// use the same method as doUpdate
+		$this->testRnBaseDoUpdatePost();
+	}
 
 	/**
 	 * @return PHPUnit_Framework_MockObject_MockObject|tx_mksearch_hooks_IndexerAutoUpdate;
@@ -124,7 +226,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdate_testcase
 
 		$hook = $this->getMock(
 			'tx_mksearch_hooks_IndexerAutoUpdate',
-			array('getIntIndexService', 'getIndexersForTable')
+			array('getIntIndexService', 'getIndexersForTable', 'getUidsByWhereClause')
 		);
 
 		$hook

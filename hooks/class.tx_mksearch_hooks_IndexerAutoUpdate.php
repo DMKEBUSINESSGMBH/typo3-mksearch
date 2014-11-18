@@ -62,6 +62,56 @@ class tx_mksearch_hooks_IndexerAutoUpdate {
 	}
 
 	/**
+	 * rn_base hook nachdem ein insert durchgeführt wurde.
+	 * Requires rn_base 0.14.6
+	 *
+	 * @param array &$params
+	 * @return NULL
+	 */
+	public function rnBaseDoInsertPost(&$params) {
+		return $this->processAutoUpdate(
+			array(
+				$params['tablename'] => array(
+					$params['uid']
+				)
+			)
+		);
+	}
+
+	/**
+	 * rn_base hook nachdem ein Update durchgeführt wurde.
+	 * Requires rn_base 0.14.6
+	 *
+	 * @param array &$params
+	 * @return NULL
+	 */
+	public function rnBaseDoUpdatePost(&$params) {
+		return $this->processAutoUpdate(
+			array(
+				$params['tablename'] => array(
+					// set the uid, id there is one
+					// otherwise use the whereclause!
+					empty($params['values']['uid'])
+						? $params['where']
+						: $params['values']['uid']
+				)
+			)
+		);
+	}
+
+	/**
+	 * rn_base hook nachdem ein Update durchgeführt wurde.
+	 * Requires rn_base 0.14.6
+	 *
+	 * @param array &$params
+	 * @return NULL
+	 */
+	public function rnBaseDoDeletePre(&$params) {
+		// use the same method as doUpdate
+		return $this->rnBaseDoUpdatePost($params);
+	}
+
+	/**
 	 * check for updatable records and fill queue
 	 *
 	 * @param array $records
@@ -115,11 +165,53 @@ class tx_mksearch_hooks_IndexerAutoUpdate {
 			// In die Queue legen, wenn Indexer für die Tabelle existieren.
 			if($isDefined) {
 				foreach ($uidList as $uid) {
-					$intIndexSrv->addRecordToIndex($table, $uid);
+					$this->addRecordToIndex($table, $uid);
 				}
 			}
 		}
 		return NULL;
+	}
+
+	/**
+	 * fügt einen datensatz für die indizierung in die queu.
+	 *
+	 * @param string $table
+	 * @param mixed $data uid or where clause
+	 * @return boolean
+	 */
+	protected function addRecordToIndex($table, $data) {
+		// hier kann ein string mit einer where clause enthalten sein
+		// dann müssen wir uns erst die uids aus der DB holen
+		if (!is_numeric($data)) {
+			$rows = $this->getUidsByWhereClause($table, $data);
+			foreach ($rows as $uid) {
+				$this->addRecordToIndex($table, $uid);
+			}
+			return TRUE;
+		}
+		$intIndexSrv = $this->getIntIndexService();
+		return $intIndexSrv->addRecordToIndex($table, $data);
+	}
+
+	/**
+	 * versucht anhand eine where clause uids für die indizierung zu finden.
+	 *
+	 * @param string $where
+	 * @return array
+	 *
+	 * @TODO: how to ensure, $data is a valid where for sql?
+	 */
+	protected function getUidsByWhereClause($table, $where) {
+		$rows = tx_rnbase_util_DB::doSelect(
+			'uid', $table,
+			array(
+				'where' => $where,
+				'enablefieldsoff' => TRUE,
+			)
+		);
+		$rows = call_user_func_array('array_merge_recursive', $rows);
+
+		return $rows['uid'];
 	}
 
 	/**
