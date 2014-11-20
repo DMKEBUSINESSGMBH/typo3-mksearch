@@ -95,6 +95,21 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdate_testcase
 			),
 		);
 
+		$hook
+			->expects($this->exactly(count($tce->datamap['tt_content'])))
+			->method('getUidsToIndex')
+			->will($this->returnValueMap(
+				array(
+					array('tt_content', 1, array(1)),
+					array('tt_content', 2, array(2)),
+					array('tt_content', 3, array(3)),
+					array('tt_content', 5, array(5)),
+					array('tt_content', 8, array(8)),
+					array('tt_content', 13, array(13)),
+				)
+			))
+		;
+
 		$service
 			->expects($this->once())
 			->method('findAll')
@@ -114,6 +129,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdate_testcase
 			$hook, 'processAutoUpdate',
 			array('tt_content' => array_keys($tce->datamap['tt_content']))
 		);
+
 	}
 	/**
 	 * @unit
@@ -124,6 +140,16 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdate_testcase
 		);
 
 		$hookParams = array('tablename' => 'tt_content', 'uid' => 1);
+
+		$hook
+			->expects($this->once())
+			->method('getUidsToIndex')
+			->will($this->returnValueMap(
+				array(
+					array('tt_content', 1, array(1)),
+				)
+			))
+		;
 
 		$indices = array(
 			$this->getMock(
@@ -166,15 +192,26 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdate_testcase
 
 		$hookParams = array(
 			'tablename' => 'tt_content',
-			'where' => 'deleted = 0'
+			'where' => 'deleted = 0',
+			'values' => array('hidden' => '1'),
+			'options' => array(),
 		);
 
 		$hook
 			->expects($this->once())
-			->method('getUidsByWhereClause')
+			->method('getUidsToIndex')
 			->with(
-				$this->equalTo($hookParams['tablename']),
-				$this->equalTo($hookParams['where'])
+				$this->equalTo(
+					$hookParams['tablename']
+				),
+				$this->equalTo(
+					array(
+						'type' => 'select',
+						'from' => $hookParams['tablename'],
+						'where' => $hookParams['where'],
+						'options' => $hookParams['options'],
+					)
+				)
 			)
 			->will($this->returnValue(array('1', '2')))
 		;
@@ -226,7 +263,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdate_testcase
 
 		$hook = $this->getMock(
 			'tx_mksearch_hooks_IndexerAutoUpdate',
-			array('getIntIndexService', 'getIndexersForTable', 'getUidsByWhereClause')
+			array('getIntIndexService', 'getIndexersForTable', 'getUidsToIndex')
 		);
 
 		$hook

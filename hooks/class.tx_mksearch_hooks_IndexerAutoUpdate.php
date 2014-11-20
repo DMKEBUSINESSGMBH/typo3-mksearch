@@ -62,6 +62,43 @@ class tx_mksearch_hooks_IndexerAutoUpdate {
 	}
 
 	/**
+	 * Hook after performing different record actions in Typo3 backend:
+	 * Update indexes according to the just performed action
+	 *
+	 * @param string $command
+	 * @param string $table
+	 * @param int $id
+	 * @param int $value
+	 * @param t3lib_TCEmain $tce
+	 * @return void
+	 * @todo Treatment of any additional actions necessary?
+	 */
+	public function processCmdmap_postProcess($command, $table, $id, $value, t3lib_TCEmain $tce) {
+		$indexer = tx_mksearch_util_Config::getIndexersForDatabaseTable($table);
+		if (!count($indexer)) return;
+
+		$srv = tx_mksearch_util_ServiceRegistry::getIntIndexService();
+		switch ($command) {
+			case 'delete':
+			case 'undelete':
+			case 'move':
+				$srv->addRecordToIndex($table, $id, true);
+				break;
+			case 'copy':
+				// This task is still done by $this->processDatamap_afterAllOperations().
+				break;
+			// workspace action
+			case 'version':
+				if ($this->isPublishedToLiveWorkspace($value)) {
+					$srv->addRecordToIndex($table, $id);
+				}
+				break;
+			default:
+				break;
+		}
+	}
+
+	/**
 	 * rn_base hook nachdem ein insert durchgeführt wurde.
 	 * Requires rn_base 0.14.6
 	 *
@@ -86,17 +123,22 @@ class tx_mksearch_hooks_IndexerAutoUpdate {
 	 * @return NULL
 	 */
 	public function rnBaseDoUpdatePost(&$params) {
-		return $this->processAutoUpdate(
-			array(
-				$params['tablename'] => array(
-					// set the uid, id there is one
-					// otherwise use the whereclause!
-					empty($params['values']['uid'])
-						? $params['where']
-						: $params['values']['uid']
-				)
-			)
-		);
+		$table = $params['tablename'];
+		// wür müssen einen select machen, um die uid zu erfahren
+		if (empty($params['values']['uid'])) {
+			$data = array(
+				'type' => 'select',
+				'from' => $table,
+				'where' => $params['where'],
+				'options' => $params['options'],
+			);
+		}
+		// wir haben eine uid, die übergeben wir!
+		else {
+			$data = $params['values']['uid'];
+		}
+
+		return $this->processAutoUpdate(array($table => array($data)));
 	}
 
 	/**
@@ -180,79 +222,57 @@ class tx_mksearch_hooks_IndexerAutoUpdate {
 	 * @return boolean
 	 */
 	protected function addRecordToIndex($table, $data) {
-		// hier kann ein string mit einer where clause enthalten sein
-		// dann müssen wir uns erst die uids aus der DB holen
-		if (!is_numeric($data)) {
-			$rows = $this->getUidsByWhereClause($table, $data);
-			foreach ($rows as $uid) {
-				$this->addRecordToIndex($table, $uid);
-			}
-			return TRUE;
+		$rows = $this->getUidsToIndex($table, $data);
+
+		if (empty($rows)) {
+			return FALSE;
 		}
+
 		$intIndexSrv = $this->getIntIndexService();
-		return $intIndexSrv->addRecordToIndex($table, $data);
+		foreach ($rows as $uid) {
+			$intIndexSrv->addRecordToIndex($table, $uid);
+		}
+
+		return TRUE;
 	}
 
 	/**
-	 * versucht anhand eine where clause uids für die indizierung zu finden.
+	 * in $data kann eine uid oder ein array
+	 * mit beispielsweise einem notwendigen select stecken,
+	 * um die uids zu erfahren.
 	 *
-	 * @param string $where
+	 *
+	 * @param mixed $data
 	 * @return array
-	 *
-	 * @TODO: how to ensure, $data is a valid where for sql?
 	 */
-	protected function getUidsByWhereClause($table, $where) {
-		$rows = tx_rnbase_util_DB::doSelect(
-			'uid', $table,
-			array(
-				'where' => $where,
-				'enablefieldsoff' => TRUE,
-			)
-		);
-		$rows = call_user_func_array('array_merge_recursive', $rows);
+	protected function getUidsToIndex($table, $data) {
 
-		if (empty($rows['uid'])) {
-			return array();
+		if (is_numeric($data)) {
+			return array((int) $data);
 		}
 
-		return is_array($rows['uid']) ? $rows['uid'] : array($rows['uid']);
-	}
-
-	/**
-	 * Hook after performing different record actions in Typo3 backend:
-	 * Update indexes according to the just performed action
-	 *
-	 * @param string $command
-	 * @param string $table
-	 * @param int $id
-	 * @param int $value
-	 * @param t3lib_TCEmain $tce
-	 * @return void
-	 * @todo Treatment of any additional actions necessary?
-	 */
-	public function processCmdmap_postProcess($command, $table, $id, $value, t3lib_TCEmain $tce) {
-		$indexer = tx_mksearch_util_Config::getIndexersForDatabaseTable($table);
-		if (!count($indexer)) return;
-
-		$srv = tx_mksearch_util_ServiceRegistry::getIntIndexService();
-		switch ($command) {
-			case 'delete':
-			case 'undelete':
-			case 'move':
-				$srv->addRecordToIndex($table, $id, true);
-				break;
-			case 'copy':
-				// This task is still done by $this->processDatamap_afterAllOperations().
-				break;
-			// workspace action
-			case 'version':
-				if ($this->isPublishedToLiveWorkspace($value)) {
-					$srv->addRecordToIndex($table, $id);
+		//
+		if (is_array($data) && isset($data['type'])) {
+			if ($data['type'] === 'select') {
+				// no where? what todo?
+				if (empty($options['where']) && empty($data['where'])) {
+					return array();
 				}
-				break;
-			default:
-				break;
+				$from = empty($data['from']) ? $table : $data['from'];
+				$options = empty($data['options']) || !is_array($data['options']) ? array() : $data['options'];
+				$options['where'] = empty($options['where']) ? $data['where'] : $options['where'];
+				$options['enablefieldsoff'] = TRUE;
+				$rows = tx_rnbase_util_DB::doSelect('uid', $from, $options);
+				$rows = call_user_func_array('array_merge_recursive', $rows);
+				if (empty($rows['uid'])) {
+					return array();
+				}
+
+				return is_array($rows['uid']) ? $rows['uid'] : array($rows['uid']);
+			}
 		}
+
+		return array();
 	}
 
 	/**
