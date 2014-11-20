@@ -3,6 +3,9 @@ if (!defined ('TYPO3_MODE')) {
  	die ('Access denied.');
 }
 
+// prepare extension config
+$_EXTCONF = empty($_EXTCONF) ? array() : (is_array($_EXTCONF) ? $_EXTCONF : unserialize($_EXTCONF));
+
 // Include service configuration
 tx_rnbase::load('tx_mksearch_util_ServiceRegistry');
 require_once(t3lib_extMgm::extPath('mksearch').'service/ext_localconf.php');
@@ -21,12 +24,14 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['GLOBAL']['cliKeys'][$_EXTKEY] = array
 //	'EXT:' . $_EXTKEY . '/hooks/class.tx_mksearch_hooks_EngineZendLucene.php:tx_mksearch_hooks_EngineZendLucene->convertFields';
 
 // rnbase insert and update hooks (requires rn_base 0.14.6)
-$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['util_db_do_insert_post'][] =
-	'EXT:mksearch/hooks/class.tx_mksearch_hooks_IndexerAutoUpdate.php:tx_mksearch_hooks_IndexerAutoUpdate->rnBaseDoInsertPost';
-$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['util_db_do_update_post'][] =
-	'EXT:mksearch/hooks/class.tx_mksearch_hooks_IndexerAutoUpdate.php:tx_mksearch_hooks_IndexerAutoUpdate->rnBaseDoUpdatePost';
-$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['util_db_do_delete_pre'][] =
-	'EXT:mksearch/hooks/class.tx_mksearch_hooks_IndexerAutoUpdate.php:tx_mksearch_hooks_IndexerAutoUpdate->rnBaseDoDeletePre';
+if (isset($_EXTCONF['enableRnBaseUtilDbHook']) && (int) $_EXTCONF['enableRnBaseUtilDbHook'] > 0) {
+	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['util_db_do_insert_post'][] =
+		'EXT:mksearch/hooks/class.tx_mksearch_hooks_IndexerAutoUpdate.php:tx_mksearch_hooks_IndexerAutoUpdate->rnBaseDoInsertPost';
+	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['util_db_do_update_post'][] =
+		'EXT:mksearch/hooks/class.tx_mksearch_hooks_IndexerAutoUpdate.php:tx_mksearch_hooks_IndexerAutoUpdate->rnBaseDoUpdatePost';
+	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['util_db_do_delete_pre'][] =
+		'EXT:mksearch/hooks/class.tx_mksearch_hooks_IndexerAutoUpdate.php:tx_mksearch_hooks_IndexerAutoUpdate->rnBaseDoDeletePre';
+}
 
 // Hook for manipulating a single search term used with Zend_Lucene
 $GLOBALS ['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['engine_ZendLucene_buildQuery_manipulateSingleTerm'][] =
