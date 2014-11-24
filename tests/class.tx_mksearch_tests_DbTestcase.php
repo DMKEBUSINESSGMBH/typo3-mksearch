@@ -156,6 +156,7 @@ abstract class tx_mksearch_tests_DbTestcase
 			}
 		}
 
+		$this->purgeRootlineCaches();
 	}
 
 	/**
@@ -191,6 +192,17 @@ abstract class tx_mksearch_tests_DbTestcase
 		}
 
 		$GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'] = $this->addRootLineFieldsBackup;
+
+		$this->purgeRootlineCaches();
+	}
+
+	/**
+	 * @return void
+	 */
+	protected function purgeRootlineCaches() {
+		if (tx_rnbase_util_TYPO3::isTYPO62OrHigher()) {
+			\TYPO3\CMS\Core\Utility\RootlineUtility::purgeCaches();
+		}
 	}
 
 }
