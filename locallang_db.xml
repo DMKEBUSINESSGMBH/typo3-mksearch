@@ -53,6 +53,7 @@
 			<label index="tx_mksearch_indices_engine">Search engine</label>
 			<label index="tx_mksearch_indices_engine_solr">Apache Solr</label>
 			<label index="tx_mksearch_indices_engine_zendlucene">Zend Lucene (PHP)</label>
+			<label index="tx_mksearch_indices_engine_elasticsearch">ElasticSearch</label>
 			<label index="tx_mksearch_indices_solrversion">Solr Version</label>
 			<label index="tx_mksearch_indices_solrversion_35"><![CDATA[<= 3.5]]></label>
 			<label index="tx_mksearch_indices_solrversion_40">4.0</label>

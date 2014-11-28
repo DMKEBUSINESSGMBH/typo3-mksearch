@@ -99,6 +99,7 @@ $TCA['tx_mksearch_indices'] = array (
 				'items' => array(
 					array('LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices_engine_zendlucene','zend_lucene'),
 					array('LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices_engine_solr','solr'),
+					array('LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices_engine_elasticsearch','elasticsearch'),
 				),
 				'eval' => 'required',
 				'default' => 'zend_lucene'
