@@ -70,12 +70,11 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 	 * @return tx_mksearch_interface_IndexerDocument|null
 	 */
 	public function indexData(
-		tx_rnbase_IModel $oModel,
+		tx_rnbase_IModel $model,
 		$tableName,
 		$rawData,
 		tx_mksearch_interface_IndexerDocument $indexDoc, $options
-	)
-	{
+	) {
 		// @todo indexing via mapping so we dont have all field in the content
 
 		// Set uid. Take care for localized records where uid of original record
@@ -84,17 +83,8 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 
 		// @TODO: l18n_parent abprüfen, wenn $lang!=0 !?
 		$lang = isset($options['lang']) ? $options['lang'] : 0;
-		if($rawData['sys_language_uid'] != $lang) {
-			return null;
-			/**
-			 * löschen!?
-			 * Default -> wird indiziert, wenn default index
-			 * EN -> wird gelöscht, wenn nicht default index,
-			 * somit fehlt nun das default doc.
-			 */
-			// wir löschen den record aus dem Indexer, falls er schon existiert.
-			$indexDoc->setDeleted(true);
-			return $indexDoc;
+		if ($rawData['sys_language_uid'] != $lang) {
+			return NULL;
 		}
 
 		// we added our own header_layout (101). as long as there is no
@@ -111,20 +101,22 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 
 		$indexDoc->setTimestamp($rawData['tstamp']);
 
-		$indexDoc->addField('pid', $oModel->record['pid'], 'keyword');
+		$indexDoc->addField('pid', $model->record['pid'], 'keyword');
 		$indexDoc->addField('CType', $rawData['CType'], 'keyword');
 
-		if($options['addPageMetaData']) {
+		if ($options['addPageMetaData']) {
 			// @TODO: keywords werden doch immer kommasepariert angegeben,
 			// warum mit leerzeichen trennen, das macht die keywords kaputt.
 			$separator = (!empty($options['addPageMetaData.']['separator'])) ? $options['addPageMetaData.']['separator'] : ' ';
 			// @TODO: nur holen was wir benötigen (keywords)
 			//        konfigurierbar machen: description, author, etc.
 			//        könnte wichtig werden!?
-			$pageData = $this->getPageContent($oModel->record['pid']);
-			if(!empty($pageData['keywords'])) {
+			$pageData = $this->getPageContent($model->record['pid']);
+			if (!empty($pageData['keywords'])) {
 				$keywords = explode($separator, $pageData['keywords']);
-				foreach($keywords as $key => $keyword) $keywords[$key] = trim($keyword);
+				foreach ($keywords as $key => $keyword) {
+					$keywords[$key] = trim($keyword);
+				}
 				$indexDoc->addField('keywords_ms', $keywords, 'keyword');
 			}
 		}
@@ -136,7 +128,7 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 		if (
 			isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch'][$hookKey])
 			&& is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch'][$hookKey])
-		){
+		) {
 			tx_rnbase_util_Misc::callHook(
 				'mksearch',
 				$hookKey,
@@ -163,8 +155,8 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 			$c = trim(tx_mksearch_util_Misc::html2plain($c));
 
 			// kein inhalt zum indizieren
-			if(empty($title) && empty($c)) {
-				$indexDoc->setDeleted(true);
+			if (empty($title) && empty($c)) {
+				$indexDoc->setDeleted(TRUE);
 				return $indexDoc;
 			}
 
@@ -182,8 +174,7 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 	 * @param array $rawData
 	 * @return string
 	 */
-	protected function getContentByFieldAndCType($field, array $rawData)
-	{
+	protected function getContentByFieldAndCType($field, array $rawData) {
 		switch ($rawData['CType']) {
 			case 'table':
 				$tempContent = $rawData[$field];
@@ -195,15 +186,23 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 					if (is_array($flex)) {
 						$flexParsingOptions = $flex['data']['s_parsing']['lDEF'];
 						// Replace special parsing characters
-						if ($flexParsingOptions['tableparsing_quote']['vDEF'])
-							$tempContent = str_replace(chr($flexParsingOptions['tableparsing_quote']['vDEF']), '', $tempContent);
-						if ($flexParsingOptions['tableparsing_delimiter']['vDEF'])
-							$tempContent = str_replace(chr($flexParsingOptions['tableparsing_delimiter']['vDEF']), ' ', $tempContent);
+						if ($flexParsingOptions['tableparsing_quote']['vDEF']) {
+							$tempContent = str_replace(
+								chr($flexParsingOptions['tableparsing_quote']['vDEF']),
+								'', $tempContent
+							);
+						}
+						if ($flexParsingOptions['tableparsing_delimiter']['vDEF']) {
+							$tempContent = str_replace(
+								chr($flexParsingOptions['tableparsing_delimiter']['vDEF']),
+								' ', $tempContent
+							);
+						}
 					}
 				}
 				break;
 			case 'templavoila_pi1':
-				if(method_exists($this, 'getTemplavoilaElementContent')){
+				if (method_exists($this, 'getTemplavoilaElementContent')) {
 					$tempContent = $this->getTemplavoilaElementContent();
 				} else {
 					$tempContent = $rawData[$field];
@@ -232,9 +231,9 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 	 * @return bool
 	 */
 	protected function stopIndexing($tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options) {
-		if($tableName == 'pages') {
+		if ($tableName == 'pages') {
 			$this->handlePagesChanged($rawData);
-			return true;
+			return TRUE;
 		}
 
 		return parent::stopIndexing($tableName, $rawData, $indexDoc, $options);
@@ -253,13 +252,13 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 		// @todo support deleted pages, too
 		$aPidList = explode(',', $this->_getPidList($aRawData['uid'], 999));
 
-		if(!empty($aPidList)){
+		if (!empty($aPidList)) {
 			$oIndexSrv = tx_mksearch_util_ServiceRegistry::getIntIndexService();
 			$aFrom = array('tt_content', 'tt_content');
 
 			foreach ($aPidList as $iPid) {
 				// if the site is not existent we have one empty entry.
-				if(!empty($iPid)){
+				if (!empty($iPid)) {
 					// hidden/deleted datasets can be excluded as they are not indexed
 					// see isIndexableRecord()
 					$aOptions = array(
@@ -271,7 +270,7 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 					// be a big concern!
 					$aRows = tx_rnbase_util_DB::doSelect('tt_content.uid', $aFrom, $aOptions);
 
-					foreach ($aRows as $aRow){
+					foreach ($aRows as $aRow) {
 						$oIndexSrv->addRecordToIndex('tt_content', $aRow['uid']);
 					}
 				}
@@ -286,46 +285,46 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 	 * @param array $options
 	 * @return bool
 	 */
-	private function checkCTypes($sourceRecord,$options) {
+	private function checkCTypes($sourceRecord, $options) {
 		$ctypes = $this->getConfigValue('ignoreCTypes', $options);
-		if(is_array($ctypes) && count($ctypes)) {
+		if (is_array($ctypes) && count($ctypes)) {
 			// Wenn das Element eines der definierten ContentTypen ist,
 			// NICHT indizieren
-			if(in_array($sourceRecord['CType'],$ctypes))
-				return false;
-		}
-		else {
+			if (in_array($sourceRecord['CType'], $ctypes)) {
+				return FALSE;
+			}
+		} else {
 			// Jetzt alternativ auf die includeCTypes prüfen
 			$ctypes = $this->getConfigValue('includeCTypes', $options);
-			if(is_array($ctypes) && count($ctypes)) {
+			if (is_array($ctypes) && count($ctypes)) {
 				// Wenn das Element keines der definierten ContentTypen ist,
 				// NICHT indizieren
-				if(!in_array($sourceRecord['CType'],$ctypes))
-					return false;
+				if (!in_array($sourceRecord['CType'], $ctypes)) {
+					return FALSE;
+				}
 			}
 		}
 
-		return true;
+		return TRUE;
 	}
 
 	/**
 	 * Sets the index doc to deleted if neccessary
 	 *
-	 * @param tx_rnbase_IModel $oModel
+	 * @param tx_rnbase_IModel $model
 	 * @param tx_mksearch_interface_IndexerDocument $oIndexDoc
 	 * @param array $aOptions
 	 * @return bool
 	 */
 	protected function hasDocToBeDeleted(
-		tx_rnbase_IModel $oModel,
+		tx_rnbase_IModel $model,
 		tx_mksearch_interface_IndexerDocument $oIndexDoc,
 		$aOptions = array()
-	)
-	{
+	) {
 		// checkPageRights() considers deleted and parent::hasDocToBeDeleted() takes
 		// care of all possible hidden parent pages
-		return (!$this->getPageContent($oModel->record['pid'])
-			|| parent::hasDocToBeDeleted($oModel,$oIndexDoc,$aOptions));
+		return (!$this->getPageContent($model->record['pid'])
+			|| parent::hasDocToBeDeleted($model, $oIndexDoc, $aOptions));
 	}
 
 	/**
@@ -339,20 +338,19 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 	 * @return bool
 	 */
 	protected function isIndexableRecord(array $sourceRecord, array $options) {
-		if(
+		if (
 			!isset($sourceRecord['tx_mksearch_is_indexable']) ||
 			($sourceRecord['tx_mksearch_is_indexable'] == self::USE_INDEXER_CONFIGURATION)
 		) {
 			return
-				$this->isOnIndexablePage($sourceRecord,$options) &&
-				$this->checkCTypes($sourceRecord,$options);
+				$this->isOnIndexablePage($sourceRecord, $options) &&
+				$this->checkCTypes($sourceRecord, $options);
 		} else {
 			$isIndexable = ($sourceRecord['tx_mksearch_is_indexable'] == self::IS_INDEXABLE);
-			return $isIndexable ? true : false;
+			return $isIndexable ? TRUE : FALSE;
 		}
 
-
-		return false;
+		return FALSE;
 	}
 
 	/**
@@ -370,8 +368,8 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 		$indexDoc = parent::indexEnableColumns($model, $tableName, $indexDoc);
 
 		$page = $this->getPageContent($model->record['pid']);
-		$pageModel = tx_rnbase::makeInstance('tx_rnbase_model_base',$page);
-		$indexDoc = parent::indexEnableColumns($pageModel, 'pages', $indexDoc,'page_');
+		$pageModel = tx_rnbase::makeInstance('tx_rnbase_model_base', $page);
+		$indexDoc = parent::indexEnableColumns($pageModel, 'pages', $indexDoc, 'page_');
 
 		return $indexDoc;
 	}
@@ -395,6 +393,6 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 	}
 }
 
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/ttcontent/class.tx_mksearch_indexer_ttcontent_Normal.php'])	{
+if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/ttcontent/class.tx_mksearch_indexer_ttcontent_Normal.php']) {
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/ttcontent/class.tx_mksearch_indexer_ttcontent_Normal.php']);
 }
