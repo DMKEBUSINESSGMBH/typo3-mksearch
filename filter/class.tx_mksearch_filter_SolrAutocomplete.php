@@ -43,7 +43,7 @@ tx_rnbase::load('tx_mksearch_util_Misc');
  * @TODO Unit Test ob das hinzufügen der FE Gruppen funktioniert.
  */
 class tx_mksearch_filter_SolrAutocomplete extends tx_mksearch_filter_SolrBase {
-	
+
 	/**
 	 * Fügt den Suchstring zu dem Filter hinzu.
 	 *
@@ -54,8 +54,16 @@ class tx_mksearch_filter_SolrAutocomplete extends tx_mksearch_filter_SolrBase {
 	 * @param 	string 						$confId
 	 */
 	protected function handleTerm(&$fields, &$parameters, &$configurations, $confId) {
+		$term = $parameters->get('term');
+		// lowercase term? default is true!
+		if (
+			$configurations->get($confId . 'autocomplete.termToLower') === NULL
+			|| $configurations->getBool($confId . 'autocomplete.termToLower')
+		) {
+			$term = strtolower($term);
+		}
 		//we just need the plain, given term, sanitize it and put it in
-		$fields['term'] = tx_mksearch_util_Misc::sanitizeTerm($parameters->get('term'));
+		$fields['term'] = tx_mksearch_util_Misc::sanitizeTerm($term);
 	}
 }
 
