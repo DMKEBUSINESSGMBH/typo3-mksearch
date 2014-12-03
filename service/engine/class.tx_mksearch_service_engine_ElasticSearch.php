@@ -81,8 +81,6 @@ class tx_mksearch_service_engine_ElasticSearch
 	}
 
 	/**
-	 * @TODO cluster setup unterstützen
-	 *
 	 * @param array $credentials
 	 * @throws Exception
 	 */
@@ -113,7 +111,7 @@ class tx_mksearch_service_engine_ElasticSearch
 	 *
 	 * @return boolean
 	 */
-	private function isServerAvailable() {
+	protected function isServerAvailable() {
 		$serverStatus = $this->getIndex()->getClient()->getStatus()->getServerStatus();
 
 		return $serverStatus['status'] == 200;
@@ -168,31 +166,50 @@ class tx_mksearch_service_engine_ElasticSearch
 	public function openIndex(
 		tx_mksearch_model_internal_Index $index, $forceCreation=false
 	) {
-		$credentialsForElastica = $this->getElasticaCredentialsFromIndexCredentialsString(
+		$credentialsForElastica = $this->getElasticaCredentialsFromCredentialsString(
 			$index->getCredentialString()
 		);
 		$this->initElasticSearchConnection($credentialsForElastica);
 	}
 
 	/**
-	 * @todo cluster setup auslesen (semikolon separiert)
 	 * @param string $credentialString
 	 * @return multitype:unknown Ambigous <unknown>
 	 */
-	private function getElasticaCredentialsFromIndexCredentialsString($credentialString) {
+	protected function getElasticaCredentialsFromCredentialsString($credentialString) {
 		$serverCredentials = t3lib_div::trimExplode(';', $credentialString);
 
 		if ($this->isSingleServerConfiguration($serverCredentials)) {
-			$serverCredentials = t3lib_div::trimExplode(',', $serverCredentials[0]);
-			$credentialsForElastica = array(
-				'host' => $serverCredentials[0],
-				'port' => $serverCredentials[1],
-				'path' => $serverCredentials[2],
-				'index' => $serverCredentials[3],
-			);
+			$credentialsForElastica =
+				$this->getElasticaCredentialArrayFromIndexCredentialStringForOneServer(
+					$serverCredentials[0]
+				);
+		} else {
+			foreach ($serverCredentials as $serverCredential) {
+				$credentialsForElastica['servers'][] =
+					$this->getElasticaCredentialArrayFromIndexCredentialStringForOneServer(
+						$serverCredential
+					);
+			}
 		}
 
 		return $credentialsForElastica;
+	}
+
+	/**
+	 * @param string $credentialString
+	 * @return multitype:unknown Ambigous <unknown>
+	 */
+	private function getElasticaCredentialArrayFromIndexCredentialStringForOneServer(
+		$credentialString
+	) {
+		$serverCredential = t3lib_div::trimExplode(',', $credentialString);
+		return array(
+			'host' => $serverCredential[0],
+			'port' => $serverCredential[1],
+			'path' => $serverCredential[2],
+			'index' => $serverCredential[3],
+		);
 	}
 
 	/**
@@ -210,8 +227,9 @@ class tx_mksearch_service_engine_ElasticSearch
 	 */
 	public function getIndex() {
 		if (!is_object($this->index)) {
-			$this->openIndex($this->indexModel, false);
+			$this->openIndex($this->indexModel);
 		}
+
 		return $this->index;
 	}
 
