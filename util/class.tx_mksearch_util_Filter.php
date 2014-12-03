@@ -41,7 +41,7 @@ class tx_mksearch_util_Filter {
 	 *
 	 * @var string
 	 */
-	protected $sortOrder = 'desc';
+	protected $sortOrder = 'asc';
 
 	/**
 	 * Fügt den Suchstring zu dem Filter hinzu.
@@ -119,7 +119,7 @@ class tx_mksearch_util_Filter {
 			// den default order nutzen!
 			$sortOrder = $sortOrder ? $sortOrder : $this->sortOrder;
 			// sicherstellen, das immer desc oder asc gesetzt ist
-			$sortOrder = ($sortOrder == 'asc') ? 'asc' : 'desc';
+			$sortOrder = (strtolower($sortOrder) === 'desc') ? 'desc' : 'asc';
 			// wird beim parsetemplate benötigt
 			$this->sortField = $sort;
 			$this->sortOrder = $sortOrder;
