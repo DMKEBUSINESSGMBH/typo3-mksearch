@@ -399,7 +399,7 @@ class tx_mksearch_service_engine_ElasticSearch
 	 * This function is called for each index after the indexing
 	 * is done.
 	 *
-	 * @param tx_mksearch_model_internal_Index $oIndex
+	 * @param tx_mksearch_model_internal_Index $index
 	 * @return void
 	 */
 	public function postProcessIndexing(tx_mksearch_model_internal_Index $index) {
