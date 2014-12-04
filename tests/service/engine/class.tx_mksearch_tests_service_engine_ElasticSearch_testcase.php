@@ -1,4 +1,6 @@
 <?php
+use Elastica\Document;
+use Elastica\Bulk\Action;
 /**
  * 	@package tx_mksearch
  *  @subpackage tx_mksearch_tests
@@ -707,5 +709,47 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 			$indexProperty->getValue($service),
 			'index property nicht auf NULL gesetzt'
 		);
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testIndexNew() {
+		/* @var $doc tx_mksearch_model_IndexerDocumentBase */
+		$doc = tx_rnbase::makeInstance(
+			'tx_mksearch_model_IndexerDocumentBase',
+			'mksearch', 'tt_content',
+			'tx_mksearch_model_IndexerFieldBase'
+		);
+		$doc->setUid(123);
+		$doc->addField('first_field', 'flat value');
+		$doc->addField('second_field', array('multi', 'value'));
+
+		$index = $this->getMock(
+			'stdClass', array('addDocuments')
+		);
+
+		$elasticaDocument = new Document(
+			'mksearch:tt_content:123',
+			array(
+				'content_ident_s' => 'mksearch.tt_content',
+				'first_field' => 'flat value',
+				'second_field' => array('multi', 'value')
+			)
+		);
+		$elasticaDocument->setType(Action::OP_TYPE_INDEX);
+		$index->expects($this->once())
+			->method('addDocuments')
+			->with(array($elasticaDocument))
+			->will($this->returnValue(TRUE));
+
+		$service = $this->getMock(
+			'tx_mksearch_service_engine_ElasticSearch', array('getIndex')
+		);
+		$service->expects($this->once())
+			->method('getIndex')
+			->will($this->returnValue($index));
+
+		$this->assertTrue($service->indexNew($doc));
 	}
 }

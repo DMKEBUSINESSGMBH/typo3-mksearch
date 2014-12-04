@@ -312,6 +312,7 @@ class tx_mksearch_service_engine_ElasticSearch
 				$data[$key] = tx_mksearch_util_Misc::utf8Encode($field->getValue());
 			}
 		}
+
 		$elasticaDocument = new Document($doc->getPrimaryKey(TRUE), $data);
 		$elasticaDocument->setType(Action::OP_TYPE_INDEX);
 
@@ -338,7 +339,11 @@ class tx_mksearch_service_engine_ElasticSearch
 	 * @return bool success
 	 */
 	public function indexDeleteByContentUid($uid, $extKey, $contentType) {
+// 		$primaryKey = $extKey . ':' . $contentType . ':' . $uid;
+// 		$elasticaDocument = new Document($primaryKey);
+// 		$elasticaDocument->setType(Action::OP_TYPE_DELETE);
 
+// 		return $this->getIndex()->deleteDocuments(array($elasticaDocument));
 	}
 
 	/**
