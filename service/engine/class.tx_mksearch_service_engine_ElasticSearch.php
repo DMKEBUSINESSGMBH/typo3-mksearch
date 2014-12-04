@@ -24,6 +24,8 @@
 use Elastica\Client;
 use Elastica\Exception\ClientException;
 use Elastica\Index;
+use Elastica\Document;
+use Elastica\Bulk\Action;
 
 require_once t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php';
 tx_rnbase::load('tx_mksearch_interface_SearchEngine');
@@ -45,13 +47,11 @@ class tx_mksearch_service_engine_ElasticSearch
 {
 
 	/**
-	 * Client used for searching and indexing
-	 * as we could have more than one server we dont use exactly one index
-	 * but a client. the client determines what idnex to use
+	 * Index used for searching and indexing
 	 *
-	 * @var Client
+	 * @var Index
 	 */
-	private $client = null;
+	private $index = null;
 
 	/**
 	 * @var tx_mksearch_model_internal_Index
@@ -62,6 +62,13 @@ class tx_mksearch_service_engine_ElasticSearch
 	 * @var string
 	 */
 	private $credentialsString = '';
+
+	/**
+	 * Name of the currently open index
+	 *
+	 * @var string
+	 */
+	private $indexName;
 
 	/**
 	 * Constructor
@@ -85,7 +92,8 @@ class tx_mksearch_service_engine_ElasticSearch
 	 * @throws Exception
 	 */
 	protected function initElasticSearchConnection(array $credentials) {
-		$this->client = $this->getElasticaClient($credentials);
+		$this->index = $this->getElasticaIndex($credentials);
+		$this->index->open();
 
 		if (!$this->isServerAvailable()) {
 			$logger = $this->getLogger();
@@ -102,17 +110,17 @@ class tx_mksearch_service_engine_ElasticSearch
 	 *
 	 * @return Index
 	 */
-	protected function getElasticaClient($credentials) {
-		return new Client($credentials);
+	protected function getElasticaIndex($credentials) {
+		$elasticaClient =  new Client($credentials);
+		return $elasticaClient->getIndex($this->getOpenIndexName());
 	}
 
 	/**
 	 *
 	 * @return boolean
-	 * @throws Exception
 	 */
 	protected function isServerAvailable() {
-		$serverStatus = $this->getIndex()->getStatus()->getServerStatus();
+		$serverStatus = $this->getIndex()->getClient()->getStatus()->getServerStatus();
 
 		return $serverStatus['status'] == 200;
 	}
@@ -153,7 +161,7 @@ class tx_mksearch_service_engine_ElasticSearch
 	 * @return string
 	 */
 	public function getOpenIndexName() {
-
+		return $this->indexName;
 	}
 
 	/**
@@ -173,25 +181,25 @@ class tx_mksearch_service_engine_ElasticSearch
 	}
 
 	/**
+	 * Der String ist semikolon separiert. der erste Teil ist der Index,
+	 * alle weiteren sind die Server. Die Credentials für die Server
+	 * werden kommasepariert erwartet wobei erst host, dann port dann url pfad
+	 *
 	 * @param string $credentialString
 	 * @return multitype:unknown Ambigous <unknown>
 	 */
 	protected function getElasticaCredentialsFromCredentialsString($credentialString) {
 		$this->credentialsString = $credentialString;
-		$serverCredentials = t3lib_div::trimExplode(';', $credentialString);
+		$serverCredentials = t3lib_div::trimExplode(';', $credentialString, TRUE);
 
-		if ($this->isSingleServerConfiguration($serverCredentials)) {
-			$credentialsForElastica =
+		$this->indexName = $serverCredentials[0];
+		unset($serverCredentials[0]);
+
+		foreach ($serverCredentials as $serverCredential) {
+			$credentialsForElastica['servers'][] =
 				$this->getElasticaCredentialArrayFromIndexCredentialStringForOneServer(
-					$serverCredentials[0]
+					$serverCredential
 				);
-		} else {
-			foreach ($serverCredentials as $serverCredential) {
-				$credentialsForElastica['servers'][] =
-					$this->getElasticaCredentialArrayFromIndexCredentialStringForOneServer(
-						$serverCredential
-					);
-			}
 		}
 
 		return $credentialsForElastica;
@@ -208,33 +216,21 @@ class tx_mksearch_service_engine_ElasticSearch
 		return array(
 			'host' => $serverCredential[0],
 			'port' => $serverCredential[1],
-			'path' => $serverCredential[2],
-			'index' => $serverCredential[3],
+			'path' => $serverCredential[2]
 		);
 	}
 
 	/**
-	 * @param array $serverCredentials
-	 * @return boolean
-	 */
-	private function isSingleServerConfiguration(array $serverCredentials) {
-		return count($serverCredentials) == 1;
-	}
-
-	/**
 	 * Liefert den Index
-	 * da wir mehr als einen Index haben könnten, verwenden wir nicht direkt einen
-	 * Index sondern einen Client. Dieser entscheidet selbst welcher
-	 * Index verwendet wird.
 	 *
-	 * @return Client
+	 * @return Index
 	 */
 	public function getIndex() {
-		if (!is_object($this->client)) {
+		if (!is_object($this->index)) {
 			$this->openIndex($this->mksearchIndexModel);
 		}
 
-		return $this->client;
+		return $this->index;
 	}
 
 	/**
@@ -244,7 +240,7 @@ class tx_mksearch_service_engine_ElasticSearch
 	 * @return bool
 	 */
 	public function indexExists($name) {
-
+		return $this->getIndex()->getClient()->getStatus()->indexExists($name);
 	}
 
 	/**
@@ -253,7 +249,7 @@ class tx_mksearch_service_engine_ElasticSearch
 	 * @return bool success
 	 */
 	public function commitIndex() {
-
+		// wird direkt beim Hinzufügen oder Löschen ausgeführt
 	}
 
 	/**
@@ -262,7 +258,8 @@ class tx_mksearch_service_engine_ElasticSearch
 	 * @return void
 	 */
 	public function closeIndex() {
-
+		$this->getIndex()->close();
+		unset($this->index);
 	}
 
 	/**
@@ -271,8 +268,12 @@ class tx_mksearch_service_engine_ElasticSearch
 	 * @param optional string $name	Name of index to delete, if not the open index is meant to be deleted
 	 * @return void
 	 */
-	public function deleteIndex($name=null) {
-
+	public function deleteIndex($name = NULL) {
+		if ($name) {
+			$this->getIndex()->getClient()->getIndex($name)->delete();
+		} else {
+			$this->getIndex()->delete();
+		}
 	}
 
 	/**
@@ -281,7 +282,7 @@ class tx_mksearch_service_engine_ElasticSearch
 	 * @return void
 	 */
 	public function optimizeIndex() {
-
+		$this->getIndex()->optimize();
 	}
 
 	/**
@@ -295,7 +296,7 @@ class tx_mksearch_service_engine_ElasticSearch
 	 * @return void
 	 */
 	public function replaceIndex($which, $by) {
-
+		//vorerst nichts zu tun
 	}
 
 	/**
@@ -305,7 +306,16 @@ class tx_mksearch_service_engine_ElasticSearch
 	 * @return bool		$success
 	 */
 	public function indexNew(tx_mksearch_interface_IndexerDocument $doc) {
+		$data = array();
+		foreach ($doc->getData() as $key => $field) {
+			if ($field) {
+				$data[$key] = tx_mksearch_util_Misc::utf8Encode($field->getValue());
+			}
+		}
+		$elasticaDocument = new Document($doc->getPrimaryKey(TRUE), $data);
+		$elasticaDocument->setType(Action::OP_TYPE_INDEX);
 
+		return $this->getIndex()->addDocuments(array($elasticaDocument));
 	}
 
 	/**
@@ -315,7 +325,8 @@ class tx_mksearch_service_engine_ElasticSearch
 	 * @return bool		$success
 	 */
 	public function indexUpdate(tx_mksearch_interface_IndexerDocument $doc) {
-
+		// ElasticSearch erkennt selbst ob ein Update nötig ist
+		return $this->indexNew($doc);
 	}
 
 	/**
@@ -356,7 +367,11 @@ class tx_mksearch_service_engine_ElasticSearch
 	 * @return tx_mksearch_interface_IndexerDocument
 	 */
 	public function makeIndexDocInstance($extKey, $contentType) {
-
+		return tx_rnbase::makeInstance(
+			'tx_mksearch_model_IndexerDocumentBase',
+			$extKey, $contentType,
+			'tx_mksearch_model_IndexerFieldBase'
+		);
 	}
 
 	/**
