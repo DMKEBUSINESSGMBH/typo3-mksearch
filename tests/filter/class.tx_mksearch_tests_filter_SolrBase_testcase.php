@@ -316,7 +316,7 @@ class tx_mksearch_tests_filter_SolrBase_testcase
 		$fields = $options = array();
 		$filter->init($fields, $options);
 
-		$this->assertEquals('uid desc', $options['sort'], 'sort falsch in options');
+		$this->assertEquals('uid asc', $options['sort'], 'sort falsch in options');
 	}
 
 	/**
@@ -350,7 +350,7 @@ class tx_mksearch_tests_filter_SolrBase_testcase
 
 		$order = new ReflectionProperty('tx_mksearch_util_Filter', 'sortOrder');
 		$order->setAccessible(true);
-		$order->setValue($filterUtil, 'asc');
+		$order->setValue($filterUtil, 'desc');
 
 		$filterUtilProperty = new ReflectionProperty(
 			'tx_mksearch_filter_SolrBase', 'filterUtility'
@@ -361,7 +361,7 @@ class tx_mksearch_tests_filter_SolrBase_testcase
 		$fields = $options = array();
 		$filter->init($fields, $options);
 
-		$this->assertEquals('uid asc', $options['sort'], 'sort falsch in options');
+		$this->assertEquals('uid desc', $options['sort'], 'sort falsch in options');
 	}
 
 	/**
@@ -386,7 +386,7 @@ class tx_mksearch_tests_filter_SolrBase_testcase
 		$fields = $options = array();
 		$filter->init($fields, $options);
 
-		$this->assertEquals('uid desc', $options['sort'], 'sort falsch in options');
+		$this->assertEquals('uid asc', $options['sort'], 'sort falsch in options');
 	}
 
 	/**
