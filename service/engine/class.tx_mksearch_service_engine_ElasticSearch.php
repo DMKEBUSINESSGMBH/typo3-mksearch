@@ -45,23 +45,23 @@ class tx_mksearch_service_engine_ElasticSearch
 {
 
 	/**
-	 * Index used for searching and indexing
+	 * Client used for searching and indexing
+	 * as we could have more than one server we dont use exactly one index
+	 * but a client. the client determines what idnex to use
 	 *
-	 * @var Index
+	 * @var Client
 	 */
-	private $index = null;
-
-	/**
-	 * Name of the currently open index
-	 *
-	 * @var string
-	 */
-	private $indexName;
+	private $client = null;
 
 	/**
 	 * @var tx_mksearch_model_internal_Index
 	 */
-	private $indexModel = null;
+	private $mksearchIndexModel = null;
+
+	/**
+	 * @var string
+	 */
+	private $credentialsString = '';
 
 	/**
 	 * Constructor
@@ -85,7 +85,7 @@ class tx_mksearch_service_engine_ElasticSearch
 	 * @throws Exception
 	 */
 	protected function initElasticSearchConnection(array $credentials) {
-		$this->index = $this->getElasticaIndex($credentials);
+		$this->client = $this->getElasticaClient($credentials);
 
 		if (!$this->isServerAvailable()) {
 			$logger = $this->getLogger();
@@ -102,17 +102,17 @@ class tx_mksearch_service_engine_ElasticSearch
 	 *
 	 * @return Index
 	 */
-	protected function getElasticaIndex($credentials) {
-		$elasticaClient =  new Client($credentials);
-		return $elasticaClient->getIndex($credentials['index']);
+	protected function getElasticaClient($credentials) {
+		return new Client($credentials);
 	}
 
 	/**
 	 *
 	 * @return boolean
+	 * @throws Exception
 	 */
 	protected function isServerAvailable() {
-		$serverStatus = $this->getIndex()->getClient()->getStatus()->getServerStatus();
+		$serverStatus = $this->getIndex()->getStatus()->getServerStatus();
 
 		return $serverStatus['status'] == 200;
 	}
@@ -177,6 +177,7 @@ class tx_mksearch_service_engine_ElasticSearch
 	 * @return multitype:unknown Ambigous <unknown>
 	 */
 	protected function getElasticaCredentialsFromCredentialsString($credentialString) {
+		$this->credentialsString = $credentialString;
 		$serverCredentials = t3lib_div::trimExplode(';', $credentialString);
 
 		if ($this->isSingleServerConfiguration($serverCredentials)) {
@@ -222,15 +223,18 @@ class tx_mksearch_service_engine_ElasticSearch
 
 	/**
 	 * Liefert den Index
+	 * da wir mehr als einen Index haben könnten, verwenden wir nicht direkt einen
+	 * Index sondern einen Client. Dieser entscheidet selbst welcher
+	 * Index verwendet wird.
 	 *
-	 * @return Index
+	 * @return Client
 	 */
 	public function getIndex() {
-		if (!is_object($this->index)) {
-			$this->openIndex($this->indexModel);
+		if (!is_object($this->client)) {
+			$this->openIndex($this->mksearchIndexModel);
 		}
 
-		return $this->index;
+		return $this->client;
 	}
 
 	/**
@@ -356,8 +360,6 @@ class tx_mksearch_service_engine_ElasticSearch
 	}
 
 	/**
-	 * @todo cluster setup unterstützen
-	 *
 	 * Returns a index status object.
 	 *
 	 * @return tx_mksearch_util_Status
@@ -367,17 +369,15 @@ class tx_mksearch_service_engine_ElasticSearch
 		$status = tx_rnbase::makeInstance('tx_mksearch_util_Status');
 
 		$id = -1;
+		$msg = 'Down. Maybe not started?';
 		try {
 			if ($this->isServerAvailable()) {
 				$id = 1;
 				$msg = 'Up and running';
 			}
 		} catch (Exception $e) {
-			$msg = 'Error connecting ElasticSearch: ' . $e->getMessage();
-			$msg .= " Url: " .
-					$this->getIndex()->getConfig('host') . ':'.
-					$this->getIndex()->getConfig('port') .
-					$this->getIndex()->getConfig('path');
+			$msg = 'Error connecting ElasticSearch: ' . $e->getMessage() . '.';
+			$msg .= " Credentials: " . $this->credentialsString;
 		}
 
 		$status->setStatus($id, $msg);
@@ -392,7 +392,7 @@ class tx_mksearch_service_engine_ElasticSearch
 	 * @return void
 	 */
 	public function setIndexModel(tx_mksearch_model_internal_Index $index) {
-		$this->indexModel = $index;
+		$this->mksearchIndexModel = $index;
 	}
 
 	/**

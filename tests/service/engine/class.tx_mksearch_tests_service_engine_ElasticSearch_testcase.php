@@ -43,14 +43,14 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 	/**
 	 * @group unit
 	 */
-	public function testGetElasticIndex() {
+	public function testGetElasticClient() {
 		$elasticaClient = $this->callInaccessibleMethod(
 			tx_rnbase::makeInstance('tx_mksearch_service_engine_ElasticSearch'),
-			'getElasticaIndex', array('index' => 'unknown')
+			'getElasticaClient', array('index' => 'unknown')
 		);
 
 		$this->assertInstanceOf(
-			'\\Elastica\\Index', $elasticaClient, 'Client hat falsche Klasse'
+			'\\Elastica\\Client', $elasticaClient, 'Client hat falsche Klasse'
 		);
 	}
 
@@ -87,19 +87,12 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 			->method('getStatus')
 			->will($this->returnValue($status));
 
-		$index = $this->getMock(
-			'stdClass', array('getClient')
-		);
-		$index->expects($this->once())
-			->method('getClient')
-			->will($this->returnValue($client));
-
 		$service = $this->getMock(
 			'tx_mksearch_service_engine_ElasticSearch', array('getIndex')
 		);
 		$service->expects($this->once())
 			->method('getIndex')
-			->will($this->returnValue($index));
+			->will($this->returnValue($client));
 
 		$this->assertEquals(
 			$expectedReturn,
@@ -124,7 +117,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 	public function testInitElasticSearchConnectionSetsIndexProperty() {
 		$service = $this->getMock(
 			'tx_mksearch_service_engine_ElasticSearch',
-			array('getElasticaIndex', 'isServerAvailable', 'getLogger')
+			array('getElasticaClient', 'isServerAvailable', 'getLogger')
 		);
 
 		$service->expects($this->once())
@@ -133,21 +126,21 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 
 		$credentials = array('someCredentials');
 		$service->expects($this->once())
-			->method('getElasticaIndex')
+			->method('getElasticaClient')
 			->with($credentials)
-			->will($this->returnValue('index'));
+			->will($this->returnValue('client'));
 
-		$indexProperty = new ReflectionProperty(
-			'tx_mksearch_service_engine_ElasticSearch', 'index'
+		$clientProperty = new ReflectionProperty(
+			'tx_mksearch_service_engine_ElasticSearch', 'client'
 		);
-		$indexProperty->setAccessible(TRUE);
+		$clientProperty->setAccessible(TRUE);
 
 		$this->callInaccessibleMethod(
 			$service, 'initElasticSearchConnection', $credentials
 		);
 
 		$this->assertEquals(
-			'index', $indexProperty ->getValue($service), 'index property falsch'
+			'client', $clientProperty ->getValue($service), 'index property falsch'
 		);
 	}
 
@@ -157,7 +150,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 	public function testInitElasticSearchConnectionCallsLoggerNotIfServerAvailable() {
 		$service = $this->getMock(
 			'tx_mksearch_service_engine_ElasticSearch',
-			array('getElasticaIndex', 'isServerAvailable', 'getLogger')
+			array('getElasticaClient', 'isServerAvailable', 'getLogger')
 		);
 
 		$service->expects($this->never())
@@ -180,7 +173,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 	public function testInitElasticSearchConnectionThrowsExceptionAndLogsErrorIfServerNotAvailable() {
 		$service = $this->getMock(
 				'tx_mksearch_service_engine_ElasticSearch',
-				array('getElasticaIndex', 'isServerAvailable', 'getLogger')
+				array('getElasticaClient', 'isServerAvailable', 'getLogger')
 		);
 
 		$credentials = array('someCredentials');
@@ -221,6 +214,26 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 				tx_rnbase::makeInstance('tx_mksearch_service_engine_ElasticSearch'),
 				'isSingleServerConfiguration', array(1, 2)
 			)
+		);
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testGetElasticaCredentialsFromCredentialsStringSetsInitialCredentialsStringToProperty() {
+		$service = tx_rnbase::makeInstance('tx_mksearch_service_engine_ElasticSearch');
+		$this->callInaccessibleMethod(
+			$service,
+			'getElasticaCredentialsFromCredentialsString', '1,2,3,4'
+		);
+		$credentialsString = new ReflectionProperty(
+			'tx_mksearch_service_engine_ElasticSearch', 'credentialsString'
+		);
+		$credentialsString->setAccessible(TRUE);
+		$this->assertEquals(
+			'1,2,3,4',
+			$credentialsString->getValue($service),
+			'property falsch'
 		);
 	}
 
@@ -313,7 +326,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 			array('openIndex')
 		);
 		$indexModelProperty = new ReflectionProperty(
-			'tx_mksearch_service_engine_ElasticSearch', 'indexModel'
+			'tx_mksearch_service_engine_ElasticSearch', 'mksearchIndexModel'
 		);
 		$indexModelProperty->setAccessible(TRUE);
 		$indexModel = tx_rnbase::makeInstance('tx_mksearch_model_internal_Index', array());
@@ -334,11 +347,11 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 			'tx_mksearch_service_engine_ElasticSearch',
 			array('openIndex')
 		);
-		$indexProperty = new ReflectionProperty(
-			'tx_mksearch_service_engine_ElasticSearch', 'index'
+		$clientProperty = new ReflectionProperty(
+			'tx_mksearch_service_engine_ElasticSearch', 'client'
 		);
-		$indexProperty->setAccessible(TRUE);
-		$indexProperty->setValue($service, new stdClass());
+		$clientProperty->setAccessible(TRUE);
+		$clientProperty->setValue($service, new stdClass());
 
 		$service->expects($this->never())
 			->method('openIndex');
@@ -356,12 +369,80 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 		$service->setIndexModel($indexModel);
 
 		$indexModelProperty = new ReflectionProperty(
-				'tx_mksearch_service_engine_ElasticSearch', 'indexModel'
+				'tx_mksearch_service_engine_ElasticSearch', 'mksearchIndexModel'
 		);
 		$indexModelProperty->setAccessible(TRUE);
 		$this->assertSame(
 			$indexModel, $indexModelProperty->getValue($service),
 			'indexModel falsch gesetzt'
+		);
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testGetStatusWhenServerIsAvailable() {
+		$service = $this->getMock(
+			'tx_mksearch_service_engine_ElasticSearch',
+			array('isServerAvailable')
+		);
+		$service->expects($this->once())
+			->method('isServerAvailable')
+			->will($this->returnValue(TRUE));
+
+		$status = $service->getStatus();
+
+		$this->assertEquals(1, $status->getStatus(), 'Status falsch');
+		$this->assertEquals('Up and running', $status->getMessage(), 'Message falsch');
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testGetStatusWhenServerIsNotAvailable() {
+		$service = $this->getMock(
+			'tx_mksearch_service_engine_ElasticSearch',
+			array('isServerAvailable')
+		);
+		$service->expects($this->once())
+			->method('isServerAvailable')
+			->will($this->returnValue(FALSE));
+
+		$status = $service->getStatus();
+
+		$this->assertEquals(-1, $status->getStatus(), 'Status falsch');
+		$this->assertEquals(
+			'Down. Maybe not started?', $status->getMessage(), 'Message falsch'
+		);
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testGetStatusWhenIsServerAvailableThrowsException() {
+		$service = $this->getMock(
+			'tx_mksearch_service_engine_ElasticSearch',
+			array('isServerAvailable')
+		);
+		$service->expects($this->once())
+			->method('isServerAvailable')
+			->will($this->throwException(
+				tx_rnbase::makeInstance('Exception', 'Verbindung fehlgeschlagen')
+			));
+
+		$credentialsStringProperty = new ReflectionProperty(
+			'tx_mksearch_service_engine_ElasticSearch', 'credentialsString'
+		);
+		$credentialsStringProperty->setAccessible(TRUE);
+		$credentialsStringProperty->setValue($service, '1,2,3,4');
+
+		$status = $service->getStatus();
+
+		$this->assertEquals(-1, $status->getStatus(), 'Status falsch');
+		$this->assertEquals(
+			'Error connecting ElasticSearch: Verbindung fehlgeschlagen. Credentials: 1,2,3,4',
+			$status->getMessage(),
+			'Message falsch'
 		);
 	}
 }
