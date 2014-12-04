@@ -316,7 +316,7 @@ class tx_mksearch_service_engine_ElasticSearch
 		$elasticaDocument = new Document($doc->getPrimaryKey(TRUE), $data);
 		$elasticaDocument->setType(Action::OP_TYPE_INDEX);
 
-		return $this->getIndex()->addDocuments(array($elasticaDocument));
+		return $this->getIndex()->addDocuments(array($elasticaDocument))->isOk();
 	}
 
 	/**

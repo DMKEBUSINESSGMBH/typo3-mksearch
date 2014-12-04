@@ -738,10 +738,16 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 			)
 		);
 		$elasticaDocument->setType(Action::OP_TYPE_INDEX);
+		$response = $this->getMock(
+			'stdClass', array('isOk')
+		);
+		$response->expects($this->once())
+			->method('isOk')
+			->will($this->returnValue(TRUE));
 		$index->expects($this->once())
 			->method('addDocuments')
 			->with(array($elasticaDocument))
-			->will($this->returnValue(TRUE));
+			->will($this->returnValue($response));
 
 		$service = $this->getMock(
 			'tx_mksearch_service_engine_ElasticSearch', array('getIndex')
