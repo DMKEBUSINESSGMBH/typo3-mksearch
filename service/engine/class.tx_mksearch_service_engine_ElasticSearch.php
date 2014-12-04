@@ -343,7 +343,7 @@ class tx_mksearch_service_engine_ElasticSearch
 // 		$elasticaDocument = new Document($primaryKey);
 // 		$elasticaDocument->setType(Action::OP_TYPE_DELETE);
 
-// 		return $this->getIndex()->deleteDocuments(array($elasticaDocument));
+// 		return $this->getIndex()->deleteDocuments(array($elasticaDocument))->isOk();
 	}
 
 	/**
