@@ -1,5 +1,5 @@
 {
-	"name" : "typo3/mksearch",
+	"name" : "dmk/mksearch",
 	"description" : "Generic highly adjustable and extendable search engine framework, using Zend Lucene or Apache Solr.",
 	"type" : "typo3-cms-extension",
 	"keywords" : ["search", "Lucene", "Zend Lucene", "Apache Solr", "Solr", "Elasticsearch"],
@@ -27,6 +27,9 @@
 		"source": "https://github.com/DMKEBUSINESSGMBH/typo3-mksearch",
 		"issues": "https://forge.typo3.org/projects/extension-mksearch"
 	},
+	"replace": {
+		"typo3-ter/mksearch": "*"
+	}, 
 	"require" : {
 		"typo3-ter/rn-base" : "*"
 	}
