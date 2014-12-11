@@ -1,0 +1,33 @@
+{
+	"name" : "typo3/mksearch",
+	"description" : "Generic highly adjustable and extendable search engine framework, using Zend Lucene or Apache Solr.",
+	"type" : "typo3cms-extension",
+	"keywords" : ["search", "Lucene", "Zend Lucene", "Apache Solr", "Solr", "Elasticsearch"],
+	"homepage" : "http://www.dmk-ebusiness.de/",
+	"license" : "OSL-3.0",
+	"authors" : [
+		{
+			"name" : "Michael Wagner",
+			"email" : "michael.wagner@dmk-ebusiness.de",
+			"role" : "Developer"
+		},
+		{
+			"name" : "Hannes Bochmann",
+			"email" : "hannes.bochmann@dmk-ebusiness.de",
+			"role" : "Developer"
+		},
+		{
+			"name" : "René Nitzsche",
+			"email" : "nitzsche@dmk-ebusiness.de",
+			"role" : "Developer"
+		}
+	],
+	"support": {
+		"email": "dev@dmk-ebusiness.de",
+		"source": "https://github.com/DMKEBUSINESSGMBH/typo3-mksearch"
+		"issues": "https://forge.typo3.org/projects/extension-mksearch"
+	},
+	"require" : {
+		"typo3-ter/rn-base" : "*"
+	}
+}
