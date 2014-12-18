@@ -26,7 +26,7 @@ use Elastica\Exception\ClientException;
 use Elastica\Index;
 use Elastica\Document;
 use Elastica\Bulk\Action;
-
+define('DEBUG', TRUE);
 require_once t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php';
 tx_rnbase::load('tx_mksearch_interface_SearchEngine');
 tx_rnbase::load('tx_rnbase_configurations');
@@ -316,8 +316,12 @@ class tx_mksearch_service_engine_ElasticSearch
 			}
 		}
 
-		$elasticaDocument = new Document($doc->getPrimaryKey(TRUE), $data);
-		$elasticaDocument->setType(Action::OP_TYPE_INDEX);
+		$primaryKey = $doc->getPrimaryKey();
+		$elasticaDocument = new Document($primaryKey['uid']->getValue(), $data);
+		$elasticaDocument->setType(
+			$primaryKey['extKey']->getValue() . ':' . 
+			$primaryKey['contentType']->getValue()
+		);
 
 		return $this->getIndex()->addDocuments(array($elasticaDocument))->isOk();
 	}
@@ -342,11 +346,11 @@ class tx_mksearch_service_engine_ElasticSearch
 	 * @return bool success
 	 */
 	public function indexDeleteByContentUid($uid, $extKey, $contentType) {
-// 		$primaryKey = $extKey . ':' . $contentType . ':' . $uid;
-// 		$elasticaDocument = new Document($primaryKey);
-// 		$elasticaDocument->setType(Action::OP_TYPE_DELETE);
+		$type = $extKey . ':' . $contentType;
+		$elasticaDocument = new Document($uid);
+		$elasticaDocument->setType($type);
 
-// 		return $this->getIndex()->deleteDocuments(array($elasticaDocument))->isOk();
+		return $this->getIndex()->deleteDocuments(array($elasticaDocument))->isOk();
 	}
 
 	/**

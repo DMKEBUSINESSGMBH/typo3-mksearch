@@ -778,14 +778,14 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 		);
 
 		$elasticaDocument = new Document(
-			'mksearch:tt_content:123',
+			'123',
 			array(
 				'content_ident_s' => 'mksearch.tt_content',
 				'first_field' => 'flat value',
 				'second_field' => array('multi', 'value')
 			)
 		);
-		$elasticaDocument->setType(Action::OP_TYPE_INDEX);
+		$elasticaDocument->setType('mksearch:tt_content');
 		$response = $this->getMock(
 			'stdClass', array('isOk')
 		);
@@ -805,5 +805,38 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 			->will($this->returnValue($index));
 
 		$this->assertTrue($service->indexNew($doc));
+	}
+	
+	/**
+	 * @group unit
+	 */
+	public function testIndexDeleteByContentUid() {
+		$index = $this->getMock(
+			'stdClass', array('deleteDocuments')
+		);
+	
+		$elasticaDocument = new Document('123');
+		$elasticaDocument->setType('mksearch:tt_content');
+		$response = $this->getMock(
+			'stdClass', array('isOk')
+		);
+		$response->expects($this->once())
+			->method('isOk')
+			->will($this->returnValue(TRUE));
+		$index->expects($this->once())
+			->method('deleteDocuments')
+			->with(array($elasticaDocument))
+			->will($this->returnValue($response));
+	
+		$service = $this->getMock(
+			'tx_mksearch_service_engine_ElasticSearch', array('getIndex')
+		);
+		$service->expects($this->once())
+			->method('getIndex')
+			->will($this->returnValue($index));
+	
+		$this->assertTrue($service->indexDeleteByContentUid(
+			123, 'mksearch', 'tt_content'
+		));
 	}
 }
