@@ -93,6 +93,9 @@ class tx_mksearch_service_engine_ElasticSearch
 	 */
 	protected function initElasticSearchConnection(array $credentials) {
 		$this->index = $this->getElasticaIndex($credentials);
+		if (!$this->index->exists()) {
+			$this->index->create();
+		}
 		$this->index->open();
 
 		if (!$this->isServerAvailable()) {

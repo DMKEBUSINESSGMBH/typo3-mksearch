@@ -128,7 +128,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 	/**
 	 * @group unit
 	 */
-	public function testInitElasticSearchConnectionSetsIndexPropertyAndOpensIndex() {
+	public function testInitElasticSearchConnectionSetsIndexPropertyCreatesIndexIfNotExistsAndOpensIndex() {
 		$service = $this->getMock(
 			'tx_mksearch_service_engine_ElasticSearch',
 			array('getElasticaIndex', 'isServerAvailable', 'getLogger')
@@ -139,9 +139,15 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 			->will($this->returnValue(TRUE));
 
 		$credentials = array('someCredentials');
-		$index = $this->getMock('stdClass', array('open'));
+		$index = $this->getMock('stdClass', array('open', 'exists', 'create'));
 		$index->expects($this->once())
 			->method('open');
+		$index->expects($this->once())
+			->method('exists')
+			->will($this->returnValue(TRUE));
+		$index->expects($this->never())
+			->method('create');
+		
 		$service->expects($this->once())
 			->method('getElasticaIndex')
 			->with($credentials)
@@ -160,6 +166,48 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 			$index, $indexProperty ->getValue($service), 'index property falsch'
 		);
 	}
+	
+	/**
+	 * @group unit
+	 */
+	public function testInitElasticSearchConnectionSetsIndexPropertyCreatesIndexNotIfExistsAndOpensIndex() {
+		$service = $this->getMock(
+			'tx_mksearch_service_engine_ElasticSearch',
+			array('getElasticaIndex', 'isServerAvailable', 'getLogger')
+		);
+	
+		$service->expects($this->once())
+			->method('isServerAvailable')
+			->will($this->returnValue(TRUE));
+	
+		$credentials = array('someCredentials');
+		$index = $this->getMock('stdClass', array('open', 'exists', 'create'));
+		$index->expects($this->once())
+			->method('open');
+		$index->expects($this->once())
+			->method('exists')
+			->will($this->returnValue(FALSE));
+		$index->expects($this->once())
+			->method('create');
+	
+		$service->expects($this->once())
+			->method('getElasticaIndex')
+			->with($credentials)
+			->will($this->returnValue($index));
+	
+		$indexProperty = new ReflectionProperty(
+			'tx_mksearch_service_engine_ElasticSearch', 'index'
+		);
+		$indexProperty->setAccessible(TRUE);
+	
+		$this->callInaccessibleMethod(
+			$service, 'initElasticSearchConnection', $credentials
+		);
+	
+		$this->assertEquals(
+			$index, $indexProperty ->getValue($service), 'index property falsch'
+		);
+	}
 
 	/**
 	 * @group unit
@@ -170,7 +218,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 			array('getElasticaIndex', 'isServerAvailable', 'getLogger')
 		);
 
-		$index = $this->getMock('stdClass', array('open'));
+		$index = $this->getMock('stdClass', array('open', 'exists', 'create'));
 		$service->expects($this->once())
 			->method('getElasticaIndex')
 			->will($this->returnValue($index));
@@ -215,7 +263,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 			->method('isServerAvailable')
 			->will($this->returnValue(FALSE));
 
-		$index = $this->getMock('stdClass', array('open'));
+		$index = $this->getMock('stdClass', array('open', 'exists', 'create'));
 		$service->expects($this->once())
 			->method('getElasticaIndex')
 			->will($this->returnValue($index));
