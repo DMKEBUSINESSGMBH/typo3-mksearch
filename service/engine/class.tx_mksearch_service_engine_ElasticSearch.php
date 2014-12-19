@@ -141,6 +141,9 @@ class tx_mksearch_service_engine_ElasticSearch
 	 * @param array		$fields
 	 * @param array		$options
 	 * @return array[tx_mksearch_model_SearchResult]	search results
+	 * 
+	 * @todo support für alle optionen von elasticsearch
+	 * @see http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html
 	 */
 	public function search(array $fields=array(), array $options=array()) {
 
@@ -400,7 +403,9 @@ class tx_mksearch_service_engine_ElasticSearch
 		try {
 			if ($this->isServerAvailable()) {
 				$id = 1;
-				$msg = 'Up and running';
+				$msg = 'Up and running (Ping time: ' . 
+						$this->getIndex()->getClient()->getStatus()->getResponse()->getQueryTime() .
+						' ms)';
 			}
 		} catch (Exception $e) {
 			$msg = 'Error connecting ElasticSearch: ' . $e->getMessage() . '.';

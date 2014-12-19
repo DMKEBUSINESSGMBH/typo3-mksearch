@@ -481,10 +481,42 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 	 * @group unit
 	 */
 	public function testGetStatusWhenServerIsAvailable() {
-		$service = $this->getMock(
-			'tx_mksearch_service_engine_ElasticSearch',
-			array('isServerAvailable')
+		$response = $this->getMock(
+			'stdClass', array('getQueryTime')
 		);
+		$response->expects($this->once())
+			->method('getQueryTime')
+			->will($this->returnValue(123));
+		
+		$status = $this->getMock(
+			'stdClass', array('getResponse')
+		);
+		$status->expects($this->once())
+			->method('getResponse')
+			->will($this->returnValue($response));
+		
+		$client = $this->getMock(
+			'stdClass', array('getStatus')
+		);
+		$client->expects($this->once())
+			->method('getStatus')
+			->will($this->returnValue($status));
+		
+		$index = $this->getMock(
+			'stdClass', array('getClient')
+		);
+		$index->expects($this->once())
+			->method('getClient')
+			->will($this->returnValue($client));
+		
+		$service = $this->getMock(
+			'tx_mksearch_service_engine_ElasticSearch', array('getIndex', 'isServerAvailable')
+		);
+		
+		$service->expects($this->once())
+			->method('getIndex')
+			->will($this->returnValue($index));
+
 		$service->expects($this->once())
 			->method('isServerAvailable')
 			->will($this->returnValue(TRUE));
@@ -492,7 +524,9 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 		$status = $service->getStatus();
 
 		$this->assertEquals(1, $status->getStatus(), 'Status falsch');
-		$this->assertEquals('Up and running', $status->getMessage(), 'Message falsch');
+		$this->assertEquals(
+			'Up and running (Ping time: 123 ms)', $status->getMessage(), 'Message falsch'
+		);
 	}
 
 	/**
