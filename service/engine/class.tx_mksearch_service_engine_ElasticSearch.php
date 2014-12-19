@@ -313,6 +313,14 @@ class tx_mksearch_service_engine_ElasticSearch
 	 */
 	public function indexNew(tx_mksearch_interface_IndexerDocument $doc) {
 		$data = array();
+		
+		// Primary key data (fields are all scalar)
+		$primaryKeyData = $doc->getPrimaryKey();
+		foreach ($primaryKeyData as $key => $field) {
+			if (!empty($field)) {
+				$data[$key] = tx_mksearch_util_Misc::utf8Encode($field->getValue());
+			}
+		}
 		foreach ($doc->getData() as $key => $field) {
 			if ($field) {
 				$data[$key] = tx_mksearch_util_Misc::utf8Encode($field->getValue());

@@ -816,7 +816,10 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 			array(
 				'content_ident_s' => 'mksearch.tt_content',
 				'first_field' => 'flat value',
-				'second_field' => array('multi', 'value')
+				'second_field' => array('multi', 'value'),
+				'extKey' =>'mksearch',
+				'contentType' =>'tt_content',
+				'uid' => 123
 			)
 		);
 		$elasticaDocument->setType('mksearch:tt_content');
