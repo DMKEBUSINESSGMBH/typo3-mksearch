@@ -29,6 +29,10 @@
 										<numIndex index="0">LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.action.searchSolr</numIndex>
 										<numIndex index="1">tx_mksearch_action_SearchSolr</numIndex>
 									</numIndex>
+									<numIndex index="20" type="array">
+										<numIndex index="0">LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.action.elasticSearch</numIndex>
+										<numIndex index="1">tx_mksearch_action_ElasticSearch</numIndex>
+									</numIndex>
 									<numIndex index="100" type="array">
 										<numIndex index="0">LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.action.showHit</numIndex>
 										<numIndex index="1">tx_mksearch_action_ShowHit</numIndex>
@@ -389,6 +393,100 @@
 				</el>
 			</ROOT>
 		</s_searchsolr>
+		<s_elasticsearch>
+			<ROOT>
+				<TCEforms>
+					<sheetTitle>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.action.elasticSearch</sheetTitle>
+				</TCEforms>
+				<type>array</type>
+				<el>
+					<elasticsearch.usedIndex>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.usedIndex</label>
+							<config>
+								<type>select</type>
+								<foreign_table>tx_mksearch_indices</foreign_table>
+								<foreign_table_where>AND engine='elasticsearch' ORDER BY name</foreign_table_where>
+								<multiple>0</multiple>
+								<maxitems>1</maxitems>
+								<size>1</size>
+							</config>
+						</TCEforms>
+					</elasticsearch.usedIndex>
+					<elasticsearch.filter.options.debug>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.filter.debugQuery</label>
+							<config>
+							  <type>check</type>
+							</config>
+						</TCEforms>
+					</elasticsearch.filter.options.debug>
+					<elasticsearch.filter.template>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.searchFormTemplate</label>
+							<config>
+								<type>input</type>
+								<size>24</size>
+								<max>256</max>
+								<eval>trim</eval>
+								<wizards type="array">
+									<_PADDING>2</_PADDING>
+									<link type="array">
+										<type>popup</type>
+										<title>Link</title>
+										<icon>link_popup.gif</icon>
+										<script>browse_links.php?mode=wizard&amp;act=file</script>
+										<params type="array">
+											<blindLinkOptions>page,url,mail,spec</blindLinkOptions>
+											<allowedExtensions>htm,html,tmpl,tpl</allowedExtensions>
+										</params>
+										<JSopenParams>height=300,width=500,status=0,menubar=0,scrollbars=1</JSopenParams>
+									</link>
+								</wizards>
+							</config>
+						</TCEforms>
+					</elasticsearch.filter.template>
+					<elasticsearchTemplate>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.resultListTemplate</label>
+							<config>
+								<type>input</type>
+								<size>24</size>
+								<max>256</max>
+								<eval>trim</eval>
+								<wizards type="array">
+									<_PADDING>2</_PADDING>
+									<link type="array">
+										<type>popup</type>
+										<title>Link</title>
+										<icon>link_popup.gif</icon>
+										<script>browse_links.php?mode=wizard&amp;act=file</script>
+										<params type="array">
+											<blindLinkOptions>page,url,mail,spec</blindLinkOptions>
+											<allowedExtensions>htm,html,tmpl,tpl</allowedExtensions>
+										</params>
+										<JSopenParams>height=300,width=500,status=0,menubar=0,scrollbars=1</JSopenParams>
+									</link>
+								</wizards>
+							</config>
+						</TCEforms>
+					</elasticsearchTemplate>
+					<elasticsearch.filter.forceSearch>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.force</label>
+							<config>
+								<type>check</type>
+							</config>
+						</TCEforms>
+					</elasticsearch.filter.forceSearch>
+				</el>
+			</ROOT>
+		</s_elasticsearch>
 
 		<s_showhit>
 			<ROOT>

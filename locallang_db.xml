@@ -86,6 +86,8 @@
 			<label index="tt_content.tx_mksearch_is_indexable.use_indexer_config">use configuration of indexer</label>
 			<label index="tt_content.tx_mksearch_is_indexable.yes">yes</label>
 			<label index="tt_content.tx_mksearch_is_indexable.no">no</label>
+			
+			<label index="plugin.mksearch.flexform.action.elasticSearch">Search view for ElasticSearch</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="general.undef">Undefiniert</label>

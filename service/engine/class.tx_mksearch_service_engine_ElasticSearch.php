@@ -26,6 +26,7 @@ use Elastica\Exception\ClientException;
 use Elastica\Index;
 use Elastica\Document;
 use Elastica\Bulk\Action;
+use Elastica\Result;
 define('DEBUG', TRUE);
 require_once t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php';
 tx_rnbase::load('tx_mksearch_interface_SearchEngine');
@@ -146,7 +147,43 @@ class tx_mksearch_service_engine_ElasticSearch
 	 * @see http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html
 	 */
 	public function search(array $fields=array(), array $options=array()) {
-
+		$startTime = microtime(true);
+		$result = array();
+		
+		try {
+			$searchResult = $this->getIndex()->search($fields['term']);
+			$lastRequest = $this->getIndex()->getClient()->getLastRequest();
+			
+			$httpStatus = $searchResult->getResponse()->getStatus();
+			if($httpStatus != 200) {
+				$message = 	'Error requesting solr. HTTP status: ' . $httpStatus . 
+							'; Path: ' . $lastRequest->getPath() . 
+							'; Query: ' . $lastRequest->getQuery();
+				throw new RuntimeException($message);
+			}
+		
+			$items = array();
+			if ($searchResult->getResults()) {
+				/* @var $item Result */
+				foreach($searchResult->getResults() as $item) {
+					$items[] = tx_rnbase::makeInstance(
+						'tx_mksearch_model_SearchHit', $item->getData()
+					);
+				}
+			}
+		
+			$result['items'] = $items;
+			$result['searchUrl'] = $lastRequest->getPath();
+			$result['searchQuery'] = $lastRequest->getQuery();
+			$result['searchTime'] = (microtime(true) - $startTime) . ' ms';
+			$result['numFound'] = $searchResult->getTotalHits();
+		}
+		catch(Exception $e) {
+			$message = 	'Exception caught from ElasticSearch: ' . $e->getMessage();
+			throw new RuntimeException($message);
+		}
+		
+		return $result;
 	}
 
 	/**
