@@ -876,4 +876,79 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 			123, 'mksearch', 'tt_content'
 		));
 	}
+	
+	/**
+	 * @group unit
+	 * @expectedException RuntimeException
+	 * @expectedExceptionMessage ohoh
+	 */
+	public function testSearchThrowsRuntimeExceptionIfElasticaThrowsException() {
+		$exception = new Exception('ohoh');
+	
+		$service = $this->getMock(
+			'tx_mksearch_service_engine_ElasticSearch', array('getIndex')
+		);
+		$service->expects($this->once())
+			->method('getIndex')
+			->will($this->throwException($exception));
+	
+		$service->search();
+	}
+	
+	/**
+	 * @group unit
+	 * @expectedException RuntimeException
+	 * @expectedExceptionMessage Exception caught from ElasticSearch: Error requesting ElasticSearch. HTTP status: 201; Path: pfad; Query: query
+	 */
+	public function testSearchThrowsRuntimeExceptionIfResponseHttpStatusIsNot200() {
+		$response = $this->getMock(
+			'stdClass', array('getStatus')
+		);
+		$response->expects($this->once())
+			->method('getStatus')
+			->will($this->returnValue(201));
+		
+		$searchResult = $this->getMock(
+			'\\Elastica\\ResultSet', array('getResponse'), array(), '', FALSE
+		);
+		$searchResult->expects($this->once())
+			->method('getResponse')
+			->will($this->returnValue($response));
+		
+		$index = $this->getMock(
+			'stdClass', array('search', 'getClient')
+		);
+		$index->expects($this->once())
+			->method('search')
+			->will($this->returnValue($searchResult));
+		
+		$lastRequest = $this->getMock(
+			'stdClass', array('getPath', 'getQuery')
+		);
+		$lastRequest->expects($this->once())
+			->method('getPath')
+			->will($this->returnValue('pfad'));
+		$lastRequest->expects($this->once())
+			->method('getQuery')
+			->will($this->returnValue('query'));
+		$client = $this->getMock(
+			'stdClass', array('getLastRequest')
+		);
+		$client->expects($this->once())
+			->method('getLastRequest')
+			->will($this->returnValue($lastRequest));
+		
+		$index->expects($this->once())
+			->method('getClient')
+			->will($this->returnValue($client));
+	
+		$service = $this->getMock(
+			'tx_mksearch_service_engine_ElasticSearch', array('getIndex')
+		);
+		$service->expects($this->any())
+			->method('getIndex')
+			->will($this->returnValue($index));
+	
+		$service->search();
+	}
 }

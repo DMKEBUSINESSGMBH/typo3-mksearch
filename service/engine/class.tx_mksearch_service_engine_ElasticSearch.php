@@ -149,7 +149,7 @@ class tx_mksearch_service_engine_ElasticSearch
 	 * @todo support für alle optionen von elasticsearch
 	 * @see http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html
 	 */
-	public function search(array $fields=array(), array $options=array()) {
+	public function search(array $fields = array(), array $options = array()) {
 		$startTime = microtime(true);
 		$result = array();
 		
@@ -223,7 +223,7 @@ class tx_mksearch_service_engine_ElasticSearch
 		$httpStatus = $searchResult->getResponse()->getStatus();
 		if($httpStatus != 200) {
 			$lastRequest = $this->getIndex()->getClient()->getLastRequest();
-			$message = 	'Error requesting solr. HTTP status: ' . $httpStatus .
+			$message = 	'Error requesting ElasticSearch. HTTP status: ' . $httpStatus .
 						'; Path: ' . $lastRequest->getPath() .
 						'; Query: ' . $lastRequest->getQuery();
 			throw new RuntimeException($message);
