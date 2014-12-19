@@ -327,6 +327,12 @@ lib.mksearch.defaultElasticSearchFilter {
 		# Die Marker haben das Format ###PARAM_EXTQUALIFIER_PARAMNAME###
 		term = ###PARAM_MKSEARCH_TERM###
 	}
+
+	availableModes = standard,advanced
+	
+	### kommaspearierte Liste von Feldern, die im Formular leer vorbefüllt werden
+	### wenn Formular noch nicht abgeschickt. sonst werden die Marker ausgegeben
+	requiredFormFields =
 	
 	### sorting beispiel
 #	sort {

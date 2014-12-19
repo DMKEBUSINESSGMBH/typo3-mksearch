@@ -36,6 +36,12 @@ tx_rnbase::load('tx_mksearch_util_Filter');
 class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter {
 
 	/**
+	 *
+	 * @var tx_mksearch_util_Filter
+	 */
+	protected $filterUtility;
+	
+	/**
 	 * Initialize filter
 	 *
 	 * @param array $fields
@@ -74,25 +80,10 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter {
 			return FALSE;
 		}
 
-		$this->handleLimit($options);
 		$this->handleTerm($fields, $parameters, $configurations, $confId);
 		$this->handleSorting($options);
 		
 		return TRUE;
-	}
-
-
-
-	/**
-	 * @todo implement
-	 *
-	 * @param 	array 						$fields
-	 * @param 	array 						$options
-	 * @param 	tx_rnbase_IParameters 		$parameters
-	 * @param 	tx_rnbase_configurations 	$configurations
-	 * @param 	string 						$confId
-	 */
-	protected function handleLimit(&$options) {
 	}
 
 	/**
@@ -106,10 +97,10 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter {
 	 */
 	protected function handleTerm(&$fields, &$parameters, &$configurations, $confId) {
 		if($termTemplate = $fields['term']) {
-			$termTemplate = $this->getFilterUtility()->parseTermTemplate(
+			$parsedTemplate = $this->getFilterUtility()->parseTermTemplate(
 				$termTemplate, $parameters, $configurations, $confId
 			);
-			$fields['term'] = $termTemplate;
+			$fields['term'] = $parsedTemplate;
 		}
 	}
 
@@ -197,6 +188,7 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter {
 			$formData['searchterm'] = htmlspecialchars( $this->getParameters()->get('term') );
 			tx_rnbase::load('tx_rnbase_util_FormUtil');
 			$formData['hiddenfields'] = tx_rnbase_util_FormUtil::getHiddenFieldsForUrlParams($formData['action']);
+			$this->prepareFormFields($formData, $this->getParameters());
 
 			$combinations = array('none', 'free', 'or', 'and', 'exact');
 			$currentCombination = $this->getParameters()->get('combination');
@@ -230,6 +222,40 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter {
 		$markArray['###'.$markerName.'###'] = $formTemplate;
 		return $template;
 	}
+	
+	/**
+	 * Werte für Formularfelder aufbereiten. Daten aus dem Request übernehmen und wieder füllen.
+	 * @param array $formData
+	 * @param tx_rnbase_parameters $parameters
+	 */
+	protected function prepareFormFields(&$formData, $parameters) {
+		$formData['searchterm'] = $parameters->get('term');
+		$values = array('or', 'and', 'exact');
+		$options = $parameters->get('options');
+		if($options['combination']) {
+			foreach ($values as $value) {
+				$formData['combination_'.$value.'_selected'] = $options['combination'] == $value ? 'checked=checked' : '';
+			}
+		}
+		else {
+			// Default
+			$formData['combination_or_selected'] = 'checked=checked';
+		}
+		$values = $this->getModeValuesAvailable();
+		if($options['mode']) {
+			foreach ($values as $value) {
+				$formData['mode_'.$value.'_selected'] = $options['mode'] == $value ? 'checked=checked' : '';
+			}
+		}
+		else {
+			// Default
+			$formData['mode_standard_selected'] = 'checked=checked';
+		}
+	
+		$formData = $this->fillFormDataWithRequiredFormFieldsIfNoSet(
+				$formData, $parameters
+		);
+	}
 
 	/**
 	 * Returns all values possible for form field mksearch[options][mode].
@@ -241,6 +267,33 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter {
 			$this->getConfigurations()->get($this->getConfId() . 'availableModes')
 		);
 		return (array) $availableModes;
+	}
+	
+	/**
+	 * ist notwendig weil sonst die Marker, welche die Formulardaten
+	 * enthalten ungeparsed rauskommen, falls das Formular noch
+	 * nicht abgeschickt wurde
+	 *
+	 * @param array $formData
+	 * @param tx_rnbase_parameters $parameters
+	 *
+	 * @return array
+	 */
+	private function fillFormDataWithRequiredFormFieldsIfNoSet(
+			array $formData, tx_rnbase_parameters $parameters
+	) {
+		$formFields = t3lib_div::trimExplode(
+			',',
+			$this->getConfigurations()->get($this->getConfId() . 'requiredFormFields')
+		);
+	
+		foreach ($formFields as $formField) {
+			if (!array_key_exists($formField, $formData)) {
+				$formData[$formField] = '';
+			}
+		}
+	
+		return $formData;
 	}
 
 	/**
