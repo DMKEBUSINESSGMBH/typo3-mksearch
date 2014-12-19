@@ -51,10 +51,10 @@ class tx_mksearch_action_ElasticSearch extends tx_rnbase_action_BaseIOC {
 		$filter = tx_rnbase_filter_BaseFilter::createFilter(
 			$parameters, $configurations, $viewData, $confId  .'filter.'
 		);
-		//manchmal will man nur ein Suchformular auf jeder Seite im Header einbinden
-		//dieses soll dann aber nur auf eine Ergebnisseite verweisen ohne
-		//selbst zu suchen
-		if($configurations->get($confId.'nosearch')) return null;
+		
+		if ($configurations->get($confId.'nosearch')) {
+			return NULL;
+		}
 
 		$fields = array();
 		$options = array();
@@ -69,10 +69,7 @@ class tx_mksearch_action_ElasticSearch extends tx_rnbase_action_BaseIOC {
 
 			$searchEngine = tx_mksearch_util_ServiceRegistry::getSearchEngine($index);
 			$searchEngine->openIndex($index);
-			$filter->handlePageBrowser($configurations,
-				$confId . 'hit.pagebrowser.', $viewData, $fields, $options,
-				array('searchcallback'=> array($searchEngine, 'search'))
-			);
+			
 			$searchResult = $searchEngine->search($fields, $options, $configurations);
 			$searchEngine->closeIndex();
 		}
@@ -82,7 +79,6 @@ class tx_mksearch_action_ElasticSearch extends tx_rnbase_action_BaseIOC {
 		
 		return NULL;
 	}
-
 
 	/**
 	 * (non-PHPdoc)
