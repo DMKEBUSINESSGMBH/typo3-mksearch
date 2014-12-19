@@ -70,6 +70,11 @@ class tx_mksearch_action_ElasticSearch extends tx_rnbase_action_BaseIOC {
 			$searchEngine = tx_mksearch_util_ServiceRegistry::getSearchEngine($index);
 			$searchEngine->openIndex($index);
 			
+			$pageBrowser = $this->handlePageBrowser(
+				$parameters, $configurations, $confId, $viewData, 
+				$fields, $options, $searchEngine
+			);
+			
 			$searchResult = $searchEngine->search($fields, $options, $configurations);
 			$searchEngine->closeIndex();
 		}
@@ -78,6 +83,49 @@ class tx_mksearch_action_ElasticSearch extends tx_rnbase_action_BaseIOC {
 		$viewData->offsetSet('search', $searchResult['items']);
 		
 		return NULL;
+	}
+	
+	/**
+	 * @param tx_rnbase_parameters $parameters
+	 * @param tx_rnbase_configurations $configurations
+	 * @param unknown $confId
+	 * @param ArrayObject $viewdata
+	 * @param array $fields
+	 * @param array $options
+	 * @param tx_mksearch_service_engine_ElasticSearch $index
+	 * @return void
+	 */
+	function handlePageBrowser(
+		tx_rnbase_parameters $parameters, tx_rnbase_configurations $configurations, 
+		$confId, ArrayObject $viewdata, array &$fields, array &$options, 
+		tx_mksearch_service_engine_ElasticSearch $searchEngine
+	) {
+		if(
+			(isset($options['limit']) || $options['limit'] > 1)
+			&& is_array($conf = $configurations->get($confId.'hit.pagebrowser.'))
+		) {
+			// PageBrowser initialisieren
+			$pageBrowserId = $conf['pbid'] ? 	$conf['pbid'] : 
+												'search' . $configurations->getPluginId();
+			/* @var $pageBrowser tx_rnbase_util_PageBrowser */
+			$pageBrowser = tx_rnbase::makeInstance(
+				'tx_rnbase_util_PageBrowser', $pageBrowserId
+			);
+			$optionsForCountOnly = $options;
+			$optionsForCountOnly['limit'] = 0;
+			$listSize = 0;
+			
+			if($result = $searchEngine->search($fields, $optionsForCountOnly)) {
+				$listSize = $result['numFound'];
+			}
+			
+			$pageSize = isset($options['limit']) ? $options['limit'] : intval($conf['limit']);
+			$pageBrowser->setState($parameters, $listSize, $pageSize);
+			$state = $pageBrowser->getState();
+			
+			$options = array_merge($options, $state);
+			$viewdata->offsetSet('pagebrowser', $pageBrowser);
+		}
 	}
 
 	/**

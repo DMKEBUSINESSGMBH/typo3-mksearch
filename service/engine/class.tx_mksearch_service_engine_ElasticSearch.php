@@ -27,6 +27,7 @@ use Elastica\Index;
 use Elastica\Document;
 use Elastica\Bulk\Action;
 use Elastica\Result;
+use Elastica\Search;
 define('DEBUG', TRUE);
 require_once t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php';
 tx_rnbase::load('tx_mksearch_interface_SearchEngine');
@@ -151,7 +152,9 @@ class tx_mksearch_service_engine_ElasticSearch
 		$result = array();
 		
 		try {
-			$searchResult = $this->getIndex()->search($fields['term']);
+			$searchResult = $this->getIndex()->search(
+				$fields['term'], $this->getOptionsForElastica($options)
+			);
 			$lastRequest = $this->getIndex()->getClient()->getLastRequest();
 			
 			$httpStatus = $searchResult->getResponse()->getStatus();
@@ -163,9 +166,9 @@ class tx_mksearch_service_engine_ElasticSearch
 			}
 		
 			$items = array();
-			if ($searchResult->getResults()) {
+			if ($elasticSearchResult = $searchResult->getResults()) {
 				/* @var $item Result */
-				foreach($searchResult->getResults() as $item) {
+				foreach($elasticSearchResult as $item) {
 					$items[] = tx_rnbase::makeInstance(
 						'tx_mksearch_model_SearchHit', $item->getData()
 					);
@@ -176,6 +179,7 @@ class tx_mksearch_service_engine_ElasticSearch
 			$result['searchUrl'] = $lastRequest->getPath();
 			$result['searchQuery'] = $lastRequest->getQuery();
 			$result['searchTime'] = (microtime(true) - $startTime) . ' ms';
+			$result['queryTime'] = $searchResult->getTotalTime() . ' ms';
 			$result['numFound'] = $searchResult->getTotalHits();
 		}
 		catch(Exception $e) {
@@ -184,6 +188,55 @@ class tx_mksearch_service_engine_ElasticSearch
 		}
 		
 		return $result;
+	}
+	
+	/**
+	 * 
+	 * @param array $options
+	 * 
+	 * @return array
+	 */
+	private function getOptionsForElastica(array $options) {
+		$elasticaOptions = array();
+		
+		foreach ($options as $key => $value) {
+			$key = $this->remapElasticaOptionKey($key);
+			switch ($key) {
+				case Search::OPTION_SEARCH_TYPE:
+				case Search::OPTION_ROUTING:
+				case Search::OPTION_PREFERENCE:
+				case Search::OPTION_VERSION:
+				case Search::OPTION_TIMEOUT:
+				case Search::OPTION_FROM:
+				case Search::OPTION_SIZE:
+				case Search::OPTION_SCROLL:
+				case Search::OPTION_SCROLL_ID:
+				case Search::OPTION_SEARCH_TYPE_SUGGEST:
+				// explain und limit wird von Elastica selbst remapped
+				case 'explain':
+				case 'limit':
+					$elasticaOptions[$key] = $value;
+			}
+		}
+		
+		return $elasticaOptions;
+	}
+	
+	/**
+	 * 
+	 * @param string $optionKey
+	 * 
+	 * @return string
+	 */
+	private function remapElasticaOptionKey($optionKey) {
+		switch ($optionKey) {
+			case 'debug':
+				$optionKey = 'explain';
+			case 'offset':
+				$optionKey = Search::OPTION_FROM;
+		}
+		
+		return $optionKey;
 	}
 
 	/**
