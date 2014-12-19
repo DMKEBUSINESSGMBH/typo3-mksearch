@@ -28,6 +28,8 @@ use Elastica\Document;
 use Elastica\Bulk\Action;
 use Elastica\Result;
 use Elastica\Search;
+use Elastica\ResultSet;
+use Elastica\Query;
 define('DEBUG', TRUE);
 require_once t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php';
 tx_rnbase::load('tx_mksearch_interface_SearchEngine');
@@ -152,29 +154,16 @@ class tx_mksearch_service_engine_ElasticSearch
 		$result = array();
 		
 		try {
+			/* @var $searchResult ResultSet */
 			$searchResult = $this->getIndex()->search(
-				$fields['term'], $this->getOptionsForElastica($options)
+				$this->getElasticaQuery($fields, $options), 
+				$this->getOptionsForElastica($options)
 			);
-			$lastRequest = $this->getIndex()->getClient()->getLastRequest();
 			
-			$httpStatus = $searchResult->getResponse()->getStatus();
-			if($httpStatus != 200) {
-				$message = 	'Error requesting solr. HTTP status: ' . $httpStatus . 
-							'; Path: ' . $lastRequest->getPath() . 
-							'; Query: ' . $lastRequest->getQuery();
-				throw new RuntimeException($message);
-			}
+			$this->checkResponseOfSearchResult($searchResult);
+			$items = $this->getItemsFromSearchResult($searchResult);
 		
-			$items = array();
-			if ($elasticSearchResult = $searchResult->getResults()) {
-				/* @var $item Result */
-				foreach($elasticSearchResult as $item) {
-					$items[] = tx_rnbase::makeInstance(
-						'tx_mksearch_model_SearchHit', $item->getData()
-					);
-				}
-			}
-		
+			$lastRequest = $this->getIndex()->getClient()->getLastRequest();
 			$result['items'] = $items;
 			$result['searchUrl'] = $lastRequest->getPath();
 			$result['searchQuery'] = $lastRequest->getQuery();
@@ -188,6 +177,75 @@ class tx_mksearch_service_engine_ElasticSearch
 		}
 		
 		return $result;
+	}
+	
+	/**
+	 * @param array $fields
+	 * @param array $options
+	 * @return Query
+	 */
+	private function getElasticaQuery(array $fields, array $options) {
+		$elasticaQuery = Query::create($fields['term']);
+		
+		$elasticaQuery = $this->handleSorting($elasticaQuery, $options);
+		
+		return $elasticaQuery;
+	}
+	
+	/**
+	 * 
+	 * @param Query $elasticaQuery
+	 * @param array $options
+	 * @return Query
+	 */
+	private function handleSorting(Query $elasticaQuery, array $options) {
+		if ($options['sort']) {
+			list($field, $order) = t3lib_div::trimExplode(' ', $options['sort'], TRUE);
+			$elasticaQuery->addSort(
+				array(
+					$field => array(
+						'order' => $order,
+					)
+				)
+			);
+		}
+		
+		return $elasticaQuery;
+	}
+	
+	/**
+	 * 
+	 * @param ResultSet $searchResult
+	 * @return void
+	 * @throws RuntimeException
+	 */
+	private function checkResponseOfSearchResult(ResultSet $searchResult) {
+		$httpStatus = $searchResult->getResponse()->getStatus();
+		if($httpStatus != 200) {
+			$lastRequest = $this->getIndex()->getClient()->getLastRequest();
+			$message = 	'Error requesting solr. HTTP status: ' . $httpStatus .
+						'; Path: ' . $lastRequest->getPath() .
+						'; Query: ' . $lastRequest->getQuery();
+			throw new RuntimeException($message);
+		}
+	}
+	
+	/**
+	 * @param ResultSet $searchResult
+	 * @return multitype:Ambigous <object, boolean, \TYPO3\CMS\Core\Utility\array<\TYPO3\CMS\Core\SingletonInterface>, mixed, \TYPO3\CMS\Core\SingletonInterface, \TYPO3\CMS\Core\Utility\mixed, unknown>
+	 */
+	private function getItemsFromSearchResult(ResultSet $searchResult) {
+		$items = array();
+		if ($elasticSearchResult = $searchResult->getResults()) {
+			/* @var $item Result */
+			foreach($elasticSearchResult as $item) {
+				$items[] = tx_rnbase::makeInstance(
+						'tx_mksearch_model_SearchHit', $item->getData()
+				);
+			}
+		}
+		
+		return $items;
 	}
 	
 	/**

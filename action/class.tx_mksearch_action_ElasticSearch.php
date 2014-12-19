@@ -76,7 +76,6 @@ class tx_mksearch_action_ElasticSearch extends tx_rnbase_action_BaseIOC {
 			);
 			
 			$searchResult = $searchEngine->search($fields, $options, $configurations);
-			$searchEngine->closeIndex();
 		}
 
 		$viewData->offsetSet('searchcount', $searchResult['numFound']);
@@ -111,12 +110,9 @@ class tx_mksearch_action_ElasticSearch extends tx_rnbase_action_BaseIOC {
 			$pageBrowser = tx_rnbase::makeInstance(
 				'tx_rnbase_util_PageBrowser', $pageBrowserId
 			);
-			$optionsForCountOnly = $options;
-			$optionsForCountOnly['limit'] = 0;
 			$listSize = 0;
-			
-			if($result = $searchEngine->search($fields, $optionsForCountOnly)) {
-				$listSize = $result['numFound'];
+			if($result = $searchEngine->getIndex()->count($fields['term'])) {
+				$listSize = $result;
 			}
 			
 			$pageSize = isset($options['limit']) ? $options['limit'] : intval($conf['limit']);
