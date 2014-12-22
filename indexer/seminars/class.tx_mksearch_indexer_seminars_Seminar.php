@@ -44,6 +44,14 @@ tx_rnbase::load('tx_mksearch_util_Indexer');
  * @subpackage tx_mksearch_indexer_seminars
  */
 class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Indexer {
+	// In seminars wurden die Konstanten bei getSpeakerBag entfernt. Zur Sicherheit mal hier angelegt.
+	const SEMINARS_TABLE_SEMINARS_SPEAKERS_MM = 'tx_seminars_seminars_speakers_mm';
+	const SEMINARS_TABLE_SEMINARS_PARTNERS_MM = 'tx_seminars_seminars_speakers_mm_partners';
+	const SEMINARS_TABLE_SEMINARS_TUTORS_MM = 'tx_seminars_seminars_speakers_mm_tutors';
+	const SEMINARS_TABLE_SEMINARS_LEADERS_MM = 'tx_seminars_seminars_speakers_mm_leaders';
+	const SEMINARS_TABLE_SPEAKERS = 'tx_seminars_speakers';
+
+	
 	/**
 	 * Our seminar object
 	 * @var tx_seminars_seminar
@@ -230,9 +238,15 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
 		//as this is a multivalue field we collect all
 		//information from the given categories
 		foreach ($aValues as $oValue){
-			foreach ($aMapping as $sFunction => $sIndexKey){
+			foreach ($aMapping as $sFunction => $mIndexKey){
 				$mValue = $oValue->$sFunction();
 				if(!empty($mValue)){
+					$sIndexKey = is_array($mIndexKey) ? $mIndexKey['indexfield'] : $mIndexKey;
+					// $mValue kann ein Object sein, dann kann in mIndexKey der Getter konfiguriert werden
+					if(is_object($mValue) && is_array($mIndexKey)) {
+						$getter = $mIndexKey['getter'];
+						$mValue = $mValue->$getter();
+					}
 					$aTempIndexDoc[$sIndexKey][] = $mValue;
 				}
 			}
@@ -309,6 +323,7 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
 		return new tx_seminars_seminar($rawData['uid']);
 	}
 
+
 	/**
 	 * This method is directly taken from tx_seminars_seminar. We have no
 	 * other possibility than to copy it to get the speakers bag as all methods
@@ -322,27 +337,36 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
 	protected function getSpeakerBag($uid, $speakerRelation = 'speakers') {
 		switch ($speakerRelation) {
 			case 'partners':
-				$mmTable = SEMINARS_TABLE_SEMINARS_PARTNERS_MM;
+				$mmTable = self::SEMINARS_TABLE_SEMINARS_PARTNERS_MM;
 				break;
 			case 'tutors':
-				$mmTable = SEMINARS_TABLE_SEMINARS_TUTORS_MM;
+				$mmTable = self::SEMINARS_TABLE_SEMINARS_TUTORS_MM;
 				break;
 			case 'leaders':
-				$mmTable = SEMINARS_TABLE_SEMINARS_LEADERS_MM;
+				$mmTable = self::SEMINARS_TABLE_SEMINARS_LEADERS_MM;
 				break;
 			case 'speakers':
 				// The fallthrough is intended.
 			default:
-				$mmTable = SEMINARS_TABLE_SEMINARS_SPEAKERS_MM;
+				$mmTable = self::SEMINARS_TABLE_SEMINARS_SPEAKERS_MM;
 				break;
 		}
-
-		return tx_oelib_ObjectFactory::make(
-			'tx_seminars_speakerbag',
-			$mmTable . '.uid_local = ' . $uid . ' AND ' .
-				SEMINARS_TABLE_SPEAKERS . '.uid = ' . $mmTable . '.uid_foreign',
-			$mmTable
-		);
+		if(tx_rnbase_util_TYPO3::isTYPO60OrHigher()) {
+			return t3lib_div::makeInstance(
+				'tx_seminars_Bag_Speaker',
+				$mmTable . '.uid_local = ' . $uid . ' AND ' . 'tx_seminars_speakers.uid = ' . $mmTable . '.uid_foreign',
+				$mmTable,
+				'sorting'
+			);
+		}
+		else {
+			return tx_oelib_ObjectFactory::make(
+					'tx_seminars_speakerbag',
+					$mmTable . '.uid_local = ' . $uid . ' AND ' .
+					self::SEMINARS_TABLE_SPEAKERS . '.uid = ' . $mmTable . '.uid_foreign',
+					$mmTable);
+						
+		}
 	}
 
 	/**
@@ -381,7 +405,8 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
 		return array(
 			'getAddress' => 'place_adress_ms',
 			'getCity' => 'place_city_ms',
-			'getCountry' => 'place_country_ms',
+			// Das Land wird ggf. als Tx_Oelib_Model_Country geliefert
+			'getCountry' => array('indexfield' => 'place_country_ms', 'getter' => 'getLocalShortName' ),
 			'getDirections' => 'place_directions_ms',
 			'getHomepage' => 'place_homepage_ms',
 			'getNotes' => 'place_notes_ms',

@@ -392,7 +392,12 @@ class tx_mksearch_model_IndexerFieldBase implements tx_mksearch_interface_Indexe
 
 	public function __toString() {
 		$mValue = $this->getValue();
-		return (is_array($mValue)) ? implode(',',$mValue) : '"' . $this->getValue() . '"';
+		try {
+			return (is_array($mValue)) ? implode(',',$mValue) : (is_object($mValue) ? $mValue->__toString() : '"' . $this->getValue() . '"');
+		}
+		catch (Exception $e) {
+			return 'ERROR: ' . $e->getMessage();
+		}
 	}
 }
 
