@@ -1,6 +1,10 @@
 <?php
 use Elastica\Document;
 use Elastica\Bulk\Action;
+use Elastica\Query;
+use Elastica\ResultSet;
+use Elastica\Response;
+use Elastica\Result;
 /**
  * 	@package tx_mksearch
  *  @subpackage tx_mksearch_tests
@@ -950,5 +954,192 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 			->will($this->returnValue($index));
 	
 		$service->search();
+	}
+	
+	/**
+	 * @group unit
+	 */
+	public function testGetElasticaQuery() {
+		$service = tx_rnbase::makeInstance('tx_mksearch_service_engine_ElasticSearch');
+		
+		$fields['term'] = 'test term';
+		$elasticaQuery = $this->callInaccessibleMethod($service, 'getElasticaQuery', $fields, array());
+		
+		$expectedQuery = array('query_string' => array('query' => 'test term'));
+		$this->assertEquals($expectedQuery, $elasticaQuery->getQuery(), 'query falsch');
+	}
+	
+	/**
+	 * @group unit
+	 */
+	public function testGetElasticaQueryHandlesSorting() {
+		$service = tx_rnbase::makeInstance('tx_mksearch_service_engine_ElasticSearch');
+	
+		$fields['term'] = 'test term';
+		$elasticaQuery = $this->callInaccessibleMethod(
+			$service, 'getElasticaQuery', $fields, array('sort' => 'uid desc')
+		);
+	
+		$expectedSort = array(0 => array('uid' => array('order' => 'desc')));
+		$this->assertEquals($expectedSort, $elasticaQuery->getParam('sort'), 'sort falsch');
+	}
+	
+	/**
+	 * @group unit
+	 * @dataProvider getOptionsForElastica
+	 */
+	public function testGetOptionsForElastica($initialOption, $expectedMappedOption) {
+		$service = tx_rnbase::makeInstance('tx_mksearch_service_engine_ElasticSearch');
+		
+		$options = array($initialOption => 'test value');
+		$mappedOptions = $this->callInaccessibleMethod(
+			$service, 'getOptionsForElastica', $options
+		);
+	
+		$expectedMappedOptions = array();
+		if ($expectedMappedOption !== NULL) {
+			$expectedMappedOptions = array($expectedMappedOption => 'test value');
+		}
+		$this->assertEquals(
+			$expectedMappedOptions, $mappedOptions, 
+			'option ' . $initialOption . ' falsch gemapped'
+		);
+	}
+	
+	/**
+	 * 
+	 * @return multitype:multitype:string  multitype:string NULL
+	 */
+	public function getOptionsForElastica() {
+		return array(
+			array('search_type', 'search_type'),
+			array('debug', 'explain'),
+			array('limit', 'limit'),
+			array('offset', 'from'),
+			array('unknown', NULL),
+		);
+	}
+	
+	/**
+	 * @group unit
+	 */
+	public function testGetItemsFromSearchResult() {
+		$searchResult = ResultSet::create(new Response(''), Query::create(''));
+		$resultProperty = new ReflectionProperty('\\Elastica\\ResultSet', '_results');
+		$results = array(
+			0 => new Result(array('_source' => array('title' => 'hit data one'))),
+			1 => new Result(array('_source' => array('title' => 'hit data two'))),
+		);
+		$resultProperty->setAccessible(TRUE);
+		$resultProperty->setValue($searchResult, $results);
+		
+		$service = tx_rnbase::makeInstance('tx_mksearch_service_engine_ElasticSearch');
+	
+		$searchHits = $this->callInaccessibleMethod(
+			$service, 'getItemsFromSearchResult', $searchResult
+		);
+		
+		$expectedSearchHits = array(
+			0 =>tx_rnbase::makeInstance(
+				'tx_mksearch_model_SearchHit', array('title' => 'hit data one')
+			),
+			1 =>tx_rnbase::makeInstance(
+				'tx_mksearch_model_SearchHit', array('title' => 'hit data two')
+			),
+		);
+	
+		$this->assertEquals(
+			$expectedSearchHits, $searchHits,
+			'die search hits wurden nicht richtig erstellt'
+		);
+	}
+	
+	/**
+	 * @group unit
+	 */
+	public function testSearchWithValidSearchResult() {
+		$lastRequest = $this->getMock(
+			'stdClass', array('getPath', 'getQuery')
+		);
+		$lastRequest->expects($this->once())
+			->method('getPath')
+			->will($this->returnValue('pfad'));
+		$lastRequest->expects($this->once())
+			->method('getQuery')
+			->will($this->returnValue('query'));
+		$client = $this->getMock(
+			'stdClass', array('getLastRequest')
+		);
+		$client->expects($this->once())
+			->method('getLastRequest')
+			->will($this->returnValue($lastRequest));
+		
+		$index = $this->getMock(
+			'stdClass', array('search', 'getClient')
+		);
+		$index->expects($this->once())
+			->method('getClient')
+			->will($this->returnValue($client));
+	
+		$service = $this->getMock(
+			'tx_mksearch_service_engine_ElasticSearch', 
+			array(
+				'getIndex', 'getElasticaQuery', 'getOptionsForElastica',
+				'checkResponseOfSearchResult', 'getItemsFromSearchResult'
+			)
+		);
+		$service->expects($this->any())
+			->method('getIndex')
+			->will($this->returnValue($index));
+		
+		$fields = array('fields');
+		$options = array('options');
+		$service->expects($this->once())
+			->method('getElasticaQuery')
+			->with($fields, $options)
+			->will($this->returnValue('elastica query'));
+		$service->expects($this->once())
+			->method('getOptionsForElastica')
+			->with($options)
+			->will($this->returnValue(123));
+		
+		$searchResult = ResultSet::create(new Response(''), Query::create(''));
+		
+		$totalHits = new ReflectionProperty('\\Elastica\\ResultSet', '_totalHits');
+		$totalHits->setAccessible(TRUE);
+		$totalHits->setValue($searchResult, 123);
+		
+		$totalTime = new ReflectionProperty('\\Elastica\\ResultSet', '_took');
+		$totalTime->setAccessible(TRUE);
+		$totalTime->setValue($searchResult, 456);
+		
+		$index->expects($this->once())
+			->method('search')
+			->with('elastica query', 123)
+			->will($this->returnValue($searchResult));
+		
+		$service->expects($this->once())
+			->method('checkResponseOfSearchResult')
+			->with($searchResult);
+		
+		$service->expects($this->once())
+			->method('getItemsFromSearchResult')
+			->with($searchResult)
+			->will($this->returnValue(array('search results')));
+	
+		$result = $service->search($fields, $options);
+		
+		$this->assertEquals(array('search results'), $result['items'], 'items falsch');
+		$this->assertEquals('pfad', $result['searchUrl'], 'searchUrl falsch');
+		$this->assertEquals('query', $result['searchQuery'], 'searchQuery falsch');
+		$this->assertContains(
+			' ms', $result['searchTime'], 'searchTime enthält nicht die Einheit'
+		);
+		$this->assertNotNull(
+			str_replace('ms', '', $result['searchTime']), 
+			'searchTime enthält keine Millisekunden Angabe'
+		);
+		$this->assertEquals('456 ms', $result['queryTime'], 'queryTime falsch');
+		$this->assertEquals(123, $result['numFound'], 'searchQuery falsch');
 	}
 }

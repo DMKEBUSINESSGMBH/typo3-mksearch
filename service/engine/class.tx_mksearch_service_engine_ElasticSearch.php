@@ -184,7 +184,7 @@ class tx_mksearch_service_engine_ElasticSearch
 	 * @param array $options
 	 * @return Query
 	 */
-	private function getElasticaQuery(array $fields, array $options) {
+	protected function getElasticaQuery(array $fields, array $options) {
 		$elasticaQuery = Query::create($fields['term']);
 		
 		$elasticaQuery = $this->handleSorting($elasticaQuery, $options);
@@ -219,7 +219,7 @@ class tx_mksearch_service_engine_ElasticSearch
 	 * @return void
 	 * @throws RuntimeException
 	 */
-	private function checkResponseOfSearchResult(ResultSet $searchResult) {
+	protected function checkResponseOfSearchResult(ResultSet $searchResult) {
 		$httpStatus = $searchResult->getResponse()->getStatus();
 		if($httpStatus != 200) {
 			$lastRequest = $this->getIndex()->getClient()->getLastRequest();
@@ -234,7 +234,7 @@ class tx_mksearch_service_engine_ElasticSearch
 	 * @param ResultSet $searchResult
 	 * @return multitype:Ambigous <object, boolean, \TYPO3\CMS\Core\Utility\array<\TYPO3\CMS\Core\SingletonInterface>, mixed, \TYPO3\CMS\Core\SingletonInterface, \TYPO3\CMS\Core\Utility\mixed, unknown>
 	 */
-	private function getItemsFromSearchResult(ResultSet $searchResult) {
+	protected function getItemsFromSearchResult(ResultSet $searchResult) {
 		$items = array();
 		if ($elasticSearchResult = $searchResult->getResults()) {
 			/* @var $item Result */
@@ -254,7 +254,7 @@ class tx_mksearch_service_engine_ElasticSearch
 	 * 
 	 * @return array
 	 */
-	private function getOptionsForElastica(array $options) {
+	protected function getOptionsForElastica(array $options) {
 		$elasticaOptions = array();
 		
 		foreach ($options as $key => $value) {
@@ -290,8 +290,10 @@ class tx_mksearch_service_engine_ElasticSearch
 		switch ($optionKey) {
 			case 'debug':
 				$optionKey = 'explain';
+				break;
 			case 'offset':
 				$optionKey = Search::OPTION_FROM;
+				break;
 		}
 		
 		return $optionKey;
