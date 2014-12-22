@@ -23,6 +23,15 @@ lib.mksearch.pagebrowser {
   link.useKeepVars = 1
 }
 
+lib.mksearch.currentSearchTerm = TEXT
+lib.mksearch.currentSearchTerm {
+	data = GP:mksearch|term
+	stdWrap.htmlSpecialChars = 1
+	### nur wenn nicht leer ausgeben
+	required = 1
+	wrap = ###LABEL_search_term_was### "|"
+}
+
 # Filter for Lucene search
 # TODO: code review!
 lib.mksearch.lucenefilter {
@@ -290,6 +299,72 @@ lib.mksearch.defaultsolrfilter {
 	}
 }
 
+lib.mksearch.defaultElasticSearchFilter {
+	class = tx_mksearch_filter_ElasticSearchBase
+	
+	### search even when form is not submitted?
+	#forceSearch = 1
+	
+	options.limit = 10
+	template {
+		file = EXT:mksearch/templates/searchForm.html
+		subpart = ###SIMPLE###
+	}
+	# Die hier konfigurierten Parameter werden als Marker im Term-String verwendet
+	# Es sind verschiedene Extensions möglich
+	params.mksearch {
+		term = TEXT
+		term {
+			field = term
+			fieldRequired = term
+			required = term
+		}
+	}
+	# So wurden auch alle Parameter von tt_news ausgelesen
+	#params.tt_news {
+	#}
+	fields {
+		# Die Marker haben das Format ###PARAM_EXTQUALIFIER_PARAMNAME###
+		term = ###PARAM_MKSEARCH_TERM###
+	}
+
+	availableModes = standard,advanced
+	
+	### kommaspearierte Liste von Feldern, die im Formular leer vorbefüllt werden
+	### wenn Formular noch nicht abgeschickt. sonst werden die Marker ausgegeben
+	requiredFormFields =
+	
+	### sorting beispiel
+#	sort {
+		### Definiert Felder, für die zusätzliche Marker für die Sortierung integriert werden sollen
+#		fields = uid, title
+		### Konfiguration für die Sortierungs-Links
+#		link{
+#			pid = 0
+#			useKeepVars = 1
+#		}
+		### TS für die Order-Felder
+#		uid_order = CASE
+#		uid_order {
+#			key.field = uid_order
+#			default = TEXT
+#			desc = TEXT
+#			desc.value = headerSortDown
+#			asc = TEXT
+#			asc.value = headerSortUp
+#		}
+#		title_order < .uid_order
+#		title_order.key.field = title_order
+#	}
+#Folgende Marker werden im Template anhand der Konfiguration oben bereitgestellt:
+###SORT_UID_ORDER### = asc
+###SORT_UID_LINKURL### = index.php?mksearch[sort]=uid&mksearch[sortorder]=asc
+###SORT_UID_LINK### = wrappedArray mit dem A-Tag
+###SORT_TITLE_ORDER### = asc
+###SORT_TITLE_LINKURL### = index.php?mksearch[sort]=title&mksearch[sortorder]=asc
+###SORT_TITLE_LINK### = wrappedArray mit dem A-Tag
+}
+
 plugin.tx_mksearch {
 	# lucene search	
 	searchlucene {
@@ -313,14 +388,7 @@ plugin.tx_mksearch {
 		hit = < lib.mksearch.hit
 
 		### Used for Marker: ###PLUGIN_DCSEARCHTERM###
-		plugin.dcsearchterm = TEXT
-		plugin.dcsearchterm {
-			data = GP:mksearch|term
-			stdWrap.htmlSpecialChars = 1
-			### nur wenn nicht leer ausgeben
-			required = 1
-			wrap = ###LABEL_search_term_was### "|"
-		}
+		plugin.dcsearchterm =< lib.mksearch.currentSearchTerm
 
 ####
 # Ab hier wird der Code für diesen View nicht mehr verwendet!!
@@ -610,14 +678,7 @@ plugin.tx_mksearch {
 		}
 
 		### aktueller Suchbegriff
-		plugin.dcsearchterm = TEXT
-		plugin.dcsearchterm {
-			data = GP:mksearch|term
-			stdWrap.htmlSpecialChars = 1
-			### nur wenn nicht leer ausgeben
-			required = 1
-			wrap = ###LABEL_search_term_was### "|"
-		}
+		plugin.dcsearchterm =< lib.mksearch.currentSearchTerm
 	}
 	
 	showhit {
@@ -635,6 +696,20 @@ plugin.tx_mksearch {
 			markerclass = tx_mksearch_marker_Search
 		}
 		hit = < lib.mksearch.hit
+	}
+	
+	elasticsearch {
+		# soll gesucht oder nur die Templates geparsed werden?
+		nosearch = 0
+		
+		usedIndex = {$plugin.tx_mksearch.usedIndex}
+		
+		filter < lib.mksearch.defaultElasticSearchFilter
+		
+		hit = < lib.mksearch.hit
+
+		### aktueller Suchbegriff
+		plugin.dcsearchterm = < lib.mksearch.currentSearchTerm
 	}
 }
 

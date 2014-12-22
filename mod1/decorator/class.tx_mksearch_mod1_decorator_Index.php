@@ -64,6 +64,9 @@ class tx_mksearch_mod1_decorator_Index {
 					case 'solr':
 						$ret = $GLOBALS['LANG']->sL('LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices_engine_solr');
 						break;
+					case 'elasticsearch':
+						$ret = $GLOBALS['LANG']->sL('LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices_engine_elasticsearch');
+						break;
 					default:
 						$ret = $value;
 				}

@@ -89,7 +89,6 @@ class tx_mksearch_action_Search extends tx_rnbase_action_BaseIOC {
 	 * @param unknown $options
 	 */
 	protected function handlePageBrowser($parameters, $configurations, $viewdata, &$fields, &$options) {
-		//if($_SERVER['REMOTE_ADDR']  == '178.15.114.146')
 		$confId = $this->getConfId();
 		if(is_array($conf = $configurations->get($confId.'hit.pagebrowser.'))) {
 			// PageBrowser initialisieren

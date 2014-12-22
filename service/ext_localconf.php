@@ -18,7 +18,6 @@ t3lib_extMgm::addService($_EXTKEY,  'mksearch_engine' /* sv type */,  'tx_mksear
 	)
 );
 
-// Search engine and indexer services
 t3lib_extMgm::addService($_EXTKEY,  'mksearch_engine' /* sv type */,  'tx_mksearch_service_engine_Solr' /* sv key */,
 	array(
 		'title' => 'Search engine Solr',
@@ -31,6 +30,24 @@ t3lib_extMgm::addService($_EXTKEY,  'mksearch_engine' /* sv type */,  'tx_mksear
 		'exec' => '',
 		'classFile' => t3lib_extMgm::extPath($_EXTKEY).'service/engine/class.tx_mksearch_service_engine_Solr.php',
 		'className' => 'tx_mksearch_service_engine_Solr',
+	)
+);
+
+t3lib_extMgm::addService(
+	$_EXTKEY,
+	'mksearch_engine' /* sv type */,
+	'tx_mksearch_service_engine_ElasticSearch' /* sv key */,
+	array(
+		'title' => 'Search engine ElasticSearch',
+		'description' => 'Service which provides access to ElasticSearch search engine',
+		'subtype' => 'elasticsearch',
+		'available' => TRUE,
+		'priority' => 50,
+		'quality' => 50,
+		'os' => '',
+		'exec' => '',
+		'classFile' => t3lib_extMgm::extPath($_EXTKEY).'service/engine/class.tx_mksearch_service_engine_ElasticSearch.php',
+		'className' => 'tx_mksearch_service_engine_ElasticSearch',
 	)
 );
 
