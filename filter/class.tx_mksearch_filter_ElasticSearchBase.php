@@ -158,6 +158,8 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter {
 	 * @param string $confId
 	 * @param string $marker
 	 * @return string
+	 * 
+	 * @todo refactoring da die gleiche Methode wie in tx_mksearch_filter_LuceneBase
 	 */
 	public function parseSearchForm(
 		$template, &$markArray, &$subpartArray, &$wrappedSubpartArray, 
