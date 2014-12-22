@@ -52,7 +52,7 @@ class tx_mksearch_action_ElasticSearch extends tx_rnbase_action_BaseIOC {
 			$parameters, $configurations, $viewData, $confId  .'filter.'
 		);
 		
-		if ($configurations->get($confId.'nosearch')) {
+		if ($configurations->get($confId . 'nosearch')) {
 			return NULL;
 		}
 
@@ -60,17 +60,16 @@ class tx_mksearch_action_ElasticSearch extends tx_rnbase_action_BaseIOC {
 		$options = array();
 		$items = array();
 		if($filter->init($fields, $options)) {
-			$index = tx_mksearch_action_SearchSolr::findSearchIndex(
+			$searchSolrAction = $this->getSearchSolrAction();
+			$index = $searchSolrAction::findSearchIndex(
 				$configurations, $confId
 			);
-			if(!$index->isValid()) {
-				throw new Exception('Configured search index not found!');
-			}
 
-			$searchEngine = tx_mksearch_util_ServiceRegistry::getSearchEngine($index);
+			$serviceRegistry = $this->getServiceRegistry();
+			$searchEngine = $serviceRegistry::getSearchEngine($index);
 			$searchEngine->openIndex($index);
 			
-			$pageBrowser = $this->handlePageBrowser(
+			$this->handlePageBrowser(
 				$parameters, $configurations, $confId, $viewData, 
 				$fields, $options, $searchEngine
 			);
@@ -82,6 +81,22 @@ class tx_mksearch_action_ElasticSearch extends tx_rnbase_action_BaseIOC {
 		$viewData->offsetSet('search', $searchResult['items']);
 		
 		return NULL;
+	}
+	
+	/**
+	 * 
+	 * @return string
+	 */
+	protected function getSearchSolrAction() {
+		return tx_mksearch_action_SearchSolr;
+	}
+	
+	/**
+	 * 
+	 * @return string
+	 */
+	protected function getServiceRegistry(){
+		return tx_mksearch_util_ServiceRegistry;
 	}
 	
 	/**
@@ -100,23 +115,23 @@ class tx_mksearch_action_ElasticSearch extends tx_rnbase_action_BaseIOC {
 		tx_mksearch_service_engine_ElasticSearch $searchEngine
 	) {
 		if(
-			(isset($options['limit']) || $options['limit'] > 1)
+			(isset($options['limit']))
 			&& is_array($conf = $configurations->get($confId.'hit.pagebrowser.'))
 		) {
 			// PageBrowser initialisieren
-			$pageBrowserId = $conf['pbid'] ? 	$conf['pbid'] : 
-												'search' . $configurations->getPluginId();
+			$pageBrowserId = $conf['pbid'] ? $conf['pbid'] : 
+							'search' . $configurations->getPluginId();
 			/* @var $pageBrowser tx_rnbase_util_PageBrowser */
 			$pageBrowser = tx_rnbase::makeInstance(
 				'tx_rnbase_util_PageBrowser', $pageBrowserId
 			);
+			
 			$listSize = 0;
 			if($result = $searchEngine->getIndex()->count($fields['term'])) {
 				$listSize = $result;
 			}
 			
-			$pageSize = isset($options['limit']) ? $options['limit'] : intval($conf['limit']);
-			$pageBrowser->setState($parameters, $listSize, $pageSize);
+			$pageBrowser->setState($parameters, $listSize, $options['limit']);
 			$state = $pageBrowser->getState();
 			
 			$options = array_merge($options, $state);
