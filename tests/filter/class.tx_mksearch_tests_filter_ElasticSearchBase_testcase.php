@@ -44,8 +44,8 @@ tx_rnbase::load('tx_mksearch_util_UserFunc');
  * @subpackage tx_mksearch
  * @author Hannes Bochmann <dev@dmk-ebusiness.de>
  */
-class tx_mksearch_tests_filter_ElasticSearchBase_testcase 
-	extends tx_mksearch_tests_Testcase 
+class tx_mksearch_tests_filter_ElasticSearchBase_testcase
+	extends tx_mksearch_tests_Testcase
 {
 
 	/**
@@ -304,7 +304,7 @@ class tx_mksearch_tests_filter_ElasticSearchBase_testcase
 		$fields = $options = array();
 		$filter->init($fields, $options);
 
-		$this->assertEquals('uid desc', $options['sort'], 'sort falsch in options');
+		$this->assertEquals('uid asc', $options['sort'], 'sort falsch in options');
 	}
 
 	/**
@@ -363,7 +363,7 @@ class tx_mksearch_tests_filter_ElasticSearchBase_testcase
 		$fields = $options = array();
 		$filter->init($fields, $options);
 
-		$this->assertEquals('uid desc', $options['sort'], 'sort falsch in options');
+		$this->assertEquals('uid asc', $options['sort'], 'sort falsch in options');
 	}
 
 	/**
@@ -437,7 +437,7 @@ class tx_mksearch_tests_filter_ElasticSearchBase_testcase
 		$configArray = t3lib_div::array_merge_recursive_overrule(
 			tx_mksearch_tests_Util::loadPageTS4BE(), $configArray
 		);
-		$configArray[$this->confId]['filter.']['requiredFormFields'] = 
+		$configArray[$this->confId]['filter.']['requiredFormFields'] =
 			'zip,company,city';
 		$configurations = tx_mksearch_tests_Util::loadConfig4BE(
 			$configArray
