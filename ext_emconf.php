@@ -12,7 +12,7 @@
 
 $EM_CONF[$_EXTKEY] = array(
 	'title' => 'MK Search',
-	'description' => 'Generic highly adjustable and extendable search engine framework, using Zend Lucene or Apache Solr. But support for other search engines like elastic search etc. can be provided easily.',
+	'description' => 'Generic highly adjustable and extendable search engine framework, using Zend Lucene, Apache Solr or ElasticSearch. But support for other search engines can be provided easily.',
 	'category' => 'plugin',
 	'author' => 'Michael Wagner, Hannes Bochmann, Rene Nitzsche',
 	'author_email' => 'dev@dmk-ebusiness.de',
