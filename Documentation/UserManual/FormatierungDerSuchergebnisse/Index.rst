@@ -74,11 +74,11 @@ einfacher wiederverwendet werden. In den Subpart
 ###SEARCHRESULTEMPTYLIST### kann man eine Meldung schreiben, die
 angezeigt wird, wenn keine Treffer gefunden wurden.
 
-.. image:: ../../../Images/manual_html_5b7527b5.png
+.. image:: ../../Images/manual_html_5b7527b5.png
    :alt: Der Marker EXTRAINFO wird per Referenz auf ein lib-Objekt formatiert.
 Der Marker EXTRAINFO wird per Referenz auf ein lib-Objekt formatiert.
 
-.. image:: ../../../Images/manual_html_22fe6f2a.png
+.. image:: ../../Images/manual_html_22fe6f2a.png
    :alt: Das lib-Objekt stellt die Konfiguation für jeden Datentyp bereit.
 Das lib-Objekt stellt die Konfiguation für jeden Datentyp bereit.
 

@@ -1,4 +1,4 @@
-﻿
+
 
 .. ==================================================
 .. FOR YOUR INFORMATION
@@ -53,12 +53,28 @@ folgt über Parameter übergebenwerden:
 Konfiguration
 """""""""""""
 
+.. code-block:: ts
 
-((generated))
-~~~~~~~~~~~~~
-
-plugin.tx\_mksearch.searchsolr.filter.sort {### Definiert Felder, für die zusätzliche Marker für die Sortierung integriert werden sollenfields = uid, title### Konfiguration für die Sortierungs-Linkslink.pid = 0### TS für die Order-Felderuid\_order = CASEuid\_order {key.field = uid\_orderdefault = TEXTdesc = TEXTdesc.value = headerSortDownasc = TEXTasc.value = headerSortUp}title\_order < .uid\_ordertitle\_order.key.field = title\_order}
-'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+   plugin.tx_mksearch.searchsolr.filter.sort {
+      ### Definiert Felder, für die zusätzliche Marker für die Sortierung integriert werden sollen
+      fields = uid, title
+      ### Konfiguration für die Sortierungs-Links
+      link.pid = 0
+      ### TS für die Order-Felder
+      uid_order = CASE
+      uid_order {
+         key.field = uid_order
+         default = TEXT
+         
+         desc = TEXT
+         desc.value = headerSortDown
+         
+         asc = TEXT
+         asc.value = headerSortUp
+      }
+      title_order < .uid_order
+      title_order.key.field = title_order
+  }
 
 
 Marker
@@ -76,9 +92,6 @@ bereitgestellt:
    ###SORT_TITLE_LINKURL### = index.php?mksearch[sort]=title&mksearch[sortorder]=asc
    ###SORT_TITLE_LINK### = wrappedArray mit dem A-Tag
 
-
-((generated))
-~~~~~~~~~~~~~
 
 über verschiedene Felder
 ''''''''''''''''''''''''

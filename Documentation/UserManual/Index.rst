@@ -1,4 +1,4 @@
-﻿
+
 
 .. ==================================================
 .. FOR YOUR INFORMATION
@@ -34,6 +34,8 @@ User manual
    Sortierung(solr)/Index
    Volltextsuche(lucene)/Index
    Sortierung(lucene)/Index
+   Volltextsuche(elasticsearch)/Index
+   Sortierung(elasticsearch)/Index
    VerwendungVonKeywords/Index
    Faq/Index
 

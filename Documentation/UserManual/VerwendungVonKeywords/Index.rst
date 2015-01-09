@@ -17,9 +17,9 @@
 
 Verwendung von Keywords
 ^^^^^^^^^^^^^^^^^^^^^^^
-.. image:: ../../../Images/manual_html_m4b4b3322.png
+.. image:: ../../Images/manual_html_m4b4b3322.png
 
-.. image:: ../../../Images/manual_html_6e866f89.png
+.. image:: ../../Images/manual_html_6e866f89.png
 
 MKsearcden Keywords hat man die Möglichkeit bei
 bestimmten Suchbegriffen, die eigentliche Suche zu umgehen und den

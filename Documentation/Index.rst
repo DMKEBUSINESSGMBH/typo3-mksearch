@@ -14,9 +14,9 @@
    :class:  typoscript
 .. role::   php(code)
 
-==============
-EXT: MK SEARCH
-==============
+=========
+MK SEARCH
+=========
 
 :Created:
       2010-02-18 17::3:3:
@@ -52,5 +52,11 @@ EXT: MK SEARCH
    :titlesonly:
    :glob:
 
-   ExtMkSearch/Index
+   Introduction/Index
+   UserManual/Index
+   Administration/Index
+   Developers/Index
+   KnownProblems/Index
+   To-doList/Index
+   Changelog/Index
 

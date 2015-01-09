@@ -18,7 +18,7 @@
 Anlegen und Einrichten des Plugins
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. image:: ../../../Images/manual_html_349c166a.png
+.. image:: ../../Images/manual_html_349c166a.png
    :alt: Für jede Suchmaschine wird im FE-Plugin ein eigener View bereitgestellt.
 Für jede Suchmaschine wird im FE-Plugin ein eigener View bereitgestellt.
 
@@ -152,3 +152,38 @@ kann dann hier eingetragen werden. Mitgeliefert wird der Subpart
 
 Festlegung einer eigenen HTML-Vorlagedatei für die Ergebnisliste.
 
+View für ElasticSearch
+""""""""""""""""""""""
+
+Die Konfiguration der Suche für ElasticSearch erfoltg nicht nur über das
+Plugin sondern kann auch direkt in ElasticSearch vorgenommen werden.
+
+Folgende Einstellungen können getroffen werden:
+
+**Search Index to use**
+
+Stellen Sie hier den ElasticSearch-Index ein, der für die Suche verwendet
+werden soll.
+
+**Debug Filter query**
+
+Wenn diese Option gesetzt ist, werden im Frontend ausführliche Daten
+über die Such-Anfrage und das gelieferte Ergebnis angezeigt. Dies ist
+oft hilfreich, wenn ElasticSearch nicht die erwarteten Ergebnisse liefert.
+
+**Template for search formular**
+
+Festlegung einer eigenen HTML-Vorlagedatei für das Suchformular.
+
+**Subpart for result list**
+
+Für die Ergebnisliste können Sie ebenfalls in einer HTML-Datei mehrere
+Varianten in verschiedenen Subparts anlegen. Der gewünschte Subpart
+kann dann hier eingetragen werden. Mitgeliefert wird der Subpart
+###SEARCH###.
+
+**Force Search**
+
+Wenn diese Option gesetzt ist, wird beim ersten Laden der Suche sofort
+eine Suchanfrage ohne Parameter abgesetzt. Somit erscheint eine
+Ergebnisliste mit allen Treffern.

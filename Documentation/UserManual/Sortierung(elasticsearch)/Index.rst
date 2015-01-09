@@ -1,4 +1,4 @@
-﻿
+
 
 .. ==================================================
 .. FOR YOUR INFORMATION
@@ -15,11 +15,10 @@
 .. role::   php(code)
 
 
-Facetted Search (SOLR)
-^^^^^^^^^^^^^^^^^^^^^^
+Sortierung (ElasticSearch)
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Solr bietet die Möglichkeit Fassetten in der Ergebnisliste mit
-auszugeben. Natürlich unterstützt auch mksearch dieses Feature.
-
-TODO: Notwendige Schritte erklären!
+Die Sortierung kann analog zu SOLR konfiguriert werden und bietet die
+gleichen Marker für das Template an. Der Pfad für die TS Konfiguration
+lautet:  **plugin.tx\_mksearch.elasticsearch.filter.sort**
 

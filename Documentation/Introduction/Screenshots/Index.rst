@@ -17,7 +17,7 @@
 
 Screenshots
 ^^^^^^^^^^^
-.. image:: ../../../Images/manual_html_74553e7b.png
+.. image:: ../../Images/manual_html_74553e7b.png
    :alt: Blick auf das Backend-Modul von mksearch. Im Beispiel sind Indizes für Solr und für Lucene eingerichtet.
 
 Blick auf das Backend-Modul von mksearch. Im Beispiel sind Indizes für Solr und für Lucene eingerichtet.

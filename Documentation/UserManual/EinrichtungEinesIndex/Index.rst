@@ -85,7 +85,7 @@ Anlegen einer kompletten Konfiguration
 Im folgenden wird die Neuanlage für die Indizierung von
 Newsdatensätzen der Extension tt\_news beschrieben.
 
-.. image:: ../../../Images/manual_html_505617cc.png
+.. image:: ../../Images/manual_html_505617cc.png
    :alt: Einen Index anlegen
 Einen Index anlegen
 
@@ -95,23 +95,43 @@ Index einen Titel und eine kurze Beschreibung. Anschließend den Typ
 der Suchmaschine auswählen. Nach dieser Auswahl richtet sich der Wert
 im Feld “Name of Index”.
 
+**Lucene Index**
+
 Bei Lucene tragen Sie bitte einen eindeutigen Keystring ein und
 vermeiden Sie Leer- und Sonderzeichen. Mit diesem String wird im
 Lucene-Arbeitsverzeichnis ein neuer Ordner gleichen Namens angelegt.
 
-.. image:: ../../../Images/manual_html_264cf732.png
+.. image:: ../../Images/manual_html_264cf732.png
    :alt: Basisdaten für einen Lucene-Index. Der Name des Index "data" ist gleichzeigig das Storageverzeichnis auf dem Server.
 Basisdaten für einen Lucene-Index. Der Name des Index "data" ist gleichzeigig das Storageverzeichnis auf dem Server.
 
-.. image:: ../../../Images/manual_html_m50901eec.png
-   :alt: Daten für einen Solr-Index. Im Beispiel wird ein lokaler Core mit dem Namen "testcore" konfiguriert.
-Daten für einen Solr-Index. Im Beispiel wird ein lokaler Core mit dem Namen "testcore" konfiguriert.
 
-.. image:: ../../../Images/manual_html_m781a862a.png
+.. image:: ../../Images/manual_html_m781a862a.png
    :alt: Der Lucene-Index wurde angelegt und erfolgreich gefunden.
 Der Lucene-Index wurde angelegt und erfolgreich gefunden.
 
-Bei Apache Solr müssen in diesem Feld die Zugriffsdaten für Solr im Format  **host,port,core** angebenen werden. Also zum Beispiel  **localhost,8983,core-name** .Speichern und schließen Sie den neuen Datensatz. Im Backend-Modul wird
+**Solr Index**
+
+.. image:: ../../Images/manual_html_m50901eec.png
+   :alt: Daten für einen Solr-Index. Im Beispiel wird ein lokaler Core mit dem Namen "testcore" konfiguriert.
+Daten für einen Solr-Index. Im Beispiel wird ein lokaler Core mit dem Namen "testcore" konfiguriert.
+
+Bei Apache Solr müssen im Feld für den Indexnamen die Zugriffsdaten im Format
+**host,port,core** angebenen werden.
+Also zum Beispiel  **localhost,8983,core-name** .
+Speichern und schließen Sie den neuen Datensatz. Im Backend-Modul wird
+der Index nun mit einer Statusinformation angezeigt. Wenn der Status
+grün ist, dann können Sie mit den weiteren Schritten fortfahren.
+Andernfalls sollten Sie zunächst das Problem beheben. Wenn Sie die
+Maus über das Statusfeld bewegen, erhalten Sie einen Tooltip mit
+Hinweisen zum Problem.
+
+**ElasticSearch Index**
+
+Bei ElasticSearch müssen im Feld für den Indexnamen die Zugriffsdaten im Format
+**index;host1,port1,core1;host2,port2,core2...** angebenen werden.
+Also zum Beispiel  **index-name;server-one,9200,/;server-two,9200,/** .
+Speichern und schließen Sie den neuen Datensatz. Im Backend-Modul wird
 der Index nun mit einer Statusinformation angezeigt. Wenn der Status
 grün ist, dann können Sie mit den weiteren Schritten fortfahren.
 Andernfalls sollten Sie zunächst das Problem beheben. Wenn Sie die
@@ -124,7 +144,7 @@ Wir wechseln nun in das Tab  **Indexer Composites** und legen einen
 neuen Datensatz an. Vergeben Sie einen Namen und wählen Sie den soeben
 angelegten Index aus. Anschließend können Sie speichern und schließen.
 
-.. image:: ../../../Images/manual_html_2c7ece1f.png
+.. image:: ../../Images/manual_html_2c7ece1f.png
    :alt: Die markierten Bereiche müssen korrekt ausgefüllt werden.
 Die markierten Bereiche müssen korrekt ausgefüllt werden.
 
@@ -151,7 +171,7 @@ und somit für eine maximale Trennung der Daten gesorgt werden.
 Indizierung von Daten
 """""""""""""""""""""
 
-.. image:: ../../../Images/manual_html_m62cfe753.png
+.. image:: ../../Images/manual_html_m62cfe753.png
    :alt: Über das Backend-Modul kann die Warteschlange überwacht werden.
 Über das Backend-Modul kann die Warteschlange überwacht werden.
 
