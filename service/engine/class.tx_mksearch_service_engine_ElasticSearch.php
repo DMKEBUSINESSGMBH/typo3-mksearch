@@ -164,12 +164,20 @@ class tx_mksearch_service_engine_ElasticSearch
 			$items = $this->getItemsFromSearchResult($searchResult);
 		
 			$lastRequest = $this->getIndex()->getClient()->getLastRequest();
-			$result['items'] = $items;
 			$result['searchUrl'] = $lastRequest->getPath();
 			$result['searchQuery'] = $lastRequest->getQuery();
 			$result['searchTime'] = (microtime(true) - $startTime) . ' ms';
 			$result['queryTime'] = $searchResult->getTotalTime() . ' ms';
 			$result['numFound'] = $searchResult->getTotalHits();
+			$result['error'] = $searchResult->getResponse()->getError();
+			$result['items'] = $items;
+			
+			if($options['debug']) {
+				tx_rnbase_util_Debug::debug(
+					array('options' => $options, 'result' => $result), 
+					__METHOD__. ' Line: ' . __LINE__
+				);
+			}
 		}
 		catch(Exception $e) {
 			$message = 	'Exception caught from ElasticSearch: ' . $e->getMessage();
