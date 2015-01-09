@@ -60,7 +60,7 @@ class tx_mksearch_filter_SolrAutocomplete extends tx_mksearch_filter_SolrBase {
 			$configurations->get($confId . 'autocomplete.termToLower') === NULL
 			|| $configurations->getBool($confId . 'autocomplete.termToLower')
 		) {
-			$term = strtolower($term);
+			$term = mb_strtolower($term, 'UTF-8');
 		}
 		//we just need the plain, given term, sanitize it and put it in
 		$fields['term'] = tx_mksearch_util_Misc::sanitizeTerm($term);

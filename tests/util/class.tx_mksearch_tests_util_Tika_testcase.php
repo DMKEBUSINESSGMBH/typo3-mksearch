@@ -49,7 +49,7 @@ class tx_mksearch_tests_util_Tika_testcase
 	 */
 	public function test_getContent() {
 		$content = tx_mksearch_util_Tika::getInstance()->extractContent(
-			'EXT:mksearch/doc/wizard_form.html'
+			'EXT:mksearch/tests/fixtures/html/wizard_form.html'
 		);
 		$this->assertTrue(strlen($content) > 100);
 	}
@@ -71,7 +71,7 @@ class tx_mksearch_tests_util_Tika_testcase
 	 */
 	public function test_getLanguage() {
 		$lang = tx_mksearch_util_Tika::getInstance()->extractLanguage(
-			'EXT:mksearch/doc/wizard_form.html'
+			'EXT:mksearch/tests/fixtures/html/wizard_form.html'
 		);
 		$this->assertEquals('en', $lang);
 	}
@@ -81,7 +81,7 @@ class tx_mksearch_tests_util_Tika_testcase
 	 */
 	public function test_getMeta() {
 		$meta = tx_mksearch_util_Tika::getInstance()->extractMetaData(
-			'EXT:mksearch/doc/wizard_form.html'
+			'EXT:mksearch/tests/fixtures/html/wizard_form.html'
 		);
 		$this->assertTrue(is_array($meta));
 	}
