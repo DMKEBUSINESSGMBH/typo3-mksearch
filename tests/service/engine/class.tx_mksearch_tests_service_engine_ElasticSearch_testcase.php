@@ -34,6 +34,7 @@ use Elastica\Result;
 require_once t3lib_extMgm::extPath('rn_base', 'class.tx_rnbase.php');
 tx_rnbase::load('tx_mksearch_tests_Testcase');
 tx_rnbase::load('tx_mksearch_service_engine_ElasticSearch');
+tx_rnbase::load('tx_mksearch_model_internal_Index');
 
 /**
  *
@@ -151,7 +152,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 			->will($this->returnValue(TRUE));
 		$index->expects($this->never())
 			->method('create');
-		
+
 		$service->expects($this->once())
 			->method('getElasticaIndex')
 			->with($credentials)
@@ -170,7 +171,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 			$index, $indexProperty ->getValue($service), 'index property falsch'
 		);
 	}
-	
+
 	/**
 	 * @group unit
 	 */
@@ -179,11 +180,11 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 			'tx_mksearch_service_engine_ElasticSearch',
 			array('getElasticaIndex', 'isServerAvailable', 'getLogger')
 		);
-	
+
 		$service->expects($this->once())
 			->method('isServerAvailable')
 			->will($this->returnValue(TRUE));
-	
+
 		$credentials = array('someCredentials');
 		$index = $this->getMock('stdClass', array('open', 'exists', 'create'));
 		$index->expects($this->once())
@@ -193,21 +194,21 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 			->will($this->returnValue(FALSE));
 		$index->expects($this->once())
 			->method('create');
-	
+
 		$service->expects($this->once())
 			->method('getElasticaIndex')
 			->with($credentials)
 			->will($this->returnValue($index));
-	
+
 		$indexProperty = new ReflectionProperty(
 			'tx_mksearch_service_engine_ElasticSearch', 'index'
 		);
 		$indexProperty->setAccessible(TRUE);
-	
+
 		$this->callInaccessibleMethod(
 			$service, 'initElasticSearchConnection', $credentials
 		);
-	
+
 		$this->assertEquals(
 			$index, $indexProperty ->getValue($service), 'index property falsch'
 		);
@@ -491,32 +492,32 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 		$response->expects($this->once())
 			->method('getQueryTime')
 			->will($this->returnValue(123));
-		
+
 		$status = $this->getMock(
 			'stdClass', array('getResponse')
 		);
 		$status->expects($this->once())
 			->method('getResponse')
 			->will($this->returnValue($response));
-		
+
 		$client = $this->getMock(
 			'stdClass', array('getStatus')
 		);
 		$client->expects($this->once())
 			->method('getStatus')
 			->will($this->returnValue($status));
-		
+
 		$index = $this->getMock(
 			'stdClass', array('getClient')
 		);
 		$index->expects($this->once())
 			->method('getClient')
 			->will($this->returnValue($client));
-		
+
 		$service = $this->getMock(
 			'tx_mksearch_service_engine_ElasticSearch', array('getIndex', 'isServerAvailable')
 		);
-		
+
 		$service->expects($this->once())
 			->method('getIndex')
 			->will($this->returnValue($index));
@@ -847,7 +848,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 
 		$this->assertTrue($service->indexNew($doc));
 	}
-	
+
 	/**
 	 * @group unit
 	 */
@@ -855,7 +856,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 		$index = $this->getMock(
 			'stdClass', array('deleteDocuments')
 		);
-	
+
 		$elasticaDocument = new Document('123');
 		$elasticaDocument->setType('mksearch:tt_content');
 		$response = $this->getMock(
@@ -868,19 +869,19 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 			->method('deleteDocuments')
 			->with(array($elasticaDocument))
 			->will($this->returnValue($response));
-	
+
 		$service = $this->getMock(
 			'tx_mksearch_service_engine_ElasticSearch', array('getIndex')
 		);
 		$service->expects($this->once())
 			->method('getIndex')
 			->will($this->returnValue($index));
-	
+
 		$this->assertTrue($service->indexDeleteByContentUid(
 			123, 'mksearch', 'tt_content'
 		));
 	}
-	
+
 	/**
 	 * @group unit
 	 * @expectedException RuntimeException
@@ -888,17 +889,17 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 	 */
 	public function testSearchThrowsRuntimeExceptionIfElasticaThrowsException() {
 		$exception = new Exception('ohoh');
-	
+
 		$service = $this->getMock(
 			'tx_mksearch_service_engine_ElasticSearch', array('getIndex')
 		);
 		$service->expects($this->once())
 			->method('getIndex')
 			->will($this->throwException($exception));
-	
+
 		$service->search();
 	}
-	
+
 	/**
 	 * @group unit
 	 * @expectedException RuntimeException
@@ -911,21 +912,21 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 		$response->expects($this->once())
 			->method('getStatus')
 			->will($this->returnValue(201));
-		
+
 		$searchResult = $this->getMock(
 			'\\Elastica\\ResultSet', array('getResponse'), array(), '', FALSE
 		);
 		$searchResult->expects($this->once())
 			->method('getResponse')
 			->will($this->returnValue($response));
-		
+
 		$index = $this->getMock(
 			'stdClass', array('search', 'getClient')
 		);
 		$index->expects($this->once())
 			->method('search')
 			->will($this->returnValue($searchResult));
-		
+
 		$lastRequest = $this->getMock(
 			'stdClass', array('getPath', 'getQuery')
 		);
@@ -941,73 +942,73 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 		$client->expects($this->once())
 			->method('getLastRequest')
 			->will($this->returnValue($lastRequest));
-		
+
 		$index->expects($this->once())
 			->method('getClient')
 			->will($this->returnValue($client));
-	
+
 		$service = $this->getMock(
 			'tx_mksearch_service_engine_ElasticSearch', array('getIndex')
 		);
 		$service->expects($this->any())
 			->method('getIndex')
 			->will($this->returnValue($index));
-	
+
 		$service->search();
 	}
-	
+
 	/**
 	 * @group unit
 	 */
 	public function testGetElasticaQuery() {
 		$service = tx_rnbase::makeInstance('tx_mksearch_service_engine_ElasticSearch');
-		
+
 		$fields['term'] = 'test term';
 		$elasticaQuery = $this->callInaccessibleMethod($service, 'getElasticaQuery', $fields, array());
-		
+
 		$expectedQuery = array('query_string' => array('query' => 'test term'));
 		$this->assertEquals($expectedQuery, $elasticaQuery->getQuery(), 'query falsch');
 	}
-	
+
 	/**
 	 * @group unit
 	 */
 	public function testGetElasticaQueryHandlesSorting() {
 		$service = tx_rnbase::makeInstance('tx_mksearch_service_engine_ElasticSearch');
-	
+
 		$fields['term'] = 'test term';
 		$elasticaQuery = $this->callInaccessibleMethod(
 			$service, 'getElasticaQuery', $fields, array('sort' => 'uid desc')
 		);
-	
+
 		$expectedSort = array(0 => array('uid' => array('order' => 'desc')));
 		$this->assertEquals($expectedSort, $elasticaQuery->getParam('sort'), 'sort falsch');
 	}
-	
+
 	/**
 	 * @group unit
 	 * @dataProvider getOptionsForElastica
 	 */
 	public function testGetOptionsForElastica($initialOption, $expectedMappedOption) {
 		$service = tx_rnbase::makeInstance('tx_mksearch_service_engine_ElasticSearch');
-		
+
 		$options = array($initialOption => 'test value');
 		$mappedOptions = $this->callInaccessibleMethod(
 			$service, 'getOptionsForElastica', $options
 		);
-	
+
 		$expectedMappedOptions = array();
 		if ($expectedMappedOption !== NULL) {
 			$expectedMappedOptions = array($expectedMappedOption => 'test value');
 		}
 		$this->assertEquals(
-			$expectedMappedOptions, $mappedOptions, 
+			$expectedMappedOptions, $mappedOptions,
 			'option ' . $initialOption . ' falsch gemapped'
 		);
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @return multitype:multitype:string  multitype:string NULL
 	 */
 	public function getOptionsForElastica() {
@@ -1019,7 +1020,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 			array('unknown', NULL),
 		);
 	}
-	
+
 	/**
 	 * @group unit
 	 */
@@ -1032,13 +1033,13 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 		);
 		$resultProperty->setAccessible(TRUE);
 		$resultProperty->setValue($searchResult, $results);
-		
+
 		$service = tx_rnbase::makeInstance('tx_mksearch_service_engine_ElasticSearch');
-	
+
 		$searchHits = $this->callInaccessibleMethod(
 			$service, 'getItemsFromSearchResult', $searchResult
 		);
-		
+
 		$expectedSearchHits = array(
 			0 =>tx_rnbase::makeInstance(
 				'tx_mksearch_model_SearchHit', array('title' => 'hit data one')
@@ -1047,13 +1048,13 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 				'tx_mksearch_model_SearchHit', array('title' => 'hit data two')
 			),
 		);
-	
+
 		$this->assertEquals(
 			$expectedSearchHits, $searchHits,
 			'die search hits wurden nicht richtig erstellt'
 		);
 	}
-	
+
 	/**
 	 * @group unit
 	 */
@@ -1073,157 +1074,14 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 		$client->expects($this->once())
 			->method('getLastRequest')
 			->will($this->returnValue($lastRequest));
-		
+
 		$index = $this->getMock(
 			'stdClass', array('search', 'getClient')
 		);
 		$index->expects($this->once())
 			->method('getClient')
 			->will($this->returnValue($client));
-	
-		$service = $this->getMock(
-			'tx_mksearch_service_engine_ElasticSearch', 
-			array(
-				'getIndex', 'getElasticaQuery', 'getOptionsForElastica',
-				'checkResponseOfSearchResult', 'getItemsFromSearchResult'
-			)
-		);
-		$service->expects($this->any())
-			->method('getIndex')
-			->will($this->returnValue($index));
-		
-		$fields = array('fields');
-		$options = array('options');
-		$service->expects($this->once())
-			->method('getElasticaQuery')
-			->with($fields, $options)
-			->will($this->returnValue('elastica query'));
-		$service->expects($this->once())
-			->method('getOptionsForElastica')
-			->with($options)
-			->will($this->returnValue(123));
-		
-		$response = $this->getMock('\\Elastica\\Response',array('getError'), array(''));
-		$response->expects($this->any())
-			->method('getError')
-			->will($this->returnValue('es gab einen Fehler'));
-		
-		$searchResult = ResultSet::create($response, Query::create(''));
-		
-		$totalHits = new ReflectionProperty('\\Elastica\\ResultSet', '_totalHits');
-		$totalHits->setAccessible(TRUE);
-		$totalHits->setValue($searchResult, 123);
-		
-		$totalTime = new ReflectionProperty('\\Elastica\\ResultSet', '_took');
-		$totalTime->setAccessible(TRUE);
-		$totalTime->setValue($searchResult, 456);
-		
-		$index->expects($this->once())
-			->method('search')
-			->with('elastica query', 123)
-			->will($this->returnValue($searchResult));
-		
-		$service->expects($this->once())
-			->method('checkResponseOfSearchResult')
-			->with($searchResult);
-		
-		$service->expects($this->once())
-			->method('getItemsFromSearchResult')
-			->with($searchResult)
-			->will($this->returnValue(array('search results')));
-	
-		$result = $service->search($fields, $options);
-		
-		$this->assertEquals(array('search results'), $result['items'], 'items falsch');
-		$this->assertEquals('pfad', $result['searchUrl'], 'searchUrl falsch');
-		$this->assertEquals('query', $result['searchQuery'], 'searchQuery falsch');
-		$this->assertContains(
-			' ms', $result['searchTime'], 'searchTime enthält nicht die Einheit'
-		);
-		$this->assertNotNull(
-			str_replace('ms', '', $result['searchTime']), 
-			'searchTime enthält keine Millisekunden Angabe'
-		);
-		$this->assertEquals('456 ms', $result['queryTime'], 'queryTime falsch');
-		$this->assertEquals(123, $result['numFound'], 'searchQuery falsch');
-		$this->assertEquals(
-			'es gab einen Fehler', $result['error'], 'error falsch'
-		);
-	}
-	
-	/**
-	 * @group unit
-	 */
-	public function testSearchPrintsNoDebugIfNotSetInOptions() {
-		$this->expectOutputString('');
-		
-		$lastRequest = $this->getMock(
-			'stdClass', array('getPath', 'getQuery')
-		);
-		$client = $this->getMock(
-			'stdClass', array('getLastRequest')
-		);
-		$client->expects($this->once())
-			->method('getLastRequest')
-			->will($this->returnValue($lastRequest));
-		
-		$index = $this->getMock(
-			'stdClass', array('search', 'getClient')
-		);
-		$index->expects($this->once())
-			->method('getClient')
-			->will($this->returnValue($client));
-	
-		$service = $this->getMock(
-			'tx_mksearch_service_engine_ElasticSearch', 
-			array(
-				'getIndex', 'getElasticaQuery', 'getOptionsForElastica',
-				'checkResponseOfSearchResult', 'getItemsFromSearchResult'
-			)
-		);
-		$service->expects($this->any())
-			->method('getIndex')
-			->will($this->returnValue($index));
-		
-		$fields = array('fields');
-		$options = array('options');
-		
-		$searchResult = ResultSet::create(new Response(''), Query::create(''));
-		
-		$index->expects($this->once())
-			->method('search')
-			->will($this->returnValue($searchResult));
-		
-		$service->search($fields, $options);
-	}
-	
-	/**
-	 * @group unit
-	 */
-	public function testSearchPrintsDebugIfSetInOptions() {
-		// es reicht zu prüfen ob einige Teile des Debug vorhanden sind
-		$this->expectOutputRegex(
-			'/.*(tx_mksearch_service_engine_ElasticSearch\:\:search).*(Line).*' . 
-			'(options).*(debug).*(result).*(searchQuery).*/'
-		);
-	
-		$lastRequest = $this->getMock(
-			'stdClass', array('getPath', 'getQuery')
-		);
-		$client = $this->getMock(
-			'stdClass', array('getLastRequest')
-		);
-		$client->expects($this->once())
-			->method('getLastRequest')
-			->will($this->returnValue($lastRequest));
-	
-		$index = $this->getMock(
-			'stdClass', array('search', 'getClient')
-		);
-		$index->expects($this->once())
-			->method('getClient')
-			->will($this->returnValue($client));
-	
+
 		$service = $this->getMock(
 			'tx_mksearch_service_engine_ElasticSearch',
 			array(
@@ -1234,16 +1092,160 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 		$service->expects($this->any())
 			->method('getIndex')
 			->will($this->returnValue($index));
-	
+
 		$fields = array('fields');
-		$options = array('debug' => TRUE);
-	
+		$options = array('options');
+		$service->expects($this->once())
+			->method('getElasticaQuery')
+			->with($fields, $options)
+			->will($this->returnValue('elastica query'));
+		$service->expects($this->once())
+			->method('getOptionsForElastica')
+			->with($options)
+			->will($this->returnValue(123));
+
+		$response = $this->getMock('\\Elastica\\Response',array('getError'), array(''));
+		$response->expects($this->any())
+			->method('getError')
+			->will($this->returnValue('es gab einen Fehler'));
+
+		$searchResult = ResultSet::create($response, Query::create(''));
+
+		$totalHits = new ReflectionProperty('\\Elastica\\ResultSet', '_totalHits');
+		$totalHits->setAccessible(TRUE);
+		$totalHits->setValue($searchResult, 123);
+
+		$totalTime = new ReflectionProperty('\\Elastica\\ResultSet', '_took');
+		$totalTime->setAccessible(TRUE);
+		$totalTime->setValue($searchResult, 456);
+
+		$index->expects($this->once())
+			->method('search')
+			->with('elastica query', 123)
+			->will($this->returnValue($searchResult));
+
+		$service->expects($this->once())
+			->method('checkResponseOfSearchResult')
+			->with($searchResult);
+
+		$service->expects($this->once())
+			->method('getItemsFromSearchResult')
+			->with($searchResult)
+			->will($this->returnValue(array('search results')));
+
+		$result = $service->search($fields, $options);
+
+		$this->assertEquals(array('search results'), $result['items'], 'items falsch');
+		$this->assertEquals('pfad', $result['searchUrl'], 'searchUrl falsch');
+		$this->assertEquals('query', $result['searchQuery'], 'searchQuery falsch');
+		$this->assertContains(
+			' ms', $result['searchTime'], 'searchTime enthält nicht die Einheit'
+		);
+		$this->assertNotNull(
+			str_replace('ms', '', $result['searchTime']),
+			'searchTime enthält keine Millisekunden Angabe'
+		);
+		$this->assertEquals('456 ms', $result['queryTime'], 'queryTime falsch');
+		$this->assertEquals(123, $result['numFound'], 'searchQuery falsch');
+		$this->assertEquals(
+			'es gab einen Fehler', $result['error'], 'error falsch'
+		);
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testSearchPrintsNoDebugIfNotSetInOptions() {
+		$this->expectOutputString('');
+
+		$lastRequest = $this->getMock(
+			'stdClass', array('getPath', 'getQuery')
+		);
+		$client = $this->getMock(
+			'stdClass', array('getLastRequest')
+		);
+		$client->expects($this->once())
+			->method('getLastRequest')
+			->will($this->returnValue($lastRequest));
+
+		$index = $this->getMock(
+			'stdClass', array('search', 'getClient')
+		);
+		$index->expects($this->once())
+			->method('getClient')
+			->will($this->returnValue($client));
+
+		$service = $this->getMock(
+			'tx_mksearch_service_engine_ElasticSearch',
+			array(
+				'getIndex', 'getElasticaQuery', 'getOptionsForElastica',
+				'checkResponseOfSearchResult', 'getItemsFromSearchResult'
+			)
+		);
+		$service->expects($this->any())
+			->method('getIndex')
+			->will($this->returnValue($index));
+
+		$fields = array('fields');
+		$options = array('options');
+
 		$searchResult = ResultSet::create(new Response(''), Query::create(''));
-	
+
 		$index->expects($this->once())
 			->method('search')
 			->will($this->returnValue($searchResult));
-	
+
+		$service->search($fields, $options);
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testSearchPrintsDebugIfSetInOptions() {
+		// es reicht zu prüfen ob einige Teile des Debug vorhanden sind
+		// "s" modifier, damit auf der CLI alle Zeilen in Betracht gezogen werden. Sonst
+		// wird nur die Zeile genommen, mit dem ersten Treffer.
+		$regularExpression = 	'/.*(tx_mksearch_service_engine_ElasticSearch\:\:search).*(Line).*' .
+								'(options).*(debug).*(result).*(searchQuery).*/s';
+		$this->expectOutputRegex($regularExpression);
+
+		$lastRequest = $this->getMock(
+			'stdClass', array('getPath', 'getQuery')
+		);
+		$client = $this->getMock(
+			'stdClass', array('getLastRequest')
+		);
+		$client->expects($this->once())
+			->method('getLastRequest')
+			->will($this->returnValue($lastRequest));
+
+		$index = $this->getMock(
+			'stdClass', array('search', 'getClient')
+		);
+		$index->expects($this->once())
+			->method('getClient')
+			->will($this->returnValue($client));
+
+		$service = $this->getMock(
+			'tx_mksearch_service_engine_ElasticSearch',
+			array(
+				'getIndex', 'getElasticaQuery', 'getOptionsForElastica',
+				'checkResponseOfSearchResult', 'getItemsFromSearchResult'
+			)
+		);
+		$service->expects($this->any())
+			->method('getIndex')
+			->will($this->returnValue($index));
+
+		$fields = array('fields');
+		$options = array('debug' => TRUE);
+
+		$searchResult = ResultSet::create(new Response(''), Query::create(''));
+
+		$index->expects($this->once())
+			->method('search')
+			->will($this->returnValue($searchResult));
+
 		$service->search($fields, $options);
 	}
 }
