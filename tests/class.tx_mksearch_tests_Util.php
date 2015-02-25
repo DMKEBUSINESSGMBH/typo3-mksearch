@@ -287,6 +287,40 @@ class tx_mksearch_tests_Util {
 		unset($GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Core\\Database\\RelationHandler']);
 	}
 
+	/**
+	 * wir wollen zwar templavoila deaktivieren, wir wollen aber nicht
+	 * das die PackageStates Datei angepasst wird, was TYPO3 aber zwangsläufig
+	 * macht. Das hat zur Folge das requests an die Seite während der Tests
+	 * eine Exception verursachen da templavoila nicht geladen ist.
+	 *
+	 * Also kopieren wir die PackageStates Datei damit wir die tatsächliche Datei
+	 * nach dem deaktiveren wieder einfügen können
+	 *
+	 * @return void
+	 */
+	public static function unloadTemplavoilaForTypo362OrHigher() {
+		if (!tx_rnbase_util_TYPO3::isTYPO62OrHigher()) {
+			return;
+		}
+
+		// wir kommen an den Pfad zur Package Datei nur über Reflection
+		$packageManager = tx_rnbase::makeInstance('TYPO3\\CMS\\Core\\Package\\PackageManager');
+		$packageStatesPathAndFilename = new ReflectionProperty('TYPO3\\CMS\\Core\\Package\\PackageManager', 'packageStatesPathAndFilename');
+		$packageStatesPathAndFilename->setAccessible(TRUE);
+
+		// backup machen
+		$packageStatesFile = $packageStatesPathAndFilename->getValue($packageManager);
+		$backupPackageStatesFile = $packageStatesFile . '.bak';
+		copy($packageStatesFile, $backupPackageStatesFile);
+
+		$extensionManagementUtility = new TYPO3\CMS\Core\Utility\ExtensionManagementUtility();
+		$extensionManagementUtility->unloadExtension('templavoila');
+
+
+		// backup zurück spielen
+		copy($backupPackageStatesFile, $packageStatesFile);
+		unlink($backupPackageStatesFile);
+	}
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/class.tx_mksearch_tests_Util.php']) {

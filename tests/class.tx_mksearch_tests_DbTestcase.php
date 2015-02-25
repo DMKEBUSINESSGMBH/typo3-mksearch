@@ -150,10 +150,7 @@ abstract class tx_mksearch_tests_DbTestcase
 			$this->templaVoilaConfigBackup = $GLOBALS['TYPO3_LOADED_EXT']['templavoila'];
 			$GLOBALS['TYPO3_LOADED_EXT']['templavoila'] = NULL;
 
-			if (tx_rnbase_util_TYPO3::isTYPO62OrHigher()) {
-				$extensionManagementUtility = new TYPO3\CMS\Core\Utility\ExtensionManagementUtility();
-				$extensionManagementUtility->unloadExtension('templavoila');
-			}
+			tx_mksearch_tests_Util::unloadTemplavoilaForTypo362OrHigher();
 		}
 
 		$this->purgeRootlineCaches();
