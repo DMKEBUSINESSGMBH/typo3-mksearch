@@ -130,6 +130,7 @@ class tx_mksearch_indexer_Page extends tx_mksearch_indexer_Base {
 
 	/**
 	 * @see tx_mksearch_indexer_Base::isIndexableRecord()
+	 * @todo Backendbenutzerbereiche nicht indizieren
 	 */
 	protected function isIndexableRecord(array $sourceRecord, array $options) {
 		//as those functions check via the pid we have to copy the uid of the
