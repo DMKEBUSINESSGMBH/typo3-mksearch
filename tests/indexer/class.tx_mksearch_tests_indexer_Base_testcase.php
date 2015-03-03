@@ -570,6 +570,146 @@ class tx_mksearch_tests_indexer_Base_testcase
 			'fe_group' => 'fe_groups',
 		);
 	}
+
+	/**
+	 * @group unit
+	 */
+	public function testGetCoreConfigUtility() {
+		$this->assertEquals(
+			'tx_mksearch_service_indexer_core_Config',
+			$this->callInaccessibleMethod(
+				tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy'),
+				'getCoreConfigUtility'
+			)
+		);
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testHasDocToBeDeletedCallsGetRootlineCorrect() {
+		$coreConfigUtility = $this->getMockClass(
+			'tx_mksearch_service_indexer_core_Config', array('getRootline')
+		);
+		$coreConfigUtility::staticExpects($this->once())
+			->method('getRootline')
+			->with(123)
+			->will($this->returnValue(array()));
+
+		$indexer = $this->getMock(
+			'tx_mksearch_tests_fixtures_indexer_Dummy', array('getCoreConfigUtility')
+		);
+		$indexer->expects($this->once())
+			->method('getCoreConfigUtility')
+			->will($this->returnValue($coreConfigUtility));
+
+		$indexDoc = tx_rnbase::makeInstance(
+			'tx_mksearch_model_IndexerDocumentBase', '', ''
+		);
+		$model = tx_rnbase::makeInstance(
+			'tx_rnbase_model_base', array('pid' => 123)
+		);
+		$this->callInaccessibleMethod($indexer, 'hasDocToBeDeleted', $model, $indexDoc);
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testHasDocToBeDeletedReturnsTrueIfOnePageInRootlineIsHidden() {
+		$coreConfigUtility = $this->getMockClass(
+			'tx_mksearch_service_indexer_core_Config', array('getRootline')
+		);
+		$coreConfigUtility::staticExpects($this->once())
+			->method('getRootline')
+			->will($this->returnValue(array(
+				0 => array('uid' => 1, 'hidden' => 1),
+				1 => array('uid' => 2, 'hidden' => 0)
+			)));
+
+		$indexer = $this->getMock(
+			'tx_mksearch_tests_fixtures_indexer_Dummy', array('getCoreConfigUtility')
+		);
+		$indexer->expects($this->once())
+			->method('getCoreConfigUtility')
+			->will($this->returnValue($coreConfigUtility));
+
+		$indexDoc = tx_rnbase::makeInstance(
+			'tx_mksearch_model_IndexerDocumentBase', '', ''
+		);
+		$model = tx_rnbase::makeInstance(
+			'tx_rnbase_model_base', array('pid' => 123)
+		);
+
+		$this->assertTrue(
+			$this->callInaccessibleMethod($indexer, 'hasDocToBeDeleted', $model, $indexDoc)
+		);
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testHasDocToBeDeletedReturnsTrueIfOnePageInRootlineIsBackendUserSection() {
+		$coreConfigUtility = $this->getMockClass(
+			'tx_mksearch_service_indexer_core_Config', array('getRootline')
+		);
+		$coreConfigUtility::staticExpects($this->once())
+			->method('getRootline')
+			->will($this->returnValue(array(
+				0 => array('uid' => 1, 'doktype' => 6),
+				1 => array('uid' => 2, 'doktype' => 1)
+			)));
+
+		$indexer = $this->getMock(
+			'tx_mksearch_tests_fixtures_indexer_Dummy', array('getCoreConfigUtility')
+		);
+		$indexer->expects($this->once())
+			->method('getCoreConfigUtility')
+			->will($this->returnValue($coreConfigUtility));
+
+		$indexDoc = tx_rnbase::makeInstance(
+			'tx_mksearch_model_IndexerDocumentBase', '', ''
+		);
+		$model = tx_rnbase::makeInstance(
+			'tx_rnbase_model_base', array('pid' => 123)
+		);
+
+		$this->assertTrue(
+			$this->callInaccessibleMethod($indexer, 'hasDocToBeDeleted', $model, $indexDoc)
+		);
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testHasDocToBeDeletedReturnsFalseIfAllPagesInRootlineAreOkay() {
+		$coreConfigUtility = $this->getMockClass(
+			'tx_mksearch_service_indexer_core_Config', array('getRootline')
+		);
+		$coreConfigUtility::staticExpects($this->once())
+			->method('getRootline')
+			->will($this->returnValue(array(
+				0 => array('uid' => 1, 'doktype' => 2),
+				1 => array('uid' => 2, 'doktype' => 1)
+			)));
+
+		$indexer = $this->getMock(
+			'tx_mksearch_tests_fixtures_indexer_Dummy', array('getCoreConfigUtility')
+		);
+		$indexer->expects($this->once())
+			->method('getCoreConfigUtility')
+			->will($this->returnValue($coreConfigUtility));
+
+		$indexDoc = tx_rnbase::makeInstance(
+			'tx_mksearch_model_IndexerDocumentBase', '', ''
+		);
+		$model = tx_rnbase::makeInstance(
+			'tx_rnbase_model_base', array('pid' => 123)
+		);
+
+		$this->assertFalse(
+			$this->callInaccessibleMethod($indexer, 'hasDocToBeDeleted', $model, $indexDoc)
+		);
+	}
 }
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']) {
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']);

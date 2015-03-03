@@ -246,7 +246,10 @@ abstract class tx_mksearch_indexer_Base
 	 * @param array $options
 	 * @return bool
 	 */
-	protected function hasDocToBeDeleted(tx_rnbase_IModel $model, tx_mksearch_interface_IndexerDocument $indexDoc, $options = array()) {
+	protected function hasDocToBeDeleted(
+		tx_rnbase_IModel $model, tx_mksearch_interface_IndexerDocument $indexDoc,
+		$options = array()
+	) {
 		if (
 			!$model ||
 			!$model->isValid() ||
@@ -260,17 +263,27 @@ abstract class tx_mksearch_indexer_Base
 		// as soon as one of the parent pages is hidden we return true.
 		// @todo support when a parent page is deleted! shouldn't be possible
 		// without further configuration for a BE user but it's still possible!
-		// @todo backendbenutzerbereich ausschließen bzw. rechte setzen damit
-		// die suchergebnisse auch nur BE Nutzer sehen können
-		$rootline = tx_mksearch_service_indexer_core_Config::getRootLine($model->record['pid']);
+		$coreConfigUtility = $this->getCoreConfigUtility();
+		$rootline = $coreConfigUtility::getRootLine($model->record['pid']);
 
+		// @todo sollten nicht auch Shortcuts etc. invalide sein?
 		foreach ($rootline as $page) {
-			if ($page['hidden']) {
+			if (
+				$page['hidden'] ||
+				($page['doktype'] == t3lib_pageSelect::DOKTYPE_BE_USER_SECTION)
+			) {
 				return TRUE;
 			}
 		}
 		// else
 		return FALSE;
+	}
+
+	/**
+	 * @return string
+	 */
+	protected function getCoreConfigUtility() {
+		return tx_mksearch_service_indexer_core_Config;
 	}
 
 	/**
