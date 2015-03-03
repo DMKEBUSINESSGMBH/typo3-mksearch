@@ -260,6 +260,8 @@ abstract class tx_mksearch_indexer_Base
 		// as soon as one of the parent pages is hidden we return true.
 		// @todo support when a parent page is deleted! shouldn't be possible
 		// without further configuration for a BE user but it's still possible!
+		// @todo backendbenutzerbereich ausschließen bzw. rechte setzen damit
+		// die suchergebnisse auch nur BE Nutzer sehen können
 		$rootline = tx_mksearch_service_indexer_core_Config::getRootLine($model->record['pid']);
 
 		foreach ($rootline as $page) {
