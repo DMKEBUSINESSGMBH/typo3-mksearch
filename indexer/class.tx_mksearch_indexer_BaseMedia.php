@@ -101,17 +101,17 @@ abstract class tx_mksearch_indexer_BaseMedia
 			return NULL;
 		}
 
+		if($sourceRecord['deleted'] || $sourceRecord['hidden']) {
+			$indexDoc->setDeleted(true);
+			return $indexDoc;
+		}
+
 		// Check if record is configured to be indexed
 		if(!$this->isIndexableRecord($tableName, $sourceRecord, $options['filter.'])) {
 			if(isset($options['deleteIfNotIndexable']) && $options['deleteIfNotIndexable']) {
 				$indexDoc->setDeleted(true);
 				return $indexDoc;
 			} else return null;
-		}
-
-		if($sourceRecord['deleted'] || $sourceRecord['hidden']) {
-			$indexDoc->setDeleted(true);
-			return $indexDoc;
 		}
 
 		// titel aus dem feld titel oder name holen, als fallback den dateinamen nutzen!

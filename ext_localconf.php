@@ -63,3 +63,7 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['tx_mksearch_sch
 if(t3lib_extMgm::isLoaded('mksanitizedparameters')) {
 	require_once(t3lib_extMgm::extPath($_EXTKEY).'ext_mksanitizedparameter_rules.php');
 }
+
+if (tx_rnbase_util_TYPO3::isTYPO60OrHigher()) {
+	require_once(t3lib_extMgm::extPath($_EXTKEY).'Configuration/SignalSlotDispatcher.php');
+}

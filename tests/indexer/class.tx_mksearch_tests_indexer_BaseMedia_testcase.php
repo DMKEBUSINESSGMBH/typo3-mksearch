@@ -43,17 +43,13 @@ class tx_mksearch_tests_indexer_BaseMedia_testcase
 	public function testPrepareSearchDataCallsStopIndexing() {
 		$indexer = $this->getIndexerMock();
 
-		$indexer->expects($this->any())
-			->method('getBaseTableName')
-			->will($this->returnValue('tt_content'));
-
 		$indexDoc = tx_rnbase::makeInstance(
 			'tx_mksearch_model_IndexerDocumentBase', 'core', 'tt_content'
 		);
 		$options = array();
 		$sourceRecord = array('uid' => 1, 'test_field_1' => 'test value 1');
 
-		$indexer->expects($this->any())
+		$indexer->expects($this->once())
 			->method('stopIndexing')
 			->with('tt_content', $sourceRecord, $indexDoc, $options);
 
@@ -68,17 +64,13 @@ class tx_mksearch_tests_indexer_BaseMedia_testcase
 	public function testPrepareSearchDataReturnsNullIfStopIndexing() {
 		$indexer = $this->getIndexerMock();
 
-		$indexer->expects($this->any())
-			->method('getBaseTableName')
-			->will($this->returnValue('tt_content'));
-
 		$indexDoc = tx_rnbase::makeInstance(
 			'tx_mksearch_model_IndexerDocumentBase', 'core', 'tt_content'
 		);
 		$options = array();
 		$sourceRecord = array('uid' => 1, 'test_field_1' => 'test value 1');
 
-		$indexer->expects($this->any())
+		$indexer->expects($this->once())
 			->method('stopIndexing')
 			->will($this->returnValue(TRUE));
 
@@ -93,17 +85,13 @@ class tx_mksearch_tests_indexer_BaseMedia_testcase
 	public function testPrepareSearchDataReturnsNotNullIfNotStopIndexing() {
 		$indexer = $this->getIndexerMock();
 
-		$indexer->expects($this->any())
-			->method('getBaseTableName')
-			->will($this->returnValue('some_table'));
-
 		$indexDoc = tx_rnbase::makeInstance(
 			'tx_mksearch_model_IndexerDocumentBase', 'core', 'tt_content'
 		);
 		$options = array();
 		$sourceRecord = array('uid' => 1, 'test_field_1' => 'test value 1');
 
-		$indexer->expects($this->any())
+		$indexer->expects($this->once())
 			->method('stopIndexing')
 			->will($this->returnValue(FALSE));
 
@@ -161,6 +149,98 @@ class tx_mksearch_tests_indexer_BaseMedia_testcase
 				$indexer, 'stopIndexing', $tableName, $sourceRecord, $indexDoc, $options
 			)
 		);
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testPrepareSearchDataCallsIsIndexableRecordNotIfRecordIsDeleted() {
+		$indexer = $this->getIndexerMock(array(
+			'getBaseTableName', 'getFileExtension',
+			'getFilePath', 'getRelFileName', 'stopIndexing', 'isIndexableRecord'
+		));
+
+		$indexDoc = tx_rnbase::makeInstance(
+			'tx_mksearch_model_IndexerDocumentBase', 'core', 'tt_content'
+		);
+		$options = array();
+		$sourceRecord = array('uid' => 1, 'deleted' => 1);
+
+		$indexer->expects($this->never())
+			->method('isIndexableRecord');
+
+		$indexer->prepareSearchData(
+			'tt_content', $sourceRecord, $indexDoc, $options
+		);
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testPrepareSearchDataCallsIsIndexableRecordNotIfRecordIsHidden() {
+		$indexer = $this->getIndexerMock(array(
+			'getBaseTableName', 'getFileExtension',
+			'getFilePath', 'getRelFileName', 'stopIndexing', 'isIndexableRecord'
+		));
+
+		$indexDoc = tx_rnbase::makeInstance(
+			'tx_mksearch_model_IndexerDocumentBase', 'core', 'tt_content'
+		);
+		$options = array();
+		$sourceRecord = array('uid' => 1, 'hidden' => 1);
+
+		$indexer->expects($this->never())
+			->method('isIndexableRecord');
+
+		$indexer->prepareSearchData(
+			'tt_content', $sourceRecord, $indexDoc, $options
+		);
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testPrepareSearchDataSetsDocDeletedIfRecordIsDeleted() {
+		$indexer = $this->getIndexerMock(array(
+			'getBaseTableName', 'getFileExtension',
+			'getFilePath', 'getRelFileName', 'stopIndexing', 'isIndexableRecord'
+		));
+
+		$indexDoc = tx_rnbase::makeInstance(
+			'tx_mksearch_model_IndexerDocumentBase', 'core', 'tt_content'
+		);
+		$options = array();
+		$sourceRecord = array('uid' => 1, 'deleted' => 1);
+
+
+		$indexDoc = $indexer->prepareSearchData(
+			'tt_content', $sourceRecord, $indexDoc, $options
+		);
+
+		$this->assertTrue($indexDoc->getDeleted());
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testPrepareSearchDataSetsDocDeletedIfRecordIsHidden() {
+		$indexer = $this->getIndexerMock(array(
+			'getBaseTableName', 'getFileExtension',
+			'getFilePath', 'getRelFileName', 'stopIndexing', 'isIndexableRecord'
+		));
+
+		$indexDoc = tx_rnbase::makeInstance(
+			'tx_mksearch_model_IndexerDocumentBase', 'core', 'tt_content'
+		);
+		$options = array();
+		$sourceRecord = array('uid' => 1, 'hidden' => 1);
+
+
+		$indexDoc = $indexer->prepareSearchData(
+			'tt_content', $sourceRecord, $indexDoc, $options
+		);
+
+		$this->assertTrue($indexDoc->getDeleted());
 	}
 
 	/**
