@@ -118,6 +118,35 @@ class tx_mksearch_indexer_FAL
 		$path = $this->getRelFileName($tableName, $sourceRecord);
 		return dirname($path) . '/';
 	}
+
+	/**
+	 * (non-PHPdoc)
+	 * @see tx_mksearch_indexer_BaseMedia::stopIndexing()
+	 */
+	protected function stopIndexing(
+		$tableName,
+		$sourceRecord,
+		tx_mksearch_interface_IndexerDocument $indexDoc,
+		$options
+	) {
+		if($tableName == 'sys_file_metadata') {
+			$this->getInternalIndexService()->addRecordToIndex(
+				'sys_file', $sourceRecord['file']
+			);
+
+			return TRUE;
+		}
+
+		return parent::stopIndexing($tableName, $sourceRecord, $indexDoc, $options);
+	}
+
+	/**
+	 *
+	 * @return Ambigous <tx_mksearch_service_internal_Index, t3lib_svbase, void, object, boolean, \TYPO3\CMS\Core\Utility\array<\TYPO3\CMS\Core\SingletonInterface>, mixed, \TYPO3\CMS\Core\SingletonInterface, \TYPO3\CMS\Core\Utility\mixed, unknown>
+	 */
+	protected function getInternalIndexService() {
+		return tx_mksearch_util_ServiceRegistry::getIntIndexService();
+	}
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_FAL.php'])	{

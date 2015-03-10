@@ -75,11 +75,6 @@ abstract class tx_mksearch_indexer_BaseMedia
 	 * @see tx_mksearch_interface_Indexer::prepareSearchData()
 	 */
 	public function prepareSearchData($tableName, $sourceRecord, tx_mksearch_interface_IndexerDocument $indexDoc, $options) {
-
-		if ($this->getBaseTableName() !== $tableName) {
-			return NULL;
-		}
-
 		// die uid muss vor dem setDeleted gesetzt sein
 		$indexDoc->setUid($sourceRecord['sys_language_uid'] ? $sourceRecord['l18n_parent'] : $sourceRecord['uid']);
 
@@ -96,6 +91,14 @@ abstract class tx_mksearch_indexer_BaseMedia
 		// check, if the doc was skiped or has to be deleted
 		if (is_null($indexDoc) || $indexDoc->getDeleted()) {
 			return $indexDoc;
+		}
+
+		// when an indexer is configured for more than one table
+		// the index process may be different for the tables.
+		// overwrite this method in your child class to stop processing and
+		// do something different like putting a record into the queue.
+		if ($this->stopIndexing($tableName, $sourceRecord, $indexDoc, $options)) {
+			return NULL;
 		}
 
 		// Check if record is configured to be indexed
@@ -128,7 +131,7 @@ abstract class tx_mksearch_indexer_BaseMedia
 		//den kompletten, relativen Pfad zum Dam Dokument indizieren
 		$indexDoc->addField('file_relpath_s', $this->getRelFileName($tableName, $sourceRecord));
 
-		$fields = $options['fields.'];
+		$fields = (array) $options['fields.'];
 		foreach($fields AS $localFieldName => $indexFieldName) {
 			$indexDoc->addField($indexFieldName, $sourceRecord[$localFieldName], 'keyword');
 		}
@@ -321,6 +324,38 @@ abstract class tx_mksearch_indexer_BaseMedia
 				return 'indexSolr';
 		}
 		return $ret;
+	}
+
+	/**
+	 * Shall we break the indexing for the current data?
+	 *
+	 * when an indexer is configured for more than one table
+	 * the index process may be different for the tables.
+	 * overwrite this method in your child class to stop processing and
+	 * do something different like putting a record into the queue
+	 * if it's not the table that should be indexed
+	 *
+	 * @param string $tableName
+	 * @param array $sourceRecord
+	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
+	 * @param array $options
+	 * @return bool
+	 */
+	protected function stopIndexing(
+		$tableName, $sourceRecord,
+		tx_mksearch_interface_IndexerDocument $indexDoc,
+		$options
+	) {
+		return $this->getIndexerUtility()->stopIndexing(
+			$tableName, $sourceRecord, $indexDoc, $options
+		);
+	}
+
+	/**
+	 * @return tx_mksearch_util_Indexer
+	 */
+	protected function getIndexerUtility() {
+		return tx_rnbase::makeInstance('tx_mksearch_util_Indexer');
 	}
 
 	/**

@@ -561,4 +561,58 @@ class tx_mksearch_tests_util_Indexer_testcase
 
 		return $utilIndexer;
 	}
+
+	/**
+	 * @group unit
+	 */
+	public function testStopIndexingReturnsFalseIfNoSysLanguageUidField() {
+		/* @var $utility tx_mksearch_util_Indexer */
+		$utility = tx_rnbase::makeInstance('tx_mksearch_util_Indexer');
+		$tableName = 'tx_mksearch_queue';
+		$sourceRecord = array('some_record');
+		$options = array('some_options');
+		$indexDoc = tx_rnbase::makeInstance(
+			'tx_mksearch_model_IndexerDocumentBase', '', ''
+		);
+
+		$this->assertFalse(
+			$utility->stopIndexing($tableName, $sourceRecord, $indexDoc, $options)
+		);
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testStopIndexingReturnsFalseIfSysLanguageUidFieldMatchesLanguageFromOptions() {
+		/* @var $utility tx_mksearch_util_Indexer */
+		$utility = tx_rnbase::makeInstance('tx_mksearch_util_Indexer');
+		$tableName = 'tt_content';
+		$sourceRecord = array('sys_language_uid' => 123);
+		$options = array('lang' => 123);
+		$indexDoc = tx_rnbase::makeInstance(
+			'tx_mksearch_model_IndexerDocumentBase', '', ''
+		);
+
+		$this->assertFalse(
+			$utility->stopIndexing($tableName, $sourceRecord, $indexDoc, $options)
+		);
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testStopIndexingReturnsTrueIfSysLanguageUidFieldMatchesNotLanguageFromOptions() {
+		/* @var $utility tx_mksearch_util_Indexer */
+		$utility = tx_rnbase::makeInstance('tx_mksearch_util_Indexer');
+		$tableName = 'tt_content';
+		$sourceRecord = array('sys_language_uid' => 123);
+		$options = array('lang' => 456);
+		$indexDoc = tx_rnbase::makeInstance(
+			'tx_mksearch_model_IndexerDocumentBase', '', ''
+		);
+
+		$this->assertTrue(
+			$utility->stopIndexing($tableName, $sourceRecord, $indexDoc, $options)
+		);
+	}
 }

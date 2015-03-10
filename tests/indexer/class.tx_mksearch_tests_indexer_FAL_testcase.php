@@ -232,10 +232,84 @@ class tx_mksearch_tests_indexer_FAL_testcase
 		$oIndexDoc = $indexer->prepareSearchData('sys_file', $aRawData, $indexDoc, $options);
 		$this->assertTrue($oIndexDoc->getDeleted(),'Das Element wurde nich auf gelöscht gesetzt!');
 	}
-}
 
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_FAL_testcase.php']) {
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_FAL_testcase.php']);
-}
+	/**
+	 * @group unit
+	 */
+	public function testStopIndexingCallsIndexerUtility() {
+		$indexer = $this->getMock(
+			'tx_mksearch_indexer_FAL', array('getIndexerUtility')
+		);
+		$indexerUtility = $this->getMock(
+			'tx_mksearch_util_Indexer', array('stopIndexing')
+		);
 
-?>
+		$tableName = 'some_table';
+		$sourceRecord = array('some_record');
+		$options = array('some_options');
+		$indexDoc = tx_rnbase::makeInstance(
+			'tx_mksearch_model_IndexerDocumentBase', '', ''
+		);
+		$indexerUtility->expects($this->once())
+			->method('stopIndexing')
+			->with($tableName, $sourceRecord, $indexDoc, $options)
+			->will($this->returnValue('return'));
+
+		$indexer->expects($this->once())
+			->method('getIndexerUtility')
+			->will($this->returnValue($indexerUtility));
+
+		$this->assertEquals(
+			'return',
+			$this->callInaccessibleMethod(
+				$indexer, 'stopIndexing', $tableName, $sourceRecord, $indexDoc, $options
+			)
+		);
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testGetInternalIndexService() {
+		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_FAL');
+
+		$this->assertInstanceOf(
+			'tx_mksearch_service_internal_Index',
+			$this->callInaccessibleMethod(
+				$indexer, 'getInternalIndexService'
+			)
+		);
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testStopIndexingPutsCorrectRecordToIndexIfSysFileMetadatahasChangedAndReturnsTrue() {
+		$indexer = $this->getMock(
+			'tx_mksearch_indexer_FAL', array('getInternalIndexService')
+		);
+		$indexerService = $this->getMock(
+			'tx_mksearch_service_internal_Index', array('addRecordToIndex')
+		);
+
+		$tableName = 'sys_file_metadata';
+		$sourceRecord = array('file' => 123);
+		$options = array('some_options');
+		$indexDoc = tx_rnbase::makeInstance(
+			'tx_mksearch_model_IndexerDocumentBase', '', ''
+		);
+		$indexerService->expects($this->once())
+			->method('addRecordToIndex')
+			->with('sys_file', 123);
+
+		$indexer->expects($this->once())
+			->method('getInternalIndexService')
+			->will($this->returnValue($indexerService));
+
+		$this->assertTrue(
+			$this->callInaccessibleMethod(
+				$indexer, 'stopIndexing', $tableName, $sourceRecord, $indexDoc, $options
+			)
+		);
+	}
+}

@@ -710,6 +710,64 @@ class tx_mksearch_tests_indexer_Base_testcase
 			$this->callInaccessibleMethod($indexer, 'hasDocToBeDeleted', $model, $indexDoc)
 		);
 	}
+
+	/**
+	 * @group unit
+	 */
+	public function testGetIndexerUtility() {
+		$indexer = $this->getMock(
+			'tx_mksearch_tests_fixtures_indexer_Dummy', array('getCoreConfigUtility')
+		);
+
+		$this->assertInstanceOf(
+			'tx_mksearch_util_Indexer',
+			$this->callInaccessibleMethod(
+				$indexer, 'getIndexerUtility'
+			)
+		);
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testStopIndexingCallsIndexerUtility() {
+		$indexer = $this->getMockForAbstractClass(
+			'tx_mksearch_indexer_Base',
+			array(),
+			'',
+			FALSE,
+			FALSE,
+			FALSE,
+			array(
+				'indexData', 'getIndexerUtility'
+			)
+		);
+		$indexerUtility = $this->getMock(
+			'tx_mksearch_util_Indexer', array('stopIndexing')
+		);
+
+		$tableName = 'some_table';
+		$sourceRecord = array('some_record');
+		$options = array('some_options');
+		$indexDoc = tx_rnbase::makeInstance(
+			'tx_mksearch_model_IndexerDocumentBase', '', ''
+		);
+		$indexerUtility->expects($this->once())
+			->method('stopIndexing')
+			->with($tableName, $sourceRecord, $indexDoc, $options)
+			->will($this->returnValue('return'));
+
+		$indexer->expects($this->once())
+			->method('getIndexerUtility')
+			->will($this->returnValue($indexerUtility));
+
+		$this->assertEquals(
+			'return',
+			$this->callInaccessibleMethod(
+				$indexer, 'stopIndexing', $tableName, $sourceRecord, $indexDoc, $options
+			)
+		);
+	}
 }
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']) {
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']);

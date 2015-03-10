@@ -57,7 +57,7 @@ if (t3lib_extMgm::isLoaded('dam')) {
 }
 
 if (tx_rnbase_util_TYPO3::isTYPO60OrHigher()) {
-	tx_mksearch_util_Config::registerIndexer('core', 'file', 'tx_mksearch_indexer_FAL', array('sys_file'));
+	tx_mksearch_util_Config::registerIndexer('core', 'file', 'tx_mksearch_indexer_FAL', array('sys_file', 'sys_file_metadata'));
 }
 
 // seminars Extension

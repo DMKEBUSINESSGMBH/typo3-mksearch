@@ -167,28 +167,27 @@ abstract class tx_mksearch_indexer_Base
 	 * if it's not the table that should be indexed
 	 *
 	 * @param string $tableName
-	 * @param array $rawData
+	 * @param array $sourceRecord
 	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
 	 * @param array $options
 	 * @return bool
 	 */
 	protected function stopIndexing(
-		$tableName, $rawData,
+		$tableName, $sourceRecord,
 		tx_mksearch_interface_IndexerDocument $indexDoc,
 		$options
 	) {
-		// Wir prüfen, ob die zu indizierende Sprache stimmt.
-		$sysLanguageUidField = tx_mksearch_util_TCA::getLanguageFieldForTable($tableName);
-		if (isset($rawData[$sysLanguageUidField])) {
-			// @TODO: getTransOrigPointerFieldForTable abprüfen, wenn $lang!=0 !
-			$lang = isset($options['lang']) ? (int) $options['lang'] : 0;
-			if ($rawData[$sysLanguageUidField] != $lang) {
-				return TRUE;
-			}
-		}
-		return FALSE;
+		return $this->getIndexerUtility()->stopIndexing(
+			$tableName, $sourceRecord, $indexDoc, $options
+		);
 	}
 
+	/**
+	 * @return tx_mksearch_util_Indexer
+	 */
+	protected function getIndexerUtility() {
+		return tx_rnbase::makeInstance('tx_mksearch_util_Indexer');
+	}
 
 	/**
 	* Indexes all fields of the model according to the given mapping

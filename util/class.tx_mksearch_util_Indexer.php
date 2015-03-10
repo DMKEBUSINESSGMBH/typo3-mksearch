@@ -469,4 +469,36 @@ class tx_mksearch_util_Indexer {
 		$page = tx_rnbase_util_DB::doSelect('*', $from, $sqlOptions);
 		return !empty($page[0]) ? $page[0] : array();
 	}
+
+	/**
+	 * Shall we break the indexing for the current data?
+	 *
+	 * when an indexer is configured for more than one table
+	 * the index process may be different for the tables.
+	 * overwrite this method in your child class to stop processing and
+	 * do something different like putting a record into the queue
+	 * if it's not the table that should be indexed
+	 *
+	 * @param string $tableName
+	 * @param array $sourceRecord
+	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
+	 * @param array $options
+	 * @return bool
+	 */
+	public function stopIndexing(
+		$tableName, $sourceRecord,
+		tx_mksearch_interface_IndexerDocument $indexDoc,
+		$options
+	) {
+		// Wir prüfen, ob die zu indizierende Sprache stimmt.
+		$sysLanguageUidField = tx_mksearch_util_TCA::getLanguageFieldForTable($tableName);
+		if (isset($sourceRecord[$sysLanguageUidField])) {
+			// @TODO: getTransOrigPointerFieldForTable abprüfen, wenn $lang!=0 !
+			$lang = isset($options['lang']) ? (int) $options['lang'] : 0;
+			if ($sourceRecord[$sysLanguageUidField] != $lang) {
+				return TRUE;
+			}
+		}
+		return FALSE;
+	}
 }
