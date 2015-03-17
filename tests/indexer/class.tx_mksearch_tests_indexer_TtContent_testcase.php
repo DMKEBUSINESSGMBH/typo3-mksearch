@@ -25,6 +25,7 @@
 require_once t3lib_extMgm::extPath('rn_base', 'class.tx_rnbase.php');
 require_once t3lib_extMgm::extPath('mksearch', 'lib/Apache/Solr/Document.php');
 tx_rnbase::load('tx_mksearch_tests_Testcase');
+tx_rnbase::load('tx_mksearch_indexer_ttcontent_Normal');
 
 /**
  *
@@ -46,7 +47,36 @@ class tx_mksearch_tests_indexer_TtContent_testcase
 		return $options;
 	}
 
-	function test_prepareSearchData_CheckIgnoreContentType() {
+	/**
+	 * @group unit
+	 */
+	public function testPrepareSearchDataCallsPrepareSearchDataOnActualIndexer() {
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', 'mksearch', 'test');
+		$options = array('options');
+		$record = array('record');
+
+		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtContent');
+		$actualIndexer = $this->getMock('tx_mksearch_indexer_ttcontent_Normal', array('prepareSearchData'));
+
+		$actualIndexer->expects($this->once())
+			->method('prepareSearchData')
+			->with('tt_content', $record, $indexDoc, $options)
+			->will($this->returnValue('return'));
+
+		$actualIndexerProperty = new ReflectionProperty('tx_mksearch_indexer_TtContent', 'actualIndexer');
+		$actualIndexerProperty->setAccessible(TRUE);
+		$actualIndexerProperty->setValue($indexer, $actualIndexer);
+
+		$this->assertEquals(
+			'return',
+			$indexer->prepareSearchData('tt_content', $record, $indexDoc, $options)
+		);
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function test_prepareSearchData_CheckIgnoreContentType() {
 		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtContent');
 		list($extKey, $cType) = $indexer->getContentType();
 		//content type correct?
@@ -78,7 +108,11 @@ class tx_mksearch_tests_indexer_TtContent_testcase
 		$result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
 		$this->assertNull($result, 'Not Null returned for uid '.$record['uid']);
 	}
-	function test_prepareSearchData_CheckIncludeContentType() {
+
+	/**
+	 * @group unit
+	 */
+	public function test_prepareSearchData_CheckIncludeContentType() {
 		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtContent');
 		list($extKey, $cType) = $indexer->getContentType();
 
@@ -96,40 +130,4 @@ class tx_mksearch_tests_indexer_TtContent_testcase
 		$this->assertNotNull($result, 'Null returned for uid '.$record['uid'].' when CType in includeCTypes');
 
 	}
-
-	public function testPrepareSearchDataIncludesPageMetaKeywords() {
-		$indexer = $this->getMock(
-			'tx_mksearch_indexer_ttcontent_Normal',
-			array('getPageContent', 'isIndexableRecord', 'hasDocToBeDeleted')
-		);
-		$indexer->expects($this->once())
-			->method('isIndexableRecord')
-			->will($this->returnValue(TRUE));
-		$indexer->expects($this->once())
-			->method('hasDocToBeDeleted')
-			->will($this->returnValue(FALSE));
-		$indexer->expects($this->any())
-			->method('getPageContent')
-			->with(456)
-			->will($this->returnValue(array('keywords' => 'first,second')));
-
-		list($extKey, $cType) = $indexer->getContentType();
-
-		$record = array('uid'=> 123, 'pid' => 456, 'CType'=>'list', 'bodytext' => 'lorem');
-		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
-		$options = self::getDefaultOptions();
-		$options['addPageMetaData'] = 1;
-		$options['addPageMetaData.']['separator'] = ',';
-		$options['includeCTypes.'] = array('search','mailform','list');
-		$indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
-		$indexDocData = $indexDoc->getData();
-
-		$this->assertEquals(array('first', 'second'), $indexDocData['keywords_ms']->getValue());
-
-	}
 }
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']) {
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']);
-}
-
-?>

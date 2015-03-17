@@ -46,16 +46,16 @@ class tx_mksearch_indexer_TtContent implements tx_mksearch_interface_Indexer {
 	 * the appropriate indexer depending on templavoila
 	 * @var tx_mksearch_indexer_Base
 	 */
-	protected $oIndexer;
+	protected $actualIndexer;
 
 	/**
 	 * load the appropriate indexer depending on templavoila
 	 */
 	public function __construct() {
 		if(t3lib_extMgm::isLoaded('templavoila')){
-			$this->oIndexer = tx_rnbase::makeInstance('tx_mksearch_indexer_ttcontent_Templavoila');
+			$this->actualIndexer = tx_rnbase::makeInstance('tx_mksearch_indexer_ttcontent_Templavoila');
 		}else{
-			$this->oIndexer = tx_rnbase::makeInstance('tx_mksearch_indexer_ttcontent_Normal');
+			$this->actualIndexer = tx_rnbase::makeInstance('tx_mksearch_indexer_ttcontent_Normal');
 		}
 	}
 
@@ -67,7 +67,7 @@ class tx_mksearch_indexer_TtContent implements tx_mksearch_interface_Indexer {
 	* @return null|tx_mksearch_interface_IndexerDocument or null if nothing should be indexed.
 	*/
 	public function prepareSearchData($tableName, $sourceRecord, tx_mksearch_interface_IndexerDocument $indexDoc, $options){
-		return $this->oIndexer->prepareSearchData($tableName, $sourceRecord, $indexDoc, $options);
+		return $this->actualIndexer->prepareSearchData($tableName, $sourceRecord, $indexDoc, $options);
 	}
 
 	/**
@@ -113,6 +113,17 @@ class tx_mksearch_indexer_TtContent implements tx_mksearch_interface_Indexer {
 
 addPageMetaData = 0
 addPageMetaData.separator = ,
+
+### should the data of the page where the tt_content element resides be indexed?
+### if so than you need to provide the mapping in the pageDataFieldMapping option like it
+### is needed for the page indexer
+indexPageData = 0
+# "page_" is automatically prefixed. so the resulting fields will be page_title_s, page_nav_title_s...
+# pageDataFieldMapping {
+#	title = title_s
+#	nav_title = nav_title_s
+#	my_record_field = my_solr_field
+#}
 
 # Configuration for each cType:
 CType {

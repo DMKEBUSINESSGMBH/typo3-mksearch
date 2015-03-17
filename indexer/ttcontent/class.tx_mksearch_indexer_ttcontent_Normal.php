@@ -121,6 +121,10 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 			}
 		}
 
+		if ($options['indexPageData']) {
+			$this->indexPageData($indexDoc, $options);
+		}
+
 		// Try to call hook for the current CType.
 		// A hook MUST call both $indexDoc->setContent and
 		// $indexDoc->setAbstract (respect $indexDoc->getMaxAbstractLength())!
@@ -165,6 +169,22 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 			$indexDoc->setAbstract(empty($c) ? $title : $c, $indexDoc->getMaxAbstractLength());
 		}
 		return $indexDoc;
+	}
+
+	/**
+	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
+	 * @param array $options
+	 */
+	protected function indexPageData(tx_mksearch_interface_IndexerDocument $indexDoc, array $options) {
+		$pageRecord = $this->getPageContent($this->getModelToIndex()->record['pid']);
+		$pageModel = tx_rnbase::makeInstance('tx_rnbase_model_base', $pageRecord);
+		$pageModel->setTableName('pages');
+
+		if (!empty($options['pageDataFieldMapping.'])) {
+			$this->indexModelByMapping(
+				$pageModel, $options['pageDataFieldMapping.'], $indexDoc, 'page_', $options
+			);
+		}
 	}
 
 	/**
