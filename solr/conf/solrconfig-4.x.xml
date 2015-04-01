@@ -792,9 +792,10 @@
 			 
 			<str name="q.alt">*:*</str>
 			<str name="fq">
-				-deleted:1 AND -hidden:1 AND (
-					-(starttime_dt:[NOW TO *] OR endtime_dt:[* TO NOW] OR
-					page_starttime_dt:[NOW TO *] OR page_endtime_dt:[* TO NOW])
+				-deleted:1 AND -hidden:1 AND 
+				-(
+					starttime_dt:[NOW TO *] OR endtime_dt:[* TO NOW] OR
+					page_starttime_dt:[NOW TO *] OR page_endtime_dt:[* TO NOW]
 				)
 			</str>
 			<str name="facet.mincount">1</str>
