@@ -89,7 +89,7 @@ class tx_mksearch_hooks_IndexerAutoUpdate {
 				break;
 			// workspace action
 			case 'version':
-				if ($this->isPublishedToLiveWorkspace($value)) {
+				if (self::isPublishedToLiveWorkspace($value)) {
 					$srv->addRecordToIndex($table, $id);
 				}
 				break;
@@ -278,7 +278,7 @@ class tx_mksearch_hooks_IndexerAutoUpdate {
 	/**
 	 * @return boolean
 	 */
-	private function isPublishedToLiveWorkspace($commandValues) {
+	public static function isPublishedToLiveWorkspace($commandValues) {
 		return ($commandValues['action'] === 'swap' && $commandValues['swapWith'] > 0);
 	}
 
