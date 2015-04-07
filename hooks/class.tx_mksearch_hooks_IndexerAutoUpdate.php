@@ -163,7 +163,7 @@ class tx_mksearch_hooks_IndexerAutoUpdate {
 	 *     );
 	 * @return NULL
 	 */
-	protected function processAutoUpdate(array $records) {
+	public function processAutoUpdate(array $records) {
 
 		if (empty($records)) {
 			return NULL;
