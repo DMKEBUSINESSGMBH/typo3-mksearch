@@ -45,8 +45,6 @@ class tx_mksearch_signalSlotDispatcher_FileIndexRepsitory {
 
 		$internalIndexService = $this->getInternalIndexService();
 		$internalIndexService->addRecordToIndex('sys_file', $uid);
-
-		// testen ob singnal slots korrekt registriert
 	}
 
 	/**
