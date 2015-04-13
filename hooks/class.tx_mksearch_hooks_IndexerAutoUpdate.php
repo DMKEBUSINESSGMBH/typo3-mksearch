@@ -254,16 +254,14 @@ class tx_mksearch_hooks_IndexerAutoUpdate {
 		//
 		if (is_array($data) && isset($data['type'])) {
 			if ($data['type'] === 'select') {
-				// no where? what todo?
-				if (empty($options['where']) && empty($data['where'])) {
-					return array();
-				}
 				$from = empty($data['from']) ? $table : $data['from'];
 				$options = empty($data['options']) || !is_array($data['options']) ? array() : $data['options'];
 				$options['where'] = empty($options['where']) ? $data['where'] : $options['where'];
 				$options['enablefieldsoff'] = TRUE;
-				$rows = tx_rnbase_util_DB::doSelect('uid', $from, $options);
-				$rows = call_user_func_array('array_merge_recursive', $rows);
+				$databaseUtility = $this->getRnbaseDatabaseUtility();
+				if (($rows = $databaseUtility::doSelect('uid', $from, $options))) {
+					$rows = call_user_func_array('array_merge_recursive', $rows);
+				}
 				if (empty($rows['uid'])) {
 					return array();
 				}
@@ -273,6 +271,13 @@ class tx_mksearch_hooks_IndexerAutoUpdate {
 		}
 
 		return array();
+	}
+
+	/**
+	 * @return string
+	 */
+	protected function getRnbaseDatabaseUtility() {
+		return tx_rnbase_util_DB;
 	}
 
 	/**

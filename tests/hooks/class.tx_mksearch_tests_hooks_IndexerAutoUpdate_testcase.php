@@ -247,12 +247,195 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdate_testcase
 
 		$hook->rnBaseDoUpdatePost($hookParams);
 	}
+
 	/**
 	 * @unit
 	 */
 	public function testRnBaseDoDeletePre() {
 		// use the same method as doUpdate
 		$this->testRnBaseDoUpdatePost();
+	}
+
+	/**
+	 * @unit
+	 */
+	public function testGetRnBaseDatabaseUtility() {
+		$this->assertEquals(
+			'tx_rnbase_util_DB',
+			$this->callInaccessibleMethod($this->getHookMock(), 'getRnbaseDatabaseUtility')
+		);
+	}
+
+	/**
+	 * @unit
+	 */
+	public function testGetUidsToIndexIfDataIsNumeric() {
+		$hook = $this->getMock(
+			'tx_mksearch_hooks_IndexerAutoUpdate',
+			array('getRnbaseDatabaseUtility')
+		);
+		$hook->expects($this->never())->method('getRnbaseDatabaseUtility');
+
+
+		$this->assertEquals(
+			array(123),
+			$this->callInaccessibleMethod($hook, 'getUidsToIndex', '', 123)
+		);
+	}
+
+	/**
+	 * @unit
+	 */
+	public function testGetUidsToIndexIfDataIsString() {
+		$hook = $this->getMock(
+			'tx_mksearch_hooks_IndexerAutoUpdate',
+			array('getRnbaseDatabaseUtility')
+		);
+		$hook->expects($this->never())->method('getRnbaseDatabaseUtility');
+
+
+		$this->assertEquals(
+			array(),
+			$this->callInaccessibleMethod($hook, 'getUidsToIndex', '', 'testString')
+		);
+	}
+
+	/**
+	 * @unit
+	 */
+	public function testGetUidsToIndexIfDataIsArrayButHasNoTypeKey() {
+		$hook = $this->getMock(
+			'tx_mksearch_hooks_IndexerAutoUpdate',
+			array('getRnbaseDatabaseUtility')
+		);
+		$hook->expects($this->never())->method('getRnbaseDatabaseUtility');
+
+
+		$this->assertEquals(
+			array(),
+			$this->callInaccessibleMethod($hook, 'getUidsToIndex', '', array())
+		);
+	}
+
+	/**
+	 * @unit
+	 */
+	public function testGetUidsToIndexIfDataIsArrayAndHasWrongTypeKey() {
+		$hook = $this->getMock(
+			'tx_mksearch_hooks_IndexerAutoUpdate',
+			array('getRnbaseDatabaseUtility')
+		);
+		$hook->expects($this->never())->method('getRnbaseDatabaseUtility');
+
+		$this->assertEquals(
+			array(),
+			$this->callInaccessibleMethod(
+				$hook, 'getUidsToIndex', '', array('type' => 'noSelect')
+			)
+		);
+	}
+
+	/**
+	 * @unit
+	 * @dataProvider dataProviderGetUidsToIndex
+	 */
+	public function testGetUidsToIndexIfDataIsArrayAndHasSelectTypeKey(
+		$data, $expectedFrom, $expectedOptions, $selectReturn, $expectedReturn
+	) {
+		$hook = $this->getMock(
+			'tx_mksearch_hooks_IndexerAutoUpdate',
+			array('getRnbaseDatabaseUtility')
+		);
+		$databaseUtility = $this->getMockClass(
+			'tx_rnbase_util_DB',
+			array('doSelect')
+		);
+		$databaseUtility::staticExpects($this->once())
+			->method('doSelect')
+			->with('uid', $expectedFrom, $expectedOptions)
+			->will($this->returnValue($selectReturn));
+		$hook->expects($this->once())
+			->method('getRnbaseDatabaseUtility')
+			->will($this->returnValue($databaseUtility));
+
+		$this->assertEquals(
+			$expectedReturn,
+			$this->callInaccessibleMethod(
+				$hook, 'getUidsToIndex', 'test_table', $data
+			)
+		);
+	}
+
+	/**
+	 * @return multitype:multitype:string multitype:string  multitype:number  multitype:multitype:number
+	 */
+	public function dataProviderGetUidsToIndex() {
+		return array(
+			// from aus übergebenem data array
+			array(
+				array('type' => 'select', 'from' => 'another_test_table'),
+				'another_test_table',
+				array('enablefieldsoff' => TRUE, 'where' => ''),
+				array(123 => array('uid' => 123)),
+				array(123)
+			),
+			// from aus übergebener tabelle
+			array(
+				array('type' => 'select'),
+				'test_table',
+				array('enablefieldsoff' => TRUE, 'where' => ''),
+				array(123 => array('uid' => 123)),
+				array(123)
+			),
+			// options aus übergebenem data array
+			array(
+				array('type' => 'select', 'options' => array('debug' => TRUE)),
+				'test_table',
+				array('enablefieldsoff' => TRUE, 'where' => '', 'debug' => TRUE),
+				array(123 => array('uid' => 123)),
+				array(123)
+			),
+			// where aus options hat vorrang
+			array(
+				array('type' => 'select', 'options' => array('where' => 'where clause'), 'where' => 'clause'),
+				'test_table',
+				array('enablefieldsoff' => TRUE, 'where' => 'where clause'),
+				array(123 => array('uid' => 123)),
+				array(123)
+			),
+			// where aus data
+			array(
+				array('type' => 'select', 'where' => 'clause'),
+				'test_table',
+				array('enablefieldsoff' => TRUE, 'where' => 'clause'),
+				array(123 => array('uid' => 123)),
+				array(123)
+			),
+			// doSelect liefert kein Ergebnis
+			array(
+				array('type' => 'select'),
+				'test_table',
+				array('enablefieldsoff' => TRUE, 'where' => ''),
+				array(),
+				array()
+			),
+			// kein uid key im select array result
+			array(
+				array('type' => 'select'),
+				'test_table',
+				array('enablefieldsoff' => TRUE, 'where' => ''),
+				array(123 => array('pid' => 123)),
+				array()
+			),
+			// mehr als ein ergebnis
+			array(
+				array('type' => 'select'),
+				'test_table',
+				array('enablefieldsoff' => TRUE, 'where' => ''),
+				array(123 => array('uid' => 123), 456 => array('uid' => 456)),
+				array(123, 456)
+			)
+		);
 	}
 
 	/**
