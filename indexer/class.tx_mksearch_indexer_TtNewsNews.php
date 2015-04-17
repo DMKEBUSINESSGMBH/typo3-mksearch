@@ -407,6 +407,10 @@ addPageMetaData.separator = ,
 deleteIfNotIndexable = 0
 ### delete from indexing or abort indexing for the record?
 deleteOnAbort = 0
+
+### should the Root Page of the current records page be indexed?
+# indexSiteRootPage = 0
+
 #
 # Sometimes news with a certain category have specially to
 # be in- or excluded

@@ -242,6 +242,10 @@ lib.mksearch.defaultsolrfilter {
 		term = contentType:* ###PARAM_MKSEARCH_TERM###
 	}
 	
+	### Hiermit kann der Filter auf Ergebnisse im aktuellen Webroot eingeschränkt werden
+	### Dazu muss in der Konfiguration der Indexer die Option indexSiteRootPage aktiviert werden
+	respectSiteRootPage = 0
+	
 	### wenn Facetten genutzt werden und plugin.tx_mksearch.searchsolr.facet.links.show.excludeFieldName = 1
 	### gesetzt ist, dann kann hier das Solr Feld für die Facetten angegeben werden. Es wird dann nachträglich
 	### im defaultFilter vorrangestellt wenn ein fq Parameter gesetzt wurde.

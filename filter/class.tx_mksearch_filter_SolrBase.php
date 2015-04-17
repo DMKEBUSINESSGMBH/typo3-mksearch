@@ -27,6 +27,7 @@ tx_rnbase::load('tx_mksearch_util_Misc');
 tx_rnbase::load('tx_rnbase_filter_BaseFilter');
 tx_rnbase::load('tx_rnbase_util_ListBuilderInfo');
 tx_rnbase::load('tx_mksearch_util_Filter');
+tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
 
 /**
  * Der Filter liest seine Konfiguration passend zum Typ des Solr RequestHandlers. Der Typ
@@ -279,6 +280,10 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 	 */
 	protected function handleFq(&$options, &$parameters, &$configurations, $confId) {
 		self::addFilterQuery($options, self::getFilterQueryForFeGroups());
+
+		// respect Root Page
+		$this->handleFqForSiteRootPage($options, $configurations, $confId);
+
 		// die erlaubten felder holen
 		$allowedFqParams = $configurations->getExploded($confId.'allowedFqParams');
 		// wenn keine konfiguriert sind, nehmen wir automatisch die faccet fields
@@ -360,6 +365,31 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 		}
 
 		return $filterQuery;
+	}
+
+	/**
+	 * Fügt die SiteRootPage zur Filter Query hinzu
+	 *
+	 * @param 	array $options
+	 * @param 	tx_rnbase_configurations $configurations
+	 * @param 	string $confId
+	 */
+	public function handleFqForSiteRootPage(
+		&$options, &$configurations, $confId
+	) {
+		if ($configurations->getBool($confId . 'respectSiteRootPage')) {
+			$siteRootPage = tx_mksearch_service_indexer_core_Config::getSiteRootPage(
+				$GLOBALS['TSFE']->id
+			);
+			if ($options['siteRootPage'] || !is_array($siteRootPage)) {
+				$siteRootPage = $options['siteRootPage'];
+			}
+			if (is_array($siteRootPage) && !empty($siteRootPage)) {
+				self::addFilterQuery(
+					$options, 'siteRootPage:' . $siteRootPage['uid']
+				);
+			}
+		}
 	}
 
 	/**
@@ -665,6 +695,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 
 		return $this->filterUtility;
 	}
+
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/filter/class.tx_mksearch_filter_SolrBase.php']) {

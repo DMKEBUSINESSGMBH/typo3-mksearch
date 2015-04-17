@@ -588,6 +588,7 @@
 		<field name="contentType" type="string" indexed="true" stored="true"
 			required="true" />
 		<field name="tstamp" type="int" indexed="true" stored="true" />
+		<field name="siteRootPage" type="int" indexed="true" stored="true" />
 
 		<!-- Common metadata fields, named specifically to match up with SolrCell 
 			metadata when parsing rich documents such as Word, PDF. Some fields are multiValued 

@@ -768,6 +768,107 @@ class tx_mksearch_tests_indexer_Base_testcase
 			)
 		);
 	}
+
+
+	/**
+	 * @group unit
+	 */
+	public function testIndexSiteRootPageIndexesRootPageCorrectly() {
+		$coreConfigUtility = $this->getMockClass(
+			'tx_mksearch_service_indexer_core_Config', array('getSiteRootPage')
+		);
+		$coreConfigUtility::staticExpects($this->once())
+			->method('getSiteRootPage')
+			->with(123)
+			->will($this->returnValue(array('uid' => 3)));
+
+		$options = array('indexSiteRootPage' => 1);
+		$indexer = $this->getMock(
+			'tx_mksearch_tests_fixtures_indexer_Dummy', array('getCoreConfigUtility', 'shouldIndexSiteRootPage')
+		);
+		$indexer->expects($this->once())
+			->method('getCoreConfigUtility')
+			->will($this->returnValue($coreConfigUtility));
+
+		$indexer->expects($this->once())
+			->method('shouldIndexSiteRootPage')
+			->with($options)
+			->will($this->returnValue(TRUE));
+
+		$indexDoc = $this->getMock(
+			'tx_mksearch_model_IndexerDocumentBase', array('addField'), array('', '')
+		);
+		$model = tx_rnbase::makeInstance(
+			'tx_rnbase_model_base', array('pid' => 123)
+		);
+		$indexDoc->expects($this->once())
+			->method('addField')
+			->with('siteRootPage', 3);
+
+		$this->callInaccessibleMethod($indexer, 'indexSiteRootPage', $model, 'tt_content', $indexDoc, $options);
+	}
+	/**
+	 * @group unit
+	 */
+	public function testIndexSiteRootPageDoesntIndexSiteRootPageWhenConfigMissing() {
+		$options = array('indexSiteRootPage' => 0);
+		$indexer = $this->getMock(
+			'tx_mksearch_tests_fixtures_indexer_Dummy', array('getCoreConfigUtility', 'shouldIndexSiteRootPage')
+		);
+		$indexer->expects($this->never())
+			->method('getCoreConfigUtility');
+
+		$indexer->expects($this->once())
+			->method('shouldIndexSiteRootPage')
+			->with($options)
+			->will($this->returnValue(FALSE));
+
+		$indexDoc = $this->getMock(
+			'tx_mksearch_model_IndexerDocumentBase', array('addField'), array('', '')
+		);
+		$model = tx_rnbase::makeInstance(
+			'tx_rnbase_model_base', array('pid' => 123)
+		);
+		$indexDoc->expects($this->never())
+			->method('addField');
+
+		$this->callInaccessibleMethod($indexer, 'indexSiteRootPage', $model, 'tt_content', $indexDoc, $options);
+	}
+
+	/**
+	 * @group unit
+	 * @dataProvider getTestDataForShouldIndexSiteRootPageTest
+	 */
+	public function testShouldIndexSiteRootPage($options, $expected) {
+		$indexer = $this->getMock(
+			'tx_mksearch_tests_fixtures_indexer_Dummy', array()
+		);
+
+		$this->assertEquals(
+			$expected,
+			$this->callInaccessibleMethod(
+				$indexer, 'shouldIndexSiteRootPage', $options
+			)
+		);
+	}
+
+	public function getTestDataForShouldIndexSiteRootPageTest() {
+		return array(
+			__LINE__ => array(
+				'options' => array('indexSiteRootPage' => 1),
+				'expected' => TRUE,
+			),
+			__LINE__ => array(
+				'options' => array('indexSiteRootPage' => 0),
+				'expected' => FALSE,
+			),
+			__LINE__ => array(
+				'options' => array(),
+				'expected' => FALSE,
+			),
+		);
+	}
+
 }
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']) {
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']);

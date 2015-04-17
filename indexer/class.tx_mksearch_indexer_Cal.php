@@ -333,6 +333,8 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base {
 #   }
 # }
 # }
+### should the Root Page of the current records page be indexed?
+# indexSiteRootPage = 0
 
 # you should always configure the root pageTree for this indexer in the includes. mostly the domain
 # include.pageTrees {

@@ -122,8 +122,15 @@ abstract class tx_mksearch_indexer_Base
 			return $indexDoc;
 		}
 
-		$indexDoc = $this->indexEnableColumns($this->modelToIndex, $tableName, $indexDoc);
-		$indexDoc = $this->indexData($this->modelToIndex, $tableName, $rawData, $indexDoc, $options);
+		$indexDoc = $this->indexEnableColumns(
+			$this->modelToIndex, $tableName, $indexDoc
+		);
+		$indexDoc = $this->indexSiteRootPage(
+			$this->modelToIndex, $tableName, $indexDoc, $options
+		);
+		$indexDoc = $this->indexData(
+			$this->modelToIndex, $tableName, $rawData, $indexDoc, $options
+		);
 
 		// post precess hock
 		tx_rnbase_util_Misc::callHook(
@@ -337,6 +344,45 @@ abstract class tx_mksearch_indexer_Base
 	}
 
 	/**
+	 * Indexes the Rootpage of the current models page
+	 *
+	 * @param tx_rnbase_IModel $model
+	 * @param string $tableName
+	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
+	 * @param array $options
+	 * @return tx_mksearch_interface_IndexerDocument
+	 */
+	protected function indexSiteRootPage(
+		tx_rnbase_IModel $model, $tableName,
+		tx_mksearch_interface_IndexerDocument $indexDoc,
+		$options = array()
+	) {
+		if ($this->shouldIndexSiteRootPage($options)) {
+			$coreConfigUtility = $this->getCoreConfigUtility();
+			$pageId = ($tableName == 'pages' ? $model->getUid() : $model->record['pid']);
+			$siteRootPage = $coreConfigUtility::getSiteRootPage(
+				$pageId
+			);
+			if (is_array($siteRootPage) && !empty($siteRootPage)) {
+				$indexDoc->addField('siteRootPage', $siteRootPage['uid']);
+			}
+		}
+
+		return $indexDoc;
+	}
+
+	/**
+	 *
+	 * @param array $options
+	 * @return boolean
+	 */
+	protected function shouldIndexSiteRootPage($options) {
+		$config = $this->getConfigValue('indexSiteRootPage', $options);
+		return ((is_array($config) && !empty($config) && reset($config) == 1));
+
+	}
+
+	/**
 	 * Erweitert den record um die enable columns.
 	 *
 	 * @param array $recordIndexMapping
@@ -450,6 +496,9 @@ abstract class tx_mksearch_indexer_Base
 # }
 ### delete from or abort indexing for the record if isIndexableRecord or no record?
 # deleteIfNotIndexable = 0
+
+### should the Root Page of the current records page be indexed?
+# indexSiteRootPage = 0
 
 # Note: you should always configure the root pageTree for this indexer in the includes. mostly the domain
 # White lists: Explicitely include items in indexing by various conditions.
