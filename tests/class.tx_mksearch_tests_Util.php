@@ -56,6 +56,12 @@ class tx_mksearch_tests_Util {
 	 */
 	private static $TCA = NULL;
 
+
+	/**
+	 * @var array
+	 */
+	private static $extConf = array();
+
 	/**
 	 * Sichert die hoocks unt entfernt diese in der globalconf.
 	 *
@@ -320,6 +326,54 @@ class tx_mksearch_tests_Util {
 		// backup zurück spielen
 		copy($backupPackageStatesFile, $packageStatesFile);
 		unlink($backupPackageStatesFile);
+	}
+
+	/**
+	 * Sichert eine Extension Konfiguration.
+	 * Wurde bereits eine Extension Konfiguration gesichert,
+	 * wird diese nur überschrieben wenn bOverwrite wahr ist!
+	 *
+	 * @param string 	$extKey
+	 * @param boolean 	$overwrite
+	 */
+	public static function storeExtConf($extKey='mksearch', $overwrite = FALSE){
+		if (!isset(self::$extConf[$extKey]) || $overwrite){
+			self::$extConf[$extKey] = $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$extKey];
+		}
+	}
+	/**
+	 * Setzt eine gesicherte Extension Konfiguration zurück.
+	 *
+	 * @param string $extKey
+	 * @return boolean 		wurde die Konfiguration zurückgesetzt?
+	 */
+	public static function restoreExtConf($extKey='mksearch'){
+		if(isset(self::$extConf[$extKey])) {
+			$GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$extKey] = self::$extConf[$extKey];
+			return TRUE;
+		}
+
+		return FALSE;
+	}
+
+	/**
+	 * Setzt eine Vaiable in die Extension Konfiguration.
+	 * Achtung im setUp sollte storeExtConf und im tearDown restoreExtConf aufgerufen werden.
+	 * @param string 	$cfgKey
+	 * @param string 	$cfgValue
+	 * @param string 	$extKey
+	 */
+	public static function setExtConfVar($cfgKey, $cfgValue, $extKey = 'mksearch'){
+		// aktuelle Konfiguration auslesen
+		$extConfig = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$extKey]);
+		// wenn keine Konfiguration existiert, legen wir eine an.
+		if (!is_array($extConfig)) {
+			$extConfig = array();
+		}
+		// neuen Wert setzen
+		$extConfig[$cfgKey] = $cfgValue;
+		// neue Konfiguration zurückschreiben
+		$GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$extKey] = serialize($extConfig);
 	}
 }
 

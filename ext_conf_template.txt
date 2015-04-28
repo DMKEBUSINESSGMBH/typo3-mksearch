@@ -21,3 +21,6 @@ useCurlAsHttpTransport = 1
 
 # cat=mksearch/basic; type=boolean; label= Enable rn_base util DB Hook: Activates the auto indexing progress for insert, update and delete statements for tx_rnbase_util_DB calls. So the queue can be filled automaticaly for frontendediting, imports or special be-module operations. Requires rn_base 0.14.6 or later!
 enableRnBaseUtilDbHook = 0
+
+# cat=mksearch/basic; type=int; label= Queue entries older than this seconds are deleted automatically (default 30 days) so the queue table stays small.
+secondsToKeepQueueEntries = 2592000

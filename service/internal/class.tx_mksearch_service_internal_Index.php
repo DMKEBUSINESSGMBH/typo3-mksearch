@@ -281,6 +281,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 		}
 		if($GLOBALS['TYPO3_CONF_VARS']['MKSEARCH_testmode'] != 1) {
 			$ret = tx_rnbase_util_DB::doUpdate(self::$queueTable, 'uid IN ('. implode(',', $uids) . ')', array('deleted' => 1));
+			$this->deleteOldQueueEntries();
 			tx_rnbase_util_Logger::info('Indexing run finished with '.$ret. ' items executed.', $extKey , array('data'=>$data));
 		}
 		else
@@ -534,6 +535,41 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 		$indexes = $this->search($fields, $options);
 		return !empty($indexes[0]) ? $indexes[0] : null;
 	}
+
+	/**
+	 * @return void
+	 */
+	protected function deleteOldQueueEntries() {
+		/* @var $databaseUtility tx_rnbase_util_DB */
+		$databaseUtility = $this->getDatabaseUtility();
+
+		$databaseUtility::doDelete(
+			self::$queueTable,
+			'deleted = 1 AND cr_date < NOW() - ' . $this->getSecondsToKeepQueueEntries()
+		);
+	}
+
+	/**
+	 *
+	 * @return string
+	 */
+	protected function getDatabaseUtility () {
+		return tx_rnbase_util_DB;
+	}
+
+	/**
+	 *
+	 * @return string
+	 */
+	protected function getSecondsToKeepQueueEntries () {
+		$secondsToKeepQueueEntries = tx_rnbase_configurations::getExtensionCfgValue(
+			'mksearch', 'secondsToKeepQueueEntries'
+		);
+		$thirtyDaysInSeconds = 2592000;
+		return $secondsToKeepQueueEntries ? $secondsToKeepQueueEntries : $thirtyDaysInSeconds;
+	}
+
+
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/internal/class.tx_mksearch_service_internal_Index.php']) {

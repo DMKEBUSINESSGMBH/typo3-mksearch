@@ -23,104 +23,104 @@
 ***************************************************************/
 
 require_once t3lib_extMgm::extPath('rn_base', 'class.tx_rnbase.php');
-tx_rnbase::load('tx_mksearch_tests_DbTestcase');
+tx_rnbase::load('tx_mksearch_tests_Testcase');
+tx_rnbase::load('tx_mksearch_tests_Util');
 
 /**
  *
- * @package tx_mksearch
- * @subpackage tx_mksearch_tests
+ * @package TYPO3
+ * @subpackage mksearch
  * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
- * @author Michael Wagner <michael.wagner@dmk-ebusiness.de>
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
 class tx_mksearch_tests_service_internal_Index_testcase
-	extends tx_mksearch_tests_DbTestcase {
+	extends tx_mksearch_tests_Testcase {
 
 	/**
-	 * Constructs a test case with the given name.
-	 *
-	 * @param string $name the name of a testcase
-	 * @param array $data ?
-	 * @param string $dataName ?
+	 * (non-PHPdoc)
+	 * @see tx_mksearch_tests_Testcase::setUp()
 	 */
-	public function __construct($name = NULL, array $data = array(), $dataName = '') {
-		parent::__construct($name, $data, $dataName);
-
-		$this->importExtensions = array('mksearch');
-		$this->importDataSets = array();
-	}
-
-	function testAddRecordToIndex() {
-		$srv = tx_mksearch_util_ServiceRegistry::getIntIndexService();
-		$srv->addRecordToIndex('tx_mktest_table', 50);
-		$res = tx_rnbase_util_DB::doSelect('*', 'tx_mksearch_queue', array('enablefieldsoff' => true));
-
-		$this->assertEquals(1, count($res), 'Wrong row count in queue.');
-
-		$first = &$res[0];
-		$this->assertEquals('tx_mktest_table', $first['tablename'], 'Wrong tablename in first table.');
-		$this->assertEquals(50, $first['recid'], 'Wrong uid in first table.');
-		$this->assertEquals('', $first['data'], 'Wrong data in first table.');
-		$this->assertEquals('', $first['resolver'], 'Wrong resolver in first table.');
+	protected function setUp() {
+		tx_mksearch_tests_Util::storeExtConf();
 	}
 
 	/**
-	 * muss nach den tests mit dem resolver laufen, da dieser sonnst immer genutzt wird
+	 * (non-PHPdoc)
+	 * @see tx_mksearch_tests_Testcase::tearDown()
 	 */
-	function testAddRecordToIndexWithRegisteredResolver() {
-		tx_mksearch_util_Config::registerResolver('tx_mksearch_resolver_Test', array('tx_mktest_table'));
-		$srv = tx_mksearch_util_ServiceRegistry::getIntIndexService();
-		$srv->addRecordToIndex('tx_mktest_table', 50);
-		$res = tx_rnbase_util_DB::doSelect('*', 'tx_mksearch_queue', array('enablefieldsoff' => true));
-
-		$this->assertEquals(1, count($res), 'Wrong row count in queue.');
-
-		$first = &$res[0];
-		$this->assertEquals('tx_mktest_table', $first['tablename'], 'Wrong tablename in first table.');
-		$this->assertEquals(50, $first['recid'], 'Wrong uid in first table.');
-		$this->assertEquals('', $first['data'], 'Wrong data in first table.');
-		$this->assertEquals('tx_mksearch_resolver_Test', $first['resolver'], 'Wrong resolver in first table.');
-
-		// resolver wieder deaktivieren
-		tx_mksearch_util_Config::registerResolver(false, array('tx_mktest_table'));
+	protected function tearDown() {
+		tx_mksearch_tests_Util::restoreExtConf();
 	}
 
-	function testAddRecordsToIndex() {
-		$srv = tx_mksearch_util_ServiceRegistry::getIntIndexService();
-		$records = array(
-			array('tablename' => 'tx_mktest_table', 'uid' => '50'),
-			array('tablename' => 'tx_mktest_table', 'uid' => '51', 'preferer' => '1'),
-			array('tablename' => 'tx_mktest_table', 'uid' => '52', 'preferer' => '1', 'resolver' => 'tx_mksearch_resolver_Test'),
-			array('tablename' => 'tx_mktest_table', 'uid' => '53', 'preferer' => '1', 'resolver' => 'tx_mksearch_resolver_Test', 'data' => 'test index'),
+	/**
+	 * @group unit
+	 */
+	public function testGetDatabaseUtility() {
+		$indexService = tx_rnbase::makeInstance(
+			'tx_mksearch_service_internal_Index'
 		);
-		$options = array('checkExisting' => false);
-		$srv->addRecordsToIndex($records, $options);
-		$res = tx_rnbase_util_DB::doSelect('*', 'tx_mksearch_queue', array('enablefieldsoff' => true));
 
-		$this->assertEquals(4, count($res), 'Wrong row count in queue.');
-
-		foreach($records as $key => $row) {
-			$this->assertTrue(array_key_exists($key, $res), $key.': Record not found.');
-			$this->assertEquals($row['tablename'], $res[$key]['tablename'], $key.': Wrong tablename.');
-			$this->assertEquals($row['uid'], $res[$key]['recid'], $key.': Wrong uid.');
-			$this->assertEquals($row['data'], $res[$key]['data'], $key.': Wrong data.');
-			$this->assertEquals($row['resolver'], $res[$key]['resolver'], $key.': Wrong resolver.');
-		}
+		$this->assertEquals(
+			'tx_rnbase_util_DB',
+			$this->callInaccessibleMethod(
+				$indexService, 'getDatabaseUtility'
+			)
+		);
 	}
-	function testAddRecordsToIndexWith10000() {
-		$srv = tx_mksearch_util_ServiceRegistry::getIntIndexService();
-		$records = array();
-		for($i=1;$i<=10000;$i++){
-			$records[] = array('tablename' => 'tx_mktest_table', 'uid' => $i);
-		}
-		$options = array('checkExisting' => false);
-		$srv->addRecordsToIndex($records, $options);
 
-		$this->assertEquals(10000, $srv->countItemsInQueue('tx_mktest_table'), 'Wrong queue count.');
+	/**
+	 * @group unit
+	 */
+	public function testGetSecondsToKeepQueueEntries() {
+		$indexService = tx_rnbase::makeInstance(
+			'tx_mksearch_service_internal_Index'
+		);
+
+		$this->assertEquals(
+			2592000,
+			$this->callInaccessibleMethod(
+				$indexService, 'getSecondsToKeepQueueEntries'
+			),
+			'Fallback falsch'
+		);
+
+		tx_mksearch_tests_Util::setExtConfVar('secondsToKeepQueueEntries', 123);
+
+		$this->assertEquals(
+			123,
+			$this->callInaccessibleMethod(
+				$indexService, 'getSecondsToKeepQueueEntries'
+			),
+			'Konfiguration nicht korrekt ausgelsen'
+		);
 	}
-}
 
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/service/internal/class.tx_mksearch_tests_service_internal_Index_testcase.php']) {
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/service/internal/class.tx_mksearch_tests_service_internal_Index_testcase.php']);
+	/**
+	 * @group unit
+	 */
+	public function testDeleteOldQueueEntries() {
+		$indexService = $this->getAccessibleMock(
+			'tx_mksearch_service_internal_Index',
+			array('getDatabaseUtility', 'getSecondsToKeepQueueEntries')
+		);
+
+		$indexService->expects($this->once())
+			->method('getSecondsToKeepQueueEntries')
+			->will($this->returnValue(123));
+
+		$databaseUtility = $this->getMockClass(
+			'tx_rnbase_util_DB',
+			array('doDelete')
+		);
+		$databaseUtility::staticExpects($this->once())
+			->method('doDelete')
+			->with('tx_mksearch_queue', 'deleted = 1 AND cr_date < NOW() - 123');
+
+		$indexService->expects($this->once())
+			->method('getDatabaseUtility')
+			->will($this->returnValue($databaseUtility));
+
+		$indexService->_call('deleteOldQueueEntries');
+	}
 }
