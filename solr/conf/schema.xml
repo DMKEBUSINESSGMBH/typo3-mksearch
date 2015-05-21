@@ -276,8 +276,16 @@
 
 				<!-- best practice (currently) for synonyms is to add them by
 					expansions during index time
+					solr.KeywordTokenizerFactory as tokenizerFactory
+					so synonyms with whitespaces are treated as phrase
 				-->
-				<filter class="solr.SynonymFilterFactory" synonyms="synonymsGerman.txt" ignoreCase="true" expand="true"/>
+				<filter 
+					class="solr.SynonymFilterFactory" 
+					synonyms="synonymsGerman.txt" 
+					ignoreCase="true" 
+					expand="true"
+					tokenizerFactory="solr.KeywordTokenizerFactory"
+				/>
 
 				<!--
 					minWordSize : only words longer than this get processed
@@ -332,8 +340,18 @@
 			positionIncrementGap="100">
 			<analyzer>
 				<tokenizer class="solr.WhitespaceTokenizerFactory" />
-				<filter class="solr.SynonymFilterFactory" synonyms="synonymsGerman.txt"
-					ignoreCase="true" expand="false" />
+				<!-- best practice (currently) for synonyms is to add them by
+					expansions during index time
+					solr.KeywordTokenizerFactory as tokenizerFactory
+					so synonyms with whitespaces are treated as phrase
+				-->
+				<filter 
+					class="solr.SynonymFilterFactory" 
+					synonyms="synonymsGerman.txt" 
+					ignoreCase="true" 
+					expand="false"
+					tokenizerFactory="solr.KeywordTokenizerFactory"
+				/>
 				<filter class="solr.StopFilterFactory" ignoreCase="true"
 					words="stopwordsGerman.txt" />
 				<filter class="solr.WordDelimiterFilterFactory"
@@ -365,8 +383,18 @@
 			</analyzer>
 			<analyzer type="query">
 				<tokenizer class="solr.WhitespaceTokenizerFactory" />
-				<filter class="solr.SynonymFilterFactory" synonyms="synonymsGerman.txt"
-					ignoreCase="true" expand="true" />
+				<!-- best practice (currently) for synonyms is to add them by
+					expansions during index time
+					solr.KeywordTokenizerFactory as tokenizerFactory
+					so synonyms with whitespaces are treated as phrase
+				-->
+				<filter 
+					class="solr.SynonymFilterFactory" 
+					synonyms="synonymsGerman.txt" 
+					ignoreCase="true" 
+					expand="true"
+					tokenizerFactory="solr.KeywordTokenizerFactory"
+				/>
 				<filter class="solr.StopFilterFactory" ignoreCase="true"
 					words="stopwordsGerman.txt" enablePositionIncrements="true" />
 				<filter class="solr.WordDelimiterFilterFactory"
@@ -396,8 +424,18 @@
 			</analyzer>
 			<analyzer type="query">
 				<tokenizer class="solr.WhitespaceTokenizerFactory" />
-				<filter class="solr.SynonymFilterFactory" synonyms="synonymsGerman.txt"
-					ignoreCase="true" expand="true" />
+				<!-- best practice (currently) for synonyms is to add them by
+					expansions during index time
+					solr.KeywordTokenizerFactory as tokenizerFactory
+					so synonyms with whitespaces are treated as phrase
+				-->
+				<filter 
+					class="solr.SynonymFilterFactory" 
+					synonyms="synonymsGerman.txt" 
+					ignoreCase="true" 
+					expand="true"
+					tokenizerFactory="solr.KeywordTokenizerFactory"
+				/>
 				<filter class="solr.StopFilterFactory" ignoreCase="true"
 					words="stopwordsGerman.txt" enablePositionIncrements="true" />
 				<filter class="solr.WordDelimiterFilterFactory"
