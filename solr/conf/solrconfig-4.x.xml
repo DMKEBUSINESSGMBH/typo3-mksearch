@@ -770,9 +770,9 @@
 				Wir  bewerten funde im titel höher als funde im content, gefolgt von den restlichen feldern.
 				Wir suchen auch immer fuzzy, allerdings mit einer niedrigen Bewertung!
 			-->
-			<str name="qf">title^1.5 fulltext^0.4 fulltext~0.2^0.1</str>
+			<str name="qf">title^10.0 fulltext^1.0 fulltext~0.2^0.1</str>
 			<!-- Boost hits one phrases -->
-			<str name="pf">title^1.5 fulltext^0.4 fulltext~0.2^0.1</str>
+			<str name="pf">title^10.0 fulltext^1.0 fulltext~0.2^0.1</str>
 			<int name="ps">15</int>
 			<str name="mm">2&lt;-35%</str>
 			<!--  
