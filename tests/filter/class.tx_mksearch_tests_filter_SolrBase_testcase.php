@@ -443,6 +443,68 @@ class tx_mksearch_tests_filter_SolrBase_testcase
 	}
 
 	/**
+	 * @group unit
+	 */
+	public function testInitSetsFacetSortToCountIfNoneAlreadySet() {
+		$config = $this->getDefaultConfig();
+		$config['searchsolr.']['filter.']['default.']['options.']['facet.']['fields'] = 'somefield';
+
+		$filter = $this->getFilter($config);
+
+		$fields = array();
+		$options = array();
+		$filter->init($fields,$options);
+		$this->assertEquals('count', $options['facet.sort'], 'facet.sort falsch');
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testInitSetsFacetSortNotToCountIfOneAlreadySet() {
+		$config = $this->getDefaultConfig();
+		$config['searchsolr.']['filter.']['default.']['options.']['facet.']['fields'] = 'somefield';
+
+		$filter = $this->getFilter($config);
+
+		$fields = array();
+		$options = array('facet.sort' => 'index');
+		$filter->init($fields,$options);
+		$this->assertEquals('index', $options['facet.sort'], 'facet.sort falsch');
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testInitSetsFacetSortToConfiguredSortIfNoneAlreadySet() {
+		$config = $this->getDefaultConfig();
+		$config['searchsolr.']['filter.']['default.']['options.']['facet.']['fields'] = 'somefield';
+		$config['searchsolr.']['filter.']['default.']['options.']['facet.']['sort'] = 'index';
+
+		$filter = $this->getFilter($config);
+
+		$fields = array();
+		$options = array();
+		$filter->init($fields,$options);
+		$this->assertEquals('index', $options['facet.sort'], 'facet.sort falsch');
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testInitSetsFacetSortNotToConfiguredSortIfOneAlreadySet() {
+		$config = $this->getDefaultConfig();
+		$config['searchsolr.']['filter.']['default.']['options.']['facet.']['fields'] = 'somefield';
+		$config['searchsolr.']['filter.']['default.']['options.']['facet.']['sort'] = 'index';
+
+		$filter = $this->getFilter($config);
+
+		$fields = array();
+		$options = array('facet.sort' => 'something other');
+		$filter->init($fields,$options);
+		$this->assertEquals('something other', $options['facet.sort'], 'facet.sort falsch');
+	}
+
+	/**
 	 * @return array
 	 */
 	private function getDefaultConfig() {

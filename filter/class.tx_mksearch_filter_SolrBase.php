@@ -243,7 +243,12 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 		if (empty($options['facet.mincount'])) {
 			$options['facet.mincount'] = '1';
 		}
-		// immer nach der anzahl sortieren, die alternative wäre index.
+
+		$sortFacetsFromConfiguration = $this->getConfValue('options.facet.sort');
+		if ($sortFacetsFromConfiguration && empty($options['facet.sort'])) {
+			$options['facet.sort'] = $sortFacetsFromConfiguration;
+		}
+		// als fallback immer nach der anzahl sortieren, die alternative wäre index.
 		if (empty($options['facet.sort'])) {
 			$options['facet.sort'] = 'count';
 		}
