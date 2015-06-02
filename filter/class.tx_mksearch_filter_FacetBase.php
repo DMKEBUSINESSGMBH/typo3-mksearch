@@ -33,7 +33,7 @@ tx_rnbase::load('tx_mksearch_filter_SolrBase');
  *
  */
 class tx_mksearch_filter_FacetBase extends tx_mksearch_filter_SolrBase {
-	
+
 	/**
 	 * Die eigentliche Konfiguration der facetten sollte
 	 * über den request Handler geschehen und nicht im Filter
@@ -43,8 +43,8 @@ class tx_mksearch_filter_FacetBase extends tx_mksearch_filter_SolrBase {
 	 * @param tx_rnbase_parameters $parameters
 	 * @param tx_rnbase_configurations $configurations
 	 * @param string $confId
-	 * @return bool	Should subsequent query be executed at all? 
-	 * 
+	 * @return bool	Should subsequent query be executed at all?
+	 *
 	 */
 	protected function initFilter(&$fields, &$options, &$parameters, &$configurations, $confId) {
 		//erstmal die prinzipielle Suche von unserem Elter initialisieren lassen
@@ -53,11 +53,23 @@ class tx_mksearch_filter_FacetBase extends tx_mksearch_filter_SolrBase {
 			//noch eingeschränkt werden wollen. Sollen sie doch eingeschränkt werden
 			//dann einfach einen Filter verwenden der "fq" nicht statisch auf nichts setzt
 			$options['limit'] = 0;//nie wirklich suchen
-			$options['fq'] = '';//nie einschränken
 			$options['facet'] = 'true';
 
-			return true;//damit der Filter als valide betrachtet wird
+			return TRUE;//damit der Filter als valide betrachtet wird
 		}
+	}
+
+	/**
+	 * (non-PHPdoc)
+	 * @see tx_mksearch_filter_SolrBase::handleFq()
+	 *
+	 * nie einschränken außer die Standard FQs
+	 */
+	protected function handleFq(&$options, &$parameters, &$configurations, $confId) {
+		self::addFilterQuery($options, self::getFilterQueryForFeGroups());
+
+		// respect Root Page
+		$this->handleFqForSiteRootPage($options, $configurations, $confId);
 	}
 }
 
