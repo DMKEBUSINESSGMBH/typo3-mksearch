@@ -240,9 +240,9 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 	 * @return tx_rnbase_util_PageBrowser
 	 */
 	function handlePageBrowser($parameters,$configurations, $confId, $viewdata, &$fields, &$options, $index) {
-		// handle page browser only, if configured and the limit is greater than one.
+		// handle page browser only, if configured and the limit is greater than zero.
 		if(
-			(isset($options['limit']) || $options['limit'] > 1)
+			(isset($options['limit']) && $options['limit'] > 0)
 			&& is_array($conf = $configurations->get($confId.'hit.pagebrowser.'))
 		) {
 			// PageBrowser initialisieren
