@@ -144,14 +144,18 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc {
 			'reset' => array('title' => 'label_table_reset', 'decorator' => $decor),
 		);
 
-		if($count = count($aDefinedTables)) {
+		if (!empty($aDefinedTables)) {
 			tx_rnbase::load('tx_rnbase_mod_Tables');
-			$arr = tx_rnbase_mod_Tables::prepareTable($aDefinedTables, $columns, $this->formTool, $this->options);
-			$content = $this->mod->doc->table($arr[0]);
+			$arr = tx_rnbase_mod_Tables::prepareTable(
+				$aDefinedTables,
+				$columns,
+				$this->getModule()->getFormTool(),
+				array()
+			);
+			$content = $this->getModule()->getDoc()->table($arr[0]);
 		}
 		else {
-	  		$content = '<p><strong>###LABEL_NO_INDEXERS_FOUND###</strong></p><br/>';
-	  		$count = '';
+			$content = '<p><strong>###LABEL_NO_INDEXERS_FOUND###</strong></p><br/>';
 		}
 
 		$markerArray['###TABLES_TABLE###'] = $content;
