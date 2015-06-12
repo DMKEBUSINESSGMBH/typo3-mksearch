@@ -85,6 +85,11 @@ class tx_mksearch_tests_util_Misc_testcase
 						array('lineendings' => true),
 						'Zeile1' . PHP_EOL . 'Zeile2',
 					),
+				__LINE__ => array(
+						'one two  three   one five     zero',
+						array('removedoublespaces' => TRUE),
+						'one two three one five zero',
+					),
 			) as $key => $row) {
 			$key = 'Line:'.$key;
 			$return[$key] = $row;

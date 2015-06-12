@@ -115,6 +115,11 @@ class tx_mksearch_util_Misc {
 			'/<!--.*?-->/' => ' ',
 		);
 
+		// replace double spaces
+		if (!empty($options['removedoublespaces'])) {
+			$replaces['/ +/'] = ' ';
+		}
+
 		return trim(
 			html_entity_decode(
 				preg_replace(
