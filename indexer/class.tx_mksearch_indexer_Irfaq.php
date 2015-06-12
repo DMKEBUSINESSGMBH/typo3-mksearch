@@ -60,22 +60,47 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base {
 	 * (non-PHPdoc)
 	 * @see tx_mksearch_interface_Indexer::prepareSearchData()
 	 */
-	public function indexData(tx_rnbase_IModel $model, $tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options) {
+	public function indexData(
+		tx_rnbase_IModel $model,
+		$tableName,
+		$rawData,
+		tx_mksearch_interface_IndexerDocument $indexDoc,
+		$options
+	) {
 		//check if at least one category of the current faq
 		//is in the given include categories if this option is used
 		//we could also extend the isIndexableRecord method but than
 		//we would need to get the faq model and the categories
 		//twice
 		$categories = tx_mksearch_util_ServiceRegistry::getIrfaqCategoryService()->getByQuestion($model);
-		if(!$this->checkInOrExcludeOptions($categories,$options))
+		if(!$this->checkInOrExcludeOptions($categories,$options)) {
 			return null;
-		//else go one with indexing
+		}
+		// else go one with indexing
 
 		//index everything about the categories
 		$this->indexArrayOfModelsByMapping(
 			$categories,
 			$this->getCategoryMapping(),
 			$indexDoc,'category_'
+		);
+
+
+		// set title, content and abstract as default
+		// can be overwritten by the mapping
+		$indexDoc->setTitle($model->getQ());
+		$indexDoc->setContent(
+			tx_mksearch_util_Misc::html2plain(
+				$model->getA(),
+				array('lineendings' => TRUE)
+			)
+		);
+		$indexDoc->setAbstract(
+			tx_mksearch_util_Misc::html2plain(
+				$model->getA(),
+				array('lineendings' => TRUE)
+			),
+			$indexDoc->getMaxAbstractLength()
 		);
 
 		// index everything about the question
@@ -258,7 +283,7 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base {
 #
 # you should always configure the root pageTree for this indexer in the includes. mostly the domain
 # include.pageTrees {
-# 	0 = $pid-of-domain
+# 	0 = \$pid-of-domain
 # }
 CONFIG;
 	}
