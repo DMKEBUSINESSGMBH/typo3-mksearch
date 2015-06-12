@@ -582,7 +582,12 @@ plugin.tx_mksearch {
 
 		responseProcessor {
 			### see tx_mksearch_util_SolrResponseProcessor::processHits
-			hit.overrideWithHl = 0
+			hit {
+				overrideWithHl = 0
+				### Horizontal Ellipsises for HL?
+				hellip = 0
+				hellip.stdWrap.noTrimWrap = |&hellip; | &hellip;|
+			}
 			facet.builderClass = tx_mksearch_util_FacetBuilder
 			suggestions.builderClass = tx_mksearch_util_SuggestionBuilder
 		}

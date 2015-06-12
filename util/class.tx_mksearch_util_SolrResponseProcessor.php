@@ -137,6 +137,14 @@ class tx_mksearch_util_SolrResponseProcessor {
 						$overrideWithHl = $overrideWithHl ? $overrideWithHl : (isset($options['overrideWithHl']) && $options['overrideWithHl']);
 						$highlightField = ($overrideWithHl) ? $docField : $docField.'_hl';
 
+						if ($this->getConfigurations()->getBool($confId.'hellip')) {
+							$highlightValue = $this->handleHellip(
+								$hit->record[$docField],
+								$highlightValue,
+								$this->getConfigurations()->get($confId.'hellip.')
+							);
+						}
+
 						$hit->record[$highlightField] = $highlightValue;
 					}
 				}
@@ -144,6 +152,72 @@ class tx_mksearch_util_SolrResponseProcessor {
 		}
 		return $hits;
 	}
+
+	/**
+	 * checks the original and the highlighted value.
+	 * if the highlighted value is an excerpt, so a horizontal ellipsises
+	 * will be wrapped around the highlighted value.
+	 *
+	 * @param string $originalValue
+	 * @param string $highlightedValue
+	 * @param array $options
+	 * @return string
+	 */
+	protected function handleHellip(
+		$originalValue,
+		$highlightedValue,
+		array $options = array()
+	) {
+
+		tx_rnbase::load('tx_rnbase_util_Strings');
+		tx_rnbase::load('tx_mksearch_util_Misc');
+
+		// cleanup the source and the highlightd
+		$cleanOriginalValue = tx_mksearch_util_Misc::html2plain(
+			$originalValue,
+			array('removedoublespaces' => TRUE)
+		);
+		$cleanHighlighted = tx_mksearch_util_Misc::html2plain(
+			$highlightedValue,
+			array('removedoublespaces' => TRUE)
+		);
+
+		// check only, if the values not the same!
+		if ($cleanOriginalValue !== $cleanHighlighted) {
+			// create the WRAP!
+			$wrap = array('', '');
+			if (!empty($options['stdWrap.'])) {
+				$token = uniqid();
+				$wrap = $this->getConfigurations()->getCObj()->stdWrap(
+					$token,
+					$options['stdWrap.']
+				);
+				$wrap = explode($token, $wrap);
+			}
+
+			// add pre, if the first part is not the same!
+			if (
+				!tx_rnbase_util_Strings::isFirstPartOfStr(
+					$cleanOriginalValue,
+					$cleanHighlighted
+				)
+			) {
+				$highlightedValue = $wrap[0] . $highlightedValue;
+			}
+			// add post, if the last part is not the same!
+			if (
+				!tx_rnbase_util_Strings::isLastPartOfStr(
+					$cleanOriginalValue,
+					$cleanHighlighted
+				)
+			) {
+				$highlightedValue = $highlightedValue . $wrap[1];
+			}
+		}
+
+		return $highlightedValue;
+	}
+
 	/**
 	 *
 	 * @param Apache_Solr_Response $response
