@@ -161,8 +161,10 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 		$this->handleSpatial($fields, $options);
 
 		// Debug prüfen
-		if($configurations->get($this->getConfIdOverwrite().'options.debug'))
+		if ($configurations->get($this->getConfIdOverwrite().'options.debug')) {
 			$options['debug'] = 1;
+		}
+
 		return true;
 	}
 
@@ -239,9 +241,15 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 		if (empty($options['facet']) || is_array($options['facet'])) {
 			$options['facet'] = 'true';
 		}
-		// nur einträge, wleche zu einem ergebnis führen würden.
+
+		// nur einträge, welche zu einem ergebnis führen würden.
 		if (empty($options['facet.mincount'])) {
-			$options['facet.mincount'] = '1';
+			// typoscript auf mincount checken.
+			$facetMinCountConfig = $this->getConfValue('options.facet.mincount');
+			$options['facet.mincount'] = strlen($facetMinCountConfig)
+				? (int) $facetMinCountConfig
+				: '1'
+			;
 		}
 
 		$sortFacetsFromConfiguration = $this->getConfValue('options.facet.sort');
@@ -310,7 +318,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 				if (empty($fqValues)) {
 					continue;
 				}
-				foreach ($fqValues as $fqNameValue => $fqValue) {
+				foreach ($fqValues as $fqValue) {
 					$fqValue = trim($fqValue);
 					if ($sFqField) {
 						$fq = $sFqField . ':"' . tx_mksearch_util_Misc::sanitizeFq($fqValue) . '"';
