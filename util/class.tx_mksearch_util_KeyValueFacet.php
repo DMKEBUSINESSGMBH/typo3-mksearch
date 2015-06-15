@@ -90,6 +90,7 @@ class tx_mksearch_util_KeyValueFacet {
 
 	/**
 	 *
+	 * @param string $key
 	 * @param string $value
 	 * @param string $sorting
 	 * @return string
@@ -98,6 +99,25 @@ class tx_mksearch_util_KeyValueFacet {
 		$builded = $key . $this->facetDelimiter . $value;
 		if ($sorting !== NULL) {
 			$builded .= $this->facetDelimiter . $sorting;
+		}
+		return $builded;
+	}
+
+	/**
+	 *
+	 * @param array $keys
+	 * @param array $value
+	 * @param array $sorting
+	 * @return string
+	 */
+	public function buildFacetValues($keys, $values, $sortings = NULL) {
+		$builded = array();
+		foreach (array_keys($keys) as $index) {
+			$builded[$index] = $this->buildFacetValue(
+				$keys[$index],
+				$values[$index],
+				is_array($sortings) ? $sortings[$index] : NULL
+			);
 		}
 		return $builded;
 	}
