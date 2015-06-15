@@ -62,6 +62,10 @@ class tx_mksearch_marker_Facet extends tx_mksearch_marker_SearchResultSimple {
 			$field = $item->getField();
 			$value = $item->getId();
 
+			// check fieldmapping:
+			$fieldMap = $configurations->get($confId . 'mapping.field.' . $field);
+			$field = empty($fieldMap) ? $field : $fieldMap;
+
 			// den Formularnamen setzen
 			if (!isset($item->record['form_name'])) {
 				$formName  = $configurations->getQualifier();
