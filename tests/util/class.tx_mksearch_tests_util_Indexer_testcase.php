@@ -44,7 +44,7 @@ class tx_mksearch_tests_util_Indexer_testcase
 	public function testGetDateTimeWithTimestamp() {
 		$dateTime = tx_mksearch_util_Indexer::getInstance()
 			->getDateTime('@2');
-		$this->assertEquals('1970-01-01T00:00:02Z', $dateTime);
+		self::assertEquals('1970-01-01T00:00:02Z', $dateTime);
 	}
 
 	/**
@@ -57,7 +57,7 @@ class tx_mksearch_tests_util_Indexer_testcase
 		$isOnIndexablePage = tx_mksearch_util_Indexer::getInstance()
 			->isOnIndexablePage($sourceRecord, $options);
 
-		$this->assertTrue($isOnIndexablePage,'Seite nicht indizierbar');
+		self::assertTrue($isOnIndexablePage,'Seite nicht indizierbar');
 	}
 
 	/**
@@ -74,7 +74,7 @@ class tx_mksearch_tests_util_Indexer_testcase
 		$isOnIndexablePage = tx_mksearch_util_Indexer::getInstance()
 			->isOnIndexablePage($sourceRecord, $options);
 
-		$this->assertTrue($isOnIndexablePage,'Seite nicht indizierbar');
+		self::assertTrue($isOnIndexablePage,'Seite nicht indizierbar');
 	}
 
 	/**
@@ -91,7 +91,7 @@ class tx_mksearch_tests_util_Indexer_testcase
 		$isOnIndexablePage = tx_mksearch_util_Indexer::getInstance()
 			->isOnIndexablePage($sourceRecord, $options);
 
-		$this->assertFalse($isOnIndexablePage,'Seite indizierbar');
+		self::assertFalse($isOnIndexablePage,'Seite indizierbar');
 	}
 
 	/**
@@ -114,7 +114,7 @@ class tx_mksearch_tests_util_Indexer_testcase
 
 		$isOnIndexablePage = $utilIndexer->isOnIndexablePage($sourceRecord, $options);
 
-		$this->assertFalse($isOnIndexablePage,'Seite indizierbar');
+		self::assertFalse($isOnIndexablePage,'Seite indizierbar');
 	}
 
 	/**
@@ -136,7 +136,7 @@ class tx_mksearch_tests_util_Indexer_testcase
 
 		$isOnIndexablePage = $utilIndexer->isOnIndexablePage($sourceRecord, $options);
 
-		$this->assertTrue($isOnIndexablePage,'Seite nicht indizierbar');
+		self::assertTrue($isOnIndexablePage,'Seite nicht indizierbar');
 	}
 
 	/**
@@ -158,7 +158,7 @@ class tx_mksearch_tests_util_Indexer_testcase
 
 		$isOnIndexablePage = $utilIndexer->isOnIndexablePage($sourceRecord, $options);
 
-		$this->assertFalse($isOnIndexablePage,'Seite indizierbar');
+		self::assertFalse($isOnIndexablePage,'Seite indizierbar');
 	}
 
 	/**
@@ -175,7 +175,7 @@ class tx_mksearch_tests_util_Indexer_testcase
 		$isOnIndexablePage = tx_mksearch_util_Indexer::getInstance()
 			->isOnIndexablePage($sourceRecord, $options);
 
-		$this->assertFalse($isOnIndexablePage,'Seite indizierbar');
+		self::assertFalse($isOnIndexablePage,'Seite indizierbar');
 	}
 
 	/**
@@ -192,7 +192,7 @@ class tx_mksearch_tests_util_Indexer_testcase
 		$isOnIndexablePage = tx_mksearch_util_Indexer::getInstance()
 			->isOnIndexablePage($sourceRecord, $options);
 
-		$this->assertTrue($isOnIndexablePage,'Seite nicht indizierbar');
+		self::assertTrue($isOnIndexablePage,'Seite nicht indizierbar');
 	}
 
 	/**
@@ -218,7 +218,7 @@ class tx_mksearch_tests_util_Indexer_testcase
 
 		$isOnIndexablePage = $utilIndexer->isOnIndexablePage($sourceRecord, $options);
 
-		$this->assertFalse($isOnIndexablePage,'Seite indizierbar');
+		self::assertFalse($isOnIndexablePage,'Seite indizierbar');
 	}
 
 	/**
@@ -244,7 +244,7 @@ class tx_mksearch_tests_util_Indexer_testcase
 
 		$isOnIndexablePage = $utilIndexer->isOnIndexablePage($sourceRecord, $options);
 
-		$this->assertTrue($isOnIndexablePage,'Seite indizierbar');
+		self::assertTrue($isOnIndexablePage,'Seite indizierbar');
 	}
 
 	/**
@@ -270,7 +270,7 @@ class tx_mksearch_tests_util_Indexer_testcase
 
 		$isOnIndexablePage = $utilIndexer->isOnIndexablePage($sourceRecord, $options);
 
-		$this->assertFalse($isOnIndexablePage,'Seite indizierbar');
+		self::assertFalse($isOnIndexablePage,'Seite indizierbar');
 	}
 
 
@@ -291,7 +291,7 @@ class tx_mksearch_tests_util_Indexer_testcase
 		);
 		$docData = $indexDoc->getData();
 
-		$this->assertEquals(
+		self::assertEquals(
 			123, $docData['documentField']->getValue(), 'model falsch indiziert'
 		);
 	}
@@ -313,7 +313,7 @@ class tx_mksearch_tests_util_Indexer_testcase
 		);
 		$docData = $indexDoc->getData();
 
-		$this->assertFalse(
+		self::assertFalse(
 			isset($docData['documentField']), 'model doch indiziert'
 		);
 	}
@@ -336,7 +336,7 @@ class tx_mksearch_tests_util_Indexer_testcase
 		);
 		$docData = $indexDoc->getData();
 
-		$this->assertEquals(
+		self::assertEquals(
 			123, $docData['documentField']->getValue(), 'model falsch indiziert'
 		);
 	}
@@ -358,7 +358,7 @@ class tx_mksearch_tests_util_Indexer_testcase
 		);
 		$docData = $indexDoc->getData();
 
-		$this->assertEquals(
+		self::assertEquals(
 			123, $docData['test_documentField']->getValue(), 'model falsch indiziert'
 		);
 	}
@@ -380,7 +380,7 @@ class tx_mksearch_tests_util_Indexer_testcase
 		);
 		$docData = $indexDoc->getData();
 
-		$this->assertFalse(
+		self::assertFalse(
 			isset($docData['documentField']), 'model doch indiziert'
 		);
 	}
@@ -403,7 +403,7 @@ class tx_mksearch_tests_util_Indexer_testcase
 		);
 		$docData = $indexDoc->getData();
 
-		$this->assertEquals(
+		self::assertEquals(
 			'', $docData['documentField']->getValue(), 'model falsch indiziert'
 		);
 	}
@@ -430,7 +430,7 @@ class tx_mksearch_tests_util_Indexer_testcase
 		);
 		$docData = $indexDoc->getData();
 
-		$this->assertEquals(
+		self::assertEquals(
 			array(123, 456), $docData['documentField']->getValue(),
 			'models falsch indiziert'
 		);
@@ -458,7 +458,7 @@ class tx_mksearch_tests_util_Indexer_testcase
 		);
 		$docData = $indexDoc->getData();
 
-		$this->assertEquals(
+		self::assertEquals(
 			array(123), $docData['documentField']->getValue(),
 			'models falsch indiziert'
 		);
@@ -487,7 +487,7 @@ class tx_mksearch_tests_util_Indexer_testcase
 		);
 		$docData = $indexDoc->getData();
 
-		$this->assertEquals(
+		self::assertEquals(
 			array(123, 456), $docData['documentField']->getValue(),
 			'models falsch indiziert'
 		);
@@ -515,7 +515,7 @@ class tx_mksearch_tests_util_Indexer_testcase
 		);
 		$docData = $indexDoc->getData();
 
-		$this->assertEquals(
+		self::assertEquals(
 			array(123, 456), $docData['test_documentField']->getValue(), 'model falsch indiziert'
 		);
 	}
@@ -542,7 +542,7 @@ class tx_mksearch_tests_util_Indexer_testcase
 		);
 		$docData = $indexDoc->getData();
 
-		$this->assertFalse(
+		self::assertFalse(
 			isset($docData['documentField']), 'model doch indiziert'
 		);
 	}
@@ -575,7 +575,7 @@ class tx_mksearch_tests_util_Indexer_testcase
 			'tx_mksearch_model_IndexerDocumentBase', '', ''
 		);
 
-		$this->assertFalse(
+		self::assertFalse(
 			$utility->stopIndexing($tableName, $sourceRecord, $indexDoc, $options)
 		);
 	}
@@ -593,7 +593,7 @@ class tx_mksearch_tests_util_Indexer_testcase
 			'tx_mksearch_model_IndexerDocumentBase', '', ''
 		);
 
-		$this->assertFalse(
+		self::assertFalse(
 			$utility->stopIndexing($tableName, $sourceRecord, $indexDoc, $options)
 		);
 	}
@@ -611,7 +611,7 @@ class tx_mksearch_tests_util_Indexer_testcase
 			'tx_mksearch_model_IndexerDocumentBase', '', ''
 		);
 
-		$this->assertTrue(
+		self::assertTrue(
 			$utility->stopIndexing($tableName, $sourceRecord, $indexDoc, $options)
 		);
 	}

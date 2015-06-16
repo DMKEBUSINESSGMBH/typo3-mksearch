@@ -61,9 +61,9 @@ class tx_mksearch_tests_solr_conf_Solrconfig_testcase extends tx_mksearch_tests_
 
 		$result = $this->search($this->getOptions());
 
-		$this->assertEquals(1, $result['numFound'], 'nicht nur 1 doc gefunden.');
-		$this->assertEquals(1, $result['items'][0]->record['uid'], 'uid falsch');
-		$this->assertEquals(
+		self::assertEquals(1, $result['numFound'], 'nicht nur 1 doc gefunden.');
+		self::assertEquals(1, $result['items'][0]->record['uid'], 'uid falsch');
+		self::assertEquals(
 			$this->defaultContentType,
 			$result['items'][0]->record['contentType'],
 			'contentType falsch'
@@ -78,9 +78,9 @@ class tx_mksearch_tests_solr_conf_Solrconfig_testcase extends tx_mksearch_tests_
 
 		$result = $this->search($this->getOptions());
 
-		$this->assertEquals(1, $result['numFound'], 'nicht nur 1 doc gefunden.');
-		$this->assertEquals(1, $result['items'][0]->record['uid'], 'uid falsch');
-		$this->assertEquals(
+		self::assertEquals(1, $result['numFound'], 'nicht nur 1 doc gefunden.');
+		self::assertEquals(1, $result['items'][0]->record['uid'], 'uid falsch');
+		self::assertEquals(
 			$this->defaultContentType,
 			$result['items'][0]->record['contentType'],
 			'contentType falsch'
@@ -95,7 +95,7 @@ class tx_mksearch_tests_solr_conf_Solrconfig_testcase extends tx_mksearch_tests_
 
 		$result = $this->search($this->getOptions());
 
-		$this->assertNothingFound($result);
+		self::assertNothingFound($result);
 	}
 
 	/**
@@ -106,9 +106,9 @@ class tx_mksearch_tests_solr_conf_Solrconfig_testcase extends tx_mksearch_tests_
 
 		$result = $this->search($this->getOptions());
 
-		$this->assertEquals(1, $result['numFound'], 'nicht nur 1 doc gefunden.');
-		$this->assertEquals(1, $result['items'][0]->record['uid'], 'uid falsch');
-		$this->assertEquals(
+		self::assertEquals(1, $result['numFound'], 'nicht nur 1 doc gefunden.');
+		self::assertEquals(1, $result['items'][0]->record['uid'], 'uid falsch');
+		self::assertEquals(
 			$this->defaultContentType,
 			$result['items'][0]->record['contentType'],
 			'contentType falsch'
@@ -123,7 +123,7 @@ class tx_mksearch_tests_solr_conf_Solrconfig_testcase extends tx_mksearch_tests_
 
 		$result = $this->search($this->getOptions());
 
-		$this->assertNothingFound($result);
+		self::assertNothingFound($result);
 	}
 
 	/**
@@ -134,9 +134,9 @@ class tx_mksearch_tests_solr_conf_Solrconfig_testcase extends tx_mksearch_tests_
 
 		$result = $this->search($this->getOptions());
 
-		$this->assertEquals(1, $result['numFound'], 'nicht nur 1 doc gefunden.');
-		$this->assertEquals(1, $result['items'][0]->record['uid'], 'uid falsch');
-		$this->assertEquals(
+		self::assertEquals(1, $result['numFound'], 'nicht nur 1 doc gefunden.');
+		self::assertEquals(1, $result['items'][0]->record['uid'], 'uid falsch');
+		self::assertEquals(
 			$this->defaultContentType,
 			$result['items'][0]->record['contentType'],
 			'contentType falsch'
@@ -151,7 +151,7 @@ class tx_mksearch_tests_solr_conf_Solrconfig_testcase extends tx_mksearch_tests_
 
 		$result = $this->search($this->getOptions());
 
-		$this->assertNothingFound($result);
+		self::assertNothingFound($result);
 	}
 
 	/**
@@ -162,7 +162,7 @@ class tx_mksearch_tests_solr_conf_Solrconfig_testcase extends tx_mksearch_tests_
 
 		$result = $this->search($this->getOptions());
 
-		$this->assertNothingFound($result);
+		self::assertNothingFound($result);
 	}
 
 	/**
@@ -173,9 +173,9 @@ class tx_mksearch_tests_solr_conf_Solrconfig_testcase extends tx_mksearch_tests_
 
 		$result = $this->search($this->getOptions());
 
-		$this->assertEquals(1, $result['numFound'], 'nicht nur 1 doc gefunden.');
-		$this->assertEquals(1, $result['items'][0]->record['uid'], 'uid falsch');
-		$this->assertEquals(
+		self::assertEquals(1, $result['numFound'], 'nicht nur 1 doc gefunden.');
+		self::assertEquals(1, $result['items'][0]->record['uid'], 'uid falsch');
+		self::assertEquals(
 			$this->defaultContentType,
 			$result['items'][0]->record['contentType'],
 			'contentType falsch'

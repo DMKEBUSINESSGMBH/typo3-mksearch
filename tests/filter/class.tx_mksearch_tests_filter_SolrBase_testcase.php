@@ -85,13 +85,13 @@ class tx_mksearch_tests_filter_SolrBase_testcase
 
 		$fields = array();
 		$options = array();
-		$this->assertFalse($filter->init($fields,$options),'Filter ist scheinbar doch durchgelaufen!');
+		self::assertFalse($filter->init($fields,$options),'Filter ist scheinbar doch durchgelaufen!');
 
 		//noch prüfen ob bei submit true zurück gegeben wird
 		$this->parameters->offsetSet('submit',true);
 		$fields = array();
 		$options = array();
-		$this->assertTrue($filter->init($fields,$options),'Filter ist scheinbar doch nicht durchgelaufen!');
+		self::assertTrue($filter->init($fields,$options),'Filter ist scheinbar doch nicht durchgelaufen!');
 	}
 
 	/**
@@ -104,7 +104,7 @@ class tx_mksearch_tests_filter_SolrBase_testcase
 		$fields = array();
 		$options = array();
 		$filter->init($fields,$options);
-		$this->assertEmpty($options['qt'],'Request Handler scheinbar doch gesetzt!');
+		self::assertEmpty($options['qt'],'Request Handler scheinbar doch gesetzt!');
 
 		//set noHash as we don't need it in tests
 		$config = $this->getDefaultConfig();
@@ -114,7 +114,7 @@ class tx_mksearch_tests_filter_SolrBase_testcase
 		$fields = array();
 		$options = array();
 		$filter->init($fields,$options);
-		$this->assertEquals('testHandler',$options['qt'],'Request Handler scheinbar doch nicht gesetzt!');
+		self::assertEquals('testHandler',$options['qt'],'Request Handler scheinbar doch nicht gesetzt!');
 	}
 
 	/**
@@ -129,7 +129,7 @@ class tx_mksearch_tests_filter_SolrBase_testcase
 		$fields = array('term' => 'contentType:* ###PARAM_MKSEARCH_TERM###');
 		$options = array();
 		$filter->init($fields,$options);
-		$this->assertEquals('contentType:* AND text:("test" "term")',$fields['term'],'Request Handler scheinbar doch nicht gesetzt!');
+		self::assertEquals('contentType:* AND text:("test" "term")',$fields['term'],'Request Handler scheinbar doch nicht gesetzt!');
 	}
 
 	/**
@@ -144,7 +144,7 @@ class tx_mksearch_tests_filter_SolrBase_testcase
 		$fields = array('term' => 'contentType:* ###PARAM_MKSEARCH_TERM###');
 		$options = array();
 		$filter->init($fields,$options);
-		$this->assertEquals('contentType:* ',$fields['term'],'Request Handler scheinbar doch nicht gesetzt!');
+		self::assertEquals('contentType:* ',$fields['term'],'Request Handler scheinbar doch nicht gesetzt!');
 	}
 
 	/**
@@ -157,7 +157,7 @@ class tx_mksearch_tests_filter_SolrBase_testcase
 		$fields = array('term' => 'contentType:* ###PARAM_MKSEARCH_TERM###');
 		$options = array();
 		$filter->init($fields,$options);
-		$this->assertEquals('contentType:* ',$fields['term'],'Request Handler scheinbar doch nicht gesetzt!');
+		self::assertEquals('contentType:* ',$fields['term'],'Request Handler scheinbar doch nicht gesetzt!');
 	}
 
 	/**
@@ -172,7 +172,7 @@ class tx_mksearch_tests_filter_SolrBase_testcase
 		$fields = array('term' => 'contentType:* ###PARAM_MKSEARCH_TERM###');
 		$options = array();
 		$filter->init($fields,$options);
-		$this->assertEquals('contentType:* ',$fields['term'],'Request Handler scheinbar doch nicht gesetzt!');
+		self::assertEquals('contentType:* ',$fields['term'],'Request Handler scheinbar doch nicht gesetzt!');
 	}
 
 	/**
@@ -190,7 +190,7 @@ class tx_mksearch_tests_filter_SolrBase_testcase
 		$options = array();
 		$filter->init($fields,$options);
 
-		$this->assertEquals(array(
+		self::assertEquals(array(
 			0 => '(-fe_group_mi:[* TO *] AND uid:[* TO *]) OR fe_group_mi:0',
 			1 => 'facet_field:"facet value"'
 		),$options['fq'],'fq wuede falsch übernommen!');
@@ -211,7 +211,7 @@ class tx_mksearch_tests_filter_SolrBase_testcase
 		$options = array();
 		$filter->init($fields,$options);
 
-		$this->assertEquals(array(
+		self::assertEquals(array(
 			0 => '(-fe_group_mi:[* TO *] AND uid:[* TO *]) OR fe_group_mi:0',
 			1 => 'facet_dummy:"facet value"'
 		),$options['fq'],'fq wuede falsch übernommen!');
@@ -234,7 +234,7 @@ class tx_mksearch_tests_filter_SolrBase_testcase
 		$options = array();
 		$filter->init($fields, $options);
 
-		$this->assertEquals('(-fe_group_mi:[* TO *] AND uid:[* TO *]) OR fe_group_mi:0',$options['fq'],'fq wuede gesetzt!');
+		self::assertEquals('(-fe_group_mi:[* TO *] AND uid:[* TO *]) OR fe_group_mi:0',$options['fq'],'fq wuede gesetzt!');
 	}
 
 	/**
@@ -252,7 +252,7 @@ class tx_mksearch_tests_filter_SolrBase_testcase
 		$options = array();
 		$filter->init($fields, $options);
 
-		$this->assertEquals('(-fe_group_mi:[* TO *] AND uid:[* TO *]) OR fe_group_mi:0 OR fe_group_mi:1 OR fe_group_mi:2',$options['fq'],'fq wuede gesetzt!');
+		self::assertEquals('(-fe_group_mi:[* TO *] AND uid:[* TO *]) OR fe_group_mi:0 OR fe_group_mi:1 OR fe_group_mi:2',$options['fq'],'fq wuede gesetzt!');
 
 		$GLOBALS['TSFE']->fe_user->groupData['uid'] = $tsFeBackup;
 	}
@@ -265,7 +265,7 @@ class tx_mksearch_tests_filter_SolrBase_testcase
 		$method = new ReflectionMethod('tx_mksearch_filter_SolrBase', 'getFilterUtility');
 		$method->setAccessible(true);
 
-		$this->assertInstanceOf(
+		self::assertInstanceOf(
 				'tx_mksearch_util_Filter', $method->invoke($filter),
 				'filter utility falsch'
 		);
@@ -284,7 +284,7 @@ class tx_mksearch_tests_filter_SolrBase_testcase
 		$fields = $options = array();
 		$filter->init($fields, $options);
 
-		$this->assertEquals('uid desc', $options['sort'], 'sort falsch in options');
+		self::assertEquals('uid desc', $options['sort'], 'sort falsch in options');
 	}
 
 	/**
@@ -300,7 +300,7 @@ class tx_mksearch_tests_filter_SolrBase_testcase
 		$fields = $options = array();
 		$filter->init($fields, $options);
 
-		$this->assertEquals('uid asc', $options['sort'], 'sort falsch in options');
+		self::assertEquals('uid asc', $options['sort'], 'sort falsch in options');
 	}
 
 	/**
@@ -316,7 +316,7 @@ class tx_mksearch_tests_filter_SolrBase_testcase
 		$fields = $options = array();
 		$filter->init($fields, $options);
 
-		$this->assertEquals('uid asc', $options['sort'], 'sort falsch in options');
+		self::assertEquals('uid asc', $options['sort'], 'sort falsch in options');
 	}
 
 	/**
@@ -333,7 +333,7 @@ class tx_mksearch_tests_filter_SolrBase_testcase
 		$fields = $options = array();
 		$filter->init($fields, $options);
 
-		$this->assertEquals('uid asc', $options['sort'], 'sort falsch in options');
+		self::assertEquals('uid asc', $options['sort'], 'sort falsch in options');
 	}
 
 	/**
@@ -361,7 +361,7 @@ class tx_mksearch_tests_filter_SolrBase_testcase
 		$fields = $options = array();
 		$filter->init($fields, $options);
 
-		$this->assertEquals('uid desc', $options['sort'], 'sort falsch in options');
+		self::assertEquals('uid desc', $options['sort'], 'sort falsch in options');
 	}
 
 	/**
@@ -386,7 +386,7 @@ class tx_mksearch_tests_filter_SolrBase_testcase
 		$fields = $options = array();
 		$filter->init($fields, $options);
 
-		$this->assertEquals('uid asc', $options['sort'], 'sort falsch in options');
+		self::assertEquals('uid asc', $options['sort'], 'sort falsch in options');
 	}
 
 	/**
@@ -435,7 +435,7 @@ class tx_mksearch_tests_filter_SolrBase_testcase
 			$template, $formatter, 'searchsolr.filter.default.'
 		);
 
-		$this->assertEquals(
+		self::assertEquals(
 			'asc ?id=1&mksearch%5Bsort%5D=title&mksearch%5Bsortorder%5D=asc',
 			$parsedTemplate,
 			'sort marker falsch geparsed'
@@ -454,7 +454,7 @@ class tx_mksearch_tests_filter_SolrBase_testcase
 		$fields = array();
 		$options = array();
 		$filter->init($fields,$options);
-		$this->assertEquals('count', $options['facet.sort'], 'facet.sort falsch');
+		self::assertEquals('count', $options['facet.sort'], 'facet.sort falsch');
 	}
 
 	/**
@@ -469,7 +469,7 @@ class tx_mksearch_tests_filter_SolrBase_testcase
 		$fields = array();
 		$options = array('facet.sort' => 'index');
 		$filter->init($fields,$options);
-		$this->assertEquals('index', $options['facet.sort'], 'facet.sort falsch');
+		self::assertEquals('index', $options['facet.sort'], 'facet.sort falsch');
 	}
 
 	/**
@@ -485,7 +485,7 @@ class tx_mksearch_tests_filter_SolrBase_testcase
 		$fields = array();
 		$options = array();
 		$filter->init($fields,$options);
-		$this->assertEquals('index', $options['facet.sort'], 'facet.sort falsch');
+		self::assertEquals('index', $options['facet.sort'], 'facet.sort falsch');
 	}
 
 	/**
@@ -501,7 +501,7 @@ class tx_mksearch_tests_filter_SolrBase_testcase
 		$fields = array();
 		$options = array('facet.sort' => 'something other');
 		$filter->init($fields,$options);
-		$this->assertEquals('something other', $options['facet.sort'], 'facet.sort falsch');
+		self::assertEquals('something other', $options['facet.sort'], 'facet.sort falsch');
 	}
 
 	/**

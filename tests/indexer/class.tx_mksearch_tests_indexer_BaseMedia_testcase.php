@@ -74,7 +74,7 @@ class tx_mksearch_tests_indexer_BaseMedia_testcase
 			->method('stopIndexing')
 			->will($this->returnValue(TRUE));
 
-		$this->assertNull($indexer->prepareSearchData(
+		self::assertNull($indexer->prepareSearchData(
 			'tt_content', $sourceRecord, $indexDoc, $options
 		));
 	}
@@ -95,7 +95,7 @@ class tx_mksearch_tests_indexer_BaseMedia_testcase
 			->method('stopIndexing')
 			->will($this->returnValue(FALSE));
 
-		$this->assertNotNull($indexer->prepareSearchData(
+		self::assertNotNull($indexer->prepareSearchData(
 			'tt_content', $sourceRecord, $indexDoc, $options
 		));
 	}
@@ -106,7 +106,7 @@ class tx_mksearch_tests_indexer_BaseMedia_testcase
 	public function testGetIndexerUtility() {
 		$indexer = $this->getIndexerMock();
 
-		$this->assertInstanceOf(
+		self::assertInstanceOf(
 			'tx_mksearch_util_Indexer',
 			$this->callInaccessibleMethod(
 				$indexer, 'getIndexerUtility'
@@ -143,7 +143,7 @@ class tx_mksearch_tests_indexer_BaseMedia_testcase
 			->method('getIndexerUtility')
 			->will($this->returnValue($indexerUtility));
 
-		$this->assertEquals(
+		self::assertEquals(
 			'return',
 			$this->callInaccessibleMethod(
 				$indexer, 'stopIndexing', $tableName, $sourceRecord, $indexDoc, $options
@@ -217,7 +217,7 @@ class tx_mksearch_tests_indexer_BaseMedia_testcase
 			'tt_content', $sourceRecord, $indexDoc, $options
 		);
 
-		$this->assertTrue($indexDoc->getDeleted());
+		self::assertTrue($indexDoc->getDeleted());
 	}
 
 	/**
@@ -240,7 +240,7 @@ class tx_mksearch_tests_indexer_BaseMedia_testcase
 			'tt_content', $sourceRecord, $indexDoc, $options
 		);
 
-		$this->assertTrue($indexDoc->getDeleted());
+		self::assertTrue($indexDoc->getDeleted());
 	}
 
 	/**

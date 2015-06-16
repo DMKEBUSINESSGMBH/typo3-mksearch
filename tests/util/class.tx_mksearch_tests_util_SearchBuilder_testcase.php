@@ -42,7 +42,7 @@ class tx_mksearch_tests_util_SearchBuilder_testcase
 	 */
 	public function testSearchSolrOptions($term, $combination, $options, $result) {
 		$res = tx_mksearch_util_SearchBuilder::searchSolrOptions($term, $combination, $options);
-		$this->assertEquals($result, $res);
+		self::assertEquals($result, $res);
 	}
 	public function providerSearchSolrOptions() {
 		$return = array();

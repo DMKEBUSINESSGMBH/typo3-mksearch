@@ -56,13 +56,13 @@ class tx_mksearch_tests_service_internal_Index_database_testcase
 		$srv->addRecordToIndex('tx_mktest_table', 50);
 		$res = tx_rnbase_util_DB::doSelect('*', 'tx_mksearch_queue', array('enablefieldsoff' => true));
 
-		$this->assertEquals(1, count($res), 'Wrong row count in queue.');
+		self::assertEquals(1, count($res), 'Wrong row count in queue.');
 
 		$first = &$res[0];
-		$this->assertEquals('tx_mktest_table', $first['tablename'], 'Wrong tablename in first table.');
-		$this->assertEquals(50, $first['recid'], 'Wrong uid in first table.');
-		$this->assertEquals('', $first['data'], 'Wrong data in first table.');
-		$this->assertEquals('', $first['resolver'], 'Wrong resolver in first table.');
+		self::assertEquals('tx_mktest_table', $first['tablename'], 'Wrong tablename in first table.');
+		self::assertEquals(50, $first['recid'], 'Wrong uid in first table.');
+		self::assertEquals('', $first['data'], 'Wrong data in first table.');
+		self::assertEquals('', $first['resolver'], 'Wrong resolver in first table.');
 	}
 
 	/**
@@ -74,13 +74,13 @@ class tx_mksearch_tests_service_internal_Index_database_testcase
 		$srv->addRecordToIndex('tx_mktest_table', 50);
 		$res = tx_rnbase_util_DB::doSelect('*', 'tx_mksearch_queue', array('enablefieldsoff' => true));
 
-		$this->assertEquals(1, count($res), 'Wrong row count in queue.');
+		self::assertEquals(1, count($res), 'Wrong row count in queue.');
 
 		$first = &$res[0];
-		$this->assertEquals('tx_mktest_table', $first['tablename'], 'Wrong tablename in first table.');
-		$this->assertEquals(50, $first['recid'], 'Wrong uid in first table.');
-		$this->assertEquals('', $first['data'], 'Wrong data in first table.');
-		$this->assertEquals('tx_mksearch_resolver_Test', $first['resolver'], 'Wrong resolver in first table.');
+		self::assertEquals('tx_mktest_table', $first['tablename'], 'Wrong tablename in first table.');
+		self::assertEquals(50, $first['recid'], 'Wrong uid in first table.');
+		self::assertEquals('', $first['data'], 'Wrong data in first table.');
+		self::assertEquals('tx_mksearch_resolver_Test', $first['resolver'], 'Wrong resolver in first table.');
 
 		// resolver wieder deaktivieren
 		tx_mksearch_util_Config::registerResolver(false, array('tx_mktest_table'));
@@ -98,14 +98,14 @@ class tx_mksearch_tests_service_internal_Index_database_testcase
 		$srv->addRecordsToIndex($records, $options);
 		$res = tx_rnbase_util_DB::doSelect('*', 'tx_mksearch_queue', array('enablefieldsoff' => true));
 
-		$this->assertEquals(4, count($res), 'Wrong row count in queue.');
+		self::assertEquals(4, count($res), 'Wrong row count in queue.');
 
 		foreach($records as $key => $row) {
-			$this->assertTrue(array_key_exists($key, $res), $key.': Record not found.');
-			$this->assertEquals($row['tablename'], $res[$key]['tablename'], $key.': Wrong tablename.');
-			$this->assertEquals($row['uid'], $res[$key]['recid'], $key.': Wrong uid.');
-			$this->assertEquals($row['data'], $res[$key]['data'], $key.': Wrong data.');
-			$this->assertEquals($row['resolver'], $res[$key]['resolver'], $key.': Wrong resolver.');
+			self::assertTrue(array_key_exists($key, $res), $key.': Record not found.');
+			self::assertEquals($row['tablename'], $res[$key]['tablename'], $key.': Wrong tablename.');
+			self::assertEquals($row['uid'], $res[$key]['recid'], $key.': Wrong uid.');
+			self::assertEquals($row['data'], $res[$key]['data'], $key.': Wrong data.');
+			self::assertEquals($row['resolver'], $res[$key]['resolver'], $key.': Wrong resolver.');
 		}
 	}
 	function testAddRecordsToIndexWith10000() {
@@ -117,7 +117,7 @@ class tx_mksearch_tests_service_internal_Index_database_testcase
 		$options = array('checkExisting' => false);
 		$srv->addRecordsToIndex($records, $options);
 
-		$this->assertEquals(10000, $srv->countItemsInQueue('tx_mktest_table'), 'Wrong queue count.');
+		self::assertEquals(10000, $srv->countItemsInQueue('tx_mktest_table'), 'Wrong queue count.');
 	}
 }
 

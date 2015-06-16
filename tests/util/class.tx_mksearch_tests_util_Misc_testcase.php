@@ -44,7 +44,7 @@ class tx_mksearch_tests_util_Misc_testcase
 	 */
 	public function testHtml2Plain($before, $options, $after) {
 		$res = tx_mksearch_util_Misc::html2plain($before, $options);
-		$this->assertEquals($res, $after);
+		self::assertEquals($res, $after);
 	}
 	public function providerHtml2Plain() {
 		$return = array();
@@ -99,51 +99,51 @@ class tx_mksearch_tests_util_Misc_testcase
 	public function test_isIndexable_NoConfig() {
 		$record = array('uid'=>123, 'pid'=>'1');
 		$options = array();
-		$this->assertEquals(true, tx_mksearch_util_Misc::isOnValidPage($record, $options));
+		self::assertEquals(true, tx_mksearch_util_Misc::isOnValidPage($record, $options));
 	}
 
 	public function test_isIndexable_IncludeWrongSinglePid() {
 		$record = array('uid'=>123, 'pid'=>'1');
 		$options = array();
 		$options['include.']['pages.']['0'] = 2;
-		$this->assertEquals(false, tx_mksearch_util_Misc::isOnValidPage($record, $options));
+		self::assertEquals(false, tx_mksearch_util_Misc::isOnValidPage($record, $options));
 
 		$options = array();
 		$options['include.']['pages'] = '2,10,145';
-		$this->assertEquals(false, tx_mksearch_util_Misc::isOnValidPage($record, $options));
+		self::assertEquals(false, tx_mksearch_util_Misc::isOnValidPage($record, $options));
 	}
 
 	public function test_isIndexable_IncludeRightSinglePid() {
 		$record = array('uid'=>123, 'pid'=>'1');
 		$options = array();
 		$options['include.']['pages.'] = array(2,10,1,1145);
-		$this->assertEquals(true, tx_mksearch_util_Misc::isOnValidPage($record, $options));
+		self::assertEquals(true, tx_mksearch_util_Misc::isOnValidPage($record, $options));
 
 		$options = array();
 		$options['include.']['pages'] = '2,10,1,145';
-		$this->assertEquals(true, tx_mksearch_util_Misc::isOnValidPage($record, $options));
+		self::assertEquals(true, tx_mksearch_util_Misc::isOnValidPage($record, $options));
 	}
 
 	public function test_isIndexable_ExcludeWrongSinglePid() {
 		$record = array('uid'=>123, 'pid'=>'1');
 		$options = array();
 		$options['exclude.']['pages.']['0'] = 2;
-		$this->assertEquals(true, tx_mksearch_util_Misc::isOnValidPage($record, $options));
+		self::assertEquals(true, tx_mksearch_util_Misc::isOnValidPage($record, $options));
 
 		$options = array();
 		$options['exclude.']['pages'] = '2,10,145';
-		$this->assertEquals(true, tx_mksearch_util_Misc::isOnValidPage($record, $options));
+		self::assertEquals(true, tx_mksearch_util_Misc::isOnValidPage($record, $options));
 	}
 
 	public function test_isIndexable_ExcludeRightSinglePid() {
 		$record = array('uid'=>123, 'pid'=>'11');
 		$options = array();
 		$options['exclude.']['pages.'] = array(2,10,11,1145);
-		$this->assertEquals(false, tx_mksearch_util_Misc::isOnValidPage($record, $options));
+		self::assertEquals(false, tx_mksearch_util_Misc::isOnValidPage($record, $options));
 
 		$options = array();
 		$options['exclude.']['pages'] = '2,10,11,145';
-		$this->assertEquals(false, tx_mksearch_util_Misc::isOnValidPage($record, $options));
+		self::assertEquals(false, tx_mksearch_util_Misc::isOnValidPage($record, $options));
 	}
 
 	public function test_isIndexable_CheckMismachingConfig() {
@@ -151,24 +151,24 @@ class tx_mksearch_tests_util_Misc_testcase
 //		$options = array();
 //		$options['include.']['pages'] = '2,10,145';
 //		$options['exclude.']['pages.'] = array(2,10,1145);
-//		$this->assertEquals(false, tx_mksearch_util_Misc::isOnValidPage($record, $options), 'Element indexed but not in include');
+//		self::assertEquals(false, tx_mksearch_util_Misc::isOnValidPage($record, $options), 'Element indexed but not in include');
 //
 //		$options = array();
 //		$options['include.']['pages'] = '';
 //		$options['exclude.']['pages'] = '2,10,11,145';
-//		$this->assertEquals(false, tx_mksearch_util_Misc::isOnValidPage($record, $options));
+//		self::assertEquals(false, tx_mksearch_util_Misc::isOnValidPage($record, $options));
 
 		$options = array();
 		$options['include.']['pages'] = '';
 		$options['exclude.']['pages'] = '2,10,145';
-		$this->assertEquals(true, tx_mksearch_util_Misc::isOnValidPage($record, $options));
+		self::assertEquals(true, tx_mksearch_util_Misc::isOnValidPage($record, $options));
 	}
 
 	/**
 	 * @dataProvider termProvider
 	 */
 	public function testSanitizeTerm($sTerm, $sExpected) {
-		$this->assertEquals($sExpected, tx_mksearch_util_Misc::sanitizeTerm($sTerm),'Der Term wurde nicht korrekt bereinigt!');
+		self::assertEquals($sExpected, tx_mksearch_util_Misc::sanitizeTerm($sTerm),'Der Term wurde nicht korrekt bereinigt!');
 	}
 	public function termProvider() {
 		return array(
@@ -180,7 +180,7 @@ class tx_mksearch_tests_util_Misc_testcase
 	 * @dataProvider sanitizeFqProvider
 	 */
 	public function testSanitizeFq($sTerm, $sExpected) {
-		$this->assertEquals($sExpected, tx_mksearch_util_Misc::sanitizeFq($sTerm));
+		self::assertEquals($sExpected, tx_mksearch_util_Misc::sanitizeFq($sTerm));
 	}
 	public function sanitizeFqProvider() {
 		return array(

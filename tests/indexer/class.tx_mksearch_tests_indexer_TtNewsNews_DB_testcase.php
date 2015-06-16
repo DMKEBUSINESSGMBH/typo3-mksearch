@@ -78,7 +78,7 @@ class tx_mksearch_tests_indexer_TtNewsNews_DB_testcase
 			tx_mksearch_tests_Util::getIndexerDocument($indexer),
 			$options
 		);
-		$this->assertNotNull($indexDoc, 'Das Element wurde nicht indziert!');
+		self::assertNotNull($indexDoc, 'Das Element wurde nicht indziert!');
 
 		$result = array('uid' => 2);
 		$indexDoc = $indexer->prepareSearchData(
@@ -86,7 +86,7 @@ class tx_mksearch_tests_indexer_TtNewsNews_DB_testcase
 			tx_mksearch_tests_Util::getIndexerDocument($indexer),
 			$options
 		);
-		$this->assertNull($indexDoc, 'Das Element wurde indziert!');
+		self::assertNull($indexDoc, 'Das Element wurde indziert!');
 	}
 
 	/**
@@ -109,7 +109,7 @@ class tx_mksearch_tests_indexer_TtNewsNews_DB_testcase
 			tx_mksearch_tests_Util::getIndexerDocument($indexer),
 			$options
 		);
-		$this->assertNull($indexDoc,'Das Element wurde doch indziert!');
+		self::assertNull($indexDoc,'Das Element wurde doch indziert!');
 
 		$result = array('uid' => 2);
 		$indexDoc = $indexer->prepareSearchData(
@@ -117,7 +117,7 @@ class tx_mksearch_tests_indexer_TtNewsNews_DB_testcase
 			tx_mksearch_tests_Util::getIndexerDocument($indexer),
 			$options
 		);
-		$this->assertNotNull($indexDoc,'Das Element wurde doch nicht indziert!');
+		self::assertNotNull($indexDoc,'Das Element wurde doch nicht indziert!');
 	}
 
 	public function testPrepareSearchDataWithSinglePid() {
@@ -130,12 +130,12 @@ class tx_mksearch_tests_indexer_TtNewsNews_DB_testcase
 
 		$aResult = array('uid' => 3, 'title' => 'Testnews');
 		$indexDoc = $indexer->prepareSearchData('tt_news', $aResult, $indexDoc, $options);
-		$this->assertTrue(is_object($indexDoc),'Das Element wurde nicht indziert!');
+		self::assertTrue(is_object($indexDoc),'Das Element wurde nicht indziert!');
 
 		$aIndexData = $indexDoc->getData();
-		$this->assertArrayHasKey('categorySinglePid_i', $aIndexData, 'categorySinglePid_i ist nicht gesetzt!');
-		$this->assertEquals('334', $aIndexData['categorySinglePid_i']->getValue(), 'categorySinglePid_i ist falsch gesetzt!');
-		$this->assertEquals(array(2,3,1,4), $aIndexData['categories_mi']->getValue(), 'categories_mi hat die falsche Reihenfolge!');
+		self::assertArrayHasKey('categorySinglePid_i', $aIndexData, 'categorySinglePid_i ist nicht gesetzt!');
+		self::assertEquals('334', $aIndexData['categorySinglePid_i']->getValue(), 'categorySinglePid_i ist falsch gesetzt!');
+		self::assertEquals(array(2,3,1,4), $aIndexData['categories_mi']->getValue(), 'categories_mi hat die falsche Reihenfolge!');
 	}
 
 	public function testPrepareSearchDataWithDefaultSinglePid() {
@@ -148,11 +148,11 @@ class tx_mksearch_tests_indexer_TtNewsNews_DB_testcase
 
 		$aResult = array('uid' => 4, 'title' => 'Testnews');
 		$indexDoc = $indexer->prepareSearchData('tt_news', $aResult, $indexDoc, $options);
-		$this->assertTrue(is_object($indexDoc),'Das Element wurde nicht indziert!');
+		self::assertTrue(is_object($indexDoc),'Das Element wurde nicht indziert!');
 
 		$aIndexData = $indexDoc->getData();
-		$this->assertArrayHasKey('categorySinglePid_i', $aIndexData, 'categorySinglePid_i ist nicht gesetzt!');
-		$this->assertEquals('50', $aIndexData['categorySinglePid_i']->getValue(), 'categorySinglePid_i ist falsch gesetzt!');
+		self::assertArrayHasKey('categorySinglePid_i', $aIndexData, 'categorySinglePid_i ist nicht gesetzt!');
+		self::assertEquals('50', $aIndexData['categorySinglePid_i']->getValue(), 'categorySinglePid_i ist falsch gesetzt!');
 	}
 
 }

@@ -82,7 +82,7 @@ class tx_mksearch_tests_marker_Irfaq_testcase
 			$template, $item, $formatter, 'searchsolr.hit.extrainfo.default.hit.', 'ITEM'
 		);
 
-		$this->assertEquals('',$parsedTemplate,'Die Marker wurden nicht entfernt!');
+		self::assertEquals('',$parsedTemplate,'Die Marker wurden nicht entfernt!');
 	}
 
 	/**
@@ -104,7 +104,7 @@ class tx_mksearch_tests_marker_Irfaq_testcase
 			$template, $item, $formatter, 'searchsolr.hit.extrainfo.default.hit.', 'ITEM'
 		);
 
-		$this->assertEquals(
+		self::assertEquals(
 			'###ITEM_SHOWFIRSTCATEGORYLINK###test###ITEM_SHOWFIRSTCATEGORYLINK###',
 			$parsedTemplate,
 			'Die Marker wurden nicht entfernt!'

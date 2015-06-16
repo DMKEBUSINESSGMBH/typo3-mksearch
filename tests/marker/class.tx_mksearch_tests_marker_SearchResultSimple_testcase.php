@@ -85,6 +85,6 @@ class tx_mksearch_tests_marker_SearchResultSimple_testcase
 		$sParsedTemplate = $this->oMarker->parseTemplate($sTemplate, $oItem, $this->oFormatter, 'searchsolr.hit.extrainfo.default.hit.', 'ITEM');
 
 		//erster Marker sollte mit wert ersetzt werden, 2. leer und 3. gar nicht
-		$this->assertEquals('firstValue  ###ITEM_THIRDFIELD###',$sParsedTemplate,'Die Marker wurden nicht korrekt ersetzt!');
+		self::assertEquals('firstValue  ###ITEM_THIRDFIELD###',$sParsedTemplate,'Die Marker wurden nicht korrekt ersetzt!');
 	}
 }

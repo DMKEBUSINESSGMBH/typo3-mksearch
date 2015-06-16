@@ -86,7 +86,7 @@ class tx_mksearch_tests_indexer_FAL_testcase
 	 * @dataProvider providerIsIndexableRecord
 	 */
 	public function testIsIndexableRecord($aSourceRecord, $aOptions, $bIndexable) {
-		$this->assertEquals(
+		self::assertEquals(
 				$bIndexable,
 				self::$oFALTest->testIsIndexableRecord('sys_file', $aSourceRecord, array('sys_file.' => $aOptions))
 			);
@@ -211,7 +211,7 @@ class tx_mksearch_tests_indexer_FAL_testcase
 		$aRawData = array('uid' => 0, 'extension' => 'something_else');
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$oIndexDoc = $indexer->prepareSearchData('sys_file', $aRawData, $indexDoc, $options);
-		$this->assertNull($oIndexDoc,'Es wurde nicht null geliefert!');
+		self::assertNull($oIndexDoc,'Es wurde nicht null geliefert!');
 	}
 
 	/**
@@ -230,7 +230,7 @@ class tx_mksearch_tests_indexer_FAL_testcase
 		$aRawData = array('uid' => 1, 'extension' => 'something_else', 'storage' => 1);
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$oIndexDoc = $indexer->prepareSearchData('sys_file', $aRawData, $indexDoc, $options);
-		$this->assertTrue($oIndexDoc->getDeleted(),'Das Element wurde nich auf gelöscht gesetzt!');
+		self::assertTrue($oIndexDoc->getDeleted(),'Das Element wurde nich auf gelöscht gesetzt!');
 	}
 
 	/**
@@ -259,7 +259,7 @@ class tx_mksearch_tests_indexer_FAL_testcase
 			->method('getIndexerUtility')
 			->will($this->returnValue($indexerUtility));
 
-		$this->assertEquals(
+		self::assertEquals(
 			'return',
 			$this->callInaccessibleMethod(
 				$indexer, 'stopIndexing', $tableName, $sourceRecord, $indexDoc, $options
@@ -273,7 +273,7 @@ class tx_mksearch_tests_indexer_FAL_testcase
 	public function testGetInternalIndexService() {
 		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_FAL');
 
-		$this->assertInstanceOf(
+		self::assertInstanceOf(
 			'tx_mksearch_service_internal_Index',
 			$this->callInaccessibleMethod(
 				$indexer, 'getInternalIndexService'
@@ -306,7 +306,7 @@ class tx_mksearch_tests_indexer_FAL_testcase
 			->method('getInternalIndexService')
 			->will($this->returnValue($indexerService));
 
-		$this->assertTrue(
+		self::assertTrue(
 			$this->callInaccessibleMethod(
 				$indexer, 'stopIndexing', $tableName, $sourceRecord, $indexDoc, $options
 			)

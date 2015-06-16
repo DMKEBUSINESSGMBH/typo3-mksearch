@@ -97,35 +97,35 @@ class tx_mksearch_tests_indexer_seminars_Seminar_testcase
 
 		$aIndexDoc = $indexer->prepareSearchData('tx_seminars_seminars', $aResult[0], $indexDoc, $options)->getData();
 
-		$this->assertEquals('1. Fortbildung',$aIndexDoc['title_s']->getValue(),'Es wurde nicht der richtige Titel indiziert!');
-		$this->assertEquals('1. Fortbildung Untertitel',$aIndexDoc['subtitle_s']->getValue(),'Es wurde nicht der richtige Untertitel indiziert!');
-		$this->assertEquals('1. Fortbildung',$aIndexDoc['realtitle_s']->getValue(),'Es wurde nicht der richtige Realtitel indiziert!');
-		$this->assertEquals('Hier gibt es viel zu lernen',$aIndexDoc['description_s']->getValue(),'Es wurde nicht die richtige Beschreibung indiziert!');
-		$this->assertEquals(74,$aIndexDoc['accreditationnumber_s']->getValue(),'Es wurde nicht der richtige Akkreditierungsnummer indiziert!');
-		$this->assertEquals(5.00,$aIndexDoc['currentpriceregular_s']->getValue(),'Es wurde nicht der richtige aktuelle normale Preis indiziert!');
-		$this->assertEquals(100,$aIndexDoc['credit_points_s']->getValue(),'Es wurden nicht die richtigen Credit Points indiziert!');
-		$this->assertEquals('1. Fortbildung, ',$aIndexDoc['titleanddate_s']->getValue(),'Es wurde nicht der richtige Titel mit Zeit indiziert!');
-		$this->assertEquals(array(0=>'1304267200'),$aIndexDoc['begin_date_ms']->getValue(),'Es wurde nicht der richtige Startzeitpunkt  indiziert!');
-		$this->assertEquals(array(0=>'1306287200'),$aIndexDoc['end_date_ms']->getValue(),'Es wurde nicht der richtige Endzeitpunkt indiziert!');
-		$this->assertEquals(array(0=>'1. Kategorie',1=>'2. Kategorie'),$aIndexDoc['categories_title_ms']->getValue(),'Es wurden nicht die richtigen Kategorietitel indiziert!');
-		$this->assertEquals(array(0=>'1. Veranstalter'),$aIndexDoc['organizers_title_ms']->getValue(),'Es wurden nicht die richtigen Veranstaltertitel indiziert!');
-		$this->assertEquals(array(0=>'1. Stadt',1=>'2. Stadt'),$aIndexDoc['place_city_ms']->getValue(),'Es wurden nicht die richtigen Städte indiziert!');
-		$this->assertEquals(array(0=>'1. Site',1=>'2. Site'),$aIndexDoc['place_title_ms']->getValue(),'Es wurden nicht die richtigen Titel der Sites indiziert!');
-		$this->assertEquals(array(0=>'1. Zielgruppe',1=>'2. Zielgruppe'),$aIndexDoc['targetgroups_title_ms']->getValue(),'Es wurden nicht die richtigen Zielgruppen indiziert!');
-		$this->assertEquals(array(0=>'1. Referent',1=>'2. Referent'),$aIndexDoc['speakers_title_ms']->getValue(),'Es wurden nicht die richtigen Sprechertitel indiziert!');
-		$this->assertEquals(array(0=>'1',1=>'2'),$aIndexDoc['speakers_gender_ms']->getValue(),'Es wurden nicht die richtigen Sprechergeschlechte indiziert!');
-		$this->assertEquals(array(0=>'1. Organisation',1=>'2. Organisation'),$aIndexDoc['speakers_organization_ms']->getValue(),'Es wurden nicht die richtigen Sprecherorganisationen indiziert!');
-		$this->assertEquals(array(0=>'www.first.de',1=>'www.second.de'),$aIndexDoc['speakers_homepage_ms']->getValue(),'Es wurden nicht die richtigen Sprecherhomepages indiziert!');
-		$this->assertEquals(array(0=>'1. Notizen',1=>'2. Notizen'),$aIndexDoc['speakers_notes_ms']->getValue(),'Es wurden nicht die richtigen Sprechernotizen indiziert!');
-		$this->assertEquals(array(0=>'1. Addresse',1=>'2. Addresse'),$aIndexDoc['speakers_address_ms']->getValue(),'Es wurden nicht die richtigen Sprecheradressen indiziert!');
-		$this->assertEquals(array(0=>'0001',1=>'0005'),$aIndexDoc['speakers_phone_work_ms']->getValue(),'Es wurden nicht die richtigen Sprechertelefon Arbeit indiziert!');
-		$this->assertEquals(array(0=>'0002',1=>'0006'),$aIndexDoc['speakers_phone_home_ms']->getValue(),'Es wurden nicht die richtigen Sprechertelefon zu Hause indiziert!');
-		$this->assertEquals(array(0=>'0003',1=>'0007'),$aIndexDoc['speakers_phone_mobile_ms']->getValue(),'Es wurden nicht die richtigen Sprechertelefon Mobil indiziert!');
-		$this->assertEquals(array(0=>'0004',1=>'0008'),$aIndexDoc['speakers_fax_ms']->getValue(),'Es wurden nicht die richtigen Sprecherfax indiziert!');
-		$this->assertEquals(array(0=>'my@email.de',1=>'your@email.de'),$aIndexDoc['speakers_email_ms']->getValue(),'Es wurden nicht die richtigen Sprecheremail indiziert!');
-		$this->assertEquals(array(0=>'will be announced'),$aIndexDoc['timeslots_entry_date_ms']->getValue(),'Es wurden nicht die richtigen Timeslot Entry Dates indiziert!');
-		$this->assertEquals(array(0=>'1. Site',1=>'2. Site'),$aIndexDoc['timeslots_place_ms']->getValue(),'Es wurden nicht die richtigen Timeslot Places indiziert!');
-		$this->assertEquals(array(0=>'1. Referent',1=>'2. Referent'),$aIndexDoc['timeslots_speakers_ms']->getValue(),'Es wurden nicht die richtigen Timeslot Speakers indiziert!');
+		self::assertEquals('1. Fortbildung',$aIndexDoc['title_s']->getValue(),'Es wurde nicht der richtige Titel indiziert!');
+		self::assertEquals('1. Fortbildung Untertitel',$aIndexDoc['subtitle_s']->getValue(),'Es wurde nicht der richtige Untertitel indiziert!');
+		self::assertEquals('1. Fortbildung',$aIndexDoc['realtitle_s']->getValue(),'Es wurde nicht der richtige Realtitel indiziert!');
+		self::assertEquals('Hier gibt es viel zu lernen',$aIndexDoc['description_s']->getValue(),'Es wurde nicht die richtige Beschreibung indiziert!');
+		self::assertEquals(74,$aIndexDoc['accreditationnumber_s']->getValue(),'Es wurde nicht der richtige Akkreditierungsnummer indiziert!');
+		self::assertEquals(5.00,$aIndexDoc['currentpriceregular_s']->getValue(),'Es wurde nicht der richtige aktuelle normale Preis indiziert!');
+		self::assertEquals(100,$aIndexDoc['credit_points_s']->getValue(),'Es wurden nicht die richtigen Credit Points indiziert!');
+		self::assertEquals('1. Fortbildung, ',$aIndexDoc['titleanddate_s']->getValue(),'Es wurde nicht der richtige Titel mit Zeit indiziert!');
+		self::assertEquals(array(0=>'1304267200'),$aIndexDoc['begin_date_ms']->getValue(),'Es wurde nicht der richtige Startzeitpunkt  indiziert!');
+		self::assertEquals(array(0=>'1306287200'),$aIndexDoc['end_date_ms']->getValue(),'Es wurde nicht der richtige Endzeitpunkt indiziert!');
+		self::assertEquals(array(0=>'1. Kategorie',1=>'2. Kategorie'),$aIndexDoc['categories_title_ms']->getValue(),'Es wurden nicht die richtigen Kategorietitel indiziert!');
+		self::assertEquals(array(0=>'1. Veranstalter'),$aIndexDoc['organizers_title_ms']->getValue(),'Es wurden nicht die richtigen Veranstaltertitel indiziert!');
+		self::assertEquals(array(0=>'1. Stadt',1=>'2. Stadt'),$aIndexDoc['place_city_ms']->getValue(),'Es wurden nicht die richtigen Städte indiziert!');
+		self::assertEquals(array(0=>'1. Site',1=>'2. Site'),$aIndexDoc['place_title_ms']->getValue(),'Es wurden nicht die richtigen Titel der Sites indiziert!');
+		self::assertEquals(array(0=>'1. Zielgruppe',1=>'2. Zielgruppe'),$aIndexDoc['targetgroups_title_ms']->getValue(),'Es wurden nicht die richtigen Zielgruppen indiziert!');
+		self::assertEquals(array(0=>'1. Referent',1=>'2. Referent'),$aIndexDoc['speakers_title_ms']->getValue(),'Es wurden nicht die richtigen Sprechertitel indiziert!');
+		self::assertEquals(array(0=>'1',1=>'2'),$aIndexDoc['speakers_gender_ms']->getValue(),'Es wurden nicht die richtigen Sprechergeschlechte indiziert!');
+		self::assertEquals(array(0=>'1. Organisation',1=>'2. Organisation'),$aIndexDoc['speakers_organization_ms']->getValue(),'Es wurden nicht die richtigen Sprecherorganisationen indiziert!');
+		self::assertEquals(array(0=>'www.first.de',1=>'www.second.de'),$aIndexDoc['speakers_homepage_ms']->getValue(),'Es wurden nicht die richtigen Sprecherhomepages indiziert!');
+		self::assertEquals(array(0=>'1. Notizen',1=>'2. Notizen'),$aIndexDoc['speakers_notes_ms']->getValue(),'Es wurden nicht die richtigen Sprechernotizen indiziert!');
+		self::assertEquals(array(0=>'1. Addresse',1=>'2. Addresse'),$aIndexDoc['speakers_address_ms']->getValue(),'Es wurden nicht die richtigen Sprecheradressen indiziert!');
+		self::assertEquals(array(0=>'0001',1=>'0005'),$aIndexDoc['speakers_phone_work_ms']->getValue(),'Es wurden nicht die richtigen Sprechertelefon Arbeit indiziert!');
+		self::assertEquals(array(0=>'0002',1=>'0006'),$aIndexDoc['speakers_phone_home_ms']->getValue(),'Es wurden nicht die richtigen Sprechertelefon zu Hause indiziert!');
+		self::assertEquals(array(0=>'0003',1=>'0007'),$aIndexDoc['speakers_phone_mobile_ms']->getValue(),'Es wurden nicht die richtigen Sprechertelefon Mobil indiziert!');
+		self::assertEquals(array(0=>'0004',1=>'0008'),$aIndexDoc['speakers_fax_ms']->getValue(),'Es wurden nicht die richtigen Sprecherfax indiziert!');
+		self::assertEquals(array(0=>'my@email.de',1=>'your@email.de'),$aIndexDoc['speakers_email_ms']->getValue(),'Es wurden nicht die richtigen Sprecheremail indiziert!');
+		self::assertEquals(array(0=>'will be announced'),$aIndexDoc['timeslots_entry_date_ms']->getValue(),'Es wurden nicht die richtigen Timeslot Entry Dates indiziert!');
+		self::assertEquals(array(0=>'1. Site',1=>'2. Site'),$aIndexDoc['timeslots_place_ms']->getValue(),'Es wurden nicht die richtigen Timeslot Places indiziert!');
+		self::assertEquals(array(0=>'1. Referent',1=>'2. Referent'),$aIndexDoc['timeslots_speakers_ms']->getValue(),'Es wurden nicht die richtigen Timeslot Speakers indiziert!');
 	}
 
 	/**
@@ -148,14 +148,14 @@ class tx_mksearch_tests_indexer_seminars_Seminar_testcase
 		$aResult[0]['deleted'] = 1;
 
 		$oIndexDoc = $indexer->prepareSearchData('tx_seminars_seminars', $aResult[0], $indexDoc, $options);
-		$this->assertTrue($oIndexDoc->getDeleted(), 'Element sollte gelöscht werden, da auf deleted');
+		self::assertTrue($oIndexDoc->getDeleted(), 'Element sollte gelöscht werden, da auf deleted');
 
 		//manipulate the seminar and set it to hidden
 		$aResult[0]['deleted'] = 0;
 		$aResult[0]['hidden'] = 1;
 
 		$oIndexDoc = $indexer->prepareSearchData('tx_seminars_seminars', $aResult[0], $indexDoc, $options);
-		$this->assertTrue($oIndexDoc->getDeleted(), 'Element sollte gelöscht werden, da auf deleted');
+		self::assertTrue($oIndexDoc->getDeleted(), 'Element sollte gelöscht werden, da auf deleted');
 	}
 
 	/**
@@ -177,34 +177,34 @@ class tx_mksearch_tests_indexer_seminars_Seminar_testcase
 
 		$aIndexDoc = $indexer->prepareSearchData('tx_seminars_seminars', $aResult[0], $indexDoc, $options)->getData();
 
-		$this->assertEquals('1. Fortbildungsthema',$aIndexDoc['title_s']->getValue(),'Es wurde nicht der richtige Titel indiziert!');
-		$this->assertEquals('1. Fortbildungsthema Untertitel',$aIndexDoc['subtitle_s']->getValue(),'Es wurde nicht der richtige Untertitel indiziert!');
-		$this->assertEquals('1. Fortbildungsthema',$aIndexDoc['realtitle_s']->getValue(),'Es wurde nicht der richtige Realtitel indiziert!');
-		$this->assertEquals('Hier gibt es viel mehr zu lernen',$aIndexDoc['description_s']->getValue(),'Es wurde nicht die richtige Beschreibung indiziert!');
-		$this->assertEquals(54,$aIndexDoc['accreditationnumber_s']->getValue(),'Es wurde nicht der richtige Akkreditierungsnummer indiziert!');
-		$this->assertEquals(8.00,$aIndexDoc['currentpriceregular_s']->getValue(),'Es wurde nicht der richtige aktuelle normale Preis indiziert!');
-		$this->assertEquals('1. Fortbildungsthema',$aIndexDoc['titleanddate_s']->getValue(),'Es wurde nicht der richtige Titel mit Zeit indiziert!');
-		$this->assertEquals(array(0=>'1304267200',1=>'1304268200'),$aIndexDoc['begin_date_ms']->getValue(),'Es wurde nicht der richtige Startzeitpunkt  indiziert!');
-		$this->assertEquals(array(0=>'1306287200',1=>'1306288200'),$aIndexDoc['end_date_ms']->getValue(),'Es wurde nicht der richtige Endzeitpunkt indiziert!');
-		$this->assertEquals(array(0=>'1. Kategorie',1=>'2. Kategorie',2=>'3. Kategorie'),$aIndexDoc['categories_title_ms']->getValue(),'Es wurden nicht die richtigen Kategorietitel indiziert!');
-		$this->assertEquals(array(0=>'1. Veranstalter',1=>'2. Veranstalter'),$aIndexDoc['organizers_title_ms']->getValue(),'Es wurden nicht die richtigen Veranstaltertitel indiziert!');
-		$this->assertEquals(array(0=>'1. Zielgruppe',1=>'2. Zielgruppe'),$aIndexDoc['targetgroups_title_ms']->getValue(),'Es wurden nicht die richtigen Zielgruppen indiziert!');
-		$this->assertEquals(array(0=>'1. Stadt',1=>'2. Stadt'),$aIndexDoc['place_city_ms']->getValue(),'Es wurden nicht die richtigen Städte indiziert!');
-		$this->assertEquals(array(0=>'1. Site',1=>'2. Site'),$aIndexDoc['place_title_ms']->getValue(),'Es wurden nicht die richtigen Titel der Sites indiziert!');
-		$this->assertEquals(array(0=>'1. Referent',1=>'2. Referent'),$aIndexDoc['speakers_title_ms']->getValue(),'Es wurden nicht die richtigen Sprechertitel indiziert!');
-		$this->assertEquals(array(0=>'1',1=>'2'),$aIndexDoc['speakers_gender_ms']->getValue(),'Es wurden nicht die richtigen Sprechergeschlechte indiziert!');
-		$this->assertEquals(array(0=>'1. Organisation',1=>'2. Organisation'),$aIndexDoc['speakers_organization_ms']->getValue(),'Es wurden nicht die richtigen Sprecherorganisationen indiziert!');
-		$this->assertEquals(array(0=>'www.first.de',1=>'www.second.de'),$aIndexDoc['speakers_homepage_ms']->getValue(),'Es wurden nicht die richtigen Sprecherhomepages indiziert!');
-		$this->assertEquals(array(0=>'1. Notizen',1=>'2. Notizen'),$aIndexDoc['speakers_notes_ms']->getValue(),'Es wurden nicht die richtigen Sprechernotizen indiziert!');
-		$this->assertEquals(array(0=>'1. Addresse',1=>'2. Addresse'),$aIndexDoc['speakers_address_ms']->getValue(),'Es wurden nicht die richtigen Sprecheradressen indiziert!');
-		$this->assertEquals(array(0=>'0001',1=>'0005'),$aIndexDoc['speakers_phone_work_ms']->getValue(),'Es wurden nicht die richtigen Sprechertelefon Arbeit indiziert!');
-		$this->assertEquals(array(0=>'0002',1=>'0006'),$aIndexDoc['speakers_phone_home_ms']->getValue(),'Es wurden nicht die richtigen Sprechertelefon zu Hause indiziert!');
-		$this->assertEquals(array(0=>'0003',1=>'0007'),$aIndexDoc['speakers_phone_mobile_ms']->getValue(),'Es wurden nicht die richtigen Sprechertelefon Mobil indiziert!');
-		$this->assertEquals(array(0=>'0004',1=>'0008'),$aIndexDoc['speakers_fax_ms']->getValue(),'Es wurden nicht die richtigen Sprecherfax indiziert!');
-		$this->assertEquals(array(0=>'my@email.de',1=>'your@email.de'),$aIndexDoc['speakers_email_ms']->getValue(),'Es wurden nicht die richtigen Sprecheremail indiziert!');
-		$this->assertEquals(array(0=>'will be announced'),$aIndexDoc['timeslots_entry_date_ms']->getValue(),'Es wurden nicht die richtigen Timeslot Entry Dates indiziert!');
-		$this->assertEquals(array(0=>'1. Site',1=>'2. Site'),$aIndexDoc['timeslots_place_ms']->getValue(),'Es wurden nicht die richtigen Timeslot Places indiziert!');
-		$this->assertEquals(array(0=>'1. Referent',1=>'2. Referent'),$aIndexDoc['timeslots_speakers_ms']->getValue(),'Es wurden nicht die richtigen Timeslot Speakers indiziert!');
+		self::assertEquals('1. Fortbildungsthema',$aIndexDoc['title_s']->getValue(),'Es wurde nicht der richtige Titel indiziert!');
+		self::assertEquals('1. Fortbildungsthema Untertitel',$aIndexDoc['subtitle_s']->getValue(),'Es wurde nicht der richtige Untertitel indiziert!');
+		self::assertEquals('1. Fortbildungsthema',$aIndexDoc['realtitle_s']->getValue(),'Es wurde nicht der richtige Realtitel indiziert!');
+		self::assertEquals('Hier gibt es viel mehr zu lernen',$aIndexDoc['description_s']->getValue(),'Es wurde nicht die richtige Beschreibung indiziert!');
+		self::assertEquals(54,$aIndexDoc['accreditationnumber_s']->getValue(),'Es wurde nicht der richtige Akkreditierungsnummer indiziert!');
+		self::assertEquals(8.00,$aIndexDoc['currentpriceregular_s']->getValue(),'Es wurde nicht der richtige aktuelle normale Preis indiziert!');
+		self::assertEquals('1. Fortbildungsthema',$aIndexDoc['titleanddate_s']->getValue(),'Es wurde nicht der richtige Titel mit Zeit indiziert!');
+		self::assertEquals(array(0=>'1304267200',1=>'1304268200'),$aIndexDoc['begin_date_ms']->getValue(),'Es wurde nicht der richtige Startzeitpunkt  indiziert!');
+		self::assertEquals(array(0=>'1306287200',1=>'1306288200'),$aIndexDoc['end_date_ms']->getValue(),'Es wurde nicht der richtige Endzeitpunkt indiziert!');
+		self::assertEquals(array(0=>'1. Kategorie',1=>'2. Kategorie',2=>'3. Kategorie'),$aIndexDoc['categories_title_ms']->getValue(),'Es wurden nicht die richtigen Kategorietitel indiziert!');
+		self::assertEquals(array(0=>'1. Veranstalter',1=>'2. Veranstalter'),$aIndexDoc['organizers_title_ms']->getValue(),'Es wurden nicht die richtigen Veranstaltertitel indiziert!');
+		self::assertEquals(array(0=>'1. Zielgruppe',1=>'2. Zielgruppe'),$aIndexDoc['targetgroups_title_ms']->getValue(),'Es wurden nicht die richtigen Zielgruppen indiziert!');
+		self::assertEquals(array(0=>'1. Stadt',1=>'2. Stadt'),$aIndexDoc['place_city_ms']->getValue(),'Es wurden nicht die richtigen Städte indiziert!');
+		self::assertEquals(array(0=>'1. Site',1=>'2. Site'),$aIndexDoc['place_title_ms']->getValue(),'Es wurden nicht die richtigen Titel der Sites indiziert!');
+		self::assertEquals(array(0=>'1. Referent',1=>'2. Referent'),$aIndexDoc['speakers_title_ms']->getValue(),'Es wurden nicht die richtigen Sprechertitel indiziert!');
+		self::assertEquals(array(0=>'1',1=>'2'),$aIndexDoc['speakers_gender_ms']->getValue(),'Es wurden nicht die richtigen Sprechergeschlechte indiziert!');
+		self::assertEquals(array(0=>'1. Organisation',1=>'2. Organisation'),$aIndexDoc['speakers_organization_ms']->getValue(),'Es wurden nicht die richtigen Sprecherorganisationen indiziert!');
+		self::assertEquals(array(0=>'www.first.de',1=>'www.second.de'),$aIndexDoc['speakers_homepage_ms']->getValue(),'Es wurden nicht die richtigen Sprecherhomepages indiziert!');
+		self::assertEquals(array(0=>'1. Notizen',1=>'2. Notizen'),$aIndexDoc['speakers_notes_ms']->getValue(),'Es wurden nicht die richtigen Sprechernotizen indiziert!');
+		self::assertEquals(array(0=>'1. Addresse',1=>'2. Addresse'),$aIndexDoc['speakers_address_ms']->getValue(),'Es wurden nicht die richtigen Sprecheradressen indiziert!');
+		self::assertEquals(array(0=>'0001',1=>'0005'),$aIndexDoc['speakers_phone_work_ms']->getValue(),'Es wurden nicht die richtigen Sprechertelefon Arbeit indiziert!');
+		self::assertEquals(array(0=>'0002',1=>'0006'),$aIndexDoc['speakers_phone_home_ms']->getValue(),'Es wurden nicht die richtigen Sprechertelefon zu Hause indiziert!');
+		self::assertEquals(array(0=>'0003',1=>'0007'),$aIndexDoc['speakers_phone_mobile_ms']->getValue(),'Es wurden nicht die richtigen Sprechertelefon Mobil indiziert!');
+		self::assertEquals(array(0=>'0004',1=>'0008'),$aIndexDoc['speakers_fax_ms']->getValue(),'Es wurden nicht die richtigen Sprecherfax indiziert!');
+		self::assertEquals(array(0=>'my@email.de',1=>'your@email.de'),$aIndexDoc['speakers_email_ms']->getValue(),'Es wurden nicht die richtigen Sprecheremail indiziert!');
+		self::assertEquals(array(0=>'will be announced'),$aIndexDoc['timeslots_entry_date_ms']->getValue(),'Es wurden nicht die richtigen Timeslot Entry Dates indiziert!');
+		self::assertEquals(array(0=>'1. Site',1=>'2. Site'),$aIndexDoc['timeslots_place_ms']->getValue(),'Es wurden nicht die richtigen Timeslot Places indiziert!');
+		self::assertEquals(array(0=>'1. Referent',1=>'2. Referent'),$aIndexDoc['timeslots_speakers_ms']->getValue(),'Es wurden nicht die richtigen Timeslot Speakers indiziert!');
 	}
 
 	/**
@@ -226,7 +226,7 @@ class tx_mksearch_tests_indexer_seminars_Seminar_testcase
 
 		$aIndexDoc = $indexer->prepareSearchData('tx_seminars_seminars', $aResult[0], $indexDoc, $options);
 
-		$this->assertNull($aIndexDoc,'Es wurde nicht null zurück gegeben!');
+		self::assertNull($aIndexDoc,'Es wurde nicht null zurück gegeben!');
 	}
 
 	/**
@@ -249,14 +249,14 @@ class tx_mksearch_tests_indexer_seminars_Seminar_testcase
 		$aResult[0]['deleted'] = 1;
 
 		$oIndexDoc = $indexer->prepareSearchData('tx_seminars_seminars', $aResult[0], $indexDoc, $options);
-		$this->assertTrue($oIndexDoc->getDeleted(), 'Element sollte gelöscht werden, da auf deleted');
+		self::assertTrue($oIndexDoc->getDeleted(), 'Element sollte gelöscht werden, da auf deleted');
 
 		//manipulate the seminar and set it to hidden
 		$aResult[0]['deleted'] = 0;
 		$aResult[0]['hidden'] = 1;
 
 		$oIndexDoc = $indexer->prepareSearchData('tx_seminars_seminars', $aResult[0], $indexDoc, $options);
-		$this->assertTrue($oIndexDoc->getDeleted(), 'Element sollte gelöscht werden, da auf deleted');
+		self::assertTrue($oIndexDoc->getDeleted(), 'Element sollte gelöscht werden, da auf deleted');
 	}
 
 	/**
@@ -277,16 +277,16 @@ class tx_mksearch_tests_indexer_seminars_Seminar_testcase
 
 		$aIndexDoc = $indexer->prepareSearchData('tx_seminars_seminars', $aResult[0], $indexDoc, $options);
 		//nichtzs direkt indiziert?
-		$this->assertNull($aIndexDoc,'Es wurde nicht null zurück gegeben!');
+		self::assertNull($aIndexDoc,'Es wurde nicht null zurück gegeben!');
 
 		$aOptions = array(
 			'enablefieldsoff' => true
 		);
 		$aResult = tx_rnbase_util_DB::doSelect('*', 'tx_mksearch_queue', $aOptions);
 
-		$this->assertEquals(1,count($aResult),'Es wurde nicht der richtige Anzahl in die queue gelegt!');
-		$this->assertEquals('tx_seminars_seminars',$aResult[0]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
-		$this->assertEquals(2,$aResult[0]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
+		self::assertEquals(1,count($aResult),'Es wurde nicht der richtige Anzahl in die queue gelegt!');
+		self::assertEquals('tx_seminars_seminars',$aResult[0]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
+		self::assertEquals(2,$aResult[0]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
 	}
 
 	/**
@@ -301,18 +301,18 @@ class tx_mksearch_tests_indexer_seminars_Seminar_testcase
 
 		$aIndexDoc = $indexer->prepareSearchData('tx_seminars_categories', $aResult, $indexDoc, $options);
 		//nichtzs direkt indiziert?
-		$this->assertNull($aIndexDoc,'Es wurde nicht null zurück gegeben!');
+		self::assertNull($aIndexDoc,'Es wurde nicht null zurück gegeben!');
 
 		$aOptions = array(
 			'enablefieldsoff' => true
 		);
 		$aResult = tx_rnbase_util_DB::doSelect('*', 'tx_mksearch_queue', $aOptions);
 
-		$this->assertEquals(2,count($aResult),'Es wurde nicht der richtige Anzahl in die queue gelegt!');
-		$this->assertEquals('tx_seminars_seminars',$aResult[0]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
-		$this->assertEquals(1,$aResult[0]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
-		$this->assertEquals('tx_seminars_seminars',$aResult[1]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
-		$this->assertEquals(2,$aResult[1]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
+		self::assertEquals(2,count($aResult),'Es wurde nicht der richtige Anzahl in die queue gelegt!');
+		self::assertEquals('tx_seminars_seminars',$aResult[0]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
+		self::assertEquals(1,$aResult[0]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
+		self::assertEquals('tx_seminars_seminars',$aResult[1]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
+		self::assertEquals(2,$aResult[1]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
 	}
 
 	/**
@@ -327,18 +327,18 @@ class tx_mksearch_tests_indexer_seminars_Seminar_testcase
 
 		$aIndexDoc = $indexer->prepareSearchData('tx_seminars_organizers', $aResult, $indexDoc, $options);
 		//nichtzs direkt indiziert?
-		$this->assertNull($aIndexDoc,'Es wurde nicht null zurück gegeben!');
+		self::assertNull($aIndexDoc,'Es wurde nicht null zurück gegeben!');
 
 		$aOptions = array(
 			'enablefieldsoff' => true
 		);
 		$aResult = tx_rnbase_util_DB::doSelect('*', 'tx_mksearch_queue', $aOptions);
 
-		$this->assertEquals(2,count($aResult),'Es wurde nicht der richtige Anzahl in die queue gelegt!');
-		$this->assertEquals('tx_seminars_seminars',$aResult[0]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
-		$this->assertEquals(1,$aResult[0]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
-		$this->assertEquals('tx_seminars_seminars',$aResult[1]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
-		$this->assertEquals(3,$aResult[1]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
+		self::assertEquals(2,count($aResult),'Es wurde nicht der richtige Anzahl in die queue gelegt!');
+		self::assertEquals('tx_seminars_seminars',$aResult[0]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
+		self::assertEquals(1,$aResult[0]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
+		self::assertEquals('tx_seminars_seminars',$aResult[1]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
+		self::assertEquals(3,$aResult[1]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
 	}
 
 	/**
@@ -353,18 +353,18 @@ class tx_mksearch_tests_indexer_seminars_Seminar_testcase
 
 		$aIndexDoc = $indexer->prepareSearchData('tx_seminars_sites', $aResult, $indexDoc, $options);
 		//nichtzs direkt indiziert?
-		$this->assertNull($aIndexDoc,'Es wurde nicht null zurück gegeben!');
+		self::assertNull($aIndexDoc,'Es wurde nicht null zurück gegeben!');
 
 		$aOptions = array(
 			'enablefieldsoff' => true
 		);
 		$aResult = tx_rnbase_util_DB::doSelect('*', 'tx_mksearch_queue', $aOptions);
 
-		$this->assertEquals(2,count($aResult),'Es wurde nicht der richtige Anzahl in die queue gelegt!');
-		$this->assertEquals('tx_seminars_seminars',$aResult[0]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
-		$this->assertEquals(1,$aResult[0]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
-		$this->assertEquals('tx_seminars_seminars',$aResult[1]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
-		$this->assertEquals(4,$aResult[1]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
+		self::assertEquals(2,count($aResult),'Es wurde nicht der richtige Anzahl in die queue gelegt!');
+		self::assertEquals('tx_seminars_seminars',$aResult[0]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
+		self::assertEquals(1,$aResult[0]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
+		self::assertEquals('tx_seminars_seminars',$aResult[1]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
+		self::assertEquals(4,$aResult[1]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
 	}
 
 	/**
@@ -379,18 +379,18 @@ class tx_mksearch_tests_indexer_seminars_Seminar_testcase
 
 		$aIndexDoc = $indexer->prepareSearchData('tx_seminars_speakers', $aResult, $indexDoc, $options);
 		//nichtzs direkt indiziert?
-		$this->assertNull($aIndexDoc,'Es wurde nicht null zurück gegeben!');
+		self::assertNull($aIndexDoc,'Es wurde nicht null zurück gegeben!');
 
 		$aOptions = array(
 			'enablefieldsoff' => true
 		);
 		$aResult = tx_rnbase_util_DB::doSelect('*', 'tx_mksearch_queue', $aOptions);
 
-		$this->assertEquals(2,count($aResult),'Es wurde nicht der richtige Anzahl in die queue gelegt!');
-		$this->assertEquals('tx_seminars_seminars',$aResult[0]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
-		$this->assertEquals(1,$aResult[0]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
-		$this->assertEquals('tx_seminars_seminars',$aResult[1]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
-		$this->assertEquals(4,$aResult[1]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
+		self::assertEquals(2,count($aResult),'Es wurde nicht der richtige Anzahl in die queue gelegt!');
+		self::assertEquals('tx_seminars_seminars',$aResult[0]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
+		self::assertEquals(1,$aResult[0]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
+		self::assertEquals('tx_seminars_seminars',$aResult[1]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
+		self::assertEquals(4,$aResult[1]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
 	}
 
 	/**
@@ -405,18 +405,18 @@ class tx_mksearch_tests_indexer_seminars_Seminar_testcase
 
 		$aIndexDoc = $indexer->prepareSearchData('tx_seminars_target_groups', $aResult, $indexDoc, $options);
 		//nichtzs direkt indiziert?
-		$this->assertNull($aIndexDoc,'Es wurde nicht null zurück gegeben!');
+		self::assertNull($aIndexDoc,'Es wurde nicht null zurück gegeben!');
 
 		$aOptions = array(
 			'enablefieldsoff' => true
 		);
 		$aResult = tx_rnbase_util_DB::doSelect('*', 'tx_mksearch_queue', $aOptions);
 
-		$this->assertEquals(2,count($aResult),'Es wurde nicht der richtige Anzahl in die queue gelegt!');
-		$this->assertEquals('tx_seminars_seminars',$aResult[0]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
-		$this->assertEquals(1,$aResult[0]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
-		$this->assertEquals('tx_seminars_seminars',$aResult[1]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
-		$this->assertEquals(2,$aResult[1]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
+		self::assertEquals(2,count($aResult),'Es wurde nicht der richtige Anzahl in die queue gelegt!');
+		self::assertEquals('tx_seminars_seminars',$aResult[0]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
+		self::assertEquals(1,$aResult[0]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
+		self::assertEquals('tx_seminars_seminars',$aResult[1]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
+		self::assertEquals(2,$aResult[1]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
 	}
 
 /**
@@ -431,16 +431,16 @@ class tx_mksearch_tests_indexer_seminars_Seminar_testcase
 
 		$aIndexDoc = $indexer->prepareSearchData('tx_seminars_timeslots', $aResult, $indexDoc, $options);
 		//nichtzs direkt indiziert?
-		$this->assertNull($aIndexDoc,'Es wurde nicht null zurück gegeben!');
+		self::assertNull($aIndexDoc,'Es wurde nicht null zurück gegeben!');
 
 		$aOptions = array(
 			'enablefieldsoff' => true
 		);
 		$aResult = tx_rnbase_util_DB::doSelect('*', 'tx_mksearch_queue', $aOptions);
 
-		$this->assertEquals(1,count($aResult),'Es wurde nicht der richtige Anzahl in die queue gelegt!');
-		$this->assertEquals('tx_seminars_seminars',$aResult[0]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
-		$this->assertEquals(4,$aResult[0]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
+		self::assertEquals(1,count($aResult),'Es wurde nicht der richtige Anzahl in die queue gelegt!');
+		self::assertEquals('tx_seminars_seminars',$aResult[0]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
+		self::assertEquals(4,$aResult[0]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
 	}
 }
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']) {

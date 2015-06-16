@@ -89,7 +89,7 @@ class tx_mksearch_tests_filter_FacetBase_testcase
 		$options = array();
 		$filter->init($fields,$options);
 
-		$this->assertEquals(
+		self::assertEquals(
 			'(-fe_group_mi:[* TO *] AND uid:[* TO *]) OR fe_group_mi:0',
 			$options['fq'],
 			'fq wuede falsch übernommen!'
@@ -111,7 +111,7 @@ class tx_mksearch_tests_filter_FacetBase_testcase
 		$options = array();
 		$filter->init($fields, $options);
 
-		$this->assertEquals('(-fe_group_mi:[* TO *] AND uid:[* TO *]) OR fe_group_mi:0 OR fe_group_mi:1 OR fe_group_mi:2',$options['fq'],'fq wuede gesetzt!');
+		self::assertEquals('(-fe_group_mi:[* TO *] AND uid:[* TO *]) OR fe_group_mi:0 OR fe_group_mi:1 OR fe_group_mi:2',$options['fq'],'fq wuede gesetzt!');
 
 		$GLOBALS['TSFE']->fe_user->groupData['uid'] = $tsFeBackup;
 	}
@@ -128,7 +128,7 @@ class tx_mksearch_tests_filter_FacetBase_testcase
 		$fields = array();
 		$options = array();
 		$filter->init($fields,$options);
-		$this->assertEquals(0, $options['limit'], 'limit nicht 0');
+		self::assertEquals(0, $options['limit'], 'limit nicht 0');
 	}
 
 	/**
@@ -143,7 +143,7 @@ class tx_mksearch_tests_filter_FacetBase_testcase
 		$fields = array();
 		$options = array();
 		$filter->init($fields,$options);
-		$this->assertEquals('true', $options['facet'], 'facet nicht true');
+		self::assertEquals('true', $options['facet'], 'facet nicht true');
 	}
 
 	/**

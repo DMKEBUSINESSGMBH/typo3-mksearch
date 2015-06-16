@@ -260,7 +260,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdate_testcase
 	 * @unit
 	 */
 	public function testGetRnBaseDatabaseUtility() {
-		$this->assertEquals(
+		self::assertEquals(
 			'tx_rnbase_util_DB',
 			$this->callInaccessibleMethod($this->getHookMock(), 'getRnbaseDatabaseUtility')
 		);
@@ -277,7 +277,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdate_testcase
 		$hook->expects($this->never())->method('getRnbaseDatabaseUtility');
 
 
-		$this->assertEquals(
+		self::assertEquals(
 			array(123),
 			$this->callInaccessibleMethod($hook, 'getUidsToIndex', '', 123)
 		);
@@ -294,7 +294,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdate_testcase
 		$hook->expects($this->never())->method('getRnbaseDatabaseUtility');
 
 
-		$this->assertEquals(
+		self::assertEquals(
 			array(),
 			$this->callInaccessibleMethod($hook, 'getUidsToIndex', '', 'testString')
 		);
@@ -311,7 +311,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdate_testcase
 		$hook->expects($this->never())->method('getRnbaseDatabaseUtility');
 
 
-		$this->assertEquals(
+		self::assertEquals(
 			array(),
 			$this->callInaccessibleMethod($hook, 'getUidsToIndex', '', array())
 		);
@@ -327,7 +327,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdate_testcase
 		);
 		$hook->expects($this->never())->method('getRnbaseDatabaseUtility');
 
-		$this->assertEquals(
+		self::assertEquals(
 			array(),
 			$this->callInaccessibleMethod(
 				$hook, 'getUidsToIndex', '', array('type' => 'noSelect')
@@ -358,7 +358,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdate_testcase
 			->method('getRnbaseDatabaseUtility')
 			->will($this->returnValue($databaseUtility));
 
-		$this->assertEquals(
+		self::assertEquals(
 			$expectedReturn,
 			$this->callInaccessibleMethod(
 				$hook, 'getUidsToIndex', 'test_table', $data

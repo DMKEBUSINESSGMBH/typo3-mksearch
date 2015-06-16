@@ -74,13 +74,13 @@ class tx_mksearch_tests_model_cal_Event_testcase
 
 		$categories = $event->getCategories();
 
-		$this->assertEquals(2, count($categories), 'Mehr Kategorien als erwartet.');
-		$this->assertEquals(
+		self::assertEquals(2, count($categories), 'Mehr Kategorien als erwartet.');
+		self::assertEquals(
 			'First Category',
 			$categories[0]->getTitle(),
 			'Titel der 1. Kategorie falsch'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			'Second Category',
 			$categories[1]->getTitle(),
 			'Titel der 2. Kategorie falsch'

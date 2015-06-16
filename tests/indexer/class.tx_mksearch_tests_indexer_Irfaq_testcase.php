@@ -77,89 +77,89 @@ class tx_mksearch_tests_indexer_Irfaq_testcase
 		$aIndexDoc = $indexer->prepareSearchData('tx_irfaq_q', $aResult[0], $indexDoc, $options)->getData();
 
 		//Common
-		$this->assertEquals(
+		self::assertEquals(
 			87,
 			$aIndexDoc['sorting_i']->getValue(),
 			'Es wurde nicht die richtige Sortierung indiziert!'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			'1. FAQ',
 		$aIndexDoc['q_s']->getValue(),
 			'Es wurde nicht die richtige Frage indiziert!'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			'You have to know this and this',
 			$aIndexDoc['a_s']->getValue(),
 			'Es wurde nicht der richtige Fragetext indiziert!'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			'<span>You have to know this and this</span>',
 			$aIndexDoc['a_with_html_s']->getValue(),
 			'Es wurde nicht der richtige Fragetext mit HTML indiziert!'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			'something related',
 			$aIndexDoc['related_s']->getValue(),
 			'Es wurde nicht das richtige related indiziert!'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			'some related links',
 			$aIndexDoc['related_links_s']->getValue(),
 			'Es wurden nicht die richtigen related Links indiziert!'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			'some files',
 			$aIndexDoc['faq_files_s']->getValue(),
 			'Es wurde nicht der richtige Dateien indiziert!'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			123,
 			$aIndexDoc['tstamp']->getValue(),
 			'Es wurde nicht der richtige tstamp indiziert!'
 		);
 		//Expert
-		$this->assertEquals(
+		self::assertEquals(
 			1,
 			$aIndexDoc['expert_i']->getValue(),
 			'Es wurde nicht der richtige Experte indiziert!'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			'1. Expert',
 			$aIndexDoc['expert_name_s']->getValue(),
 			'Es wurde nicht der richtige Expertenname indiziert!'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			'mail@expert.de',
 			$aIndexDoc['expert_email_s']->getValue(),
 			'Es wurde nicht die richtige Expertenmail indiziert!'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			'some url',
 			$aIndexDoc['expert_url_s']->getValue(),
 			'Es wurde nicht die richtige Expertenurl indiziert!'
 		);
 		//Categories
-		$this->assertEquals(
+		self::assertEquals(
 			array(0=>'1',1=>'2'),
 			$aIndexDoc['category_mi']->getValue(),
 			'Es wurden nicht die richtigen Kategorie-Uids indiziert!'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			array(0=>'47',1=>'48'),
 			$aIndexDoc['category_sorting_mi']->getValue(),
 			'Es wurden nicht die richtigen Kategorie-Sortierungen indiziert!'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			array(0=>'1. FAQ Category',1=>'2. FAQ Category'),
 			$aIndexDoc['category_title_ms']->getValue(),
 			'Es wurden nicht die richtigen Kategorie-Titel indiziert!'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			array(0=>'1. Shortcut',1=>'2. Shortcut'),
 			$aIndexDoc['category_shortcut_ms']->getValue(),
 			'Es wurden nicht die richtigen Kategorie-Shortcuts indiziert!'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			'1. Shortcut',
 			$aIndexDoc['category_first_shortcut_s']->getValue(),
 			'Es wurden nicht der richtige erste Kategorie-Shortcut indiziert!'
@@ -186,22 +186,22 @@ class tx_mksearch_tests_indexer_Irfaq_testcase
 		$aIndexDoc = $indexer->prepareSearchData('tx_irfaq_q', $aResult[0], $indexDoc, $options)->getData();
 
 		//Common
-		$this->assertEquals(99,$aIndexDoc['sorting_i']->getValue(),'Es wurde nicht die richtige Sortierung indiziert!');
-		$this->assertEquals('3. FAQ',$aIndexDoc['q_s']->getValue(),'Es wurde nicht die richtige Frage indiziert!');
-		$this->assertEquals('You have to know nothing',$aIndexDoc['a_s']->getValue(),'Es wurde nicht der richtige Fragetext indiziert!');
-		$this->assertNull($aIndexDoc['related_s'],'Es wurde doch related indiziert!');
-		$this->assertNull($aIndexDoc['related_links_s'],'Es wurden doch related Links indiziert!');
-		$this->assertNull($aIndexDoc['faq_files_s'],'Es wurde doch Dateien indiziert!');
+		self::assertEquals(99,$aIndexDoc['sorting_i']->getValue(),'Es wurde nicht die richtige Sortierung indiziert!');
+		self::assertEquals('3. FAQ',$aIndexDoc['q_s']->getValue(),'Es wurde nicht die richtige Frage indiziert!');
+		self::assertEquals('You have to know nothing',$aIndexDoc['a_s']->getValue(),'Es wurde nicht der richtige Fragetext indiziert!');
+		self::assertNull($aIndexDoc['related_s'],'Es wurde doch related indiziert!');
+		self::assertNull($aIndexDoc['related_links_s'],'Es wurden doch related Links indiziert!');
+		self::assertNull($aIndexDoc['faq_files_s'],'Es wurde doch Dateien indiziert!');
 		//Expert
-		$this->assertNull($aIndexDoc['expert_i'],'Es wurde doch ein Experte indiziert!');
-		$this->assertNull($aIndexDoc['expert_name_s'],'Es wurde doch ein Expertenname indiziert!');
-		$this->assertNull($aIndexDoc['expert_email_s'],'Es wurde doch eine Expertenmail indiziert!');
-		$this->assertNull($aIndexDoc['expert_url_s'],'Es wurde doch eine Expertenurl indiziert!');
+		self::assertNull($aIndexDoc['expert_i'],'Es wurde doch ein Experte indiziert!');
+		self::assertNull($aIndexDoc['expert_name_s'],'Es wurde doch ein Expertenname indiziert!');
+		self::assertNull($aIndexDoc['expert_email_s'],'Es wurde doch eine Expertenmail indiziert!');
+		self::assertNull($aIndexDoc['expert_url_s'],'Es wurde doch eine Expertenurl indiziert!');
 		//Categories
-		$this->assertEquals(array(0=>'2'),$aIndexDoc['category_mi']->getValue(),'Es wurden nicht die richtigen Kategorie-Uids indiziert!');
-		$this->assertEquals(array(0=>'48'),$aIndexDoc['category_sorting_mi']->getValue(),'Es wurden nicht die richtigen Kategorie-Sortierungen indiziert!');
-		$this->assertEquals(array(0=>'2. FAQ Category'),$aIndexDoc['category_title_ms']->getValue(),'Es wurden nicht die richtigen Kategorie-Titel indiziert!');
-		$this->assertEquals(array(0=>'2. Shortcut'),$aIndexDoc['category_shortcut_ms']->getValue(),'Es wurden nicht die richtigen Kategorie-Shortcuts indiziert!');
+		self::assertEquals(array(0=>'2'),$aIndexDoc['category_mi']->getValue(),'Es wurden nicht die richtigen Kategorie-Uids indiziert!');
+		self::assertEquals(array(0=>'48'),$aIndexDoc['category_sorting_mi']->getValue(),'Es wurden nicht die richtigen Kategorie-Sortierungen indiziert!');
+		self::assertEquals(array(0=>'2. FAQ Category'),$aIndexDoc['category_title_ms']->getValue(),'Es wurden nicht die richtigen Kategorie-Titel indiziert!');
+		self::assertEquals(array(0=>'2. Shortcut'),$aIndexDoc['category_shortcut_ms']->getValue(),'Es wurden nicht die richtigen Kategorie-Shortcuts indiziert!');
 	}
 
 	/**
@@ -223,18 +223,18 @@ class tx_mksearch_tests_indexer_Irfaq_testcase
 
 		$aIndexDoc = $indexer->prepareSearchData('tx_irfaq_expert', $aResult[0], $indexDoc, $options);
 		//nichtzs direkt indiziert?
-		$this->assertNull($aIndexDoc,'Es wurde nicht null zurück gegeben!');
+		self::assertNull($aIndexDoc,'Es wurde nicht null zurück gegeben!');
 
 		$aOptions = array(
 			'enablefieldsoff' => true
 		);
 		$aResult = tx_rnbase_util_DB::doSelect('*', 'tx_mksearch_queue', $aOptions);
 
-		$this->assertEquals(2,count($aResult),'Es wurde nicht der richtige Anzahl in die queue gelegt!');
-		$this->assertEquals('tx_irfaq_q',$aResult[0]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
-		$this->assertEquals(1,$aResult[0]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
-		$this->assertEquals('tx_irfaq_q',$aResult[1]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
-		$this->assertEquals(2,$aResult[1]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
+		self::assertEquals(2,count($aResult),'Es wurde nicht der richtige Anzahl in die queue gelegt!');
+		self::assertEquals('tx_irfaq_q',$aResult[0]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
+		self::assertEquals(1,$aResult[0]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
+		self::assertEquals('tx_irfaq_q',$aResult[1]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
+		self::assertEquals(2,$aResult[1]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
 	}
 
 /**
@@ -256,18 +256,18 @@ class tx_mksearch_tests_indexer_Irfaq_testcase
 
 		$aIndexDoc = $indexer->prepareSearchData('tx_irfaq_cat', $aResult[0], $indexDoc, $options);
 		//nichtzs direkt indiziert?
-		$this->assertNull($aIndexDoc,'Es wurde nicht null zurück gegeben!');
+		self::assertNull($aIndexDoc,'Es wurde nicht null zurück gegeben!');
 
 		$aOptions = array(
 			'enablefieldsoff' => true
 		);
 		$aResult = tx_rnbase_util_DB::doSelect('*', 'tx_mksearch_queue', $aOptions);
 
-		$this->assertEquals(2,count($aResult),'Es wurde nicht der richtige Anzahl in die queue gelegt!');
-		$this->assertEquals('tx_irfaq_q',$aResult[0]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
-		$this->assertEquals(1,$aResult[0]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
-		$this->assertEquals('tx_irfaq_q',$aResult[1]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
-		$this->assertEquals(3,$aResult[1]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
+		self::assertEquals(2,count($aResult),'Es wurde nicht der richtige Anzahl in die queue gelegt!');
+		self::assertEquals('tx_irfaq_q',$aResult[0]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
+		self::assertEquals(1,$aResult[0]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
+		self::assertEquals('tx_irfaq_q',$aResult[1]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
+		self::assertEquals(3,$aResult[1]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
 	}
 
 	/**
@@ -300,11 +300,11 @@ class tx_mksearch_tests_indexer_Irfaq_testcase
 
 		//with include categories as array
 		$aIndexDoc = $indexer->prepareSearchData('tx_irfaq_q', $aResult[0], $indexDoc, $options);
-		$this->assertNotNull($aIndexDoc,'Das Element wurde doch nicht indziert! Option 1');
+		self::assertNotNull($aIndexDoc,'Das Element wurde doch nicht indziert! Option 1');
 
 		//with include categories as string
 		$aIndexDoc = $indexer->prepareSearchData('tx_irfaq_q', $aResult[0], $indexDoc, $options2);
-		$this->assertNotNull($aIndexDoc,'Das Element wurde doch nicht indziert! Option 2');
+		self::assertNotNull($aIndexDoc,'Das Element wurde doch nicht indziert! Option 2');
 
 		//and now with a faq that a the worng category
 		$aOptions = array(
@@ -317,11 +317,11 @@ class tx_mksearch_tests_indexer_Irfaq_testcase
 
 		//with include categories as array
 		$aIndexDoc = $indexer->prepareSearchData('tx_irfaq_q', $aResult[0], $indexDoc, $options);
-		$this->assertNull($aIndexDoc,'Das Element wurde doch indziert! Option 1');
+		self::assertNull($aIndexDoc,'Das Element wurde doch indziert! Option 1');
 
 		//with include categories as string
 		$aIndexDoc = $indexer->prepareSearchData('tx_irfaq_q', $aResult[0], $indexDoc, $options2);
-		$this->assertNull($aIndexDoc,'Das Element wurde doch indziert! Option 2');
+		self::assertNull($aIndexDoc,'Das Element wurde doch indziert! Option 2');
 	}
 }
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']) {

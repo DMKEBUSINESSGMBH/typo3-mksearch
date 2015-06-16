@@ -49,8 +49,8 @@ class tx_mksearch_tests_util_ResolverT3DB_testcase
 		);
 		$records = $resolverT3Db->getRecords($queueData);
 
-		$this->assertEquals(1, count($records), 'es wurde nicht genau 1 record gefunden');
-		$this->assertEquals($queueData['recid'], $records[0]['uid'], 'uid falsch');
-		$this->assertEquals(1, $records[0]['deleted'], 'deleted falsch');
+		self::assertEquals(1, count($records), 'es wurde nicht genau 1 record gefunden');
+		self::assertEquals($queueData['recid'], $records[0]['uid'], 'uid falsch');
+		self::assertEquals(1, $records[0]['deleted'], 'deleted falsch');
 	}
 }

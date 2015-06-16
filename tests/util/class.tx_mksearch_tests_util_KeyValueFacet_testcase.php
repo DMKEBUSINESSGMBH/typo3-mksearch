@@ -58,7 +58,7 @@ class tx_mksearch_tests_util_KeyValueFacet_testcase
 	public function testBuildFacetValue($key, $value, $sorting, $expected) {
 		$builder = $this->getKeyValueFacetInstance();
 		$actual = $builder->buildFacetValue($key, $value, $sorting);
-		$this->assertEquals($expected, $actual);
+		self::assertEquals($expected, $actual);
 	}
 	/**
 	 * Dataprovider for testBuildFacetValue
@@ -84,7 +84,7 @@ class tx_mksearch_tests_util_KeyValueFacet_testcase
 	public function testCheckValue($value, $expected) {
 		$builder = $this->getKeyValueFacetInstance();
 		$actual = $builder->checkValue($value);
-		$this->assertEquals($expected, $actual);
+		self::assertEquals($expected, $actual);
 	}
 	/**
 	 * Dataprovider for testCheckValue
@@ -110,7 +110,7 @@ class tx_mksearch_tests_util_KeyValueFacet_testcase
 	public function testExplodeFacetValue($builded, $expected) {
 		$builder = $this->getKeyValueFacetInstance();
 		$actual = $builder->explodeFacetValue($builded);
-		$this->assertEquals($expected, $actual);
+		self::assertEquals($expected, $actual);
 	}
 	/**
 	 * Dataprovider for testExplodeFacetValue
@@ -136,7 +136,7 @@ class tx_mksearch_tests_util_KeyValueFacet_testcase
 	public function testExtractFacetValue($builded, $expected) {
 		$builder = $this->getKeyValueFacetInstance();
 		$actual = $builder->extractFacetValue($builded);
-		$this->assertEquals($expected, $actual);
+		self::assertEquals($expected, $actual);
 	}
 	/**
 	 * Dataprovider for testExtractFacetValue
@@ -167,7 +167,7 @@ class tx_mksearch_tests_util_KeyValueFacet_testcase
 			array('key' => 'key', 'value' => 'value', 'sorting' => NULL),
 			array('key' => '50', 'value' => 'Test', 'sorting' => '2'),
 		);
-		$this->assertEquals($expected, $actual);
+		self::assertEquals($expected, $actual);
 	}
 	/**
 	 *
@@ -183,7 +183,7 @@ class tx_mksearch_tests_util_KeyValueFacet_testcase
 			'key' => 'value',
 			'50' => 'Test',
 		);
-		$this->assertEquals($expected, $actual);
+		self::assertEquals($expected, $actual);
 	}
 
 }

@@ -68,7 +68,7 @@ class tx_mksearch_tests_indexer_ttcontent_Normal_testcase
 		$indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
 		$indexDocData = $indexDoc->getData();
 
-		$this->assertEquals(array('first', 'second'), $indexDocData['keywords_ms']->getValue());
+		self::assertEquals(array('first', 'second'), $indexDocData['keywords_ms']->getValue());
 
 	}
 
@@ -153,14 +153,14 @@ class tx_mksearch_tests_indexer_ttcontent_Normal_testcase
 
 		$indexedData = $indexDoc->getData();
 
-		$this->assertCount(3, $indexedData, 'more fields than expected indexed');
-		$this->assertEquals(
+		self::assertCount(3, $indexedData, 'more fields than expected indexed');
+		self::assertEquals(
 			'mksearch.test', $indexedData['content_ident_s']->getValue(), 'content_ident_s wrong'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			'Homepage', $indexedData['page_title_t']->getValue(), 'page title wrong indexed'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			'Starting point', $indexedData['page_description_t']->getValue(),
 			'page description wrong indexed'
 		);

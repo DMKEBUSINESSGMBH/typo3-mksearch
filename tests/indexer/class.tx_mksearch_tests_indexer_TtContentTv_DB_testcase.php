@@ -87,9 +87,9 @@ class tx_mksearch_tests_indexer_TtContentTv_DB_testcase
 		//the element it self resides on a hidden page but we have references that are okay
 		$record = array('uid'=> 1, 'pid' => 2, 'CType'=>'list', 'bodytext' => 'Test 1');
 		$indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
-		$this->assertFalse($indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
+		self::assertFalse($indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 		$aData = $indexDoc->getData();
-		$this->assertEquals(1,$aData['pid']->getValue(),'the new pid has not been set for '.$record['uid']);
+		self::assertEquals(1,$aData['pid']->getValue(),'the new pid has not been set for '.$record['uid']);
 
 		//should not be deleted as the element it is referenced on is on a valid page
 		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtContent');
@@ -97,9 +97,9 @@ class tx_mksearch_tests_indexer_TtContentTv_DB_testcase
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$record = array('uid'=> 5, 'pid' => 0, 'CType'=>'list', 'bodytext' => 'Test 1');
 		$indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
-		$this->assertFalse($indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
+		self::assertFalse($indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 		$aData = $indexDoc->getData();
-		$this->assertEquals(1,$aData['pid']->getValue(),'the new pid has not been set for '.$record['uid']);
+		self::assertEquals(1,$aData['pid']->getValue(),'the new pid has not been set for '.$record['uid']);
 
 		//should be deleted as the element it is referenced on is on a valid page
 		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtContent');
@@ -107,7 +107,7 @@ class tx_mksearch_tests_indexer_TtContentTv_DB_testcase
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$record = array('uid'=> 5, 'pid' => 0, 'CType'=>'list', 'bodytext' => 'Test 1');
 		$indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
-		$this->assertFalse($indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
+		self::assertFalse($indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 	}
 
 	/**
@@ -122,7 +122,7 @@ class tx_mksearch_tests_indexer_TtContentTv_DB_testcase
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$record = array('uid'=> 99, 'pid' => 0, 'CType'=>'list', 'bodytext' => 'Test 1');
 		$indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
-		$this->assertTrue($indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
+		self::assertTrue($indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 
 		//should be deleted as the page it is referenced on is hidden
 		$options = $this->getDefaultConfig();
@@ -132,7 +132,7 @@ class tx_mksearch_tests_indexer_TtContentTv_DB_testcase
 		//the pid doesn't matter as it's taken from the reference to this element
 		$record = array('uid'=> 2, 'pid' => 0, 'CType'=>'list', 'bodytext' => 'Test 1');
 		$indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
-		$this->assertTrue($indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
+		self::assertTrue($indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 
 		$options = $this->getDefaultConfig();
 		//should be deleted as the element it is referenced on is on a none existent page
@@ -141,7 +141,7 @@ class tx_mksearch_tests_indexer_TtContentTv_DB_testcase
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$record = array('uid'=> 98, 'pid' => 99, 'CType'=>'list', 'bodytext' => 'Test 1');
 		$indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
-		$this->assertTrue($indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
+		self::assertTrue($indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 	}
 
 	/**
@@ -157,7 +157,7 @@ class tx_mksearch_tests_indexer_TtContentTv_DB_testcase
 		$record = array('uid'=> 3, 'pid' => 0, 'CType'=>'list', 'bodytext' => 'Test 1');
 		$options['exclude.']['pageTrees.'] = array(4);//als array
 		$indexDoc = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
-		$this->assertNull($indexDoc, 'Index Doc not null for uid '.$record['uid']);
+		self::assertNull($indexDoc, 'Index Doc not null for uid '.$record['uid']);
 
 		//should return null as the page the element is referenced on is excluded for indexing
 		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtContent');
@@ -166,7 +166,7 @@ class tx_mksearch_tests_indexer_TtContentTv_DB_testcase
 		$record = array('uid'=> 6, 'pid' => 0, 'CType'=>'list', 'bodytext' => 'Test 1');
 		$options['exclude.']['pageTrees.'] = array(4);//als array
 		$indexDoc = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
-		$this->assertNull($indexDoc, 'Wrong deleted state for uid '.$record['uid']);
+		self::assertNull($indexDoc, 'Wrong deleted state for uid '.$record['uid']);
 	}
 
 	/**

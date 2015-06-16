@@ -61,7 +61,7 @@ class tx_mksearch_tests_service_internal_Index_testcase
 			'tx_mksearch_service_internal_Index'
 		);
 
-		$this->assertEquals(
+		self::assertEquals(
 			'tx_rnbase_util_DB',
 			$this->callInaccessibleMethod(
 				$indexService, 'getDatabaseUtility'
@@ -77,7 +77,7 @@ class tx_mksearch_tests_service_internal_Index_testcase
 			'tx_mksearch_service_internal_Index'
 		);
 
-		$this->assertEquals(
+		self::assertEquals(
 			2592000,
 			$this->callInaccessibleMethod(
 				$indexService, 'getSecondsToKeepQueueEntries'
@@ -87,7 +87,7 @@ class tx_mksearch_tests_service_internal_Index_testcase
 
 		tx_mksearch_tests_Util::setExtConfVar('secondsToKeepQueueEntries', 123);
 
-		$this->assertEquals(
+		self::assertEquals(
 			123,
 			$this->callInaccessibleMethod(
 				$indexService, 'getSecondsToKeepQueueEntries'

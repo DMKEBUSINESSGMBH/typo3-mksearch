@@ -379,8 +379,8 @@ abstract class tx_mksearch_tests_SolrTestcase
 	}
 
 	protected function assertNothingFound($result) {
-		$this->assertEquals(0, $result['numFound'], 'doch etwas gefunden');
-		$this->assertEmpty($result['items'], 'doch items etwas gefunden');
+		self::assertEquals(0, $result['numFound'], 'doch etwas gefunden');
+		self::assertEmpty($result['items'], 'doch items etwas gefunden');
 	}
 }
 

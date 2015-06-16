@@ -151,11 +151,11 @@ class tx_mksearch_tests_action_SearchSolr_testcase
 		$out = true;
 		$action = $this->getAction($aMockFunctions,$aConfig,$out);
 
-		$this->assertNull($out,'es wurde nicht null geliefert. vllt doch gesucht?');
+		self::assertNull($out,'es wurde nicht null geliefert. vllt doch gesucht?');
 		//view daten sollten nicht gesetzt sein
-		$this->assertFalse($action->getConfigurations()->getViewData()->offsetExists('result'),'es wurde doch ein result gesetzt in den view daten. doch gesucht?');
+		self::assertFalse($action->getConfigurations()->getViewData()->offsetExists('result'),'es wurde doch ein result gesetzt in den view daten. doch gesucht?');
 
-		$this->assertEmpty($GLOBALS['TSFE']->additionalHeaderData,'Daten für JS doch gesetzt?');
+		self::assertEmpty($GLOBALS['TSFE']->additionalHeaderData,'Daten für JS doch gesetzt?');
 	}
 
 	/**
@@ -188,9 +188,9 @@ class tx_mksearch_tests_action_SearchSolr_testcase
 		$out = true;
 		$action = $this->getAction($aMockFunctions,$aConfig,$out);
 
-		$this->assertNull($out,'es wurde nicht null geliefert. vllt doch gesucht?');
+		self::assertNull($out,'es wurde nicht null geliefert. vllt doch gesucht?');
 		//view daten sollten nicht gesetzt sein
-		$this->assertFalse($action->getConfigurations()->getViewData()->offsetExists('result'),'es wurde doch ein result gesetzt in den view daten. doch gesucht?');
+		self::assertFalse($action->getConfigurations()->getViewData()->offsetExists('result'),'es wurde doch ein result gesetzt in den view daten. doch gesucht?');
 
 		$sJs = '
 		<script type="text/javascript">
@@ -223,8 +223,8 @@ class tx_mksearch_tests_action_SearchSolr_testcase
 		</script>
 		';
 
-		$this->assertEquals(1, count($GLOBALS['TSFE']->additionalHeaderData),'mehr header daten als erwartet!');
-		$this->assertEquals($sJs,$GLOBALS['TSFE']->additionalHeaderData[md5($sJs)],'Daten für JS falsch');
+		self::assertEquals(1, count($GLOBALS['TSFE']->additionalHeaderData),'mehr header daten als erwartet!');
+		self::assertEquals($sJs,$GLOBALS['TSFE']->additionalHeaderData[md5($sJs)],'Daten für JS falsch');
 	}
 
 	/**
@@ -260,9 +260,9 @@ class tx_mksearch_tests_action_SearchSolr_testcase
 		$out = true;
 		$action = $this->getAction($aMockFunctions,$aConfig,$out);
 
-		$this->assertNull($out,'es wurde nicht null geliefert. vllt doch gesucht?');
+		self::assertNull($out,'es wurde nicht null geliefert. vllt doch gesucht?');
 		//view daten sollten nicht gesetzt sein
-		$this->assertFalse($action->getConfigurations()->getViewData()->offsetExists('result'),'es wurde doch ein result gesetzt in den view daten. doch gesucht?');
+		self::assertFalse($action->getConfigurations()->getViewData()->offsetExists('result'),'es wurde doch ein result gesetzt in den view daten. doch gesucht?');
 
 		$sJs = '
 		<script type="text/javascript">
@@ -295,10 +295,10 @@ class tx_mksearch_tests_action_SearchSolr_testcase
 		</script>
 		';
 
-		$this->assertEquals(3, count($GLOBALS['TSFE']->additionalHeaderData),'mehr header daten als erwartet!');
-		$this->assertEquals($sJs,$GLOBALS['TSFE']->additionalHeaderData[md5($sJs)],'Daten für JS falsch');
-		$this->assertEquals('<script type="text/javascript" src="typo3conf/ext/mksearch/res/js/jquery-1.6.2.min.js"></script>',$GLOBALS['TSFE']->additionalHeaderData['jquery-1.6.2.min.js'],'Daten für JS jquery falsch');
-		$this->assertEquals('<script type="text/javascript" src="typo3conf/ext/mksearch/res/js/jquery-ui-1.8.15.core.min.js"></script>',$GLOBALS['TSFE']->additionalHeaderData['jquery-ui-1.8.15.core.min.js'],'Daten für JS jquery ui falsch');
+		self::assertEquals(3, count($GLOBALS['TSFE']->additionalHeaderData),'mehr header daten als erwartet!');
+		self::assertEquals($sJs,$GLOBALS['TSFE']->additionalHeaderData[md5($sJs)],'Daten für JS falsch');
+		self::assertEquals('<script type="text/javascript" src="typo3conf/ext/mksearch/res/js/jquery-1.6.2.min.js"></script>',$GLOBALS['TSFE']->additionalHeaderData['jquery-1.6.2.min.js'],'Daten für JS jquery falsch');
+		self::assertEquals('<script type="text/javascript" src="typo3conf/ext/mksearch/res/js/jquery-ui-1.8.15.core.min.js"></script>',$GLOBALS['TSFE']->additionalHeaderData['jquery-ui-1.8.15.core.min.js'],'Daten für JS jquery ui falsch');
 	}
 
 	/**
@@ -334,9 +334,9 @@ class tx_mksearch_tests_action_SearchSolr_testcase
 		$out = true;
 		$action = $this->getAction($aMockFunctions,$aConfig,$out);
 
-		$this->assertNull($out,'es wurde nicht null geliefert. vllt doch gesucht?');
+		self::assertNull($out,'es wurde nicht null geliefert. vllt doch gesucht?');
 		//view daten sollten nicht gesetzt sein
-		$this->assertFalse($action->getConfigurations()->getViewData()->offsetExists('result'),'es wurde doch ein result gesetzt in den view daten. doch gesucht?');
+		self::assertFalse($action->getConfigurations()->getViewData()->offsetExists('result'),'es wurde doch ein result gesetzt in den view daten. doch gesucht?');
 
 		$sJs = '
 		<script type="text/javascript">
@@ -369,11 +369,11 @@ class tx_mksearch_tests_action_SearchSolr_testcase
 		</script>
 		';
 
-		$this->assertEquals(4, count($GLOBALS['TSFE']->additionalHeaderData),'mehr header daten als erwartet!');
-		$this->assertEquals($sJs,$GLOBALS['TSFE']->additionalHeaderData[md5($sJs)],'Daten für JS falsch');
-		$this->assertEquals('<script type="text/javascript" src="typo3conf/ext/mksearch/res/js/jquery-1.6.2.min.js"></script>',$GLOBALS['TSFE']->additionalHeaderData['jquery-1.6.2.min.js'],'Daten für JS jquery falsch');
-		$this->assertEquals('<script type="text/javascript" src="typo3conf/ext/mksearch/res/js/jquery-ui-1.8.15.core.min.js"></script>',$GLOBALS['TSFE']->additionalHeaderData['jquery-ui-1.8.15.core.min.js'],'Daten für JS jquery ui falsch');
-		$this->assertEquals('<script type="text/javascript" src="typo3conf/ext/mksearch/res/js/jquery-ui-1.8.15.autocomplete.min.js"></script>',$GLOBALS['TSFE']->additionalHeaderData['jquery-ui-1.8.15.autocomplete.min.js'],'Daten für JS jquery ui falsch');
+		self::assertEquals(4, count($GLOBALS['TSFE']->additionalHeaderData),'mehr header daten als erwartet!');
+		self::assertEquals($sJs,$GLOBALS['TSFE']->additionalHeaderData[md5($sJs)],'Daten für JS falsch');
+		self::assertEquals('<script type="text/javascript" src="typo3conf/ext/mksearch/res/js/jquery-1.6.2.min.js"></script>',$GLOBALS['TSFE']->additionalHeaderData['jquery-1.6.2.min.js'],'Daten für JS jquery falsch');
+		self::assertEquals('<script type="text/javascript" src="typo3conf/ext/mksearch/res/js/jquery-ui-1.8.15.core.min.js"></script>',$GLOBALS['TSFE']->additionalHeaderData['jquery-ui-1.8.15.core.min.js'],'Daten für JS jquery ui falsch');
+		self::assertEquals('<script type="text/javascript" src="typo3conf/ext/mksearch/res/js/jquery-ui-1.8.15.autocomplete.min.js"></script>',$GLOBALS['TSFE']->additionalHeaderData['jquery-ui-1.8.15.autocomplete.min.js'],'Daten für JS jquery ui falsch');
 	}
 
 	/**
@@ -406,9 +406,9 @@ class tx_mksearch_tests_action_SearchSolr_testcase
 		$out = true;
 		$action = $this->getAction($aMockFunctions,$aConfig,$out);
 
-		$this->assertNull($out,'es wurde nicht null geliefert. vllt doch gesucht?');
+		self::assertNull($out,'es wurde nicht null geliefert. vllt doch gesucht?');
 		//view daten sollten nicht gesetzt sein
-		$this->assertFalse($action->getConfigurations()->getViewData()->offsetExists('result'),'es wurde doch ein result gesetzt in den view daten. doch gesucht?');
+		self::assertFalse($action->getConfigurations()->getViewData()->offsetExists('result'),'es wurde doch ein result gesetzt in den view daten. doch gesucht?');
 
 		$sJs = '
 		<script type="text/javascript">
@@ -441,7 +441,7 @@ class tx_mksearch_tests_action_SearchSolr_testcase
 		</script>
 		';
 
-		$this->assertEquals(1, count($GLOBALS['TSFE']->additionalHeaderData),'mehr header daten als erwartet!');
-		$this->assertEquals($sJs,$GLOBALS['TSFE']->additionalHeaderData[md5($sJs)],'Daten für JS falsch');
+		self::assertEquals(1, count($GLOBALS['TSFE']->additionalHeaderData),'mehr header daten als erwartet!');
+		self::assertEquals($sJs,$GLOBALS['TSFE']->additionalHeaderData[md5($sJs)],'Daten für JS falsch');
 	}
 }

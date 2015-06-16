@@ -57,7 +57,7 @@ class tx_mksearch_tests_signalSlotDispatcher_FileIndexRepository_testcase
 			'tx_mksearch_signalSlotDispatcher_FileIndexRepsitory'
 		);
 
-		$this->assertInstanceOf(
+		self::assertInstanceOf(
 			'tx_mksearch_service_internal_Index',
 			$this->callInaccessibleMethod(
 				$signalSlotDispatcher, 'getInternalIndexService'
@@ -124,7 +124,7 @@ class tx_mksearch_tests_signalSlotDispatcher_FileIndexRepository_testcase
 			}
 		}
 
-		$this->assertTrue($singalSlotDispatcherCorrectConfigured);
+		self::assertTrue($singalSlotDispatcherCorrectConfigured);
 	}
 
 	/**
@@ -152,7 +152,7 @@ class tx_mksearch_tests_signalSlotDispatcher_FileIndexRepository_testcase
 			}
 		}
 
-		$this->assertTrue($singalSlotDispatcherCorrectConfigured);
+		self::assertTrue($singalSlotDispatcherCorrectConfigured);
 	}
 
 	/**
@@ -180,7 +180,7 @@ class tx_mksearch_tests_signalSlotDispatcher_FileIndexRepository_testcase
 			}
 		}
 
-		$this->assertTrue($singalSlotDispatcherCorrectConfigured);
+		self::assertTrue($singalSlotDispatcherCorrectConfigured);
 	}
 
 	/**

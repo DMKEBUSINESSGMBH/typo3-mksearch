@@ -42,7 +42,7 @@ class tx_mksearch_tests_util_UserFunc_testcase
 	public function testSearchSolrOptionsWithOptionsFromTs($term, $combination, $options, $result) {
 		$options['combination'] = $combination;
 		$res = tx_mksearch_util_UserFunc::searchSolrOptions($term, $options);
-		$this->assertEquals($result, $res);
+		self::assertEquals($result, $res);
 	}
 
 	/**
@@ -51,7 +51,7 @@ class tx_mksearch_tests_util_UserFunc_testcase
 	public function testSearchLuceneOptionsWithOptionsFromTs($term, $combination, $options, $result) {
 		$options['combination'] = $combination;
 		$res = tx_mksearch_util_UserFunc::searchLuceneOptions($term, $options);
-		$this->assertEquals($result, $res);
+		self::assertEquals($result, $res);
 	}
 
 	/**

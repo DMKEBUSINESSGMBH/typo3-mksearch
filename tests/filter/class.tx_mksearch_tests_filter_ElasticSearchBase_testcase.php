@@ -67,12 +67,12 @@ class tx_mksearch_tests_filter_ElasticSearchBase_testcase
 			array(&$formData, $parameters)
 		);
 
-		$this->assertArrayHasKey('zip', $formData, 'zip nicht vorhanden in formdata');
-		$this->assertArrayHasKey('city', $formData, 'city nicht vorhanden in formdata');
-		$this->assertArrayHasKey('company', $formData, 'company nicht vorhanden in formdata');
-		$this->assertEquals('', $formData['zip'], 'zip nicht leer in formdata');
-		$this->assertEquals('', $formData['city'], 'city nicht leer in formdata');
-		$this->assertEquals('', $formData['company'], 'company nicht leer in formdata');
+		self::assertArrayHasKey('zip', $formData, 'zip nicht vorhanden in formdata');
+		self::assertArrayHasKey('city', $formData, 'city nicht vorhanden in formdata');
+		self::assertArrayHasKey('company', $formData, 'company nicht vorhanden in formdata');
+		self::assertEquals('', $formData['zip'], 'zip nicht leer in formdata');
+		self::assertEquals('', $formData['city'], 'city nicht leer in formdata');
+		self::assertEquals('', $formData['company'], 'company nicht leer in formdata');
 	}
 
 	/**
@@ -89,9 +89,9 @@ class tx_mksearch_tests_filter_ElasticSearchBase_testcase
 			array(&$formData, $parameters)
 		);
 
-		$this->assertEquals(1, $formData['zip'], 'zip leer in formdata');
-		$this->assertEquals(2, $formData['city'], 'city leer in formdata');
-		$this->assertEquals(3, $formData['company'], 'company leer in formdata');
+		self::assertEquals(1, $formData['zip'], 'zip leer in formdata');
+		self::assertEquals(2, $formData['city'], 'city leer in formdata');
+		self::assertEquals(3, $formData['company'], 'company leer in formdata');
 	}
 
 	/**
@@ -103,7 +103,7 @@ class tx_mksearch_tests_filter_ElasticSearchBase_testcase
 		);
 		$filter = $this->getFilter($configArray);
 
-		$this->assertEquals(
+		self::assertEquals(
 			array('newCheckedMode', 'newNotCheckedMode'),
 			$this->callInaccessibleMethod($filter, 'getModeValuesAvailable'),
 			'return falsch'
@@ -127,10 +127,10 @@ class tx_mksearch_tests_filter_ElasticSearchBase_testcase
 		$reflectionMethod->setAccessible(TRUE);
 		$reflectionMethod->invokeArgs($filter, array(&$formData, $parameters));
 
-		$this->assertEquals(
+		self::assertEquals(
 			'checked=checked', $formData['mode_newCheckedMode_selected'], 'mode_newCheckedMode_selected nicht selected'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			'', $formData['mode_newNotCheckedMode_selected'], 'mode_newNotCheckedMode_selected nicht selected'
 		);
 	}
@@ -148,10 +148,10 @@ class tx_mksearch_tests_filter_ElasticSearchBase_testcase
 		$reflectionMethod->setAccessible(TRUE);
 		$reflectionMethod->invokeArgs($filter, array(&$formData, $parameters));
 
-		$this->assertEquals(
+		self::assertEquals(
 			'checked=checked', $formData['mode_standard_selected'], 'mode_standard_selected nicht selected'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			'', $formData['mode_advanced_selected'], 'mode_advanced_selected doch selected'
 		);
 	}
@@ -164,7 +164,7 @@ class tx_mksearch_tests_filter_ElasticSearchBase_testcase
 
 		$filter = $this->getFilter($configArray);
 		$fields = $options = array();
-		$this->assertFalse($filter->init($fields, $options), 'filter liefert nicht false');
+		self::assertFalse($filter->init($fields, $options), 'filter liefert nicht false');
 	}
 
 	/**
@@ -175,7 +175,7 @@ class tx_mksearch_tests_filter_ElasticSearchBase_testcase
 
 		$filter = $this->getFilter($configArray);
 		$fields = $options = array();
-		$this->assertTrue($filter->init($fields, $options), 'filter liefert nicht true');
+		self::assertTrue($filter->init($fields, $options), 'filter liefert nicht true');
 	}
 
 	/**
@@ -186,7 +186,7 @@ class tx_mksearch_tests_filter_ElasticSearchBase_testcase
 
 		$filter = $this->getFilter($configArray, array('submit' => true));
 		$fields = $options = array();
-		$this->assertTrue($filter->init($fields, $options), 'filter liefert nicht true');
+		self::assertTrue($filter->init($fields, $options), 'filter liefert nicht true');
 	}
 
 	/**
@@ -208,7 +208,7 @@ class tx_mksearch_tests_filter_ElasticSearchBase_testcase
 		);
 		$filter = $this->getFilter($configArray);
 		$filter->init($fields, $options);
-		$this->assertEquals(
+		self::assertEquals(
 			'contentType:* AND text:"test term"',
 			$fields['term'],
 			'term template falsch geparsed!'
@@ -234,7 +234,7 @@ class tx_mksearch_tests_filter_ElasticSearchBase_testcase
 		);
 		$filter = $this->getFilter($configArray);
 		$filter->init($fields, $options);
-		$this->assertEquals('contentType:* ', $fields['term'], 'term template falsch geparsed!');
+		self::assertEquals('contentType:* ', $fields['term'], 'term template falsch geparsed!');
 	}
 
 	/**
@@ -254,7 +254,7 @@ class tx_mksearch_tests_filter_ElasticSearchBase_testcase
 		);
 		$filter = $this->getFilter($configArray);
 		$filter->init($fields, $options);
-		$this->assertEquals('contentType:* ', $fields['term'], 'term template falsch geparsed!');
+		self::assertEquals('contentType:* ', $fields['term'], 'term template falsch geparsed!');
 	}
 
 	/**
@@ -265,7 +265,7 @@ class tx_mksearch_tests_filter_ElasticSearchBase_testcase
 		$method = new ReflectionMethod('tx_mksearch_filter_ElasticSearchBase', 'getFilterUtility');
 		$method->setAccessible(true);
 
-		$this->assertInstanceOf(
+		self::assertInstanceOf(
 			'tx_mksearch_util_Filter', $method->invoke($filter),
 			'filter utility falsch'
 		);
@@ -280,7 +280,7 @@ class tx_mksearch_tests_filter_ElasticSearchBase_testcase
 		$fields = $options = array();
 		$filter->init($fields, $options);
 
-		$this->assertEquals('uid desc', $options['sort'], 'sort falsch in options');
+		self::assertEquals('uid desc', $options['sort'], 'sort falsch in options');
 	}
 
 	/**
@@ -292,7 +292,7 @@ class tx_mksearch_tests_filter_ElasticSearchBase_testcase
 		$fields = $options = array();
 		$filter->init($fields, $options);
 
-		$this->assertEquals('uid asc', $options['sort'], 'sort falsch in options');
+		self::assertEquals('uid asc', $options['sort'], 'sort falsch in options');
 	}
 
 	/**
@@ -304,7 +304,7 @@ class tx_mksearch_tests_filter_ElasticSearchBase_testcase
 		$fields = $options = array();
 		$filter->init($fields, $options);
 
-		$this->assertEquals('uid asc', $options['sort'], 'sort falsch in options');
+		self::assertEquals('uid asc', $options['sort'], 'sort falsch in options');
 	}
 
 	/**
@@ -316,7 +316,7 @@ class tx_mksearch_tests_filter_ElasticSearchBase_testcase
 		$fields = $options = array();
 		$filter->init($fields, $options);
 
-		$this->assertEquals('uid asc', $options['sort'], 'sort falsch in options');
+		self::assertEquals('uid asc', $options['sort'], 'sort falsch in options');
 	}
 
 	/**
@@ -340,7 +340,7 @@ class tx_mksearch_tests_filter_ElasticSearchBase_testcase
 		$fields = $options = array();
 		$filter->init($fields, $options);
 
-		$this->assertEquals('uid asc', $options['sort'], 'sort falsch in options');
+		self::assertEquals('uid asc', $options['sort'], 'sort falsch in options');
 	}
 
 	/**
@@ -363,7 +363,7 @@ class tx_mksearch_tests_filter_ElasticSearchBase_testcase
 		$fields = $options = array();
 		$filter->init($fields, $options);
 
-		$this->assertEquals('uid asc', $options['sort'], 'sort falsch in options');
+		self::assertEquals('uid asc', $options['sort'], 'sort falsch in options');
 	}
 
 	/**
@@ -416,7 +416,7 @@ class tx_mksearch_tests_filter_ElasticSearchBase_testcase
 			$template, $formatter, 'searchsolr.filter.default.'
 		);
 
-		$this->assertEquals(
+		self::assertEquals(
 			'asc ?id=1&mksearch%5Bsort%5D=title&mksearch%5Bsortorder%5D=asc',
 			$parsedTemplate,
 			'sort marker falsch geparsed'

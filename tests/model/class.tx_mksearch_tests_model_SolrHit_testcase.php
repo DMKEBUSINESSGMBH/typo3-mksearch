@@ -45,7 +45,7 @@ class tx_mksearch_tests_model_SolrHit_testcase
 		$doc->id = 'myid';
 		$hit = tx_rnbase::makeInstance('tx_mksearch_model_SolrHit', $doc);
 
-		$this->assertEquals('myid', $hit->getSolrId());
+		self::assertEquals('myid', $hit->getSolrId());
 	}
 }
 

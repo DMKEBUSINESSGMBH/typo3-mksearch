@@ -97,7 +97,7 @@ class tx_mksearch_tests_filter_SolrBase_solr_testcase extends tx_mksearch_tests_
 
 		$options = $this->getOptionsFromFilter();
 
-		$this->assertStringStartsWith(
+		self::assertStringStartsWith(
 			'(-fe_group_mi:[* TO *] AND uid:[* TO *]) OR fe_group_mi:0',
 			$options['fq'],
 			'scheinbar falsche filter query'
@@ -105,9 +105,9 @@ class tx_mksearch_tests_filter_SolrBase_solr_testcase extends tx_mksearch_tests_
 
 		$result = $this->search($options);
 
-		$this->assertEquals(1, $result['numFound'], 'nicht nur 1 doc gefunden.');
-		$this->assertEquals(1, $result['items'][0]->record['uid'], 'uid falsch');
-		$this->assertEquals(
+		self::assertEquals(1, $result['numFound'], 'nicht nur 1 doc gefunden.');
+		self::assertEquals(1, $result['items'][0]->record['uid'], 'uid falsch');
+		self::assertEquals(
 			'fegrouptest',
 			$result['items'][0]->record['contentType'],
 			'contentType falsch'
@@ -122,7 +122,7 @@ class tx_mksearch_tests_filter_SolrBase_solr_testcase extends tx_mksearch_tests_
 
 		$options = $this->getOptionsFromFilter();
 
-		$this->assertStringStartsWith(
+		self::assertStringStartsWith(
 			'(-fe_group_mi:[* TO *] AND uid:[* TO *]) OR fe_group_mi:0',
 			$options['fq'],
 			'scheinbar falsche filter query'
@@ -130,9 +130,9 @@ class tx_mksearch_tests_filter_SolrBase_solr_testcase extends tx_mksearch_tests_
 
 		$result = $this->search($options);
 
-		$this->assertEquals(1, $result['numFound'], 'nicht nur 1 doc gefunden.');
-		$this->assertEquals(1, $result['items'][0]->record['uid'], 'uid falsch');
-		$this->assertEquals(
+		self::assertEquals(1, $result['numFound'], 'nicht nur 1 doc gefunden.');
+		self::assertEquals(1, $result['items'][0]->record['uid'], 'uid falsch');
+		self::assertEquals(
 			'fegrouptest',
 			$result['items'][0]->record['contentType'],
 			'contentType falsch'
@@ -148,7 +148,7 @@ class tx_mksearch_tests_filter_SolrBase_solr_testcase extends tx_mksearch_tests_
 		$GLOBALS['TSFE']->fe_user->groupData['uid'] = array(1);
 		$options = $this->getOptionsFromFilter();
 
-		$this->assertStringStartsWith(
+		self::assertStringStartsWith(
 			'(-fe_group_mi:[* TO *] AND uid:[* TO *]) OR fe_group_mi:0',
 			$options['fq'],
 			'scheinbar falsche filter query'
@@ -156,9 +156,9 @@ class tx_mksearch_tests_filter_SolrBase_solr_testcase extends tx_mksearch_tests_
 
 		$result = $this->search($options);
 
-		$this->assertEquals(1, $result['numFound'], 'nicht nur 1 doc gefunden.');
-		$this->assertEquals(1, $result['items'][0]->record['uid'], 'uid falsch');
-		$this->assertEquals(
+		self::assertEquals(1, $result['numFound'], 'nicht nur 1 doc gefunden.');
+		self::assertEquals(1, $result['items'][0]->record['uid'], 'uid falsch');
+		self::assertEquals(
 			'fegrouptest',
 			$result['items'][0]->record['contentType'],
 			'contentType falsch'
@@ -174,7 +174,7 @@ class tx_mksearch_tests_filter_SolrBase_solr_testcase extends tx_mksearch_tests_
 		$GLOBALS['TSFE']->fe_user->groupData['uid'] = array(2);
 		$options = $this->getOptionsFromFilter();
 
-		$this->assertStringStartsWith(
+		self::assertStringStartsWith(
 			'(-fe_group_mi:[* TO *] AND uid:[* TO *]) OR fe_group_mi:0',
 			$options['fq'],
 			'scheinbar falsche filter query'
@@ -182,8 +182,8 @@ class tx_mksearch_tests_filter_SolrBase_solr_testcase extends tx_mksearch_tests_
 
 		$result = $this->search($options);
 
-		$this->assertEquals(0, $result['numFound'], 'doch etwas gefunden');
-		$this->assertEmpty($result['items'], 'doch items etwas gefunden');
+		self::assertEquals(0, $result['numFound'], 'doch etwas gefunden');
+		self::assertEmpty($result['items'], 'doch items etwas gefunden');
 	}
 
 	private function getOptionsFromFilter() {

@@ -61,7 +61,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 			$service, 'getElasticaIndex', array()
 		);
 
-		$this->assertInstanceOf(
+		self::assertInstanceOf(
 			'\\Elastica\\Index', $elasticaClient, 'Client hat falsche Klasse'
 		);
 	}
@@ -75,7 +75,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 			'getLogger'
 		);
 
-		$this->assertEquals(
+		self::assertEquals(
 				'tx_rnbase_util_Logger', $loggerClass, 'falsche Logger-Klasse'
 		);
 	}
@@ -113,7 +113,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 			->method('getIndex')
 			->will($this->returnValue($index));
 
-		$this->assertEquals(
+		self::assertEquals(
 			$expectedReturn,
 			$this->callInaccessibleMethod($service, 'isServerAvailable'),
 			'falscher return Wert'
@@ -167,7 +167,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 			$service, 'initElasticSearchConnection', $credentials
 		);
 
-		$this->assertEquals(
+		self::assertEquals(
 			$index, $indexProperty ->getValue($service), 'index property falsch'
 		);
 	}
@@ -209,7 +209,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 			$service, 'initElasticSearchConnection', $credentials
 		);
 
-		$this->assertEquals(
+		self::assertEquals(
 			$index, $indexProperty ->getValue($service), 'index property falsch'
 		);
 	}
@@ -291,7 +291,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 			'tx_mksearch_service_engine_ElasticSearch', 'credentialsString'
 		);
 		$credentialsStringProperty->setAccessible(TRUE);
-		$this->assertEquals(
+		self::assertEquals(
 			'index;1,2,3,4',
 			$credentialsStringProperty->getValue($service),
 			'property falsch'
@@ -311,7 +311,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 			'tx_mksearch_service_engine_ElasticSearch', 'indexName'
 		);
 		$indexNameProperty->setAccessible(TRUE);
-		$this->assertEquals(
+		self::assertEquals(
 			'index',
 			$indexNameProperty->getValue($service),
 			'property falsch'
@@ -322,7 +322,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 	 * @group unit
 	 */
 	public function testGetElasticaCredentialsFromCredentialsStringForSingleServerConfiguration() {
-		$this->assertEquals(
+		self::assertEquals(
 			array(
 				'servers' => array(
 					array(
@@ -344,7 +344,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 	 * @group unit
 	 */
 	public function testGetElasticaCredentialsFromCredentialsStringIfTrailingSemikolon() {
-		$this->assertEquals(
+		self::assertEquals(
 			array(
 				'servers' => array(
 					array(
@@ -366,7 +366,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 	 * @group unit
 	 */
 	public function testGetElasticaCredentialsFromCredentialsStringForClusterSetupConfiguration() {
-		$this->assertEquals(
+		self::assertEquals(
 			array(
 				'servers' => array(
 					array(
@@ -476,7 +476,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 				'tx_mksearch_service_engine_ElasticSearch', 'mksearchIndexModel'
 		);
 		$indexModelProperty->setAccessible(TRUE);
-		$this->assertSame(
+		self::assertSame(
 			$indexModel, $indexModelProperty->getValue($service),
 			'indexModel falsch gesetzt'
 		);
@@ -528,8 +528,8 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 
 		$status = $service->getStatus();
 
-		$this->assertEquals(1, $status->getStatus(), 'Status falsch');
-		$this->assertEquals(
+		self::assertEquals(1, $status->getStatus(), 'Status falsch');
+		self::assertEquals(
 			'Up and running (Ping time: 123 ms)', $status->getMessage(), 'Message falsch'
 		);
 	}
@@ -548,8 +548,8 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 
 		$status = $service->getStatus();
 
-		$this->assertEquals(-1, $status->getStatus(), 'Status falsch');
-		$this->assertEquals(
+		self::assertEquals(-1, $status->getStatus(), 'Status falsch');
+		self::assertEquals(
 			'Down. Maybe not started?', $status->getMessage(), 'Message falsch'
 		);
 	}
@@ -576,8 +576,8 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 
 		$status = $service->getStatus();
 
-		$this->assertEquals(-1, $status->getStatus(), 'Status falsch');
-		$this->assertEquals(
+		self::assertEquals(-1, $status->getStatus(), 'Status falsch');
+		self::assertEquals(
 			'Error connecting ElasticSearch: Verbindung fehlgeschlagen. Credentials: 1,2,3,4',
 			$status->getMessage(),
 			'Message falsch'
@@ -617,7 +617,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 			->method('getIndex')
 			->will($this->returnValue($index));
 
-		$this->assertTrue(
+		self::assertTrue(
 			$service->indexExists('indexName'),
 			'falscher return Wert'
 		);
@@ -702,7 +702,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 		$service = tx_rnbase::makeInstance('tx_mksearch_service_engine_ElasticSearch');
 		$docInstance = $service->makeIndexDocInstance('mksearch', 'tt_content');
 
-		$this->assertInstanceOf(
+		self::assertInstanceOf(
 			'tx_mksearch_model_IndexerDocumentBase', $docInstance,
 			'docInstance hat falsche Klasse'
 		);
@@ -711,7 +711,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 			'tx_mksearch_model_IndexerDocumentBase', 'extKey'
 		);
 		$extKey->setAccessible(TRUE);
-		$this->assertEquals(
+		self::assertEquals(
 			'mksearch', $extKey->getValue($docInstance)->getValue(), 'extKey falsch'
 		);
 
@@ -719,7 +719,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 			'tx_mksearch_model_IndexerDocumentBase', 'contentType'
 		);
 		$contentType->setAccessible(TRUE);
-		$this->assertEquals(
+		self::assertEquals(
 			'tt_content', $contentType->getValue($docInstance)->getValue(), 'contentType falsch'
 		);
 
@@ -727,7 +727,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 			'tx_mksearch_model_IndexerDocumentBase', 'fieldClass'
 		);
 		$fieldClass->setAccessible(TRUE);
-		$this->assertEquals(
+		self::assertEquals(
 			'tx_mksearch_model_IndexerFieldBase', $fieldClass->getValue($docInstance),
 			'fieldClass falsch'
 		);
@@ -750,7 +750,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 			->with($doc)
 			->will($this->returnValue(TRUE));
 
-		$this->assertTrue($service->indexUpdate($doc));
+		self::assertTrue($service->indexUpdate($doc));
 	}
 
 	/**
@@ -764,7 +764,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 		$indexName->setAccessible(TRUE);
 		$indexName->setValue($service, 'unknown');
 
-		$this->assertEquals('unknown', $service->getOpenIndexName());
+		self::assertEquals('unknown', $service->getOpenIndexName());
 	}
 
 	/**
@@ -792,7 +792,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 		);
 		$indexProperty->setAccessible(TRUE);
 
-		$this->assertNull(
+		self::assertNull(
 			$indexProperty->getValue($service),
 			'index property nicht auf NULL gesetzt'
 		);
@@ -846,7 +846,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 			->method('getIndex')
 			->will($this->returnValue($index));
 
-		$this->assertTrue($service->indexNew($doc));
+		self::assertTrue($service->indexNew($doc));
 	}
 
 	/**
@@ -877,7 +877,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 			->method('getIndex')
 			->will($this->returnValue($index));
 
-		$this->assertTrue($service->indexDeleteByContentUid(
+		self::assertTrue($service->indexDeleteByContentUid(
 			123, 'mksearch', 'tt_content'
 		));
 	}
@@ -967,7 +967,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 		$elasticaQuery = $this->callInaccessibleMethod($service, 'getElasticaQuery', $fields, array());
 
 		$expectedQuery = array('query_string' => array('query' => 'test term'));
-		$this->assertEquals($expectedQuery, $elasticaQuery->getQuery(), 'query falsch');
+		self::assertEquals($expectedQuery, $elasticaQuery->getQuery(), 'query falsch');
 	}
 
 	/**
@@ -982,7 +982,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 		);
 
 		$expectedSort = array(0 => array('uid' => array('order' => 'desc')));
-		$this->assertEquals($expectedSort, $elasticaQuery->getParam('sort'), 'sort falsch');
+		self::assertEquals($expectedSort, $elasticaQuery->getParam('sort'), 'sort falsch');
 	}
 
 	/**
@@ -1001,7 +1001,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 		if ($expectedMappedOption !== NULL) {
 			$expectedMappedOptions = array($expectedMappedOption => 'test value');
 		}
-		$this->assertEquals(
+		self::assertEquals(
 			$expectedMappedOptions, $mappedOptions,
 			'option ' . $initialOption . ' falsch gemapped'
 		);
@@ -1049,7 +1049,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 			),
 		);
 
-		$this->assertEquals(
+		self::assertEquals(
 			$expectedSearchHits, $searchHits,
 			'die search hits wurden nicht richtig erstellt'
 		);
@@ -1135,19 +1135,19 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 
 		$result = $service->search($fields, $options);
 
-		$this->assertEquals(array('search results'), $result['items'], 'items falsch');
-		$this->assertEquals('pfad', $result['searchUrl'], 'searchUrl falsch');
-		$this->assertEquals('query', $result['searchQuery'], 'searchQuery falsch');
-		$this->assertContains(
+		self::assertEquals(array('search results'), $result['items'], 'items falsch');
+		self::assertEquals('pfad', $result['searchUrl'], 'searchUrl falsch');
+		self::assertEquals('query', $result['searchQuery'], 'searchQuery falsch');
+		self::assertContains(
 			' ms', $result['searchTime'], 'searchTime enthält nicht die Einheit'
 		);
-		$this->assertNotNull(
+		self::assertNotNull(
 			str_replace('ms', '', $result['searchTime']),
 			'searchTime enthält keine Millisekunden Angabe'
 		);
-		$this->assertEquals('456 ms', $result['queryTime'], 'queryTime falsch');
-		$this->assertEquals(123, $result['numFound'], 'searchQuery falsch');
-		$this->assertEquals(
+		self::assertEquals('456 ms', $result['queryTime'], 'queryTime falsch');
+		self::assertEquals(123, $result['numFound'], 'searchQuery falsch');
+		self::assertEquals(
 			'es gab einen Fehler', $result['error'], 'error falsch'
 		);
 	}

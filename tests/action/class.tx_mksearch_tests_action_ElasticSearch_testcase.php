@@ -76,10 +76,10 @@ class tx_mksearch_tests_action_ElasticSearch_testcase
 			$viewData, $fields, $options, $searchEngine
 		);
 		
-		$this->assertEquals(
+		self::assertEquals(
 			10, $options['limit'], 'limit wurde verändert'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			20, $options['offset'], 'offset in options falsch'
 		);
 		
@@ -88,7 +88,7 @@ class tx_mksearch_tests_action_ElasticSearch_testcase
 			'tx_rnbase_util_PageBrowser', 'search456'
 		);
 		$expectedPagebrowser->setState($parameters, 123, 10);
-		$this->assertEquals(
+		self::assertEquals(
 			$expectedPagebrowser, $pageBrowser, 'pagebrowser falsch konfiguriert'
 		);
 	}
@@ -128,10 +128,10 @@ class tx_mksearch_tests_action_ElasticSearch_testcase
 			$viewData, $fields, $options, $searchEngine
 		);
 	
-		$this->assertEquals(
+		self::assertEquals(
 			10, $options['limit'], 'limit wurde verändert'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			0, $options['offset'], 'offset in options falsch'
 		);
 	
@@ -140,7 +140,7 @@ class tx_mksearch_tests_action_ElasticSearch_testcase
 			'tx_rnbase_util_PageBrowser', 'pagebrowserId'
 		);
 		$expectedPagebrowser->setState($parameters, 123, 10);
-		$this->assertEquals(
+		self::assertEquals(
 			$expectedPagebrowser, $pageBrowser, 'pagebrowser falsch konfiguriert'
 		);
 	}
@@ -149,7 +149,7 @@ class tx_mksearch_tests_action_ElasticSearch_testcase
 	 * @group unit
 	 */
 	public function testGetSearchSolrAction(){
-		$this->assertEquals(
+		self::assertEquals(
 			'tx_mksearch_action_SearchSolr', 
 			$this->callInaccessibleMethod(
 				tx_rnbase::makeInstance('tx_mksearch_action_ElasticSearch'), 
@@ -162,7 +162,7 @@ class tx_mksearch_tests_action_ElasticSearch_testcase
 	 * @group unit
 	 */
 	public function testgetServiceRegistry(){
-		$this->assertEquals(
+		self::assertEquals(
 			'tx_mksearch_util_ServiceRegistry',
 			$this->callInaccessibleMethod(
 				tx_rnbase::makeInstance('tx_mksearch_action_ElasticSearch'),
@@ -197,15 +197,15 @@ class tx_mksearch_tests_action_ElasticSearch_testcase
 		
 		$actionReturn = $action->handleRequest($parameters, $configurations, $viewData);
 	
-		$this->assertFalse(
+		self::assertFalse(
 			$viewData->offsetExists('searchcount'), 
 			'doch searchcount in viewdata gesetzt'
 		);
-		$this->assertFalse(
+		self::assertFalse(
 			$viewData->offsetExists('search'),
 			'doch search in viewdata gesetzt'
 		);
-		$this->assertNull(
+		self::assertNull(
 			$actionReturn, 'action gibt nicht NULL zurück'
 		);
 	}
@@ -279,17 +279,17 @@ class tx_mksearch_tests_action_ElasticSearch_testcase
 	
 		$actionReturn = $action->handleRequest($parameters, $configurations, $viewData);
 	
-		$this->assertEquals(
+		self::assertEquals(
 			'987',
 			$viewData->offsetGet('searchcount'),
 			'searchcount in viewdata nicht gesetzt'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			'search hits',
 			$viewData->offsetGet('search'),
 			'search in viewdata nicht gesetzt'
 		);
-		$this->assertNull(
+		self::assertNull(
 			$actionReturn, 'action gibt nicht NULL zurück'
 		);
 	}

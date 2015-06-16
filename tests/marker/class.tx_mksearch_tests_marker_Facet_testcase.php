@@ -87,7 +87,7 @@ class tx_mksearch_tests_marker_Facet_testcase
 		if (tx_rnbase_util_TYPO3::isTYPO62OrHigher()) {
 			$expectedParsedTemplate = str_replace('" >', '">', $expectedParsedTemplate);
 		}
-		$this->assertEquals(
+		self::assertEquals(
 			$expectedParsedTemplate,
 			$sParsedTemplate,
 			'Die Filter Query wurde nicht korrekt gesetzt!'
@@ -114,7 +114,7 @@ class tx_mksearch_tests_marker_Facet_testcase
 		if (tx_rnbase_util_TYPO3::isTYPO62OrHigher()) {
 			$expectedParsedTemplate = str_replace('" >', '">', $expectedParsedTemplate);
 		}
-		$this->assertEquals(
+		self::assertEquals(
 			$expectedParsedTemplate,
 			$sParsedTemplate,
 			'In der Filter Query steht noch immer der Feldname!'
@@ -142,7 +142,7 @@ class tx_mksearch_tests_marker_Facet_testcase
 		if (tx_rnbase_util_TYPO3::isTYPO62OrHigher()) {
 			$expectedParsedTemplate = str_replace('" >', '">', $expectedParsedTemplate);
 		}
-		$this->assertEquals(
+		self::assertEquals(
 			$expectedParsedTemplate,
 			$sParsedTemplate,
 			'In der Filter Query steht noch immer der Feldname!'

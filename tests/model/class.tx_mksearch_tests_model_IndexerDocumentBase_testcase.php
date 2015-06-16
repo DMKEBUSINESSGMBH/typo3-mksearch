@@ -48,7 +48,7 @@ class tx_mksearch_tests_model_IndexerDocumentBase_testcase
 		$indexerDocument->setAbstract($abstract);
 		$data = $indexerDocument->getData();
 
-		$this->assertEquals('test', $data['abstract']->getValue(), 'html not removed');
+		self::assertEquals('test', $data['abstract']->getValue(), 'html not removed');
 	}
 
 	/**
@@ -61,7 +61,7 @@ class tx_mksearch_tests_model_IndexerDocumentBase_testcase
 		$indexerDocument->setAbstract($abstract, 3);
 		$data = $indexerDocument->getData();
 
-		$this->assertEquals('tes', $data['abstract']->getValue(), 'abstract not shortened');
+		self::assertEquals('tes', $data['abstract']->getValue(), 'abstract not shortened');
 	}
 
 	/**
@@ -75,7 +75,7 @@ class tx_mksearch_tests_model_IndexerDocumentBase_testcase
 		$data = $indexerDocument->getData();
 
 		$expectedShortenedAbstract = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores ';
-		$this->assertEquals($expectedShortenedAbstract, $data['abstract']->getValue(), 'abstract not shortened');
+		self::assertEquals($expectedShortenedAbstract, $data['abstract']->getValue(), 'abstract not shortened');
 	}
 
 	/**
@@ -88,7 +88,7 @@ class tx_mksearch_tests_model_IndexerDocumentBase_testcase
 		$indexerDocument->setAbstract($abstract, 4);
 		$data = $indexerDocument->getData();
 		$expectedAbstract = 'Rück';
-		$this->assertEquals($expectedAbstract, $data['abstract']->getValue(), 'multibyte string in abstract not correct handled');
+		self::assertEquals($expectedAbstract, $data['abstract']->getValue(), 'multibyte string in abstract not correct handled');
 	}
 
 	/**

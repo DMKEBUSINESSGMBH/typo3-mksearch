@@ -107,12 +107,12 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
 			array(&$formData, $parameters)
 		);
 
-		$this->assertArrayHasKey('zip', $formData, 'zip nicht vorhanden in formdata');
-		$this->assertArrayHasKey('city', $formData, 'city nicht vorhanden in formdata');
-		$this->assertArrayHasKey('company', $formData, 'company nicht vorhanden in formdata');
-		$this->assertEquals('', $formData['zip'], 'zip nicht leer in formdata');
-		$this->assertEquals('', $formData['city'], 'city nicht leer in formdata');
-		$this->assertEquals('', $formData['company'], 'company nicht leer in formdata');
+		self::assertArrayHasKey('zip', $formData, 'zip nicht vorhanden in formdata');
+		self::assertArrayHasKey('city', $formData, 'city nicht vorhanden in formdata');
+		self::assertArrayHasKey('company', $formData, 'company nicht vorhanden in formdata');
+		self::assertEquals('', $formData['zip'], 'zip nicht leer in formdata');
+		self::assertEquals('', $formData['city'], 'city nicht leer in formdata');
+		self::assertEquals('', $formData['company'], 'company nicht leer in formdata');
 	}
 
 	/**
@@ -129,9 +129,9 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
 			array(&$formData, $parameters)
 		);
 
-		$this->assertEquals(1, $formData['zip'], 'zip leer in formdata');
-		$this->assertEquals(2, $formData['city'], 'city leer in formdata');
-		$this->assertEquals(3, $formData['company'], 'company leer in formdata');
+		self::assertEquals(1, $formData['zip'], 'zip leer in formdata');
+		self::assertEquals(2, $formData['city'], 'city leer in formdata');
+		self::assertEquals(3, $formData['company'], 'company leer in formdata');
 	}
 
 	/**
@@ -143,7 +143,7 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
 		);
 		$filter = $this->getFilter($configArray);
 
-		$this->assertEquals(
+		self::assertEquals(
 			array('newCheckedMode','newNotCheckedMode'),
 			$this->callInaccessibleMethod($filter, 'getModeValuesAvailable'),
 			'return falsch'
@@ -167,10 +167,10 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
 		$reflectionMethod->setAccessible(TRUE);
 		$reflectionMethod->invokeArgs($filter, array(&$formData, $parameters));
 
-		$this->assertEquals(
+		self::assertEquals(
 			'checked=checked', $formData['mode_newCheckedMode_selected'], 'mode_newCheckedMode_selected nicht selected'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			'', $formData['mode_newNotCheckedMode_selected'], 'mode_newNotCheckedMode_selected nicht selected'
 		);
 	}
@@ -188,10 +188,10 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
 		$reflectionMethod->setAccessible(TRUE);
 		$reflectionMethod->invokeArgs($filter, array(&$formData, $parameters));
 
-		$this->assertEquals(
+		self::assertEquals(
 			'checked=checked', $formData['mode_standard_selected'], 'mode_standard_selected nicht selected'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			'', $formData['mode_advanced_selected'], 'mode_advanced_selected doch selected'
 		);
 	}
@@ -204,7 +204,7 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
 
 		$filter = $this->getFilter($configArray);
 		$fields = $options = array();
-		$this->assertFalse($filter->init($fields, $options), 'filter liefert nicht false');
+		self::assertFalse($filter->init($fields, $options), 'filter liefert nicht false');
 	}
 
 	/**
@@ -215,7 +215,7 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
 
 		$filter = $this->getFilter($configArray);
 		$fields = $options = array();
-		$this->assertFalse($filter->init($fields, $options), 'filter liefert nicht false');
+		self::assertFalse($filter->init($fields, $options), 'filter liefert nicht false');
 	}
 
 	/**
@@ -226,7 +226,7 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
 
 		$filter = $this->getFilter($configArray);
 		$fields = $options = array();
-		$this->assertTrue($filter->init($fields, $options), 'filter liefert nicht true');
+		self::assertTrue($filter->init($fields, $options), 'filter liefert nicht true');
 	}
 
 	/**
@@ -237,7 +237,7 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
 
 		$filter = $this->getFilter($configArray, array('submit' => true));
 		$fields = $options = array();
-		$this->assertTrue($filter->init($fields, $options), 'filter liefert nicht true');
+		self::assertTrue($filter->init($fields, $options), 'filter liefert nicht true');
 	}
 
 	/**
@@ -249,7 +249,7 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
 		$fields = $options = array();
 		$filter->init($fields, $options);
 
-		$this->assertEquals('someUids', $options['fe_groups'], 'fe gruppen nicht in options');
+		self::assertEquals('someUids', $options['fe_groups'], 'fe gruppen nicht in options');
 	}
 
 	/**
@@ -260,7 +260,7 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
 		$fields = $options = array();
 		$filter->init($fields, $options);
 
-		$this->assertEquals(
+		self::assertEquals(
 			true,
 			$options['rawFormat'],
 			'rawFormat nicht in options auf true'
@@ -279,7 +279,7 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
 			'Zend_Search_Lucene_Search_Query_Wildcard', '_minPrefixLength'
 		);
 		$lengthProperty->setAccessible(true);
-		$this->assertEquals(
+		self::assertEquals(
 			0, $lengthProperty->getValue(Zend_Search_Lucene_Search_Query_Wildcard),
 			'minimale term länge in lucene nicht auf 0 gesetzt'
 		);
@@ -295,7 +295,7 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
 		$options = array();
 		$filter = $this->getFilter();
 		$filter->init($fields, $options);
-		$this->assertEquals(
+		self::assertEquals(
 			'+contentType:* +*test* +*term*',
 			$fields['term'],
 			'term template falsch geparsed!'
@@ -312,7 +312,7 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
 		$options = array();
 		$filter = $this->getFilter();
 		$filter->init($fields, $options);
-		$this->assertEquals('+contentType:*', $fields['term'], 'term template falsch geparsed!');
+		self::assertEquals('+contentType:*', $fields['term'], 'term template falsch geparsed!');
 	}
 
 	/**
@@ -323,7 +323,7 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
 		$options = array();
 		$filter = $this->getFilter();
 		$filter->init($fields, $options);
-		$this->assertEquals('+contentType:*', $fields['term'], 'term template falsch geparsed!');
+		self::assertEquals('+contentType:*', $fields['term'], 'term template falsch geparsed!');
 	}
 
 	/**
@@ -336,7 +336,7 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
 		$options = array();
 		$filter = $this->getFilter();
 		$filter->init($fields, $options);
-		$this->assertEquals('+contentType:*', $fields['term'], 'term template falsch geparsed!');
+		self::assertEquals('+contentType:*', $fields['term'], 'term template falsch geparsed!');
 	}
 
 	/**
@@ -347,7 +347,7 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
 		$method = new ReflectionMethod('tx_mksearch_filter_LuceneBase', 'getFilterUtility');
 		$method->setAccessible(true);
 
-		$this->assertInstanceOf(
+		self::assertInstanceOf(
 			'tx_mksearch_util_Filter', $method->invoke($filter),
 			'filter utility falsch'
 		);
@@ -362,7 +362,7 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
 		$fields = $options = array();
 		$filter->init($fields, $options);
 
-		$this->assertEquals('uid desc', $options['sort'], 'sort falsch in options');
+		self::assertEquals('uid desc', $options['sort'], 'sort falsch in options');
 	}
 
 	/**
@@ -374,7 +374,7 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
 		$fields = $options = array();
 		$filter->init($fields, $options);
 
-		$this->assertEquals('uid asc', $options['sort'], 'sort falsch in options');
+		self::assertEquals('uid asc', $options['sort'], 'sort falsch in options');
 	}
 
 	/**
@@ -386,7 +386,7 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
 		$fields = $options = array();
 		$filter->init($fields, $options);
 
-		$this->assertEquals('uid desc', $options['sort'], 'sort falsch in options');
+		self::assertEquals('uid desc', $options['sort'], 'sort falsch in options');
 	}
 
 	/**
@@ -398,7 +398,7 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
 		$fields = $options = array();
 		$filter->init($fields, $options);
 
-		$this->assertEquals('uid asc', $options['sort'], 'sort falsch in options');
+		self::assertEquals('uid asc', $options['sort'], 'sort falsch in options');
 	}
 
 	/**
@@ -422,7 +422,7 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
 		$fields = $options = array();
 		$filter->init($fields, $options);
 
-		$this->assertEquals('uid asc', $options['sort'], 'sort falsch in options');
+		self::assertEquals('uid asc', $options['sort'], 'sort falsch in options');
 	}
 
 	/**
@@ -445,7 +445,7 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
 		$fields = $options = array();
 		$filter->init($fields, $options);
 
-		$this->assertEquals('uid desc', $options['sort'], 'sort falsch in options');
+		self::assertEquals('uid desc', $options['sort'], 'sort falsch in options');
 	}
 
 	/**
@@ -498,7 +498,7 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
 			$template, $formatter, 'searchsolr.filter.default.'
 		);
 
-		$this->assertEquals(
+		self::assertEquals(
 			'asc ?id=1&mksearch%5Bsort%5D=title&mksearch%5Bsortorder%5D=asc',
 			$parsedTemplate,
 			'sort marker falsch geparsed'

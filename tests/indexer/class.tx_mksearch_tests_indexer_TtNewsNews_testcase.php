@@ -65,15 +65,15 @@ class tx_mksearch_tests_indexer_TtNewsNews_testcase
 		$record = array('uid'=> 123, 'deleted' => 0, 'datetime'=>$tstamp, 'bodytext'=>'some test');
 		$indexer->prepareSearchData('tt_news', $record, $indexDoc, $options);
 		$data = $indexDoc->getData();
-		$this->assertEquals('2010-01-30T15:00:00Z', $data['datetime_dt']->getValue());
+		self::assertEquals('2010-01-30T15:00:00Z', $data['datetime_dt']->getValue());
 		//indexing of extra fields worked?
-		$this->assertEquals('some test', $data['bodytext_s']->getValue());
-		$this->assertEquals(123, $data['uid_i']->getValue());
+		self::assertEquals('some test', $data['bodytext_s']->getValue());
+		self::assertEquals(123, $data['uid_i']->getValue());
 		//merging into content worked?
-		$this->assertEquals('123 some test', $data['content']->getValue());
+		self::assertEquals('123 some test', $data['content']->getValue());
 		//indexing of standard fields worked?
-		$this->assertEquals('some test', $data['news_text_s']->getValue(),'news_text_s falsch');
-		$this->assertEquals('some test', $data['news_text_t']->getValue(),'news_text_t falsch');
+		self::assertEquals('some test', $data['news_text_s']->getValue(),'news_text_s falsch');
+		self::assertEquals('some test', $data['news_text_t']->getValue(),'news_text_t falsch');
 	}
 
 	function test_prepareSearchDataWithHtmlMarkupInBodytext() {
@@ -93,15 +93,15 @@ class tx_mksearch_tests_indexer_TtNewsNews_testcase
 		$record = array('uid'=> 123, 'deleted' => 0, 'datetime'=>$tstamp, 'bodytext'=>'some test <p>with html markup</p>');
 		$indexer->prepareSearchData('tt_news', $record, $indexDoc, $options);
 		$data = $indexDoc->getData();
-		$this->assertEquals('2010-01-30T15:00:00Z', $data['datetime_dt']->getValue(),'datetime falsch');
+		self::assertEquals('2010-01-30T15:00:00Z', $data['datetime_dt']->getValue(),'datetime falsch');
 		//indexing of extra fields worked?
-		$this->assertEquals('some test  with html markup', $data['bodytext_s']->getValue(),'bodytext falsch');
-		$this->assertEquals(123, $data['uid_i']->getValue());
+		self::assertEquals('some test  with html markup', $data['bodytext_s']->getValue(),'bodytext falsch');
+		self::assertEquals(123, $data['uid_i']->getValue());
 		//merging into content worked?
-		$this->assertEquals('123 some test  with html markup', $data['content']->getValue(),'content falsch');
+		self::assertEquals('123 some test  with html markup', $data['content']->getValue(),'content falsch');
 		//indexing of standard fields worked?
-		$this->assertEquals('some test  with html markup', $data['news_text_s']->getValue(),'news_text_s falsch');
-		$this->assertEquals('some test  with html markup', $data['news_text_t']->getValue(),'news_text_t falsch');
+		self::assertEquals('some test  with html markup', $data['news_text_s']->getValue(),'news_text_s falsch');
+		self::assertEquals('some test  with html markup', $data['news_text_t']->getValue(),'news_text_t falsch');
 	}
 
 	function test_prepareSearchDataWithHtmlMarkupInBodytextAndkeepHtmlOption() {
@@ -123,15 +123,15 @@ class tx_mksearch_tests_indexer_TtNewsNews_testcase
 		$record = array('uid'=> 123, 'deleted' => 0, 'datetime'=>$tstamp, 'bodytext'=>'some test <p>with html markup</p>');
 		$indexer->prepareSearchData('tt_news', $record, $indexDoc, $options);
 		$data = $indexDoc->getData();
-		$this->assertEquals('2010-01-30T15:00:00Z', $data['datetime_dt']->getValue(),'datetime falsch');
+		self::assertEquals('2010-01-30T15:00:00Z', $data['datetime_dt']->getValue(),'datetime falsch');
 		//indexing of extra fields worked?
-		$this->assertEquals('some test <p>with html markup</p>', $data['bodytext_s']->getValue(),'bodytext falsch');
-		$this->assertEquals(123, $data['uid_i']->getValue());
+		self::assertEquals('some test <p>with html markup</p>', $data['bodytext_s']->getValue(),'bodytext falsch');
+		self::assertEquals(123, $data['uid_i']->getValue());
 		//merging into content worked?
-		$this->assertEquals('123 some test <p>with html markup</p> ', $data['content']->getValue(),'content falsch');
+		self::assertEquals('123 some test <p>with html markup</p> ', $data['content']->getValue(),'content falsch');
 		//indexing of standard fields worked?
-		$this->assertEquals('some test <p>with html markup</p>', $data['news_text_s']->getValue(),'news_text_s falsch');
-		$this->assertEquals('some test <p>with html markup</p>', $data['news_text_t']->getValue(),'news_text_t falsch');
+		self::assertEquals('some test <p>with html markup</p>', $data['news_text_s']->getValue(),'news_text_s falsch');
+		self::assertEquals('some test <p>with html markup</p>', $data['news_text_t']->getValue(),'news_text_t falsch');
 	}
 
 	function test_prepareSearchDataDeleted() {
@@ -144,25 +144,25 @@ class tx_mksearch_tests_indexer_TtNewsNews_testcase
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType, 'tx_mksearch_model_IndexerFieldBase');
 		$record = array('uid'=> 123, 'deleted' => 1);
 		$indexer->prepareSearchData('tt_news', $record, $indexDoc, $options);
-		$this->assertEquals(true, $indexDoc->getDeleted());
+		self::assertEquals(true, $indexDoc->getDeleted());
 
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType, 'tx_mksearch_model_IndexerFieldBase');
 		$record = array('uid'=> 123, 'deleted' => 0, 'hidden' => 1);
 		$indexer->prepareSearchData('tt_news', $record, $indexDoc, $options);
-		$this->assertEquals(true, $indexDoc->getDeleted());
+		self::assertEquals(true, $indexDoc->getDeleted());
 
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType, 'tx_mksearch_model_engineSpecific_solr_IndexerField');
 		$record = array('uid'=> 123, 'deleted' => 0, 'hidden' => 0, 'bodytext' => 'some test');
 		$indexer->prepareSearchData('tt_news', $record, $indexDoc, $options);
-		$this->assertEquals(false, $indexDoc->getDeleted());
+		self::assertEquals(false, $indexDoc->getDeleted());
 		$data = $indexDoc->getData();
 		//merging into content worked?
-		$this->assertEquals('123 some test', $data['content']->getValue());
+		self::assertEquals('123 some test', $data['content']->getValue());
 		//no extra fields added?
-		$this->assertFalse(array_key_exists('uid_i', $data),'uid_i Field is existent!');
-		$this->assertFalse(array_key_exists('uid', $data),'uid Field is existent!');
-		$this->assertFalse(array_key_exists('bodytext_s', $data),'bodytext_s Field is existent!');
-		$this->assertFalse(array_key_exists('bodytext', $data),'bodytext Field is existent!');
+		self::assertFalse(array_key_exists('uid_i', $data),'uid_i Field is existent!');
+		self::assertFalse(array_key_exists('uid', $data),'uid Field is existent!');
+		self::assertFalse(array_key_exists('bodytext_s', $data),'bodytext_s Field is existent!');
+		self::assertFalse(array_key_exists('bodytext', $data),'bodytext Field is existent!');
 	}
 
 	function test_prepareSearchDataWithoutIndexedFieldsOption() {
@@ -178,19 +178,19 @@ class tx_mksearch_tests_indexer_TtNewsNews_testcase
 		$record = array('uid'=> 123, 'deleted' => 0, 'datetime'=>$tstamp, 'bodytext'=>'some test <p>with html markup</p>');
 		$indexer->prepareSearchData('tt_news', $record, $indexDoc, $options);
 		$data = $indexDoc->getData();
-		$this->assertEquals('2010-01-30T15:00:00Z', $data['datetime_dt']->getValue(),'datetime falsch');
+		self::assertEquals('2010-01-30T15:00:00Z', $data['datetime_dt']->getValue(),'datetime falsch');
 		//indexing of standard fields worked?
-		$this->assertEquals('some test  with html markup', $data['news_text_s']->getValue(),'news_text_s falsch');
-		$this->assertEquals('some test  with html markup', $data['news_text_t']->getValue(),'news_text_t falsch');
+		self::assertEquals('some test  with html markup', $data['news_text_s']->getValue(),'news_text_s falsch');
+		self::assertEquals('some test  with html markup', $data['news_text_t']->getValue(),'news_text_t falsch');
 		//merging into content ignored as nothing?
-		$this->assertTrue(empty($data['content']),'content falsch');
+		self::assertTrue(empty($data['content']),'content falsch');
 	}
 
 	/**
 	 * @group unit
 	 */
 	public function testGetDbUtil() {
-		$this->assertEquals(
+		self::assertEquals(
 			'tx_rnbase_util_DB',
 			$this->callInaccessibleMethod(
 				tx_rnbase::makeInstance('tx_mksearch_indexer_TtNewsNews'),
@@ -203,7 +203,7 @@ class tx_mksearch_tests_indexer_TtNewsNews_testcase
 	 * @group unit
 	 */
 	public function testGetIntIndexService() {
-		$this->assertInstanceOf(
+		self::assertInstanceOf(
 			'tx_mksearch_service_internal_Index',
 			$this->callInaccessibleMethod(
 				tx_rnbase::makeInstance('tx_mksearch_indexer_TtNewsNews'),
@@ -225,7 +225,7 @@ class tx_mksearch_tests_indexer_TtNewsNews_testcase
 
 		$record = array('uid' => 123);
 		$indexer->prepareSearchData('tt_news_cat', $record, $indexDoc, $options);
-		$this->assertTrue(TRUE);
+		self::assertTrue(TRUE);
 	}
 
 	/**
@@ -269,7 +269,7 @@ class tx_mksearch_tests_indexer_TtNewsNews_testcase
 
 		$record = array('uid' => 123);
 		$indexerReturn = $indexer->prepareSearchData('tt_news_cat', $record, $indexDoc, $options);
-		$this->assertNull($indexerReturn);
+		self::assertNull($indexerReturn);
 	}
 }
 

@@ -73,7 +73,7 @@ class tx_mksearch_tests_indexer_DamMedia_testcase
 	 * @dataProvider providerIsIndexableRecord
 	 */
 	public function testIsIndexableRecord($aSourceRecord, $aOptions, $bIndexable) {
-		$this->assertEquals(
+		self::assertEquals(
 				$bIndexable,
 				self::$oDamMediaTest->testIsIndexableRecord('tx_dam', $aSourceRecord, array('tx_dam.' => $aOptions))
 			);
@@ -198,7 +198,7 @@ class tx_mksearch_tests_indexer_DamMedia_testcase
 		$aRawData = array('uid' => 1, 'file_type' => 'something_else');
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$oIndexDoc = $indexer->prepareSearchData('tx_dam', $aRawData, $indexDoc, $options);
-		$this->assertNull($oIndexDoc,'Es wurde nicht null geliefert!');
+		self::assertNull($oIndexDoc,'Es wurde nicht null geliefert!');
 	}
 
 	/**
@@ -217,7 +217,7 @@ class tx_mksearch_tests_indexer_DamMedia_testcase
 		$aRawData = array('uid' => 1, 'file_type' => 'something_else');
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$oIndexDoc = $indexer->prepareSearchData('tx_dam', $aRawData, $indexDoc, $options);
-		$this->assertTrue($oIndexDoc->getDeleted(),'Das Element wurde nich auf gelöscht gesetzt!');
+		self::assertTrue($oIndexDoc->getDeleted(),'Das Element wurde nich auf gelöscht gesetzt!');
 	}
 }
 

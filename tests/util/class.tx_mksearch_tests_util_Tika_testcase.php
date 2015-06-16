@@ -51,7 +51,7 @@ class tx_mksearch_tests_util_Tika_testcase
 		$content = tx_mksearch_util_Tika::getInstance()->extractContent(
 			'EXT:mksearch/tests/fixtures/html/wizard_form.html'
 		);
-		$this->assertTrue(strlen($content) > 100);
+		self::assertTrue(strlen($content) > 100);
 	}
 
 	/**
@@ -61,7 +61,7 @@ class tx_mksearch_tests_util_Tika_testcase
 		$content = tx_mksearch_util_Tika::getInstance()->extractContent(
 			'EXT:mksearch/tests/fixtures/txt/ä.txt'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			'test text',trim($content), 'content falsch extrahiert'
 		);
 	}
@@ -73,7 +73,7 @@ class tx_mksearch_tests_util_Tika_testcase
 		$lang = tx_mksearch_util_Tika::getInstance()->extractLanguage(
 			'EXT:mksearch/tests/fixtures/html/wizard_form.html'
 		);
-		$this->assertEquals('en', $lang);
+		self::assertEquals('en', $lang);
 	}
 
 	/**
@@ -83,7 +83,7 @@ class tx_mksearch_tests_util_Tika_testcase
 		$meta = tx_mksearch_util_Tika::getInstance()->extractMetaData(
 			'EXT:mksearch/tests/fixtures/html/wizard_form.html'
 		);
-		$this->assertTrue(is_array($meta));
+		self::assertTrue(is_array($meta));
 	}
 
 }

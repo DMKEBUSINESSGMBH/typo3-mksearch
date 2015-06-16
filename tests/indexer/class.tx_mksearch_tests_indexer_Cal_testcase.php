@@ -69,39 +69,39 @@ class tx_mksearch_tests_indexer_Cal_testcase
 		$indexDocFieldArray =
 			$this->getIndexDocFieldArrayByCalRecord($calRecord);
 
-		$this->assertEquals(
+		self::assertEquals(
 			45660,$indexDocFieldArray['start_time_i']->getValue(),
 			'start_time falsch indiziert!'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			45720,$indexDocFieldArray['end_time_i']->getValue(),
 			'end_time falsch indiziert!'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			1,$indexDocFieldArray['allday_b']->getValue(),
 			'allday falsch indiziert!'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			'UTC',$indexDocFieldArray['timezone_s']->getValue(),
 			'timezone falsch indiziert!'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			'First Event',$indexDocFieldArray['title']->getValue(),
 			'title falsch indiziert!'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			'John Doe',$indexDocFieldArray['organizer_s']->getValue(),
 			'organizer falsch indiziert!'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			'john.doe.com',$indexDocFieldArray['organizer_link_s']->getValue(),
 			'organizer_link falsch indiziert!'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			'Springfield',$indexDocFieldArray['location_s']->getValue(),
 			'location falsch indiziert!'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			1,$indexDocFieldArray['type_i']->getValue(),
 			'type falsch indiziert!'
 		);
@@ -119,55 +119,55 @@ class tx_mksearch_tests_indexer_Cal_testcase
 		$indexDocFieldArray =
 			$this->getIndexDocFieldArrayByCalRecord($calRecord);
 
-		$this->assertEquals(
+		self::assertEquals(
 			'2013-03-02T23:00:00Z',$indexDocFieldArray['start_date_dt']->getValue(),
 			'start_date_dt falsch indiziert!'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			'2013-03-04T23:00:00Z',$indexDocFieldArray['end_date_dt']->getValue(),
 			'end_date_dt falsch indiziert!'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			1362265200,$indexDocFieldArray['start_date_i']->getValue(),
 			'start_date_i falsch indiziert!'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			1362438000,$indexDocFieldArray['end_date_i']->getValue(),
 			'end_date_i falsch indiziert!'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			'20130303',$indexDocFieldArray['start_date_s']->getValue(),
 			'start_date_s falsch indiziert!'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			'20130305',$indexDocFieldArray['end_date_s']->getValue(),
 			'end_date_s falsch indiziert!'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			2013,$indexDocFieldArray['start_date_year_i']->getValue(),
 			'start_date_year_i falsch indiziert!'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			3,$indexDocFieldArray['start_date_month_i']->getValue(),
 			'start_date_month_i falsch indiziert!'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			3,$indexDocFieldArray['start_date_day_i']->getValue(),
 			'start_date_day_i falsch indiziert!'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			2013,$indexDocFieldArray['end_date_year_i']->getValue(),
 			'end_date_year_i falsch indiziert!'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			3,$indexDocFieldArray['end_date_month_i']->getValue(),
 			'end_date_month_i falsch indiziert!'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			5,$indexDocFieldArray['end_date_day_i']->getValue(),
 			'end_date_day_i falsch indiziert!'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			1362265200,$indexDocFieldArray['tstamp']->getValue(),
 			'tstamp nicht gleich start_date_i falsch indiziert!'
 		);
@@ -186,51 +186,51 @@ class tx_mksearch_tests_indexer_Cal_testcase
 		$indexDocFieldArray =
 			$this->getIndexDocFieldArrayByCalRecord($calRecord);
 
-		$this->assertEquals(
+		self::assertEquals(
 			'2013-03-03T00:00:00Z',$indexDocFieldArray['start_date_dt']->getValue(),
 			'start_date_dt falsch indiziert!'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			'2013-03-05T00:00:00Z',$indexDocFieldArray['end_date_dt']->getValue(),
 			'end_date_dt falsch indiziert!'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			1362268800,$indexDocFieldArray['start_date_i']->getValue(),
 			'start_date_i falsch indiziert!'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			1362441600,$indexDocFieldArray['end_date_i']->getValue(),
 			'end_date_i falsch indiziert!'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			'20130303',$indexDocFieldArray['start_date_s']->getValue(),
 			'start_date_s falsch indiziert!'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			'20130305',$indexDocFieldArray['end_date_s']->getValue(),
 			'end_date_s falsch indiziert!'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			2013,$indexDocFieldArray['start_date_year_i']->getValue(),
 			'start_date_year_i falsch indiziert!'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			3,$indexDocFieldArray['start_date_month_i']->getValue(),
 			'start_date_month_i falsch indiziert!'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			3,$indexDocFieldArray['start_date_day_i']->getValue(),
 			'start_date_day_i falsch indiziert!'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			2013,$indexDocFieldArray['end_date_year_i']->getValue(),
 			'end_date_year_i falsch indiziert!'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			3,$indexDocFieldArray['end_date_month_i']->getValue(),
 			'end_date_month_i falsch indiziert!'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			5,$indexDocFieldArray['end_date_day_i']->getValue(),
 			'end_date_day_i falsch indiziert!'
 		);
@@ -247,7 +247,7 @@ class tx_mksearch_tests_indexer_Cal_testcase
 		$indexDocFieldArray =
 			$this->getIndexDocFieldArrayByCalRecord($calRecord);
 
-		$this->assertEquals(
+		self::assertEquals(
 			'my description',$indexDocFieldArray['description_s']->getValue(),
 			'description falsch indiziert!'
 		);
@@ -286,7 +286,7 @@ class tx_mksearch_tests_indexer_Cal_testcase
 		$indexDocFieldArray =
 			$this->getIndexDocFieldArrayByCalRecord($calEventRecord, $indexer);
 
-		$this->assertEquals(
+		self::assertEquals(
 			'First Calendar',$indexDocFieldArray['calendar_title_s']->getValue(),
 			'calendar_title falsch indiziert!'
 		);
@@ -330,7 +330,7 @@ class tx_mksearch_tests_indexer_Cal_testcase
 			0 => 'First Category',
 			1 => 'Second Category'
 		);
-		$this->assertEquals(
+		self::assertEquals(
 			$expectedCategoryTitles,$indexDocFieldArray['category_title_ms']->getValue(),
 			'categoy_title falsch indiziert!'
 		);
@@ -360,7 +360,7 @@ class tx_mksearch_tests_indexer_Cal_testcase
 			->method('addEventToIndex')
 			->with(2);
 
-		$this->assertNull($this->getIndexDocFieldArrayByCalRecord(
+		self::assertNull($this->getIndexDocFieldArrayByCalRecord(
 				array(), $indexer, 'tx_cal_calendar'
 			),
 			'Die Indizierung wurde nicht abgebrochen'
@@ -391,7 +391,7 @@ class tx_mksearch_tests_indexer_Cal_testcase
 			->method('addEventToIndex')
 			->with(2);
 
-		$this->assertNull($this->getIndexDocFieldArrayByCalRecord(
+		self::assertNull($this->getIndexDocFieldArrayByCalRecord(
 				array(), $indexer, 'tx_cal_category'
 			),
 			'Die Indizierung wurde nicht abgebrochen'

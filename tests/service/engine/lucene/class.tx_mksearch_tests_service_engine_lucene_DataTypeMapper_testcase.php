@@ -52,15 +52,15 @@ class tx_mksearch_tests_service_engine_lucene_DataTypeMapper_testcase
 	public function testFieldWithSpecialConfig() {
 
 		// Zuerst den Default testen
-		$this->assertEquals('keyword', $this->mapper->getDataType('tstamp'), 'Wrong data type found');
+		self::assertEquals('keyword', $this->mapper->getDataType('tstamp'), 'Wrong data type found');
 
 		// Und jetzt per Config überschreiben
 		$cfg = array();
 		$cfg['fields.']['tstamp.']['type'] = 'unindexed';
 		$mapper = tx_rnbase::makeInstance('tx_mksearch_service_engine_lucene_DataTypeMapper', $cfg);
-		$this->assertEquals('unindexed', $mapper->getDataType('tstamp'), 'Wrong data type found');
+		self::assertEquals('unindexed', $mapper->getDataType('tstamp'), 'Wrong data type found');
 		// Die anderen sollten weiter normal funktionieren
-		$this->assertEquals('keyword', $mapper->getDataType('uid'), 'Wrong data type found');
+		self::assertEquals('keyword', $mapper->getDataType('uid'), 'Wrong data type found');
 
 	}
 
@@ -69,7 +69,7 @@ class tx_mksearch_tests_service_engine_lucene_DataTypeMapper_testcase
 	 */
 	public function testAutoTypesFromSolr($fieldName, $expectedType) {
 		// 'text', 'keyword', 'unindexed', 'unstored', 'binary'
-		$this->assertEquals($expectedType, $this->mapper->getDataType($fieldName), 'Wrong data type found for fieldname '.$fieldName);
+		self::assertEquals($expectedType, $this->mapper->getDataType($fieldName), 'Wrong data type found for fieldname '.$fieldName);
 	}
 
 	public function getSolrLikeFieldNames() {

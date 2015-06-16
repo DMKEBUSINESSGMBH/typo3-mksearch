@@ -59,12 +59,12 @@ class tx_mksearch_tests_indexer_Base_DB_testcase
 		$aRawData = array('uid' => 1, 'pid' => 1);
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
-		$this->assertNull($aIndexDoc,'Die Indizierung wurde doch indiziert! 1');
+		self::assertNull($aIndexDoc,'Die Indizierung wurde doch indiziert! 1');
 
 		$aRawData = array('uid' => 1, 'pid' => 2);
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
-		$this->assertNotNull($aIndexDoc,'Die Indizierung wurde doch indiziert! 2');
+		self::assertNotNull($aIndexDoc,'Die Indizierung wurde doch indiziert! 2');
 
 		//noch mit kommaseparierter liste
 		unset($options);
@@ -77,17 +77,17 @@ class tx_mksearch_tests_indexer_Base_DB_testcase
 		$aRawData = array('uid' => 1, 'pid' => 1);
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
-		$this->assertNull($aIndexDoc,'Die Indizierung wurde doch indiziert! 3');
+		self::assertNull($aIndexDoc,'Die Indizierung wurde doch indiziert! 3');
 
 		$aRawData = array('uid' => 1, 'pid' => 2);
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
-		$this->assertNotNull($aIndexDoc,'Die Indizierung wurde doch indiziert! 4');
+		self::assertNotNull($aIndexDoc,'Die Indizierung wurde doch indiziert! 4');
 
 		$aRawData = array('uid' => 1, 'pid' => 3);
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
-		$this->assertNotNull($aIndexDoc,'Die Indizierung wurde doch indiziert! 5');
+		self::assertNotNull($aIndexDoc,'Die Indizierung wurde doch indiziert! 5');
 	}
 
 	/**
@@ -104,15 +104,15 @@ class tx_mksearch_tests_indexer_Base_DB_testcase
 		$aRawData = array('uid' => 1, 'pid' => 1);
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$oIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
-		$this->assertTrue($oIndexDoc->getDeleted(),'Das Element wurde doch indiziert! pid:1');
+		self::assertTrue($oIndexDoc->getDeleted(),'Das Element wurde doch indiziert! pid:1');
 		//es sollte auch keine exception durch getPrimaryKey geworfen werden damit das Löschen auch wirklich funktioniert
-		$this->assertEquals('mksearch:dummy:1',$oIndexDoc->getPrimaryKey(true),'Das Element hat nicht den richtigen primary key! pid:1');
+		self::assertEquals('mksearch:dummy:1',$oIndexDoc->getPrimaryKey(true),'Das Element hat nicht den richtigen primary key! pid:1');
 
 		$indexer =tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
 		$aRawData = array('uid' => 1, 'pid' => 2);
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$oIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
-		$this->assertFalse($oIndexDoc->getDeleted(),'Das Element wurde doch indiziert! pid:2');
+		self::assertFalse($oIndexDoc->getDeleted(),'Das Element wurde doch indiziert! pid:2');
 	}
 
 	/**
@@ -128,12 +128,12 @@ class tx_mksearch_tests_indexer_Base_DB_testcase
 		$aRawData = array('uid' => 1, 'pid' => 1);
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
-		$this->assertNotNull($aIndexDoc,'Das Element wurde nicht indiziert! 1');
+		self::assertNotNull($aIndexDoc,'Das Element wurde nicht indiziert! 1');
 
 		$aRawData = array('uid' => 1, 'pid' => 2);
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
-		$this->assertNull($aIndexDoc,'Das Element wurde doch indiziert! 2');
+		self::assertNull($aIndexDoc,'Das Element wurde doch indiziert! 2');
 
 		$indexer =tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
 		list($extKey, $cType) = $indexer->getContentType();
@@ -144,17 +144,17 @@ class tx_mksearch_tests_indexer_Base_DB_testcase
 		$aRawData = array('uid' => 1, 'pid' => 1);
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
-		$this->assertNotNull($aIndexDoc,'Das Element wurde nicht indiziert! 3');
+		self::assertNotNull($aIndexDoc,'Das Element wurde nicht indiziert! 3');
 
 		$aRawData = array('uid' => 1, 'pid' => 2);
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
-		$this->assertNull($aIndexDoc,'Das Element wurde doch indiziert! 4');
+		self::assertNull($aIndexDoc,'Das Element wurde doch indiziert! 4');
 
 		$aRawData = array('uid' => 1, 'pid' => 3);
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
-		$this->assertNull($aIndexDoc,'Das Element wurde doch indiziert! 5');
+		self::assertNull($aIndexDoc,'Das Element wurde doch indiziert! 5');
 	}
 
 	/**
@@ -170,11 +170,11 @@ class tx_mksearch_tests_indexer_Base_DB_testcase
 
 		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options)->getData();
 
-		$this->assertEquals('test value 1',$aIndexDoc['test_field_1_s']->getValue(),'Es wurde nicht das erste Feld richtig gesetzt!');
-		$this->assertEquals('test value 2',$aIndexDoc['test_field_2_s']->getValue(),'Es wurde nicht das zweite Feld richtig gesetzt!');
+		self::assertEquals('test value 1',$aIndexDoc['test_field_1_s']->getValue(),'Es wurde nicht das erste Feld richtig gesetzt!');
+		self::assertEquals('test value 2',$aIndexDoc['test_field_2_s']->getValue(),'Es wurde nicht das zweite Feld richtig gesetzt!');
 		//with keep html
-		$this->assertEquals('<a href="http://www.test.de">test value 1</a>',$aIndexDoc['keepHtml_test_field_1_s']->getValue(),'Es wurde nicht das erste Feld richtig gesetzt!');
-		$this->assertEquals('test value 2',$aIndexDoc['keepHtml_test_field_2_s']->getValue(),'Es wurde nicht das zweite Feld richtig gesetzt!');
+		self::assertEquals('<a href="http://www.test.de">test value 1</a>',$aIndexDoc['keepHtml_test_field_1_s']->getValue(),'Es wurde nicht das erste Feld richtig gesetzt!');
+		self::assertEquals('test value 2',$aIndexDoc['keepHtml_test_field_2_s']->getValue(),'Es wurde nicht das zweite Feld richtig gesetzt!');
 	}
 
 	/**
@@ -190,8 +190,8 @@ class tx_mksearch_tests_indexer_Base_DB_testcase
 
 		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options)->getData();
 
-		$this->assertEquals(array(0=>'test value 1',1=>'test value 1'),$aIndexDoc['multivalue_test_field_1_s']->getValue(),'Es wurde nicht das erste Feld richtig gesetzt!');
-		$this->assertEquals(array(0=>'test value 2',1=>'test value 2'),$aIndexDoc['multivalue_test_field_2_s']->getValue(),'Es wurde nicht das zweite Feld richtig gesetzt!');
+		self::assertEquals(array(0=>'test value 1',1=>'test value 1'),$aIndexDoc['multivalue_test_field_1_s']->getValue(),'Es wurde nicht das erste Feld richtig gesetzt!');
+		self::assertEquals(array(0=>'test value 2',1=>'test value 2'),$aIndexDoc['multivalue_test_field_2_s']->getValue(),'Es wurde nicht das zweite Feld richtig gesetzt!');
 	}
 
 
@@ -207,19 +207,19 @@ class tx_mksearch_tests_indexer_Base_DB_testcase
 		$oIndexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$aRawData = array('uid' => 1, 'hidden' => 1);
 		$oIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $oIndexDoc, $options);
-		$this->assertTrue($oIndexDoc->getDeleted(),'Das Index Doc wurde nicht auf gelöscht gesetzt! 1');
+		self::assertTrue($oIndexDoc->getDeleted(),'Das Index Doc wurde nicht auf gelöscht gesetzt! 1');
 
 		//is deleted
 		$oIndexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$aRawData = array('uid' => 1, 'hidden' => 0, 'deleted' => 1);
 		$oIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $oIndexDoc, $options);
-		$this->assertTrue($oIndexDoc->getDeleted(),'Das Index Doc wurde nicht auf gelöscht gesetzt! 2');
+		self::assertTrue($oIndexDoc->getDeleted(),'Das Index Doc wurde nicht auf gelöscht gesetzt! 2');
 
 		//everything alright
 		$oIndexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$aRawData = array('uid' => 1, 'hidden' => 0, 'deleted' => 0);
 		$oIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $oIndexDoc, $options);
-		$this->assertFalse($oIndexDoc->getDeleted(),'Das Index Doc wurde doch auf gelöscht gesetzt! 3');
+		self::assertFalse($oIndexDoc->getDeleted(),'Das Index Doc wurde doch auf gelöscht gesetzt! 3');
 	}
 
 	public function testHasDocToBeDeletedConsideringStatesOfTheParentPages() {
@@ -234,21 +234,21 @@ class tx_mksearch_tests_indexer_Base_DB_testcase
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$record = array('uid'=> 10, 'pid' => 7);
 		$indexer->prepareSearchData('doesnt_matter', $record, $indexDoc, $options);
-		$this->assertEquals(true, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
+		self::assertEquals(true, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 
 		//parent of parent is hidden
 		$indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$record = array('uid'=> 127, 'pid' => 10);
 		$indexer->prepareSearchData('doesnt_matter', $record, $indexDoc, $options);
-		$this->assertEquals(true, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
+		self::assertEquals(true, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 
 		//everything alright with parents
 		$indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$record = array('uid'=> 125, 'pid' => 3);
 		$indexer->prepareSearchData('doesnt_matter', $record, $indexDoc, $options);
-		$this->assertEquals(false, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
+		self::assertEquals(false, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 	}
 
 	/**
@@ -262,12 +262,12 @@ class tx_mksearch_tests_indexer_Base_DB_testcase
 		$aRawData = array('uid' => 1, 'stopIndexing' => true);
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
-		$this->assertNull($aIndexDoc,'Die Indizierung wurde nicht gestoppt!');
+		self::assertNull($aIndexDoc,'Die Indizierung wurde nicht gestoppt!');
 
 		$aRawData = array('uid' => 1, 'stopIndexing' => false);
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
-		$this->assertNotNull($aIndexDoc,'Die Indizierung wurde gestoppt!');
+		self::assertNotNull($aIndexDoc,'Die Indizierung wurde gestoppt!');
 	}
 }
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']) {
