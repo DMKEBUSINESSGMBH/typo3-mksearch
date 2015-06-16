@@ -116,6 +116,16 @@ if (t3lib_extMgm::isLoaded('cal')) {
 	);
 }
 
+// cal Extension
+if (t3lib_extMgm::isLoaded('a21glossary')) {
+	tx_mksearch_util_Config::registerIndexer(
+		'a21glossary',
+		'main',
+		'tx_mksearch_indexer_A21Glossary',
+		array('tx_a21glossary_main')
+	);
+}
+
 
 // Configure core page indexer service
 $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['indexer']['config']['core']['page']['indexedFields'] = array('subtitle', 'url', 'keywords', 'description', 'author', /*'author_email',*/ 'nav_title', 'alias', );
