@@ -1005,6 +1005,15 @@ lib.mksearch.extrainfo {
 			}
 		}
 	}
+	a21glossary.main =< lib.mksearch.extrainfo.default
+	a21glossary.main {
+		template = EXT:mksearch/templates/searchResultSimple.html
+		subpartName = A21GLOSSARY_MAIN
+		hit {
+			linkMethod = generic
+			links.showevent.pid = 0
+		}
+	}
 }
 
 
