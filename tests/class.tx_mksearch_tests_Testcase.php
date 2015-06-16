@@ -88,6 +88,67 @@ abstract class tx_mksearch_tests_Testcase
 		}
 	}
 
+	/**
+	 *
+	 * @param string|array $extKey
+	 * @param string $contentType
+	 * @return tx_mksearch_model_IndexerDocumentBase|PHPUnit_Framework_MockObject_MockObject
+	 */
+	protected function getIndexDocMock($extKey, $contentType = NULL) {
+		tx_rnbase::load('tx_mksearch_model_IndexerDocumentBase');
+		if ($extKey instanceof tx_mksearch_interface_Indexer) {
+			list($extKey, $contentType) = $extKey->getContentType();
+		}
+
+		return tx_rnbase::makeInstance(
+			'tx_mksearch_model_IndexerDocumentBase',
+			$extKey, $contentType
+		);
+	}
+
+	/**
+	 * checks a index doc, if there was a correct value
+	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
+	 * @param string $fieldName
+	 * @param string $expectedValue
+	 */
+	public static function assertIndexDocHasField(
+		$indexDoc,
+		$fieldName,
+		$expectedValue
+	) {
+		$message = __METHOD__ . '("Line ' . __LINE__ . '"): ';
+		self::assertInstanceOf(
+			'tx_mksearch_interface_IndexerDocument',
+			$indexDoc,
+			$message . '$indexDoc has to be an instance of "tx_mksearch_interface_IndexerDocument" but "'
+				. (is_object($indexDoc) ? get_class($indexDoc) : gettype($indexDoc)) . '" given.'
+		);
+		$indexData = $indexDoc->getData();
+		self::assertTrue(
+			is_array($indexData),
+			$message . 'The data of $indexDoc has to be an array but "'
+				. (is_object($indexData) ? get_class($indexData) : gettype($indexData)) . '" given.'
+		);
+		self::assertArrayHasKey(
+			$fieldName,
+			$indexData,
+			__LINE__ . ': $indexData dows not contain the required field "' . $fieldName . '"'
+		);
+		$field = $indexData[$fieldName];
+		self::assertInstanceOf(
+			'tx_mksearch_interface_IndexerField',
+			$field,
+			$message . '"' . $fieldName . '" has to be an instance of "tx_mksearch_interface_IndexerField" but "'
+				. (is_object($field) ? get_class($field) : gettype($field)) . '" given.'
+		);
+		self::assertSame(
+			$expectedValue,
+			$field->getValue(),
+			$message . '"' . $fieldName . '" contains the wrong value. "' . $expectedValue . '" ias exeptet but "' . $field->getValue() . '" given.'
+		);
+	}
+
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/class.tx_mksearch_tests_Testcase.php']) {
