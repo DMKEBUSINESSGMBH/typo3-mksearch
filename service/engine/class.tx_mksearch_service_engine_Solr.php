@@ -574,23 +574,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 	 * @return void
 	 */
 	public function indexUpdate(tx_mksearch_interface_IndexerDocument $doc) {
-		$data = $doc->getPrimaryKey();
-		// TODO: Ist das noch notwendig?
-//		$old = $this->getIndexDocumentByContentUid($data['uid']->getValue(), $data['extKey']->getValue(), $data['contentType']->getValue());
-		// No former document? Create one
-		$old = false;
-		if (!$old) {
-			$this->indexNew($doc);
-		}
-		// Is there still a former version of this document
-		else {
-			// Is the former version "older" respecting the timestamp?
-			if (isset($old[0]->tstamp) && $old[0]->tstamp < $data['tstamp']->getValue()) {
-				// Delete former version and create new version
-				$this->index->delete($old[0]->id);
-				$this->indexNew($doc);
-			}
-		}
+		$this->indexNew($doc);
 	}
 
 	/**
