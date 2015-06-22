@@ -43,7 +43,7 @@ class tx_mksearch_marker_SearchResultSimple
 	public function parseTemplate($template, &$item, &$formatter, $confId, $marker = 'ITEM') {
 		if(!is_object($item)) {
 			// On default use an empty instance.
-			$item = self::getEmptyInstance('tx_mkcontact_models_SearchHit');
+			$item = self::getEmptyInstance('tx_mksearch_model_SearchHit');
 		}
 
 		$this->prepareItem($item, $formatter->getConfigurations(), $confId);
