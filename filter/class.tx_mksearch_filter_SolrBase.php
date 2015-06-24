@@ -693,7 +693,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 	/**
 	 * @return array
 	 */
-	private function getFormData() {
+	protected function getFormData() {
 		return array();
 	}
 
