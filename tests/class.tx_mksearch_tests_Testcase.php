@@ -145,7 +145,7 @@ abstract class tx_mksearch_tests_Testcase
 		self::assertSame(
 			$expectedValue,
 			$field->getValue(),
-			$message . '"' . $fieldName . '" contains the wrong value. "' . $expectedValue . '" ias exeptet but "' . $field->getValue() . '" given.'
+			$message . '"' . $fieldName . '" contains the wrong value. "' . $expectedValue . '" as expected but "' . $field->getValue() . '" given.'
 		);
 	}
 
