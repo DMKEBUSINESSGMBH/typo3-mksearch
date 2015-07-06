@@ -506,7 +506,7 @@
 					gewünschte Verhalten. Das Problem ist, dass Solr eine Ziffernfolge unverändert übernimmt.
 
 					Durch einen kleinen Trick kann man diesen Umstand aber umgehen:
-					<charFilter class="PatternReplaceCharFilterFactory" pattern="^(.*)$" replacement="$1#"/>
+					<charFilter class="solr.PatternReplaceCharFilterFactory" pattern="^(.*)$" replacement="$1#"/>
 
 					Man hängt während der Suchanalyse ein # an das Ende des Suchbegriffs.
 					Dieses Sonderzeichen bewirkt, dass passende alphanummerische Suchbegriffe
