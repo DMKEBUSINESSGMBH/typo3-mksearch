@@ -108,7 +108,7 @@ class tx_mksearch_util_Indexer {
 	 * Collects the values of all models inside the given array
 	 * and adds them as multivalue (array)
 	 *
-	 * @param tx_rnbase_IModel $model
+	 * @param array[tx_rnbase_IModel] $model
 	 * @param array $aMapping
 	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
 	 * @param string $prefix
@@ -123,6 +123,7 @@ class tx_mksearch_util_Indexer {
 	) {
 		//collect values
 		$tempIndexDoc = array();
+		/* @var $model tx_rnbase_IModel */
 		foreach ($models as $model){
 			foreach ($recordIndexMapping as $recordKey => $indexDocKey) {
 				if ($dontIndexHidden && $model->isHidden()) {
