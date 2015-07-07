@@ -64,8 +64,12 @@ class tx_mksearch_marker_SearchResultSimple
 		$this->prepareLinks($item, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter, $template);
 
 		// das Template rendern
-		$out = $formatter->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
-		return $out;
+		return tx_rnbase_util_Templates::substituteMarkerArrayCached(
+			$template,
+			$markerArray,
+			$subpartArray,
+			$wrappedSubpartArray
+		);
 	}
 
 	/**

@@ -41,7 +41,7 @@ class tx_mksearch_mod1_ConfigIndizesDbList extends tx_rnbase_mod_BaseModFunc {
 	protected function getFuncId() {
 		return 'configindizesdblist';
 	}
-	
+
 	/**
 	 * Return the actual html content
 	 *
@@ -65,11 +65,10 @@ class tx_mksearch_mod1_ConfigIndizesDbList extends tx_rnbase_mod_BaseModFunc {
 			$data['showerror'] = 1;
 			$data['path'] = 'about:blank';
 		}
-   		
-   		$markerArray = $formatter->getItemMarkerArrayWrapped($data, $this->getConfId(), 0, '');
-		$out = $configurations->getCObj()->substituteMarkerArrayCached($template, $markerArray);
-		
-		return $out;
+
+		$markerArray = $formatter->getItemMarkerArrayWrapped($data, $this->getConfId(), 0, '');
+
+		return tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray);
 	}
 }
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/class.tx_mksearch_mod1_ConfigIndizesDbList.php'])	{
