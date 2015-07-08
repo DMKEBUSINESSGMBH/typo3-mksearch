@@ -32,7 +32,6 @@
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_mksearch_indexer_Base');
 tx_rnbase::load('tx_mksearch_util_Misc');
-require_once(t3lib_extMgm::extPath('cal') . 'model/class.tx_cal_date.php');
 
 /**
  * @package TYPO3
@@ -184,13 +183,37 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base {
 				$calEvent->record[$datePrefix . '_date'], $calEvent->record['timezone']
 			);
 
-			$calDate = tx_rnbase::makeInstance('tx_cal_date', $calEvent->record[$datePrefix . '_date']);
+			$calDate = tx_rnbase::makeInstance(
+				$this->getCalDateClass(), $calEvent->record[$datePrefix . '_date']
+			);
 			$calEvent->record[$datePrefix . '_date_year'] = $calDate->getYear();
 			$calEvent->record[$datePrefix . '_date_month'] = $calDate->getMonth();
 			$calEvent->record[$datePrefix . '_date_day'] = $calDate->getDay();
 		}
 
 		return $calEvent;
+	}
+
+	/**
+	 * @return string
+	 */
+	protected function getCalDateClass() {
+		if ($this->isCalInstalledInVersion190OrHigher()) {
+			$calDateClass = '\\TYPO3\\CMS\\Cal\\Model\\CalDate';
+		} else {
+			require_once(t3lib_extMgm::extPath('cal') . 'model/class.tx_cal_date.php');
+			$calDateClass = 'tx_cal_date';
+		}
+		return $calDateClass;
+	}
+
+	/**
+	 * Ist cal mind. in Version 1.9.0 installiert?
+	 * @return boolean
+	 */
+	protected function isCalInstalledInVersion190OrHigher() {
+		$calVersionNumber = t3lib_extMgm::getExtensionVersion('cal');
+		return tx_rnbase_util_TYPO3::convertVersionNumberToInteger($calVersionNumber) >= 1009000;
 	}
 
 	/**
