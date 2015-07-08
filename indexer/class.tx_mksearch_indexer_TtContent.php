@@ -165,6 +165,9 @@ includeCTypes = text,textpic,bullets,image,table,,templavoila_pi1
 ### delete from or abort indexing for the record if isIndexableRecord or no record?
  deleteIfNotIndexable = 0
 
+### disable the fallback to page title, if the content title is empty
+leaveHeaderEmpty = 0
+
 # Note: you should always configure the root pageTree for this indexer in the includes. mostly the domain
 # White lists: Explicitely include items in indexing by various conditions.
 # Note that defining a white list deactivates implicite indexing of ALL pages,

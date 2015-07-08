@@ -97,6 +97,13 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 			// Decode HTML
 			$title = trim(tx_mksearch_util_Misc::html2plain($rawData['header']));
 		}
+
+		// optional fallback to page title, if the content title is empty
+		if (empty($title) && empty($options['leaveHeaderEmpty'])) {
+			$pageData = $this->getPageContent($model->getPid());
+			$title = $pageData['title'];
+		}
+
 		$indexDoc->setTitle($title);
 
 		$indexDoc->setTimestamp($rawData['tstamp']);
@@ -108,10 +115,10 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 			// @TODO: keywords werden doch immer kommasepariert angegeben,
 			// warum mit leerzeichen trennen, das macht die keywords kaputt.
 			$separator = (!empty($options['addPageMetaData.']['separator'])) ? $options['addPageMetaData.']['separator'] : ' ';
-			// @TODO: nur holen was wir benötigen (keywords)
+			// @TODO:
 			//        konfigurierbar machen: description, author, etc.
 			//        könnte wichtig werden!?
-			$pageData = $this->getPageContent($model->record['pid']);
+			$pageData = $pageData ? $pageData : $this->getPageContent($model->record['pid']);
 			if (!empty($pageData['keywords'])) {
 				$keywords = explode($separator, $pageData['keywords']);
 				foreach ($keywords as $key => $keyword) {
