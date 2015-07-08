@@ -460,8 +460,15 @@ plugin.tx_mksearch {
 			core.tt_content < plugin.tx_mksearch.search.default
 			# 2.) OPTIONALLY: make your specific configurations
 			core.tt_content {
-				links.show.pid = TEXT
-				links.show.pid.data = register : mksearch.core.tt_content
+				links.show {
+					pid = TEXT
+					pid.data = register : mksearch.core.tt_content
+
+					### add content anchor to the url
+					section = TEXT
+					section.value = c{register:mksearch.core.tt_content}
+					section.insertData = 1
+				}
 			}
 
 			# Content type "tt_news.news"
@@ -825,8 +832,15 @@ lib.mksearch.extrainfo {
 		markerClass = tx_mksearch_marker_CoreTtContent
 		subpartName = TTCONTENT
 		hit {
-			links.show.pid = TEXT
-			links.show.pid.data = register : mksearch.core.tt_content
+			links.show {
+				pid = TEXT
+				pid.data = register : mksearch.core.tt_content
+
+				### add content anchor to the url
+				section = TEXT
+				section.value = c{register:mksearch.core.tt_content}
+				section.insertData = 1
+			}
 		}
 	}
 
