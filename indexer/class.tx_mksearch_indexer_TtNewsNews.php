@@ -334,9 +334,9 @@ class tx_mksearch_indexer_TtNewsNews
 			return;
 		}
 
+		$categoryNames = array();
 		foreach ($categories as $category) {
-			$aCategoryUid[] = $category->record['uid_foreign'];
-			$aCategoryTitle[] = $category->record['title'];
+			$categoryNames[$category->record['uid_foreign']] = $category->record['title'];
 			// Die erste Kategorie mit einer Single-PID wird gewinnen
 			if (!$iCategorySinglePid) {
 				$iCategorySinglePid = (int) $category->record['single_pid'];
@@ -346,8 +346,15 @@ class tx_mksearch_indexer_TtNewsNews
 			$iCategorySinglePid = (int) $options['defaultSinglePid'];
 		}
 
-		$indexDoc->addField('categories_mi', $aCategoryUid);
-		$indexDoc->addField('categoriesTitle_ms', $aCategoryTitle);
+		$indexDoc->addField('categories_mi', array_keys($categoryNames));
+		$indexDoc->addField('categoriesTitle_ms', array_values($categoryNames));
+
+		// add field with the combined tags uids and names
+		tx_rnbase::load('tx_mksearch_util_KeyValueFacet');
+		$dfs = tx_mksearch_util_KeyValueFacet::getInstance();
+		$tagDfs = $dfs->buildFacetValues(array_keys($categoryNames), array_values($categoryNames));
+		$indexDoc->addField('categories_dfs_ms', $tagDfs, 'keyword');
+
 		$indexDoc->addField('categorySinglePid_i', $iCategorySinglePid);
 	}
 
