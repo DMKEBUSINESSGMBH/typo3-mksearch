@@ -100,7 +100,7 @@ class tx_mksearch_tests_indexer_TtContent_DB_testcase
 		//no content
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$record = array('uid'=> 128, 'pid' => 1, 'deleted' => 0, 'hidden' => 0, 'CType'=>'list');
-		$indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
+		$indexer->prepareSearchData('tt_content', $record, $indexDoc, array_merge($options, array('leaveHeaderEmpty' => TRUE)));
 		self::assertEquals(true, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 	}
 
@@ -472,7 +472,7 @@ class tx_mksearch_tests_indexer_TtContent_DB_testcase
 
 		//header shouldn't be indexed
 		$record = array('uid'=> 123, 'pid'=>6, 'CType'=>'list', 'header' => 'test', 'header_layout' => 100);
-		$result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options)->getData();
+		$result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, array_merge($options, array('leaveHeaderEmpty' => TRUE)))->getData();
 		self::assertEquals('',$result['title']->getValue(), 'Titel doch indiziert!');
 	}
 

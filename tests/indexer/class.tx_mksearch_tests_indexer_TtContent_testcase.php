@@ -48,6 +48,90 @@ class tx_mksearch_tests_indexer_TtContent_testcase
 	}
 
 	/**
+	 *
+	 * @param array $record
+	 * @param array $options
+	 * @param string $expectedTitle
+	 *
+	 * @return void
+	 *
+	 * @group unit
+	 * @test
+	 * @dataProvider getGetTitleData
+	 */
+	public function testGetTitle(
+		array $record,
+		array $options,
+		$expectedTitle
+	) {
+		$indexer = $this->getMock(
+			'tx_mksearch_indexer_ttcontent_Normal',
+			array('getModelToIndex', 'getPageContent')
+		);
+
+		$record['pid'] = '57';
+
+		$indexer
+			->expects($this->any())
+			->method('getPageContent')
+			->with($this->equalTo('57'))
+			->will(
+				$this->returnValue(
+					array('title' => 'PageTitle')
+				)
+			)
+		;
+		$indexer
+			->expects($this->once())
+			->method('getModelToIndex')
+			->will(
+				$this->returnValue(
+					$this->getModel($record)
+				)
+			)
+		;
+
+		$title = $this->callInaccessibleMethod($indexer, 'getTitle', $options);
+
+		$this->assertSame($expectedTitle, $title);
+	}
+
+	/**
+	 * Liefert die Daten für den testGetTitle testcase.
+	 *
+	 * @return array
+	 */
+	public function getGetTitleData()
+	{
+		return array(
+			// header 100 is hidden, so the title has to be empty with leaveHeaderEmpty option.
+			__LINE__ => array(
+				'record' => array('header_layout' => 100, 'header' => 'Test'),
+				'options' => array('leaveHeaderEmpty' => TRUE),
+				'expected_title' => '',
+			),
+			// header 100 is hidden, so the title has to be used from the page.
+			__LINE__ => array(
+				'record' => array('header_layout' => 100, 'header' => 'Test'),
+				'options' => array('leaveHeaderEmpty' => FALSE),
+				'expected_title' => 'PageTitle',
+			),
+			// the title of the content element should be used.
+			__LINE__ => array(
+				'record' => array('header' => 'Test'),
+				'options' => array('leaveHeaderEmpty' => FALSE),
+				'expected_title' => 'Test',
+			),
+			// the title of the content element is empty, the pagetitle should be used.
+			__LINE__ => array(
+				'record' => array('header' => ''),
+				'options' => array('leaveHeaderEmpty' => FALSE),
+				'expected_title' => 'PageTitle',
+			),
+		);
+	}
+
+	/**
 	 * @group unit
 	 */
 	public function testPrepareSearchDataCallsPrepareSearchDataOnActualIndexer() {
