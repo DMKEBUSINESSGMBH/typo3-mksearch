@@ -460,6 +460,10 @@ class tx_mksearch_util_Indexer {
 	 * @return array
 	 */
 	public function getPageContent($pid) {
+		$pid = (int) $pid;
+		if (!$pid) {
+			return array();
+		}
 		//first of all we have to check if the page is not hidden/deleted
 		$sqlOptions = array(
 			'where' => 'pages.uid=' . $pid . ' AND hidden=0 AND deleted=0',
