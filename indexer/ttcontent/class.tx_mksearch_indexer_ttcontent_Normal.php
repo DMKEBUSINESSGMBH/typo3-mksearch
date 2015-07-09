@@ -87,23 +87,7 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 			return NULL;
 		}
 
-		// we added our own header_layout (101). as long as there is no
-		// additional config for this type (101) it isn't displayed in the FE
-		// but indexed for Solr. so use header_layout == 100 if the title
-		// should neither be indexed nor displayed in ther FE. use header_layout == 101
-		// if the title shouldn't be displayed in the FE but indexed
-		$title = '';
-		if ($rawData['header_layout'] != 100) {
-			// Decode HTML
-			$title = trim(tx_mksearch_util_Misc::html2plain($rawData['header']));
-		}
-
-		// optional fallback to page title, if the content title is empty
-		if (empty($title) && empty($options['leaveHeaderEmpty'])) {
-			$pageData = $this->getPageContent($model->getPid());
-			$title = $pageData['title'];
-		}
-
+		$title = $this->getTitle($options);
 		$indexDoc->setTitle($title);
 
 		$indexDoc->setTimestamp($rawData['tstamp']);
@@ -176,6 +160,35 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 			$indexDoc->setAbstract(empty($c) ? $title : $c, $indexDoc->getMaxAbstractLength());
 		}
 		return $indexDoc;
+	}
+
+	/**
+	 * returns the title for the element to index.
+	 *
+	 * @param array $options
+	 * @return string
+	 */
+	protected function getTitle($options)
+	{
+		$title = '';
+		$model = $this->getModelToIndex();
+		// we added our own header_layout (101). as long as there is no
+		// additional config for this type (101) it isn't displayed in the FE
+		// but indexed for Solr. so use header_layout == 100 if the title
+		// should neither be indexed nor displayed in ther FE. use header_layout == 101
+		// if the title shouldn't be displayed in the FE but indexed
+		if ($model->getHeaderLayout() != 100) {
+			// Decode HTML
+			$title = trim(tx_mksearch_util_Misc::html2plain($model->getHeader()));
+		}
+
+		// optional fallback to page title, if the content title is empty
+		if (empty($title) && empty($options['leaveHeaderEmpty'])) {
+			$pageData = $this->getPageContent($model->getPid());
+					$title = $pageData['title'];
+		}
+
+		return $title;
 	}
 
 	/**
