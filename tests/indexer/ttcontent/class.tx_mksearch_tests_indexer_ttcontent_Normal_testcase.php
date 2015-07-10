@@ -78,7 +78,7 @@ class tx_mksearch_tests_indexer_ttcontent_Normal_testcase
 	public function testIndexDataCallsIndexPageDataIfConfigured() {
 		$indexer = $this->getMock(
 			'tx_mksearch_indexer_ttcontent_Normal',
-			array('indexPageData')
+			array('indexPageData', 'getModelToIndex')
 		);
 
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', 'mksearch', 'test');
@@ -91,7 +91,17 @@ class tx_mksearch_tests_indexer_ttcontent_Normal_testcase
 
 		$indexer->expects($this->once())
 			->method('indexPageData')
-			->with($indexDoc, $options);
+			->with($indexDoc, $options)
+		;
+		$indexer
+			->expects($this->once())
+			->method('getModelToIndex')
+			->will(
+				$this->returnValue(
+					$this->getModel($model)
+				)
+			)
+		;
 
 		$indexer->indexData($model, 'tt_content', $record, $indexDoc, $options);
 	}
@@ -102,7 +112,7 @@ class tx_mksearch_tests_indexer_ttcontent_Normal_testcase
 	public function testIndexDataCallsIndexPageDataNotIfNotConfigured() {
 		$indexer = $this->getMock(
 			'tx_mksearch_indexer_ttcontent_Normal',
-			array('indexPageData')
+			array('indexPageData', 'getModelToIndex')
 		);
 
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', 'mksearch', 'test');
@@ -113,8 +123,19 @@ class tx_mksearch_tests_indexer_ttcontent_Normal_testcase
 		$options = self::getDefaultOptions();
 		$options['indexPageData'] = 0;
 
-		$indexer->expects($this->never())
-			->method('indexPageData');
+		$indexer
+		->expects($this->never())
+			->method('indexPageData')
+		;
+		$indexer
+			->expects($this->once())
+			->method('getModelToIndex')
+			->will(
+				$this->returnValue(
+					$this->getModel($model)
+				)
+			)
+		;
 
 		$indexer->indexData($model, 'tt_content', $record, $indexDoc, $options);
 	}
