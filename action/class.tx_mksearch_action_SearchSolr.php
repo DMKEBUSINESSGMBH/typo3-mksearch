@@ -120,13 +120,19 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 	 * @param array $options
 	 * @return string
 	 */
-	private function generateCacheKey($fields, $options) {
-		// wir müssen erstmal flache array draus machen um die hash
-		//Funktion nutzen zu können
-		foreach (array_merge($fields, $options) as $key => $value)
-			$aHashParams[] = $key.$value;
-
-		return 'search_'.md5(serialize($aHashParams));
+	private function generateCacheKey(
+		array $fields,
+		array $options = array()
+	) {
+		$data = array_merge($fields, $options);
+		ksort($data);
+		foreach ($data as $key => $value) {
+			if (is_array($value)) {
+				$value = $this->generateCacheKey($value);
+			}
+			$data[$key] = $key . $value;
+		}
+		return 'search_' . md5(serialize($data));
 	}
 
 	/**
