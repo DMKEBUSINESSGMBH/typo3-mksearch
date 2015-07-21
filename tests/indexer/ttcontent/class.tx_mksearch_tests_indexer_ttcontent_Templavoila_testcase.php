@@ -91,7 +91,7 @@ class tx_mksearch_tests_indexer_ttcontent_Templavoila_testcase
 	 * @group unit
 	 */
 	public function testIndexDataCallsIndexPageDataIfConfigured() {
-		$indexer = $this->getMock(
+		$indexer = $this->getAccessibleMock(
 			'tx_mksearch_indexer_ttcontent_Templavoila',
 			array('indexPageData')
 		);
@@ -101,6 +101,7 @@ class tx_mksearch_tests_indexer_ttcontent_Templavoila_testcase
 		$record = array('uid'=> 123);
 		$model = tx_rnbase::makeInstance('tx_rnbase_model_Base', $record);
 		$model->setTableName('tt_Content');
+		$indexer->_set('modelToIndex', $model);
 		$options = self::getDefaultOptions();
 		$options['indexPageData'] = 1;
 
@@ -115,7 +116,7 @@ class tx_mksearch_tests_indexer_ttcontent_Templavoila_testcase
 	 * @group unit
 	 */
 	public function testIndexDataCallsIndexPageDataNotIfNotConfigured() {
-		$indexer = $this->getMock(
+		$indexer = $this->getAccessibleMock(
 			'tx_mksearch_indexer_ttcontent_Templavoila',
 			array('indexPageData')
 		);
@@ -125,6 +126,7 @@ class tx_mksearch_tests_indexer_ttcontent_Templavoila_testcase
 		$record = array('uid'=> 123);
 		$model = tx_rnbase::makeInstance('tx_rnbase_model_Base', $record);
 		$model->setTableName('tt_Content');
+		$indexer->_set('modelToIndex', $model);
 		$options = self::getDefaultOptions();
 		$options['indexPageData'] = 0;
 

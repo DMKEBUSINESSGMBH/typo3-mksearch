@@ -52,7 +52,7 @@ abstract class tx_mksearch_indexer_Base
 	/**
 	 * @var tx_rnbase_IModel
 	 */
-	private $modelToIndex;
+	protected $modelToIndex;
 
 	/**
 	 * Prepare a searchable document from a source record.
