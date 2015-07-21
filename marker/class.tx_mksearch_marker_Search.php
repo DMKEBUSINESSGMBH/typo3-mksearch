@@ -108,12 +108,12 @@ class tx_mksearch_marker_Search extends tx_rnbase_util_SimpleMarker {
 	 * Marker für den Typ des Logeintrages gesucht. Diesem wird dann ein passendes HTML-Template übergeben.
 	 *
 	 * @param string $template
-	 * @param tx_t3users_models_log $item
+	 * @param tx_mksearch_model_SolrHit $item
 	 * @param tx_rnbase_util_FormatUtil $formatter
 	 * @param string $confId
 	 * @param string $markerPrefix
 	 */
-	protected function addInfo($template, &$item, $formatter, $confId, $markerPrefix) {
+	protected function addInfo($template, $item, $formatter, $confId, $markerPrefix) {
 
 		$typeConfId = $confId . $item->record['extKey'].'.'.$item->record['contentType'].'.';
 		$markerClass = $formatter->getConfigurations()->get($typeConfId.'markerClass');
@@ -121,14 +121,19 @@ class tx_mksearch_marker_Search extends tx_rnbase_util_SimpleMarker {
 			// Jetzt das Template laden
 			$file = $formatter->getConfigurations()->get($typeConfId.'template', true);
 			$templateCode = $formatter->getConfigurations()->getCObj()->fileResource($file);
+
 			if($templateCode) {
 				$subpartName = $formatter->getConfigurations()->get($typeConfId.'subpartName');
 				if(!$subpartName) {
 					$subpartName = strtoupper($item->record['extKey'].'_'.$item->record['contentType']);
 				}
 				$typeTemplate = tx_rnbase_util_Templates::getSubpart($templateCode,'###'.$subpartName.'###');
+				
 				if($typeTemplate) {
 					$marker = tx_rnbase::makeInstance($markerClass);
+					// Ist es sinnvoll hier den Marker-Prefix nicht zu übergeben? Wenn man einen eigenen
+					// Marker verwendet, fällt man dadurch immer auf den Default zurück. Bei Wechsel des Markers
+					// muss also das Template angepasst werden...
 					$extraInfo = $marker->parseTemplate($typeTemplate, $item, $formatter, $typeConfId.'hit.');
 				}
 				else {
@@ -145,6 +150,7 @@ class tx_mksearch_marker_Search extends tx_rnbase_util_SimpleMarker {
 		}
 
 		$markerArray = array('###'.$markerPrefix.'###' => $extraInfo);
+
 		$template = tx_rnbase_util_Templates::substituteMarkerArrayCached($template,$markerArray);
 
 		return $template;
