@@ -1,5 +1,3 @@
-.. include:: Images.txt
-
 .. ==================================================
 .. FOR YOUR INFORMATION
 .. --------------------------------------------------
@@ -51,7 +49,7 @@ Template für Schritt 1 der Ausgabe
      <!-- ###SEARCHRESULTEMPTYLIST### START -->
                            ###LABEL_SEARCH_NORESULTSFOUND###
      <!-- ###SEARCHRESULTEMPTYLIST### END -->
-   
+
      <ol>
            ###SEARCHRESULT###
                   <li id="searchresult-###SEARCHRESULT_TOTALLINE###">
@@ -76,10 +74,12 @@ angezeigt wird, wenn keine Treffer gefunden wurden.
 
 .. image:: ../../Images/manual_html_5b7527b5.png
    :alt: Der Marker EXTRAINFO wird per Referenz auf ein lib-Objekt formatiert.
+
 Der Marker EXTRAINFO wird per Referenz auf ein lib-Objekt formatiert.
 
 .. image:: ../../Images/manual_html_22fe6f2a.png
    :alt: Das lib-Objekt stellt die Konfiguation für jeden Datentyp bereit.
+
 Das lib-Objekt stellt die Konfiguation für jeden Datentyp bereit.
 
 Noch etwasDer Subpart ###SEARCH\_RESULT### gibt einen Treffer-Datensatz aus. In

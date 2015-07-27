@@ -1,5 +1,3 @@
-.. include:: Images.txt
-
 .. ==================================================
 .. FOR YOUR INFORMATION
 .. --------------------------------------------------
@@ -20,6 +18,7 @@ Anlegen und Einrichten des Plugins
 
 .. image:: ../../Images/manual_html_349c166a.png
    :alt: Für jede Suchmaschine wird im FE-Plugin ein eigener View bereitgestellt.
+
 Für jede Suchmaschine wird im FE-Plugin ein eigener View bereitgestellt.
 
 Die Extension mksearch stellt ein Frontent-Plugin für die Suchmaske und die Ausgabe der Ergebnisse bereit. Die Ausführung ist aber speziell für die einzelnen Suchmaschinen implementiert, so dass die Möglichkeiten der Suchmaschinen optimal ausgenutzt werden können. Wenn man also ein Plugin einrichtet, muss man sich zunächst die verwendete Suchmaschine aussuchen. Anschließend setzt man die weiteren Einstellungen im jeweiligen Tab der Suchmaschine.Es gibt keine getrennten Views für das Suchformular und die

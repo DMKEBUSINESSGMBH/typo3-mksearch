@@ -1,5 +1,3 @@
-.. include:: Images.txt
-
 .. ==================================================
 .. FOR YOUR INFORMATION
 .. --------------------------------------------------
@@ -87,6 +85,7 @@ Newsdatensätzen der Extension tt\_news beschrieben.
 
 .. image:: ../../Images/manual_html_505617cc.png
    :alt: Einen Index anlegen
+
 Einen Index anlegen
 
 Als erster Schritt wird das Modul “Web->MK Search” aufgerufen. Im Tab
@@ -103,17 +102,20 @@ Lucene-Arbeitsverzeichnis ein neuer Ordner gleichen Namens angelegt.
 
 .. image:: ../../Images/manual_html_264cf732.png
    :alt: Basisdaten für einen Lucene-Index. Der Name des Index "data" ist gleichzeigig das Storageverzeichnis auf dem Server.
+
 Basisdaten für einen Lucene-Index. Der Name des Index "data" ist gleichzeigig das Storageverzeichnis auf dem Server.
 
 
 .. image:: ../../Images/manual_html_m781a862a.png
    :alt: Der Lucene-Index wurde angelegt und erfolgreich gefunden.
+
 Der Lucene-Index wurde angelegt und erfolgreich gefunden.
 
 **Solr Index**
 
 .. image:: ../../Images/manual_html_m50901eec.png
    :alt: Daten für einen Solr-Index. Im Beispiel wird ein lokaler Core mit dem Namen "testcore" konfiguriert.
+
 Daten für einen Solr-Index. Im Beispiel wird ein lokaler Core mit dem Namen "testcore" konfiguriert.
 
 Bei Apache Solr müssen im Feld für den Indexnamen die Zugriffsdaten im Format
@@ -146,6 +148,7 @@ angelegten Index aus. Anschließend können Sie speichern und schließen.
 
 .. image:: ../../Images/manual_html_2c7ece1f.png
    :alt: Die markierten Bereiche müssen korrekt ausgefüllt werden.
+
 Die markierten Bereiche müssen korrekt ausgefüllt werden.
 
 **Einen Indexer für tt_news anlegen**
@@ -173,6 +176,7 @@ Indizierung von Daten
 
 .. image:: ../../Images/manual_html_m62cfe753.png
    :alt: Über das Backend-Modul kann die Warteschlange überwacht werden.
+
 Über das Backend-Modul kann die Warteschlange überwacht werden.
 
 Die Indizierung der Daten erfolgt grundsätzlich asynchron. Daten, die zur Indizierung anstehen, werden in eine Warteschlange gestellt. Diese Warteschlange für dann von einem Scheduler-Prozess nach und nach abgearbeitet. Auf diese Weise wird die Belastung des Servers auch bei großen Datenmengen gering gehalten. Bei der Erstindizierung dauert es dadurch aber eine Weile bis alle Daten in der Suche verfügbar sind.Wenn es Fehler während der Indizierung gab, dann werden diese in das devlog geschrieben.Über Backend-Modul haben Sie die Möglichkeit die Warteschlange zu
