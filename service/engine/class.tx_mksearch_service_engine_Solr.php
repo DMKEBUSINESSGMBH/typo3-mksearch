@@ -312,9 +312,9 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 	 * @throws Exception
 	 */
 	public function commitIndex() {
-    $this->getSolr()->commit();
-    $this->getSolr()->optimize();
-	  return true;
+		$this->getSolr()->commit();
+		$this->optimizeIndex();
+		return true;
 	}
 
 	/**
@@ -359,7 +359,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 	public function optimizeIndex() {
 		// Committing the index before doing the actual optimization is not necessary
 		// as the commit happens implictely on optimization by Zend_Lucene
-		$this->index->optimize();
+		$this->getSolr()->optimize();
 	}
 
 	/**
