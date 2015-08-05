@@ -120,7 +120,11 @@ class tx_mksearch_indexer_TtNewsNews
 		// At least one of the news' categories was found on black list
 		if ($abort) {
 			tx_rnbase::load('tx_rnbase_util_Logger');
-			tx_rnbase_util_Logger::info('News wurde nicht indiziert, weil Kategorie (Include/Exclude) nicht gesetzt ist.', 'mksearch');
+			tx_rnbase_util_Logger::info(
+				'News wurde nicht indiziert, weil Kategorie (Include/Exclude) nicht gesetzt ist' .
+				' oder das Signal von einem Hook gegeben wurde.',
+				'mksearch'
+			);
 			if ($options['deleteOnAbort']) {
 				$indexDoc->setDeleted(TRUE);
 				return $indexDoc;
