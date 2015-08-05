@@ -107,6 +107,35 @@ abstract class tx_mksearch_tests_Testcase
 	}
 
 	/**
+	 * @param array $record
+	 * @param tx_mksearch_interface_Indexer $indexer
+	 * @param string $tableName
+	 * @param array $options
+	 * @return tx_mksearch_model_IndexerDocumentBase|PHPUnit_Framework_MockObject_MockObject
+	 */
+	protected function getPreparedIndexDocMockByRecord(
+		array $record,
+		tx_mksearch_interface_Indexer $indexer,
+		$tableName,
+		$options = NULL
+	) {
+		$indexDoc = $this->getIndexDocMock($indexer);
+
+		if (!is_array($options)) {
+			$options = tx_mksearch_util_Misc::parseTsConfig(
+				'{' . LF . $indexer->getDefaultTSConfig() . LF . '}'
+			);
+		}
+
+		return $indexer->prepareSearchData(
+			$tableName,
+			$record,
+			$indexDoc,
+			$options
+		);
+	}
+
+	/**
 	 * checks a index doc, if there was a correct value
 	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
 	 * @param string $fieldName
