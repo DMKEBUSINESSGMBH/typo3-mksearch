@@ -12,6 +12,10 @@
    :class:  typoscript
 .. role::   php(code)
 
+1.4.31
+------
+* [CLEANUP] abort message changed for ttnewss indexer
+
 1.4.28
 ------
 * [BUGFIX] modelToIndex property now protected instead of private
