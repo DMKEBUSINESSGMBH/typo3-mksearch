@@ -113,13 +113,13 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 		tx_rnbase::load('tx_rnbase_util_Dates');
 		// achtung: die reihenfolge ist wichtig für addRecordsToIndex
 		$record = array(
-				'cr_date'	=> tx_rnbase_util_Dates::datetime_tstamp2mysql($GLOBALS['EXEC_TIME']),
-				'prefer' 	=> $prefer ? 1 : 0,
-				'recid'		=> $uid,
-				'tablename'	=> $tableName,
-				'data'		=> $data!==false ? (is_array($data) ? serialize($data) : $data) : '',
-				'resolver'	=> !empty($resolver) ? $resolver : '',
-			);
+			'cr_date'	=> tx_rnbase_util_Dates::datetime_tstamp2mysql($GLOBALS['EXEC_TIME']),
+			'prefer' 	=> (int) $prefer,
+			'recid'		=> $uid,
+			'tablename'	=> $tableName,
+			'data'		=> $data!==false ? (is_array($data) ? serialize($data) : $data) : '',
+			'resolver'	=> !empty($resolver) ? $resolver : '',
+		);
 		return $record;
 	}
 
