@@ -12,6 +12,11 @@
    :class:  typoscript
 .. role::   php(code)
 
+1.4.32
+------
+* [TASK] optimize index on commit with service method from interface.
+* [TASK] new getPreparedIndexDocMockByRecord method for phpunit tests
+
 1.4.31
 ------
 * [CLEANUP] abort message changed for ttnewss indexer
