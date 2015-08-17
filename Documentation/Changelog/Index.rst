@@ -12,6 +12,10 @@
    :class:  typoscript
 .. role::   php(code)
 
+1.4.34
+------
+* [TASK] typecast to int for preferer option, instead of bool cast
+
 1.4.32
 ------
 * [TASK] optimize index on commit with service method from interface.
