@@ -125,6 +125,9 @@ class tx_mksearch_util_Indexer {
 		$tempIndexDoc = array();
 		/* @var $model tx_rnbase_IModel */
 		foreach ($models as $model){
+			if (!$model) {
+				continue;
+			}
 			foreach ($recordIndexMapping as $recordKey => $indexDocKey) {
 				if ($dontIndexHidden && $model->isHidden()) {
 					continue;
