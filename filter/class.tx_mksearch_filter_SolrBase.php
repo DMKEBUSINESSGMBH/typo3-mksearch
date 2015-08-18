@@ -585,6 +585,8 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 			$template, $markArray, $subpartArray, $wrappedSubpartArray,
 			$formatter, $confId, $marker
 		);
+		// Aufpassen: In $confId steht "searchsolr.hit.filter."
+		// in $this->getConfId() steht "searchsolr.filter.default." (bzw. dismax)
 
 		return tx_rnbase_util_Templates::substituteMarkerArrayCached(
 			$template, $markArray, $subpartArray, $wrappedSubpartArray
@@ -654,6 +656,9 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 
 			$templateMarker = tx_rnbase::makeInstance('tx_mksearch_marker_General');
 			$formTemplate = $templateMarker->parseTemplate($formTemplate, $formData, $formatter, $confId.'form.', 'FORM');
+
+			// Formularfelder
+			$formTemplate = $this->getFilterUtility()->parseCustomFilters($formTemplate, $formatter->getConfigurations(), $confId);
 		}
 
 		$markArray['###'.$markerName.'###'] = $formTemplate;

@@ -97,6 +97,83 @@ class tx_mksearch_util_Filter {
 	}
 
 	/**
+	 * Rendert formularfelder
+	 *
+	 * @param string $template
+	 * @param string $confId
+	 * @param string $markerName
+	 * @return string
+	 */
+	public function parseCustomFilters($template, tx_rnbase_configurations $configurations, $confId, $markerName = 'SEARCH_FILTER') {
+
+		if(!tx_rnbase_util_BaseMarker::containsMarker($template, $markerName)) {
+			return $template;
+		}
+
+		$parameters = $configurations->getParameters();
+		$formfields = $configurations->getKeyNames($confId . 'formfields.');
+
+		if (!is_array($formfields) || empty($formfields)) {
+			return $template;
+		}
+
+		$markArray = array();
+		/* @var $listBuilder tx_rnbase_util_ListBuilder */
+		$listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder');
+		foreach($formfields as $field) {
+			$fieldMarker = $markerName . '_' . strtoupper($field);
+			$fieldConfId = $confId . 'formfields.' . $field . '.';
+			if(!tx_rnbase_util_BaseMarker::containsMarker($template, $fieldMarker)) {
+				continue;
+			}
+			$fieldItems = array();
+			$activeMark = $configurations->get($fieldConfId . 'activeMark', TRUE);
+			$activeMark = ''.$activeMark == '' ? 'selected="selected"' : $activeMark;
+			foreach($configurations->get($fieldConfId . 'values.') as $value => $config) {
+				$fieldActive = $parameters->getCleaned($field);
+				$markArray['###' . $fieldMarker . '_FORM_NAME###'] = $configurations->getQualifier() . '[' . $field . ']';
+				$markArray['###' . $fieldMarker . '_FORM_VALUE###'] = $fieldActive;
+				$fieldActive = empty($fieldActive) ? $configurations->get($fieldConfId . 'default') : $fieldActive;
+				$fieldId = is_array($config) ? $config['value'] : $value;
+				$fieldItems[] = tx_rnbase::makeInstance(
+						'tx_rnbase_model_base',
+						array(
+							'uid' => $fieldId,
+							'caption' => is_array($config) ? $config['caption'] : $config,
+							'selected' => $fieldId == $fieldActive ? $activeMark : '',
+						)
+				);
+			}
+			$template = $listBuilder->render(
+					$fieldItems, FALSE, $template,
+					'tx_rnbase_util_SimpleMarker',
+					$confId . 'formfields.' . $field . '.',
+					($fieldMarker), $configurations->getFormatter()
+			);
+		}
+
+		$formValues = array('term', 'place');
+		foreach ($formValues as $formField) {
+			$formMarker = $markerName . '_' . strtoupper($formField);
+			if(!tx_rnbase_util_BaseMarker::containsMarker($template, $formMarker)) {
+				continue;
+			}
+			$markArray['###' . $formMarker . '_FORM_VALUE###'] = $parameters->getCleaned($formField);
+		}
+
+		if(tx_rnbase_util_BaseMarker::containsMarker($template, $markerName . '_SPATIAL')) {
+			$markArray['###' . $markerName . '_SPATIAL_VALUE###'] = $this->getSpatialPoint();
+		}
+
+		if (!empty($markArray)) {
+			$template = tx_rnbase_util_Templates::substituteMarkerArrayCached(
+					$template, $markArray
+			);
+		}
+
+		return $template;
+	}
+	/**
 	 * Fügt die Sortierung zu dem Filter hinzu.
 	 *
 	 * @TODO: das klappt zurzeit nur bei einfacher sortierung!
@@ -159,6 +236,7 @@ class tx_mksearch_util_Filter {
 
 		// die felder für die sortierung stehen kommasepariert im ts
 		$sortFields = $configurations->get($confId.'fields');
+
 		$sortFields = $sortFields ? t3lib_div::trimExplode(',', $sortFields, true) : array();
 
 		if(!empty($sortFields)) {
