@@ -135,8 +135,9 @@ class tx_mksearch_util_Indexer {
 				if (!empty($model->record[$recordKey])) {
 					// Attributes can be commaseparated to index values into different fields
 					$indexDocKeys = tx_rnbase_util_Strings::trimExplode(',', $indexDocKey);
-					foreach ($indexDocKeys As $indexDocKey)
+					foreach ($indexDocKeys As $indexDocKey) {
 						$tempIndexDoc[$prefix.$indexDocKey][] = $model->record[$recordKey];
+					}
 				}
 			}
 		}
