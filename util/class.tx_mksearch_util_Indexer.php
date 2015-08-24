@@ -133,7 +133,10 @@ class tx_mksearch_util_Indexer {
 					continue;
 				}
 				if (!empty($model->record[$recordKey])) {
-					$tempIndexDoc[$prefix.$indexDocKey][] = $model->record[$recordKey];
+					// Attributes can be commaseparated to index values into different fields
+					$indexDocKeys = tx_rnbase_util_Strings::trimExplode(',', $indexDocKey);
+					foreach ($indexDocKeys As $indexDocKey)
+						$tempIndexDoc[$prefix.$indexDocKey][] = $model->record[$recordKey];
 				}
 			}
 		}

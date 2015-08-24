@@ -436,6 +436,34 @@ class tx_mksearch_tests_util_Indexer_testcase
 		);
 	}
 
+	public function testIndexArrayOfModelsByMappingWithMoreFields() {
+		$indexDoc = tx_rnbase::makeInstance(
+				'tx_mksearch_model_IndexerDocumentBase', '', ''
+		);
+		$models = array(
+				tx_rnbase::makeInstance(
+						'tx_rnbase_model_base', array('recordField' => 123)
+				),
+				tx_rnbase::makeInstance(
+						'tx_rnbase_model_base', array('recordField' => 456)
+				)
+		);
+
+		tx_mksearch_util_Indexer::getInstance()->indexArrayOfModelsByMapping(
+				$models, array('recordField' => 'documentField,documentField2'), $indexDoc
+		);
+		$docData = $indexDoc->getData();
+
+		self::assertEquals(
+				array(123, 456), $docData['documentField']->getValue(),
+				'models falsch indiziert'
+		);
+		self::assertEquals(
+				array(123, 456), $docData['documentField2']->getValue(),
+				'second field is wrong'
+		);
+	}
+
 	/**
 	 *
 	 */
