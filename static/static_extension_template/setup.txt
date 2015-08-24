@@ -265,7 +265,19 @@ lib.mksearch.defaultsolrfilter {
 	### kommaseparierte liste mit den erlaubten fq feldern, welche über parameter gesetzt werden können
 	allowedFqParams =
 
-	### sorting beispiel
+	### form field for sorting the new way
+	formfields.sort {
+	  default = score
+	  activeMark = selected="selected"
+	  values.10.value = score desc
+	  values.10.caption = ###LABEL_SCORE###
+	  values.20.value = tstamp asc
+	  values.20.caption = ###LABEL_TIME_ASC###
+	  values.30.value = tstamp desc
+	  values.30.caption = ###LABEL_TIME_DESC###
+	}
+
+	### sorting beispiel (veraltet)
 #	sort {
 		### Definiert Felder, für die zusätzliche Marker für die Sortierung integriert werden sollen
 #		fields = uid, title
