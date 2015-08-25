@@ -97,7 +97,7 @@ class tx_mksearch_util_Filter {
 	}
 
 	/**
-	 * Rendert formularfelder
+	 * Rendert Formularfelder. Derzeit kann man damit das Seiten-Limit und die Sortierung einstellen
 	 *
 	 * @param string $template
 	 * @param string $confId
@@ -144,6 +144,7 @@ class tx_mksearch_util_Filter {
 						)
 				);
 			}
+
 			$template = $listBuilder->render(
 					$fieldItems, FALSE, $template,
 					'tx_rnbase_util_SimpleMarker',

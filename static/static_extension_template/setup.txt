@@ -267,6 +267,19 @@ lib.mksearch.defaultsolrfilter {
 
 	### form field for pagelimit
 	formfields.pagelimit {
+		# Ein Beispiel für die Verlinkung des Pagelimits mit dem Marker ###SEARCH_FILTER_PAGELIMIT_SHOWLINK###
+		# Dafür muss das activeMark aber noch auf 1 gesetzt werden
+		links.show {
+			pid = 0
+			useKeepVars = 1
+			_cfg.params.pagelimit = uid
+			atagparams.class = CASE
+			atagparams.class.key.field = selected
+			atagparams.class.1 = TEXT
+			atagparams.class.1.value = active
+			atagparams.class.default = TEXT
+			atagparams.class.default.value = inactive
+		}
 		default = 10
 		activeMark = selected="selected"
 		values.10.value = 10
