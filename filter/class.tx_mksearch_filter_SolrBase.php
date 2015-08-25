@@ -141,7 +141,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 		}
 
 		// das Limit setzen
-		$this->handleLimit($options, $parameters, $configurations, $confId);
+		$this->handleLimit($options);
 
 		// suchstring beachten
 		$this->handleTerm($fields, $parameters, $configurations, $confId);
@@ -175,34 +175,16 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 	 * Setzt die Anzahl der Treffer pro Seite
 	 *
 	 * @param 	array 						$options
-	 * @param 	tx_rnbase_IParameters 		$parameters
-	 * @param 	tx_rnbase_configurations 	$configurations
+	 * @param 	tx_rnbase_IParameters 	$parameters
+	 * @param 	tx_rnbase_configurations $configurations
 	 * @param 	string 						$confId
 	 */
-	protected function handleLimit(&$options, $parameters=NULL, $configurations=NULL, $confId=NULL) {
-
-		if($confId !== NULL) {
-			$options['limit'] = $this->getFilterUtility()->getPageLimit($parameters, $configurations, $confId, (int) $this->getConfValue('options.limit'));
-		}
-		else {
-			// Das lassen wir wegen Kindklassen drin, denen die neuen Parameter fehlen
-			// wir können das limit im flexform setzen
-			$options['limit'] = (int) $this->getConfValue('options.limit');
-			// -1 = unlimited
-			if ($options['limit'] === -1) {
-				// ein unset führt durch den default von 10 in Apache_Solr_Service::search nicht zum erfolg,
-				// wir müssen zwingend ein limit setzen
-				$options['limit'] = 999999;
-			}
-			// -2 = 0
-			// durch typo3 und das casten von werten,
-			// kann im flexform 0 nicht explizit angegeben werden.
-			elseif ($options['limit'] === -2) {
-				$options['limit'] = 0;
-			}
-		}
-
-
+	protected function handleLimit(&$options) {
+		$options['limit'] = $this->getFilterUtility()->getPageLimit(
+				$this->getParameters(),
+				$this->getConfigurations(),
+				$this->getConfId(),
+				(int) $this->getConfValue('options.limit'));
 	}
 
 	/**
