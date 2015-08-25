@@ -265,6 +265,17 @@ lib.mksearch.defaultsolrfilter {
 	### kommaseparierte liste mit den erlaubten fq feldern, welche über parameter gesetzt werden können
 	allowedFqParams =
 
+	### form field for pagelimit
+	formfields.pagelimit {
+		default = 10
+		activeMark = selected="selected"
+		values.10.value = 10
+		values.10.caption = ###LABEL_PAGELIMIT_10###
+		values.20.value = 50
+		values.20.caption = ###LABEL_PAGELIMIT_50###
+		values.30.value = 100
+		values.30.caption = ###LABEL_PAGELIMIT_100###
+	}
 	### form field for sorting the new way
 	formfields.sort {
 	  default = score

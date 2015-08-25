@@ -92,7 +92,7 @@ searchsolr.filter.default.formfields {
 // </select> </label> </html>
 	}
 
-	public function t1st_parseCustomFiltersWithNoConfiguration() {
+	public function test_parseCustomFiltersWithNoConfiguration() {
 		$typoScript = '
 searchsolr.filter.default.formfields {
 }';
@@ -104,6 +104,118 @@ searchsolr.filter.default.formfields {
 
 		$result = $this->filterUtil->parseCustomFilters($template, $conf, 'searchsolr.filter.default.', 'FILTER');
 		$this->assertSame($template, $result);
+	}
+	/**
+	 * @group integration
+	 */
+	public function test_getPageLimit() {
+		$typoScript = '
+searchsolr.filter.default.formfields.pagelimit {
+  activeMark = selected="selected"
+  values.10.value = 10
+  values.10.caption = 10 hits
+  values.20.value = 20
+  values.20.caption = 20 hits
+  values.30.value = 50
+  values.30.caption = 50 hits
+}';
+		$params = tx_rnbase::makeInstance('tx_rnbase_parameters');
+		$params->offsetSet('pagelimit', '50');
+		$confArr = tx_rnbase_util_TS::parseTsConfig($typoScript);
+		$conf = $this->createConfigurations($confArr, 'mksearch', 'mksearch', $params);
+
+		$result = $this->filterUtil->getPageLimit($params, $conf, 'searchsolr.filter.default.', 5);
+
+		$this->assertEquals(50, $result, 'Anzahl Treffer nicht aus Parametern übernommen');
+
+		$params->offsetSet('pagelimit', '500');
+		$result = $this->filterUtil->getPageLimit($params, $conf, 'searchsolr.filter.default.', 5);
+		$this->assertEquals(5, $result, 'Anzahl nicht auf default gesetzt');
+
+		$params->offsetUnset('pagelimit');
+		$result = $this->filterUtil->getPageLimit($params, $conf, 'searchsolr.filter.default.', 5);
+		$this->assertEquals(5, $result, 'Anzahl nicht auf default gesetzt');
+
+		// Unlimited ist im TS nicht vorhanden, also ist es über das FE nicht setzbar
+		$params->offsetSet('pagelimit', '-1');
+		$result = $this->filterUtil->getPageLimit($params, $conf, 'searchsolr.filter.default.', 5);
+		$this->assertEquals(5, $result, 'Anzahl nicht auf default gesetzt');
+
+		$params->offsetSet('pagelimit', '-2');
+		$result = $this->filterUtil->getPageLimit($params, $conf, 'searchsolr.filter.default.', 5);
+		$this->assertEquals(5, $result, 'Anzahl nicht auf default gesetzt');
+
+	}
+	/**
+	 * @group integration
+	 */
+	public function test_getPageLimitWithSpecialValues() {
+		$typoScript = '
+searchsolr.filter.default.formfields.pagelimit {
+  default = 10
+  activeMark = selected="selected"
+  values.10.value = 10
+  values.10.caption = 10 hits
+  values.20.value = 20
+  values.20.caption = 20 hits
+  values.30.value = 50
+  values.30.caption = 50 hits
+  values.50.value = -1
+  values.50.caption = Unlimited hits
+  values.60.value = -2
+  values.60.caption = No results
+}';
+		$params = tx_rnbase::makeInstance('tx_rnbase_parameters');
+		$params->offsetSet('pagelimit', '-1');
+		$confArr = tx_rnbase_util_TS::parseTsConfig($typoScript);
+		$conf = $this->createConfigurations($confArr, 'mksearch', 'mksearch', $params);
+
+		$result = $this->filterUtil->getPageLimit($params, $conf, 'searchsolr.filter.default.', 5);
+		$this->assertEquals(999999, $result, 'Anzahl Treffer nicht auf unendlich gesetzt');
+
+		$params->offsetSet('pagelimit', '-2');
+		$result = $this->filterUtil->getPageLimit($params, $conf, 'searchsolr.filter.default.', 5);
+		$this->assertEquals(0, $result, 'Anzahl Treffer nicht auf 0 gesetzt');
+	}
+	/**
+	 * Hier muss immer der Fallback-Wert aus dem Flexform genutzt werden
+	 * @group integration
+	 */
+	public function test_getPageLimitWithoutTsConfiguration() {
+		$typoScript = '
+searchsolr.filter.default.formfields.pagelimit {
+}';
+		$params = tx_rnbase::makeInstance('tx_rnbase_parameters');
+		$params->offsetSet('pagelimit', '50');
+		$confArr = tx_rnbase_util_TS::parseTsConfig($typoScript);
+		$conf = $this->createConfigurations($confArr, 'mksearch', 'mksearch', $params);
+
+		$result = $this->filterUtil->getPageLimit($params, $conf, 'searchsolr.filter.default.', 5);
+
+		$this->assertEquals(5, $result, 'Anzahl Treffer auf fallback gesetzt');
+
+		$params->offsetSet('pagelimit', '500');
+		$result = $this->filterUtil->getPageLimit($params, $conf, 'searchsolr.filter.default.', 5);
+		$this->assertEquals(5, $result, 'Anzahl Treffer auf fallback gesetzt');
+
+		$params->offsetUnset('pagelimit');
+		$result = $this->filterUtil->getPageLimit($params, $conf, 'searchsolr.filter.default.', 5);
+		$this->assertEquals(5, $result, 'Anzahl Treffer auf fallback gesetzt');
+
+		// Das FE darf hier nie greifen
+		$params->offsetSet('pagelimit', '-1');
+		$result = $this->filterUtil->getPageLimit($params, $conf, 'searchsolr.filter.default.', 5);
+		$this->assertEquals(5, $result, 'Anzahl nicht auf default gesetzt');
+
+		$params->offsetSet('pagelimit', '-2');
+		$result = $this->filterUtil->getPageLimit($params, $conf, 'searchsolr.filter.default.', 5);
+		$this->assertEquals(5, $result, 'Anzahl nicht auf default gesetzt');
+
+		// Sonderfälle prüfen
+		$result = $this->filterUtil->getPageLimit($params, $conf, 'searchsolr.filter.default.', -1);
+		$this->assertEquals(999999, $result, 'Anzahl nicht auf unendlich gesetzt');
+		$result = $this->filterUtil->getPageLimit($params, $conf, 'searchsolr.filter.default.', -2);
+		$this->assertEquals(0, $result, 'Anzahl nicht auf 0 gesetzt');
 	}
 
 	/**

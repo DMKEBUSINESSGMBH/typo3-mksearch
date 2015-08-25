@@ -173,6 +173,47 @@ class tx_mksearch_util_Filter {
 
 		return $template;
 	}
+
+	/**
+	 *
+	 * @param tx_rnbase_IParameters $parameters
+	 * @param tx_rnbase_configurations $configurations
+	 * @param string $confId
+	 * @param int $defaultValue
+	 */
+	public function getPageLimit(tx_rnbase_IParameters $parameters, $configurations, $confId, $defaultValue) {
+		$pageLimit = $parameters->getInt('pagelimit');
+		// Die möglichen Wert suchen
+		$limitValues = array();
+		$limits = $configurations->get($confId . 'formfields.pagelimit.values.');
+		if(is_array($limits) && count($limits) > 0) {
+			foreach ($limits As $cfg) {
+				$limitValues[] = $cfg['value'];
+			}
+			if(!in_array($pageLimit, $limitValues)) {
+				// Der Defaultwert kommt jetzt letztendlich aus dem Flexform
+				$pageLimit = $defaultValue;
+			}
+		}
+		else {
+			$pageLimit = $defaultValue;
+		}
+		if ($pageLimit === -1) {
+			// ein unset führt durch den default von 10 in Apache_Solr_Service::search nicht zum erfolg,
+			// wir müssen zwingend ein limit setzen
+			$pageLimit = 999999;
+		}
+		// -2 = 0
+		// durch typo3 und das casten von werten,
+		// kann im flexform 0 nicht explizit angegeben werden.
+		elseif ($pageLimit === -2) {
+			$pageLimit = 0;
+		}
+
+
+		return $pageLimit;
+
+	}
 	/**
 	 * Fügt die Sortierung zu dem Filter hinzu.
 	 *

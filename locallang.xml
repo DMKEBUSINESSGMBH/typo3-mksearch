@@ -41,6 +41,14 @@
 			<label index="label_search_noresultsfound"><![CDATA[<div class="noResultsFound">Your search did not return any results.</div>]]></label>
 			
 			<label index="label_search_reset">reset Search</label>
+
+			<label index="label_score">Score</label>
+			<label index="label_time_asc">Time ascending</label>
+			<label index="label_time_desc">Time descending</label>
+			
+			<label index="label_pagelimit_10">10 hits</label>
+			<label index="label_pagelimit_50">50 hits</label>
+			<label index="label_pagelimit_100">100 hits</label>
 			
 			<label index="ERROR_default">There was an unexpected error!</label>			
 		</languageKey>
@@ -78,7 +86,15 @@
 			<label index="label_search_noresultsfound"><![CDATA[<div class="noResultsFound">Ihre Suche brachte keine Ergebnisse.</div>]]></label>
 			
 			<label index="label_search_reset">Suche zurücksetzen</label>
+
+			<label index="label_score">Relevanz</label>
+			<label index="label_time_asc">Aktualität aufsteigend</label>
+			<label index="label_time_desc">Aktualität absteigend</label>
 			
+			<label index="label_pagelimit_10">10 Treffer</label>
+			<label index="label_pagelimit_50">50 Treffer</label>
+			<label index="label_pagelimit_100">100 Treffer</label>
+
 			<label index="ERROR_default">Es gab einen unerwarteten Fehler!</label>
 		</languageKey>
 		<languageKey index="nl" type="array">
