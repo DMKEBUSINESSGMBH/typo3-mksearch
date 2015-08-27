@@ -1,3 +1,8 @@
+v1.4.35 (??.??.2015)
+ * Predefined form field for sorting search results in solr
+ * Indexer configuration: It is possible to index database fields into more several document attributes
+ * Predefined form field to limit page size for solr
+
 2010-01-07 Lars Heber <lars.heber@das-medienkombinat.de>
 	* v0.3.2
 	* Cleaned up generic searches - thx to rn_base 0.6.1
