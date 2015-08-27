@@ -436,6 +436,38 @@ class tx_mksearch_tests_util_Indexer_testcase
 		);
 	}
 
+	/**
+	 *
+	 */
+	public function testIndexArrayOfModelsByMappingWithFieldConversion() {
+		$indexDoc = tx_rnbase::makeInstance(
+				'tx_mksearch_model_IndexerDocumentBase', '', ''
+		);
+		$models = array(
+				tx_rnbase::makeInstance(
+						'tx_rnbase_model_base', array('recordField' => 1440668593)
+				),
+				tx_rnbase::makeInstance(
+						'tx_rnbase_model_base', array('recordField' => 1439034300)
+				)
+		);
+		$options = array(
+				'fieldsConversion.' => array('documentField.' => array(
+						'unix2isodate' => 1
+				))
+		);
+
+		tx_mksearch_util_Indexer::getInstance()->indexArrayOfModelsByMapping(
+				$models, array('recordField' => 'documentField'), $indexDoc, '', $options
+		);
+		$docData = $indexDoc->getData();
+
+		self::assertEquals(
+				array('2015-08-27T09:43:13Z', '2015-08-08T11:45:00Z'), $docData['documentField']->getValue(),
+				'models falsch indiziert'
+		);
+	}
+
 	public function testIndexArrayOfModelsByMappingWithMoreFields() {
 		$indexDoc = tx_rnbase::makeInstance(
 				'tx_mksearch_model_IndexerDocumentBase', '', ''

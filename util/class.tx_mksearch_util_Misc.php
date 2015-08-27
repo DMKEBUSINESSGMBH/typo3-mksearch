@@ -32,6 +32,7 @@ class tx_mksearch_util_Misc {
 	 * Convert a Timestamp to a ISO formatted DateTime string in GMT time zone
 	 * @param int $tstamp
 	 * @param int $offset
+	 * @return string in format Y-m-d\TH:i:s\Z
 	 */
 	public static function getISODateFromTimestamp($tstamp, $offset=0) {
 		$dt = new DateTime('@'.($tstamp+$offset));

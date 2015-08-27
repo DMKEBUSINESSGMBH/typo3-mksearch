@@ -12,6 +12,13 @@
    :class:  typoscript
 .. role::   php(code)
 
+1.4.35
+------
+* [FEATURE] Predefined form field for sorting search results in solr
+* [FEATURE] Indexer configuration: It is possible to index database fields into more several document attributes
+* [FEATURE] Predefined form field to limit page size for solr
+* [FEATURE] Indexer configuration: It is possible to autoconvert unix timestamps to ISO dates with fieldsConversion.attributename.unix2isodate=1
+
 1.4.34
 ------
 * [TASK] typecast to int for preferer option, instead of bool cast

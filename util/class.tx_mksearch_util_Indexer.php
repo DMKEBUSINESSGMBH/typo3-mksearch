@@ -24,6 +24,9 @@
 
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
+tx_rnbase::load('tx_mksearch_util_Misc');
+
+
 
 /**
  */
@@ -121,6 +124,7 @@ class tx_mksearch_util_Indexer {
 		tx_mksearch_interface_IndexerDocument $indexDoc, $prefix = '',
 		array $options = array(), $dontIndexHidden = TRUE
 	) {
+
 		//collect values
 		$tempIndexDoc = array();
 		/* @var $model tx_rnbase_IModel */
@@ -145,6 +149,7 @@ class tx_mksearch_util_Indexer {
 		//and now add the fields
 		if(!empty($tempIndexDoc)){
 			foreach ($tempIndexDoc as $indexDocKey => $values){
+				$values = $this->doValueConversion($values, $indexDocKey, $options);
 				$indexDoc->addField($indexDocKey, $values);
 			}
 		}
@@ -152,6 +157,30 @@ class tx_mksearch_util_Indexer {
 		return $indexDoc;
 	}
 
+	/**
+	 * handle fieldsConversion from indexer configuration
+	 * @param array $values
+	 * @param string $indexDocKey
+	 * @param array $options
+	 */
+	private function doValueConversion($values, $indexDocKey, $options) {
+		if(!(array_key_exists('fieldsConversion.', $options) &&
+			array_key_exists($indexDocKey.'.', $options['fieldsConversion.']))) {
+			return $values;
+		}
+
+		$cfg = $options['fieldsConversion.'][$indexDocKey.'.'];
+
+		if(isset($cfg['unix2isodate']) && intval($cfg['unix2isodate']) > 0) {
+			// Datum konvertieren
+			// einen offset aus der Config lesen
+			$offset = isset($cfg['unix2isodate_offset']) ? intval($cfg['unix2isodate_offset']) : 0;
+			foreach ($values As $key => $value) {
+				$values[$key] = tx_mksearch_util_Misc::getISODateFromTimestamp($value, $offset);
+			}
+		}
+		return $values;
+	}
 	/**
 	 * Adds a element to the queue
 	 *
