@@ -62,6 +62,11 @@ class tx_mksearch_marker_Facet extends tx_mksearch_marker_SearchResultSimple {
 			$field = $item->getField();
 			$value = $item->getId();
 
+			// #4 fixed field name for query facets
+			if($item->getFacetType() == tx_mksearch_model_Facet::TYPE_QUERY) {
+				$field = tx_mksearch_model_Facet::TYPE_QUERY;
+			}
+
 			// check fieldmapping:
 			$fieldMap = $configurations->get($confId . 'mapping.field.' . $field);
 			$field = empty($fieldMap) ? $field : $fieldMap;

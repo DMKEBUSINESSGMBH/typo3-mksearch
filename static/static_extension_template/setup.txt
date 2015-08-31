@@ -246,14 +246,15 @@ lib.mksearch.defaultsolrfilter {
 	### Dazu muss in der Konfiguration der Indexer die Option indexSiteRootPage aktiviert werden
 	respectSiteRootPage = 0
 
+	### DEPRECATED mit dieser Variante ist nur genau eine Facette möglich
 	### wenn Facetten genutzt werden und plugin.tx_mksearch.searchsolr.facet.links.show.excludeFieldName = 1
 	### gesetzt ist, dann kann hier das Solr Feld für die Facetten angegeben werden. Es wird dann nachträglich
 	### im defaultFilter vorrangestellt wenn ein fq Parameter gesetzt wurde.
 	fqField =
 
-	### hier werden alle felder angegeben, die facetiert werden sollen
+	### field facets: hier werden alle felder angegeben, die facettiert werden sollen
 	#options.facet.fields = mkkeywords_tag_names_ms, content_ident_s
-
+	
 	### die Sortierung der Facetten. default ist count. ansonsten ist nur noch index möglich
 	#options.facet.sort = index
 
@@ -264,6 +265,13 @@ lib.mksearch.defaultsolrfilter {
 
 	### kommaseparierte liste mit den erlaubten fq feldern, welche über parameter gesetzt werden können
 	allowedFqParams =
+
+	### query facets: die Filteranweisung für die Query-Facets
+	# Diese Anweisungen müssen identisch sein, mit den Angaben in der solrconfig.xml
+	facet.queries {
+#		date_lastweek = datetime:[NOW-7DAYS/DAY TO NOW]
+#		date_lastmonth = datetime:[NOW-1MONTH/MONTH TO NOW]
+	}
 
 	### form field for pagelimit
 	formfields.pagelimit {

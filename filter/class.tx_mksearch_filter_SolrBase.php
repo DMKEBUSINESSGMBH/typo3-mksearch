@@ -28,6 +28,8 @@ tx_rnbase::load('tx_rnbase_filter_BaseFilter');
 tx_rnbase::load('tx_rnbase_util_ListBuilderInfo');
 tx_rnbase::load('tx_mksearch_util_Filter');
 tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
+tx_rnbase::load('tx_mksearch_model_Facet');
+
 
 /**
  * Der Filter liest seine Konfiguration passend zum Typ des Solr RequestHandlers. Der Typ
@@ -290,7 +292,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 
 		// die erlaubten felder holen
 		$allowedFqParams = $configurations->getExploded($confId.'allowedFqParams');
-		// wenn keine konfiguriert sind, nehmen wir automatisch die faccet fields
+		// wenn keine konfiguriert sind, nehmen wir automatisch die facet fields
 		if (empty($allowedFqParams) && !empty($options['facet.field'])) {
 			$allowedFqParams = $options['facet.field'];
 		}
@@ -298,10 +300,11 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 		// parameter der filterquery prüfen
 		// @see tx_mksearch_marker_Facet::prepareItem
 		$fqParams = $parameters->get('fq');
-		$fqParams = is_array($fqParams) ? $fqParams : array(trim($fqParams));
+		$fqParams = is_array($fqParams) ? $fqParams : ( trim($fqParams) ? array(trim($fqParams)) : array() );
 		//@todo die if blöcke in eigene funktionen auslagern
 		if(!empty($fqParams)) {
 			// FQ field, for single queries
+			// Das ist deprecated! Dadurch wäre nur ein festes Facet-Field möglich
 			$sFqField = $configurations->get($confId.'fqField');
 			foreach ($fqParams as $fqField => $fqValues) {
 				$fieldOptions = array();
@@ -309,16 +312,25 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 				if (empty($fqValues)) {
 					continue;
 				}
-				foreach ($fqValues as $fqValue) {
+
+				foreach ($fqValues as $fqName => $fqValue) {
 					$fqValue = trim($fqValue);
 					if ($sFqField) {
+						// deprecated: sollte nicht mehr vorkommen
 						$fq = $sFqField . ':"' . tx_mksearch_util_Misc::sanitizeFq($fqValue) . '"';
 					} else {
-						// field value konstelation prüfen
-						$fq = $this->parseFieldAndValue($fqValue, $allowedFqParams);
-						if (empty($fq) && !empty($fqField) && in_array($fqField, $allowedFqParams)) {
-							$fq  = tx_mksearch_util_Misc::sanitizeFq($fqField);
-							$fq .= ':"' . tx_mksearch_util_Misc::sanitizeFq($fqValue) . '"';
+						// Query-Facet prüfen
+						if($fqField == tx_mksearch_model_Facet::TYPE_QUERY) {
+							$fq = $this->buildFq4QueryFacet($fqName, $configurations, $confId);
+						}
+						else {
+							// check field facets
+							// field value konstellation prüfen
+							$fq = $this->parseFieldAndValue($fqValue, $allowedFqParams);
+							if (empty($fq) && !empty($fqField) && in_array($fqField, $allowedFqParams)) {
+								$fq  = tx_mksearch_util_Misc::sanitizeFq($fqField);
+								$fq .= ':"' . tx_mksearch_util_Misc::sanitizeFq($fqValue) . '"';
+							}
 						}
 					}
 					self::addFilterQuery($fieldOptions, $fq);
@@ -341,15 +353,28 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 		}
 		if($sRemoveFq = trim($parameters->get('remfq'))) {
 			$aFQ = isset($options['fq']) ? (is_array($options['fq']) ? $options['fq'] : array($options['fq'])) : array();
-			// hier stekt nur der feldname drinn
+			// hier steckt nur der feldname drin
 			foreach ($aFQ as $iKey => $sFq) {
 				list($sfield) = explode(':', $sFq);
-				// wir löschend as feld
+				// wir löschen das feld
 				if(in_array($sRemoveFq, $allowedFqParams) && $sRemoveFq == $sfield)
 					unset($aFQ[$iKey]);
 			}
 			$options['fq'] = $aFQ;
 		}
+	}
+
+	/**
+	 * Baut den fq-Parameter für eine Query-Facette zusammen. Die Filter-Anweisung dafür muss im Typoscript
+	 * konfiguriert sein. Sie sollte identisch mit der Anweisung in der solrconfig.xml sein.
+	 *
+	 * @param string $queryFacetAlias
+	 * @param tx_rnbase_configurations $configurations
+	 * @param string $confId
+	 * @return string
+	 */
+	private function buildFq4QueryFacet($queryFacetAlias, $configurations, $confId) {
+		return $configurations->get($confId.'facet.queries.'.$queryFacetAlias);
 	}
 
 	public static function getFilterQueryForFeGroups() {
@@ -422,6 +447,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 	/**
 	 * Prüft den fq parameter auf richtigkeit.
 	 * @param string $sFq
+	 * @param array $allowedFqParams
 	 * @return array
 	 */
 	private function parseFieldAndValue($sFq, $allowedFqParams) {

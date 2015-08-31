@@ -29,7 +29,8 @@
 /**
  * benötigte Klassen einbinden
  */
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+
+tx_rnbase::load('tx_mksearch_model_Facet');
 
 /**
  * Der FacetBuilder erstellt aus den Rohdaten
@@ -78,10 +79,73 @@ class tx_mksearch_util_FacetBuilder {
 	/**
 	 * Baut die Daten für die Facets zusammen
 	 *
-	 * @param array|stdClass $facetData Daten von Solr
+	 * @param array|stdClass $facetData Alle Daten von Solr
+	 * @return array[] Ausgabedaten
+	 */
+	public function buildFacetData($facetData) {
+
+		$facetGroups = $this->buildFieldFacets($facetData->facet_fields);
+		$facetGroups = array_merge($facetGroups, $this->buildQueryFacets($facetData->facet_queries));
+		// TODO: RANGE-Facet integrieren
+
+		return $facetGroups;
+	}
+
+	/**
+	 * Baut die Daten für die Field-Facets zusammen
+	 *
+	 * @param array|stdClass $facetData Field-Facet Daten von Solr
 	 * @return array Ausgabedaten
+	 * @deprecated use buildFacetData
 	 */
 	public function buildFacets($facetData) {
+		return $this->buildFieldFacets($facetData);
+	}
+	/**
+	 * Query-Facets kommen von Solr nicht in Gruppen strukturiert. Damit wir mehrere Query-Gruppen unterscheiden
+	 * können, müssen die Queries IMMER mit einem Key angelegt werden. Folgende Form:
+	 *
+	 *  <str name="facet.query">{!key="date_lastweek"}datetime:[NOW-7DAYS/DAY TO NOW]</str>
+	 *	<str name="facet.query">{!key="date_lastmonth"}datetime:[NOW-1MONTH/MONTH TO NOW]</str>
+	 *
+	 * Damit splitten gruppieren wir nach dem String vor dem ersten Unterstrich.
+	 *
+	 * @param array[stdClass] $facetData Query-Facet Daten von Solr
+	 * @return array[tx_rnbase_model_base] Ausgabedaten
+	 */
+	protected function buildQueryFacets($facetData) {
+		$facetGroups = array();
+		if (!$facetData) {
+			return $facetGroups;
+		}
+
+		$uid = 0;
+		foreach ($facetData As $key => $value) {
+			list($groupName, $queryName) = explode('_', $key, 2);
+			if(!array_key_exists($groupName, $facetGroups)) {
+				$facetGroups[$groupName] = tx_rnbase::makeInstance(
+						'tx_rnbase_model_base',
+						array(
+								'uid' => ++$uid,
+								'field' => $groupName,
+								'items' => array(),
+						)
+				);
+			}
+			$facetGroups[$groupName]->record['items'][] = $this->getSimpleFacet($groupName,
+							$key, $value, tx_mksearch_model_Facet::TYPE_QUERY);
+
+		}
+
+		return array_values($facetGroups);
+	}
+	/**
+	 * Baut die Daten für die Field-Facets zusammen
+	 *
+	 * @param array|stdClass $facetData Field-Facet Daten von Solr
+	 * @return array Ausgabedaten
+	 */
+	protected function buildFieldFacets($facetData) {
 		$facetGroups = array();
 		if (!$facetData) {
 			return $facetGroups;
@@ -117,7 +181,7 @@ class tx_mksearch_util_FacetBuilder {
 	 * @param int $count
 	 * @return tx_mksearch_model_Facet
 	 */
-	protected function getSimpleFacet($field, $id, $count) {
+	protected function getSimpleFacet($field, $id, $count, $facetType = tx_mksearch_model_Facet::TYPE_FIELD) {
 		if ($this->getKeyValueFacetInstance()->checkValue($id)) {
 			$exploded = $this->getKeyValueFacetInstance()->explodeFacetValue($id);
 			$id = $exploded['key'];
@@ -126,7 +190,9 @@ class tx_mksearch_util_FacetBuilder {
 		else {
 			$title = $id;
 		}
-		return tx_rnbase::makeInstance('tx_mksearch_model_Facet', $field, $id, $title, $count);
+		$facet = tx_rnbase::makeInstance('tx_mksearch_model_Facet', $field, $id, $title, $count);
+		$facet->setFacetType($facetType);
+		return $facet;
 	}
 }
 

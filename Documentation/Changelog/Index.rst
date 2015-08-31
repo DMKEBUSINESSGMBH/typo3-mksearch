@@ -14,6 +14,7 @@
 
 1.4.35
 ------
+* [FEATURE] #4 support for query facets
 * [FEATURE] Predefined form field for sorting search results in solr
 * [FEATURE] Indexer configuration: It is possible to index database fields into more several document attributes
 * [FEATURE] Predefined form field to limit page size for solr

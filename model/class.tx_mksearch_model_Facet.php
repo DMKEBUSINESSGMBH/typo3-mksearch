@@ -38,11 +38,18 @@ tx_rnbase::load('tx_rnbase_model_base');
  * @subpackage tx_mksearch_model
  */
 class tx_mksearch_model_Facet extends tx_rnbase_model_base  {
+	const TYPE_FIELD = 'type_field';
+	const TYPE_QUERY = 'type_query';
+	const TYPE_RANGE = 'type_range';
+	const TYPE_DATE = 'type_date';
+
 	/**
 	 * Gibt ein Facet Model zurück
 	 * @param string $field
 	 * @param string $id
 	 * @param mixed $label Das Label kann ein String, oder ein Array sein
+	 * @param int $count
+	 * @param boolean $head
 	 * @return void
 	 */
 	public function __construct($field, $id, $label, $count, $head=false) {
@@ -56,6 +63,21 @@ class tx_mksearch_model_Facet extends tx_rnbase_model_base  {
 			$this->record['label'] = $label;
 		$this->record['count'] = $count;
 		$this->record['head'] = $head;
+		$this->record['type'] = self::TYPE_FIELD; // Als default ein Field-Facet verwenden
+	}
+	/**
+	 * Gibt die Art der Fassette zurück.
+	 * @return string
+	 */
+	public function getFacetType() {
+		return $this->record['type'];
+	}
+	/**
+	 * Setzt die Art der Fassette
+	 * @param string $type
+	 */
+	public function setFacetType($type) {
+		$this->record['type'] = $type;
 	}
 }
 
