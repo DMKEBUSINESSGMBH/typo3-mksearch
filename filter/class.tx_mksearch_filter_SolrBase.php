@@ -610,36 +610,14 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 		);
 	}
 
-	protected function renderSearchForm() {
-
-	}
 	/**
-	 * protected
-	 * Treat search form
 	 *
-	 * @param string $template HTML template
-	 * @param array $markArray
-	 * @param array $subpartArray
-	 * @param array $wrappedSubpartArray
+	 * @param string $formTemplate
 	 * @param tx_rnbase_util_FormatUtil $formatter
 	 * @param string $confId
-	 * @param string $marker
-	 * @return string
 	 */
-	function parseSearchForm($template, &$markArray, &$subpartArray, &$wrappedSubpartArray, &$formatter, $confId, $marker = 'FILTER') {
-		$markerName = 'SEARCH_FORM';
-		if(!tx_rnbase_util_BaseMarker::containsMarker($template, $markerName))
-			return $template;
-
-		$confId = $this->getConfId();
-//\tx_rnbase_util_Debug::debug($confId, ''.__FILE__.':'.__LINE__); // TODO: remove me
-
+	protected function renderSearchForm($formTemplate, tx_rnbase_util_FormatUtil $formatter, $confId, $templateConfId) {
 		$configurations = $formatter->getConfigurations();
-		tx_rnbase::load('tx_rnbase_util_Templates');
-		$formTemplate = $this->getConfValue($configurations, 'template.file');
-		$subpart = $this->getConfValue($configurations, 'template.subpart');
-		$formTemplate = tx_rnbase_util_Templates::getSubpartFromFile($formTemplate, $subpart);
-
 		if($formTemplate) {
 			$link = $configurations->createLink();
 			$link->initByTS($configurations, $confId.'template.links.action.', array());
@@ -668,7 +646,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 			if($currentOptions['mode']) {
 				foreach ($availableModes as $availableMode) {
 					$formData['mode_' . $availableMode . '_selected'] =
-						$currentOptions['mode'] == $availableMode ? 'checked=checked' : '';
+					$currentOptions['mode'] == $availableMode ? 'checked=checked' : '';
 				}
 			}
 			else {
@@ -682,8 +660,51 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 			// Formularfelder
 			$formTemplate = $this->getFilterUtility()->parseCustomFilters($formTemplate, $formatter->getConfigurations(), $confId);
 		}
+		return $formTemplate;
+	}
+	/**
+	 * protected
+	 * Treat search form
+	 *
+	 * @param string $template HTML template
+	 * @param array $markArray
+	 * @param array $subpartArray
+	 * @param array $wrappedSubpartArray
+	 * @param tx_rnbase_util_FormatUtil $formatter
+	 * @param string $confId
+	 * @param string $marker
+	 * @return string
+	 */
+	function parseSearchForm($template, &$markArray, &$subpartArray, &$wrappedSubpartArray, &$formatter, $confId, $marker = 'FILTER') {
+		$markerName = 'SEARCH_FORM';
+		if(!tx_rnbase_util_BaseMarker::containsMarker($template, $markerName))
+			return $template;
 
+		$confId = $this->getConfId();
+
+		$configurations = $formatter->getConfigurations();
+		tx_rnbase::load('tx_rnbase_util_Templates');
+		$formTemplate = $this->getConfValue($configurations, 'template.file');
+		$subpart = $this->getConfValue($configurations, 'template.subpart');
+		$formTemplate = tx_rnbase_util_Templates::getSubpartFromFile($formTemplate, $subpart);
+
+		$formTemplate = $this->renderSearchForm($formTemplate, $formatter, $confId, 'template.');
 		$markArray['###'.$markerName.'###'] = $formTemplate;
+		// Gibt es noch weitere Templates
+		$templateKeys = $configurations->getKeyNames($confId.'templates.');
+		if($templateKeys) {
+			foreach($templateKeys As $templateKey) {
+				$templateConfId = 'templates.'.$templateKey.'.';
+				$markerName = strtoupper($configurations->get($confId.$templateConfId.'name'));
+				if(tx_rnbase_util_BaseMarker::containsMarker($template, $markerName)) {
+					$templateFile = $this->getConfValue($configurations, $templateConfId.'file');
+					$subpart = $this->getConfValue($configurations, $templateConfId.'subpart');
+					$formTemplate = tx_rnbase_util_Templates::getSubpartFromFile($templateFile, $subpart);
+					$formTemplate = $this->renderSearchForm($formTemplate, $formatter, $confId, $templateConfId);
+					$markArray['###'.$markerName.'###'] = $formTemplate;
+				}
+			}
+		}
 		return $template;
 	}
 

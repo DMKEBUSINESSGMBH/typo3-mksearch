@@ -196,6 +196,12 @@ lib.mksearch.defaultsolrfilter {
 		file = EXT:mksearch/templates/searchForm.html
 		subpart = ###SIMPLE###
 	}
+	templates {
+		# Bei Bedarf können weitere Filter-Templates und Marker angegeben werden
+		#10.name = search_form_other
+		#10.file = EXT:mksearch/templates/searchForm.html
+		#10.subpart = ###SIMPLE###
+	}
 	form {
 		### beispiel für das verändern des checked="checked"
 		#combination_none = TEXT
