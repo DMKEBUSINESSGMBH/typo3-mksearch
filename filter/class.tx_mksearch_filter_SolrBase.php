@@ -320,7 +320,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 						$fq = $sFqField . ':"' . tx_mksearch_util_Misc::sanitizeFq($fqValue) . '"';
 					} else {
 						// Query-Facet prüfen
-						if($fqField == tx_mksearch_model_Facet::TYPE_QUERY) {
+						if($fqField === tx_mksearch_model_Facet::TYPE_QUERY) {
 							$fq = $this->buildFq4QueryFacet($fqName, $configurations, $confId);
 						}
 						else {
@@ -610,7 +610,11 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 		);
 	}
 
+	protected function renderSearchForm() {
+
+	}
 	/**
+	 * protected
 	 * Treat search form
 	 *
 	 * @param string $template HTML template
@@ -628,6 +632,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 			return $template;
 
 		$confId = $this->getConfId();
+//\tx_rnbase_util_Debug::debug($confId, ''.__FILE__.':'.__LINE__); // TODO: remove me
 
 		$configurations = $formatter->getConfigurations();
 		tx_rnbase::load('tx_rnbase_util_Templates');

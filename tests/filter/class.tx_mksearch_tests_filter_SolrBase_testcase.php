@@ -193,7 +193,7 @@ class tx_mksearch_tests_filter_SolrBase_testcase
 		self::assertEquals(array(
 			0 => '(-fe_group_mi:[* TO *] AND uid:[* TO *]) OR fe_group_mi:0',
 			1 => 'facet_field:"facet value"'
-		),$options['fq'],'fq wuede falsch übernommen!');
+		),$options['fq'],'fq wurde falsch übernommen!');
 	}
 
 	/**
