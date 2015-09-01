@@ -141,23 +141,44 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 				? $options['CType.'][$rawData['CType'] . '.']['indexedFields.']
 				: $options['CType.']['_default_.']['indexedFields.'];
 
-			$c = '';
-			foreach ($fields as $field) {
-				$c .= $this->getContentByFieldAndCType($field, $rawData) . ' ';
+			// Dieser Content-String ist deprecated
+			$content = '';
+			foreach ($fields as $sDocKey => $sRecordKey) {
+				$content .= $this->getContentByFieldAndCType($sRecordKey, $rawData) . ' ';
 			}
 
 			// Decode HTML
-			$c = trim(tx_mksearch_util_Misc::html2plain($c));
+			$content = trim(tx_mksearch_util_Misc::html2plain($content));
+
+			// Support für normale IndexedFields
+			if(isset($options['indexedFields.'])) {
+				$aIndexedFields = $options['indexedFields.'];
+				if (is_array($aIndexedFields) && !empty($aIndexedFields)) {
+					foreach ($aIndexedFields as $sDocKey => $sRecordKey) {
+						// makes only sense if we have content
+						if (!empty($rawData[$sRecordKey])) {
+							// Enable field conversions...
+							$values = array($options['keepHtml'] ? $rawData[$sRecordKey] : tx_mksearch_util_Misc::html2plain($rawData[$sRecordKey]) );
+							$values = tx_mksearch_util_Indexer::getInstance()->doValueConversion($values, $sDocKey, $options);
+							$indexDoc->addField(
+									$sDocKey,
+									$values
+							);
+						}
+					}
+				}
+			}
+
 
 			// kein inhalt zum indizieren
-			if (empty($title) && empty($c)) {
+			if (empty($title) && empty($content)) {
 				$indexDoc->setDeleted(TRUE);
 				return $indexDoc;
 			}
 
 			// Include $title into indexed content
-			$indexDoc->setContent($title . ' ' . $c);
-			$indexDoc->setAbstract(empty($c) ? $title : $c, $indexDoc->getMaxAbstractLength());
+			$indexDoc->setContent($title . ' ' . $content);
+			$indexDoc->setAbstract(empty($content) ? $title : $content, $indexDoc->getMaxAbstractLength());
 		}
 		return $indexDoc;
 	}
