@@ -168,7 +168,6 @@ class tx_mksearch_indexer_TtNewsNews
 			// only in this case it is possible to have a mapping for the doc key and record key
 			$bAddFields = TRUE;
 		}
-
 		// extra fields to index besides bodytext, timstamp and short?
 		if (is_array($aIndexedFields) && !empty($aIndexedFields)) {
 			foreach ($aIndexedFields as $sDocKey => $sRecordKey) {
@@ -178,14 +177,18 @@ class tx_mksearch_indexer_TtNewsNews
 					// we add those fields also as own field and not just put it into content
 					// do we have a mapping?
 					if ($bAddFields) {
+						// Enable field conversions...
+						$values = array($options['keepHtml'] ? $rawData[$sRecordKey] : tx_mksearch_util_Misc::html2plain($rawData[$sRecordKey]) );
+						$values = tx_mksearch_util_Indexer::getInstance()->doValueConversion($values, $sDocKey, $options);
 						$indexDoc->addField(
 							$sDocKey,
-							$options['keepHtml'] ? $rawData[$sRecordKey] : tx_mksearch_util_Misc::html2plain($rawData[$sRecordKey])
+							$values
 						);
 					}
 				}
 			}
 		}
+
 		// Decode HTML
 		$content = $options['keepHtml'] ? $content : tx_mksearch_util_Misc::html2plain($content);
 
@@ -286,8 +289,7 @@ class tx_mksearch_indexer_TtNewsNews
 		$options['where'] = 'tt_news_cat_mm.uid_foreign=' . $catUid;
 		$options['enablefieldsoff'] = TRUE;
 		$from = array('tt_news_cat_mm JOIN tt_news ON tt_news.uid=tt_news_cat_mm.uid_local AND tt_news.deleted=0', 'tt_news_cat_mm');
-		$dbUtil = $this->getDbUtil();
-		$rows = $dbUtil::doSelect('tt_news.uid AS uid', $from, $options);
+		$rows = $this->doSelect('tt_news.uid AS uid', $from, $options);
 		// Alle gefundenen News für die Neuindizierung anmelden.
 		$srv = $this->getIntIndexService();
 		foreach ($rows As $row) {
@@ -296,7 +298,18 @@ class tx_mksearch_indexer_TtNewsNews
 	}
 
 	/**
+	 * DB-Zugriff kapseln, damit er testbar wird
+	 * @param string $what
+	 * @param array $from
+	 * @param array $options
+	 */
+	protected function doSelect($what, $from, $options) {
+		return tx_rnbase_util_DB::doSelect($what, $from, $options);
+	}
+	/**
+	 * wird hier nicht mehr verwendet. Die tx_rnbase_util_DB bitte direkt verwenden.
 	 * @return string
+	 * @deprecated
 	 */
 	protected function getDbUtil() {
 		tx_rnbase::load('tx_rnbase_util_DB');

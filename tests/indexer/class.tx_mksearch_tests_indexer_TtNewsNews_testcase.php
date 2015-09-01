@@ -67,8 +67,8 @@ class tx_mksearch_tests_indexer_TtNewsNews_testcase
 		$data = $indexDoc->getData();
 		self::assertEquals('2010-01-30T15:00:00Z', $data['datetime_dt']->getValue());
 		//indexing of extra fields worked?
-		self::assertEquals('some test', $data['bodytext_s']->getValue());
-		self::assertEquals(123, $data['uid_i']->getValue());
+		self::assertEquals(array('some test'), $data['bodytext_s']->getValue());
+		self::assertEquals(array(123), $data['uid_i']->getValue());
 		//merging into content worked?
 		self::assertEquals('123 some test', $data['content']->getValue());
 		//indexing of standard fields worked?
@@ -95,8 +95,8 @@ class tx_mksearch_tests_indexer_TtNewsNews_testcase
 		$data = $indexDoc->getData();
 		self::assertEquals('2010-01-30T15:00:00Z', $data['datetime_dt']->getValue(),'datetime falsch');
 		//indexing of extra fields worked?
-		self::assertEquals('some test  with html markup', $data['bodytext_s']->getValue(),'bodytext falsch');
-		self::assertEquals(123, $data['uid_i']->getValue());
+		self::assertEquals(array('some test  with html markup'), $data['bodytext_s']->getValue(),'bodytext falsch');
+		self::assertEquals(array(123), $data['uid_i']->getValue());
 		//merging into content worked?
 		self::assertEquals('123 some test  with html markup', $data['content']->getValue(),'content falsch');
 		//indexing of standard fields worked?
@@ -125,8 +125,8 @@ class tx_mksearch_tests_indexer_TtNewsNews_testcase
 		$data = $indexDoc->getData();
 		self::assertEquals('2010-01-30T15:00:00Z', $data['datetime_dt']->getValue(),'datetime falsch');
 		//indexing of extra fields worked?
-		self::assertEquals('some test <p>with html markup</p>', $data['bodytext_s']->getValue(),'bodytext falsch');
-		self::assertEquals(123, $data['uid_i']->getValue());
+		self::assertEquals(array('some test <p>with html markup</p>'), $data['bodytext_s']->getValue(),'bodytext falsch');
+		self::assertEquals(array(123), $data['uid_i']->getValue());
 		//merging into content worked?
 		self::assertEquals('123 some test <p>with html markup</p> ', $data['content']->getValue(),'content falsch');
 		//indexing of standard fields worked?
@@ -234,15 +234,15 @@ class tx_mksearch_tests_indexer_TtNewsNews_testcase
 	public function testStopIndexingWhenTtNewsCatChangedPutsREcordsCorrectToQueue() {
 		$options = array();
 
-		$dbUtil = $this->getMockClass('tx_rnbase_util_DB',array('doSelect'));
-		$dbUtil::staticExpects($this->once())
-			->method('doSelect')
-			->with(
-				'tt_news.uid AS uid',
-				array('tt_news_cat_mm JOIN tt_news ON tt_news.uid=tt_news_cat_mm.uid_local AND tt_news.deleted=0', 'tt_news_cat_mm'),
-				array('where' => 'tt_news_cat_mm.uid_foreign=123', 'enablefieldsoff' => TRUE)
-			)
-			->will($this->returnValue(array(0 => array('uid' => 456), 1 => array('uid' => 789))));
+// 		$dbUtil = $this->getMockClass('tx_rnbase_util_DB',array('doSelect'));
+// 		$dbUtil::staticExpects($this->once())
+// 			->method('doSelect')
+// 			->with(
+// 				'tt_news.uid AS uid',
+// 				array('tt_news_cat_mm JOIN tt_news ON tt_news.uid=tt_news_cat_mm.uid_local AND tt_news.deleted=0', 'tt_news_cat_mm'),
+// 				array('where' => 'tt_news_cat_mm.uid_foreign=123', 'enablefieldsoff' => TRUE)
+// 			)
+// 			->will($this->returnValue(array(0 => array('uid' => 456), 1 => array('uid' => 789))));
 
 		$indexService = $this->getMock(
 			'tx_mksearch_service_internal_Index', array('addRecordToIndex')
@@ -254,17 +254,25 @@ class tx_mksearch_tests_indexer_TtNewsNews_testcase
 			->method('addRecordToIndex')
 			->with('tt_news', 789);
 
+		// Vor dem Mocking aufrufen, da sonst die static Methode weg ist...
+		tx_rnbase::load('tx_mksearch_indexer_TtNewsNews');
+		list($extKey, $cType) = tx_mksearch_indexer_TtNewsNews::getContentType();
+
 		$indexer = $this->getMock(
-			'tx_mksearch_indexer_TtNewsNews', array('getDbUtil', 'getIntIndexService')
+			'tx_mksearch_indexer_TtNewsNews', array('doSelect', 'getIntIndexService')
 		);
 		$indexer->expects($this->once())
-			->method('getDbUtil')
-			->will($this->returnValue($dbUtil));
+			->method('doSelect')
+			->with(
+				'tt_news.uid AS uid',
+				array('tt_news_cat_mm JOIN tt_news ON tt_news.uid=tt_news_cat_mm.uid_local AND tt_news.deleted=0', 'tt_news_cat_mm'),
+				array('where' => 'tt_news_cat_mm.uid_foreign=123', 'enablefieldsoff' => TRUE)
+			)
+			->will($this->returnValue(array(0 => array('uid' => 456), 1 => array('uid' => 789))));
 		$indexer->expects($this->once())
 			->method('getIntIndexService')
 			->will($this->returnValue($indexService));
 
-		list($extKey, $cType) = $indexer->getContentType();
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType, 'tx_mksearch_model_IndexerFieldBase');
 
 		$record = array('uid' => 123);
