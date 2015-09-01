@@ -234,16 +234,6 @@ class tx_mksearch_tests_indexer_TtNewsNews_testcase
 	public function testStopIndexingWhenTtNewsCatChangedPutsREcordsCorrectToQueue() {
 		$options = array();
 
-// 		$dbUtil = $this->getMockClass('tx_rnbase_util_DB',array('doSelect'));
-// 		$dbUtil::staticExpects($this->once())
-// 			->method('doSelect')
-// 			->with(
-// 				'tt_news.uid AS uid',
-// 				array('tt_news_cat_mm JOIN tt_news ON tt_news.uid=tt_news_cat_mm.uid_local AND tt_news.deleted=0', 'tt_news_cat_mm'),
-// 				array('where' => 'tt_news_cat_mm.uid_foreign=123', 'enablefieldsoff' => TRUE)
-// 			)
-// 			->will($this->returnValue(array(0 => array('uid' => 456), 1 => array('uid' => 789))));
-
 		$indexService = $this->getMock(
 			'tx_mksearch_service_internal_Index', array('addRecordToIndex')
 		);
