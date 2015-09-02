@@ -32,6 +32,7 @@ User manual
    Highlighting(solr)/Index
    Autocomplete(solr)/Index
    Sortierung(solr)/Index
+   Filter(lucene)
    Volltextsuche(lucene)/Index
    Sortierung(lucene)/Index
    Volltextsuche(elasticsearch)/Index

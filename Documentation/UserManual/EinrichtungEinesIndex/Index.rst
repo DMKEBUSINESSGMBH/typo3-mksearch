@@ -236,3 +236,33 @@ Stellen Sie sicher, daß Solr nach dem Update der Dateien korrekt
 startet. Wir empfehlen grundsätzlich die Verwendung des Multi-Core-
 Modus von Solr!
 
+Index Konfiguration
+"""""""""""""""""""
+
+Für jeden Datentyp, der in der Suche verwendet (gefunden) werden soll, muss eine Index configuration angelegt werden. Der Name ist beliebig wählbar, sollte aber dem Datentyp entsprechen. Danach wählt man über Extension Key und Content Typ den gewünschten Indexer aus. Im Feld Configuration können für den Indexer weitere Konfigurationen per TS bereitgestellt werden. Hier ist die Doku des Indexers zu beachten.
+
+Ein wichtiges Feature der Indexer-Konfiguration ist das zusätzliche Mapping von Datenbankfeldern in Attribute des Ziel-Dokuments. Dies ist im folgenden beispielhaft dargestellt:
+
+.. code-block:: ts
+
+   fieldsMapping {
+     entity1 {
+       tstamp = sorting_date_dt,lastchange
+       dbfield = doc_attr_for_dbfield_s
+     }
+   }
+
+Die Namen der Entities muss erfährt man aus der Doku des jeweiligen Indexers. Die Datenbankfelder stehen in der Datenbank und die Attribute des Dokuments refenzieren auf das Schema in der Suchmaschine. Im Beispiel sieht man auch, daß man ein Datenbankfeld bei Bedarf in mehrere Attribute schreiben kann.
+
+Mit Version 1.4.35 ist es möglich die Feldwerte nun auch vor der Indexierung zu manipulieren. Konkret kann man derzeit eine Konvertierung des Datums vornehmen. Ausgehend vom Beispiel oben, kann man die Konfiguration mit folgender Angabe erweitern:
+
+.. code-block:: ts
+
+   fieldsConversion {
+     sorting_date_dt {
+       unix2isodate = 1
+       unix2isodate_offset = 0
+     }
+   }
+
+Damit wird der Wert aus tstamp vor der Übernahme in das Attribut sorting_date_dt in einen String mit dem Format Y-m-d\TH:i:s\Z umgewandelt. Das ist für Solr nützlich, um da mit konkreten Datumswerten arbeiten zu können. Die Angabe von unix2isodate_offset ist optional. Der Default-Wert ist 0.
