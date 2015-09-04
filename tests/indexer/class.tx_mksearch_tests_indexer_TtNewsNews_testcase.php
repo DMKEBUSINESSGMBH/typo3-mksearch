@@ -67,8 +67,8 @@ class tx_mksearch_tests_indexer_TtNewsNews_testcase
 		$data = $indexDoc->getData();
 		self::assertEquals('2010-01-30T15:00:00Z', $data['datetime_dt']->getValue());
 		//indexing of extra fields worked?
-		self::assertEquals(array('some test'), $data['bodytext_s']->getValue());
-		self::assertEquals(array(123), $data['uid_i']->getValue());
+		self::assertEquals('some test', $data['bodytext_s']->getValue());
+		self::assertEquals(123, $data['uid_i']->getValue());
 		//merging into content worked?
 		self::assertEquals('123 some test', $data['content']->getValue());
 		//indexing of standard fields worked?
@@ -95,8 +95,8 @@ class tx_mksearch_tests_indexer_TtNewsNews_testcase
 		$data = $indexDoc->getData();
 		self::assertEquals('2010-01-30T15:00:00Z', $data['datetime_dt']->getValue(),'datetime falsch');
 		//indexing of extra fields worked?
-		self::assertEquals(array('some test  with html markup'), $data['bodytext_s']->getValue(),'bodytext falsch');
-		self::assertEquals(array(123), $data['uid_i']->getValue());
+		self::assertEquals('some test  with html markup', $data['bodytext_s']->getValue(),'bodytext falsch');
+		self::assertEquals(123, $data['uid_i']->getValue());
 		//merging into content worked?
 		self::assertEquals('123 some test  with html markup', $data['content']->getValue(),'content falsch');
 		//indexing of standard fields worked?
@@ -125,8 +125,8 @@ class tx_mksearch_tests_indexer_TtNewsNews_testcase
 		$data = $indexDoc->getData();
 		self::assertEquals('2010-01-30T15:00:00Z', $data['datetime_dt']->getValue(),'datetime falsch');
 		//indexing of extra fields worked?
-		self::assertEquals(array('some test <p>with html markup</p>'), $data['bodytext_s']->getValue(),'bodytext falsch');
-		self::assertEquals(array(123), $data['uid_i']->getValue());
+		self::assertEquals('some test <p>with html markup</p>', $data['bodytext_s']->getValue(),'bodytext falsch');
+		self::assertEquals(123, $data['uid_i']->getValue());
 		//merging into content worked?
 		self::assertEquals('123 some test <p>with html markup</p> ', $data['content']->getValue(),'content falsch');
 		//indexing of standard fields worked?

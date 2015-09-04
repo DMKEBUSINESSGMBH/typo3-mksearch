@@ -140,7 +140,8 @@ class tx_mksearch_util_Indexer {
 					// Attributes can be commaseparated to index values into different fields
 					$indexDocKeys = tx_rnbase_util_Strings::trimExplode(',', $indexDocKey);
 					foreach ($indexDocKeys As $indexDocKey) {
-						$tempIndexDoc[$prefix.$indexDocKey][] = $model->record[$recordKey];
+						$value = $model->record[$recordKey];
+						$tempIndexDoc[$prefix.$indexDocKey][] = $this->doValueConversion($value, $indexDocKey, $model->record, $recordKey, $options);
 					}
 				}
 			}
@@ -149,7 +150,6 @@ class tx_mksearch_util_Indexer {
 		//and now add the fields
 		if(!empty($tempIndexDoc)){
 			foreach ($tempIndexDoc as $indexDocKey => $values){
-				$values = $this->doValueConversion($values, $indexDocKey, $options);
 				$indexDoc->addField($indexDocKey, $values);
 			}
 		}
@@ -158,15 +158,19 @@ class tx_mksearch_util_Indexer {
 	}
 
 	/**
-	 * handle fieldsConversion from indexer configuration
-	 * @param array $values
+	 * Handle fieldsConversion from indexer configuration
+	 *
+	 * @param string $value
 	 * @param string $indexDocKey
+	 * @param array $rawData
+	 * @param string $sRecordKey
 	 * @param array $options
+	 * @return array
 	 */
-	public function doValueConversion($values, $indexDocKey, $options) {
+	public function doValueConversion($value, $indexDocKey, $rawData, $sRecordKey, $options) {
 		if(!(array_key_exists('fieldsConversion.', $options) &&
 			array_key_exists($indexDocKey.'.', $options['fieldsConversion.']))) {
-			return $values;
+			return $value;
 		}
 
 		$cfg = $options['fieldsConversion.'][$indexDocKey.'.'];
@@ -175,11 +179,22 @@ class tx_mksearch_util_Indexer {
 			// Datum konvertieren
 			// einen offset aus der Config lesen
 			$offset = isset($cfg['unix2isodate_offset']) ? intval($cfg['unix2isodate_offset']) : 0;
-			foreach ($values As $key => $value) {
-				$values[$key] = tx_mksearch_util_Misc::getISODateFromTimestamp($value, $offset);
-			}
+			$value = tx_mksearch_util_Misc::getISODateFromTimestamp($value, $offset);
 		}
-		return $values;
+		// stdWrap ausführen
+		$cObj = t3lib_div::makeInstance('tslib_cObj');
+		$cObj->data = $rawData;
+
+		if($options['fieldsConversion.'][$indexDocKey]) {
+			$cObj->setCurrentVal($value);
+			$value = $cObj->cObjGetSingle($options['fieldsConversion.'][$indexDocKey], $options['fieldsConversion.'][$indexDocKey.'.']);
+			$cObj->setCurrentVal(FALSE);
+		}
+		else {
+			$value = $cObj->stdWrap($value, $options['fieldsConversion.'][$indexDocKey.'.']);
+		}
+
+		return $value;
 	}
 	/**
 	 * Adds a element to the queue

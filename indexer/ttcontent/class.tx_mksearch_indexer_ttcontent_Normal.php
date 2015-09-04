@@ -158,11 +158,11 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 						// makes only sense if we have content
 						if (!empty($rawData[$sRecordKey])) {
 							// Enable field conversions...
-							$values = array($options['keepHtml'] ? $rawData[$sRecordKey] : tx_mksearch_util_Misc::html2plain($rawData[$sRecordKey]) );
-							$values = tx_mksearch_util_Indexer::getInstance()->doValueConversion($values, $sDocKey, $options);
+							$value = $options['keepHtml'] ? $rawData[$sRecordKey] : tx_mksearch_util_Misc::html2plain($rawData[$sRecordKey]);
+							$value = tx_mksearch_util_Indexer::getInstance()->doValueConversion($value, $sDocKey, $rawData, $sRecordKey, $options);
 							$indexDoc->addField(
 									$sDocKey,
-									$values
+									$value
 							);
 						}
 					}
