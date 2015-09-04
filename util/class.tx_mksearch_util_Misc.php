@@ -195,7 +195,8 @@ class tx_mksearch_util_Misc {
 	 */
 	public static function parseTsConfig($sTs) {
 		/* @var $TSparserObject t3lib_tsparser */
-		$TSparserObject = t3lib_div::makeInstance('t3lib_tsparser');
+		$TSparserObject = tx_rnbase::makeInstance('t3lib_TSparser');
+		$sTs = $TSparserObject->checkIncludeLines($sTs);
 		$TSparserObject->parse($sTs);
 		return $TSparserObject->setup;
 	}
