@@ -46,11 +46,11 @@ class tx_mksearch_tests_util_FacetBuilder_testcase
 		self::assertTrue(empty($facetData),'es wurde kein leeres array zurück gegeben!');
 	}
 
-	public function testBuildFacetDataWithQueryFacets() {
+	public function testBuildFacetsWithQueryFacets() {
 		$facetCount = new stdClass();
 		$facetCount->facet_queries = $this->buildQueryFacets();
 
-		$facetGroups = tx_mksearch_util_FacetBuilder::getInstance()->buildFacetData($facetCount);
+		$facetGroups = tx_mksearch_util_FacetBuilder::getInstance()->buildFacets($facetCount);
 
 		self::assertTrue(is_array($facetGroups), 'es wurde kein array zurück gegeben!');
 		self::assertEquals(2, count($facetGroups), 'Das array hat nicht die richtige Größe!');
@@ -74,11 +74,11 @@ class tx_mksearch_tests_util_FacetBuilder_testcase
 	}
 
 
-	public function testBuildFacetDataWithFieldFacets() {
+	public function testBuildFacetsWithFieldFacets() {
 		$facetCount = new stdClass();
 		$facetCount->facet_fields = $this->buildFieldFacets();
 
-		$facetGroups = tx_mksearch_util_FacetBuilder::getInstance()->buildFacetData($facetCount);
+		$facetGroups = tx_mksearch_util_FacetBuilder::getInstance()->buildFacets($facetCount);
 		self::assertTrue(is_array($facetGroups), 'es wurde kein array zurück gegeben!');
 		self::assertEquals(1, count($facetGroups), 'Das array hat nicht die richtige Größe!');
 
@@ -90,7 +90,8 @@ class tx_mksearch_tests_util_FacetBuilder_testcase
 	}
 
 	public function testBuildFacets() {
-		$facetData = $this->buildFieldFacets();
+		$facetData = new stdClass();
+		$facetData->facet_fields = $this->buildFieldFacets();
 		// die facetten kommen immer grupiert!
 		$facetGroups = tx_mksearch_util_FacetBuilder::getInstance()->buildFacets($facetData);
 

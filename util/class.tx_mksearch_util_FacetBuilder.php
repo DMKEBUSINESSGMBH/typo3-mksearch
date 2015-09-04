@@ -82,7 +82,7 @@ class tx_mksearch_util_FacetBuilder {
 	 * @param array|stdClass $facetData Alle Daten von Solr
 	 * @return array[] Ausgabedaten
 	 */
-	public function buildFacetData($facetData) {
+	public function buildFacets($facetData) {
 
 		$facetGroups = $this->buildFieldFacets($facetData->facet_fields);
 		$facetGroups = array_merge($facetGroups, $this->buildQueryFacets($facetData->facet_queries));
@@ -91,16 +91,6 @@ class tx_mksearch_util_FacetBuilder {
 		return $facetGroups;
 	}
 
-	/**
-	 * Baut die Daten für die Field-Facets zusammen
-	 *
-	 * @param array|stdClass $facetData Field-Facet Daten von Solr
-	 * @return array Ausgabedaten
-	 * @deprecated use buildFacetData
-	 */
-	public function buildFacets($facetData) {
-		return $this->buildFieldFacets($facetData);
-	}
 	/**
 	 * Query-Facets kommen von Solr nicht in Gruppen strukturiert. Damit wir mehrere Query-Gruppen unterscheiden
 	 * können, müssen die Queries IMMER mit einem Key angelegt werden. Folgende Form:

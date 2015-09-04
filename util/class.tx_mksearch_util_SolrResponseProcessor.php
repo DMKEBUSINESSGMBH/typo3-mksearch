@@ -231,12 +231,7 @@ class tx_mksearch_util_SolrResponseProcessor {
 			$builderClass = $builderClass ? $builderClass : 'tx_mksearch_util_FacetBuilder';
 			tx_rnbase::load('tx_mksearch_util_FacetBuilder');
 			$facetBuilder = tx_mksearch_util_FacetBuilder::getInstance($builderClass);
-			if(method_exists($facetBuilder, 'buildFacetData')) {
-				$facets = $facetBuilder->buildFacetData($response->facet_counts);
-			}
-			else {
-				$facets = $facetBuilder->buildFacets($response->facet_counts->facet_fields);
-			}
+			$facets = $facetBuilder->buildFacets($response->facet_counts);
 		} else $facets = array();
 		return $facets;
 	}
