@@ -193,6 +193,10 @@ class tx_mksearch_util_Indexer {
 		else {
 			$value = $cObj->stdWrap($value, $options['fieldsConversion.'][$indexDocKey.'.']);
 		}
+		// userFunc can return serialized strings to support arrays as return value
+		if (($data = @unserialize($value)) !== false) {
+			$value = $data;
+		}
 
 		return $value;
 	}
