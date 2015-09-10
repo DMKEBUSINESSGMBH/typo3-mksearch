@@ -319,9 +319,9 @@ class tx_mksearch_tests_Util {
 		$backupPackageStatesFile = $packageStatesFile . '.bak';
 		copy($packageStatesFile, $backupPackageStatesFile);
 
+		$packageManager->unregisterPackage($packageManager->getPackage('templavoila'));
 		$extensionManagementUtility = new TYPO3\CMS\Core\Utility\ExtensionManagementUtility();
 		$extensionManagementUtility->unloadExtension('templavoila');
-
 
 		// backup zurück spielen
 		copy($backupPackageStatesFile, $packageStatesFile);
