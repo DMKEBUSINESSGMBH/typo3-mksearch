@@ -319,9 +319,15 @@ class tx_mksearch_tests_Util {
 		$backupPackageStatesFile = $packageStatesFile . '.bak';
 		copy($packageStatesFile, $backupPackageStatesFile);
 
-		$packageManager->unregisterPackage($packageManager->getPackage('templavoila'));
 		$extensionManagementUtility = new TYPO3\CMS\Core\Utility\ExtensionManagementUtility();
 		$extensionManagementUtility->unloadExtension('templavoila');
+
+		// bei autoloading werden die initialen packages durchsucht. Daher müssen
+		// wir die aktualisierten packages dem class loader mitgeben
+		$classLoaderProperty = new ReflectionProperty('TYPO3\\CMS\\Core\\Package\\PackageManager', 'classLoader');
+		$classLoaderProperty->setAccessible(TRUE);
+		$classLoader = $classLoaderProperty->getValue($packageManager);
+		$classLoader->setPackages($packageManager->getActivePackages());
 
 		// backup zurück spielen
 		copy($backupPackageStatesFile, $packageStatesFile);
