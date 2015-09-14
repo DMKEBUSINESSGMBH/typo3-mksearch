@@ -44,6 +44,8 @@ abstract class tx_mksearch_tests_Testcase
 	 * setUp() = init DB etc.
 	 */
 	protected function setUp() {
+		tx_mksearch_tests_Util::emptyAddRootlineFields();
+
 		// set up hooks
 		tx_mksearch_tests_Util::hooksSetUp();
 
@@ -67,6 +69,8 @@ abstract class tx_mksearch_tests_Testcase
 
 			tx_mksearch_tests_Util::unloadTemplavoilaForTypo362OrHigher();
 		}
+
+
 	}
 
 	/**
@@ -86,6 +90,8 @@ abstract class tx_mksearch_tests_Testcase
 				$extensionManagementUtility->loadExtension('templavoila');
 			}
 		}
+
+		tx_mksearch_tests_Util::resetAddRootlineFields();
 	}
 
 	/**

@@ -63,6 +63,11 @@ class tx_mksearch_tests_Util {
 	private static $extConf = array();
 
 	/**
+	 * @var string
+	 */
+	private static $addRootLineFieldsBackup;
+
+	/**
 	 * Sichert die hoocks unt entfernt diese in der globalconf.
 	 *
 	 * @param array $hooks
@@ -380,6 +385,25 @@ class tx_mksearch_tests_Util {
 		$extConfig[$cfgKey] = $cfgValue;
 		// neue Konfiguration zurückschreiben
 		$GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$extKey] = serialize($extConfig);
+	}
+
+	/**
+	 * wenn in addRootLineFields Felder stehen, die von anderen Extensions bereitgestellt werden,
+	 * aber nicht importiert wurden, führt das zu Testfehlern. Also machen wir die einfach leer.
+	 * sollte nicht stören.
+	 *
+	 * @return void
+	 */
+	public static function emptyAddRootlineFields() {
+		self::$addRootLineFieldsBackup = $GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'];
+		$GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'] = '';
+	}
+
+	/**
+	 * @return void
+	 */
+	public static function resetAddRootlineFields() {
+		$GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'] = self::$addRootLineFieldsBackup;
 	}
 }
 
