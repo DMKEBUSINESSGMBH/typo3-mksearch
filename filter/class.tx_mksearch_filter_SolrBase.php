@@ -464,6 +464,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 		// nur buchstaben, zahlen unterstrich, leerzeichen und punkt für wert erlauben.
 		$pattern .= '(?P<value>([a-zA-Z0-9_. ]*))';
 		tx_rnbase::load('tx_mksearch_util_Misc');
+		$matches = array();
 		if (
 			// wir splitten den string auf!
 			preg_match('/^'.$pattern.'/i', $sFq, $matches)
