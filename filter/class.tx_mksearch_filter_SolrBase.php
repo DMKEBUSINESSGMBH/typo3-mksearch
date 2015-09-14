@@ -342,6 +342,11 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 						$fqOperator = $fqOperator == 'OR' ? 'OR' : 'AND';
 						$fieldQuery = implode(' ' . $fqOperator . ' ', $fieldQuery);
 					}
+					$tag = $configurations->get($confId . 'filterQuery.' . $fqField . '.tag');
+					if($tag) {
+						$tag = '{!tag="'.$tag.'"}';
+						$fieldQuery = $tag.$fieldQuery;
+					}
 					self::addFilterQuery($options, $fieldQuery);
 				}
 			}
