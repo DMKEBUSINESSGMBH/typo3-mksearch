@@ -2,7 +2,7 @@
 
 Unter Facettierung versteht mal das Gruppieren und Zählen der Treffer einer Ergebnismenge nach verschiedenen Kriterien. In einer relationalen Datenbank entspricht dies verschiedenen GROUP BY Statements auf den Ergebnisfilter. In Solr und auch in ElasticSearch gibt es verschiedenen Arten von Facettierungen. In mksearch werden derzeit Field und Query-Facetten unterstützt. 
 
-*Hinweis:* Bei den Typoscript-Beispielen wird grundsätzlich der Dismax-Filter genutzt. Alle Beispiel funktionieren aber genauso mit dem Default-Filter. Im TS-Pfad dann einfach **dismax** durch **default** ersetzen.
+:exclamation: *Hinweis:* Bei den Typoscript-Beispielen wird grundsätzlich der Dismax-Filter genutzt. Alle Beispiel funktionieren aber genauso mit dem Default-Filter. Im TS-Pfad dann einfach **dismax** durch **default** ersetzen.
 
 ## Field facets
 
@@ -103,6 +103,87 @@ Nun kann man den RequestHandler in der solrconfig.xml anweisen, die Daten die Fi
     <str name="facet.field">{!ex=tag4ctype}facet_ctype</str>
 ```
 
+### DFS-Feld dynamisch erzeugen
+Wir haben weiter oben gesehen, wie der **facet_ctype** über ein fixedField fest mit einem Wert wie **news<[DFS]>News-Artikel** indexiert wurde. Es ist natürlich viel häufiger notwendig diese Felder dynamisch zu erzeugen. Das soll am Beispiel der News-Kategorien kurz veranschaulicht werden. Der Anwendungsfall wird hier etwas komplexer, weil wir eine MM-Referenz zwischen der News-Meldung und der Kategorie haben. Für die korrekte Indexierung benötigen wir die kompletten Datensätze der zugeordneten News-Kategorien. Das wichtigste Werkzeug, daß mksearch hier bereitstellt, ist die **fieldsConversion**. Darüber lassen sich Werte vor der Indexierung manipulieren. Und man kann hier den stdWrap von TYPO3 nutzen.
+
+Den Lookup der News-Kategorien bekommt man sicher auch über den stdWrap hin. Man kann es sich aber auch einfacher machen und die Arbeit an eine PHP-Funktion übergeben:
+
+```
+fieldsConversion{
+  category = USER
+  category.userFunc = Tx_ExtKey_Package_CategorySetter->handleNews
+  category.userFunc.category = TEXT
+  category.userFunc.category.field = uid
+  facet_category < .category
+  facet_category.userFunc.uid.dataWrap = |<[DFS]>{field:title}
+}
+
+indexedFields {
+	facet_category = uid
+	category = uid
+}
+```
+
+Auch hier bitte beachten, daß wir zwei Felder vorbereiten. Einmal wird nur die UID der Kategorie gespeichert und einmal die UID zusammen mit dem Titel der Kategorie. Dazu wird lediglich ein zusätzlicher dataWrap ausgeführt. Die Angabe in **indexedFields** ist lediglich notwendig, damit die Attribute **facet_category** und **category** vom Indexer gefüllt werden und damit die **fieldConversion** überhaupt starten kann.
+
+Die Methode handleNews() hat nun die Aufgabe die News-Kategorien einer News-Meldung zu ermitteln und als Ergebnis zu liefern:
+
+```php
+class Tx_ExtKey_Package_CategorySetter {
+	/* wird automatisch von TYPO3 gesetzt */
+	public $cObj;
+	/**
+	 *
+	 * @param string $content
+	 * @param array $conf
+	 * @return string
+	 */
+	public function handleNews($content, $conf) {
+		$record = $this->cObj->data;
+
+		$categories = $this->getNewsCategories($record['uid']);
+		$result = array();
+		foreach ($categories as $cat) {
+			$this->cObj->data = $cat->record;
+			$value = $this->cObj->cObjGetSingle($conf['userFunc.']['category'], $conf['userFunc.']['category.']);
+			if($value)
+				$result[] = $value;
+		}
+		// reset data in cObj
+		$this->cObj->data = $record;
+
+		// Return the array serialized to mksearch, since stdWrap can handle strings only. Mksearch will recognize this array.
+		return serialize($result);
+
+	}
+
+	/**
+	 * Get all categories of the news record
+	 *
+	 * @param tx_rnbase_IModel $model
+	 * @return array[tx_rnbase_model_Base]
+	 */
+	private function getNewsCategories($newsUid) {
+		$options = array(
+				'where' => 'tt_news_cat_mm.uid_local=' . $newsUid,
+				'wrapperclass' => 'tx_rnbase_model_Base',
+				'orderby' => 'tt_news_cat_mm.sorting ASC'
+		);
+		$join = ' JOIN tt_news_cat_mm ON tt_news_cat_mm.uid_foreign=tt_news_cat.uid AND tt_news_cat.deleted=0 ';
+		$from = array('tt_news_cat' . $join, 'tt_news_cat');
+		$rows = tx_rnbase_util_DB::doSelect(
+				'tt_news_cat_mm.uid_foreign, tt_news_cat.uid, tt_news_cat.title, tt_news_cat.single_pid',
+				$from, $options
+		);
+		return $rows;
+	}
+
+}
+```
+
+Die Klasse holt also die Kategorien aus der Datenbank und für ihrerseits für jede Kategorie den stdWrap auf den Record aus. Das Ergebnis ist natürlich ein Array. Da der stdWrap aber als Ergebnis nur einen String liefern kann, müssen wir einen kleinen Trick anwenden. Das Ergebnis-Array wird einfach serialisiert. Die fieldConversion in mksearch prüft automatisch, ob ein serialisierter String zurückgeliefert wird. In dem Fall werden die Daten vor der Indexierung noch deserialisiert.
+
+Ein letzter Hinweis zu diesem Beispiel: Die PHP-Klasse kann leider nicht über includeLibs geladen werden. Also entweder über Autoloading bekannt machen, oder den include in die ext_localconf.php integrieren.
 
 
 ## Query facets
