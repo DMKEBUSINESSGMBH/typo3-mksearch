@@ -87,8 +87,42 @@ class tx_mksearch_view_SearchSolr extends tx_rnbase_view_Base {
 
 		//noch die Facetten parsen wenn da
 		$out = $this->handleFacets($out, $viewData, $configurations, $formatter, $listBuilder, $result);
+		$out = $this->handleSuggestions($out, $viewData, $configurations, $formatter, $listBuilder, $result);
 
 		return $out;
+	}
+	/**
+	 * Ausgabe von Suggestions für alternative Suchbegriffe
+	 *
+	 * @param string $template
+	 * @param array_object $viewData
+	 * @param tx_rnbase_configurations $configurations
+	 * @param tx_rnbase_util_FormatUtil $formatter
+	 * @param tx_rnbase_util_ListBuilder $listBuilder
+	 * @param array $result
+	 *
+	 * @return string
+	 */
+	protected function handleSuggestions($template, $viewData, $configurations, $formatter, $listBuilder, $result) {
+
+		$suggestions = $result ? $result['suggestions'] : array();
+		if(isset($suggestions['form'])) {
+			$suggestions = $suggestions['form'];
+		}
+
+		if (tx_rnbase_util_BaseMarker::containsMarker($template, 'SUGGESTIONS')) {
+			$markerClass = $configurations->get($this->confId.'suggestions.markerClass');
+			$markerClass = $markerClass ? $markerClass : 'tx_mksearch_marker_Suggestion';
+
+			$template = $listBuilder->render(
+					$suggestions, $viewData, $template,
+					$markerClass,
+					$this->confId . 'suggestions.',
+					'SUGGESTION',
+					$formatter
+			);
+		}
+		return $template;
 	}
 
 	/**
@@ -103,7 +137,7 @@ class tx_mksearch_view_SearchSolr extends tx_rnbase_view_Base {
 	 *
 	 * @return string
 	 */
-	protected function handleFacets($template, &$viewData, &$configurations, &$formatter, $listBuilder, $result) {
+	protected function handleFacets($template, $viewData, $configurations, $formatter, $listBuilder, $result) {
 		$out = $template;
 
 		// dann Liste parsen
