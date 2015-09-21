@@ -106,8 +106,9 @@ class tx_mksearch_view_SearchSolr extends tx_rnbase_view_Base {
 	protected function handleSuggestions($template, $viewData, $configurations, $formatter, $listBuilder, $result) {
 
 		$suggestions = $result ? $result['suggestions'] : array();
-		if(isset($suggestions['form'])) {
-			$suggestions = $suggestions['form'];
+
+		if(!empty($suggestions)) {
+			$suggestions = reset($suggestions);
 		}
 
 		if (tx_rnbase_util_BaseMarker::containsMarker($template, 'SUGGESTIONS')) {
