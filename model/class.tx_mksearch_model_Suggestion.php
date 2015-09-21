@@ -38,17 +38,6 @@ tx_rnbase::load('tx_rnbase_model_base');
  * @subpackage tx_mksearch_model
  */
 class tx_mksearch_model_Suggestion extends tx_rnbase_model_base  {
-	/**
-	 * Gibt ein Suggestion Model zurück
-	 * @param string $field 
-	 * @param string $id
-	 * @param mixed $label Das Label kann ein String, oder ein Array sein 
-	 * @return void
-	 */
-	public function __construct($aSuggestion) {
-		$this->record['value'] = $this->uid = $aSuggestion['value'];
-		$this->record['searchWord'] = $aSuggestion['searchWord'];
-	}
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/class.tx_mksearch_model_Suggestion.php']) {

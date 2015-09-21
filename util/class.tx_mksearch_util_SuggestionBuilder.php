@@ -62,10 +62,12 @@ class tx_mksearch_util_SuggestionBuilder {
 		if(!$aSuggestionData) return $aSuggestions;
 		foreach ($aSuggestionData as $sSearchWord => $oSearchWord) {
 			if(isset($oSearchWord->suggestion) && is_array($oSearchWord->suggestion)) {
+				$uid = 0;
 				foreach ($oSearchWord->suggestion as $sSuggestion){
 					//sorted by search word
 					$aSuggestions[$sSearchWord][] = $this->getSimpleSuggestion(
 						array(
+							'uid' => ++$uid,
 							'value' => $sSuggestion,
 							'searchWord' => $sSearchWord,
 						)

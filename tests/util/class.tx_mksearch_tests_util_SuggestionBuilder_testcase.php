@@ -37,7 +37,7 @@ tx_rnbase::load('tx_mksearch_util_SuggestionBuilder');
 class tx_mksearch_tests_util_SuggestionBuilder_testcase
 	extends tx_mksearch_tests_Testcase {
 
-	public function testBuildFacetsWithEmptyFacetData() {
+	public function testBuildSuggestionsWithEmptyFacetData() {
 		$suggestionData = array();
 		$suggestionData = tx_mksearch_util_SuggestionBuilder::getInstance()->buildSuggestions($suggestionData);
 		self::assertTrue(is_array($suggestionData),'es wurde kein array zurück gegeben!');
@@ -60,10 +60,10 @@ class tx_mksearch_tests_util_SuggestionBuilder_testcase
 
 		self::assertTrue(is_array($suggestionData),'es wurde kein array zurück gegeben!');
 		self::assertEquals(1,count($suggestionData),'Das array hat nicht die richtige Größe!');
-		self::assertEquals('searchWordFoundOnce',$suggestionData['searchWord'][0]->getUid(),'Datensatz 1 - getUid() hat den falschen Wert!');
+		self::assertEquals(1,$suggestionData['searchWord'][0]->getUid(),'Datensatz 1 - getUid() hat den falschen Wert!');
 		self::assertEquals('searchWordFoundOnce',$suggestionData['searchWord'][0]->record['value'],'Datensatz 1 - Feld:value hat den falschen Wert!');
 		self::assertEquals('searchWord',$suggestionData['searchWord'][0]->record['searchWord'],'Datensatz 1 - Feld:searchWord hat den falschen Wert!');
-		self::assertEquals('searchWordFoundTwice',$suggestionData['searchWord'][1]->getUid(),'Datensatz 2 - getUid() hat den falschen Wert!');
+		self::assertEquals(2,$suggestionData['searchWord'][1]->getUid(),'Datensatz 2 - getUid() hat den falschen Wert!');
 		self::assertEquals('searchWordFoundTwice',$suggestionData['searchWord'][1]->record['value'],'Datensatz 2 - Feld:value hat den falschen Wert!');
 		self::assertEquals('searchWord',$suggestionData['searchWord'][1]->record['searchWord'],'Datensatz 2 - Feld:searchWord hat den falschen Wert!');
 	}
