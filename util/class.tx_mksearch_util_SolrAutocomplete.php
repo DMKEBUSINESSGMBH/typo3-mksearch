@@ -102,7 +102,7 @@ class tx_mksearch_util_SolrAutocomplete {
 							var suggestions = [];
 							jQuery.each(data.suggestions, function(key, value) {
 								jQuery.each(value, function(key, suggestion) {
-									suggestions.push(suggestion.uid);
+									suggestions.push(suggestion.record.value);
 								});
 							});
 							response( jQuery.map( suggestions, function( item ) {
