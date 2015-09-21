@@ -749,14 +749,16 @@ plugin.tx_mksearch {
 		### aktueller Suchbegriff
 		plugin.dcsearchterm =< lib.mksearch.currentSearchTerm
 		suggestions {
-			suggestions.implode = ,
-			suggestions.implode.noTrimWrap = || |
+			# Join terms with comma
+			implode = ,
+			implode.noTrimWrap = || |
+			# prepare search link
 			links.search {
 				pid = 0
 				_cfg.params.term = value
 				useKeepVars = 1
 				useKeepVars.skipEmpty = 1
-				# Bei der neuen Suche nur sinnvolle Parameter weiter nutzen
+				# allow useful parameters only
 				useKeepVars.allow = submit, pagelimit, sort
 				useKeepVars.add = submit=
 			}
