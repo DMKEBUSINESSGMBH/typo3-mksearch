@@ -112,7 +112,7 @@ class tx_mksearch_view_SearchSolr extends tx_rnbase_view_Base {
 
 		if (tx_rnbase_util_BaseMarker::containsMarker($template, 'SUGGESTIONS')) {
 			$markerClass = $configurations->get($this->confId.'suggestions.markerClass');
-			$markerClass = $markerClass ? $markerClass : 'tx_mksearch_marker_Suggestion';
+			$markerClass = $markerClass ? $markerClass : 'tx_rnbase_util_SimpleMarker';
 
 			$template = $listBuilder->render(
 					$suggestions, $viewData, $template,

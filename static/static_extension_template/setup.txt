@@ -748,6 +748,19 @@ plugin.tx_mksearch {
 
 		### aktueller Suchbegriff
 		plugin.dcsearchterm =< lib.mksearch.currentSearchTerm
+		suggestions {
+			suggestions.implode = ,
+			suggestions.implode.noTrimWrap = || |
+			links.search {
+				pid = 0
+				_cfg.params.term = value
+				useKeepVars = 1
+				useKeepVars.skipEmpty = 1
+				# Bei der neuen Suche nur sinnvolle Parameter weiter nutzen
+				useKeepVars.allow = submit, pagelimit, sort
+				useKeepVars.add = submit=
+			}
+		}
 	}
 
 	showhit {
@@ -1103,15 +1116,15 @@ lib.mksearchAjaxPage {
 ### the complete TYPO3
 mksearchAjaxPage = PAGE
 mksearchAjaxPage {
-  	typeNum=540
- 	config.disableAllHeaderCode = 1
-  	config.metaCharset = utf-8
-  	### X-Robots-Tag, wir wollen vermeiden, dass der inhalt des calls indiziert wird.
-  	config.additionalHeaders = Content-Type: text/plain; charset=utf-8|X-Robots-Tag: noindex;
-  	config.xhtml_cleaning = 0
-  	config.admPanel = 0
-  	config.sendNoCacheHeaders = 1
-  	config.no_cache = 1
+	typeNum=540
+	config.disableAllHeaderCode = 1
+	config.metaCharset = utf-8
+	### X-Robots-Tag, wir wollen vermeiden, dass der inhalt des calls indiziert wird.
+	config.additionalHeaders = Content-Type: text/plain; charset=utf-8|X-Robots-Tag: noindex;
+	config.xhtml_cleaning = 0
+	config.admPanel = 0
+	config.sendNoCacheHeaders = 1
+	config.no_cache = 1
 
-  	10 =< lib.mksearchAjaxPage
+	10 =< lib.mksearchAjaxPage
 }
