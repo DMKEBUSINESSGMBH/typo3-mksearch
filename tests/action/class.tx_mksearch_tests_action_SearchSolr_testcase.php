@@ -204,7 +204,7 @@ class tx_mksearch_tests_action_SearchSolr_testcase
 							var suggestions = [];
 							jQuery.each(data.suggestions, function(key, value) {
 								jQuery.each(value, function(key, suggestion) {
-									suggestions.push(suggestion.uid);
+									suggestions.push(suggestion.record.value);
 								});
 							});
 							response( jQuery.map( suggestions, function( item ) {
@@ -276,7 +276,7 @@ class tx_mksearch_tests_action_SearchSolr_testcase
 							var suggestions = [];
 							jQuery.each(data.suggestions, function(key, value) {
 								jQuery.each(value, function(key, suggestion) {
-									suggestions.push(suggestion.uid);
+									suggestions.push(suggestion.record.value);
 								});
 							});
 							response( jQuery.map( suggestions, function( item ) {
@@ -350,7 +350,7 @@ class tx_mksearch_tests_action_SearchSolr_testcase
 							var suggestions = [];
 							jQuery.each(data.suggestions, function(key, value) {
 								jQuery.each(value, function(key, suggestion) {
-									suggestions.push(suggestion.uid);
+									suggestions.push(suggestion.record.value);
 								});
 							});
 							response( jQuery.map( suggestions, function( item ) {
@@ -422,7 +422,7 @@ class tx_mksearch_tests_action_SearchSolr_testcase
 							var suggestions = [];
 							jQuery.each(data.suggestions, function(key, value) {
 								jQuery.each(value, function(key, suggestion) {
-									suggestions.push(suggestion.uid);
+									suggestions.push(suggestion.record.value);
 								});
 							});
 							response( jQuery.map( suggestions, function( item ) {
