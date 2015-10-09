@@ -260,7 +260,7 @@ lib.mksearch.defaultsolrfilter {
 
 	### field facets: hier werden alle felder angegeben, die facettiert werden sollen
 	#options.facet.fields = mkkeywords_tag_names_ms, content_ident_s
-	
+
 	### die Sortierung der Facetten. default ist count. ansonsten ist nur noch index möglich
 	#options.facet.sort = index
 
@@ -700,6 +700,7 @@ plugin.tx_mksearch {
 		groupedfacet {
 			hit = < plugin.tx_mksearch.searchsolr.facet
 			hit {
+				child= < plugin.tx_mksearch.searchsolr.groupedfacet.hit
 				dataMap {
 					### wir mappen das feld und ersetzen den punkt durch einen unterstrich
 					### das ist beispielsweise für den case label notwendig

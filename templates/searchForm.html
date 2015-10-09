@@ -50,30 +50,30 @@
 				<legend>###LABEL_search_options_standard_combination###</legend>
 				<div>
 					<input class="radio" type="radio" name="mksearch[combination]" id="mksearch[combination][none]" value="none" ###FORM_COMBINATION_NONE### />
-					<label for="mksearch[combination][none]">###LABEL_search_options_standard_combination_none###</label> 
+					<label for="mksearch[combination][none]">###LABEL_search_options_standard_combination_none###</label>
 				</div>
 				<div>
 					<input class="radio" type="radio" name="mksearch[combination]" id="mksearch[combination][free]" value="free" ###FORM_COMBINATION_FREE### />
-					<label for="mksearch[combination][free]">###LABEL_search_options_standard_combination_free###</label> 
+					<label for="mksearch[combination][free]">###LABEL_search_options_standard_combination_free###</label>
 				</div>
 				<div>
 					<input class="radio" type="radio" name="mksearch[combination]" id="mksearch[combination][or]" value="or" ###FORM_COMBINATION_OR###/>
-					<label for="mksearch[combination][or]">###LABEL_search_options_standard_combination_or###</label> 
-				</div>		
+					<label for="mksearch[combination][or]">###LABEL_search_options_standard_combination_or###</label>
+				</div>
 				<div>
 					<input class="radio" type="radio" name="mksearch[combination]" id="mksearch[combination][and]" value="and"  ###FORM_COMBINATION_AND###/>
-					<label for="mksearch[combination][and]">###LABEL_search_options_standard_combination_and###</label> 
+					<label for="mksearch[combination][and]">###LABEL_search_options_standard_combination_and###</label>
 				</div>
 				<div>
 					<input class="radio" type="radio" name="mksearch[combination]" id="mksearch[combination][exact]" value="exact"  ###FORM_COMBINATION_EXACT###/>
-					<label for="mksearch[combination][exact]">###LABEL_search_options_standard_combination_exact###</label> 
+					<label for="mksearch[combination][exact]">###LABEL_search_options_standard_combination_exact###</label>
 				</div>
 			</fieldset>
 			<fieldset>
 				<legend>###LABEL_search_options_standard_others###</legend>
 				<div>
 					<input class="checkbox" type="checkbox" name="mksearch[options][fuzzy]" id="mksearch[options][fuzzy]" ###FORM_OPTION_FUZZY###/>
-					<label for="mksearch[options][fuzzy]">###LABEL_search_options_standard_others_fuzzy###</label> 
+					<label for="mksearch[options][fuzzy]">###LABEL_search_options_standard_others_fuzzy###</label>
 				</div>
 			</fieldset>
 	</fieldset>
@@ -95,11 +95,47 @@
 							name="###GROUPEDFACET_HIT_FORM_NAME###"
 							value="###GROUPEDFACET_HIT_FORM_VALUE###"
 							id="###GROUPEDFACET_HIT_FORM_ID###"
-							###GROUPEDFACET_HIT_ACTIVE### 
+							###GROUPEDFACET_HIT_ACTIVE###
 						/>
 						<label for="###GROUPEDFACET_HIT_FORM_ID###">
 							###GROUPEDFACET_HIT_DCLABEL### <!-- ###GROUPEDFACET_HIT_COUNT### -->
 						</label>
+						<!-- ###GROUPEDFACET_HIT_CHILDS### START -->
+							<ul class="###GROUPEDFACET_HIT_FIELD###">
+								<!-- ###GROUPEDFACET_HIT_CHILD### START -->
+									<li>
+										<input
+											type="checkbox"
+											name="###GROUPEDFACET_HIT_CHILD_FORM_NAME###"
+											value="###GROUPEDFACET_HIT_CHILD_FORM_VALUE###"
+											id="###GROUPEDFACET_HIT_CHILD_FORM_ID###"
+											###GROUPEDFACET_HIT_CHILD_ACTIVE###
+										/>
+										<label for="###GROUPEDFACET_HIT_CHILD_FORM_ID###">
+											###GROUPEDFACET_HIT_CHILD_DCLABEL### <!-- ###GROUPEDFACET_HIT_CHILD_COUNT### -->
+										</label>
+										<!-- ###GROUPEDFACET_HIT_CHILD_CHILDS### START -->
+											<ul class="###GROUPEDFACET_HIT_CHILD_FIELD###">
+												<!-- ###GROUPEDFACET_HIT_CHILD_CHILD### START -->
+													<li>
+														<input
+															type="checkbox"
+															name="###GROUPEDFACET_HIT_CHILD_CHILD_FORM_NAME###"
+															value="###GROUPEDFACET_HIT_CHILD_CHILD_FORM_VALUE###"
+															id="###GROUPEDFACET_HIT_CHILD_CHILD_FORM_ID###"
+															###GROUPEDFACET_HIT_CHILD_CHILD_ACTIVE###
+														/>
+														<label for="###GROUPEDFACET_HIT_CHILD_CHILD_FORM_ID###">
+															###GROUPEDFACET_HIT_CHILD_CHILD_DCLABEL### <!-- ###GROUPEDFACET_HIT_CHILD_CHILD_COUNT### -->
+														</label>
+													</li>
+												<!-- ###GROUPEDFACET_HIT_CHILD_CHILD### END -->
+											</ul>
+										<!-- ###GROUPEDFACET_HIT_CHILD_CHILDS### END -->
+									</li>
+								<!-- ###GROUPEDFACET_HIT_CHILD### END -->
+							</ul>
+						<!-- ###GROUPEDFACET_HIT_CHILDS### END -->
 					</li>
 					<!-- ###GROUPEDFACET_HIT### END -->
 				</ul>
@@ -137,14 +173,14 @@
 		<strong>###SUGGESTION_SEARCHLINK######SUGGESTION_VALUE######SUGGESTION_SEARCHLINK###</strong>
 		<!-- ###SUGGESTION### START -->
 		<!-- ###SUGGESTIONS### START -->
-	</fieldset>		
+	</fieldset>
 
 
 	<fieldset>
 		<input type="hidden" value="###LABEL_search_submit###" class="text" name="mksearch[submit]" title="Suchen" />
 		<input class="submit" type="submit" name="mksearch[submit]" value="###LABEL_search_submit###" />
 	</fieldset>
-	 
+
 	Diese Möglichkeiten bestehen für Sortierunslinks. Dazu benötigt man die Beispiel Konfig aus
 	dem static TS.
 

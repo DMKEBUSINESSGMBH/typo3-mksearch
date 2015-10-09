@@ -39,9 +39,12 @@ tx_rnbase::load('tx_rnbase_model_base');
  */
 class tx_mksearch_model_Facet extends tx_rnbase_model_base  {
 	const TYPE_FIELD = 'type_field';
+	const TYPE_PIVOT = 'type_pivot';
 	const TYPE_QUERY = 'type_query';
 	const TYPE_RANGE = 'type_range';
 	const TYPE_DATE = 'type_date';
+
+	private $childs = array();
 
 	/**
 	 * Gibt ein Facet Model zurück
@@ -78,6 +81,40 @@ class tx_mksearch_model_Facet extends tx_rnbase_model_base  {
 	 */
 	public function setFacetType($type) {
 		$this->record['type'] = $type;
+	}
+
+	/**
+	 * adds one ore more child facets
+	 *
+	 * @param mixed <multitype:tx_mksearch_model_Facet, tx_mksearch_model_Facet> $child
+	 * @return tx_mksearch_model_Facet
+	 */
+	public function addChild($child) {
+		if ($child instanceof tx_mksearch_model_Facet) {
+			$this->childs[] = $child;
+		} elseif(is_array($child)) {
+			foreach ($child as $sub) {
+				$this->addChild($sub);
+			}
+		}
+
+		return $this;
+	}
+	/**
+	 * returns all childs a child facet
+	 *
+	 * @return multitype:tx_mksearch_model_Facet $child
+	 */
+	public function getChilds() {
+		return $this->childs;
+	}
+	/**
+	 * there are childs?
+	 *
+	 * @return boolean
+	 */
+	public function hasChilds() {
+		return !empty($this->childs);
 	}
 }
 

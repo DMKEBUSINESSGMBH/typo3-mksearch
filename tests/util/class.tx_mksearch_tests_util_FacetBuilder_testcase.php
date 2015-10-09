@@ -73,6 +73,78 @@ class tx_mksearch_tests_util_FacetBuilder_testcase
 		self::assertEquals(tx_mksearch_model_Facet::TYPE_QUERY, $facetItems[0]->getFacetType());
 	}
 
+	public function testBuildFacetsWithPivotFacets() {
+		$facetCount = new stdClass();
+		$facetCount->facet_pivot = $this->buildPivotFacets();
+
+		$facetGroups = tx_mksearch_util_FacetBuilder::getInstance()->buildFacets($facetCount);
+
+		self::assertTrue(is_array($facetGroups));
+		self::assertEquals(2, count($facetGroups));
+
+		$facetGroup = array_shift($facetGroups);
+		self::assertInstanceOf('tx_rnbase_model_base', $facetGroup);
+		// fiel_one,fiel_two,fiel_three has to be converted to fiel_one-fiel_two-fiel_three!
+		self::assertEquals('fiel_one-fiel_two-fiel_three', $facetGroup->getField());
+
+		$facetItems = $facetGroup->getItems();
+
+		self::assertEquals(1, count($facetItems));
+		self::assertEquals(tx_mksearch_model_Facet::TYPE_PIVOT, $facetItems[0]->getFacetType());
+		self::assertEquals('fiel_one', $facetItems[0]->getField());
+		self::assertEquals('One', $facetItems[0]->getLabel());
+		self::assertEquals('1', $facetItems[0]->getCount());
+		self::assertTrue(is_array($facetItems[0]->getChilds()));
+		self::assertTrue($facetItems[0]->hasChilds());
+
+		$facetChilds = $facetItems[0]->getChilds();
+
+		self::assertEquals(2, count($facetChilds));
+		self::assertEquals(tx_mksearch_model_Facet::TYPE_PIVOT, $facetChilds[0]->getFacetType());
+		self::assertEquals('fiel_two', $facetChilds[0]->getField());
+		self::assertEquals('Two 1', $facetChilds[0]->getLabel());
+		self::assertEquals('5', $facetChilds[0]->getCount());
+		self::assertTrue($facetChilds[0]->hasChilds());
+		self::assertEquals(tx_mksearch_model_Facet::TYPE_PIVOT, $facetChilds[1]->getFacetType());
+		self::assertEquals('fiel_two', $facetChilds[1]->getField());
+		self::assertEquals('Two 2', $facetChilds[1]->getLabel());
+		self::assertEquals('2', $facetChilds[1]->getCount());
+		self::assertFalse($facetChilds[1]->hasChilds());
+
+		$facetChilds = $facetChilds[0]->getChilds();
+
+		self::assertEquals(1, count($facetChilds));
+		self::assertEquals(tx_mksearch_model_Facet::TYPE_PIVOT, $facetChilds[0]->getFacetType());
+		self::assertEquals('fiel_three', $facetChilds[0]->getField());
+		self::assertEquals('Three', $facetChilds[0]->getLabel());
+		self::assertEquals('7', $facetChilds[0]->getCount());
+		self::assertFalse($facetChilds[0]->hasChilds());
+
+
+		$facetGroup = array_shift($facetGroups);
+		self::assertInstanceOf('tx_rnbase_model_base', $facetGroup);
+		self::assertEquals('field_main-fiel_sub', $facetGroup->getField());
+
+		$facetItems = $facetGroup->getItems();
+
+		self::assertEquals(1, count($facetItems));
+		self::assertEquals(tx_mksearch_model_Facet::TYPE_PIVOT, $facetItems[0]->getFacetType());
+		self::assertEquals('field_main', $facetItems[0]->getField());
+		self::assertEquals('Main', $facetItems[0]->getLabel());
+		self::assertEquals('7', $facetItems[0]->getCount());
+		self::assertTrue(is_array($facetItems[0]->getChilds()));
+		self::assertTrue($facetItems[0]->hasChilds());
+
+		$facetChilds = $facetItems[0]->getChilds();
+
+		self::assertEquals(1, count($facetChilds));
+		self::assertEquals(tx_mksearch_model_Facet::TYPE_PIVOT, $facetChilds[0]->getFacetType());
+		self::assertEquals('fiel_sub', $facetChilds[0]->getField());
+		self::assertEquals('Sub', $facetChilds[0]->getLabel());
+		self::assertEquals('5', $facetChilds[0]->getCount());
+		self::assertFalse($facetChilds[0]->hasChilds());
+	}
+
 
 	public function testBuildFacetsWithFieldFacets() {
 		$facetCount = new stdClass();
@@ -147,6 +219,51 @@ class tx_mksearch_tests_util_FacetBuilder_testcase
 		$facetData->date_query3 = 6;
 		$facetData->price_query1 = 12;
 		$facetData->price_query2 = 25;
+		return $facetData;
+	}
+	private function buildPivotFacets() {
+		$facetData = (object) array(
+			'fiel_one,fiel_two,fiel_three' => array(
+				(object) array(
+					'field' => 'fiel_one',
+					'value' => 'One',
+					'count' => 1,
+					'pivot' => array(
+						(object) array(
+							'field' => 'fiel_two',
+							'value' => 'Two 1',
+							'count' => 5,
+							'pivot' => array(
+								(object) array(
+									'field' => 'fiel_three',
+									'value' => 'Three',
+									'count' => 7,
+								),
+							)
+						),
+						(object) array(
+							'field' => 'fiel_two',
+							'value' => 'Two 2',
+							'count' => 2,
+						),
+					)
+				),
+			),
+			'field_main,fiel_sub' => array(
+				(object) array(
+					'field' => 'field_main',
+					'value' => 'Main',
+					'count' => 7,
+					'pivot' => array(
+						(object) array(
+							'field' => 'fiel_sub',
+							'value' => 'Sub',
+							'count' => 5,
+						),
+					)
+				),
+			),
+		);
 		return $facetData;
 	}
 }

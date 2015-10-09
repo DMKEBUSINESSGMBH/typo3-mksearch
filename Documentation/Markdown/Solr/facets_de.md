@@ -274,4 +274,99 @@ plugin.tx_mksearch.searchsolr {
 ```
 
 Damit werden allgemein die Query-Facets frei gegeben.
- 
+
+## Pivot facets
+
+Die Pivot bzw Hierarchical Facets können verwendet werden, 
+um mehrere zu Facetierende Felder in einer Baumstruktur auszugeben.  
+Die Pivot Facets reduzieren die Solr-Performance
+und sollten nur mit bedacht eingesetzt werden.  
+Wie üblich werden die Facetten am besten in der solrconfig.xml angelegt:
+
+```xml
+<requestHandler name="search" class="solr.SearchHandler">
+    <lst name="defaults">
+        <str name="facet">true</str>
+        <str name="facet.pivot">fiel_one,fiel_two,fiel_three</str>
+        <str name="facet.pivot">field_main,fiel_sub</str>
+    </lst>
+</requestHandler>
+```
+
+Die Pivot Facets können sich durch die freie Angabe von Feldern beliebig verschachteln.
+Jede Facette kann dadurch nun Kinder beinhalten.
+Um das zusammen bauen kümmert sich der Facet-Builder.
+Um die Kindfacetten nun auszugeben ist eine Anpassung des Templates notwendig.
+Die relevanten Bereiche sind die CHILD-Subparts.
+Diese müsse so weit verschachtelt im Template angegeben werden,
+wie Kindfacetten ,öglich sind.
+
+```html
+	<!-- ###GROUPEDFACETS### START -->
+	<fieldset class="facets">
+		<legend>Filter</legend>
+		<ul class="mksearch-facets">
+		<!-- ###GROUPEDFACET### START -->
+			<!-- ###GROUPEDFACET_HITS### START -->
+			<li class="###GROUPEDFACET_FIELD###">
+				###GROUPEDFACET_DCFIELD###
+				<ul class="###GROUPEDFACET_FIELD###">
+					<!-- ###GROUPEDFACET_HIT### START -->
+					<li>
+						<input
+							type="checkbox"
+							name="###GROUPEDFACET_HIT_FORM_NAME###"
+							value="###GROUPEDFACET_HIT_FORM_VALUE###"
+							id="###GROUPEDFACET_HIT_FORM_ID###"
+							###GROUPEDFACET_HIT_ACTIVE###
+						/>
+						<label for="###GROUPEDFACET_HIT_FORM_ID###">
+							###GROUPEDFACET_HIT_DCLABEL### <!-- ###GROUPEDFACET_HIT_COUNT### -->
+						</label>
+						<!-- ###GROUPEDFACET_HIT_CHILDS### START -->
+							<ul class="###GROUPEDFACET_HIT_FIELD###">
+								<!-- ###GROUPEDFACET_HIT_CHILD### START -->
+									<li>
+										<input
+											type="checkbox"
+											name="###GROUPEDFACET_HIT_CHILD_FORM_NAME###"
+											value="###GROUPEDFACET_HIT_CHILD_FORM_VALUE###"
+											id="###GROUPEDFACET_HIT_CHILD_FORM_ID###"
+											###GROUPEDFACET_HIT_CHILD_ACTIVE###
+										/>
+										<label for="###GROUPEDFACET_HIT_CHILD_FORM_ID###">
+											###GROUPEDFACET_HIT_CHILD_DCLABEL### <!-- ###GROUPEDFACET_HIT_CHILD_COUNT### -->
+										</label>
+										<!-- ###GROUPEDFACET_HIT_CHILD_CHILDS### START -->
+											<ul class="###GROUPEDFACET_HIT_CHILD_FIELD###">
+												<!-- ###GROUPEDFACET_HIT_CHILD_CHILD### START -->
+													<li>
+														<input
+															type="checkbox"
+															name="###GROUPEDFACET_HIT_CHILD_CHILD_FORM_NAME###"
+															value="###GROUPEDFACET_HIT_CHILD_CHILD_FORM_VALUE###"
+															id="###GROUPEDFACET_HIT_CHILD_CHILD_FORM_ID###"
+															###GROUPEDFACET_HIT_CHILD_CHILD_ACTIVE###
+														/>
+														<label for="###GROUPEDFACET_HIT_CHILD_CHILD_FORM_ID###">
+															###GROUPEDFACET_HIT_CHILD_CHILD_DCLABEL### <!-- ###GROUPEDFACET_HIT_CHILD_CHILD_COUNT### -->
+														</label>
+													</li>
+												<!-- ###GROUPEDFACET_HIT_CHILD_CHILD### END -->
+											</ul>
+										<!-- ###GROUPEDFACET_HIT_CHILD_CHILDS### END -->
+									</li>
+								<!-- ###GROUPEDFACET_HIT_CHILD### END -->
+							</ul>
+						<!-- ###GROUPEDFACET_HIT_CHILDS### END -->
+					</li>
+					<!-- ###GROUPEDFACET_HIT### END -->
+				</ul>
+			</li>
+			<!-- ###GROUPEDFACET_HITS### END -->
+		<!-- ###GROUPEDFACET### END -->
+		</ul>
+	</fieldset>
+	<!-- ###GROUPEDFACETS### END -->
+```
+

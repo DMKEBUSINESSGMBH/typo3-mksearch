@@ -84,8 +84,11 @@ class tx_mksearch_util_FacetBuilder {
 	 */
 	public function buildFacets($facetData) {
 
-		$facetGroups = $this->buildFieldFacets($facetData->facet_fields);
-		$facetGroups = array_merge($facetGroups, $this->buildQueryFacets($facetData->facet_queries));
+		$facetGroups = array_merge(
+			$this->buildFieldFacets($facetData->facet_fields),
+			$this->buildQueryFacets($facetData->facet_queries),
+			$this->buildPivotFacets($facetData->facet_pivot)
+		);
 		// TODO: RANGE-Facet integrieren
 
 		return $facetGroups;
@@ -129,6 +132,65 @@ class tx_mksearch_util_FacetBuilder {
 
 		return array_values($facetGroups);
 	}
+
+	/**
+	 * Query-Facets kommen von Solr nicht in Gruppen strukturiert. Damit wir mehrere Query-Gruppen unterscheiden
+	 * können, müssen die Queries IMMER mit einem Key angelegt werden. Folgende Form:
+	 *
+	 *  <str name="facet.query">{!key="date_lastweek"}datetime:[NOW-7DAYS/DAY TO NOW]</str>
+	 *	<str name="facet.query">{!key="date_lastmonth"}datetime:[NOW-1MONTH/MONTH TO NOW]</str>
+	 *
+	 * Damit splitten gruppieren wir nach dem String vor dem ersten Unterstrich.
+	 *
+	 * @param array[stdClass] $facetData Query-Facet Daten von Solr
+	 * @return array[tx_rnbase_model_base] Ausgabedaten
+	 */
+	protected function buildPivotFacets($facetData) {
+		$facetGroups = array();
+		if (!$facetData) {
+			return $facetGroups;
+		}
+		$uid = 0;
+		foreach ($facetData As $fields => $pivots) {
+			$facetGroups[] = tx_rnbase::makeInstance(
+				'tx_rnbase_model_base',
+				array(
+					'uid' => ++$uid,
+					'field' => implode('-', explode(',', $fields)),
+					'items' => $this->buildPivotChildFacets($pivots),
+				)
+			);
+		}
+
+		return array_values($facetGroups);
+	}
+
+	/**
+	 * Creates Hierarchical Facets.
+	 *
+	 * @param array $pivots
+	 * @return multitype:tx_mksearch_model_Facet
+	 */
+	protected function buildPivotChildFacets($pivots)
+	{
+		$fields = array();
+		if (empty($pivots) || !is_array($pivots)) {
+			return $fields;
+		}
+		foreach ($pivots as $pivot) {
+			$field = $this->getSimpleFacet(
+				(string) $pivot->field,
+				(string) $pivot->value,
+				(string) $pivot->count,
+				tx_mksearch_model_Facet::TYPE_PIVOT
+			);
+			$field->addChild($this->buildPivotChildFacets($pivot->pivot));
+			$fields[] = $field;
+		}
+
+		return $fields;
+	}
+
 	/**
 	 * Baut die Daten für die Field-Facets zusammen
 	 *

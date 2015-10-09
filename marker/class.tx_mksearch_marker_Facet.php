@@ -41,6 +41,44 @@ tx_rnbase::load('tx_mksearch_marker_SearchResultSimple');
  */
 class tx_mksearch_marker_Facet extends tx_mksearch_marker_SearchResultSimple {
 
+
+
+	/**
+	 * @param string $template HTML template
+	 * @param tx_mksearch_model_Facet $item search hit
+	 * @param tx_rnbase_util_FormatUtil $formatter
+	 * @param string $confId path of typoscript configuration
+	 * @param string $marker name of marker
+	 * @return string readily parsed template
+	 */
+	public function parseTemplate($template, &$item, &$formatter, $confId, $marker = 'ITEM') {
+		$out = parent::parseTemplate($template, $item, $formatter, $confId, $marker);
+
+		if (self::containsMarker($out, $marker . '_CHILDS')) {
+			$childs = array();
+			if (
+				$item instanceof tx_mksearch_model_Facet
+				&& $item->hasChilds()
+			) {
+				$childs = $item->getChilds();
+			}
+
+			/* @var $listBuilder tx_rnbase_util_ListBuilder */
+			$listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder');
+			$out = $listBuilder->render(
+				$childs,
+				FALSE,
+				$out,
+				'tx_mksearch_marker_Facet',
+				$confId . 'child.',
+				$marker . '_CHILD',
+				$formatter
+			);
+		}
+
+		return $out;
+	}
+
 	/**
 	 * Führt vor dem parsen Änderungen am Model durch.
 	 *
