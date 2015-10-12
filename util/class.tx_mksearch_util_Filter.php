@@ -316,6 +316,53 @@ class tx_mksearch_util_Filter {
 			$markArray = array_merge($markArray, $markOrders);
 		}
 	}
+
+	/**
+	 * Prüft den fq parameter auf richtigkeit.
+	 *     valid:
+	 *         title:hans
+	 *         uid:1
+	 *
+	 * @param string $sFq
+	 * @param array $allowedFqParams
+	 * @return string
+	 */
+	public function parseFqFieldAndValue($sFq, $allowedFqParams) {
+		if (empty($sFq) || empty($allowedFqParams)) return '';
+
+		// wir trennen den string auf!
+		// field:value | field:"value"
+		// nur kleinbuchstaben und unterstrich für feldnamen erlauben.
+		$pattern  = '(?P<field>([a-z_]*))';
+		// feld mit doppelpunkt vom wert getrennt.
+		$pattern .= ':';
+		// eventuelles anführungszeichen am anfang abschneiden.
+		$pattern .= '(["]*)';
+		// nur buchstaben, zahlen unterstrich, leerzeichen und punkt für wert erlauben.
+		$pattern .= '(?P<value>([a-zA-Z0-9_. ]*))';
+		tx_rnbase::load('tx_mksearch_util_Misc');
+		$matches = array();
+		if (
+			// wir splitten den string auf!
+			preg_match('/^'.$pattern.'/i', $sFq, $matches)
+			// wurde das feld gefunden?
+			&& isset($matches['field']) && !empty($matches['field'])
+			// wurde der wert gefunden?
+			&& isset($matches['value']) && !empty($matches['value'])
+			// das feld muss erlaubt sein!
+			&& in_array($matches['field'], $allowedFqParams)
+			// werte reinigen
+			&& ($field = tx_mksearch_util_Misc::sanitizeFq($matches['field']))
+			&& ($term = tx_mksearch_util_Misc::sanitizeFq($matches['value']))
+		) {
+			// fq wieder zusammensetzen
+			$sFq = $field . ':"'. $term .'"';
+		}
+		// kein feld und oder wert gefunden oder feld nicht erlaubt, wir lassen den qs leer!
+		else $sFq = '';
+
+		return $sFq;
+	}
 }
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_Filter.php'])	{
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_Filter.php']);
