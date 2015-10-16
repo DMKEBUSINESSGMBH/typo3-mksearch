@@ -15,6 +15,9 @@
 .. role::   php(code)
 
 
+.. _extConf:
+
+
 Einstellungen im ExtensionManager
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -44,6 +47,10 @@ Videos, aber auch aus PDF- oder Worddokumenten extrahieren. Wenn man
 Tika verwenden möchte, dann sollte man noch den kompletten Pfad zum
 Tika-Jarfile angeben.
 
+Tika kann z.B. auf der `Tika Homepage`_ heruntergeladen werden.
+
+.. _Tika Homepage: https://tika.apache.org/download.html
+
 Hinweis: Apache Solr hat ebenfalls eine Integration für Tika. Wenn
 diese verwendet wird, muss das Tika-Jar hier nicht angegeben werden.
 
@@ -54,6 +61,8 @@ Umlaute/Sonderzeichen im Dateinamen haben. de\_DE.UTF-8 ermöglicht es
 z.B. Dateien mit Umlauten zu verarbeiten. Ggf. müssen verschiedene
 Typen probiert werden. Auf Windows Systemen ist diese Einstellung
 egal.
+
+Außerdem wird natürlich Java benötigt.
 
 Sekunden bis Queue Einträge gelöscht werden (secondsToKeepQueueEntries)
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

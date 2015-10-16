@@ -266,3 +266,51 @@ Mit Version 1.4.35 ist es möglich die Feldwerte nun auch vor der Indexierung zu
    }
 
 Damit wird der Wert aus tstamp vor der Übernahme in das Attribut sorting_date_dt in einen String mit dem Format Y-m-d\TH:i:s\Z umgewandelt. Das ist für Solr nützlich, um da mit konkreten Datumswerten arbeiten zu können. Die Angabe von unix2isodate_offset ist optional. Der Default-Wert ist 0.
+
+
+Indizierung von Dateien (PDFs, Word Dokumenten etc.)
+""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+Für die Indizierung von PDFs etc. gibt es verschiedene Möglichkeiten. Das lässt sich direkt mit Solr
+bewerkstelligen aber auch direkt in mksearch. Wenn es in mksearch geschehen soll, muss der Pfad zum Tika jar
+in der Extensioneinstellung konfiguriert werden (siehe :ref:`extConf`). Außerdem ist Java notwendig. Evtl. muss der Pfad dazu im binSetup
+von TYPO3 konfiguriert werden.
+
+Typischerweise wird die Datei in der Tabelle sys_file liegen. Also muss der Indexer für diesen Datentyp (core:file)
+eingerichtet werden. Das könnte wie folgt aussehen:
+
+.. code-block:: ts
+
+   # Configuration for indexing mode: tika/solr
+   # - tika means local data extraction with tika.jar (Java required on local server!)
+   # - solr means data extraction on remote Solr-Server. Binary data is streamed by http.
+   indexMode = tika
+   # optional array of key value pairs that will be sent with the post (see Solr Cell documentation)
+   #solr.indexOptions.params
+
+   # define filters for FAL records. All filters must match to index a record.
+   filter.sys_file {
+     # a regular expression
+     byDirectory = /^fileadmin\/uploads\/.*/
+     # commaseparated strings
+     byFileExtension = pdf
+   }
+
+   # Define which FAL fields to index and to which fields
+   fields {
+     file_name = file_name_s
+     abstract = abstract_s
+   }
+   # How to map Tika-Fields. Check the manual of Tika which fields exist.
+   tikafields {
+     # tikafield = indexfield
+     content = content
+     language = lang_s
+     meta.Content-Encoding = encoding_s
+     meta.Content-Length = filesize_i
+   }
+
+Damit lassen sich dann auch PDF Dateien durchsuchen. Die Ausgabe im FE wird wie üblich konfiguriert.
+
+mksearch bietet aber auch eine Tika Utility, welche anderswertig verwendet werden kann, um den Inhalt von Dateien
+zu extrahieren. Die Klasse heißt tx_mksearch_util_Tika.
