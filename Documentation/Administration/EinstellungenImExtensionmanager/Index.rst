@@ -47,7 +47,7 @@ Videos, aber auch aus PDF- oder Worddokumenten extrahieren. Wenn man
 Tika verwenden möchte, dann sollte man noch den kompletten Pfad zum
 Tika-Jarfile angeben.
 
-Tika kann z.B. auf der `Tika Homepage`_ heruntergeladen werden.
+Tika kann z.B. auf der `Tika Homepage`_ heruntergeladen werden (tika-app).
 
 .. _Tika Homepage: https://tika.apache.org/download.html
 
