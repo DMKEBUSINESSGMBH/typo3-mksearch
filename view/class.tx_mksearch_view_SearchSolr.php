@@ -142,7 +142,7 @@ class tx_mksearch_view_SearchSolr extends tx_rnbase_view_Base {
 		$out = $template;
 
 		// dann Liste parsen
-		$facets = $result ? $result['facets'] : array();
+		$facets = $result ? (array) $result['facets'] : array();
 
 		// the old way!
 		if (tx_rnbase_util_BaseMarker::containsMarker($out, 'FACETS')) {
