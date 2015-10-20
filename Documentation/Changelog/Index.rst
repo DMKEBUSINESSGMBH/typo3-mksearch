@@ -15,6 +15,19 @@
 Changelog
 ---------
 
+1.5.6
+"""""
+* [TASK] added FieldConversion for tt_news and tt_content indexer
+* [TASK] buildFacetData fallback removed tx_mksearch_util_FacetBuilder
+* [TASK] Support for stdWrap in FieldConversion (issue _`#6`: https://github.com/DMKEBUSINESSGMBH/typo3-mksearch/issues/6)
+* [TASK] use TS parsinf of rn_base to support file includes etc. in indexer configuration (_`#7`: https://github.com/DMKEBUSINESSGMBH/typo3-mksearch/issues/7)
+* [TASK] Support tags for fq-parameters (_`#8`: https://github.com/DMKEBUSINESSGMBH/typo3-mksearch/issues/8)
+* [TASK] rendering suggestions (_`#9`: https://github.com/DMKEBUSINESSGMBH/typo3-mksearch/issues/9)
+* [TASK] support for query facets added (_`#10`: https://github.com/DMKEBUSINESSGMBH/typo3-mksearch/issues/10)
+* [TASK] solr filter method parseFieldAndValue moved to filter util
+* [TASK] added documentation for the use of Tika to index PDFs etc.
+* some code cleanup and bugfixes
+
 1.5.0
 """""
 * [FEATURE] #4 support for query facets
