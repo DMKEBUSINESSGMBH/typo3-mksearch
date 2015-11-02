@@ -2,7 +2,7 @@
 /**
  *	@package tx_mksearch
  *  @subpackage tx_mksearch_search_irfaq
- *  
+ *
  *  Copyright notice
  *
  *  (c) 2011 DMK E-Business GmbH <dev@dmk-ebusiness.de>
@@ -32,13 +32,13 @@ require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_rnbase_util_SearchBase');
 
 /**
- * 
+ *
  * @package tx_mksearch
  * @subpackage tx_mksearch_search_irfaq
  * @author Hannes Bochmann
  */
 class tx_mksearch_search_irfaq_Category extends tx_rnbase_util_SearchBase {
-	
+
 	/**
 	 * getTableMappings()
 	 */
@@ -90,7 +90,7 @@ class tx_mksearch_search_irfaq_Category extends tx_rnbase_util_SearchBase {
 	 */
 	protected function getJoins($tableAliases) {
 		$join = '';
-		
+
 		//rezepte mit typ soundso
 		if (isset($tableAliases['IRFAQ_QUESTION_CATEGORY_MM'])) {
 			$join .= ' JOIN tx_irfaq_q_cat_mm AS IRFAQ_QUESTION_CATEGORY_MM ON IRFAQ_CATEGORY.uid = IRFAQ_QUESTION_CATEGORY_MM.uid_foreign';
@@ -107,5 +107,3 @@ class tx_mksearch_search_irfaq_Category extends tx_rnbase_util_SearchBase {
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/search/irfaq/class.tx_mksearch_search_irfaq_Expert.php']) {
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/search/irfaq/class.tx_mksearch_search_irfaq_Expert.php']);
 }
-
-?>

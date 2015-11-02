@@ -536,5 +536,3 @@ class tx_mksearch_tests_filter_SolrBase_testcase
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mkmarketplace/tests/filter/class.tx_mkmarketplace_tests_filter_SearchAds_testcase.php']) {
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mkmarketplace/tests/filter/class.tx_mkmarketplace_tests_filter_SearchAds_testcase.php']);
 }
-
-?>

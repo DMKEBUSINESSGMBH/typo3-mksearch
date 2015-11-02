@@ -48,7 +48,7 @@ class tx_mksearch_mod1_decorator_Composite {
 	 * @param array $item
 	 */
 	public function format($value, $colName, $record, $item) {
-		
+
 		switch ($colName) {
 // 			case 'uid':
 			case 'title':
@@ -82,7 +82,7 @@ class tx_mksearch_mod1_decorator_Composite {
 			default:
 				$ret = $value;
 		}
-		
+
 		return $ret;
 	}
 
@@ -107,7 +107,7 @@ class tx_mksearch_mod1_decorator_Composite {
 	 */
 	public function getCompositeInfo(tx_mksearch_model_internal_Composite $item, $options=array()){
 		$formtool = $this->getModule()->getFormTool();
-		
+
 		$out  = '';
 		$out .= $formtool->createEditLink($item->getTableName(), $item->getUid(), '');
 		$out .= $item->getTitle();
@@ -129,15 +129,14 @@ class tx_mksearch_mod1_decorator_Composite {
 			$out .= $configDecorator->getConfigInfos($configs);
 			$out .= '</div>';
 		}
-		
+
 // 		$out .= '<br />'; // @TODO: in indices und configs wahlweise mit ausgeben
 		return '<div>'.$out.'</div>';
 	}
-	
+
 }
 
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/decorator/class.tx_mksearch_mod1_decorator_Composite.php'])	{
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/decorator/class.tx_mksearch_mod1_decorator_Composite.php']);
 }
-?>

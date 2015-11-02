@@ -34,14 +34,14 @@ tx_rnbase::load('tx_mksearch_mod1_searcher_abstractBase');
  * @author Michael Wagner <dev@dmk-ebusiness.de>
  */
 class tx_mksearch_mod1_searcher_Index extends tx_mksearch_mod1_searcher_abstractBase {
-	
+
 /**
 	 * Liefert die Funktions-Id
 	 */
 	public function getSearcherId() {
 		return 'index';
 	}
-	
+
 	/**
 	 * Liefert den Service.
 	 *
@@ -64,14 +64,14 @@ class tx_mksearch_mod1_searcher_Index extends tx_mksearch_mod1_searcher_abstract
 		}
 // 		$options['debug'] = 1;
 	}
-	
+
 	/**
 	 * @return 	tx_mksearch_mod1_decorator_Keyword
 	 */
 	protected function getDecorator(&$mod){
 		return tx_rnbase::makeInstance('tx_mksearch_mod1_decorator_Index', $mod);
 	}
-	
+
 	/**
 	 * Liefert die Spalten für den Decorator.
 	 * @param 	tx_mksearch_mod1_decorator_Keyword 	$oDecorator
@@ -101,7 +101,7 @@ class tx_mksearch_mod1_searcher_Index extends tx_mksearch_mod1_searcher_abstract
 			),
 		);
 	}
-	
+
 	/**
 	 * (non-PHPdoc)
 	 * @see tx_mksearch_mod1_searcher_abstractBase::getSearchColumns()
@@ -114,4 +114,3 @@ class tx_mksearch_mod1_searcher_Index extends tx_mksearch_mod1_searcher_abstract
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/searcher/class.tx_mksearch_mod1_searcher_Index.php'])	{
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/searcher/class.tx_mksearch_mod1_searcher_Index.php']);
 }
-?>

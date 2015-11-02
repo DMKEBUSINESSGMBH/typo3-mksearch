@@ -60,5 +60,3 @@ class tx_mksearch_service_engine_SolrException extends tx_rnbase_util_Exception 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/engine/class.tx_mksearch_service_engine_SolrException.php']) {
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/engine/class.tx_mksearch_service_engine_SolrException.php']);
 }
-
-?>

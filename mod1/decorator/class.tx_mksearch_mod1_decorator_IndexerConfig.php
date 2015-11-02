@@ -48,7 +48,7 @@ class tx_mksearch_mod1_decorator_IndexerConfig {
 	 * @param 	tx_mksearch_model_internal_Config 	$item
 	 */
 	public function format($value, $colName, $record, $item) {
-		
+
 		switch ($colName) {
 			case 'title':
 				$ret  = '';
@@ -78,7 +78,7 @@ class tx_mksearch_mod1_decorator_IndexerConfig {
 			default:
 				$ret = $value;
 		}
-		
+
 		return $ret;
 	}
 
@@ -103,7 +103,7 @@ class tx_mksearch_mod1_decorator_IndexerConfig {
 	 */
 	public function getConfigInfo(tx_mksearch_model_internal_Config $item, $options=array()){
 		$formtool = $this->getModule()->getFormTool();
-		
+
 		$out  = '';
 		$out .= $formtool->createEditLink($item->getTableName(), $item->getUid(), '');
 		$out .= $item->getTitle();
@@ -117,4 +117,3 @@ class tx_mksearch_mod1_decorator_IndexerConfig {
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/decorator/class.tx_mksearch_mod1_decorator_IndexerConfig.php'])	{
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/decorator/class.tx_mksearch_mod1_decorator_IndexerConfig.php']);
 }
-?>
