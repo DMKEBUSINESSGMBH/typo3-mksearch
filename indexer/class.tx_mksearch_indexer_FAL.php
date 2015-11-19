@@ -74,7 +74,12 @@ class tx_mksearch_indexer_FAL
 			$file = new \TYPO3\CMS\Core\Resource\File($sourceRecord, $resourceStorage);
 			// wir holen uns die url von dem storage, falls vorhanden
 			if ($resourceStorage instanceof \TYPO3\CMS\Core\Resource\ResourceStorage) {
-				return $resourceStorage->getPublicUrl($file);
+				// getPublicUrl macht ein rawurlencode, womit aber Umlaute etc.
+				// enkodiert werden. Im Dateisystem werden diese aber nciht enkodiert stehen
+				// womit wir das wieder dekodieren müssen. Es gibt leider
+				// keine besser Möglichkeit an den unbehandelten Pfad zur Datei
+				// inkl. Pfad vom Storage zu kommen.
+				return rawurldecode($resourceStorage->getPublicUrl($file));
 			}
 		}
 		// wenn wir keine ressource haben, bauen die url selbst zusammen.

@@ -312,4 +312,30 @@ class tx_mksearch_tests_indexer_FAL_testcase
 			)
 		);
 	}
+
+	/**
+	 * @group unit
+	 */
+	public function testGetRelFileName() {
+		$fileRecord = array('identifier' => 'FileWithUmalutsÄÖÜ.txt', 'uid' => 123, 'storage' => 1);
+		$indexer = $this->getMock('tx_mksearch_indexer_FAL', array('getResourceStorage'));
+		/** @var $fileFactory TYPO3\\CMS\\Core\\Resource\\ResourceFactory' */
+		$fileFactory = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\ResourceFactory');
+		$driver = $fileFactory->getDriverObject('Local', array('basePath' => 'fileadmin', 'pathType' => 'relative'));
+		$driver->processConfiguration();
+		$storage = tx_rnbase::makeInstance(
+			'\\TYPO3\\CMS\\Core\\Resource\\ResourceStorage', $driver, array('is_public' => 2, 'driver' => 'Local')
+		);
+		$isOnline = new ReflectionProperty(get_class($storage), 'isOnline');
+		$isOnline->setAccessible(TRUE);
+		$isOnline->setValue($storage, TRUE);
+		$indexer->expects(self::once())
+			->method('getResourceStorage')
+			->will(self::returnValue($storage));
+
+		self::assertEquals(
+			'fileadmin/FileWithUmalutsÄÖÜ.txt',
+			$this->callInaccessibleMethod($indexer, 'getRelFileName', 'sys_file', $fileRecord)
+		);
+	}
 }
