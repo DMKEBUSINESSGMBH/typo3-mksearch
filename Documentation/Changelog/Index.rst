@@ -15,6 +15,10 @@
 Changelog
 ---------
 
+1.5.9
+"""""
+* [BUGFIX] files with special characters like umlauts in their filename are now indexed correctly
+
 1.5.6
 """""
 * [TASK] added FieldConversion for tt_news and tt_content indexer
