@@ -17,7 +17,7 @@ Changelog
 
 1.5.9
 """""
-* [BUGFIX] files with special characters like umlauts in their filename are now indexed correctly
+* [!!!][BUGFIX] sys_files with special characters like umlauts in their filename are now indexed correctly with the FAL indexer. You need the reindex all sys_file records!
 
 1.5.6
 """""
