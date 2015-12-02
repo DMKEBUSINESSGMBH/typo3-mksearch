@@ -280,6 +280,24 @@ class tx_mksearch_tests_indexer_Base_testcase
 	/**
 	 *
 	 */
+	public function testIndexEnableColumnsDoesNotChangeRecordInPassedModel() {
+		$this->setTcaEnableColumnsForMyTestTable1();
+
+		$indexer =tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
+		list($extKey, $cType) = $indexer->getContentType();
+
+		$record = array('uid' => 1, 'startdate' => 2);
+		$model = tx_rnbase::makeInstance('tx_rnbase_model_base', $record);
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
+
+		$this->callInaccessibleMethod($indexer, 'indexEnableColumns', $model, 'mytesttable_1', $indexDoc);
+
+		self::assertSame(2, $model->record['startdate']);
+	}
+
+	/**
+	 *
+	 */
 	public function testIndexModelByMapping() {
 		$indexDoc = tx_rnbase::makeInstance(
 			'tx_mksearch_model_IndexerDocumentBase', '', ''

@@ -327,7 +327,9 @@ abstract class tx_mksearch_indexer_Base
 		}
 
 		$recordIndexMapping = array();
-		$tempModel = $model;
+		// mit Klon wird trotzdem der record von $model verändert
+		// @todo warum ist das so?
+		$tempModel = unserialize(serialize($model));
 		foreach ($enableColumns as $typo3InternalName => $enableColumnName) {
 			$recordIndexMapping = $this->enhanceRecordIndexMappingForEnableColumn(
 				$recordIndexMapping, $typo3InternalName, $enableColumnName, $indexDocFieldsPrefix
@@ -337,7 +339,6 @@ abstract class tx_mksearch_indexer_Base
 				$tempModel, $typo3InternalName, $enableColumnName
 			);
 		}
-
 		$this->indexModelByMapping($tempModel, $recordIndexMapping, $indexDoc);
 
 		return $indexDoc;
