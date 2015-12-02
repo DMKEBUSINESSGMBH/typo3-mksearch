@@ -327,8 +327,9 @@ abstract class tx_mksearch_indexer_Base
 		}
 
 		$recordIndexMapping = array();
-		// mit Klon wird trotzdem der record von $model verändert
-		// @todo warum ist das so?
+		// mit clone wird trotzdem der record von $model verändert
+		// wenn dieser vorher referenziert wurde. Mit serialize/unserialize
+		// gehen wir auf Nummer sicher und haben mit Sicherheit keine Referenzen mehr.
 		$tempModel = unserialize(serialize($model));
 		foreach ($enableColumns as $typo3InternalName => $enableColumnName) {
 			$recordIndexMapping = $this->enhanceRecordIndexMappingForEnableColumn(

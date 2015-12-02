@@ -550,7 +550,7 @@ class tx_mksearch_util_Indexer {
 		tx_mksearch_interface_IndexerDocument $indexDoc,
 		$options
 	) {
-		// Wir prüfen, ob die zu indizierende Sprache stimmt.
+// 		// Wir prüfen, ob die zu indizierende Sprache stimmt.
 		$sysLanguageUidField = tx_mksearch_util_TCA::getLanguageFieldForTable($tableName);
 		if (isset($sourceRecord[$sysLanguageUidField])) {
 			// @TODO: getTransOrigPointerFieldForTable abprüfen, wenn $lang!=0 !
