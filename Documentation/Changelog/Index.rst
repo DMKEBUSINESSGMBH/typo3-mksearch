@@ -15,6 +15,10 @@
 Changelog
 ---------
 
+1.5.10
+""""""
+* [BUGFIX] passed model in tx_mksearch_indexer_Base::indexEnableColumns is not changed anymore
+
 1.5.9
 """""
 * [!!!][BUGFIX] sys_files with special characters like umlauts in their filename are now indexed correctly with the FAL indexer. You need the reindex all sys_file records!
