@@ -85,6 +85,8 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base {
 			$indexDoc,'category_'
 		);
 
+		// irfaq-Kategorien hinzufügen, wenn Option gesetzt ist
+		$this->addCategoryData($indexDoc, $categories, $options);
 
 		// set title, content and abstract as default
 		// can be overwritten by the mapping
@@ -153,6 +155,40 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base {
 		}
 
 		return $indexDoc;
+	}
+
+	/**
+	 * Adds Categories
+	 *
+	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
+	 * @param array $categories
+	 * @param array $options
+	 * @return void
+	 */
+	private function addCategoryData(
+			tx_mksearch_interface_IndexerDocument $indexDoc,
+			$categories, $options
+	) {
+		if (
+			empty($options['addCategoryData'])
+			|| empty($categories))
+		{
+			return;
+		}
+
+		$categoryNames = array();
+		foreach ($categories as $category) {
+			$categoryNames[$category->record['uid']] = $category->record['title'];
+		}
+
+		$indexDoc->addField('categories_mi', array_keys($categoryNames));
+		$indexDoc->addField('categoriesTitle_ms', array_values($categoryNames));
+
+		// add field with the combined tags uids and names
+		tx_rnbase::load('tx_mksearch_util_KeyValueFacet');
+		$dfs = tx_mksearch_util_KeyValueFacet::getInstance();
+		$tagDfs = $dfs->buildFacetValues(array_keys($categoryNames), array_values($categoryNames));
+		$indexDoc->addField('faq_categories_dfs_ms', $tagDfs, 'keyword');
 	}
 
 	/**
