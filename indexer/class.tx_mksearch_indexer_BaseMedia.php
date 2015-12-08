@@ -101,6 +101,12 @@ abstract class tx_mksearch_indexer_BaseMedia
 			return NULL;
 		}
 
+		// shall we break the indexing and set the doc to deleted?
+		if ($this->hasDocToBeDeleted($tableName, $sourceRecord, $indexDoc, $options)) {
+			$indexDoc->setDeleted(TRUE);
+			return $indexDoc;
+		}
+
 		if($sourceRecord['deleted'] || $sourceRecord['hidden']) {
 			$indexDoc->setDeleted(true);
 			return $indexDoc;
@@ -350,6 +356,27 @@ abstract class tx_mksearch_indexer_BaseMedia
 			$tableName, $sourceRecord, $indexDoc, $options
 		);
 	}
+
+	/**
+	 * Sets the index doc to deleted if neccessary
+	 *
+	 * @param string $tableName
+	 * @param array $sourceRecord
+	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
+	 * @param array $options
+	 * @return bool
+	 */
+	protected function hasDocToBeDeleted(
+		$tableName, $sourceRecord,
+		tx_mksearch_interface_IndexerDocument $indexDoc,
+		$options = array()
+	) {
+		if($sourceRecord['deleted'] || $sourceRecord['hidden']) {
+			return TRUE;
+		}
+		return FALSE;
+	}
+
 
 	/**
 	 * @return tx_mksearch_util_Indexer

@@ -244,6 +244,46 @@ class tx_mksearch_tests_indexer_BaseMedia_testcase
 	}
 
 	/**
+	 * @group unit
+	 * @dataProvider providerHasDocToBeDeleted
+	 */
+	public function testHasDocToBeDeleted($sourceRecord, $expected) {
+		$indexer = $this->getIndexerMock();
+		$indexDoc = tx_rnbase::makeInstance(
+			'tx_mksearch_model_IndexerDocumentBase', 'core', 'tt_content'
+		);
+		self::assertEquals(
+			$expected,
+			$this->callInaccessibleMethod(
+				$indexer, 'hasDocToBeDeleted',
+				'tt_content', $sourceRecord, $indexDoc
+			)
+		);
+	}
+
+	public function providerHasDocToBeDeleted() {
+		return array(
+			__LINE__ => array(
+				'sourceRecord' => array('uid' => 7),
+				'expected' => FALSE,
+			),
+			__LINE__ => array(
+				'sourceRecord' => array('uid' => 7, 'deleted' => 1),
+				'expected' => TRUE,
+			),
+			__LINE__ => array(
+				'sourceRecord' => array('uid' => 7, 'hidden' => 1),
+				'expected' => TRUE,
+			),
+			__LINE__ => array(
+				'sourceRecord' => array('uid' => 7, 'hidden' => 1, 'deleted' => 1),
+				'expected' => TRUE,
+			),
+		);
+	}
+
+
+	/**
 	 * @param array $mockedMethods
 	 * @return Ambigous <PHPUnit_Framework_MockObject_MockObject, tx_mksearch_indexer_BaseMedia>
 	 */

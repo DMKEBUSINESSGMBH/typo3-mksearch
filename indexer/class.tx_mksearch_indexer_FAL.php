@@ -145,6 +145,39 @@ class tx_mksearch_indexer_FAL
 		return parent::stopIndexing($tableName, $sourceRecord, $indexDoc, $options);
 	}
 
+
+	/**
+	 * (non-PHPdoc)
+	 * @see tx_mksearch_indexer_BaseMedia::hasDocToBeDeleted()
+	 */
+	protected function hasDocToBeDeleted(
+		$tableName, $sourceRecord,
+		tx_mksearch_interface_IndexerDocument $indexDoc,
+		$options = array()
+	) {
+		$filePath = $this->getFilePath($tableName, $sourceRecord);
+		if (!\TYPO3\CMS\Core\Utility\PathUtility::isAbsolutePath($filePath)) {
+			$filePath = PATH_site . $filePath;
+		}
+		if (
+			// In FALs sys_file table there are no cloumns for hidden and deleted
+			// items. Nevertheless we check the deleted flag, because in
+			// tx_mksearch_util_ResolverT3DB::getRecords() may be a "minimal model"
+			// with such a column defined.
+			$sourceRecord['deleted'] ||
+
+			// missing flag is set by FAL indexing scheduler, if the file is
+			// directly deleted in OS filesystem (see https://forge.typo3.org/issues/50876)
+			$sourceRecord['missing'] ||
+
+			// file does not exist anymore
+			!file_exists($filePath . $sourceRecord['name'])
+		) {
+			return TRUE;
+		}
+		return FALSE;
+	}
+
 	/**
 	 *
 	 * @return Ambigous <tx_mksearch_service_internal_Index, t3lib_svbase, void, object, boolean, \TYPO3\CMS\Core\Utility\array<\TYPO3\CMS\Core\SingletonInterface>, mixed, \TYPO3\CMS\Core\SingletonInterface, \TYPO3\CMS\Core\Utility\mixed, unknown>

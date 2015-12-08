@@ -199,7 +199,13 @@ class tx_mksearch_tests_indexer_FAL_testcase
 	 *
 	 */
 	public function testIsIndexableRecordWithoutDeleteIfNotIndexableOption() {
-		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_FAL');
+		$indexer = $this->getMock(
+				'tx_mksearch_indexer_FAL', array('hasDocToBeDeleted')
+		);
+		$indexer->expects($this->once())
+			->method('hasDocToBeDeleted')
+			->will($this->returnValue(FALSE));
+
 		list($extKey, $cType) = $indexer->getContentType();
 		$options = array(
 			'filter.' => array(
@@ -218,7 +224,13 @@ class tx_mksearch_tests_indexer_FAL_testcase
 	 *
 	 */
 	public function testIsIndexableRecordWithDeleteIfNotIndexableOption() {
-		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_FAL');
+		$indexer = $this->getMock(
+			'tx_mksearch_indexer_FAL', array('hasDocToBeDeleted')
+		);
+		$indexer->expects($this->once())
+			->method('hasDocToBeDeleted')
+			->will($this->returnValue(FALSE));
+
 		list($extKey, $cType) = $indexer->getContentType();
 		$options = array(
 			'filter.' => array(
@@ -338,4 +350,53 @@ class tx_mksearch_tests_indexer_FAL_testcase
 			$this->callInaccessibleMethod($indexer, 'getRelFileName', 'sys_file', $fileRecord)
 		);
 	}
+
+	/**
+	 * @group unit
+	 * @dataProvider providerHasDocToBeDeleted
+	 */
+	public function testHasDocToBeDeletedWithRecordWithDeleteFlag($sourceRecord, $expected) {
+		$indexer = $this->getMock(
+			'tx_mksearch_indexer_FAL', array('getFilePath')
+		);
+		$indexer->expects(self::any())
+			->method('getFilePath')
+			->will(self::returnValue(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch')));
+
+		$indexDoc = tx_rnbase::makeInstance(
+			'tx_mksearch_model_IndexerDocumentBase', 'core', 'file'
+		);
+		self::assertEquals(
+			$expected,
+			$this->callInaccessibleMethod(
+				$indexer, 'hasDocToBeDeleted',
+				'tt_content', $sourceRecord, $indexDoc
+			)
+		);
+	}
+
+
+
+	public function providerHasDocToBeDeleted() {
+		return array(
+			__LINE__ => array(
+				'sourceRecord' => array('name' => 'ext_icon.gif'),
+				'expected' => FALSE,
+			),
+			__LINE__ => array(
+				'sourceRecord' => array('name' => 'sdfuhsdfjkhk.gif'),
+				'expected' => TRUE,
+			),
+			__LINE__ => array(
+				'sourceRecord' => array('deleted' => 1, 'name' => 'ext_icon.gif'),
+				'expected' => TRUE,
+			),
+			__LINE__ => array(
+				'sourceRecord' => array('missing' => 1, 'name' => 'ext_icon.gif'),
+				'expected' => TRUE,
+			),
+		);
+	}
+
+
 }
