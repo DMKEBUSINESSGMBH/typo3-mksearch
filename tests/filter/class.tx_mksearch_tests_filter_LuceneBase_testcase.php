@@ -498,8 +498,8 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
 			$template, $formatter, 'searchsolr.filter.default.'
 		);
 
-		self::assertEquals(
-			'asc ?id=1&mksearch%5Bsort%5D=title&mksearch%5Bsortorder%5D=asc',
+		self::assertRegExp(
+			'/(asc \?id=)[a-z0-9].+(&mksearch%5Bsort%5D=title&mksearch%5Bsortorder%5D=asc)/',
 			$parsedTemplate,
 			'sort marker falsch geparsed'
 		);
