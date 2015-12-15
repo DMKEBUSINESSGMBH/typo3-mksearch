@@ -516,6 +516,7 @@
 					</showhit.usedIndex>
 					<showhit.extkey>
 						<TCEforms>
+							<exclude>1</exclude>
 							<label>LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indexerconfigs.extkey</label>
 							<config>
 								<type>select</type>
@@ -534,6 +535,7 @@
 					</showhit.extkey>
 					<showhit.contenttype>
 						<TCEforms>
+							<exclude>1</exclude>
 							<label>LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indexerconfigs.contenttype</label>
 							<config>
 								<type>select</type>
@@ -629,6 +631,7 @@
 				<el>
 					<softlink.enable>
 						<TCEforms>
+							<exclude>1</exclude>
 							<label>LLL:EXT:mksearch/locallang_db.xml:plugin_common_enable</label>
 							<config>
 								<type>check</type>
@@ -652,6 +655,7 @@
 					</softlink.options.pidlist>
 					<softlink.options.recursive>
 						<TCEforms>
+							<exclude>1</exclude>
 							<label>LLL:EXT:lang/locallang_general.php:LGL.recursive</label>
 							<config>
 								<type>select</type>
