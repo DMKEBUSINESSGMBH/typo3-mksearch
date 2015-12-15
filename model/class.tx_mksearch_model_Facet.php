@@ -103,6 +103,18 @@ class tx_mksearch_model_Facet extends tx_rnbase_model_base  {
 	/**
 	 * returns all childs a child facet
 	 *
+	 * @param array <multitype:tx_mksearch_model_Facet, tx_mksearch_model_Facet> $child
+	 * @return tx_mksearch_model_Facet
+	 */
+	public function setChilds(array $childs) {
+		$this->childs = array();
+		$this->addChild($childs);
+
+		return $this;
+	}
+	/**
+	 * returns all childs a child facet
+	 *
 	 * @return multitype:tx_mksearch_model_Facet $child
 	 */
 	public function getChilds() {

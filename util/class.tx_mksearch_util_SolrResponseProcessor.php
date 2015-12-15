@@ -223,16 +223,27 @@ class tx_mksearch_util_SolrResponseProcessor {
 	 * @param Apache_Solr_Response $response
 	 * @return array
 	 */
-	public function processFacets(Apache_Solr_Response &$response) {
+	public function processFacets(Apache_Solr_Response &$response)
+	{
+		if (!$response->facet_counts) {
+			return array();
+		}
+
 		$confId = $this->getConfId().'facet.';
-		//Facets
-		if($response->facet_counts) {
-			$builderClass = $this->getConfigurations()->get($confId . 'builderClass');
-			$builderClass = $builderClass ? $builderClass : 'tx_mksearch_util_FacetBuilder';
-			tx_rnbase::load('tx_mksearch_util_FacetBuilder');
-			$facetBuilder = tx_mksearch_util_FacetBuilder::getInstance($builderClass);
-			$facets = $facetBuilder->buildFacets($response->facet_counts);
-		} else $facets = array();
+		$configurations = $this->getConfigurations();
+
+		$builderClass = $configurations->get($confId . 'builderClass');
+		$builderClass = $builderClass ? $builderClass : 'tx_mksearch_util_FacetBuilder';
+
+		tx_rnbase::load('tx_mksearch_util_FacetBuilder');
+		$facetBuilder = tx_mksearch_util_FacetBuilder::getInstance($builderClass);
+
+		$facets = $facetBuilder->buildFacets($response->facet_counts);
+
+		if ($configurations->getBool($confId . 'sorting')) {
+			$facets = $facetBuilder->sortFacets($facets);
+		}
+
 		return $facets;
 	}
 	/**

@@ -1,34 +1,26 @@
 <?php
-/**
- * 	@package tx_mksearch
- *  @subpackage tx_mksearch_util
- *  @author Hannes Bochmann
+/***************************************************************
+ * Copyright notice
  *
- *  Copyright notice
+ * (c) 2011 - 2015 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
  *
- *  (c) 2011 DMK E-Business GmbH <dev@dmk-ebusiness.de>
- *  All rights reserved
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
  *
- *  This script is part of the TYPO3 project. The TYPO3 project is
- *  free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ * The GNU General Public License can be found at
+ * http://www.gnu.org/copyleft/gpl.html.
  *
- *  The GNU General Public License can be found at
- *  http://www.gnu.org/copyleft/gpl.html.
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *  This script is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  This copyright notice MUST APPEAR in all copies of the script!
- */
-
-/**
- * benötigte Klassen einbinden
- */
+ * This copyright notice MUST APPEAR in all copies of the script!
+ ***************************************************************/
 
 tx_rnbase::load('tx_mksearch_model_Facet');
 
@@ -36,10 +28,10 @@ tx_rnbase::load('tx_mksearch_model_Facet');
  * Der FacetBuilder erstellt aus den Rohdaten
  * der Facets passende Objekte für das Rendering.
  *
- * @package tx_mksearch
- * @subpackage tx_mksearch_util
- * @author Hannes Bochmann <dev@dmk-ebusiness.de>
- * @author Michael Wagner <dev@dmk-ebusiness.de>
+ * @package TYPO3
+ * @subpackage tx_mksearch
+ * @author Hannes Bochmann
+ * @author Michael Wagner
  */
 class tx_mksearch_util_FacetBuilder {
 
@@ -125,8 +117,12 @@ class tx_mksearch_util_FacetBuilder {
 						)
 				);
 			}
-			$facetGroups[$groupName]->record['items'][] = $this->getSimpleFacet($groupName,
-							$key, $value, tx_mksearch_model_Facet::TYPE_QUERY);
+			$facetGroups[$groupName]->record['items'][] = $this->getSimpleFacet(
+				$groupName,
+				$key,
+				$value,
+				tx_mksearch_model_Facet::TYPE_QUERY
+			);
 
 		}
 
@@ -233,18 +229,113 @@ class tx_mksearch_util_FacetBuilder {
 	 * @param int $count
 	 * @return tx_mksearch_model_Facet
 	 */
-	protected function getSimpleFacet($field, $id, $count, $facetType = tx_mksearch_model_Facet::TYPE_FIELD) {
+	protected function getSimpleFacet(
+		$field,
+		$id,
+		$count,
+		$facetType = tx_mksearch_model_Facet::TYPE_FIELD
+	) {
 		if ($this->getKeyValueFacetInstance()->checkValue($id)) {
 			$exploded = $this->getKeyValueFacetInstance()->explodeFacetValue($id);
 			$id = $exploded['key'];
 			$title = $exploded['value'];
+			$sorting = $exploded['sorting'];
 		}
 		else {
 			$title = $id;
 		}
-		$facet = tx_rnbase::makeInstance('tx_mksearch_model_Facet', $field, $id, $title, $count);
+		$facet = tx_rnbase::makeInstance(
+			'tx_mksearch_model_Facet',
+			$field,
+			$id,
+			$title,
+			$count
+		);
 		$facet->setFacetType($facetType);
+		if (isset($sorting)) {
+			$facet->setSorting($sorting);
+		}
 		return $facet;
+	}
+
+	/**
+	 * checks the sorting field of the facets and and sorts afterwards.
+	 *
+	 * @param array $facets
+	 * @return array
+	 */
+	public function sortFacets(array $facets) {
+		// field facets are an instance of tx_rnbase_model_base with childs in "items" of record
+		// other facets, like pivot, are an instance of tx_mksearch_model_Facet with childs
+		foreach ($facets as $facet) {
+			$childs = $facet instanceof tx_mksearch_model_Facet
+				? $facet->getChilds()
+				: $facet->getItems()
+			;
+			if (!empty($childs) && is_array($childs)) {
+				$childs = $this->sortFacets($childs);
+				// set back the sorted items
+				$facet instanceof tx_mksearch_model_Facet
+					? $facet->setChilds($childs)
+					: $facet->setItems($childs)
+				;
+			}
+		}
+
+		// we have sortalbe facets, so sort!
+		if ($facet && $facet->hasSorting()) {
+			$s = usort(
+				$facets,
+				array(self, 'cbSortFacets')
+			);
+		}
+
+		return $facets;
+	}
+
+	/**
+	 * facet sort calback, is called by sortFacets.
+	 *
+	 * @param tx_mksearch_model_Facet $a
+	 * @param tx_mksearch_model_Facet $b
+	 * @return int
+	 */
+	public static function cbSortFacets($a, $b)
+	{
+		if ($a->getSorting() == $b->getSorting()) {
+			return 0;
+		}
+		return ($a->getSorting() < $b->getSorting()) ? -1 : 1;
+	}
+
+
+	/**
+	 * Debugs the big facet array for better readability.
+	 *
+	 * @param mixed $var
+	 * @param number $levels
+	 * @param mixed
+	 */
+	public static function debugFacets($var, $levels = 99) {
+		if (is_array($var)) {
+			foreach ($var as &$sub) {
+				$sub = self::debugFacets($sub, $levels);
+			}
+		}
+		elseif ($var instanceof tx_rnbase_model_base) {
+			$childs = $var instanceof tx_mksearch_model_Facet
+				? $var->getChilds()
+				: $var->getItems()
+			;
+			$childs = is_array($childs) ? $childs : array();
+			$var = array_map('strval', $var->getProperty());
+			$var['childs'] = $levels-- <= 0
+				? 'length: ' . count($childs)
+				: self::debugFacets($childs, $levels)
+			;
+		}
+
+		return $var;
 	}
 }
 

@@ -4,6 +4,7 @@ Unter Facettierung versteht mal das Gruppieren und Zählen der Treffer einer Erg
 
 :exclamation: *Hinweis:* Bei den Typoscript-Beispielen wird grundsätzlich der Dismax-Filter genutzt. Alle Beispiel funktionieren aber genauso mit dem Default-Filter. Im TS-Pfad dann einfach **dismax** durch **default** ersetzen.
 
+
 ## Field facets
 
 Die Field-Facette ist die einfachste Möglichkeit der Facettierung in Solr. Es wird einfach nach den Werten eines bestimmten Attributes im Index gruppiert. Im Zusammenspiel mit mksearch werden aber zwei Felder benötigt. Eines für die Darstellung der Facette im Frontend und eines für die Filterung. Das ist notwendig, weil per mksearch kein direkter Zugriff auf das Solr benötigt wird.
@@ -76,6 +77,7 @@ plugin.tx_mksearch.searchsolr {
 }
 ```
 
+
 ### Suchoperator konfigurieren
 Wenn man mehrere Werte einer Facette filtern, dann werden diese per Default mit **AND** verknüpft. Häufig will man aber einer eine Verknüpfung per **OR**. Das lässt sich leicht im Typoscript einstellen:
 ```
@@ -84,6 +86,7 @@ plugin.tx_mksearch.searchsolr.filter.dismax {
   filterQuery.ctype.operator = OR
 }
 ```
+
 
 ### Tags verwenden
 Häufig ist es sinnvoll, für die Erzeugung der Facette, den Filter auf darauf zu ignorieren (Vgl. Solr in Action, Kapitel 8.7.2 Tags, excludes, and multiselect faceting). Man kann dies über spezielle Tags erreichen, mit denen die fq-Parameter gekennzeichnet werden. Im Typoscript dazu folgende Anweisung setzen: 
@@ -103,10 +106,22 @@ Nun kann man den RequestHandler in der solrconfig.xml anweisen, die Daten die Fi
     <str name="facet.field">{!ex=tag4ctype}facet_ctype</str>
 ```
 
-### DFS-Feld dynamisch erzeugen
-Wir haben weiter oben gesehen, wie der **facet_ctype** über ein fixedField fest mit einem Wert wie **news<[DFS]>News-Artikel** indexiert wurde. Es ist natürlich viel häufiger notwendig diese Felder dynamisch zu erzeugen. Das soll am Beispiel der News-Kategorien kurz veranschaulicht werden. Der Anwendungsfall wird hier etwas komplexer, weil wir eine MM-Referenz zwischen der News-Meldung und der Kategorie haben. Für die korrekte Indexierung benötigen wir die kompletten Datensätze der zugeordneten News-Kategorien. Das wichtigste Werkzeug, daß mksearch hier bereitstellt, ist die **fieldsConversion**. Darüber lassen sich Werte vor der Indexierung manipulieren. Und man kann hier den stdWrap von TYPO3 nutzen.
 
-Den Lookup der News-Kategorien bekommt man sicher auch über den stdWrap hin. Man kann es sich aber auch einfacher machen und die Arbeit an eine PHP-Funktion übergeben:
+### DFS-Feld dynamisch erzeugen
+Wir haben weiter oben gesehen, wie der **facet_ctype** über ein fixedField 
+fest mit einem Wert wie **news<[DFS]>News-Artikel** indexiert wurde. 
+Es ist natürlich viel häufiger notwendig diese Felder dynamisch zu erzeugen. 
+Das soll am Beispiel der News-Kategorien kurz veranschaulicht werden. 
+Der Anwendungsfall wird hier etwas komplexer, 
+weil wir eine MM-Referenz zwischen der News-Meldung und der Kategorie haben. 
+Für die korrekte Indexierung benötigen wir die kompletten Datensätze 
+der zugeordneten News-Kategorien. Das wichtigste Werkzeug, 
+daß mksearch hier bereitstellt, ist die **fieldsConversion**. 
+Darüber lassen sich Werte vor der Indexierung manipulieren. 
+Und man kann hier den stdWrap von TYPO3 nutzen.
+
+Den Lookup der News-Kategorien bekommt man sicher auch über den stdWrap hin. 
+Man kann es sich aber auch einfacher machen und die Arbeit an eine PHP-Funktion übergeben:
 
 ```
 fieldsConversion{
@@ -124,7 +139,14 @@ indexedFields {
 }
 ```
 
-Auch hier bitte beachten, daß wir zwei Felder vorbereiten. Einmal wird nur die UID der Kategorie gespeichert und einmal die UID zusammen mit dem Titel der Kategorie. Dazu wird lediglich ein zusätzlicher dataWrap ausgeführt. Die Angabe in **indexedFields** ist lediglich notwendig, damit die Attribute **facet_category** und **category** vom Indexer gefüllt werden und damit die **fieldConversion** überhaupt starten kann.
+Auch hier bitte beachten, daß wir zwei Felder vorbereiten. 
+Einmal wird nur die UID der Kategorie gespeichert 
+und einmal die UID zusammen mit dem Titel der Kategorie. 
+Dazu wird lediglich ein zusätzlicher dataWrap ausgeführt. 
+Die Angabe in **indexedFields** ist lediglich notwendig, 
+damit die Attribute **facet_category** und **category** 
+vom Indexer gefüllt werden und damit die **fieldConversion** 
+überhaupt starten kann.
 
 Die Methode handleNews() hat nun die Aufgabe die News-Kategorien einer News-Meldung zu ermitteln und als Ergebnis zu liefern:
 
@@ -275,6 +297,7 @@ plugin.tx_mksearch.searchsolr {
 
 Damit werden allgemein die Query-Facets frei gegeben.
 
+
 ## Pivot facets
 
 Die Pivot bzw Hierarchical Facets können verwendet werden, 
@@ -370,3 +393,35 @@ wie Kindfacetten ,öglich sind.
 	<!-- ###GROUPEDFACETS### END -->
 ```
 
+
+## Facet Sorting
+
+Facetten werden in der Regel nach der Anzahl der daraus resultierenden Ergebnisse sortiert.
+
+Über die DFS-Felder ist es allerdings möglich, eine bestimmte Reihenfolge festzulegen.
+Dafür kann Beispielsweise das sorting Feld von TYPO3 verwendet werden.  
+Sinnvoll kann dies beispielsweise bei Kategorien seien, 
+die bei der Facetierung immer in einer vorbestimmte Reihenfolge dargestellt werden.
+Normalerweise würde die Reihenfolge entweder Alphabetisch oder je nach Suchergebnis unterschiedlich sein.
+
+Damit die Sortierung funktioniert muss das zu Facetierende Feld entsprechend erweitert werden.  
+Indizierung eines DFS-Feldes inklusive Sortierung:
+
+```php
+$dfs = tx_mksearch_util_KeyValueFacet::getInstance();
+$indexDoc->addField(
+	'field_dfs_ms',
+	$dfs->buildFacetValues(
+		$model->getUid(),
+		$model->getTcaLabel(),
+		$model->getSorting()
+	),
+	'keyword'
+);
+```
+
+Da die Sortierung Initial deaktiviert ist, muss diese über TypoScript noch aktiviert werden:
+
+```
+	plugin.tx_mksearch.responseProcessor.facet.sorting
+```

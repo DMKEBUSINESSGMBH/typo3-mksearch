@@ -645,7 +645,11 @@ plugin.tx_mksearch {
 				hellip = 0
 				hellip.stdWrap.noTrimWrap = |&hellip; | &hellip;|
 			}
-			facet.builderClass = tx_mksearch_util_FacetBuilder
+			facet {
+				builderClass = tx_mksearch_util_FacetBuilder
+				### enables the sorting feature for the dfs fields
+				sorting = 0
+			}
 			suggestions.builderClass = tx_mksearch_util_SuggestionBuilder
 		}
 

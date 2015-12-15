@@ -177,6 +177,65 @@ class tx_mksearch_tests_util_FacetBuilder_testcase
 
 		$this->doFieldFacetAssertations($facetGroup);
 	}
+	public function testSortFacets() {
+		$facets = array(
+			// field facets
+			$this->getModel(
+				array(
+					'uid' => ++$uid,
+					'field' => $field,
+					'items' => array(
+						tx_rnbase::makeInstance(
+							'tx_mksearch_model_Facet',
+							'category_dfs_ms',
+							1,
+							array(
+								'label' => 'A',
+								'sorting' => 5,
+							),
+							50
+						),
+						tx_rnbase::makeInstance(
+							'tx_mksearch_model_Facet',
+							'category_dfs_ms',
+							1,
+							array(
+								'label' => 'B',
+								'sorting' => 3,
+							),
+							30
+						),
+						tx_rnbase::makeInstance(
+							'tx_mksearch_model_Facet',
+							'category_dfs_ms',
+							1,
+							array(
+								'label' => 'C',
+								'sorting' => 1,
+							),
+							10
+						),
+					),
+				)
+			),
+			// @TODO: write sorting tests for the other facet types!
+		);
+
+		$sorted = $this->callInaccessibleMethod(
+			tx_mksearch_util_FacetBuilder::getInstance(),
+			'sortFacets',
+			$facets
+		);
+
+
+		self::assertTrue(is_array($sorted));
+		self::assertInstanceOf(tx_rnbase_model_base, $sorted[0]);
+		self::assertTrue(is_array($sorted[0]->record['items']));
+		self::assertCount(3, $sorted[0]->record['items']);
+		self::assertSame('C', $sorted[0]->record['items'][0]->record['label']);
+		self::assertSame('B', $sorted[0]->record['items'][1]->record['label']);
+		self::assertSame('A', $sorted[0]->record['items'][2]->record['label']);
+	}
 	/**
 	 * Check assertations for field facet contentType
 	 * @param unknown $facetGroup
