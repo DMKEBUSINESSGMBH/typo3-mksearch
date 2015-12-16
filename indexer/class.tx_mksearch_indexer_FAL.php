@@ -71,9 +71,9 @@ class tx_mksearch_indexer_FAL
 		// wir haben ein indiziertes dokument
 		if (isset($sourceRecord['uid']) && intval($sourceRecord['uid']) > 0) {
 			$resourceStorage = $this->getResourceStorage($sourceRecord['storage']);
-			$file = new \TYPO3\CMS\Core\Resource\File($sourceRecord, $resourceStorage);
 			// wir holen uns die url von dem storage, falls vorhanden
 			if ($resourceStorage instanceof \TYPO3\CMS\Core\Resource\ResourceStorage) {
+				$file = new \TYPO3\CMS\Core\Resource\File($sourceRecord, $resourceStorage);
 				// getPublicUrl macht ein rawurlencode, womit aber Umlaute etc.
 				// enkodiert werden. Im Dateisystem werden diese aber nciht enkodiert stehen
 				// womit wir das wieder dekodieren müssen. Es gibt leider
