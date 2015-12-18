@@ -94,7 +94,9 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 			$this->index->setHttpTransport($oHttpTransport);
 		}
 
-		if ( ! $this->index->ping() && $force) {
+		//die Methode Ping gibt bei einem 200er die Millisek. zurück,
+		//die die Anfrage gedauert hat, dies kann auch 0 sein!
+		if ( $this->index->ping() === FALSE && $force) {
 			tx_rnbase_util_Logger::fatal('Solr service not responding.','mksearch',array($host, $port, $path));
 			throw new tx_mksearch_service_engine_SolrException('Solr service not responding.', -1, 'http://'.$host.':'.$port.$path);
 		}
@@ -657,7 +659,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 		$msg = 'Up and running';
 		try {
 			$respTime = $this->getSolr()->ping();
-			if($respTime != FALSE)
+			if($respTime !== FALSE)
 				$msg .= ' (Ping time: ' . $respTime .' ms)';
 			else {
 				$id = -1;
