@@ -61,6 +61,29 @@ class tx_mksearch_indexer_FAL
 	}
 
 	/**
+	 * @param string $tableName
+	 * @param array $sourceRecord
+	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
+	 * @param array $options
+	 * @return bool|null|tx_mksearch_interface_IndexerDocument
+	 */
+	public function prepareSearchData(
+		$tableName,
+		$sourceRecord,
+		tx_mksearch_interface_IndexerDocument $indexDoc,
+		$options
+	) {
+		//den Titel aus den Metadaten holen
+		$resourceFile = $this->getFileFromRecord($sourceRecord);
+		if ($resourceFile && $resourceFile->hasProperty('title')) {
+			//oder mergen? $resourceFile->getProperties()
+			$sourceRecord['title'] = $resourceFile->getProperty('title');
+		}
+		return parent::prepareSearchData($tableName, $sourceRecord, $indexDoc, $options);
+	}
+
+
+	/**
 	 * Den Relativen Server-Pfad zur Datei.
 	 *
 	 * @param string $tableName
@@ -70,20 +93,33 @@ class tx_mksearch_indexer_FAL
 	protected function getRelFileName($tableName, $sourceRecord) {
 		// wir haben ein indiziertes dokument
 		if (isset($sourceRecord['uid']) && intval($sourceRecord['uid']) > 0) {
-			$resourceStorage = $this->getResourceStorage($sourceRecord['storage']);
-			// wir holen uns die url von dem storage, falls vorhanden
-			if ($resourceStorage instanceof \TYPO3\CMS\Core\Resource\ResourceStorage) {
-				$file = new \TYPO3\CMS\Core\Resource\File($sourceRecord, $resourceStorage);
+			$resourceFile = $this->getFileFromRecord($sourceRecord);
+			if ($resourceFile) {
 				// getPublicUrl macht ein rawurlencode, womit aber Umlaute etc.
 				// enkodiert werden. Im Dateisystem werden diese aber nciht enkodiert stehen
 				// womit wir das wieder dekodieren müssen. Es gibt leider
 				// keine besser Möglichkeit an den unbehandelten Pfad zur Datei
 				// inkl. Pfad vom Storage zu kommen.
-				return rawurldecode($resourceStorage->getPublicUrl($file));
+				return rawurldecode($resourceFile->getPublicUrl());
 			}
 		}
 		// wenn wir keine ressource haben, bauen die url selbst zusammen.
 		return $GLOBALS['TYPO3_CONF_VARS']['BE']['fileadminDir'] . $sourceRecord['identifier'];
+	}
+
+	/**
+	 * @param $sourceRecord
+	 * @return bool|\TYPO3\CMS\Core\Resource\File
+	 */
+	protected function getFileFromRecord($sourceRecord) {
+		$resourceStorage = $this->getResourceStorage($sourceRecord['storage']);
+		// wir holen uns die url von dem storage, falls vorhanden
+		if ($resourceStorage instanceof \TYPO3\CMS\Core\Resource\ResourceStorage) {
+			$file = new \TYPO3\CMS\Core\Resource\File($sourceRecord, $resourceStorage);
+			return $file;
+		}
+
+		return FALSE;
 	}
 
 	/**
