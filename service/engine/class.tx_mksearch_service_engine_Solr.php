@@ -564,8 +564,8 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 		$params = is_array($params) ? $params : $options['solr.']['indexOptions.']['params.'];
 		$params = is_array($params) ? $params : array();
 
-		$solrMimeType =($fileMimeType && $fileMimeSubtype) ? $fileMimeType .'/'. $fileMimeSubtype : 'application/octet-stream';
-		$response = $this->getSolr()->extract($file, $params, $solrDoc, $mimetype);
+		$solrMimeType = ($fileMimeType && $fileMimeSubtype) ? $fileMimeType .'/'. $fileMimeSubtype : 'application/octet-stream';
+		$response = $this->getSolr()->extract($file, $params, $solrDoc, $solrMimeType);
 		return $response;
 	}
 
