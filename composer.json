@@ -30,5 +30,9 @@
 	},
 	"replace": {
 		"typo3-ter/mksearch": "*"
+	},
+	"require" : {
+		"typo3/cms-core" : ">=4.5.0 <=7.6.99",
+		"digedag/rn-base" : ">=1.0.0"
 	}
 }
