@@ -15,6 +15,10 @@
 Changelog
 ---------
 
+?.?.?
+""""""
+* removed CLI Crawler. Please use the Scheduler Task fpr indexing instead
+
 1.5.10
 """"""
 * [BUGFIX] passed model in tx_mksearch_indexer_Base::indexEnableColumns is not changed anymore
