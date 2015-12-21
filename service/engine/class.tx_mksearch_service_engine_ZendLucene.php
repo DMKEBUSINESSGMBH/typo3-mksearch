@@ -22,13 +22,12 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php';
+
 tx_rnbase::load('tx_mksearch_interface_SearchEngine');
 tx_rnbase::load('tx_rnbase_configurations');
-tx_rnbase::load('tx_rnbase_util_Misc');
 tx_rnbase::load('tx_rnbase_util_Logger');
 tx_rnbase::load('tx_mksearch_service_engine_lucene_DataTypeMapper');
-
+tx_rnbase::load('Tx_Rnbase_Service_Base');
 
 /**
  * Service "ZendLucene search engine" for the "mksearch" extension.
@@ -37,7 +36,7 @@ tx_rnbase::load('tx_mksearch_service_engine_lucene_DataTypeMapper');
  * @package	TYPO3
  * @subpackage	tx_mksearch
  */
-class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_mksearch_interface_SearchEngine {
+class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base implements tx_mksearch_interface_SearchEngine {
 
 	const FE_GROUP_FIELD = 'fe_group_mi';
 
@@ -72,7 +71,7 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 	public function __construct() {
     	// Explicitely include zend path if necessary
     	$zendPath = tx_rnbase_configurations::getExtensionCfgValue('mksearch', 'zendPath');
-    	$zendPath = t3lib_div::getFileAbsFileName($zendPath);
+    	$zendPath = tx_rnbase_util_Files::getFileAbsFileName($zendPath);
 
     	$iniPath = get_include_path();
     	if (strpos($zendPath, $iniPath) === false) {
@@ -97,7 +96,7 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
     	// Set utf-8-able analyzer
     	// @todo: Make configurable
     	Zend_Search_Lucene_Analysis_Analyzer::setDefault(
-    		t3lib_div::makeInstance('Zend_Search_Lucene_Analysis_Analyzer_Common_Utf8Num_CaseInsensitive')
+    		tx_rnbase::makeInstance('Zend_Search_Lucene_Analysis_Analyzer_Common_Utf8Num_CaseInsensitive')
     	);
 	}
 	/**
@@ -141,8 +140,9 @@ class tx_mksearch_service_engine_ZendLucene extends t3lib_svbase implements tx_m
 	 * @return string
 	 */
 	private function getIndexDirectory($name) {
-		$path = tx_rnbase_configurations::getExtensionCfgValue('mksearch', 'luceneIndexDir').DIRECTORY_SEPARATOR.$name;
-		if(!t3lib_div::isAbsPath($path)) {
+		$path = tx_rnbase_configurations::getExtensionCfgValue('mksearch', 'luceneIndexDir') . DIRECTORY_SEPARATOR . $name;
+		tx_rnbase::load('tx_rnbase_util_Files');
+		if (!tx_rnbase_util_Files::isAbsPath($path)) {
 			$path = PATH_site . $path;
 		}
 		return $path;

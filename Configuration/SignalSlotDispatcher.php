@@ -3,7 +3,7 @@ if (!defined ('TYPO3_MODE')) {
  	die ('Access denied.');
 }
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+
 tx_rnbase::load('tx_mksearch_signalSlotDispatcher_FileIndexRepsitory');
 $signalSlotDispatcher = tx_rnbase::makeInstance('TYPO3\CMS\Extbase\SignalSlot\Dispatcher');
 

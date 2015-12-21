@@ -62,7 +62,7 @@ interface tx_mksearch_interface_DataProvider {
 	 * as a guaranteed invoking of the destructor is not trivial to implement.
 	 * Additionally, as an indexer is mostly used as a service which may be
 	 * re-used over and over again
-	 * (@see t3lib_div::makeInstanceService() -> persistence of service),
+	 * (@see tx_rnbase::makeInstanceService() -> persistence of service),
 	 * take care to restore the instance to a clean, initial state!  
 	 * 
 	 * @return array	Tablename <-> uids matrix of records to be indexed (array('tab1' => array(2,5,6), 'tab2' => array(4,5,8)) 

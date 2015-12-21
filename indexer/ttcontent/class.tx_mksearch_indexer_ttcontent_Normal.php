@@ -29,10 +29,9 @@
 /**
  * benötigte Klassen einbinden
  */
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+
 tx_rnbase::load('tx_mksearch_indexer_Base');
 tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
-tx_rnbase::load('tx_rnbase_util_Misc');
 tx_rnbase::load('tx_mksearch_util_Misc');
 
 /**
@@ -243,7 +242,7 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 				// by the character defined in flexform
 				if ($field == 'bodytext') {
 					// Get table parsing options from flexform
-					$flex = t3lib_div::xml2array($rawData['pi_flexform']);
+					$flex = tx_rnbase_util_Arrays::xml2array($rawData['pi_flexform']);
 					if (is_array($flex)) {
 						$flexParsingOptions = $flex['data']['s_parsing']['lDEF'];
 						// Replace special parsing characters

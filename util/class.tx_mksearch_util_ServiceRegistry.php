@@ -22,9 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
-tx_rnbase::load('tx_rnbase_util_Misc');
-
 /**
  * Access a service instance
  */
@@ -39,7 +36,7 @@ class tx_mksearch_util_ServiceRegistry {
 		$type = $index->getEngineType();
 		if(!$type)
 			throw new Exception('No engine type configured in search index. Check your index configuration!', 100);
-		$srv = t3lib_div::makeInstanceService('mksearch_engine', $type);
+		$srv = tx_rnbase::makeInstanceService('mksearch_engine', $type);
 		if (!is_object($srv))
 			throw new Exception('Service mksearch_engine not found for type: ' . $type);
 		if (!$srv instanceof tx_mksearch_interface_SearchEngine)
@@ -54,7 +51,7 @@ class tx_mksearch_util_ServiceRegistry {
 	 * @deprecated request search engine via configured index
 	 */
 	public static function getSearchEngineService() {
-		$srv = t3lib_div::makeInstanceService('mksearch_engine', 'zend_lucene');
+		$srv = tx_rnbase::makeInstanceService('mksearch_engine', 'zend_lucene');
 		if (!is_object($srv))
 			throw new Exception('Service mksearch_engine not found!');
 		// else
@@ -77,7 +74,7 @@ class tx_mksearch_util_ServiceRegistry {
 	 */
 	public static function getIndexerService($extKey, $contentType) {
 		$subType = $extKey . '.' . $contentType;
-    	$srv = t3lib_div::makeInstanceService('mksearch_indexer', $subType);
+    	$srv = tx_rnbase::makeInstanceService('mksearch_indexer', $subType);
 		if (!is_object($srv))
 			throw new Exception('Service "mksearch_indexer.' . $subType . '" not found!');
 		// else

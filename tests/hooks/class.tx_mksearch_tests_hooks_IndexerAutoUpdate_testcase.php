@@ -22,7 +22,7 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once t3lib_extMgm::extPath('rn_base', 'class.tx_rnbase.php');
+
 tx_rnbase::load('tx_mksearch_tests_Testcase');
 tx_rnbase::load('tx_mksearch_hooks_IndexerAutoUpdate');
 tx_rnbase::load('tx_mksearch_service_internal_Index');
@@ -465,10 +465,10 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdate_testcase
 	}
 
 	/**
-	 * @return t3lib_TCEmain
+	 * @return \TYPO3\CMS\Core\DataHandling\DataHandler
 	 */
 	protected function getTceMock() {
-		$tce = tx_rnbase::makeInstance('t3lib_TCEmain');
+		$tce = tx_rnbase::makeInstance(tx_rnbase_util_Typo3Classes::getDataHandlerClass());
 		// default datamap
 		$tce->datamap = array(
 			'tt_content' => array(

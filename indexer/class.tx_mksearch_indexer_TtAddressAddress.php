@@ -22,11 +22,10 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+
 tx_rnbase::load('tx_mksearch_interface_Indexer');
 tx_rnbase::load('tx_mksearch_util_Misc');
 tx_rnbase::load('tx_mksearch_util_Indexer');
-tx_rnbase::load('tx_rnbase_util_Misc');
 tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
 
 /**
@@ -179,14 +178,14 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
 	 */
 	protected function getContentFromFields($sourceRecord, $options) {
 		$aContent = array();
-		$aContentFields = t3lib_div::trimExplode(',', $options['fields'], true);
+		$aContentFields = tx_rnbase_util_Strings::trimExplode(',', $options['fields'], true);
 
 		foreach($aContentFields as $field){
 			if(array_key_exists($field, $sourceRecord) && !empty($sourceRecord[$field])) {
 				$aContent[] = trim($sourceRecord[$field]);
 			}
 		}
-		$wrap =  t3lib_div::trimExplode('|', $options['wrap'], true);
+		$wrap =  tx_rnbase_util_Strings::trimExplode('|', $options['wrap'], true);
 		if(count($wrap) !=2) $wrap = array('','');
 		$sContent = $wrap[0].implode($wrap[1].$wrap[0], $aContent).$wrap[1];
 

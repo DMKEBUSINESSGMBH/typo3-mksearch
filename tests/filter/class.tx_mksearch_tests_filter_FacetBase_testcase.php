@@ -29,7 +29,7 @@
 /**
  * benötigte Klassen einbinden
  */
-require_once t3lib_extMgm::extPath('rn_base', 'class.tx_rnbase.php');
+
 tx_rnbase::load('tx_mksearch_tests_Testcase');
 tx_rnbase::load('tx_mksearch_filter_FacetBase');
 

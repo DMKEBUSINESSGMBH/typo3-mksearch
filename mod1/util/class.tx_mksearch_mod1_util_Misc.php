@@ -25,9 +25,10 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
-require_once(t3lib_extMgm::extPath('rn_base', 'class.tx_rnbase.php'));
+
 tx_rnbase::load('tx_rnbase_util_Templates');
 tx_rnbase::load('tx_rnbase_util_DB');
+tx_rnbase::load('Tx_Rnbase_Backend_Utility_Icons');
 
 /**
  *
@@ -48,9 +49,9 @@ class tx_mksearch_mod1_util_Misc {
 			return null;
 		}
 		foreach($pages as $pid => &$page) {
-			$pageinfo = t3lib_BEfunc::readPageAccess($pid, $mod->perms_clause);
+			$pageinfo = Tx_Rnbase_Backend_Utility::readPageAccess($pid, $mod->perms_clause);
 			$page  = '<a href="index.php?id=' . $pid . '">';
-			$page .= t3lib_iconWorks::getSpriteIconForRecord('pages', t3lib_BEfunc::getRecord('pages', $pid));
+			$page .= Tx_Rnbase_Backend_Utility_Icons::getSpriteIconForRecord('pages', Tx_Rnbase_Backend_Utility::getRecord('pages', $pid));
 			$page .= ' '.$pageinfo['title'];
 			$page .= ' '.htmlspecialchars($pageinfo['_thePath']);
 			$page .= '</a>';

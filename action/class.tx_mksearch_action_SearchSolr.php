@@ -22,7 +22,7 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+
 
 tx_rnbase::load('tx_rnbase_action_BaseIOC');
 tx_rnbase::load('tx_rnbase_filter_BaseFilter');
@@ -71,7 +71,7 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 		// die ip muss im debug stehen
 		if ($parameters->get('debug')) {
 			tx_rnbase::load('tx_mksearch_util_Misc');
-			if ($parameters->get('debug') == t3lib_div::getIndpEnv('REMOTE_ADDR')
+			if ($parameters->get('debug') == tx_rnbase_util_Misc::getIndpEnv('REMOTE_ADDR')
 				|| tx_mksearch_util_Misc::isDevIpMask()) {
 				$options['debug'] = 1; $options['debugQuery'] = 'true';
 			}
@@ -178,7 +178,6 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 			//Da die Exception gefangen wird, würden die Entwickler keine Mail bekommen
 			//also machen wir das manuell
 			if($addr = tx_rnbase_configurations::getExtensionCfgValue('rn_base', 'sendEmailOnException')) {
-				tx_rnbase::load('tx_rnbase_util_Misc');
 				tx_rnbase_util_Misc::sendErrorMail($addr, 'tx_mksearch_action_SearchSolr_searchSolr', $e);
 			}
 			tx_rnbase::load('tx_rnbase_util_Logger');
@@ -273,10 +272,10 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 				//zu können. Dann werden hier auch nicht alle Parameter von
 				//anderen Plugins überschrieben
 				if(!$parameters->getInt($limitParam, $limitQualifier)) {
-					$params = t3lib_div::_GP($limitQualifier);
+					$params = tx_rnbase_parameters::getPostOrGetParameter($limitQualifier);
 					$params = $params ? $params : array();
 					$params = array_merge(array($limitParam => $pageSize),$params);
-					t3lib_div::_GETset($params, $limitQualifier );
+					tx_rnbase_parameters::setGetParameter($params, $limitQualifier );
 					if($limitQualifier == $parameters->getQualifier()) {
 						$parameters->offsetSet($limitParam, $pageSize);
 					}
@@ -315,7 +314,7 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 			return;
 		$aConfig = $configurations->get($autocompleteTsPath);
 
-		$sJavascriptsPath = t3lib_extMgm::siteRelPath('mksearch').'res/js/';
+		$sJavascriptsPath = tx_rnbase_util_Extensions::siteRelPath('mksearch').'res/js/';
 		$aJsScripts = array();
 		if($aConfig['includeJquery'])
 			$aJsScripts[] = 'jquery-1.6.2.min.js';

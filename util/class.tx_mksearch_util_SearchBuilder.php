@@ -22,7 +22,7 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+
 tx_rnbase::load('tx_rnbase_configurations');
 tx_rnbase::load('tx_mksearch_util_ServiceRegistry');
 
@@ -196,7 +196,7 @@ class tx_mksearch_util_SearchBuilder {
 			return '';
 		}
 		// die wörter aufsplitten
-		$terms = t3lib_div::trimExplode(' ', $term, 1);
+		$terms = tx_rnbase_util_Strings::trimExplode(' ', $term, 1);
 		if(self::emptyTerm($terms)) {
 			return '';
 		}

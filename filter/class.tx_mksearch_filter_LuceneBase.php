@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+
 
 tx_rnbase::load('tx_rnbase_util_SearchBase');
 tx_rnbase::load('tx_rnbase_util_ListBuilderInfo');
@@ -264,7 +264,7 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
 	 * @return array
 	 */
 	protected function getModeValuesAvailable() {
-		$availableModes = t3lib_div::trimExplode(',',
+		$availableModes = tx_rnbase_util_Strings::trimExplode(',',
 			$this->getConfigurations()->get($this->getConfId() . 'filter.availableModes')
 		);
 		return (array) $availableModes;
@@ -282,7 +282,7 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
 	private function fillFormDataWithRequiredFormFieldsIfNoSet(
 		array $formData, tx_rnbase_parameters $parameters
 	) {
-		$formFields = t3lib_div::trimExplode(
+		$formFields = tx_rnbase_util_Strings::trimExplode(
 			',',
 			$this->getConfigurations()->get($this->getConfId() . 'filter.requiredFormFields')
 		);

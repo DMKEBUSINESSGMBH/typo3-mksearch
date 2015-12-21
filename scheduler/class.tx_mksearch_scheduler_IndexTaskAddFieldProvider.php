@@ -22,9 +22,9 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php';
+
 if (!interface_exists('tx_scheduler_AdditionalFieldProvider')) {
-	require_once t3lib_extMgm::extPath(
+	require_once tx_rnbase_util_Extensions::extPath(
 		'scheduler', '/interfaces/interface.tx_scheduler_additionalfieldprovider.php'
 	);
 }
@@ -127,7 +127,11 @@ class tx_mksearch_scheduler_IndexTaskAddFieldProvider implements tx_scheduler_Ad
 
 		$submittedData[FIELD_ITEMS] = trim($submittedData[FIELD_ITEMS]);
 		if (empty($submittedData[FIELD_ITEMS])) {
-			$parentObject->addMessage($GLOBALS['LANG']->sL('LLL:EXT:scheduler/mod1/locallang.xml:msg.noEmail'), t3lib_FlashMessage::ERROR);
+			$flashMessageClass = tx_rnbase_util_Typo3Classes::getFlashMessageClass();
+			$parentObject->addMessage(
+				$GLOBALS['LANG']->sL('LLL:EXT:scheduler/mod1/locallang.xml:msg.noEmail'),
+				$flashMessageClass::ERROR
+			);
 			return false;
 		}
 

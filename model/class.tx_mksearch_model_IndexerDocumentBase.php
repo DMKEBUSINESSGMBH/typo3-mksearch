@@ -22,7 +22,7 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php';
+
 tx_rnbase::load('tx_mksearch_interface_IndexerDocument');
 
 /**
@@ -223,7 +223,7 @@ class tx_mksearch_model_IndexerDocumentBase implements tx_mksearch_interface_Ind
 		$abstract = tx_mksearch_util_Misc::html2plain($abstract);
 
 		if ($length || ($length = $this->getMaxAbstractLength())) {
-			$csConvObj = tx_rnbase::makeInstance('t3lib_cs');
+			$csConvObj = tx_rnbase::makeInstance(tx_rnbase_util_Typo3Classes::getCharsetConverterClass());
 			$abstract = $csConvObj->substr($encoding, $abstract, 0, $length);
 		}
 		$this->data['abstract'] = $this->getFieldInstance($abstract, 'unindexed', 1.0, 'string', $encoding);

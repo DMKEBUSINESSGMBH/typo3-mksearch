@@ -22,12 +22,12 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once t3lib_extMgm::extPath('rn_base', 'class.tx_rnbase.php');
+
 tx_rnbase::load('tx_mksearch_tests_DbTestcase');
 tx_rnbase::load('tx_mksearch_tests_Util');
 tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
 
-require_once(t3lib_extMgm::extPath('mksearch') . 'lib/Apache/Solr/Document.php');
+require_once(tx_rnbase_util_Extensions::extPath('mksearch') . 'lib/Apache/Solr/Document.php');
 
 /**
  * Wir müssen in diesem Fall mit der DB testen da wir die pages

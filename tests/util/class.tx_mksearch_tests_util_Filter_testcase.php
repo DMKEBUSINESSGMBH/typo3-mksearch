@@ -230,7 +230,8 @@ searchsolr.filter.default.sort {
     useKeepVars = 1
   }
 }';
-		$cObjMock = $this->getMockBuilder('tslib_cObj')->disableOriginalConstructor()->setMethods(array('typolink'))->getMock();
+		$cObjMock = $this->getMockBuilder(tx_rnbase_util_Typo3Classes::getContentObjectRendererClass())
+			->disableOriginalConstructor()->setMethods(array('typolink'))->getMock();
 		// Den Token bekommen wir nicht rein...
 		$cObjMock->expects($this->any())->method('typolink')->will(self::returnValue('<a href=""/>'));
 		$confArr = tx_rnbase_util_TS::parseTsConfig($typoScript);

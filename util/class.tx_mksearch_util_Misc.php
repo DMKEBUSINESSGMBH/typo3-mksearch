@@ -21,8 +21,8 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
-
-require_once(t3lib_extMgm::extPath('mksearch').'lib/Apache/Solr/Service.php' );
+require_once(tx_rnbase_util_Extensions::extPath('mksearch').'lib/Apache/Solr/Service.php' );
+tx_rnbase::load('tx_rnbase_util_Strings');
 
 /**
  * Miscellaneous methods
@@ -53,7 +53,7 @@ class tx_mksearch_util_Misc {
 		if(!is_array($options)) { return true; }
 		if(array_key_exists('include.', $options) && is_array($options['include.'])) {
 			$aPages = (array_key_exists('pages', $options['include.']) && strlen(trim($options['include.']['pages'])))
-						? t3lib_div::intExplode(',', $options['include.']['pages']) : false;
+						? tx_rnbase_util_Strings::intExplode(',', $options['include.']['pages']) : false;
 			if(!is_array($aPages))
 				$aPages = $options['include.']['pages.'];
 
@@ -64,7 +64,7 @@ class tx_mksearch_util_Misc {
 		}
 		if(array_key_exists('exclude.', $options) && is_array($options['exclude.'])) {
 			$aPages = (array_key_exists('pages', $options['exclude.']) && strlen(trim($options['exclude.']['pages'])))
-						? t3lib_div::intExplode(',', $options['exclude.']['pages']) : false;
+						? tx_rnbase_util_Strings::intExplode(',', $options['exclude.']['pages']) : false;
 			if(!is_array($aPages))
 				$aPages = $options['exclude.']['pages.'];
 			if(is_array($aPages) && count($aPages)) {
@@ -182,12 +182,11 @@ class tx_mksearch_util_Misc {
 	 * @return 	boolean
 	 */
 	public static function isDevIpMask($remoteAddress='',$devIPmask=''){
+		tx_rnbase::load('tx_rnbase_util_Network');
 		$devIPmask = trim(strcmp($devIPmask, '') ? $devIPmask : $GLOBALS['TYPO3_CONF_VARS']['SYS']['devIPmask']);
-		$remoteAddress = trim(strcmp($remoteAddress, '') ? $remoteAddress : t3lib_div::getIndpEnv('REMOTE_ADDR'));
-		return t3lib_div::cmpIP($remoteAddress, $devIPmask);
+		$remoteAddress = trim(strcmp($remoteAddress, '') ? $remoteAddress : tx_rnbase_util_Misc::getIndpEnv('REMOTE_ADDR'));
+		return tx_rnbase_util_Network::cmpIP($remoteAddress, $devIPmask);
 	}
-
-
 
 	/**
 	 * Parse the configuration of the given models

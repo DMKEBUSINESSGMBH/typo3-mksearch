@@ -22,7 +22,7 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once t3lib_extMgm::extPath('rn_base', 'class.tx_rnbase.php');
+
 
 /**
  * Bei Facetten von Lucene oder Solr ist es nicht Möglich,
@@ -137,7 +137,7 @@ class tx_mksearch_util_KeyValueFacet {
 	 * @return array ($sorting | $value | $sorting[optional] )
 	 */
 	public function explodeFacetValue($value) {
-		$exploded = t3lib_div::trimExplode($this->facetDelimiter, $value);
+		$exploded = tx_rnbase_util_Strings::trimExplode($this->facetDelimiter, $value);
 		return array(
 			'key' => array_shift($exploded),
 			'value' => array_shift($exploded),

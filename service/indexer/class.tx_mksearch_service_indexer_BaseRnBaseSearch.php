@@ -22,7 +22,7 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php';
+tx_rnbase::load('Tx_Rnbase_Service_Base');
 tx_rnbase::load('tx_mksearch_interface_Indexer');
 
 /**
@@ -33,7 +33,7 @@ tx_rnbase::load('tx_mksearch_interface_Indexer');
  * @subpackage	tx_mksearch
  */
 abstract class tx_mksearch_service_indexer_BaseRnBaseSearch
-	extends t3lib_svbase
+	extends Tx_Rnbase_Service_Base
 	implements tx_mksearch_interface_Indexer {
 
 	/**

@@ -22,7 +22,7 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once t3lib_extMgm::extPath('rn_base', 'class.tx_rnbase.php');
+
 tx_rnbase::load('tx_mksearch_tests_Util');
 tx_rnbase::load('tx_rnbase_util_TYPO3');
 
@@ -83,15 +83,15 @@ abstract class tx_mksearch_tests_DbTestcase
 
 		// templavoila und realurl brauchen wir da es im BE sonst Warnungen hagelt
 		// und man die Testergebnisse nicht sieht
-		if (t3lib_extMgm::isLoaded('realurl')) {
+		if (tx_rnbase_util_Extensions::isLoaded('realurl')) {
 			$this->importExtensions[] = 'realurl';
 		}
-		if (t3lib_extMgm::isLoaded('templavoila')) {
+		if (tx_rnbase_util_Extensions::isLoaded('templavoila')) {
 			$this->importExtensions[] = 'templavoila';
 		}
 		// fügt felder bei datenbank abfragen hinzu in $TYPO3_CONF_VARS['FE']['pageOverlayFields']
 		// und $TYPO3_CONF_VARS['FE']['addRootLineFields']
-		if (t3lib_extMgm::isLoaded('tq_seo')) {
+		if (tx_rnbase_util_Extensions::isLoaded('tq_seo')) {
 			$this->importExtensions[] = 'tq_seo';
 		}
 	}
@@ -142,7 +142,7 @@ abstract class tx_mksearch_tests_DbTestcase
 		tx_mksearch_tests_Util::disableDevlog();
 
 		// set up tv
-		if (t3lib_extMgm::isLoaded('templavoila') && $this->unloadTemplavoila) {
+		if (tx_rnbase_util_Extensions::isLoaded('templavoila') && $this->unloadTemplavoila) {
 			$this->templaVoilaConfigBackup = $GLOBALS['TYPO3_LOADED_EXT']['templavoila'];
 			$GLOBALS['TYPO3_LOADED_EXT']['templavoila'] = NULL;
 

@@ -30,15 +30,13 @@ use Elastica\Result;
 use Elastica\Search;
 use Elastica\ResultSet;
 use Elastica\Query;
-define('DEBUG', TRUE);
-require_once t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php';
+
 tx_rnbase::load('tx_mksearch_interface_SearchEngine');
 tx_rnbase::load('tx_rnbase_configurations');
-tx_rnbase::load('tx_rnbase_util_Misc');
 tx_rnbase::load('tx_mksearch_util_Misc');
 tx_rnbase::load('tx_mksearch_service_engine_SolrException');
 tx_rnbase::load('tx_rnbase_util_Logger');
-
+tx_rnbase::load('Tx_Rnbase_Service_Base');
 
 /**
  * Service "ElasticSearch search engine" for the "mksearch" extension.
@@ -47,7 +45,7 @@ tx_rnbase::load('tx_rnbase_util_Logger');
  * @subpackage	tx_mksearch
  */
 class tx_mksearch_service_engine_ElasticSearch
-	extends t3lib_svbase implements tx_mksearch_interface_SearchEngine
+	extends Tx_Rnbase_Service_Base implements tx_mksearch_interface_SearchEngine
 {
 
 	/**
@@ -83,7 +81,7 @@ class tx_mksearch_service_engine_ElasticSearch
 		spl_autoload_register(function($class){
 			if (strpos($class, 'Elastica') !== FALSE) {
 				$class = str_replace('\\', '/', $class);
-				$filePath = t3lib_extMgm::extPath('mksearch').'lib/' . $class . '.php';
+				$filePath = tx_rnbase_util_Extensions::extPath('mksearch').'lib/' . $class . '.php';
 				if (file_exists($filePath)) {
 					require_once($filePath);
 				}
@@ -145,24 +143,24 @@ class tx_mksearch_service_engine_ElasticSearch
 	 * @param array		$fields
 	 * @param array		$options
 	 * @return array[tx_mksearch_model_SearchResult]	search results
-	 * 
+	 *
 	 * @todo support für alle optionen von elasticsearch
 	 * @see http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html
 	 */
 	public function search(array $fields = array(), array $options = array()) {
 		$startTime = microtime(true);
 		$result = array();
-		
+
 		try {
 			/* @var $searchResult ResultSet */
 			$searchResult = $this->getIndex()->search(
-				$this->getElasticaQuery($fields, $options), 
+				$this->getElasticaQuery($fields, $options),
 				$this->getOptionsForElastica($options)
 			);
-			
+
 			$this->checkResponseOfSearchResult($searchResult);
 			$items = $this->getItemsFromSearchResult($searchResult);
-		
+
 			$lastRequest = $this->getIndex()->getClient()->getLastRequest();
 			$result['searchUrl'] = $lastRequest->getPath();
 			$result['searchQuery'] = $lastRequest->getQuery();
@@ -171,10 +169,10 @@ class tx_mksearch_service_engine_ElasticSearch
 			$result['numFound'] = $searchResult->getTotalHits();
 			$result['error'] = $searchResult->getResponse()->getError();
 			$result['items'] = $items;
-			
+
 			if($options['debug']) {
 				tx_rnbase_util_Debug::debug(
-					array('options' => $options, 'result' => $result), 
+					array('options' => $options, 'result' => $result),
 					__METHOD__. ' Line: ' . __LINE__
 				);
 			}
@@ -183,10 +181,10 @@ class tx_mksearch_service_engine_ElasticSearch
 			$message = 	'Exception caught from ElasticSearch: ' . $e->getMessage();
 			throw new RuntimeException($message);
 		}
-		
+
 		return $result;
 	}
-	
+
 	/**
 	 * @param array $fields
 	 * @param array $options
@@ -194,21 +192,21 @@ class tx_mksearch_service_engine_ElasticSearch
 	 */
 	protected function getElasticaQuery(array $fields, array $options) {
 		$elasticaQuery = Query::create($fields['term']);
-		
+
 		$elasticaQuery = $this->handleSorting($elasticaQuery, $options);
-		
+
 		return $elasticaQuery;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param Query $elasticaQuery
 	 * @param array $options
 	 * @return Query
 	 */
 	private function handleSorting(Query $elasticaQuery, array $options) {
 		if ($options['sort']) {
-			list($field, $order) = t3lib_div::trimExplode(' ', $options['sort'], TRUE);
+			list($field, $order) = tx_rnbase_util_Strings::trimExplode(' ', $options['sort'], TRUE);
 			$elasticaQuery->addSort(
 				array(
 					$field => array(
@@ -217,12 +215,12 @@ class tx_mksearch_service_engine_ElasticSearch
 				)
 			);
 		}
-		
+
 		return $elasticaQuery;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param ResultSet $searchResult
 	 * @return void
 	 * @throws RuntimeException
@@ -237,7 +235,7 @@ class tx_mksearch_service_engine_ElasticSearch
 			throw new RuntimeException($message);
 		}
 	}
-	
+
 	/**
 	 * @param ResultSet $searchResult
 	 * @return multitype:Ambigous <object, boolean, \TYPO3\CMS\Core\Utility\array<\TYPO3\CMS\Core\SingletonInterface>, mixed, \TYPO3\CMS\Core\SingletonInterface, \TYPO3\CMS\Core\Utility\mixed, unknown>
@@ -252,19 +250,19 @@ class tx_mksearch_service_engine_ElasticSearch
 				);
 			}
 		}
-		
+
 		return $items;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param array $options
-	 * 
+	 *
 	 * @return array
 	 */
 	protected function getOptionsForElastica(array $options) {
 		$elasticaOptions = array();
-		
+
 		foreach ($options as $key => $value) {
 			$key = $this->remapElasticaOptionKey($key);
 			switch ($key) {
@@ -284,14 +282,14 @@ class tx_mksearch_service_engine_ElasticSearch
 					$elasticaOptions[$key] = $value;
 			}
 		}
-		
+
 		return $elasticaOptions;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param string $optionKey
-	 * 
+	 *
 	 * @return string
 	 */
 	private function remapElasticaOptionKey($optionKey) {
@@ -303,7 +301,7 @@ class tx_mksearch_service_engine_ElasticSearch
 				$optionKey = Search::OPTION_FROM;
 				break;
 		}
-		
+
 		return $optionKey;
 	}
 
@@ -354,7 +352,7 @@ class tx_mksearch_service_engine_ElasticSearch
 	 */
 	protected function getElasticaCredentialsFromCredentialsString($credentialString) {
 		$this->credentialsString = $credentialString;
-		$serverCredentials = t3lib_div::trimExplode(';', $credentialString, TRUE);
+		$serverCredentials = tx_rnbase_util_Strings::trimExplode(';', $credentialString, TRUE);
 
 		$this->indexName = $serverCredentials[0];
 		unset($serverCredentials[0]);
@@ -376,7 +374,7 @@ class tx_mksearch_service_engine_ElasticSearch
 	private function getElasticaCredentialArrayFromIndexCredentialStringForOneServer(
 		$credentialString
 	) {
-		$serverCredential = t3lib_div::trimExplode(',', $credentialString);
+		$serverCredential = tx_rnbase_util_Strings::trimExplode(',', $credentialString);
 		return array(
 			'host' => $serverCredential[0],
 			'port' => $serverCredential[1],
@@ -471,7 +469,7 @@ class tx_mksearch_service_engine_ElasticSearch
 	 */
 	public function indexNew(tx_mksearch_interface_IndexerDocument $doc) {
 		$data = array();
-		
+
 		// Primary key data (fields are all scalar)
 		$primaryKeyData = $doc->getPrimaryKey();
 		foreach ($primaryKeyData as $key => $field) {
@@ -488,7 +486,7 @@ class tx_mksearch_service_engine_ElasticSearch
 		$primaryKey = $doc->getPrimaryKey();
 		$elasticaDocument = new Document($primaryKey['uid']->getValue(), $data);
 		$elasticaDocument->setType(
-			$primaryKey['extKey']->getValue() . ':' . 
+			$primaryKey['extKey']->getValue() . ':' .
 			$primaryKey['contentType']->getValue()
 		);
 
@@ -569,7 +567,7 @@ class tx_mksearch_service_engine_ElasticSearch
 		try {
 			if ($this->isServerAvailable()) {
 				$id = 1;
-				$msg = 'Up and running (Ping time: ' . 
+				$msg = 'Up and running (Ping time: ' .
 						$this->getIndex()->getClient()->getStatus()->getResponse()->getQueryTime() .
 						' ms)';
 			}

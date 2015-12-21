@@ -22,8 +22,8 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once t3lib_extMgm::extPath('rn_base', 'class.tx_rnbase.php');
-require_once t3lib_extMgm::extPath('mksearch', 'lib/Apache/Solr/Document.php');
+
+require_once tx_rnbase_util_Extensions::extPath('mksearch', 'lib/Apache/Solr/Document.php');
 tx_rnbase::load('tx_mksearch_tests_Testcase');
 tx_rnbase::load('tx_rnbase_util_Dates');
 
@@ -42,7 +42,7 @@ class tx_mksearch_tests_indexer_TtNewsNews_testcase
 	extends tx_mksearch_tests_Testcase {
 
 	protected function setUp() {
-		if(!t3lib_extMgm::isLoaded('tt_news')) {
+		if(!tx_rnbase_util_Extensions::isLoaded('tt_news')) {
 			$this->markTestSkipped('tt_news is not installed!');
 		}
 		parent::setUp();

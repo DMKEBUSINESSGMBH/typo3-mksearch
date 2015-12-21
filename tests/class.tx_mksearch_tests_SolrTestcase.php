@@ -22,7 +22,7 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once t3lib_extMgm::extPath('rn_base', 'class.tx_rnbase.php');
+tx_rnbase::load('tx_rnbase_util_Files');
 tx_rnbase::load('tx_mksearch_tests_Testcase');
 tx_rnbase::load('tx_mksearch_util_ServiceRegistry');
 tx_rnbase::load('tx_rnbase_util_Spyc');
@@ -100,7 +100,7 @@ abstract class tx_mksearch_tests_SolrTestcase
 		$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['devlog']['nolog'] = true;
 
 		$this->initAbsolutePathsForConfigs();
-		t3lib_div::rmdir($this->instanceDir,true);
+		tx_rnbase_util_Files::rmdir($this->instanceDir,true);
 		$this->createCore();
 	}
 
@@ -111,7 +111,7 @@ abstract class tx_mksearch_tests_SolrTestcase
 	protected function tearDown() {
 		parent::tearDown();
 		$this->unloadCore();
-		t3lib_div::rmdir($this->instanceDir,true);
+		tx_rnbase_util_Files::rmdir($this->instanceDir,true);
 	}
 
 	/**
@@ -119,9 +119,9 @@ abstract class tx_mksearch_tests_SolrTestcase
 	 */
 	protected function initAbsolutePathsForConfigs() {
 		$this->setConfigFileDependendOnSolrVersion();
-		$this->instanceDir = t3lib_div::getFileAbsFileName($this->instanceDir);
-		$this->configFile = t3lib_div::getFileAbsFileName($this->configFile);
-		$this->schemaFile = t3lib_div::getFileAbsFileName($this->schemaFile);
+		$this->instanceDir = tx_rnbase_util_Files::getFileAbsFileName($this->instanceDir);
+		$this->configFile = tx_rnbase_util_Files::getFileAbsFileName($this->configFile);
+		$this->schemaFile = tx_rnbase_util_Files::getFileAbsFileName($this->schemaFile);
 	}
 
 	/**
@@ -163,11 +163,11 @@ abstract class tx_mksearch_tests_SolrTestcase
 		//$this->getDefaultIndexModel()->record['name'] ist z.B.
 		//"localhost,8081,/solr-3.5.0/mycore"
 		$credentialsStringParts =
-			t3lib_div::trimExplode(',',$this->getDefaultIndexModel()->record['name']);
+			tx_rnbase_util_Strings::trimExplode(',',$this->getDefaultIndexModel()->record['name']);
 
 		//damit ist also $credentialsStringParts[2] z.B.
 		//"/solr-3.5.0/mycore"
-		$solrPathParts = t3lib_div::trimExplode('/',$credentialsStringParts[2]);
+		$solrPathParts = tx_rnbase_util_Strings::trimExplode('/',$credentialsStringParts[2]);
 
 		//build new credential string
 		$newCredentialsString = $credentialsStringParts[0] . ',' . $credentialsStringParts[1] .
@@ -269,9 +269,8 @@ abstract class tx_mksearch_tests_SolrTestcase
 		$umaskBackup = $GLOBALS['TYPO3_CONF_VARS']['BE']['folderCreateMask'];
 		$GLOBALS['TYPO3_CONF_VARS']['BE']['folderCreateMask'] = '0775';
 
-		t3lib_div::mkdir($path);
-		t3lib_div::mkdir($path . '/conf');
-		t3lib_div::mkdir($path . '/lib');
+		tx_rnbase_util_Files::mkdir_deep($path . '/conf');
+		tx_rnbase_util_Files::mkdir_deep($path . '/lib');
 
 		$GLOBALS['TYPO3_CONF_VARS']['BE']['folderCreateMask'] = $umaskBackup;
 	}

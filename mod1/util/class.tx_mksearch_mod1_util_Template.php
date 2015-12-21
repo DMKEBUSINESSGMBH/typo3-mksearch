@@ -25,7 +25,7 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
-require_once(t3lib_extMgm::extPath('rn_base', 'class.tx_rnbase.php'));
+
 tx_rnbase::load('tx_rnbase_util_Templates');
 
 /**
@@ -69,7 +69,7 @@ class tx_mksearch_mod1_util_Template {
 		if(empty($rootPage))
 			$rootPage = array_pop(tx_mksearch_service_indexer_core_Config::getRootLine($module->getPid() ? $module->getPid() : 0));
 
-		$rootPage = is_array($rootPage) ? t3lib_BEfunc::readPageAccess($rootPage['uid'], $GLOBALS['BE_USER']->getPagePermsClause(1)) : false;
+		$rootPage = is_array($rootPage) ? Tx_Rnbase_Backend_Utility::readPageAccess($rootPage['uid'], $GLOBALS['BE_USER']->getPagePermsClause(1)) : false;
 
 		if (is_array($rootPage)) {
 

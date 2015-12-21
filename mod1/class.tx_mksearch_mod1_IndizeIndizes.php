@@ -26,7 +26,7 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+
 tx_rnbase::load('tx_rnbase_mod_BaseModFunc');
 tx_rnbase::load('tx_mksearch_mod1_util_Template');
 tx_rnbase::load('tx_rnbase_util_Templates');
@@ -81,7 +81,7 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc {
 
 		$oIntIndexSrv = tx_mksearch_util_ServiceRegistry::getIntIndexService();
 
-		if(t3lib_div::_GP('updateIndex')) {
+		if(tx_rnbase_parameters::getPostOrGetParameter('updateIndex')) {
 			$status[] = $this->handleReset($oIntIndexSrv, $configurations);
 			$status[] = $this->handleClear($oIntIndexSrv, $configurations);
 			$status[] = $this->handleTrigger($oIntIndexSrv, $configurations);
@@ -92,7 +92,7 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc {
 		$markerArray['###ISSTATUS###'] = $bIsStatus ? 'block' : 'none';
 		$markerArray['###STATUS###'] = $bIsStatus ? implode('<br />', $status) : '';
 		$markerArray['###QUEUESIZE###'] = $oIntIndexSrv->countItemsInQueue();
-		$indexItems = intval(t3lib_div::_GP('triggerIndexingQueueCount'));
+		$indexItems = intval(tx_rnbase_parameters::getPostOrGetParameter('triggerIndexingQueueCount'));
 		$markerArray['###INDEXITEMS###'] = $indexItems > 0 ? $indexItems : 100;
 
 		$markerArray['###CORE_STATUS###'] = tx_mksearch_mod1_util_IndexStatusHandler
@@ -173,7 +173,7 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc {
 		// ausnahmen
 
 		// pageids für dam
-		if (t3lib_extMgm::isLoaded('dam')) {
+		if (tx_rnbase_util_Extensions::isLoaded('dam')) {
 			$pages = tx_rnbase_util_DB::doSelect('uid', 'pages', array('where' => 'pages.module=\'dam\''));
 			$pidList .= (empty($pidList) ? '' : ',').implode(',', array_values($pages[0]));
 		}
@@ -188,7 +188,7 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc {
 	 * @return string
 	 */
 	private function handleClear($oIntIndexSrv, &$configurations) {
-		$aTables = t3lib_div::_GP('clearTables');
+		$aTables = tx_rnbase_parameters::getPostOrGetParameter('clearTables');
 		if (!(is_array($aTables) && (!empty($aTables)))) return '';
 
 		$status = $configurations->getLL('label_queue_cleared');
@@ -208,9 +208,9 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc {
 	 */
 	private function handleReset($oIntIndexSrv, &$configurations) {
 		// reset aller elemente im siteroot
-		$aTables['pid'] = t3lib_div::_GP('resetTables');
+		$aTables['pid'] = tx_rnbase_parameters::getPostOrGetParameter('resetTables');
 		// global, alle elemente
-		$aTables['global'] = t3lib_div::_GP('resetTablesG');
+		$aTables['global'] = tx_rnbase_parameters::getPostOrGetParameter('resetTablesG');
 		if (
 			(!is_array($aTables['pid']) && empty($aTables['pid']))
 			&& (!is_array($aTables['global']) && empty($aTables['global']))
@@ -218,11 +218,11 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc {
 
 		$where = $options = array();
 		// deleted aussschließen, wenn nicht gesetzt
-		if (!t3lib_div::_GP('resetDeleted')) {
+		if (!tx_rnbase_parameters::getPostOrGetParameter('resetDeleted')) {
 			$where[] = 'deleted = 0';
 		}
 		// hidden aussschließen, wenn nicht gesetzt
-		if (!t3lib_div::_GP('resetHidden')) {
+		if (!tx_rnbase_parameters::getPostOrGetParameter('resetHidden')) {
 			$where[] = 'hidden = 0';
 		}
 		if (!empty($where)) $options['where'] = implode(' AND ', $where);
@@ -263,14 +263,14 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc {
 	 * @return string
 	 */
 	private function handleTrigger($oIntIndexSrv, &$configurations) {
-		$triggerIndexingQueue = t3lib_div::_GP('triggerIndexingQueue');
+		$triggerIndexingQueue = tx_rnbase_parameters::getPostOrGetParameter('triggerIndexingQueue');
 		if (!$triggerIndexingQueue) return '';
 
 		// wir entfernen das time limit, da die indizierung ziemlich lange dauern kann.
 		set_time_limit(0);
 
 		$status = '';
-		$indexItems = intval(t3lib_div::_GP('triggerIndexingQueueCount'));
+		$indexItems = intval(tx_rnbase_parameters::getPostOrGetParameter('triggerIndexingQueueCount'));
 		$options['limit'] = $indexItems > 0 ? $indexItems : 100;
 		$options['pid'] = $this->getPid();
 		$rows = $oIntIndexSrv->triggerQueueIndexing($options);

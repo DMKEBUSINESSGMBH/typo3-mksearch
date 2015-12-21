@@ -22,7 +22,7 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+
 tx_rnbase::load('tx_mksearch_util_Config');
 /**
  * Tools for use in TCA
@@ -76,7 +76,7 @@ class tx_mksearch_util_TCA {
 		// im flexform nachsehen
 		if (!$extKey && !empty($params['config']['extKeyField']) && !empty($params['config']['extKeySection'])) {
 			if ($params['table'] == 'tt_content' && !empty($params['row']['pi_flexform'])) {
-				$flexform = t3lib_div::xml2array($params['row']['pi_flexform']);
+				$flexform = tx_rnbase_util_Arrays::xml2array($params['row']['pi_flexform']);
 			}
 			if (!empty($flexform)) {
 				$section = $params['config']['extKeySection'];

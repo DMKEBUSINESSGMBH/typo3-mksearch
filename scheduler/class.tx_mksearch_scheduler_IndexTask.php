@@ -22,9 +22,9 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php';
+
 if (!class_exists('tx_scheduler_Task')) {
-	require_once t3lib_extMgm::extPath('scheduler', 'class.tx_scheduler_task.php');
+	require_once tx_rnbase_util_Extensions::extPath('scheduler', 'class.tx_scheduler_task.php');
 }
 
 /**
@@ -60,7 +60,6 @@ class tx_mksearch_scheduler_IndexTask extends tx_scheduler_Task {
 			//Da die Exception gefangen wird, würden die Entwickler keine Mail bekommen
 			//also machen wir das manuell
 			if($addr = tx_rnbase_configurations::getExtensionCfgValue('rn_base', 'sendEmailOnException')) {
-				tx_rnbase::load('tx_rnbase_util_Misc');
 				//die Mail soll immer geschickt werden
 				$aOptions = array('ignoremaillock' => true);
 				tx_rnbase_util_Misc::sendErrorMail($addr, 'tx_mksearch_scheduler_IndexTask', $e, $aOptions);

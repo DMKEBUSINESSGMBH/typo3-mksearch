@@ -22,7 +22,7 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+tx_rnbase::load('tx_rnbase_util_Files');
 tx_rnbase::load('tx_mksearch_tests_SolrTestcase');
 
 /**
@@ -44,7 +44,7 @@ class tx_mksearch_tests_filter_SolrBase_solr_testcase extends tx_mksearch_tests_
 	protected function setUp() {
 		$this->groupDataBackup = $GLOBALS['TSFE']->fe_user->groupData['uid'];
 		$this->initAbsolutePathsForConfigs();
-		t3lib_div::rmdir($this->instanceDir,true);
+		tx_rnbase_util_Files::rmdir($this->instanceDir,true);
 
 		$this->copyNeccessaryConfigFiles($this->instanceDir);
 		$this->copyNeccessaryLibFiles($this->instanceDir);
@@ -82,7 +82,7 @@ class tx_mksearch_tests_filter_SolrBase_solr_testcase extends tx_mksearch_tests_
 
 		foreach ($neccessaryFiles as $neccessaryFile) {
 			copy(
-				t3lib_div::getFileAbsFileName(
+				tx_rnbase_util_Files::getFileAbsFileName(
 					'EXT:mksearch/solr/'. $filesPath . $neccessaryFile
 				),$destPath . $filesPath .$neccessaryFile
 			);

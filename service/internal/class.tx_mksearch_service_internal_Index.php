@@ -22,7 +22,7 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+
 tx_rnbase::load('tx_mksearch_service_internal_Base');
 tx_rnbase::load('tx_rnbase_util_Logger');
 
@@ -137,13 +137,14 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 	public function addRecordToIndex($tableName, $uid, $prefer=false, $resolver=false, $data=false, array $options = array()) {
 		if (empty($uid) || empty($tableName)) {
 			tx_rnbase::load('tx_rnbase_util_Logger');
+			tx_rnbase::load('tx_rnbase_util_Debug');
 			tx_rnbase_util_Logger::warn(
 				'Could not add record to index. No table or uid given.',
 				'mksearch',
 				array(
 					'tablename' => '[' . gettype($tableName) . '] ' . $tableName,
 					'uid' => '[' . gettype($uid) . '] ' . $uid,
-					'trace' => t3lib_utility_Debug::debugTrail(),
+					'trace' => tx_rnbase_util_Debug::getDebugTrail(),
 				)
 			);
 			return false;
@@ -350,7 +351,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 								foreach ($indexConfig[$extKey.'.'][$contentType.'.'] as $aConfigByContentType){
 									// config mit der default config mergen, falls vorhanden
 									if (is_array($indexConfig['default.'][$extKey.'.'][$contentType.'.']))
-										$aConfigByContentType = t3lib_div::array_merge_recursive_overrule(
+										$aConfigByContentType = tx_rnbase_util_Arrays::mergeRecursiveWithOverrule(
 											$indexConfig['default.'][$extKey.'.'][$contentType.'.'], $aConfigByContentType);
 
 									$aConfigByContentType['queueRecord'] = $queueRecord;

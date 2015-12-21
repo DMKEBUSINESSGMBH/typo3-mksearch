@@ -21,7 +21,7 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
-require_once t3lib_extMgm::extPath('rn_base', 'class.tx_rnbase.php');
+
 tx_rnbase::load('tx_mksearch_tests_Testcase');
 
 /**
@@ -41,7 +41,7 @@ class tx_mksearch_tests_indexer_Cal_testcase
 	 * @see PHPUnit_Framework_TestCase::setUp()
 	 */
 	protected function setUp() {
-		if(!t3lib_extMgm::isLoaded('cal')) {
+		if(!tx_rnbase_util_Extensions::isLoaded('cal')) {
 			$this->markTestSkipped('cal nicht geladen.');
 		}
 		parent::setUp();

@@ -22,7 +22,7 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once t3lib_extMgm::extPath('rn_base', 'class.tx_rnbase.php');
+
 tx_rnbase::load('tx_mksearch_tests_DbTestcase');
 tx_rnbase::load('tx_mksearch_tests_fixtures_indexer_Dummy');
 tx_rnbase::load('tx_mksearch_tests_Util');

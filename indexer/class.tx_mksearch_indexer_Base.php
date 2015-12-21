@@ -29,7 +29,7 @@
 /**
  * benötigte Klassen einbinden
  */
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+
 tx_rnbase::load('tx_mksearch_interface_Indexer');
 tx_rnbase::load('tx_mksearch_util_Misc');
 tx_rnbase::load('tx_mksearch_util_TCA');
@@ -273,10 +273,11 @@ abstract class tx_mksearch_indexer_Base
 		$rootline = $coreConfigUtility::getRootLine($model->record['pid']);
 
 		// @todo sollten nicht auch Shortcuts etc. invalide sein?
+		$sysPage = tx_rnbase_util_TYPO3::getSysPage();
 		foreach ($rootline as $page) {
 			if (
 				$page['hidden'] ||
-				($page['doktype'] == t3lib_pageSelect::DOKTYPE_BE_USER_SECTION)
+				($page['doktype'] == $sysPage::DOKTYPE_BE_USER_SECTION)
 			) {
 				return TRUE;
 			}
@@ -464,7 +465,7 @@ abstract class tx_mksearch_indexer_Base
 	protected function getEffectiveFeGroups($fegroups, $pid) {
 		return tx_mksearch_service_indexer_core_Config::getEffectiveContentElementFeGroups(
 			$pid,
-			t3lib_div::trimExplode(',', $fegroups, TRUE)
+			tx_rnbase_util_Strings::trimExplode(',', $fegroups, TRUE)
 		);
 	}
 

@@ -24,7 +24,7 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
-require_once(t3lib_extMgm::extPath('rn_base', 'class.tx_rnbase.php'));
+
 tx_rnbase::load('tx_mksearch_mod1_handler_Base');
 tx_rnbase::load('tx_rnbase_mod_IModHandler');
 
@@ -58,12 +58,12 @@ class tx_mksearch_mod1_handler_admin_Solr implements tx_rnbase_mod_IModHandler {
 	 * @param tx_rnbase_mod_IModule $mod
 	 */
 	public function handleRequest(tx_rnbase_mod_IModule $mod) {
-		$submitted = t3lib_div::_GP('doDelete') || t3lib_div::_GP('doQuery');
+		$submitted = tx_rnbase_parameters::getPostOrGetParameter('doDelete') || tx_rnbase_parameters::getPostOrGetParameter('doQuery');
 		if(!$submitted) return '';
 
-		$this->data = t3lib_div::_GP('data');
+		$this->data = tx_rnbase_parameters::getPostOrGetParameter('data');
 		$deleteQuery = trim($this->data['deletequery']);
-		$SET = t3lib_div::_GP('SET');
+		$SET = tx_rnbase_parameters::getPostOrGetParameter('SET');
 		$core = intval($SET['solr_core']);
 		if(!$core) {
 			$mod->addMessage('###LABEL_SOLR_NOCORE_FOUND###','###LABEL_COMMON_WARNING###');

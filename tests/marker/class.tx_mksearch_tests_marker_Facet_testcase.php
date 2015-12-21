@@ -25,7 +25,7 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
-require_once t3lib_extMgm::extPath('rn_base', 'class.tx_rnbase.php');
+
 tx_rnbase::load('tx_mksearch_tests_Testcase');
 tx_rnbase::load('tx_mksearch_marker_Facet');
 
@@ -52,7 +52,6 @@ class tx_mksearch_tests_marker_Facet_testcase
 	 * setUp() = init DB etc.
 	 */
 	protected function setUp(){
-		tx_rnbase::load('tx_rnbase_util_Misc');
 		tx_rnbase_util_Misc::prepareTSFE();
 
 		$this->oParameters = tx_rnbase::makeInstance('tx_rnbase_parameters');

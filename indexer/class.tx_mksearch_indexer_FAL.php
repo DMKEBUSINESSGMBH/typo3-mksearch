@@ -22,11 +22,10 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+
 tx_rnbase::load('tx_mksearch_indexer_BaseMedia');
 tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
 tx_rnbase::load('tx_mksearch_util_Misc');
-tx_rnbase::load('tx_rnbase_util_Misc');
 tx_rnbase::load('tx_rnbase_util_Logger');
 
 
@@ -216,7 +215,7 @@ class tx_mksearch_indexer_FAL
 
 	/**
 	 *
-	 * @return Ambigous <tx_mksearch_service_internal_Index, t3lib_svbase, void, object, boolean, \TYPO3\CMS\Core\Utility\array<\TYPO3\CMS\Core\SingletonInterface>, mixed, \TYPO3\CMS\Core\SingletonInterface, \TYPO3\CMS\Core\Utility\mixed, unknown>
+	 * @return tx_mksearch_service_internal_Base
 	 */
 	protected function getInternalIndexService() {
 		return tx_mksearch_util_ServiceRegistry::getIntIndexService();

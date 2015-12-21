@@ -25,7 +25,7 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+
 
 
 /**
@@ -36,7 +36,7 @@ require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
  * @author Michael Wagner <dev@dmk-ebusiness.de>
  */
 abstract class tx_mksearch_mod1_searcher_abstractBase {
-	
+
 	/**
 	 * Wurde die ll bereits geladen?
 	 * @var boolean
@@ -57,20 +57,20 @@ abstract class tx_mksearch_mod1_searcher_abstractBase {
 	 * @var array
 	 */
 	protected $options = array();
-	
+
 	/**
 	 * Current search term
 	 * @var 	string
 	 */
 	protected $currentSearchWord = '';
-	
+
 	/**
 	 * Current hidden option
 	 * @var 	string
 	 */
 	protected $currentShowHidden = 1;
-	
-	
+
+
 	/**
 	 * Constructor
 	 *
@@ -107,26 +107,26 @@ abstract class tx_mksearch_mod1_searcher_abstractBase {
 	 * @return string
 	 */
 	abstract protected function getSearcherId();
-	
+
 	/**
 	 * Liefert den Service.
 	 *
-	 * @return t3lib_svbase
+	 * @return tx_mksearch_service_Base
 	 */
 	abstract public function getService();
-	
+
 	/**
 	 * Returns the complete search form
 	 * @return 	string
 	 */
 	public function getSearchForm() {
 		$data = $this->getFilterTableDataForSearchForm();
-		
+
 		$selector = $this->getSelector();
 		$out = $selector->buildFilterTable($data);
 		return $out;
 	}
-	
+
 	/**
 	 * Liefert die Daten für das Basis-Suchformular damit
 	 * das Html gebaut werden kann
@@ -139,27 +139,27 @@ abstract class tx_mksearch_mod1_searcher_abstractBase {
 			$options['pid'] = $this->options['pid'];
 		}
 		$selector = $this->getSelector();
-		
+
 		$this->currentSearchWord = $selector->showFreeTextSearchForm(
 			$data['search'],
 			$this->getSearcherId().'Search',
 			$options
 		);
-		
+
 		$this->currentShowHidden = $selector->showHiddenSelector(
 			$data['hidden'],
 			$options
 		);
-		
+
 		if($updateButton = $this->getSearchButton())
 			$data['updatebutton'] = array(
 				'label' => '',
 				'button'=> $updateButton
 			);
-				
+
 		return $data;
 	}
-	
+
 	/**
 	 * Returns the search button
 	 * @return 	string|false
@@ -189,10 +189,10 @@ abstract class tx_mksearch_mod1_searcher_abstractBase {
 
 		$fields = $options = array();
 		$this->prepareFieldsAndOptions($fields, $options);
-		
+
 		// Get counted data
 		$cnt = $this->getCount($fields, $options);
-		
+
 		$pager->setListSize($cnt);
 		$pager->setOptions($options);
 
@@ -200,22 +200,22 @@ abstract class tx_mksearch_mod1_searcher_abstractBase {
 		$items = $srv->search($fields, $options);
 		$content = '';
 		$this->showItems($content, $items);
-		
+
 		$pagerData = $pager->render();
-		
+
 		//der zusammengeführte Pager für die Ausgabe
 		//nur wenn es auch Ergebnisse gibt. sonst reicht die noItemsFoundMsg
 		$sPagerData = '';
 		if($cnt)
 			$sPagerData = $pagerData['limits'] . ' - ' .$pagerData['pages'];
-			
+
 		return array(
 				'table' 	=> $content,
 				'totalsize' => $cnt,
 				'pager' 	=> '<div class="pager">' . $sPagerData .'</div>',
 			);
 	}
-	
+
 	/**
 	 * Kann von der Kindklasse überschrieben werden, um weitere Filter zu setzen.
 	 *
@@ -225,17 +225,17 @@ abstract class tx_mksearch_mod1_searcher_abstractBase {
 	protected function prepareFieldsAndOptions(array &$fields, array &$options) {
 		$options['distinct'] = 1;
 // 		$options['debug'] = true;
-		
+
 		if(!$this->currentShowHidden) { $options['enablefieldsfe'] = 1;}
 		else { $options['enablefieldsbe'] = 1; }
-		
+
 		//die fields nun mit dem Suchbegriff und den Spalten,
 		//in denen gesucht werden soll, füllen
 		tx_rnbase::load('tx_mksearch_mod1_util_SearchBuilder');
 		tx_mksearch_mod1_util_SearchBuilder::buildFreeText($fields, $this->currentSearchWord, $this->getSearchColumns());
-		
+
 	}
-	
+
 	/**
 	 * Liefert die Spalten, in denen gesucht werden soll
 	 * @return array
@@ -267,7 +267,7 @@ abstract class tx_mksearch_mod1_searcher_abstractBase {
 		$content .= $out;
 		return $out;
 	}
-	
+
 	/**
 	 * @return 	tx_rnbase_mod_IDecorator
 	 */
@@ -278,7 +278,7 @@ abstract class tx_mksearch_mod1_searcher_abstractBase {
 	protected function getColumns(&$oDecorator){
 		return $this->getDecoratorColumns($oDecorator);
 	}
-	
+
 	/**
 	 * Liefert die Spalten für den Decorator.
 	 * @param 	tx_rnbase_mod_IDecorator 	$oDecorator
@@ -296,7 +296,7 @@ abstract class tx_mksearch_mod1_searcher_abstractBase {
 			)
 		);
 	}
-	
+
 	/**
 	 * Der Selector wird erst erzeugt, wenn er benötigt wird
 	 *
@@ -309,7 +309,7 @@ abstract class tx_mksearch_mod1_searcher_abstractBase {
 		}
 		return $this->selector;
 	}
-	
+
 	/**
 	 *
 	 * @param array $fields
@@ -320,7 +320,7 @@ abstract class tx_mksearch_mod1_searcher_abstractBase {
 		$options['count'] = 1;
 		return $this->getService()->search($fields, $options);
 	}
-	
+
 	/**
 	 * Returns an instance of tx_rnbase_mod_IModule
 	 *
@@ -329,7 +329,7 @@ abstract class tx_mksearch_mod1_searcher_abstractBase {
 	protected function getModule() {
 		return $this->mod;
 	}
-	
+
 	/**
 	 * Returns an instance of tx_rnbase_mod_IModule
 	 *
@@ -338,7 +338,7 @@ abstract class tx_mksearch_mod1_searcher_abstractBase {
 	protected function getOptions() {
 		return $this->options;
 	}
-	
+
 	/**
 	 * Returns an instance of tx_rnbase_mod_IModule
 	 *
@@ -347,7 +347,7 @@ abstract class tx_mksearch_mod1_searcher_abstractBase {
 	protected function getFormTool() {
 		return $this->mod->getFormTool();
 	}
-	
+
 	/**
 	 * Returns the message in case no items could be found in showItems()
 	 *

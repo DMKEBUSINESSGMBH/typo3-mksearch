@@ -22,7 +22,7 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+
 tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
 tx_rnbase::load('tx_mksearch_util_Misc');
 
@@ -182,7 +182,7 @@ class tx_mksearch_util_Indexer {
 			$value = tx_mksearch_util_Misc::getISODateFromTimestamp($value, $offset);
 		}
 		// stdWrap ausführen
-		$cObj = t3lib_div::makeInstance('tslib_cObj');
+		$cObj = tx_rnbase::makeInstance(tx_rnbase_util_Typo3Classes::getContentObjectRendererClass());
 		$cObj->data = $rawData;
 
 		if($options['fieldsConversion.'][$indexDocKey]) {
@@ -499,7 +499,7 @@ class tx_mksearch_util_Indexer {
 		$config = array();
 		if(is_array($options)) {
 			if (isset($options[$key]) && strlen(trim($options[$key]))) {
-				$config = t3lib_div::trimExplode(',', $options[$key]);
+				$config = tx_rnbase_util_Strings::trimExplode(',', $options[$key]);
 			}
 			elseif(isset($options[$key.'.']) && is_array($options[$key.'.'])) {
 				$config = $options[$key.'.'];

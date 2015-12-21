@@ -23,7 +23,7 @@
 ***************************************************************/
 
 
-require_once t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php';
+
 tx_rnbase::load('tx_mksearch_interface_Indexer');
 tx_rnbase::load('tx_mksearch_interface_DataProvider');
 
@@ -114,7 +114,7 @@ abstract class tx_mksearch_service_dp_Database implements tx_mksearch_interface_
 			$sql['table'] = trim($sql['table']); $pos = strpos($sql['table'], ' ');
 			$firstTable = $pos === false ? $sql['table'] : substr($sql['table'], 0, $pos);
 
-			$page = t3lib_div::makeInstance('t3lib_pageSelect');
+			$page = tx_rnbase_util_TYPO3::getSysPage();
 			if (isset($sql['skipEnableFields'])) {
 				$ignore = array();
 				foreach ($sql['skipEnableFields'] as $s) $ignore[$s] = true;
@@ -170,7 +170,7 @@ abstract class tx_mksearch_service_dp_Database implements tx_mksearch_interface_
 	 * as a guaranteed invoking of the destructor is not trivial to implement.
 	 * Additionally, as an indexer is mostly used as a service which may be
 	 * re-used over and over again
-	 * (@see t3lib_div::makeInstanceService() -> persistence of service),
+	 * (@see tx_rnbase::makeInstanceService() -> persistence of service),
 	 * take care to restore the instance to a clean, initial state!
 	 *
 	 * @return array	Matrix of records to be deleted
@@ -204,7 +204,7 @@ abstract class tx_mksearch_service_dp_Database implements tx_mksearch_interface_
 	 * 				* string	optional	'orderBy'			SQL substring defining the sql ORDER BY clause
 	 * 				* string	optional	'limit'				LIMIT value ([begin,]count)
 	 * 				* bool		optional	'noEnableFields'	Don't exclude records which are estimated as non-relevant by Typo3. First word of [table] is used as table for enableFields.
-	 * 				* array		optional	'skipEnableFields'	Conflicts with [enableFields]. Array of TCA enableFields keys which are to be skipped from where clause (@see t3lib_pageSelect::enableFields)
+	 * 				* array		optional	'skipEnableFields'	Conflicts with [enableFields]. Array of TCA enableFields keys which are to be skipped from where clause (@see tx_rnbase_util_TYPO3::getSysPage()::enableFields)
 	 *
 	 */
 	abstract protected function getSqlData(array $options, array $data=array());

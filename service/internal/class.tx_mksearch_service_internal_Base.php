@@ -21,13 +21,12 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
-
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+tx_rnbase::load('Tx_Rnbase_Service_Base');
 
 /**
  * Service for accessing models from database
  */
-class tx_mksearch_service_internal_Base extends t3lib_svbase {
+class tx_mksearch_service_internal_Base extends Tx_Rnbase_Service_Base {
 
 	/**
 	 * Search class - set this to the search class name

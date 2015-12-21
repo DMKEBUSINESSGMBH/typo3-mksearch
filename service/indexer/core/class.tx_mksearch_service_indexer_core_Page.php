@@ -22,16 +22,16 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+
 tx_rnbase::load('tx_mksearch_interface_Indexer');
 tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
 tx_rnbase::load('tx_mksearch_util_Misc');
 
 /**
  * Indexer service for core.page called by the "mksearch" extension.
- * 
+ *
  * The page's metadata field "abstract" is used for search result abstract.
- * 
+ *
  * Expected option for indexer configuration:
  * * indexedFields (mandatory - set by default):
  *		Define which fields are used for building the index
@@ -62,7 +62,7 @@ tx_rnbase::load('tx_mksearch_util_Misc');
  *
  */
 class tx_mksearch_service_indexer_core_Page implements tx_mksearch_interface_Indexer {
-	
+
 	/**
 	 * Array of processed uids.
 	 * Used to avoid multiple indexing of the same page
@@ -71,7 +71,7 @@ class tx_mksearch_service_indexer_core_Page implements tx_mksearch_interface_Ind
 	 * @var array
 	 */
 	protected $processedUids = array();
-	
+
 	/**
 	 * Array of page uids which are to be processed
 	 * in a follow-up db-query
@@ -80,33 +80,33 @@ class tx_mksearch_service_indexer_core_Page implements tx_mksearch_interface_Ind
 	 * @var array
 	 */
 	protected $additionalUids = array();
-	
+
 	/**
-	 * Mandatory data base fields 
+	 * Mandatory data base fields
 	 *
 	 * @var array
 	 */
 	protected $baseFields = array('uid', 'title', 'tstamp', 'abstract', 'doktype', 'shortcut');
-	
+
 	/**
 	 * Return content type identification.
 	 * This identification is part of the indexed data
 	 * and is used on later searches to identify the search results.
 	 * You're completely free in the range of values, but take care
 	 * as you at the same time are responsible for
-	 * uniqueness (i.e. no overlapping with other content types) and 
-	 * consistency (i.e. recognition) on indexing and searching data. 
+	 * uniqueness (i.e. no overlapping with other content types) and
+	 * consistency (i.e. recognition) on indexing and searching data.
 	 *
 	 * @return array('extKey' => [extension key], 'name' => [key of content type]
 	 */
 	public static function getContentType() {
 		return array('core', 'page');
 	}
-	
+
 	/**
-	 * Get sql data necessary to grab data to be indexed from data base 
+	 * Get sql data necessary to grab data to be indexed from data base
 	 * TODO: Check if parameter data is necessary for this indexer
-	 * 
+	 *
 	 * @param array $options from service configuration
 	 * @param array $data		Tablename <-> uids matrix of records to be indexed (array('tab1' => array(2,5,6), 'tab2' => array(4,5,8))
 	 * @return array
@@ -115,49 +115,49 @@ class tx_mksearch_service_indexer_core_Page implements tx_mksearch_interface_Ind
 	protected function getSqlData(array $options, array $data=array()) {
 		if (!isset($options['indexedFields']))
 			throw new Exception('tx_mksearch_service_indexer_core_Page->getSqlData(): mandatory option "indexedFields" not set!');
-		
+
 		$fields = array_unique(array_merge($this->baseFields, $options['indexedFields']));
-		
+
 		$where = 	// restrict page types to FE relevant ones
-					'doktype <= 5' . 
+					'doktype <= 5' .
 					// Include / exclude restrictions
 					tx_mksearch_service_indexer_core_Config::getIncludeExcludeWhere(
 						isset($options['include']) ? $options['include'] : array(),
 						isset($options['exclude']) ? $options['exclude'] : array()
 					);
-		
+
 		return array(
-					'fields' => implode(',', $fields), 
+					'fields' => implode(',', $fields),
 					'table' => 'pages',
-					'where' => $where,	
-					'skipEnableFields' => array('fe_group'), 
+					'where' => $where,
+					'skipEnableFields' => array('fe_group'),
 				);
 	}
-	
+
 	/**
 	 * Get sql data for an optional follow-up data base query
-	 * 
+	 *
 	 * @param array $options from service configuration
 	 * @return null | array
 	 * @see self::getSqlData()
 	 */
 	protected function getFollowUpSqlData(array $options) {
-		// Remove all pages from $this->additionalUids which have still been processed earlier. 
+		// Remove all pages from $this->additionalUids which have still been processed earlier.
 		$this->additionalUids = array_diff($this->additionalUids, $this->processedUids);
-		
+
 		// No additionalUids?
 		if (!$this->additionalUids) return null;
 		// else:
 
 		// Retain options, but update include option
 		$options['include'] = array('pages' => $this->additionalUids);
-		
-		// Finally, delete $this->additionalUids 
+
+		// Finally, delete $this->additionalUids
 		$this->additionalUids = array();
-		
+
 		return $this->getSqlData($options);
 	}
-	
+
 	/**
 	 * (non-PHPdoc)
 	 * @see tx_mksearch_interface_Indexer::prepareSearchData()
@@ -178,19 +178,19 @@ class tx_mksearch_service_indexer_core_Page implements tx_mksearch_interface_Ind
 		// Avoid multiple indexing of the same page
 		if (in_array($rawData['uid'], $this->processedUids)) return null;
 		// else:
-		
+
 		$this->processedUids[] = $rawData['uid'];
-		
+
 		// Current page is a short cut? Follow up short-cutted page
 		if ($rawData['doktype'] == 4) {
 			$this->additionalUids[] = $rawData['shortcut'];
 		}
-		
+
 		$lang = isset($this->options['lang'])? $this->options['lang'] : 0;
-		
+
 		// Localize record, if necessary
 		if ($lang) {
-			$page = t3lib_div::makeInstance('t3lib_pageSelect');
+			$page = tx_rnbase_util_TYPO3::getSysPage();
 			$rawData = $page->getPageOverlay ($rawData, $lang);
 			// No success in record translation?
 			if (!isset($rawData['_PAGES_OVERLAY'])) return null;
@@ -199,17 +199,17 @@ class tx_mksearch_service_indexer_core_Page implements tx_mksearch_interface_Ind
 		$indexDoc->setUid($rawData['uid']);
 		$indexDoc->setTitle($rawData['title']);
 		$indexDoc->setTimestamp($rawData['tstamp']);
-		
+
 		$content = '';
 		// Index all fields according to configuration
 		if(!empty($options['indexedFields']))
-			foreach ($options['indexedFields'] as $field) 
+			foreach ($options['indexedFields'] as $field)
 				if (!empty($rawData[$field])) $content .= $rawData[$field] . ' ';
-			
-		// Decode HTML 
+
+		// Decode HTML
 		if(!empty($content))
 			$indexDoc->setContent(tx_mksearch_util_Misc::html2plain($content));
-		
+
 		// You are strongly encouraged to use $doc->getMaxAbstractLength() to limit the length of your abstract!
 		// You are indeed free to ignore that limit if you have good reasons to do so, but always
 		// keep in mind that the abstract data is stored with the indexed document - so think about your data traffic
@@ -221,7 +221,7 @@ class tx_mksearch_service_indexer_core_Page implements tx_mksearch_interface_Ind
 									tx_mksearch_util_Misc::html2plain($rawData['abstract']),
 									$indexDoc->getMaxAbstractLength()
 								);
-		
+
 		return $indexDoc;
 	}
 	public function getDefaultTSConfig() {

@@ -3,7 +3,7 @@ if (!defined ('TYPO3_MODE')) {
  	die ('Access denied.');
 }
 // Search engine and indexer services
-t3lib_extMgm::addService($_EXTKEY,  'mksearch_engine' /* sv type */,  'tx_mksearch_service_engine_ZendLucene' /* sv key */,
+tx_rnbase_util_Extensions::addService($_EXTKEY,  'mksearch_engine' /* sv type */,  'tx_mksearch_service_engine_ZendLucene' /* sv key */,
 	array(
 		'title' => 'Search engine Zend Lucene',
 		'description' => 'Service which provides access to ZEND Lucene search engine',
@@ -13,12 +13,12 @@ t3lib_extMgm::addService($_EXTKEY,  'mksearch_engine' /* sv type */,  'tx_mksear
 		'quality' => 50,
 		'os' => '',
 		'exec' => '',
-		'classFile' => t3lib_extMgm::extPath($_EXTKEY).'service/engine/class.tx_mksearch_service_engine_ZendLucene.php',
+		'classFile' => tx_rnbase_util_Extensions::extPath($_EXTKEY).'service/engine/class.tx_mksearch_service_engine_ZendLucene.php',
 		'className' => 'tx_mksearch_service_engine_ZendLucene',
 	)
 );
 
-t3lib_extMgm::addService($_EXTKEY,  'mksearch_engine' /* sv type */,  'tx_mksearch_service_engine_Solr' /* sv key */,
+tx_rnbase_util_Extensions::addService($_EXTKEY,  'mksearch_engine' /* sv type */,  'tx_mksearch_service_engine_Solr' /* sv key */,
 	array(
 		'title' => 'Search engine Solr',
 		'description' => 'Service which provides access to Apache SOLR search engine',
@@ -28,12 +28,12 @@ t3lib_extMgm::addService($_EXTKEY,  'mksearch_engine' /* sv type */,  'tx_mksear
 		'quality' => 50,
 		'os' => '',
 		'exec' => '',
-		'classFile' => t3lib_extMgm::extPath($_EXTKEY).'service/engine/class.tx_mksearch_service_engine_Solr.php',
+		'classFile' => tx_rnbase_util_Extensions::extPath($_EXTKEY).'service/engine/class.tx_mksearch_service_engine_Solr.php',
 		'className' => 'tx_mksearch_service_engine_Solr',
 	)
 );
 
-t3lib_extMgm::addService(
+tx_rnbase_util_Extensions::addService(
 	$_EXTKEY,
 	'mksearch_engine' /* sv type */,
 	'tx_mksearch_service_engine_ElasticSearch' /* sv key */,
@@ -46,13 +46,13 @@ t3lib_extMgm::addService(
 		'quality' => 50,
 		'os' => '',
 		'exec' => '',
-		'classFile' => t3lib_extMgm::extPath($_EXTKEY).'service/engine/class.tx_mksearch_service_engine_ElasticSearch.php',
+		'classFile' => tx_rnbase_util_Extensions::extPath($_EXTKEY).'service/engine/class.tx_mksearch_service_engine_ElasticSearch.php',
 		'className' => 'tx_mksearch_service_engine_ElasticSearch',
 	)
 );
 
 // Services for mksearch-internal use
-t3lib_extMgm::addService($_EXTKEY, 'mksearch', 'tx_mksearch_indexer_internal_index',
+tx_rnbase_util_Extensions::addService($_EXTKEY, 'mksearch', 'tx_mksearch_indexer_internal_index',
 		array(
 			'title' => 'Index',
 			'description' => 'Service for indices',
@@ -62,11 +62,11 @@ t3lib_extMgm::addService($_EXTKEY, 'mksearch', 'tx_mksearch_indexer_internal_ind
 			'quality' => 50,
 			'os' => '',
 			'exec' => '',
-			'classFile' => t3lib_extMgm::extPath($_EXTKEY).'service/internal/class.tx_mksearch_service_internal_Index.php',
+			'classFile' => tx_rnbase_util_Extensions::extPath($_EXTKEY).'service/internal/class.tx_mksearch_service_internal_Index.php',
 			'className' => 'tx_mksearch_service_internal_Index',
 		)
 	);
-t3lib_extMgm::addService($_EXTKEY, 'mksearch', 'tx_mksearch_indexer_internal_composite',
+tx_rnbase_util_Extensions::addService($_EXTKEY, 'mksearch', 'tx_mksearch_indexer_internal_composite',
 		array(
 			'title' => 'Indexer configuration composites',
 			'description' => 'Service for indexer configuration composites',
@@ -76,11 +76,11 @@ t3lib_extMgm::addService($_EXTKEY, 'mksearch', 'tx_mksearch_indexer_internal_com
 			'quality' => 50,
 			'os' => '',
 			'exec' => '',
-			'classFile' => t3lib_extMgm::extPath($_EXTKEY).'service/internal/class.tx_mksearch_service_internal_Composite.php',
+			'classFile' => tx_rnbase_util_Extensions::extPath($_EXTKEY).'service/internal/class.tx_mksearch_service_internal_Composite.php',
 			'className' => 'tx_mksearch_service_internal_Composite',
 		)
 	);
-t3lib_extMgm::addService($_EXTKEY, 'mksearch', 'tx_mksearch_indexer_internal_config',
+tx_rnbase_util_Extensions::addService($_EXTKEY, 'mksearch', 'tx_mksearch_indexer_internal_config',
 		array(
 			'title' => 'Indexer configuration',
 			'description' => 'Service for indexer configurations',
@@ -90,11 +90,11 @@ t3lib_extMgm::addService($_EXTKEY, 'mksearch', 'tx_mksearch_indexer_internal_con
 			'quality' => 50,
 			'os' => '',
 			'exec' => '',
-			'classFile' => t3lib_extMgm::extPath($_EXTKEY).'service/internal/class.tx_mksearch_service_internal_Config.php',
+			'classFile' => tx_rnbase_util_Extensions::extPath($_EXTKEY).'service/internal/class.tx_mksearch_service_internal_Config.php',
 			'className' => 'tx_mksearch_service_internal_Config',
 		)
 	);
-t3lib_extMgm::addService($_EXTKEY, 'mksearch', 'tx_mksearch_service_internal_Keyword',
+tx_rnbase_util_Extensions::addService($_EXTKEY, 'mksearch', 'tx_mksearch_service_internal_Keyword',
 		array(
 			'title' => 'Keyword Service',
 			'description' => 'Service for keywords',
@@ -104,12 +104,12 @@ t3lib_extMgm::addService($_EXTKEY, 'mksearch', 'tx_mksearch_service_internal_Key
 			'quality' => 50,
 			'os' => '',
 			'exec' => '',
-			'classFile' => t3lib_extMgm::extPath($_EXTKEY).'service/internal/class.tx_mksearch_service_internal_Keyword.php',
+			'classFile' => tx_rnbase_util_Extensions::extPath($_EXTKEY).'service/internal/class.tx_mksearch_service_internal_Keyword.php',
 			'className' => 'tx_mksearch_service_internal_Keyword',
 		)
 	);
 
-t3lib_extMgm::addService($_EXTKEY, 'mksearch', 'tx_mksearch_service_irfaq_Expert',
+tx_rnbase_util_Extensions::addService($_EXTKEY, 'mksearch', 'tx_mksearch_service_irfaq_Expert',
 		array(
 			'title' => 'Irfaq Expert Service',
 			'description' => 'Service for Irfaq Experts',
@@ -119,12 +119,12 @@ t3lib_extMgm::addService($_EXTKEY, 'mksearch', 'tx_mksearch_service_irfaq_Expert
 			'quality' => 50,
 			'os' => '',
 			'exec' => '',
-			'classFile' => t3lib_extMgm::extPath($_EXTKEY).'service/irfaq/class.tx_mksearch_service_irfaq_Expert.php',
+			'classFile' => tx_rnbase_util_Extensions::extPath($_EXTKEY).'service/irfaq/class.tx_mksearch_service_irfaq_Expert.php',
 			'className' => 'tx_mksearch_service_irfaq_Expert',
 		)
 	);
 
-t3lib_extMgm::addService($_EXTKEY, 'mksearch', 'tx_mksearch_service_irfaq_Category',
+tx_rnbase_util_Extensions::addService($_EXTKEY, 'mksearch', 'tx_mksearch_service_irfaq_Category',
 		array(
 			'title' => 'Irfaq Category Service',
 			'description' => 'Service for Irfaq Categories',
@@ -134,12 +134,12 @@ t3lib_extMgm::addService($_EXTKEY, 'mksearch', 'tx_mksearch_service_irfaq_Catego
 			'quality' => 50,
 			'os' => '',
 			'exec' => '',
-			'classFile' => t3lib_extMgm::extPath($_EXTKEY).'service/irfaq/class.tx_mksearch_service_irfaq_Category.php',
+			'classFile' => tx_rnbase_util_Extensions::extPath($_EXTKEY).'service/irfaq/class.tx_mksearch_service_irfaq_Category.php',
 			'className' => 'tx_mksearch_service_irfaq_Category',
 		)
 	);
 
-t3lib_extMgm::addService($_EXTKEY, 'mksearch', 'tx_mksearch_service_irfaq_Question',
+tx_rnbase_util_Extensions::addService($_EXTKEY, 'mksearch', 'tx_mksearch_service_irfaq_Question',
 		array(
 			'title' => 'Irfaq Question Service',
 			'description' => 'Service for Irfaq Questions',
@@ -149,7 +149,7 @@ t3lib_extMgm::addService($_EXTKEY, 'mksearch', 'tx_mksearch_service_irfaq_Questi
 			'quality' => 50,
 			'os' => '',
 			'exec' => '',
-			'classFile' => t3lib_extMgm::extPath($_EXTKEY).'service/irfaq/class.tx_mksearch_service_irfaq_Question.php',
+			'classFile' => tx_rnbase_util_Extensions::extPath($_EXTKEY).'service/irfaq/class.tx_mksearch_service_irfaq_Question.php',
 			'className' => 'tx_mksearch_service_irfaq_Question',
 		)
 	);

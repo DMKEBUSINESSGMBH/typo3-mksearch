@@ -29,7 +29,7 @@
 /**
  * benötigte Klassen einbinden
  */
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+
 tx_rnbase::load('tx_mksearch_indexer_Base');
 tx_rnbase::load('tx_mksearch_util_Misc');
 
@@ -201,7 +201,7 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base {
 		if ($this->isCalInstalledInVersion190OrHigher()) {
 			$calDateClass = '\\TYPO3\\CMS\\Cal\\Model\\CalDate';
 		} else {
-			require_once(t3lib_extMgm::extPath('cal') . 'model/class.tx_cal_date.php');
+			require_once(tx_rnbase_util_Extensions::extPath('cal') . 'model/class.tx_cal_date.php');
 			$calDateClass = 'tx_cal_date';
 		}
 		return $calDateClass;
@@ -212,7 +212,7 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base {
 	 * @return boolean
 	 */
 	protected function isCalInstalledInVersion190OrHigher() {
-		$calVersionNumber = t3lib_extMgm::getExtensionVersion('cal');
+		$calVersionNumber = tx_rnbase_util_Extensions::getExtensionVersion('cal');
 		return tx_rnbase_util_TYPO3::convertVersionNumberToInteger($calVersionNumber) >= 1009000;
 	}
 

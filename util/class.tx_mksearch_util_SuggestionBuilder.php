@@ -29,7 +29,7 @@
 /**
  * benötigte Klassen einbinden
  */
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+
 
 /**
  * Der SuggestionBuilder erstellt aus den Rohdaten der Suggestions passende Objekte für das Rendering.

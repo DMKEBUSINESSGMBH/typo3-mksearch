@@ -29,7 +29,7 @@
 /**
  * benötigte Klassen einbinden
  */
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+
 tx_rnbase::load('tx_mksearch_filter_ElasticSearchBase');
 tx_rnbase::load('tx_mksearch_tests_Testcase');
 
@@ -434,7 +434,7 @@ class tx_mksearch_tests_filter_ElasticSearchBase_testcase
 			$configArray[$this->confId]['filter.']['forceSearch'] = true;
 		}
 
-		$configArray = t3lib_div::array_merge_recursive_overrule(
+		$configArray = tx_rnbase_util_Arrays::mergeRecursiveWithOverrule(
 			tx_mksearch_tests_Util::loadPageTS4BE(), $configArray
 		);
 		$configArray[$this->confId]['filter.']['requiredFormFields'] =
@@ -446,7 +446,7 @@ class tx_mksearch_tests_filter_ElasticSearchBase_testcase
 		$configurations = $this->createConfigurations(
 			$configurations->getConfigArray(), 'mksearch', 'mksearch',
 			$parameters,
-			tx_rnbase::makeInstance('tslib_cObj')
+			tx_rnbase::makeInstance(tx_rnbase_util_Typo3Classes::getContentObjectRendererClass())
 		);
 
 		return tx_rnbase::makeInstance(

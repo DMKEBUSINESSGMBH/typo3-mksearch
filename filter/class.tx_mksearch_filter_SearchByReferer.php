@@ -21,13 +21,11 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
-
 tx_rnbase::load('tx_rnbase_util_SearchBase');
 tx_rnbase::load('tx_rnbase_util_ListBuilderInfo');
 
 class tx_mksearch_filter_SearchByReferer extends tx_rnbase_filter_BaseFilter implements ListBuilderInfo {
-	
+
 	/**
 	 * Initialize filter
 	 *
@@ -41,7 +39,7 @@ class tx_mksearch_filter_SearchByReferer extends tx_rnbase_filter_BaseFilter imp
 
 		return $this->initFilter($fields, $options, $this->getParameters(), $this->getConfigurations(), $this->getConfId());
 	}
-	
+
 	/**
 	 * Filter for search form
 	 *
@@ -50,14 +48,14 @@ class tx_mksearch_filter_SearchByReferer extends tx_rnbase_filter_BaseFilter imp
 	 * @param tx_rnbase_parameters $parameters
 	 * @param tx_rnbase_configurations $configurations
 	 * @param string $confId
-	 * @return bool	Should subsequent query be executed at all? 
-	 * 
+	 * @return bool	Should subsequent query be executed at all?
+	 *
 	 */
 	protected function initFilter(&$fields, &$options, &$parameters, &$configurations, $confId) {
 		$config = $configurations->get($confId); $config = $config['filter.'];
-		$referrer = (isset($config['refererDebug'])) ? 
-						$config['refererDebug'] : 
-						t3lib_div::getIndpEnv('HTTP_REFERER');
+		$referrer = (isset($config['refererDebug'])) ?
+						$config['refererDebug'] :
+						tx_rnbase_util_Misc::getIndpEnv('HTTP_REFERER');
 		if ($referrer) {
 			$config = $config['referers.'];
 			if (is_array($config)) {
@@ -74,7 +72,7 @@ class tx_mksearch_filter_SearchByReferer extends tx_rnbase_filter_BaseFilter imp
 							// Set fe_groups
 							global $GLOBALS;
 							$options['fe_groups'] = $GLOBALS['TSFE']->fe_user->groupData['uid'];
-								
+
 							if (!isset($v['searchTermDelimiterRegEx'])) $v['searchTermDelimiterRegEx'] = '/\++/';
 							$terms = preg_split($v['searchTermDelimiterRegEx'], $matches[1]);
 							$sign = (isset($v['searchTermOperator']) and $v['searchTermOperator']=='and') ? true : null;
@@ -91,7 +89,7 @@ class tx_mksearch_filter_SearchByReferer extends tx_rnbase_filter_BaseFilter imp
 	}
 
 	/**
-	 * Get a message string for empty list. This is an language string. The key is 
+	 * Get a message string for empty list. This is an language string. The key is
 	 * taken from ts-config: [item].listinfo.llkeyEmpty
 	 *
 	 * @param array_object $viewData
@@ -99,9 +97,9 @@ class tx_mksearch_filter_SearchByReferer extends tx_rnbase_filter_BaseFilter imp
 	 * @return string
 	 */
 	function getEmptyListMessage($confId, &$viewData, &$configurations) {}
-	
+
 	function setMarkerArrays(&$markerArray, &$subpartArray, &$wrappedSubpartArray) {}
-	
+
 	function getListMarkerInfo() {return null;}
 }
 

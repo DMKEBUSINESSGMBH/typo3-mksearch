@@ -21,7 +21,7 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
-
+tx_rnbase::load('tx_rnbase_util_Files');
 
 /**
  * Tika controller class
@@ -37,7 +37,7 @@ class tx_mksearch_util_Tika {
 	 */
 	public static function getInstance() {
 		$tikaJar = tx_rnbase_configurations::getExtensionCfgValue('mksearch', 'tikaJar');
-		$tikaJar = t3lib_div::getFileAbsFileName($tikaJar, FALSE);
+		$tikaJar = tx_rnbase_util_Files::getFileAbsFileName($tikaJar, FALSE);
 		self::$instance = new tx_mksearch_util_Tika($tikaJar);
 		return self::$instance;
 	}
@@ -59,7 +59,8 @@ class tx_mksearch_util_Tika {
 			return $this->tikaAvailable;
 		}
 
-		if (!t3lib_exec::checkCommand('java')) {
+		$commandUtilityClass = tx_rnbase_util_Typo3Classes::getCommandUtilityClass();
+		if (!$commandUtilityClass::checkCommand('java')) {
 			tx_rnbase_util_Logger::warn('Java not found! Java is required to run Apache Tika.', 'mksearch');
 			$this->tikaAvailable = 0;
 			return $this->tikaAvailable;
@@ -140,7 +141,8 @@ class tx_mksearch_util_Tika {
 
 		$this->setLocaleTypeForNonWindowsSystems();
 
-		$tikaCommand = t3lib_exec::getCommand('java')
+		$commandUtilityClass = tx_rnbase_util_Typo3Classes::getCommandUtilityClass();
+		$tikaCommand = $commandUtilityClass::getCommand('java')
 			. ' -Dfile.encoding=UTF8' // forces UTF8 output
 			. ' -jar ' . escapeshellarg($this->tikaJar)
 			. ' -m ' . escapeshellarg($absFile);
@@ -170,7 +172,8 @@ class tx_mksearch_util_Tika {
 
 		$this->setLocaleTypeForNonWindowsSystems();
 
-		$tikaCommand = t3lib_exec::getCommand('java')
+		$commandUtilityClass = tx_rnbase_util_Typo3Classes::getCommandUtilityClass();
+		$tikaCommand = $commandUtilityClass::getCommand('java')
 			. ' -Dfile.encoding=UTF-8' // forces UTF8 output
 			. ' -jar ' . escapeshellarg($this->tikaJar)
 			. ' -' . $tikaCmdType . ' ' . escapeshellarg($absFile);
@@ -204,9 +207,9 @@ class tx_mksearch_util_Tika {
 	 * @throws Exception
 	 */
 	private static function checkFile ($fName)	{
-		$absFile = t3lib_div::getFileAbsFileName($fName);
+		$absFile = tx_rnbase_util_Files::getFileAbsFileName($fName);
 		$absFile = self::fixFilenameWithPossibleUmlautsForWindows($absFile);
-		if(!(t3lib_div::isAllowedAbsPath($absFile) && @is_file($absFile))) {
+		if(!(tx_rnbase_util_Files::isAllowedAbsPath($absFile) && @is_file($absFile))) {
 			throw new Exception('File not found: '.$absFile);
 		}
 		if(!@is_readable($absFile)) {

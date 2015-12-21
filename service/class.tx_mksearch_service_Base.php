@@ -25,11 +25,7 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
-
-/**
- * benötigte Klassen einbinden
- */
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+tx_rnbase::load('Tx_Rnbase_Service_Base');
 tx_rnbase::load('tx_rnbase_util_SearchBase');
 
 /**
@@ -38,7 +34,7 @@ tx_rnbase::load('tx_rnbase_util_SearchBase');
  * @package tx_mksearch
  * @subpackage tx_mksearch_service
  */
-abstract class tx_mksearch_service_Base extends t3lib_svbase {
+abstract class tx_mksearch_service_Base extends Tx_Rnbase_Service_Base {
 
 	/**
 	 * Return name of search class
@@ -53,7 +49,7 @@ abstract class tx_mksearch_service_Base extends t3lib_svbase {
 	public function getSearcher(){
 		return tx_rnbase_util_SearchBase::getInstance($this->getSearchClass());
 	}
-	
+
 	/**
 	 * Search database
 	 *

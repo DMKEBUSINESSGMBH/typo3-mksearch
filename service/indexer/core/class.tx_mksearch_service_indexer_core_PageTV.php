@@ -22,18 +22,18 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+
 tx_rnbase::load('tx_mksearch_service_indexer_core_Page');
 
 /**
  * Indexer service for templavoila.page called by the "mksearch" extension.
  *
  * This class extends tx_mksearch_service_indexer_core_Page in the way that
- * it is aware of some TemplaVoilà-specific things like references. 
- * 
+ * it is aware of some TemplaVoilà-specific things like references.
+ *
  * IMPORTANT NOTES:
  * * The content type of indexed pages stays unchanged, meaning that
- *   all TypoScript configuration related to displaying search results 
+ *   all TypoScript configuration related to displaying search results
  *   refers to 'core.page'. As a consequence, the default search result
  *   configuration of tx_mksearch_service_indexer_core_Page is re-used.
  * * The subtype of this indexer service (which is used for activation and
@@ -45,58 +45,58 @@ tx_rnbase::load('tx_mksearch_service_indexer_core_Page');
  * * There is no need to explicitely configure include options for the
  *   'core.tt_content' indexer service as the content elements to be indexed
  *   are determined by THIS 'templavoila.page' service.
- *   Note that implicitely indexing ALL 'core.tt_content' documents is 
+ *   Note that implicitely indexing ALL 'core.tt_content' documents is
  *   not possible when combinated with THIS 'templavoila.page' service.
  *   Use the include.pageTrees option instead with the page root as needed.
  * * This indexer must be activated explicitely as needed (i.e. if TemplaVoilà
  *   is installed). Make sure to DEACTIVATE the 'core.page' indexer service at the same time!
  *     1. $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['indexer']['active'][] = 'templavoila.page';
  *     2. $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['indexer']['active'] = array_diff($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['indexer']['active'], array('core.page'));
- * 
- * Options are identical to tx_mksearch_service_indexer_core_Page (except the key / service subtype!), 
+ *
+ * Options are identical to tx_mksearch_service_indexer_core_Page (except the key / service subtype!),
  * e.g. $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['indexer']['config']['templavoila.page']['indexedFields'] = array('header', 'bodytext');
  * @see tx_mksearch_service_indexer_core_Page
  */
 class tx_mksearch_service_indexer_core_PageTV extends tx_mksearch_service_indexer_core_Page {
-	
+
 	/**
 	 * Special TV fields needed in background, but not for actual indexing
 	 *
 	 * @var unknown_type
 	 */
 	private $tvFields = array('tx_templavoila_flex');
-	
+
 	/**
 	 * Shortcut to templavoila.tt_content include pages configuration
 	 *
 	 * @var array
 	 */
 	private $ttcConfInclude = array();
-	
+
 	/**
 	 * Shortcut to templavoila.tt_content mapping configuration
 	 *
 	 * @var array
 	 */
 	private $ttcConfMap = array();
-	
+
 	/**
-	 * Get sql data necessary to grab data to be indexed from data base 
-	 * 
+	 * Get sql data necessary to grab data to be indexed from data base
+	 *
 	 * @param array $options from service configuration
 	 * @return array
 	 * @see tx_mksearch_service_indexer_BaseDataBase::getSqlData()
 	 */
 	protected function getSqlData(array $options) {
 		$this->ttcConfInclude = &$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['indexer']['config']['templavoila.tt_content']['include']['elements'];
-		if (!is_array($this->ttcConfInclude)) $this->ttcConfInclude = array(); 
+		if (!is_array($this->ttcConfInclude)) $this->ttcConfInclude = array();
 		$this->ttcConfMap = &$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['indexer']['config']['templavoila.tt_content']['pidMapping'];
-		if (!is_array($this->ttcConfMap)) $this->ttcConfMap = array(); 
-		
-		$this->baseFields = array_merge($this->baseFields, $this->tvFields);		
+		if (!is_array($this->ttcConfMap)) $this->ttcConfMap = array();
+
+		$this->baseFields = array_merge($this->baseFields, $this->tvFields);
 		return parent::getSqlData($options);
 	}
-	
+
 	/**
 	 * Prepare / transform data from database for indexing
 	 *
@@ -108,9 +108,9 @@ class tx_mksearch_service_indexer_core_PageTV extends tx_mksearch_service_indexe
 	protected function prepareData(array $rawData, array $options, tx_mksearch_model_IndexerDocument $indexDoc) {
 		if ($rawData['tx_templavoila_flex']) {
 			// Get tt_content uids and add them to templavoila.tt_content indexer config
-			$flex = t3lib_div::xml2array($rawData['tx_templavoila_flex']);
-			$uids = t3lib_div::trimExplode(',', $flex['data']['sDEF']['lDEF']['field_content']['vDEF'], 1);
-							
+			$flex = tx_rnbase_util_Arrays::xml2array($rawData['tx_templavoila_flex']);
+			$uids = tx_rnbase_util_Strings::trimExplode(',', $flex['data']['sDEF']['lDEF']['field_content']['vDEF'], 1);
+
 			$this->ttcConfInclude = array_merge($this->ttcConfInclude, $uids);
 
 			// Fill templavoila.tt_content indexer PID mapping
@@ -118,13 +118,13 @@ class tx_mksearch_service_indexer_core_PageTV extends tx_mksearch_service_indexe
 				foreach ($uids as $uid) {
 					if (!isset($this->ttcConfMap[$uid])) $this->ttcConfMap[$uid] = array();
 					$this->ttcConfMap[$uid][] = $rawData['uid'];
-				} 	
+				}
 			}
 		}
 		// Call parent's method
 		return parent::prepareData($rawData, $options, $indexDoc);
 	}
-	
+
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/indexer/core/class.tx_mksearch_service_indexer_core_PageTV.php'])	{

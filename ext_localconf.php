@@ -8,10 +8,10 @@ $_EXTCONF = empty($_EXTCONF) ? array() : (is_array($_EXTCONF) ? $_EXTCONF : unse
 
 // Include service configuration
 tx_rnbase::load('tx_mksearch_util_ServiceRegistry');
-require_once(t3lib_extMgm::extPath('mksearch').'service/ext_localconf.php');
+require_once(tx_rnbase_util_Extensions::extPath('mksearch').'service/ext_localconf.php');
 
 // Include indexer registrations
-require_once(t3lib_extMgm::extPath('mksearch').'indexer/ext_localconf.php');
+require_once(tx_rnbase_util_Extensions::extPath('mksearch').'indexer/ext_localconf.php');
 
 // Register hooks
 // Hooks for converting Zend_Lucene index data
@@ -41,10 +41,10 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['proc
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processCmdmapClass'][] =
 	'EXT:' . $_EXTKEY . '/hooks/class.tx_mksearch_hooks_IndexerAutoUpdate.php:tx_mksearch_hooks_IndexerAutoUpdate';
 // Include PageTSConfig for backend module
-t3lib_extMgm::addPageTSConfig('<INCLUDE_TYPOSCRIPT: source="FILE:EXT:mksearch/mod1/pageTSconfig.txt">');
+tx_rnbase_util_Extensions::addPageTSConfig('<INCLUDE_TYPOSCRIPT: source="FILE:EXT:mksearch/mod1/pageTSconfig.txt">');
 
 
-//require_once t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php';
+//
 //tx_rnbase::load('tx_mksearch_scheduler_IndexTask');
 //tx_rnbase::load('tx_mksearch_scheduler_IndexTaskAddFieldProvider');
 
@@ -57,10 +57,16 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['tx_mksearch_sch
 );
 
 
-if(t3lib_extMgm::isLoaded('mksanitizedparameters')) {
-	require_once(t3lib_extMgm::extPath($_EXTKEY).'ext_mksanitizedparameter_rules.php');
+if(tx_rnbase_util_Extensions::isLoaded('mksanitizedparameters')) {
+	require_once(tx_rnbase_util_Extensions::extPath($_EXTKEY).'ext_mksanitizedparameter_rules.php');
 }
 
 if (tx_rnbase_util_TYPO3::isTYPO60OrHigher()) {
-	require_once(t3lib_extMgm::extPath($_EXTKEY).'Configuration/SignalSlotDispatcher.php');
+	require_once(tx_rnbase_util_Extensions::extPath($_EXTKEY).'Configuration/SignalSlotDispatcher.php');
 }
+
+tx_rnbase::load('tx_rnbase_util_Misc');
+tx_rnbase::load('tx_rnbase_util_Strings');
+tx_rnbase::load('tx_rnbase_util_Arrays');
+tx_rnbase::load('tx_rnbase_util_Files');
+tx_rnbase::load('tx_rnbase_util_Typo3Classes');

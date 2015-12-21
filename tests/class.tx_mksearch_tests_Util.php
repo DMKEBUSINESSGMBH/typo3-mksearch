@@ -29,7 +29,7 @@
 /**
  * benötigte Klassen einbinden
  */
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+
 tx_rnbase::load('tx_rnbase_cache_Manager');
 tx_rnbase::load('tx_rnbase_util_TYPO3');
 tx_rnbase::load('tx_rnbase_util_Spyc');
@@ -173,7 +173,7 @@ class tx_mksearch_tests_Util {
 	 * @return string
 	 */
 	public static function getFixturePath($filename, $dir = 'tests/fixtures/', $extKey = 'mksearch') {
-		return t3lib_extMgm::extPath($extKey).$dir.$filename;
+		return tx_rnbase_util_Extensions::extPath($extKey).$dir.$filename;
 	}
 
 	/**
@@ -185,7 +185,7 @@ class tx_mksearch_tests_Util {
   	public static function loadPageTS4BE() {
   		$extKeyTS = $extKey = 'mksearch';
 
-	    t3lib_extMgm::addPageTSConfig('<INCLUDE_TYPOSCRIPT: source="FILE:EXT:mksearch/static/static_extension_template/setup.txt">');
+	    tx_rnbase_util_Extensions::addPageTSConfig('<INCLUDE_TYPOSCRIPT: source="FILE:EXT:mksearch/static/static_extension_template/setup.txt">');
 
 	    $pageTSconfig = self::getPagesTSconfig(0);
 	    $tempConfig = $pageTSconfig['plugin.']['tx_'.$extKeyTS.'.'];
@@ -212,7 +212,8 @@ class tx_mksearch_tests_Util {
   		// die rootline korrekt geholt wird und nichts aus dem Cache. Sonst werden
   		// die gerade hinzugefügten TS Dateien nicht beachtet
   		$rootLine = 1;
-  		return t3lib_BEfunc::getPagesTSconfig($pageId, $rootLine);
+  		tx_rnbase::load('Tx_Rnbase_Backend_Utility');
+  		return Tx_Rnbase_Backend_Utility::getPagesTSconfig($pageId, $rootLine);
   	}
 
 /**
@@ -223,11 +224,10 @@ class tx_mksearch_tests_Util {
    	 */
   	public static function loadConfig4BE($pageTSconfig) {
 	    tx_rnbase::load('tx_rnbase_configurations');
-	    tx_rnbase::load('tx_rnbase_util_Misc');
 
 	    tx_rnbase_util_Misc::prepareTSFE(); // Ist bei Aufruf aus BE notwendig!
 	    $GLOBALS['TSFE']->config = array();
-	    $cObj = t3lib_div::makeInstance('tslib_cObj');
+	    $cObj = tx_rnbase::makeInstance(tx_rnbase_util_Typo3Classes::getContentObjectRendererClass());
 
 	    $configurations = new tx_rnbase_configurations();
 	    $configurations->init($pageTSconfig, $cObj, 'mksearch', 'mksearch');

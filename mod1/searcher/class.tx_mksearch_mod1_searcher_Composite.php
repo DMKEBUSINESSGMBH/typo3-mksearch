@@ -24,7 +24,7 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
-require_once(t3lib_extMgm::extPath('rn_base', 'class.tx_rnbase.php'));
+
 tx_rnbase::load('tx_mksearch_mod1_searcher_abstractBase');
 
 /**
@@ -46,7 +46,7 @@ class tx_mksearch_mod1_searcher_Composite extends tx_mksearch_mod1_searcher_abst
 	/**
 	 * Liefert den Service.
 	 *
-	 * @return t3lib_svbase
+	 * @return tx_mksearch_service_Base
 	 */
 	public function getService() {
 		return tx_mksearch_util_ServiceRegistry::getIntCompositeService();

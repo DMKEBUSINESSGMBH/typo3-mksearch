@@ -22,7 +22,7 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+
 tx_rnbase::load('tx_mksearch_service_indexer_BaseDataBase');
 tx_rnbase::load('tx_mksearch_util_Tree');
 
@@ -30,11 +30,11 @@ tx_rnbase::load('tx_mksearch_util_Tree');
  * Helper class for configuring core contents
  */
 class tx_mksearch_service_indexer_core_Config {
-	
+
 	/**
 	 * Page instance
 	 *
-	 * @var t3lib_pageSelect
+	 * @var \TYPO3\CMS\Frontend\Page\PageRepository
 	 */
 	private static $page;
 
@@ -48,35 +48,35 @@ class tx_mksearch_service_indexer_core_Config {
 	 * * 'local':	all groups of a page in its local context (i.e. including local fe groups which aren't relevant for children because access rights are not marked as "extend to subpages")
 	 */
 	private static $resultingAccessCache = array();
-	
+
 	/**
 	 * Cache for storing subgroups
 	 *
 	 * @var array
 	 */
 	private static $groupCache = array();
-	
+
 	/**
 	* Return page instance
 	*
-	* @return t3lib_pageSelect
+	* @return \TYPO3\CMS\Frontend\Page\PageRepository
 	*/
 	private static function page() {
 		if (!isset(self::$page))
-			self::$page = t3lib_div::makeInstance('t3lib_pageSelect');
+			self::$page = tx_rnbase_util_TYPO3::getSysPage();
 		return self::$page;
 	}
-	
+
 	/**
 	 * clears the page instance so it is renewed
 	 * upon the next call.
-	 * @deprecated this function is only used in tests as long as a phpunit 
-	 * bug (http://forge.typo3.org/issues/36232) exists 
+	 * @deprecated this function is only used in tests as long as a phpunit
+	 * bug (http://forge.typo3.org/issues/36232) exists
 	 */
 	public static function clearPageInstance() {
 		self::$page = null;
 	}
-	
+
 	/**
 	 * Returns the rootline of the given page id.
 	 * @param 	int 	$uid
@@ -109,7 +109,7 @@ class tx_mksearch_service_indexer_core_Config {
 			tx_rnbase::load('tx_rnbase_util_DB');
 		return tx_rnbase_util_DB::_getPidList($rootPage['uid'], $recursive);
 	}
-	
+
 	/**
 	 * Fetch all subgroups for the given group
 	 *
@@ -120,10 +120,10 @@ class tx_mksearch_service_indexer_core_Config {
 	private static function getSubGroups($groupId, array $callStackGroups=array()) {
 		// Cache?
 		if (isset(self::$groupCache[$groupId])) return self::$groupCache[$groupId];
-		
+
 		// Simplify query via table sys_refindex so what
 		// we don't need to struggle with those stupid csv fields...
-		
+
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 									'ref_uid',
 									'fe_groups JOIN sys_refindex AS ref ON fe_groups.uid = ref.ref_uid',
@@ -133,7 +133,7 @@ class tx_mksearch_service_indexer_core_Config {
 								);
 		// Initialize suber group array with ourselves!
 		$sub = array($groupId);
-		
+
 		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res))	{
 			// Recursively get sub groups, avoiding endless recursion
 			if (!in_array($row['ref_uid'], $callStackGroups))
@@ -142,13 +142,13 @@ class tx_mksearch_service_indexer_core_Config {
 
 		// Eliminate duplicates
 		if ($sub) $sub = array_unique($sub);
-		
+
 		// Fill cache
 		self::$groupCache[$groupId] = $sub;
-		
+
 		return $sub;
 	}
-	
+
 	/**
 	 * Actually calculate fe_groups
 	 *
@@ -167,7 +167,7 @@ class tx_mksearch_service_indexer_core_Config {
 		if (isset(self::$resultingAccessCache[$pid])) return self::$resultingAccessCache[$pid];
 		// else: Begin calculating...
 		$rootline = self::getRootLine($pid);
-		
+
 		if (!sizeof($rootline))
 			// MW: Keine Rootline gefunden, Seite gelöscht!?
 			return false;
@@ -175,25 +175,25 @@ class tx_mksearch_service_indexer_core_Config {
 
 		// Page's index in rootline array (i.e. last element)
 		$selfIndex = sizeof($rootline)-1;
-			
+
 		// Get fe groups and all their superordinate groups
 		// as these are also allowed to view the page!
 		$self = array();
-		
-		$baseGroups = t3lib_div::trimExplode(',', $rootline[$selfIndex]['fe_group'], true);
+
+		$baseGroups = tx_rnbase_util_Strings::trimExplode(',', $rootline[$selfIndex]['fe_group'], true);
 		foreach ($baseGroups as $b) {
 			$sub = self::getSubGroups($b);
 			if ($sub) $self = array_merge($self, $sub);
 		}
 		$self = array_unique($self);
-		
+
 		self::$resultingAccessCache[$pid] = array();
-		
+
 		// We're root! We're god! Our access rules are valid without any further checks!
 		if (sizeof($rootline) == 1) {
 			self::$resultingAccessCache[$pid]['groups'] = $self;
 		}
-		
+
 		// We really have to calculate...
 		else {
 			// Get parent page's access rights
@@ -208,7 +208,7 @@ class tx_mksearch_service_indexer_core_Config {
 					// Prepare merged parent and current pages' fe_groups:
 					if ($parent['groups']) $merged = array_intersect($parent['groups'], $self);
 					else $merged = $self;
-					
+
 					// Current page's fe_groups forced to "extend to subpages"?
 					// Effective groups are merged ones:
 					if ($rootline[$selfIndex]['extendToSubpages'])
@@ -227,7 +227,7 @@ class tx_mksearch_service_indexer_core_Config {
 		}
 		return self::$resultingAccessCache[$pid];
 	}
-	
+
 	/**
 	 * Return calculated FE groups of the given page
 	 *
@@ -240,7 +240,7 @@ class tx_mksearch_service_indexer_core_Config {
 		// else
 		return $foo['groups'];
 	}
-	
+
 	/**
 	 * Return a content element's FE groups
 	 *
@@ -256,13 +256,13 @@ class tx_mksearch_service_indexer_core_Config {
 
 		// Explicite groups for content element?
 		if ($ceGroups)
-			$groupsArr = t3lib_div::array_merge_recursive_overrule($groupsArr, $ceGroups);
+			$groupsArr = tx_rnbase_util_Arrays::mergeRecursiveWithOverrule($groupsArr, $ceGroups);
 
 		if(empty($groupsArr))
 			$groupsArr[] = 0; // Wenn keine Gruppe gesetzt ist, dann die 0 speichern
 		return $groupsArr;
 	}
-	
+
 	/**
 	 * Return SQL where clause containing include and exclude pages
 	 *
@@ -282,13 +282,13 @@ class tx_mksearch_service_indexer_core_Config {
 		foreach ($exclude as $param=>$uids)
 			$foo[] = $param . ' IN (' . implode(',', $uids) . ')';
 		if (count($foo)) $whereAll[] = '(' . implode(' OR ', $foo) . ')';
-		
+
 		if (count($whereAll))
 			return ' AND ' . implode(' AND ', $whereAll);
 		else return '';
 	}
-	
-	
+
+
 	/**
 	 * Return arrays of include and exclude uids
 	 *
@@ -311,7 +311,7 @@ class tx_mksearch_service_indexer_core_Config {
 				if (isset($res['include'][$column]))
 					$res['include'][$column] = array_unique($res['include'][$column]);
 			}
-			
+
 			if ($exclude) {
 				if ($s == 'page' and isset($exclude[$s.'Trees.']))
 					$res['exclude'][$column] = tx_mksearch_util_Tree::getTreeUids($exclude[$s.'Trees.'], 'pages');

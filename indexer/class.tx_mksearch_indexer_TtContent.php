@@ -29,10 +29,9 @@
 /**
  * benötigte Klassen einbinden
  */
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+
 tx_rnbase::load('tx_mksearch_indexer_Base');
 tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
-tx_rnbase::load('tx_rnbase_util_Misc');
 tx_rnbase::load('tx_mksearch_util_Misc');
 
 /**
@@ -52,7 +51,7 @@ class tx_mksearch_indexer_TtContent implements tx_mksearch_interface_Indexer {
 	 * load the appropriate indexer depending on templavoila
 	 */
 	public function __construct() {
-		if(t3lib_extMgm::isLoaded('templavoila')){
+		if(tx_rnbase_util_Extensions::isLoaded('templavoila')){
 			$this->actualIndexer = tx_rnbase::makeInstance('tx_mksearch_indexer_ttcontent_Templavoila');
 		}else{
 			$this->actualIndexer = tx_rnbase::makeInstance('tx_mksearch_indexer_ttcontent_Normal');

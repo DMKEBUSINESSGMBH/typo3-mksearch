@@ -22,9 +22,9 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+tx_rnbase::load('tx_rnbase_util_Files');
 tx_rnbase::load('tx_mksearch_tests_SolrTestcase');
-require_once(t3lib_extMgm::extPath('mksearch') . 'tests/filter/class.tx_mksearch_tests_filter_SolrBase_solr_testcase.php');
+require_once(tx_rnbase_util_Extensions::extPath('mksearch') . 'tests/filter/class.tx_mksearch_tests_filter_SolrBase_solr_testcase.php');
 
 /**
  * @author Hannes Bochmann
@@ -44,7 +44,7 @@ class tx_mksearch_tests_solr_conf_Solrconfig_testcase extends tx_mksearch_tests_
 	 */
 	protected function setUp() {
 		$this->initAbsolutePathsForConfigs();
-		t3lib_div::rmdir($this->instanceDir,true);
+		tx_rnbase_util_Files::rmdir($this->instanceDir,true);
 
 		$filterTestcase = new tx_mksearch_tests_filter_SolrBase_solr_testcase();
 		$filterTestcase->copyNeccessaryConfigFiles($this->instanceDir);

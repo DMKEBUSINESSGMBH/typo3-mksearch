@@ -22,8 +22,8 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once t3lib_extMgm::extPath('rn_base', 'class.tx_rnbase.php');
-require_once t3lib_extMgm::extPath('mksearch', 'lib/Apache/Solr/Document.php');
+
+require_once tx_rnbase_util_Extensions::extPath('mksearch', 'lib/Apache/Solr/Document.php');
 tx_rnbase::load('tx_mksearch_tests_Testcase');
 tx_rnbase::load('tx_mksearch_model_SolrHit');
 

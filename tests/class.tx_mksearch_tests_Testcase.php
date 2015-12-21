@@ -22,7 +22,7 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once t3lib_extMgm::extPath('rn_base', 'class.tx_rnbase.php');
+
 tx_rnbase::load('tx_mksearch_tests_Util');
 tx_rnbase::load('tx_rnbase_tests_BaseTestCase');
 
@@ -63,7 +63,7 @@ abstract class tx_mksearch_tests_Testcase
 		tx_mksearch_tests_Util::disableDevlog();
 
 		// set up tv
-		if (t3lib_extMgm::isLoaded('templavoila')) {
+		if (tx_rnbase_util_Extensions::isLoaded('templavoila')) {
 			$this->templaVoilaConfigBackup = $GLOBALS['TYPO3_LOADED_EXT']['templavoila'];
 			$GLOBALS['TYPO3_LOADED_EXT']['templavoila'] = NULL;
 

@@ -25,7 +25,7 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+tx_rnbase::load('tx_rnbase_util_Network');
 tx_rnbase::load('tx_rnbase_mod_BaseModFunc');
 
 /**
@@ -59,7 +59,7 @@ class tx_mksearch_mod1_ConfigIndizesDbList extends tx_rnbase_mod_BaseModFunc {
 		$storagePid = $this->getModule()->id;
 		if ($storagePid) {
 			$data['showerror'] = 0;
-			$data['path'] = t3lib_div::locationHeaderUrl('/'.TYPO3_mainDir).'db_list.php?id='.$storagePid;
+			$data['path'] = tx_rnbase_util_Network::locationHeaderUrl('/'.TYPO3_mainDir).'db_list.php?id='.$storagePid;
 //			$data['path'] = '/'.TYPO3_mainDir.'db_list.php?id='.$storagePid;
 		} else {
 			$data['showerror'] = 1;

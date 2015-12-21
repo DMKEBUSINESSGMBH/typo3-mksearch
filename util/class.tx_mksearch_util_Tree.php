@@ -22,13 +22,13 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+
 
 tx_rnbase::load('tx_rnbase_util_SearchBase');
 
 /**
  * Class for working on hierarchical tree data
- * 
+ *
  * @TODO: replace by ext:tx_mkstats_util_Tree (to come...)
  */
 class tx_mksearch_util_Tree {
@@ -39,24 +39,24 @@ class tx_mksearch_util_Tree {
 	 * @var array array['table1'=>array[], 'table2'=>...]
 	 */
 	private static $treeCache = array();
-	
+
 	/**
-	 * Get a flat list of children of a generic node defined by configuration 
-	 * 
-	 * 
+	 * Get a flat list of children of a generic node defined by configuration
+	 *
+	 *
 	 * @param array $fields		Fields for the tx_rnbase_util_SearchGeneric search
 	 * @param array $options	Options for the tx_rnbase_util_SearchGeneric search
 	 * 							Example:
 	 * 							options {
-	 * 								// You're encouraged to define field aliases via "as" sql clause to prevent hard to debug naming problems. Then, use THIS alias for $config['keyField'] 
+	 * 								// You're encouraged to define field aliases via "as" sql clause to prevent hard to debug naming problems. Then, use THIS alias for $config['keyField']
 	 * 								what = PAGES.uid as uid, PAGES.title, PAGES.pid
 	 * 								searchdef {
 	 * 									basetable = pages
 	 * 									basetablealias = PAGES
 	 * 									usealias = 1
 	 * 								}
-	 *							}				
-	 * 
+	 *							}
+	 *
 	 * @param array $config		Additional configuration:
 	 * 							* string			keyField	Name of the field containing the record uid
 	 * 							* string			parentField	Name of the field which contains the uid of the parent record
@@ -69,16 +69,16 @@ class tx_mksearch_util_Tree {
 		if (!isset($config['parentField'])) throw new Exception('tx_mksearch_util_Tree::getFlatChildren(): parameter $config[\'parentField\'] missing!');
 		if (!isset($config['rootPoints'])) throw new Exception('tx_mksearch_util_Tree::getFlatChildren(): parameter $config[\'rootPoints\'] missing!');
 		if (!isset($config['maxLevel'])) $config['maxLevel'] = 10;
-		
+
 		$result = array();
 		$searcher = tx_rnbase_util_SearchBase::getInstance('tx_rnbase_util_SearchGeneric');
 		$config['parentField'] = $options['searchdef']['basetablealias'].'.'. $config['parentField'];
-		
-		$parentIds = is_array($config['rootPoints']) ? implode(',' , $config['rootPoints']) : $config['rootPoints']; 
+
+		$parentIds = is_array($config['rootPoints']) ? implode(',' , $config['rootPoints']) : $config['rootPoints'];
 
 		// Just prepare so we can fill it later...
 		$fields[$config['parentField']] = array(OP_IN_INT => 0);
-		
+
 		$i = 0;
 		do {
 			$fields[$config['parentField']][OP_IN_INT] = $parentIds;
@@ -93,7 +93,7 @@ class tx_mksearch_util_Tree {
 		} while ($children and ++$i < $config['maxLevel']);
 		return $result;
 	}
-	
+
 	/**
 	 * Get ancestors of a generic node according to configuration
 	 *
@@ -105,9 +105,9 @@ class tx_mksearch_util_Tree {
 	 * 							* string					startingPoint	UID of starting point for which the ancestors are to be searched
 	 * 							* string | array optional	endingPoint		UID(s) of ancestor(s) where traversal stops
 	 * 							* int optional=10			maxLevel		Max. number of levels to traverse. Note this is your safety net if something goes wrong with the db query so we find us back in an infinite loop!
-	 * 
+	 *
 	 * @return array
-	 * 
+	 *
 	 * @see self::getFlatChildren()
 	 */
 	public static function getAncestors(array $fields, array $options, array $config) {
@@ -116,20 +116,20 @@ class tx_mksearch_util_Tree {
 		if (!isset($config['startingPoint'])) throw new Exception('tx_mksearch_util_Tree::getAncestors(): parameter $config[\'startingPoint\'] missing!');
 		if (isset($config['endingPoint']) and !is_array($config['endingPoint'])) $config['endingPoint'] = array($config['endingPoint']);
 		if (!isset($config['maxLevel'])) $config['maxLevel'] = 10;
-		
+
 		$result = array();
 		$searcher = tx_rnbase_util_SearchBase::getInstance('tx_rnbase_util_SearchGeneric');
 		$config['keyField'] = $options['searchdef']['basetablealias'].'.'. $config['keyField'];
-		
+
 		// Prepare search
 		$fields[$config['keyField']] = array(OP_EQ_INT => $config['startingPoint']);
-		
+
 		$i = 0;
 		while (
-				$parent = $searcher->search($fields, $options) and 
-				++$i < $config['maxLevel'] 
+				$parent = $searcher->search($fields, $options) and
+				++$i < $config['maxLevel']
 			) {
-			$result[] = $parent[0];	
+			$result[] = $parent[0];
 			$fields[$config['keyField']][OP_EQ_INT] = $parent[0][$config['parentField']];
 			if (
 				!$parent[0][$config['parentField']] or
@@ -140,28 +140,30 @@ class tx_mksearch_util_Tree {
 
 		return $result;
 	}
-	
-	
+
+
 	/**
 	 * Page instance
 	 *
-	 * @var t3lib_pageSelect
+	 * @var \TYPO3\CMS\Frontend\Page\PageRepository
 	 */
-	private static $page; 
+	private static $page;
 
 	/**
 	 * Return page instance
 	 *
-	 * @return t3lib_pageSelect
+	 * @return \TYPO3\CMS\Frontend\Page\PageRepository
 	 */
 	private static function page() {
-		if (!isset(self::$page)) self::$page = t3lib_div::makeInstance('t3lib_pageSelect');
+		if (!isset(self::$page)) {
+			self::$page = tx_rnbase_util_TYPO3::getSysPage();
+		}
 		return self::$page;
 	}
-	
+
 	/**
 	 * Return all uids in record trees of given uids.
-	 * 
+	 *
 	 * This is a specialisation of self::getFlatChildren().
 	 *
 	 * @param array $uids
@@ -173,9 +175,9 @@ class tx_mksearch_util_Tree {
 		// Cache?
 		if (isset(self::$treeCache[$table][$cacheKey]))
 		return self::$treeCache[$table][$cacheKey];
-		
+
 		$ffields = array();
-		
+
 		// Turn off automatic enableFields,
 		// as rn_base doesn't support skipping single enableField options (yet?)
 		// Thus, WE have to take care of enableFields
@@ -202,16 +204,16 @@ class tx_mksearch_util_Tree {
 						'parentField' => $parentField,
 						'rootPoints' => $uids,
 					);
-						
+
 		$result = $uids;
-						
+
 		foreach (tx_mksearch_util_Tree::getFlatChildren($ffields, $ooptions, $config) as $childCat) {
 			$result[] = intval($childCat['uid']);
 		}
-		
+
 		// Fill cache
 		if (!isset(self::$treeCache[$table])) self::$treeCache[$table] = array();
-		self::$treeCache[$table][$cacheKey] = array_unique($result); 
+		self::$treeCache[$table][$cacheKey] = array_unique($result);
 		return self::$treeCache[$table][$cacheKey];
 	}
 }

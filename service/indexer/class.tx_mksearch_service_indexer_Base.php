@@ -22,12 +22,9 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-
-require_once t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php';
 tx_rnbase::load('tx_mksearch_interface_Indexer');
 tx_rnbase::load('tx_mksearch_interface_DataProvider');
-
-
+tx_rnbase::load('Tx_Rnbase_Service_Base');
 
 /**
  * Base indexer class. It uses DataProviders to lookup data to be indexed.
@@ -36,7 +33,7 @@ tx_rnbase::load('tx_mksearch_interface_DataProvider');
  * @subpackage	tx_mksearch
  * @deprecated Entfällt komplett.
  */
-abstract class tx_mksearch_service_indexer_Base extends t3lib_svbase
+abstract class tx_mksearch_service_indexer_Base extends Tx_Rnbase_Service_Base
 	implements tx_mksearch_interface_Indexer {
 
 	/**
@@ -118,7 +115,7 @@ abstract class tx_mksearch_service_indexer_Base extends t3lib_svbase
 	 * as a guaranteed invoking of the destructor is not trivial to implement.
 	 * Additionally, as an indexer is mostly used as a service which may be
 	 * re-used over and over again
-	 * (@see t3lib_div::makeInstanceService() -> persistence of service),
+	 * (@see tx_rnbase::makeInstanceService() -> persistence of service),
 	 * take care to restore the instance to a clean, initial state!
 	 *
 	 * @return array	Matrix of records to be deleted

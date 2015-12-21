@@ -22,11 +22,10 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+
 tx_rnbase::load('tx_mksearch_interface_Indexer');
 tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
 tx_rnbase::load('tx_mksearch_util_Misc');
-tx_rnbase::load('tx_rnbase_util_Misc');
 tx_rnbase::load('tx_rnbase_util_Logger');
 
 
@@ -273,7 +272,7 @@ abstract class tx_mksearch_indexer_BaseMedia
 				// 	Kommagetrennt	mit byFileExtension
 				//	Als Array		mit byFileExtension.
 				case 'byFileExtension':
-					$filterValue = t3lib_div::trimExplode(',',$filterValue);
+					$filterValue = tx_rnbase_util_Strings::trimExplode(',',$filterValue);
 					$filterValue = is_array($filters['byFileExtension.'])
 						? array_merge(array_values($filters['byFileExtension.']), $filterValue)
 						: $filterValue;
@@ -299,7 +298,7 @@ abstract class tx_mksearch_indexer_BaseMedia
 					elseif($filterValue['checkSubFolder']) {
 						unset($filterValue['checkSubFolder']); // brauchen wir nicht mehr
 						foreach($filterValue as $key => $folder) {
-							if(t3lib_div::isFirstPartOfStr($filePath, $folder)){
+							if(tx_rnbase_util_Strings::isFirstPartOfStr($filePath, $folder)){
 								$ret = intval($filterValue[$key.'.']['disallow']) ? false : true;
 								break;
 							}

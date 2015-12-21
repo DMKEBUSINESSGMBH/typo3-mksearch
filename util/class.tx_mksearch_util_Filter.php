@@ -22,7 +22,7 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+
 
 /**
  *
@@ -279,7 +279,7 @@ class tx_mksearch_util_Filter {
 		// die felder für die sortierung stehen kommasepariert im ts
 		$sortFields = $configurations->get($confId.'fields');
 
-		$sortFields = $sortFields ? t3lib_div::trimExplode(',', $sortFields, true) : array();
+		$sortFields = $sortFields ? tx_rnbase_util_Strings::trimExplode(',', $sortFields, true) : array();
 
 		if(!empty($sortFields)) {
 			tx_rnbase::load('tx_rnbase_util_BaseMarker');

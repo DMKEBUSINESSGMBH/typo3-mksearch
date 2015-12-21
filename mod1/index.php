@@ -34,7 +34,7 @@ if (!class_exists('template')) {
 	require_once($REQUIRE_PATH . 'template.php');
 }
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+
 
 $LANG->includeLLFile('EXT:mksearch/mod1/locallang.xml');
 $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users has no permission for entry.
@@ -89,7 +89,7 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 }
 
 /* @var $SOBE tx_mksearch_module1 */
-$SOBE = t3lib_div::makeInstance('tx_mksearch_module1');
+$SOBE = tx_rnbase::makeInstance('tx_mksearch_module1');
 $SOBE->init();
 
 // Include files?

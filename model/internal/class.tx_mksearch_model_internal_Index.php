@@ -22,7 +22,7 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+
 tx_rnbase::load('tx_rnbase_model_base');
 tx_rnbase::load('tx_mksearch_util_ServiceRegistry');
 
@@ -117,7 +117,7 @@ class tx_mksearch_model_internal_Index extends tx_rnbase_model_base {
 			// get default configuation from composite
 			$compositeConfig = tx_mksearch_util_ServiceRegistry::getIntCompositeService()
 				->getIndexerOptionsByIndex($this);
-			$this->options['default.'] = t3lib_div::array_merge_recursive_overrule(
+			$this->options['default.'] = tx_rnbase_util_Arrays::mergeRecursiveWithOverrule(
 				$this->options['default.'], $compositeConfig);
 
 		}

@@ -29,7 +29,7 @@
 /**
  * benötigte Klassen einbinden
  */
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+
 tx_rnbase::load('tx_mksearch_indexer_ttcontent_Normal');
 
 /**
@@ -214,7 +214,7 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
 		$this->adjustIncludeLibsPathForBe();
 
 		$templavoilaPlugin = tx_rnbase::makeInstance('tx_templavoila_pi1');
-		$templavoilaPlugin->cObj = tx_rnbase::makeInstance('tslib_cObj');
+		$templavoilaPlugin->cObj = tx_rnbase::makeInstance(tx_rnbase_util_Typo3Classes::getContentObjectRendererClass());
 		$templavoilaPlugin->cObj->data = $record;
 		$templavoilaPlugin->cObj->currentRecord = 'tt_content:' . $ttContentModel->getUid();
 
@@ -228,7 +228,6 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
 	 * @return void
 	 */
 	private function initTsForFrontend($pid) {
-		tx_rnbase::load('tx_rnbase_util_Misc');
 		$tsfe = tx_rnbase_util_Misc::prepareTSFE(
 			array(
 				'force' => TRUE,

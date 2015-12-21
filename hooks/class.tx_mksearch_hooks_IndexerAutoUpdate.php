@@ -22,11 +22,10 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
+
 tx_rnbase::load('tx_mksearch_util_ServiceRegistry');
 tx_rnbase::load('tx_mksearch_util_Config');
 tx_rnbase::load('tx_mksearch_util_Tree');
-tx_rnbase::load('tx_rnbase_util_Misc');
 
 /**
  * Hooks for auto-updating search indices
@@ -37,23 +36,23 @@ class tx_mksearch_hooks_IndexerAutoUpdate {
 	 * Hook after saving a record in Typo3 backend:
 	 * Perform index update depending on given data
 	 *
-	 * @param t3lib_TCEmain $tce
+	 * @param \TYPO3\CMS\Core\DataHandling\DataHandler $dataHandler
 	 * @return void
 	 */
-	public function processDatamap_afterAllOperations(t3lib_TCEmain $tce) {
+	public function processDatamap_afterAllOperations($dataHandler) {
 		// Nothing to do?
-		if (empty($tce->datamap)) return;
+		if (empty($dataHandler->datamap)) return;
 
 		// @todo Make sensible for workspaces!
-		if ($tce->BE_USER->workspace !== 0) return;
+		if ($dataHandler->BE_USER->workspace !== 0) return;
 
 		// daten sammeln
 		$records = array();
-		foreach ($tce->datamap as $table => $uids) {
+		foreach ($dataHandler->datamap as $table => $uids) {
 			$records[$table] = array();
 			foreach (array_keys($uids) as $uid) {
 				// New element?
-				if (!is_numeric($uid)) $uid = $tce->substNEWwithIDs[$uid];
+				if (!is_numeric($uid)) $uid = $dataHandler->substNEWwithIDs[$uid];
 				$records[$table][] = (int) $uid;
 			}
 		}
@@ -69,11 +68,11 @@ class tx_mksearch_hooks_IndexerAutoUpdate {
 	 * @param string $table
 	 * @param int $id
 	 * @param int $value
-	 * @param t3lib_TCEmain $tce
+	 * @param \TYPO3\CMS\Core\DataHandling\DataHandler $dataHandler
 	 * @return void
 	 * @todo Treatment of any additional actions necessary?
 	 */
-	public function processCmdmap_postProcess($command, $table, $id, $value, t3lib_TCEmain $tce) {
+	public function processCmdmap_postProcess($command, $table, $id, $value, $dataHandler) {
 		$indexer = tx_mksearch_util_Config::getIndexersForDatabaseTable($table);
 		if (!count($indexer)) return;
 

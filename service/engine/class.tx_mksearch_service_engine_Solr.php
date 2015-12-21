@@ -22,15 +22,15 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php';
+
 tx_rnbase::load('tx_mksearch_interface_SearchEngine');
 tx_rnbase::load('tx_rnbase_configurations');
-tx_rnbase::load('tx_rnbase_util_Misc');
 tx_rnbase::load('tx_mksearch_util_Misc');
 tx_rnbase::load('tx_mksearch_service_engine_SolrException');
 tx_rnbase::load('tx_rnbase_util_Logger');
+tx_rnbase::load('Tx_Rnbase_Service_Base');
 
-require_once(t3lib_extMgm::extPath('mksearch').'lib/Apache/Solr/Service.php' );
+require_once(tx_rnbase_util_Extensions::extPath('mksearch').'lib/Apache/Solr/Service.php' );
 
 /**
  * Service "Solr search engine" for the "mksearch" extension.
@@ -38,7 +38,7 @@ require_once(t3lib_extMgm::extPath('mksearch').'lib/Apache/Solr/Service.php' );
  * @package	TYPO3
  * @subpackage	tx_mksearch
  */
-class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearch_interface_SearchEngine {
+class tx_mksearch_service_engine_Solr extends Tx_Rnbase_Service_Base implements tx_mksearch_interface_SearchEngine {
 
 	/**
 	 * Index used for searching and indexing
@@ -89,7 +89,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 		//Sicherheitslücke. Alternativ bieten wir daher an alle Http Aufrufe
 		//per Curl durchzuführen.
 		if(tx_rnbase_configurations::getExtensionCfgValue('mksearch', 'useCurlAsHttpTransport')){
-			require_once(t3lib_extMgm::extPath('mksearch').'lib/Apache/Solr/HttpTransport/Curl.php' );
+			require_once(tx_rnbase_util_Extensions::extPath('mksearch').'lib/Apache/Solr/HttpTransport/Curl.php' );
 			$oHttpTransport = new Apache_Solr_HttpTransport_Curl();
 			$this->index->setHttpTransport($oHttpTransport);
 		}
@@ -285,7 +285,7 @@ class tx_mksearch_service_engine_Solr extends t3lib_svbase implements tx_mksearc
 	 * @return array
 	 */
 	public static function getCredentialsFromString($data) {
-		$data = t3lib_div::trimExplode(',', $data);
+		$data = tx_rnbase_util_Strings::trimExplode(',', $data);
 		if(count($data) != 3) throw new Exception('Wrong credentials for solr defined.');
 		$ret = array();
 		$ret['host'] = $data[0];

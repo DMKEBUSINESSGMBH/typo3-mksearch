@@ -1,4 +1,4 @@
-﻿
+
 
 .. ==================================================
 .. FOR YOUR INFORMATION
@@ -48,7 +48,7 @@ registriert werden:
 
 ::
 
-   if (t3lib_extMgm::isLoaded('irfaq')) {
+   if (tx_rnbase_util_Extensions::isLoaded('irfaq')) {
            tx_mksearch_util_Config::registerIndexer(
              'irfaq',
              'question',
