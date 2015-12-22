@@ -1,7 +1,7 @@
 {
 	"name" : "dmk/mksearch",
 	"description" : "Generic highly adjustable and extendable search engine framework, using Zend Lucene, Apache Solr or ElasticSearch. But support for other search engines can be provided easily.",
-	"version" : "1.5.14",
+	"version" : "1.5.15",
 	"type" : "typo3-cms-extension",
 	"keywords" : ["TYPO3 CMS", "search", "Lucene", "Zend Lucene", "Apache Solr", "Solr", "Elasticsearch"],
 	"homepage" : "http://www.dmk-ebusiness.de/",
