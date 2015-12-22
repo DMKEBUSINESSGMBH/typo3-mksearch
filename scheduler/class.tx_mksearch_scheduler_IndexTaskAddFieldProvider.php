@@ -21,28 +21,27 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
-
-
-if (!interface_exists('tx_scheduler_AdditionalFieldProvider')) {
-	require_once tx_rnbase_util_Extensions::extPath(
-		'scheduler', '/interfaces/interface.tx_scheduler_additionalfieldprovider.php'
-	);
-}
-
+tx_rnbase::load('Tx_Rnbase_Scheduler_FieldProvider');
 define('FIELD_ITEMS', 'amountOfItems');
 
 /**
+ * tx_mksearch_scheduler_IndexTaskAddFieldProvider
  *
+ * @package 		TYPO3
+ * @subpackage	 	mksearch
+ * @author 			Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
+ * @license 		http://www.gnu.org/licenses/lgpl.html
+ * 					GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_scheduler_IndexTaskAddFieldProvider implements tx_scheduler_AdditionalFieldProvider {
+class tx_mksearch_scheduler_IndexTaskAddFieldProvider extends Tx_Rnbase_Scheduler_FieldProvider {
 
 	/**
 	 * This method is used to define new fields for adding or editing a task
 	 * In this case, it adds an email field
 	 *
 	 * @param	array					$taskInfo: reference to the array containing the info used in the add/edit form
-	 * @param	object					$task: when editing, reference to the current task object. Null when adding.
-	 * @param	tx_scheduler_Module		$parentObject: reference to the calling object (Scheduler's BE module)
+	 * @param	Tx_Rnbase_Scheduler_Task					$task: when editing, reference to the current task object. Null when adding.
+	 * @param	\TYPO3\CMS\Scheduler\Controller\SchedulerModuleController		$parentObject: reference to the calling object (Scheduler's BE module)
 	 * @return	array					Array containg all the information pertaining to the additional fields
 	 *									The array is multidimensional, keyed to the task class name and each field's id
 	 *									For each field it provides an associative sub-array with the following:
@@ -51,7 +50,7 @@ class tx_mksearch_scheduler_IndexTaskAddFieldProvider implements tx_scheduler_Ad
 	 *										['cshKey']		=> The CSH key for the field
 	 *										['cshLabel']	=> The code of the CSH label
 	 */
-	public function getAdditionalFields(array &$taskInfo, $task, tx_scheduler_Module $parentObject) {
+	protected function _getAdditionalFields(array &$taskInfo, $task, $parentObject) {
 
 
 		// Initialize extra field value
@@ -118,10 +117,10 @@ class tx_mksearch_scheduler_IndexTaskAddFieldProvider implements tx_scheduler_Ad
 	 * If the task class is not relevant, the method is expected to return true
 	 *
 	 * @param	array					$submittedData: reference to the array containing the data submitted by the user
-	 * @param	tx_scheduler_Module		$parentObject: reference to the calling object (Scheduler's BE module)
+	 * @param	\TYPO3\CMS\Scheduler\Controller\SchedulerModuleController		$parentObject: reference to the calling object (Scheduler's BE module)
 	 * @return	boolean					True if validation was ok (or selected class is not relevant), false otherwise
 	 */
-	public function validateAdditionalFields(array &$submittedData, tx_scheduler_Module $parentObject) {
+	protected function _validateAdditionalFields(array &$submittedData, $parentObject) {
 
 		return true;
 
@@ -146,7 +145,7 @@ class tx_mksearch_scheduler_IndexTaskAddFieldProvider implements tx_scheduler_Ad
 	 * @param	tx_mksearch_scheduler_IndexTask	$task: reference to the current task object
 	 * @return	void
 	 */
-	public function saveAdditionalFields(array $submittedData, tx_scheduler_Task $task) {
+	protected function _saveAdditionalFields(array $submittedData, Tx_Rnbase_Scheduler_Task $task) {
 		$task->setAmountOfItems($submittedData[FIELD_ITEMS]);
 	}
 

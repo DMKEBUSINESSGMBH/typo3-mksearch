@@ -21,16 +21,12 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
-
-
-if (!class_exists('tx_scheduler_Task')) {
-	require_once tx_rnbase_util_Extensions::extPath('scheduler', 'class.tx_scheduler_task.php');
-}
+tx_rnbase::load('Tx_Rnbase_Scheduler_Task');
 
 /**
  *
  */
-class tx_mksearch_scheduler_IndexTask extends tx_scheduler_Task {
+class tx_mksearch_scheduler_IndexTask extends Tx_Rnbase_Scheduler_Task {
 
 	/**
 	 * Amount of items to be indexed at one run
