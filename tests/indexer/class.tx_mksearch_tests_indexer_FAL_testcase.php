@@ -239,7 +239,7 @@ class tx_mksearch_tests_indexer_FAL_testcase
 			'deleteIfNotIndexable' => 1
 		);
 
-		$aRawData = array('uid' => 1, 'extension' => 'something_else', 'storage' => 1);
+		$aRawData = array('uid' => 1, 'extension' => 'something_else');
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$oIndexDoc = $indexer->prepareSearchData('sys_file', $aRawData, $indexDoc, $options);
 		self::assertTrue($oIndexDoc->getDeleted(),'Das Element wurde nich auf gelöscht gesetzt!');
