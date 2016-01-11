@@ -260,8 +260,8 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdate_testcase
 	 * @unit
 	 */
 	public function testGetRnBaseDatabaseUtility() {
-		self::assertEquals(
-			'tx_rnbase_util_DB',
+		self::assertInstanceOf(
+			'Tx_Rnbase_Database_Connection',
 			$this->callInaccessibleMethod($this->getHookMock(), 'getRnbaseDatabaseUtility')
 		);
 	}
@@ -346,11 +346,11 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdate_testcase
 			'tx_mksearch_hooks_IndexerAutoUpdate',
 			array('getRnbaseDatabaseUtility')
 		);
-		$databaseUtility = $this->getMockClass(
-			'tx_rnbase_util_DB',
+		$databaseUtility = $this->getMock(
+			'Tx_Rnbase_Database_Connection',
 			array('doSelect')
 		);
-		$databaseUtility::staticExpects($this->once())
+		$databaseUtility->expects($this->once())
 			->method('doSelect')
 			->with('uid', $expectedFrom, $expectedOptions)
 			->will($this->returnValue($selectReturn));

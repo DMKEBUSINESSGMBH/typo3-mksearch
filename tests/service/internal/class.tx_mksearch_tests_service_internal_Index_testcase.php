@@ -61,8 +61,8 @@ class tx_mksearch_tests_service_internal_Index_testcase
 			'tx_mksearch_service_internal_Index'
 		);
 
-		self::assertEquals(
-			'tx_rnbase_util_DB',
+		self::assertInstanceOf(
+			'Tx_Rnbase_Database_Connection',
 			$this->callInaccessibleMethod(
 				$indexService, 'getDatabaseUtility'
 			)
@@ -109,11 +109,11 @@ class tx_mksearch_tests_service_internal_Index_testcase
 			->method('getSecondsToKeepQueueEntries')
 			->will($this->returnValue(123));
 
-		$databaseUtility = $this->getMockClass(
-			'tx_rnbase_util_DB',
+		$databaseUtility = $this->getMock(
+			'Tx_Rnbase_Database_Connection',
 			array('doDelete')
 		);
-		$databaseUtility::staticExpects($this->once())
+		$databaseUtility->expects($this->once())
 			->method('doDelete')
 			->with('tx_mksearch_queue', 'deleted = 1 AND cr_date < NOW() - 123');
 

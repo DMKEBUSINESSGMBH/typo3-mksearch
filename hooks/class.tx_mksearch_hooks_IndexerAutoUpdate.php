@@ -258,7 +258,7 @@ class tx_mksearch_hooks_IndexerAutoUpdate {
 				$options['where'] = empty($options['where']) ? $data['where'] : $options['where'];
 				$options['enablefieldsoff'] = TRUE;
 				$databaseUtility = $this->getRnbaseDatabaseUtility();
-				if (($rows = $databaseUtility::doSelect('uid', $from, $options))) {
+				if (($rows = $databaseUtility->doSelect('uid', $from, $options))) {
 					$rows = call_user_func_array('array_merge_recursive', $rows);
 				}
 				if (empty($rows['uid'])) {
@@ -273,10 +273,10 @@ class tx_mksearch_hooks_IndexerAutoUpdate {
 	}
 
 	/**
-	 * @return string
+	 * @return Tx_Rnbase_Database_Connection
 	 */
 	protected function getRnbaseDatabaseUtility() {
-		return tx_rnbase_util_DB;
+		return tx_rnbase::makeInstance('Tx_Rnbase_Database_Connection');
 	}
 
 	/**

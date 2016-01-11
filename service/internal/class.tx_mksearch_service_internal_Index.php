@@ -541,10 +541,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 	 * @return void
 	 */
 	protected function deleteOldQueueEntries() {
-		/* @var $databaseUtility tx_rnbase_util_DB */
-		$databaseUtility = $this->getDatabaseUtility();
-
-		$databaseUtility::doDelete(
+		$this->getDatabaseUtility()->doDelete(
 			self::$queueTable,
 			'deleted = 1 AND cr_date < NOW() - ' . $this->getSecondsToKeepQueueEntries()
 		);
@@ -552,10 +549,10 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 
 	/**
 	 *
-	 * @return string
+	 * @return Tx_Rnbase_Database_Connection
 	 */
 	protected function getDatabaseUtility () {
-		return tx_rnbase_util_DB;
+		return tx_rnbase::makeInstance('Tx_Rnbase_Database_Connection');
 	}
 
 	/**
