@@ -606,10 +606,10 @@ class tx_mksearch_tests_indexer_Base_testcase
 	 * @group unit
 	 */
 	public function testHasDocToBeDeletedCallsGetRootlineCorrect() {
-		$coreConfigUtility = $this->getMockClass(
-			'tx_mksearch_service_indexer_core_Config', array('getRootline')
+		$coreConfigUtility = $this->getMock(
+			'stdClass', array('getRootline')
 		);
-		$coreConfigUtility::staticExpects($this->once())
+		$coreConfigUtility->expects($this->once())
 			->method('getRootline')
 			->with(123)
 			->will($this->returnValue(array()));
@@ -634,10 +634,10 @@ class tx_mksearch_tests_indexer_Base_testcase
 	 * @group unit
 	 */
 	public function testHasDocToBeDeletedReturnsTrueIfOnePageInRootlineIsHidden() {
-		$coreConfigUtility = $this->getMockClass(
-			'tx_mksearch_service_indexer_core_Config', array('getRootline')
+		$coreConfigUtility = $this->getMock(
+			'stdClass', array('getRootline')
 		);
-		$coreConfigUtility::staticExpects($this->once())
+		$coreConfigUtility->expects($this->once())
 			->method('getRootline')
 			->will($this->returnValue(array(
 				0 => array('uid' => 1, 'hidden' => 1),
@@ -667,10 +667,10 @@ class tx_mksearch_tests_indexer_Base_testcase
 	 * @group unit
 	 */
 	public function testHasDocToBeDeletedReturnsTrueIfOnePageInRootlineIsBackendUserSection() {
-		$coreConfigUtility = $this->getMockClass(
-			'tx_mksearch_service_indexer_core_Config', array('getRootline')
+		$coreConfigUtility = $this->getMock(
+			'stdClass', array('getRootline')
 		);
-		$coreConfigUtility::staticExpects($this->once())
+		$coreConfigUtility->expects($this->once())
 			->method('getRootline')
 			->will($this->returnValue(array(
 				0 => array('uid' => 1, 'doktype' => 6),
@@ -700,10 +700,10 @@ class tx_mksearch_tests_indexer_Base_testcase
 	 * @group unit
 	 */
 	public function testHasDocToBeDeletedReturnsFalseIfAllPagesInRootlineAreOkay() {
-		$coreConfigUtility = $this->getMockClass(
-			'tx_mksearch_service_indexer_core_Config', array('getRootline')
+		$coreConfigUtility = $this->getMock(
+			'stdClass', array('getRootline')
 		);
-		$coreConfigUtility::staticExpects($this->once())
+		$coreConfigUtility->expects($this->once())
 			->method('getRootline')
 			->will($this->returnValue(array(
 				0 => array('uid' => 1, 'doktype' => 2),
@@ -792,10 +792,10 @@ class tx_mksearch_tests_indexer_Base_testcase
 	 * @group unit
 	 */
 	public function testIndexSiteRootPageIndexesRootPageCorrectly() {
-		$coreConfigUtility = $this->getMockClass(
-			'tx_mksearch_service_indexer_core_Config', array('getSiteRootPage')
+		$coreConfigUtility = $this->getMock(
+			'stdClass', array('getSiteRootPage')
 		);
-		$coreConfigUtility::staticExpects($this->once())
+		$coreConfigUtility->expects($this->once())
 			->method('getSiteRootPage')
 			->with(123)
 			->will($this->returnValue(array('uid' => 3)));

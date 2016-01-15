@@ -59,7 +59,7 @@ class tx_mksearch_action_Search extends tx_rnbase_action_BaseIOC {
 		if($filter->init($fields, $options)) {
 			// Adjust Pagebrowser
 			$this->handlePageBrowser($parameters,$configurations, $viewData, $fields, $options);
-			$index = tx_mksearch_action_SearchSolr::findSearchIndex($configurations, $confId);
+			$index = tx_rnbase::makeInstance('tx_mksearch_action_SearchSolr')->findSearchIndex($configurations, $confId);
 			if(!$index->isValid())
 				throw new Exception('Configured search index not found!');
 

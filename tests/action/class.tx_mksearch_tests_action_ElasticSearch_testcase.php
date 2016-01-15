@@ -45,20 +45,20 @@ class tx_mksearch_tests_action_ElasticSearch_testcase
 	public function testHandlePagebrowser(){
 		$confId = 'elasticsearch.';
 		$configurations = $this->createConfigurations(
-			array($confId => array('hit.' => array('pagebrowser.' => array('limit' => 20)))), 
+			array($confId => array('hit.' => array('pagebrowser.' => array('limit' => 20)))),
 			'mksearch'
 		);
 		$pluginUid = new ReflectionProperty('tx_rnbase_configurations', 'pluginUid');
 		$pluginUid->setAccessible(TRUE);
 		$pluginUid->setValue($configurations, 456);
-		
+
 		$parameters = tx_rnbase::makeInstance(
 			'tx_rnbase_parameters', array('pb-search456-pointer' => 2)
 		);
 		$viewData = $configurations->getViewData();
 		$fields = array();
 		$options = array('limit' => 10);
-		
+
 		$searchEngine = $this->getMock(
 			'tx_mksearch_service_engine_ElasticSearch', array('getIndex')
 		);
@@ -69,20 +69,20 @@ class tx_mksearch_tests_action_ElasticSearch_testcase
 		$searchEngine->expects($this->once())
 			->method('getIndex')
 			->will($this->returnValue($index));
-		
+
 		$action = tx_rnbase::makeInstance('tx_mksearch_action_ElasticSearch');
 		$action->handlePageBrowser(
-			$parameters, $configurations, $confId, 
+			$parameters, $configurations, $confId,
 			$viewData, $fields, $options, $searchEngine
 		);
-		
+
 		self::assertEquals(
 			10, $options['limit'], 'limit wurde verändert'
 		);
 		self::assertEquals(
 			20, $options['offset'], 'offset in options falsch'
 		);
-		
+
 		$pageBrowser = $viewData->offsetGet('pagebrowser');
 		$expectedPagebrowser = tx_rnbase::makeInstance(
 			'tx_rnbase_util_PageBrowser', 'search456'
@@ -92,7 +92,7 @@ class tx_mksearch_tests_action_ElasticSearch_testcase
 			$expectedPagebrowser, $pageBrowser, 'pagebrowser falsch konfiguriert'
 		);
 	}
-	
+
 	/**
 	 * @group unit
 	 */
@@ -105,12 +105,12 @@ class tx_mksearch_tests_action_ElasticSearch_testcase
 			)))),
 			'mksearch'
 		);
-	
+
 		$parameters = tx_rnbase::makeInstance('tx_rnbase_parameters', array());
 		$viewData = $configurations->getViewData();
 		$fields = array();
 		$options = array('limit' => 10);
-	
+
 		$searchEngine = $this->getMock(
 			'tx_mksearch_service_engine_ElasticSearch', array('getIndex')
 		);
@@ -121,20 +121,20 @@ class tx_mksearch_tests_action_ElasticSearch_testcase
 		$searchEngine->expects($this->once())
 			->method('getIndex')
 			->will($this->returnValue($index));
-	
+
 		$action = tx_rnbase::makeInstance('tx_mksearch_action_ElasticSearch');
 		$action->handlePageBrowser(
 			$parameters, $configurations, $confId,
 			$viewData, $fields, $options, $searchEngine
 		);
-	
+
 		self::assertEquals(
 			10, $options['limit'], 'limit wurde verändert'
 		);
 		self::assertEquals(
 			0, $options['offset'], 'offset in options falsch'
 		);
-	
+
 		$pageBrowser = $viewData->offsetGet('pagebrowser');
 		$expectedPagebrowser = tx_rnbase::makeInstance(
 			'tx_rnbase_util_PageBrowser', 'pagebrowserId'
@@ -144,24 +144,24 @@ class tx_mksearch_tests_action_ElasticSearch_testcase
 			$expectedPagebrowser, $pageBrowser, 'pagebrowser falsch konfiguriert'
 		);
 	}
-	
+
 	/**
 	 * @group unit
 	 */
 	public function testGetSearchSolrAction(){
-		self::assertEquals(
-			'tx_mksearch_action_SearchSolr', 
+		self::assertInstanceOf(
+			'tx_mksearch_action_SearchSolr',
 			$this->callInaccessibleMethod(
-				tx_rnbase::makeInstance('tx_mksearch_action_ElasticSearch'), 
+				tx_rnbase::makeInstance('tx_mksearch_action_ElasticSearch'),
 				'getSearchSolrAction'
 			)
 		);
 	}
-	
+
 	/**
 	 * @group unit
 	 */
-	public function testgetServiceRegistry(){
+	public function testGetServiceRegistry(){
 		self::assertEquals(
 			'tx_mksearch_util_ServiceRegistry',
 			$this->callInaccessibleMethod(
@@ -170,7 +170,7 @@ class tx_mksearch_tests_action_ElasticSearch_testcase
 			)
 		);
 	}
-	
+
 	/**
 	 * @group unit
 	 */
@@ -180,12 +180,12 @@ class tx_mksearch_tests_action_ElasticSearch_testcase
 			array($confId => array('nosearch' => TRUE)),
 			'mksearch'
 		);
-	
+
 		$parameters = tx_rnbase::makeInstance('tx_rnbase_parameters', array());
 		$viewData = $configurations->getViewData();
-	
+
 		$action = $this->getMock(
-			'tx_mksearch_action_ElasticSearch', 
+			'tx_mksearch_action_ElasticSearch',
 			array('getSearchSolrAction', 'getServiceRegistry', 'handlePageBrowser')
 		);
 		$action->expects($this->never())
@@ -194,11 +194,11 @@ class tx_mksearch_tests_action_ElasticSearch_testcase
 			->method('getServiceRegistry');
 		$action->expects($this->never())
 			->method('handlePageBrowser');
-		
+
 		$actionReturn = $action->handleRequest($parameters, $configurations, $viewData);
-	
+
 		self::assertFalse(
-			$viewData->offsetExists('searchcount'), 
+			$viewData->offsetExists('searchcount'),
 			'doch searchcount in viewdata gesetzt'
 		);
 		self::assertFalse(
@@ -209,7 +209,7 @@ class tx_mksearch_tests_action_ElasticSearch_testcase
 			$actionReturn, 'action gibt nicht NULL zurück'
 		);
 	}
-	
+
 	/**
 	 * @group unit
 	 */
@@ -218,7 +218,7 @@ class tx_mksearch_tests_action_ElasticSearch_testcase
 		$configurations = $this->createConfigurations(
 			array($confId => array(
 				'filter.' => array(
-					'forceSearch' => TRUE, 
+					'forceSearch' => TRUE,
 					'class' => 'tx_mksearch_filter_ElasticSearchBase',
 					'fields.' => array('term' => 'testterm'),
 					'options.' => array('limt' => 123),
@@ -226,28 +226,28 @@ class tx_mksearch_tests_action_ElasticSearch_testcase
 			)),
 			'mksearch'
 		);
-	
+
 		$parameters = tx_rnbase::makeInstance('tx_rnbase_parameters', array());
 		$viewData = $configurations->getViewData();
-	
+
 		$action = $this->getMock(
 			'tx_mksearch_action_ElasticSearch',
 			array('getSearchSolrAction', 'getServiceRegistry', 'handlePageBrowser')
 		);
-		$searchSolrAction = $this->getMockClass(
+		$searchSolrAction = $this->getMock(
 			'tx_mksearch_action_SearchSolr', array('findSearchIndex')
 		);
 		$index = tx_rnbase::makeInstance('tx_mksearch_model_internal_Index', array());
-		$searchSolrAction::staticExpects($this->once())
+		$searchSolrAction->expects($this->once())
 			->method('findSearchIndex')
 			->with($configurations, $confId)
 			->will($this->returnValue($index));
 		$action->expects($this->once())
 			->method('getSearchSolrAction')
 			->will($this->returnValue($searchSolrAction));
-		
-		$serviceRegistry = $this->getMockClass(
-			'tx_mksearch_util_ServiceRegistry', array('getSearchEngine')
+
+		$serviceRegistry = $this->getMock(
+			'stdClass', array('getSearchEngine')
 		);
 		$searchEngine = $this->getMock(
 			'tx_mksearch_service_engine_ElasticSearch',
@@ -262,23 +262,23 @@ class tx_mksearch_tests_action_ElasticSearch_testcase
 			->will($this->returnValue(
 				array('items' => 'search hits', 'numFound' => 987)
 			));
-		$serviceRegistry::staticExpects($this->once())
+		$serviceRegistry->expects($this->once())
 			->method('getSearchEngine')
 			->with($index)
 			->will($this->returnValue($searchEngine));
 		$action->expects($this->once())
 			->method('getServiceRegistry')
 			->will($this->returnValue($serviceRegistry));
-		
+
 		$action->expects($this->once())
 			->method('handlePageBrowser')
 			->with(
-				$parameters, $configurations, $confId, $viewData, 
+				$parameters, $configurations, $confId, $viewData,
 				array('term' =>'testterm'), array('limt' => 123), $searchEngine
 			);
-	
+
 		$actionReturn = $action->handleRequest($parameters, $configurations, $viewData);
-	
+
 		self::assertEquals(
 			'987',
 			$viewData->offsetGet('searchcount'),

@@ -101,10 +101,14 @@ class tx_mksearch_service_engine_ElasticSearch
 		$this->index->open();
 
 		if (!$this->isServerAvailable()) {
-			$logger = $this->getLogger();
-			$logger::fatal(
-				'ElasticSearch service not responding.', 'mksearch',
-				array($credentials)
+			// wir rufen die Methode mit call_user_func_array auf, da sie
+			// statisch ist, womit wir diese nicht mocken könnten
+			call_user_func_array(
+				array($this->getLogger(), 'fatal'),
+				array(
+					'ElasticSearch service not responding.', 'mksearch',
+					array($credentials)
+				)
 			);
 			throw new ClientException('ElasticSearch service not responding.');
 		}

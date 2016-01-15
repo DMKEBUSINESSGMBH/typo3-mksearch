@@ -51,7 +51,7 @@ class tx_mksearch_action_ElasticSearch extends tx_rnbase_action_BaseIOC {
 		$filter = tx_rnbase_filter_BaseFilter::createFilter(
 			$parameters, $configurations, $viewData, $confId  .'filter.'
 		);
-		
+
 		if ($configurations->get($confId . 'nosearch')) {
 			return NULL;
 		}
@@ -61,44 +61,48 @@ class tx_mksearch_action_ElasticSearch extends tx_rnbase_action_BaseIOC {
 		$items = array();
 		if($filter->init($fields, $options)) {
 			$searchSolrAction = $this->getSearchSolrAction();
-			$index = $searchSolrAction::findSearchIndex(
+			$index = $searchSolrAction->findSearchIndex(
 				$configurations, $confId
 			);
 
-			$serviceRegistry = $this->getServiceRegistry();
-			$searchEngine = $serviceRegistry::getSearchEngine($index);
+			// wir rufen die Methode mit call_user_func_array auf, da sie
+			// statisch ist, womit wir diese nicht mocken könnten
+			$searchEngine = call_user_func_array(
+				array($this->getServiceRegistry(), 'getSearchEngine'),
+				array($index)
+			);
 			$searchEngine->openIndex($index);
-			
+
 			$this->handlePageBrowser(
-				$parameters, $configurations, $confId, $viewData, 
+				$parameters, $configurations, $confId, $viewData,
 				$fields, $options, $searchEngine
 			);
-			
+
 			$searchResult = $searchEngine->search($fields, $options, $configurations);
 		}
 
 		$viewData->offsetSet('searchcount', $searchResult['numFound']);
 		$viewData->offsetSet('search', $searchResult['items']);
-		
+
 		return NULL;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @return string
 	 */
 	protected function getSearchSolrAction() {
-		return tx_mksearch_action_SearchSolr;
+		return tx_rnbase::makeInstance('tx_mksearch_action_SearchSolr');
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @return string
 	 */
 	protected function getServiceRegistry(){
 		return tx_mksearch_util_ServiceRegistry;
 	}
-	
+
 	/**
 	 * @param tx_rnbase_parameters $parameters
 	 * @param tx_rnbase_configurations $configurations
@@ -110,8 +114,8 @@ class tx_mksearch_action_ElasticSearch extends tx_rnbase_action_BaseIOC {
 	 * @return void
 	 */
 	function handlePageBrowser(
-		tx_rnbase_parameters $parameters, tx_rnbase_configurations $configurations, 
-		$confId, ArrayObject $viewdata, array &$fields, array &$options, 
+		tx_rnbase_parameters $parameters, tx_rnbase_configurations $configurations,
+		$confId, ArrayObject $viewdata, array &$fields, array &$options,
 		tx_mksearch_service_engine_ElasticSearch $searchEngine
 	) {
 		if(
@@ -119,21 +123,21 @@ class tx_mksearch_action_ElasticSearch extends tx_rnbase_action_BaseIOC {
 			&& is_array($conf = $configurations->get($confId.'hit.pagebrowser.'))
 		) {
 			// PageBrowser initialisieren
-			$pageBrowserId = $conf['pbid'] ? $conf['pbid'] : 
+			$pageBrowserId = $conf['pbid'] ? $conf['pbid'] :
 							'search' . $configurations->getPluginId();
 			/* @var $pageBrowser tx_rnbase_util_PageBrowser */
 			$pageBrowser = tx_rnbase::makeInstance(
 				'tx_rnbase_util_PageBrowser', $pageBrowserId
 			);
-			
+
 			$listSize = 0;
 			if($result = $searchEngine->getIndex()->count($fields['term'])) {
 				$listSize = $result;
 			}
-			
+
 			$pageBrowser->setState($parameters, $listSize, $options['limit']);
 			$state = $pageBrowser->getState();
-			
+
 			$options = array_merge($options, $state);
 			$viewdata->offsetSet('pagebrowser', $pageBrowser);
 		}
@@ -143,15 +147,15 @@ class tx_mksearch_action_ElasticSearch extends tx_rnbase_action_BaseIOC {
 	 * (non-PHPdoc)
 	 * @see tx_rnbase_action_BaseIOC::getTemplateName()
 	 */
-	public function getTemplateName() { 
+	public function getTemplateName() {
 		return 'elasticsearch';
 	}
-	
+
 	/**
 	 * (non-PHPdoc)
 	 * @see tx_rnbase_action_BaseIOC::getViewClassName()
 	 */
-	public function getViewClassName() { 
+	public function getViewClassName() {
 		return 'tx_mksearch_view_Search';
 	}
 }

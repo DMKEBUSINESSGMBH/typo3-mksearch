@@ -252,8 +252,8 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 		);
 
 		$credentials = array('someCredentials');
-		$logger = $this->getMockClass('tx_rnbase_util_Logger', array('fatal'));
-		$logger::staticExpects($this->once())
+		$logger = $this->getMock('stdClass', array('fatal'));
+		$logger->expects($this->once())
 			->method('fatal')
 			->with(
 				'ElasticSearch service not responding.', 'mksearch',

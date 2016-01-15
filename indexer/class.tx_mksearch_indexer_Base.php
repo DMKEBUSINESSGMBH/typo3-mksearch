@@ -269,8 +269,13 @@ abstract class tx_mksearch_indexer_Base
 		// as soon as one of the parent pages is hidden we return true.
 		// @todo support when a parent page is deleted! shouldn't be possible
 		// without further configuration for a BE user but it's still possible!
-		$coreConfigUtility = $this->getCoreConfigUtility();
-		$rootline = $coreConfigUtility::getRootLine($model->record['pid']);
+
+		// wir rufen die Methode mit call_user_func_array auf, da sie
+		// statisch ist, womit wir diese nicht mocken könnten
+		$rootline = call_user_func_array(
+			array($this->getCoreConfigUtility(), 'getRootLine'),
+			array($model->record['pid'])
+		);
 
 		// @todo sollten nicht auch Shortcuts etc. invalide sein?
 		$sysPage = tx_rnbase_util_TYPO3::getSysPage();
@@ -358,10 +363,12 @@ abstract class tx_mksearch_indexer_Base
 		$options = array()
 	) {
 		if ($this->shouldIndexSiteRootPage($options)) {
-			$coreConfigUtility = $this->getCoreConfigUtility();
 			$pageId = ($tableName == 'pages' ? $model->getUid() : $model->record['pid']);
-			$siteRootPage = $coreConfigUtility::getSiteRootPage(
-				$pageId
+			// wir rufen die Methode mit call_user_func_array auf, da sie
+			// statisch ist, womit wir diese nicht mocken könnten
+			$siteRootPage = call_user_func_array(
+				array($this->getCoreConfigUtility(), 'getSiteRootPage'),
+				array($pageId)
 			);
 			if (is_array($siteRootPage) && !empty($siteRootPage)) {
 				$indexDoc->addField('siteRootPage', $siteRootPage['uid']);

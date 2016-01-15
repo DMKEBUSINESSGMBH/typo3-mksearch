@@ -84,7 +84,7 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 				$fields['term'] = '*:*';
 
 			//get the index we shall search in
-			$index = self::findSearchIndex($configurations, $confId);
+			$index = $this->findSearchIndex($configurations, $confId);
 			$pageBrowser = $this->handlePageBrowser($parameters, $configurations, $confId, $viewData, $fields, $options, $index);
 
 			if ($result = $this->searchSolr($fields, $options, $configurations, $index)) {
@@ -346,7 +346,7 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 	 * @throws Exception
 	 * @return tx_mksearch_service_internal_Index
 	 */
-	public static function findSearchIndex($configurations, $confId) {
+	public function findSearchIndex($configurations, $confId) {
 		$indexUid = $configurations->get($confId. 'usedIndex');
 		//let's see if we got a index to use via parameters
 		if(empty($indexUid))
