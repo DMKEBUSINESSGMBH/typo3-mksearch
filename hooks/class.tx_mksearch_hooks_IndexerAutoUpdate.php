@@ -182,9 +182,6 @@ class tx_mksearch_hooks_IndexerAutoUpdate {
 				// Ignore internal tables
 				continue;
 			}
-			if (empty($records)) {
-				continue;
-			}
 
 			// indexer besorgen
 			$indexers = $this->getIndexersForTable($table);
