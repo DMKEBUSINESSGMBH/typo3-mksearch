@@ -27,21 +27,13 @@
  * benötigte Klassen einbinden
  */
 
-unset($MCONF);
-require_once('conf.php');
-require_once($REQUIRE_PATH.'init.php');
-if (!class_exists('template')) {
-	require_once($REQUIRE_PATH . 'template.php');
-}
 
-
-
-$LANG->includeLLFile('EXT:mksearch/mod1/locallang.xml');
-$BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users has no permission for entry.
-	// DEFAULT initialization of a module [END]
+$GLOBALS['LANG']->includeLLFile('EXT:mksearch/mod1/locallang.xml');
+$GLOBALS['BE_USER']->modAccess($GLOBALS['MCONF'], 1);
 
 tx_rnbase::load('tx_rnbase_mod_BaseModule');
 tx_rnbase::load('tx_mksearch_mod1_util_Misc');
+tx_rnbase::load('Tx_Rnbase_Backend_Utility');
 
 /**
  * Backend Modul für mksearch
@@ -70,7 +62,8 @@ class  tx_mksearch_module1 extends tx_rnbase_mod_BaseModule {
 		return $mainmenu['menu'];
 	}
 	protected function getFormTag() {
-		return '<form action="index.php?id=' . $this->getPid() . '" method="POST" name="editform" id="editform">';
+		$modUrl = Tx_Rnbase_Backend_Utility::getModuleUrl('web_txmksearchM1', array('id' => $this->getPid()), '');
+		return '<form action="' . $modUrl . '" method="POST" name="editform" id="editform">';
 	}
 
 
