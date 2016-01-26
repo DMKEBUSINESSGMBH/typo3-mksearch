@@ -50,45 +50,13 @@ $TCA['tx_mksearch_indices'] = array (
 			'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices.composites',
 			'config' => array (
 				'type' => 'select',
+				'renderType' => 'selectMultipleSideBySide',
 				'foreign_table' => 'tx_mksearch_configcomposites',
 				'foreign_table_where' => ' AND tx_mksearch_configcomposites.pid=###CURRENT_PID### ORDER BY tx_mksearch_configcomposites.title',
 				'MM' => 'tx_mksearch_indices_configcomposites_mm',
 				'size' => 20,
 				'minitems' => 0,
 				'maxitems' => 100,
-				'wizards' => array(
-					'_PADDING'  => 2,
-					'_VERTICAL' => 1,
-					'add' => array(
-						'type'   => 'script',
-						'title'  => 'Create new record',
-						'icon'   => 'add.gif',
-						'params' => array(
-							'table'    => 'tx_mksearch_configcomposites',
-							'pid'      => '###CURRENT_PID###',
-							'setValue' => 'prepend'
-						),
-						'script' => 'wizard_add.php',
-					),
-					'list' => array(
-						'type'   => 'script',
-						'title'  => 'List',
-						'icon'   => 'list.gif',
-						'params' => array(
-							'table' => 'tx_mksearch_configcomposites',
-							'pid'   => '###CURRENT_PID###',
-						),
-						'script' => 'wizard_list.php',
-					),
-					'edit' => array(
-						'type'                     => 'popup',
-						'title'                    => 'Edit',
-						'script'                   => 'wizard_edit.php',
-						'popup_onlyOpenIfSelected' => 1,
-						'icon'                     => 'edit2.gif',
-						'JSopenParams'             => 'height=350,width=580,status=0,menubar=0,scrollbars=1',
-					),
-				),
 			),
 		),
 		'engine' => array (
@@ -176,6 +144,7 @@ $TCA['tx_mksearch_configcomposites'] = array (
 			'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_configcomposites.indices',
 			'config' => array (
 				'type' => 'select',
+				'renderType' => 'selectMultipleSideBySide',
 				'foreign_table' => 'tx_mksearch_indices',
 				'foreign_table_where' => ' AND tx_mksearch_indices.pid=###CURRENT_PID### ORDER BY tx_mksearch_indices.title',
 				'MM' => 'tx_mksearch_indices_configcomposites_mm',
@@ -183,39 +152,6 @@ $TCA['tx_mksearch_configcomposites'] = array (
 				'size' => 20,
 				'minitems' => 0,
 				'maxitems' => 100,
-				'wizards' => array(
-					'_PADDING'  => 2,
-					'_VERTICAL' => 1,
-					'add' => array(
-						'type'   => 'script',
-						'title'  => 'Create new record',
-						'icon'   => 'add.gif',
-						'params' => array(
-							'table'    => 'tx_mksearch_indices',
-							'pid'      => '###CURRENT_PID###',
-							'setValue' => 'prepend'
-						),
-						'script' => 'wizard_add.php',
-					),
-					'list' => array(
-						'type'   => 'script',
-						'title'  => 'List',
-						'icon'   => 'list.gif',
-						'params' => array(
-							'table' => 'tx_mksearch_indices',
-							'pid'   => '###CURRENT_PID###',
-						),
-						'script' => 'wizard_list.php',
-					),
-					'edit' => array(
-						'type'                     => 'popup',
-						'title'                    => 'Edit',
-						'script'                   => 'wizard_edit.php',
-						'popup_onlyOpenIfSelected' => 1,
-						'icon'                     => 'edit2.gif',
-						'JSopenParams'             => 'height=350,width=580,status=0,menubar=0,scrollbars=1',
-					),
-				),
 			)
 		),
 		'configs' => array (
@@ -223,45 +159,13 @@ $TCA['tx_mksearch_configcomposites'] = array (
 			'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_configcomposites.configs',
 			'config' => array (
 				'type' => 'select',
+				'renderType' => 'selectMultipleSideBySide',
 				'foreign_table' => 'tx_mksearch_indexerconfigs',
 				'foreign_table_where' => ' AND tx_mksearch_indexerconfigs.pid=###CURRENT_PID### ORDER BY tx_mksearch_indexerconfigs.title',
 				'MM' => 'tx_mksearch_configcomposites_indexerconfigs_mm',
 				'size' => 20,
 				'minitems' => 0,
 				'maxitems' => 100,
-				'wizards' => array(
-					'_PADDING'  => 2,
-					'_VERTICAL' => 1,
-					'add' => array(
-						'type'   => 'script',
-						'title'  => 'Create new record',
-						'icon'   => 'add.gif',
-						'params' => array(
-							'table'    => 'tx_mksearch_indexerconfigs',
-							'pid'      => '###CURRENT_PID###',
-							'setValue' => 'prepend'
-						),
-						'script' => 'wizard_add.php',
-					),
-					'list' => array(
-						'type'   => 'script',
-						'title'  => 'List',
-						'icon'   => 'list.gif',
-						'params' => array(
-							'table' => 'tx_mksearch_indexerconfigs',
-							'pid'   => '###CURRENT_PID###',
-						),
-						'script' => 'wizard_list.php',
-					),
-					'edit' => array(
-						'type'                     => 'popup',
-						'title'                    => 'Edit',
-						'script'                   => 'wizard_edit.php',
-						'popup_onlyOpenIfSelected' => 1,
-						'icon'                     => 'edit2.gif',
-						'JSopenParams'             => 'height=350,width=580,status=0,menubar=0,scrollbars=1',
-					),
-				),
 			)
 		),
 		'configuration' => array (
@@ -325,6 +229,7 @@ $TCA['tx_mksearch_indexerconfigs'] = array (
 			'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indexerconfigs.extkey',
 			'config' => array (
 				'type' => 'select',
+				'renderType' => 'selectSingle',
 				'items' => array(array('','')),
 				'itemsProcFunc' => 'EXT:mksearch/util/class.tx_mksearch_util_TCA.php:tx_mksearch_util_TCA->getIndexerExtKeys',
 				'size' => '1',
@@ -336,6 +241,7 @@ $TCA['tx_mksearch_indexerconfigs'] = array (
 			'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indexerconfigs.contenttype',
 			'config' => array (
 				'type' => 'select',
+				'renderType' => 'selectSingle',
 				'items' => array(array('','')),
 				'itemsProcFunc' => 'EXT:mksearch/util/class.tx_mksearch_util_TCA.php:tx_mksearch_util_TCA->getIndexerContentTypes',
 				'size' => '1',
@@ -368,6 +274,7 @@ $TCA['tx_mksearch_indexerconfigs'] = array (
 			'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indexerconfigs.composites',
 			'config' => array (
 				'type' => 'select',
+				'renderType' => 'selectMultipleSideBySide',
 				'foreign_table' => 'tx_mksearch_configcomposites',
 				'foreign_table_where' => ' AND tx_mksearch_configcomposites.pid=###CURRENT_PID### ORDER BY tx_mksearch_configcomposites.title',
 				'MM' => 'tx_mksearch_configcomposites_indexerconfigs_mm',
@@ -375,39 +282,6 @@ $TCA['tx_mksearch_indexerconfigs'] = array (
 				'size' => 20,
 				'minitems' => 0,
 				'maxitems' => 100,
-				'wizards' => array(
-					'_PADDING'  => 2,
-					'_VERTICAL' => 1,
-					'add' => array(
-						'type'   => 'script',
-						'title'  => 'Create new record',
-						'icon'   => 'add.gif',
-						'params' => array(
-							'table'    => 'tx_mksearch_configcomposites',
-							'pid'      => '###CURRENT_PID###',
-							'setValue' => 'prepend'
-						),
-						'script' => 'wizard_add.php',
-					),
-					'list' => array(
-						'type'   => 'script',
-						'title'  => 'List',
-						'icon'   => 'list.gif',
-						'params' => array(
-							'table' => 'tx_mksearch_configcomposites',
-							'pid'   => '###CURRENT_PID###',
-						),
-						'script' => 'wizard_list.php',
-					),
-					'edit' => array(
-						'type'                     => 'popup',
-						'title'                    => 'Edit',
-						'script'                   => 'wizard_edit.php',
-						'popup_onlyOpenIfSelected' => 1,
-						'icon'                     => 'edit2.gif',
-						'JSopenParams'             => 'height=350,width=580,status=0,menubar=0,scrollbars=1',
-					),
-				),
 			)
 		),
 	),
@@ -452,16 +326,6 @@ $TCA['tx_mksearch_keywords'] = array (
 				'max' => '255',
 				'checkbox' => '',
 				'eval' => 'trim',
-				'wizards' => Array(
-					'_PADDING' => 2,
-					'link' => Array(
-						'type' => 'popup',
-						'title' => 'Link',
-						'icon' => 'link_popup.gif',
-						'script' => 'browse_links.php?mode=wizard',
-						'JSopenParams' => 'height=300,width=500,status=0,menubar=0,scrollbars=1'
-					)
-				)
 			)
 		),
 	),
@@ -472,3 +336,50 @@ $TCA['tx_mksearch_keywords'] = array (
 		'1' => array('showitem' => '')
 	)
 );
+
+$tca = tx_rnbase::makeInstance('Tx_Rnbase_Utility_TcaTool');
+$tca->addWizard($TCA['tx_mksearch_indices'] , 'composites', 'add', 'wizard_add', array(
+	'table'    => 'tx_mksearch_configcomposites',
+	'pid'      => '###CURRENT_PID###',
+	'setValue' => 'prepend'
+));
+$tca->addWizard($TCA['tx_mksearch_indices'] , 'composites', 'list', 'wizard_list', array(
+	'table' => 'tx_mksearch_configcomposites',
+	'pid'   => '###CURRENT_PID###',
+));
+$tca->addWizard($TCA['tx_mksearch_indices'] , 'composites', 'edit', 'wizard_edit');
+
+$tca->addWizard($TCA['tx_mksearch_configcomposites'] , 'indices', 'add', 'wizard_add', array(
+	'table'    => 'tx_mksearch_indices',
+	'pid'      => '###CURRENT_PID###',
+	'setValue' => 'prepend'
+));
+$tca->addWizard($TCA['tx_mksearch_configcomposites'] , 'indices', 'list', 'wizard_list', array(
+	'table' => 'tx_mksearch_indices',
+	'pid'   => '###CURRENT_PID###',
+));
+$tca->addWizard($TCA['tx_mksearch_configcomposites'] , 'indices', 'edit', 'wizard_edit');
+
+$tca->addWizard($TCA['tx_mksearch_configcomposites'] , 'configs', 'add', 'wizard_add', array(
+	'table'    => 'tx_mksearch_indexerconfigs',
+	'pid'      => '###CURRENT_PID###',
+	'setValue' => 'prepend'
+));
+$tca->addWizard($TCA['tx_mksearch_configcomposites'] , 'configs', 'list', 'wizard_list', array(
+	'table' => 'tx_mksearch_indexerconfigs',
+	'pid'   => '###CURRENT_PID###',
+));
+$tca->addWizard($TCA['tx_mksearch_configcomposites'] , 'configs', 'edit', 'wizard_edit');
+
+$tca->addWizard($TCA['tx_mksearch_indexerconfigs'] , 'composites', 'add', 'wizard_add', array(
+	'table'    => 'tx_mksearch_configcomposites',
+	'pid'      => '###CURRENT_PID###',
+	'setValue' => 'prepend'
+));
+$tca->addWizard($TCA['tx_mksearch_indexerconfigs'] , 'composites', 'list', 'wizard_list', array(
+	'table' => 'tx_mksearch_configcomposites',
+	'pid'   => '###CURRENT_PID###',
+));
+$tca->addWizard($TCA['tx_mksearch_indexerconfigs'] , 'composites', 'edit', 'wizard_edit');
+
+$tca->addWizard($TCA['tx_mksearch_keywords'] , 'link', 'link', 'wizard_link');

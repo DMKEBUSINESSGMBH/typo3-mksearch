@@ -12,6 +12,7 @@ $tempTtContent = array(
 		'label' => 'LLL:EXT:mksearch/locallang_db.xml:tt_content.tx_mksearch_is_indexable',
 		'config' => array (
 			'type'	=> 'select',
+			'renderType' => 'selectSingle',
 			'items' => array(
     			array(
     				'LLL:EXT:mksearch/locallang_db.xml:tt_content.tx_mksearch_is_indexable.use_indexer_config',
