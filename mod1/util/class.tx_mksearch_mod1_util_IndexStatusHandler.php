@@ -54,11 +54,12 @@ class tx_mksearch_mod1_util_IndexStatusHandler {
 			$msg = 'Exception occured: '.$e->getMessage();
 		}
 		$ret  = '';
-		$ret .= '<a href="#hint" class="tooltip">';
+		$ret .= '<a href="#hint" class="mktooltip">';
 		$ret .= '<span style="width:20px; background-color:'.$color.'">&nbsp;&nbsp;&nbsp;</span>&nbsp;';
 		$ret .= '<strong>'. $index->getTitle() . '</strong> - '. $index->getCredentialString().'<br />';
 		$ret .= '<span class="info">'.$msg.'</span>';
 		$ret .= '</a>';
+
 		return $ret;
 	}
 	/**
