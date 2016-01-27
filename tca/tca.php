@@ -1,5 +1,6 @@
 <?php
 if (!defined ('TYPO3_MODE')) 	die ('Access denied.');
+tx_rnbase::load('Tx_Rnbase_Utility_TcaTool');
 
 $TCA['tx_mksearch_indices'] = array (
 	'ctrl' => $TCA['tx_mksearch_indices']['ctrl'],
@@ -57,6 +58,10 @@ $TCA['tx_mksearch_indices'] = array (
 				'size' => 20,
 				'minitems' => 0,
 				'maxitems' => 100,
+				'wizards' => Tx_Rnbase_Utility_TcaTool::getWizards(
+					'tx_mksearch_configcomposites',
+					array('add' => TRUE, 'edit' => TRUE, 'list' => TRUE)
+				),
 			),
 		),
 		'engine' => array (
@@ -152,6 +157,10 @@ $TCA['tx_mksearch_configcomposites'] = array (
 				'size' => 20,
 				'minitems' => 0,
 				'maxitems' => 100,
+				'wizards' => Tx_Rnbase_Utility_TcaTool::getWizards(
+					'tx_mksearch_indices',
+					array('add' => TRUE, 'edit' => TRUE, 'list' => TRUE)
+				)
 			)
 		),
 		'configs' => array (
@@ -166,6 +175,10 @@ $TCA['tx_mksearch_configcomposites'] = array (
 				'size' => 20,
 				'minitems' => 0,
 				'maxitems' => 100,
+				'wizards' => Tx_Rnbase_Utility_TcaTool::getWizards(
+					'tx_mksearch_indexerconfigs',
+					array('add' => TRUE, 'edit' => TRUE, 'list' => TRUE)
+				)
 			)
 		),
 		'configuration' => array (
@@ -282,6 +295,10 @@ $TCA['tx_mksearch_indexerconfigs'] = array (
 				'size' => 20,
 				'minitems' => 0,
 				'maxitems' => 100,
+				'wizards' => Tx_Rnbase_Utility_TcaTool::getWizards(
+					'tx_mksearch_configcomposites',
+					array('add' => TRUE, 'edit' => TRUE, 'list' => TRUE)
+				)
 			)
 		),
 	),
@@ -326,6 +343,10 @@ $TCA['tx_mksearch_keywords'] = array (
 				'max' => '255',
 				'checkbox' => '',
 				'eval' => 'trim',
+					'wizards' => Tx_Rnbase_Utility_TcaTool::getWizards(
+					'',
+					array('link' => TRUE)
+				)
 			)
 		),
 	),
@@ -336,50 +357,3 @@ $TCA['tx_mksearch_keywords'] = array (
 		'1' => array('showitem' => '')
 	)
 );
-
-$tca = tx_rnbase::makeInstance('Tx_Rnbase_Utility_TcaTool');
-$tca->addWizard($TCA['tx_mksearch_indices'] , 'composites', 'add', 'wizard_add', array(
-	'table'    => 'tx_mksearch_configcomposites',
-	'pid'      => '###CURRENT_PID###',
-	'setValue' => 'prepend'
-));
-$tca->addWizard($TCA['tx_mksearch_indices'] , 'composites', 'list', 'wizard_list', array(
-	'table' => 'tx_mksearch_configcomposites',
-	'pid'   => '###CURRENT_PID###',
-));
-$tca->addWizard($TCA['tx_mksearch_indices'] , 'composites', 'edit', 'wizard_edit');
-
-$tca->addWizard($TCA['tx_mksearch_configcomposites'] , 'indices', 'add', 'wizard_add', array(
-	'table'    => 'tx_mksearch_indices',
-	'pid'      => '###CURRENT_PID###',
-	'setValue' => 'prepend'
-));
-$tca->addWizard($TCA['tx_mksearch_configcomposites'] , 'indices', 'list', 'wizard_list', array(
-	'table' => 'tx_mksearch_indices',
-	'pid'   => '###CURRENT_PID###',
-));
-$tca->addWizard($TCA['tx_mksearch_configcomposites'] , 'indices', 'edit', 'wizard_edit');
-
-$tca->addWizard($TCA['tx_mksearch_configcomposites'] , 'configs', 'add', 'wizard_add', array(
-	'table'    => 'tx_mksearch_indexerconfigs',
-	'pid'      => '###CURRENT_PID###',
-	'setValue' => 'prepend'
-));
-$tca->addWizard($TCA['tx_mksearch_configcomposites'] , 'configs', 'list', 'wizard_list', array(
-	'table' => 'tx_mksearch_indexerconfigs',
-	'pid'   => '###CURRENT_PID###',
-));
-$tca->addWizard($TCA['tx_mksearch_configcomposites'] , 'configs', 'edit', 'wizard_edit');
-
-$tca->addWizard($TCA['tx_mksearch_indexerconfigs'] , 'composites', 'add', 'wizard_add', array(
-	'table'    => 'tx_mksearch_configcomposites',
-	'pid'      => '###CURRENT_PID###',
-	'setValue' => 'prepend'
-));
-$tca->addWizard($TCA['tx_mksearch_indexerconfigs'] , 'composites', 'list', 'wizard_list', array(
-	'table' => 'tx_mksearch_configcomposites',
-	'pid'   => '###CURRENT_PID###',
-));
-$tca->addWizard($TCA['tx_mksearch_indexerconfigs'] , 'composites', 'edit', 'wizard_edit');
-
-$tca->addWizard($TCA['tx_mksearch_keywords'] , 'link', 'link', 'wizard_link');

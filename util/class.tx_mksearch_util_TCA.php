@@ -72,7 +72,9 @@ class tx_mksearch_util_TCA {
 	 * @return array
 	 */
 	public static function getIndexerContentTypes(array &$params) {
-		$extKey = $params['row']['extkey'];
+		$extKey = is_array($params['row']['extkey']) ?
+			$params['row']['extkey'][0] : $params['row']['extkey'];
+
 		// im flexform nachsehen
 		if (!$extKey && !empty($params['config']['extKeyField']) && !empty($params['config']['extKeySection'])) {
 			if ($params['table'] == 'tt_content' && !empty($params['row']['pi_flexform'])) {
@@ -106,12 +108,17 @@ class tx_mksearch_util_TCA {
 	 * @param array $params
 	 */
 	public static function insertIndexerDefaultTSConfig(array &$params) {
+		$extKey = is_array($params['row']['extkey']) ?
+			$params['row']['extkey'][0] : $params['row']['extkey'];
+		$contentType = is_array($params['row']['contenttype']) ?
+			$params['row']['contenttype'][0] : $params['row']['contenttype'];
+
 		if (!(isset($params['params']['insertBetween']) && is_array($params['params']['insertBetween']) &&
-					!empty($params['row']['extkey']) && !empty($params['row']['contenttype'])))
+					!empty($extKey) && !empty($contentType)))
 			return;
 
 		try {
-			$ts = tx_mksearch_util_Config::getIndexerDefaultTSConfig($params['row']['extkey'], $params['row']['contenttype']);
+			$ts = tx_mksearch_util_Config::getIndexerDefaultTSConfig($extKey, $contentType);
 		}
 		catch (Exception $e) {
 			// "Service not found" exception is thrown for invalid $extkey/$contenttype combinations
