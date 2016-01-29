@@ -149,7 +149,9 @@ class tx_mksearch_util_TCA {
 	public static function getIndexes(array &$params) {
 		// rootpage des aktuellen plugins
 		tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
-		$rootOfPlugin = tx_mksearch_service_indexer_core_Config::getSiteRootPage($params['row']['pid']);
+		$pid = is_array($params['row']['pid']) ?
+			$params['row']['pid'][0] : $params['row']['pid'];
+		$rootOfPlugin = tx_mksearch_service_indexer_core_Config::getSiteRootPage($pid);
 
 		// Wir suchen alle Indexes, da die aktuelle PageId oder die RootPageId
 		// nicht die der PageId des Indexes entsprechen muss.
