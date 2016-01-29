@@ -179,7 +179,7 @@ class tx_mksearch_mod1_util_Selector {
 
 		// Build select box items
 		$aData['selector'] = Tx_Rnbase_Backend_Utility::getFuncMenu(
-			$pid, 'SET['.$id.']', $selectedItem, $aItems
+			$this->mod->getPid(), 'SET['.$id.']', $selectedItem, $aItems
 		);
 
 		//label
