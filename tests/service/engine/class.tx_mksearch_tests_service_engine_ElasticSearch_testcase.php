@@ -1205,8 +1205,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 		// es reicht zu prüfen ob einige Teile des Debug vorhanden sind
 		// "s" modifier, damit auf der CLI alle Zeilen in Betracht gezogen werden. Sonst
 		// wird nur die Zeile genommen, mit dem ersten Treffer.
-		$regularExpression = 	'/.*(tx_mksearch_service_engine_ElasticSearch\:\:search).*(Line).*' .
-								'(options).*(debug).*(result).*(searchQuery).*/s';
+		$regularExpression = 	'/.*(tx_mksearch_service_engine_ElasticSearch\:\:search).*(Line).*/s';
 		$this->expectOutputRegex($regularExpression);
 
 		$lastRequest = $this->getMock(

@@ -113,8 +113,8 @@ class tx_mksearch_indexer_FAL
 	protected function getFileFromRecord($sourceRecord) {
 		$resourceStorage = $this->getResourceStorage($sourceRecord['storage']);
 		// wir holen uns die url von dem storage, falls vorhanden
-		if ($resourceStorage instanceof \TYPO3\CMS\Core\Resource\ResourceStorage) {
-			$file = new \TYPO3\CMS\Core\Resource\File($sourceRecord, $resourceStorage);
+		if ($resourceStorage instanceof TYPO3\CMS\Core\Resource\ResourceStorage) {
+			$file = new TYPO3\CMS\Core\Resource\File($sourceRecord, $resourceStorage);
 			return $file;
 		}
 

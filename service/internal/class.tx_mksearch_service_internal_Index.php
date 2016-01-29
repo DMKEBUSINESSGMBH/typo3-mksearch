@@ -25,6 +25,7 @@
 
 tx_rnbase::load('tx_mksearch_service_internal_Base');
 tx_rnbase::load('tx_rnbase_util_Logger');
+tx_rnbase::load('tx_mksearch_model_internal_Composite');
 
 
 /**

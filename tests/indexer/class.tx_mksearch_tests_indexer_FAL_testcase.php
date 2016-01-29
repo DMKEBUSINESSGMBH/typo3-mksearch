@@ -336,7 +336,7 @@ class tx_mksearch_tests_indexer_FAL_testcase
 		$driver = $fileFactory->getDriverObject('Local', array('basePath' => 'fileadmin', 'pathType' => 'relative'));
 		$driver->processConfiguration();
 		$storage = tx_rnbase::makeInstance(
-			'\\TYPO3\\CMS\\Core\\Resource\\ResourceStorage', $driver, array('is_public' => 2, 'driver' => 'Local')
+			'TYPO3\\CMS\\Core\\Resource\\ResourceStorage', $driver, array('is_public' => 2, 'driver' => 'Local')
 		);
 		$isOnline = new ReflectionProperty(get_class($storage), 'isOnline');
 		$isOnline->setAccessible(TRUE);

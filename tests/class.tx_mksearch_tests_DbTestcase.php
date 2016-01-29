@@ -36,7 +36,7 @@ tx_rnbase::load('tx_rnbase_util_TYPO3');
  *          GNU Lesser General Public License, version 3 or later
  */
 abstract class tx_mksearch_tests_DbTestcase
-	extends tx_phpunit_database_testcase {
+	extends Tx_Phpunit_Database_TestCase {
 
 	protected $workspaceBackup;
 	protected $templaVoilaConfigBackup = NULL;
@@ -57,7 +57,7 @@ abstract class tx_mksearch_tests_DbTestcase
 	 *
 	 * @var array
 	 */
-	protected $importExtensions = array('cms', 'mksearch');
+	protected $importExtensions = array('cms' => 'cms', 'mksearch');
 
 	/**
 	 * Liste der daten, welche in die test DB importiert werden müssen.
@@ -79,6 +79,10 @@ abstract class tx_mksearch_tests_DbTestcase
 		if (tx_rnbase_util_TYPO3::isTYPO62OrHigher()) {
 			$this->importExtensions[] = 'core';
 			$this->importExtensions[] = 'frontend';
+		}
+
+		if (tx_rnbase_util_TYPO3::isTYPO76OrHigher()) {
+			unset($this->importExtensions['cms']);
 		}
 
 		// templavoila und realurl brauchen wir da es im BE sonst Warnungen hagelt
