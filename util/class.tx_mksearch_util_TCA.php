@@ -77,9 +77,15 @@ class tx_mksearch_util_TCA {
 
 		// im flexform nachsehen
 		if (!$extKey && !empty($params['config']['extKeyField']) && !empty($params['config']['extKeySection'])) {
-			if ($params['table'] == 'tt_content' && !empty($params['row']['pi_flexform'])) {
-				$flexform = tx_rnbase_util_Arrays::xml2array($params['row']['pi_flexform']);
+			$piFlexformField = is_array($params['flexParentDatabaseRow']) ?
+				$params['flexParentDatabaseRow']['pi_flexform'] : $params['row']['pi_flexform'];
+
+			if ($params['table'] == 'tt_content' && !empty($piFlexformField)) {
+				$flexform = is_string($piFlexformField) ?
+					tx_rnbase_util_Arrays::xml2array($piFlexformField) :
+					$piFlexformField;
 			}
+
 			if (!empty($flexform)) {
 				$section = $params['config']['extKeySection'];
 				$field  = $params['config']['extKeyField'];
