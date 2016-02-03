@@ -13,13 +13,14 @@
 
 				<type>array</type>
 				<el>
-	
+
 					<action> <!-- Bezeichner ist frei wählbar -->
 						<TCEforms>
 							<exclude>1</exclude>
 							<label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.tab.action</label>
 							<config>
 								<type>select</type>
+								<renderType>selectSingle</renderType>
 								<items type="array">
 									<numIndex index="0" type="array">
 										<numIndex index="0">LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.action.searchLucene</numIndex>
@@ -61,6 +62,7 @@
 							<label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.usedIndex</label>
 							<config>
 								<type>select</type>
+								<renderType>selectSingle</renderType>
 								<foreign_table>tx_mksearch_indices</foreign_table>
 								<foreign_table_where>AND engine='zend_lucene' ORDER BY name</foreign_table_where>
 								<multiple>0</multiple>
@@ -155,6 +157,7 @@
 							<label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.usedIndex</label>
 							<config>
 								<type>select</type>
+								<renderType>selectSingle</renderType>
 								<items type="array">
 								  <numIndex index="0" type="array">
 									<numIndex index="0"></numIndex>
@@ -176,6 +179,7 @@
 							<label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.filter.confid</label>
 							<config>
 								<type>select</type>
+								<renderType>selectSingle</renderType>
 								<items type="array">
 								  <numIndex index="0" type="array">
 									<numIndex index="0">LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.filter.confid.default</numIndex>
@@ -263,7 +267,7 @@
 							</config>
 						</TCEforms>
 					</searchsolr.autocomplete.includeJqueryUiAutocomplete>
-					
+
 					<searchsolr.filter._overwrite.options.debug>
 						<TCEforms>
 							<exclude>1</exclude>
@@ -406,6 +410,7 @@
 							<label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.usedIndex</label>
 							<config>
 								<type>select</type>
+								<renderType>selectSingle</renderType>
 								<foreign_table>tx_mksearch_indices</foreign_table>
 								<foreign_table_where>AND engine='elasticsearch' ORDER BY name</foreign_table_where>
 								<multiple>0</multiple>
@@ -501,6 +506,7 @@
 							<label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.usedIndex</label>
 							<config>
 								<type>select</type>
+								<renderType>selectSingle</renderType>
 								<items type="array">
 								  <numIndex index="0" type="array">
 									<numIndex index="0"></numIndex>
@@ -520,6 +526,7 @@
 							<label>LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indexerconfigs.extkey</label>
 							<config>
 								<type>select</type>
+								<renderType>selectSingle</renderType>
 								<items type="array">
 									<numIndex index="0" type="array">
 										<numIndex index="0"></numIndex>
@@ -539,6 +546,7 @@
 							<label>LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indexerconfigs.contenttype</label>
 							<config>
 								<type>select</type>
+								<renderType>selectSingle</renderType>
 								<items type="array">
 									<numIndex index="0" type="array">
 										<numIndex index="0"></numIndex>
@@ -659,6 +667,7 @@
 							<label>LLL:EXT:lang/locallang_general.php:LGL.recursive</label>
 							<config>
 								<type>select</type>
+								<renderType>selectSingle</renderType>
 								<items type="array">
 									<numIndex index="0" type="array">
 										<numIndex index="0"></numIndex>
