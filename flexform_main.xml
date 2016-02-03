@@ -96,6 +96,7 @@
 										<title>Link</title>
 										<icon>link_popup.gif</icon>
 										<script>browse_links.php?mode=wizard&amp;act=file</script>
+										<module><name>wizard_link</name></module>
 										<params type="array">
 											<blindLinkOptions>page,url,mail,spec</blindLinkOptions>
 											<allowedExtensions>htm,html,tmpl,tpl</allowedExtensions>
@@ -122,6 +123,7 @@
 										<title>Link</title>
 										<icon>link_popup.gif</icon>
 										<script>browse_links.php?mode=wizard&amp;act=file</script>
+										<module><name>wizard_link</name></module>
 										<params type="array">
 											<blindLinkOptions>page,url,mail,spec</blindLinkOptions>
 											<allowedExtensions>htm,html,tmpl,tpl</allowedExtensions>
@@ -344,6 +346,7 @@
 										<title>Link</title>
 										<icon>link_popup.gif</icon>
 										<script>browse_links.php?mode=wizard&amp;act=file</script>
+										<module><name>wizard_link</name></module>
 										<params type="array">
 											<blindLinkOptions>page,url,mail,spec</blindLinkOptions>
 											<allowedExtensions>htm,html,tmpl,tpl</allowedExtensions>
@@ -383,6 +386,7 @@
 										<title>Link</title>
 										<icon>link_popup.gif</icon>
 										<script>browse_links.php?mode=wizard&amp;act=file</script>
+										<module><name>wizard_link</name></module>
 										<params type="array">
 											<blindLinkOptions>page,url,mail,spec</blindLinkOptions>
 											<allowedExtensions>htm,html</allowedExtensions>
@@ -444,6 +448,7 @@
 										<title>Link</title>
 										<icon>link_popup.gif</icon>
 										<script>browse_links.php?mode=wizard&amp;act=file</script>
+										<module><name>wizard_link</name></module>
 										<params type="array">
 											<blindLinkOptions>page,url,mail,spec</blindLinkOptions>
 											<allowedExtensions>htm,html,tmpl,tpl</allowedExtensions>
@@ -470,6 +475,7 @@
 										<title>Link</title>
 										<icon>link_popup.gif</icon>
 										<script>browse_links.php?mode=wizard&amp;act=file</script>
+										<module><name>wizard_link</name></module>
 										<params type="array">
 											<blindLinkOptions>page,url,mail,spec</blindLinkOptions>
 											<allowedExtensions>htm,html,tmpl,tpl</allowedExtensions>
@@ -617,6 +623,7 @@
 										<title>Link</title>
 										<icon>link_popup.gif</icon>
 										<script>browse_links.php?mode=wizard&amp;act=file</script>
+										<module><name>wizard_link</name></module>
 										<params type="array">
 											<blindLinkOptions>page,url,mail,spec</blindLinkOptions>
 											<allowedExtensions>htm,html</allowedExtensions>
