@@ -123,4 +123,40 @@ class tx_mksearch_tests_service_internal_Index_testcase
 
 		$indexService->_call('deleteOldQueueEntries');
 	}
+
+
+	/**
+	 * test for tx_mksearch_service_internal_Index::addModelsToIndex.
+	 * @group unit
+	 * @test
+	 */
+	public function testAddModelsToIndex()
+	{
+		$model = $this->getModel(array('uid' => '5'));
+		$options = array();
+
+		/* @var $srv tx_mksearch_service_internal_Index */
+		$srv = $this->getMock(
+			'tx_mksearch_service_internal_Index',
+			array('addRecordToIndex')
+		);
+
+		$srv
+			->expects(self::once())
+			->method('addRecordToIndex')
+			->with(
+				$model->getTableName(),
+				$model->getUid(),
+				FALSE,
+				FALSE,
+				FALSE,
+				$options
+			)
+		;
+
+		$srv->addModelsToIndex(
+			array($model),
+			$options
+		);
+	}
 }

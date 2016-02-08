@@ -211,6 +211,42 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 		$this->doInsertRecords($sqlValues);
 		return $GLOBALS['TYPO3_DB']->sql_insert_id() > 0;
 	}
+
+	/**
+	 * Adds models to the indexing queue
+	 *
+	 * @param array:Tx_Rnbase_Domain_Model_DomainInterface $models
+	 * @param array $options
+	 * @return void
+	 */
+	public function addModelsToIndex(
+		array $models,
+		array $options = array()
+	) {
+		$prefer = isset($options['preferer']) ? $options['preferer'] : FALSE;
+		$resolver = isset($options['resolver']) ? $options['resolver'] : FALSE;
+		$data = isset($options['data']) ? $options['data'] : FALSE;
+		/* @var $model Tx_Rnbase_Domain_Model_DomainInterface */
+		foreach ($models as $model) {
+			// only rnbase models with uid and tablename supported!
+			if (
+				!$model instanceof Tx_Rnbase_Domain_Model_DomainInterface
+				// @TODO @deprecated fallback for old rnbase models versions
+				&& !$model instanceof Tx_Rnbase_Domain_Model_RecordInterface
+			) {
+				continue;
+			}
+			$this->addRecordToIndex(
+				$model->getTableName(),
+				$model->getUid(),
+				$prefer,
+				$resolver,
+				$data,
+				$options
+			);
+		}
+	}
+
 	/**
 	 * Does the insert.
 	 * @param 	$sqlValues 	$sqlValues

@@ -203,16 +203,19 @@ class tx_mksearch_util_Indexer {
 	/**
 	 * Adds a element to the queue
 	 *
+	 * @TODO refactor to tx_mksearch_service_internal_Index::addModelsToIndex
+	 * @TODO remove static indexSrv cache
+	 *
 	 * @param tx_rnbase_IModel $model
 	 * @param string $tableName
-	 * @param 	boolean 	$prefer
-	 * @param 	string 		$resolver class name of record resolver
-	 * @param 	array 		$data
-	 * @param 	array 		$options
+	 * @param boolean $prefer
+	 * @param string $resolver class name of record resolver
+	 * @param array $data
+	 * @param array $options
 	 * @return void
 	 */
 	public function addModelToIndex(
-		tx_rnbase_IModel $model, $tableName, $prefer=false, $resolver=false,
+		Tx_Rnbase_Domain_Model_RecordInterface $model, $tableName, $prefer=false, $resolver=false,
 		$data=false, array $options = array()
 	){
 		static $indexSrv;
@@ -228,12 +231,14 @@ class tx_mksearch_util_Indexer {
 	/**
 	 * just a wrapper for addModelToIndex and an array of models
 	 *
+	 * @TODO refactor to tx_mksearch_service_internal_Index::addModelsToIndex
+	 *
 	 * @param array $models
 	 * @param string $tableName
-	 * @param 	boolean 	$prefer
-	 * @param 	string 		$resolver class name of record resolver
-	 * @param 	array 		$data
-	 * @param 	array 		$options
+	 * @param boolean $prefer
+	 * @param string $resolver class name of record resolver
+	 * @param array $data
+	 * @param array $options
 	 * @return void
 	 */
 	public function addModelsToIndex(
