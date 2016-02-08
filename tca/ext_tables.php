@@ -22,7 +22,7 @@ $TCA['tx_mksearch_indices'] = array (
 			'disabled' => 'hidden',
 		),
 		'dynamicConfigFile' => $_EXT_PATH.'tca/tca.php',
-		'iconfile'          => $_EXT_RELPATH.'icons/icon_tx_mksearch_indices.gif',
+		'iconfile'          => 'EXT:mksearch/icons/icon_tx_mksearch_indices.gif',
 		'requestUpdate'		=> 'engine'
 	),
 );
@@ -40,7 +40,7 @@ $TCA['tx_mksearch_configcomposites'] = array (
 			'disabled' => 'hidden',
 		),
 		'dynamicConfigFile' => $_EXT_PATH.'tca/tca.php',
-		'iconfile'          => $_EXT_RELPATH.'icons/icon_tx_mksearch_configcomposites.gif',
+		'iconfile'          => 'EXT:mksearch/icons/icon_tx_mksearch_configcomposites.gif',
 	),
 );
 
@@ -58,7 +58,7 @@ $TCA['tx_mksearch_indexerconfigs'] = array (
 		),
 		'requestUpdate' => 'extkey,contenttype',
 		'dynamicConfigFile' => $_EXT_PATH.'tca/tca.php',
-		'iconfile'          => $_EXT_RELPATH.'icons/icon_tx_mksearch_indexconfigs.gif',
+		'iconfile'          => 'EXT:mksearch/icons/icon_tx_mksearch_indexconfigs.gif',
 	),
 );
 
@@ -75,7 +75,7 @@ $TCA['tx_mksearch_keywords'] = Array (
 			'disabled' => 'hidden',
 		),
 		'dynamicConfigFile' => $_EXT_PATH.'tca/tca.php',
-		'iconfile' => $_EXT_RELPATH.'icons/tx_mksearch_keywords.gif',
+		'iconfile' => 'EXT:mksearch/icons/tx_mksearch_keywords.gif',
 	),
 	'feInterface' => Array (
 		'fe_admin_fieldList' => 'hidden, keyword, link',
