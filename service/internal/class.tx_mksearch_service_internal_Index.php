@@ -216,13 +216,19 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 	 * Adds models to the indexing queue
 	 *
 	 * @param array:Tx_Rnbase_Domain_Model_DomainInterface $models
-	 * @param array $options
+	 * @param Traversable|array $options
 	 * @return void
 	 */
 	public function addModelsToIndex(
-		array $models,
+		$models,
 		array $options = array()
 	) {
+		if (!(is_array($models) || $models instanceof Traversable)) {
+			throw new Exception(
+				'Argument 1 passed to' . __METHOD__ . '() must be of the type array or Traversable.'
+			);
+		}
+
 		$prefer = isset($options['preferer']) ? $options['preferer'] : FALSE;
 		$resolver = isset($options['resolver']) ? $options['resolver'] : FALSE;
 		$data = isset($options['data']) ? $options['data'] : FALSE;
