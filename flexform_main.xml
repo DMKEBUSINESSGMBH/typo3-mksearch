@@ -542,7 +542,7 @@
 								<itemsProcFunc>EXT:mksearch/util/class.tx_mksearch_util_TCA.php:tx_mksearch_util_TCA->getIndexerExtKeys</itemsProcFunc>
 								<size>1</size>
 								<maxitems>1</maxitems>
-								<eval>required,trim</eval>
+								<eval>trim</eval>
 							</config>
 						</TCEforms>
 					</showhit.extkey>
@@ -564,7 +564,7 @@
 								<extKeyField>showhit.extkey</extKeyField>
 								<size>1</size>
 								<maxitems>1</maxitems>
-								<eval>required,trim</eval>
+								<eval>trim</eval>
 							</config>
 						</TCEforms>
 					</showhit.contenttype>
