@@ -31,6 +31,7 @@
  */
 
 tx_rnbase::load('tx_mksearch_interface_Indexer');
+tx_rnbase::load('tx_mksearch_interface_IndexerDocument');
 tx_rnbase::load('tx_mksearch_util_Misc');
 tx_rnbase::load('tx_mksearch_util_TCA');
 tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
