@@ -26,7 +26,7 @@
 	"support": {
 		"email": "dev@dmk-ebusiness.de",
 		"source": "https://github.com/DMKEBUSINESSGMBH/typo3-mksearch",
-		"issues": "https://forge.typo3.org/projects/extension-mksearch"
+		"issues": "https://github.com/DMKEBUSINESSGMBH/typo3-mksearch"
 	},
 	"replace": {
 		"typo3-ter/mksearch": "*"
