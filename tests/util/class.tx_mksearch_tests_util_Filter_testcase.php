@@ -252,9 +252,70 @@ searchsolr.filter.default.sort {
 	}
 
 
+
+
+	/**
+	 * Tests tx_mksearch_util_Filter::parseFqFieldAndValue
+	 *
+	 * @return void
+	 *
+	 * @group unit
+	 * @test
+	 * @dataProvider getParseFqFieldAndValueData
+	 */
+	public function testParseFqFieldAndValue(
+		$fq,
+		$expected,
+		array $allowedFqParams = array()
+	) {
+		if (empty($allowedFqParams)) {
+			$allowedFqParams[] = 'contentType';
+		}
+		$util = tx_rnbase::makeInstance('tx_mksearch_util_Filter');
+		$actual = $util->parseFqFieldAndValue($fq, $allowedFqParams);
+		self::assertSame($expected, $actual);
+	}
+
+
+	/**
+	 * The test data for testParseFqFieldAndValue testcase.
+	 *
+	 * @return array
+	 */
+	public function getParseFqFieldAndValueData() {
+		return array(
+			__LINE__ => array(
+				'fq' => 'contentType:5',
+				'expected' => 'contentType:"5"',
+			),
+			__LINE__ => array(
+				'fq' => 'contentType:tt_content',
+				'expected' => 'contentType:"tt_content"',
+			),
+			__LINE__ => array(
+				'fq' => 'category_s:Foo Bar',
+				'expected' => 'category_s:"Foo Bar"',
+				'allowedFqParams' => array('category_s'),
+			),
+			__LINE__ => array(
+				'fq' => 'field1_uid_i:57',
+				'expected' => 'field1_uid_i:"57"',
+				'allowedFqParams' => array('field1_uid_i'),
+			),
+			__LINE__ => array(
+				'fq' => 'upperCaseField:7',
+				'expected' => 'upperCaseField:"7"',
+				'allowedFqParams' => array('upperCaseField'),
+			),
+			__LINE__ => array(
+				'fq' => 'unknowd_ms:5',
+				'expected' => '',
+			),
+		);
+	}
+
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/util/class.tx_mksearch_tests_util_Filter_testcase.php']) {
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/util/class.tx_mksearch_tests_util_Filter_testcase.php']);
 }
-

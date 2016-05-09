@@ -333,13 +333,13 @@ class tx_mksearch_util_Filter {
 		// wir trennen den string auf!
 		// field:value | field:"value"
 		// nur kleinbuchstaben und unterstrich für feldnamen erlauben.
-		$pattern  = '(?P<field>([a-z_]*))';
+		$pattern  = '(?P<field>([a-z0-9_]*))';
 		// feld mit doppelpunkt vom wert getrennt.
 		$pattern .= ':';
 		// eventuelles anführungszeichen am anfang abschneiden.
 		$pattern .= '(["]*)';
 		// nur buchstaben, zahlen unterstrich, leerzeichen und punkt für wert erlauben.
-		$pattern .= '(?P<value>([a-zA-Z0-9_. ]*))';
+		$pattern .= '(?P<value>([a-z0-9_. ]*))';
 		tx_rnbase::load('tx_mksearch_util_Misc');
 		$matches = array();
 		if (
