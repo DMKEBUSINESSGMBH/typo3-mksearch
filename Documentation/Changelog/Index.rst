@@ -15,9 +15,20 @@
 Changelog
 ---------
 
-?.?.?
-""""""
-* removed CLI Crawler. Please use the Scheduler Task fpr indexing instead
+2.0.0
+"""""
+* added support for TYPO3 7.6
+* removed CLI Crawler. Please use the Scheduler Task for indexing instead
+* cleanup and refactoring
+* added dfs field for irfaq categories
+* Handling of deleted files on FAL Indexing added
+* added missing exclude option in flexform for some fields
+* add new sorting feature for dfs fields
+* bugfix in case a FAL file has no storage
+* use title of FAL entites from metadata
+* fix solr ping checks to be typesafe
+* new addModelsToIndex method do add rnbase models and ArrayObjects to indexing queue
+* numbers are now accepted in fieldnames for filtering
 
 1.5.10
 """"""
