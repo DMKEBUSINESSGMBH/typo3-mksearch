@@ -43,6 +43,23 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdate_testcase
 	extends tx_mksearch_tests_Testcase {
 
 	/**
+	 * (non-PHPdoc)
+	 * @see tx_mksearch_tests_Testcase::setUp()
+	 */
+	protected function setUp() {
+		tx_mksearch_tests_Util::storeExtConf();
+		tx_mksearch_tests_Util::setExtConfVar('enableRnBaseUtilDbHook', 1);
+	}
+
+	/**
+	 * (non-PHPdoc)
+	 * @see tx_mksearch_tests_Testcase::tearDown()
+	 */
+	protected function tearDown() {
+		tx_mksearch_tests_Util::restoreExtConf();
+	}
+
+	/**
 	 * @unit
 	 */
 	public function testProcessAutoUpdateWithEmptyDatamap() {
@@ -254,6 +271,70 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdate_testcase
 	public function testRnBaseDoDeletePre() {
 		// use the same method as doUpdate
 		$this->testRnBaseDoUpdatePost();
+	}
+
+	/**
+	 * @unit
+	 */
+	public function testRnBaseDoInsertPostIfHookDeactivated() {
+		tx_mksearch_tests_Util::setExtConfVar('enableRnBaseUtilDbHook', 0);
+
+		$hook = $this->getHookMock(
+			$service = $this->getMock('tx_mksearch_service_internal_Index')
+		);
+
+		$hookParams = array('tablename' => 'tt_content', 'uid' => 1);
+
+		$hook
+			->expects($this->never())
+			->method('getUidsToIndex');
+
+		$service
+			->expects($this->never())
+			->method('findAll');
+
+		$service
+			->expects($this->never())
+			->method('isIndexerDefined');
+
+		$service
+			->expects($this->never())
+			->method('addRecordToIndex');
+
+		$hook->rnBaseDoInsertPost($hookParams);
+	}
+	/**
+	 * @unit
+	 */
+	public function testRnBaseDoUpdatePostIfHookDeactivated() {
+		tx_mksearch_tests_Util::setExtConfVar('enableRnBaseUtilDbHook', 0);
+
+		$hook = $this->getHookMock(
+			$service = $this->getMock('tx_mksearch_service_internal_Index')
+		);
+
+		$hookParams = array(
+			'tablename' => 'tt_content',
+			'where' => 'deleted = 0',
+			'values' => array('hidden' => '1'),
+			'options' => array(),
+		);
+
+		$hook
+			->expects($this->never())
+			->method('getUidsToIndex');
+
+		$service
+			->expects($this->never())
+			->method('findAll');
+		$service
+			->expects($this->never())
+			->method('isIndexerDefined');
+		$service
+			->expects($this->never())
+			->method('addRecordToIndex');
+
+		$hook->rnBaseDoUpdatePost($hookParams);
 	}
 
 	/**

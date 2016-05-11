@@ -105,6 +105,10 @@ class tx_mksearch_hooks_IndexerAutoUpdate {
 	 * @return NULL
 	 */
 	public function rnBaseDoInsertPost(&$params) {
+		if (!$this->isRnBaseUtilDbHookActivated()) {
+			return NULL;
+		}
+
 		return $this->processAutoUpdate(
 			array(
 				$params['tablename'] => array(
@@ -122,6 +126,10 @@ class tx_mksearch_hooks_IndexerAutoUpdate {
 	 * @return NULL
 	 */
 	public function rnBaseDoUpdatePost(&$params) {
+		if (!$this->isRnBaseUtilDbHookActivated()) {
+			return NULL;
+		}
+
 		$table = $params['tablename'];
 		// wür müssen einen select machen, um die uid zu erfahren
 		if (empty($params['values']['uid'])) {
@@ -138,6 +146,14 @@ class tx_mksearch_hooks_IndexerAutoUpdate {
 		}
 
 		return $this->processAutoUpdate(array($table => array($data)));
+	}
+
+	/**
+	 * Wir prüfen das nochmal für den Fall dass die Hooks zur Laufzeit deaktiviert wurden.
+	 * @return boolean
+	 */
+	protected function isRnBaseUtilDbHookActivated() {
+		return tx_rnbase_configurations::getExtensionCfgValue('mksearch', 'enableRnBaseUtilDbHook');
 	}
 
 	/**
