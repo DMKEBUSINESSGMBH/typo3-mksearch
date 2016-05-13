@@ -182,6 +182,7 @@ class tx_mksearch_util_Indexer {
 			$value = tx_mksearch_util_Misc::getISODateFromTimestamp($value, $offset);
 		}
 		// stdWrap ausführen
+		tx_rnbase_util_TYPO3::getTSFE(); // TSFE wird für cObj benötigt
 		$cObj = tx_rnbase::makeInstance(tx_rnbase_util_Typo3Classes::getContentObjectRendererClass());
 		$cObj->data = $rawData;
 
