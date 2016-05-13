@@ -1,41 +1,49 @@
 {
 	"name" : "dmk/mksearch",
 	"description" : "Generic highly adjustable and extendable search engine framework, using Zend Lucene, Apache Solr or ElasticSearch. But support for other search engines can be provided easily.",
-	"version" : "2.0.0",
+	"version" : "2.0.1",
 	"type" : "typo3-cms-extension",
-	"keywords" : ["TYPO3 CMS", "search", "Lucene", "Zend Lucene", "Apache Solr", "Solr", "Elasticsearch"],
+	"keywords" : [
+		"TYPO3 CMS",
+		"search",
+		"Lucene",
+		"Zend Lucene",
+		"Apache Solr",
+		"Solr",
+		"Elasticsearch"
+	],
 	"homepage" : "http://www.dmk-ebusiness.de/",
 	"license" : "GPL-2.0+",
-	"authors" : [
-		{
+	"authors" : [{
 			"name" : "Michael Wagner",
 			"email" : "michael.wagner@dmk-ebusiness.de",
 			"role" : "Developer"
-		},
-		{
+		}, {
 			"name" : "Hannes Bochmann",
 			"email" : "hannes.bochmann@dmk-ebusiness.de",
 			"role" : "Developer"
-		},
-		{
+		}, {
 			"name" : "René Nitzsche",
 			"email" : "nitzsche@dmk-ebusiness.de",
 			"role" : "Developer"
 		}
 	],
-	"support": {
-		"email": "dev@dmk-ebusiness.de",
-		"source": "https://github.com/DMKEBUSINESSGMBH/typo3-mksearch",
-		"issues": "https://github.com/DMKEBUSINESSGMBH/typo3-mksearch"
+	"support" : {
+		"email" : "dev@dmk-ebusiness.de",
+		"source" : "https://github.com/DMKEBUSINESSGMBH/typo3-mksearch",
+		"issues" : "https://github.com/DMKEBUSINESSGMBH/typo3-mksearch"
 	},
-	"replace": {
-		"typo3-ter/mksearch": "*"
+	"replace" : {
+		"typo3-ter/mksearch" : "*"
 	},
 	"require" : {
 		"typo3/cms-core" : ">=4.5.0 <=7.6.99",
 		"digedag/rn-base" : ">=1.0.0"
 	},
-	"autoload": {
-		"classmap": ["scheduler/", "service/"]
+	"autoload" : {
+		"classmap" : [
+			"scheduler/",
+			"service/"
+		]
 	}
 }
