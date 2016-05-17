@@ -58,8 +58,10 @@ class tx_mksearch_util_SolrResponseProcessor {
 		|| !($result['response'] instanceof Apache_Solr_Response)
 		) return false;
 
-		if (!$instance)
-			$instance = new tx_mksearch_util_SolrResponseProcessor($configurations, $confId);
+		if (!$instance) {
+			$processorClass = get_called_class();
+			$instance = new $processorClass($configurations, $confId);
+		}
 
 		$response = &$result['response'];
 		$result = $instance->processSolrResponse($response, $options, $result);
