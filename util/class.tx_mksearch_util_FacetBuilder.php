@@ -237,6 +237,7 @@ class tx_mksearch_util_FacetBuilder {
 	) {
 		if ($this->getKeyValueFacetInstance()->checkValue($id)) {
 			$exploded = $this->getKeyValueFacetInstance()->explodeFacetValue($id);
+			$raw = $id;
 			$id = $exploded['key'];
 			$title = $exploded['value'];
 			$sorting = $exploded['sorting'];
@@ -254,6 +255,9 @@ class tx_mksearch_util_FacetBuilder {
 		$facet->setFacetType($facetType);
 		if (isset($sorting)) {
 			$facet->setSorting($sorting);
+		}
+		if (isset($raw)) {
+			$facet->setLabelRaw($raw);
 		}
 		return $facet;
 	}
