@@ -75,13 +75,13 @@ class tx_mksearch_util_SolrResponseProcessor {
 	/**
 	 * @return tx_rnbase_configurations
 	 */
-	private function getConfigurations() {
+	protected function getConfigurations() {
 		return $this->configurations;
 	}
 	/**
 	 * @return string
 	 */
-	private function getConfId() {
+	protected function getConfId() {
 		return $this->confId;
 	}
 
@@ -272,7 +272,7 @@ class tx_mksearch_util_SolrResponseProcessor {
 	 * @param Apache_Solr_Response $response
 	 * @return array
 	 */
-	private function getHighlighting(Apache_Solr_Response $response) {
+	protected function getHighlighting(Apache_Solr_Response $response) {
 		$aHighlights = array();
 		//Highlighting für jedes gefundene Dokument
 		if(!empty($response->highlighting)) {
