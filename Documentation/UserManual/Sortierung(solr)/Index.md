@@ -78,6 +78,14 @@ Nun noch das HTML-Template anpassen:
 ###SEARCH_FILTER_SORT_SHOWLINK### ###SEARCH_FILTER_SORT_CAPTION### ###SEARCH_FILTER_SORT_SHOWLINK###
 ~~~~
 
+
+Eine Default-Sortierung kann man per TypoScript vorgeben. Dabei muss die Sortierreihenfolge zwingen angegeben werden:
+~~~~ {.sourceCode .ts}
+lib.mksearch {
+	defaultsolrfilter.options.sort = crdate_i desc
+}
+~~~~
+
 Variante 2
 ----------
 
