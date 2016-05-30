@@ -1,6 +1,27 @@
 Changelog
 =========
 
+2.0.4
+-----
+
+-   converted documentation to markdown
+
+2.0.3
+-----
+
+-   make some methods in solr response processor protected for inheritance
+
+2.0.2
+-----
+
+-   solr response processer class can be extended from now on
+-   raw value added to facet object
+
+2.0.1
+-----
+
+-   fieldsConversion needs TSFE for cObj
+
 2.0.0
 -----
 
