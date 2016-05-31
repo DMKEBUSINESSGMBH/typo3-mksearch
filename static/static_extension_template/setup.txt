@@ -359,7 +359,7 @@ lib.mksearch.defaultsolrfilter {
 	### immer die pid -1
 	### kann entfernt wenn folgendes issue erledigt wurde:
 	### https://github.com/DMKEBUSINESSGMBH/typo3-mksearch/issues/15
-	default.options.fq.123456789 = -pid:"-1"
+	options.fq.1464679148 = -pid:"-1"
 }
 
 lib.mksearch.defaultElasticSearchFilter {
