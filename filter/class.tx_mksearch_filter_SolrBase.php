@@ -599,7 +599,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 			$paramArray = $this->getParameters()->getArrayCopy();
 			$formData = $this->getParameters()->get('submit') ? $paramArray : $this->getFormData();
 			$formData['action'] = $link->makeUrl(false);
-			$formData['searchterm'] = htmlspecialchars( $this->getParameters()->get('term') );
+			$formData['searchterm'] = htmlspecialchars( $this->getParameters()->get('term'), ENT_QUOTES );
 			tx_rnbase::load('tx_rnbase_util_FormUtil');
 			$formData['hiddenfields'] = tx_rnbase_util_FormUtil::getHiddenFieldsForUrlParams($formData['action']);
 
