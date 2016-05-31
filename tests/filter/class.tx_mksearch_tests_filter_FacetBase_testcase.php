@@ -156,6 +156,9 @@ class tx_mksearch_tests_filter_FacetBase_testcase
 		//force noch setzen
 		$config['searchsolr.']['filter.']['default.']['force'] = 1;
 
+		// brauchen wir hier nicht
+		unset($config['searchsolr.']['filter.']['default.']['options.']['fq.'][1464679148]);
+
 		return $config;
 	}
 
