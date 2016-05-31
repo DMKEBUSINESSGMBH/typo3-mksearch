@@ -179,7 +179,7 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
 	 * @param string $confId
 	 * @param string $marker
 	 * @return string
-	 * 
+	 *
 	 * @todo refactoring da die gleiche Methode wie in tx_mksearch_filter_ElasticSearchBase
 	 */
 	protected function parseSearchForm($template, &$formatter, $confId, $marker = 'FILTER') {
@@ -230,7 +230,7 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
 	 * @param tx_rnbase_parameters $parameters
 	 */
 	protected function prepareFormFields(&$formData, $parameters) {
-		$formData['searchterm'] = $parameters->get('term');
+		$formData['searchterm'] = htmlspecialchars( $parameters->get('term'), ENT_QUOTES );
 		$values = array('or', 'and', 'exact');
 		$options = $parameters->get('options');
 		if($options['combination']) {

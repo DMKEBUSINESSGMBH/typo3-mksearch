@@ -29,7 +29,7 @@ tx_rnbase::load('tx_rnbase_util_ListBuilderInfo');
 tx_rnbase::load('tx_mksearch_util_Filter');
 
 /**
- * 
+ *
  * @author Hannes Bochmann <hannes.bochmann@dmk-business.de>
  *
  */
@@ -40,7 +40,7 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter {
 	 * @var tx_mksearch_util_Filter
 	 */
 	protected $filterUtility;
-	
+
 	/**
 	 * Initialize filter
 	 *
@@ -54,7 +54,7 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter {
 			$options, $this->getConfigurations(), $confId . 'options.'
 		);
 		return $this->initFilter(
-			$fields, $options, $this->getParameters(), 
+			$fields, $options, $this->getParameters(),
 			$this->getConfigurations(), $confId
 		);
 	}
@@ -74,7 +74,7 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter {
 		&$fields, &$options, &$parameters, &$configurations, $confId
 	) {
 		// Es muss ein Submit-Parameter im request liegen, damit der Filter greift
-		if(!($parameters->offsetExists('submit') || 
+		if(!($parameters->offsetExists('submit') ||
 			$configurations->get($confId . 'forceSearch'))
 		) {
 			return FALSE;
@@ -82,7 +82,7 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter {
 
 		$this->handleTerm($fields, $parameters, $configurations, $confId);
 		$this->handleSorting($options);
-		
+
 		return TRUE;
 	}
 
@@ -158,11 +158,11 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter {
 	 * @param string $confId
 	 * @param string $marker
 	 * @return string
-	 * 
+	 *
 	 * @todo refactoring da die gleiche Methode wie in tx_mksearch_filter_LuceneBase
 	 */
 	public function parseSearchForm(
-		$template, &$markArray, &$subpartArray, &$wrappedSubpartArray, 
+		$template, &$markArray, &$subpartArray, &$wrappedSubpartArray,
 		&$formatter, $confId, $marker = 'FILTER'
 	) {
 		$markerName = 'SEARCH_FORM';
@@ -174,7 +174,7 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter {
 		$configurations = $formatter->getConfigurations();
 		tx_rnbase::load('tx_rnbase_util_Templates');
 		$formTemplate = $configurations->get($confId . 'template.file');
-		
+
 		$subpart = $configurations->get($confId . 'template.subpart');
 		$formTemplate = tx_rnbase_util_Templates::getSubpartFromFile(
 			$formTemplate, $subpart
@@ -187,7 +187,7 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter {
 			$paramArray = $this->getParameters()->getArrayCopy();
 			$formData = $this->getParameters()->get('submit') ? $paramArray : $this->getFormData();
 			$formData['action'] = $link->makeUrl(false);
-			$formData['searchterm'] = htmlspecialchars( $this->getParameters()->get('term') );
+			$formData['searchterm'] = htmlspecialchars( $this->getParameters()->get('term'), ENT_QUOTES );
 			tx_rnbase::load('tx_rnbase_util_FormUtil');
 			$formData['hiddenfields'] = tx_rnbase_util_FormUtil::getHiddenFieldsForUrlParams($formData['action']);
 			$this->prepareFormFields($formData, $this->getParameters());
@@ -224,14 +224,14 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter {
 		$markArray['###'.$markerName.'###'] = $formTemplate;
 		return $template;
 	}
-	
+
 	/**
 	 * Werte für Formularfelder aufbereiten. Daten aus dem Request übernehmen und wieder füllen.
 	 * @param array $formData
 	 * @param tx_rnbase_parameters $parameters
 	 */
 	protected function prepareFormFields(&$formData, $parameters) {
-		$formData['searchterm'] = $parameters->get('term');
+		$formData['searchterm'] = htmlspecialchars( $parameters->get('term'), ENT_QUOTES );
 		$values = array('or', 'and', 'exact');
 		$options = $parameters->get('options');
 		if($options['combination']) {
@@ -253,7 +253,7 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter {
 			// Default
 			$formData['mode_standard_selected'] = 'checked=checked';
 		}
-	
+
 		$formData = $this->fillFormDataWithRequiredFormFieldsIfNoSet(
 				$formData, $parameters
 		);
@@ -270,7 +270,7 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter {
 		);
 		return (array) $availableModes;
 	}
-	
+
 	/**
 	 * ist notwendig weil sonst die Marker, welche die Formulardaten
 	 * enthalten ungeparsed rauskommen, falls das Formular noch
@@ -288,13 +288,13 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter {
 			',',
 			$this->getConfigurations()->get($this->getConfId() . 'requiredFormFields')
 		);
-	
+
 		foreach ($formFields as $formField) {
 			if (!array_key_exists($formField, $formData)) {
 				$formData[$formField] = '';
 			}
 		}
-	
+
 		return $formData;
 	}
 
@@ -310,7 +310,7 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter {
 	 * @param string $marker
 	 */
 	public function parseSortFields(
-		$template, &$markArray, &$subpartArray, 
+		$template, &$markArray, &$subpartArray,
 		&$wrappedSubpartArray, &$formatter, $confId, $marker = 'FILTER'
 	) {
 		$this->getFilterUtility()->parseSortFields(
