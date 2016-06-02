@@ -177,3 +177,15 @@ tikafields {
 Damit lassen sich dann auch PDF Dateien durchsuchen. Die Ausgabe im FE wird wie üblich konfiguriert.
 
 mksearch bietet aber auch eine Tika Utility, welche anderswertig verwendet werden kann, um den Inhalt von Dateien zu extrahieren. Die Klasse heißt tx\_mksearch\_util\_Tika.
+
+
+Workspaces
+-------------------
+In jeder Indexer Konfiguration kann angegeben werden in welchem Workspace ein Datensatz liegen darf. Default ist nur der Live
+Workspace. Liegt der Datensatz nicht im richtigen Workspace, wird dieser gelöscht.
+
+Im folgenden Beispiel wird nichts aus dem Live Workspace indiziert sondern aus den Workspaces 1,2,3.
+
+~~~~ {.sourceCode .ts}
+workspaceIds = 1,2,3
+~~~~

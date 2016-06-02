@@ -402,10 +402,15 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 									// indizieren!
 									$doc = $indexer->prepareSearchData(
 										$queueRecord['tablename'], $record,
-										$searchEngine->makeIndexDocInstance($extKey, $contentType),
-										$aConfigByContentType
+										$searchEngine->makeIndexDocInstance($extKey, $contentType), $aConfigByContentType
 									);
 									if($doc) {
+										if ($GLOBALS['TCA'][$queueRecord['tablename']]['ctrl']['versioningWS']) {
+											$this->deleteDocumentIfNotCorrectWorkspace(
+												$aConfigByContentType, $record, $doc
+											);
+										}
+
 										//add fixed_fields from indexer config if defined
 										$doc = $this->addFixedFields($doc, $aConfigByContentType);
 
@@ -474,6 +479,33 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 		}
 
 		return true;
+	}
+
+	/**
+	 * @param array $configurationByContentType
+	 * @param array $record
+	 * @param tx_mksearch_interface_IndexerDocument $indexDocument
+	 *
+	 * @return void
+	 */
+	protected function deleteDocumentIfNotCorrectWorkspace(
+		array $configurationByContentType, array $record, tx_mksearch_interface_IndexerDocument $indexDocument
+	) {
+		$workspacesToIndex = $configurationByContentType['workspaceIds'] ?
+			Tx_Rnbase_Utility_Strings::trimExplode(',', $configurationByContentType['workspaceIds']) :
+			array(0);
+
+		$isInIndexableWorkspace = FALSE;
+		foreach ($workspacesToIndex as $workspaceId) {
+			if ($record['t3ver_wsid'] == $workspaceId) {
+				$isInIndexableWorkspace = TRUE;
+				break;
+			}
+		}
+
+		if (!$isInIndexableWorkspace) {
+			$indexDocument->setDeleted(TRUE);
+		}
 	}
 
 	/**

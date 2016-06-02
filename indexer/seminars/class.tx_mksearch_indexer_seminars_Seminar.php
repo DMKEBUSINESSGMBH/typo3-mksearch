@@ -51,7 +51,7 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
 	const SEMINARS_TABLE_SEMINARS_LEADERS_MM = 'tx_seminars_seminars_speakers_mm_leaders';
 	const SEMINARS_TABLE_SPEAKERS = 'tx_seminars_speakers';
 
-	
+
 	/**
 	 * Our seminar object
 	 * @var tx_seminars_seminar
@@ -365,7 +365,7 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
 					$mmTable . '.uid_local = ' . $uid . ' AND ' .
 					self::SEMINARS_TABLE_SPEAKERS . '.uid = ' . $mmTable . '.uid_foreign',
 					$mmTable);
-						
+
 		}
 	}
 
@@ -483,6 +483,11 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
 # include.pageTrees {
 # 	0 = $pid-of-domain
 # }
+
+# should a special workspace be indexed?
+# default is the live workspace (ID = 0)
+# comma separated list of workspace IDs
+#workspaceIds = 1,2,3
 
 LH;
 	}

@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.0.5
+-----
+
+-   support for workspaces included (IMPORTANT: reindexing of all data is neccessary)
+
 2.0.4
 -----
 

@@ -354,12 +354,6 @@ lib.mksearch.defaultsolrfilter {
 			distance = 50
 		}
 	}
-
-	### Datensätze in einem Workspace sollten für gewöhnlich unerwünscht sein und die haben
-	### immer die pid -1
-	### kann entfernt wenn folgendes issue erledigt wurde:
-	### https://github.com/DMKEBUSINESSGMBH/typo3-mksearch/issues/15
-	options.fq.1464679148 = -pid:"-1"
 }
 
 lib.mksearch.defaultElasticSearchFilter {

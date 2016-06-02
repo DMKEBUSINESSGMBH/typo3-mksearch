@@ -159,4 +159,33 @@ class tx_mksearch_tests_service_internal_Index_testcase
 			$options
 		);
 	}
+
+	/**
+	 * @group unit
+	 * @dataProvider dataProviderDeleteDocumentIfNotCorrectWorkspaceTest
+	 */
+	public function testDeleteDocumentIfNotCorrectWorkspace(
+		array $configuration, array $record, $isDeleted
+	) {
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', 'mksearch', 'test');
+
+		$this->callInaccessibleMethod(
+			tx_mksearch_util_ServiceRegistry::getIntIndexService(), 'deleteDocumentIfNotCorrectWorkspace',
+			$configuration, $record, $indexDoc
+		);
+
+		self::assertSame($isDeleted, $indexDoc->getDeleted());
+	}
+
+	/**
+	 * @return array
+	 */
+	public function dataProviderDeleteDocumentIfNotCorrectWorkspaceTest() {
+		return array(
+			array(array(), array('t3ver_wsid' => 0), FALSE),
+			array(array(), array('t3ver_wsid' => 1), TRUE),
+			array(array('workspaceIds' => '1,2,3'), array('t3ver_wsid' => 3), FALSE),
+			array(array('workspaceIds' => '1,2,3'), array('t3ver_wsid' => 0), TRUE),
+		);
+	}
 }

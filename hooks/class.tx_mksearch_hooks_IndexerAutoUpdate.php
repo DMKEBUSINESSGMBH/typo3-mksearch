@@ -43,9 +43,6 @@ class tx_mksearch_hooks_IndexerAutoUpdate {
 		// Nothing to do?
 		if (empty($dataHandler->datamap)) return;
 
-		// @todo Make sensible for workspaces!
-		if ($dataHandler->BE_USER->workspace !== 0) return;
-
 		// daten sammeln
 		$records = array();
 		foreach ($dataHandler->datamap as $table => $uids) {
@@ -81,16 +78,8 @@ class tx_mksearch_hooks_IndexerAutoUpdate {
 			case 'delete':
 			case 'undelete':
 			case 'move':
-				$srv->addRecordToIndex($table, $id, true);
-				break;
-			case 'copy':
-				// This task is still done by $this->processDatamap_afterAllOperations().
-				break;
-			// workspace action
 			case 'version':
-				if (self::isPublishedToLiveWorkspace($value)) {
-					$srv->addRecordToIndex($table, $id);
-				}
+				$srv->addRecordToIndex($table, $id, true);
 				break;
 			default:
 				break;
@@ -290,13 +279,6 @@ class tx_mksearch_hooks_IndexerAutoUpdate {
 	 */
 	protected function getRnbaseDatabaseUtility() {
 		return tx_rnbase::makeInstance('Tx_Rnbase_Database_Connection');
-	}
-
-	/**
-	 * @return boolean
-	 */
-	public static function isPublishedToLiveWorkspace($commandValues) {
-		return ($commandValues['action'] === 'swap' && $commandValues['swapWith'] > 0);
 	}
 
 	/**

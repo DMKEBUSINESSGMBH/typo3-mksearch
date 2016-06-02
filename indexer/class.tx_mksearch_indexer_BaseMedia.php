@@ -458,6 +458,11 @@ tikafields {
   meta.resourceName = resource_name_s
 }
 
+# should a special workspace be indexed?
+# default is the live workspace (ID = 0)
+# comma separated list of workspace IDs
+#workspaceIds = 1,2,3
+
 CFG;
 	}
 }
