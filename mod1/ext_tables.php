@@ -5,8 +5,19 @@ if (!defined ('TYPO3_MODE')) {
 
 if (TYPO3_MODE == 'BE') {
 
-	tx_rnbase_util_Extensions::addModulePath('web_txmksearchM1', tx_rnbase_util_Extensions::extPath($_EXTKEY, 'mod1/'));
-	tx_rnbase_util_Extensions::addModule('web', 'txmksearchM1', 'bottom', tx_rnbase_util_Extensions::extPath($_EXTKEY, 'mod1/'));
+	tx_rnbase::load('tx_mksearch_mod1_Module');
+	$modPath = '';
+	if (tx_rnbase_util_TYPO3::isTYPO60OrHigher()) {
+		tx_rnbase_util_Extensions::addModulePath('web_txmksearchM1', tx_rnbase_util_Extensions::extPath($_EXTKEY, 'mod1/'));
+		$modPath = tx_rnbase_util_Extensions::extPath($_EXTKEY, 'mod1/');
+	}
+	tx_rnbase_util_Extensions::addModule(
+		'web',
+		'txmksearchM1',
+		'bottom',
+		$modPath,
+		array('routeTarget' => 'tx_mksearch_mod1_Module')
+	);
 
 	tx_rnbase_util_Extensions::insertModuleFunction(
 		'web_txmksearchM1',
