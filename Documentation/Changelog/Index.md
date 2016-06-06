@@ -1,10 +1,16 @@
 Changelog
 =========
 
+2.0.6
+-----
+
+-   support for workspaces included (IMPORTANT: reindexing of all data is neccessary if you have workspaces)
+
 2.0.5
 -----
 
--   support for workspaces included (IMPORTANT: reindexing of all data is neccessary)
+-   updates manual
+-   escape single quotes in the search term upon display in the FE for Lucence, Solr and ElasticSearch filters to avoid XSS
 
 2.0.4
 -----
