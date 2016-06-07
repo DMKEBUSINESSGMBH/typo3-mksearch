@@ -45,19 +45,21 @@ class tx_mksearch_mod1_Module
 	 */
 	public function init()
 	{
-		$GLOBALS['SOBE'] = $this;
+		// fallback for TYPO3 4 and index.php calls
+		if (!$this->MCONF['name']) {
+			$this->MCONF = array_merge(
+				(array) $GLOBALS['MCONF'],
+				array(
+					'name' => 'web_MksearchM1',
+					'access' => 'user,group',
+					'default' => array(
+						'tabs_images' => array('tab' => 'moduleicon.gif'),
+						'll_ref' => 'LLL:EXT:mksearch/mod1/locallang_mod.xml',
+					),
+				)
+			);
+		}
 
-		$this->MCONF = array_merge(
-			(array) $GLOBALS['MCONF'],
-			array(
-				'name' => 'web_txmksearchM1',
-				'access' => 'user,group',
-				'default' => array(
-					'tabs_images' => array('tab' => 'moduleicon.gif'),
-					'll_ref' => 'LLL:EXT:mksearch/mod1/locallang_mod.xml',
-				),
-			)
-		);
 		$GLOBALS['LANG']->includeLLFile('EXT:mksearch/mod1/locallang.xml');
 		$GLOBALS['BE_USER']->modAccess($this->MCONF, 1);
 		parent::init();
@@ -92,7 +94,7 @@ class tx_mksearch_mod1_Module
 	protected function getFormTag()
 	{
 		$modUrl = Tx_Rnbase_Backend_Utility::getModuleUrl(
-			'web_txmksearchM1',
+			'web_MksearchM1',
 			array(
 				'id' => $this->getPid()
 			),

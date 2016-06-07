@@ -4,7 +4,7 @@
 // deprecated, will be removed, when TYPO3 4.x support drops! //
 // ////////////////////////////////////////////////////////// //
 
-$MCONF['name'] = 'web_txmksearchM1';
+$MCONF['name'] = 'web_MksearchM1';
 $MCONF['script']='_DISPATCH';
 
 $MCONF['access'] = 'user,group';

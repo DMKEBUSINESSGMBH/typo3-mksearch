@@ -50,7 +50,7 @@ class tx_mksearch_mod1_util_Misc {
 		}
 		foreach($pages as $pid => &$page) {
 			$pageinfo = Tx_Rnbase_Backend_Utility::readPageAccess($pid, $mod->perms_clause);
-			$modUrl = Tx_Rnbase_Backend_Utility::getModuleUrl('web_txmksearchM1', array('id' => $pid), '');
+			$modUrl = Tx_Rnbase_Backend_Utility::getModuleUrl('web_MksearchM1', array('id' => $pid), '');
 			$page  = '<a href="' . $modUrl . '">';
 			$page .= Tx_Rnbase_Backend_Utility_Icons::getSpriteIconForRecord('pages', Tx_Rnbase_Backend_Utility::getRecord('pages', $pid));
 			$page .= ' '.$pageinfo['title'];
