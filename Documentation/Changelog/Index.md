@@ -1,6 +1,12 @@
 Changelog
 =========
 
+2.0.7
+-----
+
+-   bemodule refactored to rnbase module runner
+-   be module registration for TYPO3 6 and above refactored
+
 2.0.6
 -----
 
