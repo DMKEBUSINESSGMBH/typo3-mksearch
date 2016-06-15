@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.0.8
+-----
+
+-   bugfix for core selection in solr admin panel
+
 2.0.7
 -----
 
