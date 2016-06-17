@@ -157,11 +157,18 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 			return;
 		}
 
-		$qid = tx_rnbase_util_DB::doInsert(self::$queueTable, $record);
+		$qid = $this->getDatabaseConnection()->doInsert(self::$queueTable, $record);
 		if(tx_rnbase_util_Logger::isDebugEnabled()) {
 			tx_rnbase_util_Logger::debug('New record to be indexed added to queue.', 'mksearch', array('queue-id'=>$qid, 'tablename' => $tableName, 'recid' => $uid));
 		}
 		return $qid > 0;
+	}
+
+	/**
+	 * @return Tx_Rnbase_Database_Connection
+	 */
+	protected function getDatabaseConnection() {
+		return Tx_Rnbase_Database_Connection::getInstance();
 	}
 
 	/**
@@ -258,7 +265,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 	 * @param 	$sqlValues 	$sqlValues
 	 * @return 	boolean
 	 */
-	private function doInsertRecords(array $sqlValues){
+	protected function doInsertRecords(array $sqlValues){
 		$insert = 'INSERT INTO '.self::$queueTable.'(cr_date,prefer,recid,tablename,data,resolver)';
 
 		// no inserts found
@@ -268,7 +275,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 
 		// build query string
 		$sqlQuery = $insert." VALUES \r\n".implode(", \r\n",$sqlValues).';';
-		tx_rnbase_util_DB::doQuery($sqlQuery);
+		$this->getDatabaseConnection()->doQuery($sqlQuery);
 		if(tx_rnbase_util_Logger::isDebugEnabled()) {
 			tx_rnbase_util_Logger::debug('New records to be indexed added to queue.', 'mksearch', array('sqlQuery' => $sqlQuery));
 		}

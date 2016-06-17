@@ -51,6 +51,8 @@ class tx_mksearch_tests_service_internal_Index_testcase
 	 */
 	protected function tearDown() {
 		tx_mksearch_tests_Util::restoreExtConf();
+
+		tx_mksearch_util_Config::registerResolver(false, array('tx_mktest_table'));
 	}
 
 	/**
@@ -187,5 +189,163 @@ class tx_mksearch_tests_service_internal_Index_testcase
 			array(array('workspaceIds' => '1,2,3'), array('t3ver_wsid' => 3), FALSE),
 			array(array('workspaceIds' => '1,2,3'), array('t3ver_wsid' => 0), TRUE),
 		);
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testGetDatabaseConnection() {
+		self::assertInstanceOf(
+			'Tx_Rnbase_Database_Connection',
+			$this->callInaccessibleMethod(tx_rnbase::makeInstance('tx_mksearch_service_internal_Index'), 'getDatabaseConnection')
+		);
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testAddRecordToIndex() {
+		$databaseConnection = $this->getMock('Tx_Rnbase_Database_Connection', array('doInsert'));
+		$databaseConnection->expects(self::once())
+			->method('doInsert')
+			->with(
+				'tx_mksearch_queue',
+				array(
+					'cr_date'	=> tx_rnbase_util_Dates::datetime_tstamp2mysql($GLOBALS['EXEC_TIME']),
+					'prefer' 	=> 0,
+					'recid'		=> 50,
+					'tablename'	=> 'tx_mktest_table',
+					'data'		=> '',
+					'resolver'	=> '',
+				)
+			)
+			->will(self::returnValue(123));
+
+		$service = $this->getMock('tx_mksearch_service_internal_Index', array('getDatabaseConnection'));
+		$service->expects(self::once())
+			->method('getDatabaseConnection')
+			->will(self::returnValue($databaseConnection));
+
+		self::assertTrue($service->addRecordToIndex('tx_mktest_table', 50));
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testAddRecordToIndexWithRegisteredResolver() {
+		tx_mksearch_util_Config::registerResolver('tx_mksearch_resolver_Test', array('tx_mktest_table'));
+
+		$databaseConnection = $this->getMock('Tx_Rnbase_Database_Connection', array('doInsert'));
+		$databaseConnection->expects(self::once())
+			->method('doInsert')
+			->with(
+				'tx_mksearch_queue',
+				array(
+						'cr_date'	=> tx_rnbase_util_Dates::datetime_tstamp2mysql($GLOBALS['EXEC_TIME']),
+						'prefer' 	=> 0,
+						'recid'		=> 50,
+						'tablename'	=> 'tx_mktest_table',
+						'data'		=> '',
+						'resolver'	=> 'tx_mksearch_resolver_Test',
+				)
+			)
+			->will(self::returnValue(123));
+
+		$service = $this->getMock('tx_mksearch_service_internal_Index', array('getDatabaseConnection'));
+		$service->expects(self::once())
+			->method('getDatabaseConnection')
+			->will(self::returnValue($databaseConnection));
+
+		self::assertTrue($service->addRecordToIndex('tx_mktest_table', 50));
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testDoInsertRecords() {
+		$databaseConnection = $this->getMock('Tx_Rnbase_Database_Connection', array('doQuery'));
+		$databaseConnection->expects(self::once())
+			->method('doQuery')
+			->with(
+				"INSERT INTO tx_mksearch_queue(cr_date,prefer,recid,tablename,data,resolver) VALUES \r\nvalue1, \r\nvalue2;"
+			);
+
+		$service = $this->getMock('tx_mksearch_service_internal_Index', array('getDatabaseConnection'));
+		$service->expects(self::once())
+			->method('getDatabaseConnection')
+			->will(self::returnValue($databaseConnection));
+
+		$this->callInaccessibleMethod($service, 'doInsertRecords', array('value1', 'value2'));
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testDoInsertRecordsWhenNoSqlValuesGiven() {
+		$service = $this->getMock('tx_mksearch_service_internal_Index', array('getDatabaseConnection'));
+		$service->expects(self::never())
+			->method('getDatabaseConnection');
+
+		self::assertTrue($this->callInaccessibleMethod($service, 'doInsertRecords', array()));
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testAddRecordsToIndex() {
+		$execTimeFormatted = tx_rnbase_util_Dates::datetime_tstamp2mysql($GLOBALS['EXEC_TIME']);
+		$service = $this->getMock('tx_mksearch_service_internal_Index', array('doInsertRecords'));
+		$service->expects(self::once())
+			->method('doInsertRecords')
+			->with(array(
+				0 => "('$execTimeFormatted','0','50','tx_mktest_table','','')",
+				1 => "('$execTimeFormatted','1','51','tx_mktest_table','','')",
+				2 => "('$execTimeFormatted','1','52','tx_mktest_table','','tx_mksearch_resolver_Test')",
+				3 => "('$execTimeFormatted','1','53','tx_mktest_table','test index','tx_mksearch_resolver_Test')",
+			));
+
+		$records = array(
+			array('tablename' => 'tx_mktest_table', 'uid' => '50'),
+			array('tablename' => 'tx_mktest_table', 'uid' => '51', 'preferer' => '1'),
+			array('tablename' => 'tx_mktest_table', 'uid' => '52', 'preferer' => '1', 'resolver' => 'tx_mksearch_resolver_Test'),
+			array('tablename' => 'tx_mktest_table', 'uid' => '53', 'preferer' => '1', 'resolver' => 'tx_mksearch_resolver_Test', 'data' => 'test index'),
+		);
+		$options = array('checkExisting' => false);
+		$service->addRecordsToIndex($records, $options);
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testAddRecordsToIndexWithMoreThan500Records() {
+		$execTimeFormatted = tx_rnbase_util_Dates::datetime_tstamp2mysql($GLOBALS['EXEC_TIME']);
+		for ($i = 1; $i <= 501; $i++) {
+			$records[] = array('tablename' => 'tx_mktest_table', 'uid' => $i);
+		}
+		foreach ($records as $record) {
+			$expectedRecordsToInsert[] = "('$execTimeFormatted','0','" . $record['uid'] . "','" . $record['tablename'] . "','','')";
+		}
+
+		$service = $this->getMock('tx_mksearch_service_internal_Index', array('doInsertRecords'));
+		$service->expects(self::at(0))
+			->method('doInsertRecords')
+			->with(array_slice($expectedRecordsToInsert, 0, 500));
+		$service->expects(self::at(1))
+			->method('doInsertRecords')
+			->with(array_slice($expectedRecordsToInsert, 500));
+
+		$options = array('checkExisting' => false);
+		$service->addRecordsToIndex($records, $options);
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testAddRecordsToIndexWhenNoRecordsGiven() {
+		$service = $this->getMock('tx_mksearch_service_internal_Index', array('doInsertRecords'));
+		$service->expects(self::never())
+			->method('doInsertRecords');
+
+		self::assertTrue($service->addRecordsToIndex(array()));
 	}
 }
