@@ -87,8 +87,8 @@ class tx_mksearch_model_cal_Event extends tx_rnbase_model_base  {
 	/**
 	 * @return array
 	 */
-	private function getCategoriesByEvent() {
-		return tx_rnbase_util_DB::doSelect(
+	protected function getCategoriesByEvent() {
+		return Tx_Rnbase_Database_Connection::getInstance()->doSelect(
 			'uid_foreign',
 			'tx_cal_event_category_mm AS MM JOIN tx_cal_category AS CAT ON ' .
 			'MM.uid_foreign = CAT.uid',
@@ -96,8 +96,7 @@ class tx_mksearch_model_cal_Event extends tx_rnbase_model_base  {
 				//da MM keine TCA hat
 				'enablefieldsoff' => true,
 				//keine versteckten kategorien
-				'where'	=> 'MM.uid_local = ' . intval($this->getUid()) .
-					' AND CAT.hidden = 0'
+				'where'	=> 	'MM.uid_local = ' . intval($this->getUid()) . ' AND CAT.hidden = 0'
 			)
 		);
 	}

@@ -21,10 +21,7 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
-
-
-require_once tx_rnbase_util_Extensions::extPath('mksearch', 'lib/Apache/Solr/Document.php');
-tx_rnbase::load('tx_mksearch_tests_DbTestcase');
+tx_rnbase::load('tx_mksearch_tests_Testcase');
 tx_rnbase::load('tx_mksearch_tests_Util');
 
 
@@ -40,46 +37,42 @@ tx_rnbase::load('tx_mksearch_tests_Util');
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_tests_model_cal_Event_testcase
-	extends tx_mksearch_tests_DbTestcase {
+class tx_mksearch_tests_model_cal_Event_testcase extends tx_mksearch_tests_Testcase {
 
 	/**
-	 * Constructs a test case with the given name.
+	 * @group integration
 	 *
-	 * @param string $name the name of a testcase
-	 * @param array $data ?
-	 * @param string $dataName ?
+	 * wir testen im Prinzip nur ob die Query korrekt durchläuft. Damit stellen
+	 * wir zumindest sicher dass die Tabellen und Felder vorhanden sind
 	 */
-	public function __construct($name = NULL, array $data = array(), $dataName = '') {
-		parent::__construct($name, $data, $dataName);
+	public function testGetCategoriesByEvent() {
+		$event = tx_rnbase::makeInstance('tx_mksearch_model_cal_Event', array('uid' => 1));
 
-		$this->importDataSets[] = tx_mksearch_tests_Util::getFixturePath('db/cal_event_category_mm.xml');
-		$this->importDataSets[] = tx_mksearch_tests_Util::getFixturePath('db/cal_category.xml');
+		self::assertTrue(is_array($this->callInaccessibleMethod($event, 'getCategoriesByEvent')));
 	}
 
 	/**
-	 * setUp() = init DB etc.
+	 * group unit
 	 */
-	protected function setUp() {
-		$this->importExtensions[] = 'cal';
-		parent::setUp();
-	}
-
-	/**
-	 */
-	public function testgetCategoriesReturnsCorrectCategories() {
-		$event = tx_rnbase::makeInstance(
-			'tx_mksearch_model_cal_Event',array('uid' => 1)
-		);
+	public function testGetCategories() {
+		$event = $this->loadYaml(array(
+			'_model' => 'tx_mksearch_model_cal_Event',
+			'getCategoriesByEvent' => array(
+				0 => array('uid_foreign' => array('title' => 'First Category')),
+				1 => array('uid_foreign' => array('title' => 'Second Category')),
+			)
+		));
 
 		$categories = $event->getCategories();
 
 		self::assertEquals(2, count($categories), 'Mehr Kategorien als erwartet.');
+		self::assertInstanceOf('tx_mksearch_model_cal_Category', $categories[0]);
 		self::assertEquals(
 			'First Category',
 			$categories[0]->getTitle(),
 			'Titel der 1. Kategorie falsch'
 		);
+		self::assertInstanceOf('tx_mksearch_model_cal_Category', $categories[1]);
 		self::assertEquals(
 			'Second Category',
 			$categories[1]->getTitle(),
