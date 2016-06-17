@@ -325,6 +325,20 @@ class tx_mksearch_tests_Util {
 		copy($packageStatesFile, $backupPackageStatesFile);
 
 		$extensionManagementUtility = new TYPO3\CMS\Core\Utility\ExtensionManagementUtility();
+
+		$method = new ReflectionMethod('TYPO3\\CMS\\Core\\Package\\PackageManager', 'getDependencyArrayForPackage');
+		$method->setAccessible(true);
+
+		// falls eine extension von templavoila abhängt, müssen wir diese auch deinstallieren
+		foreach ($packageManager->getActivePackages() as $package) {
+			$packageKey = $package->getPackageMetaData()->getPackageKey();
+			$dependencies = $method->invokeArgs($packageManager, array($packageKey));
+
+			if (array_search('templavoila', $dependencies) !== false) {
+				$extensionManagementUtility->unloadExtension($packageKey);
+			}
+		}
+
 		$extensionManagementUtility->unloadExtension('templavoila');
 
 		// bei autoloading werden die initialen packages durchsucht. Daher müssen
