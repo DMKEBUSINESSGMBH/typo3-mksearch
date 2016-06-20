@@ -31,15 +31,13 @@ tx_rnbase::load('tx_mksearch_service_Base');
 class tx_mksearch_service_irfaq_Category extends tx_mksearch_service_Base {
 
 	/**
-	 * returns all categories of the given question
-	 *
-	 * @param tx_mksearch_model_irfaq_Question $oQuestion
+	 * @param tx_mksearch_model_irfaq_Question $question
 	 * @return array[tx_mksearch_model_irfaq_Category]
 	 */
-	public function getByQuestion($oQuestion){
+	public function getByQuestion(tx_mksearch_model_irfaq_Question $question){
 	    $fields = array();
 	    $options = array();
-	    $fields['IRFAQ_QUESTION_CATEGORY_MM.uid_local'][OP_EQ_INT] = $oQuestion->getUid();
+	    $fields['IRFAQ_QUESTION_CATEGORY_MM.uid_local'][OP_EQ_INT] = $question->getUid();
 	    return $this->search($fields, $options);
 	}
 

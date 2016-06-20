@@ -21,8 +21,6 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
-
-
 tx_rnbase::load('tx_mksearch_service_Base');
 
 /**
