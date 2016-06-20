@@ -47,6 +47,8 @@ class tx_mksearch_tests_service_irfaq_Question_testcase extends tx_mksearch_test
 		if (!tx_rnbase_util_Extensions::isLoaded('irfaq')) {
 			self::markTestSkipped('irfaq nicht installiert');
 		}
+
+		parent::setUp();
 	}
 
 	/**
