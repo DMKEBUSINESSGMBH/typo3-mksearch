@@ -221,12 +221,20 @@ class tx_mksearch_util_Indexer {
 	){
 		static $indexSrv;
 		if(!empty($model) && $model->isValid()){
-			if(!$indexSrv)
-				$indexSrv = tx_mksearch_util_ServiceRegistry::getIntIndexService();
+			if(!$indexSrv) {
+				$indexSrv = $this->getInternalIndexService();
+			}
 			$indexSrv->addRecordToIndex(
 				$tableName, $model->getUid(), $prefer, $resolver, $data, $options
 			);
 		}
+	}
+
+	/**
+	 * @return tx_mksearch_service_internal_Index
+	 */
+	protected function getInternalIndexService() {
+		return tx_mksearch_util_ServiceRegistry::getIntIndexService();
 	}
 
 	/**

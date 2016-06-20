@@ -194,7 +194,7 @@ abstract class tx_mksearch_indexer_Base
 	 * @return tx_mksearch_util_Indexer
 	 */
 	protected function getIndexerUtility() {
-		return tx_rnbase::makeInstance('tx_mksearch_util_Indexer');
+		return tx_mksearch_util_Indexer::getInstance();
 	}
 
 	/**
@@ -571,8 +571,7 @@ CONFIG;
 		$models, $tableName, $prefer=false, $resolver=false,
 		$data=false, array $options = array()
 	) {
-		tx_mksearch_util_Indexer::getInstance()
-			->addModelsToIndex($models, $tableName, $prefer, $resolver, $data, $options);
+		$this->getIndexerUtility()->addModelsToIndex($models, $tableName, $prefer, $resolver, $data, $options);
 	}
 
 	/**

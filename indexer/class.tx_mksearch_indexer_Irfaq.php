@@ -57,10 +57,24 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 * @see tx_mksearch_indexer_Base::hasDocToBeDeleted($model, $indexDoc, $options)
+	 *
+	 * @todo support exclude option, too
+	 */
+	protected function hasDocToBeDeleted(
+		tx_rnbase_IModel $model, tx_mksearch_interface_IndexerDocument $indexDoc,
+		$options = array()
+	) {
+		return 	parent::hasDocToBeDeleted($model, $indexDoc, $options) ||
+				!$this->checkInOrExcludeOptions($this->getIrfaqCategoryService()->getByQuestion($model), $options);
+	}
+
+	/**
 	 * (non-PHPdoc)
 	 * @see tx_mksearch_interface_Indexer::prepareSearchData()
 	 */
-	public function indexData(
+	protected function indexData(
 		tx_rnbase_IModel $model,
 		$tableName,
 		$rawData,
@@ -72,7 +86,7 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base {
 		//we could also extend the isIndexableRecord method but than
 		//we would need to get the faq model and the categories
 		//twice
-		$categories = tx_mksearch_util_ServiceRegistry::getIrfaqCategoryService()->getByQuestion($model);
+		$categories = $this->getIrfaqCategoryService()->getByQuestion($model);
 		if(!$this->checkInOrExcludeOptions($categories,$options)) {
 			return null;
 		}
@@ -113,13 +127,27 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base {
 
 		//index everything about the expert
 		$this->indexModelByMapping(
-			tx_mksearch_util_ServiceRegistry::getIrfaqExpertService()->get($model->record['expert']),
+			$this->getIrfaqExpertService()->get($model->record['expert']),
 			$this->getExpertMapping(),
 			$indexDoc,'expert_'
 		);
 
 		//done
 		return $indexDoc;
+	}
+
+	/**
+	 * @return tx_mksearch_service_irfaq_Category
+	 */
+	protected function getIrfaqCategoryService() {
+		return tx_mksearch_util_ServiceRegistry::getIrfaqCategoryService();
+	}
+
+	/**
+	 * @return tx_mksearch_service_irfaq_Expert
+	 */
+	protected function getIrfaqExpertService() {
+		return tx_mksearch_util_ServiceRegistry::getIrfaqExpertService();
 	}
 
 	/**
@@ -201,11 +229,11 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base {
 	 * @return bool
 	 */
 	protected function stopIndexing($tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options) {
-		if($tableName == 'tx_irfaq_expert') {
-			$this->handleRelatedTableChanged($rawData,'Expert');
+		if ($tableName == 'tx_irfaq_expert') {
+			$this->handleRelatedTableChanged($rawData, 'Expert');
 			return true;
-		}else if($tableName == 'tx_irfaq_cat') {
-			$this->handleRelatedTableChanged($rawData,'Category');
+		} else if ($tableName == 'tx_irfaq_cat') {
+			$this->handleRelatedTableChanged($rawData, 'Category');
 			return true;
 		}
 
@@ -217,13 +245,19 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base {
 	 * @param array $aModels
 	 */
 	protected function handleRelatedTableChanged(array $rawData, $callback) {
-		$service = tx_mksearch_util_ServiceRegistry::getIrfaqQuestionService();
-		$callback = 'getBy'.$callback;
+		$callback = 'getBy' . $callback;
 
 		$this->addModelsToIndex(
-				$service->$callback($rawData['uid']),
-				'tx_irfaq_q'
-			);
+			$this->getIrfaqQuestionService()->$callback($rawData['uid']),
+			'tx_irfaq_q'
+		);
+	}
+
+	/**
+	 * @return tx_mksearch_service_irfaq_Question
+	 */
+	protected function getIrfaqQuestionService() {
+		return tx_mksearch_util_ServiceRegistry::getIrfaqQuestionService();
 	}
 
 	/**

@@ -887,7 +887,27 @@ class tx_mksearch_tests_indexer_Base_testcase
 		);
 	}
 
-}
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']) {
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']);
+	/**
+	 * @group unit
+	 */
+	public function testAddModelsToIndex() {
+		$models = array('some models');
+		$tableName = 'test_table';
+		$prefer = 'prefer_me';
+		$resolver = 'test_resolver';
+		$data = array('test data');
+		$options = array('test options');
+
+		$indexerUtility = $this->getMock('tx_mksearch_util_Indexer', array('addModelsToIndex'));
+		$indexerUtility->expects(self::once())
+			->method('addModelsToIndex')
+			->with($models, $tableName, $prefer, $resolver, $data, $options);
+
+		$indexer = $this->getMock('tx_mksearch_tests_fixtures_indexer_Dummy', array('getIndexerUtility'));
+		$indexer->expects(self::once())
+			->method('getIndexerUtility')
+			->will(self::returnValue($indexerUtility));
+
+		$this->callInaccessibleMethod($indexer, 'addModelsToIndex', $models, $tableName, $prefer, $resolver, $data, $options);
+	}
 }

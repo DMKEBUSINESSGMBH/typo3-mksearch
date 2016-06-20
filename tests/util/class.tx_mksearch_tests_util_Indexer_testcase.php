@@ -675,4 +675,76 @@ class tx_mksearch_tests_util_Indexer_testcase
 			$utility->stopIndexing($tableName, $sourceRecord, $indexDoc, $options)
 		);
 	}
+
+	/**
+	 * @group unit
+	 */
+	public function testAddModelsToIndex() {
+		$models = array(
+			tx_rnbase::makeInstance('tx_rnbase_model_base', array('uid' => 1)),
+			tx_rnbase::makeInstance('tx_rnbase_model_base', array('uid' => 2))
+		);
+		$tableName = 'test_table';
+		$prefer = 'prefer_me';
+		$resolver = 'test_resolver';
+		$data = array('test data');
+		$options = array('test options');
+
+		$utility = $this->getMock('tx_mksearch_util_Indexer', array('addModelToIndex'));
+
+		$utility->expects(self::at(0))
+			->method('addModelToIndex')
+			->with($models[0], $tableName, $prefer, $resolver, $data, $options);
+
+		$utility->expects(self::at(1))
+			->method('addModelToIndex')
+			->with($models[1], $tableName, $prefer, $resolver, $data, $options);
+
+		$utility->addModelsToIndex($models, $tableName, $prefer, $resolver, $data, $options);
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testGetInternalIndexService() {
+		self::assertInstanceOf(
+			'tx_mksearch_service_internal_Index',
+			$this->callInaccessibleMethod(tx_mksearch_util_Indexer::getInstance(), 'getInternalIndexService')
+		);
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testAddModelToIndexWithInvalidModel() {
+		$utility = $this->getMock('tx_mksearch_util_Indexer', array('getInternalIndexService'));
+		$utility->expects(self::never())
+			->method('getInternalIndexService');
+
+		$utility->addModelToIndex(tx_rnbase::makeInstance('tx_rnbase_model_base', array()), 'test_table');
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testAddModelToIndexWithValidModel() {
+		$model = tx_rnbase::makeInstance('tx_rnbase_model_base', array('uid' => 123));
+		$tableName = 'test_table';
+		$prefer = 'prefer_me';
+		$resolver = 'test_resolver';
+		$data = array('test data');
+		$options = array('test options');
+
+		$internalIndexService = $this->getMock('tx_mksearch_service_internal_Index', array('addRecordToIndex'));
+		$internalIndexService->expects(self::once())
+			->method('addRecordToIndex')
+			->with($tableName, 123, $prefer, $resolver, $data, $options);
+
+		$utility = $this->getMock('tx_mksearch_util_Indexer', array('getInternalIndexService'));
+		$utility->expects(self::once())
+			->method('getInternalIndexService')
+			->will(self::returnValue($internalIndexService));
+
+		$utility->addModelToIndex($model, $tableName, $prefer, $resolver, $data, $options);
+	}
 }

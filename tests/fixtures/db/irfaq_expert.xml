@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<dataset>
-	<tx_irfaq_expert>
-		<uid>1</uid>
-		<name>1. Expert</name>
-		<email>mail@expert.de</email>
-		<url>some url</url>
-	</tx_irfaq_expert>
-</dataset>

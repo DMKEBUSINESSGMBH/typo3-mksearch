@@ -21,15 +21,13 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
-
-
 require_once tx_rnbase_util_Extensions::extPath('mksearch', 'lib/Apache/Solr/Document.php');
-tx_rnbase::load('tx_mksearch_tests_DbTestcase');
+tx_rnbase::load('tx_mksearch_tests_Testcase');
 tx_rnbase::load('tx_mksearch_tests_Util');
+tx_rnbase::load('tx_mksearch_indexer_Irfaq');
 
 /**
- * Wir müssen in diesem Fall mit der DB testen da wir die pages
- * Tabelle benötigen
+ * tx_mksearch_tests_indexer_Irfaq_testcase
  *
  * @package tx_mksearch
  * @subpackage tx_mksearch_tests
@@ -38,292 +36,391 @@ tx_rnbase::load('tx_mksearch_tests_Util');
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_tests_indexer_Irfaq_testcase
-	extends tx_mksearch_tests_DbTestcase {
+class tx_mksearch_tests_indexer_Irfaq_testcase extends tx_mksearch_tests_Testcase {
 
 	/**
-	 * Constructs a test case with the given name.
-	 *
-	 * @param string $name the name of a testcase
-	 * @param array $data ?
-	 * @param string $dataName ?
+	 * {@inheritDoc}
+	 * @see tx_mksearch_tests_Testcase::setUp()
 	 */
-	public function __construct($name = NULL, array $data = array(), $dataName = '') {
-		parent::__construct($name, $data, $dataName);
-		$this->importExtensions[] = 'irfaq';
-		$this->importDataSets[] = tx_mksearch_tests_Util::getFixturePath('db/irfaq_q.xml');
-		$this->importDataSets[] = tx_mksearch_tests_Util::getFixturePath('db/irfaq_cat.xml');
-		$this->importDataSets[] = tx_mksearch_tests_Util::getFixturePath('db/irfaq_q_cat_mm.xml');
-		$this->importDataSets[] = tx_mksearch_tests_Util::getFixturePath('db/irfaq_expert.xml');
+	protected function setUp() {
+		if (!tx_rnbase_util_Extensions::isLoaded('irfaq')) {
+			self::markTestSkipped('irfaq nicht installiert');
+		}
 	}
 
 	/**
-	 * Prüft ob nur die Elemente indiziert werden, die im
-	 * angegebenen Seitenbaum liegen
+	 * @group unit
 	 */
-	public function testPrepareSearchDataWhenTableQuestionsWithExpert() {
-		//Testdaten aus DB holen
-		$aOptions = array(
-			'where' => 'tx_irfaq_q.uid=1',
-			'enablefieldsoff' => true
+	public function testCreateModel() {
+		$irfaqModel = $this->callInaccessibleMethod(
+			tx_rnbase::makeInstance('tx_mksearch_indexer_Irfaq'), 'createModel', array('uid' => 123)
 		);
-		$aResult = tx_rnbase_util_DB::doSelect('*', 'tx_irfaq_q', $aOptions);
+		self::assertInstanceOf('tx_mksearch_model_irfaq_Question', $irfaqModel);
+		self::assertEquals(123, $irfaqModel->getUid());
+	}
 
-		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_Irfaq');
-		list($extKey, $cType) = $indexer->getContentType();
-		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
-		$options = array();
+	/**
+	 * @group unit
+	 */
+	public function testGetIrfaqExpertService() {
+		self::assertInstanceOf(
+			'tx_mksearch_service_irfaq_Expert',
+			$this->callInaccessibleMethod(tx_rnbase::makeInstance('tx_mksearch_indexer_Irfaq'), 'getIrfaqExpertService')
+		);
+	}
 
-		$aIndexDoc = $indexer->prepareSearchData('tx_irfaq_q', $aResult[0], $indexDoc, $options)->getData();
+	/**
+	 * @group unit
+	 */
+	public function testGetIrfaqCategoryService() {
+		self::assertInstanceOf(
+			'tx_mksearch_service_irfaq_Category',
+			$this->callInaccessibleMethod(tx_rnbase::makeInstance('tx_mksearch_indexer_Irfaq'), 'getIrfaqCategoryService')
+		);
+	}
 
-		//Common
+	/**
+	 * @group unit
+	 */
+	public function testPrepareSearchDataIndexesQuestionDataWhenTableQuestionsWithExpert() {
+		$record = array(
+			'uid' => 1,
+			'sorting' => 87,
+			'q' => '1. FAQ',
+			'cat' => 789,
+			'a' => '<span>You have to know this and this</span>',
+			'expert' => 456,
+			'related' => 'something related',
+			'related_links' => 'some related links',
+			'faq_files' => 'some files',
+			'tstamp' => 123,
+		);
+
+		$irfaqExpertService = $this->getMock('tx_mksearch_service_irfaq_Expert', array('get'));
+		$irfaqExpertService->expects(self::once())
+			->method('get')
+			->will(self::returnValue(tx_rnbase::makeInstance('tx_mksearch_model_irfaq_Expert',array())));
+
+		$irfaqCategoryService = $this->getMock('tx_mksearch_service_irfaq_Category', array('getByQuestion'));
+		$irfaqCategoryService->expects(self::exactly(2))
+			->method('getByQuestion')
+			->will(self::returnValue(array()));
+
+		$indexer = $this->getMock('tx_mksearch_indexer_Irfaq', array('getIrfaqCategoryService', 'getIrfaqExpertService'));
+		$indexer->expects(self::exactly(2))
+			->method('getIrfaqCategoryService')
+			->will(self::returnValue($irfaqCategoryService));
+		$indexer->expects(self::once())
+			->method('getIrfaqExpertService')
+			->will(self::returnValue($irfaqExpertService));
+
+		$indexDocData = $this->prepareSearchData($indexer, $record)->getData();
+
 		self::assertEquals(
 			87,
-			$aIndexDoc['sorting_i']->getValue(),
+			$indexDocData['sorting_i']->getValue(),
 			'Es wurde nicht die richtige Sortierung indiziert!'
 		);
 		self::assertEquals(
 			'1. FAQ',
-		$aIndexDoc['q_s']->getValue(),
+			$indexDocData['q_s']->getValue(),
 			'Es wurde nicht die richtige Frage indiziert!'
 		);
 		self::assertEquals(
 			'You have to know this and this',
-			$aIndexDoc['a_s']->getValue(),
+			$indexDocData['a_s']->getValue(),
 			'Es wurde nicht der richtige Fragetext indiziert!'
 		);
 		self::assertEquals(
 			'<span>You have to know this and this</span>',
-			$aIndexDoc['a_with_html_s']->getValue(),
+			$indexDocData['a_with_html_s']->getValue(),
 			'Es wurde nicht der richtige Fragetext mit HTML indiziert!'
 		);
 		self::assertEquals(
 			'something related',
-			$aIndexDoc['related_s']->getValue(),
+			$indexDocData['related_s']->getValue(),
 			'Es wurde nicht das richtige related indiziert!'
 		);
 		self::assertEquals(
 			'some related links',
-			$aIndexDoc['related_links_s']->getValue(),
+			$indexDocData['related_links_s']->getValue(),
 			'Es wurden nicht die richtigen related Links indiziert!'
 		);
 		self::assertEquals(
 			'some files',
-			$aIndexDoc['faq_files_s']->getValue(),
+			$indexDocData['faq_files_s']->getValue(),
 			'Es wurde nicht der richtige Dateien indiziert!'
 		);
 		self::assertEquals(
 			123,
-			$aIndexDoc['tstamp']->getValue(),
+			$indexDocData['tstamp']->getValue(),
 			'Es wurde nicht der richtige tstamp indiziert!'
 		);
-		//Expert
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testPrepareSearchDataIndexesExpertDataWhenTableQuestionsWithExpert() {
+		$record = array(
+			'uid' => 1,
+			'expert' => 456,
+		);
+
+		$irfaqExpertService = $this->getMock('tx_mksearch_service_irfaq_Expert', array('get'));
+		$irfaqExpertService->expects(self::once())
+			->method('get')
+			->with(456)
+			->will(self::returnValue(tx_rnbase::makeInstance(
+				'tx_mksearch_model_irfaq_Expert',
+				array(
+					'uid' => 456,
+					'name' => '1. Expert',
+					'email' => 'mail@expert.de',
+					'url' => 'some url',
+				)
+			)));
+
+		$irfaqCategoryService = $this->getMock('tx_mksearch_service_irfaq_Category', array('getByQuestion'));
+		$irfaqCategoryService->expects(self::exactly(2))
+			->method('getByQuestion')
+			->will(self::returnValue(array()));
+
+		$indexer = $this->getMock('tx_mksearch_indexer_Irfaq', array('getIrfaqCategoryService', 'getIrfaqExpertService'));
+		$indexer->expects(self::exactly(2))
+			->method('getIrfaqCategoryService')
+			->will(self::returnValue($irfaqCategoryService));
+		$indexer->expects(self::once())
+			->method('getIrfaqExpertService')
+			->will(self::returnValue($irfaqExpertService));
+
+		$indexDocData = $this->prepareSearchData($indexer, $record)->getData();
+
 		self::assertEquals(
-			1,
-			$aIndexDoc['expert_i']->getValue(),
+			456,
+			$indexDocData['expert_i']->getValue(),
 			'Es wurde nicht der richtige Experte indiziert!'
 		);
 		self::assertEquals(
 			'1. Expert',
-			$aIndexDoc['expert_name_s']->getValue(),
+			$indexDocData['expert_name_s']->getValue(),
 			'Es wurde nicht der richtige Expertenname indiziert!'
 		);
 		self::assertEquals(
 			'mail@expert.de',
-			$aIndexDoc['expert_email_s']->getValue(),
+			$indexDocData['expert_email_s']->getValue(),
 			'Es wurde nicht die richtige Expertenmail indiziert!'
 		);
 		self::assertEquals(
 			'some url',
-			$aIndexDoc['expert_url_s']->getValue(),
+			$indexDocData['expert_url_s']->getValue(),
 			'Es wurde nicht die richtige Expertenurl indiziert!'
 		);
-		//Categories
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testPrepareSearchDataIndexesCategoryDataWhenTableQuestionsWithExpert() {
+		$record = array(
+			'uid' => 1,
+		);
+
+		$irfaqExpertService = $this->getMock('tx_mksearch_service_irfaq_Expert', array('get'));
+		$irfaqExpertService->expects(self::once())
+			->method('get')
+			->will(self::returnValue(tx_rnbase::makeInstance('tx_mksearch_model_irfaq_Expert', array())));
+
+		$irfaqCategoryService = $this->getMock('tx_mksearch_service_irfaq_Category', array('getByQuestion'));
+		$irfaqCategoryService->expects(self::exactly(2))
+			->method('getByQuestion')
+			->with(tx_rnbase::makeInstance('tx_mksearch_model_irfaq_Question', $record))
+			->will(self::returnValue(array(
+				0 => tx_rnbase::makeInstance(
+					'tx_mksearch_model_irfaq_Category',
+					array(
+						'uid' => 1,
+						'sorting' => 47,
+						'title' => '1. FAQ Category',
+						'shortcut' => '1. Shortcut',
+					)
+				),
+				1 => tx_rnbase::makeInstance(
+					'tx_mksearch_model_irfaq_Category',
+					array(
+						'uid' => 2,
+						'sorting' => 48,
+						'title' => '2. FAQ Category',
+						'shortcut' => '2. Shortcut',
+					)
+				)
+			)));
+
+		$indexer = $this->getMock('tx_mksearch_indexer_Irfaq', array('getIrfaqCategoryService', 'getIrfaqExpertService'));
+		$indexer->expects(self::exactly(2))
+			->method('getIrfaqCategoryService')
+			->will(self::returnValue($irfaqCategoryService));
+		$indexer->expects(self::once())
+			->method('getIrfaqExpertService')
+			->will(self::returnValue($irfaqExpertService));
+
+		$indexDocData = $this->prepareSearchData($indexer, $record)->getData();
+
 		self::assertEquals(
-			array(0=>'1',1=>'2'),
-			$aIndexDoc['category_mi']->getValue(),
+			array(0 => '1', 1 => '2'),
+			$indexDocData['category_mi']->getValue(),
 			'Es wurden nicht die richtigen Kategorie-Uids indiziert!'
 		);
 		self::assertEquals(
-			array(0=>'47',1=>'48'),
-			$aIndexDoc['category_sorting_mi']->getValue(),
+			array(0 => '47', 1 => '48'),
+			$indexDocData['category_sorting_mi']->getValue(),
 			'Es wurden nicht die richtigen Kategorie-Sortierungen indiziert!'
 		);
 		self::assertEquals(
-			array(0=>'1. FAQ Category',1=>'2. FAQ Category'),
-			$aIndexDoc['category_title_ms']->getValue(),
+			array(0 => '1. FAQ Category', 1 => '2. FAQ Category'),
+			$indexDocData['category_title_ms']->getValue(),
 			'Es wurden nicht die richtigen Kategorie-Titel indiziert!'
 		);
 		self::assertEquals(
-			array(0=>'1. Shortcut',1=>'2. Shortcut'),
-			$aIndexDoc['category_shortcut_ms']->getValue(),
+			array(0 => '1. Shortcut', 1 => '2. Shortcut'),
+			$indexDocData['category_shortcut_ms']->getValue(),
 			'Es wurden nicht die richtigen Kategorie-Shortcuts indiziert!'
 		);
 		self::assertEquals(
 			'1. Shortcut',
-			$aIndexDoc['category_first_shortcut_s']->getValue(),
+			$indexDocData['category_first_shortcut_s']->getValue(),
 			'Es wurden nicht der richtige erste Kategorie-Shortcut indiziert!'
 		);
 	}
 
 	/**
-	 * Prüft ob nur die Elemente indiziert werden, die im
-	 * angegebenen Seitenbaum liegen
+	 * @group unit
 	 */
-	public function testPrepareSearchDataWhenTableQuestionsWithoutExpert() {
-		//Testdaten aus DB holen
-		$aOptions = array(
-			'where' => 'tx_irfaq_q.uid=3',
-			'enablefieldsoff' => true
-		);
-		$aResult = tx_rnbase_util_DB::doSelect('*', 'tx_irfaq_q', $aOptions);
+	public function testPrepareSearchDataWhenTableExpertsStopsIndexing() {
+		$record = array('uid' => 123, 'some_field' => 456);
 
-		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_Irfaq');
-		list($extKey, $cType) = $indexer->getContentType();
-		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
-		$options = array();
+		$indexer = $this->getMock('tx_mksearch_indexer_Irfaq', array('handleRelatedTableChanged'));
+		$indexer->expects(self::once())
+			->method('handleRelatedTableChanged')
+			->with($record, 'Expert');
 
-		$aIndexDoc = $indexer->prepareSearchData('tx_irfaq_q', $aResult[0], $indexDoc, $options)->getData();
-
-		//Common
-		self::assertEquals(99,$aIndexDoc['sorting_i']->getValue(),'Es wurde nicht die richtige Sortierung indiziert!');
-		self::assertEquals('3. FAQ',$aIndexDoc['q_s']->getValue(),'Es wurde nicht die richtige Frage indiziert!');
-		self::assertEquals('You have to know nothing',$aIndexDoc['a_s']->getValue(),'Es wurde nicht der richtige Fragetext indiziert!');
-		self::assertNull($aIndexDoc['related_s'],'Es wurde doch related indiziert!');
-		self::assertNull($aIndexDoc['related_links_s'],'Es wurden doch related Links indiziert!');
-		self::assertNull($aIndexDoc['faq_files_s'],'Es wurde doch Dateien indiziert!');
-		//Expert
-		self::assertNull($aIndexDoc['expert_i'],'Es wurde doch ein Experte indiziert!');
-		self::assertNull($aIndexDoc['expert_name_s'],'Es wurde doch ein Expertenname indiziert!');
-		self::assertNull($aIndexDoc['expert_email_s'],'Es wurde doch eine Expertenmail indiziert!');
-		self::assertNull($aIndexDoc['expert_url_s'],'Es wurde doch eine Expertenurl indiziert!');
-		//Categories
-		self::assertEquals(array(0=>'2'),$aIndexDoc['category_mi']->getValue(),'Es wurden nicht die richtigen Kategorie-Uids indiziert!');
-		self::assertEquals(array(0=>'48'),$aIndexDoc['category_sorting_mi']->getValue(),'Es wurden nicht die richtigen Kategorie-Sortierungen indiziert!');
-		self::assertEquals(array(0=>'2. FAQ Category'),$aIndexDoc['category_title_ms']->getValue(),'Es wurden nicht die richtigen Kategorie-Titel indiziert!');
-		self::assertEquals(array(0=>'2. Shortcut'),$aIndexDoc['category_shortcut_ms']->getValue(),'Es wurden nicht die richtigen Kategorie-Shortcuts indiziert!');
+		self::assertNull($this->prepareSearchData($indexer, $record, 'tx_irfaq_expert'));
 	}
 
 	/**
-	 * Prüft ob nur die Elemente indiziert werden, die im
-	 * angegebenen Seitenbaum liegen
+	 * @group unit
 	 */
-	public function testPrepareSearchDataWhenTableExperts() {
-		//Testdaten aus DB holen
-		$aOptions = array(
-			'where' => 'tx_irfaq_expert.uid=1',
-			'enablefieldsoff' => true
-		);
-		$aResult = tx_rnbase_util_DB::doSelect('*', 'tx_irfaq_expert', $aOptions);
+	public function testPrepareSearchDataWhenTableCategoryStopsIndexing() {
+		$record = array('uid' => 123, 'some_field' => 456);
 
-		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_Irfaq');
-		list($extKey, $cType) = $indexer->getContentType();
-		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
-		$options = array();
+		$indexer = $this->getMock('tx_mksearch_indexer_Irfaq', array('handleRelatedTableChanged'));
+		$indexer->expects(self::once())
+			->method('handleRelatedTableChanged')
+			->with($record, 'Category');
 
-		$aIndexDoc = $indexer->prepareSearchData('tx_irfaq_expert', $aResult[0], $indexDoc, $options);
-		//nichtzs direkt indiziert?
-		self::assertNull($aIndexDoc,'Es wurde nicht null zurück gegeben!');
-
-		$aOptions = array(
-			'enablefieldsoff' => true
-		);
-		$aResult = tx_rnbase_util_DB::doSelect('*', 'tx_mksearch_queue', $aOptions);
-
-		self::assertEquals(2,count($aResult),'Es wurde nicht der richtige Anzahl in die queue gelegt!');
-		self::assertEquals('tx_irfaq_q',$aResult[0]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
-		self::assertEquals(1,$aResult[0]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
-		self::assertEquals('tx_irfaq_q',$aResult[1]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
-		self::assertEquals(2,$aResult[1]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
-	}
-
-/**
-	 * Prüft ob nur die Elemente indiziert werden, die im
-	 * angegebenen Seitenbaum liegen
-	 */
-	public function testPrepareSearchDataWhenTableCategory() {
-		//Testdaten aus DB holen
-		$aOptions = array(
-			'where' => 'tx_irfaq_cat.uid=2',
-			'enablefieldsoff' => true
-		);
-		$aResult = tx_rnbase_util_DB::doSelect('*', 'tx_irfaq_cat', $aOptions);
-
-		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_Irfaq');
-		list($extKey, $cType) = $indexer->getContentType();
-		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
-		$options = array();
-
-		$aIndexDoc = $indexer->prepareSearchData('tx_irfaq_cat', $aResult[0], $indexDoc, $options);
-		//nichtzs direkt indiziert?
-		self::assertNull($aIndexDoc,'Es wurde nicht null zurück gegeben!');
-
-		$aOptions = array(
-			'enablefieldsoff' => true
-		);
-		$aResult = tx_rnbase_util_DB::doSelect('*', 'tx_mksearch_queue', $aOptions);
-
-		self::assertEquals(2,count($aResult),'Es wurde nicht der richtige Anzahl in die queue gelegt!');
-		self::assertEquals('tx_irfaq_q',$aResult[0]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
-		self::assertEquals(1,$aResult[0]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
-		self::assertEquals('tx_irfaq_q',$aResult[1]['tablename'],'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
-		self::assertEquals(3,$aResult[1]['recid'],'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
+		self::assertNull($this->prepareSearchData($indexer, $record, 'tx_irfaq_cat'));
 	}
 
 	/**
-	 * Prüft ob nur die Elemente indiziert werden, die im
-	 * angegebenen Seitenbaum liegen
+	 * @group unit
 	 */
-	public function testPrepareSearchDataWhenTableQuestionsWithIncludeCategoriesOption() {
-		//Testdaten aus DB holen
-		$aOptions = array(
-			'where' => 'tx_irfaq_q.uid=1',
-			'enablefieldsoff' => true
+	public function testGetIrfaqQuestionService() {
+		self::assertInstanceOf(
+			'tx_mksearch_service_irfaq_Question',
+			$this->callInaccessibleMethod(tx_rnbase::makeInstance('tx_mksearch_indexer_Irfaq'), 'getIrfaqQuestionService')
 		);
-		$aResult = tx_rnbase_util_DB::doSelect('*', 'tx_irfaq_q', $aOptions);
-
-		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_Irfaq');
-		list($extKey, $cType) = $indexer->getContentType();
-		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
-		$options = array(
-			'include.' => array(
-				'categories.' => array(
-					0 => 1
-				)
-			)
-		);
-		$options2 = array(
-			'include.' => array(
-				'categories' => 1,3
-			)
-		);
-
-		//with include categories as array
-		$aIndexDoc = $indexer->prepareSearchData('tx_irfaq_q', $aResult[0], $indexDoc, $options);
-		self::assertNotNull($aIndexDoc,'Das Element wurde doch nicht indziert! Option 1');
-
-		//with include categories as string
-		$aIndexDoc = $indexer->prepareSearchData('tx_irfaq_q', $aResult[0], $indexDoc, $options2);
-		self::assertNotNull($aIndexDoc,'Das Element wurde doch nicht indziert! Option 2');
-
-		//and now with a faq that a the worng category
-		$aOptions = array(
-			'where' => 'tx_irfaq_q.uid=3',
-			'enablefieldsoff' => true
-		);
-		$aResult = tx_rnbase_util_DB::doSelect('*', 'tx_irfaq_q', $aOptions);
-
-		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
-
-		//with include categories as array
-		$aIndexDoc = $indexer->prepareSearchData('tx_irfaq_q', $aResult[0], $indexDoc, $options);
-		self::assertNull($aIndexDoc,'Das Element wurde doch indziert! Option 1');
-
-		//with include categories as string
-		$aIndexDoc = $indexer->prepareSearchData('tx_irfaq_q', $aResult[0], $indexDoc, $options2);
-		self::assertNull($aIndexDoc,'Das Element wurde doch indziert! Option 2');
 	}
-}
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']) {
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']);
+
+	/**
+	 * @group unit
+	 */
+	public function testHandleRelatedTableChanged() {
+		$questionService = $this->getMock('tx_mksearch_service_irfaq_Question', array('getByMyTestMethod'));
+		$questionService->expects(self::once())
+			->method('getByMyTestMethod')
+			->will(self::returnValue(array(1,2,3)));
+
+		$indexer = $this->getMock('tx_mksearch_indexer_Irfaq', array('getIrfaqQuestionService', 'addModelsToIndex'));
+		$indexer->expects(self::once())
+			->method('getIrfaqQuestionService')
+			->will(self::returnValue($questionService));
+
+		$indexer->expects(self::once())
+			->method('addModelsToIndex')
+			->with(array(1,2,3), 'tx_irfaq_q');
+
+		$this->callInaccessibleMethod($indexer, 'handleRelatedTableChanged', array('uid' => 123), 'MyTestMethod');
+	}
+
+	/**
+	 * @group unit
+	 * @dataProvider getCategoriesIncludeOptions
+	 *
+	 * @param array $options
+	 * @param boolean $isDeleted
+	 */
+	public function testPrepareSearchDataSetsDocDeletedDependingOnIncludedCategoriesOption(array $options, $isDeleted) {
+		$record = array('uid' => 1);
+
+		$irfaqExpertService = $this->getMock('tx_mksearch_service_irfaq_Expert', array('get'));
+		$irfaqExpertService->expects(self::any())
+			->method('get')
+			->will(self::returnValue(tx_rnbase::makeInstance('tx_mksearch_model_irfaq_Expert',array())));
+
+		$irfaqCategoryService = $this->getMock('tx_mksearch_service_irfaq_Category', array('getByQuestion'));
+		$irfaqCategoryService->expects(self::exactly($isDeleted ? 1 : 2))
+			->method('getByQuestion')
+			->with(tx_rnbase::makeInstance('tx_mksearch_model_irfaq_Question', $record))
+			->will(self::returnValue(array(
+					0 => tx_rnbase::makeInstance(
+						'tx_mksearch_model_irfaq_Category',
+						array(
+								'uid' => 1,
+						)
+					),
+					1 => tx_rnbase::makeInstance(
+						'tx_mksearch_model_irfaq_Category',
+						array(
+							'uid' => 2,
+						)
+					)
+			)));
+
+		$indexer = $this->getMock('tx_mksearch_indexer_Irfaq', array('getIrfaqCategoryService', 'getIrfaqExpertService'));
+		$indexer->expects(self::exactly($isDeleted ? 1 : 2))
+			->method('getIrfaqCategoryService')
+			->will(self::returnValue($irfaqCategoryService));
+		$indexer->expects(self::any())
+			->method('getIrfaqExpertService')
+			->will(self::returnValue($irfaqExpertService));
+
+		self::assertSame($isDeleted, $this->prepareSearchData($indexer, $record, 'tx_irfaq_q', $options)->getDeleted());
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getCategoriesIncludeOptions() {
+		return array(
+			array(array('include.' => array('categories.' => array(0 => 1, 1 => 2))), false),
+			array(array('include.' => array('categories' => '1,3')), false),
+			array(array('include.' => array('categories.' => array(0 => 3))), true),
+			array(array('include.' => array('categories' => '3')), true),
+		);
+	}
+
+	/**
+	 * @param tx_mksearch_indexer_Irfaq $indexer
+	 * @param array $record
+	 * @param string $table
+	 * @param array $options
+	 * @return tx_mksearch_interface_IndexerField[]
+	 */
+	protected function prepareSearchData(
+		tx_mksearch_indexer_Irfaq $indexer, array $record, $table = 'tx_irfaq_q', array $options = array()
+	) {
+		list($extKey, $cType) = $indexer->getContentType();
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+		return $indexer->prepareSearchData($table, $record, $indexDoc, $options);
+	}
 }
