@@ -40,6 +40,16 @@ tx_rnbase::load('tx_mksearch_tests_Util');
 class tx_mksearch_tests_model_cal_Event_testcase extends tx_mksearch_tests_Testcase {
 
 	/**
+	 * {@inheritDoc}
+	 * @see tx_mksearch_tests_Testcase::setUp()
+	 */
+	protected function setUp() {
+		if (!tx_rnbase_util_Extensions::isLoaded('cal')) {
+			self::markTestSkipped('cal nicht installiert');
+		}
+	}
+
+	/**
 	 * @group integration
 	 *
 	 * wir testen im Prinzip nur ob die Query korrekt durchläuft. Damit stellen
