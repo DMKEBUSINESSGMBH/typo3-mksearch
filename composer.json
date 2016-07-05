@@ -42,8 +42,20 @@
 	},
 	"autoload" : {
 		"classmap" : [
+			"action/",
+			"filter/",
+			"hooks/",
+			"indexer/",
+			"lib/",
+			"marker/",
+			"mod1/",
+			"model/",
 			"scheduler/",
-			"service/"
+			"search/",
+			"service/",
+			"signalSlotDispatcher/",
+			"util/",
+			"view/",
 		]
 	}
 }
