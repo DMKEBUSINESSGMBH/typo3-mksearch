@@ -55,7 +55,7 @@
 			"service/",
 			"signalSlotDispatcher/",
 			"util/",
-			"view/",
+			"view/"
 		]
 	}
 }
