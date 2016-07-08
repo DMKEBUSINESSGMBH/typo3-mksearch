@@ -3,8 +3,6 @@ Autosuggest und Spellchecking (SOLR)
 
 Mit diesen beiden Begriffen werden Möglichkeiten beschrieben, den Anwender bei der Formulierung seiner Suchanfrage zu unterstützen. Rein technisch basieren die beiden Ansätze auf der selben Basis, für den Anwender erscheint die Unterstützung aber zu unterschiedlichen Zeitpunkten.
 
-Mit diesen beiden Begriffen werden Möglichkeiten beschrieben, den Anwender bei der Formulierung seiner Suchanfrage zu unterstützen. Rein technisch basieren die beiden Ansätze auf der selben Basis, für den Anwender erscheint die Unterstützung aber zu unterschiedlichen Zeitpunkten.
-
 **Autosuggest:** Der Anwender erhält hier eine Vorschlagsliste von Begriffen oder Formulierungen während er seine Query im Suchfeld eintippt.
 
 **Spellchecking:** Umgangssprachlich wird dieses Feature häufig als *Meinten Sie?* bezeichnet. Damit sollte auch schon klar sein, was die Funktion tut. Mit dem Ergebnis der Suche erhält der Nutzer eine Liste von alternativen Suchbegriffen, mit denen er eventuell bessere Ergebnisse erhält.
