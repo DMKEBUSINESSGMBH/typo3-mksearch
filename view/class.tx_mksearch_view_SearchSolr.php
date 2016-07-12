@@ -58,6 +58,7 @@ class tx_mksearch_view_SearchSolr extends tx_rnbase_view_Base {
 			$GLOBALS['TYPO3_CONF_VARS']['FE']['debug'] = 0;
 			tx_rnbase::load('tx_rnbase_util_TYPO3');
 			if (tx_rnbase_util_TYPO3::isTYPO60OrHigher()) {
+				$GLOBALS['TSFE']->config['config']['debug'] = 0;
 				$GLOBALS['TSFE']->TYPO3_CONF_VARS['FE']['debug'] = 0;
 			}
 			return json_encode($result);
