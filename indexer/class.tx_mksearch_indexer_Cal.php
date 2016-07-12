@@ -199,7 +199,7 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base {
 	 */
 	protected function getCalDateClass() {
 		if ($this->isCalInstalledInVersion190OrHigher()) {
-			$calDateClass = '\\TYPO3\\CMS\\Cal\\Model\\CalDate';
+			$calDateClass = 'TYPO3\\CMS\\Cal\\Model\\CalDate';
 		} else {
 			require_once(tx_rnbase_util_Extensions::extPath('cal') . 'model/class.tx_cal_date.php');
 			$calDateClass = 'tx_cal_date';
