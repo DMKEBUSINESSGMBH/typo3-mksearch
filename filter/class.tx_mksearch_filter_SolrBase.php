@@ -386,7 +386,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 		//wenigstens ein teil der query muss matchen. bei prüfen auf
 		//nicht vorhandensein muss also noch auf ein feld geprüft werden
 		//das garantiert existiert und damit ein match generiert.
-		$filterQuery = '(-fe_group_mi:[* TO *] AND uid:[* TO *]) OR fe_group_mi:0';
+		$filterQuery = '(-fe_group_mi:[* TO *] AND id:[* TO *]) OR fe_group_mi:0';
 
 		if(is_array($GLOBALS['TSFE']->fe_user->groupData['uid'])){
 			$filterQueriesByFeGroup = array();
