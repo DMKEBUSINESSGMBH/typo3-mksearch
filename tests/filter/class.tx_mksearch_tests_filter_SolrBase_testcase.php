@@ -191,7 +191,7 @@ class tx_mksearch_tests_filter_SolrBase_testcase
 		$filter->init($fields,$options);
 
 		self::assertEquals(array(
-			0 => '(-fe_group_mi:[* TO *] AND uid:[* TO *]) OR fe_group_mi:0',
+			0 => '(-fe_group_mi:[* TO *] AND id:[* TO *]) OR fe_group_mi:0',
 			1 => 'facet_field:"facet value"'
 		),$options['fq'],'fq wurde falsch übernommen!');
 	}
@@ -212,7 +212,7 @@ class tx_mksearch_tests_filter_SolrBase_testcase
 		$filter->init($fields,$options);
 
 		self::assertEquals(array(
-			0 => '(-fe_group_mi:[* TO *] AND uid:[* TO *]) OR fe_group_mi:0',
+			0 => '(-fe_group_mi:[* TO *] AND id:[* TO *]) OR fe_group_mi:0',
 			1 => 'facet_dummy:"facet value"'
 		),$options['fq'],'fq wuede falsch übernommen!');
 	}
@@ -234,7 +234,7 @@ class tx_mksearch_tests_filter_SolrBase_testcase
 		$options = array();
 		$filter->init($fields, $options);
 
-		self::assertEquals('(-fe_group_mi:[* TO *] AND uid:[* TO *]) OR fe_group_mi:0',$options['fq'],'fq wuede gesetzt!');
+		self::assertEquals('(-fe_group_mi:[* TO *] AND id:[* TO *]) OR fe_group_mi:0',$options['fq'],'fq wuede gesetzt!');
 	}
 
 	/**
@@ -252,7 +252,7 @@ class tx_mksearch_tests_filter_SolrBase_testcase
 		$options = array();
 		$filter->init($fields, $options);
 
-		self::assertEquals('(-fe_group_mi:[* TO *] AND uid:[* TO *]) OR fe_group_mi:0 OR fe_group_mi:1 OR fe_group_mi:2',$options['fq'],'fq wuede gesetzt!');
+		self::assertEquals('(-fe_group_mi:[* TO *] AND id:[* TO *]) OR fe_group_mi:0 OR fe_group_mi:1 OR fe_group_mi:2',$options['fq'],'fq wuede gesetzt!');
 
 		$GLOBALS['TSFE']->fe_user->groupData['uid'] = $tsFeBackup;
 	}

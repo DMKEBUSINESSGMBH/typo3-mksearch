@@ -98,7 +98,7 @@ class tx_mksearch_tests_filter_SolrBase_solr_testcase extends tx_mksearch_tests_
 		$options = $this->getOptionsFromFilter();
 
 		self::assertStringStartsWith(
-			'(-fe_group_mi:[* TO *] AND uid:[* TO *]) OR fe_group_mi:0',
+			'(-fe_group_mi:[* TO *] AND id:[* TO *]) OR fe_group_mi:0',
 			$options['fq'],
 			'scheinbar falsche filter query'
 		);
@@ -123,7 +123,7 @@ class tx_mksearch_tests_filter_SolrBase_solr_testcase extends tx_mksearch_tests_
 		$options = $this->getOptionsFromFilter();
 
 		self::assertStringStartsWith(
-			'(-fe_group_mi:[* TO *] AND uid:[* TO *]) OR fe_group_mi:0',
+			'(-fe_group_mi:[* TO *] AND id:[* TO *]) OR fe_group_mi:0',
 			$options['fq'],
 			'scheinbar falsche filter query'
 		);
@@ -149,7 +149,7 @@ class tx_mksearch_tests_filter_SolrBase_solr_testcase extends tx_mksearch_tests_
 		$options = $this->getOptionsFromFilter();
 
 		self::assertStringStartsWith(
-			'(-fe_group_mi:[* TO *] AND uid:[* TO *]) OR fe_group_mi:0',
+			'(-fe_group_mi:[* TO *] AND id:[* TO *]) OR fe_group_mi:0',
 			$options['fq'],
 			'scheinbar falsche filter query'
 		);
@@ -175,7 +175,7 @@ class tx_mksearch_tests_filter_SolrBase_solr_testcase extends tx_mksearch_tests_
 		$options = $this->getOptionsFromFilter();
 
 		self::assertStringStartsWith(
-			'(-fe_group_mi:[* TO *] AND uid:[* TO *]) OR fe_group_mi:0',
+			'(-fe_group_mi:[* TO *] AND id:[* TO *]) OR fe_group_mi:0',
 			$options['fq'],
 			'scheinbar falsche filter query'
 		);
