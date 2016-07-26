@@ -90,7 +90,7 @@ class tx_mksearch_tests_filter_FacetBase_testcase
 		$filter->init($fields,$options);
 
 		self::assertEquals(
-			'(-fe_group_mi:[* TO *] AND uid:[* TO *]) OR fe_group_mi:0',
+			'(-fe_group_mi:[* TO *] AND id:[* TO *]) OR fe_group_mi:0',
 			$options['fq'],
 			'fq wuede falsch übernommen!'
 		);
@@ -111,7 +111,7 @@ class tx_mksearch_tests_filter_FacetBase_testcase
 		$options = array();
 		$filter->init($fields, $options);
 
-		self::assertEquals('(-fe_group_mi:[* TO *] AND uid:[* TO *]) OR fe_group_mi:0 OR fe_group_mi:1 OR fe_group_mi:2',$options['fq'],'fq wuede gesetzt!');
+		self::assertEquals('(-fe_group_mi:[* TO *] AND id:[* TO *]) OR fe_group_mi:0 OR fe_group_mi:1 OR fe_group_mi:2',$options['fq'],'fq wuede gesetzt!');
 
 		$GLOBALS['TSFE']->fe_user->groupData['uid'] = $tsFeBackup;
 	}
