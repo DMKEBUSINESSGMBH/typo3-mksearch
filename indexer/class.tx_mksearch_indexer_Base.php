@@ -101,10 +101,17 @@ abstract class tx_mksearch_indexer_Base
 		// get a model from the source array
 		$this->modelToIndex = $this->createModel($rawData, $tableName, $options);
 
+		// the old way
+		$record = $this->modelToIndex->record;
+		// the new property way
+		if ($this->modelToIndex instanceof Tx_Rnbase_Domain_Model_Data) {
+			$record = $this->modelToIndex->getProperty();
+		}
+
 		// Is the model valid and data indexable?
 		if (
-			!$this->modelToIndex->record
-			|| !$this->isIndexableRecord($this->modelToIndex->record, $options)
+			!$record
+			|| !$this->isIndexableRecord($record, $options)
 		) {
 			if (
 				isset($options['deleteIfNotIndexable'])
