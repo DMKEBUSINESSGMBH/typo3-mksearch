@@ -163,7 +163,7 @@ class tx_mksearch_action_ShowHit extends tx_rnbase_action_BaseIOC {
 				)
 			);
 			$configurations = $this->getConfigurations();
-			if($configurations->getBool($confId.'throwSolrSearchException')) {
+			if($configurations->getBool($this->getConfId() . 'throwSolrSearchException')) {
 				throw $e;
 			}
 		}
