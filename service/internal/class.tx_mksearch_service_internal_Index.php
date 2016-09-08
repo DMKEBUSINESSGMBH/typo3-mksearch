@@ -333,10 +333,19 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 		if($GLOBALS['TYPO3_CONF_VARS']['MKSEARCH_testmode'] != 1) {
 			$ret = tx_rnbase_util_DB::doUpdate(self::$queueTable, 'uid IN ('. implode(',', $uids) . ')', array('deleted' => 1));
 			$this->deleteOldQueueEntries();
-			tx_rnbase_util_Logger::info('Indexing run finished with '.$ret. ' items executed.', $extKey , array('data'=>$data));
+			tx_rnbase_util_Logger::info(
+				'Indexing run finished with '.$ret. ' items executed.',
+				'mksearch' ,
+				array('data'=>$data)
+			);
+		} else {
+			tx_rnbase_util_Logger::info(
+				'Indexing run finished in test mode. Queue not deleted!',
+				'mksearch' ,
+				array('data'=>$data)
+			);
 		}
-		else
-			tx_rnbase_util_Logger::info('Indexing run finished in test mode. Queue not deleted!', $extKey , array('data'=>$data));
+
 		return $rows;
 	}
 	/**

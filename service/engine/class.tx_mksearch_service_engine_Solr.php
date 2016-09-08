@@ -417,7 +417,8 @@ class tx_mksearch_service_engine_Solr extends Tx_Rnbase_Service_Base implements 
 		if (count($response['items']) > 1) {
 			tx_rnbase_util_Logger::warn(
 				'getByContentUid has returned more than one element.',
-				'mksearch', array(
+				'mksearch',
+				array(
 					'service' => get_class($this),
 					'uid' => $uid,
 					'extKey' => $extKey,
@@ -529,10 +530,15 @@ class tx_mksearch_service_engine_Solr extends Tx_Rnbase_Service_Base implements 
 				$this->getSolr()->addDocument($solrDoc);
 			}
 		} catch (Apache_Solr_HttpTransportException $e) {
-			tx_rnbase_util_Logger::fatal('[SOLR] Adding document to Solr failed.', 'mksearch',
-				array('Exception' => $e->getMessage(), 'lastUrl' => $this->getSolr()->lastUrl,
-						'doc' => $this->getFields4Doc($solrDoc),
-						'solrResponse'=>$e->getResponse()->getRawResponse()));
+			tx_rnbase_util_Logger::fatal(
+				'[SOLR] Adding document to Solr failed.',
+				'mksearch',
+				array(
+					'Exception' => $e->getMessage(), 'lastUrl' => $this->getSolr()->lastUrl,
+					'doc' => $this->getFields4Doc($solrDoc),
+					'solrResponse'=>$e->getResponse()->getRawResponse()
+				)
+			);
 			throw $e;
 		}
 	}

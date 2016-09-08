@@ -156,10 +156,9 @@ class tx_mksearch_action_ShowHit extends tx_rnbase_action_BaseIOC {
 			tx_rnbase::load('tx_rnbase_util_Logger');
 			tx_rnbase_util_Logger::fatal(
 				'Solr search failed with Exception!',
-				'mksearch', array(
+				'mksearch',
+				array(
 					'Exception' => $e->getMessage(),
-					'fields' => $fields,
-					'options' => $options,
 					'URL'=> $lastUrl
 				)
 			);

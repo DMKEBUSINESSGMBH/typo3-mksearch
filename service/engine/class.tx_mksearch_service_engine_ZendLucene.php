@@ -568,7 +568,8 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
 		if (count($results) > 1) {
 			tx_rnbase_util_Logger::warn(
 				'getByContentUid has returned more than one element.',
-				'mksearch', array(
+				'mksearch',
+				array(
 					'service' => get_class($this),
 					'uid' => $uid,
 					'extKey' => $extKey,
