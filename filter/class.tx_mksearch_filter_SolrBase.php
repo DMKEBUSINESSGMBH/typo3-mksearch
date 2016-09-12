@@ -267,7 +267,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 	 * @param 	tx_rnbase_configurations 	$configurations
 	 * @param 	string 						$confId
 	 */
-	private function handleOperators(&$fields, &$options, &$parameters, &$configurations, $confId) {
+	protected function handleOperators(&$fields, &$options, &$parameters, &$configurations, $confId) {
 		// wenn der DisMaxRequestHandler genutzt wird, müssen wir ggf. den term und die options ändern.
 		if($configurations->get($confId.'useDisMax')) {
 			tx_rnbase::load('tx_mksearch_util_SearchBuilder');
