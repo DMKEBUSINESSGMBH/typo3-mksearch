@@ -309,8 +309,8 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 	protected function handlePagesChanged(array $aRawData) {
 		// every tt_content element on this page or it's
 		// subpages has to be put into the queue.
-		// @todo support deleted pages, too
-		$aPidList = explode(',', $this->_getPidList($aRawData['uid'], 999));
+
+		$aPidList =$this->_getPidList($aRawData['uid'], 999);
 
 		if (!empty($aPidList)) {
 			$oIndexSrv = tx_mksearch_util_ServiceRegistry::getIntIndexService();
@@ -323,6 +323,7 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 					// see isIndexableRecord()
 					$aOptions = array(
 						'where' => 'tt_content.pid=' . $iPid,
+						'enablefieldsoff' => true
 					);
 					// as the pid list can be very long, we don't risk to create a sql
 					// statement that is too long. we are fine with a database access
