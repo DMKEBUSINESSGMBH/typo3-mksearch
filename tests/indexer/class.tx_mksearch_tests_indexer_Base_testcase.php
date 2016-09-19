@@ -60,15 +60,6 @@ class tx_mksearch_tests_indexer_Base_testcase
 		self::assertEquals(1,$aPrimaryKey['uid']->getValue(),'Es wurde nicht die richtige Uid gesetzt!');
 	}
 
-	public function testGetPidListPreparesTsfe() {
-		$GLOBALS['TSFE'] = null;
-
-		$indexer =tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
-		$indexer->callGetPidList();
-
-		self::assertNotNull($GLOBALS['TSFE'],'TSFE wurde nicht geladen!');
-	}
-
 	/**
 	 *
 	 */

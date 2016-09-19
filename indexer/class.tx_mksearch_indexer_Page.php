@@ -72,12 +72,12 @@ class tx_mksearch_indexer_Page extends tx_mksearch_indexer_Base {
 			// the queue in case changes on this page have effects on subpages.
 			$aPidList = $this->_getPidList($rawData['uid'],999);
 
-			// the last element is always the page itself. so we can pop this.
-			array_pop($aPidList);
-
 			$oIndexSrv = tx_mksearch_util_ServiceRegistry::getIntIndexService();
 			foreach ($aPidList as $iUid) {
-				$oIndexSrv->addRecordToIndex($tableName, $iUid);
+				// the current page is handled later in case of short cuts
+				if ($iUid != $rawData['uid']) {
+					$oIndexSrv->addRecordToIndex($tableName, $iUid);
+				}
 			}
 
 			// Current page is a short cut? Follow up short-cutted page

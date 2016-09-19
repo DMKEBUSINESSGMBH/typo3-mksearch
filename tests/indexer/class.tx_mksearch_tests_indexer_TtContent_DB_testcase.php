@@ -228,23 +228,6 @@ class tx_mksearch_tests_indexer_TtContent_DB_testcase
 		self::assertNull($result, 'Element sollte gelöscht werden, da nicht im richtigen Seitenbaum. 1');
 	}
 
-	public function testPrepareSearchDataPreparesTsfeIfTablePagesSoGetPidListWorks() {
-		$GLOBALS['TSFE'] = null;
-		$this->importDataSet(tx_mksearch_tests_Util::getFixturePath('db/tt_content.xml'));
-		//damit es nicht an der Konfig scheitert
-		$options = $this->getDefaultConfig();
-
-		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtContent');
-		list($extKey, $cType) = $indexer->getContentType();
-
-		$record = array('uid'=> 1);
-		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
-
-		$result = $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
-
-		self::assertNotNull($GLOBALS['TSFE'],'TSFE wurde nicht geladen!');
-	}
-
 	public function testPrepareSearchDataPutsCorrectElementsIntoTheQueueIfTablePagesAndPageHasSubpages() {
 		$this->importDataSet(tx_mksearch_tests_Util::getFixturePath('db/tt_content.xml'));
 		//damit es nicht an der Konfig scheitert
@@ -267,16 +250,17 @@ class tx_mksearch_tests_indexer_TtContent_DB_testcase
 		$aResult = tx_rnbase_util_DB::doSelect('*', 'tx_mksearch_queue', $aOptions);
 
 		self::assertEquals(4,count($aResult),'Es wurde nicht der richtige Anzahl in die queue gelegt!');
-		//elemente von unterseiten
-		self::assertEquals('tt_content',$aResult[0]['tablename'],'Es wurde nicht das richtige Element (tablename) in die queue gelegt! Element 1');
-		self::assertEquals(4,$aResult[0]['recid'],'Es wurde nicht das richtige Element (recid) in die queue gelegt! Element 1');
-		self::assertEquals('tt_content',$aResult[1]['tablename'],'Es wurde nicht das richtige Element (tablename) in die queue gelegt! Element 2');
-		self::assertEquals(5,$aResult[1]['recid'],'Es wurde nicht das richtige Element (recid) in die queue gelegt! Element 2');
+
 		//elemente auf der eigentlichen seite
+		self::assertEquals('tt_content',$aResult[0]['tablename'],'Es wurde nicht das richtige Element (tablename) in die queue gelegt! Element 1');
+		self::assertEquals(1,$aResult[0]['recid'],'Es wurde nicht das richtige Element (recid) in die queue gelegt! Element 1');
+		self::assertEquals('tt_content',$aResult[1]['tablename'],'Es wurde nicht das richtige Element (tablename) in die queue gelegt! Element 2');
+		self::assertEquals(2,$aResult[1]['recid'],'Es wurde nicht das richtige Element (recid) in die queue gelegt! Element 2');
+		//elemente von unterseiten
 		self::assertEquals('tt_content',$aResult[2]['tablename'],'Es wurde nicht das richtige Element (tablename) in die queue gelegt! Element 3');
-		self::assertEquals(1,$aResult[2]['recid'],'Es wurde nicht das richtige Element (recid) in die queue gelegt! Element 3');
+		self::assertEquals(4,$aResult[2]['recid'],'Es wurde nicht das richtige Element (recid) in die queue gelegt! Element 3');
 		self::assertEquals('tt_content',$aResult[3]['tablename'],'Es wurde nicht das richtige Element (tablename) in die queue gelegt! Element 4');
-		self::assertEquals(2,$aResult[3]['recid'],'Es wurde nicht das richtige Element (recid) in die queue gelegt! Element 4');
+		self::assertEquals(5,$aResult[3]['recid'],'Es wurde nicht das richtige Element (recid) in die queue gelegt! Element 4');
 	}
 
 	public function testPrepareSearchDataDoesNothingIfTablePagesButPageNotExistent() {
@@ -350,9 +334,9 @@ class tx_mksearch_tests_indexer_TtContent_DB_testcase
 
 		self::assertEquals(2,count($aResult),'Es wurde nicht der richtige Anzahl in die queue gelegt!');
 		self::assertEquals('tt_content',$aResult[0]['tablename'],'Es wurde nicht das richtige Element (tablename) in die queue gelegt! Element 1');
-		self::assertEquals(3,$aResult[0]['recid'],'Es wurde nicht das richtige Element (recid) in die queue gelegt! Element 1');
+		self::assertEquals(6,$aResult[0]['recid'],'Es wurde nicht das richtige Element (recid) in die queue gelegt! Element 1');
 		self::assertEquals('tt_content',$aResult[1]['tablename'],'Es wurde nicht das richtige Element (tablename) in die queue gelegt! Element 2');
-		self::assertEquals(6,$aResult[1]['recid'],'Es wurde nicht das richtige Element (recid) in die queue gelegt! Element 2');
+		self::assertEquals(3,$aResult[1]['recid'],'Es wurde nicht das richtige Element (recid) in die queue gelegt! Element 2');
 	}
 
 	public function testPrepareSearchDataPutsCorrectElementsIntoTheQueueIfTablePagesAndPageHasNoSubpages() {

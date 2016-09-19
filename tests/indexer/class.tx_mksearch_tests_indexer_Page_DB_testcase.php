@@ -57,19 +57,6 @@ class tx_mksearch_tests_indexer_Page_DB_testcase
 		$this->importDataSets[] = tx_mksearch_tests_Util::getFixturePath('db/pages.xml');
 	}
 
-	public function testPrepareSearchDataPreparesTsfeIfTablePagesSoGetPidListWorks() {
-		$GLOBALS['TSFE'] = null;
-		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_Page');
-		list($extKey, $cType) = $indexer->getContentType();
-
-		$record = array('uid'=> 2, 'doktype' => 1);
-		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
-
-		$oIndexDoc = $indexer->prepareSearchData('pages', $record, $indexDoc, array());
-
-		self::assertNotNull($GLOBALS['TSFE'],'TSFE wurde nicht geladen!');
-	}
-
 	public function testPrepareSearchDataPutsCorrectShortcutTargetAndSubpagesIntoTheQueue() {
 		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_Page');
 		list($extKey, $cType) = $indexer->getContentType();
