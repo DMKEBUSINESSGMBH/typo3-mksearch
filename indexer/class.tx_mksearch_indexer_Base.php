@@ -617,17 +617,16 @@ CONFIG;
 	}
 
 	/**
-	 * Wrapper for tx_rnbase_util_Misc::getPidList
+	 * get a pidlist, also deleted pages will be included
 	 *
 	 * @param string $pidList
 	 * @param int $recursive
-	 * @return string with list of pids
+	 * @return array list of pids
 	 */
 	protected function _getPidList($pidList, $recursive=0) {
-		// @TODO: BUG in rn_base. dort sollte sichergestellt werden,
-		//        das die TSFE existiert.
-		tx_rnbase_util_Misc::prepareTSFE();
-		return tx_rnbase_util_Misc::getPidList($pidList, $recursive);
+		/** @var Tx_Rnbase_Database_TreeQueryBuilder $treeQueryBuilder */
+		$treeQueryBuilder = tx_rnbase::makeInstance('Tx_Rnbase_Database_TreeQueryBuilder');
+		return $treeQueryBuilder->getPageTreeUidList($pidList, array('enablefieldsoff' => true));
 	}
 
 	/**
