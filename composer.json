@@ -34,11 +34,12 @@
 		"issues" : "https://github.com/DMKEBUSINESSGMBH/typo3-mksearch"
 	},
 	"replace" : {
-		"typo3-ter/mksearch" : "*"
+		"mksearch" : "self.version",
+		"typo3-ter/mksearch" : "self.version"
 	},
 	"require" : {
 		"typo3/cms-core" : ">=4.5.0 <=7.6.99",
-		"digedag/rn-base" : ">=1.1.6"
+		"typo3-ter/rn-base" : ">=1.1.6"
 	},
 	"autoload" : {
 		"classmap" : [
