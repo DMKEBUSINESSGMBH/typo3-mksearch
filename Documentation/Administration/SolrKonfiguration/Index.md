@@ -1,7 +1,7 @@
 SOLR Konfiguration
 ==================
 
-Solr wird über die solrconfig.xml konfiguriert. In mksearch sind Beispiel Konfiguationen für die Versionen 3.x und 4.x enthalten.
+Solr wird über die solrconfig.xml konfiguriert. In mksearch sind Beispiel Konfiguationen für die Versionen [3.x, 4.x](solr) und [6.x](Configuration/Solr) enthalten.
 
 luceneMatchVersion
 ------------------
