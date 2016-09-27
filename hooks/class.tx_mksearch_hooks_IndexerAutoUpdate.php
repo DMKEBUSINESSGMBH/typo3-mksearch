@@ -46,6 +46,24 @@ class tx_mksearch_hooks_IndexerAutoUpdate {
 		// daten sammeln
 		$records = array();
 		foreach ($dataHandler->datamap as $table => $uids) {
+			// beim rückgängig machen eines einzelnen records über die history funktion
+			// ist nicht jeder datensatz in der datamap wie sonst. Es gibt den üblichen:
+			//
+			// array(
+			//	tablename => array(
+			//		uid123 => array(),
+			//	)
+			// )
+			//
+			// und einen weiteren, den wir aber nicht beachten brauchen.
+			//
+			// array(
+			//	tablename:uid123 => -1
+			// )
+			if (!is_array($uids)) {
+				continue;
+			}
+
 			$records[$table] = array();
 			foreach (array_keys($uids) as $uid) {
 				// New element?

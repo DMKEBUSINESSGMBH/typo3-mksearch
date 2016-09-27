@@ -62,7 +62,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdate_testcase
 	/**
 	 * @unit
 	 */
-	public function testProcessAutoUpdateWithWorkspace() {
+	public function testProcessDatamapAfterAllOperationsWithWorkspace() {
 		$hook = $this->getHookMock(
 			$service = $this->getMock('tx_mksearch_service_internal_Index')
 		);
@@ -81,7 +81,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdate_testcase
 	/**
 	 * @unit
 	 */
-	public function testProcessAutoUpdateWithEmptyDatamap() {
+	public function testProcessDatamapAfterAllOperationsWithEmptyDatamap() {
 		$hook = $this->getHookMock(
 			$service = $this->getMock('tx_mksearch_service_internal_Index')
 		);
@@ -95,6 +95,25 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdate_testcase
 
 		$hook->processDatamap_afterAllOperations($tce);
 	}
+
+	/**
+	 * @unit
+	 */
+	public function testProcessDatamapAfterAllOperationsWithDataFromHistoryUndo() {
+		$hook = $this->getMock('tx_mksearch_hooks_IndexerAutoUpdate', array('processAutoUpdate'));
+
+		$hook
+			->expects(self::once())
+			->method('processAutoUpdate')
+			->with(array('tt_content' => array(123)))
+			;
+
+		$tce = $this->getTceMock();
+		$tce->datamap = array('tt_content:123' => -1, 'tt_content' => array(123 => array()));
+
+		$hook->processDatamap_afterAllOperations($tce);
+	}
+
 	/**
 	 * @unit
 	 */
