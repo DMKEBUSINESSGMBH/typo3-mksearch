@@ -35,16 +35,35 @@ class tx_mksearch_util_Tika {
 	/**
 	 * @return tx_mksearch_util_Tika
 	 */
-	public static function getInstance() {
-		$tikaJar = tx_rnbase_configurations::getExtensionCfgValue('mksearch', 'tikaJar');
-		$tikaJar = tx_rnbase_util_Files::getFileAbsFileName($tikaJar, FALSE);
-		self::$instance = new tx_mksearch_util_Tika($tikaJar);
+	public static function getInstance()
+	{
+		if (self::$instance === null) {
+			$tikaJar = tx_rnbase_configurations::getExtensionCfgValue(
+				'mksearch',
+				'tikaJar'
+			);
+			// check relative path to webroot.
+			if (is_file(PATH_site . $tikaJar)) {
+				// Here are paths outside of the webroot allowed.
+				$tikaJar = PATH_site . $tikaJar;
+			} else {
+				// Here only paths within the webroot and EXT:myext paths allowed.
+				$tikaJar = tx_rnbase_util_Files::getFileAbsFileName($tikaJar, FALSE);
+			}
+			self::$instance = new tx_mksearch_util_Tika($tikaJar);
+		}
 		return self::$instance;
 	}
-	private function __construct($tikaJar) {
+
+	private function __construct($tikaJar)
+	{
 		$this->setTikaJar($tikaJar);
-		$this->tikaLocaleType = tx_rnbase_configurations::getExtensionCfgValue('mksearch', 'tikaLocaleType');
+		$this->tikaLocaleType = tx_rnbase_configurations::getExtensionCfgValue(
+			'mksearch',
+			'tikaLocaleType'
+		);
 	}
+
 	/**
 	 * Whether or not Tika is available on server.
 	 * @return boolean
