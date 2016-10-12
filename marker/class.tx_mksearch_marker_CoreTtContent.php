@@ -45,9 +45,10 @@ class tx_mksearch_marker_CoreTtContent extends tx_mksearch_marker_SearchResultSi
 		// Usually you won't need that - it's a special case for core.tt_content.
 		// For other contents you just configure the page id via TS statically
 		// as all search results of one particular content type will be shown
-		// within the same page which is to be configured preliminarily. 
-		
+		// within the same page which is to be configured preliminarily.
+
 		$GLOBALS['TSFE']->register['mksearch.core.tt_content'] = $item->record['pid'];
+		$GLOBALS['TSFE']->register['mksearch.core.tt_content.uid'] = $item->record['uid'];
 		$linkId = 'show';
 		$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, $linkId, $marker, array());
 	}

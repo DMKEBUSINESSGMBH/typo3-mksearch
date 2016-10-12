@@ -516,7 +516,7 @@ plugin.tx_mksearch {
 
 					### add content anchor to the url
 					section = TEXT
-					section.value = c{register:mksearch.core.tt_content}
+					section.value = c{register:mksearch.core.tt_content.uid}
 					section.insertData = 1
 				}
 			}
@@ -908,7 +908,7 @@ lib.mksearch.extrainfo {
 
 				### add content anchor to the url
 				section = TEXT
-				section.value = c{register:mksearch.core.tt_content}
+				section.value = c{register:mksearch.core.tt_content.uid}
 				section.insertData = 1
 			}
 		}
