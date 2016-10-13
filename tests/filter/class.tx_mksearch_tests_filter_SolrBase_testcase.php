@@ -505,6 +505,57 @@ class tx_mksearch_tests_filter_SolrBase_testcase
 	}
 
 	/**
+	 * @group unit
+	 */
+	public function testInitDoesNotConsiderGroupingIfNotEnabled() {
+		$config = $this->getDefaultConfig();
+		$filter = $this->getFilter($config);
+		$fields = array();
+		$options = array();
+		$filter->init($fields, $options);
+
+		self::assertNotEquals('true', $options['group']);
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testInitSetsGroupingOptionsCorrectIfEnabled() {
+		$config = $this->getDefaultConfig();
+		$config['searchsolr.']['filter.']['default.']['options.']['group.']['enable'] = 1;
+		$config['searchsolr.']['filter.']['default.']['options.']['group.']['field'] = 'myField';
+		$config['searchsolr.']['filter.']['default.']['options.']['group.']['useNumberOfGroupsAsSearchResultCount'] = FALSE;
+		$filter = $this->getFilter($config);
+		$fields = array();
+		$options = array();
+		$filter->init($fields, $options);
+
+		self::assertEquals('true', $options['group']);
+		self::assertEquals('myField', $options['group.field']);
+		self::assertArrayNotHasKey('group.ngroups', $options);
+		self::assertArrayNotHasKey('group.truncate', $options);
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testInitSetsGroupingOptionsCorrectIfEnabledAndUseNumberOfGroupsAsSearchResultCount() {
+		$config = $this->getDefaultConfig();
+		$config['searchsolr.']['filter.']['default.']['options.']['group.']['enable'] = 1;
+		$config['searchsolr.']['filter.']['default.']['options.']['group.']['field'] = 'myField';
+		$config['searchsolr.']['filter.']['default.']['options.']['group.']['useNumberOfGroupsAsSearchResultCount'] = TRUE;
+		$filter = $this->getFilter($config);
+		$fields = array();
+		$options = array();
+		$filter->init($fields, $options);
+
+		self::assertEquals('true', $options['group']);
+		self::assertEquals('myField', $options['group.field']);
+		self::assertEquals('true', $options['group.ngroups']);
+		self::assertEquals('true', $options['group.truncate']);
+	}
+
+	/**
 	 * @return array
 	 */
 	private function getDefaultConfig() {

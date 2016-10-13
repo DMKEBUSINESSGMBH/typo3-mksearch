@@ -57,7 +57,7 @@
 			<label index="tx_mksearch_indices_solrversion">Solr Version</label>
 			<label index="tx_mksearch_indices_solrversion_35"><![CDATA[<= 3.5 (e.g 1.4 or 3.4)]]></label>
 			<label index="tx_mksearch_indices_solrversion_40"><![CDATA[>= 3.6 (e.g 4.7 or 6.2)]]></label>
-			
+
 			<label index="tx_mksearch_configcomposites">Indexer configuration composite</label>
 			<label index="tx_mksearch_configcomposites.hidden">Hidden, i.e. composite is disabled</label>
 			<label index="tx_mksearch_configcomposites.title">Title</label>
@@ -65,7 +65,7 @@
 			<label index="tx_mksearch_configcomposites.indices">Assigned to indices</label>
 			<label index="tx_mksearch_configcomposites.configs">Connected index configurations</label>
 			<label index="tx_mksearch_configcomposites.configuration">Default Configuration for index configurations</label>
-			
+
 			<label index="tx_mksearch_indexerconfigs">Indexer configuration</label>
 			<label index="tx_mksearch_indexerconfigs.hidden">Hidden, i.e. configuration is disabled</label>
 			<label index="tx_mksearch_indexerconfigs.title">Title</label>
@@ -80,14 +80,18 @@
 			<label index="tx_mksearch_keywords_link">Link</label>
 
 			<label index="plugin_common_enable">Enable</label>
-			
+
 			<label index="plugin.mksearch.tt_content.header_layout">Hidden (but indexed via mksearch)</label>
 			<label index="tt_content.tx_mksearch_is_indexable">indexable through mksearch?</label>
 			<label index="tt_content.tx_mksearch_is_indexable.use_indexer_config">use configuration of indexer</label>
 			<label index="tt_content.tx_mksearch_is_indexable.yes">yes</label>
 			<label index="tt_content.tx_mksearch_is_indexable.no">no</label>
-			
+
 			<label index="plugin.mksearch.flexform.action.elasticSearch">Search view for ElasticSearch</label>
+
+			<label index="plugin.mksearch.flexform.options.group.enable">enable group?</label>
+			<label index="plugin.mksearch.flexform.options.group.useNumberOfGroupsAsSearchResultCount">use number of groups as search result count?</label>
+			<label index="plugin.mksearch.flexform.options.group.field">group field</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="general.undef">Undefiniert</label>
@@ -102,6 +106,10 @@
 			<label index="tt_content.tx_mksearch_is_indexable.use_indexer_config">Konfiguration des Indexer verwenden</label>
 			<label index="tt_content.tx_mksearch_is_indexable.yes">Ja</label>
 			<label index="tt_content.tx_mksearch_is_indexable.no">Nein</label>
+
+			<label index="plugin.mksearch.flexform.options.group.enable">Gruppierung aktivieren?</label>
+			<label index="plugin.mksearch.flexform.options.group.useNumberOfGroupsAsSearchResultCount">Anzahl der Gruppen als Anzahl der Suchergebnisse anzeigen?</label>
+			<label index="plugin.mksearch.flexform.options.group.field">Gruppierungsfeld</label>
 		</languageKey>
 	</data>
 </T3locallang>

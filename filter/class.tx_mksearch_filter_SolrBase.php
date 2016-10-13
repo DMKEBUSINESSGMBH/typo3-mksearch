@@ -163,6 +163,8 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 		// umkreissuche prüfen
 		$this->handleSpatial($fields, $options);
 
+		$this->handleGrouping($options);
+
 		// Debug prüfen
 		if ($configurations->get($this->getConfIdOverwrite().'options.debug')) {
 			$options['debug'] = 1;
@@ -731,6 +733,22 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 		return $this->filterUtility;
 	}
 
+	/**
+	 * @param array $options
+	 * @return void
+	 */
+	protected function handleGrouping(array &$options) {
+		if ($this->getConfValue('options.group.enable')) {
+			$options['group'] = 'true';
+			$options['group.field'] = $this->getConfValue('options.group.field');
+
+			if ($this->getConfValue('options.group.useNumberOfGroupsAsSearchResultCount')) {
+				$options['group.ngroups'] = 'true';
+				$options['group.truncate'] = 'true';
+			}
+
+		}
+	}
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/filter/class.tx_mksearch_filter_SolrBase.php']) {

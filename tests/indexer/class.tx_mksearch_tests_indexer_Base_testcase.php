@@ -223,10 +223,13 @@ class tx_mksearch_tests_indexer_Base_testcase
 		$indexDocData = $indexer->prepareSearchData('doesn_t_matter', $aRawData, $indexDoc, array())->getData();
 
 		self::assertEquals(
-			1, count($indexDocData), 'es sollte nur 1 Feld (content_ident_s) indiziert werden.'
+			2, count($indexDocData), 'es sollte nur 1 Feld (content_ident_s) indiziert werden.'
 		);
 		self::assertArrayHasKey(
 			'content_ident_s', $indexDocData, 'content_ident_s nicht enthalten.'
+		);
+		self::assertArrayHasKey(
+			'group_s', $indexDocData, 'group_s nicht enthalten.'
 		);
 	}
 
@@ -900,5 +903,21 @@ class tx_mksearch_tests_indexer_Base_testcase
 			->will(self::returnValue($indexerUtility));
 
 		$this->callInaccessibleMethod($indexer, 'addModelsToIndex', $models, $tableName, $prefer, $resolver, $data, $options);
+	}
+
+	/**
+	 * @group unit
+	 */
+	public function testGroupFieldIsAdded() {
+		$indexer =tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
+		list($extKey, $contentType) = $indexer->getContentType();
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $contentType);
+
+		$rawData = array('uid' => 123);
+
+		$indexDoc = $indexer->prepareSearchData('doesnt_matter', $rawData, $indexDoc, array());
+
+		$indexedData = $indexDoc->getData();
+		self::assertEquals('mksearch:dummy:123', $indexedData['group_s']->getValue());
 	}
 }

@@ -18,6 +18,8 @@ User manual
 
 [Sortierung (Solr)](Sortierung(solr)/Index.md)
 
+[Gruppierung (Solr)](Gruppierung(solr)/Index.md)
+
 [Filter (Lucene)](Filter(lucene).md)
 
 [Volltextsuche Lucene)](Volltextsuche(lucene)/Index.md)

@@ -354,6 +354,22 @@ lib.mksearch.defaultsolrfilter {
 			distance = 50
 		}
 	}
+
+	options {
+		### Grouping
+		group {
+			enable = 0
+			field = group_s
+
+			### per default ist die Anzahl der Ergebnisse gleich den gefundenen Dokumenten.
+			### durch die Gruppierung liefert Solr aber natürlich weniger Gruppen
+			### als Dokumente. Mit dieser Anweisung wird statt der Anzahl der gefundenen
+			### Dokumente die Anzahl der Gruppen verwendet
+			useNumberOfGroupsAsSearchResultCount = 1
+
+			### Weitere Optionen wie group.limit noch nicht implementiert.
+		}
+	}
 }
 
 lib.mksearch.defaultElasticSearchFilter {

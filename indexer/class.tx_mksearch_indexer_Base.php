@@ -136,6 +136,7 @@ abstract class tx_mksearch_indexer_Base
 		$indexDoc = $this->indexSiteRootPage(
 			$this->modelToIndex, $tableName, $indexDoc, $options
 		);
+		$indexDoc->addField('group_s', $this->getGroupFieldValue($indexDoc));
 		$indexDoc = $this->indexData(
 			$this->modelToIndex, $tableName, $rawData, $indexDoc, $options
 		);
@@ -700,6 +701,28 @@ CONFIG;
 	 */
 	protected function getModelToIndex() {
 		return $this->modelToIndex;
+	}
+
+	/**
+	 * if tt_content is indexed, you will often have the problem that you
+	 * get several search results from the same page. In most cases this is
+	 * not wanted. So we can use the grouping of SOLR on the pid. But there is
+	 * a problem. tt_news and so on will often have the same pid. This would
+	 * lead to having only one news which again is unwanted. That's why we add
+	 * a dedicated field for grouping. By default the used value is the primary key aka SOLR ID.
+	 * Indexer can overwrite this method to provide other values. The tt_content
+	 * indexer does that for example. It returns the pid. This way we can group
+	 * by the group_s field. tt_news and so on will practically not be grouped
+	 * as the group_s field value is unique for every document. tt_content
+	 * on the other side will be grouped.
+	 *
+	 * @TODO if needed make the value configurable through the indexer options
+	 *
+	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
+	 * @return string
+	 */
+	protected function getGroupFieldValue(tx_mksearch_interface_IndexerDocument $indexDoc) {
+		return $indexDoc->getPrimaryKey(TRUE);
 	}
 }
 

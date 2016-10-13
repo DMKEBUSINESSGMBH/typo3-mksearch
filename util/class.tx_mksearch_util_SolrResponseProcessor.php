@@ -114,44 +114,36 @@ class tx_mksearch_util_SolrResponseProcessor {
 		// wenn keins existiert brauchen wir nichts machen
 		if (empty($highlights)) return $hits;
 
-		// Gibt es docs?
-		// Im Fall eines Autocompletes, haben wir keinen Responce, nur Suggestions!
-		if($response->response->docs) {
-			if (empty($hits)) { // wir erzeugen die hits, sollte vom service allerdings schon geschehen sein.
-				foreach($response->response->docs as $doc) {
-					$hits[] = tx_rnbase::makeInstance('tx_mksearch_model_SolrHit', $doc);
-				}
-			}
-			foreach($hits as &$hit) {
-				//highlighting hinzufügen für alle Felder
-				if(!empty($highlights[$hit->record['id']])){
-					foreach($highlights[$hit->record['id']] as $docField => $highlightValue) {
-						//Solr liefert die Highlightings gesondert weshalb wir diese in das
-						//eigentliche Dokument bekommen müssen. Dafür gibts es 2 Möglichkeiten:
-						//1. wenn overrideWithHl auf true gesetzt ist werden die jeweiligen Inhaltsfelder
-						//mit den korrespondierenden Highlighting Snippets überschrieben. Dabei muss man auf
-						//hl.fragsize achten da die Snippets nur so lang sind wie in hl.fragsize angegeben
-						//2. ist overrideWithHl nicht gesetzt dann werden die Highlighting Snippets
-						//in ein eigenes Feld nach folgendem Schema ins Dokument geschrieben: $Feldname_hl
-						//dabei wäre es dann möglich die Felder flexibel über TS überschrieben zu lassen
-						//indem bspw. ein TS wie content.override.field = content_hl angegeben wird ;)
-						$overrideWithHl = $this->getConfigurations()->get($confId.'overrideWithHl');
-						$overrideWithHl = $overrideWithHl ? $overrideWithHl : (isset($options['overrideWithHl']) && $options['overrideWithHl']);
-						$highlightField = ($overrideWithHl) ? $docField : $docField.'_hl';
+		foreach($hits as &$hit) {
+			//highlighting hinzufügen für alle Felder
+			if(!empty($highlights[$hit->record['id']])){
+				foreach($highlights[$hit->record['id']] as $docField => $highlightValue) {
+					//Solr liefert die Highlightings gesondert weshalb wir diese in das
+					//eigentliche Dokument bekommen müssen. Dafür gibts es 2 Möglichkeiten:
+					//1. wenn overrideWithHl auf true gesetzt ist werden die jeweiligen Inhaltsfelder
+					//mit den korrespondierenden Highlighting Snippets überschrieben. Dabei muss man auf
+					//hl.fragsize achten da die Snippets nur so lang sind wie in hl.fragsize angegeben
+					//2. ist overrideWithHl nicht gesetzt dann werden die Highlighting Snippets
+					//in ein eigenes Feld nach folgendem Schema ins Dokument geschrieben: $Feldname_hl
+					//dabei wäre es dann möglich die Felder flexibel über TS überschrieben zu lassen
+					//indem bspw. ein TS wie content.override.field = content_hl angegeben wird ;)
+					$overrideWithHl = $this->getConfigurations()->get($confId.'overrideWithHl');
+					$overrideWithHl = $overrideWithHl ? $overrideWithHl : (isset($options['overrideWithHl']) && $options['overrideWithHl']);
+					$highlightField = ($overrideWithHl) ? $docField : $docField.'_hl';
 
-						if ($this->getConfigurations()->getBool($confId.'hellip')) {
-							$highlightValue = $this->handleHellip(
-								$hit->record[$docField],
-								$highlightValue,
-								$this->getConfigurations()->get($confId.'hellip.')
-							);
-						}
-
-						$hit->record[$highlightField] = $highlightValue;
+					if ($this->getConfigurations()->getBool($confId.'hellip')) {
+						$highlightValue = $this->handleHellip(
+							$hit->record[$docField],
+							$highlightValue,
+							$this->getConfigurations()->get($confId.'hellip.')
+						);
 					}
+
+					$hit->record[$highlightField] = $highlightValue;
 				}
 			}
 		}
+
 		return $hits;
 	}
 

@@ -229,18 +229,19 @@ class tx_mksearch_service_engine_Solr extends Tx_Rnbase_Service_Base implements 
 			}
 
 			// wir müssen hier schon die hits erzeugen.
-			// im tx_mksearch_util_SolrResponseProcessor werden Sie dann nurnoch bearbeidet!
-			$hits = array();
-			if ($response->response->docs) {
-				foreach($response->response->docs as $doc) {
-					$hits[] = tx_rnbase::makeInstance('tx_mksearch_model_SolrHit', $doc);
-				}
-			}
+			// im tx_mksearch_util_SolrResponseProcessor werden Sie dann nur noch bearbeidet!
+			$hits = self::getHitsFromSolrResponse($response, $options);
 
 			$ret['items'] = $hits;
 			$ret['searchUrl'] = $solr->lastUrl;
 			$ret['searchTime'] = (microtime(true) - $start) . ' ms';
-			$ret['numFound'] = $response->response->numFound;
+
+			if ($options['group.ngroups'] == 'true') {
+				$ret['numFound'] = $response->grouped->$options['group.field']->ngroups;
+			} else {
+				$ret['numFound'] = $response->response->numFound;
+			}
+
 			$ret['response'] = &$response; // wichtig, wird im SolrResponseProcessor benötigt
 
 			if($options['debug']) {
@@ -741,6 +742,39 @@ class tx_mksearch_service_engine_Solr extends Tx_Rnbase_Service_Base implements 
 		$this->indexModel = null;
 	}
 
+	/**
+	 * @param Apache_Solr_Response $response
+	 * @param array $options
+	 * @return array[tx_mksearch_model_SolrHit]
+	 */
+	public static function getHitsFromSolrResponse(Apache_Solr_Response $response, array $options) {
+		if ($options['group'] == 'true') {
+			foreach ((array) $response->grouped->$options['group.field']->groups as $group) {
+				foreach ($group->doclist->docs as $doc) {
+					$solrDocument = new Apache_Solr_Document();
+					foreach ($doc as $field => $value) {
+						if (is_array($value) && count($value) <= 1)
+						{
+							$value = array_shift($value);
+						}
+						$solrDocument->$field = $value;
+					}
+					$docs[] = $solrDocument;
+				}
+			}
+		} else {
+			$docs = $response->response->docs;
+		}
+
+		$hits = array();
+		if ($docs) {
+			foreach($docs as $doc) {
+				$hits[] = tx_rnbase::makeInstance('tx_mksearch_model_SolrHit', $doc);
+			}
+		}
+
+		return $hits;
+	}
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/engine/class.tx_mksearch_service_engine_Solr.php'])	{

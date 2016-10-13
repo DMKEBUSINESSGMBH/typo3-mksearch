@@ -214,4 +214,20 @@ class tx_mksearch_tests_indexer_TtContent_testcase
 		self::assertNotNull($result, 'Null returned for uid '.$record['uid'].' when CType in includeCTypes');
 
 	}
+
+	/**
+	 * @group unit
+	 */
+	public function testGroupFieldIsAddedWithPid() {
+		$indexer =tx_rnbase::makeInstance('tx_mksearch_indexer_TtContent');
+		list($extKey, $contentType) = $indexer->getContentType();
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $contentType);
+
+		$rawData = array('uid' => 123, 'pid' => 456);
+
+		$indexDoc = $indexer->prepareSearchData('doesnt_matter', $rawData, $indexDoc, self::getDefaultOptions());
+
+		$indexedData = $indexDoc->getData();
+		self::assertEquals('core:tt_content:456', $indexedData['group_s']->getValue());
+	}
 }

@@ -441,7 +441,7 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 	 * @return array([extension key], [key of content type])
 	 */
 	public static function getContentType() {
-		return array();
+		return array('core', 'tt_content');
 	}
 
 	/**
@@ -451,6 +451,17 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 	 */
 	public function getDefaultTSConfig() {
 		return '';
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * @see tx_mksearch_indexer_Base::getGroupFieldValue()
+	 */
+	protected function getGroupFieldValue() {
+		$parts = $this->getContentType();
+		$parts[] = $this->getModelToIndex()->getPid();
+
+		return join(':', $parts);
 	}
 }
 
