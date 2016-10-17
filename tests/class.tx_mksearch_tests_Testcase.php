@@ -70,7 +70,9 @@ abstract class tx_mksearch_tests_Testcase
 			tx_mksearch_tests_Util::unloadTemplavoilaForTypo362OrHigher();
 		}
 
-
+		// das TS Parsing frisst in manchen Umgebung mehr als 128MB Speicher. Es gibt aber im Moment keine Zeit
+		// die Tests zu refactoren. Also setzen wir das Limit hoch
+		ini_set('memory_limit', '1024M');
 	}
 
 	/**

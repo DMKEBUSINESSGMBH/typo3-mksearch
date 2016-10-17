@@ -62,10 +62,6 @@ class tx_mksearch_tests_marker_SearchResultSimple_testcase
 
 		$this->oParameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
 		$this->oMarker = tx_rnbase::makeInstance('tx_mksearch_marker_SearchResultSimple');
-
-		// das TS Parsing frisst in manchen Umgebung mehr als 128MB Speicher. Es gibt aber im Moment keine Zeit
-		// die Tests zu refactoren. Also setzen wir das Limit hoch
-		ini_set('memory_limit', '1024M');
 	}
 
 	/**
