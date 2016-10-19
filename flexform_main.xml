@@ -291,6 +291,38 @@
 							</config>
 						</TCEforms>
 					</searchsolr.filter._overwrite.options.facet.fields>
+					<searchsolr.filter._overwrite.options.group.enable>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.options.group.enable</label>
+							<config>
+								<type>check</type>
+							</config>
+						</TCEforms>
+					</searchsolr.filter._overwrite.options.group.enable>
+					<searchsolr.filter._overwrite.options.group.useNumberOfGroupsAsSearchResultCount>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.options.group.useNumberOfGroupsAsSearchResultCount</label>
+							<config>
+								<type>check</type>
+								<defautl>1</defautl>
+							</config>
+						</TCEforms>
+					</searchsolr.filter._overwrite.options.group.useNumberOfGroupsAsSearchResultCount>
+					<searchsolr.filter._overwrite.options.group.field>
+						<TCEforms>
+							<exclude>1</exclude>
+							<label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.options.group.field</label>
+							<config>
+								<type>input</type>
+								<size>50</size>
+								<max>256</max>
+								<eval>trim</eval>
+								<default>group_s</default>
+							</config>
+						</TCEforms>
+					</searchsolr.filter._overwrite.options.group.field>
 					<searchsolr.filter>
 						<TCEforms>
 							<exclude>1</exclude>
@@ -370,38 +402,6 @@
 							</config>
 						</TCEforms>
 					</searchsolr.mainsubpart>
-					<searchsolr.filter._overwrite.options.group.enable>
-						<TCEforms>
-							<exclude>1</exclude>
-							<label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.options.group.enable</label>
-							<config>
-								<type>check</type>
-							</config>
-						</TCEforms>
-					</searchsolr.filter._overwrite.options.group.enable>
-					<searchsolr.filter._overwrite.options.group.useNumberOfGroupsAsSearchResultCount>
-						<TCEforms>
-							<exclude>1</exclude>
-							<label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.options.group.useNumberOfGroupsAsSearchResultCount</label>
-							<config>
-								<type>check</type>
-								<defautl>1</defautl>
-							</config>
-						</TCEforms>
-					</searchsolr.filter._overwrite.options.group.useNumberOfGroupsAsSearchResultCount>
-					<searchsolr.filter._overwrite.options.group.field>
-						<TCEforms>
-							<exclude>1</exclude>
-							<label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.options.group.field</label>
-							<config>
-								<type>input</type>
-								<size>50</size>
-								<max>256</max>
-								<eval>trim</eval>
-								<default>group_s</default>
-							</config>
-						</TCEforms>
-					</searchsolr.filter._overwrite.options.group.field>
 					<searchsolrTemplate>
 						<TCEforms>
 							<exclude>1</exclude>
