@@ -453,9 +453,14 @@ tikafields {
   # tikafield = indexfield
   content = content
   language = lang_s
-  meta.Content-Encoding = encoding_s
-  meta.Content-Length = filesize_i
-  meta.resourceName = resource_name_s
+  meta {
+    Content-Encoding = encoding_s
+    Content-Length = filesize_i
+    Content-Type = contenttype_s
+    Creation-Date = creationdate_dt
+    title = title
+    resourceName = resource_name_s
+  }
 }
 
 # should a special workspace be indexed?
