@@ -139,7 +139,9 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base {
 		tx_mksearch_interface_IndexerDocument $indexDoc,
 		$options
 	) {
+
 		$this->indexEvent($model, $indexDoc);
+		$this->indexLocation($model, $indexDoc);
 		$this->indexCalendar($model, $indexDoc);
 		$this->indexCategories($model, $indexDoc);
 
@@ -158,14 +160,47 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base {
 	) {
 		$calEvent = $this->prepareDates($calEvent);
 
-		$calEvent->record['description'] =
-			tx_mksearch_util_Misc::html2plain($calEvent->record['description']);
+		$calEvent->record['description'] = tx_mksearch_util_Misc::html2plain(
+			$calEvent->record['description']
+		);
+
+		// add some base doc fields
+		$indexDoc->setTitle($calEvent->getTitle());
+		$indexDoc->setContent($calEvent->getDescription());
+		$indexDoc->setAbstract(
+			$calEvent->getDescription(),
+			$indexDoc->getMaxAbstractLength()
+		);
 
 		$this->indexModelByMapping(
 			$calEvent,$this->getEventMapping(),$indexDoc
 		);
 
 		$indexDoc->setTimestamp($calEvent->record['start_date_timestamp']);
+	}
+
+	/**
+	 * Indexes the location of the event.
+	 *
+	 * currently only overrides the location field of the event!
+	 *
+	 * @param tx_mksearch_model_cal_Event $calEvent
+	 * @param tx_mksearch_interface_IndexerDocument- $indexDoc
+	 *
+	 * @return void
+	 */
+	private function indexLocation(
+		tx_mksearch_model_cal_Event $calEvent,
+		tx_mksearch_interface_IndexerDocument $indexDoc
+	) {
+		$location = $calEvent->getLocation();
+
+		if (!$location->isValid()) {
+			return;
+		}
+
+
+		$indexDoc->addField('location_s', $location->getCity());
 	}
 
 	/**
