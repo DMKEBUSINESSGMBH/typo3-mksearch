@@ -282,6 +282,27 @@ class tx_mksearch_tests_indexer_BaseMedia_testcase
 		);
 	}
 
+	/**
+	 * @group unit
+	 */
+	public function testGroupFieldIsAdded() {
+		$indexer = $this->getIndexerMock(array(
+			'getBaseTableName', 'getFileExtension',
+			'getFilePath', 'getRelFileName', 'stopIndexing', 'isIndexableRecord'
+		));
+		$indexer->expects(self::once())
+			->method('isIndexableRecord')
+			->will(self::returnValue(TRUE));
+
+		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', 'core', 'file');
+
+		$rawData = array('uid' => 123);
+
+		$indexDoc = $indexer->prepareSearchData('doesnt_matter', $rawData, $indexDoc, array());
+
+		$indexedData = $indexDoc->getData();
+		self::assertEquals('core:file:123', $indexedData['group_s']->getValue());
+	}
 
 	/**
 	 * @param array $mockedMethods
