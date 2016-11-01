@@ -140,7 +140,19 @@ class tx_mksearch_marker_Facet extends tx_mksearch_marker_SearchResultSimple {
 			// den status setzen
 			if (!isset($item->record['active'])) {
 				$params = $configurations->getParameters()->get('fq');
-				$params = empty($params[$field]) ? array() : $params[$field];
+				if (!empty($params[$field])) {
+					$params = $params[$field];
+				} else {
+					// check addfq parameter for active state
+					$params = $configurations->getParameters()->get('addfq');
+					if ($field == substr($params, 0, strpos($params, ':'))) {
+						$params = array(
+							substr($params, strpos($params, ':') + 1) => $params
+						);
+					} else {
+						$params = array();
+					}
+				}
 				$item->record['active'] = empty($params[$value]) ? 0 : 1;
 			}
 		}
