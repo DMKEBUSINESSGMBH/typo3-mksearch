@@ -344,19 +344,14 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 						$fqOperator = $fqOperator == 'OR' ? 'OR' : 'AND';
 						$fieldQuery = implode(' ' . $fqOperator . ' ', $fieldQuery);
 					}
-					$tag = $configurations->get($confId . 'filterQuery.' . $fqField . '.tag');
-					if($tag) {
-						$tag = '{!tag="'.$tag.'"}';
-						$fieldQuery = $tag.$fieldQuery;
-					}
-					self::addFilterQuery($options, $fieldQuery);
+					self::addFilterQuery($options, $this->handleFqTags($fieldQuery));
 				}
 			}
 		}
 		if($sAddFq = trim($parameters->get('addfq'))) {
 			// field value konstelation prüfen
 			$sAddFq = $this->parseFieldAndValue($sAddFq, $allowedFqParams);
-			self::addFilterQuery($options, $sAddFq);
+			self::addFilterQuery($options, $this->handleFqTags($sAddFq));
 		}
 		if($sRemoveFq = trim($parameters->get('remfq'))) {
 			$aFQ = isset($options['fq']) ? (is_array($options['fq']) ? $options['fq'] : array($options['fq'])) : array();
@@ -369,6 +364,30 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 			}
 			$options['fq'] = $aFQ;
 		}
+	}
+
+	/**
+	 * Handles the filter query tags and prefix the tag to the query
+	 *
+	 * @param string $query
+	 *
+	 * @return string
+	 */
+	protected function handleFqTags($query)
+	{
+		// strip the field from the query
+		$field = substr($query, 0, strpos($query, ':'));
+		// get the tag config
+		$tag = $this->getConfigurations()->get(
+			$this->getConfId() . 'filterQuery.' . $field . '.tag'
+		);
+		// addd the tag to the query
+		if($tag) {
+			$tag = '{!tag="' . $tag . '"}';
+			$query = $tag . $query;
+		}
+
+		return $query;
 	}
 
 	/**
