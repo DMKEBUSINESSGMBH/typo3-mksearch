@@ -613,6 +613,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 	 */
 	protected function renderSearchForm($formTemplate, tx_rnbase_util_FormatUtil $formatter, $confId, $templateConfId) {
 		$configurations = $formatter->getConfigurations();
+		$viewData = $configurations->getViewData();
 		if($formTemplate) {
 			$link = $configurations->createLink();
 			$link->initByTS($configurations, $confId.'template.links.action.', array());
@@ -621,6 +622,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 			$formData = $this->getParameters()->get('submit') ? $paramArray : $this->getFormData();
 			$formData['action'] = $link->makeUrl(false);
 			$formData['searchterm'] = htmlspecialchars( $this->getParameters()->get('term'), ENT_QUOTES );
+			$formData['listsize'] = $viewData->offsetExists('pagebrowser') ? $viewData->offsetGet('pagebrowser')->getListSize() : 0;
 			tx_rnbase::load('tx_rnbase_util_FormUtil');
 			$formData['hiddenfields'] = tx_rnbase_util_FormUtil::getHiddenFieldsForUrlParams($formData['action']);
 
