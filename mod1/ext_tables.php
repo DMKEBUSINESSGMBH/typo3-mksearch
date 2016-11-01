@@ -25,7 +25,7 @@ if (TYPO3_MODE == 'BE') {
 		);
 		tx_rnbase_util_Extensions::addModule(
 			'web',
-			'txmksearchM1',
+			'MksearchM1',
 			'bottom',
 			tx_rnbase_util_Extensions::extPath($_EXTKEY, 'mod1/')
 		);
