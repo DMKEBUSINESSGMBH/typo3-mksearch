@@ -235,6 +235,11 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
 			)
 		);
 
+		// add cobject for some plugins like tt_news
+		$tsfe->cObj = tx_rnbase::makeInstance(
+			tx_rnbase_util_Typo3Classes::getContentObjectRendererClass()
+		);
+
 		tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
 		$rootlineByPid = tx_mksearch_service_indexer_core_Config::getRootLine($pid);
 
