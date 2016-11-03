@@ -126,31 +126,34 @@ class tx_mksearch_util_Filter {
 			if(!tx_rnbase_util_BaseMarker::containsMarker($template, $fieldMarker)) {
 				continue;
 			}
-			$fieldItems = array();
 			$activeMark = $configurations->get($fieldConfId . 'activeMark', TRUE);
 			$activeMark = ''.$activeMark == '' ? 'selected="selected"' : $activeMark;
 			$fieldActive = $parameters->getCleaned($field);
 			$markArray['###' . $fieldMarker . '_FORM_NAME###'] = $configurations->getQualifier() . '[' . $field . ']';
 			$markArray['###' . $fieldMarker . '_FORM_VALUE###'] = $fieldActive;
-			foreach($configurations->get($fieldConfId . 'values.') as $value => $config) {
-				$fieldActive = empty($fieldActive) ? $configurations->get($fieldConfId . 'default') : $fieldActive;
-				$fieldId = is_array($config) ? $config['value'] : $value;
-				$fieldItems[] = tx_rnbase::makeInstance(
+			$fieldValues = $configurations->get($fieldConfId . 'values.');
+			if (is_array($fieldValues)) {
+				$fieldItems = array();
+				foreach($configurations->get($fieldConfId . 'values.') as $value => $config) {
+					$fieldActive = empty($fieldActive) ? $configurations->get($fieldConfId . 'default') : $fieldActive;
+					$fieldId = is_array($config) ? $config['value'] : $value;
+					$fieldItems[] = tx_rnbase::makeInstance(
 						'tx_rnbase_model_base',
 						array(
 							'uid' => $fieldId,
 							'caption' => is_array($config) ? $config['caption'] : $config,
 							'selected' => $fieldId == $fieldActive ? $activeMark : '',
 						)
-				);
-			}
+					);
+				}
 
-			$template = $listBuilder->render(
+				$template = $listBuilder->render(
 					$fieldItems, FALSE, $template,
 					'tx_rnbase_util_SimpleMarker',
 					$confId . 'formfields.' . $field . '.',
 					($fieldMarker), $configurations->getFormatter()
-			);
+				);
+			}
 		}
 
 		$formValues = array('term', 'place');
