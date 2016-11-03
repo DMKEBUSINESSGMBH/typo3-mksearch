@@ -131,10 +131,10 @@ class tx_mksearch_util_Filter {
 			$fieldActive = $parameters->getCleaned($field);
 			$markArray['###' . $fieldMarker . '_FORM_NAME###'] = $configurations->getQualifier() . '[' . $field . ']';
 			$markArray['###' . $fieldMarker . '_FORM_VALUE###'] = $fieldActive;
+			$fieldItems = array();
 			$fieldValues = $configurations->get($fieldConfId . 'values.');
 			if (is_array($fieldValues)) {
-				$fieldItems = array();
-				foreach($configurations->get($fieldConfId . 'values.') as $value => $config) {
+				foreach($fieldValues as $value => $config) {
 					$fieldActive = empty($fieldActive) ? $configurations->get($fieldConfId . 'default') : $fieldActive;
 					$fieldId = is_array($config) ? $config['value'] : $value;
 					$fieldItems[] = tx_rnbase::makeInstance(
