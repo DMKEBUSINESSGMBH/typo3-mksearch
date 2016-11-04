@@ -49,9 +49,6 @@ class tx_mksearch_indexer_ttcontent_Gridelements
 		tx_mksearch_interface_IndexerDocument $oIndexDoc,
 		$aOptions = array()
 	) {
-\tx_rnbase_util_Debug::debug(array(
-		$this->isGridelement($oModel->getRecord())
-	), 'DEBUG: '.__FILE__.'LINE: '.__LINE__);
 		// should the element be removed from the index?
 		if ((
 			// only for gridelements? no, other elements should be deleted too!
