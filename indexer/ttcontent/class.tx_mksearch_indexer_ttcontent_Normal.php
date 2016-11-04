@@ -140,10 +140,12 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 				? $options['CType.'][$rawData['CType'] . '.']['indexedFields.']
 				: $options['CType.']['_default_.']['indexedFields.'];
 
-			// Dieser Content-String ist deprecated
-			$content = '';
-			foreach ($fields as $sDocKey => $sRecordKey) {
-				$content .= $this->getContentByFieldAndCType($sRecordKey, $rawData) . ' ';
+			$content = $this->getContentByContentType($rawData);
+			// Dieser Content-String ist deprecated!
+			if (is_array($fields)) {
+				foreach ($fields as $sDocKey => $sRecordKey) {
+					$content .= $this->getContentByFieldAndCType($sRecordKey, $rawData) . ' ';
+				}
 			}
 
 			// Decode HTML
@@ -225,6 +227,20 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 				$pageModel, $options['pageDataFieldMapping.'], $indexDoc, 'page_', $options
 			);
 		}
+	}
+
+	/**
+	 * Get the content by CType.
+	 *
+	 * This can be overridden by special types like templavoila or gridelements.
+	 *
+	 * @param array $rawData
+	 *
+	 * @return string
+	 */
+	protected function getContentByContentType(array $rawData)
+	{
+		return '';
 	}
 
 	/**
