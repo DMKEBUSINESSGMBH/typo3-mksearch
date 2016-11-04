@@ -48,23 +48,24 @@ class tx_mksearch_indexer_TtContent implements tx_mksearch_interface_Indexer {
 	protected $actualIndexer;
 
 	/**
-	 * load the appropriate indexer depending on templavoila
+	 * load the appropriate indexer depending on templavoila or gridelements
 	 */
 	public function __construct() {
-		if(tx_rnbase_util_Extensions::isLoaded('templavoila')){
+		if (tx_rnbase_util_Extensions::isLoaded('gridelements')) {
+			$this->actualIndexer = tx_rnbase::makeInstance('tx_mksearch_indexer_ttcontent_Gridelements');
+		} elseif (tx_rnbase_util_Extensions::isLoaded('templavoila')) {
 			$this->actualIndexer = tx_rnbase::makeInstance('tx_mksearch_indexer_ttcontent_Templavoila');
-		}else{
+		} else {
 			$this->actualIndexer = tx_rnbase::makeInstance('tx_mksearch_indexer_ttcontent_Normal');
 		}
 	}
 
-
 	/**
-	* Prepare a searchable document from a source record.
-	*
-	* @param tx_mksearch_interface_IndexerDocument		$indexDoc	Indexer document to be "filled", instantiated based on self::getContentType()
-	* @return null|tx_mksearch_interface_IndexerDocument or null if nothing should be indexed.
-	*/
+	 * Prepare a searchable document from a source record.
+	 *
+	 * @param tx_mksearch_interface_IndexerDocument		$indexDoc	Indexer document to be "filled", instantiated based on self::getContentType()
+	 * @return null|tx_mksearch_interface_IndexerDocument or null if nothing should be indexed.
+	 */
 	public function prepareSearchData($tableName, $sourceRecord, tx_mksearch_interface_IndexerDocument $indexDoc, $options){
 		return $this->actualIndexer->prepareSearchData($tableName, $sourceRecord, $indexDoc, $options);
 	}
@@ -85,16 +86,16 @@ class tx_mksearch_indexer_TtContent implements tx_mksearch_interface_Indexer {
 	}
 
 	/**
-	* Return the default Typoscript configuration for this indexer
-	*
-	* This config is not used for actual indexing but serves only as assistance
-	* when actually configuring an indexer via Typo3 backend by creating
-	* a new indexer configuration record!
-	* Hence all possible configuration options should be set or at least
-	* be mentioned (i.e. commented out) to provide an easy-to-access inline documentation!
-	*
-	* @return string
-	*/
+	 * Return the default Typoscript configuration for this indexer
+	 *
+	 * This config is not used for actual indexing but serves only as assistance
+	 * when actually configuring an indexer via Typo3 backend by creating
+	 *  a new indexer configuration record!
+	 * Hence all possible configuration options should be set or at least
+	 * be mentioned (i.e. commented out) to provide an easy-to-access inline documentation!
+	 *
+	 * @return string
+	 */
 	public function getDefaultTSConfig() {
 		return <<<CONF
 # Fields which are set statically to the given value
@@ -139,6 +140,11 @@ CType {
 	# cType "text":
 	text.indexedFields {
 		0 = bodytext
+	}
+	gridelements_pi1.indexedFields {
+	}
+	templavoila_pi1.indexedFields {
+		0 = tx_templavoila_flex
 	}
 }
 
