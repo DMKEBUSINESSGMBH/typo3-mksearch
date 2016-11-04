@@ -42,17 +42,20 @@ class tx_mksearch_indexer_ttcontent_Gridelements
 	 * @param tx_rnbase_IModel $oModel
 	 * @param tx_mksearch_interface_IndexerDocument $oIndexDoc
 	 * @param array $aOptions
+	 *
 	 * @return bool
 	 */
+	// @codingStandardsIgnoreStart (interface/abstract mistake)
 	protected function hasDocToBeDeleted(
 		tx_rnbase_IModel $oModel,
 		tx_mksearch_interface_IndexerDocument $oIndexDoc,
 		$aOptions = array()
 	) {
+		// @codingStandardsIgnoreEnd
 		// should the element be removed from the index?
 		if ((
 			// only for gridelements? no, other elements should be deleted too!
-			#$this->isGridelement($oModel->getRecord()) &&
+			// $this->isGridelement($oModel->getRecord()) &&
 			// only if not directly set do indexable or not indexable!
 			$oModel->getTxMksearchIsIndexable() == self::USE_INDEXER_CONFIGURATION &&
 			// only, if there are a parent container
@@ -73,13 +76,16 @@ class tx_mksearch_indexer_ttcontent_Gridelements
 	 * @param tx_rnbase_IModel $oModel
 	 * @param tx_mksearch_interface_IndexerDocument $oIndexDoc
 	 * @param array $aOptions
+	 *
 	 * @return bool
 	 */
+	// @codingStandardsIgnoreStart (interface/abstract mistake)
 	protected function hasNonGridelementDocToBeDeleted(
 		tx_rnbase_IModel $oModel,
 		tx_mksearch_interface_IndexerDocument $oIndexDoc,
 		$aOptions = array()
 	) {
+		// @codingStandardsIgnoreEnd
 		return parent::hasDocToBeDeleted($oModel, $oIndexDoc, $aOptions);
 	}
 
@@ -123,7 +129,7 @@ class tx_mksearch_indexer_ttcontent_Gridelements
 	 *
 	 * @param array $rawData
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	protected function isGridelement(
 		array $rawData
@@ -135,7 +141,7 @@ class tx_mksearch_indexer_ttcontent_Gridelements
 	}
 
 	/**
-	 * fetches the content of an grid element
+	 * Fetches the content of an grid element
 	 *
 	 * @param array $record
 	 *
@@ -162,15 +168,17 @@ class tx_mksearch_indexer_ttcontent_Gridelements
 	}
 
 	/**
-	 * initializes the tsfe for the tv elements
+	 * Initializes the tsfe for the tv elements
 	 *
 	 * @param int $pid
+	 *
 	 * @return void
 	 */
-	private function initTsForFrontend($pid) {
+	private function initTsForFrontend($pid)
+	{
 		$tsfe = tx_rnbase_util_Misc::prepareTSFE(
 			array(
-				'force' => TRUE,
+				'force' => true,
 				'pid'	=> $pid
 			)
 		);
@@ -183,13 +191,13 @@ class tx_mksearch_indexer_ttcontent_Gridelements
 		tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
 		$rootlineByPid = tx_mksearch_service_indexer_core_Config::getRootLine($pid);
 
-			// disable cache for be indexing!
-		$tsfe->no_cache = TRUE;
+		// disable cache for be indexing!
+		$tsfe->no_cache = true;
 		$tsfe->tmpl->start($rootlineByPid);
 		$tsfe->rootLine = $rootlineByPid;
 	}
 }
 
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/ttcontent/class.tx_mksearch_indexer_ttcontent_Gridelements.php'])	{
+if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/ttcontent/class.tx_mksearch_indexer_ttcontent_Gridelements.php']) {
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/ttcontent/class.tx_mksearch_indexer_ttcontent_Gridelements.php']);
 }
