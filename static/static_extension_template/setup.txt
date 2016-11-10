@@ -359,6 +359,10 @@ lib.mksearch.defaultsolrfilter {
 		### Grouping
 		group {
 			enable = 0
+
+			### dieses Feld wird automatisch in den Indexern gesetzt, die auf
+			### tx_mksearch_indexer_Base bzw. tx_mksearch_indexer_BaseMedia basieren.
+			### wenn es also geändert wird, muss sich die Indizierung darum kümmern.
 			field = group_s
 
 			### per default ist die Anzahl der Ergebnisse gleich den gefundenen Dokumenten.
