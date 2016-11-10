@@ -310,22 +310,31 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 		$configurations = $this->getConfigurations();
 		$autocompleteTsPath = $this->getConfId() . $this->autocompleteConfId;
 
-		if(!$configurations->get($autocompleteTsPath.'enable'))
+		if(!$configurations->get($autocompleteTsPath.'enable')) {
 			return;
-		$aConfig = $configurations->get($autocompleteTsPath);
+		}
 
-		$sJavascriptsPath = tx_rnbase_util_Extensions::siteRelPath('mksearch').'res/js/';
-		$aJsScripts = array();
-		if($aConfig['includeJquery'])
-			$aJsScripts[] = 'jquery-1.6.2.min.js';
-		if($aConfig['includeJqueryUiCore'])
-			$aJsScripts[] = 'jquery-ui-1.8.15.core.min.js';
-		if($aConfig['includeJqueryUiAutocomplete'])
-			$aJsScripts[] = 'jquery-ui-1.8.15.autocomplete.min.js';
+		$configurationArray = $configurations->get($autocompleteTsPath);
 
-		if (!empty($aJsScripts))
-			foreach ($aJsScripts as $sJavaScriptFilename)
-				$GLOBALS['TSFE']->additionalHeaderData[$sJavaScriptFilename] = '<script type="text/javascript" src="'.$sJavascriptsPath.$sJavaScriptFilename.'"></script>';
+		$javascriptsPath = tx_rnbase_util_Extensions::siteRelPath('mksearch').'res/js/';
+		$jsScripts = array();
+
+		if($configurationArray['includeJquery']) {
+			$jsScripts[] = 'jquery-1.6.2.min.js';
+		}
+		if($configurationArray['includeJqueryUiCore']) {
+			$jsScripts[] = 'jquery-ui-1.8.15.core.min.js';
+		}
+		if($configurationArray['includeJqueryUiAutocomplete']) {
+			$jsScripts[] = 'jquery-ui-1.8.15.autocomplete.min.js';
+		}
+
+		if (!empty($jsScripts)) {
+			foreach ($jsScripts as $javaScriptFilename) {
+				$GLOBALS['TSFE']->additionalHeaderData[$javaScriptFilename] =
+					'<script type="text/javascript" src="' . $javascriptsPath . $javaScriptFilename . '"></script>';
+			}
+		}
 
 		$link = tx_mksearch_util_SolrAutocomplete::getAutocompleteActionLinkByConfigurationsAndConfId(
 			$configurations, $this->getConfId()
