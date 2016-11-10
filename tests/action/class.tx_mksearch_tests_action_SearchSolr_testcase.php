@@ -88,6 +88,14 @@ class tx_mksearch_tests_action_SearchSolr_testcase
 		$this->linkId = $GLOBALS['TSFE']->page['alias'] ?
 						$GLOBALS['TSFE']->page['alias'] :
 						$GLOBALS['TSFE']->page['uid'];
+
+		$property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsInline');
+		$property->setAccessible(TRUE);
+		$property->setValue(tx_rnbase_util_TYPO3::getTSFE()->getPageRenderer(), array());
+
+		$property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsLibs');
+		$property->setAccessible(TRUE);
+		$property->setValue(tx_rnbase_util_TYPO3::getTSFE()->getPageRenderer(), array());
 	}
 
 	/**
@@ -105,6 +113,7 @@ class tx_mksearch_tests_action_SearchSolr_testcase
 
 		//configure action
 		$configurations = tx_rnbase::makeInstance('tx_rnbase_configurations');
+
 		$parameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
 
 		$configurations->init(
@@ -119,6 +128,11 @@ class tx_mksearch_tests_action_SearchSolr_testcase
 				$parameters->offsetSet($sName,$mValue);
 
 		$configurations->setParameters($parameters);
+
+		$property = new ReflectionProperty('tx_rnbase_configurations', 'pluginUid');
+		$property->setAccessible(TRUE);
+		$property->setValue($configurations, 123);
+
 		$action->setConfigurations($configurations);
 
 		$out = $action->handleRequest($parameters, $configurations, $configurations->getViewData());
@@ -187,9 +201,7 @@ class tx_mksearch_tests_action_SearchSolr_testcase
 		//view daten sollten nicht gesetzt sein
 		self::assertFalse($action->getConfigurations()->getViewData()->offsetExists('result'),'es wurde doch ein result gesetzt in den view daten. doch gesucht?');
 
-		$sJs = '
-		<script type="text/javascript">
-		jQuery(document).ready(function(){
+		$expectedJavaScript = 'jQuery(document).ready(function(){
 			jQuery(myElementSelector).autocomplete({
 				source: function( request, response ) {
 					jQuery.ajax({
@@ -214,12 +226,14 @@ class tx_mksearch_tests_action_SearchSolr_testcase
 				minLength: 2
 			});
 		});
-		jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();
-		</script>
-		';
+		jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();' . LF;
 
-		self::assertEquals(1, count($GLOBALS['TSFE']->additionalHeaderData),'mehr header daten als erwartet!');
-		self::assertEquals($sJs,$GLOBALS['TSFE']->additionalHeaderData[md5($sJs)],'Daten für JS falsch');
+		$property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsInline');
+		$property->setAccessible(TRUE);
+		$inlineJavaScripts = $property->getValue(tx_rnbase_util_TYPO3::getTSFE()->getPageRenderer());
+
+		self::assertEquals(1, count($inlineJavaScripts),'mehr header daten als erwartet!');
+		self::assertEquals($expectedJavaScript, $inlineJavaScripts['mksearch_autocomplete_123']['code']);
 	}
 
 	/**
@@ -259,9 +273,7 @@ class tx_mksearch_tests_action_SearchSolr_testcase
 		//view daten sollten nicht gesetzt sein
 		self::assertFalse($action->getConfigurations()->getViewData()->offsetExists('result'),'es wurde doch ein result gesetzt in den view daten. doch gesucht?');
 
-		$sJs = '
-		<script type="text/javascript">
-		jQuery(document).ready(function(){
+		$expectedJavaScript = 'jQuery(document).ready(function(){
 			jQuery(myElementSelector).autocomplete({
 				source: function( request, response ) {
 					jQuery.ajax({
@@ -286,14 +298,28 @@ class tx_mksearch_tests_action_SearchSolr_testcase
 				minLength: 2
 			});
 		});
-		jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();
-		</script>
-		';
+		jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();' . LF;
 
-		self::assertEquals(3, count($GLOBALS['TSFE']->additionalHeaderData),'mehr header daten als erwartet!');
-		self::assertEquals($sJs,$GLOBALS['TSFE']->additionalHeaderData[md5($sJs)],'Daten für JS falsch');
-		self::assertEquals('<script type="text/javascript" src="typo3conf/ext/mksearch/res/js/jquery-1.6.2.min.js"></script>',$GLOBALS['TSFE']->additionalHeaderData['jquery-1.6.2.min.js'],'Daten für JS jquery falsch');
-		self::assertEquals('<script type="text/javascript" src="typo3conf/ext/mksearch/res/js/jquery-ui-1.8.15.core.min.js"></script>',$GLOBALS['TSFE']->additionalHeaderData['jquery-ui-1.8.15.core.min.js'],'Daten für JS jquery ui falsch');
+		$property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsInline');
+		$property->setAccessible(TRUE);
+		$inlineJavaScripts = $property->getValue(tx_rnbase_util_TYPO3::getTSFE()->getPageRenderer());
+
+		self::assertEquals(1, count($inlineJavaScripts),'mehr header daten als erwartet!');
+		self::assertEquals($expectedJavaScript, $inlineJavaScripts['mksearch_autocomplete_123']['code']);
+
+		$property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsLibs');
+		$property->setAccessible(TRUE);
+		$javaScriptLibraries = $property->getValue(tx_rnbase_util_TYPO3::getTSFE()->getPageRenderer());
+
+		self::assertEquals(2, count($javaScriptLibraries),'mehr header daten als erwartet!');
+		self::assertEquals(
+			'typo3conf/ext/mksearch/res/js/jquery-1.6.2.min.js',
+			$javaScriptLibraries['jquery-1.6.2.min.js']['file']
+		);
+		self::assertEquals(
+			'typo3conf/ext/mksearch/res/js/jquery-ui-1.8.15.core.min.js',
+			$javaScriptLibraries['jquery-ui-1.8.15.core.min.js']['file']
+		);
 	}
 
 	/**
@@ -333,9 +359,7 @@ class tx_mksearch_tests_action_SearchSolr_testcase
 		//view daten sollten nicht gesetzt sein
 		self::assertFalse($action->getConfigurations()->getViewData()->offsetExists('result'),'es wurde doch ein result gesetzt in den view daten. doch gesucht?');
 
-		$sJs = '
-		<script type="text/javascript">
-		jQuery(document).ready(function(){
+		$expectedJavaScript = 'jQuery(document).ready(function(){
 			jQuery(myElementSelector).autocomplete({
 				source: function( request, response ) {
 					jQuery.ajax({
@@ -360,15 +384,32 @@ class tx_mksearch_tests_action_SearchSolr_testcase
 				minLength: 2
 			});
 		});
-		jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();
-		</script>
-		';
+		jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();' . LF;
 
-		self::assertEquals(4, count($GLOBALS['TSFE']->additionalHeaderData),'mehr header daten als erwartet!');
-		self::assertEquals($sJs,$GLOBALS['TSFE']->additionalHeaderData[md5($sJs)],'Daten für JS falsch');
-		self::assertEquals('<script type="text/javascript" src="typo3conf/ext/mksearch/res/js/jquery-1.6.2.min.js"></script>',$GLOBALS['TSFE']->additionalHeaderData['jquery-1.6.2.min.js'],'Daten für JS jquery falsch');
-		self::assertEquals('<script type="text/javascript" src="typo3conf/ext/mksearch/res/js/jquery-ui-1.8.15.core.min.js"></script>',$GLOBALS['TSFE']->additionalHeaderData['jquery-ui-1.8.15.core.min.js'],'Daten für JS jquery ui falsch');
-		self::assertEquals('<script type="text/javascript" src="typo3conf/ext/mksearch/res/js/jquery-ui-1.8.15.autocomplete.min.js"></script>',$GLOBALS['TSFE']->additionalHeaderData['jquery-ui-1.8.15.autocomplete.min.js'],'Daten für JS jquery ui falsch');
+		$property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsInline');
+		$property->setAccessible(TRUE);
+		$inlineJavaScripts = $property->getValue(tx_rnbase_util_TYPO3::getTSFE()->getPageRenderer());
+
+		self::assertEquals(1, count($inlineJavaScripts),'mehr header daten als erwartet!');
+		self::assertEquals($expectedJavaScript, $inlineJavaScripts['mksearch_autocomplete_123']['code']);
+
+		$property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsLibs');
+		$property->setAccessible(TRUE);
+		$javaScriptLibraries = $property->getValue(tx_rnbase_util_TYPO3::getTSFE()->getPageRenderer());
+
+		self::assertEquals(3, count($javaScriptLibraries),'mehr header daten als erwartet!');
+		self::assertEquals(
+			'typo3conf/ext/mksearch/res/js/jquery-1.6.2.min.js',
+			$javaScriptLibraries['jquery-1.6.2.min.js']['file']
+		);
+		self::assertEquals(
+			'typo3conf/ext/mksearch/res/js/jquery-ui-1.8.15.core.min.js',
+			$javaScriptLibraries['jquery-ui-1.8.15.core.min.js']['file']
+		);
+		self::assertEquals(
+			'typo3conf/ext/mksearch/res/js/jquery-ui-1.8.15.autocomplete.min.js',
+			$javaScriptLibraries['jquery-ui-1.8.15.autocomplete.min.js']['file']
+		);
 	}
 
 	/**
@@ -405,9 +446,7 @@ class tx_mksearch_tests_action_SearchSolr_testcase
 		//view daten sollten nicht gesetzt sein
 		self::assertFalse($action->getConfigurations()->getViewData()->offsetExists('result'),'es wurde doch ein result gesetzt in den view daten. doch gesucht?');
 
-		$sJs = '
-		<script type="text/javascript">
-		jQuery(document).ready(function(){
+		$expectedJavaScript = 'jQuery(document).ready(function(){
 			jQuery(myElementSelector).autocomplete({
 				source: function( request, response ) {
 					jQuery.ajax({
@@ -432,11 +471,13 @@ class tx_mksearch_tests_action_SearchSolr_testcase
 				minLength: 2
 			});
 		});
-		jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();
-		</script>
-		';
+		jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();' . LF;
 
-		self::assertEquals(1, count($GLOBALS['TSFE']->additionalHeaderData),'mehr header daten als erwartet!');
-		self::assertEquals($sJs,$GLOBALS['TSFE']->additionalHeaderData[md5($sJs)],'Daten für JS falsch');
+		$property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsInline');
+		$property->setAccessible(TRUE);
+		$inlineJavaScripts = $property->getValue(tx_rnbase_util_TYPO3::getTSFE()->getPageRenderer());
+
+		self::assertEquals(1, count($inlineJavaScripts),'mehr header daten als erwartet!');
+		self::assertEquals($expectedJavaScript, $inlineJavaScripts['mksearch_autocomplete_123']['code']);
 	}
 }

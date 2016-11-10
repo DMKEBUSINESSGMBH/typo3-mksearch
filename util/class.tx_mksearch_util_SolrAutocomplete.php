@@ -77,6 +77,15 @@ class tx_mksearch_util_SolrAutocomplete {
 	}
 
 	/**
+	 * @deprecated use getAutocompleteJavaScriptByConfigurationArrayAndLink
+	 */
+	public static function getAutocompleteJsByConfigurationsConfIdAndLink(
+		$configArray, tx_rnbase_util_Link $link, $wrapInScriptTags = TRUE
+	) {
+		return self::getAutocompleteJavaScriptByConfigurationArrayAndLink($configArray, $link, $wrapInScriptTags);
+	}
+
+	/**
 	 * @param array $configArray example:
 	 * array (
 	 * 	minLength = 2
@@ -84,15 +93,14 @@ class tx_mksearch_util_SolrAutocomplete {
 	 * )
 	 *
 	 * @param tx_rnbase_util_Link $link
+	 * @param boolean $wrapInScriptTags
 	 *
 	 * @return string
 	 */
-	public static function getAutocompleteJsByConfigurationsConfIdAndLink(
-		$configArray, tx_rnbase_util_Link $link
+	public static function getAutocompleteJavaScriptByConfigurationArrayAndLink(
+		$configArray, tx_rnbase_util_Link $link, $wrapInScriptTags = TRUE
 	) {
-		return '
-		<script type="text/javascript">
-		jQuery(document).ready(function(){
+		$javaScript = 'jQuery(document).ready(function(){
 			jQuery('.$configArray['elementSelector'].').autocomplete({
 				source: function( request, response ) {
 					jQuery.ajax({
@@ -117,8 +125,11 @@ class tx_mksearch_util_SolrAutocomplete {
 				minLength: '.$configArray['minLength'].'
 			});
 		});
-		jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();
-		</script>
-		';
+		jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();';
+
+		if ($wrapInScriptTags) {
+			$javaScript = '<script type="text/javascript">' . LF . $javaScript . LF . '</script>';
+		}
+		return $javaScript;
 	}
 }

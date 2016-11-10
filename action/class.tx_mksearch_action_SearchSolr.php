@@ -329,10 +329,10 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 			$jsScripts[] = 'jquery-ui-1.8.15.autocomplete.min.js';
 		}
 
+		$pageRenderer = tx_rnbase_util_TYPO3::getTSFE()->getPageRenderer();
 		if (!empty($jsScripts)) {
 			foreach ($jsScripts as $javaScriptFilename) {
-				$GLOBALS['TSFE']->additionalHeaderData[$javaScriptFilename] =
-					'<script type="text/javascript" src="' . $javascriptsPath . $javaScriptFilename . '"></script>';
+				$pageRenderer->addJsLibrary($javaScriptFilename, $javascriptsPath . $javaScriptFilename);
 			}
 		}
 
@@ -340,11 +340,11 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 			$configurations, $this->getConfId()
 		);
 
-		$autocompleteJS = tx_mksearch_util_SolrAutocomplete::getAutocompleteJsByConfigurationsConfIdAndLink(
-			$configurations->get($this->getConfId() . $this->autocompleteConfId), $link
+		$autocompleteJS = tx_mksearch_util_SolrAutocomplete::getAutocompleteJavaScriptByConfigurationArrayAndLink(
+			$configurations->get($this->getConfId() . $this->autocompleteConfId), $link, FALSE
 		);
 
-		$GLOBALS['TSFE']->additionalHeaderData[md5($autocompleteJS)] = $autocompleteJS;
+		$pageRenderer->addJsFooterInlineCode('mksearch_autocomplete_' . $this->getConfigurations()->getPluginId(), $autocompleteJS);
 	}
 
 	/**
