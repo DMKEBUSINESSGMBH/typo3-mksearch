@@ -297,6 +297,7 @@
 							<label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.options.group.enable</label>
 							<config>
 								<type>check</type>
+								<defautl>1</defautl>
 							</config>
 						</TCEforms>
 					</searchsolr.filter._overwrite.options.group.enable>

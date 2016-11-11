@@ -37,6 +37,8 @@ plugin.tx_mksearch.searchsolr.filter.(dismax|default).options {
 }
 ~~~~
 
+Achtung: Das könnte die Suche etwas verlangsamen.
+
 ToDos
 ----------
 

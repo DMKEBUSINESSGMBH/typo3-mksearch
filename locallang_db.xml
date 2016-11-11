@@ -89,7 +89,7 @@
 
 			<label index="plugin.mksearch.flexform.action.elasticSearch">Search view for ElasticSearch</label>
 
-			<label index="plugin.mksearch.flexform.options.group.enable">enable group?</label>
+			<label index="plugin.mksearch.flexform.options.group.enable">enable group? (might slow down the search a bit)</label>
 			<label index="plugin.mksearch.flexform.options.group.useNumberOfGroupsAsSearchResultCount">use number of groups as search result count?</label>
 			<label index="plugin.mksearch.flexform.options.group.field">group field</label>
 		</languageKey>
@@ -107,7 +107,7 @@
 			<label index="tt_content.tx_mksearch_is_indexable.yes">Ja</label>
 			<label index="tt_content.tx_mksearch_is_indexable.no">Nein</label>
 
-			<label index="plugin.mksearch.flexform.options.group.enable">Gruppierung aktivieren?</label>
+			<label index="plugin.mksearch.flexform.options.group.enable">Gruppierung aktivieren? (könnte die Suche etwas verlangsamen)</label>
 			<label index="plugin.mksearch.flexform.options.group.useNumberOfGroupsAsSearchResultCount">Anzahl der Gruppen als Anzahl der Suchergebnisse anzeigen?</label>
 			<label index="plugin.mksearch.flexform.options.group.field">Gruppierungsfeld</label>
 		</languageKey>
