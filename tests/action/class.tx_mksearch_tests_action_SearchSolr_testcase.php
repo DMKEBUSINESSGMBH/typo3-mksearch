@@ -164,7 +164,11 @@ class tx_mksearch_tests_action_SearchSolr_testcase
 		//view daten sollten nicht gesetzt sein
 		self::assertFalse($action->getConfigurations()->getViewData()->offsetExists('result'),'es wurde doch ein result gesetzt in den view daten. doch gesucht?');
 
-		self::assertEmpty($GLOBALS['TSFE']->additionalHeaderData,'Daten für JS doch gesetzt?');
+		$property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsInline');
+		$property->setAccessible(TRUE);
+		$inlineJavaScripts = $property->getValue(tx_rnbase_util_TYPO3::getTSFE()->getPageRenderer());
+
+		self::assertEmpty($inlineJavaScripts,'Daten für JS doch gesetzt?');
 	}
 
 	/**
