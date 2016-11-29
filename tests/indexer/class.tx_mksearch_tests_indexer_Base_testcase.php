@@ -920,4 +920,39 @@ class tx_mksearch_tests_indexer_Base_testcase
 		$indexedData = $indexDoc->getData();
 		self::assertEquals('mksearch:dummy:123', $indexedData['group_s']->getValue());
 	}
+
+	/**
+	 * @group unit
+	 * @dataProvider getHandleCharBrowserFieldsData
+	 */
+	public function testHandleCharBrowserFields(
+		$title,
+		$firstChar
+	) {
+		$indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
+		$indexDoc = $this->getIndexDocMock($indexer);
+
+		$indexDoc->setTitle($title);
+
+		$this->callInaccessibleMethod(
+			array($indexer, 'handleCharBrowserFields'),
+			array($indexDoc)
+		);
+
+		$this->assertIndexDocHasField($indexDoc, 'first_letter_s', $firstChar);
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getHandleCharBrowserFieldsData()
+	{
+		return array(
+			__LINE__ => array('title' => 'Titel', 'first_char' => 'T'),
+			__LINE__ => array('title' => 'lower', 'first_char' => 'L'),
+			__LINE__ => array('title' => 'Ölpreis', 'first_char' => 'O'),
+			__LINE__ => array('title' => 'über', 'first_char' => 'U'),
+			__LINE__ => array('title' => '0815', 'first_char' => '0-9'),
+		);
+	}
 }

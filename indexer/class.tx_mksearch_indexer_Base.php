@@ -141,6 +141,9 @@ abstract class tx_mksearch_indexer_Base
 			$this->modelToIndex, $tableName, $rawData, $indexDoc, $options
 		);
 
+		// check carbrowserletter
+		$this->handleCharBrowserFields($indexDoc);
+
 		// post precess hock
 		tx_rnbase_util_Misc::callHook(
 			'mksearch',
@@ -723,6 +726,33 @@ CONFIG;
 	 */
 	protected function getGroupFieldValue(tx_mksearch_interface_IndexerDocument $indexDoc) {
 		return $indexDoc->getPrimaryKey(TRUE);
+	}
+
+	/**
+	 * Handles the required fields for a charbrowser.
+	 *
+	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
+	 */
+	protected function handleCharBrowserFields(
+		tx_mksearch_interface_IndexerDocument $indexDoc
+	) {
+		$data = $indexDoc->getData();
+		if (empty($data['title'])) {
+			return;
+		}
+
+		$title = $data['title']->getValue();
+		$firstChar = mb_substr(mb_strtoupper($title), 0, 1);
+
+		$specials = tx_rnbase_util_SearchBase::getSpecialChars();
+		foreach ($specials as $ascii => $variations) {
+			if (in_array($firstChar, $variations)) {
+				$firstChar = $ascii;
+				break;
+			}
+		}
+
+		$indexDoc->addField('first_letter_s', $firstChar);
 	}
 }
 
