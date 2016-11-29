@@ -767,7 +767,9 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 				$options['group.ngroups'] = 'true';
 				$options['group.truncate'] = 'true';
 			}
-
+		} elseif (is_array($options['group'])) {
+			// remove group config from options array
+			unset($options['group']);
 		}
 	}
 }
