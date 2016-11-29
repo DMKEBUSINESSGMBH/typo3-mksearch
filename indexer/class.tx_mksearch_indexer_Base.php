@@ -142,7 +142,9 @@ abstract class tx_mksearch_indexer_Base
 		);
 
 		// check carbrowserletter
-		$this->handleCharBrowserFields($indexDoc);
+		if ($indexDoc instanceof tx_mksearch_interface_IndexerDocument) {
+			$this->handleCharBrowserFields($indexDoc);
+		}
 
 		// post precess hock
 		tx_rnbase_util_Misc::callHook(
