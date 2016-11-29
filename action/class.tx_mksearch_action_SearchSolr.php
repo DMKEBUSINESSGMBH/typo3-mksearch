@@ -149,7 +149,6 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 		// erstmal den cache fragen. Das ist vor allem interessant wenn
 		// das plugin mehrfach auf einer Seite eingebunden wird. Dadurch
 		// muss die Solr Suche nur einmal ausgeführt werden
-		//@todo bringt das wirklich performance?
 		tx_rnbase::load('tx_rnbase_cache_Manager');
 		$oCache = tx_rnbase_cache_Manager::getCache('mksearch');
 		$sCacheKey = $this->generateCacheKey($fields, $options);
