@@ -43,6 +43,10 @@ class tx_mksearch_tests_solr_conf_Solrconfig_testcase extends tx_mksearch_tests_
 	 * @see PHPUnit_Framework_TestCase::setUp()
 	 */
 	protected function setUp() {
+		// set internal encoding for multibyte strings to utf-8
+		$this->backups['mb_internal_encoding'] = mb_internal_encoding();
+		mb_internal_encoding('UTF-8');
+
 		$this->initAbsolutePathsForConfigs();
 		tx_rnbase_util_Files::rmdir($this->instanceDir,true);
 

@@ -47,6 +47,8 @@ class tx_mksearch_tests_model_cal_Event_testcase extends tx_mksearch_tests_Testc
 		if (!tx_rnbase_util_Extensions::isLoaded('cal')) {
 			self::markTestSkipped('cal nicht installiert');
 		}
+
+		parent::setUp();
 	}
 
 	/**
