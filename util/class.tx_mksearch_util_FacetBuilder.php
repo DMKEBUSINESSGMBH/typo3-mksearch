@@ -23,6 +23,7 @@
  ***************************************************************/
 
 tx_rnbase::load('tx_mksearch_model_Facet');
+tx_rnbase::load('Tx_Rnbase_Domain_Model_Data');
 
 /**
  * Der FacetBuilder erstellt aus den Rohdaten
@@ -33,7 +34,12 @@ tx_rnbase::load('tx_mksearch_model_Facet');
  * @author Hannes Bochmann
  * @author Michael Wagner
  */
-class tx_mksearch_util_FacetBuilder {
+class tx_mksearch_util_FacetBuilder
+{
+	/**
+	 * @var Tx_Rnbase_Domain_Model_Data
+	 */
+	private $options = null;
 
 	/**
 	 *
@@ -42,18 +48,41 @@ class tx_mksearch_util_FacetBuilder {
 	private $keyValueFacetInstance = NULL;
 
 	/**
-	 * get singelton
+	 * Get singelton
 	 *
 	 * @param string $class
+	 * @param array $options
+	 *
 	 * @return tx_mksearch_util_FacetBuilder
 	 */
-	public static function getInstance($class = '') {
+	public static function getInstance($class = '', array $options = array()) {
 		static $instance;
 		$class = empty($class) ? 'tx_mksearch_util_FacetBuilder' : $class;
 		if (!$instance[$class]) {
-			$instance[$class] = tx_rnbase::makeInstance($class);
+			$instance[$class] = tx_rnbase::makeInstance($class, $options);
 		}
 		return $instance[$class];
+	}
+
+	/**
+	 * Constructor
+	 *
+	 * @param array $options
+	 */
+	public function __construct(
+		array $options = array()
+	) {
+		$this->options = Tx_Rnbase_Domain_Model_Data::getInstance($options);
+	}
+
+	/**
+	 * The options for this builder
+	 *
+	 * @return Tx_Rnbase_Domain_Model_Data
+	 */
+	protected function getOptions()
+	{
+		return $this->options;
 	}
 
 	/**

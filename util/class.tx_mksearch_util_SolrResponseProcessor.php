@@ -230,7 +230,10 @@ class tx_mksearch_util_SolrResponseProcessor {
 		$builderClass = $builderClass ? $builderClass : 'tx_mksearch_util_FacetBuilder';
 
 		tx_rnbase::load('tx_mksearch_util_FacetBuilder');
-		$facetBuilder = tx_mksearch_util_FacetBuilder::getInstance($builderClass);
+		$facetBuilder = tx_mksearch_util_FacetBuilder::getInstance(
+			$builderClass,
+			$configurations->get($confId)
+		);
 
 		$facets = $facetBuilder->buildFacets($response->facet_counts);
 
