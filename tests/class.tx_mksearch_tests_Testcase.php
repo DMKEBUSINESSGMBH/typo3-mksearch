@@ -100,7 +100,9 @@ abstract class tx_mksearch_tests_Testcase
 		tx_mksearch_tests_Util::resetAddRootlineFields();
 
 		// reset internal encoding for multibyte strings
-		mb_internal_encoding($this->backups['mb_internal_encoding']);
+		if (!empty($this->backups['mb_internal_encoding'])) {
+			mb_internal_encoding($this->backups['mb_internal_encoding']);
+		}
 	}
 
 	/**
