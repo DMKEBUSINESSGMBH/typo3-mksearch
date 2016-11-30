@@ -38,7 +38,7 @@ tx_rnbase::load('tx_rnbase_tests_BaseTestCase');
 abstract class tx_mksearch_tests_Testcase
 	extends tx_rnbase_tests_BaseTestCase {
 
-	protected $templaVoilaConfigBackup;
+	protected $backups = array();
 
 	/**
 	 * setUp() = init DB etc.
@@ -64,7 +64,7 @@ abstract class tx_mksearch_tests_Testcase
 
 		// set up tv
 		if (tx_rnbase_util_Extensions::isLoaded('templavoila')) {
-			$this->templaVoilaConfigBackup = $GLOBALS['TYPO3_LOADED_EXT']['templavoila'];
+			$this->backups['templaVoilaConfigBackup'] = $GLOBALS['TYPO3_LOADED_EXT']['templavoila'];
 			$GLOBALS['TYPO3_LOADED_EXT']['templavoila'] = NULL;
 
 			tx_mksearch_tests_Util::unloadTemplavoilaForTypo362OrHigher();
@@ -73,6 +73,10 @@ abstract class tx_mksearch_tests_Testcase
 		// das TS Parsing frisst in manchen Umgebung mehr als 128MB Speicher. Es gibt aber im Moment keine Zeit
 		// die Tests zu refactoren. Also setzen wir das Limit hoch
 		ini_set('memory_limit', '1024M');
+
+		// set internal encoding for multibyte strings to utf-8
+		$this->backups['mb_internal_encoding'] = mb_internal_encoding();
+		mb_internal_encoding('UTF-8');
 	}
 
 	/**
@@ -83,9 +87,9 @@ abstract class tx_mksearch_tests_Testcase
 		tx_mksearch_tests_Util::hooksTearDown();
 
 		// tear down tv
-		if ($this->templaVoilaConfigBackup !== NULL) {
-			$GLOBALS['TYPO3_LOADED_EXT']['templavoila'] = $this->templaVoilaConfigBackup;
-			$this->templaVoilaConfigBackup = NULL;
+		if ($this->backups['templaVoilaConfigBackup'] !== NULL) {
+			$GLOBALS['TYPO3_LOADED_EXT']['templavoila'] = $this->backups['templaVoilaConfigBackup'];
+			$this->backups['templaVoilaConfigBackup'] = NULL;
 
 			if (tx_rnbase_util_TYPO3::isTYPO62OrHigher()) {
 				$extensionManagementUtility = new TYPO3\CMS\Core\Utility\ExtensionManagementUtility();
@@ -94,6 +98,9 @@ abstract class tx_mksearch_tests_Testcase
 		}
 
 		tx_mksearch_tests_Util::resetAddRootlineFields();
+
+		// reset internal encoding for multibyte strings
+		mb_internal_encoding($this->backups['mb_internal_encoding']);
 	}
 
 	/**
