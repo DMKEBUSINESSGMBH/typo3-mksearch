@@ -223,7 +223,8 @@ class tx_mksearch_util_SolrResponseProcessor {
 			return array();
 		}
 
-		$confId = $this->getConfId().'facet.';
+		// usually "searchsolr.responseProcessor.facet."
+		$confId = $this->getConfId() . 'facet.';
 		$configurations = $this->getConfigurations();
 
 		$builderClass = $configurations->get($confId . 'builderClass');

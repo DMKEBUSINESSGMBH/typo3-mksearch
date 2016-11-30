@@ -168,9 +168,10 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 			// es werden hits, facets, uws. erzeugt.
 			tx_rnbase::load('tx_mksearch_util_SolrResponseProcessor');
 			tx_mksearch_util_SolrResponseProcessor::processSolrResult(
-					$result, $options, $configurations,
-					$this->getConfId().'responseProcessor.'
-				);
+				$result, $options, $configurations,
+				$this->getConfId() . 'responseProcessor.'
+			);
+			$this->findCharBrowserData($result);
 		}
 		catch(Exception $e) {
 			$lastUrl = $e instanceof tx_mksearch_service_engine_SolrException ? $e->getLastUrl() : '';
@@ -298,6 +299,58 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 			$viewdata->offsetSet('pagebrowser', $pageBrowser);
 			return $pageBrowser;
 		}
+	}
+
+	/**
+	 * Extracts the charbrowser data from the facets
+	 * and fills the viewdata for the tempate output
+	 *
+	 * @param array $result
+	 *
+	 * @return void
+	 */
+	protected function findCharBrowserData(array &$result)
+	{
+		if (empty($result['facets'])) {
+			return;
+		}
+
+		$facet = null;
+		// check if there are a first_letter_s
+		foreach ($result['facets'] as $key => $group) {
+			if ($group->getField() === 'first_letter_s') {
+				$facet = $group;
+				unset($result['facets'][$key]);
+				break;
+			}
+		}
+
+		if (!$facet) {
+			return;
+		}
+
+		$confId = $this->getConfId() . 'charbrowser.';
+		$configurations = $this->getConfigurations();
+		$viewData = $configurations->getViewData();
+		$pointername = $configurations->get($confId . 'cbid') ?: 'solr-cb';
+
+		$list = array();
+		// now build the pagerdate based on the faccets
+		foreach ($facet->getItems() as $item) {
+			$list[$item->getLabel()] = $item->getCount();
+		}
+
+		$pagerData = array(
+			'list' => $list,
+			'default' => empty($list) ? 0 : key($list),
+			'pointername' => $pointername,
+		);
+
+		$firstChar = $viewData->offsetGet('charpointer');
+		$firstChar = $firstChar ?: $configurations->getParameters()->offsetGet($pointername);
+
+		$viewData->offsetSet('pagerData', $pagerData);
+		$viewData->offsetSet('charpointer', $firstChar);
 	}
 
 	/**

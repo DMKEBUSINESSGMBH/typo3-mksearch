@@ -68,9 +68,9 @@ class tx_mksearch_view_SearchSolr extends tx_rnbase_view_Base {
 		$items = $result ? $result['items'] : array();
 		/* @var $listBuilder tx_rnbase_util_ListBuilder */
 		$listBuilder = tx_rnbase::makeInstance(
-				'tx_rnbase_util_ListBuilder',
-				$viewData->offsetGet('filter') instanceof ListBuilderInfo ? $viewData->offsetGet('filter') : null
-			);
+			'tx_rnbase_util_ListBuilder',
+			$viewData->offsetGet('filter') instanceof ListBuilderInfo ? $viewData->offsetGet('filter') : null
+		);
 
 		// wurden options für die markerklassen gesetzt?
 		$markerParams = $viewData->offsetExists('markerParams') ? $viewData->offsetGet('markerParams') : array();

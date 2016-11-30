@@ -291,6 +291,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 
 		// respect Root Page
 		$this->handleFqForSiteRootPage($options, $configurations, $confId);
+		$this->handleFqForCharBrowser($options);
 
 		// die erlaubten felder holen
 		$allowedFqParams = $configurations->getExploded($confId.'allowedFqParams');
@@ -445,6 +446,41 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 				);
 			}
 		}
+	}
+
+	/**
+	 * Adds filter for the charbrowser
+	 *
+	 * @param array $options
+	 *
+	 * @return void
+	 */
+	public function handleFqForCharBrowser(
+		&$options
+	) {
+		$confId = $this->getConfId(false) . 'charbrowser.';
+		$configurations = $this->getConfigurations();
+
+		$pointername = $configurations->get($confId . 'cbid') ?: 'solr-cb';
+
+		$firstChar = $this->getParameters()->get($pointername);
+
+		if (empty($firstChar)) {
+			return;
+		}
+
+		// crop pointer value
+		$firstChar = substr($firstChar, 0, ($firstChar{0} == '0' ? 3 : 1));
+
+		// store firstchar
+		$configurations->getViewData()->offsetSet('charpointer', $firstChar);
+
+		self::addFilterQuery(
+			$options,
+			$this->handleFqTags(
+				'first_letter_s:"' . $firstChar . '"'
+			)
+		);
 	}
 
 	/**

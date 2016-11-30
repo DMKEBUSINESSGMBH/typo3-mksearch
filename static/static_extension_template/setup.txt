@@ -630,6 +630,10 @@ plugin.tx_mksearch {
 			}
 		}
 
+		charbrowser {
+			cbid = searchcb
+		}
+
 		filter = tx_mksearch_filter_SolrBase
 		# Beispiel-Config für den Solr-Filter
 		filter.default =< lib.mksearch.defaultsolrfilter
