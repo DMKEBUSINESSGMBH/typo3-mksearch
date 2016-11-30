@@ -556,6 +556,22 @@ class tx_mksearch_tests_filter_SolrBase_testcase
 	}
 
 	/**
+	 * @group unit
+	 */
+	public function testInitRemovesGroupConfigIfNotEnabledButSomeOptionsAreSet() {
+		$config = $this->getDefaultConfig();
+		$config['searchsolr.']['filter.']['default.']['options.']['group.']['enable'] = 0;
+		$config['searchsolr.']['filter.']['default.']['options.']['group.']['field'] = 'myField';
+		$config['searchsolr.']['filter.']['default.']['options.']['group.']['useNumberOfGroupsAsSearchResultCount'] = TRUE;
+		$filter = $this->getFilter($config);
+		$fields = array();
+		$options = array();
+		$filter->init($fields, $options);
+
+		self::assertArrayNotHasKey('group', $options);
+	}
+
+	/**
 	 * @return array
 	 */
 	private function getDefaultConfig() {
