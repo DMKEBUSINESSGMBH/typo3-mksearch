@@ -470,7 +470,11 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 		}
 
 		// crop pointer value
-		$firstChar = substr($firstChar, 0, ($firstChar{0} == '0' ? 3 : 1));
+		$firstChar = substr(
+			strtoupper($firstChar),
+			0,
+			($firstChar{0} == '0' ? 3 : 1)
+		);
 
 		// store firstchar
 		$configurations->getViewData()->offsetSet('charpointer', $firstChar);
