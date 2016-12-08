@@ -980,6 +980,7 @@
     the slash makes it possible to call this handler via an url, which is needed
     if the autocomplete index shall be built
   -->
+  <queryConverter name="queryConverter" class="org.dmk.solr.spelling.MultiWordSpellingQueryConverter"/>
   <requestHandler name="/suggest" class="org.apache.solr.handler.component.SearchHandler">
     <lst name="defaults">
       <str name="spellcheck">true</str>
