@@ -37,6 +37,11 @@ tx_rnbase::load('tx_mksearch_tests_Util');
  * @author Michael Wagner <michael.wagner@dmk-ebusiness.de>
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
+ *
+ * @deprecated no support for Solr >= 5.x will be added. Testing direclty through
+ * Solr doesn't make much sense in many cases anyway because that doesn't say much about
+ * how the search will acutally work in the UI. A better way would be to test
+ * the search directly in the UI.
  */
 abstract class tx_mksearch_tests_SolrTestcase
 	extends tx_mksearch_tests_Testcase {
@@ -146,10 +151,6 @@ abstract class tx_mksearch_tests_SolrTestcase
 		$this->createInstanceDir($this->instanceDir);
 
 		$solr = $this->getSolr();
-
-		if ($this->isSolr6OrHigher()) {
-			self::markTestSkipped('Tests funktionieren in SOLR 6 im Moment nicht');
-		}
 
 		$httpTransport = $solr->getHttpTransport();
 		$url = $this->getAdminCoresPath() . '?action=CREATE&name=' . $this->getCoreName() .
@@ -385,33 +386,6 @@ abstract class tx_mksearch_tests_SolrTestcase
 	protected function assertNothingFound($result) {
 		self::assertEquals(0, $result['numFound'], 'doch etwas gefunden');
 		self::assertEmpty($result['items'], 'doch items etwas gefunden');
-	}
-
-	/**
-	 * @return boolean
-	 */
-	protected function isSolr6OrHigher() {
-		return $this->getSolrVersion() >= 6000000;
-	}
-
-	/**
-	 * @return int
-	 */
-	protected function getSolrVersion() {
-		if ($this->solrVersion === NULL) {
-			// wir gehen davon aus dass der Pfad so aufgebaut ist:
-			// /$PFAD_ZU_SOLR/$PFAD_ZUM_CORE
-			$pathParts = explode('/', $this->getSolr()->getPath());
-			$response = new Apache_Solr_Response(
-				$this->getSolr()->getHttpTransport()->performGetRequest(
-					'http://' . $this->getSolr()->getHost() . ':' . $this->getSolr()->getPort() . '/' . $pathParts[1] .
-					'/admin/info/system?wt=json', 0
-				), false, false
-			);
-			$this->solrVersion = tx_rnbase_util_TYPO3::convertVersionNumberToInteger($response->lucene->{'solr-spec-version'});
-		}
-
-		return $this->solrVersion;
 	}
 }
 
