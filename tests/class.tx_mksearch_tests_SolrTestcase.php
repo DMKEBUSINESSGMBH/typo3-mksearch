@@ -38,9 +38,9 @@ tx_rnbase::load('tx_mksearch_tests_Util');
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  *
- * @deprecated no support for Solr >= 5.x will be added. Testing direclty through
+ * @deprecated no support for Solr >= 5.x will be added. Testing directly through
  * Solr doesn't make much sense in many cases anyway because that doesn't say much about
- * how the search will acutally work in the UI. A better way would be to test
+ * how the search will actually work in the UI. A better way would be to test
  * the search directly in the UI.
  */
 abstract class tx_mksearch_tests_SolrTestcase
