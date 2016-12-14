@@ -112,7 +112,10 @@ class Apache_Solr_HttpTransport_Curl extends Apache_Solr_HttpTransport_Abstract
 			CURLOPT_URL => $url,
 
 			// set the timeout
-			CURLOPT_TIMEOUT => $timeout
+			CURLOPT_TIMEOUT => $timeout,
+
+			// set the HTTP Header. Since Solr 5.x necessary
+			CURLOPT_HTTPHEADER => array('Content-Type: application/x-www-form-urlencoded; charset=utf-8')
 		));
 
 		// make the request
