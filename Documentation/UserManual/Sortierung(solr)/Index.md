@@ -32,7 +32,11 @@ Erzeugt aus folgender HTML-Vorlage
 ~~~~ {.sourceCode .html}
 <label class="sort"> Sortierung
  <select name="###SEARCH_FILTER_SORT_FORM_NAME###">
-  <option value="###SEARCH_FILTER_SORT_UID###" ###SEARCH_FILTER_SORT_SELECTED###>###SEARCH_FILTER_SORT_CAPTION###</option>
+  ###SEARCH_FILTER_SORTS###
+    ###SEARCH_FILTER_SORT###
+      <option value="###SEARCH_FILTER_SORT_UID###" ###SEARCH_FILTER_SORT_SELECTED###>###SEARCH_FILTER_SORT_CAPTION###</option>
+    ###SEARCH_FILTER_SORT###
+  ###SEARCH_FILTER_SORTS###
  </select>
 </label>
 ~~~~
