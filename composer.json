@@ -55,6 +55,7 @@
 			"search/",
 			"service/",
 			"signalSlotDispatcher/",
+			"tests/",
 			"util/",
 			"view/"
 		]
