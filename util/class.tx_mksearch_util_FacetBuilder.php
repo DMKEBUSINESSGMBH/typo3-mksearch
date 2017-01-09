@@ -155,7 +155,7 @@ class tx_mksearch_util_FacetBuilder
 
 		}
 
-		return array_values($facetGroups);
+		return $facetGroups;
 	}
 
 	/**
@@ -187,7 +187,7 @@ class tx_mksearch_util_FacetBuilder
 			);
 		}
 
-		return array_values($facetGroups);
+		return $facetGroups;
 	}
 
 	/**
@@ -243,7 +243,7 @@ class tx_mksearch_util_FacetBuilder
 				$facetGroups[$field]->record['items'][] = $this->getSimpleFacet($field, $id, $count);
 			}
 		}
-		return array_values($facetGroups);
+		return $facetGroups;
 	}
 
 	protected function buildGroupedFacet() {
