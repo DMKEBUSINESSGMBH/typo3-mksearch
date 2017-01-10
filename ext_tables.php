@@ -9,7 +9,7 @@ $_EXT_RELPATH = tx_rnbase_util_Extensions::extRelPath($_EXTKEY);
 // Show tt_content-field pi_flexform
 $TCA['tt_content']['types']['list']['subtypes_addlist']['tx_mksearch']='pi_flexform';
 // Hide some fields
-$TCA['tt_content']['types']['list']['subtypes_excludelist']['tx_mksearch']='layout,select_key,pages';
+$TCA['tt_content']['types']['list']['subtypes_excludelist']['tx_mksearch'] = 'select_key';
 
 //add our own header_layout. this one isn't displayed in the FE (like the Hidden type)
 //as long as there is no additional configuration how to display this type.
