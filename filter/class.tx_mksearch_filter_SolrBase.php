@@ -165,6 +165,8 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 
 		$this->handleGrouping($options);
 
+		$this->handleWhat($options);
+
 		// Debug prüfen
 		if ($configurations->get($this->getConfIdOverwrite().'options.debug')) {
 			$options['debug'] = 1;
@@ -812,6 +814,19 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter {
 			// are not taken into the request. this can happen if grouping not enabled
 			// but options.group.useNumberOfGroupsAsSearchResultCount is set.
 			unset($options['group']);
+		}
+	}
+
+	/**
+	 * @param array $options
+	 *
+	 * @return void
+	 */
+	protected function handleWhat(array &$options)
+	{
+		$fieldlist = $this->getConfValue('options.what');
+		if (!empty($fieldlist)) {
+			$options['fl'] = $fieldlist;
 		}
 	}
 }
