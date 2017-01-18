@@ -307,9 +307,11 @@ class tx_mksearch_tests_Util {
 	 * Also kopieren wir die PackageStates Datei damit wir die tatsächliche Datei
 	 * nach dem deaktiveren wieder einfügen können
 	 *
+	 * @param string $extensionKey
+	 *
 	 * @return void
 	 */
-	public static function unloadTemplavoilaForTypo362OrHigher() {
+	public static function unloadExtensionForTypo362OrHigher($extensionKey) {
 		if (!tx_rnbase_util_TYPO3::isTYPO62OrHigher()) {
 			return;
 		}
@@ -334,12 +336,12 @@ class tx_mksearch_tests_Util {
 			$packageKey = $package->getPackageMetaData()->getPackageKey();
 			$dependencies = $method->invokeArgs($packageManager, array($packageKey));
 
-			if (array_search('templavoila', $dependencies) !== false) {
+			if (array_search($extensionKey, $dependencies) !== false) {
 				$extensionManagementUtility->unloadExtension($packageKey);
 			}
 		}
 
-		$extensionManagementUtility->unloadExtension('templavoila');
+		$extensionManagementUtility->unloadExtension($extensionKey);
 
 		// bei autoloading werden die initialen packages durchsucht. Daher müssen
 		// wir die aktualisierten packages dem class loader mitgeben

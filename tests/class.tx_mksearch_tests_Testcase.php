@@ -67,7 +67,7 @@ abstract class tx_mksearch_tests_Testcase
 			$this->backups['templaVoilaConfigBackup'] = $GLOBALS['TYPO3_LOADED_EXT']['templavoila'];
 			$GLOBALS['TYPO3_LOADED_EXT']['templavoila'] = NULL;
 
-			tx_mksearch_tests_Util::unloadTemplavoilaForTypo362OrHigher();
+			tx_mksearch_tests_Util::unloadExtensionForTypo362OrHigher('templavoila');
 		}
 
 		// das TS Parsing frisst in manchen Umgebung mehr als 128MB Speicher. Es gibt aber im Moment keine Zeit

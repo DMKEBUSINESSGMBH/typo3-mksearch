@@ -49,6 +49,11 @@ class tx_mksearch_tests_indexer_TtContentTv_DB_testcase
 	protected $unloadTemplavoila = false;
 
 	/**
+	 * @var boolean
+	 */
+	protected $gridelementsWasLoaded = false;
+
+	/**
 	 * Constructs a test case with the given name.
 	 *
 	 * @param string $name the name of a testcase
@@ -69,7 +74,27 @@ class tx_mksearch_tests_indexer_TtContentTv_DB_testcase
 		if (!tx_rnbase_util_Extensions::isLoaded('templavoila')) {
 			$this->markTestSkipped('templavoila ist nicht Installiert.');
 		}
+
+		// gridelements steht im Konflikt mit templavoila
+		if ($this->gridelementsWasLoaded = tx_rnbase_util_Extensions::isLoaded('gridelements')) {
+			tx_mksearch_tests_Util::unloadExtensionForTypo362OrHigher('gridelements');
+		}
+
 		parent::setUp();
+	}
+
+	/**
+	 *
+	 * {@inheritDoc}
+	 * @see tx_mksearch_tests_DbTestcase::tearDown()
+	 */
+	protected function tearDown() {
+		if ($this->gridelementsWasLoaded) {
+			$extensionManagementUtility = new TYPO3\CMS\Core\Utility\ExtensionManagementUtility();
+			$extensionManagementUtility->loadExtension('gridelements');
+		}
+
+		parent::tearDown();
 	}
 
 	/**

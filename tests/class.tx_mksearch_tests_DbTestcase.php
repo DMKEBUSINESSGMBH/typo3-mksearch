@@ -150,7 +150,7 @@ abstract class tx_mksearch_tests_DbTestcase
 			$this->templaVoilaConfigBackup = $GLOBALS['TYPO3_LOADED_EXT']['templavoila'];
 			$GLOBALS['TYPO3_LOADED_EXT']['templavoila'] = NULL;
 
-			tx_mksearch_tests_Util::unloadTemplavoilaForTypo362OrHigher();
+			tx_mksearch_tests_Util::unloadExtensionForTypo362OrHigher('templavoila');
 		}
 
 		$this->purgeRootlineCaches();
