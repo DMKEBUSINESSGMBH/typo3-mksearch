@@ -40,7 +40,7 @@ class tx_mksearch_marker_CoreTtContent extends tx_mksearch_marker_SearchResultSi
 	 * @param string $confId
 	 * @param tx_rnbase_util_FormatUtil $formatter
 	 */
-	public function prepareLinks(&$item, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, &$formatter) {
+	public function prepareLinks(&$item, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, &$formatter, $template) {
 		// Fill TSFE register with adequate page id.
 		// Usually you won't need that - it's a special case for core.tt_content.
 		// For other contents you just configure the page id via TS statically
@@ -49,8 +49,7 @@ class tx_mksearch_marker_CoreTtContent extends tx_mksearch_marker_SearchResultSi
 
 		$GLOBALS['TSFE']->register['mksearch.core.tt_content'] = $item->record['pid'];
 		$GLOBALS['TSFE']->register['mksearch.core.tt_content.uid'] = $item->record['uid'];
-		$linkId = 'show';
-		$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, $linkId, $marker, array());
+		parent::prepareLinks($item, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter, $template);
 	}
 }
 
