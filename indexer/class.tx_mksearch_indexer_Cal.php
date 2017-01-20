@@ -368,7 +368,8 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base {
 	 */
 	private function getCategoryMapping() {
 		return array(
-			'title'	=> 'title_ms'
+			'title'	=> 'title_ms',
+			'uid'	=> 'uid_mi'
 		);
 	}
 

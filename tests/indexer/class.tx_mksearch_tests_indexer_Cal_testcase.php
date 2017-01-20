@@ -293,20 +293,24 @@ class tx_mksearch_tests_indexer_Cal_testcase
 	}
 
 	/**
-	* @group unit
-	*/
-	public function testPrepareSearchDataIndexesCategoryTitlesCorrect() {
+	 *
+	 * @return array
+	 */
+	private function getIndexDocFieldArrayForCategoryTests() {
+
 		$categoryModels = array(
 			0 => tx_rnbase::makeInstance(
-				'tx_mksearch_model_cal_Category', array('title' => 'First Category')
+				'tx_mksearch_model_cal_Category',
+				array('uid' => 3, 'title' => 'First Category')
 			),
 			1 => tx_rnbase::makeInstance(
-				'tx_mksearch_model_cal_Category', array('title' => 'Second Category')
+				'tx_mksearch_model_cal_Category',
+				array('uid' => 2, 'title' => 'Second Category')
 			)
 		);
 
 		$calEventRecord = array(
-			'category_id' 	=> 1,
+			'category_id' 	=> 2,
 		);
 		$calendarEventMock = $this->getMock(
 			'tx_mksearch_model_cal_Event',
@@ -325,6 +329,29 @@ class tx_mksearch_tests_indexer_Cal_testcase
 
 		$indexDocFieldArray =
 			$this->getIndexDocFieldArrayByCalRecord($calEventRecord, $indexer);
+		return $indexDocFieldArray;
+	}
+
+	/**
+	* @group unit
+	*/
+	public function testPrepareSearchDataIndexesCategoryUidsCorrect() {
+		$indexDocFieldArray = $this->getIndexDocFieldArrayForCategoryTests();
+		$expectedCategoryUids = array(
+			0 => 3,
+			1 => 2
+		);
+		self::assertEquals(
+			$expectedCategoryUids,$indexDocFieldArray['category_uid_mi']->getValue(),
+			'categoy_title falsch indiziert!'
+		);
+	}
+
+	/**
+	* @group unit
+	*/
+	public function testPrepareSearchDataIndexesCategoryTitlesCorrect() {
+		$indexDocFieldArray = $this->getIndexDocFieldArrayForCategoryTests();
 
 		$expectedCategoryTitles = array(
 			0 => 'First Category',
