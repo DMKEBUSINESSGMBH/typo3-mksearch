@@ -152,7 +152,7 @@ CType {
 # Obviously, the respective "indexedFields" option is ignored in this case.
 # templavoila_pi1 should in most cases be too, indexed, but requires some more configuration
 
-includeCTypes = text,textpic,bullets,image,table,,templavoila_pi1
+includeCTypes = text,textpic,bullets,image,table,gridelements_pi1,templavoila_pi1
 
 #ignoreCTypes {
 #	0 = search
