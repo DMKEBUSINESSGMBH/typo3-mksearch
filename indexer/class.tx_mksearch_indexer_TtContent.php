@@ -213,6 +213,9 @@ exclude {
 # comma separated list of workspace IDs
 #workspaceIds = 1,2,3
 
+# cTypes of content elements to be included in rendering from gridelements
+includeCTypesInGridelementRendering = text,textpic,shortcut,image,table,gridelements_pi1
+
 CONF;
 	}
 }

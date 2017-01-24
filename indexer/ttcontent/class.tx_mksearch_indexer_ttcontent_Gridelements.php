@@ -229,18 +229,6 @@ class tx_mksearch_indexer_ttcontent_Gridelements
 		return $allowedCTypes;
 	}
 
-	/**
-	 * (non-PHPdoc)
-	 * @see tx_mksearch_indexer_ttcontent_Normal::getDefaultTSConfig()
-	 */
-	public function getDefaultTSConfig() {
-		$tsconfig = parent::getDefaultTSConfig();
-		$tsconfig .= '
-
-# cTypes of content elements to be included in rendering from gridelements
-includeCTypesInGridelementRendering = text,textpic,shortcut,image,table,gridelements_pi1';
-		return $tsconfig;
-	}
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/ttcontent/class.tx_mksearch_indexer_ttcontent_Gridelements.php']) {
