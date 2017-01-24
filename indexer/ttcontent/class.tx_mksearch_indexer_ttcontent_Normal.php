@@ -140,7 +140,7 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 				? $options['CType.'][$rawData['CType'] . '.']['indexedFields.']
 				: $options['CType.']['_default_.']['indexedFields.'];
 
-			$content = $this->getContentByContentType($rawData);
+			$content = $this->getContentByContentType($rawData, $options);
 			// Dieser Content-String ist deprecated!
 			if (is_array($fields)) {
 				foreach ($fields as $sDocKey => $sRecordKey) {
@@ -235,10 +235,11 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 	 * This can be overridden by special types like templavoila or gridelements.
 	 *
 	 * @param array $rawData
+	 * @param array $options
 	 *
 	 * @return string
 	 */
-	protected function getContentByContentType(array $rawData)
+	protected function getContentByContentType(array $rawData, array $options)
 	{
 		return '';
 	}

@@ -111,17 +111,18 @@ class tx_mksearch_indexer_ttcontent_Gridelements
 	 * Get the content by CType
 	 *
 	 * @param array $rawData
+	 * @param array $options
 	 *
 	 * @return string
 	 */
 	protected function getContentByContentType(
-		array $rawData
+		array $rawData, array $options
 	) {
 		if (!$this->isGridelement($rawData)) {
 			return '';
 		}
 
-		return $this->getGridelementElementContent($rawData);
+		return $this->getGridelementElementContent($rawData, $options);
 	}
 
 	/**
@@ -144,27 +145,42 @@ class tx_mksearch_indexer_ttcontent_Gridelements
 	 * Fetches the content of an grid element
 	 *
 	 * @param array $record
+	 * @param array $options
 	 *
 	 * @return string
 	 */
 	protected function getGridelementElementContent(
-		array $record
+		array $record, array $options
 	) {
 		$this->initTsForFrontend($record['pid']);
-
 		$uid = $this->getUid('tt_content', $record, array());
 
-		/* @var $gridelements \GridElementsTeam\Gridelements\Plugin\Gridelements */
-		$gridelements = tx_rnbase::makeInstance(
-			'\GridElementsTeam\\Gridelements\\Plugin\\Gridelements'
-		);
-		$gridelements->cObj = tx_rnbase::makeInstance(
-			tx_rnbase_util_Typo3Classes::getContentObjectRendererClass()
-		);
-		$gridelements->cObj->data = $record;
-		$gridelements->cObj->currentRecord = 'tt_content:' . $uid;
+		$allowedCTypes = $this->getAllowedCTypes($options);
 
-		return $gridelements->main('', array());
+		if (is_array($allowedCTypes)) {
+			foreach (
+				$GLOBALS['TSFE']->tmpl->setup['tt_content.'] as
+				$currentCType => $conf
+			) {
+				if ($currentCType == 'key.') {
+					continue;
+				}
+				// Config der nicht definierten ContentTypen entfernen, damit
+				// Elemente nicht durch Gridelements gerendert werden
+				if (!in_array($currentCType, $allowedCTypes)) {
+					unset($GLOBALS['TSFE']->tmpl->setup['tt_content.'][$currentCType]);
+				}
+			}
+		}
+		$cObj = $GLOBALS['TSFE']->cObj;
+		$cObj->data = $record;
+		$cObj->currentRecord = 'tt_content:' . $uid;
+
+		$content = $cObj->callUserFunction(
+			'GridElementsTeam\\Gridelements\\Plugin\\Gridelements->main',
+			array(), ''
+		);
+		return $content;
 	}
 
 	/**
@@ -195,6 +211,35 @@ class tx_mksearch_indexer_ttcontent_Gridelements
 		$tsfe->no_cache = true;
 		$tsfe->tmpl->start($rootlineByPid);
 		$tsfe->rootLine = $rootlineByPid;
+	}
+
+	/**
+	 * Gets the allowed CTypes from Configuration for Gridelement Rendering
+	 *
+	 * @param array $options
+	 * @return array $allowedCTypes
+	 */
+	protected function getAllowedCTypes($options) {
+		$allowedCTypes = $this->getConfigValue(
+				'includeCTypesInGridelementRendering', $options
+		);
+		foreach ($allowedCTypes as $allowedCType) {
+			$allowedCTypes[] = $allowedCType . '.';
+		}
+		return $allowedCTypes;
+	}
+
+	/**
+	 * (non-PHPdoc)
+	 * @see tx_mksearch_indexer_ttcontent_Normal::getDefaultTSConfig()
+	 */
+	public function getDefaultTSConfig() {
+		$tsconfig = parent::getDefaultTSConfig();
+		$tsconfig .= '
+
+# cTypes of content elements to be included in rendering from gridelements
+includeCTypesInGridelementRendering = text,textpic,shortcut,image,table,gridelements_pi1';
+		return $tsconfig;
 	}
 }
 

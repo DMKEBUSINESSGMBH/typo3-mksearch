@@ -281,7 +281,7 @@ class tx_mksearch_tests_indexer_ttcontent_Gridelements_testcase
 
 		$this->callInaccessibleMethod(
 			array($indexer, 'getContentByContentType'),
-			array(array('CType' => 'gridelements_pi1'))
+			array(array('CType' => 'gridelements_pi1'), array())
 		);
 	}
 
@@ -306,7 +306,38 @@ class tx_mksearch_tests_indexer_ttcontent_Gridelements_testcase
 
 		$this->callInaccessibleMethod(
 			array($indexer, 'getContentByContentType'),
-			array(array('CType' => 'list'))
+			array(array('CType' => 'list'), array())
 		);
 	}
+
+	/**
+	 * Test the getAllowedCTypes method
+	 *
+	 * @return void
+	 *
+	 * @group unit
+	 * @test
+	 */
+	public function testGetAllowedCTypes()
+	{
+		$indexer = $this->getMock(
+			'tx_mksearch_indexer_ttcontent_Gridelements',
+			array('getGridelementElementContent')
+		);
+		$expected = array(
+			'text','textpic', 'gridelements_pi1',
+			'text.','textpic.', 'gridelements_pi1.'
+		);
+
+		$cTypes = $this->callInaccessibleMethod(
+			array($indexer, 'getAllowedCTypes'),
+			array(array(
+				'includeCTypesInGridelementRendering' =>
+					'text,textpic,gridelements_pi1'
+			))
+		);
+		self::assertEquals($cTypes, $expected);
+	}
+
+
 }
