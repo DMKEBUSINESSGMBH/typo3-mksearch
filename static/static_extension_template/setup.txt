@@ -628,6 +628,11 @@ plugin.tx_mksearch {
 				absurl = 1
 				noHash = 1
 			}
+
+			### the ID of the current plugin (tt_content uid) is used by default
+			### configure a suffix here in case several search boxes are included per page
+			### but not through page content but through TypoScript for example.
+			#javaScriptSnippetSuffix = searchbox_bottom
 		}
 
 		charbrowser {

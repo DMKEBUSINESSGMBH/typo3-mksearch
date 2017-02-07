@@ -396,7 +396,11 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 			$configurations->get($this->getConfId() . $this->autocompleteConfId), $link, FALSE
 		);
 
-		$pageRenderer->addJsFooterInlineCode('mksearch_autocomplete_' . $this->getConfigurations()->getPluginId(), $autocompleteJS);
+		$javaScriptSnippetSuffix =
+			$configurations->get($this->getConfId() . $this->autocompleteConfId . 'javaScriptSnippetSuffix') ?
+				$configurations->get($this->getConfId() . $this->autocompleteConfId . 'javaScriptSnippetSuffix') :
+				$this->getConfigurations()->getPluginId();
+		$pageRenderer->addJsFooterInlineCode('mksearch_autocomplete_' . $javaScriptSnippetSuffix, $autocompleteJS);
 	}
 
 	/**

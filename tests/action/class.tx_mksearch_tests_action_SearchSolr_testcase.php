@@ -484,4 +484,74 @@ class tx_mksearch_tests_action_SearchSolr_testcase
 		self::assertEquals(1, count($inlineJavaScripts),'mehr header daten als erwartet!');
 		self::assertEquals($expectedJavaScript, $inlineJavaScripts['mksearch_autocomplete_123']['code']);
 	}
+
+	/**
+	 */
+	public function testHandleRequestWithEnabledAutocompleteAndAutocompleteJavaScriptSuffix(){
+		//action initialisieren
+		$aConfig['searchsolr.'] = array(
+			'nosearch' => 1,//keine echte Suche
+			'autocomplete.' => array(
+				'enable' => 1,
+				'minLength' => 2,
+				'elementSelector' => 'myElementSelector',
+				'actionLink.' => array(
+					'useKeepVars' => 1,
+					'useKeepVars.' => array(
+							'add' => '::type=540'
+					),
+					'noHash' => 1,
+				),
+				'javaScriptSnippetSuffix' => 'my_custom_suffix'
+			),
+			'usedIndex' => 1
+		);
+		//mock getIndex() so its not called for real
+		$aMockFunctions = array(
+			'getIndex' => array(
+				'expects' => $this->never(),
+				'returnValue' => true,
+			)
+		);
+		$out = true;
+		$action = $this->getAction($aMockFunctions,$aConfig,$out);
+
+		self::assertNull($out,'es wurde nicht null geliefert. vllt doch gesucht?');
+		//view daten sollten nicht gesetzt sein
+		self::assertFalse($action->getConfigurations()->getViewData()->offsetExists('result'),'es wurde doch ein result gesetzt in den view daten. doch gesucht?');
+
+		$expectedJavaScript = 'jQuery(document).ready(function(){
+			jQuery(myElementSelector).autocomplete({
+				source: function( request, response ) {
+					jQuery.ajax({
+						url: "?id='.$this->linkId.'&type=540&mksearch%5Bajax%5D=1&mksearch%5BusedIndex%5D=1&mksearch[term]="+encodeURIComponent(request.term),
+						dataType: "json",
+						success: function( data ) {
+							var suggestions = [];
+							jQuery.each(data.suggestions, function(key, value) {
+								jQuery.each(value, function(key, suggestion) {
+									suggestions.push(suggestion.record.value);
+								});
+							});
+							response( jQuery.map( suggestions, function( item ) {
+								return {
+									label: item,
+									value: item
+								};
+							}));
+						}
+					});
+				},
+				minLength: 2
+			});
+		});
+		jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();' . LF;
+
+		$property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsInline');
+		$property->setAccessible(TRUE);
+		$inlineJavaScripts = $property->getValue(tx_rnbase_util_TYPO3::getTSFE()->getPageRenderer());
+
+		self::assertEquals(1, count($inlineJavaScripts),'mehr header daten als erwartet!');
+		self::assertEquals($expectedJavaScript, $inlineJavaScripts['mksearch_autocomplete_my_custom_suffix']['code']);
+	}
 }
