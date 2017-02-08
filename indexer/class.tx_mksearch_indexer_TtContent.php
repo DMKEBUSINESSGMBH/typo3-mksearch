@@ -152,7 +152,7 @@ CType {
 # Obviously, the respective "indexedFields" option is ignored in this case.
 # templavoila_pi1 should in most cases be too, indexed, but requires some more configuration
 
-includeCTypes = text,textpic,bullets,image,table,gridelements_pi1,templavoila_pi1
+includeCTypes = text,textpic,textmedia,bullets,image,table,gridelements_pi1,templavoila_pi1
 
 #ignoreCTypes {
 #	0 = search
@@ -214,7 +214,7 @@ exclude {
 #workspaceIds = 1,2,3
 
 # cTypes of content elements to be included in rendering from gridelements
-includeCTypesInGridelementRendering = text,textpic,shortcut,image,table,gridelements_pi1
+includeCTypesInGridelementRendering = text,textpic,textmedia,shortcut,image,table,gridelements_pi1
 
 CONF;
 	}
