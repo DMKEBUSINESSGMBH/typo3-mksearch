@@ -97,43 +97,43 @@ class tx_mksearch_marker_SearchResultSimple
 		$linkMethod	= $config->get($confId.'linkMethod');
 		if ($linkMethod == 'generic') {
 			parent::prepareLinks($item, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter, $template);
+		} else {
+			$linkId = 'show';
+			$linkConfId = $confId.'links.'.$linkId.'.';
+			//cObject Daten sichern und durch unseren solr record ersetzen
+			$sCObjTempData = $config->getCObj()->data;
+			$config->getCObj()->data = $item->record;
+
+			$pid = $config->getCObj()->stdWrap($config->get($linkConfId.'pid'), $config->get($linkConfId.'pid.'));
+
+			// Link entfernen, wenn nicht gesetzt
+			if(empty($pid)) {
+				$remove = intval($formatter->getConfigurations()->get($linkConfId.'removeIfDisabled'));
+				$linkMarker = $marker . '_' . strtoupper($linkId).'LINK';
+				self::disableLink($markerArray, $subpartArray, $wrappedSubpartArray, $linkMarker, $remove>0);
+			} else if(self::checkLinkExistence($linkId, $marker, $template)) {
+
+				// Try to get parameter name from TS
+				$paramName = $config->get($linkConfId.'paramName');
+				if (!$paramName) $paramName = $item->record['contentType'];
+				// Try to get value field name from TS
+				$paramField = $config->get($linkConfId.'paramField');
+				if (!$paramField) $paramField = 'uid';
+
+				/* Wir lesen weitere Parameter aus dem TS aus. Dabei ist folgendes möglich:
+						backPid = TEXT
+						backPid.data = TSFE:id
+						backPid.require = 1
+				 */
+				$addParams = $config->get($linkConfId.'additionalParams.', true);
+				if (!is_array($addParams)) $addParams = array();
+				$addParams[$paramName] = $item->record[$paramField];
+
+				$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, $linkId, $marker, $addParams, $template);
+			}
+			//cObject Daten wieder zurück
+			$config->getCObj()->data = $sCObjTempData;
 		}
-
-		$linkId = 'show';
-		$linkConfId = $confId.'links.'.$linkId.'.';
-		//cObject Daten sichern und durch unseren solr record ersetzen
-		$sCObjTempData = $config->getCObj()->data;
-		$config->getCObj()->data = $item->record;
-
-		$pid = $config->getCObj()->stdWrap($config->get($linkConfId.'pid'), $config->get($linkConfId.'pid.'));
-
-		// Link entfernen, wenn nicht gesetzt
-		if(empty($pid)) {
-			$remove = intval($formatter->getConfigurations()->get($linkConfId.'removeIfDisabled'));
-			$linkMarker = $marker . '_' . strtoupper($linkId).'LINK';
-			self::disableLink($markerArray, $subpartArray, $wrappedSubpartArray, $linkMarker, $remove>0);
-		} else if(self::checkLinkExistence($linkId, $marker, $template)) {
-
-			// Try to get parameter name from TS
-			$paramName = $config->get($linkConfId.'paramName');
-			if (!$paramName) $paramName = $item->record['contentType'];
-			// Try to get value field name from TS
-			$paramField = $config->get($linkConfId.'paramField');
-			if (!$paramField) $paramField = 'uid';
-
-			/* Wir lesen weitere Parameter aus dem TS aus. Dabei ist folgendes möglich:
-					backPid = TEXT
-					backPid.data = TSFE:id
-					backPid.require = 1
-			 */
-			$addParams = $config->get($linkConfId.'additionalParams.', true);
-			if (!is_array($addParams)) $addParams = array();
-			$addParams[$paramName] = $item->record[$paramField];
-
-			$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, $linkId, $marker, $addParams, $template);
-		}
-		//cObject Daten wieder zurück
-		$config->getCObj()->data = $sCObjTempData;
 	}
 }
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/marker/class.tx_mksearch_marker_SearchResultSimple.php'])	{
