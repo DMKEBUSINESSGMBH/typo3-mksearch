@@ -97,7 +97,11 @@ class tx_mksearch_marker_SearchResultSimple
 		$linkMethod	= $config->get($confId.'linkMethod');
 		if ($linkMethod == 'generic') {
 			parent::prepareLinks($item, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter, $template);
-		} else {
+		}
+
+		// @deprecated. Wenn generic, dann sollte der alte Link nie erstellt werden.
+		// das ist aber aus Gründen der Abwärtskompatibiltät schwierig.
+		if (!$config->get($confId . 'disableOldShowLink')) {
 			$linkId = 'show';
 			$linkConfId = $confId.'links.'.$linkId.'.';
 			//cObject Daten sichern und durch unseren solr record ersetzen

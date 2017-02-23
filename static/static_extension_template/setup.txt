@@ -932,6 +932,7 @@ lib.mksearch.extrainfo {
 		subpartName = TTCONTENT
 		hit {
 			linkMethod = generic
+			disableOldShowLink = 1
 			links.show {
 				pid = TEXT
 				pid.data = register : mksearch.core.tt_content
