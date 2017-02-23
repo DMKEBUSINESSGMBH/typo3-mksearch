@@ -931,6 +931,7 @@ lib.mksearch.extrainfo {
 		markerClass = tx_mksearch_marker_CoreTtContent
 		subpartName = TTCONTENT
 		hit {
+			linkMethod = generic
 			links.show {
 				pid = TEXT
 				pid.data = register : mksearch.core.tt_content
