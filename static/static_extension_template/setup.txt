@@ -552,7 +552,7 @@ plugin.tx_mksearch {
 					# Additional parameters
 					additionalParams {
 						# PID of news list page
-						backPid = 0
+						#backPid = 0
 					}
 				}
 			}
@@ -994,7 +994,7 @@ lib.mksearch.extrainfo {
 				# Additional parameters
 				additionalParams {
 					# PID of news list page
-					backPid = 0
+					#backPid = 0
 				}
 			}
 			datetime_i.strftime= %d.%m.%y
