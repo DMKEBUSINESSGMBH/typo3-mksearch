@@ -818,6 +818,9 @@
    		<!-- <copyField source="organizer_s" dest="fulltext"/>
    		<copyField source="organizer_link_s" dest="fulltext"/>
    		<copyField source="location_s" dest="fulltext"/>
+   		<copyField source="location_name_s" dest="fulltext"/>
+   		<copyField source="location_street_s" dest="fulltext"/>
+   		<copyField source="location_city_s" dest="fulltext"/>
    		<copyField source="description_s" dest="fulltext"/>
    		<copyField source="calendar_title_s" dest="fulltext"/>
    		<copyField source="category_title_ms" dest="fulltext"/> -->

@@ -182,8 +182,6 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base {
 	/**
 	 * Indexes the location of the event.
 	 *
-	 * currently only overrides the location field of the event!
-	 *
 	 * @param tx_mksearch_model_cal_Event $calEvent
 	 * @param tx_mksearch_interface_IndexerDocument- $indexDoc
 	 *
@@ -199,8 +197,10 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base {
 			return;
 		}
 
-
-		$indexDoc->addField('location_s', $location->getCity());
+		$indexDoc->addField('location_s', $location->getName());
+		$indexDoc->addField('location_street_s', $location->getStreet());
+		$indexDoc->addField('location_zip_s', $location->getZip());
+		$indexDoc->addField('location_city_s', $location->getCity());
 	}
 
 	/**
