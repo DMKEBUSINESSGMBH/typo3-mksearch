@@ -70,7 +70,8 @@
 			sortMissingLast="true" omitNorms="true"
 		>
 			<analyzer>
-				<tokenizer class="solr.LowerCaseTokenizerFactory" />
+				<tokenizer class="solr.KeywordTokenizerFactory" />
+				<filter class="solr.LowerCaseFilterFactory"/>
 			</analyzer>
 		</fieldType>
 
@@ -79,7 +80,8 @@
 			omitNorms="true"
 		>
 			<analyzer>
-				<tokenizer class="solr.LowerCaseTokenizerFactory" />
+				<tokenizer class="solr.KeywordTokenizerFactory" />
+				<filter class="solr.LowerCaseFilterFactory"/>
 			</analyzer>
 		</fieldType>
 
