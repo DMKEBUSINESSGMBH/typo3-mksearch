@@ -53,11 +53,35 @@
 
 		<!-- The StrField type is not analyzed, but indexed/stored verbatim. It
 			supports doc values but in that case the field needs to be single-valued
-			and either required or have a default value. -->
+			and either required or have a default value.
+			Use this for case sensitive search or only stored fields
+			-->
 		<fieldType name="string" class="solr.StrField"
 			sortMissingLast="true" docValues="true" />
 		<fieldType name="strings" class="solr.StrField"
 			sortMissingLast="true" multiValued="true" docValues="true" />
+
+
+
+		<!-- The StrField type is not analyzed,
+			so we use TextField to add lowercase filters.
+			-->
+		<fieldType name="string_ci" class="solr.TextField"
+			sortMissingLast="true" omitNorms="true"
+		>
+			<analyzer>
+				<tokenizer class="solr.LowerCaseTokenizerFactory" />
+			</analyzer>
+		</fieldType>
+
+		<fieldType name="strings_ci" class="solr.TextField"
+			sortMissingLast="true" multiValued="true"
+			omitNorms="true"
+		>
+			<analyzer>
+				<tokenizer class="solr.LowerCaseTokenizerFactory" />
+			</analyzer>
+		</fieldType>
 
 		<!-- boolean type: "true" or "false" -->
 		<fieldType name="boolean" class="solr.BoolField"
@@ -643,8 +667,7 @@
 			increase storage costs. default: a value that should be used if no value
 			is specified when adding a document. -->
 
-		<field name="id" type="string" indexed="true" stored="true"
-			required="true" />
+		<field name="id" type="string" indexed="true" stored="true" required="true" />
 
 		<!--
 			It is used internally by Solr, for example by features like partial
@@ -653,12 +676,9 @@
 		<field name="_version_" type="long" indexed="true" stored="true"/>
 
 		<!-- common mksearch fields -->
-		<field name="extKey" type="string" indexed="true" stored="true"
-			required="false" />
-		<field name="uid" type="int" indexed="true" stored="true"
-			required="false" />
-		<field name="contentType" type="string" indexed="true" stored="true"
-			required="true" />
+		<field name="extKey" type="string" indexed="true" stored="true" required="false" />
+		<field name="uid" type="int" indexed="true" stored="true" required="false" />
+		<field name="contentType" type="string" indexed="true" stored="true" required="true" />
 		<field name="tstamp" type="int" indexed="true" stored="true" />
 		<field name="siteRootPage" type="int" indexed="true" stored="true" />
 
@@ -673,11 +693,9 @@
 		<field name="author" type="textgen" indexed="true" stored="true" />
 		<field name="keywords" type="textgen" indexed="true" stored="true" />
 		<field name="category" type="textgen" indexed="true" stored="true" />
-		<field name="content_type" type="string" indexed="true" stored="true"
-			multiValued="true" />
+		<field name="content_type" type="strings" indexed="true" stored="true" multiValued="true" />
 		<field name="last_modified" type="date" indexed="true" stored="true" />
-		<field name="links" type="string" indexed="true" stored="true"
-			multiValued="true" />
+		<field name="links" type="strings" indexed="true" stored="true" multiValued="true" />
 
 
 		<!-- catchall field, containing all other searchable text fields (implemented
@@ -739,62 +757,38 @@
 			many extensions use the *_s field as text field and not as string field. that's why the
 			default type is text_german so highlighting on these fields works at all and supports stemming etc.
 		 -->
-		<dynamicField name="*_s" type="string" indexed="true"
-			stored="true" />
-		<dynamicField name="*_l" type="long" indexed="true"
-			stored="true" />
-		<dynamicField name="*_t" type="text_german" indexed="true"
-			stored="true" />
-		<dynamicField name="*_b" type="boolean" indexed="true"
-			stored="true" />
-		<dynamicField name="*_f" type="float" indexed="true"
-			stored="true" />
-		<dynamicField name="*_d" type="double" indexed="true"
-			stored="true" />
-		<dynamicField name="*_dt" type="date" indexed="true"
-			stored="true" />
+		<dynamicField name="*_s" type="string_ci" indexed="true" stored="true" />
+		<dynamicField name="*_l" type="long" indexed="true" stored="true" />
+		<dynamicField name="*_t" type="text_german" indexed="true" stored="true" />
+		<dynamicField name="*_b" type="boolean" indexed="true" stored="true" />
+		<dynamicField name="*_f" type="float" indexed="true" stored="true" />
+		<dynamicField name="*_d" type="double" indexed="true" stored="true" />
+		<dynamicField name="*_dt" type="date" indexed="true" stored="true" />
 
-		<dynamicField name="*_mi" type="int" indexed="true"
-			stored="true" multiValued="true" />
-		<dynamicField name="*_ms" type="string" indexed="true"
-			stored="true" multiValued="true" />
-		<dynamicField name="*_ml" type="long" indexed="true"
-			stored="true" multiValued="true" />
-		<dynamicField name="*_mt" type="text_german" indexed="true"
-			stored="true" multiValued="true" />
-		<dynamicField name="*_mb" type="boolean" indexed="true"
-			stored="true" multiValued="true" />
-		<dynamicField name="*_mf" type="float" indexed="true"
-			stored="true" multiValued="true" />
-		<dynamicField name="*_md" type="double" indexed="true"
-			stored="true" multiValued="true" />
-		<dynamicField name="*_mdt" type="date" indexed="true"
-			stored="true" multiValued="true" />
+		<dynamicField name="*_mi" type="int" indexed="true" stored="true" multiValued="true" />
+		<dynamicField name="*_ms" type="strings_ci" indexed="true" stored="true" multiValued="true" />
+		<dynamicField name="*_ml" type="long" indexed="true" stored="true" multiValued="true" />
+		<dynamicField name="*_mt" type="text_german" indexed="true" stored="true" multiValued="true" />
+		<dynamicField name="*_mb" type="boolean" indexed="true" stored="true" multiValued="true" />
+		<dynamicField name="*_mf" type="float" indexed="true" stored="true" multiValued="true" />
+		<dynamicField name="*_md" type="double" indexed="true" stored="true" multiValued="true" />
+		<dynamicField name="*_mdt" type="date" indexed="true" stored="true" multiValued="true" />
 
 		<!-- some trie-coded dynamic fields for faster range queries -->
-		<dynamicField name="*_ti" type="tint" indexed="true"
-			stored="true" />
-		<dynamicField name="*_tl" type="tlong" indexed="true"
-			stored="true" />
-		<dynamicField name="*_tf" type="tfloat" indexed="true"
-			stored="true" />
-		<dynamicField name="*_td" type="tdouble" indexed="true"
-			stored="true" />
-		<dynamicField name="*_tdt" type="tdate" indexed="true"
-			stored="true" />
+		<dynamicField name="*_ti" type="tint" indexed="true" stored="true" />
+		<dynamicField name="*_tl" type="tlong" indexed="true" stored="true" />
+		<dynamicField name="*_tf" type="tfloat" indexed="true" stored="true" />
+		<dynamicField name="*_td" type="tdouble" indexed="true" stored="true" />
+		<dynamicField name="*_tdt" type="tdate" indexed="true" stored="true" />
 
 		<!--
 			For Geospatial search
 		 -->
-		<dynamicField name="*_latlon" type="location"
-			indexed="true" stored="false" />
-		<dynamicField name="*_coord" type="tdouble"
-			indexed="true" stored="false" />
+		<dynamicField name="*_latlon" type="location" indexed="true" stored="false" />
+		<dynamicField name="*_coord" type="tdouble" indexed="true" stored="false" />
 
-		<dynamicField name="ignored_*" type="ignored"
-			multiValued="true" />
-		<dynamicField name="attr_*" type="textgen" indexed="true"
-			stored="true" multiValued="true" />
+		<dynamicField name="ignored_*" type="ignored" multiValued="true" />
+		<dynamicField name="attr_*" type="textgen" indexed="true" stored="true" multiValued="true" />
 
 		<dynamicField name="random_*" type="random" />
 
