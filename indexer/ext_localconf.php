@@ -47,6 +47,16 @@ tx_mksearch_util_Config::registerIndexer(
 if (tx_rnbase_util_Extensions::isLoaded('tt_news')) {
 	tx_mksearch_util_Config::registerIndexer('tt_news', 'news', 'tx_mksearch_indexer_TtNewsNews', array('tt_news', 'tt_news_cat'));
 }
+if (tx_rnbase_util_Extensions::isLoaded('news')) {
+	tx_mksearch_util_Config::registerIndexer(
+		'tx_news',
+		'news',
+		'tx_mksearch_indexer_TxNewsNews',
+		array(
+			'tx_news_domain_model_news',
+		)
+	);
+}
 
 if (tx_rnbase_util_Extensions::isLoaded('tt_address')) {
 	tx_mksearch_util_Config::registerIndexer('tt_address', 'address', 'tx_mksearch_indexer_TtAddressAddress', array('tt_address'));

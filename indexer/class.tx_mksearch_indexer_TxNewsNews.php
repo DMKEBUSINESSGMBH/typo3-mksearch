@@ -316,8 +316,6 @@ class tx_mksearch_indexer_TxNewsNews
 	{
 		// @codingStandardsIgnoreEnd
 		return <<<CONF
-indexSiteRootPage = 0
-
 # Should the HTML Markup in indexed fields, the abstract and the content be kept?
 # by default every HTML Markup is removed
 # keepHtml = 1
