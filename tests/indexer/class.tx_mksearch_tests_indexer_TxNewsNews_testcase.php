@@ -99,65 +99,31 @@ class tx_mksearch_tests_indexer_TxNewsNews_testcase
 			)
 		);
 
-		$this->assertIndexDocHasField(
+		$this->assertIndexDocHasFields(
 			$indexDoc,
-			'content_ident_s',
-			'tx_news.news'
-		);
-
-		$this->assertIndexDocHasField(
-			$indexDoc,
-			'title',
-			'first news'
-		);
-
-		$this->assertIndexDocHasField(
-			$indexDoc,
-			'pid',
-			'7'
-		);
-
-		$this->assertIndexDocHasField(
-			$indexDoc,
-			'tstamp',
-			(string) $GLOBALS['EXEC_TIME']
-		);
-
-		$this->assertIndexDocHasField(
-			$indexDoc,
-			'datetime_dt',
-			tx_mksearch_util_Misc::getIsoDate(
-				new \DateTime('@' . $GLOBALS['EXEC_TIME'])
+			array(
+				// base indexer data
+				'content_ident_s' => 'tx_news.news',
+				'pid' => '7',
+				'tstamp' => (string) $GLOBALS['EXEC_TIME'],
+				// news text ata
+				'title' => 'first news',
+				'content' => 'the first news  html in body text  description',
+				'abstract' => 'the first news',
+				'news_text_s' => 'html in body text',
+				'news_text_t' => 'html in body text',
+				// dates
+				'datetime_dt' => tx_mksearch_util_Misc::getIsoDate(
+					new \DateTime('@' . $GLOBALS['EXEC_TIME'])
+				),
+				// tags
+				'keywords_ms' => array('Tag1', 'Tag2'),
+				// category data
+				'categorySinglePid_i' => '14',
+				'categories_mi' => array('71', '72', '73'),
+				'categoriesTitle_ms' => array('Cat1', 'Cat2', 'Cat3'),
+				'categories_dfs_ms' => array('71<[DFS]>Cat1', '72<[DFS]>Cat2', '73<[DFS]>Cat3'),
 			)
-		);
-
-		$this->assertIndexDocHasField(
-			$indexDoc,
-			'content',
-			'the first news  html in body text  description'
-		);
-
-		$this->assertIndexDocHasField(
-			$indexDoc,
-			'news_text_s',
-			'html in body text'
-		);
-		$this->assertIndexDocHasField(
-			$indexDoc,
-			'news_text_t',
-			'html in body text'
-		);
-
-		$this->assertIndexDocHasField(
-			$indexDoc,
-			'abstract',
-			'the first news'
-		);
-
-		$this->assertIndexDocHasField(
-			$indexDoc,
-			'keywords_ms',
-			array('Tag1', 'Tag2')
 		);
 	}
 
@@ -191,7 +157,30 @@ class tx_mksearch_tests_indexer_TxNewsNews_testcase
 							'title' => 'Tag2',
 						)
 					),
-				)
+				),
+				'categories' => array(
+					$this->getModel(
+						array(
+							'uid' => '71',
+							'title' => 'Cat1',
+							'single_pid' => '0',
+						)
+					),
+					$this->getModel(
+						array(
+							'uid' => '72',
+							'title' => 'Cat2',
+							'single_pid' => '14',
+						)
+					),
+					$this->getModel(
+						array(
+							'uid' => '73',
+							'title' => 'Cat3',
+							'single_pid' => '0',
+						)
+					),
+				),
 			)
 		);
 	}

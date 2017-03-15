@@ -134,6 +134,7 @@ class tx_mksearch_indexer_TxNewsNews
 
 		$this->indexNews($rawData, $news, $indexDoc);
 		$this->indexNewsTags($rawData, $news, $indexDoc);
+		$this->indexNewsCategories($rawData, $news, $indexDoc);
 
 		// Hook to extend indexer
 		tx_rnbase_util_Misc::callHook(
@@ -256,6 +257,47 @@ class tx_mksearch_indexer_TxNewsNews
 			$tags[$tag->getUid()] = $tag->getTitle();
 		}
 		$indexDoc->addField('keywords_ms', array_values($tags), 'keyword');
+	}
+
+	/**
+	 * Add category data of the News to the index
+	 *
+	 * @param array $rawData
+	 * @param unknown $news
+	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
+	 * @param array $options
+	 */
+	// @codingStandardsIgnoreStart (interface/abstract/unittest mistake)
+	protected function indexNewsCategories(
+		array $rawData,
+		/* \GeorgRinger\News\Domain\Model\News */ $news,
+		tx_mksearch_interface_IndexerDocument $indexDoc,
+		array $options = array()
+	) {
+		/* @var $category \GeorgRinger\News\Domain\Model\Category */
+		$categories = array();
+		$singlePid = 0;
+
+		foreach ($news->getCategories() as $category) {
+			$categories[$category->getUid()] = $category->getTitle();
+			if (!$singlePid) {
+				$singlePid = $category->getSinglePid();
+			}
+		}
+
+		$indexDoc->addField(
+			'categorySinglePid_i',
+			$singlePid ?: (int) $options['defaultSinglePid']
+		);
+
+		$indexDoc->addField('categories_mi', array_keys($categories));
+		$indexDoc->addField('categoriesTitle_ms', array_values($categories));
+
+		// add field with the combined tags uids and names
+		tx_rnbase::load('tx_mksearch_util_KeyValueFacet');
+		$dfs = tx_mksearch_util_KeyValueFacet::getInstance();
+		$tagDfs = $dfs->buildFacetValues(array_keys($categories), array_values($categories));
+		$indexDoc->addField('categories_dfs_ms', $tagDfs, 'keyword');
 	}
 
 	/**
