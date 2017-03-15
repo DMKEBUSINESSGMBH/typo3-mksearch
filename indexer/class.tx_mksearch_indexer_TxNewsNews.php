@@ -62,7 +62,7 @@ class tx_mksearch_indexer_TxNewsNews
 	 */
 	protected function createNewsModel(array $rawData)
 	{
-		$uid = (int) $rawData;
+		$uid = (int) $rawData['uid'];
 
 		if (!$uid) {
 			return null;
