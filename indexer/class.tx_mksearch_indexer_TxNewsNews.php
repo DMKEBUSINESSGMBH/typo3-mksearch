@@ -34,10 +34,11 @@ tx_rnbase::load('tx_mksearch_indexer_Base');
  *          GNU Lesser General Public License, version 3 or later
  */
 class tx_mksearch_indexer_TxNewsNews
-	extends tx_mksearch_indexer_Base {
-
+	extends tx_mksearch_indexer_Base
+{
 	/**
 	 * Return content type identification.
+	 *
 	 * This identification is part of the indexed data
 	 * and is used on later searches to identify the search results.
 	 * You're completely free in the range of values, but take care
@@ -45,11 +46,36 @@ class tx_mksearch_indexer_TxNewsNews
 	 * uniqueness (i.e. no overlapping with other content types) and
 	 * consistency (i.e. recognition) on indexing and searching data.
 	 *
-	 * @return array('extKey' => [extension key], 'name' => [key of content type]
+	 * @return array
 	 */
 	public static function getContentType()
 	{
 		return array('tx_news', 'news');
+	}
+
+	/**
+	 * Creates the extbase model of the raw datas uid.
+	 *
+	 * @param array $rawData
+	 *
+	 * @return \GeorgRinger\News\Domain\Model\News
+	 */
+	protected function createNewsModel(array $rawData)
+	{
+		$uid = (int) $rawData;
+
+		if (!$uid) {
+			return null;
+		}
+
+		$objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+			'TYPO3\\CMS\\Extbase\\Object\\ObjectManager'
+		);
+		$repository = $objectManager->get(
+			'GeorgRinger\\News\\Domain\\Repository\\NewsRepository'
+		);
+
+		return $repository->findByIdentifier($uid);
 	}
 
 	/**
@@ -63,6 +89,7 @@ class tx_mksearch_indexer_TxNewsNews
 	 *
 	 * @return tx_mksearch_interface_IndexerDocument|null
 	 */
+	// @codingStandardsIgnoreStart (interface/abstract mistake)
 	public function indexData(
 		tx_rnbase_IModel $oModel,
 		$tableName,
@@ -70,13 +97,17 @@ class tx_mksearch_indexer_TxNewsNews
 		tx_mksearch_interface_IndexerDocument $indexDoc,
 		$options
 	) {
+		// @codingStandardsIgnoreEnd
 		$abort = false;
 
-		// Hook to append indexer
+		$news = $this->createNewsModel($rawData);
+
+		// Hook to append indexer data
 		tx_rnbase_util_Misc::callHook(
 			'mksearch',
 			'indexer_TxNews_prepareDataBeforeAddFields',
 			array(
+				'news' => &$news,
 				'rawData' => &$rawData,
 				'options' => $options,
 				'indexDoc' => &$indexDoc,
@@ -93,36 +124,138 @@ class tx_mksearch_indexer_TxNewsNews
 				'mksearch'
 			);
 			if ($options['deleteOnAbort']) {
-				$indexDoc->setDeleted(TRUE);
+				$indexDoc->setDeleted(true);
+
 				return $indexDoc;
 			} else {
 				return null;
 			}
 		}
 
-		$indexDoc->setTitle($rawData['title']);
-		$indexDoc->addField('pid', $rawData['pid']);
-		$indexDoc->setTimestamp($rawData['tstamp']);
+		$this->indexNews($rawData, $news, $indexDoc);
+		$this->indexNewsTags($rawData, $news, $indexDoc);
 
-		$content = $rawData['bodytext'];
-		$abstract = empty($rawData['teaser']) ? $content : $rawData['teaser'];
+		// Hook to extend indexer
+		tx_rnbase_util_Misc::callHook(
+			'mksearch',
+			'indexer_TxNews_prepareDataAfterAddFields',
+			array(
+				'news' => &$news,
+				'rawData' => &$rawData,
+				'options' => $options,
+				'indexDoc' => &$indexDoc,
+			),
+			$this
+		);
+
+		return $indexDoc;
+	}
+
+	/**
+	 * Add data of the News to the index
+	 *
+	 * @param array $rawData
+	 * @param \GeorgRinger\News\Domain\Model\News $news
+	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
+	 * @param array $options
+	 *
+	 * @return void
+	 */
+	// @codingStandardsIgnoreStart (interface/abstract/unittest mistake)
+	protected function indexNews(
+		array $rawData,
+		/* \GeorgRinger\News\Domain\Model\News */ $news,
+		tx_mksearch_interface_IndexerDocument $indexDoc,
+		array $options = array()
+	) {
+		// @codingStandardsIgnoreEnd
+		/* @var $news \GeorgRinger\News\Domain\Model\News */
+
+		$indexDoc->addField('pid', $news->getPid());
+		$indexDoc->setTitle($news->getTitle());
+		$indexDoc->setTimestamp($news->getTstamp());
+
+		$content = trim(
+			implode(
+				CRLF . CRLF,
+				array(
+					$news->getTeaser(),
+					$news->getBodytext(),
+					$news->getDescription(),
+				)
+			)
+		);
+
+		$abstract = $news->getTeaser();
+		if (empty($abstract)) {
+			$abstract = $content;
+		}
+
+		$bodyText = '';
+		foreach (array(
+				$news->getBodytext(),
+				$news->getTeaser(),
+				$news->getTitle(),
+				$content,
+				$abstract,
+			) as $html) {
+			if (empty($html)) {
+				continue;
+			}
+			$bodyText = $html;
+			break;
+		}
 
 		// html entfernen
 		if (empty($options['keepHtml'])) {
-			$content = tx_mksearch_util_Misc::html2plain($content);
-			$abstract = tx_mksearch_util_Misc::html2plain($abstract);
+			foreach (array(&$content, &$abstract, &$bodyText) as &$html) {
+				$html = tx_mksearch_util_Misc::html2plain($html);
+			}
 		}
 
 		// wir indizieren nicht, wenn kein content für die news da ist.
 		if (empty($content)) {
-			$indexDoc->setDeleted(TRUE);
-			return $indexDoc;
+			$indexDoc->setDeleted(true);
+
+			return;
 		}
 
 		$indexDoc->setContent($content);
 		$indexDoc->setAbstract($abstract, $indexDoc->getMaxAbstractLength());
 
-		return $indexDoc;
+		$indexDoc->addField('news_text_s', $bodyText, 'keyword');
+		$indexDoc->addField('news_text_t', $bodyText, 'keyword');
+
+		$indexDoc->addField(
+			'datetime_dt',
+			tx_mksearch_util_Misc::getIsoDate($news->getDatetime()),
+			'keyword',
+			1.0,
+			'date'
+		);
+	}
+
+	/**
+	 * Add tag data of the News to the index
+	 *
+	 * @param array $rawData
+	 * @param unknown $news
+	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
+	 * @param array $options
+	 */
+	// @codingStandardsIgnoreStart (interface/abstract/unittest mistake)
+	protected function indexNewsTags(
+		array $rawData,
+		/* \GeorgRinger\News\Domain\Model\News */ $news,
+		tx_mksearch_interface_IndexerDocument $indexDoc,
+		array $options = array()
+	) {
+		// @codingStandardsIgnoreEnd
+		$tags = array();
+		foreach ($news->getTags() as $tag) {
+			$tags[$tag->getUid()] = $tag->getTitle();
+		}
+		$indexDoc->addField('keywords_ms', array_values($tags), 'keyword');
 	}
 
 	/**
@@ -136,7 +269,10 @@ class tx_mksearch_indexer_TxNewsNews
 	 *
 	 * @return string
 	 */
-	public function getDefaultTSConfig() {
+	// @codingStandardsIgnoreStart (interface/abstract mistake)
+	public function getDefaultTSConfig()
+	{
+		// @codingStandardsIgnoreEnd
 		return <<<CONF
 indexSiteRootPage = 0
 
@@ -165,6 +301,11 @@ CONF;
 	}
 }
 
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_TxNewsNews.php']) {
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_TxNewsNews.php']);
+if ((
+	defined('TYPO3_MODE') &&
+	$GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']
+		['ext/mksearch/indexer/class.tx_mksearch_indexer_TxNewsNews.php']
+)) {
+	include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']
+		['ext/mksearch/indexer/class.tx_mksearch_indexer_TxNewsNews.php'];
 }

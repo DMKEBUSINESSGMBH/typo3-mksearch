@@ -45,7 +45,7 @@ class tx_mksearch_tests_indexer_TxNewsNews_testcase
 	 */
 	protected function setUp()
 	{
-		if(!tx_rnbase_util_Extensions::isLoaded('news')) {
+		if (!tx_rnbase_util_Extensions::isLoaded('news')) {
 			$this->markTestSkipped('tx_news is not installed!');
 		}
 		parent::setUp();
@@ -82,20 +82,10 @@ class tx_mksearch_tests_indexer_TxNewsNews_testcase
 	 */
 	public function testIndexData()
 	{
-		$model = $this->getModel(
-			array(
-				'uid' => '5',
-				'pid' => '7',
-				'tstamp' => $GLOBALS['EXEC_TIME'],
-				'title' => 'first news',
-				'teaser' => 'the first news',
-				'bodytext' => '<span>html in body text</span>',
-			)
-		);
+		$model = $this->getNewsModel();
 
-		$indexer = $this->getMock(
-			'tx_mksearch_indexer_TxNewsNews',
-			array('getDefaultTSConfig')
+		$indexer = $this->getIndexerMock(
+			$model->getRecord()
 		);
 
 		$indexDoc = $this->callInaccessibleMethod(
@@ -135,7 +125,26 @@ class tx_mksearch_tests_indexer_TxNewsNews_testcase
 
 		$this->assertIndexDocHasField(
 			$indexDoc,
+			'datetime_dt',
+			tx_mksearch_util_Misc::getIsoDate(
+				new \DateTime('@' . $GLOBALS['EXEC_TIME'])
+			)
+		);
+
+		$this->assertIndexDocHasField(
+			$indexDoc,
 			'content',
+			'the first news  html in body text  description'
+		);
+
+		$this->assertIndexDocHasField(
+			$indexDoc,
+			'news_text_s',
+			'html in body text'
+		);
+		$this->assertIndexDocHasField(
+			$indexDoc,
+			'news_text_t',
 			'html in body text'
 		);
 
@@ -144,9 +153,78 @@ class tx_mksearch_tests_indexer_TxNewsNews_testcase
 			'abstract',
 			'the first news'
 		);
+
+		$this->assertIndexDocHasField(
+			$indexDoc,
+			'keywords_ms',
+			array('Tag1', 'Tag2')
+		);
+	}
+
+	/**
+	 * A model Mock containing news data
+	 *
+	 * @return tx_rnbase_model_base|PHPUnit_Framework_MockObject_MockObject
+	 */
+	protected function getNewsModel()
+	{
+		return $this->getModel(
+			array(
+				'uid' => '5',
+				'pid' => '7',
+				'tstamp' => $GLOBALS['EXEC_TIME'],
+				'datetime' => new \DateTime('@' . $GLOBALS['EXEC_TIME']),
+				'title' => 'first news',
+				'teaser' => 'the first news',
+				'bodytext' => '<span>html in body text</span>',
+				'description' => 'description',
+				'tags' => array(
+					$this->getModel(
+						array(
+							'uid' => '51',
+							'title' => 'Tag1',
+						)
+					),
+					$this->getModel(
+						array(
+							'uid' => '52',
+							'title' => 'Tag2',
+						)
+					),
+				)
+			)
+		);
+	}
+
+	/**
+	 * Creates a Mock of the indexer object
+	 *
+	 * @return PHPUnit_Framework_MockObject_MockObject
+	 */
+	protected function getIndexerMock()
+	{
+		$model = $this->getNewsModel();
+
+		$indexer = $this->getMock(
+			'tx_mksearch_indexer_TxNewsNews',
+			array('createNewsModel')
+		);
+
+		($indexer
+			->expects(self::once())
+			->method('createNewsModel')
+			->will(self::returnValue($model))
+		);
+
+		return $indexer;
 	}
 }
 
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TxNewsNews_testcase.php']) {
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TxNewsNews_testcase.php']);
+if ((
+	defined('TYPO3_MODE') &&
+	$GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']
+		['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TxNewsNews_testcase.php']
+)) {
+	include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']
+		['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TxNewsNews_testcase.php'];
 }
