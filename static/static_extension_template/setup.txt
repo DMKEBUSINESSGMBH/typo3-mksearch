@@ -761,6 +761,7 @@ plugin.tx_mksearch {
 					core_tt_content.value = Inhalte
 					tt_news_news = TEXT
 					tt_news_news.value = News
+					tx_news_news < .tt_news_news
 					core_file = TEXT
 					core_file.value = Multimedia-Objekte
 					default = TEXT
@@ -1008,6 +1009,28 @@ lib.mksearch.extrainfo {
 			}
 		}
 	}
+
+	# Content type "tt_news.news"
+	tx_news.news < lib.mksearch.extrainfo.tt_news.news
+	tx_news.news {
+		hit {
+			links.show {
+				# PID of single news page
+				pid = 0
+				noHash = 0
+				removeIfDisabled = 0
+				qualifier = tx_news_pi1
+				paramName = news
+
+				# Additional parameters
+				additionalParams {
+					controller = News
+					action = detail
+				}
+			}
+		}
+	}
+
 	# Content type "tt_address.address"
 	tt_address.address < .default
 	tt_address.address {
