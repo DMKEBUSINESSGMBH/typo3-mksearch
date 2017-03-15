@@ -80,6 +80,94 @@ class tx_mksearch_tests_indexer_TxNewsNews_testcase
 	 * @group unit
 	 * @test
 	 */
+	public function testHandleCategoryChanged()
+	{
+		tx_rnbase::load('Tx_Rnbase_Database_Connection');
+		$connection = $this->getMock(
+			'Tx_Rnbase_Database_Connection',
+			array('doSelect')
+		);
+		($connection
+			->expects(self::once())
+			->method('doSelect')
+			->with(
+				$this->equalTo('NEWS.uid AS uid'),
+				$this->equalTo(
+					array(
+						'tx_news_domain_model_news AS NEWS' .
+							' JOIN sys_category_record_mm AS CATMM ON NEWS.uid = CATMM.uid_foreign',
+						'tx_news_domain_model_news',
+						'NEWS',
+					)
+				),
+				$this->equalTo(
+					array(
+						'where' => 'CATMM.uid_local = 5',
+						'orderby' => 'sorting_foreign DESC',
+					)
+				)
+			)
+			->will(
+				self::returnValue(
+					array(
+						array('uid' => '6'),
+						array('uid' => '8'),
+						array('uid' => '10'),
+					)
+				)
+			)
+		);
+
+		tx_rnbase::load('tx_mksearch_service_internal_Index');
+		$indexSrv = $this->getMock(
+			'tx_mksearch_service_internal_Index',
+			array('addRecordToIndex')
+		);
+		($indexSrv
+			->expects(self::exactly(3))
+			->method('addRecordToIndex')
+			->with(
+				$this->equalTo('tx_news_domain_model_news'),
+				$this->logicalOr(6, 8, 10)
+			)
+		);
+
+		$indexer = $this->getMock(
+			'tx_mksearch_indexer_TxNewsNews',
+			array('getDatabaseConnection', 'getIntIndexService')
+		);
+		($indexer
+			->expects(self::once())
+			->method('getDatabaseConnection')
+			->will(self::returnValue($connection))
+		);
+		($indexer
+			->expects(self::once())
+			->method('getIntIndexService')
+			->will(self::returnValue($indexSrv))
+		);
+
+		$stopIndexing = $this->callInaccessibleMethod(
+			array($indexer, 'stopIndexing'),
+			array(
+				'sys_category',
+				array('uid' => '5'),
+				$this->getIndexDocMock($indexer),
+				array()
+			)
+		);
+
+		$this->assertTrue($stopIndexing);
+	}
+
+	/**
+	 * Testet die indexData Methode.
+	 *
+	 * @return void
+	 *
+	 * @group unit
+	 * @test
+	 */
 	public function testIndexData()
 	{
 		$model = $this->getNewsModel();

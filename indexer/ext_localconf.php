@@ -53,7 +53,10 @@ if (tx_rnbase_util_Extensions::isLoaded('news')) {
 		'news',
 		'tx_mksearch_indexer_TxNewsNews',
 		array(
+			//Main Table
 			'tx_news_domain_model_news',
+			//related/monitored tables
+			'sys_category',
 		)
 	);
 }

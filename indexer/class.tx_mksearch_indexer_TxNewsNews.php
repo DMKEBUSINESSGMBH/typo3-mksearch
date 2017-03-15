@@ -79,6 +79,60 @@ class tx_mksearch_indexer_TxNewsNews
 	}
 
 	/**
+	 * check if related data has changed
+	 *
+	 * @param string $tableName
+	 * @param array $rawData
+	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
+	 * @param array $options
+	 * @return bool
+	 */
+	protected function stopIndexing(
+		$tableName, $rawData,
+		tx_mksearch_interface_IndexerDocument $indexDoc,
+		$options
+	) {
+		if ($tableName == 'sys_category') {
+			// Eine Kategorie wurde verändert
+			// Alle News müssen neu indiziert werden.
+			$this->handleCategoryChanged($rawData);
+			return true;
+		}
+
+		return parent::stopIndexing($tableName, $rawData, $indexDoc, $options);
+	}
+
+	/**
+	 * Handle data change for category. All connected news should be updated
+	 *
+	 * @param array $catRecord
+	 *
+	 * @return void
+	 */
+	private function handleCategoryChanged($catRecord)
+	{
+		$rows = $this->getDatabaseConnection()->doSelect(
+			'NEWS.uid AS uid',
+			array(
+				'tx_news_domain_model_news AS NEWS' .
+					' JOIN sys_category_record_mm AS CATMM ON NEWS.uid = CATMM.uid_foreign',
+				'tx_news_domain_model_news',
+				'NEWS',
+			),
+			array(
+				'where' => 'CATMM.uid_local = ' . (int) $catRecord['uid'],
+				'orderby' => 'sorting_foreign DESC',
+			)
+		);
+
+		// Alle gefundenen News für die Neuindizierung anmelden.
+		$srv = $this->getIntIndexService();
+		foreach ($rows as $row) {
+			$srv->addRecordToIndex('tx_news_domain_model_news', (int) $row['uid']);
+		}
+	}
+
+	/**
 	 * Do the actual indexing for the given model
 	 *
 	 * @param tx_rnbase_IModel $oModel
@@ -298,6 +352,25 @@ class tx_mksearch_indexer_TxNewsNews
 		$dfs = tx_mksearch_util_KeyValueFacet::getInstance();
 		$tagDfs = $dfs->buildFacetValues(array_keys($categories), array_values($categories));
 		$indexDoc->addField('categories_dfs_ms', $tagDfs, 'keyword');
+	}
+
+	/**
+	 * The conection to the db.
+	 *
+	 * @return Tx_Rnbase_Database_Connection
+	 */
+	protected function getDatabaseConnection()
+	{
+		return Tx_Rnbase_Database_Connection::getInstance();
+	}
+
+	/**
+	 * The index Service
+	 * @return tx_mksearch_service_internal_Index
+	 */
+	protected function getIntIndexService()
+	{
+		return tx_mksearch_util_ServiceRegistry::getIntIndexService();
 	}
 
 	/**
