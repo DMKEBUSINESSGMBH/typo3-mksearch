@@ -93,9 +93,10 @@ class tx_mksearch_indexer_TxNewsNews
 		$options
 	) {
 		if ($tableName == 'sys_category') {
-			// Eine Kategorie wurde verändert
-			// Alle News müssen neu indiziert werden.
 			$this->handleCategoryChanged($rawData);
+			return true;
+		} elseif ($tableName == 'tx_news_domain_model_tag') {
+			$this->handleTagChanged($rawData);
 			return true;
 		}
 
@@ -130,6 +131,18 @@ class tx_mksearch_indexer_TxNewsNews
 		foreach ($rows as $row) {
 			$srv->addRecordToIndex('tx_news_domain_model_news', (int) $row['uid']);
 		}
+	}
+
+	/**
+	 * Handle data change for category. All connected news should be updated
+	 *
+	 * @param array $catRecord
+	 *
+	 * @return void
+	 */
+	private function handleTagChanged($catRecord)
+	{
+		// @TODO: find all news for the tag and add to index.
 	}
 
 	/**

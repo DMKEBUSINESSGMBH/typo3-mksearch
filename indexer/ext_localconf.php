@@ -57,6 +57,7 @@ if (tx_rnbase_util_Extensions::isLoaded('news')) {
 			'tx_news_domain_model_news',
 			//related/monitored tables
 			'sys_category',
+			'tx_news_domain_model_tag',
 		)
 	);
 }
