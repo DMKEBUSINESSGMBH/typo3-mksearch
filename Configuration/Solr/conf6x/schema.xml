@@ -211,18 +211,53 @@
 			class="solr.TextField"> <analyzer class="org.apache.lucene.analysis.el.GreekAnalyzer"/>
 			</fieldType> -->
 
-		<!-- A text field that only splits on whitespace for exact matching of
-			words -->
+		<!-- A text field that only splits on whitespace for exact matching of words -->
 		<fieldType name="text_ws" class="solr.TextField"
 			positionIncrementGap="100">
 			<analyzer>
 				<tokenizer class="solr.WhitespaceTokenizerFactory" />
+				<filter class="solr.LowerCaseFilterFactory"/>
 			</analyzer>
 		</fieldType>
 
+
 		<!--
-			the same as full_text_german but without synonyms. can be used for example for highlighting
-			-->
+			the same as full_text but without synonyms. can be used for example for highlighting
+		-->
+		<fieldType name="text" class="solr.TextField"
+			positionIncrementGap="100">
+			<analyzer type="index">
+				<tokenizer class="solr.WhitespaceTokenizerFactory"/>
+				<filter class="solr.WordDelimiterFilterFactory"
+					generateWordParts="1"
+					generateNumberParts="1"
+					catenateWords="1"
+					catenateNumbers="1"
+					catenateAll="0"
+					splitOnCaseChange="1"
+					preserveOriginal="1"
+				/>
+				<filter class="solr.LowerCaseFilterFactory"/>
+				<filter class="solr.GermanNormalizationFilterFactory"/>
+				<filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
+			</analyzer>
+			<analyzer type="query">
+				<tokenizer class="solr.WhitespaceTokenizerFactory"/>
+				<filter class="solr.WordDelimiterFilterFactory"
+					generateWordParts="1"
+					generateNumberParts="1"
+					catenateWords="0"
+					catenateNumbers="0"
+					catenateAll="0"
+					splitOnCaseChange="1"
+					preserveOriginal="1"
+				/>
+				<filter class="solr.LowerCaseFilterFactory"/>
+				<filter class="solr.GermanNormalizationFilterFactory"/>
+				<filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
+			</analyzer>
+		</fieldType>
+
 		<fieldType name="text_german" class="solr.TextField"
 			positionIncrementGap="100">
 			<analyzer type="index">
@@ -259,7 +294,7 @@
 				-->
 				<filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_de.txt" format="snowball" />
 				<filter class="solr.GermanNormalizationFilterFactory"/>
-				<filter class="solr.SnowballPorterFilterFactory" language="German2" protected="protwords.txt"/>
+				<filter class="solr.SnowballPorterFilterFactory" language="German2" protected="lang/protwords_de.txt"/>
 				<filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
 			</analyzer>
 			<analyzer type="query">
@@ -277,7 +312,63 @@
 				<filter class="solr.LowerCaseFilterFactory"/>
 				<filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_de.txt" format="snowball" />
 				<filter class="solr.GermanNormalizationFilterFactory"/>
-				<filter class="solr.SnowballPorterFilterFactory" language="German2" protected="protwords.txt"/>
+				<filter class="solr.SnowballPorterFilterFactory" language="German2" protected="lang/protwords_de.txt"/>
+				<filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
+			</analyzer>
+		</fieldType>
+
+		<fieldType name="text_english" class="solr.TextField"
+			positionIncrementGap="100">
+			<analyzer type="index">
+				<tokenizer class="solr.WhitespaceTokenizerFactory"/>
+				<filter class="solr.WordDelimiterFilterFactory"
+					generateWordParts="1"
+					generateNumberParts="1"
+					catenateWords="1"
+					catenateNumbers="1"
+					catenateAll="0"
+					splitOnCaseChange="1"
+					preserveOriginal="1"
+				/>
+				<filter class="solr.LowerCaseFilterFactory"/>
+
+				<!--
+					minWordSize : only words longer than this get processed
+					minSubwordSize : only subwords longer than this get to the output stream
+					maxSubwordSize : only subwords shorter than this get to the output stream
+					onlyLongestMatch : add only the longest matching subword to the stream
+				-->
+				<filter class="solr.DictionaryCompoundWordTokenFilterFactory"
+					dictionary="lang/dictionary_en.txt"
+					minWordSize="5"
+					minSubwordSize="3"
+					maxSubwordSize="30"
+					onlyLongestMatch="false"
+				/>
+				<!-- Case insensitive stop word removal.
+					add enablePositionIncrements=true in both the index and query
+					analyzers to leave a 'gap' for more accurate phrase queries.
+				-->
+				<filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_en.txt" format="snowball" />
+				<filter class="solr.GermanNormalizationFilterFactory"/>
+				<filter class="solr.SnowballPorterFilterFactory" language="English" protected="lang/protwords_en.txt"/>
+				<filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
+			</analyzer>
+			<analyzer type="query">
+				<tokenizer class="solr.WhitespaceTokenizerFactory"/>
+				<filter class="solr.WordDelimiterFilterFactory"
+					generateWordParts="1"
+					generateNumberParts="1"
+					catenateWords="0"
+					catenateNumbers="0"
+					catenateAll="0"
+					splitOnCaseChange="1"
+					preserveOriginal="1"
+				/>
+				<filter class="solr.LowerCaseFilterFactory"/>
+				<filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_en.txt" format="snowball" />
+				<filter class="solr.GermanNormalizationFilterFactory"/>
+				<filter class="solr.SnowballPorterFilterFactory" language="English" protected="lang/protwords_en.txt"/>
 				<filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
 			</analyzer>
 		</fieldType>
@@ -341,7 +432,7 @@
 				-->
 				<filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_de.txt" format="snowball" />
 				<filter class="solr.GermanNormalizationFilterFactory"/>
-				<filter class="solr.SnowballPorterFilterFactory" language="German2" protected="protwords.txt"/>
+				<filter class="solr.SnowballPorterFilterFactory" language="German2" protected="lang/protwords_de.txt"/>
 				<filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
 			</analyzer>
 			<analyzer type="query">
@@ -359,7 +450,57 @@
 				<filter class="solr.LowerCaseFilterFactory"/>
 				<filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_de.txt" format="snowball" />
 				<filter class="solr.GermanNormalizationFilterFactory"/>
-				<filter class="solr.SnowballPorterFilterFactory" language="German2" protected="protwords.txt"/>
+				<filter class="solr.SnowballPorterFilterFactory" language="German2" protected="lang/protwords_de.txt"/>
+				<filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
+			</analyzer>
+		</fieldType>
+		<fieldType name="full_text_english" class="solr.TextField" positionIncrementGap="100">
+			<analyzer type="index">
+				<tokenizer class="solr.WhitespaceTokenizerFactory"/>
+				<filter class="solr.WordDelimiterFilterFactory"
+					generateWordParts="1"
+					generateNumberParts="1"
+					catenateWords="1"
+					catenateNumbers="1"
+					catenateAll="0"
+					splitOnCaseChange="1"
+					preserveOriginal="1"
+				/>
+				<filter class="solr.LowerCaseFilterFactory"/>
+				<filter
+					class="solr.SynonymFilterFactory"
+					synonyms="lang/synonyms_en.txt"
+					ignoreCase="true"
+					expand="true"
+					tokenizerFactory="solr.KeywordTokenizerFactory"
+				/>
+				<filter class="solr.DictionaryCompoundWordTokenFilterFactory"
+					dictionary="lang/dictionary_en.txt"
+					minWordSize="5"
+					minSubwordSize="3"
+					maxSubwordSize="30"
+					onlyLongestMatch="false"
+				/>
+				<filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_en.txt" format="snowball" />
+				<filter class="solr.GermanNormalizationFilterFactory"/>
+				<filter class="solr.SnowballPorterFilterFactory" language="English" protected="lang/protwords_en.txt"/>
+				<filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
+			</analyzer>
+			<analyzer type="query">
+				<tokenizer class="solr.WhitespaceTokenizerFactory"/>
+				<filter class="solr.WordDelimiterFilterFactory"
+					generateWordParts="1"
+					generateNumberParts="1"
+					catenateWords="0"
+					catenateNumbers="0"
+					catenateAll="0"
+					splitOnCaseChange="1"
+					preserveOriginal="1"
+				/>
+				<filter class="solr.LowerCaseFilterFactory"/>
+				<filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_en.txt" format="snowball" />
+				<filter class="solr.GermanNormalizationFilterFactory"/>
+				<filter class="solr.SnowballPorterFilterFactory" language="English" protected="lang/protwords_en.txt"/>
 				<filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
 			</analyzer>
 		</fieldType>
@@ -388,8 +529,7 @@
 					generateWordParts="0" generateNumberParts="0" catenateWords="1"
 					catenateNumbers="1" catenateAll="0" />
 				<filter class="solr.LowerCaseFilterFactory" />
-				<filter class="solr.SnowballPorterFilterFactory" language="English"
-					protected="protwords.txt" />
+				<filter class="solr.SnowballPorterFilterFactory" language="English" protected="lang/protwords_en.txt" />
 				<!-- this filter can remove any duplicate tokens that appear at the same
 					position - sometimes possible with WordDelimiterFilter in conjuncton with
 					stemming. -->
@@ -684,11 +824,6 @@
 		<field name="tstamp" type="int" indexed="true" stored="true" />
 		<field name="siteRootPage" type="int" indexed="true" stored="true" />
 
-		<!-- Common metadata fields, named specifically to match up with SolrCell
-			metadata when parsing rich documents such as Word, PDF. Some fields are multiValued
-			only because Tika currently may return multiple values for them. -->
-		<field name="title" type="text_german" indexed="true" stored="true"
-			multiValued="true" />
 		<field name="subject" type="text_german" indexed="true" stored="true" />
 		<field name="description" type="text_german" indexed="true" stored="true" />
 		<field name="comments" type="text_german" indexed="true" stored="true" />
@@ -699,21 +834,13 @@
 		<field name="last_modified" type="date" indexed="true" stored="true" />
 		<field name="links" type="strings" indexed="true" stored="true" multiValued="true" />
 
-
-		<!-- catchall field, containing all other searchable text fields (implemented
-			via copyField further on in this schema -->
-		<field name="fulltext" type="full_text_german" indexed="true" stored="false"
-			multiValued="true" />
-
 		<!-- catchall text field that indexes tokens both normally and in reverse
 			for efficient leading wildcard queries. -->
-		<field name="text_rev" type="text_rev" indexed="true" stored="false"
-			multiValued="true" />
+		<field name="text_rev" type="text_rev" indexed="true" stored="false" multiValued="true" />
 
 		<!-- Uncommenting the following will create a "timestamp" field using a
 			default value of "NOW" to indicate when each document was indexed. -->
-		<field name="timestamp" type="date" indexed="true" stored="true"
-			default="NOW" multiValued="false" />
+		<field name="timestamp" type="date" indexed="true" stored="true" default="NOW" multiValued="false" />
 
 		<!-- common TYPO3 fields -->
 		<field name="deleted" type="int" indexed="true" stored="true" />
@@ -721,24 +848,49 @@
 		<field name="fe_groups" type="int" indexed="true" stored="false" />
 		<field name="pid" type="int" indexed="true" stored="true" />
 		<field name="CType" type="string" indexed="true" stored="true" />
-		<field name="content" type="text_german" indexed="true" stored="true" />
 		<field name="abstract" type="text_german" indexed="true" stored="true" />
 
-		<!-- Sortierung. see solrconfig-x.xml updateRequestProcessorChain name="clone-for-sort-title" -->
-   		<!-- <field name="sort_title" type="text_sort" indexed="true" stored="false" /> -->
-
-		<!-- FIXME: Bitte ein ordentliches Datumsformat verwenden!! -->
 		<field name="datetime" type="date" indexed="true" stored="true" />
 
-		<!-- fulltext search. copy all fields to "text" which should be used for
-			a fulltext search -->
-		<copyField source="title" dest="fulltext" />
-		<copyField source="content" dest="fulltext" />
+		<!--  searchable fields in de and en -->
+		<field name="title" type="text" indexed="true" stored="true" multiValued="false" />
+
+		<!--  make title sortable -->
+		<field name="title_sort" type="string" indexed="true" stored="false" multiValued="false" />
+ 		<copyField source="title" dest="title_sort" />
+
+		<field name="content" type="text" indexed="true" stored="true" />
+
+		<field name="fulltext" type="text" indexed="true" stored="false" multiValued="true" />
+
+		<!-- create and copy language fields -->
+		<field name="title_german" type="text_german" indexed="true" stored="false" multiValued="false" />
+		<field name="title_english" type="text_english" indexed="true" stored="false" multiValued="false" />
+		<copyField source="title" dest="title_german" />
+		<copyField source="title" dest="title_english" />
+
+		<field name="content_german" type="text_german" indexed="true" stored="false" />
+		<field name="content_english" type="text_english" indexed="true" stored="false" />
+		<copyField source="content" dest="content_german" />
+		<copyField source="content" dest="content_english" />
+
+		<field name="fulltext_german" type="full_text_german" indexed="true" stored="false" multiValued="true" />
+		<field name="fulltext_english" type="full_text_english" indexed="true" stored="false" multiValued="true" />
+		<copyField source="fulltext" dest="fulltext_german" />
+		<copyField source="fulltext" dest="fulltext_english" />
+
+		<!-- some copy fields for fulltext search -->
+
+		<copyField source="*_t" dest="fulltext_german"/>
+		<copyField source="*_t" dest="fulltext_english"/>
+		<copyField source="*_mt" dest="fulltext_german"/>
+		<copyField source="*_mt" dest="fulltext_english"/>
 
 		<!-- Autocomplete. copy all fields to "text_autocomplete_phrases" which should be used
 			for a autocomplete search -->
 		<field name="text_autocomplete_phrases" type="text_autocomplete" indexed="true" stored="false" multiValued="true" />
 		<copyField source="title" dest="text_autocomplete_phrases" />
+		<copyField source="mkkeywords_tag_names_ms" dest="text_autocomplete_phrases" />
 
 		<!-- Dynamic field definitions. If a field name is not found, dynamicFields
 			will be used if the name matches any of the patterns. RESTRICTION: the glob-like
@@ -746,8 +898,7 @@
 			EXAMPLE: name="*_i" will match any field ending in _i (like myid_i, z_i)
 			Longer patterns will be matched first. if equal size patterns both match,
 			the first appearing in the schema will be used. -->
-		<dynamicField name="*_i" type="int" indexed="true"
-			stored="true" />
+		<dynamicField name="*_i" type="int" indexed="true" stored="true" />
 		<!--
 			highlighting for (dynamic) string fields will not work.
 			in this case the type *_s should not be string but text. this should
@@ -804,9 +955,6 @@
    		<!-- <copyField source="organizer_s" dest="fulltext"/>
    		<copyField source="organizer_link_s" dest="fulltext"/>
    		<copyField source="location_s" dest="fulltext"/>
-   		<copyField source="location_name_s" dest="fulltext"/>
-   		<copyField source="location_street_s" dest="fulltext"/>
-   		<copyField source="location_city_s" dest="fulltext"/>
    		<copyField source="description_s" dest="fulltext"/>
    		<copyField source="calendar_title_s" dest="fulltext"/>
    		<copyField source="category_title_ms" dest="fulltext"/> -->
