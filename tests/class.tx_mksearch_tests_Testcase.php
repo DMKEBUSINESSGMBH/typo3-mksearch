@@ -179,7 +179,7 @@ abstract class tx_mksearch_tests_Testcase
 		self::assertArrayHasKey(
 			$fieldName,
 			$indexData,
-			__LINE__ . ': $indexData dows not contain the required field "' . $fieldName . '"'
+			__LINE__ . ': $indexData does not contain the required field "' . $fieldName . '"'
 		);
 		$field = $indexData[$fieldName];
 		self::assertInstanceOf(
