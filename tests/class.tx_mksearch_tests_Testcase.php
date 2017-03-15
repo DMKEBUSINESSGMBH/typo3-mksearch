@@ -153,7 +153,27 @@ abstract class tx_mksearch_tests_Testcase
 	}
 
 	/**
-	 * checks a index doc, if there was a correct value
+	 * Checks a index doc, if there was a correct value
+	 *
+	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
+ 	 * @param array $fields Containig field value pairs
+	 */
+	public static function assertIndexDocHasFields(
+		$indexDoc,
+		$fields
+	) {
+		foreach ($fields as $field => $value) {
+			static::assertIndexDocHasField(
+				$indexDoc,
+				$field,
+				$value
+			);
+		}
+	}
+
+	/**
+	 * Checks a index doc, if there was a correct value
+	 *
 	 * @param tx_mksearch_interface_IndexerDocument $indexDoc
 	 * @param string $fieldName
 	 * @param string $expectedValue
