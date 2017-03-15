@@ -27,16 +27,31 @@ tx_rnbase::load('tx_rnbase_util_Strings');
 /**
  * Miscellaneous methods
  */
-class tx_mksearch_util_Misc {
+class tx_mksearch_util_Misc
+{
 	/**
 	 * Convert a Timestamp to a ISO formatted DateTime string in GMT time zone
+	 *
+	 * @param \DateTime $datetime
+	 *
+	 * @return string in format Y-m-d\TH:i:s\Z
+	 */
+	public static function getIsoDate(\DateTime $datetime) {
+		return $datetime->format('Y-m-d\TH:i:s\Z');
+	}
+
+	/**
+	 * Convert a Timestamp to a ISO formatted DateTime string in GMT time zone
+	 *
 	 * @param int $tstamp
 	 * @param int $offset
+	 *
 	 * @return string in format Y-m-d\TH:i:s\Z
 	 */
 	public static function getISODateFromTimestamp($tstamp, $offset=0) {
-		$dt = new DateTime('@'.($tstamp+$offset));
-		return $dt->format('Y-m-d\TH:i:s\Z');
+		return self::getIsoDate(
+			new \DateTime('@' . ($tstamp + $offset))
+		);
 	}
 
 	/**
