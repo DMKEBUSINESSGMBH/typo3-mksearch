@@ -1,6 +1,23 @@
 Changelog
 =========
 
+2.0.25
+------
+
+-   bugfix if extensions depend on templavoila
+-   bugfix if cal isn't installed
+-   bugfix autoloading in T3 >= 6.2
+-   bugfix cal indexer in T3 7.6
+-   bugfix page indexer
+-   support rnbase domain models
+-   support reindexing deleted elements recursively
+-   new config for solr 6.2
+-   new feature grouped search in solr
+-   new feature charbrowser for solr
+-   new indexer for gridelements
+-   new indexer for news
+-   refactor several code and tests
+
 2.0.8
 -----
 
