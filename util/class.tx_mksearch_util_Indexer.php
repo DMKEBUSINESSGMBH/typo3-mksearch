@@ -575,4 +575,35 @@ class tx_mksearch_util_Indexer {
 		}
 		return FALSE;
 	}
+
+	/**
+	 * Initializes the tsfe for the tv elements
+	 *
+	 * @param int $pid
+	 *
+	 * @return void
+	 */
+	public static function prepareTSFE($pid)
+	{
+		tx_rnbase::load('tx_rnbase_util_Misc');
+		$tsfe = tx_rnbase_util_Misc::prepareTSFE(
+			array(
+				'force' => true,
+				'pid'	=> $pid
+			)
+		);
+
+		// add cobject for some plugins like tt_news
+		$tsfe->cObj = tx_rnbase::makeInstance(
+			tx_rnbase_util_Typo3Classes::getContentObjectRendererClass()
+		);
+
+		tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
+		$rootlineByPid = tx_mksearch_service_indexer_core_Config::getRootLine($pid);
+
+		// disable cache for be indexing!
+		$tsfe->no_cache = true;
+		$tsfe->tmpl->start($rootlineByPid);
+		$tsfe->rootLine = $rootlineByPid;
+	}
 }

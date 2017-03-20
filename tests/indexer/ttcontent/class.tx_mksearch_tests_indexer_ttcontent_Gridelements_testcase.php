@@ -29,7 +29,7 @@ tx_rnbase::load('tx_mksearch_indexer_ttcontent_Gridelements');
  * Gridelements indexer testcase
  *
  * @package TYPO3
- * @subpackage DMK\Mkleipzig
+ * @subpackage mksearch
  * @author Michael Wagner
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later

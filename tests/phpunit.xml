@@ -8,9 +8,10 @@
 	<testsuites>
 		<testsuite name="MKSearchTestSuite">
 			<directory suffix="testcase.php">./</directory>
+			<directory suffix="Test.php">./</directory>
 		</testsuite>
 	</testsuites>
-	
+
 	<groups>
 	  <exclude>
 	    <group>dummytest</group>

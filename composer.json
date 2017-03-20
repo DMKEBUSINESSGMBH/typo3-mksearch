@@ -58,6 +58,9 @@
 			"tests/",
 			"util/",
 			"view/"
-		]
+		],
+		"psr-4" : {
+			"DMK\\Mksearch\\" : "Classes"
+		}
 	}
 }

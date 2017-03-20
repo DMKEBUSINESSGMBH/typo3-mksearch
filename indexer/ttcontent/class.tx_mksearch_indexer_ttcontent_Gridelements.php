@@ -23,12 +23,13 @@
  ***************************************************************/
 
 tx_rnbase::load('tx_mksearch_indexer_ttcontent_Normal');
+tx_rnbase::load('tx_mksearch_util_Indexer');
 
 /**
  * Gridelements indexer
  *
  * @package TYPO3
- * @subpackage DMK\Mkleipzig
+ * @subpackage mksearch
  * @author Michael Wagner
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
@@ -152,7 +153,7 @@ class tx_mksearch_indexer_ttcontent_Gridelements
 	protected function getGridelementElementContent(
 		array $record, array $options
 	) {
-		$this->initTsForFrontend($record['pid']);
+		tx_mksearch_util_Indexer::prepareTSFE($record['pid']);
 		$uid = $this->getUid('tt_content', $record, array());
 
 		$allowedCTypes = $this->getAllowedCTypes($options);
@@ -181,36 +182,6 @@ class tx_mksearch_indexer_ttcontent_Gridelements
 			array(), ''
 		);
 		return $content;
-	}
-
-	/**
-	 * Initializes the tsfe for the tv elements
-	 *
-	 * @param int $pid
-	 *
-	 * @return void
-	 */
-	private function initTsForFrontend($pid)
-	{
-		$tsfe = tx_rnbase_util_Misc::prepareTSFE(
-			array(
-				'force' => true,
-				'pid'	=> $pid
-			)
-		);
-
-		// add cobject for some plugins like tt_news
-		$tsfe->cObj = tx_rnbase::makeInstance(
-			tx_rnbase_util_Typo3Classes::getContentObjectRendererClass()
-		);
-
-		tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
-		$rootlineByPid = tx_mksearch_service_indexer_core_Config::getRootLine($pid);
-
-		// disable cache for be indexing!
-		$tsfe->no_cache = true;
-		$tsfe->tmpl->start($rootlineByPid);
-		$tsfe->rootLine = $rootlineByPid;
 	}
 
 	/**

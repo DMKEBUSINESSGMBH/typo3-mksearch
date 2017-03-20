@@ -32,6 +32,12 @@ tx_rnbase::load('tx_mksearch_model_internal_Composite');
  * Service for accessing index models from database
  */
 class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Base {
+
+	/**
+	 * @var boolean
+	 */
+	private static $indexingInProgress = FALSE;
+
 	/**
 	 * Search class of this service
 	 *
@@ -367,6 +373,8 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 
 		tx_rnbase_util_Logger::debug('[INDEXQUEUE] Found '.count($indices) . ' indices for update', 'mksearch');
 
+		self::setSignalThatIndexingIsInProgress();
+
 		try {
 			// Loop through all active indices, collecting all configurations
 			foreach ($indices as $index) {
@@ -491,8 +499,11 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 					'Queue-Items'=> $data
 				)
 			);
+			self::removeSignalThatIndexingIsInProgress();
 			return false;
 		}
+
+		self::removeSignalThatIndexingIsInProgress();
 
 		return true;
 	}
@@ -658,6 +669,27 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 		return $secondsToKeepQueueEntries ? $secondsToKeepQueueEntries : $thirtyDaysInSeconds;
 	}
 
+
+	/**
+	 * @return void
+	 */
+	private static function setSignalThatIndexingIsInProgress() {
+		self::$indexingInProgress = TRUE;
+	}
+
+	/**
+	 * @return boolean
+	 */
+	public static function isIndexingInProgress() {
+		return self::$indexingInProgress;
+	}
+
+	/**
+	 * @return void
+	 */
+	private static function removeSignalThatIndexingIsInProgress() {
+		self::$indexingInProgress = FALSE;
+	}
 
 }
 

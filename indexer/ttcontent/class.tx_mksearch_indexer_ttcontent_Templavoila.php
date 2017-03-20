@@ -31,6 +31,7 @@
  */
 
 tx_rnbase::load('tx_mksearch_indexer_ttcontent_Normal');
+tx_rnbase::load('tx_mksearch_util_Indexer');
 
 /**
  * takes care of tt_content with templavoila support.
@@ -210,7 +211,7 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
 	protected function getTemplavoilaElementContent() {
 		$ttContentModel = $this->getModelToIndex();
 		$record = $ttContentModel->getRecord();
-		$this->initTsForFrontend($record['pid']);
+		tx_mksearch_util_Indexer::prepareTSFE($record['pid']);
 		$this->adjustIncludeLibsPathForBe();
 
 		$templavoilaPlugin = tx_rnbase::makeInstance('tx_templavoila_pi1');
@@ -219,34 +220,6 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
 		$templavoilaPlugin->cObj->currentRecord = 'tt_content:' . $ttContentModel->getUid();
 
 		return $templavoilaPlugin->renderElement($record, 'tt_content');
-	}
-
-	/**
-	 * initializes the tsfe for the tv elements
-	 *
-	 * @param int $pid
-	 * @return void
-	 */
-	private function initTsForFrontend($pid) {
-		$tsfe = tx_rnbase_util_Misc::prepareTSFE(
-			array(
-				'force' => TRUE,
-				'pid'	=> $pid
-			)
-		);
-
-		// add cobject for some plugins like tt_news
-		$tsfe->cObj = tx_rnbase::makeInstance(
-			tx_rnbase_util_Typo3Classes::getContentObjectRendererClass()
-		);
-
-		tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
-		$rootlineByPid = tx_mksearch_service_indexer_core_Config::getRootLine($pid);
-
-			// disable cache for be indexing!
-		$tsfe->no_cache = TRUE;
-		$tsfe->tmpl->start($rootlineByPid);
-		$tsfe->rootLine = $rootlineByPid;
 	}
 
 	/**
