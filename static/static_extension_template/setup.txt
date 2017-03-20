@@ -20,7 +20,10 @@ lib.mksearch.pagebrowser {
   maxPages = 11
   pagefloat = CENTER
   hideIfSinglePage = 1
-  link.useKeepVars = 1
+  link {
+  	useKeepVars = 1
+  	noHash = 1
+  }
 }
 
 lib.mksearch.currentSearchTerm = TEXT
