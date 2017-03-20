@@ -715,6 +715,8 @@ plugin.tx_mksearch {
 						data = TSFE:id
 						insertData = 1
 					}
+
+					noHash = 1
 				}
 				### Einschränkung rückgängig machen
 				reset.useKeepVars = 1
