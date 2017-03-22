@@ -71,3 +71,10 @@ tx_rnbase::load('tx_rnbase_util_Strings');
 tx_rnbase::load('tx_rnbase_util_Arrays');
 tx_rnbase::load('tx_rnbase_util_Files');
 tx_rnbase::load('tx_rnbase_util_Typo3Classes');
+
+tx_rnbase::load('Tx_Rnbase_Utility_Cache');
+Tx_Rnbase_Utility_Cache::addExcludedParametersForCacheHash(array(
+	'mksearch[pb-search-pointer]',
+	'mksearch[submit]',
+	'mksearch[term]',
+));
