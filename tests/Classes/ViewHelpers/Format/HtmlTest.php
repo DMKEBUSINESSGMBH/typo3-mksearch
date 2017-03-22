@@ -23,7 +23,7 @@ namespace DMK\Mksearch\Tests\ViewHelpers\Format;
  *
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-
+\tx_rnbase::load('tx_rnbase_util_TYPO3');
 \tx_rnbase::load('tx_mksearch_tests_Testcase');
 
 /**
@@ -111,13 +111,16 @@ class HtmlViewHelperTest extends \tx_mksearch_tests_Testcase
 	 * @return DMK\Mksearch\ViewHelpers\Format\HtmlViewHelper
 	 */
 	protected function getViewHelper() {
-		$viewHelper = \tx_rnbase::makeInstance('\\TYPO3\\CMS\\Fluid\\ViewHelpers\\Format\\HtmlViewHelper');
-		$configurationManager = $this->getMock(
-			'\\TYPO3\\CMS\\Extbase\\Configuration\\ConfigurationManager'
-		);
 
-		$viewHelper->injectConfigurationManager($configurationManager);
+		if (\tx_rnbase_util_TYPO3::isTYPO70OrHigher()) {
+			
+		$viewHelper = \tx_rnbase::makeInstance('TYPO3\\CMS\\Fluid\\ViewHelpers\\Format\\HtmlViewHelper');
 
+		} else {
+			$viewHelper = \tx_rnbase::makeInstance('\\TYPO3\\CMS\\Fluid\\ViewHelpers\\Format\\HtmlViewHelper');
+			$configurationManager = $this->getMock('\\TYPO3\\CMS\\Extbase\\Configuration\\ConfigurationManager');
+			$viewHelper->injectConfigurationManager($configurationManager);
+		}
 		return $viewHelper;
 	}
 }
