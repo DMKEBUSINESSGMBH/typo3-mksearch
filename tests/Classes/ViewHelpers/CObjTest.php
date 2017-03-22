@@ -70,7 +70,7 @@ class CObjectViewHelperTest extends \tx_mksearch_tests_Testcase
 	public function testSimulateFrontendEnvironmentWhenMksearchIndexingIsNotInProgress() {
 		$GLOBALS['TSFE'] = 'test';
 
-		$viewHelper = $this->getViewHelper();		
+		$viewHelper = $this->getViewHelper();
 		$this->callInaccessibleMethod($viewHelper, 'simulateFrontendEnvironment');
 		self::assertInstanceOf('stdCLass', $GLOBALS['TSFE']);
 	}
@@ -84,7 +84,7 @@ class CObjectViewHelperTest extends \tx_mksearch_tests_Testcase
 		$property->setValue(null, TRUE);
 
 		$viewHelper = $this->getViewHelper();
-		$property = new \ReflectionProperty('\\TYPO3\\CMS\\Fluid\\ViewHelpers\\CObjectViewHelper', 'tsfeBackup');
+		$property = new \ReflectionProperty('TYPO3\\CMS\\Fluid\\ViewHelpers\\CObjectViewHelper', 'tsfeBackup');
 		$property->setAccessible(TRUE);
 		$property->setValue($viewHelper, 'tsfeBackup');
 
@@ -100,26 +100,19 @@ class CObjectViewHelperTest extends \tx_mksearch_tests_Testcase
 		$GLOBALS['TSFE'] = 'test';
 
 		$viewHelper = $this->getViewHelper();
-		$property = new \ReflectionProperty('\\TYPO3\\CMS\\Fluid\\ViewHelpers\\CObjectViewHelper', 'tsfeBackup');
+		$property = new \ReflectionProperty('TYPO3\\CMS\\Fluid\\ViewHelpers\\CObjectViewHelper', 'tsfeBackup');
 		$property->setAccessible(TRUE);
 		$property->setValue($viewHelper, 'tsfeBackup');
 
 		$this->callInaccessibleMethod($viewHelper, 'resetFrontendEnvironment');
 		self::assertSame('tsfeBackup', $GLOBALS['TSFE']);
 	}
-	
+
 	/**
 	 *
 	 * @return DMK\Mksearch\ViewHelpers\CObjectViewHelper
 	 */
 	protected function getViewHelper() {
-		if (\tx_rnbase_util_TYPO3::isTYPO70OrHigher()) {
-	
-			$viewHelper = \tx_rnbase::makeInstance('TYPO3\\CMS\\Fluid\\ViewHelpers\\CObjectViewHelper');
-		} else {
-			$viewHelper = \tx_rnbase::makeInstance('\\TYPO3\\CMS\\Fluid\\ViewHelpers\\CObjectViewHelper');
-		}
-	
-		return $viewHelper;
+		return \tx_rnbase::makeInstance('TYPO3\\CMS\\Fluid\\ViewHelpers\\CObjectViewHelper');
 	}
 }

@@ -83,7 +83,7 @@ class HtmlViewHelperTest extends \tx_mksearch_tests_Testcase
 		$property->setValue(null, TRUE);
 
 		$viewHelper = $this->getViewHelper();
-		$property = new \ReflectionProperty('\\TYPO3\\CMS\\Fluid\\ViewHelpers\\Format\\HtmlViewHelper', 'tsfeBackup');
+		$property = new \ReflectionProperty('TYPO3\\CMS\\Fluid\\ViewHelpers\\Format\\HtmlViewHelper', 'tsfeBackup');
 		$property->setAccessible(TRUE);
 		$property->setValue($viewHelper, 'tsfeBackup');
 
@@ -99,7 +99,7 @@ class HtmlViewHelperTest extends \tx_mksearch_tests_Testcase
 		$GLOBALS['TSFE'] = 'test';
 
 		$viewHelper = $this->getViewHelper();
-		$property = new \ReflectionProperty('\\TYPO3\\CMS\\Fluid\\ViewHelpers\\Format\\HtmlViewHelper', 'tsfeBackup');
+		$property = new \ReflectionProperty('TYPO3\\CMS\\Fluid\\ViewHelpers\\Format\\HtmlViewHelper', 'tsfeBackup');
 		$property->setAccessible(TRUE);
 		$property->setValue($viewHelper, 'tsfeBackup');
 
@@ -111,14 +111,9 @@ class HtmlViewHelperTest extends \tx_mksearch_tests_Testcase
 	 * @return DMK\Mksearch\ViewHelpers\Format\HtmlViewHelper
 	 */
 	protected function getViewHelper() {
-
-		if (\tx_rnbase_util_TYPO3::isTYPO70OrHigher()) {
-			
 		$viewHelper = \tx_rnbase::makeInstance('TYPO3\\CMS\\Fluid\\ViewHelpers\\Format\\HtmlViewHelper');
-
-		} else {
-			$viewHelper = \tx_rnbase::makeInstance('\\TYPO3\\CMS\\Fluid\\ViewHelpers\\Format\\HtmlViewHelper');
-			$configurationManager = $this->getMock('\\TYPO3\\CMS\\Extbase\\Configuration\\ConfigurationManager');
+		if (!\tx_rnbase_util_TYPO3::isTYPO70OrHigher()) {
+			$configurationManager = $this->getMock('TYPO3\\CMS\\Extbase\\Configuration\\ConfigurationManager');
 			$viewHelper->injectConfigurationManager($configurationManager);
 		}
 		return $viewHelper;
