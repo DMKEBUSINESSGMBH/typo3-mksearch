@@ -141,14 +141,18 @@ class tx_mksearch_indexer_Page extends tx_mksearch_indexer_Base {
 	/**
 	 * Returns the model to be indexed
 	 *
-	 * @param array $aRawData
+	 * @param array $rawData
+	 * @param string $tableName
+	 * @param array $options
 	 *
 	 * @return tx_mksearch_model_irfaq_Question
 	 */
-	protected function createModel(array $aRawData) {
-		$oModel = tx_rnbase::makeInstance('tx_rnbase_model_Base', $aRawData);
-
-		return $oModel;
+	protected function createModel(
+		array $rawData,
+		$tableName = null,
+		$options = array()
+	) {
+		return tx_rnbase::makeInstance('tx_rnbase_model_Base', $rawData);
 	}
 
 	/**
