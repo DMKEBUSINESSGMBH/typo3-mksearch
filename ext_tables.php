@@ -34,11 +34,26 @@ if (TYPO3_MODE == 'BE') {
 	# Add plugin wizards
 	$TBE_MODULES_EXT['xMOD_db_new_content_el']['addElClasses']['tx_mksearch_util_wizicon'] = tx_rnbase_util_Extensions::extPath($_EXTKEY).'util/class.tx_mksearch_util_Wizicon.php';
 
-		// @TODO: add storage folder icon!
-	if (!tx_rnbase_util_TYPO3::isTYPO80OrHigher()) {
-		// // icon für sysfolder registrieren
-		tx_rnbase::load('tx_rnbase_util_TYPO3');
-		$TCA['pages']['columns']['module']['config']['items'][] = array('MK Search', $_EXTKEY, $_EXT_RELPATH.'icons/icon_folder.gif');
+	// icon für sysfolder registrieren
+	tx_rnbase::load('tx_rnbase_util_TYPO3');
+	if (tx_rnbase_util_TYPO3::isTYPO80OrHigher()) {
+// 		\TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
+		$GLOBALS['TCA']['pages']['columns']['module']['config']['items'][] = array(
+			'MK Search',
+			'mksearch',
+			'apps-pagetree-folder-contains-mksearch'
+		);
+		Tx_Rnbase_Backend_Utility_Icons::getIconRegistry()->registerIcon(
+			'apps-pagetree-folder-contains-mksearch',
+			'TYPO3\\CMS\Core\\Imaging\\IconProvider\\BitmapIconProvider',
+			array('source' => 'EXT:mksearch/icons/icon_folder.gif')
+		);
+	} else {
+		$GLOBALS['TCA']['pages']['columns']['module']['config']['items'][] = array(
+			'MK Search',
+			'mksearch',
+			$_EXT_RELPATH.'icons/icon_folder.gif'
+		);
 		if(tx_rnbase_util_TYPO3::isTYPO44OrHigher()) {
 			$spriteManager = tx_rnbase_util_Typo3Classes::getSpriteManagerClass();
 			$spriteManager::addTcaTypeIcon('pages', 'contains-'.$_EXTKEY, $_EXT_RELPATH.'icons/icon_folder.gif');
