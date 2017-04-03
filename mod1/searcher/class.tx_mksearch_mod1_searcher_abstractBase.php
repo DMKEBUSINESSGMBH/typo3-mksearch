@@ -258,13 +258,20 @@ abstract class tx_mksearch_mod1_searcher_abstractBase {
 		// else
 		tx_rnbase::load('tx_mksearch_mod1_util_Template');
 		$aColumns = $this->getColumns( $this->getDecorator( $this->getModule() ) );
-		tx_rnbase::load('tx_rnbase_mod_Tables');
-		$arr = tx_rnbase_mod_Tables::prepareTable($items, $aColumns, $this->getFormTool(), $this->getOptions());
-		$out = $this->getModule()->getDoc()->table(
-				$arr[0],
-				tx_mksearch_mod1_util_Template::getTableLayout($aColumns, $this->getModule())
-			);
+
+		/* @var $tables Tx_Rnbase_Backend_Utility_Tables */
+		$tables = tx_rnbase::makeInstance('Tx_Rnbase_Backend_Utility_Tables');
+		list ($tableData, $tableLayout) = $tables->prepareTable(
+			$items,
+			$aColumns,
+			$this->getFormTool(),
+			$this->getOptions()
+		);
+
+		$out = $tables->buildTable($tableData, $tableLayout);
+
 		$content .= $out;
+
 		return $out;
 	}
 

@@ -145,14 +145,16 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc {
 		);
 
 		if (!empty($aDefinedTables)) {
-			tx_rnbase::load('tx_rnbase_mod_Tables');
-			$arr = tx_rnbase_mod_Tables::prepareTable(
+			/* @var $tables Tx_Rnbase_Backend_Utility_Tables */
+			$tables = tx_rnbase::makeInstance('Tx_Rnbase_Backend_Utility_Tables');
+			list ($tableData, $tableLayout) = $tables->prepareTable(
 				$aDefinedTables,
 				$columns,
 				$this->getModule()->getFormTool(),
 				array()
 			);
-			$content = $this->getModule()->getDoc()->table($arr[0]);
+
+			$content = $tables->buildTable($tableData, $tableLayout);
 		}
 		else {
 			$content = '<p><strong>###LABEL_NO_INDEXERS_FOUND###</strong></p><br/>';
