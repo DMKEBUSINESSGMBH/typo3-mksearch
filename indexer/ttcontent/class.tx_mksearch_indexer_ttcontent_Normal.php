@@ -440,10 +440,12 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 	 * @return tx_mksearch_interface_IndexerDocument
 	 */
 	protected function indexEnableColumns(
-		tx_rnbase_IModel $model, $tableName,
-		tx_mksearch_interface_IndexerDocument $indexDoc
+		tx_rnbase_IModel $model,
+		$tableName,
+		tx_mksearch_interface_IndexerDocument $indexDoc,
+		$indexDocFieldsPrefix = ''
 	) {
-		$indexDoc = parent::indexEnableColumns($model, $tableName, $indexDoc);
+		$indexDoc = parent::indexEnableColumns($model, $tableName, $indexDoc, $indexDocFieldsPrefix);
 
 		$page = $this->getPageContent($model->record['pid']);
 		$pageModel = tx_rnbase::makeInstance('tx_rnbase_model_base', $page);
@@ -474,7 +476,9 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base {
 	 * {@inheritDoc}
 	 * @see tx_mksearch_indexer_Base::getGroupFieldValue()
 	 */
-	protected function getGroupFieldValue() {
+	protected function getGroupFieldValue(
+		tx_mksearch_interface_IndexerDocument $indexDoc
+	) {
 		$parts = $this->getContentType();
 		$parts[] = $this->getModelToIndex()->getPid();
 
