@@ -47,6 +47,7 @@
 			"filter/",
 			"hooks/",
 			"indexer/",
+			"interface/",
 			"lib/",
 			"marker/",
 			"mod1/",
@@ -55,7 +56,6 @@
 			"search/",
 			"service/",
 			"signalSlotDispatcher/",
-			"tests/",
 			"util/",
 			"view/"
 		],
