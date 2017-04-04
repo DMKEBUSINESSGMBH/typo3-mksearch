@@ -27,7 +27,7 @@ namespace DMK\Mksearch\ViewHelpers\Format;
 \tx_rnbase::load('tx_rnbase_util_TYPO3');
 if (\tx_rnbase_util_TYPO3::isTYPO70OrHigher()) {
 	class CropViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Format\CropViewHelper {
-	
+
 		/**
 		 * nähere Infos in Configuration/XClasses.php
 		 *
@@ -38,7 +38,7 @@ if (\tx_rnbase_util_TYPO3::isTYPO70OrHigher()) {
 				parent::simulateFrontendEnvironment();
 			}
 		}
-	
+
 		/**
 		 * @return void
 		 * @see simulateFrontendEnvironment()
@@ -51,9 +51,11 @@ if (\tx_rnbase_util_TYPO3::isTYPO70OrHigher()) {
 	}
 
 } else {
-	
+
+	// needed in TYPO3 6.2 without composer (question is why?)
+	\tx_rnbase::load('tx_mksearch_service_internal_Index');
 	class CropViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Format\CropViewHelper {
-	
+
 		/**
 		 * nähere Infos in Configuration/XClasses.php
 		 *
@@ -64,7 +66,7 @@ if (\tx_rnbase_util_TYPO3::isTYPO70OrHigher()) {
 				parent::simulateFrontendEnvironment();
 			}
 		}
-	
+
 		/**
 		 * @return void
 		 * @see simulateFrontendEnvironment()
@@ -75,5 +77,5 @@ if (\tx_rnbase_util_TYPO3::isTYPO70OrHigher()) {
 			}
 		}
 	}
-	
+
 }
