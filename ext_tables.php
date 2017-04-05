@@ -38,7 +38,7 @@ if (TYPO3_MODE == 'BE') {
 		tx_mksearch_util_Wizicon::addWizicon(
 			'tx_mksearch_util_Wizicon',
 			tx_rnbase_util_Extensions::extPath(
-				'mkmailer',
+				'mksearch',
 				'util/class.tx_mksearch_util_Wizicon.php'
 			)
 		);
