@@ -34,9 +34,9 @@ if (TYPO3_MODE == 'BE') {
 	# Add plugin wizards
 	tx_rnbase::load('tx_rnbase_util_TYPO3');
 	if (!tx_rnbase_util_TYPO3::isTYPO80OrHigher()) {
-		tx_rnbase::load('tx_mksearch_util_wizicon');
+		tx_rnbase::load('tx_mksearch_util_Wizicon');
 		tx_mksearch_util_Wizicon::addWizicon(
-			'tx_mksearch_util_wizicon',
+			'tx_mksearch_util_Wizicon',
 			tx_rnbase_util_Extensions::extPath(
 				'mkmailer',
 				'util/class.tx_mksearch_util_Wizicon.php'
