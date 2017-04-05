@@ -32,7 +32,28 @@ if (TYPO3_MODE == 'BE') {
 	require_once($_EXT_PATH.'mod1/ext_tables.php');
 
 	# Add plugin wizards
-	$TBE_MODULES_EXT['xMOD_db_new_content_el']['addElClasses']['tx_mksearch_util_wizicon'] = tx_rnbase_util_Extensions::extPath($_EXTKEY).'util/class.tx_mksearch_util_Wizicon.php';
+	tx_rnbase::load('tx_rnbase_util_TYPO3');
+	if (!tx_rnbase_util_TYPO3::isTYPO80OrHigher()) {
+		tx_rnbase::load('tx_mksearch_util_wizicon');
+		tx_mksearch_util_Wizicon::addWizicon(
+			'tx_mksearch_util_wizicon',
+			tx_rnbase_util_Extensions::extPath(
+				'mkmailer',
+				'util/class.tx_mksearch_util_Wizicon.php'
+			)
+		);
+	} else {
+		// register icon
+		Tx_Rnbase_Backend_Utility_Icons::getIconRegistry()->registerIcon(
+			'ext-mksearch-wizard-icon',
+			'TYPO3\\CMS\Core\\Imaging\\IconProvider\\BitmapIconProvider',
+			array('source' => 'EXT:mksearch/ext_icon.gif')
+		);
+		// Wizardkonfiguration hinzufügen
+		\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
+			'<INCLUDE_TYPOSCRIPT: source="FILE:EXT:mksearch/Configuration/TSconfig/ContentElementWizard.txt">'
+		);
+	}
 
 	// icon für sysfolder registrieren
 	tx_rnbase::load('tx_rnbase_util_TYPO3');
