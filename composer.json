@@ -38,7 +38,7 @@
 		"typo3-ter/mksearch" : "self.version"
 	},
 	"require" : {
-		"typo3/cms-core" : ">=4.5.0 <=7.6.99",
+		"typo3/cms-core" : ">=4.5.0 <=8.7.99",
 		"typo3-ter/rn-base" : ">=1.2.6"
 	},
 	"autoload" : {
