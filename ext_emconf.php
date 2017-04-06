@@ -56,6 +56,7 @@ $EM_CONF[$_EXTKEY] = array(
 		"search/",
 		"service/",
 		"signalSlotDispatcher/",
+		"tests/",
 		"util/",
 		"view/",
 	),
