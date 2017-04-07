@@ -333,23 +333,11 @@ class tx_mksearch_util_Filter {
 	public function parseFqFieldAndValue($sFq, $allowedFqParams) {
 		if (empty($sFq) || empty($allowedFqParams)) return '';
 
-		// wir trennen den string auf!
-		// field:value | field:"value"
-		// nur kleinbuchstaben und unterstrich für feldnamen erlauben.
-		$pattern  = '(?P<field>([a-z0-9_]*))';
-		// feld mit doppelpunkt vom wert getrennt.
-		$pattern .= ':';
-		// eventuelles anführungszeichen am anfang abschneiden.
-		$pattern .= '(["]*)';
-		// nur buchstaben, zahlen unterstrich, leerzeichen und punkt für wert erlauben.
-		$pattern .= '(?P<value>([a-z0-9_. ]*))';
-		tx_rnbase::load('tx_mksearch_util_Misc');
-		$matches = array();
+		$filterQueryParts = array ('field', 'value');
+		$matches = array_combine ($filterQueryParts, Tx_Rnbase_Utility_Strings::trimExplode(':', $sFq));
 		if (
-			// wir splitten den string auf!
-			preg_match('/^'.$pattern.'/i', $sFq, $matches)
 			// wurde das feld gefunden?
-			&& isset($matches['field']) && !empty($matches['field'])
+			isset($matches['field']) && !empty($matches['field'])
 			// wurde der wert gefunden?
 			&& isset($matches['value']) && !empty($matches['value'])
 			// das feld muss erlaubt sein!

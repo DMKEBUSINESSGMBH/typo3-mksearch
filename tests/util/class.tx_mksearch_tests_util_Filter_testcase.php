@@ -311,6 +311,10 @@ searchsolr.filter.default.sort {
 				'fq' => 'unknowd_ms:5',
 				'expected' => '',
 			),
+			__LINE__ => array(
+				'fq' => 'contentType:frühstück',
+				'expected' => 'contentType:"frühstück"',
+			),
 		);
 	}
 
