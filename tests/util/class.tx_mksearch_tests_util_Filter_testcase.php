@@ -314,6 +314,10 @@ searchsolr.filter.default.sort {
 			__LINE__ => array(
 				'fq' => 'contentType:frühstück',
 				'expected' => 'contentType:"frühstück"',
+		),
+			__LINE__ => array(
+				'fq' => 'frühstück',
+				'expected' => '',
 			),
 		);
 	}

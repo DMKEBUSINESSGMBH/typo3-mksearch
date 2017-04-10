@@ -333,8 +333,17 @@ class tx_mksearch_util_Filter {
 	public function parseFqFieldAndValue($sFq, $allowedFqParams) {
 		if (empty($sFq) || empty($allowedFqParams)) return '';
 
-		$filterQueryParts = array ('field', 'value');
-		$matches = array_combine ($filterQueryParts, Tx_Rnbase_Utility_Strings::trimExplode(':', $sFq));
+		$filterQueryPartKeys = array ('field', 'value');
+		$filterQueryParts = Tx_Rnbase_Utility_Strings::trimExplode(':', $sFq);
+
+		// die initiale fq muss aus $feldName:$feldWert bestehen. Das ist der alte Weg. Der neue Weg
+		// der fq soll hier ignoriert werden.
+		if (count($filterQueryParts) == 2) {
+			$matches = array_combine ($filterQueryPartKeys, Tx_Rnbase_Utility_Strings::trimExplode(':', $sFq));
+		} else {
+			$matches = array();
+		}
+
 		if (
 			// wurde das feld gefunden?
 			isset($matches['field']) && !empty($matches['field'])
