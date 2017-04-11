@@ -43,7 +43,7 @@ class tx_mksearch_model_SearchHit extends tx_rnbase_model_base implements tx_mks
 	 * @param $rowOrUid
 	 * @return void
 	 */
-	public function init($rowOrUid) {
+	public function init($rowOrUid = null) {
 		if(is_array($rowOrUid)) {
 			$this->uid = $rowOrUid['uid'];
 			$this->record = $rowOrUid;

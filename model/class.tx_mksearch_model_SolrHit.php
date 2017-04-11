@@ -44,7 +44,7 @@ class tx_mksearch_model_SolrHit extends tx_rnbase_model_base implements tx_mksea
 	 * @param $rowOrUid
 	 * @return void
 	 */
-	public function init($rowOrUid) {
+	public function init($rowOrUid = null) {
 		$solrDoc = $rowOrUid;
 		if (!$solrDoc instanceof Apache_Solr_Document) {
 			throw new InvalidArgumentException(
