@@ -25,6 +25,7 @@
 
 tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
 tx_rnbase::load('tx_mksearch_util_Misc');
+tx_rnbase::load('tx_mksearch_util_TCA');
 
 
 
