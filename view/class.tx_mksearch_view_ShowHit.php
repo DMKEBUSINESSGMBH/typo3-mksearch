@@ -54,7 +54,8 @@ class tx_mksearch_view_ShowHit extends tx_rnbase_view_Single {
 	 *
 	 * @return string
 	 */
-	function getMainSubpart() {
+	function getMainSubpart(&$viewData)
+	{
 		$subpart = $this->getController()->getConfigurations()->get($this->getController()->getConfId().'template.subpart');
 		return $subpart ? $subpart : '###SHOWHIT###';
 	}

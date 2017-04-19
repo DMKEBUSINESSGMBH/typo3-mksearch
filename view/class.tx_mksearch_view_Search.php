@@ -38,15 +38,15 @@ class tx_mksearch_view_Search extends tx_rnbase_view_Base {
 		// Get data from action
 		$items =& $viewData->offsetGet('search');
 
-		$listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder', 
+		$listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder',
 				$viewData->offsetGet('filter') instanceof ListBuilderInfo ? $viewData->offsetGet('filter') : null);
 
 		// wurden options für die markerklassen gesetzt?
 		$markerParams = $viewData->offsetExists('markerParams') ? $viewData->offsetGet('markerParams') : array();
 		$confId = $this->getController()->getConfId();
 		$out = $listBuilder->render(
-			$items, $viewData, 
-			$template, 'tx_mksearch_marker_Search', 
+			$items, $viewData,
+			$template, 'tx_mksearch_marker_Search',
 			$confId.'hit.', 'SEARCHRESULT',
 			$formatter, $markerParams);
 
@@ -55,12 +55,12 @@ class tx_mksearch_view_Search extends tx_rnbase_view_Base {
 	}
 
 	/**
-	 * Subpart der im HTML-Template geladen werden soll. Dieser wird der Methode
-	 * createOutput automatisch als $template übergeben. 
+	 * Subpart der im HTML-Template geladen werden soll.
 	 *
 	 * @return string
 	 */
-	function getMainSubpart() {
+	function getMainSubpart(&$viewData)
+	{
 		return '###SEARCH###';
 	}
 }
