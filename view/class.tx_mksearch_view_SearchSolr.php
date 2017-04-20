@@ -198,7 +198,7 @@ class tx_mksearch_view_SearchSolr extends tx_rnbase_view_Base {
 	 *
 	 * @param tx_rnbase_configurations $configurations
 	 */
-	function _init($configurations){
+	function _init(&$configurations) {
 		$this->confId = $this->getController()->getConfId();
 		$this->configurations = &$configurations;
 	}
