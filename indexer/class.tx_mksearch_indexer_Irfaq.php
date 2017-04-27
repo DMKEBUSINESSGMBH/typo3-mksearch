@@ -309,10 +309,12 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base {
 	 * Returns the model to be indexed
 	 *
 	 * @param array $rawData
+	 * @param string $tableName
+	 * @param array $options
 	 *
 	 * @return tx_mksearch_model_irfaq_Question
 	 */
-	protected function createModel(array $rawData) {
+	protected function createModel(array $rawData, $tableName = NULL, $options = array()) {
 		return tx_rnbase::makeInstance('tx_mksearch_model_irfaq_Question', $rawData);
 	}
 

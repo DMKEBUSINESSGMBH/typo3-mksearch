@@ -83,12 +83,12 @@ class tx_mksearch_marker_SearchResultSimple
 	 * @param tx_rnbase_util_FormatUtil $formatter
 	 * @param string $template
 	 */
-	public function prepareLinks(&$item, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, &$formatter, $template) {
+	public function prepareLinks($item, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, $formatter, $template) {
 		$config = $formatter->getConfigurations();
 
 		/*
 		 * Wenn linkMethod auf generic steht,
-		 * werden die Links über den SimpleMarker gerendert.
+		 * werden die Links über den SimpleMarker gerendert.prepareLinks
 		 * Damit sind mehrere Links für das ergebnis möglich.
 		 *
 		 * Andernfalls wird der Alte Weg genutzt.

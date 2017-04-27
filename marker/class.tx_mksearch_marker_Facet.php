@@ -88,9 +88,9 @@ class tx_mksearch_marker_Facet extends tx_mksearch_marker_SearchResultSimple {
 	 * @return void
 	 */
 	protected function prepareItem(
-			tx_rnbase_model_base &$item,
-			tx_rnbase_configurations &$configurations,
-			$confId
+		Tx_Rnbase_Domain_Model_DataInterface $item,
+		Tx_Rnbase_Configuration_ProcessorInterface $configurations,
+		$confId
 	) {
 		parent::prepareItem($item, $configurations, $confId);
 
@@ -168,8 +168,7 @@ class tx_mksearch_marker_Facet extends tx_mksearch_marker_SearchResultSimple {
 	 * @param string $confId
 	 * @param tx_rnbase_util_FormatUtil $formatter
 	 */
-	public function prepareLinks(&$item, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, &$formatter, $template) {
-		//schränkt nach dem facettierten feld und dessen aktullen wert ein
+	public function prepareLinks($item, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, $formatter, $template) {
 		//z.B. wird nach contentType facettiert. Dann sieht der Link bei tt_content
 		//so aus: mksearch[fq]=contentType:tt_content
 		$sFq = $item->record['id'];

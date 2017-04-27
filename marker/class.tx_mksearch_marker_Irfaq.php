@@ -43,7 +43,7 @@ class tx_mksearch_marker_Irfaq
 	 * @param tx_rnbase_util_FormatUtil $formatter
 	 * @param string $template
 	 */
-	public function prepareLinks(&$item, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, &$formatter, $template) {
+	public function prepareLinks($item, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, $formatter, $template) {
 		parent::prepareLinks($item, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter, $template);
 
 		//nachträglich entfernen. geht nicht über rnbase da remove nur möglich ist, wenn das model
