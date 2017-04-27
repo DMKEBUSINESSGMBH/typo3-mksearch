@@ -452,12 +452,7 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
 	 * @group unit
 	 */
 	public function testParseTemplateParsesSortMarkerCorrect() {
-		tx_rnbase_util_Misc::prepareTSFE(
-			array('force' => true, 'pid' => 1)
-		);
-
-		$GLOBALS['TSFE']->id = 1;
-		$GLOBALS['TSFE']->rootLine[0]['uid'] = 1; //wenn tq_seo kommt sonst ein error
+		$this->prepareTSFE();
 
 		$config = array($this->confId => array('filter.' => array(
 			'sort.' => array(

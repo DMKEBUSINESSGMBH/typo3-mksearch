@@ -58,7 +58,7 @@ class tx_mksearch_tests_marker_SearchResultSimple_testcase
 	 */
 	protected function setUp(){
 		parent::setUp();
-		tx_rnbase_util_Misc::prepareTSFE();
+		$this->prepareTSFE();
 
 		$this->oParameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
 		$this->oMarker = tx_rnbase::makeInstance('tx_mksearch_marker_SearchResultSimple');

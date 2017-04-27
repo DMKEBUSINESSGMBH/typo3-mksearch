@@ -52,17 +52,10 @@ class tx_mksearch_tests_marker_Facet_testcase
 	 * setUp() = init DB etc.
 	 */
 	protected function setUp(){
-		tx_rnbase_util_Misc::prepareTSFE();
+		$this->prepareTSFE();
 
 		$this->oParameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
 		$this->oMarker = tx_rnbase::makeInstance('tx_mksearch_marker_Facet');
-		//muss gesetzt werden damit ein link erstellt werden kann
-		//bis TYPO3 4.5 wird $GLOBALS['TSFE']->id per default auf 1 gesetzt
-		//ab TYPO3 4.5 wird die id per default auf 0 gesetzt womit kein Link
-		//erstellt werden könnte. alternativ kann auch in jedem Test
-		//$aConfig['searchsolr.']['facet.']['links.']['show.']['pid'] = 1;
-		//ergänzt werden
-		$GLOBALS['TSFE']->id = 1;
 		parent::setUp();
 	}
 

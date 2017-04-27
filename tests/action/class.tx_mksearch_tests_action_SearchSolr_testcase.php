@@ -73,7 +73,7 @@ class tx_mksearch_tests_action_SearchSolr_testcase
 			}
 		}
 
-		tx_rnbase_util_Misc::prepareTSFE(array('force' => TRUE));
+		$this->prepareTSFE();
 
 		$framework = new Tx_Phpunit_Framework('dummy');
 		$framework->createFakeFrontEnd();

@@ -106,6 +106,27 @@ abstract class tx_mksearch_tests_Testcase
 	}
 
 	/**
+	 * Prepare classes for FE-rendering if it is needed in TYPO3 backend.
+	 *
+	 * @return \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController or tslib_fe
+	 */
+	protected function prepareTSFE(array $options = array('force' => true, 'pid' => 1)) {
+		tx_rnbase_util_Misc::prepareTSFE($options);
+
+		if (!empty($options['pid'])) {
+			$GLOBALS['TSFE']->id = $options['pid'];
+			if (!is_array($GLOBALS['TSFE']->rootLine)) {
+				$GLOBALS['TSFE']->rootLine = array();
+			}
+			if (!is_array($GLOBALS['TSFE']->rootLine[0])) {
+				$GLOBALS['TSFE']->rootLine[0] = array();
+			}
+			//wenn tq_seo kommt sonst ein error
+			$GLOBALS['TSFE']->rootLine[0]['uid'] = $options['pid'];
+		}
+	}
+
+	/**
 	 *
 	 * @param string|array $extKey
 	 * @param string $contentType

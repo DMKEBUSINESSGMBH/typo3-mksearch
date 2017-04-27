@@ -55,7 +55,7 @@ class tx_mksearch_tests_marker_Irfaq_testcase
 	 * setUp() = init DB etc.
 	 */
 	protected function setUp(){
-		tx_rnbase_util_Misc::prepareTSFE();
+		$this->prepareTSFE();
 
 		$this->marker = tx_rnbase::makeInstance('tx_mksearch_marker_Irfaq');
 
