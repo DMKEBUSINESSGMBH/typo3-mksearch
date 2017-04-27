@@ -124,7 +124,7 @@ class tx_mksearch_tests_fixtures_indexer_Dummy extends tx_mksearch_indexer_Base 
 	 * @return tx_rnbase_IModel
 	 */
 	protected function createModel(array $rawData, $tableName = NULL, $options = array()) {
-		return tx_rnbase::makeInstance('tx_rnbase_model_base', $aRawData);
+		return tx_rnbase::makeInstance('tx_rnbase_model_base', $rawData);
 	}
 
 	/**
