@@ -130,7 +130,13 @@ abstract class tx_mksearch_tests_DbTestcase
 
 		// set up database
 		$GLOBALS['TYPO3_DB']->debugOutput = TRUE;
-		$this->createDatabase();
+		try {
+			$this->createDatabase();
+		} catch (RuntimeException $e) {
+			$this->markTestSkipped(
+				'This test is skipped because the test database is not available.'
+			);
+		}
 		// assuming that test-database can be created otherwise PHPUnit will skip the test
 		$this->db = $this->useTestDatabase();
 
