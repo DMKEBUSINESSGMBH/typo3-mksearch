@@ -381,7 +381,7 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC {
 			$jsScripts[] = 'jquery-ui-1.8.15.autocomplete.min.js';
 		}
 
-		$pageRenderer = tx_rnbase_util_TYPO3::getTSFE()->getPageRenderer();
+		$pageRenderer = tx_rnbase_util_TYPO3::getPageRenderer();
 		if (!empty($jsScripts)) {
 			foreach ($jsScripts as $javaScriptFilename) {
 				$pageRenderer->addJsLibrary($javaScriptFilename, $javascriptsPath . $javaScriptFilename);
