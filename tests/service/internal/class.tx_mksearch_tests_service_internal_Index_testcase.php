@@ -43,6 +43,8 @@ class tx_mksearch_tests_service_internal_Index_testcase
 	 */
 	protected function setUp() {
 		tx_mksearch_tests_Util::storeExtConf();
+		// @TODO: ther are TYPO3_DB operations. where? mock it!
+		$this->prepareLegacyTypo3DbGlobal();
 	}
 
 	/**

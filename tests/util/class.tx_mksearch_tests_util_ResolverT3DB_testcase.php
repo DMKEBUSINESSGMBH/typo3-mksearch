@@ -41,6 +41,9 @@ class tx_mksearch_tests_util_ResolverT3DB_testcase
 	 * @group integration
 	 */
 	public function testGetRecordsReturnsRecordedWithDeletedFlagIfRecordNotFound() {
+		// @TODO: ther are TYPO3_DB operations. where? mock it!
+		$this->prepareLegacyTypo3DbGlobal();
+
 		$resolverT3Db = tx_rnbase::makeInstance('tx_mksearch_util_ResolverT3DB');
 
 		$queueData = array(
