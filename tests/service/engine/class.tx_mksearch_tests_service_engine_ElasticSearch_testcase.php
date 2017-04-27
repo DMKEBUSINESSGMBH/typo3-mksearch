@@ -1,10 +1,4 @@
 <?php
-use Elastica\Document;
-use Elastica\Bulk\Action;
-use Elastica\Query;
-use Elastica\ResultSet;
-use Elastica\Response;
-use Elastica\Result;
 /**
  * 	@package tx_mksearch
  *  @subpackage tx_mksearch_tests
@@ -47,6 +41,12 @@ tx_rnbase::load('tx_mksearch_model_internal_Index');
 class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 	extends tx_mksearch_tests_Testcase
 {
+	public function setUp() {
+		if (version_compare(phpversion(), '7.0.0') >= 0) {
+			$this->markTestSkipped('Elastic does not support php 7 currently');
+		}
+	}
+
 	/**
 	 * @group unit
 	 */
@@ -816,7 +816,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 			'stdClass', array('addDocuments')
 		);
 
-		$elasticaDocument = new Document(
+		$elasticaDocument = new Elastica\Document(
 			'123',
 			array(
 				'content_ident_s' => 'mksearch.tt_content',
@@ -857,7 +857,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 			'stdClass', array('deleteDocuments')
 		);
 
-		$elasticaDocument = new Document('123');
+		$elasticaDocument = new Elastica\Document('123');
 		$elasticaDocument->setType('mksearch:tt_content');
 		$response = $this->getMock(
 			'stdClass', array('isOk')
@@ -1025,11 +1025,11 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 	 * @group unit
 	 */
 	public function testGetItemsFromSearchResult() {
-		$searchResult = ResultSet::create(new Response(''), Query::create(''));
+		$searchResult = Elastica\ResultSet::create(new Elastica\Response(''), Elastica\Query::create(''));
 		$resultProperty = new ReflectionProperty('\\Elastica\\ResultSet', '_results');
 		$results = array(
-			0 => new Result(array('_source' => array('title' => 'hit data one'))),
-			1 => new Result(array('_source' => array('title' => 'hit data two'))),
+			0 => new Elastica\Result(array('_source' => array('title' => 'hit data one'))),
+			1 => new Elastica\Result(array('_source' => array('title' => 'hit data two'))),
 		);
 		$resultProperty->setAccessible(TRUE);
 		$resultProperty->setValue($searchResult, $results);
@@ -1109,7 +1109,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 			->method('getError')
 			->will($this->returnValue('es gab einen Fehler'));
 
-		$searchResult = ResultSet::create($response, Query::create(''));
+		$searchResult = Elastica\ResultSet::create($response, Elastica\Query::create(''));
 
 		$totalHits = new ReflectionProperty('\\Elastica\\ResultSet', '_totalHits');
 		$totalHits->setAccessible(TRUE);
@@ -1189,7 +1189,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 		$fields = array('fields');
 		$options = array('options');
 
-		$searchResult = ResultSet::create(new Response(''), Query::create(''));
+		$searchResult = Elastica\ResultSet::create(new Elastica\Response(''), Elastica\Query::create(''));
 
 		$index->expects($this->once())
 			->method('search')
@@ -1239,7 +1239,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase
 		$fields = array('fields');
 		$options = array('debug' => TRUE);
 
-		$searchResult = ResultSet::create(new Response(''), Query::create(''));
+		$searchResult = Elastica\ResultSet::create(new Elastica\Response(''), Elastica\Query::create(''));
 
 		$index->expects($this->once())
 			->method('search')

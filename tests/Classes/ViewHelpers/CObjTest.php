@@ -38,7 +38,15 @@ namespace DMK\Mksearch\Tests\ViewHelpers;
  */
 class CObjectViewHelperTest extends \tx_mksearch_tests_Testcase
 {
-
+	/**
+	 * {@inheritDoc}
+	 * @see tx_mksearch_tests_Testcase::setUp()
+	 */
+	protected function setUp() {
+		if (\tx_rnbase_util_TYPO3::isTYPO80OrHigher()) {
+			$this->markTestSkipped('Not required for TYPO3 8 or higher');
+		}
+	}
 	/**
 	 * {@inheritDoc}
 	 * @see tx_mksearch_tests_Testcase::tearDown()
