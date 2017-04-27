@@ -45,7 +45,8 @@ class tx_mksearch_tests_indexer_Base_testcase
 	 * Check if the uid is set correct
 	 */
 	public function testGetPrimarKey() {
-		$indexer =tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
+		/* @var $indexer tx_mksearch_tests_fixtures_indexer_Dummy */
+		$indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
 		list($extKey, $cType) = $indexer->getContentType();
 		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
 		$options = array();
@@ -53,6 +54,8 @@ class tx_mksearch_tests_indexer_Base_testcase
 		$aRawData = array('uid' => 1, 'test_field_1' => 'test value 1');
 
 		$oIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
+
+		self::assertInstanceOf(tx_mksearch_interface_IndexerDocument, $oIndexDoc);
 
 		$aPrimaryKey = $oIndexDoc->getPrimaryKey();
 		self::assertEquals('mksearch',$aPrimaryKey['extKey']->getValue(),'Es wurde nicht der richtige extKey gesetzt!');
