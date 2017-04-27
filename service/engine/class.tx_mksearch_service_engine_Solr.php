@@ -237,7 +237,7 @@ class tx_mksearch_service_engine_Solr extends Tx_Rnbase_Service_Base implements 
 			$ret['searchTime'] = (microtime(true) - $start) . ' ms';
 
 			if ($options['group.ngroups'] == 'true') {
-				$ret['numFound'] = $response->grouped->$options['group.field']->ngroups;
+				$ret['numFound'] = $response->grouped->{$options['group.field']}->ngroups;
 			} else {
 				$ret['numFound'] = $response->response->numFound;
 			}
@@ -749,7 +749,7 @@ class tx_mksearch_service_engine_Solr extends Tx_Rnbase_Service_Base implements 
 	 */
 	public static function getHitsFromSolrResponse(Apache_Solr_Response $response, array $options) {
 		if ($options['group'] == 'true') {
-			foreach ((array) $response->grouped->$options['group.field']->groups as $group) {
+			foreach ((array) $response->grouped->{$options['group.field']}->groups as $group) {
 				foreach ($group->doclist->docs as $doc) {
 					$solrDocument = new Apache_Solr_Document();
 					foreach ($doc as $field => $value) {
