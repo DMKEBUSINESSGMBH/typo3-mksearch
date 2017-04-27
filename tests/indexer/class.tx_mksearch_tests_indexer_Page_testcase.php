@@ -42,6 +42,9 @@ class tx_mksearch_tests_indexer_Page_testcase
 	extends tx_mksearch_tests_Testcase {
 
 	public function testPrepareSearchDataSetsDocToDeleted() {
+		// @TODO: ther is a db operation. where? fix it!
+		$this->prepareLegacyTypo3DbGlobal();
+
 		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_Page');
 		$options = array();
 

@@ -37,7 +37,16 @@ tx_rnbase::load('tx_mksearch_indexer_ttcontent_Normal');
  *          GNU Lesser General Public License, version 3 or later
  */
 class tx_mksearch_tests_indexer_TtContent_testcase
-	extends tx_mksearch_tests_Testcase {
+	extends tx_mksearch_tests_Testcase
+{
+	/**
+	 * {@inheritDoc}
+	 * @see tx_mksearch_tests_Testcase::setUp()
+	 */
+	protected function setUp() {
+		// @TODO: ther are db operations. where? fix it!
+		$this->prepareLegacyTypo3DbGlobal();
+	}
 
 	private static function getDefaultOptions(){
 		$options = array();
