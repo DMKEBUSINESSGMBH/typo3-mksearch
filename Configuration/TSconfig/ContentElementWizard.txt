@@ -1,13 +1,13 @@
 mod.wizards.newContentElement.wizardItems.plugins {
-	elements {
-		mksearch {
-			iconIdentifier = ext-mksearch-wizard-icon
-			title = LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.label
-			description = LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.description
-			tt_content_defValues {
-				CType = list
-				list_type = tx_mksearch
-			}
-		}
-	}
+    elements {
+        mksearch {
+            iconIdentifier = ext-mksearch-wizard-icon
+            title = LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.label
+            description = LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.description
+            tt_content_defValues {
+                CType = list
+                list_type = tx_mksearch
+            }
+        }
+    }
 }

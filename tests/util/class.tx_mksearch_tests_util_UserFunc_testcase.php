@@ -33,46 +33,49 @@ tx_rnbase::load('tx_mksearch_util_UserFunc');
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_tests_util_UserFunc_testcase
-	extends tx_mksearch_tests_Testcase {
+class tx_mksearch_tests_util_UserFunc_testcase extends tx_mksearch_tests_Testcase
+{
 
-	/**
-	 * @dataProvider providerSearchOptions
-	 */
-	public function testSearchSolrOptionsWithOptionsFromTs($term, $combination, $options, $result) {
-		$options['combination'] = $combination;
-		$res = tx_mksearch_util_UserFunc::searchSolrOptions($term, $options);
-		self::assertEquals($result, $res);
-	}
+    /**
+     * @dataProvider providerSearchOptions
+     */
+    public function testSearchSolrOptionsWithOptionsFromTs($term, $combination, $options, $result)
+    {
+        $options['combination'] = $combination;
+        $res = tx_mksearch_util_UserFunc::searchSolrOptions($term, $options);
+        self::assertEquals($result, $res);
+    }
 
-	/**
-	 * @dataProvider providerSearchOptions
-	 */
-	public function testSearchLuceneOptionsWithOptionsFromTs($term, $combination, $options, $result) {
-		$options['combination'] = $combination;
-		$res = tx_mksearch_util_UserFunc::searchLuceneOptions($term, $options);
-		self::assertEquals($result, $res);
-	}
+    /**
+     * @dataProvider providerSearchOptions
+     */
+    public function testSearchLuceneOptionsWithOptionsFromTs($term, $combination, $options, $result)
+    {
+        $options['combination'] = $combination;
+        $res = tx_mksearch_util_UserFunc::searchLuceneOptions($term, $options);
+        self::assertEquals($result, $res);
+    }
 
-	/**
-	 * @return array
-	 */
-	public function providerSearchOptions() {
-		$return = array();
-		foreach(array(
-//				array($term, $combination, $options, $result),
-				__LINE__ => array('Hallo  Welt', MKSEARCH_OP_AND, array('quote' => 1, 'dismax' => 0, 'fuzzy' => 0), '(+"Hallo" +"Welt")'),
-				__LINE__ => array(0, null, array('quote' => 1, 'dismax' => 0, 'fuzzy' => 0, 'sanitize' => 1, 'wildcard' => 1), '("*0*")'),
-				__LINE__ => array('', null, array('quote' => 1, 'dismax' => 0, 'fuzzy' => 0, 'sanitize' => 1, 'wildcard' => 1), ''),
-			) as $key => $row) {
-			$key = 'Line:'.$key.' Term:'.$row[0].' OP:'.$row[1].' Quote:'.$row[2]['quote'].' DisMax:'.$row[2]['dismax'].' Fuzzy:'.$row[2]['fuzzy'].' Result:'.$row[3];
-			$return[$key] = $row;
-		}
-		return $return;
-	}
+    /**
+     * @return array
+     */
+    public function providerSearchOptions()
+    {
+        $return = array();
+        foreach (array(
+                         // array($term, $combination, $options, $result),
+                __LINE__ => array('Hallo  Welt', MKSEARCH_OP_AND, array('quote' => 1, 'dismax' => 0, 'fuzzy' => 0), '(+"Hallo" +"Welt")'),
+                __LINE__ => array(0, null, array('quote' => 1, 'dismax' => 0, 'fuzzy' => 0, 'sanitize' => 1, 'wildcard' => 1), '("*0*")'),
+                __LINE__ => array('', null, array('quote' => 1, 'dismax' => 0, 'fuzzy' => 0, 'sanitize' => 1, 'wildcard' => 1), ''),
+            ) as $key => $row) {
+            $key = 'Line:'.$key.' Term:'.$row[0].' OP:'.$row[1].' Quote:'.$row[2]['quote'].' DisMax:'.$row[2]['dismax'].' Fuzzy:'.$row[2]['fuzzy'].' Result:'.$row[3];
+            $return[$key] = $row;
+        }
 
+        return $return;
+    }
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/util/class.tx_mksearch_tests_util_SearchBuilder_testcase.php']) {
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/util/class.tx_mksearch_tests_util_SearchBuilder_testcase.php']);
+    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/util/class.tx_mksearch_tests_util_SearchBuilder_testcase.php']);
 }

@@ -28,92 +28,98 @@
 /**
  * Diese Klasse ist für die Darstellung von Indexer tabellen im Backend verantwortlich
  */
-class tx_mksearch_mod1_decorator_IndexerConfig {
-	function __construct($mod) {
-		$this->mod = $mod;
-	}
+class tx_mksearch_mod1_decorator_IndexerConfig
+{
+    public function __construct($mod)
+    {
+        $this->mod = $mod;
+    }
 
-	/**
-	 * Returns the module
-	 * @return tx_rnbase_mod_IModule
-	 */
-	private function getModule() {
-		return $this->mod;
-	}
-	/**
-	 *
-	 * @param 	string 								$value
-	 * @param 	string 								$colName
-	 * @param 	array 								$record
-	 * @param 	tx_mksearch_model_internal_Config 	$item
-	 */
-	public function format($value, $colName, $record, $item) {
+    /**
+     * Returns the module
+     * @return tx_rnbase_mod_IModule
+     */
+    private function getModule()
+    {
+        return $this->mod;
+    }
+    /**
+     *
+     * @param   string                              $value
+     * @param   string                              $colName
+     * @param   array                               $record
+     * @param   tx_mksearch_model_internal_Config   $item
+     */
+    public function format($value, $colName, $record, $item)
+    {
+        switch ($colName) {
+            case 'title':
+                $ret  = '';
+                $ret .= $value;
+                if (!empty($record->record['description'])) {
+                    $ret .= '<br /><pre>'.$record->record['description'].'</pre>';
+                }
+                break;
+            case 'contenttype':
+                $ret = $item->getExtkey().'.'.$item->getContenttype();
+                break;
+            case 'composites':
+                $composites = tx_mksearch_util_ServiceRegistry::getIntCompositeService()->getByConfiguration($item);
+                /* @var $compositeDecorator tx_mksearch_mod1_decorator_Composite */
+                $compositeDecorator = tx_rnbase::makeInstance('tx_mksearch_mod1_decorator_Composite', $this->getModule());
+                $ret = $compositeDecorator->getCompositeInfos($composites, array('includeIndex' => 1));
+                break;
+            case 'actions':
+                $formtool = $this->getModule()->getFormTool();
+                $ret  = '';
+                // bearbeiten link
+                $ret .= $formtool->createEditLink($item->getTableName(), $item->getUid(), '');
+                // hide undhide link
+                $ret .= $formtool->createHideLink($item->getTableName(), $item->getUid(), $item->record['hidden']);
+                // remove link
+                $ret .= $formtool->createDeleteLink($item->getTableName(), $item->getUid(), '', array('confirm' => $GLOBALS['LANG']->getLL('confirmation_deletion')));
+                break;
+            default:
+                $ret = $value;
+        }
 
-		switch ($colName) {
-			case 'title':
-				$ret  = '';
-				$ret .= $value;
-				if(!empty($record->record['description']))
-					$ret .= '<br /><pre>'.$record->record['description'].'</pre>';
-				break;
-			case 'contenttype':
-				$ret = $item->getExtkey().'.'.$item->getContenttype();
-				break;
-			case 'composites':
-				$composites = tx_mksearch_util_ServiceRegistry::getIntCompositeService()->getByConfiguration($item);
-				/* @var $compositeDecorator tx_mksearch_mod1_decorator_Composite */
-				$compositeDecorator = tx_rnbase::makeInstance('tx_mksearch_mod1_decorator_Composite', $this->getModule());
-				$ret = $compositeDecorator->getCompositeInfos($composites, array('includeIndex'=>1));
-				break;
-			case 'actions':
-				$formtool = $this->getModule()->getFormTool();
-				$ret  = '';
-				// bearbeiten link
-				$ret .= $formtool->createEditLink($item->getTableName(), $item->getUid(), '');
-				// hide undhide link
-				$ret .= $formtool->createHideLink($item->getTableName(), $item->getUid(), $item->record['hidden']);
-				// remove link
-				$ret .= $formtool->createDeleteLink($item->getTableName(), $item->getUid(), '', array('confirm' => $GLOBALS['LANG']->getLL('confirmation_deletion')));
-				break;
-			default:
-				$ret = $value;
-		}
+        return $ret;
+    }
 
-		return $ret;
-	}
+    /**
+     *
+     * @param   array       $items
+     * @param   array       $options
+     * @return  string
+     */
+    public function getConfigInfos($items, $options = array())
+    {
+        foreach ($items as $item) {
+            $ret[] = $this->getConfigInfo($item, $options);
+        }
+        $ret = empty($ret) ? '###LABEL_NO_INDEXERCONFIGURATIONS###' : implode('</li><li class="hr"></li><li>', $ret);
 
-	/**
-	 *
-	 * @param 	array 		$items
-	 * @param 	array 		$options
-	 * @return 	string
-	 */
-	public function getConfigInfos($items, $options=array()){
-		foreach($items as $item) {
-			$ret[] = $this->getConfigInfo($item, $options);
-		}
-		$ret = empty($ret) ? '###LABEL_NO_INDEXERCONFIGURATIONS###' : implode('</li><li class="hr"></li><li>',$ret);
-		return '<ul><li>'.$ret.'</li></ul>';
-	}
-	/**
-	 *
-	 * @param 	tx_mksearch_model_internal_Composite 	$item
-	 * @param 	array 									$options
-	 * @return 	string
-	 */
-	public function getConfigInfo(tx_mksearch_model_internal_Config $item, $options=array()){
-		$formtool = $this->getModule()->getFormTool();
+        return '<ul><li>'.$ret.'</li></ul>';
+    }
+    /**
+     *
+     * @param   tx_mksearch_model_internal_Composite    $item
+     * @param   array                                   $options
+     * @return  string
+     */
+    public function getConfigInfo(tx_mksearch_model_internal_Config $item, $options = array())
+    {
+        $formtool = $this->getModule()->getFormTool();
 
-		$out  = '';
-		$out .= $formtool->createEditLink($item->getTableName(), $item->getUid(), '');
-		$out .= $item->getTitle();
-// 		$out .= '<br />'; // @TODO: in indices und configs wahlweise mit ausgeben
-		return '<div>'.$out.'</div>';
-	}
-
+        $out  = '';
+        $out .= $formtool->createEditLink($item->getTableName(), $item->getUid(), '');
+        $out .= $item->getTitle();
+        // $out .= '<br />'; // @TODO: in indices und configs wahlweise mit ausgeben
+        return '<div>'.$out.'</div>';
+    }
 }
 
 
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/decorator/class.tx_mksearch_mod1_decorator_IndexerConfig.php'])	{
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/decorator/class.tx_mksearch_mod1_decorator_IndexerConfig.php']);
+if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/decorator/class.tx_mksearch_mod1_decorator_IndexerConfig.php']) {
+    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/decorator/class.tx_mksearch_mod1_decorator_IndexerConfig.php']);
 }

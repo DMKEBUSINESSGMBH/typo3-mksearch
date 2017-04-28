@@ -33,426 +33,491 @@ tx_rnbase::load('tx_mksearch_tests_Testcase');
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_tests_indexer_Cal_testcase
-	extends tx_mksearch_tests_Testcase {
+class tx_mksearch_tests_indexer_Cal_testcase extends tx_mksearch_tests_Testcase
+{
 
-	/**
-	 * (non-PHPdoc)
-	 * @see PHPUnit_Framework_TestCase::setUp()
-	 */
-	protected function setUp() {
-		if(!tx_rnbase_util_Extensions::isLoaded('cal')) {
-			$this->markTestSkipped('cal nicht geladen.');
-		}
-		parent::setUp();
+    /**
+     * (non-PHPdoc)
+     * @see PHPUnit_Framework_TestCase::setUp()
+     */
+    protected function setUp()
+    {
+        if (!tx_rnbase_util_Extensions::isLoaded('cal')) {
+            $this->markTestSkipped('cal nicht geladen.');
+        }
+        parent::setUp();
 
-		tx_rnbase::load('tx_mksearch_indexer_Cal');
-		tx_rnbase::load('tx_mksearch_model_cal_Event');
-	}
+        tx_rnbase::load('tx_mksearch_indexer_Cal');
+        tx_rnbase::load('tx_mksearch_model_cal_Event');
+    }
 
-	/**
-	 * @group unit
-	 */
-	public function testPrepareSearchDataReturnsCorrectDocWithFieldsThatAreNotPrepared() {
-		$calRecord = array(
-			'start_time' 		=> 45660,
-			'end_time' 			=> 45720,
-			'allday' 			=> 1,
-			'timezone' 			=> 'UTC',
-			'title' 			=> 'First Event',
-			'organizer' 		=> 'John Doe',
-			'organizer_link' 	=> 'john.doe.com',
-			'location' 			=> 'Springfield',
-			'type' 				=> 1
-		);
+    /**
+     * @group unit
+     */
+    public function testPrepareSearchDataReturnsCorrectDocWithFieldsThatAreNotPrepared()
+    {
+        $calRecord = array(
+            'start_time'        => 45660,
+            'end_time'            => 45720,
+            'allday'            => 1,
+            'timezone'            => 'UTC',
+            'title'            => 'First Event',
+            'organizer'        => 'John Doe',
+            'organizer_link'    => 'john.doe.com',
+            'location'            => 'Springfield',
+            'type'                => 1
+        );
 
-		$indexDocFieldArray =
-			$this->getIndexDocFieldArrayByCalRecord($calRecord);
+        $indexDocFieldArray =
+            $this->getIndexDocFieldArrayByCalRecord($calRecord);
 
-		self::assertEquals(
-			45660,$indexDocFieldArray['start_time_i']->getValue(),
-			'start_time falsch indiziert!'
-		);
-		self::assertEquals(
-			45720,$indexDocFieldArray['end_time_i']->getValue(),
-			'end_time falsch indiziert!'
-		);
-		self::assertEquals(
-			1,$indexDocFieldArray['allday_b']->getValue(),
-			'allday falsch indiziert!'
-		);
-		self::assertEquals(
-			'UTC',$indexDocFieldArray['timezone_s']->getValue(),
-			'timezone falsch indiziert!'
-		);
-		self::assertEquals(
-			'First Event',$indexDocFieldArray['title']->getValue(),
-			'title falsch indiziert!'
-		);
-		self::assertEquals(
-			'John Doe',$indexDocFieldArray['organizer_s']->getValue(),
-			'organizer falsch indiziert!'
-		);
-		self::assertEquals(
-			'john.doe.com',$indexDocFieldArray['organizer_link_s']->getValue(),
-			'organizer_link falsch indiziert!'
-		);
-		self::assertEquals(
-			'Springfield',$indexDocFieldArray['location_s']->getValue(),
-			'location falsch indiziert!'
-		);
-		self::assertEquals(
-			1,$indexDocFieldArray['type_i']->getValue(),
-			'type falsch indiziert!'
-		);
-	}
+        self::assertEquals(
+            45660,
+            $indexDocFieldArray['start_time_i']->getValue(),
+            'start_time falsch indiziert!'
+        );
+        self::assertEquals(
+            45720,
+            $indexDocFieldArray['end_time_i']->getValue(),
+            'end_time falsch indiziert!'
+        );
+        self::assertEquals(
+            1,
+            $indexDocFieldArray['allday_b']->getValue(),
+            'allday falsch indiziert!'
+        );
+        self::assertEquals(
+            'UTC',
+            $indexDocFieldArray['timezone_s']->getValue(),
+            'timezone falsch indiziert!'
+        );
+        self::assertEquals(
+            'First Event',
+            $indexDocFieldArray['title']->getValue(),
+            'title falsch indiziert!'
+        );
+        self::assertEquals(
+            'John Doe',
+            $indexDocFieldArray['organizer_s']->getValue(),
+            'organizer falsch indiziert!'
+        );
+        self::assertEquals(
+            'john.doe.com',
+            $indexDocFieldArray['organizer_link_s']->getValue(),
+            'organizer_link falsch indiziert!'
+        );
+        self::assertEquals(
+            'Springfield',
+            $indexDocFieldArray['location_s']->getValue(),
+            'location falsch indiziert!'
+        );
+        self::assertEquals(
+            1,
+            $indexDocFieldArray['type_i']->getValue(),
+            'type falsch indiziert!'
+        );
+    }
 
-	/**
-	* @group unit
-	*/
-	public function testPrepareSearchDataReturnsCorrectDocForStartAndEnddateFieldsWithoutTimezone() {
-		$calRecord = array(
-			'start_date' 	=> '20130303',
-			'end_date' 		=> '20130305',
-		);
+    /**
+     * @group unit
+     */
+    public function testPrepareSearchDataReturnsCorrectDocForStartAndEnddateFieldsWithoutTimezone()
+    {
+        $calRecord = array(
+            'start_date'    => '20130303',
+            'end_date'        => '20130305',
+        );
 
-		$indexDocFieldArray =
-			$this->getIndexDocFieldArrayByCalRecord($calRecord);
+        $indexDocFieldArray =
+            $this->getIndexDocFieldArrayByCalRecord($calRecord);
 
-		self::assertEquals(
-			'2013-03-02T23:00:00Z',$indexDocFieldArray['start_date_dt']->getValue(),
-			'start_date_dt falsch indiziert!'
-		);
-		self::assertEquals(
-			'2013-03-04T23:00:00Z',$indexDocFieldArray['end_date_dt']->getValue(),
-			'end_date_dt falsch indiziert!'
-		);
-		self::assertEquals(
-			1362265200,$indexDocFieldArray['start_date_i']->getValue(),
-			'start_date_i falsch indiziert!'
-		);
-		self::assertEquals(
-			1362438000,$indexDocFieldArray['end_date_i']->getValue(),
-			'end_date_i falsch indiziert!'
-		);
-		self::assertEquals(
-			'20130303',$indexDocFieldArray['start_date_s']->getValue(),
-			'start_date_s falsch indiziert!'
-		);
-		self::assertEquals(
-			'20130305',$indexDocFieldArray['end_date_s']->getValue(),
-			'end_date_s falsch indiziert!'
-		);
-		self::assertEquals(
-			2013,$indexDocFieldArray['start_date_year_i']->getValue(),
-			'start_date_year_i falsch indiziert!'
-		);
-		self::assertEquals(
-			3,$indexDocFieldArray['start_date_month_i']->getValue(),
-			'start_date_month_i falsch indiziert!'
-		);
-		self::assertEquals(
-			3,$indexDocFieldArray['start_date_day_i']->getValue(),
-			'start_date_day_i falsch indiziert!'
-		);
-		self::assertEquals(
-			2013,$indexDocFieldArray['end_date_year_i']->getValue(),
-			'end_date_year_i falsch indiziert!'
-		);
-		self::assertEquals(
-			3,$indexDocFieldArray['end_date_month_i']->getValue(),
-			'end_date_month_i falsch indiziert!'
-		);
-		self::assertEquals(
-			5,$indexDocFieldArray['end_date_day_i']->getValue(),
-			'end_date_day_i falsch indiziert!'
-		);
-		self::assertEquals(
-			1362265200,$indexDocFieldArray['tstamp']->getValue(),
-			'tstamp nicht gleich start_date_i falsch indiziert!'
-		);
-	}
+        self::assertEquals(
+            '2013-03-02T23:00:00Z',
+            $indexDocFieldArray['start_date_dt']->getValue(),
+            'start_date_dt falsch indiziert!'
+        );
+        self::assertEquals(
+            '2013-03-04T23:00:00Z',
+            $indexDocFieldArray['end_date_dt']->getValue(),
+            'end_date_dt falsch indiziert!'
+        );
+        self::assertEquals(
+            1362265200,
+            $indexDocFieldArray['start_date_i']->getValue(),
+            'start_date_i falsch indiziert!'
+        );
+        self::assertEquals(
+            1362438000,
+            $indexDocFieldArray['end_date_i']->getValue(),
+            'end_date_i falsch indiziert!'
+        );
+        self::assertEquals(
+            '20130303',
+            $indexDocFieldArray['start_date_s']->getValue(),
+            'start_date_s falsch indiziert!'
+        );
+        self::assertEquals(
+            '20130305',
+            $indexDocFieldArray['end_date_s']->getValue(),
+            'end_date_s falsch indiziert!'
+        );
+        self::assertEquals(
+            2013,
+            $indexDocFieldArray['start_date_year_i']->getValue(),
+            'start_date_year_i falsch indiziert!'
+        );
+        self::assertEquals(
+            3,
+            $indexDocFieldArray['start_date_month_i']->getValue(),
+            'start_date_month_i falsch indiziert!'
+        );
+        self::assertEquals(
+            3,
+            $indexDocFieldArray['start_date_day_i']->getValue(),
+            'start_date_day_i falsch indiziert!'
+        );
+        self::assertEquals(
+            2013,
+            $indexDocFieldArray['end_date_year_i']->getValue(),
+            'end_date_year_i falsch indiziert!'
+        );
+        self::assertEquals(
+            3,
+            $indexDocFieldArray['end_date_month_i']->getValue(),
+            'end_date_month_i falsch indiziert!'
+        );
+        self::assertEquals(
+            5,
+            $indexDocFieldArray['end_date_day_i']->getValue(),
+            'end_date_day_i falsch indiziert!'
+        );
+        self::assertEquals(
+            1362265200,
+            $indexDocFieldArray['tstamp']->getValue(),
+            'tstamp nicht gleich start_date_i falsch indiziert!'
+        );
+    }
 
-	/**
-	* @group unit
-	*/
-	public function testPrepareSearchDataReturnsCorrectDocForStartAndEnddateFieldsWithTimezone() {
-		$calRecord = array(
-			'start_date' 	=> 20130303,
-			'end_date' 		=> 20130305,
-			'timezone'		=> 'UTC'
-		);
+    /**
+     * @group unit
+     */
+    public function testPrepareSearchDataReturnsCorrectDocForStartAndEnddateFieldsWithTimezone()
+    {
+        $calRecord = array(
+            'start_date'    => 20130303,
+            'end_date'        => 20130305,
+            'timezone'        => 'UTC'
+        );
 
-		$indexDocFieldArray =
-			$this->getIndexDocFieldArrayByCalRecord($calRecord);
+        $indexDocFieldArray =
+            $this->getIndexDocFieldArrayByCalRecord($calRecord);
 
-		self::assertEquals(
-			'2013-03-03T00:00:00Z',$indexDocFieldArray['start_date_dt']->getValue(),
-			'start_date_dt falsch indiziert!'
-		);
-		self::assertEquals(
-			'2013-03-05T00:00:00Z',$indexDocFieldArray['end_date_dt']->getValue(),
-			'end_date_dt falsch indiziert!'
-		);
-		self::assertEquals(
-			1362268800,$indexDocFieldArray['start_date_i']->getValue(),
-			'start_date_i falsch indiziert!'
-		);
-		self::assertEquals(
-			1362441600,$indexDocFieldArray['end_date_i']->getValue(),
-			'end_date_i falsch indiziert!'
-		);
-		self::assertEquals(
-			'20130303',$indexDocFieldArray['start_date_s']->getValue(),
-			'start_date_s falsch indiziert!'
-		);
-		self::assertEquals(
-			'20130305',$indexDocFieldArray['end_date_s']->getValue(),
-			'end_date_s falsch indiziert!'
-		);
-		self::assertEquals(
-			2013,$indexDocFieldArray['start_date_year_i']->getValue(),
-			'start_date_year_i falsch indiziert!'
-		);
-		self::assertEquals(
-			3,$indexDocFieldArray['start_date_month_i']->getValue(),
-			'start_date_month_i falsch indiziert!'
-		);
-		self::assertEquals(
-			3,$indexDocFieldArray['start_date_day_i']->getValue(),
-			'start_date_day_i falsch indiziert!'
-		);
-		self::assertEquals(
-			2013,$indexDocFieldArray['end_date_year_i']->getValue(),
-			'end_date_year_i falsch indiziert!'
-		);
-		self::assertEquals(
-			3,$indexDocFieldArray['end_date_month_i']->getValue(),
-			'end_date_month_i falsch indiziert!'
-		);
-		self::assertEquals(
-			5,$indexDocFieldArray['end_date_day_i']->getValue(),
-			'end_date_day_i falsch indiziert!'
-		);
-	}
+        self::assertEquals(
+            '2013-03-03T00:00:00Z',
+            $indexDocFieldArray['start_date_dt']->getValue(),
+            'start_date_dt falsch indiziert!'
+        );
+        self::assertEquals(
+            '2013-03-05T00:00:00Z',
+            $indexDocFieldArray['end_date_dt']->getValue(),
+            'end_date_dt falsch indiziert!'
+        );
+        self::assertEquals(
+            1362268800,
+            $indexDocFieldArray['start_date_i']->getValue(),
+            'start_date_i falsch indiziert!'
+        );
+        self::assertEquals(
+            1362441600,
+            $indexDocFieldArray['end_date_i']->getValue(),
+            'end_date_i falsch indiziert!'
+        );
+        self::assertEquals(
+            '20130303',
+            $indexDocFieldArray['start_date_s']->getValue(),
+            'start_date_s falsch indiziert!'
+        );
+        self::assertEquals(
+            '20130305',
+            $indexDocFieldArray['end_date_s']->getValue(),
+            'end_date_s falsch indiziert!'
+        );
+        self::assertEquals(
+            2013,
+            $indexDocFieldArray['start_date_year_i']->getValue(),
+            'start_date_year_i falsch indiziert!'
+        );
+        self::assertEquals(
+            3,
+            $indexDocFieldArray['start_date_month_i']->getValue(),
+            'start_date_month_i falsch indiziert!'
+        );
+        self::assertEquals(
+            3,
+            $indexDocFieldArray['start_date_day_i']->getValue(),
+            'start_date_day_i falsch indiziert!'
+        );
+        self::assertEquals(
+            2013,
+            $indexDocFieldArray['end_date_year_i']->getValue(),
+            'end_date_year_i falsch indiziert!'
+        );
+        self::assertEquals(
+            3,
+            $indexDocFieldArray['end_date_month_i']->getValue(),
+            'end_date_month_i falsch indiziert!'
+        );
+        self::assertEquals(
+            5,
+            $indexDocFieldArray['end_date_day_i']->getValue(),
+            'end_date_day_i falsch indiziert!'
+        );
+    }
 
-	/**
-	* @group unit
-	*/
-	public function testPrepareSearchDataRemovesHtmlFromDescriptionField() {
-		$calRecord = array(
-			'description' 	=> '<p>my description</p>',
-		);
+    /**
+     * @group unit
+     */
+    public function testPrepareSearchDataRemovesHtmlFromDescriptionField()
+    {
+        $calRecord = array(
+            'description'    => '<p>my description</p>',
+        );
 
-		$indexDocFieldArray =
-			$this->getIndexDocFieldArrayByCalRecord($calRecord);
+        $indexDocFieldArray =
+            $this->getIndexDocFieldArrayByCalRecord($calRecord);
 
-		self::assertEquals(
-			'my description',$indexDocFieldArray['description_s']->getValue(),
-			'description falsch indiziert!'
-		);
-	}
+        self::assertEquals(
+            'my description',
+            $indexDocFieldArray['description_s']->getValue(),
+            'description falsch indiziert!'
+        );
+    }
 
-	/**
-	* @group unit
-	*/
-	public function testPrepareSearchDataIndexesCalendarTitleCorrect() {
-		$calRecord = array(
-			'title' => 'First Calendar',
-		);
+    /**
+     * @group unit
+     */
+    public function testPrepareSearchDataIndexesCalendarTitleCorrect()
+    {
+        $calRecord = array(
+            'title' => 'First Calendar',
+        );
 
-		$calendarModel = tx_rnbase::makeInstance(
-			'tx_mksearch_model_cal_Calendar', $calRecord
-		);
+        $calendarModel = tx_rnbase::makeInstance(
+            'tx_mksearch_model_cal_Calendar',
+            $calRecord
+        );
 
-		$calEventRecord = array(
-			'calendar_id' 	=> 1,
-		);
-		$calendarEventMock = $this->getMock(
-			'tx_mksearch_model_cal_Event',
-			array('getCalendar'), array($calEventRecord)
-		);
-		$calendarEventMock->expects($this->once())
-			->method('getCalendar')
-			->will($this->returnValue($calendarModel));
+        $calEventRecord = array(
+            'calendar_id'    => 1,
+        );
+        $calendarEventMock = $this->getMock(
+            'tx_mksearch_model_cal_Event',
+            array('getCalendar'),
+            array($calEventRecord)
+        );
+        $calendarEventMock->expects($this->once())
+            ->method('getCalendar')
+            ->will($this->returnValue($calendarModel));
 
-		$indexer = $this->getMock(
-			'tx_mksearch_indexer_Cal', array('createModel')
-		);
-		$indexer->expects($this->once())
-			->method('createModel')
-			->will($this->returnValue($calendarEventMock));
+        $indexer = $this->getMock(
+            'tx_mksearch_indexer_Cal',
+            array('createModel')
+        );
+        $indexer->expects($this->once())
+            ->method('createModel')
+            ->will($this->returnValue($calendarEventMock));
 
-		$indexDocFieldArray =
-			$this->getIndexDocFieldArrayByCalRecord($calEventRecord, $indexer);
+        $indexDocFieldArray =
+            $this->getIndexDocFieldArrayByCalRecord($calEventRecord, $indexer);
 
-		self::assertEquals(
-			'First Calendar',$indexDocFieldArray['calendar_title_s']->getValue(),
-			'calendar_title falsch indiziert!'
-		);
-	}
+        self::assertEquals(
+            'First Calendar',
+            $indexDocFieldArray['calendar_title_s']->getValue(),
+            'calendar_title falsch indiziert!'
+        );
+    }
 
-	/**
-	 *
-	 * @return array
-	 */
-	private function getIndexDocFieldArrayForCategoryTests() {
+    /**
+     *
+     * @return array
+     */
+    private function getIndexDocFieldArrayForCategoryTests()
+    {
+        $categoryModels = array(
+            0 => tx_rnbase::makeInstance(
+                'tx_mksearch_model_cal_Category',
+                array('uid' => 3, 'title' => 'First Category')
+            ),
+            1 => tx_rnbase::makeInstance(
+                'tx_mksearch_model_cal_Category',
+                array('uid' => 2, 'title' => 'Second Category')
+            )
+        );
 
-		$categoryModels = array(
-			0 => tx_rnbase::makeInstance(
-				'tx_mksearch_model_cal_Category',
-				array('uid' => 3, 'title' => 'First Category')
-			),
-			1 => tx_rnbase::makeInstance(
-				'tx_mksearch_model_cal_Category',
-				array('uid' => 2, 'title' => 'Second Category')
-			)
-		);
+        $calEventRecord = array(
+            'category_id'    => 2,
+        );
+        $calendarEventMock = $this->getMock(
+            'tx_mksearch_model_cal_Event',
+            array('getCategories'),
+            array($calEventRecord)
+        );
+        $calendarEventMock->expects($this->once())
+            ->method('getCategories')
+            ->will($this->returnValue($categoryModels));
 
-		$calEventRecord = array(
-			'category_id' 	=> 2,
-		);
-		$calendarEventMock = $this->getMock(
-			'tx_mksearch_model_cal_Event',
-			array('getCategories'), array($calEventRecord)
-		);
-		$calendarEventMock->expects($this->once())
-			->method('getCategories')
-			->will($this->returnValue($categoryModels));
+        $indexer = $this->getMock(
+            'tx_mksearch_indexer_Cal',
+            array('createModel')
+        );
+        $indexer->expects($this->once())
+            ->method('createModel')
+            ->will($this->returnValue($calendarEventMock));
 
-		$indexer = $this->getMock(
-			'tx_mksearch_indexer_Cal', array('createModel')
-		);
-		$indexer->expects($this->once())
-			->method('createModel')
-			->will($this->returnValue($calendarEventMock));
+        $indexDocFieldArray =
+            $this->getIndexDocFieldArrayByCalRecord($calEventRecord, $indexer);
 
-		$indexDocFieldArray =
-			$this->getIndexDocFieldArrayByCalRecord($calEventRecord, $indexer);
-		return $indexDocFieldArray;
-	}
+        return $indexDocFieldArray;
+    }
 
-	/**
-	* @group unit
-	*/
-	public function testPrepareSearchDataIndexesCategoryUidsCorrect() {
-		$indexDocFieldArray = $this->getIndexDocFieldArrayForCategoryTests();
-		$expectedCategoryUids = array(
-			0 => 3,
-			1 => 2
-		);
-		self::assertEquals(
-			$expectedCategoryUids,$indexDocFieldArray['category_uid_mi']->getValue(),
-			'categoy_title falsch indiziert!'
-		);
-	}
+    /**
+     * @group unit
+     */
+    public function testPrepareSearchDataIndexesCategoryUidsCorrect()
+    {
+        $indexDocFieldArray = $this->getIndexDocFieldArrayForCategoryTests();
+        $expectedCategoryUids = array(
+            0 => 3,
+            1 => 2
+        );
+        self::assertEquals(
+            $expectedCategoryUids,
+            $indexDocFieldArray['category_uid_mi']->getValue(),
+            'categoy_title falsch indiziert!'
+        );
+    }
 
-	/**
-	* @group unit
-	*/
-	public function testPrepareSearchDataIndexesCategoryTitlesCorrect() {
-		$indexDocFieldArray = $this->getIndexDocFieldArrayForCategoryTests();
+    /**
+     * @group unit
+     */
+    public function testPrepareSearchDataIndexesCategoryTitlesCorrect()
+    {
+        $indexDocFieldArray = $this->getIndexDocFieldArrayForCategoryTests();
 
-		$expectedCategoryTitles = array(
-			0 => 'First Category',
-			1 => 'Second Category'
-		);
-		self::assertEquals(
-			$expectedCategoryTitles,$indexDocFieldArray['category_title_ms']->getValue(),
-			'categoy_title falsch indiziert!'
-		);
-	}
+        $expectedCategoryTitles = array(
+            0 => 'First Category',
+            1 => 'Second Category'
+        );
+        self::assertEquals(
+            $expectedCategoryTitles,
+            $indexDocFieldArray['category_title_ms']->getValue(),
+            'categoy_title falsch indiziert!'
+        );
+    }
 
-	/**
-	 * @group unit
-	 */
-	public function testPrepareSearchDataStopsIndexingAndPutsEventsToTheIndexIfTableCalendarHasChanged() {
-		$indexer = $this->getMock(
-			'tx_mksearch_indexer_Cal',
-			array('getEventsByCalendarUid','addEventToIndex')
-		);
+    /**
+     * @group unit
+     */
+    public function testPrepareSearchDataStopsIndexingAndPutsEventsToTheIndexIfTableCalendarHasChanged()
+    {
+        $indexer = $this->getMock(
+            'tx_mksearch_indexer_Cal',
+            array('getEventsByCalendarUid','addEventToIndex')
+        );
 
-		$eventsByCalendarUid = array(
-			array('uid' => 1),array('uid' => 2)
-		);
-		$indexer->expects($this->once())
-			->method('getEventsByCalendarUid')
-			->will($this->returnValue($eventsByCalendarUid));
+        $eventsByCalendarUid = array(
+            array('uid' => 1),array('uid' => 2)
+        );
+        $indexer->expects($this->once())
+            ->method('getEventsByCalendarUid')
+            ->will($this->returnValue($eventsByCalendarUid));
 
-		$indexer->expects($this->at(1))
-			->method('addEventToIndex')
-			->with(1);
+        $indexer->expects($this->at(1))
+            ->method('addEventToIndex')
+            ->with(1);
 
-		$indexer->expects($this->at(2))
-			->method('addEventToIndex')
-			->with(2);
+        $indexer->expects($this->at(2))
+            ->method('addEventToIndex')
+            ->with(2);
 
-		self::assertNull($this->getIndexDocFieldArrayByCalRecord(
-				array(), $indexer, 'tx_cal_calendar'
-			),
-			'Die Indizierung wurde nicht abgebrochen'
-		);
-	}
+        self::assertNull(
+            $this->getIndexDocFieldArrayByCalRecord(
+                array(),
+                $indexer,
+                'tx_cal_calendar'
+            ),
+            'Die Indizierung wurde nicht abgebrochen'
+        );
+    }
 
-	/**
-	 * @group unit
-	 */
-	public function testPrepareSearchDataStopsIndexingAndPutsEventsToTheIndexIfTableCategoryHasChanged() {
-		$indexer = $this->getMock(
-			'tx_mksearch_indexer_Cal',
-			array('getEventsByCategoryUid','addEventToIndex')
-		);
+    /**
+     * @group unit
+     */
+    public function testPrepareSearchDataStopsIndexingAndPutsEventsToTheIndexIfTableCategoryHasChanged()
+    {
+        $indexer = $this->getMock(
+            'tx_mksearch_indexer_Cal',
+            array('getEventsByCategoryUid','addEventToIndex')
+        );
 
-		$eventsByCategoryUid = array(
-			array('uid' => 1),array('uid' => 2)
-		);
-		$indexer->expects($this->once())
-			->method('getEventsByCategoryUid')
-			->will($this->returnValue($eventsByCategoryUid));
+        $eventsByCategoryUid = array(
+            array('uid' => 1),array('uid' => 2)
+        );
+        $indexer->expects($this->once())
+            ->method('getEventsByCategoryUid')
+            ->will($this->returnValue($eventsByCategoryUid));
 
-		$indexer->expects($this->at(1))
-			->method('addEventToIndex')
-			->with(1);
+        $indexer->expects($this->at(1))
+            ->method('addEventToIndex')
+            ->with(1);
 
-		$indexer->expects($this->at(2))
-			->method('addEventToIndex')
-			->with(2);
+        $indexer->expects($this->at(2))
+            ->method('addEventToIndex')
+            ->with(2);
 
-		self::assertNull($this->getIndexDocFieldArrayByCalRecord(
-				array(), $indexer, 'tx_cal_category'
-			),
-			'Die Indizierung wurde nicht abgebrochen'
-		);
-	}
+        self::assertNull(
+            $this->getIndexDocFieldArrayByCalRecord(
+                array(),
+                $indexer,
+                'tx_cal_category'
+            ),
+            'Die Indizierung wurde nicht abgebrochen'
+        );
+    }
 
-	/**
-	 * @param array $calRecord
-	 * @param tx_mksearch_indexer_Cal $indexer
-	 * @param string $table
-	 *
-	 * @return tx_mksearch_model_IndexerDocumentBase
-	 */
-	private function getIndexDocFieldArrayByCalRecord(
-		array $calRecord,
-		tx_mksearch_indexer_Cal $indexer = null,
-		$table = 'tx_cal_event'
-	) {
-		if($indexer === null) {
-			$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_Cal');
-		}
+    /**
+     * @param array $calRecord
+     * @param tx_mksearch_indexer_Cal $indexer
+     * @param string $table
+     *
+     * @return tx_mksearch_model_IndexerDocumentBase
+     */
+    private function getIndexDocFieldArrayByCalRecord(
+        array $calRecord,
+        tx_mksearch_indexer_Cal $indexer = null,
+        $table = 'tx_cal_event'
+    ) {
+        if ($indexer === null) {
+            $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_Cal');
+        }
 
-		list($extKey, $cType) = $indexer->getContentType();
-		$indexDoc = tx_rnbase::makeInstance(
-			'tx_mksearch_model_IndexerDocumentBase',$extKey, $cType
-		);
+        list($extKey, $cType) = $indexer->getContentType();
+        $indexDoc = tx_rnbase::makeInstance(
+            'tx_mksearch_model_IndexerDocumentBase',
+            $extKey,
+            $cType
+        );
 
-		$options = array();
-		$indexDoc = $indexer->prepareSearchData(
-			$table, $calRecord, $indexDoc, $options
-		);
+        $options = array();
+        $indexDoc = $indexer->prepareSearchData(
+            $table,
+            $calRecord,
+            $indexDoc,
+            $options
+        );
 
-		$return = is_object($indexDoc) ? $indexDoc->getData() : $indexDoc;
+        $return = is_object($indexDoc) ? $indexDoc->getData() : $indexDoc;
 
-		return $return;
-	}
+        return $return;
+    }
 }

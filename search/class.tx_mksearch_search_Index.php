@@ -26,60 +26,69 @@ tx_rnbase::load('tx_rnbase_util_SearchBase');
 /**
  * Class to search indices from database
  */
-class tx_mksearch_search_Index extends tx_rnbase_util_SearchBase {
+class tx_mksearch_search_Index extends tx_rnbase_util_SearchBase
+{
 
-	/**
-	 * Return table mappings
-	 *
-	 * MUST be public as we need these data from external!
-	 */
-	public function getTableMappings() {
-		$tableMapping = array();
-		$tableMapping['INDX'] = self::getBaseTable();
-		$tableMapping['CMP'] = 'tx_mksearch_configcomposites';
-		$tableMapping['INDXCMPMM'] = 'tx_mksearch_indices_configcomposites_mm';
-		return $tableMapping;
-	}
+    /**
+     * Return table mappings
+     *
+     * MUST be public as we need these data from external!
+     */
+    public function getTableMappings()
+    {
+        $tableMapping = array();
+        $tableMapping['INDX'] = self::getBaseTable();
+        $tableMapping['CMP'] = 'tx_mksearch_configcomposites';
+        $tableMapping['INDXCMPMM'] = 'tx_mksearch_indices_configcomposites_mm';
 
-	/**
-	 * return name of base table
-	 * MUST be public as we need these data from external!
-	 * @see util/tx_rnbase_util_SearchBase#getBaseTable()
-	 */
-	public function getBaseTable() {
-		return 'tx_mksearch_indices';
-	}
-	/**
-	 * return name of base table
-	 * MUST be public as we need these data from external!
-	 * @see util/tx_rnbase_util_SearchBase#getBaseTable()
-	 */
-	public function getBaseTableAlias() {
-		return 'INDX';
-	}
-	
-	public function getWrapperClass() {
-		return 'tx_mksearch_model_internal_Index';
-	}
-	
-	protected function getJoins($tableAliases) {
-	  	$join = '';
-	  	$tableMapping = $this->getTableMappings();
-	  	
-		// Additional table "composites" or its MM table?
-		if(isset($tableAliases['INDXCMPMM']) or isset($tableAliases['CMP']))
-			$join .=
-	    		' JOIN ' . $tableMapping['INDXCMPMM'] .
-	    			' ON ' . $tableMapping['INDX'] . '.uid = ' . $tableMapping['INDXCMPMM'] . '.uid_local';
-	  	
-		// Additional table "composites"?
-	  	if(isset($tableAliases['CMP'])) {
-	    	$join .= ' JOIN ' . $tableMapping['CMP'] . ' ON ' . $tableMapping['INDXCMPMM'] . '.uid_foreign = ' . $tableMapping['CMP'] . '.uid';
-	    }
-		return $join;
-	}
+        return $tableMapping;
+    }
+
+    /**
+     * return name of base table
+     * MUST be public as we need these data from external!
+     * @see util/tx_rnbase_util_SearchBase#getBaseTable()
+     */
+    public function getBaseTable()
+    {
+        return 'tx_mksearch_indices';
+    }
+    /**
+     * return name of base table
+     * MUST be public as we need these data from external!
+     * @see util/tx_rnbase_util_SearchBase#getBaseTable()
+     */
+    public function getBaseTableAlias()
+    {
+        return 'INDX';
+    }
+    
+    public function getWrapperClass()
+    {
+        return 'tx_mksearch_model_internal_Index';
+    }
+    
+    protected function getJoins($tableAliases)
+    {
+        $join = '';
+        $tableMapping = $this->getTableMappings();
+        
+        // Additional table "composites" or its MM table?
+        if (isset($tableAliases['INDXCMPMM']) or isset($tableAliases['CMP'])) {
+            $join .=
+                ' JOIN ' . $tableMapping['INDXCMPMM'] .
+                    ' ON ' . $tableMapping['INDX'] . '.uid = ' . $tableMapping['INDXCMPMM'] . '.uid_local';
+        }
+        
+        // Additional table "composites"?
+        if (isset($tableAliases['CMP'])) {
+            $join .= ' JOIN ' . $tableMapping['CMP'] . ' ON ' . $tableMapping['INDXCMPMM'] . '.uid_foreign = ' . $tableMapping['CMP'] . '.uid';
+        }
+
+        return $join;
+    }
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/search/class.tx_mksearch_search_Index.php']) {
-  include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/search/class.tx_mksearch_search_Index.php']);
+    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/search/class.tx_mksearch_search_Index.php']);
 }

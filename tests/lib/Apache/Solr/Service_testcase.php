@@ -35,90 +35,98 @@ tx_rnbase::load('tx_mksearch_tests_Testcase');
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class Apache_Solr_Service_testcase
-	extends tx_mksearch_tests_Testcase {
+class Apache_Solr_Service_testcase extends tx_mksearch_tests_Testcase
+{
 
-	/**
-	 * @group unit
-	 */
-	public function testCommitCallsSendRawPostWithWaitFlushParameterIfNotSolr4() {
-		$service = $this->getMock(
-			'Apache_Solr_Service', array('_sendRawPost')
-		);
-		$service->setSolrVersion(30);
+    /**
+     * @group unit
+     */
+    public function testCommitCallsSendRawPostWithWaitFlushParameterIfNotSolr4()
+    {
+        $service = $this->getMock(
+            'Apache_Solr_Service',
+            array('_sendRawPost')
+        );
+        $service->setSolrVersion(30);
 
-		$expectedUrl = 'http://localhost:8180/solr/update?wt=json';
-		$expectedRawPostWithWaitFlushParameter =
-			'<commit expungeDeletes="false" waitFlush="true" waitSearcher="true" />';
-		$expectedTimeout = 3600;
+        $expectedUrl = 'http://localhost:8180/solr/update?wt=json';
+        $expectedRawPostWithWaitFlushParameter =
+            '<commit expungeDeletes="false" waitFlush="true" waitSearcher="true" />';
+        $expectedTimeout = 3600;
 
-		$service->expects($this->once())
-			->method('_sendRawPost')
-			->with($expectedUrl, $expectedRawPostWithWaitFlushParameter, $expectedTimeout);
+        $service->expects($this->once())
+            ->method('_sendRawPost')
+            ->with($expectedUrl, $expectedRawPostWithWaitFlushParameter, $expectedTimeout);
 
-		$service->commit();
-	}
+        $service->commit();
+    }
 
-	/**
-	 * @group unit
-	 */
-	public function testCommitCallsSendRawPostWithoutWaitFlushParameterIfSolr4() {
-		$service = $this->getMock(
-			'Apache_Solr_Service', array('_sendRawPost')
-		);
-		$service->setSolrVersion(40);
+    /**
+     * @group unit
+     */
+    public function testCommitCallsSendRawPostWithoutWaitFlushParameterIfSolr4()
+    {
+        $service = $this->getMock(
+            'Apache_Solr_Service',
+            array('_sendRawPost')
+        );
+        $service->setSolrVersion(40);
 
-		$expectedUrl = 'http://localhost:8180/solr/update?wt=json';
-		$expectedRawPostWithWaitFlushParameter =
-			'<commit expungeDeletes="false" waitSearcher="true" />';
-		$expectedTimeout = 3600;
+        $expectedUrl = 'http://localhost:8180/solr/update?wt=json';
+        $expectedRawPostWithWaitFlushParameter =
+            '<commit expungeDeletes="false" waitSearcher="true" />';
+        $expectedTimeout = 3600;
 
-		$service->expects($this->once())
-			->method('_sendRawPost')
-			->with($expectedUrl, $expectedRawPostWithWaitFlushParameter, $expectedTimeout);
+        $service->expects($this->once())
+            ->method('_sendRawPost')
+            ->with($expectedUrl, $expectedRawPostWithWaitFlushParameter, $expectedTimeout);
 
-		$service->commit();
-	}
+        $service->commit();
+    }
 
-	/**
-	 * @group unit
-	 */
-	public function testOptimizeCallsSendRawPostWithWaitFlushParameterIfNotSolr4() {
-		$service = $this->getMock(
-			'Apache_Solr_Service', array('_sendRawPost')
-		);
-		$service->setSolrVersion(30);
+    /**
+     * @group unit
+     */
+    public function testOptimizeCallsSendRawPostWithWaitFlushParameterIfNotSolr4()
+    {
+        $service = $this->getMock(
+            'Apache_Solr_Service',
+            array('_sendRawPost')
+        );
+        $service->setSolrVersion(30);
 
-		$expectedUrl = 'http://localhost:8180/solr/update?wt=json';
-		$expectedRawPostWithWaitFlushParameter =
-			'<optimize waitFlush="true" waitSearcher="true" />';
-		$expectedTimeout = 3600;
+        $expectedUrl = 'http://localhost:8180/solr/update?wt=json';
+        $expectedRawPostWithWaitFlushParameter =
+            '<optimize waitFlush="true" waitSearcher="true" />';
+        $expectedTimeout = 3600;
 
-		$service->expects($this->once())
-			->method('_sendRawPost')
-			->with($expectedUrl, $expectedRawPostWithWaitFlushParameter, $expectedTimeout);
+        $service->expects($this->once())
+            ->method('_sendRawPost')
+            ->with($expectedUrl, $expectedRawPostWithWaitFlushParameter, $expectedTimeout);
 
-		$service->optimize();
-	}
+        $service->optimize();
+    }
 
-	/**
-	 * @group unit
-	 */
-	public function testOptimizeCallsSendRawPostWithoutWaitFlushParameterIfSolr4() {
-		$service = $this->getMock(
-			'Apache_Solr_Service', array('_sendRawPost')
-		);
-		$service->setSolrVersion(40);
+    /**
+     * @group unit
+     */
+    public function testOptimizeCallsSendRawPostWithoutWaitFlushParameterIfSolr4()
+    {
+        $service = $this->getMock(
+            'Apache_Solr_Service',
+            array('_sendRawPost')
+        );
+        $service->setSolrVersion(40);
 
-		$expectedUrl = 'http://localhost:8180/solr/update?wt=json';
-		$expectedRawPostWithWaitFlushParameter =
-			'<optimize waitSearcher="true" />';
-		$expectedTimeout = 3600;
+        $expectedUrl = 'http://localhost:8180/solr/update?wt=json';
+        $expectedRawPostWithWaitFlushParameter =
+            '<optimize waitSearcher="true" />';
+        $expectedTimeout = 3600;
 
-		$service->expects($this->once())
-			->method('_sendRawPost')
-			->with($expectedUrl, $expectedRawPostWithWaitFlushParameter, $expectedTimeout);
+        $service->expects($this->once())
+            ->method('_sendRawPost')
+            ->with($expectedUrl, $expectedRawPostWithWaitFlushParameter, $expectedTimeout);
 
-		$service->optimize();
-	}
+        $service->optimize();
+    }
 }

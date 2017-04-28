@@ -28,30 +28,32 @@ tx_rnbase::load('tx_mksearch_marker_SearchResultSimple');
 /**
  * Marker class for core page search results
  */
-class tx_mksearch_marker_CorePage extends tx_mksearch_marker_SearchResultSimple {
+class tx_mksearch_marker_CorePage extends tx_mksearch_marker_SearchResultSimple
+{
 
-	/**
-	 * Prepare links
-	 *
-	 * @param tx_mksearch_model_SearchHit $item
-	 * @param string $marker
-	 * @param array $markerArray
-	 * @param array $wrappedSubpartArray
-	 * @param string $confId
-	 * @param tx_rnbase_util_FormatUtil $formatter
-	 */
-	public function prepareLinks(&$item, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, &$formatter) {
-		// Fill TSFE register with adequate page id.
-		// Usually you won't need that - it's a special case for core.tt_content.
-		// For other contents you just configure the page id via TS statically
-		// as all search results of one particular content type will be shown
-		// within the same page which is to be configured preliminarily. 
-		$GLOBALS['TSFE']->register['mksearch.core.page'] = $item->uid;
-		$linkId = 'show';
-		$this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, $linkId, $marker, array());
-	}
+    /**
+     * Prepare links
+     *
+     * @param tx_mksearch_model_SearchHit $item
+     * @param string $marker
+     * @param array $markerArray
+     * @param array $wrappedSubpartArray
+     * @param string $confId
+     * @param tx_rnbase_util_FormatUtil $formatter
+     */
+    public function prepareLinks(&$item, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, &$formatter)
+    {
+        // Fill TSFE register with adequate page id.
+        // Usually you won't need that - it's a special case for core.tt_content.
+        // For other contents you just configure the page id via TS statically
+        // as all search results of one particular content type will be shown
+        // within the same page which is to be configured preliminarily.
+        $GLOBALS['TSFE']->register['mksearch.core.page'] = $item->uid;
+        $linkId = 'show';
+        $this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, $linkId, $marker, array());
+    }
 }
 
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/marker/class.tx_mksearch_marker_CorePage.php'])	{
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/marker/class.tx_mksearch_marker_CorePage.php']);
+if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/marker/class.tx_mksearch_marker_CorePage.php']) {
+    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/marker/class.tx_mksearch_marker_CorePage.php']);
 }

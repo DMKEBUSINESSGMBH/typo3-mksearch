@@ -29,22 +29,23 @@
  * @package TYPO3
  * @subpackage tx_mksearch
  */
-interface tx_mksearch_interface_SearchHit {
+interface tx_mksearch_interface_SearchHit
+{
 
-	/**
-	 * Returns the uid
-	 * @return int
-	 */
-// 	public function getUid(); // allready declared in tx_rnbase_IModel
+    /**
+     * Returns the uid
+     * @return int
+     */
+//    public function getUid(); // allready declared in tx_rnbase_IModel
 
-	/**
-	 * Returns the data record as array
-	 * @return array
-	 */
-//	public function getRecord();// allready declared in tx_rnbase_IModel
+    /**
+     * Returns the data record as array
+     * @return array
+     */
+//   public function getRecord();// allready declared in tx_rnbase_IModel
 }
 
 
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/interface/class.tx_mksearch_interface_SearchHit.php'])	{
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/interface/class.tx_mksearch_interface_SearchHit.php']);
+if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/interface/class.tx_mksearch_interface_SearchHit.php']) {
+    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/interface/class.tx_mksearch_interface_SearchHit.php']);
 }

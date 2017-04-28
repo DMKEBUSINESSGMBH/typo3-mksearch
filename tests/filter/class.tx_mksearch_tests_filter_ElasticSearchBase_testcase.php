@@ -1,8 +1,8 @@
 <?php
 /**
- *	@package TYPO3
- *  @subpackage tx_mksearch
- *  @author Hannes Bochmann <dev@dmk-ebusiness.de>
+ * @package TYPO3
+ * @subpackage tx_mksearch
+ * @author Hannes Bochmann <dev@dmk-ebusiness.de>
  *
  *  Copyright notice
  *
@@ -44,409 +44,447 @@ tx_rnbase::load('tx_mksearch_util_UserFunc');
  * @subpackage tx_mksearch
  * @author Hannes Bochmann <dev@dmk-ebusiness.de>
  */
-class tx_mksearch_tests_filter_ElasticSearchBase_testcase
-	extends tx_mksearch_tests_Testcase
+class tx_mksearch_tests_filter_ElasticSearchBase_testcase extends tx_mksearch_tests_Testcase
 {
 
-	/**
-	 * @var string
-	 */
-	private $confId = 'elasticsearch.';
+    /**
+     * @var string
+     */
+    private $confId = 'elasticsearch.';
 
-	/**
-	 * @group uinit
-	 */
-	public function testPrepareFormFieldsSetsDefaultFieldsIfNotInParameters() {
-		$parameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
-		$formData = array();
-		$reflectionObject = new ReflectionObject($this->getFilter());
-		$reflectionMethod = $reflectionObject->getMethod('prepareFormFields');
-		$reflectionMethod->setAccessible(TRUE);
-		$reflectionMethod->invokeArgs(
-			$this->getFilter(),
-			array(&$formData, $parameters)
-		);
+    /**
+     * @group uinit
+     */
+    public function testPrepareFormFieldsSetsDefaultFieldsIfNotInParameters()
+    {
+        $parameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
+        $formData = array();
+        $reflectionObject = new ReflectionObject($this->getFilter());
+        $reflectionMethod = $reflectionObject->getMethod('prepareFormFields');
+        $reflectionMethod->setAccessible(true);
+        $reflectionMethod->invokeArgs(
+            $this->getFilter(),
+            array(&$formData, $parameters)
+        );
 
-		self::assertArrayHasKey('zip', $formData, 'zip nicht vorhanden in formdata');
-		self::assertArrayHasKey('city', $formData, 'city nicht vorhanden in formdata');
-		self::assertArrayHasKey('company', $formData, 'company nicht vorhanden in formdata');
-		self::assertEquals('', $formData['zip'], 'zip nicht leer in formdata');
-		self::assertEquals('', $formData['city'], 'city nicht leer in formdata');
-		self::assertEquals('', $formData['company'], 'company nicht leer in formdata');
-	}
+        self::assertArrayHasKey('zip', $formData, 'zip nicht vorhanden in formdata');
+        self::assertArrayHasKey('city', $formData, 'city nicht vorhanden in formdata');
+        self::assertArrayHasKey('company', $formData, 'company nicht vorhanden in formdata');
+        self::assertEquals('', $formData['zip'], 'zip nicht leer in formdata');
+        self::assertEquals('', $formData['city'], 'city nicht leer in formdata');
+        self::assertEquals('', $formData['company'], 'company nicht leer in formdata');
+    }
 
-	/**
-	 * @group uinit
-	 */
-	public function testPrepareFormFieldsSetsDefaultFieldsNotIfAlreadyInFormData() {
-		$parameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
-		$formData = array('zip' => 1, 'city' => 2, 'company' => 3);
-		$reflectionObject = new ReflectionObject($this->getFilter());
-		$reflectionMethod = $reflectionObject->getMethod('prepareFormFields');
-		$reflectionMethod->setAccessible(TRUE);
-		$reflectionMethod->invokeArgs(
-			$this->getFilter(),
-			array(&$formData, $parameters)
-		);
+    /**
+     * @group uinit
+     */
+    public function testPrepareFormFieldsSetsDefaultFieldsNotIfAlreadyInFormData()
+    {
+        $parameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
+        $formData = array('zip' => 1, 'city' => 2, 'company' => 3);
+        $reflectionObject = new ReflectionObject($this->getFilter());
+        $reflectionMethod = $reflectionObject->getMethod('prepareFormFields');
+        $reflectionMethod->setAccessible(true);
+        $reflectionMethod->invokeArgs(
+            $this->getFilter(),
+            array(&$formData, $parameters)
+        );
 
-		self::assertEquals(1, $formData['zip'], 'zip leer in formdata');
-		self::assertEquals(2, $formData['city'], 'city leer in formdata');
-		self::assertEquals(3, $formData['company'], 'company leer in formdata');
-	}
+        self::assertEquals(1, $formData['zip'], 'zip leer in formdata');
+        self::assertEquals(2, $formData['city'], 'city leer in formdata');
+        self::assertEquals(3, $formData['company'], 'company leer in formdata');
+    }
 
-	/**
-	 * @group uinit
-	 */
-	public function testGetModeValuesAvailable() {
-		$configArray = array($this->confId => array(
-			'filter.' => array('availableModes' => 'newCheckedMode,newNotCheckedMode'))
-		);
-		$filter = $this->getFilter($configArray);
+    /**
+     * @group uinit
+     */
+    public function testGetModeValuesAvailable()
+    {
+        $configArray = array($this->confId => array(
+            'filter.' => array('availableModes' => 'newCheckedMode,newNotCheckedMode'))
+        );
+        $filter = $this->getFilter($configArray);
 
-		self::assertEquals(
-			array('newCheckedMode', 'newNotCheckedMode'),
-			$this->callInaccessibleMethod($filter, 'getModeValuesAvailable'),
-			'return falsch'
-		);
-	}
+        self::assertEquals(
+            array('newCheckedMode', 'newNotCheckedMode'),
+            $this->callInaccessibleMethod($filter, 'getModeValuesAvailable'),
+            'return falsch'
+        );
+    }
 
-	/**
-	 * @group uinit
-	 */
-	public function testPrepareFormFieldsSetsCorrectModeChecked() {
-		$_GET['mksearch']['options']['mode'] = 'newCheckedMode';
-		$parameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
-		$parameters->init('mksearch');
-		$formData = array();
-		$configArray = array($this->confId => array(
-			'filter.' => array('availableModes' => 'newCheckedMode,newNotCheckedMode'))
-		);
-		$filter = $this->getFilter($configArray);
-		$reflectionObject = new ReflectionObject($filter);
-		$reflectionMethod = $reflectionObject->getMethod('prepareFormFields');
-		$reflectionMethod->setAccessible(TRUE);
-		$reflectionMethod->invokeArgs($filter, array(&$formData, $parameters));
+    /**
+     * @group uinit
+     */
+    public function testPrepareFormFieldsSetsCorrectModeChecked()
+    {
+        $_GET['mksearch']['options']['mode'] = 'newCheckedMode';
+        $parameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
+        $parameters->init('mksearch');
+        $formData = array();
+        $configArray = array($this->confId => array(
+            'filter.' => array('availableModes' => 'newCheckedMode,newNotCheckedMode'))
+        );
+        $filter = $this->getFilter($configArray);
+        $reflectionObject = new ReflectionObject($filter);
+        $reflectionMethod = $reflectionObject->getMethod('prepareFormFields');
+        $reflectionMethod->setAccessible(true);
+        $reflectionMethod->invokeArgs($filter, array(&$formData, $parameters));
 
-		self::assertEquals(
-			'checked=checked', $formData['mode_newCheckedMode_selected'], 'mode_newCheckedMode_selected nicht selected'
-		);
-		self::assertEquals(
-			'', $formData['mode_newNotCheckedMode_selected'], 'mode_newNotCheckedMode_selected nicht selected'
-		);
-	}
+        self::assertEquals(
+            'checked=checked',
+            $formData['mode_newCheckedMode_selected'],
+            'mode_newCheckedMode_selected nicht selected'
+        );
+        self::assertEquals(
+            '',
+            $formData['mode_newNotCheckedMode_selected'],
+            'mode_newNotCheckedMode_selected nicht selected'
+        );
+    }
 
-	/**
-	 * @group uinit
-	 */
-	public function testPrepareFormFieldsSetsStandardModeCheckedAsDefault() {
-		$parameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
-		$formData = array();
-		$configArray = array($this->confId => array('filter.' => array('availableModes' => 'standard,advanced')));
-		$filter = $this->getFilter($configArray);
-		$reflectionObject = new ReflectionObject($filter);
-		$reflectionMethod = $reflectionObject->getMethod('prepareFormFields');
-		$reflectionMethod->setAccessible(TRUE);
-		$reflectionMethod->invokeArgs($filter, array(&$formData, $parameters));
+    /**
+     * @group uinit
+     */
+    public function testPrepareFormFieldsSetsStandardModeCheckedAsDefault()
+    {
+        $parameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
+        $formData = array();
+        $configArray = array($this->confId => array('filter.' => array('availableModes' => 'standard,advanced')));
+        $filter = $this->getFilter($configArray);
+        $reflectionObject = new ReflectionObject($filter);
+        $reflectionMethod = $reflectionObject->getMethod('prepareFormFields');
+        $reflectionMethod->setAccessible(true);
+        $reflectionMethod->invokeArgs($filter, array(&$formData, $parameters));
 
-		self::assertEquals(
-			'checked=checked', $formData['mode_standard_selected'], 'mode_standard_selected nicht selected'
-		);
-		self::assertEquals(
-			'', $formData['mode_advanced_selected'], 'mode_advanced_selected doch selected'
-		);
-	}
+        self::assertEquals(
+            'checked=checked',
+            $formData['mode_standard_selected'],
+            'mode_standard_selected nicht selected'
+        );
+        self::assertEquals(
+            '',
+            $formData['mode_advanced_selected'],
+            'mode_advanced_selected doch selected'
+        );
+    }
 
-	/**
-	 * @group unit
-	 */
-	public function testInitReturnsFalseIfNoSubmit() {
-		$configArray = array($this->confId => array('filter.' => array('forceSearch' => false)));
+    /**
+     * @group unit
+     */
+    public function testInitReturnsFalseIfNoSubmit()
+    {
+        $configArray = array($this->confId => array('filter.' => array('forceSearch' => false)));
 
-		$filter = $this->getFilter($configArray);
-		$fields = $options = array();
-		self::assertFalse($filter->init($fields, $options), 'filter liefert nicht false');
-	}
+        $filter = $this->getFilter($configArray);
+        $fields = $options = array();
+        self::assertFalse($filter->init($fields, $options), 'filter liefert nicht false');
+    }
 
-	/**
-	 * @group unit
-	 */
-	public function testInitReturnsTrueIfNoSubmitButForceSearch() {
-		$configArray = array($this->confId => array('filter.' => array('forceSearch' => true)));
+    /**
+     * @group unit
+     */
+    public function testInitReturnsTrueIfNoSubmitButForceSearch()
+    {
+        $configArray = array($this->confId => array('filter.' => array('forceSearch' => true)));
 
-		$filter = $this->getFilter($configArray);
-		$fields = $options = array();
-		self::assertTrue($filter->init($fields, $options), 'filter liefert nicht true');
-	}
+        $filter = $this->getFilter($configArray);
+        $fields = $options = array();
+        self::assertTrue($filter->init($fields, $options), 'filter liefert nicht true');
+    }
 
-	/**
-	 * @group unit
-	 */
-	public function testInitReturnsTrueIfSubmit() {
-		$configArray = array($this->confId => array('filter.' => array('forceSearch' => false)));
+    /**
+     * @group unit
+     */
+    public function testInitReturnsTrueIfSubmit()
+    {
+        $configArray = array($this->confId => array('filter.' => array('forceSearch' => false)));
 
-		$filter = $this->getFilter($configArray, array('submit' => true));
-		$fields = $options = array();
-		self::assertTrue($filter->init($fields, $options), 'filter liefert nicht true');
-	}
+        $filter = $this->getFilter($configArray, array('submit' => true));
+        $fields = $options = array();
+        self::assertTrue($filter->init($fields, $options), 'filter liefert nicht true');
+    }
 
-	/**
-	 * @group unit
-	 */
-	public function testInitSetsCorrectPlainTerm() {
-		$_GET['mksearch']['term'] = 'test term';
+    /**
+     * @group unit
+     */
+    public function testInitSetsCorrectPlainTerm()
+    {
+        $_GET['mksearch']['term'] = 'test term';
 
-		$fields = array();
-		$options = array();
-		$configArray = array(
-			$this->confId => array(
-				'filter.' => array(
-					'fields.' => array(
-						'term' => 'contentType:* AND text:"###PARAM_MKSEARCH_TERM###"'
-					)
-				)
-			)
-		);
-		$filter = $this->getFilter($configArray);
-		$filter->init($fields, $options);
-		self::assertEquals(
-			'contentType:* AND text:"test term"',
-			$fields['term'],
-			'term template falsch geparsed!'
-		);
-	}
+        $fields = array();
+        $options = array();
+        $configArray = array(
+            $this->confId => array(
+                'filter.' => array(
+                    'fields.' => array(
+                        'term' => 'contentType:* AND text:"###PARAM_MKSEARCH_TERM###"'
+                    )
+                )
+            )
+        );
+        $filter = $this->getFilter($configArray);
+        $filter->init($fields, $options);
+        self::assertEquals(
+            'contentType:* AND text:"test term"',
+            $fields['term'],
+            'term template falsch geparsed!'
+        );
+    }
 
-	/**
-	 * @group unit
-	 */
-	public function testInitSetsCorrectTermIfTermEmpty() {
-		$_GET['mksearch']['term'] = '';
+    /**
+     * @group unit
+     */
+    public function testInitSetsCorrectTermIfTermEmpty()
+    {
+        $_GET['mksearch']['term'] = '';
 
-		$fields = array();
-		$options = array();
-		$configArray = array(
-			$this->confId => array(
-				'filter.' => array(
-					'fields.' => array(
-						'term' => 'contentType:* ###PARAM_MKSEARCH_TERM###'
-					)
-				)
-			)
-		);
-		$filter = $this->getFilter($configArray);
-		$filter->init($fields, $options);
-		self::assertEquals('contentType:* ', $fields['term'], 'term template falsch geparsed!');
-	}
+        $fields = array();
+        $options = array();
+        $configArray = array(
+            $this->confId => array(
+                'filter.' => array(
+                    'fields.' => array(
+                        'term' => 'contentType:* ###PARAM_MKSEARCH_TERM###'
+                    )
+                )
+            )
+        );
+        $filter = $this->getFilter($configArray);
+        $filter->init($fields, $options);
+        self::assertEquals('contentType:* ', $fields['term'], 'term template falsch geparsed!');
+    }
 
-	/**
-	 * @group unit
-	 */
-	public function testInitSetsCorrectTermIfNoTermParamSet() {
-		$fields = array();
-		$options = array();
-		$configArray = array(
-			$this->confId => array(
-				'filter.' => array(
-					'fields.' => array(
-						'term' => 'contentType:* ###PARAM_MKSEARCH_TERM###'
-					)
-				)
-			)
-		);
-		$filter = $this->getFilter($configArray);
-		$filter->init($fields, $options);
-		self::assertEquals('contentType:* ', $fields['term'], 'term template falsch geparsed!');
-	}
+    /**
+     * @group unit
+     */
+    public function testInitSetsCorrectTermIfNoTermParamSet()
+    {
+        $fields = array();
+        $options = array();
+        $configArray = array(
+            $this->confId => array(
+                'filter.' => array(
+                    'fields.' => array(
+                        'term' => 'contentType:* ###PARAM_MKSEARCH_TERM###'
+                    )
+                )
+            )
+        );
+        $filter = $this->getFilter($configArray);
+        $filter->init($fields, $options);
+        self::assertEquals('contentType:* ', $fields['term'], 'term template falsch geparsed!');
+    }
 
-	/**
-	 * @group unit
-	 */
-	public function testGetFilterUtility() {
-		$filter = $this->getFilter();
-		$method = new ReflectionMethod('tx_mksearch_filter_ElasticSearchBase', 'getFilterUtility');
-		$method->setAccessible(true);
+    /**
+     * @group unit
+     */
+    public function testGetFilterUtility()
+    {
+        $filter = $this->getFilter();
+        $method = new ReflectionMethod('tx_mksearch_filter_ElasticSearchBase', 'getFilterUtility');
+        $method->setAccessible(true);
 
-		self::assertInstanceOf(
-			'tx_mksearch_util_Filter', $method->invoke($filter),
-			'filter utility falsch'
-		);
-	}
+        self::assertInstanceOf(
+            'tx_mksearch_util_Filter',
+            $method->invoke($filter),
+            'filter utility falsch'
+        );
+    }
 
-	/**
-	 * @group unit
-	 */
-	public function testInitSetsSortingToOptionsCorrectFromParameter() {
-		$filter = $this->getFilter(array(), array('sort' => 'uid desc'));
+    /**
+     * @group unit
+     */
+    public function testInitSetsSortingToOptionsCorrectFromParameter()
+    {
+        $filter = $this->getFilter(array(), array('sort' => 'uid desc'));
 
-		$fields = $options = array();
-		$filter->init($fields, $options);
+        $fields = $options = array();
+        $filter->init($fields, $options);
 
-		self::assertEquals('uid desc', $options['sort'], 'sort falsch in options');
-	}
+        self::assertEquals('uid desc', $options['sort'], 'sort falsch in options');
+    }
 
-	/**
-	 * @group unit
-	 */
-	public function testInitSetsSortingToOptionsCorrectIfSortOrderAsc() {
-		$filter = $this->getFilter(array(), array('sort' => 'uid asc'));
+    /**
+     * @group unit
+     */
+    public function testInitSetsSortingToOptionsCorrectIfSortOrderAsc()
+    {
+        $filter = $this->getFilter(array(), array('sort' => 'uid asc'));
 
-		$fields = $options = array();
-		$filter->init($fields, $options);
+        $fields = $options = array();
+        $filter->init($fields, $options);
 
-		self::assertEquals('uid asc', $options['sort'], 'sort falsch in options');
-	}
+        self::assertEquals('uid asc', $options['sort'], 'sort falsch in options');
+    }
 
-	/**
-	 * @group unit
-	 */
-	public function testInitSetsSortingToOptionsCorrectWithUnknownSortOrder() {
-		$filter = $this->getFilter(array(), array('sort' => 'uid unknown'));
+    /**
+     * @group unit
+     */
+    public function testInitSetsSortingToOptionsCorrectWithUnknownSortOrder()
+    {
+        $filter = $this->getFilter(array(), array('sort' => 'uid unknown'));
 
-		$fields = $options = array();
-		$filter->init($fields, $options);
+        $fields = $options = array();
+        $filter->init($fields, $options);
 
-		self::assertEquals('uid asc', $options['sort'], 'sort falsch in options');
-	}
+        self::assertEquals('uid asc', $options['sort'], 'sort falsch in options');
+    }
 
-	/**
-	 * @group unit
-	 */
-	public function testInitSetsSortingToOptionsCorrectIfSortOrderInSortOrderParameter() {
-		$filter = $this->getFilter(array(), array('sort' => 'uid', 'sortorder' => 'asc'));
+    /**
+     * @group unit
+     */
+    public function testInitSetsSortingToOptionsCorrectIfSortOrderInSortOrderParameter()
+    {
+        $filter = $this->getFilter(array(), array('sort' => 'uid', 'sortorder' => 'asc'));
 
-		$fields = $options = array();
-		$filter->init($fields, $options);
+        $fields = $options = array();
+        $filter->init($fields, $options);
 
-		self::assertEquals('uid asc', $options['sort'], 'sort falsch in options');
-	}
+        self::assertEquals('uid asc', $options['sort'], 'sort falsch in options');
+    }
 
-	/**
-	 * @group unit
-	 */
-	public function testInitSetsSortingToOptionsCorrectIfNoSortOrderUsesClassPropertyForSortOrder() {
-		$filter = $this->getFilter(array(), array('sort' => 'uid'));
+    /**
+     * @group unit
+     */
+    public function testInitSetsSortingToOptionsCorrectIfNoSortOrderUsesClassPropertyForSortOrder()
+    {
+        $filter = $this->getFilter(array(), array('sort' => 'uid'));
 
-		$filterUtil = $this->getMock('tx_mksearch_util_Filter', array('parseTermTemplate'));
+        $filterUtil = $this->getMock('tx_mksearch_util_Filter', array('parseTermTemplate'));
 
-		$order = new ReflectionProperty('tx_mksearch_util_Filter', 'sortOrder');
-		$order->setAccessible(true);
-		$order->setValue($filterUtil, 'asc');
+        $order = new ReflectionProperty('tx_mksearch_util_Filter', 'sortOrder');
+        $order->setAccessible(true);
+        $order->setValue($filterUtil, 'asc');
 
-		$filterUtilProperty = new ReflectionProperty(
-			'tx_mksearch_filter_ElasticSearchBase', 'filterUtility'
-		);
-		$filterUtilProperty->setAccessible(true);
-		$filterUtilProperty->setValue($filter, $filterUtil);
+        $filterUtilProperty = new ReflectionProperty(
+            'tx_mksearch_filter_ElasticSearchBase',
+            'filterUtility'
+        );
+        $filterUtilProperty->setAccessible(true);
+        $filterUtilProperty->setValue($filter, $filterUtil);
 
-		$fields = $options = array();
-		$filter->init($fields, $options);
+        $fields = $options = array();
+        $filter->init($fields, $options);
 
-		self::assertEquals('uid asc', $options['sort'], 'sort falsch in options');
-	}
+        self::assertEquals('uid asc', $options['sort'], 'sort falsch in options');
+    }
 
-	/**
-	 * @group unit
-	 */
-	public function testInitSetsSortingToOptionsCorrectIfNoSortFieldUsesClassPropertyForSortField() {
-		$filter = $this->getFilter();
-		$filterUtil = $this->getMock('tx_mksearch_util_Filter', array('parseTermTemplate'));
+    /**
+     * @group unit
+     */
+    public function testInitSetsSortingToOptionsCorrectIfNoSortFieldUsesClassPropertyForSortField()
+    {
+        $filter = $this->getFilter();
+        $filterUtil = $this->getMock('tx_mksearch_util_Filter', array('parseTermTemplate'));
 
-		$field = new ReflectionProperty('tx_mksearch_util_Filter', 'sortField');
-		$field->setAccessible(true);
-		$field->setValue($filterUtil, 'uid');
+        $field = new ReflectionProperty('tx_mksearch_util_Filter', 'sortField');
+        $field->setAccessible(true);
+        $field->setValue($filterUtil, 'uid');
 
-		$filterUtilProperty = new ReflectionProperty(
-			'tx_mksearch_filter_ElasticSearchBase', 'filterUtility'
-		);
-		$filterUtilProperty->setAccessible(true);
-		$filterUtilProperty->setValue($filter, $filterUtil);
+        $filterUtilProperty = new ReflectionProperty(
+            'tx_mksearch_filter_ElasticSearchBase',
+            'filterUtility'
+        );
+        $filterUtilProperty->setAccessible(true);
+        $filterUtilProperty->setValue($filter, $filterUtil);
 
-		$fields = $options = array();
-		$filter->init($fields, $options);
+        $fields = $options = array();
+        $filter->init($fields, $options);
 
-		self::assertEquals('uid asc', $options['sort'], 'sort falsch in options');
-	}
+        self::assertEquals('uid asc', $options['sort'], 'sort falsch in options');
+    }
 
-	/**
-	 * @group unit
-	 */
-	public function testParseTemplateParsesSortMarkerCorrect() {
-		$this->prepareTSFE();
+    /**
+     * @group unit
+     */
+    public function testParseTemplateParsesSortMarkerCorrect()
+    {
+        $this->prepareTSFE();
 
-		$config = array($this->confId => array('filter.' => array(
-			'sort.' => array(
-				'fields' => 'uid, title',
-				'link.' => array('noHash' => true)
-			),
-			'config.' => array('template' => '')
-		)));
+        $config = array($this->confId => array('filter.' => array(
+            'sort.' => array(
+                'fields' => 'uid, title',
+                'link.' => array('noHash' => true)
+            ),
+            'config.' => array('template' => '')
+        )));
 
-		$filter = $this->getFilter($config);
+        $filter = $this->getFilter($config);
 
-		$filterUtil = $this->getMock('tx_mksearch_util_Filter', array('getSortString'));
+        $filterUtil = $this->getMock('tx_mksearch_util_Filter', array('getSortString'));
 
-		$field = new ReflectionProperty('tx_mksearch_util_Filter', 'sortField');
-		$field->setAccessible(true);
-		$field->setValue($filterUtil, 'uid');
+        $field = new ReflectionProperty('tx_mksearch_util_Filter', 'sortField');
+        $field->setAccessible(true);
+        $field->setValue($filterUtil, 'uid');
 
-		$order = new ReflectionProperty('tx_mksearch_util_Filter', 'sortOrder');
-		$order->setAccessible(true);
-		$order->setValue($filterUtil, 'asc');
+        $order = new ReflectionProperty('tx_mksearch_util_Filter', 'sortOrder');
+        $order->setAccessible(true);
+        $order->setValue($filterUtil, 'asc');
 
-		$filterUtilProperty = new ReflectionProperty(
-			'tx_mksearch_filter_ElasticSearchBase', 'filterUtility'
-		);
-		$filterUtilProperty->setAccessible(true);
-		$filterUtilProperty->setValue($filter, $filterUtil);
+        $filterUtilProperty = new ReflectionProperty(
+            'tx_mksearch_filter_ElasticSearchBase',
+            'filterUtility'
+        );
+        $filterUtilProperty->setAccessible(true);
+        $filterUtilProperty->setValue($filter, $filterUtil);
 
-		$fields = $options = array();
-		$filter->init($fields, $options);
+        $fields = $options = array();
+        $filter->init($fields, $options);
 
-		$method = new ReflectionMethod('tx_mksearch_filter_ElasticSearchBase', 'getConfigurations');
-		$method->setAccessible(true);
-		$formatter = $method->invoke($filter)->getFormatter();
+        $method = new ReflectionMethod('tx_mksearch_filter_ElasticSearchBase', 'getConfigurations');
+        $method->setAccessible(true);
+        $formatter = $method->invoke($filter)->getFormatter();
 
-		// eine kleine auswahl der möglichen marker
-		$template = '###SORT_UID_ORDER### ###SORT_TITLE_LINKURL###';
-		$parsedTemplate = $filter->parseTemplate(
-			$template, $formatter, 'searchsolr.filter.default.'
-		);
+        // eine kleine auswahl der möglichen marker
+        $template = '###SORT_UID_ORDER### ###SORT_TITLE_LINKURL###';
+        $parsedTemplate = $filter->parseTemplate(
+            $template,
+            $formatter,
+            'searchsolr.filter.default.'
+        );
 
-		self::assertRegExp(
-			'/(asc \?id=)([a-z0-9]+)(&mksearch%5Bsort%5D=title&mksearch%5Bsortorder%5D=asc)/',
-			$parsedTemplate,
-			'sort marker falsch geparsed'
-		);
-	}
+        self::assertRegExp(
+            '/(asc \?id=)([a-z0-9]+)(&mksearch%5Bsort%5D=title&mksearch%5Bsortorder%5D=asc)/',
+            $parsedTemplate,
+            'sort marker falsch geparsed'
+        );
+    }
 
-	/**
-	 * @param array $configArray
-	 * @param array $parametersArray
-	 *
-	 * @return tx_mksearch_filter_ElasticSearchBase
-	 */
-	private function getFilter(array $configArray = array(), $parametersArray =array()) {
-		if(!isset($configArray[$this->confId]['filter.']['forceSearch'])) {
-			$configArray[$this->confId]['filter.']['forceSearch'] = true;
-		}
+    /**
+     * @param array $configArray
+     * @param array $parametersArray
+     *
+     * @return tx_mksearch_filter_ElasticSearchBase
+     */
+    private function getFilter(array $configArray = array(), $parametersArray = array())
+    {
+        if (!isset($configArray[$this->confId]['filter.']['forceSearch'])) {
+            $configArray[$this->confId]['filter.']['forceSearch'] = true;
+        }
 
-		$configArray = tx_rnbase_util_Arrays::mergeRecursiveWithOverrule(
-			tx_mksearch_tests_Util::loadPageTS4BE(), $configArray
-		);
-		$configArray[$this->confId]['filter.']['requiredFormFields'] =
-			'zip,company,city';
-		$configurations = tx_mksearch_tests_Util::loadConfig4BE(
-			$configArray
-		);
-		$parameters = tx_rnbase::makeInstance('tx_rnbase_parameters', $parametersArray);
-		$configurations = $this->createConfigurations(
-			$configurations->getConfigArray(), 'mksearch', 'mksearch',
-			$parameters,
-			tx_rnbase::makeInstance(tx_rnbase_util_Typo3Classes::getContentObjectRendererClass())
-		);
+        $configArray = tx_rnbase_util_Arrays::mergeRecursiveWithOverrule(
+            tx_mksearch_tests_Util::loadPageTS4BE(),
+            $configArray
+        );
+        $configArray[$this->confId]['filter.']['requiredFormFields'] =
+            'zip,company,city';
+        $configurations = tx_mksearch_tests_Util::loadConfig4BE(
+            $configArray
+        );
+        $parameters = tx_rnbase::makeInstance('tx_rnbase_parameters', $parametersArray);
+        $configurations = $this->createConfigurations(
+            $configurations->getConfigArray(),
+            'mksearch',
+            'mksearch',
+            $parameters,
+            tx_rnbase::makeInstance(tx_rnbase_util_Typo3Classes::getContentObjectRendererClass())
+        );
 
-		return tx_rnbase::makeInstance(
-			'tx_mksearch_filter_ElasticSearchBase',
-			$parameters, $configurations, $this->confId . 'filter.'
-		);
-	}
+        return tx_rnbase::makeInstance(
+            'tx_mksearch_filter_ElasticSearchBase',
+            $parameters,
+            $configurations,
+            $this->confId . 'filter.'
+        );
+    }
 }

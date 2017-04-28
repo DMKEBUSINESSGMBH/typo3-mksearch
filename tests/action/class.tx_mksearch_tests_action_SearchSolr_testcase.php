@@ -1,8 +1,8 @@
 <?php
 /**
- * 	@package tx_mkkvbb
- *  @subpackage tx_mkkvbb_tests_action
- *  @author Hannes Bochmann
+ * @package tx_mkkvbb
+ * @subpackage tx_mkkvbb_tests_action
+ * @author Hannes Bochmann
  *
  *  Copyright notice
  *
@@ -40,172 +40,179 @@ tx_rnbase::load('Tx_Phpunit_Framework');
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_tests_action_SearchSolr_testcase
-	extends tx_mksearch_tests_Testcase {
+class tx_mksearch_tests_action_SearchSolr_testcase extends tx_mksearch_tests_Testcase
+{
 
-	/**
-	 * unsere link id. entweder die id oder der alias wenn gesetzt
-	 * @var string or integer
-	 */
-	protected $linkId  = '';
+    /**
+     * unsere link id. entweder die id oder der alias wenn gesetzt
+     * @var string or integer
+     */
+    protected $linkId  = '';
 
-	protected function setUp() {
-		parent::setUp();
-		// logoff für phpmyadmin deaktivieren. ist nicht immer notwendig
-		// aber sollte auch nicht stören!
-		/*
-		 * Error in test case test_handleRequest aus mkforms
-		 * in file C:\xampp\htdocs\typo3\typo3conf\ext\phpmyadmin\res\class.tx_phpmyadmin_utilities.php
-		 * on line 66:
-		 * Message:
-		 * Cannot modify header information - headers already sent by (output started at C:\xampp\htdocs\typo3\typo3conf\ext\phpunit\mod1\class.tx_phpunit_module1.php:112)
-		 *
-		 * Diese Fehler passiert, wenn die usersession ausgelesen wird. der feuser hat natürlich keine.
-		 * Das Ganze passiert in der TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication->fetchUserSession.
-		 * Dort wird TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication->logoff aufgerufen, da keine session vorhanden ist.
-		 * phpmyadmin klingt sich da ein und schreibt daten in die session.
-		 */
-		if(is_array($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_userauth.php']['logoff_post_processing'])){
-			foreach($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_userauth.php']['logoff_post_processing'] as $k=>$v){
-				if($v = 'tx_phpmyadmin_utilities->pmaLogOff'){
-					unset($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_userauth.php']['logoff_post_processing'][$k]);
-				}
-			}
-		}
+    protected function setUp()
+    {
+        parent::setUp();
+        // logoff für phpmyadmin deaktivieren. ist nicht immer notwendig
+        // aber sollte auch nicht stören!
+        /*
+         * Error in test case test_handleRequest aus mkforms
+         * in file C:\xampp\htdocs\typo3\typo3conf\ext\phpmyadmin\res\class.tx_phpmyadmin_utilities.php
+         * on line 66:
+         * Message:
+         * Cannot modify header information - headers already sent by (output started at C:\xampp\htdocs\typo3\typo3conf\ext\phpunit\mod1\class.tx_phpunit_module1.php:112)
+         *
+         * Diese Fehler passiert, wenn die usersession ausgelesen wird. der feuser hat natürlich keine.
+         * Das Ganze passiert in der TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication->fetchUserSession.
+         * Dort wird TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication->logoff aufgerufen, da keine session vorhanden ist.
+         * phpmyadmin klingt sich da ein und schreibt daten in die session.
+         */
+        if (is_array($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_userauth.php']['logoff_post_processing'])) {
+            foreach ($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_userauth.php']['logoff_post_processing'] as $k => $v) {
+                if ($v = 'tx_phpmyadmin_utilities->pmaLogOff') {
+                    unset($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_userauth.php']['logoff_post_processing'][$k]);
+                }
+            }
+        }
 
-		$this->prepareTSFE();
+        $this->prepareTSFE();
 
-		$framework = new Tx_Phpunit_Framework('dummy');
-		$framework->createFakeFrontEnd();
+        $framework = new Tx_Phpunit_Framework('dummy');
+        $framework->createFakeFrontEnd();
 
-		//reset to see if filled correct
-		$GLOBALS['TSFE']->additionalHeaderData = null;
+        //reset to see if filled correct
+        $GLOBALS['TSFE']->additionalHeaderData = null;
 
-		//damit links generiert werden können
-		$GLOBALS['TSFE']->sys_page = tx_rnbase_util_TYPO3::getSysPage();
+        //damit links generiert werden können
+        $GLOBALS['TSFE']->sys_page = tx_rnbase_util_TYPO3::getSysPage();
 
-		//wir brauchen noch die id/alias für den link, der genriert wird
-		$this->linkId = $GLOBALS['TSFE']->page['alias'] ?
-						$GLOBALS['TSFE']->page['alias'] :
-						$GLOBALS['TSFE']->page['uid'];
+        //wir brauchen noch die id/alias für den link, der genriert wird
+        $this->linkId = $GLOBALS['TSFE']->page['alias'] ?
+                        $GLOBALS['TSFE']->page['alias'] :
+                        $GLOBALS['TSFE']->page['uid'];
 
-		$property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsInline');
-		$property->setAccessible(TRUE);
-		$property->setValue(tx_rnbase_util_TYPO3::getPageRenderer(), array());
+        $property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsInline');
+        $property->setAccessible(true);
+        $property->setValue(tx_rnbase_util_TYPO3::getPageRenderer(), array());
 
-		$property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsLibs');
-		$property->setAccessible(TRUE);
-		$property->setValue(tx_rnbase_util_TYPO3::getPageRenderer(), array());
-	}
+        $property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsLibs');
+        $property->setAccessible(true);
+        $property->setValue(tx_rnbase_util_TYPO3::getPageRenderer(), array());
+    }
 
-	/**
-	 * @param unknown_type $aParams
-	 */
-	private function getAction($aMockFunctions = array(),$aConfig = array(), &$out = '', $aParams = array()) {
-		//build mock
-		$action = $this->getMock('tx_mksearch_action_SearchSolr',array_keys($aMockFunctions));
+    /**
+     * @param unknown_type $aParams
+     */
+    private function getAction($aMockFunctions = array(), $aConfig = array(), &$out = '', $aParams = array())
+    {
+        //build mock
+        $action = $this->getMock('tx_mksearch_action_SearchSolr', array_keys($aMockFunctions));
 
-		foreach ($aMockFunctions as $sMockFunction => $aMockFunctionConfig) {
-			$action->expects($aMockFunctionConfig['expects'])
-			->method($sMockFunction)
-			->will($this->returnValue($aMockFunctionConfig['returnValue']));
-		}
+        foreach ($aMockFunctions as $sMockFunction => $aMockFunctionConfig) {
+            $action->expects($aMockFunctionConfig['expects'])
+            ->method($sMockFunction)
+            ->will($this->returnValue($aMockFunctionConfig['returnValue']));
+        }
 
-		//configure action
-		$configurations = tx_rnbase::makeInstance('tx_rnbase_configurations');
+        //configure action
+        $configurations = tx_rnbase::makeInstance('tx_rnbase_configurations');
 
-		$parameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
+        $parameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
 
-		$configurations->init(
-			$aConfig,
-			$configurations->getCObj(1),
-			'mksearch','mksearch'
-		);
+        $configurations->init(
+            $aConfig,
+            $configurations->getCObj(1),
+            'mksearch',
+            'mksearch'
+        );
 
-		//noch extra params?
-		if(!empty($aParams))
-			foreach ($aParams as $sName => $mValue)
-				$parameters->offsetSet($sName,$mValue);
+        //noch extra params?
+        if (!empty($aParams)) {
+            foreach ($aParams as $sName => $mValue) {
+                $parameters->offsetSet($sName, $mValue);
+            }
+        }
 
-		$configurations->setParameters($parameters);
+        $configurations->setParameters($parameters);
 
-		$property = new ReflectionProperty('tx_rnbase_configurations', 'pluginUid');
-		$property->setAccessible(TRUE);
-		$property->setValue($configurations, 123);
+        $property = new ReflectionProperty('tx_rnbase_configurations', 'pluginUid');
+        $property->setAccessible(true);
+        $property->setValue($configurations, 123);
 
-		$action->setConfigurations($configurations);
+        $action->setConfigurations($configurations);
 
-		$out = $action->handleRequest($parameters, $configurations, $configurations->getViewData());
+        $out = $action->handleRequest($parameters, $configurations, $configurations->getViewData());
 
-		return $action;
-	}
+        return $action;
+    }
 
-	/**
-	 */
-	public function testHandleRequestWithDisabledAutocomplete(){
-		//action initialisieren
-		$aConfig['searchsolr.'] = array(
-			'nosearch' => 1,//keine echte Suche
-			'autocomplete.' => array(
-				'enable' => 0
-			)
-		);
-		//mock getIndex() so its not called for real
-		$aMockFunctions = array(
-			'getIndex' => array(
-				'expects' => $this->never(),
-				'returnValue' => true,
-			)
-		);
-		$out = true;
-		$action = $this->getAction($aMockFunctions,$aConfig,$out);
+    /**
+     */
+    public function testHandleRequestWithDisabledAutocomplete()
+    {
+        //action initialisieren
+        $aConfig['searchsolr.'] = array(
+            'nosearch' => 1,//keine echte Suche
+            'autocomplete.' => array(
+                'enable' => 0
+            )
+        );
+        //mock getIndex() so its not called for real
+        $aMockFunctions = array(
+            'getIndex' => array(
+                'expects' => $this->never(),
+                'returnValue' => true,
+            )
+        );
+        $out = true;
+        $action = $this->getAction($aMockFunctions, $aConfig, $out);
 
-		self::assertNull($out,'es wurde nicht null geliefert. vllt doch gesucht?');
-		//view daten sollten nicht gesetzt sein
-		self::assertFalse($action->getConfigurations()->getViewData()->offsetExists('result'),'es wurde doch ein result gesetzt in den view daten. doch gesucht?');
+        self::assertNull($out, 'es wurde nicht null geliefert. vllt doch gesucht?');
+        //view daten sollten nicht gesetzt sein
+        self::assertFalse($action->getConfigurations()->getViewData()->offsetExists('result'), 'es wurde doch ein result gesetzt in den view daten. doch gesucht?');
 
-		$property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsInline');
-		$property->setAccessible(TRUE);
-		$inlineJavaScripts = $property->getValue(tx_rnbase_util_TYPO3::getPageRenderer());
+        $property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsInline');
+        $property->setAccessible(true);
+        $inlineJavaScripts = $property->getValue(tx_rnbase_util_TYPO3::getPageRenderer());
 
-		self::assertEmpty($inlineJavaScripts,'Daten für JS doch gesetzt?');
-	}
+        self::assertEmpty($inlineJavaScripts, 'Daten für JS doch gesetzt?');
+    }
 
-	/**
-	 */
-	public function testHandleRequestWithEnabledAutocomplete(){
-		//action initialisieren
-		$aConfig['searchsolr.'] = array(
-			'nosearch' => 1,//keine echte Suche
-			'autocomplete.' => array(
-				'enable' => 1,
-				'minLength' => 2,
-				'elementSelector' => 'myElementSelector',
-				'actionLink.' => array(
-					'useKeepVars' => 1,
-					'useKeepVars.' => array(
-						'add' => '::type=540'
-					),
-					'noHash' => 1,
-				)
-			),
-			'usedIndex' => 1
-		);
-		//mock getIndex() so its not called for real
-		$aMockFunctions = array(
-			'getIndex' => array(
-				'expects' => $this->never(),
-				'returnValue' => true,
-			)
-		);
-		$out = true;
-		$action = $this->getAction($aMockFunctions,$aConfig,$out);
+    /**
+     */
+    public function testHandleRequestWithEnabledAutocomplete()
+    {
+        //action initialisieren
+        $aConfig['searchsolr.'] = array(
+            'nosearch' => 1,//keine echte Suche
+            'autocomplete.' => array(
+                'enable' => 1,
+                'minLength' => 2,
+                'elementSelector' => 'myElementSelector',
+                'actionLink.' => array(
+                    'useKeepVars' => 1,
+                    'useKeepVars.' => array(
+                        'add' => '::type=540'
+                    ),
+                    'noHash' => 1,
+                )
+            ),
+            'usedIndex' => 1
+        );
+        //mock getIndex() so its not called for real
+        $aMockFunctions = array(
+            'getIndex' => array(
+                'expects' => $this->never(),
+                'returnValue' => true,
+            )
+        );
+        $out = true;
+        $action = $this->getAction($aMockFunctions, $aConfig, $out);
 
-		self::assertNull($out,'es wurde nicht null geliefert. vllt doch gesucht?');
-		//view daten sollten nicht gesetzt sein
-		self::assertFalse($action->getConfigurations()->getViewData()->offsetExists('result'),'es wurde doch ein result gesetzt in den view daten. doch gesucht?');
+        self::assertNull($out, 'es wurde nicht null geliefert. vllt doch gesucht?');
+        //view daten sollten nicht gesetzt sein
+        self::assertFalse($action->getConfigurations()->getViewData()->offsetExists('result'), 'es wurde doch ein result gesetzt in den view daten. doch gesucht?');
 
-		$expectedJavaScript = 'jQuery(document).ready(function(){
+        $expectedJavaScript = 'jQuery(document).ready(function(){
 			jQuery(myElementSelector).autocomplete({
 				source: function( request, response ) {
 					jQuery.ajax({
@@ -232,52 +239,53 @@ class tx_mksearch_tests_action_SearchSolr_testcase
 		});
 		jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();' . LF;
 
-		$property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsInline');
-		$property->setAccessible(TRUE);
-		$inlineJavaScripts = $property->getValue(tx_rnbase_util_TYPO3::getPageRenderer());
+        $property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsInline');
+        $property->setAccessible(true);
+        $inlineJavaScripts = $property->getValue(tx_rnbase_util_TYPO3::getPageRenderer());
 
-		self::assertEquals(1, count($inlineJavaScripts),'mehr header daten als erwartet!');
-		self::assertEquals($expectedJavaScript, $inlineJavaScripts['mksearch_autocomplete_123']['code']);
-	}
+        self::assertEquals(1, count($inlineJavaScripts), 'mehr header daten als erwartet!');
+        self::assertEquals($expectedJavaScript, $inlineJavaScripts['mksearch_autocomplete_123']['code']);
+    }
 
-	/**
-	 */
-	public function testHandleRequestWithEnabledAutocompleteAndInclusionOfSomeJqueryLibs(){
-		//action initialisieren
-		$aConfig['searchsolr.'] = array(
-			'nosearch' => 1,//keine echte Suche
-			'autocomplete.' => array(
-				'enable' => 1,
-				'minLength' => 2,
-				'elementSelector' => 'myElementSelector',
-				'actionLink.' => array(
-					'useKeepVars' => 1,
-					'useKeepVars.' => array(
-						'add' => '::type=540'
-					),
-					'noHash' => 1,
-				),
-				'includeJquery' => 1,
-				'includeJqueryUiCore' => 1,
-				'includeJqueryUiAutocomplete' => 0,
-			),
-			'usedIndex' => 1
-		);
-		//mock getIndex() so its not called for real
-		$aMockFunctions = array(
-			'getIndex' => array(
-				'expects' => $this->never(),
-				'returnValue' => true,
-			)
-		);
-		$out = true;
-		$action = $this->getAction($aMockFunctions,$aConfig,$out);
+    /**
+     */
+    public function testHandleRequestWithEnabledAutocompleteAndInclusionOfSomeJqueryLibs()
+    {
+        //action initialisieren
+        $aConfig['searchsolr.'] = array(
+            'nosearch' => 1,//keine echte Suche
+            'autocomplete.' => array(
+                'enable' => 1,
+                'minLength' => 2,
+                'elementSelector' => 'myElementSelector',
+                'actionLink.' => array(
+                    'useKeepVars' => 1,
+                    'useKeepVars.' => array(
+                        'add' => '::type=540'
+                    ),
+                    'noHash' => 1,
+                ),
+                'includeJquery' => 1,
+                'includeJqueryUiCore' => 1,
+                'includeJqueryUiAutocomplete' => 0,
+            ),
+            'usedIndex' => 1
+        );
+        //mock getIndex() so its not called for real
+        $aMockFunctions = array(
+            'getIndex' => array(
+                'expects' => $this->never(),
+                'returnValue' => true,
+            )
+        );
+        $out = true;
+        $action = $this->getAction($aMockFunctions, $aConfig, $out);
 
-		self::assertNull($out,'es wurde nicht null geliefert. vllt doch gesucht?');
-		//view daten sollten nicht gesetzt sein
-		self::assertFalse($action->getConfigurations()->getViewData()->offsetExists('result'),'es wurde doch ein result gesetzt in den view daten. doch gesucht?');
+        self::assertNull($out, 'es wurde nicht null geliefert. vllt doch gesucht?');
+        //view daten sollten nicht gesetzt sein
+        self::assertFalse($action->getConfigurations()->getViewData()->offsetExists('result'), 'es wurde doch ein result gesetzt in den view daten. doch gesucht?');
 
-		$expectedJavaScript = 'jQuery(document).ready(function(){
+        $expectedJavaScript = 'jQuery(document).ready(function(){
 			jQuery(myElementSelector).autocomplete({
 				source: function( request, response ) {
 					jQuery.ajax({
@@ -304,66 +312,67 @@ class tx_mksearch_tests_action_SearchSolr_testcase
 		});
 		jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();' . LF;
 
-		$property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsInline');
-		$property->setAccessible(TRUE);
-		$inlineJavaScripts = $property->getValue(tx_rnbase_util_TYPO3::getPageRenderer());
+        $property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsInline');
+        $property->setAccessible(true);
+        $inlineJavaScripts = $property->getValue(tx_rnbase_util_TYPO3::getPageRenderer());
 
-		self::assertEquals(1, count($inlineJavaScripts),'mehr header daten als erwartet!');
-		self::assertEquals($expectedJavaScript, $inlineJavaScripts['mksearch_autocomplete_123']['code']);
+        self::assertEquals(1, count($inlineJavaScripts), 'mehr header daten als erwartet!');
+        self::assertEquals($expectedJavaScript, $inlineJavaScripts['mksearch_autocomplete_123']['code']);
 
-		$property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsLibs');
-		$property->setAccessible(TRUE);
-		$javaScriptLibraries = $property->getValue(tx_rnbase_util_TYPO3::getPageRenderer());
+        $property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsLibs');
+        $property->setAccessible(true);
+        $javaScriptLibraries = $property->getValue(tx_rnbase_util_TYPO3::getPageRenderer());
 
-		self::assertEquals(2, count($javaScriptLibraries),'mehr header daten als erwartet!');
-		self::assertEquals(
-			'typo3conf/ext/mksearch/res/js/jquery-1.6.2.min.js',
-			$javaScriptLibraries['jquery-1.6.2.min.js']['file']
-		);
-		self::assertEquals(
-			'typo3conf/ext/mksearch/res/js/jquery-ui-1.8.15.core.min.js',
-			$javaScriptLibraries['jquery-ui-1.8.15.core.min.js']['file']
-		);
-	}
+        self::assertEquals(2, count($javaScriptLibraries), 'mehr header daten als erwartet!');
+        self::assertEquals(
+            'typo3conf/ext/mksearch/res/js/jquery-1.6.2.min.js',
+            $javaScriptLibraries['jquery-1.6.2.min.js']['file']
+        );
+        self::assertEquals(
+            'typo3conf/ext/mksearch/res/js/jquery-ui-1.8.15.core.min.js',
+            $javaScriptLibraries['jquery-ui-1.8.15.core.min.js']['file']
+        );
+    }
 
-	/**
-	 */
-	public function testHandleRequestWithEnabledAutocompleteAndInclusionOfAllJqueryLibs(){
-		//action initialisieren
-		$aConfig['searchsolr.'] = array(
-			'nosearch' => 1,//keine echte Suche
-			'autocomplete.' => array(
-				'enable' => 1,
-				'minLength' => 2,
-				'elementSelector' => 'myElementSelector',
-				'actionLink.' => array(
-					'useKeepVars' => 1,
-					'useKeepVars.' => array(
-						'add' => '::type=540'
-					),
-					'noHash' => 1,
-				),
-				'includeJquery' => 1,
-				'includeJqueryUiCore' => 1,
-				'includeJqueryUiAutocomplete' => 1,
-			),
-			'usedIndex' => 1
-		);
-		//mock getIndex() so its not called for real
-		$aMockFunctions = array(
-			'getIndex' => array(
-				'expects' => $this->never(),
-				'returnValue' => true,
-			)
-		);
-		$out = true;
-		$action = $this->getAction($aMockFunctions,$aConfig,$out);
+    /**
+     */
+    public function testHandleRequestWithEnabledAutocompleteAndInclusionOfAllJqueryLibs()
+    {
+        //action initialisieren
+        $aConfig['searchsolr.'] = array(
+            'nosearch' => 1,//keine echte Suche
+            'autocomplete.' => array(
+                'enable' => 1,
+                'minLength' => 2,
+                'elementSelector' => 'myElementSelector',
+                'actionLink.' => array(
+                    'useKeepVars' => 1,
+                    'useKeepVars.' => array(
+                        'add' => '::type=540'
+                    ),
+                    'noHash' => 1,
+                ),
+                'includeJquery' => 1,
+                'includeJqueryUiCore' => 1,
+                'includeJqueryUiAutocomplete' => 1,
+            ),
+            'usedIndex' => 1
+        );
+        //mock getIndex() so its not called for real
+        $aMockFunctions = array(
+            'getIndex' => array(
+                'expects' => $this->never(),
+                'returnValue' => true,
+            )
+        );
+        $out = true;
+        $action = $this->getAction($aMockFunctions, $aConfig, $out);
 
-		self::assertNull($out,'es wurde nicht null geliefert. vllt doch gesucht?');
-		//view daten sollten nicht gesetzt sein
-		self::assertFalse($action->getConfigurations()->getViewData()->offsetExists('result'),'es wurde doch ein result gesetzt in den view daten. doch gesucht?');
+        self::assertNull($out, 'es wurde nicht null geliefert. vllt doch gesucht?');
+        //view daten sollten nicht gesetzt sein
+        self::assertFalse($action->getConfigurations()->getViewData()->offsetExists('result'), 'es wurde doch ein result gesetzt in den view daten. doch gesucht?');
 
-		$expectedJavaScript = 'jQuery(document).ready(function(){
+        $expectedJavaScript = 'jQuery(document).ready(function(){
 			jQuery(myElementSelector).autocomplete({
 				source: function( request, response ) {
 					jQuery.ajax({
@@ -390,67 +399,68 @@ class tx_mksearch_tests_action_SearchSolr_testcase
 		});
 		jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();' . LF;
 
-		$property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsInline');
-		$property->setAccessible(TRUE);
-		$inlineJavaScripts = $property->getValue(tx_rnbase_util_TYPO3::getPageRenderer());
+        $property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsInline');
+        $property->setAccessible(true);
+        $inlineJavaScripts = $property->getValue(tx_rnbase_util_TYPO3::getPageRenderer());
 
-		self::assertEquals(1, count($inlineJavaScripts),'mehr header daten als erwartet!');
-		self::assertEquals($expectedJavaScript, $inlineJavaScripts['mksearch_autocomplete_123']['code']);
+        self::assertEquals(1, count($inlineJavaScripts), 'mehr header daten als erwartet!');
+        self::assertEquals($expectedJavaScript, $inlineJavaScripts['mksearch_autocomplete_123']['code']);
 
-		$property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsLibs');
-		$property->setAccessible(TRUE);
-		$javaScriptLibraries = $property->getValue(tx_rnbase_util_TYPO3::getPageRenderer());
+        $property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsLibs');
+        $property->setAccessible(true);
+        $javaScriptLibraries = $property->getValue(tx_rnbase_util_TYPO3::getPageRenderer());
 
-		self::assertEquals(3, count($javaScriptLibraries),'mehr header daten als erwartet!');
-		self::assertEquals(
-			'typo3conf/ext/mksearch/res/js/jquery-1.6.2.min.js',
-			$javaScriptLibraries['jquery-1.6.2.min.js']['file']
-		);
-		self::assertEquals(
-			'typo3conf/ext/mksearch/res/js/jquery-ui-1.8.15.core.min.js',
-			$javaScriptLibraries['jquery-ui-1.8.15.core.min.js']['file']
-		);
-		self::assertEquals(
-			'typo3conf/ext/mksearch/res/js/jquery-ui-1.8.15.autocomplete.min.js',
-			$javaScriptLibraries['jquery-ui-1.8.15.autocomplete.min.js']['file']
-		);
-	}
+        self::assertEquals(3, count($javaScriptLibraries), 'mehr header daten als erwartet!');
+        self::assertEquals(
+            'typo3conf/ext/mksearch/res/js/jquery-1.6.2.min.js',
+            $javaScriptLibraries['jquery-1.6.2.min.js']['file']
+        );
+        self::assertEquals(
+            'typo3conf/ext/mksearch/res/js/jquery-ui-1.8.15.core.min.js',
+            $javaScriptLibraries['jquery-ui-1.8.15.core.min.js']['file']
+        );
+        self::assertEquals(
+            'typo3conf/ext/mksearch/res/js/jquery-ui-1.8.15.autocomplete.min.js',
+            $javaScriptLibraries['jquery-ui-1.8.15.autocomplete.min.js']['file']
+        );
+    }
 
-	/**
-	 */
-	public function testHandleRequestWithEnabledAutocompleteAndConfiguredUsedIndex(){
-		//action initialisieren
-		$aConfig['searchsolr.'] = array(
-			'nosearch' => 1,//keine echte Suche
-			'autocomplete.' => array(
-				'enable' => 1,
-				'minLength' => 2,
-				'elementSelector' => 'myElementSelector',
-				'actionLink.' => array(
-					'useKeepVars' => 1,
-					'useKeepVars.' => array(
-						'add' => '::type=540'
-					),
-					'noHash' => 1,
-				)
-			),
-			'usedIndex' => 2
-		);
-		//mock getIndex() so its not called for real
-		$aMockFunctions = array(
-			'getIndex' => array(
-				'expects' => $this->never(),
-				'returnValue' => true,
-			)
-		);
-		$out = true;
-		$action = $this->getAction($aMockFunctions,$aConfig,$out);
+    /**
+     */
+    public function testHandleRequestWithEnabledAutocompleteAndConfiguredUsedIndex()
+    {
+        //action initialisieren
+        $aConfig['searchsolr.'] = array(
+            'nosearch' => 1,//keine echte Suche
+            'autocomplete.' => array(
+                'enable' => 1,
+                'minLength' => 2,
+                'elementSelector' => 'myElementSelector',
+                'actionLink.' => array(
+                    'useKeepVars' => 1,
+                    'useKeepVars.' => array(
+                        'add' => '::type=540'
+                    ),
+                    'noHash' => 1,
+                )
+            ),
+            'usedIndex' => 2
+        );
+        //mock getIndex() so its not called for real
+        $aMockFunctions = array(
+            'getIndex' => array(
+                'expects' => $this->never(),
+                'returnValue' => true,
+            )
+        );
+        $out = true;
+        $action = $this->getAction($aMockFunctions, $aConfig, $out);
 
-		self::assertNull($out,'es wurde nicht null geliefert. vllt doch gesucht?');
-		//view daten sollten nicht gesetzt sein
-		self::assertFalse($action->getConfigurations()->getViewData()->offsetExists('result'),'es wurde doch ein result gesetzt in den view daten. doch gesucht?');
+        self::assertNull($out, 'es wurde nicht null geliefert. vllt doch gesucht?');
+        //view daten sollten nicht gesetzt sein
+        self::assertFalse($action->getConfigurations()->getViewData()->offsetExists('result'), 'es wurde doch ein result gesetzt in den view daten. doch gesucht?');
 
-		$expectedJavaScript = 'jQuery(document).ready(function(){
+        $expectedJavaScript = 'jQuery(document).ready(function(){
 			jQuery(myElementSelector).autocomplete({
 				source: function( request, response ) {
 					jQuery.ajax({
@@ -477,50 +487,51 @@ class tx_mksearch_tests_action_SearchSolr_testcase
 		});
 		jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();' . LF;
 
-		$property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsInline');
-		$property->setAccessible(TRUE);
-		$inlineJavaScripts = $property->getValue(tx_rnbase_util_TYPO3::getPageRenderer());
+        $property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsInline');
+        $property->setAccessible(true);
+        $inlineJavaScripts = $property->getValue(tx_rnbase_util_TYPO3::getPageRenderer());
 
-		self::assertEquals(1, count($inlineJavaScripts),'mehr header daten als erwartet!');
-		self::assertEquals($expectedJavaScript, $inlineJavaScripts['mksearch_autocomplete_123']['code']);
-	}
+        self::assertEquals(1, count($inlineJavaScripts), 'mehr header daten als erwartet!');
+        self::assertEquals($expectedJavaScript, $inlineJavaScripts['mksearch_autocomplete_123']['code']);
+    }
 
-	/**
-	 */
-	public function testHandleRequestWithEnabledAutocompleteAndAutocompleteJavaScriptSuffix(){
-		//action initialisieren
-		$aConfig['searchsolr.'] = array(
-			'nosearch' => 1,//keine echte Suche
-			'autocomplete.' => array(
-				'enable' => 1,
-				'minLength' => 2,
-				'elementSelector' => 'myElementSelector',
-				'actionLink.' => array(
-					'useKeepVars' => 1,
-					'useKeepVars.' => array(
-							'add' => '::type=540'
-					),
-					'noHash' => 1,
-				),
-				'javaScriptSnippetSuffix' => 'my_custom_suffix'
-			),
-			'usedIndex' => 1
-		);
-		//mock getIndex() so its not called for real
-		$aMockFunctions = array(
-			'getIndex' => array(
-				'expects' => $this->never(),
-				'returnValue' => true,
-			)
-		);
-		$out = true;
-		$action = $this->getAction($aMockFunctions,$aConfig,$out);
+    /**
+     */
+    public function testHandleRequestWithEnabledAutocompleteAndAutocompleteJavaScriptSuffix()
+    {
+        //action initialisieren
+        $aConfig['searchsolr.'] = array(
+            'nosearch' => 1,//keine echte Suche
+            'autocomplete.' => array(
+                'enable' => 1,
+                'minLength' => 2,
+                'elementSelector' => 'myElementSelector',
+                'actionLink.' => array(
+                    'useKeepVars' => 1,
+                    'useKeepVars.' => array(
+                            'add' => '::type=540'
+                    ),
+                    'noHash' => 1,
+                ),
+                'javaScriptSnippetSuffix' => 'my_custom_suffix'
+            ),
+            'usedIndex' => 1
+        );
+        //mock getIndex() so its not called for real
+        $aMockFunctions = array(
+            'getIndex' => array(
+                'expects' => $this->never(),
+                'returnValue' => true,
+            )
+        );
+        $out = true;
+        $action = $this->getAction($aMockFunctions, $aConfig, $out);
 
-		self::assertNull($out,'es wurde nicht null geliefert. vllt doch gesucht?');
-		//view daten sollten nicht gesetzt sein
-		self::assertFalse($action->getConfigurations()->getViewData()->offsetExists('result'),'es wurde doch ein result gesetzt in den view daten. doch gesucht?');
+        self::assertNull($out, 'es wurde nicht null geliefert. vllt doch gesucht?');
+        //view daten sollten nicht gesetzt sein
+        self::assertFalse($action->getConfigurations()->getViewData()->offsetExists('result'), 'es wurde doch ein result gesetzt in den view daten. doch gesucht?');
 
-		$expectedJavaScript = 'jQuery(document).ready(function(){
+        $expectedJavaScript = 'jQuery(document).ready(function(){
 			jQuery(myElementSelector).autocomplete({
 				source: function( request, response ) {
 					jQuery.ajax({
@@ -547,11 +558,11 @@ class tx_mksearch_tests_action_SearchSolr_testcase
 		});
 		jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();' . LF;
 
-		$property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsInline');
-		$property->setAccessible(TRUE);
-		$inlineJavaScripts = $property->getValue(tx_rnbase_util_TYPO3::getPageRenderer());
+        $property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsInline');
+        $property->setAccessible(true);
+        $inlineJavaScripts = $property->getValue(tx_rnbase_util_TYPO3::getPageRenderer());
 
-		self::assertEquals(1, count($inlineJavaScripts),'mehr header daten als erwartet!');
-		self::assertEquals($expectedJavaScript, $inlineJavaScripts['mksearch_autocomplete_my_custom_suffix']['code']);
-	}
+        self::assertEquals(1, count($inlineJavaScripts), 'mehr header daten als erwartet!');
+        self::assertEquals($expectedJavaScript, $inlineJavaScripts['mksearch_autocomplete_my_custom_suffix']['code']);
+    }
 }

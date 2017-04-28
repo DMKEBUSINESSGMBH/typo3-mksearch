@@ -28,33 +28,34 @@ tx_rnbase::load('tx_mksearch_marker_SearchResultSimple');
 /**
  * @author Hannes Bochmann
  */
-class tx_mksearch_marker_Irfaq
-	extends tx_mksearch_marker_SearchResultSimple {
+class tx_mksearch_marker_Irfaq extends tx_mksearch_marker_SearchResultSimple
+{
 
 
-	/**
-	 * Prepare links
-	 *
-	 * @param tx_mksearch_model_SearchHit $item
-	 * @param string $marker
-	 * @param array $markerArray
-	 * @param array $wrappedSubpartArray
-	 * @param string $confId
-	 * @param tx_rnbase_util_FormatUtil $formatter
-	 * @param string $template
-	 */
-	public function prepareLinks($item, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, $formatter, $template) {
-		parent::prepareLinks($item, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter, $template);
+    /**
+     * Prepare links
+     *
+     * @param tx_mksearch_model_SearchHit $item
+     * @param string $marker
+     * @param array $markerArray
+     * @param array $wrappedSubpartArray
+     * @param string $confId
+     * @param tx_rnbase_util_FormatUtil $formatter
+     * @param string $template
+     */
+    public function prepareLinks($item, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, $formatter, $template)
+    {
+        parent::prepareLinks($item, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter, $template);
 
-		//nachträglich entfernen. geht nicht über rnbase da remove nur möglich ist, wenn das model
-		//nicht persisted ist. Das ist ein Solr Dokument aber immer.
-		if(!$item->record['category_first_shortcut_s']) {
-			$linkMarker = $marker . '_SHOWFIRSTCATEGORYLINK';
-			$this->disableLink($markerArray, $subpartArray, $wrappedSubpartArray, $linkMarker, true);
-			unset($wrappedSubpartArray['###ITEM_SHOWFIRSTCATEGORYLINK###']);
-		}
-	}
+        //nachträglich entfernen. geht nicht über rnbase da remove nur möglich ist, wenn das model
+        //nicht persisted ist. Das ist ein Solr Dokument aber immer.
+        if (!$item->record['category_first_shortcut_s']) {
+            $linkMarker = $marker . '_SHOWFIRSTCATEGORYLINK';
+            $this->disableLink($markerArray, $subpartArray, $wrappedSubpartArray, $linkMarker, true);
+            unset($wrappedSubpartArray['###ITEM_SHOWFIRSTCATEGORYLINK###']);
+        }
+    }
 }
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/marker/class.tx_mksearch_marker_Irfaq.php'])	{
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/marker/class.tx_mksearch_marker_Irfaq.php']);
+if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/marker/class.tx_mksearch_marker_Irfaq.php']) {
+    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/marker/class.tx_mksearch_marker_Irfaq.php']);
 }

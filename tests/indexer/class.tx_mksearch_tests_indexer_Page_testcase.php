@@ -38,37 +38,37 @@ tx_rnbase::load('tx_mksearch_tests_Testcase');
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_tests_indexer_Page_testcase
-	extends tx_mksearch_tests_Testcase {
+class tx_mksearch_tests_indexer_Page_testcase extends tx_mksearch_tests_Testcase
+{
+    public function testPrepareSearchDataSetsDocToDeleted()
+    {
+        // @TODO: ther is a db operation. where? fix it!
+        $this->prepareLegacyTypo3DbGlobal();
 
-	public function testPrepareSearchDataSetsDocToDeleted() {
-		// @TODO: ther is a db operation. where? fix it!
-		$this->prepareLegacyTypo3DbGlobal();
+        $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_Page');
+        $options = array();
 
-		$indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_Page');
-		$options = array();
+        list($extKey, $cType) = $indexer->getContentType();
+        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
 
-		list($extKey, $cType) = $indexer->getContentType();
-		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
+        //is deleted
+        $record = array('uid' => 123, 'pid' => 0, 'deleted' => 1);
+        $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
+        self::assertEquals(true, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 
-		//is deleted
-		$record = array('uid'=> 123, 'pid' => 0, 'deleted' => 1);
-		$indexer->prepareSearchData('pages', $record, $indexDoc, $options);
-		self::assertEquals(true, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
+        //is hidden
+        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $record = array('uid' => 124, 'pid' => 0, 'deleted' => 0, 'hidden' => 1);
+        $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
+        self::assertEquals(true, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 
-		//is hidden
-		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
-		$record = array('uid'=> 124, 'pid' => 0, 'deleted' => 0, 'hidden' => 1);
-		$indexer->prepareSearchData('pages', $record, $indexDoc, $options);
-		self::assertEquals(true, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
-
-		//everything alright
-		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
-		$record = array('uid'=> 125, 'pid' => 0, 'deleted' => 0, 'hidden' => 0);
-		$indexer->prepareSearchData('pages', $record, $indexDoc, $options);
-		self::assertEquals(false, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
-	}
+        //everything alright
+        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $record = array('uid' => 125, 'pid' => 0, 'deleted' => 0, 'hidden' => 0);
+        $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
+        self::assertEquals(false, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
+    }
 }
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']) {
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']);
+    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']);
 }

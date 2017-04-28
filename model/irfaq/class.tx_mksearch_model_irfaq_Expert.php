@@ -1,8 +1,8 @@
 <?php
 /**
- * 	@package tx_mksearch
- *  @subpackage tx_mksearch_model
- *  @author Hannes Bochmann
+ * @package tx_mksearch
+ * @subpackage tx_mksearch_model
+ * @author Hannes Bochmann
  *
  *  Copyright notice
  *
@@ -37,14 +37,18 @@ tx_rnbase::load('tx_rnbase_model_base');
  * @package tx_mksearch
  * @subpackage tx_mksearch_model
  */
-class tx_mksearch_model_irfaq_Expert extends tx_rnbase_model_base  {
-	/**
-	 * (non-PHPdoc)
-	 * @see tx_rnbase_model_base::getTableName()
-	 */
-	public function getTableName(){return 'tx_irfaq_expert';}
+class tx_mksearch_model_irfaq_Expert extends tx_rnbase_model_base
+{
+    /**
+     * (non-PHPdoc)
+     * @see tx_rnbase_model_base::getTableName()
+     */
+    public function getTableName()
+    {
+        return 'tx_irfaq_expert';
+    }
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/irfaq/class.tx_mksearch_model_irfaq_Expert.php']) {
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/irfaq/class.tx_mksearch_model_irfaq_Expert.php']);
+    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/irfaq/class.tx_mksearch_model_irfaq_Expert.php']);
 }

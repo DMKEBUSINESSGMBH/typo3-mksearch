@@ -34,174 +34,177 @@ tx_rnbase::load('tx_mksearch_util_Indexer');
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_indexer_ttcontent_Gridelements
-	extends tx_mksearch_indexer_ttcontent_Normal
+class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttcontent_Normal
 {
-	/**
-	 * Sets the index doc to deleted if neccessary
-	 *
-	 * @param tx_rnbase_IModel $oModel
-	 * @param tx_mksearch_interface_IndexerDocument $oIndexDoc
-	 * @param array $aOptions
-	 *
-	 * @return bool
-	 */
-	// @codingStandardsIgnoreStart (interface/abstract mistake)
-	protected function hasDocToBeDeleted(
-		tx_rnbase_IModel $oModel,
-		tx_mksearch_interface_IndexerDocument $oIndexDoc,
-		$aOptions = array()
-	) {
-		// @codingStandardsIgnoreEnd
-		// should the element be removed from the index?
-		if ((
-			// only for gridelements? no, other elements should be deleted too!
-			// $this->isGridelement($oModel->getRecord()) &&
-			// only if not directly set do indexable or not indexable!
-			$oModel->getTxMksearchIsIndexable() == self::USE_INDEXER_CONFIGURATION &&
-			// only, if there are a parent container
-			$oModel->getTxGridelementsContainer() > 0
-		)) {
-			// add the parent do index, so the changes are writen to index
-			$this->addGridelementsContainerToIndex($oModel);
+    /**
+     * Sets the index doc to deleted if neccessary
+     *
+     * @param tx_rnbase_IModel $oModel
+     * @param tx_mksearch_interface_IndexerDocument $oIndexDoc
+     * @param array $aOptions
+     *
+     * @return bool
+     */
+    // @codingStandardsIgnoreStart (interface/abstract mistake)
+    protected function hasDocToBeDeleted(
+        tx_rnbase_IModel $oModel,
+        tx_mksearch_interface_IndexerDocument $oIndexDoc,
+        $aOptions = array()
+    ) {
+        // @codingStandardsIgnoreEnd
+        // should the element be removed from the index?
+        if ((
+            // only for gridelements? no, other elements should be deleted too!
+            // $this->isGridelement($oModel->getRecord()) &&
+            // only if not directly set do indexable or not indexable!
+            $oModel->getTxMksearchIsIndexable() == self::USE_INDEXER_CONFIGURATION &&
+            // only, if there are a parent container
+            $oModel->getTxGridelementsContainer() > 0
+        )) {
+            // add the parent do index, so the changes are writen to index
+            $this->addGridelementsContainerToIndex($oModel);
 
-			return true;
-		}
+            return true;
+        }
 
-		return $this->hasNonGridelementDocToBeDeleted($oModel, $oIndexDoc, $aOptions);
-	}
+        return $this->hasNonGridelementDocToBeDeleted($oModel, $oIndexDoc, $aOptions);
+    }
 
-	/**
-	 * Sets the index doc to deleted if neccessary
-	 *
-	 * @param tx_rnbase_IModel $oModel
-	 * @param tx_mksearch_interface_IndexerDocument $oIndexDoc
-	 * @param array $aOptions
-	 *
-	 * @return bool
-	 */
-	// @codingStandardsIgnoreStart (interface/abstract mistake)
-	protected function hasNonGridelementDocToBeDeleted(
-		tx_rnbase_IModel $oModel,
-		tx_mksearch_interface_IndexerDocument $oIndexDoc,
-		$aOptions = array()
-	) {
-		// @codingStandardsIgnoreEnd
-		return parent::hasDocToBeDeleted($oModel, $oIndexDoc, $aOptions);
-	}
+    /**
+     * Sets the index doc to deleted if neccessary
+     *
+     * @param tx_rnbase_IModel $oModel
+     * @param tx_mksearch_interface_IndexerDocument $oIndexDoc
+     * @param array $aOptions
+     *
+     * @return bool
+     */
+    // @codingStandardsIgnoreStart (interface/abstract mistake)
+    protected function hasNonGridelementDocToBeDeleted(
+        tx_rnbase_IModel $oModel,
+        tx_mksearch_interface_IndexerDocument $oIndexDoc,
+        $aOptions = array()
+    ) {
+        // @codingStandardsIgnoreEnd
+        return parent::hasDocToBeDeleted($oModel, $oIndexDoc, $aOptions);
+    }
 
-	/**
-	 * Adds the parent to index
-	 *
-	 * @param tx_rnbase_IModel $oModel
-	 *
-	 * @return void
-	 */
-	protected function addGridelementsContainerToIndex(
-		tx_rnbase_IModel $oModel
-	) {
-		// add the parent do index, so the changes are writen to index
-		$indexSrv = tx_mksearch_util_ServiceRegistry::getIntIndexService();
-		$indexSrv->addRecordToIndex(
-			'tt_content',
-			$oModel->getTxGridelementsContainer()
-		);
-	}
+    /**
+     * Adds the parent to index
+     *
+     * @param tx_rnbase_IModel $oModel
+     *
+     * @return void
+     */
+    protected function addGridelementsContainerToIndex(
+        tx_rnbase_IModel $oModel
+    ) {
+        // add the parent do index, so the changes are writen to index
+        $indexSrv = tx_mksearch_util_ServiceRegistry::getIntIndexService();
+        $indexSrv->addRecordToIndex(
+            'tt_content',
+            $oModel->getTxGridelementsContainer()
+        );
+    }
 
-	/**
-	 * Get the content by CType
-	 *
-	 * @param array $rawData
-	 * @param array $options
-	 *
-	 * @return string
-	 */
-	protected function getContentByContentType(
-		array $rawData, array $options
-	) {
-		if (!$this->isGridelement($rawData)) {
-			return '';
-		}
+    /**
+     * Get the content by CType
+     *
+     * @param array $rawData
+     * @param array $options
+     *
+     * @return string
+     */
+    protected function getContentByContentType(
+        array $rawData,
+        array $options
+    ) {
+        if (!$this->isGridelement($rawData)) {
+            return '';
+        }
 
-		return $this->getGridelementElementContent($rawData, $options);
-	}
+        return $this->getGridelementElementContent($rawData, $options);
+    }
 
-	/**
-	 * Is the given record an gridelement?
-	 *
-	 * @param array $rawData
-	 *
-	 * @return bool
-	 */
-	protected function isGridelement(
-		array $rawData
-	) {
-		return (
-			tx_rnbase_util_Extensions::isLoaded('gridelements') &&
-			$rawData['CType'] == 'gridelements_pi1'
-		);
-	}
+    /**
+     * Is the given record an gridelement?
+     *
+     * @param array $rawData
+     *
+     * @return bool
+     */
+    protected function isGridelement(
+        array $rawData
+    ) {
+        return (
+            tx_rnbase_util_Extensions::isLoaded('gridelements') &&
+            $rawData['CType'] == 'gridelements_pi1'
+        );
+    }
 
-	/**
-	 * Fetches the content of an grid element
-	 *
-	 * @param array $record
-	 * @param array $options
-	 *
-	 * @return string
-	 */
-	protected function getGridelementElementContent(
-		array $record, array $options
-	) {
-		tx_mksearch_util_Indexer::prepareTSFE($record['pid']);
-		$uid = $this->getUid('tt_content', $record, array());
+    /**
+     * Fetches the content of an grid element
+     *
+     * @param array $record
+     * @param array $options
+     *
+     * @return string
+     */
+    protected function getGridelementElementContent(
+        array $record,
+        array $options
+    ) {
+        tx_mksearch_util_Indexer::prepareTSFE($record['pid']);
+        $uid = $this->getUid('tt_content', $record, array());
 
-		$allowedCTypes = $this->getAllowedCTypes($options);
+        $allowedCTypes = $this->getAllowedCTypes($options);
 
-		if (is_array($allowedCTypes)) {
-			foreach (
-				$GLOBALS['TSFE']->tmpl->setup['tt_content.'] as
-				$currentCType => $conf
-			) {
-				if ($currentCType == 'key.') {
-					continue;
-				}
-				// Config der nicht definierten ContentTypen entfernen, damit
-				// Elemente nicht durch Gridelements gerendert werden
-				if (!in_array($currentCType, $allowedCTypes)) {
-					unset($GLOBALS['TSFE']->tmpl->setup['tt_content.'][$currentCType]);
-				}
-			}
-		}
-		$cObj = $GLOBALS['TSFE']->cObj;
-		$cObj->data = $record;
-		$cObj->currentRecord = 'tt_content:' . $uid;
+        if (is_array($allowedCTypes)) {
+            foreach ($GLOBALS['TSFE']->tmpl->setup['tt_content.'] as
+                $currentCType => $conf) {
+                if ($currentCType == 'key.') {
+                    continue;
+                }
+                // Config der nicht definierten ContentTypen entfernen, damit
+                // Elemente nicht durch Gridelements gerendert werden
+                if (!in_array($currentCType, $allowedCTypes)) {
+                    unset($GLOBALS['TSFE']->tmpl->setup['tt_content.'][$currentCType]);
+                }
+            }
+        }
+        $cObj = $GLOBALS['TSFE']->cObj;
+        $cObj->data = $record;
+        $cObj->currentRecord = 'tt_content:' . $uid;
 
-		$content = $cObj->callUserFunction(
-			'GridElementsTeam\\Gridelements\\Plugin\\Gridelements->main',
-			array(), ''
-		);
-		return $content;
-	}
+        $content = $cObj->callUserFunction(
+            'GridElementsTeam\\Gridelements\\Plugin\\Gridelements->main',
+            array(),
+            ''
+        );
 
-	/**
-	 * Gets the allowed CTypes from Configuration for Gridelement Rendering
-	 *
-	 * @param array $options
-	 * @return array $allowedCTypes
-	 */
-	protected function getAllowedCTypes($options) {
-		$allowedCTypes = $this->getConfigValue(
-				'includeCTypesInGridelementRendering', $options
-		);
-		foreach ($allowedCTypes as $allowedCType) {
-			$allowedCTypes[] = $allowedCType . '.';
-		}
-		return $allowedCTypes;
-	}
+        return $content;
+    }
 
+    /**
+     * Gets the allowed CTypes from Configuration for Gridelement Rendering
+     *
+     * @param array $options
+     * @return array $allowedCTypes
+     */
+    protected function getAllowedCTypes($options)
+    {
+        $allowedCTypes = $this->getConfigValue(
+            'includeCTypesInGridelementRendering',
+            $options
+        );
+        foreach ($allowedCTypes as $allowedCType) {
+            $allowedCTypes[] = $allowedCType . '.';
+        }
+
+        return $allowedCTypes;
+    }
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/ttcontent/class.tx_mksearch_indexer_ttcontent_Gridelements.php']) {
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/ttcontent/class.tx_mksearch_indexer_ttcontent_Gridelements.php']);
+    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/ttcontent/class.tx_mksearch_indexer_ttcontent_Gridelements.php']);
 }

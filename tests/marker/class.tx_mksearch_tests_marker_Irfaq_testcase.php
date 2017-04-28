@@ -1,8 +1,8 @@
 <?php
 /**
- * 	@package tx_mksearch
- *  @subpackage tx_mksearch_tests
- *  @author Hannes Bochmann
+ * @package tx_mksearch
+ * @subpackage tx_mksearch_tests
+ * @author Hannes Bochmann
  *
  *  Copyright notice
  *
@@ -43,70 +43,81 @@ tx_rnbase::load('tx_mksearch_tests_Testcase');
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_tests_marker_Irfaq_testcase
-	extends tx_mksearch_tests_Testcase {
+class tx_mksearch_tests_marker_Irfaq_testcase extends tx_mksearch_tests_Testcase
+{
 
-	/**
-	 * @var tx_mksearch_marker_Irfaq
-	 */
-	protected $marker;
+    /**
+     * @var tx_mksearch_marker_Irfaq
+     */
+    protected $marker;
 
-	/**
-	 * setUp() = init DB etc.
-	 */
-	protected function setUp(){
-		$this->prepareTSFE();
+    /**
+     * setUp() = init DB etc.
+     */
+    protected function setUp()
+    {
+        $this->prepareTSFE();
 
-		$this->marker = tx_rnbase::makeInstance('tx_mksearch_marker_Irfaq');
+        $this->marker = tx_rnbase::makeInstance('tx_mksearch_marker_Irfaq');
 
-		parent::setUp();
-	}
+        parent::setUp();
+    }
 
-	/**
-	 * @group unit
-	 */
-	public function testParseTemplateRemovesShowFirstCategoryLinkIfFieldEmpty() {
-		$config = tx_mksearch_tests_Util::loadPageTS4BE();
-		$configurations = tx_mksearch_tests_Util::loadConfig4BE($config);
-		$formatter = $configurations->getFormatter();
+    /**
+     * @group unit
+     */
+    public function testParseTemplateRemovesShowFirstCategoryLinkIfFieldEmpty()
+    {
+        $config = tx_mksearch_tests_Util::loadPageTS4BE();
+        $configurations = tx_mksearch_tests_Util::loadConfig4BE($config);
+        $formatter = $configurations->getFormatter();
 
-		//now test
-		$doc = new Apache_Solr_Document();
-		$doc->category_first_shortcut_s = '';
+        //now test
+        $doc = new Apache_Solr_Document();
+        $doc->category_first_shortcut_s = '';
 
-		$item = tx_rnbase::makeInstance('tx_mksearch_model_SolrHit',$doc);
+        $item = tx_rnbase::makeInstance('tx_mksearch_model_SolrHit', $doc);
 
-		$template = '###ITEM_SHOWFIRSTCATEGORYLINK###test###ITEM_SHOWFIRSTCATEGORYLINK###';
-		$parsedTemplate = $this->marker->parseTemplate(
-			$template, $item, $formatter, 'searchsolr.hit.extrainfo.default.hit.', 'ITEM'
-		);
+        $template = '###ITEM_SHOWFIRSTCATEGORYLINK###test###ITEM_SHOWFIRSTCATEGORYLINK###';
+        $parsedTemplate = $this->marker->parseTemplate(
+            $template,
+            $item,
+            $formatter,
+            'searchsolr.hit.extrainfo.default.hit.',
+            'ITEM'
+        );
 
-		self::assertEquals('',$parsedTemplate,'Die Marker wurden nicht entfernt!');
-	}
+        self::assertEquals('', $parsedTemplate, 'Die Marker wurden nicht entfernt!');
+    }
 
-	/**
-	 * @group unit
-	 */
-	public function testParseTemplateRemovesShowFirstCategoryLinkNotIfFieldFilled() {
-		$config = tx_mksearch_tests_Util::loadPageTS4BE();
-		$configurations = tx_mksearch_tests_Util::loadConfig4BE($config);
-		$formatter = $configurations->getFormatter();
+    /**
+     * @group unit
+     */
+    public function testParseTemplateRemovesShowFirstCategoryLinkNotIfFieldFilled()
+    {
+        $config = tx_mksearch_tests_Util::loadPageTS4BE();
+        $configurations = tx_mksearch_tests_Util::loadConfig4BE($config);
+        $formatter = $configurations->getFormatter();
 
-		//now test
-		$doc = new Apache_Solr_Document();
-		$doc->category_first_shortcut_s = 'filled';
+        //now test
+        $doc = new Apache_Solr_Document();
+        $doc->category_first_shortcut_s = 'filled';
 
-		$item = tx_rnbase::makeInstance('tx_mksearch_model_SolrHit',$doc);
+        $item = tx_rnbase::makeInstance('tx_mksearch_model_SolrHit', $doc);
 
-		$template = '###ITEM_SHOWFIRSTCATEGORYLINK###test###ITEM_SHOWFIRSTCATEGORYLINK###';
-		$parsedTemplate = $this->marker->parseTemplate(
-			$template, $item, $formatter, 'searchsolr.hit.extrainfo.default.hit.', 'ITEM'
-		);
+        $template = '###ITEM_SHOWFIRSTCATEGORYLINK###test###ITEM_SHOWFIRSTCATEGORYLINK###';
+        $parsedTemplate = $this->marker->parseTemplate(
+            $template,
+            $item,
+            $formatter,
+            'searchsolr.hit.extrainfo.default.hit.',
+            'ITEM'
+        );
 
-		self::assertEquals(
-			'###ITEM_SHOWFIRSTCATEGORYLINK###test###ITEM_SHOWFIRSTCATEGORYLINK###',
-			$parsedTemplate,
-			'Die Marker wurden nicht entfernt!'
-		);
-	}
+        self::assertEquals(
+            '###ITEM_SHOWFIRSTCATEGORYLINK###test###ITEM_SHOWFIRSTCATEGORYLINK###',
+            $parsedTemplate,
+            'Die Marker wurden nicht entfernt!'
+        );
+    }
 }

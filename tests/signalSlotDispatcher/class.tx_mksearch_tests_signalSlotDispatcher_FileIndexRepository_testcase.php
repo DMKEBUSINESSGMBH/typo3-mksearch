@@ -33,172 +33,180 @@ tx_rnbase::load('tx_mksearch_tests_Testcase');
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_tests_signalSlotDispatcher_FileIndexRepository_testcase
-	extends tx_mksearch_tests_Testcase {
+class tx_mksearch_tests_signalSlotDispatcher_FileIndexRepository_testcase extends tx_mksearch_tests_Testcase
+{
 
 
-	/**
-	 * (non-PHPdoc)
-	 * @see tx_mksearch_tests_Testcase::setUp()
-	 */
-	protected function setUp() {
-		if (!tx_rnbase_util_TYPO3::isTYPO60OrHigher()) {
-			$this->markTestSkipped('Erst ab TYPO3 6.x relevant');
-		}
+    /**
+     * (non-PHPdoc)
+     * @see tx_mksearch_tests_Testcase::setUp()
+     */
+    protected function setUp()
+    {
+        if (!tx_rnbase_util_TYPO3::isTYPO60OrHigher()) {
+            $this->markTestSkipped('Erst ab TYPO3 6.x relevant');
+        }
 
-		parent::setUp();
-	}
+        parent::setUp();
+    }
 
-	/**
-	 * @group unit
-	 */
-	public function testGetInternalIndexService() {
-		$signalSlotDispatcher = tx_rnbase::makeInstance(
-			'tx_mksearch_signalSlotDispatcher_FileIndexRepsitory'
-		);
+    /**
+     * @group unit
+     */
+    public function testGetInternalIndexService()
+    {
+        $signalSlotDispatcher = tx_rnbase::makeInstance(
+            'tx_mksearch_signalSlotDispatcher_FileIndexRepsitory'
+        );
 
-		self::assertInstanceOf(
-			'tx_mksearch_service_internal_Index',
-			$this->callInaccessibleMethod(
-				$signalSlotDispatcher, 'getInternalIndexService'
-			)
-		);
-	}
+        self::assertInstanceOf(
+            'tx_mksearch_service_internal_Index',
+            $this->callInaccessibleMethod(
+                $signalSlotDispatcher,
+                'getInternalIndexService'
+            )
+        );
+    }
 
-	/**
-	 * @group unit
-	 */
-	public function testPutFileIntoQueueWhenDataIsInteger() {
-		$internalIndexService = $this->getMock(
-			'tx_mksearch_service_internal_Index',
-			array('addRecordToIndex')
-		);
-		$internalIndexService->expects($this->once())
-			->method('addRecordToIndex')
-			->with('sys_file', 123);
+    /**
+     * @group unit
+     */
+    public function testPutFileIntoQueueWhenDataIsInteger()
+    {
+        $internalIndexService = $this->getMock(
+            'tx_mksearch_service_internal_Index',
+            array('addRecordToIndex')
+        );
+        $internalIndexService->expects($this->once())
+            ->method('addRecordToIndex')
+            ->with('sys_file', 123);
 
-		$signalSlotDispatcher = $this->getDispatcherMock($internalIndexService);
+        $signalSlotDispatcher = $this->getDispatcherMock($internalIndexService);
 
-		$signalSlotDispatcher->putFileIntoQueue(123);
-	}
+        $signalSlotDispatcher->putFileIntoQueue(123);
+    }
 
-	/**
-	 * @group unit
-	 */
-	public function testPutFileIntoQueueWhenDataIsArray() {
-		$internalIndexService = $this->getMock(
-			'tx_mksearch_service_internal_Index',
-			array('addRecordToIndex')
-		);
-		$internalIndexService->expects($this->once())
-			->method('addRecordToIndex')
-			->with('sys_file', 123);
+    /**
+     * @group unit
+     */
+    public function testPutFileIntoQueueWhenDataIsArray()
+    {
+        $internalIndexService = $this->getMock(
+            'tx_mksearch_service_internal_Index',
+            array('addRecordToIndex')
+        );
+        $internalIndexService->expects($this->once())
+            ->method('addRecordToIndex')
+            ->with('sys_file', 123);
 
-		$signalSlotDispatcher = $this->getDispatcherMock($internalIndexService);
+        $signalSlotDispatcher = $this->getDispatcherMock($internalIndexService);
 
-		$signalSlotDispatcher->putFileIntoQueue(array('uid' => 123));
-	}
+        $signalSlotDispatcher->putFileIntoQueue(array('uid' => 123));
+    }
 
-	/**
-	 * @group unit
-	 */
-	public function testDispatcherRegisteredForRecordCreatedSignalSlot() {
-		$signalSlotDispatcher = tx_rnbase::makeInstance(
-			'TYPO3\CMS\Extbase\SignalSlot\Dispatcher'
-		);
+    /**
+     * @group unit
+     */
+    public function testDispatcherRegisteredForRecordCreatedSignalSlot()
+    {
+        $signalSlotDispatcher = tx_rnbase::makeInstance(
+            'TYPO3\CMS\Extbase\SignalSlot\Dispatcher'
+        );
 
-		$slots = new ReflectionProperty(
-			'TYPO3\CMS\Extbase\SignalSlot\Dispatcher', 'slots'
-		);
-		$slots->setAccessible(TRUE);
+        $slots = new ReflectionProperty(
+            'TYPO3\CMS\Extbase\SignalSlot\Dispatcher',
+            'slots'
+        );
+        $slots->setAccessible(true);
 
-		$slotsArray = $slots->getValue($signalSlotDispatcher);
+        $slotsArray = $slots->getValue($signalSlotDispatcher);
 
-		$singalSlotDispatcherCorrectConfigured = FALSE;
-		foreach ($slotsArray['TYPO3\CMS\Core\Resource\Index\FileIndexRepository']['recordCreated'] as $signalSlotDispatcherConfiguration) {			;
-			if (
-				($signalSlotDispatcherConfiguration['class'] == 'tx_mksearch_signalSlotDispatcher_FileIndexRepsitory') &&
-				($signalSlotDispatcherConfiguration['method'] == 'putFileIntoQueue')
-			) {
-				$singalSlotDispatcherCorrectConfigured = TRUE;
-			}
-		}
+        $singalSlotDispatcherCorrectConfigured = false;
+        foreach ($slotsArray['TYPO3\CMS\Core\Resource\Index\FileIndexRepository']['recordCreated'] as $signalSlotDispatcherConfiguration) {;
+            if (($signalSlotDispatcherConfiguration['class'] == 'tx_mksearch_signalSlotDispatcher_FileIndexRepsitory') &&
+                ($signalSlotDispatcherConfiguration['method'] == 'putFileIntoQueue')
+            ) {
+                $singalSlotDispatcherCorrectConfigured = true;
+            }
+        }
 
-		self::assertTrue($singalSlotDispatcherCorrectConfigured);
-	}
+        self::assertTrue($singalSlotDispatcherCorrectConfigured);
+    }
 
-	/**
-	 * @group unit
-	 */
-	public function testDispatcherRegisteredForRecordUpdatedSignalSlot() {
-		$signalSlotDispatcher = tx_rnbase::makeInstance(
-			'TYPO3\CMS\Extbase\SignalSlot\Dispatcher'
-		);
+    /**
+     * @group unit
+     */
+    public function testDispatcherRegisteredForRecordUpdatedSignalSlot()
+    {
+        $signalSlotDispatcher = tx_rnbase::makeInstance(
+            'TYPO3\CMS\Extbase\SignalSlot\Dispatcher'
+        );
 
-		$slots = new ReflectionProperty(
-			'TYPO3\CMS\Extbase\SignalSlot\Dispatcher', 'slots'
-		);
-		$slots->setAccessible(TRUE);
+        $slots = new ReflectionProperty(
+            'TYPO3\CMS\Extbase\SignalSlot\Dispatcher',
+            'slots'
+        );
+        $slots->setAccessible(true);
 
-		$slotsArray = $slots->getValue($signalSlotDispatcher);
+        $slotsArray = $slots->getValue($signalSlotDispatcher);
 
-		$singalSlotDispatcherCorrectConfigured = FALSE;
-		foreach ($slotsArray['TYPO3\CMS\Core\Resource\Index\FileIndexRepository']['recordUpdated'] as $signalSlotDispatcherConfiguration) {			;
-			if (
-				($signalSlotDispatcherConfiguration['class'] == 'tx_mksearch_signalSlotDispatcher_FileIndexRepsitory') &&
-				($signalSlotDispatcherConfiguration['method'] == 'putFileIntoQueue')
-			) {
-				$singalSlotDispatcherCorrectConfigured = TRUE;
-			}
-		}
+        $singalSlotDispatcherCorrectConfigured = false;
+        foreach ($slotsArray['TYPO3\CMS\Core\Resource\Index\FileIndexRepository']['recordUpdated'] as $signalSlotDispatcherConfiguration) {;
+            if (($signalSlotDispatcherConfiguration['class'] == 'tx_mksearch_signalSlotDispatcher_FileIndexRepsitory') &&
+                ($signalSlotDispatcherConfiguration['method'] == 'putFileIntoQueue')
+            ) {
+                $singalSlotDispatcherCorrectConfigured = true;
+            }
+        }
 
-		self::assertTrue($singalSlotDispatcherCorrectConfigured);
-	}
+        self::assertTrue($singalSlotDispatcherCorrectConfigured);
+    }
 
-	/**
-	 * @group unit
-	 */
-	public function testDispatcherRegisteredForRecordDeletedSignalSlot() {
-		$signalSlotDispatcher = tx_rnbase::makeInstance(
-			'TYPO3\CMS\Extbase\SignalSlot\Dispatcher'
-		);
+    /**
+     * @group unit
+     */
+    public function testDispatcherRegisteredForRecordDeletedSignalSlot()
+    {
+        $signalSlotDispatcher = tx_rnbase::makeInstance(
+            'TYPO3\CMS\Extbase\SignalSlot\Dispatcher'
+        );
 
-		$slots = new ReflectionProperty(
-			'TYPO3\CMS\Extbase\SignalSlot\Dispatcher', 'slots'
-		);
-		$slots->setAccessible(TRUE);
+        $slots = new ReflectionProperty(
+            'TYPO3\CMS\Extbase\SignalSlot\Dispatcher',
+            'slots'
+        );
+        $slots->setAccessible(true);
 
-		$slotsArray = $slots->getValue($signalSlotDispatcher);
+        $slotsArray = $slots->getValue($signalSlotDispatcher);
 
-		$singalSlotDispatcherCorrectConfigured = FALSE;
-		foreach ($slotsArray['TYPO3\CMS\Core\Resource\Index\FileIndexRepository']['recordDeleted'] as $signalSlotDispatcherConfiguration) {			;
-			if (
-				($signalSlotDispatcherConfiguration['class'] == 'tx_mksearch_signalSlotDispatcher_FileIndexRepsitory') &&
-				($signalSlotDispatcherConfiguration['method'] == 'putFileIntoQueue')
-			) {
-				$singalSlotDispatcherCorrectConfigured = TRUE;
-			}
-		}
+        $singalSlotDispatcherCorrectConfigured = false;
+        foreach ($slotsArray['TYPO3\CMS\Core\Resource\Index\FileIndexRepository']['recordDeleted'] as $signalSlotDispatcherConfiguration) {;
+            if (($signalSlotDispatcherConfiguration['class'] == 'tx_mksearch_signalSlotDispatcher_FileIndexRepsitory') &&
+                ($signalSlotDispatcherConfiguration['method'] == 'putFileIntoQueue')
+            ) {
+                $singalSlotDispatcherCorrectConfigured = true;
+            }
+        }
 
-		self::assertTrue($singalSlotDispatcherCorrectConfigured);
-	}
+        self::assertTrue($singalSlotDispatcherCorrectConfigured);
+    }
 
-	/**
-	 * @param tx_mksearch_service_internal_Index $internalIndexService
-	 * @return Ambigous <PHPUnit_Framework_MockObject_MockObject, tx_mksearch_signalSlotDispatcher_FileIndexRepsitory>
-	 */
-	private function getDispatcherMock(
-		tx_mksearch_service_internal_Index $internalIndexService
-	) {
-		$signalSlotDispatcher = $this->getMock(
-			'tx_mksearch_signalSlotDispatcher_FileIndexRepsitory',
-			array('getInternalIndexService')
-		);
+    /**
+     * @param tx_mksearch_service_internal_Index $internalIndexService
+     * @return Ambigous <PHPUnit_Framework_MockObject_MockObject, tx_mksearch_signalSlotDispatcher_FileIndexRepsitory>
+     */
+    private function getDispatcherMock(
+        tx_mksearch_service_internal_Index $internalIndexService
+    ) {
+        $signalSlotDispatcher = $this->getMock(
+            'tx_mksearch_signalSlotDispatcher_FileIndexRepsitory',
+            array('getInternalIndexService')
+        );
 
-		$signalSlotDispatcher->expects($this->once())
-			->method('getInternalIndexService')
-			->will($this->returnValue($internalIndexService));
+        $signalSlotDispatcher->expects($this->once())
+            ->method('getInternalIndexService')
+            ->will($this->returnValue($internalIndexService));
 
-		return $signalSlotDispatcher;
-	}
+        return $signalSlotDispatcher;
+    }
 }

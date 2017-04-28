@@ -28,43 +28,47 @@ tx_rnbase::load('tx_mksearch_util_SearchBuilder');
 /**
  * userFunc Methoden
  */
-class tx_mksearch_util_UserFunc {
+class tx_mksearch_util_UserFunc
+{
 
-	/**
-	 * @see 	tx_mksearch_util_SearchBuilder::searchSolrOptions
-	 */
-	public static function searchSolrOptions($term = '', $conf = array()){
-		if(tx_mksearch_util_SearchBuilder::emptyTerm($term)) {
-			return '';
-		}
+    /**
+     * @see     tx_mksearch_util_SearchBuilder::searchSolrOptions
+     */
+    public static function searchSolrOptions($term = '', $conf = array())
+    {
+        if (tx_mksearch_util_SearchBuilder::emptyTerm($term)) {
+            return '';
+        }
 
-		/* @var $parameters tx_rnbase_parameters */
-		$parameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
-		$combination = $parameters->get('combination', $conf['qualifier']);
-		//fallback aus TS
-		if(empty($combination))
-			$combination = $conf['combination'];
-		// Bei free kann die volle Dismax-Syntax durch den User verwendet werden
-		if($combination == MKSEARCH_OP_FREE)
-			return $term;
+        /* @var $parameters tx_rnbase_parameters */
+        $parameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
+        $combination = $parameters->get('combination', $conf['qualifier']);
+        //fallback aus TS
+        if (empty($combination)) {
+            $combination = $conf['combination'];
+        }
+        // Bei free kann die volle Dismax-Syntax durch den User verwendet werden
+        if ($combination == MKSEARCH_OP_FREE) {
+            return $term;
+        }
 
-		$options = $parameters->get('options', $conf['qualifier']);
+        $options = $parameters->get('options', $conf['qualifier']);
 
-		$options = is_array($options) ? array_merge($conf, $options) : $conf;
+        $options = is_array($options) ? array_merge($conf, $options) : $conf;
 
-		return tx_mksearch_util_SearchBuilder::searchSolrOptions($term, $combination, $options);
-	}
+        return tx_mksearch_util_SearchBuilder::searchSolrOptions($term, $combination, $options);
+    }
 
-	/**
-	 * vorerst machen wir nichts anders als bei SOLR
-	 * @see 	tx_mksearch_util_SearchBuilder::searchSolrOptions
-	 */
-	public static function searchLuceneOptions($term = '', $conf = array()){
-		return self::searchSolrOptions($term, $conf);
-	}
-
+    /**
+     * vorerst machen wir nichts anders als bei SOLR
+     * @see     tx_mksearch_util_SearchBuilder::searchSolrOptions
+     */
+    public static function searchLuceneOptions($term = '', $conf = array())
+    {
+        return self::searchSolrOptions($term, $conf);
+    }
 }
 
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_UserFunc.php'])	{
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_UserFunc.php']);
+if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_UserFunc.php']) {
+    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_UserFunc.php']);
 }

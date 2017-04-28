@@ -1,4 +1,4 @@
 plugin.tx_mksearch {
-	### cat=mksearch/base; type=int;label=Index to use: The UID of the index to use for the search.
-	usedIndex = 0
+    ### cat=mksearch/base; type=int;label=Index to use: The UID of the index to use for the search.
+    usedIndex = 0
 }

@@ -34,289 +34,355 @@ tx_rnbase::load('tx_mksearch_tests_Testcase');
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_tests_indexer_BaseMedia_testcase
-	extends tx_mksearch_tests_Testcase {
+class tx_mksearch_tests_indexer_BaseMedia_testcase extends tx_mksearch_tests_Testcase
+{
 
-	/**
-	 * @group unit
-	 */
-	public function testPrepareSearchDataCallsStopIndexing() {
-		$indexer = $this->getIndexerMock();
+    /**
+     * @group unit
+     */
+    public function testPrepareSearchDataCallsStopIndexing()
+    {
+        $indexer = $this->getIndexerMock();
 
-		$indexDoc = tx_rnbase::makeInstance(
-			'tx_mksearch_model_IndexerDocumentBase', 'core', 'tt_content'
-		);
-		$options = array();
-		$sourceRecord = array('uid' => 1, 'test_field_1' => 'test value 1');
+        $indexDoc = tx_rnbase::makeInstance(
+            'tx_mksearch_model_IndexerDocumentBase',
+            'core',
+            'tt_content'
+        );
+        $options = array();
+        $sourceRecord = array('uid' => 1, 'test_field_1' => 'test value 1');
 
-		$indexer->expects($this->once())
-			->method('stopIndexing')
-			->with('tt_content', $sourceRecord, $indexDoc, $options);
+        $indexer->expects($this->once())
+            ->method('stopIndexing')
+            ->with('tt_content', $sourceRecord, $indexDoc, $options);
 
-		$indexer->prepareSearchData(
-			'tt_content', $sourceRecord, $indexDoc, $options
-		);
-	}
+        $indexer->prepareSearchData(
+            'tt_content',
+            $sourceRecord,
+            $indexDoc,
+            $options
+        );
+    }
 
-	/**
-	 * @group unit
-	 */
-	public function testPrepareSearchDataReturnsNullIfStopIndexing() {
-		$indexer = $this->getIndexerMock();
+    /**
+     * @group unit
+     */
+    public function testPrepareSearchDataReturnsNullIfStopIndexing()
+    {
+        $indexer = $this->getIndexerMock();
 
-		$indexDoc = tx_rnbase::makeInstance(
-			'tx_mksearch_model_IndexerDocumentBase', 'core', 'tt_content'
-		);
-		$options = array();
-		$sourceRecord = array('uid' => 1, 'test_field_1' => 'test value 1');
+        $indexDoc = tx_rnbase::makeInstance(
+            'tx_mksearch_model_IndexerDocumentBase',
+            'core',
+            'tt_content'
+        );
+        $options = array();
+        $sourceRecord = array('uid' => 1, 'test_field_1' => 'test value 1');
 
-		$indexer->expects($this->once())
-			->method('stopIndexing')
-			->will($this->returnValue(TRUE));
+        $indexer->expects($this->once())
+            ->method('stopIndexing')
+            ->will($this->returnValue(true));
 
-		self::assertNull($indexer->prepareSearchData(
-			'tt_content', $sourceRecord, $indexDoc, $options
-		));
-	}
+        self::assertNull($indexer->prepareSearchData(
+            'tt_content',
+            $sourceRecord,
+            $indexDoc,
+            $options
+        ));
+    }
 
-	/**
-	 * @group unit
-	 */
-	public function testPrepareSearchDataReturnsNotNullIfNotStopIndexing() {
-		$indexer = $this->getIndexerMock();
+    /**
+     * @group unit
+     */
+    public function testPrepareSearchDataReturnsNotNullIfNotStopIndexing()
+    {
+        $indexer = $this->getIndexerMock();
 
-		$indexDoc = tx_rnbase::makeInstance(
-			'tx_mksearch_model_IndexerDocumentBase', 'core', 'tt_content'
-		);
-		$options = array();
-		$sourceRecord = array('uid' => 1, 'test_field_1' => 'test value 1');
+        $indexDoc = tx_rnbase::makeInstance(
+            'tx_mksearch_model_IndexerDocumentBase',
+            'core',
+            'tt_content'
+        );
+        $options = array();
+        $sourceRecord = array('uid' => 1, 'test_field_1' => 'test value 1');
 
-		$indexer->expects($this->once())
-			->method('stopIndexing')
-			->will($this->returnValue(FALSE));
+        $indexer->expects($this->once())
+            ->method('stopIndexing')
+            ->will($this->returnValue(false));
 
-		self::assertNotNull($indexer->prepareSearchData(
-			'tt_content', $sourceRecord, $indexDoc, $options
-		));
-	}
+        self::assertNotNull($indexer->prepareSearchData(
+            'tt_content',
+            $sourceRecord,
+            $indexDoc,
+            $options
+        ));
+    }
 
-	/**
-	 * @group unit
-	 */
-	public function testGetIndexerUtility() {
-		$indexer = $this->getIndexerMock();
+    /**
+     * @group unit
+     */
+    public function testGetIndexerUtility()
+    {
+        $indexer = $this->getIndexerMock();
 
-		self::assertInstanceOf(
-			'tx_mksearch_util_Indexer',
-			$this->callInaccessibleMethod(
-				$indexer, 'getIndexerUtility'
-			)
-		);
-	}
+        self::assertInstanceOf(
+            'tx_mksearch_util_Indexer',
+            $this->callInaccessibleMethod(
+                $indexer,
+                'getIndexerUtility'
+            )
+        );
+    }
 
-	/**
-	 * @group unit
-	 */
-	public function testStopIndexingCallsIndexerUtility() {
-		$indexer = $this->getIndexerMock(
-			array(
-				'getBaseTableName', 'getFileExtension',
-				'getFilePath', 'getRelFileName', 'getIndexerUtility'
-			)
-		);
-		$indexerUtility = $this->getMock(
-			'tx_mksearch_util_Indexer', array('stopIndexing')
-		);
+    /**
+     * @group unit
+     */
+    public function testStopIndexingCallsIndexerUtility()
+    {
+        $indexer = $this->getIndexerMock(
+            array(
+                'getBaseTableName', 'getFileExtension',
+                'getFilePath', 'getRelFileName', 'getIndexerUtility'
+            )
+        );
+        $indexerUtility = $this->getMock(
+            'tx_mksearch_util_Indexer',
+            array('stopIndexing')
+        );
 
-		$tableName = 'some_table';
-		$sourceRecord = array('some_record');
-		$options = array('some_options');
-		$indexDoc = tx_rnbase::makeInstance(
-			'tx_mksearch_model_IndexerDocumentBase', '', ''
-		);
-		$indexerUtility->expects($this->once())
-			->method('stopIndexing')
-			->with($tableName, $sourceRecord, $indexDoc, $options)
-			->will($this->returnValue('return'));
+        $tableName = 'some_table';
+        $sourceRecord = array('some_record');
+        $options = array('some_options');
+        $indexDoc = tx_rnbase::makeInstance(
+            'tx_mksearch_model_IndexerDocumentBase',
+            '',
+            ''
+        );
+        $indexerUtility->expects($this->once())
+            ->method('stopIndexing')
+            ->with($tableName, $sourceRecord, $indexDoc, $options)
+            ->will($this->returnValue('return'));
 
-		$indexer->expects($this->once())
-			->method('getIndexerUtility')
-			->will($this->returnValue($indexerUtility));
+        $indexer->expects($this->once())
+            ->method('getIndexerUtility')
+            ->will($this->returnValue($indexerUtility));
 
-		self::assertEquals(
-			'return',
-			$this->callInaccessibleMethod(
-				$indexer, 'stopIndexing', $tableName, $sourceRecord, $indexDoc, $options
-			)
-		);
-	}
+        self::assertEquals(
+            'return',
+            $this->callInaccessibleMethod(
+                $indexer,
+                'stopIndexing',
+                $tableName,
+                $sourceRecord,
+                $indexDoc,
+                $options
+            )
+        );
+    }
 
-	/**
-	 * @group unit
-	 */
-	public function testPrepareSearchDataCallsIsIndexableRecordNotIfRecordIsDeleted() {
-		$indexer = $this->getIndexerMock(array(
-			'getBaseTableName', 'getFileExtension',
-			'getFilePath', 'getRelFileName', 'stopIndexing', 'isIndexableRecord'
-		));
+    /**
+     * @group unit
+     */
+    public function testPrepareSearchDataCallsIsIndexableRecordNotIfRecordIsDeleted()
+    {
+        $indexer = $this->getIndexerMock(array(
+            'getBaseTableName', 'getFileExtension',
+            'getFilePath', 'getRelFileName', 'stopIndexing', 'isIndexableRecord'
+        ));
 
-		$indexDoc = tx_rnbase::makeInstance(
-			'tx_mksearch_model_IndexerDocumentBase', 'core', 'tt_content'
-		);
-		$options = array();
-		$sourceRecord = array('uid' => 1, 'deleted' => 1);
+        $indexDoc = tx_rnbase::makeInstance(
+            'tx_mksearch_model_IndexerDocumentBase',
+            'core',
+            'tt_content'
+        );
+        $options = array();
+        $sourceRecord = array('uid' => 1, 'deleted' => 1);
 
-		$indexer->expects($this->never())
-			->method('isIndexableRecord');
+        $indexer->expects($this->never())
+            ->method('isIndexableRecord');
 
-		$indexer->prepareSearchData(
-			'tt_content', $sourceRecord, $indexDoc, $options
-		);
-	}
+        $indexer->prepareSearchData(
+            'tt_content',
+            $sourceRecord,
+            $indexDoc,
+            $options
+        );
+    }
 
-	/**
-	 * @group unit
-	 */
-	public function testPrepareSearchDataCallsIsIndexableRecordNotIfRecordIsHidden() {
-		$indexer = $this->getIndexerMock(array(
-			'getBaseTableName', 'getFileExtension',
-			'getFilePath', 'getRelFileName', 'stopIndexing', 'isIndexableRecord'
-		));
+    /**
+     * @group unit
+     */
+    public function testPrepareSearchDataCallsIsIndexableRecordNotIfRecordIsHidden()
+    {
+        $indexer = $this->getIndexerMock(array(
+            'getBaseTableName', 'getFileExtension',
+            'getFilePath', 'getRelFileName', 'stopIndexing', 'isIndexableRecord'
+        ));
 
-		$indexDoc = tx_rnbase::makeInstance(
-			'tx_mksearch_model_IndexerDocumentBase', 'core', 'tt_content'
-		);
-		$options = array();
-		$sourceRecord = array('uid' => 1, 'hidden' => 1);
+        $indexDoc = tx_rnbase::makeInstance(
+            'tx_mksearch_model_IndexerDocumentBase',
+            'core',
+            'tt_content'
+        );
+        $options = array();
+        $sourceRecord = array('uid' => 1, 'hidden' => 1);
 
-		$indexer->expects($this->never())
-			->method('isIndexableRecord');
+        $indexer->expects($this->never())
+            ->method('isIndexableRecord');
 
-		$indexer->prepareSearchData(
-			'tt_content', $sourceRecord, $indexDoc, $options
-		);
-	}
+        $indexer->prepareSearchData(
+            'tt_content',
+            $sourceRecord,
+            $indexDoc,
+            $options
+        );
+    }
 
-	/**
-	 * @group unit
-	 */
-	public function testPrepareSearchDataSetsDocDeletedIfRecordIsDeleted() {
-		$indexer = $this->getIndexerMock(array(
-			'getBaseTableName', 'getFileExtension',
-			'getFilePath', 'getRelFileName', 'stopIndexing', 'isIndexableRecord'
-		));
+    /**
+     * @group unit
+     */
+    public function testPrepareSearchDataSetsDocDeletedIfRecordIsDeleted()
+    {
+        $indexer = $this->getIndexerMock(array(
+            'getBaseTableName', 'getFileExtension',
+            'getFilePath', 'getRelFileName', 'stopIndexing', 'isIndexableRecord'
+        ));
 
-		$indexDoc = tx_rnbase::makeInstance(
-			'tx_mksearch_model_IndexerDocumentBase', 'core', 'tt_content'
-		);
-		$options = array();
-		$sourceRecord = array('uid' => 1, 'deleted' => 1);
-
-
-		$indexDoc = $indexer->prepareSearchData(
-			'tt_content', $sourceRecord, $indexDoc, $options
-		);
-
-		self::assertTrue($indexDoc->getDeleted());
-	}
-
-	/**
-	 * @group unit
-	 */
-	public function testPrepareSearchDataSetsDocDeletedIfRecordIsHidden() {
-		$indexer = $this->getIndexerMock(array(
-			'getBaseTableName', 'getFileExtension',
-			'getFilePath', 'getRelFileName', 'stopIndexing', 'isIndexableRecord'
-		));
-
-		$indexDoc = tx_rnbase::makeInstance(
-			'tx_mksearch_model_IndexerDocumentBase', 'core', 'tt_content'
-		);
-		$options = array();
-		$sourceRecord = array('uid' => 1, 'hidden' => 1);
+        $indexDoc = tx_rnbase::makeInstance(
+            'tx_mksearch_model_IndexerDocumentBase',
+            'core',
+            'tt_content'
+        );
+        $options = array();
+        $sourceRecord = array('uid' => 1, 'deleted' => 1);
 
 
-		$indexDoc = $indexer->prepareSearchData(
-			'tt_content', $sourceRecord, $indexDoc, $options
-		);
+        $indexDoc = $indexer->prepareSearchData(
+            'tt_content',
+            $sourceRecord,
+            $indexDoc,
+            $options
+        );
 
-		self::assertTrue($indexDoc->getDeleted());
-	}
+        self::assertTrue($indexDoc->getDeleted());
+    }
 
-	/**
-	 * @group unit
-	 * @dataProvider providerHasDocToBeDeleted
-	 */
-	public function testHasDocToBeDeleted($sourceRecord, $expected) {
-		$indexer = $this->getIndexerMock();
-		$indexDoc = tx_rnbase::makeInstance(
-			'tx_mksearch_model_IndexerDocumentBase', 'core', 'tt_content'
-		);
-		self::assertEquals(
-			$expected,
-			$this->callInaccessibleMethod(
-				$indexer, 'hasDocToBeDeleted',
-				'tt_content', $sourceRecord, $indexDoc
-			)
-		);
-	}
+    /**
+     * @group unit
+     */
+    public function testPrepareSearchDataSetsDocDeletedIfRecordIsHidden()
+    {
+        $indexer = $this->getIndexerMock(array(
+            'getBaseTableName', 'getFileExtension',
+            'getFilePath', 'getRelFileName', 'stopIndexing', 'isIndexableRecord'
+        ));
 
-	public function providerHasDocToBeDeleted() {
-		return array(
-			__LINE__ => array(
-				'sourceRecord' => array('uid' => 7),
-				'expected' => FALSE,
-			),
-			__LINE__ => array(
-				'sourceRecord' => array('uid' => 7, 'deleted' => 1),
-				'expected' => TRUE,
-			),
-			__LINE__ => array(
-				'sourceRecord' => array('uid' => 7, 'hidden' => 1),
-				'expected' => TRUE,
-			),
-			__LINE__ => array(
-				'sourceRecord' => array('uid' => 7, 'hidden' => 1, 'deleted' => 1),
-				'expected' => TRUE,
-			),
-		);
-	}
+        $indexDoc = tx_rnbase::makeInstance(
+            'tx_mksearch_model_IndexerDocumentBase',
+            'core',
+            'tt_content'
+        );
+        $options = array();
+        $sourceRecord = array('uid' => 1, 'hidden' => 1);
 
-	/**
-	 * @group unit
-	 */
-	public function testGroupFieldIsAdded() {
-		$indexer = $this->getIndexerMock(array(
-			'getBaseTableName', 'getFileExtension',
-			'getFilePath', 'getRelFileName', 'stopIndexing', 'isIndexableRecord'
-		));
-		$indexer->expects(self::once())
-			->method('isIndexableRecord')
-			->will(self::returnValue(TRUE));
 
-		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', 'core', 'file');
+        $indexDoc = $indexer->prepareSearchData(
+            'tt_content',
+            $sourceRecord,
+            $indexDoc,
+            $options
+        );
 
-		$rawData = array('uid' => 123);
+        self::assertTrue($indexDoc->getDeleted());
+    }
 
-		$indexDoc = $indexer->prepareSearchData('doesnt_matter', $rawData, $indexDoc, array());
+    /**
+     * @group unit
+     * @dataProvider providerHasDocToBeDeleted
+     */
+    public function testHasDocToBeDeleted($sourceRecord, $expected)
+    {
+        $indexer = $this->getIndexerMock();
+        $indexDoc = tx_rnbase::makeInstance(
+            'tx_mksearch_model_IndexerDocumentBase',
+            'core',
+            'tt_content'
+        );
+        self::assertEquals(
+            $expected,
+            $this->callInaccessibleMethod(
+                $indexer,
+                'hasDocToBeDeleted',
+                'tt_content',
+                $sourceRecord,
+                $indexDoc
+            )
+        );
+    }
 
-		$indexedData = $indexDoc->getData();
-		self::assertEquals('core:file:123', $indexedData['group_s']->getValue());
-	}
+    public function providerHasDocToBeDeleted()
+    {
+        return array(
+            __LINE__ => array(
+                'sourceRecord' => array('uid' => 7),
+                'expected' => false,
+            ),
+            __LINE__ => array(
+                'sourceRecord' => array('uid' => 7, 'deleted' => 1),
+                'expected' => true,
+            ),
+            __LINE__ => array(
+                'sourceRecord' => array('uid' => 7, 'hidden' => 1),
+                'expected' => true,
+            ),
+            __LINE__ => array(
+                'sourceRecord' => array('uid' => 7, 'hidden' => 1, 'deleted' => 1),
+                'expected' => true,
+            ),
+        );
+    }
 
-	/**
-	 * @param array $mockedMethods
-	 * @return Ambigous <PHPUnit_Framework_MockObject_MockObject, tx_mksearch_indexer_BaseMedia>
-	 */
-	private function getIndexerMock(
-		array $mockedMethods = array(
-			'getBaseTableName', 'getFileExtension',
-			'getFilePath', 'getRelFileName', 'stopIndexing'
-		)
-	) {
-		return $this->getMockForAbstractClass(
-			'tx_mksearch_indexer_BaseMedia',
-			array(), '', FALSE, FALSE, FALSE, $mockedMethods
-		);
-	}
+    /**
+     * @group unit
+     */
+    public function testGroupFieldIsAdded()
+    {
+        $indexer = $this->getIndexerMock(array(
+            'getBaseTableName', 'getFileExtension',
+            'getFilePath', 'getRelFileName', 'stopIndexing', 'isIndexableRecord'
+        ));
+        $indexer->expects(self::once())
+            ->method('isIndexableRecord')
+            ->will(self::returnValue(true));
+
+        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', 'core', 'file');
+
+        $rawData = array('uid' => 123);
+
+        $indexDoc = $indexer->prepareSearchData('doesnt_matter', $rawData, $indexDoc, array());
+
+        $indexedData = $indexDoc->getData();
+        self::assertEquals('core:file:123', $indexedData['group_s']->getValue());
+    }
+
+    /**
+     * @param array $mockedMethods
+     * @return Ambigous <PHPUnit_Framework_MockObject_MockObject, tx_mksearch_indexer_BaseMedia>
+     */
+    private function getIndexerMock(
+        array $mockedMethods = array(
+            'getBaseTableName', 'getFileExtension',
+            'getFilePath', 'getRelFileName', 'stopIndexing'
+        )
+    ) {
+        return $this->getMockForAbstractClass(
+            'tx_mksearch_indexer_BaseMedia',
+            array(),
+            '',
+            false,
+            false,
+            false,
+            $mockedMethods
+        );
+    }
 }

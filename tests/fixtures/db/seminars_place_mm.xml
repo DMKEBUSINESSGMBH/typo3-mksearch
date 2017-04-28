@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <dataset>
-	<tx_seminars_seminars_place_mm>
-		<uid_local>1</uid_local>
-		<uid_foreign>1</uid_foreign>
-	</tx_seminars_seminars_place_mm>
-	<tx_seminars_seminars_place_mm>
-		<uid_local>1</uid_local>
-		<uid_foreign>2</uid_foreign>
-	</tx_seminars_seminars_place_mm>
-	<tx_seminars_seminars_place_mm>
-		<uid_local>3</uid_local>
-		<uid_foreign>1</uid_foreign>
-	</tx_seminars_seminars_place_mm>	
-	<tx_seminars_seminars_place_mm>
-		<uid_local>4</uid_local>
-		<uid_foreign>2</uid_foreign>
-	</tx_seminars_seminars_place_mm>		
+    <tx_seminars_seminars_place_mm>
+        <uid_local>1</uid_local>
+        <uid_foreign>1</uid_foreign>
+    </tx_seminars_seminars_place_mm>
+    <tx_seminars_seminars_place_mm>
+        <uid_local>1</uid_local>
+        <uid_foreign>2</uid_foreign>
+    </tx_seminars_seminars_place_mm>
+    <tx_seminars_seminars_place_mm>
+        <uid_local>3</uid_local>
+        <uid_foreign>1</uid_foreign>
+    </tx_seminars_seminars_place_mm>
+    <tx_seminars_seminars_place_mm>
+        <uid_local>4</uid_local>
+        <uid_foreign>2</uid_foreign>
+    </tx_seminars_seminars_place_mm>
 </dataset>

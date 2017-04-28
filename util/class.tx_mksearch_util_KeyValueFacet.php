@@ -36,169 +36,182 @@
  *
  * Das zusammenführen und auseinandernehmen, erledigt diese Klasse für uns!
  *
- *
  * @package tx_mksearch
  * @subpackage tx_mksearch_util
  * @author Michael Wagner <michael.wagner@dmk-ebusiness.de>
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_util_KeyValueFacet {
+class tx_mksearch_util_KeyValueFacet
+{
 
-	/**
-	 *
-	 * @var tx_mksearch_util_KeyValueFacet|NULL
-	 */
-	private static $defaultInstance = NULL;
+    /**
+     *
+     * @var tx_mksearch_util_KeyValueFacet|NULL
+     */
+    private static $defaultInstance = null;
 
-	/**
-	 *
-	 * @var string
-	 */
-	private $facetDelimiter = '<[DFS]>';
+    /**
+     *
+     * @var string
+     */
+    private $facetDelimiter = '<[DFS]>';
 
-	/**
-	 *
-	 * @param string $delimiter
-	 */
-	public function __construct($delimiter = NULL) {
-		if (!empty($delimiter)) {
-			$this->facetDelimiter = $delimiter;
-		}
-	}
+    /**
+     *
+     * @param string $delimiter
+     */
+    public function __construct($delimiter = null)
+    {
+        if (!empty($delimiter)) {
+            $this->facetDelimiter = $delimiter;
+        }
+    }
 
-	/**
-	 * Liefert eine instanz dieser klasse.
-	 * Bei defaulteinstellungen bleibt es ein sigelton.
-	 *
-	 * @param string $delimiter
-	 * @return tx_mksearch_util_KeyValueFacet
-	 */
-	public static function getInstance($delimiter = NULL) {
-		$instance = self::$defaultInstance && $delimiter === NULL
-			? self::$defaultInstance
-			: tx_rnbase::makeInstance(
-				'tx_mksearch_util_KeyValueFacet',
-				$delimiter
-			)
-		;
-		if ($delimiter === NULL) {
-			self::$defaultInstance = $instance;
-		}
-		return $instance;
-	}
+    /**
+     * Liefert eine instanz dieser klasse.
+     * Bei defaulteinstellungen bleibt es ein sigelton.
+     *
+     * @param string $delimiter
+     * @return tx_mksearch_util_KeyValueFacet
+     */
+    public static function getInstance($delimiter = null)
+    {
+        $instance = self::$defaultInstance && $delimiter === null ? self::$defaultInstance : tx_rnbase::makeInstance(
+            'tx_mksearch_util_KeyValueFacet',
+            $delimiter
+        );
+        if ($delimiter === null) {
+            self::$defaultInstance = $instance;
+        }
 
-	/**
-	 *
-	 * @param string $key
-	 * @param string $value
-	 * @param string $sorting
-	 * @return string
-	 */
-	public function buildFacetValue($key, $value, $sorting = NULL) {
-		$builded = $key . $this->facetDelimiter . $value;
-		if ($sorting !== NULL) {
-			$builded .= $this->facetDelimiter . $sorting;
-		}
-		return $builded;
-	}
+        return $instance;
+    }
 
-	/**
-	 *
-	 * @param array $keys
-	 * @param array $value
-	 * @param array $sorting
-	 * @return string
-	 */
-	public function buildFacetValues($keys, $values, $sortings = NULL) {
-		$builded = array();
-		foreach (array_keys($keys) as $index) {
-			$builded[$index] = $this->buildFacetValue(
-				$keys[$index],
-				$values[$index],
-				is_array($sortings) ? $sortings[$index] : NULL
-			);
-		}
-		return $builded;
-	}
+    /**
+     *
+     * @param string $key
+     * @param string $value
+     * @param string $sorting
+     * @return string
+     */
+    public function buildFacetValue($key, $value, $sorting = null)
+    {
+        $builded = $key . $this->facetDelimiter . $value;
+        if ($sorting !== null) {
+            $builded .= $this->facetDelimiter . $sorting;
+        }
 
-	/**
-	 * Prüft, ob es sich bei dem Wert um einen zusammengebauten handelt
-	 *
-	 * @param string$value
-	 */
-	public function checkValue($value) {
-		return strpos($value, $this->facetDelimiter) !== FALSE;
-	}
+        return $builded;
+    }
 
-	/**
-	 *
-	 * @param string $value
-	 * @return array ($sorting | $value | $sorting[optional] )
-	 */
-	public function explodeFacetValue($value) {
-		$exploded = tx_rnbase_util_Strings::trimExplode($this->facetDelimiter, $value);
-		return array(
-			'key' => array_shift($exploded),
-			'value' => array_shift($exploded),
-			'sorting' => array_shift($exploded),
-		);
-	}
+    /**
+     *
+     * @param array $keys
+     * @param array $value
+     * @param array $sorting
+     * @return string
+     */
+    public function buildFacetValues($keys, $values, $sortings = null)
+    {
+        $builded = array();
+        foreach (array_keys($keys) as $index) {
+            $builded[$index] = $this->buildFacetValue(
+                $keys[$index],
+                $values[$index],
+                is_array($sortings) ? $sortings[$index] : null
+            );
+        }
 
-	/**
-	 *
-	 * @param array $values
-	 * @return array
-	 */
-	public function explodeFacetValues(array $values) {
-		$extracted = array();
-		foreach ($values as $key => $value) {
-			$exploded = $this->explodeFacetValue($value);
-			$extracted[] = $exploded;
-		}
-		return $this->sortExplodedFacetValues($extracted);
-	}
+        return $builded;
+    }
 
-	/**
-	 *
-	 * @param string $value
-	 * @return string
-	 */
-	public function extractFacetValue($value) {
-		$exploded = $this->explodeFacetValue($value);
-		return $exploded['value'];
-	}
+    /**
+     * Prüft, ob es sich bei dem Wert um einen zusammengebauten handelt
+     *
+     * @param string$value
+     */
+    public function checkValue($value)
+    {
+        return strpos($value, $this->facetDelimiter) !== false;
+    }
 
-	/**
-	 *
-	 * @param array $values
-	 * @return array
-	 */
-	public function extractFacetValues(array $values) {
-		$extracted = array();
-		$exploded = $this->explodeFacetValues($values);
-		foreach ($exploded as $value) {
-			$extracted[$value['key']] = $value['value'];
-		}
-		return $extracted;
-	}
+    /**
+     *
+     * @param string $value
+     * @return array ($sorting | $value | $sorting[optional] )
+     */
+    public function explodeFacetValue($value)
+    {
+        $exploded = tx_rnbase_util_Strings::trimExplode($this->facetDelimiter, $value);
 
-	/**
-	 *
-	 * @TODO: implement sorting on the sorting key
-	 *
-	 * @param array $exploded
-	 * @return array
-	 */
-	protected function sortExplodedFacetValues(array $exploded) {
-		// foreach ($exploded as $values) {
-		// 	$values['sorting'];
-		// }
-		return $exploded;
-	}
+        return array(
+            'key' => array_shift($exploded),
+            'value' => array_shift($exploded),
+            'sorting' => array_shift($exploded),
+        );
+    }
 
+    /**
+     *
+     * @param array $values
+     * @return array
+     */
+    public function explodeFacetValues(array $values)
+    {
+        $extracted = array();
+        foreach ($values as $key => $value) {
+            $exploded = $this->explodeFacetValue($value);
+            $extracted[] = $exploded;
+        }
+
+        return $this->sortExplodedFacetValues($extracted);
+    }
+
+    /**
+     *
+     * @param string $value
+     * @return string
+     */
+    public function extractFacetValue($value)
+    {
+        $exploded = $this->explodeFacetValue($value);
+
+        return $exploded['value'];
+    }
+
+    /**
+     *
+     * @param array $values
+     * @return array
+     */
+    public function extractFacetValues(array $values)
+    {
+        $extracted = array();
+        $exploded = $this->explodeFacetValues($values);
+        foreach ($exploded as $value) {
+            $extracted[$value['key']] = $value['value'];
+        }
+
+        return $extracted;
+    }
+
+    /**
+     *
+     * @TODO: implement sorting on the sorting key
+     *
+     * @param array $exploded
+     * @return array
+     */
+    protected function sortExplodedFacetValues(array $exploded)
+    {
+//         foreach ($exploded as $values) {
+//             $values['sorting'];
+//         }
+        return $exploded;
+    }
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_KeyValueFacet.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_KeyValueFacet.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_KeyValueFacet.php']) {
+    include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_KeyValueFacet.php']);
 }

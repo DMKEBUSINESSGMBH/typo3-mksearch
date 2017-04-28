@@ -29,54 +29,57 @@
  * Diese Klasse ist für die Darstellung von Indexer tabellen im Backend verantwortlich
  * Wird für die Indexing Wueue benötigt
  */
-class tx_mksearch_mod1_decorator_Indizes {
-	function __construct($mod) {
-		$this->mod = $mod;
-	}
+class tx_mksearch_mod1_decorator_Indizes
+{
+    public function __construct($mod)
+    {
+        $this->mod = $mod;
+    }
 
-	/**
-	 * Returns the module
-	 * @return tx_rnbase_mod_IModule
-	 */
-	private function getModule() {
-		return $this->mod;
-	}
-	/**
-	 *
-	 * @param string $value
-	 * @param string $colName
-	 * @param array $record
-	 * @param array $item
-	 */
-	public function format($value, $colName, $record, $item) {
+    /**
+     * Returns the module
+     * @return tx_rnbase_mod_IModule
+     */
+    private function getModule()
+    {
+        return $this->mod;
+    }
+    /**
+     *
+     * @param string $value
+     * @param string $colName
+     * @param array $record
+     * @param array $item
+     */
+    public function format($value, $colName, $record, $item)
+    {
+        switch ($colName) {
+            case 'name':
+                $ret = '<label for="resetTables'.$record['name'].'">'.$value.'</label>';
+                break;
+            case 'reset':
+                $ret = '<input type="checkbox" name="resetTables[]" value="'.$record['name'].'" id="resetTables'.$record['name'].'" />';
+                break;
+            case 'resetG':
+                $ret = '<input type="checkbox" name="resetTablesG[]" value="'.$record['name'].'" id="resetTablesG'.$record['name'].'" />';
+                break;
+            case 'clear':
+                $ret = '<input type="checkbox" name="clearTables[]" value="'.$record['name'].'" id="clearTables'.$record['name'].'" />';
+                break;
+            case 'queuecount':
+                    $oIntIndexSrv = tx_mksearch_util_ServiceRegistry::getIntIndexService();
+                    $ret = $oIntIndexSrv->countItemsInQueue($record['name']);
+                break;
+            default:
+                $ret = $value;
+                break;
+        }
 
-		switch($colName){
-			case 'name':
-				$ret = '<label for="resetTables'.$record['name'].'">'.$value.'</label>';
-				break;
-			case 'reset':
-				$ret = '<input type="checkbox" name="resetTables[]" value="'.$record['name'].'" id="resetTables'.$record['name'].'" />';
-				break;
-			case 'resetG':
-				$ret = '<input type="checkbox" name="resetTablesG[]" value="'.$record['name'].'" id="resetTablesG'.$record['name'].'" />';
-				break;
-			case 'clear':
-				$ret = '<input type="checkbox" name="clearTables[]" value="'.$record['name'].'" id="clearTables'.$record['name'].'" />';
-				break;
-			case 'queuecount':
-					$oIntIndexSrv = tx_mksearch_util_ServiceRegistry::getIntIndexService();
-					$ret = $oIntIndexSrv->countItemsInQueue($record['name']);
-				break;
-			default:
-				$ret = $value;
-				break;
-		}
-		return $ret;
-	}
-
+        return $ret;
+    }
 }
 
 
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/decorator/class.tx_mksearch_mod1_decorator_Indizes.php'])	{
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/decorator/class.tx_mksearch_mod1_decorator_Indizes.php']);
+if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/decorator/class.tx_mksearch_mod1_decorator_Indizes.php']) {
+    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/decorator/class.tx_mksearch_mod1_decorator_Indizes.php']);
 }

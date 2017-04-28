@@ -34,41 +34,42 @@ tx_rnbase::load('tx_mksearch_util_SuggestionBuilder');
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_tests_util_SuggestionBuilder_testcase
-	extends tx_mksearch_tests_Testcase {
+class tx_mksearch_tests_util_SuggestionBuilder_testcase extends tx_mksearch_tests_Testcase
+{
+    public function testBuildSuggestionsWithEmptyFacetData()
+    {
+        $suggestionData = array();
+        $suggestionData = tx_mksearch_util_SuggestionBuilder::getInstance()->buildSuggestions($suggestionData);
+        self::assertTrue(is_array($suggestionData), 'es wurde kein array zurück gegeben!');
+        self::assertTrue(empty($suggestionData), 'es wurde kein leeres array zurück gegeben!');
+    }
 
-	public function testBuildSuggestionsWithEmptyFacetData() {
-		$suggestionData = array();
-		$suggestionData = tx_mksearch_util_SuggestionBuilder::getInstance()->buildSuggestions($suggestionData);
-		self::assertTrue(is_array($suggestionData),'es wurde kein array zurück gegeben!');
-		self::assertTrue(empty($suggestionData),'es wurde kein leeres array zurück gegeben!');
-	}
+    public function testBuildSuggestions()
+    {
+        $suggestionData = new stdClass();
+        $suggestionData->searchWord = new stdClass();
+        $suggestionData->searchWord->numFound = 2;
+        $suggestionData->searchWord->startOffset = 0;
+        $suggestionData->searchWord->endOffset = 3;
+        $suggestionData->searchWord->suggestion = array(
+            0 => searchWordFoundOnce,
+            1 => searchWordFoundTwice
+        );
+        $suggestionData->collation = 'test collation should be ignored.';
 
-	public function testBuildSuggestions() {
-		$suggestionData = new stdClass();
-		$suggestionData->searchWord = new stdClass();
-		$suggestionData->searchWord->numFound = 2;
-		$suggestionData->searchWord->startOffset = 0;
-		$suggestionData->searchWord->endOffset = 3;
-		$suggestionData->searchWord->suggestion = array(
-			0 => searchWordFoundOnce,
-			1 => searchWordFoundTwice
-		);
-		$suggestionData->collation = 'test collation should be ignored.';
+        $suggestionData = tx_mksearch_util_SuggestionBuilder::getInstance()->buildSuggestions($suggestionData);
 
-		$suggestionData = tx_mksearch_util_SuggestionBuilder::getInstance()->buildSuggestions($suggestionData);
-
-		self::assertTrue(is_array($suggestionData),'es wurde kein array zurück gegeben!');
-		self::assertEquals(1,count($suggestionData),'Das array hat nicht die richtige Größe!');
-		self::assertEquals(1,$suggestionData['searchWord'][0]->getUid(),'Datensatz 1 - getUid() hat den falschen Wert!');
-		self::assertEquals('searchWordFoundOnce',$suggestionData['searchWord'][0]->record['value'],'Datensatz 1 - Feld:value hat den falschen Wert!');
-		self::assertEquals('searchWord',$suggestionData['searchWord'][0]->record['searchWord'],'Datensatz 1 - Feld:searchWord hat den falschen Wert!');
-		self::assertEquals(2,$suggestionData['searchWord'][1]->getUid(),'Datensatz 2 - getUid() hat den falschen Wert!');
-		self::assertEquals('searchWordFoundTwice',$suggestionData['searchWord'][1]->record['value'],'Datensatz 2 - Feld:value hat den falschen Wert!');
-		self::assertEquals('searchWord',$suggestionData['searchWord'][1]->record['searchWord'],'Datensatz 2 - Feld:searchWord hat den falschen Wert!');
-	}
+        self::assertTrue(is_array($suggestionData), 'es wurde kein array zurück gegeben!');
+        self::assertEquals(1, count($suggestionData), 'Das array hat nicht die richtige Größe!');
+        self::assertEquals(1, $suggestionData['searchWord'][0]->getUid(), 'Datensatz 1 - getUid() hat den falschen Wert!');
+        self::assertEquals('searchWordFoundOnce', $suggestionData['searchWord'][0]->record['value'], 'Datensatz 1 - Feld:value hat den falschen Wert!');
+        self::assertEquals('searchWord', $suggestionData['searchWord'][0]->record['searchWord'], 'Datensatz 1 - Feld:searchWord hat den falschen Wert!');
+        self::assertEquals(2, $suggestionData['searchWord'][1]->getUid(), 'Datensatz 2 - getUid() hat den falschen Wert!');
+        self::assertEquals('searchWordFoundTwice', $suggestionData['searchWord'][1]->record['value'], 'Datensatz 2 - Feld:value hat den falschen Wert!');
+        self::assertEquals('searchWord', $suggestionData['searchWord'][1]->record['searchWord'], 'Datensatz 2 - Feld:searchWord hat den falschen Wert!');
+    }
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/util/class.tx_mksearch_tests_util_Misc_testcase.php']) {
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/util/class.tx_mksearch_tests_util_Misc_testcase.php']);
+    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/util/class.tx_mksearch_tests_util_Misc_testcase.php']);
 }

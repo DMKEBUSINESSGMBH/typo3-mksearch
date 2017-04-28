@@ -26,42 +26,50 @@ tx_rnbase::load('tx_mksearch_service_Base');
 /**
  * Service for accessing models from database
  */
-class tx_mksearch_service_irfaq_Question extends tx_mksearch_service_Base {
+class tx_mksearch_service_irfaq_Question extends tx_mksearch_service_Base
+{
 
-	/**
-	 * returns all categories of the given question
-	 *
-	 * @param int $iExpert
-	 * @return array[tx_mksearch_model_irfaq_Question]
-	 */
-	public function getByExpert($iExpert){
-	    $fields = array();
-	    $options = array();
-	    $fields['IRFAQ_QUESTION.expert'][OP_EQ_INT] = $iExpert;
-	    return $this->search($fields, $options);
-	}
+    /**
+     * returns all categories of the given question
+     *
+     * @param int $iExpert
+     * @return array[tx_mksearch_model_irfaq_Question]
+     */
+    public function getByExpert($iExpert)
+    {
+        $fields = array();
+        $options = array();
+        $fields['IRFAQ_QUESTION.expert'][OP_EQ_INT] = $iExpert;
 
-	/**
-	 * returns all questions with the given category
-	 *
-	 * @param int $iCategory
-	 * @return array[tx_mksearch_model_irfaq_Question]
-	 */
-	public function getByCategory($iCategory){
-	    $fields = array();
-	    $options = array();
-	    $fields['IRFAQ_QUESTION_CATEGORY_MM.uid_foreign'][OP_EQ_INT] = $iCategory;
-	    return $this->search($fields, $options);
-	}
+        return $this->search($fields, $options);
+    }
 
-	/**
-	 * Liefert die zugehörige Search-Klasse zurück
-	 *
-	 * @return string
-	 */
-	public function getSearchClass(){return 'tx_mksearch_search_irfaq_Question';}
+    /**
+     * returns all questions with the given category
+     *
+     * @param int $iCategory
+     * @return array[tx_mksearch_model_irfaq_Question]
+     */
+    public function getByCategory($iCategory)
+    {
+        $fields = array();
+        $options = array();
+        $fields['IRFAQ_QUESTION_CATEGORY_MM.uid_foreign'][OP_EQ_INT] = $iCategory;
+
+        return $this->search($fields, $options);
+    }
+
+    /**
+     * Liefert die zugehörige Search-Klasse zurück
+     *
+     * @return string
+     */
+    public function getSearchClass()
+    {
+        return 'tx_mksearch_search_irfaq_Question';
+    }
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/internal/class.tx_mksearch_service_internal_Base.php']) {
-  include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/internal/class.tx_mksearch_service_internal_Base.php']);
+    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/internal/class.tx_mksearch_service_internal_Base.php']);
 }

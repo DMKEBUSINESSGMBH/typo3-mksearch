@@ -33,20 +33,19 @@ tx_rnbase::load('tx_rnbase_model_base');
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_model_cal_Location
-	extends tx_rnbase_model_base
+class tx_mksearch_model_cal_Location extends tx_rnbase_model_base
 {
-	/**
-	 * Tablename
-	 *
-	 * @return string
-	 */
-	public function getTableName()
-	{
-		return 'tx_cal_location';
-	}
+    /**
+     * Tablename
+     *
+     * @return string
+     */
+    public function getTableName()
+    {
+        return 'tx_cal_location';
+    }
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/cal/class.tx_mksearch_model_cal_Location.php']) {
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/cal/class.tx_mksearch_model_cal_Location.php']);
+    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/cal/class.tx_mksearch_model_cal_Location.php']);
 }

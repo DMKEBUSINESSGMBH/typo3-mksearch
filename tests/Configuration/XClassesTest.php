@@ -29,50 +29,54 @@ namespace DMK\Mksearch\Tests;
 /**
  * DMK\Mksearch\Tests\ViewHelpers$CObjectViewHelperTest
  *
- * @package 		TYPO3
- * @subpackage	 	mksearch
- * @author 			Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
- * @license 		http://www.gnu.org/licenses/lgpl.html
- * 					GNU Lesser General Public License, version 3 or later
+ * @package         TYPO3
+ * @subpackage      mksearch
+ * @author          Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
+ * @license         http://www.gnu.org/licenses/lgpl.html
+ *                  GNU Lesser General Public License, version 3 or later
  */
 class XClassesTest extends \tx_mksearch_tests_Testcase
 {
-	/**
-	 * {@inheritDoc}
-	 * @see tx_mksearch_tests_Testcase::setUp()
-	 */
-	protected function setUp() {
-		if (\tx_rnbase_util_TYPO3::isTYPO80OrHigher()) {
-			$this->markTestSkipped('Not required for TYPO3 8 or higher');
-		}
-	}
-	/**
-	 * @group unit
-	 */
-	public function testFluidCObjViewHelperIsXClassed() {
-		self::assertInstanceOf(
-			'DMK\\Mksearch\\ViewHelpers\\CObjectViewHelper',
-			\tx_rnbase::makeInstance('TYPO3\\CMS\\Fluid\\ViewHelpers\\CObjectViewHelper')
-		);
-	}
+    /**
+     * {@inheritDoc}
+     * @see tx_mksearch_tests_Testcase::setUp()
+     */
+    protected function setUp()
+    {
+        if (\tx_rnbase_util_TYPO3::isTYPO80OrHigher()) {
+            $this->markTestSkipped('Not required for TYPO3 8 or higher');
+        }
+    }
+    /**
+     * @group unit
+     */
+    public function testFluidCObjViewHelperIsXClassed()
+    {
+        self::assertInstanceOf(
+            'DMK\\Mksearch\\ViewHelpers\\CObjectViewHelper',
+            \tx_rnbase::makeInstance('TYPO3\\CMS\\Fluid\\ViewHelpers\\CObjectViewHelper')
+        );
+    }
 
-	/**
-	 * @group unit
-	 */
-	public function testFluidCropViewHelperIsXClassed() {
-		self::assertInstanceOf(
-			'DMK\\Mksearch\\ViewHelpers\\Format\\CropViewHelper',
-			\tx_rnbase::makeInstance('TYPO3\\CMS\\Fluid\\ViewHelpers\\Format\\CropViewHelper')
-		);
-	}
+    /**
+     * @group unit
+     */
+    public function testFluidCropViewHelperIsXClassed()
+    {
+        self::assertInstanceOf(
+            'DMK\\Mksearch\\ViewHelpers\\Format\\CropViewHelper',
+            \tx_rnbase::makeInstance('TYPO3\\CMS\\Fluid\\ViewHelpers\\Format\\CropViewHelper')
+        );
+    }
 
-	/**
-	 * @group unit
-	 */
-	public function testFluidHtmlViewHelperIsXClassed() {
-		self::assertInstanceOf(
-			'DMK\\Mksearch\\ViewHelpers\\Format\\HtmlViewHelper',
-			\tx_rnbase::makeInstance('TYPO3\\CMS\\Fluid\\ViewHelpers\\Format\\HtmlViewHelper')
-		);
-	}
+    /**
+     * @group unit
+     */
+    public function testFluidHtmlViewHelperIsXClassed()
+    {
+        self::assertInstanceOf(
+            'DMK\\Mksearch\\ViewHelpers\\Format\\HtmlViewHelper',
+            \tx_rnbase::makeInstance('TYPO3\\CMS\\Fluid\\ViewHelpers\\Format\\HtmlViewHelper')
+        );
+    }
 }

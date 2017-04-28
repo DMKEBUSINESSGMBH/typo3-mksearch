@@ -34,97 +34,95 @@ tx_rnbase::load('tx_mksearch_indexer_A21Glossary');
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_tests_indexer_A21Glossary_testcase
-	extends tx_mksearch_tests_Testcase {
+class tx_mksearch_tests_indexer_A21Glossary_testcase extends tx_mksearch_tests_Testcase
+{
 
-	/**
-	 *
-	 * @return tx_mksearch_indexer_A21Glossary|PHPUnit_Framework_MockObject_MockObject
-	 */
-	protected function getIndexerMock(
-	) {
-		$mock = $this->getMock(
-			'tx_mksearch_indexer_A21Glossary',
-			array('stopIndexing', 'isIndexableRecord', 'hasDocToBeDeleted')
-		);
-		$mock
-			->expects($this->any())
-			->method('stopIndexing')
-			->will($this->returnValue(FALSE))
-		;
-		$mock
-			->expects($this->any())
-			->method('isIndexableRecord')
-			->will($this->returnValue(TRUE))
-		;
-		$mock
-			->expects($this->any())
-			->method('hasDocToBeDeleted')
-			->will($this->returnValue(TRUE))
-		;
-		return $mock;
-	}
+    /**
+     *
+     * @return tx_mksearch_indexer_A21Glossary|PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getIndexerMock()
+    {
+        $mock = $this->getMock(
+            'tx_mksearch_indexer_A21Glossary',
+            array('stopIndexing', 'isIndexableRecord', 'hasDocToBeDeleted')
+        );
+        $mock
+            ->expects($this->any())
+            ->method('stopIndexing')
+            ->will($this->returnValue(false));
+        $mock
+            ->expects($this->any())
+            ->method('isIndexableRecord')
+            ->will($this->returnValue(true));
+        $mock
+            ->expects($this->any())
+            ->method('hasDocToBeDeleted')
+            ->will($this->returnValue(true));
 
-	/**
-	 * Testet die getContentType Methode.
-	 *
-	 * @group unit
-	 * @test
-	 */
-	public function testGetContentType() {
-		$ct = $this->getIndexerMock()->getContentType();
-		self::assertTrue(is_array($ct));
-		list($extKey, $contentType) = $ct;
-		self::assertSame($extKey, 'a21glossary');
-		self::assertSame($contentType, 'main');
-	}
-	/**
-	 * Testet die getContentType Methode.
-	 *
-	 * @group unit
-	 * @test
-	 */
-	public function testIndexData() {
-		$indexer = $this->getIndexerMock();
-		$model = $this->getModel(
-				array(
-					'uid' => 57,
-					'short' => 'Titel',
-					'shortcut' => 'Alternative',
-					'longversion' => 'Long',
-					'description' => 'Beschreibung',
-				)
-			)
-			->setTableName('tx_a21glossary_main')
-		;
-		/* @var $indexDoc tx_mksearch_model_IndexerDocumentBase */
-		$indexDoc = $this->getIndexDocMock($indexer);
-		$indexDoc->setUid($model->getUid());
-		$return = $this->callInaccessibleMethod(
-			$indexer,
-			'indexData',
-			$model,
-			'tx_a21glossary_main',
-			$model->getRecord(),
-			$indexDoc,
-			array()
-		);
+        return $mock;
+    }
 
-		self::assertInstanceOf(get_class($indexDoc), $return);
-		self::assertSame('a21glossary:main:57', $indexDoc->getPrimaryKey(TRUE));
+    /**
+     * Testet die getContentType Methode.
+     *
+     * @group unit
+     * @test
+     */
+    public function testGetContentType()
+    {
+        $ct = $this->getIndexerMock()->getContentType();
+        self::assertTrue(is_array($ct));
+        list($extKey, $contentType) = $ct;
+        self::assertSame($extKey, 'a21glossary');
+        self::assertSame($contentType, 'main');
+    }
+    /**
+     * Testet die getContentType Methode.
+     *
+     * @group unit
+     * @test
+     */
+    public function testIndexData()
+    {
+        $indexer = $this->getIndexerMock();
+        $model = $this->getModel(
+            array(
+                    'uid' => 57,
+                    'short' => 'Titel',
+                    'shortcut' => 'Alternative',
+                    'longversion' => 'Long',
+                    'description' => 'Beschreibung',
+                )
+        )
+            ->setTableName('tx_a21glossary_main');
+        /* @var $indexDoc tx_mksearch_model_IndexerDocumentBase */
+        $indexDoc = $this->getIndexDocMock($indexer);
+        $indexDoc->setUid($model->getUid());
+        $return = $this->callInaccessibleMethod(
+            $indexer,
+            'indexData',
+            $model,
+            'tx_a21glossary_main',
+            $model->getRecord(),
+            $indexDoc,
+            array()
+        );
 
-		// check default fields (title, content, abstract)
-		// longversion is the caption of the glossar entry
-		self::assertIndexDocHasField($indexDoc, 'title', 'Long');
-		// description contains the explanation of the glossary word (short)
-		self::assertIndexDocHasField($indexDoc, 'content', 'Beschreibung');
-		self::assertIndexDocHasField($indexDoc, 'abstract', 'Beschreibung');
+        self::assertInstanceOf(get_class($indexDoc), $return);
+        self::assertSame('a21glossary:main:57', $indexDoc->getPrimaryKey(true));
 
-		// check mapped fields
-		self::assertIndexDocHasField($indexDoc, 'short_s', 'Titel');
-		self::assertIndexDocHasField($indexDoc, 'shortcut_s', 'Alternative');
-		self::assertIndexDocHasField($indexDoc, 'longversion_s', 'Long');
-		self::assertIndexDocHasField($indexDoc, 'description_t', 'Beschreibung');
-	}
+        // check default fields (title, content, abstract)
+        // longversion is the caption of the glossar entry
+        self::assertIndexDocHasField($indexDoc, 'title', 'Long');
+        // description contains the explanation of the glossary word (short)
+        self::assertIndexDocHasField($indexDoc, 'content', 'Beschreibung');
+        self::assertIndexDocHasField($indexDoc, 'abstract', 'Beschreibung');
 
+        // check mapped fields
+        self::assertIndexDocHasField($indexDoc, 'short_s', 'Titel');
+        self::assertIndexDocHasField($indexDoc, 'shortcut_s', 'Alternative');
+        self::assertIndexDocHasField($indexDoc, 'longversion_s', 'Long');
+        self::assertIndexDocHasField($indexDoc, 'description_t', 'Beschreibung');
+    }
 }

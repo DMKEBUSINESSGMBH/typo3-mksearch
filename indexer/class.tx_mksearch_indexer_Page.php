@@ -1,8 +1,8 @@
 <?php
 /**
- * 	@package tx_mksearch
- *  @subpackage tx_mksearch_indexer
- *  @author Hannes Bochmann
+ * @package tx_mksearch
+ * @subpackage tx_mksearch_indexer
+ * @author Hannes Bochmann
  *
  *  Copyright notice
  *
@@ -37,204 +37,221 @@ tx_rnbase::load('tx_mksearch_util_Misc');
 /**
  * Indexer service for core.tt_content called by the "mksearch" extension.
  */
-class tx_mksearch_indexer_Page extends tx_mksearch_indexer_Base {
+class tx_mksearch_indexer_Page extends tx_mksearch_indexer_Base
+{
 
-	/**
-	 * Return content type identification.
-	 * This identification is part of the indexed data
-	 * and is used on later searches to identify the search results.
-	 * You're completely free in the range of values, but take care
-	 * as you at the same time are responsible for
-	 * uniqueness (i.e. no overlapping with other content types) and
-	 * consistency (i.e. recognition) on indexing and searching data.
-	 *
-	 * @return array([extension key], [key of content type])
-	 */
-	public static function getContentType() {
-		return array('core', 'page');
-	}
+    /**
+     * Return content type identification.
+     * This identification is part of the indexed data
+     * and is used on later searches to identify the search results.
+     * You're completely free in the range of values, but take care
+     * as you at the same time are responsible for
+     * uniqueness (i.e. no overlapping with other content types) and
+     * consistency (i.e. recognition) on indexing and searching data.
+     *
+     * @return array
+     */
+    public static function getContentType()
+    {
+        return array('core', 'page');
+    }
 
 /**
-	 * (non-PHPdoc)
-	 * @see tx_mksearch_interface_Indexer::prepareSearchData()
-	 */
-	public function prepareSearchData($tableName, $sourceRecord, tx_mksearch_interface_IndexerDocument $indexDoc, $options) {
-		return parent::prepareSearchData($tableName, $sourceRecord, $indexDoc, $options);
-	}
+ * (non-PHPdoc)
+ * @see tx_mksearch_interface_Indexer::prepareSearchData()
+ */
+    public function prepareSearchData($tableName, $sourceRecord, tx_mksearch_interface_IndexerDocument $indexDoc, $options)
+    {
+        return parent::prepareSearchData($tableName, $sourceRecord, $indexDoc, $options);
+    }
 
-	/**
-	 * check if we have a shortcut and index the target instead
-	 * @see tx_mksearch_indexer_Base::stopIndexing()
-	 */
-	protected function stopIndexing($tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options) {
-		if($tableName == 'pages') {
-			// this our first entry point. so we fetch all subpages and put them into
-			// the queue in case changes on this page have effects on subpages.
-			$aPidList = $this->_getPidList($rawData['uid'],999);
+    /**
+     * check if we have a shortcut and index the target instead
+     * @see tx_mksearch_indexer_Base::stopIndexing()
+     */
+    protected function stopIndexing($tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options)
+    {
+        if ($tableName == 'pages') {
+            // this our first entry point. so we fetch all subpages and put them into
+            // the queue in case changes on this page have effects on subpages.
+            $aPidList = $this->_getPidList($rawData['uid'], 999);
 
-			$oIndexSrv = tx_mksearch_util_ServiceRegistry::getIntIndexService();
-			foreach ($aPidList as $iUid) {
-				// the current page is handled later in case of short cuts
-				if ($iUid != $rawData['uid']) {
-					$oIndexSrv->addRecordToIndex($tableName, $iUid);
-				}
-			}
+            $oIndexSrv = tx_mksearch_util_ServiceRegistry::getIntIndexService();
+            foreach ($aPidList as $iUid) {
+                // the current page is handled later in case of short cuts
+                if ($iUid != $rawData['uid']) {
+                    $oIndexSrv->addRecordToIndex($tableName, $iUid);
+                }
+            }
 
-			// Current page is a short cut? Follow up short-cutted page
-			if($rawData['doktype'] == 4) {
-				$oIndexSrv->addRecordToIndex('pages', $rawData['shortcut']);
-				return true;
-			}
-		}
-		//else
-		return parent::stopIndexing($tableName, $rawData, $indexDoc, $options);
-	}
+            // Current page is a short cut? Follow up short-cutted page
+            if ($rawData['doktype'] == 4) {
+                $oIndexSrv->addRecordToIndex('pages', $rawData['shortcut']);
 
-	/**
-	 * @see tx_mksearch_indexer_Base::indexData()
-	 */
-	public function indexData(tx_rnbase_IModel $oModel, $tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options) {
-		$lang = isset($this->options['lang'])? $this->options['lang'] : 0;
+                return true;
+            }
+        }
+        //else
+        return parent::stopIndexing($tableName, $rawData, $indexDoc, $options);
+    }
 
-		// Localize record, if necessary
-		if ($lang) {
-			$page = tx_rnbase_util_TYPO3::getSysPage();
-			$rawData = $page->getPageOverlay ($rawData, $lang);
-			// No success in record translation?
-			if (!isset($rawData['_PAGES_OVERLAY'])) return null;
-		}
-		// Fill indexer document
-		$indexDoc->setUid($rawData['uid']);
-		$indexDoc->setTitle($rawData['title']);
-		$indexDoc->setTimestamp($rawData['tstamp']);
+    /**
+     * @see tx_mksearch_indexer_Base::indexData()
+     */
+    public function indexData(tx_rnbase_IModel $oModel, $tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options)
+    {
+        $lang = isset($this->options['lang']) ? $this->options['lang'] : 0;
 
-		// You are strongly encouraged to use $doc->getMaxAbstractLength() to limit the length of your abstract!
-		// You are indeed free to ignore that limit if you have good reasons to do so, but always
-		// keep in mind that the abstract data is stored with the indexed document - so think about your data traffic
-		// and last but not least about the index size!
-		// You may define the limit for your content type centrally with the key
-		// "abstractMaxLength_[your extkey]_[your content type]" as defined at $indexDoc constructor
-		if(!empty($oModel->record['abstract']))
-			$indexDoc->setAbstract(
-					$options['keepHtml'] ? $oModel->record['abstract'] : tx_mksearch_util_Misc::html2plain($oModel->record['abstract']),
-					$indexDoc->getMaxAbstractLength()
-			);
+        // Localize record, if necessary
+        if ($lang) {
+            $page = tx_rnbase_util_TYPO3::getSysPage();
+            $rawData = $page->getPageOverlay($rawData, $lang);
+            // No success in record translation?
+            if (!isset($rawData['_PAGES_OVERLAY'])) {
+                return null;
+            }
+        }
+        // Fill indexer document
+        $indexDoc->setUid($rawData['uid']);
+        $indexDoc->setTitle($rawData['title']);
+        $indexDoc->setTimestamp($rawData['tstamp']);
 
-		//now let's use the given mapping to get the fields separatly into solr
-		if(!empty($options['mapping.']))
-			$this->indexModelByMapping($oModel,$options['mapping.'],$indexDoc,'',$options);
+        // You are strongly encouraged to use $doc->getMaxAbstractLength() to limit the length of your abstract!
+        // You are indeed free to ignore that limit if you have good reasons to do so, but always
+        // keep in mind that the abstract data is stored with the indexed document - so think about your data traffic
+        // and last but not least about the index size!
+        // You may define the limit for your content type centrally with the key
+        // "abstractMaxLength_[your extkey]_[your content type]" as defined at $indexDoc constructor
+        if (!empty($oModel->record['abstract'])) {
+            $indexDoc->setAbstract(
+                $options['keepHtml'] ? $oModel->record['abstract'] : tx_mksearch_util_Misc::html2plain($oModel->record['abstract']),
+                $indexDoc->getMaxAbstractLength()
+            );
+        }
 
-		return $indexDoc;
-	}
+        //now let's use the given mapping to get the fields separatly into solr
+        if (!empty($options['mapping.'])) {
+            $this->indexModelByMapping($oModel, $options['mapping.'], $indexDoc, '', $options);
+        }
 
-	/**
-	 * @see tx_mksearch_indexer_Base::isIndexableRecord()
-	 * @todo Backendbenutzerbereiche nicht indizieren
-	 */
-	protected function isIndexableRecord(array $sourceRecord, array $options) {
-		//as those functions check via the pid we have to copy the uid of the
-		//current page into the pid this is what we want to check
-		$sourceRecord['pid'] = $sourceRecord['uid'];
-		return $this->isOnIndexablePage($sourceRecord,$options);
-	}
+        return $indexDoc;
+    }
 
-	/**
-	 * Returns the model to be indexed
-	 *
-	 * @param array $rawData
-	 * @param string $tableName
-	 * @param array $options
-	 *
-	 * @return tx_mksearch_model_irfaq_Question
-	 */
-	protected function createModel(
-		array $rawData,
-		$tableName = null,
-		$options = array()
-	) {
-		return tx_rnbase::makeInstance('tx_rnbase_model_Base', $rawData);
-	}
+    /**
+     * @see tx_mksearch_indexer_Base::isIndexableRecord()
+     * @todo Backendbenutzerbereiche nicht indizieren
+     */
+    protected function isIndexableRecord(array $sourceRecord, array $options)
+    {
+        //as those functions check via the pid we have to copy the uid of the
+        //current page into the pid this is what we want to check
+        $sourceRecord['pid'] = $sourceRecord['uid'];
 
-	/**
-	 * Get sql data necessary to grab data to be indexed from data base
-	 * TODO: Check if parameter data is necessary for this indexer
-	 *
-	 * @param array $options from service configuration
-	 * @param array $data		Tablename <-> uids matrix of records to be indexed (array('tab1' => array(2,5,6), 'tab2' => array(4,5,8))
-	 * @return array
-	 * @see tx_mksearch_service_indexer_BaseDataBase::getSqlData()
-	 */
-	protected function getSqlData(array $options, array $data=array()) {
-		if (!isset($options['indexedFields']))
-			throw new Exception('tx_mksearch_service_indexer_core_Page->getSqlData(): mandatory option "indexedFields" not set!');
+        return $this->isOnIndexablePage($sourceRecord, $options);
+    }
 
-		$fields = array_unique(array_merge($this->baseFields, $options['indexedFields']));
+    /**
+     * Returns the model to be indexed
+     *
+     * @param array $rawData
+     * @param string $tableName
+     * @param array $options
+     *
+     * @return tx_mksearch_model_irfaq_Question
+     */
+    protected function createModel(
+        array $rawData,
+        $tableName = null,
+        $options = array()
+    ) {
+        return tx_rnbase::makeInstance('tx_rnbase_model_Base', $rawData);
+    }
 
-		$where = 	// restrict page types to FE relevant ones
-					'doktype <= 5' .
-					// Include / exclude restrictions
-					tx_mksearch_service_indexer_core_Config::getIncludeExcludeWhere(
-						isset($options['include']) ? $options['include'] : array(),
-						isset($options['exclude']) ? $options['exclude'] : array()
-					);
+    /**
+     * Get sql data necessary to grab data to be indexed from data base
+     * TODO: Check if parameter data is necessary for this indexer
+     *
+     * @param array $options from service configuration
+     * @param array $data       Tablename <-> uids matrix of records to be indexed (array('tab1' => array(2,5,6), 'tab2' => array(4,5,8))
+     * @return array
+     * @see tx_mksearch_service_indexer_BaseDataBase::getSqlData()
+     */
+    protected function getSqlData(array $options, array $data = array())
+    {
+        if (!isset($options['indexedFields'])) {
+            throw new Exception('tx_mksearch_service_indexer_core_Page->getSqlData(): mandatory option "indexedFields" not set!');
+        }
 
-		return array(
-					'fields' => implode(',', $fields),
-					'table' => 'pages',
-					'where' => $where,
-					'skipEnableFields' => array('fe_group'),
-				);
-	}
+        $fields = array_unique(array_merge($this->baseFields, $options['indexedFields']));
 
-	/**
-	 * Get sql data for an optional follow-up data base query
-	 *
-	 * @param array $options from service configuration
-	 * @return null | array
-	 * @see self::getSqlData()
-	 */
-	protected function getFollowUpSqlData(array $options) {
-		// Remove all pages from $this->additionalUids which have still been processed earlier.
-		$this->additionalUids = array_diff($this->additionalUids, $this->processedUids);
+        $where =    // restrict page types to FE relevant ones
+                    'doktype <= 5' .
+                    // Include / exclude restrictions
+                    tx_mksearch_service_indexer_core_Config::getIncludeExcludeWhere(
+                        isset($options['include']) ? $options['include'] : array(),
+                        isset($options['exclude']) ? $options['exclude'] : array()
+                    );
 
-		// No additionalUids?
-		if (!$this->additionalUids) return null;
-		// else:
+        return array(
+                    'fields' => implode(',', $fields),
+                    'table' => 'pages',
+                    'where' => $where,
+                    'skipEnableFields' => array('fe_group'),
+                );
+    }
 
-		// Retain options, but update include option
-		$options['include'] = array('pages' => $this->additionalUids);
+    /**
+     * Get sql data for an optional follow-up data base query
+     *
+     * @param array $options from service configuration
+     * @return null | array
+     * @see self::getSqlData()
+     */
+    protected function getFollowUpSqlData(array $options)
+    {
+        // Remove all pages from $this->additionalUids which have still been processed earlier.
+        $this->additionalUids = array_diff($this->additionalUids, $this->processedUids);
 
-		// Finally, delete $this->additionalUids
-		$this->additionalUids = array();
+        // No additionalUids?
+        if (!$this->additionalUids) {
+            return null;
+        }
+        // else:
 
-		return $this->getSqlData($options);
-	}
+        // Retain options, but update include option
+        $options['include'] = array('pages' => $this->additionalUids);
 
-	/**
-	 * Return the default Typoscript configuration for this indexer.
-	 *
-	 * Note that this config is not used for actual indexing
-	 * but only serves as assistance when actually configuring an indexer!
-	 * Hence all possible configuration options should be set or
-	 * at least be mentioned to provide an easy-to-access inline documentation!
-	 *
-	 * @return string
-	 *
-	 */
-	/**
-	 * Return the default Typoscript configuration for this indexer.
-	 *
-	 * @return string
-	 */
-	public function getDefaultTSConfig() {
-		return <<<CONF
+        // Finally, delete $this->additionalUids
+        $this->additionalUids = array();
+
+        return $this->getSqlData($options);
+    }
+
+    /**
+     * Return the default Typoscript configuration for this indexer.
+     *
+     * Note that this config is not used for actual indexing
+     * but only serves as assistance when actually configuring an indexer!
+     * Hence all possible configuration options should be set or
+     * at least be mentioned to provide an easy-to-access inline documentation!
+     *
+     * @return string
+     */
+    /**
+     * Return the default Typoscript configuration for this indexer.
+     *
+     * @return string
+     */
+    public function getDefaultTSConfig()
+    {
+        return <<<CONF
 # Fields which are set statically to the given value
 # Don't forget to add those fields to your Solr schema.xml
 # For example it can be used to define site areas this
 # contentType belongs to
 #
 # fixedFields {
-#	my_fixed_field_singlevalue = first
+#  my_fixed_field_singlevalue = first
 #   my_fixed_field_multivalue {
 #      0 = first
 #      1 = second
@@ -243,9 +260,9 @@ class tx_mksearch_indexer_Page extends tx_mksearch_indexer_Base {
 
 # the mapping which record field should be put into which solr field
  mapping {
-	nav_title = nav_title_s
-	subtitle = subtitle_s
-#	my_record_field = my_solr_field
+   nav_title = nav_title_s
+   subtitle = subtitle_s
+#   my_record_field = my_solr_field
 }
 
 ### delete from or abort indexing for the record if isIndexableRecord or no record?
@@ -258,25 +275,25 @@ deleteIfNotIndexable = 0
 # May also be combined with option "exclude"
 include {
 # Include several pages in indexing:
-#		# Include page #18 and #27
-#	pages = 18,27
+#   # Include page #18 and #27
+#   pages = 18,27
 # Include complete page trees (i. e. pages with all their children) in indexing:
-#	pageTrees {
-#		# Include page tree with root page #19
-#		0 = 19
-#		# Include page  tree with root page #28
-#		1 = 28
-#	}
+#   pageTrees {
+#     # Include page tree with root page #19
+#     0 = 19
+#     # Include page  tree with root page #28
+#     1 = 28
+# }
 }
 # Black lists: Exclude pages from indexing by various conditions.
 # May also be combined with option "include", while "exclude" option
 # takes precedence over "include" option.
 exclude {
-	# Exclude several pages from indexing. @see respective include option
-#	pages ...
- 	# Exclude complete page trees (i. e. pages with all their children) from indexing.
- 	# @see respective include option
-#	pageTrees ...
+   # Exclude several pages from indexing. @see respective include option
+#   pages ...
+   # Exclude complete page trees (i. e. pages with all their children) from indexing.
+   # @see respective include option
+#   pageTrees ...
 }
 
 # should a special workspace be indexed?
@@ -284,9 +301,9 @@ exclude {
 # comma separated list of workspace IDs
 #workspaceIds = 1,2,3
 CONF;
-	}
+    }
 }
 
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_TtContent.php'])	{
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_TtContent.php']);
+if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_TtContent.php']) {
+    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_TtContent.php']);
 }

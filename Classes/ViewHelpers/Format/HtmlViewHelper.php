@@ -18,61 +18,66 @@ namespace DMK\Mksearch\ViewHelpers\Format;
  *
  * nähere Infos in Configuration/XClasses.php
  *
- * @package 		TYPO3
- * @subpackage		mksearch
- * @author 			Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
- * @license 		http://www.gnu.org/licenses/lgpl.html
- * 					GNU Lesser General Public License, version 3 or later
+ * @package         TYPO3
+ * @subpackage      mksearch
+ * @author          Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
+ * @license         http://www.gnu.org/licenses/lgpl.html
+ *                  GNU Lesser General Public License, version 3 or later
  */
 
 \tx_rnbase::load('tx_rnbase_util_TYPO3');
 if (\tx_rnbase_util_TYPO3::isTYPO70OrHigher()) {
-	class HtmlViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Format\HtmlViewHelper {
-	
-		/**
-		 * nähere Infos in Configuration/XClasses.php
-		 *
-		 * @return void
-		 */
-		protected static function simulateFrontendEnvironment() {
-			if(!\tx_mksearch_service_internal_Index::isIndexingInProgress()) {
-				parent::simulateFrontendEnvironment();
-			}
-		}
-	
-		/**
-		 * @return void
-		 * @see simulateFrontendEnvironment()
-		 */
-		protected static function resetFrontendEnvironment() {
-			if(!\tx_mksearch_service_internal_Index::isIndexingInProgress()) {
-				parent::resetFrontendEnvironment();
-			}
-		}
-	}
+    class HtmlViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Format\HtmlViewHelper
+    {
+    
+        /**
+         * nähere Infos in Configuration/XClasses.php
+         *
+         * @return void
+         */
+        protected static function simulateFrontendEnvironment()
+        {
+            if (!\tx_mksearch_service_internal_Index::isIndexingInProgress()) {
+                parent::simulateFrontendEnvironment();
+            }
+        }
+    
+        /**
+         * @return void
+         * @see simulateFrontendEnvironment()
+         */
+        protected static function resetFrontendEnvironment()
+        {
+            if (!\tx_mksearch_service_internal_Index::isIndexingInProgress()) {
+                parent::resetFrontendEnvironment();
+            }
+        }
+    }
 } else {
-	class HtmlViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Format\HtmlViewHelper {
-	
-		/**
-		 * nähere Infos in Configuration/XClasses.php
-		 *
-		 * @return void
-		 */
-		protected function simulateFrontendEnvironment() {
-			if(!\tx_mksearch_service_internal_Index::isIndexingInProgress()) {
-				parent::simulateFrontendEnvironment();
-			}
-		}
-	
-		/**
-		 * @return void
-		 * @see simulateFrontendEnvironment()
-		 */
-		protected function resetFrontendEnvironment() {
-			if(!\tx_mksearch_service_internal_Index::isIndexingInProgress()) {
-				parent::resetFrontendEnvironment();
-			}
-		}
-	}
-	
+    class HtmlViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Format\HtmlViewHelper
+    {
+    
+        /**
+         * nähere Infos in Configuration/XClasses.php
+         *
+         * @return void
+         */
+        protected function simulateFrontendEnvironment()
+        {
+            if (!\tx_mksearch_service_internal_Index::isIndexingInProgress()) {
+                parent::simulateFrontendEnvironment();
+            }
+        }
+    
+        /**
+         * @return void
+         * @see simulateFrontendEnvironment()
+         */
+        protected function resetFrontendEnvironment()
+        {
+            if (!\tx_mksearch_service_internal_Index::isIndexingInProgress()) {
+                parent::resetFrontendEnvironment();
+            }
+        }
+    }
 }

@@ -1,8 +1,8 @@
 <?php
 /**
- * 	@package tx_mksearch
- *  @subpackage tx_mksearch_tests
- *  @author Hannes Bochmann
+ * @package tx_mksearch
+ * @subpackage tx_mksearch_tests
+ * @author Hannes Bochmann
  *
  *  Copyright notice
  *
@@ -43,47 +43,48 @@ tx_rnbase::load('tx_mksearch_marker_SearchResultSimple');
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_tests_marker_SearchResultSimple_testcase
-	extends tx_mksearch_tests_Testcase {
+class tx_mksearch_tests_marker_SearchResultSimple_testcase extends tx_mksearch_tests_Testcase
+{
 
-	/**
-	 *
-	 * Enter description here ...
-	 * @var tx_mksearch_marker_Facet
-	 */
-	protected $oMarker;
+    /**
+     * Enter description here ...
+     * @var tx_mksearch_marker_Facet
+     */
+    protected $oMarker;
 
-	/**
-	 * setUp() = init DB etc.
-	 */
-	protected function setUp(){
-		parent::setUp();
-		$this->prepareTSFE();
+    /**
+     * setUp() = init DB etc.
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->prepareTSFE();
 
-		$this->oParameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
-		$this->oMarker = tx_rnbase::makeInstance('tx_mksearch_marker_SearchResultSimple');
-	}
+        $this->oParameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
+        $this->oMarker = tx_rnbase::makeInstance('tx_mksearch_marker_SearchResultSimple');
+    }
 
-	/**
-	 * prüfen ob die richtigen fields und options zurück gegeben werden
-	 */
-	public function testParseTemplateDoesntReturnUnparsedMarkersForRequiredFields() {
-		//set noHash as we don't need it in tests
-		$aConfig = tx_mksearch_tests_Util::loadPageTS4BE();
-		$aConfig['searchsolr.']['hit.']['extrainfo.']['default.']['hit.']['initFields.'] = array('secondField');
-		$this->oConfig = tx_mksearch_tests_Util::loadConfig4BE($aConfig);
-		$this->oFormatter = $this->oConfig->getFormatter();
+    /**
+     * prüfen ob die richtigen fields und options zurück gegeben werden
+     */
+    public function testParseTemplateDoesntReturnUnparsedMarkersForRequiredFields()
+    {
+        //set noHash as we don't need it in tests
+        $aConfig = tx_mksearch_tests_Util::loadPageTS4BE();
+        $aConfig['searchsolr.']['hit.']['extrainfo.']['default.']['hit.']['initFields.'] = array('secondField');
+        $this->oConfig = tx_mksearch_tests_Util::loadConfig4BE($aConfig);
+        $this->oFormatter = $this->oConfig->getFormatter();
 
-		//now test
-		$doc = new Apache_Solr_Document();
-		$doc->firstField = 'firstValue';
+        //now test
+        $doc = new Apache_Solr_Document();
+        $doc->firstField = 'firstValue';
 
-		$oItem = tx_rnbase::makeInstance('tx_mksearch_model_SolrHit',$doc);
+        $oItem = tx_rnbase::makeInstance('tx_mksearch_model_SolrHit', $doc);
 
-		$sTemplate = '###ITEM_FIRSTFIELD### ###ITEM_SECONDFIELD### ###ITEM_THIRDFIELD###';
-		$sParsedTemplate = $this->oMarker->parseTemplate($sTemplate, $oItem, $this->oFormatter, 'searchsolr.hit.extrainfo.default.hit.', 'ITEM');
+        $sTemplate = '###ITEM_FIRSTFIELD### ###ITEM_SECONDFIELD### ###ITEM_THIRDFIELD###';
+        $sParsedTemplate = $this->oMarker->parseTemplate($sTemplate, $oItem, $this->oFormatter, 'searchsolr.hit.extrainfo.default.hit.', 'ITEM');
 
-		//erster Marker sollte mit wert ersetzt werden, 2. leer und 3. gar nicht
-		self::assertEquals('firstValue  ###ITEM_THIRDFIELD###',$sParsedTemplate,'Die Marker wurden nicht korrekt ersetzt!');
-	}
+        //erster Marker sollte mit wert ersetzt werden, 2. leer und 3. gar nicht
+        self::assertEquals('firstValue  ###ITEM_THIRDFIELD###', $sParsedTemplate, 'Die Marker wurden nicht korrekt ersetzt!');
+    }
 }

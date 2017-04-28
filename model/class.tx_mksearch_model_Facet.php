@@ -1,8 +1,8 @@
 <?php
 /**
- * 	@package tx_mksearch
- *  @subpackage tx_mksearch_model
- *  @author Hannes Bochmann
+ * @package tx_mksearch
+ * @subpackage tx_mksearch_model
+ * @author Hannes Bochmann
  *
  *  Copyright notice
  *
@@ -37,99 +37,107 @@ tx_rnbase::load('tx_rnbase_model_base');
  * @package tx_mksearch
  * @subpackage tx_mksearch_model
  */
-class tx_mksearch_model_Facet extends tx_rnbase_model_base  {
-	const TYPE_FIELD = 'type_field';
-	const TYPE_PIVOT = 'type_pivot';
-	const TYPE_QUERY = 'type_query';
-	const TYPE_RANGE = 'type_range';
-	const TYPE_DATE = 'type_date';
+class tx_mksearch_model_Facet extends tx_rnbase_model_base
+{
+    const TYPE_FIELD = 'type_field';
+    const TYPE_PIVOT = 'type_pivot';
+    const TYPE_QUERY = 'type_query';
+    const TYPE_RANGE = 'type_range';
+    const TYPE_DATE = 'type_date';
 
-	private $childs = array();
+    private $childs = array();
 
-	/**
-	 * Gibt ein Facet Model zurück
-	 * @param string $field
-	 * @param string $id
-	 * @param mixed $label Das Label kann ein String, oder ein Array sein
-	 * @param int $count
-	 * @param boolean $head
-	 * @return void
-	 */
-	public function __construct($field, $id, $label, $count, $head=false) {
-		$this->record['field'] = $field;
-		$this->record['id'] = $this->record['uid'] = $this->uid = $id;
-		if(is_array($label)) {
-			// Bei den gruppierten Facets gibt es nicht nur ein Label, sondern mehrere Datenfelder
-			$this->record = array_merge($this->record, $label);
-		}
-		else
-			$this->record['label'] = $label;
-		$this->record['count'] = $count;
-		$this->record['head'] = $head;
-		$this->record['type'] = self::TYPE_FIELD; // Als default ein Field-Facet verwenden
-	}
-	/**
-	 * Gibt die Art der Fassette zurück.
-	 * @return string
-	 */
-	public function getFacetType() {
-		return $this->record['type'];
-	}
-	/**
-	 * Setzt die Art der Fassette
-	 * @param string $type
-	 */
-	public function setFacetType($type) {
-		$this->record['type'] = $type;
-	}
+    /**
+     * Gibt ein Facet Model zurück
+     * @param string $field
+     * @param string $id
+     * @param mixed $label Das Label kann ein String, oder ein Array sein
+     * @param int $count
+     * @param bool $head
+     * @return void
+     */
+    public function __construct($field, $id, $label, $count, $head = false)
+    {
+        $this->record['field'] = $field;
+        $this->record['id'] = $this->record['uid'] = $this->uid = $id;
+        if (is_array($label)) {
+            // Bei den gruppierten Facets gibt es nicht nur ein Label, sondern mehrere Datenfelder
+            $this->record = array_merge($this->record, $label);
+        } else {
+            $this->record['label'] = $label;
+        }
+        $this->record['count'] = $count;
+        $this->record['head'] = $head;
+        $this->record['type'] = self::TYPE_FIELD; // Als default ein Field-Facet verwenden
+    }
+    /**
+     * Gibt die Art der Fassette zurück.
+     * @return string
+     */
+    public function getFacetType()
+    {
+        return $this->record['type'];
+    }
+    /**
+     * Setzt die Art der Fassette
+     * @param string $type
+     */
+    public function setFacetType($type)
+    {
+        $this->record['type'] = $type;
+    }
 
-	/**
-	 * adds one ore more child facets
-	 *
-	 * @param mixed <multitype:tx_mksearch_model_Facet, tx_mksearch_model_Facet> $child
-	 * @return tx_mksearch_model_Facet
-	 */
-	public function addChild($child) {
-		if ($child instanceof tx_mksearch_model_Facet) {
-			$this->childs[] = $child;
-		} elseif(is_array($child)) {
-			foreach ($child as $sub) {
-				$this->addChild($sub);
-			}
-		}
+    /**
+     * adds one ore more child facets
+     *
+     * @param mixed <multitype:tx_mksearch_model_Facet, tx_mksearch_model_Facet> $child
+     * @return tx_mksearch_model_Facet
+     */
+    public function addChild($child)
+    {
+        if ($child instanceof tx_mksearch_model_Facet) {
+            $this->childs[] = $child;
+        } elseif (is_array($child)) {
+            foreach ($child as $sub) {
+                $this->addChild($sub);
+            }
+        }
 
-		return $this;
-	}
-	/**
-	 * returns all childs a child facet
-	 *
-	 * @param array <multitype:tx_mksearch_model_Facet, tx_mksearch_model_Facet> $child
-	 * @return tx_mksearch_model_Facet
-	 */
-	public function setChilds(array $childs) {
-		$this->childs = array();
-		$this->addChild($childs);
+        return $this;
+    }
+    /**
+     * returns all childs a child facet
+     *
+     * @param array <multitype:tx_mksearch_model_Facet, tx_mksearch_model_Facet> $child
+     * @return tx_mksearch_model_Facet
+     */
+    public function setChilds(array $childs)
+    {
+        $this->childs = array();
+        $this->addChild($childs);
 
-		return $this;
-	}
-	/**
-	 * returns all childs a child facet
-	 *
-	 * @return multitype:tx_mksearch_model_Facet $child
-	 */
-	public function getChilds() {
-		return $this->childs;
-	}
-	/**
-	 * there are childs?
-	 *
-	 * @return boolean
-	 */
-	public function hasChilds() {
-		return !empty($this->childs);
-	}
+        return $this;
+    }
+    /**
+     * returns all childs a child facet
+     *
+     * @return multitype:tx_mksearch_model_Facet $child
+     */
+    public function getChilds()
+    {
+        return $this->childs;
+    }
+    /**
+     * there are childs?
+     *
+     * @return bool
+     */
+    public function hasChilds()
+    {
+        return !empty($this->childs);
+    }
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/class.tx_mksearch_model_Facet.php']) {
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/class.tx_mksearch_model_Facet.php']);
+    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/class.tx_mksearch_model_Facet.php']);
 }

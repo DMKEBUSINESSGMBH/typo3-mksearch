@@ -33,55 +33,57 @@ tx_rnbase::load('tx_mksearch_tests_Testcase');
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_tests_service_engine_lucene_DataTypeMapper_testcase
-	extends tx_mksearch_tests_Testcase {
+class tx_mksearch_tests_service_engine_lucene_DataTypeMapper_testcase extends tx_mksearch_tests_Testcase
+{
 
 
-	/* @var $mapper tx_mksearch_service_engine_lucene_DataTypeMapper */
-	private $mapper;
+    /* @var $mapper tx_mksearch_service_engine_lucene_DataTypeMapper */
+    private $mapper;
 
-	/**
-	 *
-	 */
-	protected function setUp() {
-		parent::setUp();
-		$this->mapper = tx_rnbase::makeInstance('tx_mksearch_service_engine_lucene_DataTypeMapper');
+    /**
+     *
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->mapper = tx_rnbase::makeInstance('tx_mksearch_service_engine_lucene_DataTypeMapper');
+    }
 
-	}
+    public function testFieldWithSpecialConfig()
+    {
 
-	public function testFieldWithSpecialConfig() {
+        // Zuerst den Default testen
+        self::assertEquals('keyword', $this->mapper->getDataType('tstamp'), 'Wrong data type found');
 
-		// Zuerst den Default testen
-		self::assertEquals('keyword', $this->mapper->getDataType('tstamp'), 'Wrong data type found');
+        // Und jetzt per Config überschreiben
+        $cfg = array();
+        $cfg['fields.']['tstamp.']['type'] = 'unindexed';
+        $mapper = tx_rnbase::makeInstance('tx_mksearch_service_engine_lucene_DataTypeMapper', $cfg);
+        self::assertEquals('unindexed', $mapper->getDataType('tstamp'), 'Wrong data type found');
+        // Die anderen sollten weiter normal funktionieren
+        self::assertEquals('keyword', $mapper->getDataType('uid'), 'Wrong data type found');
+    }
 
-		// Und jetzt per Config überschreiben
-		$cfg = array();
-		$cfg['fields.']['tstamp.']['type'] = 'unindexed';
-		$mapper = tx_rnbase::makeInstance('tx_mksearch_service_engine_lucene_DataTypeMapper', $cfg);
-		self::assertEquals('unindexed', $mapper->getDataType('tstamp'), 'Wrong data type found');
-		// Die anderen sollten weiter normal funktionieren
-		self::assertEquals('keyword', $mapper->getDataType('uid'), 'Wrong data type found');
+    /**
+     * @dataProvider getSolrLikeFieldNames
+     */
+    public function testAutoTypesFromSolr($fieldName, $expectedType)
+    {
+        // 'text', 'keyword', 'unindexed', 'unstored', 'binary'
+        self::assertEquals($expectedType, $this->mapper->getDataType($fieldName), 'Wrong data type found for fieldname '.$fieldName);
+    }
 
-	}
-
-	/**
-	 * @dataProvider getSolrLikeFieldNames
-	 */
-	public function testAutoTypesFromSolr($fieldName, $expectedType) {
-		// 'text', 'keyword', 'unindexed', 'unstored', 'binary'
-		self::assertEquals($expectedType, $this->mapper->getDataType($fieldName), 'Wrong data type found for fieldname '.$fieldName);
-	}
-
-	public function getSolrLikeFieldNames() {
-		return array(
-				array('test_s', 'text'),
-				array('test_i', 'keyword'),
-				array('pid', 'keyword'),
-				array('someotherfield', 'text'),
-				array('someotherfield_mi', 'text'),
-		);
-	}
+    public function getSolrLikeFieldNames()
+    {
+        return array(
+                array('test_s', 'text'),
+                array('test_i', 'keyword'),
+                array('pid', 'keyword'),
+                array('someotherfield', 'text'),
+                array('someotherfield_mi', 'text'),
+        );
+    }
 }
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/service/engine/lucene/class.tx_mksearch_tests_service_engine_lucene_DataTypeMapper_testcase.php']) {
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/service/engine/lucene/class.tx_mksearch_tests_service_engine_lucene_DataTypeMapper_testcase.php']);
+    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/service/engine/lucene/class.tx_mksearch_tests_service_engine_lucene_DataTypeMapper_testcase.php']);
 }

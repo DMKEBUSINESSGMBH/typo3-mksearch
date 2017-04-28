@@ -55,78 +55,88 @@ tx_rnbase::load('tx_mksearch_service_indexer_core_Page');
  *
  * Options are identical to tx_mksearch_service_indexer_core_Page (except the key / service subtype!),
  * e.g. $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['indexer']['config']['templavoila.page']['indexedFields'] = array('header', 'bodytext');
+ *
  * @see tx_mksearch_service_indexer_core_Page
  */
-class tx_mksearch_service_indexer_core_PageTV extends tx_mksearch_service_indexer_core_Page {
+class tx_mksearch_service_indexer_core_PageTV extends tx_mksearch_service_indexer_core_Page
+{
 
-	/**
-	 * Special TV fields needed in background, but not for actual indexing
-	 *
-	 * @var unknown_type
-	 */
-	private $tvFields = array('tx_templavoila_flex');
+    /**
+     * Special TV fields needed in background, but not for actual indexing
+     *
+     * @var unknown_type
+     */
+    private $tvFields = array('tx_templavoila_flex');
 
-	/**
-	 * Shortcut to templavoila.tt_content include pages configuration
-	 *
-	 * @var array
-	 */
-	private $ttcConfInclude = array();
+    /**
+     * Shortcut to templavoila.tt_content include pages configuration
+     *
+     * @var array
+     */
+    private $ttcConfInclude = array();
 
-	/**
-	 * Shortcut to templavoila.tt_content mapping configuration
-	 *
-	 * @var array
-	 */
-	private $ttcConfMap = array();
+    /**
+     * Shortcut to templavoila.tt_content mapping configuration
+     *
+     * @var array
+     */
+    private $ttcConfMap = array();
 
-	/**
-	 * Get sql data necessary to grab data to be indexed from data base
-	 *
-	 * @param array $options from service configuration
-	 * @return array
-	 * @see tx_mksearch_service_indexer_BaseDataBase::getSqlData()
-	 */
-	protected function getSqlData(array $options) {
-		$this->ttcConfInclude = &$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['indexer']['config']['templavoila.tt_content']['include']['elements'];
-		if (!is_array($this->ttcConfInclude)) $this->ttcConfInclude = array();
-		$this->ttcConfMap = &$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['indexer']['config']['templavoila.tt_content']['pidMapping'];
-		if (!is_array($this->ttcConfMap)) $this->ttcConfMap = array();
+    /**
+     * Get sql data necessary to grab data to be indexed from data base
+     *
+     * @param array $options from service configuration
+     * @return array
+     * @see tx_mksearch_service_indexer_BaseDataBase::getSqlData()
+     */
+    protected function getSqlData(array $options)
+    {
+        $this->ttcConfInclude = &$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['indexer']['config']['templavoila.tt_content']['include']['elements'];
+        if (!is_array($this->ttcConfInclude)) {
+            $this->ttcConfInclude = array();
+        }
+        $this->ttcConfMap = &$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['indexer']['config']['templavoila.tt_content']['pidMapping'];
+        if (!is_array($this->ttcConfMap)) {
+            $this->ttcConfMap = array();
+        }
 
-		$this->baseFields = array_merge($this->baseFields, $this->tvFields);
-		return parent::getSqlData($options);
-	}
+        $this->baseFields = array_merge($this->baseFields, $this->tvFields);
 
-	/**
-	 * Prepare / transform data from database for indexing
-	 *
-	 * @param array								$rawData
-	 * @param array 							$options from service configuration
-	 * @param tx_mksearch_model_IndexerDocument	$indexDoc Model to be filled
-	 * @return tx_mksearch_model_IndexerDocument or null, if record is not to be indexed
-	 */
-	protected function prepareData(array $rawData, array $options, tx_mksearch_model_IndexerDocument $indexDoc) {
-		if ($rawData['tx_templavoila_flex']) {
-			// Get tt_content uids and add them to templavoila.tt_content indexer config
-			$flex = tx_rnbase_util_Arrays::xml2array($rawData['tx_templavoila_flex']);
-			$uids = tx_rnbase_util_Strings::trimExplode(',', $flex['data']['sDEF']['lDEF']['field_content']['vDEF'], 1);
+        return parent::getSqlData($options);
+    }
 
-			$this->ttcConfInclude = array_merge($this->ttcConfInclude, $uids);
+    /**
+     * Prepare / transform data from database for indexing
+     *
+     * @param array                             $rawData
+     * @param array                             $options from service configuration
+     * @param tx_mksearch_model_IndexerDocument $indexDoc Model to be filled
+     * @return tx_mksearch_model_IndexerDocument or null, if record is not to be indexed
+     */
+    protected function prepareData(array $rawData, array $options, tx_mksearch_model_IndexerDocument $indexDoc)
+    {
+        if ($rawData['tx_templavoila_flex']) {
+            // Get tt_content uids and add them to templavoila.tt_content indexer config
+            $flex = tx_rnbase_util_Arrays::xml2array($rawData['tx_templavoila_flex']);
+            $uids = tx_rnbase_util_Strings::trimExplode(',', $flex['data']['sDEF']['lDEF']['field_content']['vDEF'], 1);
 
-			// Fill templavoila.tt_content indexer PID mapping
-			if ($uids) {
-				foreach ($uids as $uid) {
-					if (!isset($this->ttcConfMap[$uid])) $this->ttcConfMap[$uid] = array();
-					$this->ttcConfMap[$uid][] = $rawData['uid'];
-				}
-			}
-		}
-		// Call parent's method
-		return parent::prepareData($rawData, $options, $indexDoc);
-	}
+            $this->ttcConfInclude = array_merge($this->ttcConfInclude, $uids);
 
+            // Fill templavoila.tt_content indexer PID mapping
+            if ($uids) {
+                foreach ($uids as $uid) {
+                    if (!isset($this->ttcConfMap[$uid])) {
+                        $this->ttcConfMap[$uid] = array();
+                    }
+                    $this->ttcConfMap[$uid][] = $rawData['uid'];
+                }
+            }
+        }
+        // Call parent's method
+        return parent::prepareData($rawData, $options, $indexDoc);
+    }
 }
 
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/indexer/core/class.tx_mksearch_service_indexer_core_PageTV.php'])	{
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/indexer/core/class.tx_mksearch_service_indexer_core_PageTV.php']);
+if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/indexer/core/class.tx_mksearch_service_indexer_core_PageTV.php']) {
+    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/indexer/core/class.tx_mksearch_service_indexer_core_PageTV.php']);
 }

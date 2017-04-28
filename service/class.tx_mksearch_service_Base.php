@@ -1,8 +1,8 @@
 <?php
 /**
- * 	@package tx_mksearch
- *  @subpackage tx_mksearch_service
- *  @author Hannes Bochmann
+ * @package tx_mksearch
+ * @subpackage tx_mksearch_service
+ * @author Hannes Bochmann
  *
  *  Copyright notice
  *
@@ -34,70 +34,75 @@ tx_rnbase::load('tx_rnbase_util_SearchBase');
  * @package tx_mksearch
  * @subpackage tx_mksearch_service
  */
-abstract class tx_mksearch_service_Base extends Tx_Rnbase_Service_Base {
+abstract class tx_mksearch_service_Base extends Tx_Rnbase_Service_Base
+{
 
-	/**
-	 * Return name of search class
-	 *
-	 * @return string
-	 */
-	abstract public function getSearchClass();
+    /**
+     * Return name of search class
+     *
+     * @return string
+     */
+    abstract public function getSearchClass();
 
-	/**
-	 * @return tx_rnbase_util_SearchBase
-	 */
-	public function getSearcher(){
-		return tx_rnbase_util_SearchBase::getInstance($this->getSearchClass());
-	}
+    /**
+     * @return tx_rnbase_util_SearchBase
+     */
+    public function getSearcher()
+    {
+        return tx_rnbase_util_SearchBase::getInstance($this->getSearchClass());
+    }
 
-	/**
-	 * Search database
-	 *
-	 * @param array $fields
-	 * @param array $options
-	 * @return array[tx_rnbase_model_base]
-	 */
-	public function search($fields, $options) {
-		$searcher = $this->getSearcher();
+    /**
+     * Search database
+     *
+     * @param array $fields
+     * @param array $options
+     * @return array[tx_rnbase_model_base]
+     */
+    public function search($fields, $options)
+    {
+        $searcher = $this->getSearcher();
 
-		// On default, return hidden and deleted fields in backend
-		// @TODO: realy return deleted fields? make Konfigurable!
-		if (
-		TYPO3_MODE == 'BE' &&
-		!isset($options['enablefieldsoff']) &&
-		!isset($options['enablefieldsbe']) &&
-		!isset($options['enablefieldsfe'])
-		) {
-			$options['enablefieldsoff'] = true;
-		}
+        // On default, return hidden and deleted fields in backend
+        // @TODO: realy return deleted fields? make Konfigurable!
+        if (TYPO3_MODE == 'BE' &&
+        !isset($options['enablefieldsoff']) &&
+        !isset($options['enablefieldsbe']) &&
+        !isset($options['enablefieldsfe'])
+        ) {
+            $options['enablefieldsoff'] = true;
+        }
 
-		return $searcher->search($fields, $options);
-	}
+        return $searcher->search($fields, $options);
+    }
 
-	/**
-	 * Search the item for the given uid
-	 *
-	 * @TODO: 	Achtung,
-	 * 			tx_rnbase_util_SearchBase::getWrapperClass() ist eigentlich protected!
-	 *
-	 * @param int $ct
-	 * @return tx_rnbase_model_base
-	 */
-	public function get($uid) {
-		$searcher = tx_rnbase_util_SearchBase::getInstance($this->getSearchClass());
-		return tx_rnbase::makeInstance($searcher->getWrapperClass(), $uid);
-	}
+    /**
+     * Search the item for the given uid
+     *
+     * @TODO:   Achtung,
+     *          tx_rnbase_util_SearchBase::getWrapperClass() ist eigentlich protected!
+     *
+     * @param int $ct
+     * @return tx_rnbase_model_base
+     */
+    public function get($uid)
+    {
+        $searcher = tx_rnbase_util_SearchBase::getInstance($this->getSearchClass());
 
-	/**
-	 * Find all records
-	 *
-	 * @return array[tx_rnbase_model_base]
-	 */
-	public function findAll(){
-		return $this->search(array(), array());
-	}
+        return tx_rnbase::makeInstance($searcher->getWrapperClass(), $uid);
+    }
+
+    /**
+     * Find all records
+     *
+     * @return array[tx_rnbase_model_base]
+     */
+    public function findAll()
+    {
+        return $this->search(array(), array());
+    }
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/class.tx_mksearch_service_Base.php']) {
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/class.tx_mksearch_service_Base.php']);
+    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/class.tx_mksearch_service_Base.php']);
 }

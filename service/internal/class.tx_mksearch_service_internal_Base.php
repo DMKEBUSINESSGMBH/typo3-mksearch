@@ -26,105 +26,108 @@ tx_rnbase::load('Tx_Rnbase_Service_Base');
 /**
  * Service for accessing models from database
  */
-class tx_mksearch_service_internal_Base extends Tx_Rnbase_Service_Base {
+class tx_mksearch_service_internal_Base extends Tx_Rnbase_Service_Base
+{
 
-	/**
-	 * Search class - set this to the search class name
-	 *
-	 * @var string
-	 */
-	protected $searchClass;
+    /**
+     * Search class - set this to the search class name
+     *
+     * @var string
+     */
+    protected $searchClass;
 
-	/**
-	* @return tx_rnbase_util_SearchBase
-	*/
-	public function getSearcher() {
-		tx_rnbase::load('tx_rnbase_util_SearchBase');
-		return tx_rnbase_util_SearchBase::getInstance($this->searchClass);
-	}
-	/**
-	 * Search database
-	 *
-	 * @param array $fields
-	 * @param array $options
-	 * @return array[tx_mksearch_model_internal_Index]
-	 */
-	public function search($fields, $options) {
-		return $this->getSearcher()->search($fields, $options);
-	}
-	/**
-	 * Check if a indexer is defined to index data into a given core.
-	 * @param tx_mksearch_model_internal_Index $core
-	 * @param tx_mksearch_interface_Indexer $indexer keys: extKey and contentType
-	 * @return boolean
-	 */
-	public function isIndexerDefined($core, tx_mksearch_interface_Indexer $indexer) {
-		$ret = false;
-		$cfg = $core->getIndexerOptions();
-		$indexerType = $indexer->getContentType();
-		list($extKey, $contentType) = $indexer->getContentType();
-		$indexerData = array('extKey'=>$extKey, 'contentType'=>$contentType);
+    /**
+     * @return tx_rnbase_util_SearchBase
+     */
+    public function getSearcher()
+    {
+        tx_rnbase::load('tx_rnbase_util_SearchBase');
+
+        return tx_rnbase_util_SearchBase::getInstance($this->searchClass);
+    }
+    /**
+     * Search database
+     *
+     * @param array $fields
+     * @param array $options
+     * @return array[tx_mksearch_model_internal_Index]
+     */
+    public function search($fields, $options)
+    {
+        return $this->getSearcher()->search($fields, $options);
+    }
+    /**
+     * Check if a indexer is defined to index data into a given core.
+     * @param tx_mksearch_model_internal_Index $core
+     * @param tx_mksearch_interface_Indexer $indexer keys: extKey and contentType
+     * @return bool
+     */
+    public function isIndexerDefined($core, tx_mksearch_interface_Indexer $indexer)
+    {
+        $ret = false;
+        $cfg = $core->getIndexerOptions();
+        $indexerType = $indexer->getContentType();
+        list($extKey, $contentType) = $indexer->getContentType();
+        $indexerData = array('extKey' => $extKey, 'contentType' => $contentType);
 
 
-		if(array_key_exists($indexerData['extKey'].'.', $cfg)) {
-			if(array_key_exists($indexerData['contentType'].'.', $cfg[$indexerData['extKey'].'.'])) {
-				$ret = true;
-			}
-		}
-		return $ret;
-	}
+        if (array_key_exists($indexerData['extKey'].'.', $cfg)) {
+            if (array_key_exists($indexerData['contentType'].'.', $cfg[$indexerData['extKey'].'.'])) {
+                $ret = true;
+            }
+        }
 
-	/**
-	 * Search database for all configurated Indices
-	 *
-	 * @param array $fields
-	 * @param array $options
-	 * @return array[tx_mksearch_model_internal_Index]
-	 */
-	public function findAll() {
-		$fields = $options = array();
-		//$options['debug'] = 1;
-		$options['enablefieldsfe'] = 1;
-		return $this->search($fields, $options);
-	}
+        return $ret;
+    }
 
-	/**
-	 * Search database for all configurated Indices
-	 *
-	 * @param array $fields
-	 * @param array $options
-	 * @return array[tx_mksearch_model_internal_Index]
-	 */
-	public function getByPageId($pageId) {
-		//$options['debug'] = 1;
-		$alias = $this->getSearcher()->getBaseTableAlias();
-		if(intval($pageId)) $fields[$alias.'.pid'][OP_EQ_INT] = $pageId;
-		$options['enablefieldsfe'] = 1;
-		return $this->search($fields, $options);
-	}
+    /**
+     * Search database for all configurated Indices
+     *
+     * @param array $fields
+     * @param array $options
+     * @return array[tx_mksearch_model_internal_Index]
+     */
+    public function findAll()
+    {
+        $fields = $options = array();
+        //$options['debug'] = 1;
+        $options['enablefieldsfe'] = 1;
 
-	/**
-	 * Get model from database by its uid
-	 *
-	 * @param array $fields
-	 * @param array $options
-	 * @return tx_mksearch_model_*
-	 */
-	public function get($uid) {
-		return tx_rnbase::makeInstance($this->getSearcher()->getWrapperClass(), $uid);
-	}
+        return $this->search($fields, $options);
+    }
 
-//	/**
-//	 * Pass through search class's table mappings
-//	 *
-//	 * @return array
-//	 */
-//	public function getTableMappings() {
-//		$searcher = tx_rnbase_util_SearchBase::getInstance($this->searchClass);
-//		return $searcher->getTableMappings();
-//	}
+    /**
+     * Search database for all configurated Indices
+     *
+     * @param array $fields
+     * @param array $options
+     * @return array[tx_mksearch_model_internal_Index]
+     */
+    public function getByPageId($pageId)
+    {
+        //$options['debug'] = 1;
+        $alias = $this->getSearcher()->getBaseTableAlias();
+        if (intval($pageId)) {
+            $fields[$alias.'.pid'][OP_EQ_INT] = $pageId;
+        }
+        $options['enablefieldsfe'] = 1;
+
+        return $this->search($fields, $options);
+    }
+
+    /**
+     * Get model from database by its uid
+     *
+     * @param array $fields
+     * @param array $options
+     * @return tx_mksearch_model_*
+     */
+    public function get($uid)
+    {
+        return tx_rnbase::makeInstance($this->getSearcher()->getWrapperClass(), $uid);
+    }
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/internal/class.tx_mksearch_service_internal_Base.php']) {
-  include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/internal/class.tx_mksearch_service_internal_Base.php']);
+    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/internal/class.tx_mksearch_service_internal_Base.php']);
 }

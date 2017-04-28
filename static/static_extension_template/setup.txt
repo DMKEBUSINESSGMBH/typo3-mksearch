@@ -3,12 +3,12 @@ includeLibs.tx_mksearch_util_UserFunc = EXT:mksearch/util/class.tx_mksearch_util
 
 plugin.tx_mksearch = USER_INT
 plugin.tx_mksearch {
-	# flexform			= flexform_main.xml
-	userFunc			= tx_rnbase_controller->main
-	defaultAction		= tx_mksearch_action_Search
-	qualifier			= mksearch
-	templatePath		= EXT:mksearch/templates
-	locallangFilename	= EXT:mksearch/locallang.xml
+    # flexform            = flexform_main.xml
+    userFunc            = tx_rnbase_controller->main
+    defaultAction        = tx_mksearch_action_Search
+    qualifier            = mksearch
+    templatePath        = EXT:mksearch/templates
+    locallangFilename    = EXT:mksearch/locallang.xml
 }
 
 tt_content.list.20.tx_mksearch =< plugin.tx_mksearch
@@ -16,144 +16,144 @@ tt_content.list.20.tx_mksearch =< plugin.tx_mksearch
 
 # Default page browser config
 lib.mksearch.pagebrowser {
-  limit = 50
-  maxPages = 11
-  pagefloat = CENTER
-  hideIfSinglePage = 1
-  link {
-  	useKeepVars = 1
-  	noHash = 1
-  }
+    limit = 50
+    maxPages = 11
+    pagefloat = CENTER
+    hideIfSinglePage = 1
+    link {
+        useKeepVars = 1
+        noHash = 1
+    }
 }
 
 lib.mksearch.currentSearchTerm = TEXT
 lib.mksearch.currentSearchTerm {
-	data = GP:mksearch|term
-	stdWrap.htmlSpecialChars = 1
-	### nur wenn nicht leer ausgeben
-	required = 1
-	wrap = ###LABEL_search_term_was### "|"
+    data = GP:mksearch|term
+    stdWrap.htmlSpecialChars = 1
+    ### nur wenn nicht leer ausgeben
+    required = 1
+    wrap = ###LABEL_search_term_was### "|"
 }
 
 # Filter for Lucene search
 # TODO: code review!
 lib.mksearch.lucenefilter {
-	# Default filter which provides a standard form
-	# to receive a search term
-	searchForm = tx_mksearch_filter_LuceneBase
-	searchForm {
-		# Configuration of the filter itself
-		config {
-			# form marker in main search template
-			# 	>>>	marker "SEARCH_FORM" is already defined
-			# 		in the default main search template!
-			marker = SEARCH_FORM
-			# template containing the actual form
-			template = EXT:mksearch/templates/searchlucene.html
-			# subpart in the form template
-			subpart = LUCENEFORM
-			links {
-				action.pid = 0
-			}
-		}
+    # Default filter which provides a standard form
+    # to receive a search term
+    searchForm = tx_mksearch_filter_LuceneBase
+    searchForm {
+        # Configuration of the filter itself
+        config {
+            # form marker in main search template
+            #     >>>    marker "SEARCH_FORM" is already defined
+            #         in the default main search template!
+            marker = SEARCH_FORM
+            # template containing the actual form
+            template = EXT:mksearch/templates/searchlucene.html
+            # subpart in the form template
+            subpart = LUCENEFORM
+            links {
+                action.pid = 0
+            }
+        }
 
-		# Only the searchform was displayed, no search was done
-		# FormOnly funktioniert nicht!!! Stattdessen nosearch = 0 bzw 1 verwenden
-		formOnly = 0
+        # Only the searchform was displayed, no search was done
+        # FormOnly funktioniert nicht!!! Stattdessen nosearch = 0 bzw 1 verwenden
+        formOnly = 0
 
-		# Configuration of form data used for displaying the form
-		form {
-			searchterm.stdWrap.htmlSpecialChars = 1
-			# Used for marker: ###FORM_DCSEARCHTERMHEADING###
-			dcsearchtermheading = TEXT
-			dcsearchtermheading {
-				wrap = <h1>###LABEL_search_yoursearchtermwas### <em>|</em></h1>
-				required = 1
-				field = searchterm
-				stdWrap.htmlSpecialChars = 1
-			}
-		}
+        # Configuration of form data used for displaying the form
+        form {
+            searchterm.stdWrap.htmlSpecialChars = 1
+            # Used for marker: ###FORM_DCSEARCHTERMHEADING###
+            dcsearchtermheading = TEXT
+            dcsearchtermheading {
+                wrap = <h1>###LABEL_search_yoursearchtermwas### <em>|</em></h1>
+                required = 1
+                field = searchterm
+                stdWrap.htmlSpecialChars = 1
+            }
+        }
 
-		# Die hier konfigurierten Parameter werden als Marker im Term-String verwendet
-		# Es sind verschiedene Extensions möglich
-		params.mksearch {
-			term = TEXT
-			term {
-				field = term
-				# "-" vor ein Feld um den Wert auszuschließen, "+" um es zu einzuschließen
-				# bzw. mit und zu verknüpfen. alternativ kann auch combination
-				# in der preUserFunc auf "and" gesetzt werden. allerdings funtkioniert das
-				# nur wenn die fields nicht explizit gesetzt sind
-				#wrap = +|
-				required = 1
-				preUserFunc = tx_mksearch_util_UserFunc->searchLuceneOptions
-				preUserFunc {
-					### wo steckt der combination parameter?
-					qualifier = mksearch
-					## in Anführungszeichen setzen? sollte nicht in verbindung mit wildcard suchen
-					## verwendet werden
-					quote = 0
-					### remove lucene control characters?
-					sanitize = 1
-					### wie sollen die einzelnen wörter im suchterm verbunden werden
-					combination = and
-					### sollen wildcards vor und dem term gesetzt werden?
-					wildcard = 1
-					### sollen klammern um den term? das nur nutzen wenn in einem konkreten
-					### feld gesucht wird. wenn die default fields verwendet werden, dann keine
-					### klammern
-					dismax = 1
-				}
-			}
-		}
-		# So wurden auch alle Parameter von tt_news ausgelesen
-		#params.tt_news {
-		#}
+        # Die hier konfigurierten Parameter werden als Marker im Term-String verwendet
+        # Es sind verschiedene Extensions möglich
+        params.mksearch {
+            term = TEXT
+            term {
+                field = term
+                # "-" vor ein Feld um den Wert auszuschließen, "+" um es zu einzuschließen
+                # bzw. mit und zu verknüpfen. alternativ kann auch combination
+                # in der preUserFunc auf "and" gesetzt werden. allerdings funtkioniert das
+                # nur wenn die fields nicht explizit gesetzt sind
+                #wrap = +|
+                required = 1
+                preUserFunc = tx_mksearch_util_UserFunc->searchLuceneOptions
+                preUserFunc {
+                    ### wo steckt der combination parameter?
+                    qualifier = mksearch
+                    ## in Anführungszeichen setzen? sollte nicht in verbindung mit wildcard suchen
+                    ## verwendet werden
+                    quote = 0
+                    ### remove lucene control characters?
+                    sanitize = 1
+                    ### wie sollen die einzelnen wörter im suchterm verbunden werden
+                    combination = and
+                    ### sollen wildcards vor und dem term gesetzt werden?
+                    wildcard = 1
+                    ### sollen klammern um den term? das nur nutzen wenn in einem konkreten
+                    ### feld gesucht wird. wenn die default fields verwendet werden, dann keine
+                    ### klammern
+                    dismax = 1
+                }
+            }
+        }
+        # So wurden auch alle Parameter von tt_news ausgelesen
+        #params.tt_news {
+        #}
 
-		fields {
-			# Die Marker haben das Format ###PARAM_EXTQUALIFIER_PARAMNAME###
-			# "-" vor ein Feld um den Wert auszuschließen, "+" um es zu einzuschließen
-			# bzw. mit und zu verknüpfen
-			term = +contentType:* ###PARAM_MKSEARCH_TERM###
-		}
+        fields {
+            # Die Marker haben das Format ###PARAM_EXTQUALIFIER_PARAMNAME###
+            # "-" vor ein Feld um den Wert auszuschließen, "+" um es zu einzuschließen
+            # bzw. mit und zu verknüpfen
+            term = +contentType:* ###PARAM_MKSEARCH_TERM###
+        }
 
-		availableModes = standard,advanced
+        availableModes = standard,advanced
 
 
-		### wir eigentlich über Flexform gesetzt. d.h wenn es dort gesetzt wurde,
-		### wird das auch vorgezogen
-		forceSearch = 0
+        ### wir eigentlich über Flexform gesetzt. d.h wenn es dort gesetzt wurde,
+        ### wird das auch vorgezogen
+        forceSearch = 0
 
-		### kommaspearierte Liste von Feldern, die im Formular leer vorbefüllt werden
-		### wenn Formular noch nicht abgeschickt. sonst werden die Marker ausgegeben
-		requiredFormFields =
+        ### kommaspearierte Liste von Feldern, die im Formular leer vorbefüllt werden
+        ### wenn Formular noch nicht abgeschickt. sonst werden die Marker ausgegeben
+        requiredFormFields =
 
-		### wenn das auf 1 steht, dann werden alle anderen Sortierungen ignoriert und es wird
-		### nach Zufall sortiert
-		options.sortRandom =
+        ### wenn das auf 1 steht, dann werden alle anderen Sortierungen ignoriert und es wird
+        ### nach Zufall sortiert
+        options.sortRandom =
 
-		### sorting beispiel
-		sort {
-			### Definiert Felder, für die zusätzliche Marker für die Sortierung integriert werden sollen
-#			fields = uid, title
-			### Konfiguration für die Sortierungs-Links
-			link{
-#				pid = 0
-				useKeepVars = 1
-			}
-			### TS für die Order-Felder
-#			uid_order = CASE
-#			uid_order {
-#				key.field = uid_order
-#				default = TEXT
-#				desc = TEXT
-#				desc.value = headerSortDown
-#				asc = TEXT
-#				asc.value = headerSortUp
-#			}
-#			title_order < .uid_order
-#			title_order.key.field = title_order
-		}
+        ### sorting beispiel
+        sort {
+            ### Definiert Felder, für die zusätzliche Marker für die Sortierung integriert werden sollen
+#            fields = uid, title
+            ### Konfiguration für die Sortierungs-Links
+            link{
+#                pid = 0
+                useKeepVars = 1
+            }
+            ### TS für die Order-Felder
+#            uid_order = CASE
+#            uid_order {
+#                key.field = uid_order
+#                default = TEXT
+#                desc = TEXT
+#                desc.value = headerSortDown
+#                asc = TEXT
+#                asc.value = headerSortUp
+#            }
+#            title_order < .uid_order
+#            title_order.key.field = title_order
+        }
 #Folgende Marker werden im Template anhand der Konfiguration oben bereitgestellt:
 ###SORT_UID_ORDER### = asc
 ###SORT_UID_LINKURL### = index.php?mksearch[sort]=uid&mksearch[sortorder]=asc
@@ -161,185 +161,185 @@ lib.mksearch.lucenefilter {
 ###SORT_TITLE_ORDER### = asc
 ###SORT_TITLE_LINKURL### = index.php?mksearch[sort]=title&mksearch[sortorder]=asc
 ###SORT_TITLE_LINK### = wrappedArray mit dem A-Tag
-	}
+    }
 
-	# Alternative filter which receives the search term from the
-	# HTTP referer URL. This could be used to search our own site
-	# for the search term the user just entered on Google website.
-	searchByReferer = tx_mksearch_filter_SearchByReferer
-	searchByReferer {
-		referers {
-			google {
-				# Which URL? All URLs ending with "google.xx[x]"
-				urlRegEx = /\.google\.[a-z]{2,3}\//i
-				# How to find the search term within the URL? Here it's the "q" parameter.
-				# The term within the (first and only) brackets () is used.
-				searchTermRegEx = /[?&]q=([^&]*)/
-				# How to separate words within the url encoded search term?
-				searchTermDelimiterRegEx = /\++/
-				# Type of logical conjunction in our own page search: "or" [default] or "and"
-				searchTermOperator = or
-			}
-			yahoo {
-				urlRegEx = /\.yahoo\.[a-z]{2,3}\//i
-				searchTermRegEx = /[?&]p=([^&]*)/
-				searchTermDelimiterRegEx = /\++/
-				searchTermOperator = or
-			}
-		}
-	}
+    # Alternative filter which receives the search term from the
+    # HTTP referer URL. This could be used to search our own site
+    # for the search term the user just entered on Google website.
+    searchByReferer = tx_mksearch_filter_SearchByReferer
+    searchByReferer {
+        referers {
+            google {
+                # Which URL? All URLs ending with "google.xx[x]"
+                urlRegEx = /\.google\.[a-z]{2,3}\//i
+                # How to find the search term within the URL? Here it's the "q" parameter.
+                # The term within the (first and only) brackets () is used.
+                searchTermRegEx = /[?&]q=([^&]*)/
+                # How to separate words within the url encoded search term?
+                searchTermDelimiterRegEx = /\++/
+                # Type of logical conjunction in our own page search: "or" [default] or "and"
+                searchTermOperator = or
+            }
+            yahoo {
+                urlRegEx = /\.yahoo\.[a-z]{2,3}\//i
+                searchTermRegEx = /[?&]p=([^&]*)/
+                searchTermDelimiterRegEx = /\++/
+                searchTermOperator = or
+            }
+        }
+    }
 }
 
 lib.mksearch.defaultsolrfilter {
-	### wird der DisMaxRequestHandler genutzt? wenn ja muss auch params.mksearch.term. angepasst werden!
-	useDisMax = 0
+    ### wird der DisMaxRequestHandler genutzt? wenn ja muss auch params.mksearch.term. angepasst werden!
+    useDisMax = 0
 
-	options.limit = 10
-	template {
-		file = EXT:mksearch/templates/searchForm.html
-		subpart = ###SIMPLE###
-	}
-	templates {
-		# Bei Bedarf können weitere Filter-Templates und Marker angegeben werden
-		#10.name = search_form_other
-		#10.file = EXT:mksearch/templates/searchForm.html
-		#10.subpart = ###SIMPLE###
-	}
-	form {
-		### beispiel für das verändern des checked="checked"
-		#combination_none = TEXT
-		#combination_none.value = selected="selected"
-		#combination_none.fieldRequired = combination_none
-	}
-	# Die hier konfigurierten Parameter werden als Marker im Term-String verwendet
-	# Es sind verschiedene Extensions möglich
-	params.mksearch {
-		term = TEXT
-		term {
-			field = term
-			### der Wrap muss beim DisMaxRequestHandler geleert werden!
-			wrap = AND text:|
-			fieldRequired = term
-			required = term
-			preUserFunc = tx_mksearch_util_UserFunc->searchSolrOptions
-			preUserFunc {
-				### wo steckt der combination parameter?
-				qualifier = mksearch
-				### wird der DisMaxRequestHandler genutzt?
-				dismax = 0
-				## in Anführungszeichen setzen?
-				quote = 1
-				### for fuzzy search!
-				fuzzySlop = 0.2
-				### remove solr control characters?
-				sanitize = 1
-				### wie sollen die einzelnen wörter im suchterm verbunden werden
-				combination = or
-				### sollen wildcards vor und dem term gesetzt werden?
-				### besser durch eine ordentliche filter chain in der schema.xml
-				### realisieren
-				wildcard = 0
-			}
-		}
-	}
-	# So wurden auch alle Parameter von tt_news ausgelesen
-	#params.tt_news {
-	#}
-	fields {
-		# Die Marker haben das Format ###PARAM_EXTQUALIFIER_PARAMNAME###
-		### beim DisMaxRequestHandler darf hier nur ###PARAM_MKSEARCH_TERM### stehen!
-		term = contentType:* ###PARAM_MKSEARCH_TERM###
-	}
+    options.limit = 10
+    template {
+        file = EXT:mksearch/templates/searchForm.html
+        subpart = ###SIMPLE###
+    }
+    templates {
+        # Bei Bedarf können weitere Filter-Templates und Marker angegeben werden
+        #10.name = search_form_other
+        #10.file = EXT:mksearch/templates/searchForm.html
+        #10.subpart = ###SIMPLE###
+    }
+    form {
+        ### beispiel für das verändern des checked="checked"
+        #combination_none = TEXT
+        #combination_none.value = selected="selected"
+        #combination_none.fieldRequired = combination_none
+    }
+    # Die hier konfigurierten Parameter werden als Marker im Term-String verwendet
+    # Es sind verschiedene Extensions möglich
+    params.mksearch {
+        term = TEXT
+        term {
+            field = term
+            ### der Wrap muss beim DisMaxRequestHandler geleert werden!
+            wrap = AND text:|
+            fieldRequired = term
+            required = term
+            preUserFunc = tx_mksearch_util_UserFunc->searchSolrOptions
+            preUserFunc {
+                ### wo steckt der combination parameter?
+                qualifier = mksearch
+                ### wird der DisMaxRequestHandler genutzt?
+                dismax = 0
+                ## in Anführungszeichen setzen?
+                quote = 1
+                ### for fuzzy search!
+                fuzzySlop = 0.2
+                ### remove solr control characters?
+                sanitize = 1
+                ### wie sollen die einzelnen wörter im suchterm verbunden werden
+                combination = or
+                ### sollen wildcards vor und dem term gesetzt werden?
+                ### besser durch eine ordentliche filter chain in der schema.xml
+                ### realisieren
+                wildcard = 0
+            }
+        }
+    }
+    # So wurden auch alle Parameter von tt_news ausgelesen
+    #params.tt_news {
+    #}
+    fields {
+        # Die Marker haben das Format ###PARAM_EXTQUALIFIER_PARAMNAME###
+        ### beim DisMaxRequestHandler darf hier nur ###PARAM_MKSEARCH_TERM### stehen!
+        term = contentType:* ###PARAM_MKSEARCH_TERM###
+    }
 
-	### Hiermit kann der Filter auf Ergebnisse im aktuellen Webroot eingeschränkt werden
-	### Dazu muss in der Konfiguration der Indexer die Option indexSiteRootPage aktiviert werden
-	respectSiteRootPage = 0
+    ### Hiermit kann der Filter auf Ergebnisse im aktuellen Webroot eingeschränkt werden
+    ### Dazu muss in der Konfiguration der Indexer die Option indexSiteRootPage aktiviert werden
+    respectSiteRootPage = 0
 
-	### DEPRECATED mit dieser Variante ist nur genau eine Facette möglich
-	### wenn Facetten genutzt werden und plugin.tx_mksearch.searchsolr.facet.links.show.excludeFieldName = 1
-	### gesetzt ist, dann kann hier das Solr Feld für die Facetten angegeben werden. Es wird dann nachträglich
-	### im defaultFilter vorrangestellt wenn ein fq Parameter gesetzt wurde.
-	fqField =
+    ### DEPRECATED mit dieser Variante ist nur genau eine Facette möglich
+    ### wenn Facetten genutzt werden und plugin.tx_mksearch.searchsolr.facet.links.show.excludeFieldName = 1
+    ### gesetzt ist, dann kann hier das Solr Feld für die Facetten angegeben werden. Es wird dann nachträglich
+    ### im defaultFilter vorrangestellt wenn ein fq Parameter gesetzt wurde.
+    fqField =
 
-	### field facets: hier werden alle felder angegeben, die facettiert werden sollen
-	#options.facet.fields = mkkeywords_tag_names_ms, content_ident_s
+    ### field facets: hier werden alle felder angegeben, die facettiert werden sollen
+    #options.facet.fields = mkkeywords_tag_names_ms, content_ident_s
 
-	### die Sortierung der Facetten. default ist count. ansonsten ist nur noch index möglich
-	#options.facet.sort = index
+    ### die Sortierung der Facetten. default ist count. ansonsten ist nur noch index möglich
+    #options.facet.sort = index
 
-	### hier kann der operator, für bestimmte facet fields gesetzt werden. default ist AND!
-	filterQuery {
-		#content_ident_s.operator = OR
-	}
+    ### hier kann der operator, für bestimmte facet fields gesetzt werden. default ist AND!
+    filterQuery {
+        #content_ident_s.operator = OR
+    }
 
-	### kommaseparierte liste mit den erlaubten fq feldern, welche über parameter gesetzt werden können
-	allowedFqParams =
+    ### kommaseparierte liste mit den erlaubten fq feldern, welche über parameter gesetzt werden können
+    allowedFqParams =
 
-	### query facets: die Filteranweisung für die Query-Facets
-	# Diese Anweisungen müssen identisch sein, mit den Angaben in der solrconfig.xml
-	facet.queries {
-#		date_lastweek = datetime:[NOW-7DAYS/DAY TO NOW]
-#		date_lastmonth = datetime:[NOW-1MONTH/MONTH TO NOW]
-	}
+    ### query facets: die Filteranweisung für die Query-Facets
+    # Diese Anweisungen müssen identisch sein, mit den Angaben in der solrconfig.xml
+    facet.queries {
+#        date_lastweek = datetime:[NOW-7DAYS/DAY TO NOW]
+#        date_lastmonth = datetime:[NOW-1MONTH/MONTH TO NOW]
+    }
 
-	### form field for pagelimit
-	formfields.pagelimit {
-		# Ein Beispiel für die Verlinkung des Pagelimits mit dem Marker ###SEARCH_FILTER_PAGELIMIT_SHOWLINK###
-		# Dafür muss das activeMark aber noch auf 1 gesetzt werden
-		links.show {
-			pid = 0
-			useKeepVars = 1
-			_cfg.params.pagelimit = uid
-			atagparams.class = CASE
-			atagparams.class.key.field = selected
-			atagparams.class.1 = TEXT
-			atagparams.class.1.value = active
-			atagparams.class.default = TEXT
-			atagparams.class.default.value = inactive
-		}
-		default = 10
-		activeMark = selected="selected"
-		values.10.value = 10
-		values.10.caption = ###LABEL_PAGELIMIT_10###
-		values.20.value = 50
-		values.20.caption = ###LABEL_PAGELIMIT_50###
-		values.30.value = 100
-		values.30.caption = ###LABEL_PAGELIMIT_100###
-	}
-	### form field for sorting the new way
-	formfields.sort {
-	  default = score
-	  activeMark = selected="selected"
-	  values.10.value = score desc
-	  values.10.caption = ###LABEL_SCORE###
-	  values.20.value = tstamp asc
-	  values.20.caption = ###LABEL_TIME_ASC###
-	  values.30.value = tstamp desc
-	  values.30.caption = ###LABEL_TIME_DESC###
-	}
+    ### form field for pagelimit
+    formfields.pagelimit {
+        # Ein Beispiel für die Verlinkung des Pagelimits mit dem Marker ###SEARCH_FILTER_PAGELIMIT_SHOWLINK###
+        # Dafür muss das activeMark aber noch auf 1 gesetzt werden
+        links.show {
+            pid = 0
+            useKeepVars = 1
+            _cfg.params.pagelimit = uid
+            atagparams.class = CASE
+            atagparams.class.key.field = selected
+            atagparams.class.1 = TEXT
+            atagparams.class.1.value = active
+            atagparams.class.default = TEXT
+            atagparams.class.default.value = inactive
+        }
+        default = 10
+        activeMark = selected="selected"
+        values.10.value = 10
+        values.10.caption = ###LABEL_PAGELIMIT_10###
+        values.20.value = 50
+        values.20.caption = ###LABEL_PAGELIMIT_50###
+        values.30.value = 100
+        values.30.caption = ###LABEL_PAGELIMIT_100###
+    }
+    ### form field for sorting the new way
+    formfields.sort {
+        default = score
+        activeMark = selected="selected"
+        values.10.value = score desc
+        values.10.caption = ###LABEL_SCORE###
+        values.20.value = tstamp asc
+        values.20.caption = ###LABEL_TIME_ASC###
+        values.30.value = tstamp desc
+        values.30.caption = ###LABEL_TIME_DESC###
+    }
 
-	### sorting beispiel (veraltet)
-#	sort {
-		### Definiert Felder, für die zusätzliche Marker für die Sortierung integriert werden sollen
-#		fields = uid, title
-		### Konfiguration für die Sortierungs-Links
-#		link{
-#			pid = 0
-#			useKeepVars = 1
-#		}
-		### TS für die Order-Felder
-#		uid_order = CASE
-#		uid_order {
-#			key.field = uid_order
-#			default = TEXT
-#			desc = TEXT
-#			desc.value = headerSortDown
-#			asc = TEXT
-#			asc.value = headerSortUp
-#		}
-#		title_order < .uid_order
-#		title_order.key.field = title_order
-#	}
+    ### sorting beispiel (veraltet)
+#    sort {
+        ### Definiert Felder, für die zusätzliche Marker für die Sortierung integriert werden sollen
+#        fields = uid, title
+        ### Konfiguration für die Sortierungs-Links
+#        link{
+#            pid = 0
+#            useKeepVars = 1
+#        }
+        ### TS für die Order-Felder
+#        uid_order = CASE
+#        uid_order {
+#            key.field = uid_order
+#            default = TEXT
+#            desc = TEXT
+#            desc.value = headerSortDown
+#            asc = TEXT
+#            asc.value = headerSortUp
+#        }
+#        title_order < .uid_order
+#        title_order.key.field = title_order
+#    }
 #Folgende Marker werden im Template anhand der Konfiguration oben bereitgestellt:
 ###SORT_UID_ORDER### = asc
 ###SORT_UID_LINKURL### = index.php?mksearch[sort]=uid&mksearch[sortorder]=asc
@@ -348,94 +348,94 @@ lib.mksearch.defaultsolrfilter {
 ###SORT_TITLE_LINKURL### = index.php?mksearch[sort]=title&mksearch[sortorder]=asc
 ###SORT_TITLE_LINK### = wrappedArray mit dem A-Tag
 
-	### Konfiguration für die Umkreissuche
-	spatial {
-		### das feld in dem die koordinaten im solr doc zu finden sind (location_latlon).
-		sfield =
-		default {
-			### die distanz für die Umkreissuche, falls der parameter mksearch[distance] leer ist.
-			distance = 50
-		}
-	}
+    ### Konfiguration für die Umkreissuche
+    spatial {
+        ### das feld in dem die koordinaten im solr doc zu finden sind (location_latlon).
+        sfield =
+        default {
+            ### die distanz für die Umkreissuche, falls der parameter mksearch[distance] leer ist.
+            distance = 50
+        }
+    }
 
-	options {
-		### Grouping
-		group {
-			enable = 0
+    options {
+        ### Grouping
+        group {
+            enable = 0
 
-			### dieses Feld wird automatisch in den Indexern gesetzt, die auf
-			### tx_mksearch_indexer_Base bzw. tx_mksearch_indexer_BaseMedia basieren.
-			### wenn es also geändert wird, muss sich die Indizierung darum kümmern.
-			field = group_s
+            ### dieses Feld wird automatisch in den Indexern gesetzt, die auf
+            ### tx_mksearch_indexer_Base bzw. tx_mksearch_indexer_BaseMedia basieren.
+            ### wenn es also geändert wird, muss sich die Indizierung darum kümmern.
+            field = group_s
 
-			### per default ist die Anzahl der Ergebnisse gleich den gefundenen Dokumenten.
-			### durch die Gruppierung liefert Solr aber natürlich weniger Gruppen
-			### als Dokumente. Mit dieser Anweisung wird statt der Anzahl der gefundenen
-			### Dokumente die Anzahl der Gruppen verwendet
-			useNumberOfGroupsAsSearchResultCount = 1
+            ### per default ist die Anzahl der Ergebnisse gleich den gefundenen Dokumenten.
+            ### durch die Gruppierung liefert Solr aber natürlich weniger Gruppen
+            ### als Dokumente. Mit dieser Anweisung wird statt der Anzahl der gefundenen
+            ### Dokumente die Anzahl der Gruppen verwendet
+            useNumberOfGroupsAsSearchResultCount = 1
 
-			### Weitere Optionen wie group.limit noch nicht implementiert.
-		}
-	}
+            ### Weitere Optionen wie group.limit noch nicht implementiert.
+        }
+    }
 }
 
 lib.mksearch.defaultElasticSearchFilter {
-	class = tx_mksearch_filter_ElasticSearchBase
+    class = tx_mksearch_filter_ElasticSearchBase
 
-	### search even when form is not submitted?
-	#forceSearch = 1
+    ### search even when form is not submitted?
+    #forceSearch = 1
 
-	options.limit = 10
-	template {
-		file = EXT:mksearch/templates/searchForm.html
-		subpart = ###SIMPLE###
-	}
-	# Die hier konfigurierten Parameter werden als Marker im Term-String verwendet
-	# Es sind verschiedene Extensions möglich
-	params.mksearch {
-		term = TEXT
-		term {
-			field = term
-			fieldRequired = term
-			required = term
-		}
-	}
-	# So wurden auch alle Parameter von tt_news ausgelesen
-	#params.tt_news {
-	#}
-	fields {
-		# Die Marker haben das Format ###PARAM_EXTQUALIFIER_PARAMNAME###
-		term = ###PARAM_MKSEARCH_TERM###
-	}
+    options.limit = 10
+    template {
+        file = EXT:mksearch/templates/searchForm.html
+        subpart = ###SIMPLE###
+    }
+    # Die hier konfigurierten Parameter werden als Marker im Term-String verwendet
+    # Es sind verschiedene Extensions möglich
+    params.mksearch {
+        term = TEXT
+        term {
+            field = term
+            fieldRequired = term
+            required = term
+        }
+    }
+    # So wurden auch alle Parameter von tt_news ausgelesen
+    #params.tt_news {
+    #}
+    fields {
+        # Die Marker haben das Format ###PARAM_EXTQUALIFIER_PARAMNAME###
+        term = ###PARAM_MKSEARCH_TERM###
+    }
 
-	availableModes = standard,advanced
+    availableModes = standard,advanced
 
-	### kommaspearierte Liste von Feldern, die im Formular leer vorbefüllt werden
-	### wenn Formular noch nicht abgeschickt. sonst werden die Marker ausgegeben
-	requiredFormFields =
+    ### kommaspearierte Liste von Feldern, die im Formular leer vorbefüllt werden
+    ### wenn Formular noch nicht abgeschickt. sonst werden die Marker ausgegeben
+    requiredFormFields =
 
-	### sorting beispiel
-#	sort {
-		### Definiert Felder, für die zusätzliche Marker für die Sortierung integriert werden sollen
-#		fields = uid, title
-		### Konfiguration für die Sortierungs-Links
-#		link{
-#			pid = 0
-#			useKeepVars = 1
-#		}
-		### TS für die Order-Felder
-#		uid_order = CASE
-#		uid_order {
-#			key.field = uid_order
-#			default = TEXT
-#			desc = TEXT
-#			desc.value = headerSortDown
-#			asc = TEXT
-#			asc.value = headerSortUp
-#		}
-#		title_order < .uid_order
-#		title_order.key.field = title_order
-#	}
+    ### sorting beispiel
+#    sort {
+        ### Definiert Felder, für die zusätzliche Marker für die Sortierung integriert werden sollen
+#        fields = uid, title
+        ### Konfiguration für die Sortierungs-Links
+#        link{
+#            pid = 0
+#            useKeepVars = 1
+#        }
+        ### TS für die Order-Felder
+#        uid_order = CASE
+#        uid_order {
+#            key.field = uid_order
+#            default = TEXT
+#            desc = TEXT
+#            desc.value = headerSortDown
+#            asc = TEXT
+#            asc.value = headerSortUp
+#        }
+#        title_order < .uid_order
+#        title_order.key.field = title_order
+#    }
 #Folgende Marker werden im Template anhand der Konfiguration oben bereitgestellt:
 ###SORT_UID_ORDER### = asc
 ###SORT_UID_LINKURL### = index.php?mksearch[sort]=uid&mksearch[sortorder]=asc
@@ -446,430 +446,430 @@ lib.mksearch.defaultElasticSearchFilter {
 }
 
 plugin.tx_mksearch {
-	# lucene search
-	searchlucene {
-		# Filter configuration - default filter is the form filter
-		filter < lib.mksearch.lucenefilter.searchForm
+    # lucene search
+    searchlucene {
+        # Filter configuration - default filter is the form filter
+        filter < lib.mksearch.lucenefilter.searchForm
 
-		# Alternative filter used for doing a search based on HTTP referer
-		# e.g. to search the recent Google search phrase within the page
-		# When this filter is used, another template without the
-		# ###SEARCH_FORM### marker should be used.
-		# filter < lib.mksearch.lucenefilter.searchByReferer
+        # Alternative filter used for doing a search based on HTTP referer
+        # e.g. to search the recent Google search phrase within the page
+        # When this filter is used, another template without the
+        # ###SEARCH_FORM### marker should be used.
+        # filter < lib.mksearch.lucenefilter.searchByReferer
 
-		# For testing and debugging purposes the http referer can be set:
-		# filter.refererDebug = http://www.google.de/search?hl=de&q=Some+test+search+term
+        # For testing and debugging purposes the http referer can be set:
+        # filter.refererDebug = http://www.google.de/search?hl=de&q=Some+test+search+term
 
-		# Name of label for the "no results found" message
-		listinfo.llkeyEmpty = label_search_noresultsfound
+        # Name of label for the "no results found" message
+        listinfo.llkeyEmpty = label_search_noresultsfound
 
-		# Konfig für die Darstellung des Treffers über den allgemeinen Marker
-		# Die Config von Solr sollte auch für Lucene passen
-		hit = < lib.mksearch.hit
+        # Konfig für die Darstellung des Treffers über den allgemeinen Marker
+        # Die Config von Solr sollte auch für Lucene passen
+        hit = < lib.mksearch.hit
 
-		### Used for Marker: ###PLUGIN_DCSEARCHTERM###
-		plugin.dcsearchterm =< lib.mksearch.currentSearchTerm
+        ### Used for Marker: ###PLUGIN_DCSEARCHTERM###
+        plugin.dcsearchterm =< lib.mksearch.currentSearchTerm
 
 ####
 # Ab hier wird der Code für diesen View nicht mehr verwendet!!
 # Nach Übernahme und erfolgreichem Test bitte löschen!
 ####
 /*
-		# Default configuration for fields
-		default {
-			abstract {
-				wrap = <div class="searchResultAbstract">|</div>
-				required = 1
-				stdWrap.htmlSpecialChars = 1
-			}
-			extrainfo {
-				wrap = <div class="searchResultExtraInfo">|</div>
-				required = 1
-			}
-		}
+        # Default configuration for fields
+        default {
+            abstract {
+                wrap = <div class="searchResultAbstract">|</div>
+                required = 1
+                stdWrap.htmlSpecialChars = 1
+            }
+            extrainfo {
+                wrap = <div class="searchResultExtraInfo">|</div>
+                required = 1
+            }
+        }
 
-		# Configuration for rendered fields for each content type
-		render {
-			# Content type "core.page"
-			# 1.) OBLIGATORY: import default values
-			core.page < plugin.tx_mksearch.search.default
-			# 2.) OPTIONALLY: make your specific configurations
-			core.page {
-				# You might set own values for some fields, or even delete their display,
-				# as your template has an adequate substitute, e. g.:
-				# abstract.field = [some field]
+        # Configuration for rendered fields for each content type
+        render {
+            # Content type "core.page"
+            # 1.) OBLIGATORY: import default values
+            core.page < plugin.tx_mksearch.search.default
+            # 2.) OPTIONALLY: make your specific configurations
+            core.page {
+                # You might set own values for some fields, or even delete their display,
+                # as your template has an adequate substitute, e. g.:
+                # abstract.field = [some field]
 
-				# Usually just configure the pid of result page statically:
-				# links.show {
-					# The pid usually will be defined in the backend
-					# pid = [some page id]
+                # Usually just configure the pid of result page statically:
+                # links.show {
+                    # The pid usually will be defined in the backend
+                    # pid = [some page id]
 
-					# IMPORTANT: Define the link qualifier with the key of the extension
-					# which is responsible for displaying the respective search result!
-					# qualifier = [extkey]
+                    # IMPORTANT: Define the link qualifier with the key of the extension
+                    # which is responsible for displaying the respective search result!
+                    # qualifier = [extkey]
 
-					# Optionally, when the default search result marker class is used,
-					# the name of the link parameter which holds the record uid within the link
-					# can be changed. By default this is the search result's content type,
-					# e.g. "tt_content" in this case.
-					# paramName = [some other parameter name]
+                    # Optionally, when the default search result marker class is used,
+                    # the name of the link parameter which holds the record uid within the link
+                    # can be changed. By default this is the search result's content type,
+                    # e.g. "tt_content" in this case.
+                    # paramName = [some other parameter name]
 
-					# Optionally, additional parameters can be defined.
-					# These however are not entirely free, but are subvalues
-					# of the parameter named by .qualifier
-					# additionalParams {
-					#	key = value
-					# }
+                    # Optionally, additional parameters can be defined.
+                    # These however are not entirely free, but are subvalues
+                    # of the parameter named by .qualifier
+                    # additionalParams {
+                    #    key = value
+                    # }
 
-				# }
+                # }
 
-				# Special case for core.page: Dynamically assigned pid
-				links.show.pid = TEXT
-				links.show.pid.data = register : mksearch.core.page
-			}
+                # Special case for core.page: Dynamically assigned pid
+                links.show.pid = TEXT
+                links.show.pid.data = register : mksearch.core.page
+            }
 
-			# Content type "core.tt_content"
-			# 1.) OBLIGATORY: import default values
-			core.tt_content < plugin.tx_mksearch.search.default
-			# 2.) OPTIONALLY: make your specific configurations
-			core.tt_content {
-				links.show {
-					pid = TEXT
-					pid.data = register : mksearch.core.tt_content
+            # Content type "core.tt_content"
+            # 1.) OBLIGATORY: import default values
+            core.tt_content < plugin.tx_mksearch.search.default
+            # 2.) OPTIONALLY: make your specific configurations
+            core.tt_content {
+                links.show {
+                    pid = TEXT
+                    pid.data = register : mksearch.core.tt_content
 
-					### add content anchor to the url
-					section = TEXT
-					section.value = c{register:mksearch.core.tt_content.uid}
-					section.insertData = 1
-				}
-			}
+                    ### add content anchor to the url
+                    section = TEXT
+                    section.value = c{register:mksearch.core.tt_content.uid}
+                    section.insertData = 1
+                }
+            }
 
-			# Content type "tt_news.news"
-			tt_news.news < plugin.tx_mksearch.search.default
-			tt_news.news {
-				links.show {
-					# PID of single news page
-					pid = 0
-					qualifier = tx_ttnews
-					paramName = tt_news
-					# Additional parameters
-					additionalParams {
-						# PID of news list page
-						#backPid = 0
-					}
-				}
-			}
-			# Content type "tt_address.address"
-			tt_address.address < plugin.tx_mksearch.search.default
-			tt_address.address {
-				links.show.pid = 0
-			}
-		}
+            # Content type "tt_news.news"
+            tt_news.news < plugin.tx_mksearch.search.default
+            tt_news.news {
+                links.show {
+                    # PID of single news page
+                    pid = 0
+                    qualifier = tx_ttnews
+                    paramName = tt_news
+                    # Additional parameters
+                    additionalParams {
+                        # PID of news list page
+                        #backPid = 0
+                    }
+                }
+            }
+            # Content type "tt_address.address"
+            tt_address.address < plugin.tx_mksearch.search.default
+            tt_address.address {
+                links.show.pid = 0
+            }
+        }
 
-		# Configuration of search result displaying ui for each content type
-		setup {
-			# Default configuration which can be used without any changes
-			# if no special marker or template things have to be done
-			default {
-				# Class responsible for displaying additional search result info - just the default one
-				markerClass = tx_mksearch_marker_SearchResultSimple
+        # Configuration of search result displaying ui for each content type
+        setup {
+            # Default configuration which can be used without any changes
+            # if no special marker or template things have to be done
+            default {
+                # Class responsible for displaying additional search result info - just the default one
+                markerClass = tx_mksearch_marker_SearchResultSimple
 
-				# Template to be used for rendering extra info - again just the default one
-				template = EXT:mksearch/templates/searchResultSimple.html
+                # Template to be used for rendering extra info - again just the default one
+                template = EXT:mksearch/templates/searchResultSimple.html
 
-				# Subpart name containing the particular markup within the template
-				# This key is optional - fallback is "ITEM"
-				subpartName = ITEM
-			}
+                # Subpart name containing the particular markup within the template
+                # This key is optional - fallback is "ITEM"
+                subpartName = ITEM
+            }
 
-			# Content type "core.page": Use an own marker class, but stay with the default template
-			core.page < .default
-			core.page.markerClass = tx_mksearch_marker_CorePage
+            # Content type "core.page": Use an own marker class, but stay with the default template
+            core.page < .default
+            core.page.markerClass = tx_mksearch_marker_CorePage
 
-			# Content type "core.tt_content": Use an own marker class, but stay with the default template
-			core.tt_content < .default
-			core.tt_content.markerClass = tx_mksearch_marker_CoreTtContent
+            # Content type "core.tt_content": Use an own marker class, but stay with the default template
+            core.tt_content < .default
+            core.tt_content.markerClass = tx_mksearch_marker_CoreTtContent
 
-			# Content type "tt_news.news": Use default marker class and default template
-			tt_news.news < .default
+            # Content type "tt_news.news": Use default marker class and default template
+            tt_news.news < .default
 
-			# Content type "tt_address.address": Use default marker class and default template
-			tt_address.address < .default
-		}
+            # Content type "tt_address.address": Use default marker class and default template
+            tt_address.address < .default
+        }
 */
 ####
 # Ende veralteter Code
 ####
 
-	}
+    }
 
-	searchsolr {
-		# soll gesucht oder nur die Templates geparsed werden?
-		nosearch = 0
+    searchsolr {
+        # soll gesucht oder nur die Templates geparsed werden?
+        nosearch = 0
 
-		usedIndex = {$plugin.tx_mksearch.usedIndex}
+        usedIndex = {$plugin.tx_mksearch.usedIndex}
 
-		throwSolrSearchException = 0
+        throwSolrSearchException = 0
 
-		# shall we prepare everything for the autocomplete feature? (including js etc)
-		# dont forget to set the extension config for updating the autocomplete index
-		# after each indexing
-		autocomplete{
-			enable = 0
-			# include the javascript files?
-			includeJquery = 0
-			includeJqueryUiCore = 0
-			includeJqueryUiAutocomplete = 0
-			minLength = 2
-			### should be an id. for globaly use '[name="mksearch[term]"]'
-			elementSelector = "#mksearch_term"
-			actionLink {
-				# Additional parameters
-				# type should be the page type containing the search action
-				useKeepVars = 1
-				useKeepVars.add = ::type=540
-				absurl = 1
-				noHash = 1
-			}
+        # shall we prepare everything for the autocomplete feature? (including js etc)
+        # dont forget to set the extension config for updating the autocomplete index
+        # after each indexing
+        autocomplete{
+            enable = 0
+            # include the javascript files?
+            includeJquery = 0
+            includeJqueryUiCore = 0
+            includeJqueryUiAutocomplete = 0
+            minLength = 2
+            ### should be an id. for globaly use '[name="mksearch[term]"]'
+            elementSelector = "#mksearch_term"
+            actionLink {
+                # Additional parameters
+                # type should be the page type containing the search action
+                useKeepVars = 1
+                useKeepVars.add = ::type=540
+                absurl = 1
+                noHash = 1
+            }
 
-			### the ID of the current plugin (tt_content uid) is used by default
-			### configure a suffix here in case several search boxes are included per page
-			### but not through page content but through TypoScript for example.
-			#javaScriptSnippetSuffix = searchbox_bottom
-		}
+            ### the ID of the current plugin (tt_content uid) is used by default
+            ### configure a suffix here in case several search boxes are included per page
+            ### but not through page content but through TypoScript for example.
+            #javaScriptSnippetSuffix = searchbox_bottom
+        }
 
-		charbrowser {
-			cbid = searchcb
-		}
+        charbrowser {
+            cbid = searchcb
+        }
 
-		filter = tx_mksearch_filter_SolrBase
-		# Beispiel-Config für den Solr-Filter
-		filter.default =< lib.mksearch.defaultsolrfilter
-		filter.dismax =< lib.mksearch.defaultsolrfilter
-		filter.dismax {
-			useDisMax = 1
+        filter = tx_mksearch_filter_SolrBase
+        # Beispiel-Config für den Solr-Filter
+        filter.default =< lib.mksearch.defaultsolrfilter
+        filter.dismax =< lib.mksearch.defaultsolrfilter
+        filter.dismax {
+            useDisMax = 1
 
-			### setzt den mm (Min-should-match) Parameter ###
-			### none wird auch als default genutzt
-			###default müssen 100% der Suchparameter vorkommen
-			mm.none = 80%
-			## bei einer or suche brauchen nur noch 20% vorkommen
-			mm.or = 20%
+            ### setzt den mm (Min-should-match) Parameter ###
+            ### none wird auch als default genutzt
+            ###default müssen 100% der Suchparameter vorkommen
+            mm.none = 80%
+            ## bei einer or suche brauchen nur noch 20% vorkommen
+            mm.or = 20%
 
-			params.mksearch {
-				term = TEXT
-				term {
-					wrap =
-					preUserFunc.dismax = 1
-					preUserFunc.combination = free
-				}
-			}
-			fields {
-				term = ###PARAM_MKSEARCH_TERM###
-			}
-		}
+            params.mksearch {
+                term = TEXT
+                term {
+                    wrap =
+                    preUserFunc.dismax = 1
+                    preUserFunc.combination = free
+                }
+            }
+            fields {
+                term = ###PARAM_MKSEARCH_TERM###
+            }
+        }
 
-		responseProcessor {
-			### see tx_mksearch_util_SolrResponseProcessor::processHits
-			hit {
-				overrideWithHl = 0
-				### Horizontal Ellipsises for HL?
-				hellip = 0
-				hellip.stdWrap.noTrimWrap = |&hellip; | &hellip;|
-			}
-			facet {
-				builderClass = tx_mksearch_util_FacetBuilder
-				### enables the sorting feature for the dfs fields
-				sorting = 0
-			}
-			suggestions.builderClass = tx_mksearch_util_SuggestionBuilder
-		}
+        responseProcessor {
+            ### see tx_mksearch_util_SolrResponseProcessor::processHits
+            hit {
+                overrideWithHl = 0
+                ### Horizontal Ellipsises for HL?
+                hellip = 0
+                hellip.stdWrap.noTrimWrap = |&hellip; | &hellip;|
+            }
+            facet {
+                builderClass = tx_mksearch_util_FacetBuilder
+                ### enables the sorting feature for the dfs fields
+                sorting = 0
+            }
+            suggestions.builderClass = tx_mksearch_util_SuggestionBuilder
+        }
 
-		hit = < lib.mksearch.hit
+        hit = < lib.mksearch.hit
 
-		facet{
-			markerClass = tx_mksearch_marker_Facet
-			linkMethod = generic
-			links {
-				### bestehende Suche soll eingeschränkt werden
-				### dabei wird direkt mksearch[fq] gesetzt
-				show{
-					useKeepVars = 1
-					### shall the field name not be taken into the link so
-					### we don't have something like mksearch[fq]=contentType:media
-					### but something like mksearch[fq]=media. This is strongly
-					### recommended in a live environment as nobody needs to know
-					### the name of the solr fields. The field name should be defined
-					### in the default filter config (fqField) so it can be added
-					excludeFieldName = 0
+        facet{
+            markerClass = tx_mksearch_marker_Facet
+            linkMethod = generic
+            links {
+                ### bestehende Suche soll eingeschränkt werden
+                ### dabei wird direkt mksearch[fq] gesetzt
+                show{
+                    useKeepVars = 1
+                    ### shall the field name not be taken into the link so
+                    ### we don't have something like mksearch[fq]=contentType:media
+                    ### but something like mksearch[fq]=media. This is strongly
+                    ### recommended in a live environment as nobody needs to know
+                    ### the name of the solr fields. The field name should be defined
+                    ### in the default filter config (fqField) so it can be added
+                    excludeFieldName = 0
 
-					paramName = fq
+                    paramName = fq
 
-					### we need to put the resulting value dependend on
-					### excludeFieldName into the record. this can be left
-					### as it is as long as the facet record has not the field
-					### already in record.
-					paramField = fq
+                    ### we need to put the resulting value dependend on
+                    ### excludeFieldName into the record. this can be left
+                    ### as it is as long as the facet record has not the field
+                    ### already in record.
+                    paramField = fq
 
-					### the generic link builder needs a pid. otherwise
-					### the link is disabled. by default we use the current page.
-					### feel free to change this!
-					pid {
-						data = TSFE:id
-						insertData = 1
-					}
+                    ### the generic link builder needs a pid. otherwise
+                    ### the link is disabled. by default we use the current page.
+                    ### feel free to change this!
+                    pid {
+                        data = TSFE:id
+                        insertData = 1
+                    }
 
-					noHash = 1
-				}
-				### Einschränkung rückgängig machen
-				reset.useKeepVars = 1
-				reset.useKeepVars.deny = fq
+                    noHash = 1
+                }
+                ### Einschränkung rückgängig machen
+                reset.useKeepVars = 1
+                reset.useKeepVars.deny = fq
 
-				### bei gruppierter facettierung notwendig
-				add = 1
-				add {
-				}
-				remove = 1
-				remove {
-				}
-			}
-		}
+                ### bei gruppierter facettierung notwendig
+                add = 1
+                add {
+                }
+                remove = 1
+                remove {
+                }
+            }
+        }
 
-		groupedfacet {
-			hit = < plugin.tx_mksearch.searchsolr.facet
-			hit {
-				child= < plugin.tx_mksearch.searchsolr.groupedfacet.hit
-				dataMap {
-					### wir mappen das feld und ersetzen den punkt durch einen unterstrich
-					### das ist beispielsweise für den case label notwendig
-					dotValueFields = label
-				}
+        groupedfacet {
+            hit = < plugin.tx_mksearch.searchsolr.facet
+            hit {
+                child= < plugin.tx_mksearch.searchsolr.groupedfacet.hit
+                dataMap {
+                    ### wir mappen das feld und ersetzen den punkt durch einen unterstrich
+                    ### das ist beispielsweise für den case label notwendig
+                    dotValueFields = label
+                }
 
-				active = TEXT
-				active.value = checked="checked"
-				active.fieldRequired = active
+                active = TEXT
+                active.value = checked="checked"
+                active.fieldRequired = active
 
-				disabled = TEXT
-				disabled.value = disabled="disabled"
-				disabled.fieldRequired = disabled
+                disabled = TEXT
+                disabled.value = disabled="disabled"
+                disabled.fieldRequired = disabled
 
-				count.noTrimWrap = | (|)|
-				count.required = 1
+                count.noTrimWrap = | (|)|
+                count.required = 1
 
-				dclabel = CASE
-				dclabel {
-					### im feld _label ist der wert enthalten, wo der punkt
-					### durch einen unterstrich ersetzt wurde
-					### core.tt_content > core_tt_content
-					key.field = _label
-					core_tt_content = TEXT
-					core_tt_content.value = Inhalte
-					tt_news_news = TEXT
-					tt_news_news.value = News
-					tx_news_news < .tt_news_news
-					core_file = TEXT
-					core_file.value = Multimedia-Objekte
-					default = TEXT
-					default.field = label
+                dclabel = CASE
+                dclabel {
+                    ### im feld _label ist der wert enthalten, wo der punkt
+                    ### durch einen unterstrich ersetzt wurde
+                    ### core.tt_content > core_tt_content
+                    key.field = _label
+                    core_tt_content = TEXT
+                    core_tt_content.value = Inhalte
+                    tt_news_news = TEXT
+                    tt_news_news.value = News
+                    tx_news_news < .tt_news_news
+                    core_file = TEXT
+                    core_file.value = Multimedia-Objekte
+                    default = TEXT
+                    default.field = label
 
-					stdWrap.dataWrap = |&nbsp;({field:count})
-				}
-			}
-			### die Gruppenbezeichnung
-			dcfield = CASE
-			dcfield {
-				key.field = field
-				content_ident_s = TEXT
-				content_ident_s.value = Datentypen
-				default = TEXT
-				default.value.field = field
-			}
-		}
+                    stdWrap.dataWrap = |&nbsp;({field:count})
+                }
+            }
+            ### die Gruppenbezeichnung
+            dcfield = CASE
+            dcfield {
+                key.field = field
+                content_ident_s = TEXT
+                content_ident_s.value = Datentypen
+                default = TEXT
+                default.value.field = field
+            }
+        }
 
-		### aktueller Suchbegriff
-		plugin.dcsearchterm =< lib.mksearch.currentSearchTerm
-		suggestions {
-			# Join terms with comma
-			implode = ,
-			implode.noTrimWrap = || |
-			# prepare search link
-			links.search {
-				pid = 0
-				_cfg.params.term = value
-				useKeepVars = 1
-				useKeepVars.skipEmpty = 1
-				# allow useful parameters only
-				useKeepVars.allow = submit, pagelimit, sort
-				useKeepVars.add = submit=
-			}
-		}
-	}
+        ### aktueller Suchbegriff
+        plugin.dcsearchterm =< lib.mksearch.currentSearchTerm
+        suggestions {
+            # Join terms with comma
+            implode = ,
+            implode.noTrimWrap = || |
+            # prepare search link
+            links.search {
+                pid = 0
+                _cfg.params.term = value
+                useKeepVars = 1
+                useKeepVars.skipEmpty = 1
+                # allow useful parameters only
+                useKeepVars.allow = submit, pagelimit, sort
+                useKeepVars.add = submit=
+            }
+        }
+    }
 
-	showhit {
-		_caching {
-			class = tx_mksearch_action_CacheHandler
-			### für den cachekey werden folgende parameter mit genutzt.
-			params.allowed = item
-			name = mksearch
-			### für vorerst 1h cachen
-			expire = 3600
-		}
-		usedIndex = {$plugin.tx_mksearch.usedIndex}
-		template {
-			itempath = hit
-			markerclass = tx_mksearch_marker_Search
-		}
-		hit = < lib.mksearch.hit
-	}
+    showhit {
+        _caching {
+            class = tx_mksearch_action_CacheHandler
+            ### für den cachekey werden folgende parameter mit genutzt.
+            params.allowed = item
+            name = mksearch
+            ### für vorerst 1h cachen
+            expire = 3600
+        }
+        usedIndex = {$plugin.tx_mksearch.usedIndex}
+        template {
+            itempath = hit
+            markerclass = tx_mksearch_marker_Search
+        }
+        hit = < lib.mksearch.hit
+    }
 
-	elasticsearch {
-		# soll gesucht oder nur die Templates geparsed werden?
-		nosearch = 0
+    elasticsearch {
+        # soll gesucht oder nur die Templates geparsed werden?
+        nosearch = 0
 
-		usedIndex = {$plugin.tx_mksearch.usedIndex}
+        usedIndex = {$plugin.tx_mksearch.usedIndex}
 
-		filter < lib.mksearch.defaultElasticSearchFilter
+        filter < lib.mksearch.defaultElasticSearchFilter
 
-		hit = < lib.mksearch.hit
+        hit = < lib.mksearch.hit
 
-		### aktueller Suchbegriff
-		plugin.dcsearchterm = < lib.mksearch.currentSearchTerm
-	}
+        ### aktueller Suchbegriff
+        plugin.dcsearchterm = < lib.mksearch.currentSearchTerm
+    }
 }
 
 lib.mksearch.hit {
-	pagebrowser =< lib.mksearch.pagebrowser
-	extrainfo =< lib.mksearch.extrainfo
-	totalline.startValue = 1
-	# TODO: Für Highlighting testen
-	content.override.cObject = TEXT
-	content.override.cObject.field = content_hl
+    pagebrowser =< lib.mksearch.pagebrowser
+    extrainfo =< lib.mksearch.extrainfo
+    totalline.startValue = 1
+    # TODO: Für Highlighting testen
+    content.override.cObject = TEXT
+    content.override.cObject.field = content_hl
 
-	multiValuedGlue = |, |
-	multiValuedGlue.noTrim = 1
-	#multiValuedGlue = 0| 0
-	#multiValuedGlue.noTrim.splitChar = 0
+    multiValuedGlue = |, |
+    multiValuedGlue.noTrim = 1
+    #multiValuedGlue = 0| 0
+    #multiValuedGlue.noTrim.splitChar = 0
 
-	subparts {
-		### set this to 0, to deactivate the simple template, to use only the extrainfo
-		simple.visible = 1
-		is_ttcontent {
-			### definiert die marker (optional).
-			marker {
-				### Definiert den Marker für den Subpart, der angezeigt werden soll (optional). Default ist VISIBLE
-				visible = VISIBLE
-				### Definiert den Marker für den Subpart, der ausgeblendet werden soll (optional). Default ist HIDDEN
-				hidden = HIDDEN
-			}
-			### Definiert, welcher marker gerendert werden soll, der visible (venn true) oder der hidden (wenn false)
-			visible = TEXT
-			visible.value = 1
-			visible.if {
-				value = tt_content
-				equals.data = field:contentType
-			}
-		}
-	}
+    subparts {
+        ### set this to 0, to deactivate the simple template, to use only the extrainfo
+        simple.visible = 1
+        is_ttcontent {
+            ### definiert die marker (optional).
+            marker {
+                ### Definiert den Marker für den Subpart, der angezeigt werden soll (optional). Default ist VISIBLE
+                visible = VISIBLE
+                ### Definiert den Marker für den Subpart, der ausgeblendet werden soll (optional). Default ist HIDDEN
+                hidden = HIDDEN
+            }
+            ### Definiert, welcher marker gerendert werden soll, der visible (venn true) oder der hidden (wenn false)
+            visible = TEXT
+            visible.value = 1
+            visible.if {
+                value = tt_content
+                equals.data = field:contentType
+            }
+        }
+    }
 }
 
 ###
@@ -877,320 +877,320 @@ lib.mksearch.hit {
 # Drittextensions sollten ihre Angaben in diesem lib-Objekt hinzufügen.
 ###
 lib.mksearch.extrainfo {
-	# In Default werden die Basisangeben defniert. Diese werden dann aber meistens überschrieben.
-	default {
-		# Class responsible for displaying additional search result info - just the default one
-		markerClass = tx_mksearch_marker_SearchResultSimple
+    # In Default werden die Basisangeben defniert. Diese werden dann aber meistens überschrieben.
+    default {
+        # Class responsible for displaying additional search result info - just the default one
+        markerClass = tx_mksearch_marker_SearchResultSimple
 
-		# Template to be used for rendering extra info - again just the default one
-		template = EXT:mksearch/templates/searchResultSimple.html
+        # Template to be used for rendering extra info - again just the default one
+        template = EXT:mksearch/templates/searchResultSimple.html
 
-		# Subpart name containing the particular markup within the template
-		# This key is optional - fallback is "ITEM"
-		subpartName = ITEM
-		hit {
-			### Wenn linkMethod auf generic steht,
-			### werden die Links über den SimpleMarker gerendert.
-			### Damit sind mehrere Links für das Ergebnis möglich.
-			### Andernfalls wird der alte Weg genutzt.
-			### Hier wurde nur der SHOWLINK gerendert und alle anderen ignoriert.
-			### Default lassen wir dies auf mksearch,
-			### um bestehende Indexer kompatibel zu halten.
-			linkMethod = mksearch
-			###links {
-			###}
+        # Subpart name containing the particular markup within the template
+        # This key is optional - fallback is "ITEM"
+        subpartName = ITEM
+        hit {
+            ### Wenn linkMethod auf generic steht,
+            ### werden die Links über den SimpleMarker gerendert.
+            ### Damit sind mehrere Links für das Ergebnis möglich.
+            ### Andernfalls wird der alte Weg genutzt.
+            ### Hier wurde nur der SHOWLINK gerendert und alle anderen ignoriert.
+            ### Default lassen wir dies auf mksearch,
+            ### um bestehende Indexer kompatibel zu halten.
+            linkMethod = mksearch
+            ###links {
+            ###}
 
-			abstract {
-				wrap = <div class="searchResultAbstract">|...</div>
-				required = 1
-			}
-#			extrainfo {
-#				wrap = <div class="searchResultExtraInfo">|</div>
-#				required = 1
-#			}
+            abstract {
+                wrap = <div class="searchResultAbstract">|...</div>
+                required = 1
+            }
+#            extrainfo {
+#                wrap = <div class="searchResultExtraInfo">|</div>
+#                required = 1
+#            }
 
-			### define for which fields no marker should be displayed if empty
-			### or not returned. meanigly which fields should be inited if empty.
-			### alternatively Solr can set a default value for each field except
-			### for dynamic fields.
-			initFields {
-				99 = title
-				100 = abstract
-				101 = title_s
-				102 = content
-			}
-		}
-	}
+            ### define for which fields no marker should be displayed if empty
+            ### or not returned. meanigly which fields should be inited if empty.
+            ### alternatively Solr can set a default value for each field except
+            ### for dynamic fields.
+            initFields {
+                99 = title
+                100 = abstract
+                101 = title_s
+                102 = content
+            }
+        }
+    }
 
-	core.page < .default
-	core.page {
-		markerClass = tx_mksearch_marker_CorePage
-		hit {
-			# Special case for core.page: Dynamically assigned pid
-			links.show.pid = TEXT
-			links.show.pid.data = register : mksearch.core.page
-		}
-	}
+    core.page < .default
+    core.page {
+        markerClass = tx_mksearch_marker_CorePage
+        hit {
+            # Special case for core.page: Dynamically assigned pid
+            links.show.pid = TEXT
+            links.show.pid.data = register : mksearch.core.page
+        }
+    }
 
-	core.tt_content < .default
-	core.tt_content {
-		markerClass = tx_mksearch_marker_CoreTtContent
-		subpartName = TTCONTENT
-		hit {
-			linkMethod = generic
-			disableOldShowLink = 1
-			links.show {
-				pid = TEXT
-				pid.data = register : mksearch.core.tt_content
+    core.tt_content < .default
+    core.tt_content {
+        markerClass = tx_mksearch_marker_CoreTtContent
+        subpartName = TTCONTENT
+        hit {
+            linkMethod = generic
+            disableOldShowLink = 1
+            links.show {
+                pid = TEXT
+                pid.data = register : mksearch.core.tt_content
 
-				### add content anchor to the url
-				section = TEXT
-				section.value = c{register:mksearch.core.tt_content.uid}
-				section.insertData = 1
-			}
-		}
-	}
+                ### add content anchor to the url
+                section = TEXT
+                section.value = c{register:mksearch.core.tt_content.uid}
+                section.insertData = 1
+            }
+        }
+    }
 
-	# Content type "dam.media"
-	defaultMedia < .default
-	defaultMedia {
-		hit {
-			links{
-				show.pid.cObject = TEXT
-				show.pid.cObject.field = file_relpath_s
-				show.atagparams.rel = external
-			}
-			# Beispiel für korrekte Dateiverlinkung
-			dclink = TEXT
-			dclink.field = file_relpath_s
-			dclink.filelink {
-				jumpurl = 1
-				labelStdWrap = TEXT
-				labelStdWrap.field = title
-				icon = 1
-				size = 1
-				size.bytes = 1
-				size.noTrimWrap = | ||
-			}
+    # Content type "dam.media"
+    defaultMedia < .default
+    defaultMedia {
+        hit {
+            links{
+                show.pid.cObject = TEXT
+                show.pid.cObject.field = file_relpath_s
+                show.atagparams.rel = external
+            }
+            # Beispiel für korrekte Dateiverlinkung
+            dclink = TEXT
+            dclink.field = file_relpath_s
+            dclink.filelink {
+                jumpurl = 1
+                labelStdWrap = TEXT
+                labelStdWrap.field = title
+                icon = 1
+                size = 1
+                size.bytes = 1
+                size.noTrimWrap = | ||
+            }
 
-			initFields{
-				0 = file_name_s
-				1 = file_relpath_s
-			}
-		}
-	}
+            initFields{
+                0 = file_name_s
+                1 = file_relpath_s
+            }
+        }
+    }
 
-	core.file < .defaultMedia
-	core.file {
-	}
+    core.file < .defaultMedia
+    core.file {
+    }
 
 
-	# Content type "tt_news.news"
-	tt_news.news < .default
-	tt_news.news {
-		markerClass = tx_mksearch_marker_CoreTtNews
-		hit {
-			links.show {
-				# PID of single news page
-				pid = 0
-				noHash = 0
-				removeIfDisabled = 0
-				qualifier = tx_ttnews
-				paramName = tt_news
-				# Additional parameters
-				additionalParams {
-					# PID of news list page
-					#backPid = 0
-				}
-			}
-			datetime_i.strftime= %d.%m.%y
+    # Content type "tt_news.news"
+    tt_news.news < .default
+    tt_news.news {
+        markerClass = tx_mksearch_marker_CoreTtNews
+        hit {
+            links.show {
+                # PID of single news page
+                pid = 0
+                noHash = 0
+                removeIfDisabled = 0
+                qualifier = tx_ttnews
+                paramName = tt_news
+                # Additional parameters
+                additionalParams {
+                    # PID of news list page
+                    #backPid = 0
+                }
+            }
+            datetime_i.strftime= %d.%m.%y
 
-			initFields{
-				0 = www_s
-				1 = email_s
-				2 = first_name_s
-				3 = last_name_s
-				4 = city_s
-			}
-		}
-	}
+            initFields{
+                0 = www_s
+                1 = email_s
+                2 = first_name_s
+                3 = last_name_s
+                4 = city_s
+            }
+        }
+    }
 
-	# Content type "tt_news.news"
-	tx_news.news < lib.mksearch.extrainfo.tt_news.news
-	tx_news.news {
-		hit {
-			links.show {
-				# PID of single news page
-				pid = 0
-				noHash = 0
-				removeIfDisabled = 0
-				qualifier = tx_news_pi1
-				paramName = news
+    # Content type "tt_news.news"
+    tx_news.news < lib.mksearch.extrainfo.tt_news.news
+    tx_news.news {
+        hit {
+            links.show {
+                # PID of single news page
+                pid = 0
+                noHash = 0
+                removeIfDisabled = 0
+                qualifier = tx_news_pi1
+                paramName = news
 
-				# Additional parameters
-				additionalParams {
-					controller = News
-					action = detail
-				}
-			}
-		}
-	}
+                # Additional parameters
+                additionalParams {
+                    controller = News
+                    action = detail
+                }
+            }
+        }
+    }
 
-	# Content type "tt_address.address"
-	tt_address.address < .default
-	tt_address.address {
-		### TT_ADDRESS_ADDRESS
-		subpartName =
-		hit {
-			links.show.pid = 0
-			links.show.noHash = 0
-			www_s.typolink = 1
-			www_s.typolink.parameter.field = www_s
-			email_s.typolink = 1
-			email_s.typolink.parameter.field = email_s
+    # Content type "tt_address.address"
+    tt_address.address < .default
+    tt_address.address {
+        ### TT_ADDRESS_ADDRESS
+        subpartName =
+        hit {
+            links.show.pid = 0
+            links.show.noHash = 0
+            www_s.typolink = 1
+            www_s.typolink.parameter.field = www_s
+            email_s.typolink = 1
+            email_s.typolink.parameter.field = email_s
 
-			initFields{
-				0 = www_s
-				1 = email_s
-				2 = first_name_s
-				3 = last_name_s
-				4 = city_s
-			}
-		}
-	}
+            initFields{
+                0 = www_s
+                1 = email_s
+                2 = first_name_s
+                3 = last_name_s
+                4 = city_s
+            }
+        }
+    }
 
-	# Content type "dam.media"
-	dam.media < .defaultMedia
-	dam.media {
-	}
+    # Content type "dam.media"
+    dam.media < .defaultMedia
+    dam.media {
+    }
 
-	# Content type "irfaq.question"
-	irfaq.question < .default
-	irfaq.question{
-		template = EXT:mksearch/templates/searchResultIrfaq.html
-		markerClass = tx_mksearch_marker_Irfaq
-		hit {
-			linkMethod = generic
-			links.showfirstcategory {
-				noHash = 1
-				pid = TEXT
-				pid.field = category_first_shortcut_s
-			}
-			initFields{
-				0 = q_s
-				1 = a_s
-				2 = a_with_html_s
-			}
+    # Content type "irfaq.question"
+    irfaq.question < .default
+    irfaq.question{
+        template = EXT:mksearch/templates/searchResultIrfaq.html
+        markerClass = tx_mksearch_marker_Irfaq
+        hit {
+            linkMethod = generic
+            links.showfirstcategory {
+                noHash = 1
+                pid = TEXT
+                pid.field = category_first_shortcut_s
+            }
+            initFields{
+                0 = q_s
+                1 = a_s
+                2 = a_with_html_s
+            }
 
-			a_with_html_s.parseFunc =< lib.parseFunc_RTE
-		}
-	}
-	# Content type "irfaq.question"
-	efaq.faq < .default
-	efaq.faq {
-		template = EXT:mksearch/templates/searchResultEfaq.html
-	}
+            a_with_html_s.parseFunc =< lib.parseFunc_RTE
+        }
+    }
+    # Content type "irfaq.question"
+    efaq.faq < .default
+    efaq.faq {
+        template = EXT:mksearch/templates/searchResultEfaq.html
+    }
 
-	# Content type "seminars.seminar"
-	seminars.seminar < .default
-	seminars.seminar{
-		template = EXT:mksearch/templates/searchResultSeminar.html
-		hit {
-			links.show {
-				### pid for the single view of a seminar
-				pid = 0
-				qualifier = tx_seminars_pi1
-				paramName = showUid
-			}
-			initFields{
-				0 = realtitle_s
-				1 = targetgroups_title_ms
-			}
-		}
-	}
+    # Content type "seminars.seminar"
+    seminars.seminar < .default
+    seminars.seminar{
+        template = EXT:mksearch/templates/searchResultSeminar.html
+        hit {
+            links.show {
+                ### pid for the single view of a seminar
+                pid = 0
+                qualifier = tx_seminars_pi1
+                paramName = showUid
+            }
+            initFields{
+                0 = realtitle_s
+                1 = targetgroups_title_ms
+            }
+        }
+    }
 
-	# Content type "cal.event"
-	cal.event =< lib.mksearch.extrainfo.default
-	cal.event{
-		template = EXT:mksearch/templates/searchResultCal.html
-		hit {
-			linkMethod = generic
-			links.showevent {
-				### pid for the single view of a calendar event
-				pid = 0
-				noHash = 0
-				qualifier = tx_cal_controller
-				useKeepVars = 1
-				useKeepVars.add = view=event,type=tx_cal_phpicalendar
-				_cfg.params{
-					year = start_date_year_i
-					month = start_date_month_i
-					day = start_date_day_i
-					uid = uid
-				}
-			}
-			initFields{
-				0 = calendar_title_s
-				1 = category_title_ms
-				2 = description_s
-				3 = start_date_i
-				4 = end_date_i
-			}
+    # Content type "cal.event"
+    cal.event =< lib.mksearch.extrainfo.default
+    cal.event{
+        template = EXT:mksearch/templates/searchResultCal.html
+        hit {
+            linkMethod = generic
+            links.showevent {
+                ### pid for the single view of a calendar event
+                pid = 0
+                noHash = 0
+                qualifier = tx_cal_controller
+                useKeepVars = 1
+                useKeepVars.add = view=event,type=tx_cal_phpicalendar
+                _cfg.params{
+                    year = start_date_year_i
+                    month = start_date_month_i
+                    day = start_date_day_i
+                    uid = uid
+                }
+            }
+            initFields{
+                0 = calendar_title_s
+                1 = category_title_ms
+                2 = description_s
+                3 = start_date_i
+                4 = end_date_i
+            }
 
-			description_s.cropHTML = 150|...|1
-			start_date_i{
-				strftime = %d.%m.%Y
-				required = 1
-			}
-			end_date_i{
-				strftime = %d.%m.%Y
-				required = 1
-			}
-		}
-	}
-	a21glossary.main =< lib.mksearch.extrainfo.default
-	a21glossary.main {
-		template = EXT:mksearch/templates/searchResultSimple.html
-		subpartName = A21GLOSSARY_MAIN
-		hit {
-			linkMethod = generic
-			links.showevent.pid = 0
-		}
-	}
+            description_s.cropHTML = 150|...|1
+            start_date_i{
+                strftime = %d.%m.%Y
+                required = 1
+            }
+            end_date_i{
+                strftime = %d.%m.%Y
+                required = 1
+            }
+        }
+    }
+    a21glossary.main =< lib.mksearch.extrainfo.default
+    a21glossary.main {
+        template = EXT:mksearch/templates/searchResultSimple.html
+        subpartName = A21GLOSSARY_MAIN
+        hit {
+            linkMethod = generic
+            links.showevent.pid = 0
+        }
+    }
 }
 
 
 ### the configuration for the search plugin on the ajax/autocomplete page
 lib.mksearchAjaxPage =< plugin.tx_mksearch
 lib.mksearchAjaxPage {
-	action = tx_mksearch_action_SearchSolr
-	searchsolr{
-		filter = tx_mksearch_filter_SolrAutocomplete
-		filter{
-			### wir setzen beide varianten auf force,
-			## da wir im autocomplete immer eine suche ausführen wollen
-			## und nicht wissen welche genutzt wird.
-			default.force = 1
-			dismax.force = 1
-		}
-		requestHandler = /suggest
-		usedIndex = {$plugin.tx_mksearch.usedIndex}
-	}
+    action = tx_mksearch_action_SearchSolr
+    searchsolr{
+        filter = tx_mksearch_filter_SolrAutocomplete
+        filter{
+            ### wir setzen beide varianten auf force,
+            ## da wir im autocomplete immer eine suche ausführen wollen
+            ## und nicht wissen welche genutzt wird.
+            default.force = 1
+            dismax.force = 1
+        }
+        requestHandler = /suggest
+        usedIndex = {$plugin.tx_mksearch.usedIndex}
+    }
 }
 
 ### our own page type for the autocomplete plugin so we dont have to init
 ### the complete TYPO3
 mksearchAjaxPage = PAGE
 mksearchAjaxPage {
-	typeNum=540
-	config.disableAllHeaderCode = 1
-	config.metaCharset = utf-8
-	### X-Robots-Tag, wir wollen vermeiden, dass der inhalt des calls indiziert wird.
-	config.additionalHeaders = Content-Type: text/plain; charset=utf-8|X-Robots-Tag: noindex;
-	config.xhtml_cleaning = 0
-	config.admPanel = 0
-	config.sendNoCacheHeaders = 1
-	config.no_cache = 1
+    typeNum=540
+    config.disableAllHeaderCode = 1
+    config.metaCharset = utf-8
+    ### X-Robots-Tag, wir wollen vermeiden, dass der inhalt des calls indiziert wird.
+    config.additionalHeaders = Content-Type: text/plain; charset=utf-8|X-Robots-Tag: noindex;
+    config.xhtml_cleaning = 0
+    config.admPanel = 0
+    config.sendNoCacheHeaders = 1
+    config.no_cache = 1
 
-	10 =< lib.mksearchAjaxPage
+    10 =< lib.mksearchAjaxPage
 }

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <dataset>
-	<tx_seminars_sites>
-		<uid>1</uid>
-		<title>1. Site</title>
-		<city>1. Stadt</city>
-	</tx_seminars_sites>
-	<tx_seminars_sites>
-		<uid>2</uid>
-		<title>2. Site</title>
-		<city>2. Stadt</city>
-	</tx_seminars_sites>
+    <tx_seminars_sites>
+        <uid>1</uid>
+        <title>1. Site</title>
+        <city>1. Stadt</city>
+    </tx_seminars_sites>
+    <tx_seminars_sites>
+        <uid>2</uid>
+        <title>2. Site</title>
+        <city>2. Stadt</city>
+    </tx_seminars_sites>
 </dataset>

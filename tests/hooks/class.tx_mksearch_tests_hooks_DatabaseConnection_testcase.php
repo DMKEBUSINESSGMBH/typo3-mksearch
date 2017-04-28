@@ -27,128 +27,136 @@ tx_rnbase::load('tx_mksearch_hooks_DatabaseConnection');
 /**
  * tx_mksearch_tests_hooks_DatabaseConnection_testcase
  *
- * @package 		TYPO3
- * @subpackage	 	mksearch
- * @author 			Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
- * @license 		http://www.gnu.org/licenses/lgpl.html
- * 					GNU Lesser General Public License, version 3 or later
+ * @package         TYPO3
+ * @subpackage      mksearch
+ * @author          Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
+ * @license         http://www.gnu.org/licenses/lgpl.html
+ *                  GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_tests_hooks_DatabaseConnection_testcase
-	extends tx_mksearch_tests_Testcase {
+class tx_mksearch_tests_hooks_DatabaseConnection_testcase extends tx_mksearch_tests_Testcase
+{
 
-	/**
-	 * @var integer
-	 */
-	private static $loadHiddenObjectsConfigurationBackup;
+    /**
+     * @var integer
+     */
+    private static $loadHiddenObjectsConfigurationBackup;
 
-	/**
-	 * (non-PHPdoc)
-	 * @see tx_mksearch_tests_Testcase::setUp()
-	 */
-	protected function setUp() {
-		self::$loadHiddenObjectsConfigurationBackup = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects'];
-	}
+    /**
+     * (non-PHPdoc)
+     * @see tx_mksearch_tests_Testcase::setUp()
+     */
+    protected function setUp()
+    {
+        self::$loadHiddenObjectsConfigurationBackup = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects'];
+    }
 
-	/**
-	 * (non-PHPdoc)
-	 * @see tx_mksearch_tests_Testcase::tearDown()
-	 */
-	protected function tearDown() {
-		$property = new ReflectionProperty('tx_mksearch_hooks_DatabaseConnection', 'loadHiddenObjectsConfigurationBackup');
-		$property->setAccessible(true);
-		$property->setValue(null, null);
+    /**
+     * (non-PHPdoc)
+     * @see tx_mksearch_tests_Testcase::tearDown()
+     */
+    protected function tearDown()
+    {
+        $property = new ReflectionProperty('tx_mksearch_hooks_DatabaseConnection', 'loadHiddenObjectsConfigurationBackup');
+        $property->setAccessible(true);
+        $property->setValue(null, null);
 
-		$this->setIsIndexingInProgress(false);
+        $this->setIsIndexingInProgress(false);
 
-		$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects'] = self::$loadHiddenObjectsConfigurationBackup;
-	}
+        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects'] = self::$loadHiddenObjectsConfigurationBackup;
+    }
 
-	/**
-	 * @unit
-	 */
-	public function testDoSelectPostResetsRnBaseConfiguration() {
-		$property = new ReflectionProperty('tx_mksearch_hooks_DatabaseConnection', 'loadHiddenObjectsConfigurationBackup');
-		$property->setAccessible(true);
-		$property->setValue(null, $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects']);
-		$initialValue = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects'];
+    /**
+     * @unit
+     */
+    public function testDoSelectPostResetsRnBaseConfiguration()
+    {
+        $property = new ReflectionProperty('tx_mksearch_hooks_DatabaseConnection', 'loadHiddenObjectsConfigurationBackup');
+        $property->setAccessible(true);
+        $property->setValue(null, $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects']);
+        $initialValue = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects'];
 
-		$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects'] = 'test';
+        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects'] = 'test';
 
-		tx_rnbase::makeInstance('tx_mksearch_hooks_DatabaseConnection')->doSelectPost();
+        tx_rnbase::makeInstance('tx_mksearch_hooks_DatabaseConnection')->doSelectPost();
 
-		self::assertSame($initialValue, $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects']);
-	}
+        self::assertSame($initialValue, $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects']);
+    }
 
-	/**
-	 * @unit
-	 */
-	public function testDoSelectPreSetEnableFieldsFeIfDuringIndexingAndNoEnableFieldsOff() {
-		$this->setIsIndexingInProgress();
-		$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects'] = 'test';
+    /**
+     * @unit
+     */
+    public function testDoSelectPreSetEnableFieldsFeIfDuringIndexingAndNoEnableFieldsOff()
+    {
+        $this->setIsIndexingInProgress();
+        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects'] = 'test';
 
-		$paramaters = array('options' => array());
+        $paramaters = array('options' => array());
 
-		tx_rnbase::makeInstance('tx_mksearch_hooks_DatabaseConnection')->doSelectPre($paramaters);
+        tx_rnbase::makeInstance('tx_mksearch_hooks_DatabaseConnection')->doSelectPre($paramaters);
 
-		self::assertSame(1, $paramaters['options']['enablefieldsfe']);
-		self::assertSame(0, $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects']);
-	}
+        self::assertSame(1, $paramaters['options']['enablefieldsfe']);
+        self::assertSame(0, $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects']);
+    }
 
-	/**
-	 * @unit
-	 */
-	public function testDoSelectPreSetEnableFieldsFeAndRemovesEnableFieldsBeIfDuringIndexingNoEnableFieldsOffAndEnableFieldsBe() {
-		$this->setIsIndexingInProgress();
-		$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects'] = 'test';
+    /**
+     * @unit
+     */
+    public function testDoSelectPreSetEnableFieldsFeAndRemovesEnableFieldsBeIfDuringIndexingNoEnableFieldsOffAndEnableFieldsBe()
+    {
+        $this->setIsIndexingInProgress();
+        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects'] = 'test';
 
-		$paramaters = array('options' => array('enablefieldsbe' => 1));
+        $paramaters = array('options' => array('enablefieldsbe' => 1));
 
-		tx_rnbase::makeInstance('tx_mksearch_hooks_DatabaseConnection')->doSelectPre($paramaters);
+        tx_rnbase::makeInstance('tx_mksearch_hooks_DatabaseConnection')->doSelectPre($paramaters);
 
-		self::assertSame(1, $paramaters['options']['enablefieldsfe']);
-		self::assertArrayNotHasKey('enablefieldsbe', $paramaters['options']);
-		self::assertSame(0, $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects']);
-	}
+        self::assertSame(1, $paramaters['options']['enablefieldsfe']);
+        self::assertArrayNotHasKey('enablefieldsbe', $paramaters['options']);
+        self::assertSame(0, $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects']);
+    }
 
-	/**
-	 * @unit
-	 */
-	public function testDoSelectPreDoesNothingWhenDuringIndexingButEnableFieldsOff() {
-		$this->setIsIndexingInProgress();
-		$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects'] = 'test';
+    /**
+     * @unit
+     */
+    public function testDoSelectPreDoesNothingWhenDuringIndexingButEnableFieldsOff()
+    {
+        $this->setIsIndexingInProgress();
+        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects'] = 'test';
 
-		$paramaters = array('options' => array('enablefieldsoff' => true));
+        $paramaters = array('options' => array('enablefieldsoff' => true));
 
-		tx_rnbase::makeInstance('tx_mksearch_hooks_DatabaseConnection')->doSelectPre($paramaters);
+        tx_rnbase::makeInstance('tx_mksearch_hooks_DatabaseConnection')->doSelectPre($paramaters);
 
-		self::assertArrayNotHasKey('enablefieldsfe', $paramaters['options']);
-		self::assertTrue($paramaters['options']['enablefieldsoff']);
-		self::assertSame('test', $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects']);
-	}
+        self::assertArrayNotHasKey('enablefieldsfe', $paramaters['options']);
+        self::assertTrue($paramaters['options']['enablefieldsoff']);
+        self::assertSame('test', $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects']);
+    }
 
-	/**
-	 * @unit
-	 */
-	public function testDoSelectPreDoesNothingWhenNotDuringIndexing() {
-		$this->setIsIndexingInProgress(false);
-		$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects'] = 'test';
+    /**
+     * @unit
+     */
+    public function testDoSelectPreDoesNothingWhenNotDuringIndexing()
+    {
+        $this->setIsIndexingInProgress(false);
+        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects'] = 'test';
 
-		$paramaters = array('options' => array('enablefieldsoff' => true));
+        $paramaters = array('options' => array('enablefieldsoff' => true));
 
-		tx_rnbase::makeInstance('tx_mksearch_hooks_DatabaseConnection')->doSelectPre($paramaters);
+        tx_rnbase::makeInstance('tx_mksearch_hooks_DatabaseConnection')->doSelectPre($paramaters);
 
-		self::assertArrayNotHasKey('enablefieldsfe', $paramaters['options']);
-		self::assertTrue($paramaters['options']['enablefieldsoff']);
-		self::assertSame('test', $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects']);
-	}
+        self::assertArrayNotHasKey('enablefieldsfe', $paramaters['options']);
+        self::assertTrue($paramaters['options']['enablefieldsoff']);
+        self::assertSame('test', $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects']);
+    }
 
-	/**
-	 * @param boolean $indexingInProgress
-	 * @return void
-	 */
-	protected function setIsIndexingInProgress($indexingInProgress = true) {
-		$property = new ReflectionProperty('tx_mksearch_service_internal_Index', 'indexingInProgress');
-		$property->setAccessible(true);
-		$property->setValue(null, $indexingInProgress);
-	}
+    /**
+     * @param boolean $indexingInProgress
+     * @return void
+     */
+    protected function setIsIndexingInProgress($indexingInProgress = true)
+    {
+        $property = new ReflectionProperty('tx_mksearch_service_internal_Index', 'indexingInProgress');
+        $property->setAccessible(true);
+        $property->setValue(null, $indexingInProgress);
+    }
 }

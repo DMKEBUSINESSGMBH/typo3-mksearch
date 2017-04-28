@@ -33,133 +33,154 @@ tx_rnbase::load('tx_mksearch_action_SearchSolr');
 /**
  * @author Hannes Bochmann <hannes.bochmann@dmk-business.de>
  */
-class tx_mksearch_action_ElasticSearch extends tx_rnbase_action_BaseIOC {
+class tx_mksearch_action_ElasticSearch extends tx_rnbase_action_BaseIOC
+{
 
-	/**
-	 *
-	 * @param array_object $parameters
-	 * @param tx_rnbase_configurations $configurations
-	 * @param array_object $viewData
-	 * @return string error msg or null
-	 */
-	function handleRequest(&$parameters,&$configurations, &$viewData){
-		$confId = $this->getConfId();
-		tx_mksearch_action_SearchSolr::handleSoftLink(
-			$parameters, $configurations, $confId
-		);
+    /**
+     *
+     * @param array_object $parameters
+     * @param tx_rnbase_configurations $configurations
+     * @param array_object $viewData
+     * @return string error msg or null
+     */
+    public function handleRequest(&$parameters, &$configurations, &$viewData)
+    {
+        $confId = $this->getConfId();
+        tx_mksearch_action_SearchSolr::handleSoftLink(
+            $parameters,
+            $configurations,
+            $confId
+        );
 
-		$filter = tx_rnbase_filter_BaseFilter::createFilter(
-			$parameters, $configurations, $viewData, $confId  .'filter.'
-		);
+        $filter = tx_rnbase_filter_BaseFilter::createFilter(
+            $parameters,
+            $configurations,
+            $viewData,
+            $confId  .'filter.'
+        );
 
-		if ($configurations->get($confId . 'nosearch')) {
-			return NULL;
-		}
+        if ($configurations->get($confId . 'nosearch')) {
+            return null;
+        }
 
-		$fields = array();
-		$options = array();
-		$items = array();
-		if($filter->init($fields, $options)) {
-			$searchSolrAction = $this->getSearchSolrAction();
-			$index = $searchSolrAction->findSearchIndex(
-				$configurations, $confId
-			);
+        $fields = array();
+        $options = array();
+        $items = array();
+        if ($filter->init($fields, $options)) {
+            $searchSolrAction = $this->getSearchSolrAction();
+            $index = $searchSolrAction->findSearchIndex(
+                $configurations,
+                $confId
+            );
 
-			// wir rufen die Methode mit call_user_func_array auf, da sie
-			// statisch ist, womit wir diese nicht mocken könnten
-			$searchEngine = call_user_func_array(
-				array($this->getServiceRegistry(), 'getSearchEngine'),
-				array($index)
-			);
-			$searchEngine->openIndex($index);
+            // wir rufen die Methode mit call_user_func_array auf, da sie
+            // statisch ist, womit wir diese nicht mocken könnten
+            $searchEngine = call_user_func_array(
+                array($this->getServiceRegistry(), 'getSearchEngine'),
+                array($index)
+            );
+            $searchEngine->openIndex($index);
 
-			$this->handlePageBrowser(
-				$parameters, $configurations, $confId, $viewData,
-				$fields, $options, $searchEngine
-			);
+            $this->handlePageBrowser(
+                $parameters,
+                $configurations,
+                $confId,
+                $viewData,
+                $fields,
+                $options,
+                $searchEngine
+            );
 
-			$searchResult = $searchEngine->search($fields, $options, $configurations);
-		}
+            $searchResult = $searchEngine->search($fields, $options, $configurations);
+        }
 
-		$viewData->offsetSet('searchcount', $searchResult['numFound']);
-		$viewData->offsetSet('search', $searchResult['items']);
+        $viewData->offsetSet('searchcount', $searchResult['numFound']);
+        $viewData->offsetSet('search', $searchResult['items']);
 
-		return NULL;
-	}
+        return null;
+    }
 
-	/**
-	 *
-	 * @return string
-	 */
-	protected function getSearchSolrAction() {
-		return tx_rnbase::makeInstance('tx_mksearch_action_SearchSolr');
-	}
+    /**
+     *
+     * @return string
+     */
+    protected function getSearchSolrAction()
+    {
+        return tx_rnbase::makeInstance('tx_mksearch_action_SearchSolr');
+    }
 
-	/**
-	 *
-	 * @return string
-	 */
-	protected function getServiceRegistry(){
-		return tx_mksearch_util_ServiceRegistry;
-	}
+    /**
+     *
+     * @return string
+     */
+    protected function getServiceRegistry()
+    {
+        return tx_mksearch_util_ServiceRegistry;
+    }
 
-	/**
-	 * @param tx_rnbase_parameters $parameters
-	 * @param tx_rnbase_configurations $configurations
-	 * @param unknown $confId
-	 * @param ArrayObject $viewdata
-	 * @param array $fields
-	 * @param array $options
-	 * @param tx_mksearch_service_engine_ElasticSearch $index
-	 * @return void
-	 */
-	function handlePageBrowser(
-		tx_rnbase_parameters $parameters, tx_rnbase_configurations $configurations,
-		$confId, ArrayObject $viewdata, array &$fields, array &$options,
-		tx_mksearch_service_engine_ElasticSearch $searchEngine
-	) {
-		if(
-			(isset($options['limit']))
-			&& is_array($conf = $configurations->get($confId.'hit.pagebrowser.'))
-		) {
-			// PageBrowser initialisieren
-			$pageBrowserId = $conf['pbid'] ? $conf['pbid'] :
-							'search' . $configurations->getPluginId();
-			/* @var $pageBrowser tx_rnbase_util_PageBrowser */
-			$pageBrowser = tx_rnbase::makeInstance(
-				'tx_rnbase_util_PageBrowser', $pageBrowserId
-			);
+    /**
+     * @param tx_rnbase_parameters $parameters
+     * @param tx_rnbase_configurations $configurations
+     * @param unknown $confId
+     * @param ArrayObject $viewdata
+     * @param array $fields
+     * @param array $options
+     * @param tx_mksearch_service_engine_ElasticSearch $index
+     * @return void
+     */
+    public function handlePageBrowser(
+        tx_rnbase_parameters $parameters,
+        tx_rnbase_configurations $configurations,
+        $confId,
+        ArrayObject $viewdata,
+        array &$fields,
+        array &$options,
+        tx_mksearch_service_engine_ElasticSearch $searchEngine
+    ) {
+        if ((isset($options['limit']))
+            && is_array($conf = $configurations->get($confId.'hit.pagebrowser.'))
+        ) {
+            // PageBrowser initialisieren
+            $pageBrowserId = $conf['pbid'] ? $conf['pbid'] :
+                            'search' . $configurations->getPluginId();
+            /* @var $pageBrowser tx_rnbase_util_PageBrowser */
+            $pageBrowser = tx_rnbase::makeInstance(
+                'tx_rnbase_util_PageBrowser',
+                $pageBrowserId
+            );
 
-			$listSize = 0;
-			if($result = $searchEngine->getIndex()->count($fields['term'])) {
-				$listSize = $result;
-			}
+            $listSize = 0;
+            if ($result = $searchEngine->getIndex()->count($fields['term'])) {
+                $listSize = $result;
+            }
 
-			$pageBrowser->setState($parameters, $listSize, $options['limit']);
-			$state = $pageBrowser->getState();
+            $pageBrowser->setState($parameters, $listSize, $options['limit']);
+            $state = $pageBrowser->getState();
 
-			$options = array_merge($options, $state);
-			$viewdata->offsetSet('pagebrowser', $pageBrowser);
-		}
-	}
+            $options = array_merge($options, $state);
+            $viewdata->offsetSet('pagebrowser', $pageBrowser);
+        }
+    }
 
-	/**
-	 * (non-PHPdoc)
-	 * @see tx_rnbase_action_BaseIOC::getTemplateName()
-	 */
-	public function getTemplateName() {
-		return 'elasticsearch';
-	}
+    /**
+     * (non-PHPdoc)
+     * @see tx_rnbase_action_BaseIOC::getTemplateName()
+     */
+    public function getTemplateName()
+    {
+        return 'elasticsearch';
+    }
 
-	/**
-	 * (non-PHPdoc)
-	 * @see tx_rnbase_action_BaseIOC::getViewClassName()
-	 */
-	public function getViewClassName() {
-		return 'tx_mksearch_view_Search';
-	}
+    /**
+     * (non-PHPdoc)
+     * @see tx_rnbase_action_BaseIOC::getViewClassName()
+     */
+    public function getViewClassName()
+    {
+        return 'tx_mksearch_view_Search';
+    }
 }
 
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/action/class.tx_mksearch_action_ElasticSearch.php'])	{
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/action/class.tx_mksearch_action_ElasticSearch.php']);
+if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/action/class.tx_mksearch_action_ElasticSearch.php']) {
+    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/action/class.tx_mksearch_action_ElasticSearch.php']);
 }

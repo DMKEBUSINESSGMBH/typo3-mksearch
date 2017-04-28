@@ -1,8 +1,8 @@
 <?php
 /**
- * 	@package tx_mksearch
- *  @subpackage tx_mksearch_filter
- *  @author Hannes Bochmann
+ * @package tx_mksearch
+ * @subpackage tx_mksearch_filter
+ * @author Hannes Bochmann
  *
  *  Copyright notice
  *
@@ -42,31 +42,32 @@ tx_rnbase::load('tx_mksearch_util_Misc');
  * @subpackage tx_mksearch_filter
  * @TODO Unit Test ob das hinzufügen der FE Gruppen funktioniert.
  */
-class tx_mksearch_filter_SolrAutocomplete extends tx_mksearch_filter_SolrBase {
+class tx_mksearch_filter_SolrAutocomplete extends tx_mksearch_filter_SolrBase
+{
 
-	/**
-	 * Fügt den Suchstring zu dem Filter hinzu.
-	 *
-	 * @param 	array 						$fields
-	 * @param 	array 						$options
-	 * @param 	tx_rnbase_IParameters 		$parameters
-	 * @param 	tx_rnbase_configurations 	$configurations
-	 * @param 	string 						$confId
-	 */
-	protected function handleTerm(&$fields, &$parameters, &$configurations, $confId) {
-		$term = $parameters->get('term');
-		// lowercase term? default is true!
-		if (
-			$configurations->get($confId . 'autocomplete.termToLower') === NULL
-			|| $configurations->getBool($confId . 'autocomplete.termToLower')
-		) {
-			$term = mb_strtolower($term, 'UTF-8');
-		}
-		//we just need the plain, given term, sanitize it and put it in
-		$fields['term'] = tx_mksearch_util_Misc::sanitizeTerm($term);
-	}
+    /**
+     * Fügt den Suchstring zu dem Filter hinzu.
+     *
+     * @param   array                       $fields
+     * @param   array                       $options
+     * @param   tx_rnbase_IParameters       $parameters
+     * @param   tx_rnbase_configurations    $configurations
+     * @param   string                      $confId
+     */
+    protected function handleTerm(&$fields, &$parameters, &$configurations, $confId)
+    {
+        $term = $parameters->get('term');
+        // lowercase term? default is true!
+        if ($configurations->get($confId . 'autocomplete.termToLower') === null
+            || $configurations->getBool($confId . 'autocomplete.termToLower')
+        ) {
+            $term = mb_strtolower($term, 'UTF-8');
+        }
+        //we just need the plain, given term, sanitize it and put it in
+        $fields['term'] = tx_mksearch_util_Misc::sanitizeTerm($term);
+    }
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/filter/class.tx_mksearch_filter_SolrAutocomplete.php']) {
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/filter/class.tx_mksearch_filter_SolrAutocomplete.php']);
+    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/filter/class.tx_mksearch_filter_SolrAutocomplete.php']);
 }

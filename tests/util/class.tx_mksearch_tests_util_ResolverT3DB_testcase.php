@@ -34,26 +34,27 @@ tx_rnbase::load('tx_mksearch_tests_Testcase');
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_tests_util_ResolverT3DB_testcase
-	extends tx_mksearch_tests_Testcase {
+class tx_mksearch_tests_util_ResolverT3DB_testcase extends tx_mksearch_tests_Testcase
+{
 
-	/**
-	 * @group integration
-	 */
-	public function testGetRecordsReturnsRecordedWithDeletedFlagIfRecordNotFound() {
-		// @TODO: ther are TYPO3_DB operations. where? mock it!
-		$this->prepareLegacyTypo3DbGlobal();
+    /**
+     * @group integration
+     */
+    public function testGetRecordsReturnsRecordedWithDeletedFlagIfRecordNotFound()
+    {
+        // @TODO: ther are TYPO3_DB operations. where? mock it!
+        $this->prepareLegacyTypo3DbGlobal();
 
-		$resolverT3Db = tx_rnbase::makeInstance('tx_mksearch_util_ResolverT3DB');
+        $resolverT3Db = tx_rnbase::makeInstance('tx_mksearch_util_ResolverT3DB');
 
-		$queueData = array(
-			'tablename'	=>	'tt_content',
-			'recid'		=>	1215752191
-		);
-		$records = $resolverT3Db->getRecords($queueData);
+        $queueData = array(
+            'tablename'    =>    'tt_content',
+            'recid'        =>    1215752191
+        );
+        $records = $resolverT3Db->getRecords($queueData);
 
-		self::assertEquals(1, count($records), 'es wurde nicht genau 1 record gefunden');
-		self::assertEquals($queueData['recid'], $records[0]['uid'], 'uid falsch');
-		self::assertEquals(1, $records[0]['deleted'], 'deleted falsch');
-	}
+        self::assertEquals(1, count($records), 'es wurde nicht genau 1 record gefunden');
+        self::assertEquals($queueData['recid'], $records[0]['uid'], 'uid falsch');
+        self::assertEquals(1, $records[0]['deleted'], 'deleted falsch');
+    }
 }

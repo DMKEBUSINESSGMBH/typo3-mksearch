@@ -1,8 +1,8 @@
 <?php
 /**
- * 	@package TYPO3
- *  @subpackage tx_mksearch
- *  @author Hannes Bochmann
+ * @package TYPO3
+ * @subpackage tx_mksearch
+ * @author Hannes Bochmann
  *
  *  Copyright notice
  *
@@ -36,17 +36,19 @@ tx_rnbase::load('tx_rnbase_model_base');
  * @package TYPO3
  * @subpackage tx_mksearch
  */
-class tx_mksearch_model_cal_Category extends tx_rnbase_model_base  {
-	
-	/**
-	 * (non-PHPdoc)
-	 * @see tx_rnbase_model_base::getTableName()
-	 */
-	public function getTableName(){
-		return 'tx_cal_category';
-	}
+class tx_mksearch_model_cal_Category extends tx_rnbase_model_base
+{
+    
+    /**
+     * (non-PHPdoc)
+     * @see tx_rnbase_model_base::getTableName()
+     */
+    public function getTableName()
+    {
+        return 'tx_cal_category';
+    }
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/cal/class.tx_mksearch_model_cal_Category.php']) {
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/cal/class.tx_mksearch_model_cal_Category.php']);
+    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/cal/class.tx_mksearch_model_cal_Category.php']);
 }

@@ -30,96 +30,103 @@ namespace DMK\Mksearch\Tests\ViewHelpers\Format;
 /**
  * DMK\Mksearch\Tests\ViewHelpers$CObjectViewHelperTest
  *
- * @package 		TYPO3
- * @subpackage	 	mksearch
- * @author 			Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
- * @license 		http://www.gnu.org/licenses/lgpl.html
- * 					GNU Lesser General Public License, version 3 or later
+ * @package         TYPO3
+ * @subpackage      mksearch
+ * @author          Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
+ * @license         http://www.gnu.org/licenses/lgpl.html
+ *                  GNU Lesser General Public License, version 3 or later
  */
 class CropViewHelperTest extends \tx_mksearch_tests_Testcase
 {
-	/**
-	 * {@inheritDoc}
-	 * @see tx_mksearch_tests_Testcase::setUp()
-	 */
-	protected function setUp() {
-		if (\tx_rnbase_util_TYPO3::isTYPO80OrHigher()) {
-			$this->markTestSkipped('Not required for TYPO3 8 or higher');
-		}
-	}
-	/**
-	 * {@inheritDoc}
-	 * @see tx_mksearch_tests_Testcase::tearDown()
-	 */
-	protected function tearDown() {
-		$property = new \ReflectionProperty('tx_mksearch_service_internal_Index', 'indexingInProgress');
-		$property->setAccessible(TRUE);
-		$property->setValue(null, FALSE);
-	}
+    /**
+     * {@inheritDoc}
+     * @see tx_mksearch_tests_Testcase::setUp()
+     */
+    protected function setUp()
+    {
+        if (\tx_rnbase_util_TYPO3::isTYPO80OrHigher()) {
+            $this->markTestSkipped('Not required for TYPO3 8 or higher');
+        }
+    }
+    /**
+     * {@inheritDoc}
+     * @see tx_mksearch_tests_Testcase::tearDown()
+     */
+    protected function tearDown()
+    {
+        $property = new \ReflectionProperty('tx_mksearch_service_internal_Index', 'indexingInProgress');
+        $property->setAccessible(true);
+        $property->setValue(null, false);
+    }
 
-	/**
-	 * @group unit
-	 */
-	public function testSimulateFrontendEnvironmentWhenMksearchIndexingIsInProgress() {
-		$property = new \ReflectionProperty('tx_mksearch_service_internal_Index', 'indexingInProgress');
-		$property->setAccessible(TRUE);
-		$property->setValue(null, TRUE);
+    /**
+     * @group unit
+     */
+    public function testSimulateFrontendEnvironmentWhenMksearchIndexingIsInProgress()
+    {
+        $property = new \ReflectionProperty('tx_mksearch_service_internal_Index', 'indexingInProgress');
+        $property->setAccessible(true);
+        $property->setValue(null, true);
 
-		$GLOBALS['TSFE'] = 'test';
+        $GLOBALS['TSFE'] = 'test';
 
-		$viewHelper = $this->getViewHelper();
-		$this->callInaccessibleMethod($viewHelper, 'simulateFrontendEnvironment');
-		self::assertSame('test', $GLOBALS['TSFE']);
-	}
+        $viewHelper = $this->getViewHelper();
+        $this->callInaccessibleMethod($viewHelper, 'simulateFrontendEnvironment');
+        self::assertSame('test', $GLOBALS['TSFE']);
+    }
 
-	/**
-	 * @group unit
-	 */
-	public function testSimulateFrontendEnvironmentWhenMksearchIndexingIsNotInProgress() {
-		$GLOBALS['TSFE'] = 'test';
+    /**
+     * @group unit
+     */
+    public function testSimulateFrontendEnvironmentWhenMksearchIndexingIsNotInProgress()
+    {
+        $GLOBALS['TSFE'] = 'test';
 
-		$viewHelper = $this->getViewHelper();
-		$this->callInaccessibleMethod($viewHelper, 'simulateFrontendEnvironment');
-		self::assertInstanceOf('stdCLass', $GLOBALS['TSFE']);
-	}
+        $viewHelper = $this->getViewHelper();
+        $this->callInaccessibleMethod($viewHelper, 'simulateFrontendEnvironment');
+        self::assertInstanceOf('stdCLass', $GLOBALS['TSFE']);
+    }
 
-	/**
-	 * @group unit
-	 */
-	public function testResetFrontendEnvironmentWhenMksearchIndexingIsInProgress() {
-		$property = new \ReflectionProperty('tx_mksearch_service_internal_Index', 'indexingInProgress');
-		$property->setAccessible(TRUE);
-		$property->setValue(null, TRUE);
+    /**
+     * @group unit
+     */
+    public function testResetFrontendEnvironmentWhenMksearchIndexingIsInProgress()
+    {
+        $property = new \ReflectionProperty('tx_mksearch_service_internal_Index', 'indexingInProgress');
+        $property->setAccessible(true);
+        $property->setValue(null, true);
 
-		$viewHelper = $this->getViewHelper();
-		$property = new \ReflectionProperty('TYPO3\\CMS\\Fluid\\ViewHelpers\\Format\\CropViewHelper', 'tsfeBackup');
-		$property->setAccessible(TRUE);
-		$property->setValue($viewHelper, 'tsfeBackup');
+        $viewHelper = $this->getViewHelper();
+        $property = new \ReflectionProperty('TYPO3\\CMS\\Fluid\\ViewHelpers\\Format\\CropViewHelper', 'tsfeBackup');
+        $property->setAccessible(true);
+        $property->setValue($viewHelper, 'tsfeBackup');
 
-		$GLOBALS['TSFE'] = 'test';
-		$this->callInaccessibleMethod($viewHelper, 'resetFrontendEnvironment');
-		self::assertSame('test', $GLOBALS['TSFE']);
-	}
+        $GLOBALS['TSFE'] = 'test';
+        $this->callInaccessibleMethod($viewHelper, 'resetFrontendEnvironment');
+        self::assertSame('test', $GLOBALS['TSFE']);
+    }
 
-	/**
-	 * @group unit
-	 */
-	public function testResetFrontendEnvironmentWhenMksearchIndexingIsNotInProgress() {
-		$GLOBALS['TSFE'] = 'test';
+    /**
+     * @group unit
+     */
+    public function testResetFrontendEnvironmentWhenMksearchIndexingIsNotInProgress()
+    {
+        $GLOBALS['TSFE'] = 'test';
 
-		$viewHelper = $this->getViewHelper();
-		$property = new \ReflectionProperty('TYPO3\\CMS\\Fluid\\ViewHelpers\\Format\\CropViewHelper', 'tsfeBackup');
-		$property->setAccessible(TRUE);
-		$property->setValue($viewHelper, 'tsfeBackup');
+        $viewHelper = $this->getViewHelper();
+        $property = new \ReflectionProperty('TYPO3\\CMS\\Fluid\\ViewHelpers\\Format\\CropViewHelper', 'tsfeBackup');
+        $property->setAccessible(true);
+        $property->setValue($viewHelper, 'tsfeBackup');
 
-		$this->callInaccessibleMethod($viewHelper, 'resetFrontendEnvironment');
-		self::assertSame('tsfeBackup', $GLOBALS['TSFE']);
-	}
+        $this->callInaccessibleMethod($viewHelper, 'resetFrontendEnvironment');
+        self::assertSame('tsfeBackup', $GLOBALS['TSFE']);
+    }
 
-	/**
-	 * @return DMK\Mksearch\ViewHelpers\Format\CropViewHelper
-	 */
-	protected function getViewHelper() {
-		return \tx_rnbase::makeInstance('TYPO3\\CMS\\Fluid\\ViewHelpers\\Format\\CropViewHelper');
-	}
+    /**
+     * @return DMK\Mksearch\ViewHelpers\Format\CropViewHelper
+     */
+    protected function getViewHelper()
+    {
+        return \tx_rnbase::makeInstance('TYPO3\\CMS\\Fluid\\ViewHelpers\\Format\\CropViewHelper');
+    }
 }

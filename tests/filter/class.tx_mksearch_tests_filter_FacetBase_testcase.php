@@ -1,8 +1,8 @@
 <?php
 /**
- * 	@package tx_mksearch
- *  @subpackage tx_mksearch_tests_filter
- *  @author Hannes Bochmann
+ * @package tx_mksearch
+ * @subpackage tx_mksearch_tests_filter
+ * @author Hannes Bochmann
  *
  *  Copyright notice
  *
@@ -42,135 +42,142 @@ tx_rnbase::load('tx_mksearch_filter_FacetBase');
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_tests_filter_FacetBase_testcase
-	extends tx_mksearch_tests_Testcase {
+class tx_mksearch_tests_filter_FacetBase_testcase extends tx_mksearch_tests_Testcase
+{
+    protected $parameters;
+    protected $groupDataBackup;
 
-	protected $parameters;
-	protected $groupDataBackup;
+    /**
+     * (non-PHPdoc)
+     * @see tx_mksearch_tests_Testcase::setUp()
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->parameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
+        $this->parameters->setQualifier('mksearch');
+    }
 
-	/**
-	 * (non-PHPdoc)
-	 * @see tx_mksearch_tests_Testcase::setUp()
-	 */
-	protected function setUp(){
-		parent::setUp();
-		$this->parameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
-		$this->parameters->setQualifier('mksearch');
-	}
+    /**
+     * (non-PHPdoc)
+     * @see tx_mksearch_tests_Testcase::tearDown()
+     */
+    protected function tearDown()
+    {
+        parent::tearDown();
+        unset($_GET['mksearch']);
 
-	/**
-	 * (non-PHPdoc)
-	 * @see tx_mksearch_tests_Testcase::tearDown()
-	 */
-	protected function tearDown() {
-		parent::tearDown();
-		unset($_GET['mksearch']);
+        if (isset($GLOBALS['TSFE']->id)) {
+            unset($GLOBALS['TSFE']->id);
+        }
+        if (isset($GLOBALS['TSFE']->rootLine[0]['uid'])) {
+            unset($GLOBALS['TSFE']->rootLine[0]['uid']);
+        }
+    }
 
-		if(isset($GLOBALS['TSFE']->id)) {
-			unset($GLOBALS['TSFE']->id);
-		}
-		if(isset($GLOBALS['TSFE']->rootLine[0]['uid'])) {
-			unset($GLOBALS['TSFE']->rootLine[0]['uid']);
-		}
-	}
+    /**
+     * @group unit
+     */
+    public function testInitSetsFilterQueriesFromParametersNot()
+    {
+        $config = $this->getDefaultConfig();
+        // das feld für den fq muss noch erlaubt werden
+        $config['searchsolr.']['filter.']['default.']['allowedFqParams'] = 'facet_field';
+        //fq noch setzen
+        $this->parameters->offsetSet('fq', 'facet_field:"facet value"');
+        $filter = $this->getFilter($config);
 
-	/**
-	 * @group unit
-	 */
-	public function testInitSetsFilterQueriesFromParametersNot() {
-		$config = $this->getDefaultConfig();
-		// das feld für den fq muss noch erlaubt werden
-		$config['searchsolr.']['filter.']['default.']['allowedFqParams'] = 'facet_field';
-		//fq noch setzen
-		$this->parameters->offsetSet('fq','facet_field:"facet value"');
-		$filter = $this->getFilter($config);
+        $fields = array('term' => 'contentType:* ###PARAM_MKSEARCH_TERM###');
+        $options = array();
+        $filter->init($fields, $options);
 
-		$fields = array('term' => 'contentType:* ###PARAM_MKSEARCH_TERM###');
-		$options = array();
-		$filter->init($fields,$options);
+        self::assertEquals(
+            '(-fe_group_mi:[* TO *] AND id:[* TO *]) OR fe_group_mi:0',
+            $options['fq'],
+            'fq wuede falsch übernommen!'
+        );
+    }
 
-		self::assertEquals(
-			'(-fe_group_mi:[* TO *] AND id:[* TO *]) OR fe_group_mi:0',
-			$options['fq'],
-			'fq wuede falsch übernommen!'
-		);
-	}
+    /**
+     * @group unit
+     */
+    public function testSettingOfFeGroupsToFilterQuery()
+    {
+        $tsFeBackup = $GLOBALS['TSFE']->fe_user->groupData['uid'];
+        $GLOBALS['TSFE']->fe_user->groupData['uid'] = array(1,2);
 
-	/**
-	 * @group unit
-	 */
-	public function testSettingOfFeGroupsToFilterQuery(){
-		$tsFeBackup = $GLOBALS['TSFE']->fe_user->groupData['uid'];
-		$GLOBALS['TSFE']->fe_user->groupData['uid'] = array(1,2);
+        $config = $this->getDefaultConfig();
 
-		$config = $this->getDefaultConfig();
+        $filter = $this->getFilter($config);
 
-		$filter = $this->getFilter($config);
+        $fields = array('term' => 'contentType:* ###PARAM_MKSEARCH_TERM###');
+        $options = array();
+        $filter->init($fields, $options);
 
-		$fields = array('term' => 'contentType:* ###PARAM_MKSEARCH_TERM###');
-		$options = array();
-		$filter->init($fields, $options);
+        self::assertEquals('(-fe_group_mi:[* TO *] AND id:[* TO *]) OR fe_group_mi:0 OR fe_group_mi:1 OR fe_group_mi:2', $options['fq'], 'fq wuede gesetzt!');
 
-		self::assertEquals('(-fe_group_mi:[* TO *] AND id:[* TO *]) OR fe_group_mi:0 OR fe_group_mi:1 OR fe_group_mi:2',$options['fq'],'fq wuede gesetzt!');
+        $GLOBALS['TSFE']->fe_user->groupData['uid'] = $tsFeBackup;
+    }
 
-		$GLOBALS['TSFE']->fe_user->groupData['uid'] = $tsFeBackup;
-	}
+    /**
+     * @group unit
+     */
+    public function testInitSetsLimitToZero()
+    {
+        $config = $this->getDefaultConfig();
+        $config['searchsolr.']['filter.']['default.']['options.']['limit'] = 10;
 
-	/**
-	 * @group unit
-	 */
-	public function testInitSetsLimitToZero() {
-		$config = $this->getDefaultConfig();
-		$config['searchsolr.']['filter.']['default.']['options.']['limit'] = 10;
+        $filter = $this->getFilter($config);
 
-		$filter = $this->getFilter($config);
+        $fields = array();
+        $options = array();
+        $filter->init($fields, $options);
+        self::assertEquals(0, $options['limit'], 'limit nicht 0');
+    }
 
-		$fields = array();
-		$options = array();
-		$filter->init($fields,$options);
-		self::assertEquals(0, $options['limit'], 'limit nicht 0');
-	}
+    /**
+     * @group unit
+     */
+    public function testInitSetsFacetToTrue()
+    {
+        $config = $this->getDefaultConfig();
+        $config['searchsolr.']['filter.']['default.']['options.']['facet'] = 'false';
 
-	/**
-	 * @group unit
-	 */
-	public function testInitSetsFacetToTrue() {
-		$config = $this->getDefaultConfig();
-		$config['searchsolr.']['filter.']['default.']['options.']['facet'] = 'false';
+        $filter = $this->getFilter($config);
 
-		$filter = $this->getFilter($config);
+        $fields = array();
+        $options = array();
+        $filter->init($fields, $options);
+        self::assertEquals('true', $options['facet'], 'facet nicht true');
+    }
 
-		$fields = array();
-		$options = array();
-		$filter->init($fields,$options);
-		self::assertEquals('true', $options['facet'], 'facet nicht true');
-	}
+    /**
+     * @return array
+     */
+    private function getDefaultConfig()
+    {
+        $config = tx_mksearch_tests_Util::loadPageTS4BE();
+        //wir müssen fields extra kopieren da es über TS Anweisungen im BE nicht geht
+        $config['searchsolr.']['filter.']['default.'] = $config['lib.']['mksearch.']['defaultsolrfilter.'];
+        //force noch setzen
+        $config['searchsolr.']['filter.']['default.']['force'] = 1;
 
-	/**
-	 * @return array
-	 */
-	private function getDefaultConfig() {
-		$config = tx_mksearch_tests_Util::loadPageTS4BE();
-		//wir müssen fields extra kopieren da es über TS Anweisungen im BE nicht geht
-		$config['searchsolr.']['filter.']['default.'] = $config['lib.']['mksearch.']['defaultsolrfilter.'];
-		//force noch setzen
-		$config['searchsolr.']['filter.']['default.']['force'] = 1;
+        return $config;
+    }
 
-		return $config;
-	}
+    /**
+     * @param array $config
+     * @return tx_mksearch_filter_FacetBase
+     */
+    private function getFilter($config = array())
+    {
+        $filter = tx_rnbase::makeInstance(
+            'tx_mksearch_filter_FacetBase',
+            $this->parameters,
+            tx_mksearch_tests_Util::loadConfig4BE($config),
+            'searchsolr.'
+        );
 
-	/**
-	 * @param array $config
-	 * @return tx_mksearch_filter_FacetBase
-	 */
-	private function getFilter($config = array()) {
-		$filter = tx_rnbase::makeInstance(
-			'tx_mksearch_filter_FacetBase',
-			$this->parameters,
-			tx_mksearch_tests_Util::loadConfig4BE($config),
-			'searchsolr.'
-		);
-
-		return $filter;
-	}
+        return $filter;
+    }
 }

@@ -26,51 +26,53 @@ tx_rnbase::load('tx_mksearch_service_internal_Index');
 /**
  * tx_mksearch_hooks_DatabaseConnection
  *
- * @package 		TYPO3
- * @subpackage	 	mksearch
- * @author 			Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
- * @license 		http://www.gnu.org/licenses/lgpl.html
- * 					GNU Lesser General Public License, version 3 or later
+ * @package         TYPO3
+ * @subpackage      mksearch
+ * @author          Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
+ * @license         http://www.gnu.org/licenses/lgpl.html
+ *                  GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_hooks_DatabaseConnection {
+class tx_mksearch_hooks_DatabaseConnection
+{
 
-	/**
-	 * @var integer
-	 */
-	private static $loadHiddenObjectsConfigurationBackup;
+    /**
+     * @var integer
+     */
+    private static $loadHiddenObjectsConfigurationBackup;
 
-	/**
-	 * During indexing we always use enablefieldsfe for selects to avoid hidden
-	 * data being indexed. enablefieldsoff needs to be set when this behaviour is
-	 * not desired. in this case setting enable fields has to be done manually
-	 * when searching.
-	 *
-	 * Example without this fix: Wneh a news is indexed hidden categories will be
-	 * indexed.
-	 *
-	 * @param array $parameters
-	 */
-	public function doSelectPre(array &$parameters) {
-		if (
-			tx_mksearch_service_internal_Index::isIndexingInProgress() &&
-			!isset($parameters['options']['enablefieldsoff'])
-		) {
-			$parameters['options']['enablefieldsfe'] = 1;
+    /**
+     * During indexing we always use enablefieldsfe for selects to avoid hidden
+     * data being indexed. enablefieldsoff needs to be set when this behaviour is
+     * not desired. in this case setting enable fields has to be done manually
+     * when searching.
+     *
+     * Example without this fix: Wneh a news is indexed hidden categories will be
+     * indexed.
+     *
+     * @param array $parameters
+     */
+    public function doSelectPre(array &$parameters)
+    {
+        if (tx_mksearch_service_internal_Index::isIndexingInProgress() &&
+            !isset($parameters['options']['enablefieldsoff'])
+        ) {
+            $parameters['options']['enablefieldsfe'] = 1;
 
-			if (isset($parameters['options']['enablefieldsbe'])) {
-				unset($parameters['options']['enablefieldsbe']);
-			}
+            if (isset($parameters['options']['enablefieldsbe'])) {
+                unset($parameters['options']['enablefieldsbe']);
+            }
 
-			// avoid that our changes are overwritten when loadHiddenObjects is true.
-			self::$loadHiddenObjectsConfigurationBackup = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects'];
-			$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects'] = 0;
-		}
-	}
+            // avoid that our changes are overwritten when loadHiddenObjects is true.
+            self::$loadHiddenObjectsConfigurationBackup = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects'];
+            $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects'] = 0;
+        }
+    }
 
-	/**
-	 * @return void
-	 */
-	public function doSelectPost() {
-		$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects'] = self::$loadHiddenObjectsConfigurationBackup;
-	}
+    /**
+     * @return void
+     */
+    public function doSelectPost()
+    {
+        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects'] = self::$loadHiddenObjectsConfigurationBackup;
+    }
 }

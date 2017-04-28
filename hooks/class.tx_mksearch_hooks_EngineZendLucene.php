@@ -25,40 +25,44 @@
 /**
  * Hooks for search engine Zend_Lucene
  */
-class tx_mksearch_hooks_EngineZendLucene {
+class tx_mksearch_hooks_EngineZendLucene
+{
 
-	/**
-	 * Hook for converting fields before actual indexing
-	 *
-	 * This method has to do some additional work the Zend Analyzer can't do.
-	 *
-	 * @param array $params:
-	 * 						['data']	=> &associative array[tx_mksearch_interface_IndexerField]
-	 * @return void
-	 */
-	public function convertFields($p) {
-		// Do some converting...
-		// @see tx_mksearch_service_engine_ZendLucene::indexNew() - hooks
-	}
+    /**
+     * Hook for converting fields before actual indexing
+     *
+     * This method has to do some additional work the Zend Analyzer can't do.
+     *
+     * @param array $params:
+     *                      ['data']    => &associative array[tx_mksearch_interface_IndexerField]
+     * @return void
+     */
+    public function convertFields($p)
+    {
+        // Do some converting...
+        // @see tx_mksearch_service_engine_ZendLucene::indexNew() - hooks
+    }
 
-	/**
-	 * Manipulate one single search term
-	 *
-	 * This method can be used to normalize search terms
-	 * to match conditions of indexed data, e. g. adapt charse encoding.
-	 *
-	 * @param array $params:
-	 * 						['term']	=> string
-	 * @return void
-	 */
-	public function manipulateSingleTerm($p) {
-		if (!isset($p['term']))
-			throw new Exception('tx_mksearch_hooks_EngineZendLucene::manipulateSingleTerm(): No term given!');
-		// else
-		$p['term'] = mb_strtolower($p['term'], 'utf-8');
-	}
+    /**
+     * Manipulate one single search term
+     *
+     * This method can be used to normalize search terms
+     * to match conditions of indexed data, e. g. adapt charse encoding.
+     *
+     * @param array $params:
+     *                      ['term']    => string
+     * @return void
+     */
+    public function manipulateSingleTerm($p)
+    {
+        if (!isset($p['term'])) {
+            throw new Exception('tx_mksearch_hooks_EngineZendLucene::manipulateSingleTerm(): No term given!');
+        }
+        // else
+        $p['term'] = mb_strtolower($p['term'], 'utf-8');
+    }
 }
 
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/hooks/class.tx_mksearch_hooks_EngineZendLucene.php'])	{
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/hooks/class.tx_mksearch_hooks_EngineZendLucene.php']);
+if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/hooks/class.tx_mksearch_hooks_EngineZendLucene.php']) {
+    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/hooks/class.tx_mksearch_hooks_EngineZendLucene.php']);
 }

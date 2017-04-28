@@ -1,8 +1,8 @@
 <?php
 /**
- *	@package TYPO3
- *  @subpackage tx_mksearch
- *  @author Hannes Bochmann <dev@dmk-ebusiness.de>
+ * @package TYPO3
+ * @subpackage tx_mksearch
+ * @author Hannes Bochmann <dev@dmk-ebusiness.de>
  *
  *  Copyright notice
  *
@@ -30,21 +30,23 @@ tx_rnbase::load('tx_mksearch_tests_Testcase');
 /**
  * tx_mksearch_tests_search_irfaq_Expert_testcase
  *
- * @package 		TYPO3
- * @subpackage	 	mksearch
- * @author 			Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
- * @license 		http://www.gnu.org/licenses/lgpl.html
- * 					GNU Lesser General Public License, version 3 or later
+ * @package         TYPO3
+ * @subpackage      mksearch
+ * @author          Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
+ * @license         http://www.gnu.org/licenses/lgpl.html
+ *                  GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_tests_search_irfaq_Expert_testcase extends tx_mksearch_tests_Testcase {
+class tx_mksearch_tests_search_irfaq_Expert_testcase extends tx_mksearch_tests_Testcase
+{
 
-	/**
-	 * @group unit
-	 */
-	public function testGetWrapperClass() {
-		$wrapperClass = tx_rnbase::makeInstance('tx_mksearch_search_irfaq_Expert')->getWrapperClass();
-		self::assertSame('tx_mksearch_model_irfaq_Expert', $wrapperClass);
-		// wenn es die Klasse nicht gibt, wirft rn_base einen Fehler
-		tx_rnbase::load($wrapperClass);
-	}
+    /**
+     * @group unit
+     */
+    public function testGetWrapperClass()
+    {
+        $wrapperClass = tx_rnbase::makeInstance('tx_mksearch_search_irfaq_Expert')->getWrapperClass();
+        self::assertSame('tx_mksearch_model_irfaq_Expert', $wrapperClass);
+        // wenn es die Klasse nicht gibt, wirft rn_base einen Fehler
+        tx_rnbase::load($wrapperClass);
+    }
 }

@@ -37,18 +37,18 @@ tx_rnbase::load('tx_mksearch_model_SolrHit');
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_tests_model_SolrHit_testcase
-	extends tx_mksearch_tests_Testcase {
+class tx_mksearch_tests_model_SolrHit_testcase extends tx_mksearch_tests_Testcase
+{
+    public function test_getSolrId()
+    {
+        $doc = new Apache_Solr_Document();
+        $doc->id = 'myid';
+        $hit = tx_rnbase::makeInstance('tx_mksearch_model_SolrHit', $doc);
 
-	function test_getSolrId() {
-		$doc = new Apache_Solr_Document();
-		$doc->id = 'myid';
-		$hit = tx_rnbase::makeInstance('tx_mksearch_model_SolrHit', $doc);
-
-		self::assertEquals('myid', $hit->getSolrId());
-	}
+        self::assertEquals('myid', $hit->getSolrId());
+    }
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/class.tx_mksearch_tests_model_SolrHit_testcase.php']) {
-  include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/class.tx_mksearch_tests_model_SolrHit_testcase.php']);
+    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/class.tx_mksearch_tests_model_SolrHit_testcase.php']);
 }

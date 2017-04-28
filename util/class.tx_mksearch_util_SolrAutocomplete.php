@@ -31,76 +31,82 @@ tx_rnbase::load('tx_mksearch_util_ServiceRegistry');
  * @package TYPO3
  * @subpackage tx_mksearch
  */
-class tx_mksearch_util_SolrAutocomplete {
+class tx_mksearch_util_SolrAutocomplete
+{
 
-	/**
-	 * @var string
-	 */
-	protected static $autocompleteConfId = 'autocomplete.';
+    /**
+     * @var string
+     */
+    protected static $autocompleteConfId = 'autocomplete.';
 
-	/**
-	 * @param tx_rnbase_configurations $configurations
-	 * @param string $confId
-	 *
-	 * example TS config:
-	 * myConfId {
-	 * 	usedIndex = 1
-	 * 	autocomplete {
-	 * 		actionLink {
-	 * 			useKeepVars = 1
-	 * 			useKeepVars.add = ::type=540
-	 * 			absurl = 1
-	 * 			noHash = 1
-	 * 		}
-	 * 	}
-	 * }
-	 *
-	 * @return tx_rnbase_util_Link
-	 */
-	public static function getAutocompleteActionLinkByConfigurationsAndConfId(
-		tx_rnbase_configurations $configurations, $confId
-	) {
-		$linkParameters = array('ajax' => 1);
-		$usedIndex = $configurations->get($confId.'usedIndex');
-		if ($usedIndex === 0 || $usedIndex > 0) {
-			$linkParameters['usedIndex'] = intval($usedIndex);
-		}
+    /**
+     * @param tx_rnbase_configurations $configurations
+     * @param string $confId
+     *
+     * example TS config:
+     * myConfId {
+     *  usedIndex = 1
+     *  autocomplete {
+     *      actionLink {
+     *          useKeepVars = 1
+     *          useKeepVars.add = ::type=540
+     *          absurl = 1
+     *          noHash = 1
+     *      }
+     *  }
+     * }
+     *
+     * @return tx_rnbase_util_Link
+     */
+    public static function getAutocompleteActionLinkByConfigurationsAndConfId(
+        tx_rnbase_configurations $configurations,
+        $confId
+    ) {
+        $linkParameters = array('ajax' => 1);
+        $usedIndex = $configurations->get($confId.'usedIndex');
+        if ($usedIndex === 0 || $usedIndex > 0) {
+            $linkParameters['usedIndex'] = intval($usedIndex);
+        }
 
-		$link = $configurations->createLink();
-		$link->initByTS(
-			$configurations,
-			$confId . self::$autocompleteConfId . 'actionLink.',
-			$linkParameters
-		);
+        $link = $configurations->createLink();
+        $link->initByTS(
+            $configurations,
+            $confId . self::$autocompleteConfId . 'actionLink.',
+            $linkParameters
+        );
 
-		return $link;
-	}
+        return $link;
+    }
 
-	/**
-	 * @deprecated use getAutocompleteJavaScriptByConfigurationArrayAndLink
-	 */
-	public static function getAutocompleteJsByConfigurationsConfIdAndLink(
-		$configArray, tx_rnbase_util_Link $link, $wrapInScriptTags = TRUE
-	) {
-		return self::getAutocompleteJavaScriptByConfigurationArrayAndLink($configArray, $link, $wrapInScriptTags);
-	}
+    /**
+     * @deprecated use getAutocompleteJavaScriptByConfigurationArrayAndLink
+     */
+    public static function getAutocompleteJsByConfigurationsConfIdAndLink(
+        $configArray,
+        tx_rnbase_util_Link $link,
+        $wrapInScriptTags = true
+    ) {
+        return self::getAutocompleteJavaScriptByConfigurationArrayAndLink($configArray, $link, $wrapInScriptTags);
+    }
 
-	/**
-	 * @param array $configArray example:
-	 * array (
-	 * 	minLength = 2
-	 * 	elementSelector = "#mksearch_term"
-	 * )
-	 *
-	 * @param tx_rnbase_util_Link $link
-	 * @param boolean $wrapInScriptTags
-	 *
-	 * @return string
-	 */
-	public static function getAutocompleteJavaScriptByConfigurationArrayAndLink(
-		$configArray, tx_rnbase_util_Link $link, $wrapInScriptTags = TRUE
-	) {
-		$javaScript = 'jQuery(document).ready(function(){
+    /**
+     * @param array $configArray example:
+     * array (
+     *  minLength = 2
+     *  elementSelector = "#mksearch_term"
+     * )
+     *
+     * @param tx_rnbase_util_Link $link
+     * @param bool $wrapInScriptTags
+     *
+     * @return string
+     */
+    public static function getAutocompleteJavaScriptByConfigurationArrayAndLink(
+        $configArray,
+        tx_rnbase_util_Link $link,
+        $wrapInScriptTags = true
+    ) {
+        $javaScript = 'jQuery(document).ready(function(){
 			jQuery('.$configArray['elementSelector'].').autocomplete({
 				source: function( request, response ) {
 					jQuery.ajax({
@@ -127,9 +133,10 @@ class tx_mksearch_util_SolrAutocomplete {
 		});
 		jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();';
 
-		if ($wrapInScriptTags) {
-			$javaScript = '<script type="text/javascript">' . LF . $javaScript . LF . '</script>';
-		}
-		return $javaScript;
-	}
+        if ($wrapInScriptTags) {
+            $javaScript = '<script type="text/javascript">' . LF . $javaScript . LF . '</script>';
+        }
+
+        return $javaScript;
+    }
 }

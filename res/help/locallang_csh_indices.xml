@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <T3locallang>
-	<meta type="array">
-		<type>database</type>
-		<description>Language labels for the 'tx_mksearch_types' context sensitive help (CSH)</description>
-	</meta>
-	<data type="array">
-		<languageKey index="default" type="array">
-			<label index="name.description"><![CDATA[If you use Solr you have to set the name by following schema: 'host,port,core' e.g. 'localhost,8983,/solr/core-name'. <br /><br />  If you use Zend Lucene you just have to provide the index name. <br /><br />  If you use ElasticSearch you have to set the name by the following schema: 'index;host,port,path;host,port,path' e.g. 'typo3-content;first-server,8983,/;second-server,8983,/']]></label>
-			<label index="name.details"></label>
-		</languageKey>
-		<languageKey index="de" type="array">
-			<label index="name.description"><![CDATA[Wenn Sie Solr nutzen muss der Name nach folgendem Schema angegeben werden: 'Host,Port,Core' z.B.: 'localhost,8983,/solr/core-name'. <br /><br />  Wenn Sie Zend Lucene nutzen, dann müssen Sie nur den Indexnamen angeben. <br /><br />  Wenn Sie ElasticSearch nutzen, dann muss der Name nach folgendem Schema angegeben werden: 'index;host,port,path;host,port,path' e.g. 'typo3-content;erster-server,8983,/;zweiter-server,8983,/']]></label>
-			<label index="name.details"></label>
-		</languageKey>
-	</data>
+    <meta type="array">
+        <type>database</type>
+        <description>Language labels for the 'tx_mksearch_types' context sensitive help (CSH)</description>
+    </meta>
+    <data type="array">
+        <languageKey index="default" type="array">
+            <label index="name.description"><![CDATA[If you use Solr you have to set the name by following schema: 'host,port,core' e.g. 'localhost,8983,/solr/core-name'. <br /><br />  If you use Zend Lucene you just have to provide the index name. <br /><br />  If you use ElasticSearch you have to set the name by the following schema: 'index;host,port,path;host,port,path' e.g. 'typo3-content;first-server,8983,/;second-server,8983,/']]></label>
+            <label index="name.details"></label>
+        </languageKey>
+        <languageKey index="de" type="array">
+            <label index="name.description"><![CDATA[Wenn Sie Solr nutzen muss der Name nach folgendem Schema angegeben werden: 'Host,Port,Core' z.B.: 'localhost,8983,/solr/core-name'. <br /><br />  Wenn Sie Zend Lucene nutzen, dann müssen Sie nur den Indexnamen angeben. <br /><br />  Wenn Sie ElasticSearch nutzen, dann muss der Name nach folgendem Schema angegeben werden: 'index;host,port,path;host,port,path' e.g. 'typo3-content;erster-server,8983,/;zweiter-server,8983,/']]></label>
+            <label index="name.details"></label>
+        </languageKey>
+    </data>
 </T3locallang>

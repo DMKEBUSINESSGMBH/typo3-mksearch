@@ -1,8 +1,8 @@
 <?php
 /**
- * 	@package tx_mksearch
- *  @subpackage tx_mksearch_service
- *  @author Hannes Bochmann
+ * @package tx_mksearch
+ * @subpackage tx_mksearch_service
+ * @author Hannes Bochmann
  *
  *  Copyright notice
  *
@@ -29,33 +29,36 @@
 /**
  * tx_mksearch_signalSlotDispatcher_FileIndexRepsitory
  *
- * @package 		TYPO3
- * @subpackage		mksearch
- * @author 			Hannes Bochmann <dev@dmk-ebusiness.de>
- * @license 		http://www.gnu.org/licenses/lgpl.html
- * 					GNU Lesser General Public License, version 3 or later
+ * @package         TYPO3
+ * @subpackage      mksearch
+ * @author          Hannes Bochmann <dev@dmk-ebusiness.de>
+ * @license         http://www.gnu.org/licenses/lgpl.html
+ *                  GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_signalSlotDispatcher_FileIndexRepsitory {
+class tx_mksearch_signalSlotDispatcher_FileIndexRepsitory
+{
 
-	/**
-	 * @param integer || array $fileData
-	 */
-	public function putFileIntoQueue($data){
-		$uid = is_array($data) ? $data['uid'] : $data;
+    /**
+     * @param integer || array $fileData
+     */
+    public function putFileIntoQueue($data)
+    {
+        $uid = is_array($data) ? $data['uid'] : $data;
 
-		$internalIndexService = $this->getInternalIndexService();
-		$internalIndexService->addRecordToIndex('sys_file', $uid);
-	}
+        $internalIndexService = $this->getInternalIndexService();
+        $internalIndexService->addRecordToIndex('sys_file', $uid);
+    }
 
-	/**
-	 *
-	 * @return tx_mksearch_service_internal_Index
-	 */
-	protected function getInternalIndexService() {
-		return tx_mksearch_util_ServiceRegistry::getIntIndexService();
-	}
+    /**
+     *
+     * @return tx_mksearch_service_internal_Index
+     */
+    protected function getInternalIndexService()
+    {
+        return tx_mksearch_util_ServiceRegistry::getIntIndexService();
+    }
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/signalSlotDispatcher/class.tx_mksearch_signalSlotDispatcher_FileIndexRepsitory.php']) {
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/signalSlotDispatcher/class.tx_mksearch_signalSlotDispatcher_FileIndexRepsitory.php']);
+    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/signalSlotDispatcher/class.tx_mksearch_signalSlotDispatcher_FileIndexRepsitory.php']);
 }

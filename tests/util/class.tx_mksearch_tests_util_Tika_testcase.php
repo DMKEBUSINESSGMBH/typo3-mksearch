@@ -34,60 +34,65 @@ tx_rnbase::load('tx_mksearch_util_Tika');
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_tests_util_Tika_testcase
-	extends tx_mksearch_tests_Testcase {
+class tx_mksearch_tests_util_Tika_testcase extends tx_mksearch_tests_Testcase
+{
+    protected function setUp()
+    {
+        if (!tx_mksearch_util_Tika::getInstance()->isAvailable()) {
+            $this->markTestSkipped('Tika is not available!');
+        }
+        parent::setUp();
+    }
 
-	protected function setUp() {
-		if(!tx_mksearch_util_Tika::getInstance()->isAvailable()){
-			$this->markTestSkipped('Tika is not available!');
-		}
-		parent::setUp();
-	}
+    /**
+     * @group integration
+     */
+    public function test_getContent()
+    {
+        $content = tx_mksearch_util_Tika::getInstance()->extractContent(
+            'EXT:mksearch/tests/fixtures/html/wizard_form.html'
+        );
+        self::assertTrue(strlen($content) > 100);
+    }
 
-	/**
-	 * @group integration
-	 */
-	public function test_getContent() {
-		$content = tx_mksearch_util_Tika::getInstance()->extractContent(
-			'EXT:mksearch/tests/fixtures/html/wizard_form.html'
-		);
-		self::assertTrue(strlen($content) > 100);
-	}
+    /**
+     * @group integration
+     */
+    public function test_getContentFromFileWithUmlautsInName()
+    {
+        $content = tx_mksearch_util_Tika::getInstance()->extractContent(
+            'EXT:mksearch/tests/fixtures/txt/ä.txt'
+        );
+        self::assertEquals(
+            'test text',
+            trim($content),
+            'content falsch extrahiert'
+        );
+    }
 
-	/**
-	 * @group integration
-	 */
-	public function test_getContentFromFileWithUmlautsInName() {
-		$content = tx_mksearch_util_Tika::getInstance()->extractContent(
-			'EXT:mksearch/tests/fixtures/txt/ä.txt'
-		);
-		self::assertEquals(
-			'test text',trim($content), 'content falsch extrahiert'
-		);
-	}
+    /**
+     * @group integration
+     */
+    public function test_getLanguage()
+    {
+        $lang = tx_mksearch_util_Tika::getInstance()->extractLanguage(
+            'EXT:mksearch/tests/fixtures/html/wizard_form.html'
+        );
+        self::assertEquals('en', $lang);
+    }
 
-	/**
-	 * @group integration
-	 */
-	public function test_getLanguage() {
-		$lang = tx_mksearch_util_Tika::getInstance()->extractLanguage(
-			'EXT:mksearch/tests/fixtures/html/wizard_form.html'
-		);
-		self::assertEquals('en', $lang);
-	}
-
-	/**
-	 * @group integration
-	 */
-	public function test_getMeta() {
-		$meta = tx_mksearch_util_Tika::getInstance()->extractMetaData(
-			'EXT:mksearch/tests/fixtures/html/wizard_form.html'
-		);
-		self::assertTrue(is_array($meta));
-	}
-
+    /**
+     * @group integration
+     */
+    public function test_getMeta()
+    {
+        $meta = tx_mksearch_util_Tika::getInstance()->extractMetaData(
+            'EXT:mksearch/tests/fixtures/html/wizard_form.html'
+        );
+        self::assertTrue(is_array($meta));
+    }
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/util/class.tx_mksearch_tests_util_Misc_testcase.php']) {
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/util/class.tx_mksearch_tests_util_Misc_testcase.php']);
+    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/util/class.tx_mksearch_tests_util_Misc_testcase.php']);
 }

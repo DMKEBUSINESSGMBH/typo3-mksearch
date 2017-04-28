@@ -1,8 +1,8 @@
 <?php
 /**
- *	@package TYPO3
- *  @subpackage tx_mksearch
- *  @author Hannes Bochmann <dev@dmk-ebusiness.de>
+ * @package TYPO3
+ * @subpackage tx_mksearch
+ * @author Hannes Bochmann <dev@dmk-ebusiness.de>
  *
  *  Copyright notice
  *
@@ -31,38 +31,42 @@ tx_rnbase::load('tx_mksearch_tests_Testcase');
 /**
  * tx_mksearch_tests_service_irfaq_Expert_testcase
  *
- * @package 		TYPO3
- * @subpackage	 	mksearch
- * @author 			Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
- * @license 		http://www.gnu.org/licenses/lgpl.html
- * 					GNU Lesser General Public License, version 3 or later
+ * @package         TYPO3
+ * @subpackage      mksearch
+ * @author          Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
+ * @license         http://www.gnu.org/licenses/lgpl.html
+ *                  GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_tests_service_irfaq_Expert_testcase extends tx_mksearch_tests_Testcase {
+class tx_mksearch_tests_service_irfaq_Expert_testcase extends tx_mksearch_tests_Testcase
+{
 
-	/**
-	 * {@inheritDoc}
-	 * @see tx_mksearch_tests_Testcase::setUp()
-	 */
-	protected function setUp() {
-		if (!tx_rnbase_util_Extensions::isLoaded('irfaq')) {
-			self::markTestSkipped('irfaq nicht installiert');
-		}
+    /**
+     * {@inheritDoc}
+     * @see tx_mksearch_tests_Testcase::setUp()
+     */
+    protected function setUp()
+    {
+        if (!tx_rnbase_util_Extensions::isLoaded('irfaq')) {
+            self::markTestSkipped('irfaq nicht installiert');
+        }
 
-		parent::setUp();
-	}
+        parent::setUp();
+    }
 
-	/**
-	 * @group unit
-	 */
-	public function testGetSearchClass() {
-		self::assertEquals('tx_mksearch_search_irfaq_Expert', tx_mksearch_util_ServiceRegistry::getIrfaqExpertService()->getSearchClass());
-	}
+    /**
+     * @group unit
+     */
+    public function testGetSearchClass()
+    {
+        self::assertEquals('tx_mksearch_search_irfaq_Expert', tx_mksearch_util_ServiceRegistry::getIrfaqExpertService()->getSearchClass());
+    }
 
-	/**
-	 * Damit testen wir nur ob der Datenbankzugriff keine Fehler verursacht
-	 * @group integration
-	 */
-	public function testSearch() {
-		tx_mksearch_util_ServiceRegistry::getIrfaqExpertService()->search(array(), array());
-	}
+    /**
+     * Damit testen wir nur ob der Datenbankzugriff keine Fehler verursacht
+     * @group integration
+     */
+    public function testSearch()
+    {
+        tx_mksearch_util_ServiceRegistry::getIrfaqExpertService()->search(array(), array());
+    }
 }

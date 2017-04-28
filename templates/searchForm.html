@@ -9,187 +9,187 @@
 
 <!-- ###HEAD### START -->
 <form id="sitesearch-head" name="sitesearch-head" action="###FORM_ACTION###" method="get">
-	###FORM_HIDDENFIELDS###
-	<input id="search" type="text" class="text" />
-	<input type="hidden" value="###LABEL_search_submit###" class="text" name="mksearch[submit]" title="Suchen" />
-	<input type="submit" value="###LABEL_search_submit###" class="button" id="searchsubmit" name="mksearch[submit]" title="Suchen" />
+    ###FORM_HIDDENFIELDS###
+    <input id="search" type="text" class="text" />
+    <input type="hidden" value="###LABEL_search_submit###" class="text" name="mksearch[submit]" title="Suchen" />
+    <input type="submit" value="###LABEL_search_submit###" class="button" id="searchsubmit" name="mksearch[submit]" title="Suchen" />
 </form>
 <!-- ###HEAD### END -->
 
 
 <!-- ###SIMPLE### START -->
 <form action="###FORM_ACTION###" method="get" id="sitesearch">
-	###FORM_HIDDENFIELDS###
-	<fieldset class="term">
-		<div>
-			<label for="mksearch[term]">###LABEL_search_searchterm###</label>
-			<input class="text" type="text" name="mksearch[term]"  id="mksearch_term" value="###FORM_SEARCHTERM###"/>
-		</div>
-	</fieldset>
-	<fieldset>
-		<input type="hidden" value="###LABEL_search_submit###" class="text" name="mksearch[submit]" title="Suchen" />
-		<input class="submit" type="submit" name="mksearch[submit]" value="###LABEL_search_submit###" />
-	</fieldset>
+    ###FORM_HIDDENFIELDS###
+    <fieldset class="term">
+        <div>
+            <label for="mksearch[term]">###LABEL_search_searchterm###</label>
+            <input class="text" type="text" name="mksearch[term]"  id="mksearch_term" value="###FORM_SEARCHTERM###"/>
+        </div>
+    </fieldset>
+    <fieldset>
+        <input type="hidden" value="###LABEL_search_submit###" class="text" name="mksearch[submit]" title="Suchen" />
+        <input class="submit" type="submit" name="mksearch[submit]" value="###LABEL_search_submit###" />
+    </fieldset>
 </form>
 <!-- ###SIMPLE### END -->
 
 
 <!-- ###FORM### START -->
 <form action="###FORM_ACTION###" method="get" id="sitesearch">
-	###FORM_HIDDENFIELDS###
-	<fieldset class="term">
-		<label for="mksearch_term">###LABEL_search_searchterm###</label>
-		<input class="text" type="text" name="mksearch[term]" id="mksearch_term" value="###FORM_SEARCHTERM###"/>
-	</fieldset>
+    ###FORM_HIDDENFIELDS###
+    <fieldset class="term">
+        <label for="mksearch_term">###LABEL_search_searchterm###</label>
+        <input class="text" type="text" name="mksearch[term]" id="mksearch_term" value="###FORM_SEARCHTERM###"/>
+    </fieldset>
 
 
-	<fieldset>
-		<legend>###LABEL_search_options###</legend>
-			<div>###LABEL_search_options_standard_hint###</div>
-			<fieldset>
-				<legend>###LABEL_search_options_standard_combination###</legend>
-				<div>
-					<input class="radio" type="radio" name="mksearch[combination]" id="mksearch[combination][none]" value="none" ###FORM_COMBINATION_NONE### />
-					<label for="mksearch[combination][none]">###LABEL_search_options_standard_combination_none###</label>
-				</div>
-				<div>
-					<input class="radio" type="radio" name="mksearch[combination]" id="mksearch[combination][free]" value="free" ###FORM_COMBINATION_FREE### />
-					<label for="mksearch[combination][free]">###LABEL_search_options_standard_combination_free###</label>
-				</div>
-				<div>
-					<input class="radio" type="radio" name="mksearch[combination]" id="mksearch[combination][or]" value="or" ###FORM_COMBINATION_OR###/>
-					<label for="mksearch[combination][or]">###LABEL_search_options_standard_combination_or###</label>
-				</div>
-				<div>
-					<input class="radio" type="radio" name="mksearch[combination]" id="mksearch[combination][and]" value="and"  ###FORM_COMBINATION_AND###/>
-					<label for="mksearch[combination][and]">###LABEL_search_options_standard_combination_and###</label>
-				</div>
-				<div>
-					<input class="radio" type="radio" name="mksearch[combination]" id="mksearch[combination][exact]" value="exact"  ###FORM_COMBINATION_EXACT###/>
-					<label for="mksearch[combination][exact]">###LABEL_search_options_standard_combination_exact###</label>
-				</div>
-			</fieldset>
-			<fieldset>
-				<legend>###LABEL_search_options_standard_others###</legend>
-				<div>
-					<input class="checkbox" type="checkbox" name="mksearch[options][fuzzy]" id="mksearch[options][fuzzy]" ###FORM_OPTION_FUZZY###/>
-					<label for="mksearch[options][fuzzy]">###LABEL_search_options_standard_others_fuzzy###</label>
-				</div>
-			</fieldset>
-	</fieldset>
+    <fieldset>
+        <legend>###LABEL_search_options###</legend>
+            <div>###LABEL_search_options_standard_hint###</div>
+            <fieldset>
+                <legend>###LABEL_search_options_standard_combination###</legend>
+                <div>
+                    <input class="radio" type="radio" name="mksearch[combination]" id="mksearch[combination][none]" value="none" ###FORM_COMBINATION_NONE### />
+                    <label for="mksearch[combination][none]">###LABEL_search_options_standard_combination_none###</label>
+                </div>
+                <div>
+                    <input class="radio" type="radio" name="mksearch[combination]" id="mksearch[combination][free]" value="free" ###FORM_COMBINATION_FREE### />
+                    <label for="mksearch[combination][free]">###LABEL_search_options_standard_combination_free###</label>
+                </div>
+                <div>
+                    <input class="radio" type="radio" name="mksearch[combination]" id="mksearch[combination][or]" value="or" ###FORM_COMBINATION_OR###/>
+                    <label for="mksearch[combination][or]">###LABEL_search_options_standard_combination_or###</label>
+                </div>
+                <div>
+                    <input class="radio" type="radio" name="mksearch[combination]" id="mksearch[combination][and]" value="and"  ###FORM_COMBINATION_AND###/>
+                    <label for="mksearch[combination][and]">###LABEL_search_options_standard_combination_and###</label>
+                </div>
+                <div>
+                    <input class="radio" type="radio" name="mksearch[combination]" id="mksearch[combination][exact]" value="exact"  ###FORM_COMBINATION_EXACT###/>
+                    <label for="mksearch[combination][exact]">###LABEL_search_options_standard_combination_exact###</label>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>###LABEL_search_options_standard_others###</legend>
+                <div>
+                    <input class="checkbox" type="checkbox" name="mksearch[options][fuzzy]" id="mksearch[options][fuzzy]" ###FORM_OPTION_FUZZY###/>
+                    <label for="mksearch[options][fuzzy]">###LABEL_search_options_standard_others_fuzzy###</label>
+                </div>
+            </fieldset>
+    </fieldset>
 
 
-	<!-- ###GROUPEDFACETS### START -->
-	<fieldset class="facets">
-		<legend>Filter</legend>
-		<ul class="mksearch-facets">
-		<!-- ###GROUPEDFACET### START -->
-			<!-- ###GROUPEDFACET_HITS### START -->
-			<li class="###GROUPEDFACET_FIELD###">
-				###GROUPEDFACET_DCFIELD###
-				<ul class="###GROUPEDFACET_FIELD###">
-					<!-- ###GROUPEDFACET_HIT### START -->
-					<li>
-						<input
-							type="checkbox"
-							name="###GROUPEDFACET_HIT_FORM_NAME###"
-							value="###GROUPEDFACET_HIT_FORM_VALUE###"
-							id="###GROUPEDFACET_HIT_FORM_ID###"
-							###GROUPEDFACET_HIT_ACTIVE###
-						/>
-						<label for="###GROUPEDFACET_HIT_FORM_ID###">
-							###GROUPEDFACET_HIT_DCLABEL### <!-- ###GROUPEDFACET_HIT_COUNT### -->
-						</label>
-						<!-- ###GROUPEDFACET_HIT_CHILDS### START -->
-							<ul class="###GROUPEDFACET_HIT_FIELD###">
-								<!-- ###GROUPEDFACET_HIT_CHILD### START -->
-									<li>
-										<input
-											type="checkbox"
-											name="###GROUPEDFACET_HIT_CHILD_FORM_NAME###"
-											value="###GROUPEDFACET_HIT_CHILD_FORM_VALUE###"
-											id="###GROUPEDFACET_HIT_CHILD_FORM_ID###"
-											###GROUPEDFACET_HIT_CHILD_ACTIVE###
-										/>
-										<label for="###GROUPEDFACET_HIT_CHILD_FORM_ID###">
-											###GROUPEDFACET_HIT_CHILD_DCLABEL### <!-- ###GROUPEDFACET_HIT_CHILD_COUNT### -->
-										</label>
-										<!-- ###GROUPEDFACET_HIT_CHILD_CHILDS### START -->
-											<ul class="###GROUPEDFACET_HIT_CHILD_FIELD###">
-												<!-- ###GROUPEDFACET_HIT_CHILD_CHILD### START -->
-													<li>
-														<input
-															type="checkbox"
-															name="###GROUPEDFACET_HIT_CHILD_CHILD_FORM_NAME###"
-															value="###GROUPEDFACET_HIT_CHILD_CHILD_FORM_VALUE###"
-															id="###GROUPEDFACET_HIT_CHILD_CHILD_FORM_ID###"
-															###GROUPEDFACET_HIT_CHILD_CHILD_ACTIVE###
-														/>
-														<label for="###GROUPEDFACET_HIT_CHILD_CHILD_FORM_ID###">
-															###GROUPEDFACET_HIT_CHILD_CHILD_DCLABEL### <!-- ###GROUPEDFACET_HIT_CHILD_CHILD_COUNT### -->
-														</label>
-													</li>
-												<!-- ###GROUPEDFACET_HIT_CHILD_CHILD### END -->
-											</ul>
-										<!-- ###GROUPEDFACET_HIT_CHILD_CHILDS### END -->
-									</li>
-								<!-- ###GROUPEDFACET_HIT_CHILD### END -->
-							</ul>
-						<!-- ###GROUPEDFACET_HIT_CHILDS### END -->
-					</li>
-					<!-- ###GROUPEDFACET_HIT### END -->
-				</ul>
-			</li>
-			<!-- ###GROUPEDFACET_HITS### END -->
-		<!-- ###GROUPEDFACET### END -->
-		</ul>
-	</fieldset>
-	<!-- ###GROUPEDFACETS### END -->
+    <!-- ###GROUPEDFACETS### START -->
+    <fieldset class="facets">
+        <legend>Filter</legend>
+        <ul class="mksearch-facets">
+        <!-- ###GROUPEDFACET### START -->
+            <!-- ###GROUPEDFACET_HITS### START -->
+            <li class="###GROUPEDFACET_FIELD###">
+                ###GROUPEDFACET_DCFIELD###
+                <ul class="###GROUPEDFACET_FIELD###">
+                    <!-- ###GROUPEDFACET_HIT### START -->
+                    <li>
+                        <input
+                            type="checkbox"
+                            name="###GROUPEDFACET_HIT_FORM_NAME###"
+                            value="###GROUPEDFACET_HIT_FORM_VALUE###"
+                            id="###GROUPEDFACET_HIT_FORM_ID###"
+                            ###GROUPEDFACET_HIT_ACTIVE###
+                        />
+                        <label for="###GROUPEDFACET_HIT_FORM_ID###">
+                            ###GROUPEDFACET_HIT_DCLABEL### <!-- ###GROUPEDFACET_HIT_COUNT### -->
+                        </label>
+                        <!-- ###GROUPEDFACET_HIT_CHILDS### START -->
+                            <ul class="###GROUPEDFACET_HIT_FIELD###">
+                                <!-- ###GROUPEDFACET_HIT_CHILD### START -->
+                                    <li>
+                                        <input
+                                            type="checkbox"
+                                            name="###GROUPEDFACET_HIT_CHILD_FORM_NAME###"
+                                            value="###GROUPEDFACET_HIT_CHILD_FORM_VALUE###"
+                                            id="###GROUPEDFACET_HIT_CHILD_FORM_ID###"
+                                            ###GROUPEDFACET_HIT_CHILD_ACTIVE###
+                                        />
+                                        <label for="###GROUPEDFACET_HIT_CHILD_FORM_ID###">
+                                            ###GROUPEDFACET_HIT_CHILD_DCLABEL### <!-- ###GROUPEDFACET_HIT_CHILD_COUNT### -->
+                                        </label>
+                                        <!-- ###GROUPEDFACET_HIT_CHILD_CHILDS### START -->
+                                            <ul class="###GROUPEDFACET_HIT_CHILD_FIELD###">
+                                                <!-- ###GROUPEDFACET_HIT_CHILD_CHILD### START -->
+                                                    <li>
+                                                        <input
+                                                            type="checkbox"
+                                                            name="###GROUPEDFACET_HIT_CHILD_CHILD_FORM_NAME###"
+                                                            value="###GROUPEDFACET_HIT_CHILD_CHILD_FORM_VALUE###"
+                                                            id="###GROUPEDFACET_HIT_CHILD_CHILD_FORM_ID###"
+                                                            ###GROUPEDFACET_HIT_CHILD_CHILD_ACTIVE###
+                                                        />
+                                                        <label for="###GROUPEDFACET_HIT_CHILD_CHILD_FORM_ID###">
+                                                            ###GROUPEDFACET_HIT_CHILD_CHILD_DCLABEL### <!-- ###GROUPEDFACET_HIT_CHILD_CHILD_COUNT### -->
+                                                        </label>
+                                                    </li>
+                                                <!-- ###GROUPEDFACET_HIT_CHILD_CHILD### END -->
+                                            </ul>
+                                        <!-- ###GROUPEDFACET_HIT_CHILD_CHILDS### END -->
+                                    </li>
+                                <!-- ###GROUPEDFACET_HIT_CHILD### END -->
+                            </ul>
+                        <!-- ###GROUPEDFACET_HIT_CHILDS### END -->
+                    </li>
+                    <!-- ###GROUPEDFACET_HIT### END -->
+                </ul>
+            </li>
+            <!-- ###GROUPEDFACET_HITS### END -->
+        <!-- ###GROUPEDFACET### END -->
+        </ul>
+    </fieldset>
+    <!-- ###GROUPEDFACETS### END -->
 
-	<!-- ###SEARCH_FILTER_SORTS### -->
-			<label class="sort">
-				Sortierung
-				<select name="###SEARCH_FILTER_SORT_FORM_NAME###">
-					<!-- ###SEARCH_FILTER_SORT### -->
-					<option value="###SEARCH_FILTER_SORT_UID###" ###SEARCH_FILTER_SORT_SELECTED###>###SEARCH_FILTER_SORT_CAPTION###</option>
-					<!-- ###SEARCH_FILTER_SORT### -->
-				</select>
-			</label>
-	<!-- ###SEARCH_FILTER_SORTS### -->
+    <!-- ###SEARCH_FILTER_SORTS### -->
+            <label class="sort">
+                Sortierung
+                <select name="###SEARCH_FILTER_SORT_FORM_NAME###">
+                    <!-- ###SEARCH_FILTER_SORT### -->
+                    <option value="###SEARCH_FILTER_SORT_UID###" ###SEARCH_FILTER_SORT_SELECTED###>###SEARCH_FILTER_SORT_CAPTION###</option>
+                    <!-- ###SEARCH_FILTER_SORT### -->
+                </select>
+            </label>
+    <!-- ###SEARCH_FILTER_SORTS### -->
 
-	<!-- ###SEARCH_FILTER_PAGELIMITS### -->
-			<label for="mksearch_pagelimit">Treffer pro Seite</label>
-			<select name="###SEARCH_FILTER_PAGELIMIT_FORM_NAME###" id="mksearch_pagelimit">
-				<!-- ###SEARCH_FILTER_PAGELIMIT### -->
-				<option value="###SEARCH_FILTER_PAGELIMIT_UID###" ###SEARCH_FILTER_PAGELIMIT_SELECTED###>###SEARCH_FILTER_PAGELIMIT_CAPTION###</option>
-				<!-- ###SEARCH_FILTER_PAGELIMIT### -->
-			</select>
-	<!-- ###SEARCH_FILTER_PAGELIMITS### -->
+    <!-- ###SEARCH_FILTER_PAGELIMITS### -->
+            <label for="mksearch_pagelimit">Treffer pro Seite</label>
+            <select name="###SEARCH_FILTER_PAGELIMIT_FORM_NAME###" id="mksearch_pagelimit">
+                <!-- ###SEARCH_FILTER_PAGELIMIT### -->
+                <option value="###SEARCH_FILTER_PAGELIMIT_UID###" ###SEARCH_FILTER_PAGELIMIT_SELECTED###>###SEARCH_FILTER_PAGELIMIT_CAPTION###</option>
+                <!-- ###SEARCH_FILTER_PAGELIMIT### -->
+            </select>
+    <!-- ###SEARCH_FILTER_PAGELIMITS### -->
 
-	<fieldset class="suggestion">
-		<!-- ###SUGGESTIONS### START -->
-		Meinten Sie:
-		<!-- ###SUGGESTION### START -->
-		<strong>###SUGGESTION_SEARCHLINK######SUGGESTION_VALUE######SUGGESTION_SEARCHLINK###</strong>
-		<!-- ###SUGGESTION### START -->
-		<!-- ###SUGGESTIONS### START -->
-	</fieldset>
+    <fieldset class="suggestion">
+        <!-- ###SUGGESTIONS### START -->
+        Meinten Sie:
+        <!-- ###SUGGESTION### START -->
+        <strong>###SUGGESTION_SEARCHLINK######SUGGESTION_VALUE######SUGGESTION_SEARCHLINK###</strong>
+        <!-- ###SUGGESTION### START -->
+        <!-- ###SUGGESTIONS### START -->
+    </fieldset>
 
 
-	<fieldset>
-		<input type="hidden" value="###LABEL_search_submit###" class="text" name="mksearch[submit]" title="Suchen" />
-		<input class="submit" type="submit" name="mksearch[submit]" value="###LABEL_search_submit###" />
-	</fieldset>
+    <fieldset>
+        <input type="hidden" value="###LABEL_search_submit###" class="text" name="mksearch[submit]" title="Suchen" />
+        <input class="submit" type="submit" name="mksearch[submit]" value="###LABEL_search_submit###" />
+    </fieldset>
 
-	Diese Möglichkeiten bestehen für Sortierunslinks. Dazu benötigt man die Beispiel Konfig aus
-	dem static TS.
+    Diese Möglichkeiten bestehen für Sortierunslinks. Dazu benötigt man die Beispiel Konfig aus
+    dem static TS.
 
-	###SORT_UID_ORDER### = asc
-	###SORT_UID_LINKURL### = index.php?mksearch[sort]=uid&mksearch[sortorder]=asc
-	###SORT_UID_LINK### = wrappedArray mit dem A-Tag
-	###SORT_TITLE_ORDER### = asc
-	###SORT_TITLE_LINKURL### = index.php?mksearch[sort]=title&mksearch[sortorder]=asc
-	###SORT_TITLE_LINK### = wrappedArray mit dem A-Tag
+    ###SORT_UID_ORDER### = asc
+    ###SORT_UID_LINKURL### = index.php?mksearch[sort]=uid&mksearch[sortorder]=asc
+    ###SORT_UID_LINK### = wrappedArray mit dem A-Tag
+    ###SORT_TITLE_ORDER### = asc
+    ###SORT_TITLE_LINKURL### = index.php?mksearch[sort]=title&mksearch[sortorder]=asc
+    ###SORT_TITLE_LINK### = wrappedArray mit dem A-Tag
 </form>
 <!-- ###FORM### END -->
 

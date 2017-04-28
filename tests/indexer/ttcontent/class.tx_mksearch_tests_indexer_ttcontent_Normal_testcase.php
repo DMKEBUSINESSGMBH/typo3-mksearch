@@ -35,166 +35,172 @@ tx_rnbase::load('tx_mksearch_indexer_ttcontent_Normal');
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_tests_indexer_ttcontent_Normal_testcase
-	extends tx_mksearch_tests_Testcase {
+class tx_mksearch_tests_indexer_ttcontent_Normal_testcase extends tx_mksearch_tests_Testcase
+{
 
-	/**
-	 * @group unit
-	 */
-	public function testPrepareSearchDataIncludesPageMetaKeywords() {
-		$indexer = $this->getMock(
-			'tx_mksearch_indexer_ttcontent_Normal',
-			array('getPageContent', 'isIndexableRecord', 'hasDocToBeDeleted')
-		);
-		$indexer->expects($this->once())
-			->method('isIndexableRecord')
-			->will($this->returnValue(TRUE));
-		$indexer->expects($this->once())
-			->method('hasDocToBeDeleted')
-			->will($this->returnValue(FALSE));
-		$indexer->expects($this->any())
-			->method('getPageContent')
-			->with(456)
-			->will($this->returnValue(array('keywords' => 'first,second')));
+    /**
+     * @group unit
+     */
+    public function testPrepareSearchDataIncludesPageMetaKeywords()
+    {
+        $indexer = $this->getMock(
+            'tx_mksearch_indexer_ttcontent_Normal',
+            array('getPageContent', 'isIndexableRecord', 'hasDocToBeDeleted')
+        );
+        $indexer->expects($this->once())
+            ->method('isIndexableRecord')
+            ->will($this->returnValue(true));
+        $indexer->expects($this->once())
+            ->method('hasDocToBeDeleted')
+            ->will($this->returnValue(false));
+        $indexer->expects($this->any())
+            ->method('getPageContent')
+            ->with(456)
+            ->will($this->returnValue(array('keywords' => 'first,second')));
 
-		list($extKey, $cType) = $indexer->getContentType();
+        list($extKey, $cType) = $indexer->getContentType();
 
-		$record = array('uid'=> 123, 'pid' => 456, 'CType'=>'list', 'bodytext' => 'lorem');
-		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase',$extKey, $cType);
-		$options = self::getDefaultOptions();
-		$options['addPageMetaData'] = 1;
-		$options['addPageMetaData.']['separator'] = ',';
-		$options['includeCTypes.'] = array('search','mailform','list');
-		$indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
-		$indexDocData = $indexDoc->getData();
+        $record = array('uid' => 123, 'pid' => 456, 'CType' => 'list', 'bodytext' => 'lorem');
+        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $options = self::getDefaultOptions();
+        $options['addPageMetaData'] = 1;
+        $options['addPageMetaData.']['separator'] = ',';
+        $options['includeCTypes.'] = array('search','mailform','list');
+        $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
+        $indexDocData = $indexDoc->getData();
 
-		self::assertEquals(array('first', 'second'), $indexDocData['keywords_ms']->getValue());
+        self::assertEquals(array('first', 'second'), $indexDocData['keywords_ms']->getValue());
+    }
 
-	}
+    /**
+     * @group unit
+     */
+    public function testIndexDataCallsIndexPageDataIfConfigured()
+    {
+        $indexer = $this->getMock(
+            'tx_mksearch_indexer_ttcontent_Normal',
+            array('indexPageData', 'getModelToIndex')
+        );
 
-	/**
-	 * @group unit
-	 */
-	public function testIndexDataCallsIndexPageDataIfConfigured() {
-		$indexer = $this->getMock(
-			'tx_mksearch_indexer_ttcontent_Normal',
-			array('indexPageData', 'getModelToIndex')
-		);
+        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', 'mksearch', 'test');
 
-		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', 'mksearch', 'test');
+        $record = array('uid' => 123);
+        $model = tx_rnbase::makeInstance('tx_rnbase_model_Base', $record);
+        $model->setTableName('tt_Content');
+        $options = self::getDefaultOptions();
+        $options['indexPageData'] = 1;
 
-		$record = array('uid'=> 123);
-		$model = tx_rnbase::makeInstance('tx_rnbase_model_Base', $record);
-		$model->setTableName('tt_Content');
-		$options = self::getDefaultOptions();
-		$options['indexPageData'] = 1;
+        $indexer->expects($this->once())
+            ->method('indexPageData')
+            ->with($indexDoc, $options);
+        $indexer
+            ->expects($this->once())
+            ->method('getModelToIndex')
+            ->will(
+                $this->returnValue(
+                    $this->getModel($model)
+                )
+            );
 
-		$indexer->expects($this->once())
-			->method('indexPageData')
-			->with($indexDoc, $options)
-		;
-		$indexer
-			->expects($this->once())
-			->method('getModelToIndex')
-			->will(
-				$this->returnValue(
-					$this->getModel($model)
-				)
-			)
-		;
+        $indexer->indexData($model, 'tt_content', $record, $indexDoc, $options);
+    }
 
-		$indexer->indexData($model, 'tt_content', $record, $indexDoc, $options);
-	}
+    /**
+     * @group unit
+     */
+    public function testIndexDataCallsIndexPageDataNotIfNotConfigured()
+    {
+        $indexer = $this->getMock(
+            'tx_mksearch_indexer_ttcontent_Normal',
+            array('indexPageData', 'getModelToIndex')
+        );
 
-	/**
-	 * @group unit
-	 */
-	public function testIndexDataCallsIndexPageDataNotIfNotConfigured() {
-		$indexer = $this->getMock(
-			'tx_mksearch_indexer_ttcontent_Normal',
-			array('indexPageData', 'getModelToIndex')
-		);
+        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', 'mksearch', 'test');
 
-		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', 'mksearch', 'test');
+        $record = array('uid' => 123);
+        $model = tx_rnbase::makeInstance('tx_rnbase_model_Base', $record);
+        $model->setTableName('tt_Content');
+        $options = self::getDefaultOptions();
+        $options['indexPageData'] = 0;
 
-		$record = array('uid'=> 123);
-		$model = tx_rnbase::makeInstance('tx_rnbase_model_Base', $record);
-		$model->setTableName('tt_Content');
-		$options = self::getDefaultOptions();
-		$options['indexPageData'] = 0;
+        $indexer
+        ->expects($this->never())
+            ->method('indexPageData');
+        $indexer
+            ->expects($this->once())
+            ->method('getModelToIndex')
+            ->will(
+                $this->returnValue(
+                    $this->getModel($model)
+                )
+            );
 
-		$indexer
-		->expects($this->never())
-			->method('indexPageData')
-		;
-		$indexer
-			->expects($this->once())
-			->method('getModelToIndex')
-			->will(
-				$this->returnValue(
-					$this->getModel($model)
-				)
-			)
-		;
+        $indexer->indexData($model, 'tt_content', $record, $indexDoc, $options);
+    }
 
-		$indexer->indexData($model, 'tt_content', $record, $indexDoc, $options);
-	}
+    /**
+     * @group unit
+     */
+    public function testIndexPageData()
+    {
+        $indexer = $this->getAccessibleMock(
+            'tx_mksearch_indexer_ttcontent_Normal',
+            array('getPageContent')
+        );
 
-	/**
-	 * @group unit
-	 */
-	public function testIndexPageData() {
-		$indexer = $this->getAccessibleMock(
-			'tx_mksearch_indexer_ttcontent_Normal',
-			array('getPageContent')
-		);
+        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', 'mksearch', 'test');
 
-		$indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', 'mksearch', 'test');
+        $model = tx_rnbase::makeInstance('tx_rnbase_model_Base', array('uid' => 123));
+        $model->setTableName('tt_Content');
+        $indexer->_set('modelToIndex', $model);
 
-		$model = tx_rnbase::makeInstance('tx_rnbase_model_Base', array('uid'=> 123));
-		$model->setTableName('tt_Content');
-		$indexer->_set('modelToIndex', $model);
+        $options = array(
+            'pageDataFieldMapping.' => array(
+                'title' => 'title_t',
+                'description' => 'description_t',
+            )
+        );
 
-		$options = array(
-			'pageDataFieldMapping.' => array(
-				'title' => 'title_t',
-				'description' => 'description_t',
-			)
-		);
+        $indexer->expects($this->once())
+            ->method('getPageContent')
+            ->will($this->returnValue(array(
+                'title' => 'Homepage',
+                'description' => 'Starting point',
+                'subtitle' => 'not to be indexed'
+            )));
 
-		$indexer->expects($this->once())
-			->method('getPageContent')
-			->will($this->returnValue(array(
-				'title' => 'Homepage',
-				'description' => 'Starting point',
-				'subtitle' => 'not to be indexed'
-			)));
+        $this->callInaccessibleMethod($indexer, 'indexPageData', $indexDoc, $options);
 
-		$this->callInaccessibleMethod($indexer, 'indexPageData', $indexDoc, $options);
+        $indexedData = $indexDoc->getData();
 
-		$indexedData = $indexDoc->getData();
+        self::assertCount(3, $indexedData, 'more fields than expected indexed');
+        self::assertEquals(
+            'mksearch.test',
+            $indexedData['content_ident_s']->getValue(),
+            'content_ident_s wrong'
+        );
+        self::assertEquals(
+            'Homepage',
+            $indexedData['page_title_t']->getValue(),
+            'page title wrong indexed'
+        );
+        self::assertEquals(
+            'Starting point',
+            $indexedData['page_description_t']->getValue(),
+            'page description wrong indexed'
+        );
+    }
 
-		self::assertCount(3, $indexedData, 'more fields than expected indexed');
-		self::assertEquals(
-			'mksearch.test', $indexedData['content_ident_s']->getValue(), 'content_ident_s wrong'
-		);
-		self::assertEquals(
-			'Homepage', $indexedData['page_title_t']->getValue(), 'page title wrong indexed'
-		);
-		self::assertEquals(
-			'Starting point', $indexedData['page_description_t']->getValue(),
-			'page description wrong indexed'
-		);
-	}
+    /**
+     * @return multitype:string
+     */
+    private static function getDefaultOptions()
+    {
+        $options = array();
+        $options['CType.']['_default_.']['indexedFields.'] = array(
+            'bodytext', 'imagecaption' , 'altText', 'titleText'
+        );
 
-	/**
-	 * @return multitype:string
-	 */
-	private static function getDefaultOptions(){
-		$options = array();
-		$options['CType.']['_default_.']['indexedFields.'] = array(
-			'bodytext', 'imagecaption' , 'altText', 'titleText'
-		);
-		return $options;
-	}
+        return $options;
+    }
 }

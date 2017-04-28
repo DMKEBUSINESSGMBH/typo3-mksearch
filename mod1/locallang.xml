@@ -12,15 +12,15 @@
             <label index="func_config_indizesdblist">Configure indizes (old db list)</label>
             <label index="func_indize_indizes">Indexing Queue</label>
             <label index="func_solradmin">Admin Panel</label>
-            
+
             <label index="label_no_page_selected">No Page selected.</label>
 
             <label index="label_handler_index">Indizes</label>
             <label index="label_handler_indexerconfig">Indexer Configuration</label>
             <label index="label_handler_composite">Indexer Composites</label>
-            
+
             <label index="label_handler_adminsolr">Solr</label>
-            
+
             <label index="label_no_indexers_found">No indexers defined on this page!</label>
             <label index="label_configured_indexer_tables_head">Tables from configured indexers</label>
             <label index="label_core_status_head">Core status</label>
@@ -49,47 +49,47 @@
             <label index="label_solr_delete_query">Submit raw delete query</label>
             <label index="label_solr_submit_delete">Submit delete</label>
             <label index="label_solr_delete_successful">Delete successfully submitted.</label>
-            
-			<label index="label_common_start">Requestinfos</label>
-			<label index="label_common_end">Requestinfos</label>
-			<label index="label_common_warning">Warning</label>
-			<label index="label_common_error">Error</label>
-			<label index="label_common_info">Information</label>
-			<label index="label_search_form">Filter</label>
-			<label index="label_buttons">Functions</label>
-			<label index="label_pager">Navigation</label>
-			<label index="label_list">Results</label>
-			<label index="label_search">Free text search:</label>
-			<label index="label_hidden">Hidden entries:</label>
-			<label index="label_button_search">search</label>
-			<label index="label_select_hide_hidden">Hide</label>
-			<label index="label_select_show_hidden">Show</label>
-			<label index="label_list_size">Entries found: </label>
-			
-			<label index="confirmation_deletion">Delete this record?</label>
-			
-			<label index="label_uid">ID</label>
-			<label index="label_tableheader_title">Title</label>
-			<label index="label_tableheader_core">Core</label>
-			<label index="label_tableheader_name">Name</label>
-			<label index="label_tableheader_engine">Engine</label>
-			<label index="label_tableheader_keyword">Keyword</label>
-			<label index="label_tableheader_link">Link</label>
-			<label index="label_tableheader_contenttype">ContentType</label>
-			<label index="label_tableheader_composites">Composites</label>
-			<label index="label_tableheader_indices">Indizes</label>
-			<label index="label_tableheader_configs">Configurations</label>
-			<label index="label_tableheader_actions"> </label>
-            
+
+            <label index="label_common_start">Requestinfos</label>
+            <label index="label_common_end">Requestinfos</label>
+            <label index="label_common_warning">Warning</label>
+            <label index="label_common_error">Error</label>
+            <label index="label_common_info">Information</label>
+            <label index="label_search_form">Filter</label>
+            <label index="label_buttons">Functions</label>
+            <label index="label_pager">Navigation</label>
+            <label index="label_list">Results</label>
+            <label index="label_search">Free text search:</label>
+            <label index="label_hidden">Hidden entries:</label>
+            <label index="label_button_search">search</label>
+            <label index="label_select_hide_hidden">Hide</label>
+            <label index="label_select_show_hidden">Show</label>
+            <label index="label_list_size">Entries found: </label>
+
+            <label index="confirmation_deletion">Delete this record?</label>
+
+            <label index="label_uid">ID</label>
+            <label index="label_tableheader_title">Title</label>
+            <label index="label_tableheader_core">Core</label>
+            <label index="label_tableheader_name">Name</label>
+            <label index="label_tableheader_engine">Engine</label>
+            <label index="label_tableheader_keyword">Keyword</label>
+            <label index="label_tableheader_link">Link</label>
+            <label index="label_tableheader_contenttype">ContentType</label>
+            <label index="label_tableheader_composites">Composites</label>
+            <label index="label_tableheader_indices">Indizes</label>
+            <label index="label_tableheader_configs">Configurations</label>
+            <label index="label_tableheader_actions"> </label>
+
             <label index="label_no_indizes">No indizes found.</label>
             <label index="label_no_composites">No indexer composites found.</label>
             <label index="label_no_indexerconfigurations">No indexer configurations found.</label>
-            
+
             <label index="label_add_keyword">add Keyword</label>
             <label index="label_add_index">add Index</label>
             <label index="label_add_indexerconfig">add Indexer Configuration</label>
             <label index="label_add_composite">add Indexer Composite</label>
-            
+
             <label index="allow_url_fopen_deactivated_hint"><![CDATA[<div class="message-error" style="width:16px; height:16px; float:left;"></div><strong><div style="background-color: #F6D3CF; height:16px; font-size: 15px;">allow_url_fopen is not activated but mksearch is not configured to use curl for HTTP transport!</div></strong>]]></label>
         </languageKey>
     </data>

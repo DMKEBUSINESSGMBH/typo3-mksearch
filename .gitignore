@@ -3,3 +3,4 @@
 .settings
 .idea
 .*md.html
+/.php_cs.cache

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <dataset>
-	<tx_seminars_categories>
-		<uid>1</uid>
-		<title>1. Kategorie</title>
-	</tx_seminars_categories>
-	<tx_seminars_categories>
-		<uid>2</uid>
-		<title>2. Kategorie</title>
-	</tx_seminars_categories>	
-	<tx_seminars_categories>
-		<uid>3</uid>
-		<title>3. Kategorie</title>
-	</tx_seminars_categories>		
+    <tx_seminars_categories>
+        <uid>1</uid>
+        <title>1. Kategorie</title>
+    </tx_seminars_categories>
+    <tx_seminars_categories>
+        <uid>2</uid>
+        <title>2. Kategorie</title>
+    </tx_seminars_categories>
+    <tx_seminars_categories>
+        <uid>3</uid>
+        <title>3. Kategorie</title>
+    </tx_seminars_categories>
 </dataset>
