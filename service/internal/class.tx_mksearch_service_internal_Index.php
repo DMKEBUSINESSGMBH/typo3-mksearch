@@ -362,6 +362,8 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 	 * @return 	void
 	 */
 	private function executeQueueData($data, array $config = array()) {
+		self::setSignalThatIndexingIsInProgress();
+
 		$rootline = 0;
 		// alle indexer fragen oder nur von der aktuellen pid?
 		if($config['pid']) {
@@ -372,8 +374,6 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 		}
 
 		tx_rnbase_util_Logger::debug('[INDEXQUEUE] Found '.count($indices) . ' indices for update', 'mksearch');
-
-		self::setSignalThatIndexingIsInProgress();
 
 		try {
 			// Loop through all active indices, collecting all configurations
