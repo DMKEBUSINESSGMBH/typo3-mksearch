@@ -30,6 +30,11 @@ if (isset($_EXTCONF['enableRnBaseUtilDbHook']) && (int) $_EXTCONF['enableRnBaseU
 		'EXT:mksearch/hooks/class.tx_mksearch_hooks_IndexerAutoUpdate.php:tx_mksearch_hooks_IndexerAutoUpdate->rnBaseDoDeletePre';
 }
 
+$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['util_db_do_select_pre'][] =
+	'EXT:mksearch/hooks/class.tx_mksearch_hooks_DatabaseConnection.php:tx_mksearch_hooks_DatabaseConnection->doSelectPre';
+$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['util_db_do_select_post'][] =
+	'EXT:mksearch/hooks/class.tx_mksearch_hooks_DatabaseConnection.php:tx_mksearch_hooks_DatabaseConnection->doSelectPost';
+
 // Hook for manipulating a single search term used with Zend_Lucene
 $GLOBALS ['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['engine_ZendLucene_buildQuery_manipulateSingleTerm'][] =
 	'EXT:' . $_EXTKEY . '/hooks/class.tx_mksearch_hooks_EngineZendLucene.php:tx_mksearch_hooks_EngineZendLucene->manipulateSingleTerm';
