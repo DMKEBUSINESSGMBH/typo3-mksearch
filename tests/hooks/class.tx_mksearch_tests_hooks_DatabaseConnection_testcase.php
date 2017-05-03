@@ -60,6 +60,10 @@ class tx_mksearch_tests_hooks_DatabaseConnection_testcase extends tx_mksearch_te
         $property->setAccessible(true);
         $property->setValue(null, null);
 
+        $property = new ReflectionProperty('tx_mksearch_hooks_DatabaseConnection', 'loadHiddenObjectsConfigurationBackupSet');
+        $property->setAccessible(true);
+        $property->setValue(null, false);
+
         $this->setIsIndexingInProgress(false);
 
         $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects'] = self::$loadHiddenObjectsConfigurationBackup;
@@ -70,16 +74,44 @@ class tx_mksearch_tests_hooks_DatabaseConnection_testcase extends tx_mksearch_te
      */
     public function testDoSelectPostResetsRnBaseConfiguration()
     {
-        $property = new ReflectionProperty('tx_mksearch_hooks_DatabaseConnection', 'loadHiddenObjectsConfigurationBackup');
-        $property->setAccessible(true);
-        $property->setValue(null, $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects']);
+        $backUpProperty = new ReflectionProperty('tx_mksearch_hooks_DatabaseConnection', 'loadHiddenObjectsConfigurationBackup');
+        $backUpProperty->setAccessible(true);
+        $backUpProperty->setValue(null, $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects']);
         $initialValue = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects'];
+
+        $backUpSetProperty = new ReflectionProperty('tx_mksearch_hooks_DatabaseConnection', 'loadHiddenObjectsConfigurationBackupSet');
+        $backUpSetProperty->setAccessible(true);
+        $backUpSetProperty->setValue(null, true);
 
         $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects'] = 'test';
 
         tx_rnbase::makeInstance('tx_mksearch_hooks_DatabaseConnection')->doSelectPost();
 
         self::assertSame($initialValue, $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects']);
+        self::assertFalse($backUpSetProperty->getValue(null));
+        self::assertNull($backUpProperty->getValue(null));
+    }
+
+    /**
+     * @unit
+     */
+    public function testDoSelectPostResetsRnBaseConfigurationNotIfBackUpWasNotSet()
+    {
+        $backUpProperty = new ReflectionProperty('tx_mksearch_hooks_DatabaseConnection', 'loadHiddenObjectsConfigurationBackup');
+        $backUpProperty->setAccessible(true);
+        $backUpProperty->setValue(null, $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects']);
+        $initialValue = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects'];
+
+        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects'] = 'test';
+
+        tx_rnbase::makeInstance('tx_mksearch_hooks_DatabaseConnection')->doSelectPost();
+
+        self::assertSame('test', $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects']);
+
+        $backUpSetProperty = new ReflectionProperty('tx_mksearch_hooks_DatabaseConnection', 'loadHiddenObjectsConfigurationBackupSet');
+        $backUpSetProperty->setAccessible(true);
+        self::assertFalse($backUpSetProperty->getValue(null));
+        self::assertSame($initialValue, $backUpProperty->getValue(null));
     }
 
     /**
@@ -96,6 +128,14 @@ class tx_mksearch_tests_hooks_DatabaseConnection_testcase extends tx_mksearch_te
 
         self::assertSame(1, $paramaters['options']['enablefieldsfe']);
         self::assertSame(0, $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects']);
+
+        $backUpProperty = new ReflectionProperty('tx_mksearch_hooks_DatabaseConnection', 'loadHiddenObjectsConfigurationBackup');
+        $backUpProperty->setAccessible(true);
+        self::assertSame('test', $backUpProperty->getValue(null));
+
+        $backUpSetProperty = new ReflectionProperty('tx_mksearch_hooks_DatabaseConnection', 'loadHiddenObjectsConfigurationBackupSet');
+        $backUpSetProperty->setAccessible(true);
+        self::assertTrue($backUpSetProperty->getValue(null));
     }
 
     /**
@@ -113,6 +153,14 @@ class tx_mksearch_tests_hooks_DatabaseConnection_testcase extends tx_mksearch_te
         self::assertSame(1, $paramaters['options']['enablefieldsfe']);
         self::assertArrayNotHasKey('enablefieldsbe', $paramaters['options']);
         self::assertSame(0, $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects']);
+
+        $backUpProperty = new ReflectionProperty('tx_mksearch_hooks_DatabaseConnection', 'loadHiddenObjectsConfigurationBackup');
+        $backUpProperty->setAccessible(true);
+        self::assertSame('test', $backUpProperty->getValue(null));
+
+        $backUpSetProperty = new ReflectionProperty('tx_mksearch_hooks_DatabaseConnection', 'loadHiddenObjectsConfigurationBackupSet');
+        $backUpSetProperty->setAccessible(true);
+        self::assertTrue($backUpSetProperty->getValue(null));
     }
 
     /**
@@ -130,6 +178,14 @@ class tx_mksearch_tests_hooks_DatabaseConnection_testcase extends tx_mksearch_te
         self::assertArrayNotHasKey('enablefieldsfe', $paramaters['options']);
         self::assertTrue($paramaters['options']['enablefieldsoff']);
         self::assertSame('test', $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects']);
+
+        $backUpProperty = new ReflectionProperty('tx_mksearch_hooks_DatabaseConnection', 'loadHiddenObjectsConfigurationBackup');
+        $backUpProperty->setAccessible(true);
+        self::assertNull($backUpProperty->getValue(null));
+
+        $backUpSetProperty = new ReflectionProperty('tx_mksearch_hooks_DatabaseConnection', 'loadHiddenObjectsConfigurationBackupSet');
+        $backUpSetProperty->setAccessible(true);
+        self::assertFalse($backUpSetProperty->getValue(null));
     }
 
     /**
@@ -147,6 +203,14 @@ class tx_mksearch_tests_hooks_DatabaseConnection_testcase extends tx_mksearch_te
         self::assertArrayNotHasKey('enablefieldsfe', $paramaters['options']);
         self::assertTrue($paramaters['options']['enablefieldsoff']);
         self::assertSame('test', $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects']);
+
+        $backUpProperty = new ReflectionProperty('tx_mksearch_hooks_DatabaseConnection', 'loadHiddenObjectsConfigurationBackup');
+        $backUpProperty->setAccessible(true);
+        self::assertNull($backUpProperty->getValue(null));
+
+        $backUpSetProperty = new ReflectionProperty('tx_mksearch_hooks_DatabaseConnection', 'loadHiddenObjectsConfigurationBackupSet');
+        $backUpSetProperty->setAccessible(true);
+        self::assertFalse($backUpSetProperty->getValue(null));
     }
 
     /**

@@ -41,6 +41,11 @@ class tx_mksearch_hooks_DatabaseConnection
     private static $loadHiddenObjectsConfigurationBackup;
 
     /**
+     * @var boolean
+     */
+    private static $loadHiddenObjectsConfigurationBackupSet = false;
+
+    /**
      * During indexing we always use enablefieldsfe for selects to avoid hidden
      * data being indexed. enablefieldsoff needs to be set when this behaviour is
      * not desired. in this case setting enable fields has to be done manually
@@ -64,6 +69,7 @@ class tx_mksearch_hooks_DatabaseConnection
 
             // avoid that our changes are overwritten when loadHiddenObjects is true.
             self::$loadHiddenObjectsConfigurationBackup = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects'];
+            self::$loadHiddenObjectsConfigurationBackupSet = true;
             $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects'] = 0;
         }
     }
@@ -73,6 +79,10 @@ class tx_mksearch_hooks_DatabaseConnection
      */
     public function doSelectPost()
     {
-        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects'] = self::$loadHiddenObjectsConfigurationBackup;
+        if (self::$loadHiddenObjectsConfigurationBackupSet === true) {
+            $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects'] = self::$loadHiddenObjectsConfigurationBackup;
+            self::$loadHiddenObjectsConfigurationBackup = null;
+            self::$loadHiddenObjectsConfigurationBackupSet = false;
+        }
     }
 }
