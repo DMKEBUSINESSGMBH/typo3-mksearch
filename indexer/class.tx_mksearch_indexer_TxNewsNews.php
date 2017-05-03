@@ -185,7 +185,7 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
             $this
         );
 
-        if (!news){
+        if (!$news){
             $abort = true;
         }
         
