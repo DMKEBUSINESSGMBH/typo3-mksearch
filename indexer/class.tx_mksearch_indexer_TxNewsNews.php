@@ -185,6 +185,10 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
             $this
         );
 
+        if (!news){
+            $abort = true;
+        }
+        
         // At least one of the news' categories was found on black list
         if ($abort) {
             tx_rnbase::load('tx_rnbase_util_Logger');
