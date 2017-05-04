@@ -365,6 +365,8 @@ class tx_mksearch_util_Filter
             $matches = array();
         }
 
+        tx_rnbase::load('tx_mksearch_util_Misc');
+
         if (// wurde das feld gefunden?
             isset($matches['field']) && !empty($matches['field'])
             // wurde der wert gefunden?
