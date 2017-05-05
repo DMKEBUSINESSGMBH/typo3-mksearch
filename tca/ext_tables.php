@@ -13,7 +13,7 @@ call_user_func(
         foreach (array(
             'tt_content',
         ) as $table) {
-            require $extPath . 'Configuration/TCA/Override/' . $table . '.php';
+            require $extPath . 'Configuration/TCA/Overrides/' . $table . '.php';
         }
 
         foreach (array(
