@@ -66,7 +66,7 @@ class tx_mksearch_tests_Util
     /**
      * @var string
      */
-    private static $addRootLineFieldsBackup;
+    private static $addRootLineFieldsBackup = null;
 
     /**
      * Sichert die hoocks unt entfernt diese in der globalconf.
@@ -433,6 +433,12 @@ class tx_mksearch_tests_Util
     {
         self::$addRootLineFieldsBackup = $GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'];
         $GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'] = '';
+        if (tx_rnbase_util_TYPO3::isTYPO62OrHigher()) {
+            $property = new ReflectionProperty('TYPO3\\CMS\\Core\\Utility\\RootlineUtility', 'rootlineFields');
+            $property->setAccessible(true);
+            $rootLineFields = Tx_Rnbase_Utility_Strings::trimExplode(',', self::$addRootLineFieldsBackup, true);
+            $property->setValue(null, array_diff($property->getValue(null), $rootLineFields));
+        }
     }
 
     /**
@@ -440,7 +446,16 @@ class tx_mksearch_tests_Util
      */
     public static function resetAddRootlineFields()
     {
-        $GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'] = self::$addRootLineFieldsBackup;
+        if (self::$addRootLineFieldsBackup != null) {
+            $GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'] = self::$addRootLineFieldsBackup;
+            if (tx_rnbase_util_TYPO3::isTYPO62OrHigher()) {
+                $property = new ReflectionProperty('TYPO3\\CMS\\Core\\Utility\\RootlineUtility', 'rootlineFields');
+                $property->setAccessible(true);
+                $rootLineFields = Tx_Rnbase_Utility_Strings::trimExplode(',', self::$addRootLineFieldsBackup, true);
+                $property->setValue(null, array_unique(array_merge($property->getValue(null), $rootLineFields)));
+            }
+            self::$addRootLineFieldsBackup = null;
+        }
     }
 }
 
