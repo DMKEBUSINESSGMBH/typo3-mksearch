@@ -72,8 +72,7 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC
         // die ip muss im debug stehen
         if ($parameters->get('debug')) {
             tx_rnbase::load('tx_mksearch_util_Misc');
-            if ($parameters->get('debug') == tx_rnbase_util_Misc::getIndpEnv('REMOTE_ADDR')
-                || tx_mksearch_util_Misc::isDevIpMask()) {
+            if (tx_mksearch_util_Misc::isDevIpMask()) {
                 $options['debug'] = 1;
                 $options['debugQuery'] = 'true';
             }
