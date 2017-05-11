@@ -9,7 +9,6 @@
  * Only the data in the array - everything else is removed by next
  * writing. "version" and "dependencies" must not be touched!
  ***************************************************************/
-
 $EM_CONF[$_EXTKEY] = array(
     'title' => 'MK Search',
     'description' => 'Generic highly adjustable and extendable search engine framework, using Zend Lucene, Apache Solr or ElasticSearch. But support for other search engines can be provided easily.',
@@ -18,7 +17,7 @@ $EM_CONF[$_EXTKEY] = array(
     'author_email' => 'dev@dmk-ebusiness.de',
     'shy' => '',
     'dependencies' => 'rn_base',
-'version' => '2.0.34',
+    'version' => '3.0.0',
     'conflicts' => '',
     'priority' => '',
     'module' => '',
@@ -32,16 +31,14 @@ $EM_CONF[$_EXTKEY] = array(
     'author_company' => 'DMK E-Business GmbH',
     'constraints' => array(
         'depends' => array(
-            'rn_base' => '1.1.6-',
+            'rn_base' => '1.4.0-',
             'typo3' => '4.5.0-8.7.99',
+            'scheduler' => '1.0.0-8.7.99'
         ),
-        'conflicts' => array(
-        ),
-        'suggests' => array(
-        ),
+        'conflicts' => array(),
+        'suggests' => array(),
     ),
-    'suggests' => array(
-    ),
+    'suggests' => array(),
     'classmap' => array(
         'action/',
         'filter/',
