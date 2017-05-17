@@ -106,31 +106,31 @@ class tx_mksearch_util_SolrAutocomplete
         tx_rnbase_util_Link $link,
         $wrapInScriptTags = true
     ) {
-        $javaScript = 'jQuery(document).ready(function(){'.
-			'jQuery('.$configArray['elementSelector'].').autocomplete({'.
-				'source: function( request, response ) {'.
-					'jQuery.ajax({'.
-						'url: "'.$link->makeUrl(false).'&mksearch[term]="+encodeURIComponent(request.term),'.
-						'dataType: "json",'.
-						'success: function( data ) {'.
-							'var suggestions = [];'.
-							'jQuery.each(data.suggestions, function(key, value) {'.
-								'jQuery.each(value, function(key, suggestion) {'.
-									'suggestions.push(suggestion.record.value);'.
-								'});'.
-							'});'.
-							'response( jQuery.map( suggestions, function( item ) {'.
-								'return {'.
-									'label: item,'.
-									'value: item'.
-								'};'.
-							'}));'.
-						'}'.
-					'});'.
-				'},'.
-				'minLength: '.$configArray['minLength'].''.
-			'});'.
-		'});'.
+        $javaScript = 'jQuery(document).ready(function(){' .
+			'jQuery('.$configArray['elementSelector'].').autocomplete({' .
+				'source: function( request, response ) {' .
+					'jQuery.ajax({' .
+						'url: "' . $link->makeUrl(false) . '&mksearch[term]="+encodeURIComponent(request.term),' .
+						'dataType: "json",' .
+						'success: function( data ) {' .
+							'var suggestions = [];' .
+							'jQuery.each(data.suggestions, function(key, value) {' .
+								'jQuery.each(value, function(key, suggestion) {' .
+									'suggestions.push(suggestion.record.value);' .
+								'});' .
+							'});' .
+							'response( jQuery.map( suggestions, function( item ) {' .
+								'return {' .
+									'label: item,' .
+									'value: item' .
+								'};' .
+							'}));' .
+						'}' .
+					'});' .
+				'},' .
+				'minLength: ' . $configArray['minLength'] .
+			'});' .
+		'});' .
 		'jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();';
 
         if ($wrapInScriptTags) {

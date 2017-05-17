@@ -212,32 +212,32 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends tx_mksearch_tests_Tes
         //view daten sollten nicht gesetzt sein
         self::assertFalse($action->getConfigurations()->getViewData()->offsetExists('result'), 'es wurde doch ein result gesetzt in den view daten. doch gesucht?');
 
-        $expectedJavaScript = 'jQuery(document).ready(function(){
-			jQuery(myElementSelector).autocomplete({
-				source: function( request, response ) {
-					jQuery.ajax({
-						url: "?id='.$this->linkId.'&type=540&mksearch%5Bajax%5D=1&mksearch%5BusedIndex%5D=1&mksearch[term]="+encodeURIComponent(request.term),
-						dataType: "json",
-						success: function( data ) {
-							var suggestions = [];
-							jQuery.each(data.suggestions, function(key, value) {
-								jQuery.each(value, function(key, suggestion) {
-									suggestions.push(suggestion.record.value);
-								});
-							});
-							response( jQuery.map( suggestions, function( item ) {
-								return {
-									label: item,
-									value: item
-								};
-							}));
-						}
-					});
-				},
-				minLength: 2
-			});
-		});
-		jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();' . LF;
+        $expectedJavaScript = 'jQuery(document).ready(function(){' .
+			'jQuery(myElementSelector).autocomplete({' .
+				'source: function( request, response ) {' .
+					'jQuery.ajax({' .
+						'url: "?id='.$this->linkId.'&type=540&mksearch%5Bajax%5D=1&mksearch%5BusedIndex%5D=1&mksearch[term]="+encodeURIComponent(request.term),' .
+						'dataType: "json",' .
+						'success: function( data ) {' .
+							'var suggestions = [];' .
+							'jQuery.each(data.suggestions, function(key, value) {' .
+								'jQuery.each(value, function(key, suggestion) {' .
+									'suggestions.push(suggestion.record.value);' .
+								'});' .
+							'});' .
+							'response( jQuery.map( suggestions, function( item ) {' .
+								'return {' .
+									'label: item,' .
+									'value: item' .
+								'};' .
+							'}));' .
+						'}' .
+					'});' .
+				'},' .
+				'minLength: 2' .
+			'});' .
+		'});' .
+		'jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();' . LF;
 
         $property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsInline');
         $property->setAccessible(true);
@@ -285,32 +285,32 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends tx_mksearch_tests_Tes
         //view daten sollten nicht gesetzt sein
         self::assertFalse($action->getConfigurations()->getViewData()->offsetExists('result'), 'es wurde doch ein result gesetzt in den view daten. doch gesucht?');
 
-        $expectedJavaScript = 'jQuery(document).ready(function(){
-			jQuery(myElementSelector).autocomplete({
-				source: function( request, response ) {
-					jQuery.ajax({
-						url: "?id='.$this->linkId.'&type=540&mksearch%5Bajax%5D=1&mksearch%5BusedIndex%5D=1&mksearch[term]="+encodeURIComponent(request.term),
-						dataType: "json",
-						success: function( data ) {
-							var suggestions = [];
-							jQuery.each(data.suggestions, function(key, value) {
-								jQuery.each(value, function(key, suggestion) {
-									suggestions.push(suggestion.record.value);
-								});
-							});
-							response( jQuery.map( suggestions, function( item ) {
-								return {
-									label: item,
-									value: item
-								};
-							}));
-						}
-					});
-				},
-				minLength: 2
-			});
-		});
-		jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();' . LF;
+        $expectedJavaScript = 'jQuery(document).ready(function(){' .
+			'jQuery(myElementSelector).autocomplete({' .
+				'source: function( request, response ) {' .
+					'jQuery.ajax({' .
+						'url: "?id='.$this->linkId.'&type=540&mksearch%5Bajax%5D=1&mksearch%5BusedIndex%5D=1&mksearch[term]="+encodeURIComponent(request.term),' .
+						'dataType: "json",' .
+						'success: function( data ) {' .
+							'var suggestions = [];' .
+							'jQuery.each(data.suggestions, function(key, value) {' .
+								'jQuery.each(value, function(key, suggestion) {' .
+									'suggestions.push(suggestion.record.value);' .
+								'});' .
+							'});' .
+							'response( jQuery.map( suggestions, function( item ) {' .
+								'return {' .
+									'label: item,' .
+									'value: item' .
+								'};' .
+							'}));' .
+						'}' .
+					'});' .
+				'},' .
+				'minLength: 2' .
+			'});' .
+		'});' .
+		'jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();' . LF;
 
         $property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsInline');
         $property->setAccessible(true);
@@ -372,32 +372,32 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends tx_mksearch_tests_Tes
         //view daten sollten nicht gesetzt sein
         self::assertFalse($action->getConfigurations()->getViewData()->offsetExists('result'), 'es wurde doch ein result gesetzt in den view daten. doch gesucht?');
 
-        $expectedJavaScript = 'jQuery(document).ready(function(){
-			jQuery(myElementSelector).autocomplete({
-				source: function( request, response ) {
-					jQuery.ajax({
-						url: "?id='.$this->linkId.'&type=540&mksearch%5Bajax%5D=1&mksearch%5BusedIndex%5D=1&mksearch[term]="+encodeURIComponent(request.term),
-						dataType: "json",
-						success: function( data ) {
-							var suggestions = [];
-							jQuery.each(data.suggestions, function(key, value) {
-								jQuery.each(value, function(key, suggestion) {
-									suggestions.push(suggestion.record.value);
-								});
-							});
-							response( jQuery.map( suggestions, function( item ) {
-								return {
-									label: item,
-									value: item
-								};
-							}));
-						}
-					});
-				},
-				minLength: 2
-			});
-		});
-		jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();' . LF;
+        $expectedJavaScript = 'jQuery(document).ready(function(){' .
+			'jQuery(myElementSelector).autocomplete({' .
+				'source: function( request, response ) {' .
+					'jQuery.ajax({' .
+						'url: "?id='.$this->linkId.'&type=540&mksearch%5Bajax%5D=1&mksearch%5BusedIndex%5D=1&mksearch[term]="+encodeURIComponent(request.term),' .
+						'dataType: "json",' .
+						'success: function( data ) {' .
+							'var suggestions = [];' .
+							'jQuery.each(data.suggestions, function(key, value) {' .
+								'jQuery.each(value, function(key, suggestion) {' .
+									'suggestions.push(suggestion.record.value);' .
+								'});' .
+							'});' .
+							'response( jQuery.map( suggestions, function( item ) {' .
+								'return {' .
+									'label: item,' .
+									'value: item' .
+								'};' .
+							'}));' .
+						'}' .
+					'});' .
+				'},' .
+				'minLength: 2' .
+			'});' .
+		'});' .
+		'jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();' . LF;
 
         $property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsInline');
         $property->setAccessible(true);
@@ -460,32 +460,32 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends tx_mksearch_tests_Tes
         //view daten sollten nicht gesetzt sein
         self::assertFalse($action->getConfigurations()->getViewData()->offsetExists('result'), 'es wurde doch ein result gesetzt in den view daten. doch gesucht?');
 
-        $expectedJavaScript = 'jQuery(document).ready(function(){
-			jQuery(myElementSelector).autocomplete({
-				source: function( request, response ) {
-					jQuery.ajax({
-						url: "?id='.$this->linkId.'&type=540&mksearch%5Bajax%5D=1&mksearch%5BusedIndex%5D=2&mksearch[term]="+encodeURIComponent(request.term),
-						dataType: "json",
-						success: function( data ) {
-							var suggestions = [];
-							jQuery.each(data.suggestions, function(key, value) {
-								jQuery.each(value, function(key, suggestion) {
-									suggestions.push(suggestion.record.value);
-								});
-							});
-							response( jQuery.map( suggestions, function( item ) {
-								return {
-									label: item,
-									value: item
-								};
-							}));
-						}
-					});
-				},
-				minLength: 2
-			});
-		});
-		jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();' . LF;
+        $expectedJavaScript = 'jQuery(document).ready(function(){' .
+			'jQuery(myElementSelector).autocomplete({' .
+				'source: function( request, response ) {' .
+					'jQuery.ajax({' .
+						'url: "?id=' . $this->linkId . '&type=540&mksearch%5Bajax%5D=1&mksearch%5BusedIndex%5D=2&mksearch[term]="+encodeURIComponent(request.term),' .
+						'dataType: "json",' .
+						'success: function( data ) {' .
+							'var suggestions = [];' .
+							'jQuery.each(data.suggestions, function(key, value) {' .
+								'jQuery.each(value, function(key, suggestion) {' .
+									'suggestions.push(suggestion.record.value);' .
+								'});' .
+							'});' .
+							'response( jQuery.map( suggestions, function( item ) {' .
+								'return {' .
+									'label: item,' .
+									'value: item' .
+								'};' .
+							'}));' .
+						'}' .
+					'});' .
+				'},' .
+				'minLength: 2' .
+			'});' .
+		'});' .
+		'jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();' . LF;
 
         $property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsInline');
         $property->setAccessible(true);
@@ -531,32 +531,32 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends tx_mksearch_tests_Tes
         //view daten sollten nicht gesetzt sein
         self::assertFalse($action->getConfigurations()->getViewData()->offsetExists('result'), 'es wurde doch ein result gesetzt in den view daten. doch gesucht?');
 
-        $expectedJavaScript = 'jQuery(document).ready(function(){
-			jQuery(myElementSelector).autocomplete({
-				source: function( request, response ) {
-					jQuery.ajax({
-						url: "?id='.$this->linkId.'&type=540&mksearch%5Bajax%5D=1&mksearch%5BusedIndex%5D=1&mksearch[term]="+encodeURIComponent(request.term),
-						dataType: "json",
-						success: function( data ) {
-							var suggestions = [];
-							jQuery.each(data.suggestions, function(key, value) {
-								jQuery.each(value, function(key, suggestion) {
-									suggestions.push(suggestion.record.value);
-								});
-							});
-							response( jQuery.map( suggestions, function( item ) {
-								return {
-									label: item,
-									value: item
-								};
-							}));
-						}
-					});
-				},
-				minLength: 2
-			});
-		});
-		jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();' . LF;
+        $expectedJavaScript = 'jQuery(document).ready(function(){' .
+			'jQuery(myElementSelector).autocomplete({' .
+				'source: function( request, response ) {' .
+					'jQuery.ajax({' .
+						'url: "?id='.$this->linkId.'&type=540&mksearch%5Bajax%5D=1&mksearch%5BusedIndex%5D=1&mksearch[term]="+encodeURIComponent(request.term),' .
+						'dataType: "json",' .
+						'success: function( data ) {' .
+							'var suggestions = [];' .
+							'jQuery.each(data.suggestions, function(key, value) {' .
+								'jQuery.each(value, function(key, suggestion) {' .
+									'suggestions.push(suggestion.record.value);' .
+								'});' .
+							'});' .
+							'response( jQuery.map( suggestions, function( item ) {' .
+								'return {' .
+									'label: item,' .
+									'value: item' .
+								'};' .
+							'}));' .
+						'}' .
+					'});' .
+				'},' .
+				'minLength: 2' .
+			'});' .
+		'});' .
+		'jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();' . LF;
 
         $property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsInline');
         $property->setAccessible(true);
