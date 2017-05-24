@@ -325,8 +325,8 @@ class tx_mksearch_util_Indexer
                 break;
         }
 
-        //should only element with a special category be indexed
-        if (!empty($options[$mode.'.'])) {
+        //should only elements with a special category etc. be indexed?
+        if (!empty($options[$mode.'.'][$optionKey.'.']) || !empty($options[$mode . '.'][$optionKey])) {
             $isValid = $noHit;//no option given
             if (!empty($models)) {
                 //include categories as array like

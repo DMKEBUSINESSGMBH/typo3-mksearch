@@ -370,14 +370,14 @@ class tx_mksearch_tests_indexer_Irfaq_testcase extends tx_mksearch_tests_Testcas
 
     /**
      * @group unit
-     * @dataProvider getCategoriesIncludeOptions
+     * @dataProvider getIncludeOptions
      *
      * @param array $options
      * @param boolean $isDeleted
      */
-    public function testPrepareSearchDataSetsDocDeletedDependingOnIncludedCategoriesOption(array $options, $isDeleted)
+    public function testPrepareSearchDataSetsDocDeletedDependingOnIncludeOptions(array $options, $isDeleted, $noCategories = false)
     {
-        $record = array('uid' => 1);
+        $record = array('uid' => 1, 'pid' => 2);
 
         $irfaqExpertService = $this->getMock('tx_mksearch_service_irfaq_Expert', array('get'));
         $irfaqExpertService->expects(self::any())
@@ -385,26 +385,33 @@ class tx_mksearch_tests_indexer_Irfaq_testcase extends tx_mksearch_tests_Testcas
             ->will(self::returnValue(tx_rnbase::makeInstance('tx_mksearch_model_irfaq_Expert', array())));
 
         $irfaqCategoryService = $this->getMock('tx_mksearch_service_irfaq_Category', array('getByQuestion'));
-        $irfaqCategoryService->expects(self::exactly($isDeleted ? 1 : 2))
+
+        if ($noCategories) {
+            $categories = array();
+        } else {
+            $categories = array(
+                0 => tx_rnbase::makeInstance(
+                    'tx_mksearch_model_irfaq_Category',
+                    array(
+                        'uid' => 1,
+                    )
+                ),
+                1 => tx_rnbase::makeInstance(
+                    'tx_mksearch_model_irfaq_Category',
+                    array(
+                        'uid' => 2,
+                    )
+                )
+            );
+        }
+
+        $irfaqCategoryService->expects(self::any())
             ->method('getByQuestion')
             ->with(tx_rnbase::makeInstance('tx_mksearch_model_irfaq_Question', $record))
-            ->will(self::returnValue(array(
-                    0 => tx_rnbase::makeInstance(
-                        'tx_mksearch_model_irfaq_Category',
-                        array(
-                                'uid' => 1,
-                        )
-                    ),
-                    1 => tx_rnbase::makeInstance(
-                        'tx_mksearch_model_irfaq_Category',
-                        array(
-                            'uid' => 2,
-                        )
-                    )
-            )));
+            ->will(self::returnValue($categories));
 
         $indexer = $this->getMock('tx_mksearch_indexer_Irfaq', array('getIrfaqCategoryService', 'getIrfaqExpertService'));
-        $indexer->expects(self::exactly($isDeleted ? 1 : 2))
+        $indexer->expects(self::any())
             ->method('getIrfaqCategoryService')
             ->will(self::returnValue($irfaqCategoryService));
         $indexer->expects(self::any())
@@ -417,13 +424,17 @@ class tx_mksearch_tests_indexer_Irfaq_testcase extends tx_mksearch_tests_Testcas
     /**
      * @return array
      */
-    public function getCategoriesIncludeOptions()
+    public function getIncludeOptions()
     {
         return array(
             array(array('include.' => array('categories.' => array(0 => 1, 1 => 2))), false),
             array(array('include.' => array('categories' => '1,3')), false),
             array(array('include.' => array('categories.' => array(0 => 3))), true),
             array(array('include.' => array('categories' => '3')), true),
+            array(array('include.' => array('pageTrees' => '2'), 'deleteIfNotIndexable' => 1), false, true),
+            array(array('include.' => array('pageTrees' => '3'), 'deleteIfNotIndexable' => 1), true, true),
+            array(array('include.' => array('pageTrees' => '2'), 'deleteIfNotIndexable' => 1), false),
+            array(array('include.' => array('pageTrees' => '3'), 'deleteIfNotIndexable' => 1), true),
         );
     }
 

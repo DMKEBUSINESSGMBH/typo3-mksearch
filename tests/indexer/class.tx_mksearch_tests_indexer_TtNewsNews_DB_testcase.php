@@ -163,6 +163,29 @@ class tx_mksearch_tests_indexer_TtNewsNews_DB_testcase extends tx_mksearch_tests
         self::assertArrayHasKey('categorySinglePid_i', $aIndexData, 'categorySinglePid_i ist nicht gesetzt!');
         self::assertEquals('50', $aIndexData['categorySinglePid_i']->getValue(), 'categorySinglePid_i ist falsch gesetzt!');
     }
+
+    /**
+     * @group integration
+     */
+    public function testPrepareSearchDataWithIncludeOptionsOtherThanCategories()
+    {
+        /* @var $indexer tx_mksearch_indexer_TtNewsNews */
+        $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtNewsNews');
+        $options = array(
+            'include.' => array(
+                'somethingelse' => '1'
+            ),
+        );
+
+        $result = array('uid' => 5);
+        $indexDoc = $indexer->prepareSearchData(
+            'tt_news',
+            $result,
+            tx_mksearch_tests_Util::getIndexerDocument($indexer),
+            $options
+        );
+        self::assertNotNull($indexDoc, 'Das Element wurde nicht indziert!');
+    }
 }
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']) {
     include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']);
