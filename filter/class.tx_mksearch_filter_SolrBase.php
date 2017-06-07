@@ -499,10 +499,11 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
         // store firstchar
         $configurations->getViewData()->offsetSet('charpointer', $firstChar);
 
+        $facetField  = $configurations->get($confId . 'facetField') ?: 'first_letter_s';
         self::addFilterQuery(
             $options,
             $this->handleFqTags(
-                'first_letter_s:"' . $firstChar . '"'
+                $facetField  . ':"' . $firstChar . '"'
             )
         );
     }

@@ -640,6 +640,7 @@ plugin.tx_mksearch {
 
         charbrowser {
             cbid = searchcb
+            facetField = first_letter_s
         }
 
         filter = tx_mksearch_filter_SolrBase

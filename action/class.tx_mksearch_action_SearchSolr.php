@@ -327,9 +327,12 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC
         }
 
         $facet = null;
+
+        $facetField  = $this->getConfigurations()->get($this->getConfId(). 'facetField') ?: 'first_letter_s';
+
         // check if there are a first_letter_s
         foreach ($result['facets'] as $key => $group) {
-            if ($group->getField() === 'first_letter_s') {
+            if ($group->getField() === $facetField) {
                 $facet = $group;
                 unset($result['facets'][$key]);
                 break;
