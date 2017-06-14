@@ -1,44 +1,37 @@
 <?php
-
 namespace Elastica\Query;
-use Elastica\Type;
+
+use Elastica\Type as ElasticaType;
 
 /**
- * Ids Query
+ * Ids Query.
  *
- * @category Xodoa
- * @package Elastica
  * @author Lee Parker
  * @author Nicolas Ruflin <spam@ruflin.com>
  * @author Tim Rupp
- * @link http://www.elasticsearch.org/guide/reference/query-dsl/ids-query.html
+ *
+ * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-ids-query.html
  */
 class Ids extends AbstractQuery
 {
     /**
-     * Params
-     *
-     * @var array Params
-     */
-    protected $_params = array();
-
-    /**
-     * Creates filter object
+     * Creates filter object.
      *
      * @param string|\Elastica\Type $type Type to filter on
-     * @param array                $ids  List of ids
+     * @param array                 $ids  List of ids
      */
-    public function __construct($type = null, array $ids = array())
+    public function __construct($type = null, array $ids = [])
     {
         $this->setType($type);
         $this->setIds($ids);
     }
 
     /**
-     * Adds one more filter to the and filter
+     * Adds one more filter to the and filter.
      *
-     * @param  string                  $id Adds id to filter
-     * @return \Elastica\Query\Ids Current object
+     * @param string $id Adds id to filter
+     *
+     * @return $this
      */
     public function addId($id)
     {
@@ -48,14 +41,15 @@ class Ids extends AbstractQuery
     }
 
     /**
-     * Adds one more type to query
+     * Adds one more type to query.
      *
-     * @param  string|\Elastica\Type    $type Type name or object
-     * @return \Elastica\Query\Ids Current object
+     * @param string|\Elastica\Type $type Type name or object
+     *
+     * @return $this
      */
     public function addType($type)
     {
-        if ($type instanceof Type) {
+        if ($type instanceof ElasticaType) {
             $type = $type->getName();
         } elseif (empty($type) && !is_numeric($type)) {
             // A type can be 0, but cannot be empty
@@ -68,50 +62,53 @@ class Ids extends AbstractQuery
     }
 
     /**
-     * Set type
+     * Set type.
      *
-     * @param  string|\Elastica\Type $type Type name or object
-     * @return \Elastica\Query\Ids   Current object
+     * @param array|string|\Elastica\Type $type Type name or object
+     *
+     * @return $this
      */
     public function setType($type)
     {
-        if ($type instanceof Type) {
+        if ($type instanceof ElasticaType) {
             $type = $type->getName();
         } elseif (empty($type) && !is_numeric($type)) {
             // A type can be 0, but cannot be empty
             return $this;
         }
 
-        $this->_params['type'] = $type;
+        $this->_params['type'] = (array) $type;
 
         return $this;
     }
 
     /**
-     * Sets the ids to filter
+     * Sets the ids to filter.
      *
-     * @param  array|string            $ids List of ids
-     * @return \Elastica\Query\Ids Current object
+     * @param array|string $ids List of ids
+     *
+     * @return $this
      */
     public function setIds($ids)
     {
         if (is_array($ids)) {
             $this->_params['values'] = $ids;
         } else {
-            $this->_params['values'] = array($ids);
+            $this->_params['values'] = [$ids];
         }
 
         return $this;
     }
 
     /**
-     * Converts filter to array
+     * Converts filter to array.
      *
      * @see \Elastica\Query\AbstractQuery::toArray()
+     *
      * @return array Query array
      */
     public function toArray()
     {
-        return array('ids' => $this->_params);
+        return ['ids' => $this->_params];
     }
 }

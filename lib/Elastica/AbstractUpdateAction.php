@@ -1,13 +1,10 @@
 <?php
-
 namespace Elastica;
 
 /**
  * Base class for things that can be sent to the update api (Document and
  * Script).
  *
- * @category Xodoa
- * @package  Elastica
  * @author   Nik Everett <nik9000@gmail.com>
  */
 class AbstractUpdateAction extends Param
@@ -20,8 +17,9 @@ class AbstractUpdateAction extends Param
     /**
      * Sets the id of the document.
      *
-     * @param  string            $id
-     * @return \Elastica\Document
+     * @param string $id
+     *
+     * @return $this
      */
     public function setId($id)
     {
@@ -29,7 +27,7 @@ class AbstractUpdateAction extends Param
     }
 
     /**
-     * Returns document id
+     * Returns document id.
      *
      * @return string|int Document id
      */
@@ -47,37 +45,11 @@ class AbstractUpdateAction extends Param
     }
 
     /**
-     * Sets lifetime of document
+     * Sets the document type name.
      *
-     * @param  string            $ttl
-     * @return \Elastica\Document
-     */
-    public function setTtl($ttl)
-    {
-        return $this->setParam('_ttl', $ttl);
-    }
-
-    /**
-     * @return string
-     */
-    public function getTtl()
-    {
-        return $this->getParam('_ttl');
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasTtl()
-    {
-        return $this->hasParam('_ttl');
-    }
-
-    /**
-     * Sets the document type name
+     * @param Type|string $type Type name
      *
-     * @param  string            $type Type name
-     * @return \Elastica\Document Current object
+     * @return $this
      */
     public function setType($type)
     {
@@ -85,14 +57,16 @@ class AbstractUpdateAction extends Param
             $this->setIndex($type->getIndex());
             $type = $type->getName();
         }
+
         return $this->setParam('_type', $type);
     }
 
     /**
-     * Return document type name
+     * Return document type name.
      *
-     * @return string                              Document type name
      * @throws \Elastica\Exception\InvalidException
+     *
+     * @return string Document type name
      */
     public function getType()
     {
@@ -100,24 +74,27 @@ class AbstractUpdateAction extends Param
     }
 
     /**
-     * Sets the document index name
+     * Sets the document index name.
      *
-     * @param  string            $index Index name
-     * @return \Elastica\Document Current object
+     * @param Index|string $index Index name
+     *
+     * @return $this
      */
     public function setIndex($index)
     {
         if ($index instanceof Index) {
             $index = $index->getName();
         }
+
         return $this->setParam('_index', $index);
     }
 
     /**
-     * Get the document index name
+     * Get the document index name.
      *
-     * @return string                              Index name
      * @throws \Elastica\Exception\InvalidException
+     *
+     * @return string Index name
      */
     public function getIndex()
     {
@@ -125,11 +102,13 @@ class AbstractUpdateAction extends Param
     }
 
     /**
-     * Sets the version of a document for use with optimistic concurrency control
+     * Sets the version of a document for use with optimistic concurrency control.
      *
-     * @param  int               $version Document version
-     * @return \Elastica\Document Current object
-     * @link http://www.elasticsearch.org/blog/2011/02/08/versioning.html
+     * @param int $version Document version
+     *
+     * @return $this
+     *
+     * @link https://www.elastic.co/blog/versioning
      */
     public function setVersion($version)
     {
@@ -137,7 +116,7 @@ class AbstractUpdateAction extends Param
     }
 
     /**
-     * Returns document version
+     * Returns document version.
      *
      * @return string|int Document version
      */
@@ -156,11 +135,11 @@ class AbstractUpdateAction extends Param
 
     /**
      * Sets the version_type of a document
-     * Default in ES is internal, but you can set to external to use custom versioning
+     * Default in ES is internal, but you can set to external to use custom versioning.
      *
-     * @param  int               $versionType Document version type
-     * @return \Elastica\Document Current object
-     * @link http://www.elasticsearch.org/guide/reference/api/index_.html
+     * @param string $versionType Document version type
+     *
+     * @return $this
      */
     public function setVersionType($versionType)
     {
@@ -168,7 +147,7 @@ class AbstractUpdateAction extends Param
     }
 
     /**
-     * Returns document version type
+     * Returns document version type.
      *
      * @return string|int Document version type
      */
@@ -186,11 +165,13 @@ class AbstractUpdateAction extends Param
     }
 
     /**
-     * Sets parent document id
+     * Sets parent document id.
      *
-     * @param  string|int        $parent Parent document id
-     * @return \Elastica\Document Current object
-     * @link http://www.elasticsearch.org/guide/reference/mapping/parent-field.html
+     * @param string|int $parent Parent document id
+     *
+     * @return $this
+     *
+     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-parent-field.html
      */
     public function setParent($parent)
     {
@@ -198,7 +179,7 @@ class AbstractUpdateAction extends Param
     }
 
     /**
-     * Returns the parent document id
+     * Returns the parent document id.
      *
      * @return string|int Parent document id
      */
@@ -216,10 +197,11 @@ class AbstractUpdateAction extends Param
     }
 
     /**
-     * Set operation type
+     * Set operation type.
      *
-     * @param  string            $opType Only accept create
-     * @return \Elastica\Document Current object
+     * @param string $opType Only accept create
+     *
+     * @return $this
      */
     public function setOpType($opType)
     {
@@ -227,7 +209,8 @@ class AbstractUpdateAction extends Param
     }
 
     /**
-     * Get operation type
+     * Get operation type.
+     *
      * @return string
      */
     public function getOpType()
@@ -244,39 +227,11 @@ class AbstractUpdateAction extends Param
     }
 
     /**
-     * Set percolate query param
+     * Set routing query param.
      *
-     * @param  string            $value percolator filter
-     * @return \Elastica\Document
-     */
-    public function setPercolate($value = '*')
-    {
-        return $this->setParam('_percolate', $value);
-    }
-
-    /**
-     * Get percolate parameter
+     * @param string $value routing
      *
-     * @return string
-     */
-    public function getPercolate()
-    {
-        return $this->getParam('_percolate');
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasPercolate()
-    {
-        return $this->hasParam('_percolate');
-    }
-
-    /**
-     * Set routing query param
-     *
-     * @param  string            $value routing
-     * @return \Elastica\Document
+     * @return $this
      */
     public function setRouting($value)
     {
@@ -284,7 +239,7 @@ class AbstractUpdateAction extends Param
     }
 
     /**
-     * Get routing parameter
+     * Get routing parameter.
      *
      * @return string
      */
@@ -303,18 +258,20 @@ class AbstractUpdateAction extends Param
 
     /**
      * @param array|string $fields
-     * @return \Elastica\Document
+     *
+     * @return $this
      */
     public function setFields($fields)
     {
         if (is_array($fields)) {
             $fields = implode(',', $fields);
         }
+
         return $this->setParam('_fields', (string) $fields);
     }
 
     /**
-     * @return \Elastica\Document
+     * @return $this
      */
     public function setFieldsSource()
     {
@@ -339,7 +296,8 @@ class AbstractUpdateAction extends Param
 
     /**
      * @param int $num
-     * @return \Elastica\Document
+     *
+     * @return $this
      */
     public function setRetryOnConflict($num)
     {
@@ -363,37 +321,13 @@ class AbstractUpdateAction extends Param
     }
 
     /**
-     * @param string $timestamp
-     * @return \Elastica\Document
-     */
-    public function setTimestamp($timestamp)
-    {
-        return $this->setParam('_timestamp', $timestamp);
-    }
-
-    /**
-     * @return int
-     */
-    public function getTimestamp()
-    {
-        return $this->getParam('_timestamp');
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasTimestamp()
-    {
-        return $this->hasParam('_timestamp');
-    }
-
-    /**
      * @param bool $refresh
-     * @return \Elastica\Document
+     *
+     * @return $this
      */
     public function setRefresh($refresh = true)
     {
-        return $this->setParam('_refresh', (bool) $refresh);
+        return $this->setParam('_refresh', (bool) $refresh ? 'true' : 'false');
     }
 
     /**
@@ -401,7 +335,7 @@ class AbstractUpdateAction extends Param
      */
     public function getRefresh()
     {
-        return $this->getParam('_refresh');
+        return 'true' === $this->getParam('_refresh');
     }
 
     /**
@@ -414,7 +348,8 @@ class AbstractUpdateAction extends Param
 
     /**
      * @param string $timeout
-     * @return \Elastica\Document
+     *
+     * @return $this
      */
     public function setTimeout($timeout)
     {
@@ -430,7 +365,7 @@ class AbstractUpdateAction extends Param
     }
 
     /**
-     * @return string
+     * @return bool
      */
     public function hasTimeout()
     {
@@ -439,7 +374,8 @@ class AbstractUpdateAction extends Param
 
     /**
      * @param string $timeout
-     * @return \Elastica\Document
+     *
+     * @return $this
      */
     public function setConsistency($timeout)
     {
@@ -455,7 +391,7 @@ class AbstractUpdateAction extends Param
     }
 
     /**
-     * @return string
+     * @return bool
      */
     public function hasConsistency()
     {
@@ -464,7 +400,8 @@ class AbstractUpdateAction extends Param
 
     /**
      * @param string $timeout
-     * @return \Elastica\Document
+     *
+     * @return $this
      */
     public function setReplication($timeout)
     {
@@ -489,7 +426,8 @@ class AbstractUpdateAction extends Param
 
     /**
      * @param \Elastica\Document|array $data
-     * @return \Elastica\Document
+     *
+     * @return $this
      */
     public function setUpsert($data)
     {
@@ -516,16 +454,17 @@ class AbstractUpdateAction extends Param
     }
 
     /**
-     * @param array $fields if empty array all options will be returned, field names can be either with underscored either without, i.e. _percolate, routing
-     * @param bool $withUnderscore should option keys contain underscore prefix
+     * @param array $fields         if empty array all options will be returned, field names can be either with underscored either without, i.e. _percolate, routing
+     * @param bool  $withUnderscore should option keys contain underscore prefix
+     *
      * @return array
      */
-    public function getOptions(array $fields = array(), $withUnderscore = false)
+    public function getOptions(array $fields = [], $withUnderscore = false)
     {
         if (!empty($fields)) {
-            $data = array();
+            $data = [];
             foreach ($fields as $field) {
-                $key = '_' . ltrim($field, '_');
+                $key = '_'.ltrim($field, '_');
                 if ($this->hasParam($key) && '' !== (string) $this->getParam($key)) {
                     $data[$key] = $this->getParam($key);
                 }
@@ -539,6 +478,7 @@ class AbstractUpdateAction extends Param
                 unset($data[$key]);
             }
         }
+
         return $data;
     }
 }

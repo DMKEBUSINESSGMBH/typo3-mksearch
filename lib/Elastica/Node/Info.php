@@ -1,55 +1,59 @@
 <?php
-
 namespace Elastica\Node;
 
 use Elastica\Node as BaseNode;
-use Elastica\Request;
 
 /**
- * Elastica cluster node object
+ * Elastica cluster node object.
  *
- * @category Xodoa
- * @package Elastica
  * @author Nicolas Ruflin <spam@ruflin.com>
- * @link http://www.elasticsearch.org/guide/reference/api/admin-indices-status.html
+ *
+ * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-status.html
  */
 class Info
 {
     /**
-     * Response
+     * Response.
      *
      * @var \Elastica\Response Response object
      */
-    protected $_response = null;
+    protected $_response;
 
     /**
-     * Stats data
+     * Stats data.
      *
      * @var array stats data
      */
-    protected $_data = array();
+    protected $_data = [];
 
     /**
-     * Node
+     * Node.
      *
      * @var \Elastica\Node Node object
      */
-    protected $_node = null;
+    protected $_node;
 
     /**
-     * Query parameters
+     * Query parameters.
      *
      * @var array
      */
-    protected $_params = array();
+    protected $_params = [];
 
     /**
-     * Create new info object for node
+     * Unique node id.
+     *
+     * @var string
+     */
+    protected $_id;
+
+    /**
+     * Create new info object for node.
      *
      * @param \Elastica\Node $node   Node object
-     * @param array         $params List of params to return. Can be: settings, os, process, jvm, thread_pool, network, transport, http
+     * @param array          $params List of params to return. Can be: settings, os, process, jvm, thread_pool, network, transport, http
      */
-    public function __construct(BaseNode $node, array $params = array())
+    public function __construct(BaseNode $node, array $params = [])
     {
         $this->_node = $node;
         $this->refresh($params);
@@ -73,7 +77,7 @@ class Info
             if (isset($data[$arg])) {
                 $data = $data[$arg];
             } else {
-                return null;
+                return;
             }
         }
 
@@ -81,7 +85,7 @@ class Info
     }
 
     /**
-     * Return port of the node
+     * Return port of the node.
      *
      * @return string Returns Node port
      */
@@ -96,7 +100,7 @@ class Info
     }
 
     /**
-     * Return IP of the node
+     * Return IP of the node.
      *
      * @return string Returns Node ip address
      */
@@ -111,37 +115,43 @@ class Info
     }
 
     /**
-     * Return data regarding plugins installed on this node
+     * Return data regarding plugins installed on this node.
+     *
      * @return array plugin data
-     * @link http://www.elasticsearch.org/guide/reference/api/admin-cluster-nodes-info/
+     *
+     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/cluster-nodes-info.html
      */
     public function getPlugins()
     {
-        if(!in_array('plugins', $this->_params)) {
+        if (!in_array('plugins', $this->_params)) {
             //Plugin data was not retrieved when refresh() was called last. Get it now.
             $this->_params[] = 'plugins';
             $this->refresh($this->_params);
         }
+
         return $this->get('plugins');
     }
 
     /**
-     * Check if the given plugin is installed on this node
+     * Check if the given plugin is installed on this node.
+     *
      * @param string $name plugin name
+     *
      * @return bool true if the plugin is installed, false otherwise
      */
     public function hasPlugin($name)
     {
-        foreach($this->getPlugins() as $plugin) {
-            if($plugin['name'] == $name) {
+        foreach ($this->getPlugins() as $plugin) {
+            if ($plugin['name'] == $name) {
                 return true;
             }
         }
+
         return false;
     }
 
     /**
-     * Return all info data
+     * Return all info data.
      *
      * @return array Data array
      */
@@ -151,7 +161,7 @@ class Info
     }
 
     /**
-     * Return node object
+     * Return node object.
      *
      * @return \Elastica\Node Node object
      */
@@ -161,7 +171,23 @@ class Info
     }
 
     /**
-     * Returns response object
+     * @return string Unique node id
+     */
+    public function getId()
+    {
+        return $this->_id;
+    }
+
+    /**
+     * @return string Node name
+     */
+    public function getName()
+    {
+        return $this->_data['name'];
+    }
+
+    /**
+     * Returns response object.
      *
      * @return \Elastica\Response Response object
      */
@@ -171,26 +197,28 @@ class Info
     }
 
     /**
-     * Reloads all nodes information. Has to be called if informations changed
+     * Reloads all nodes information. Has to be called if informations changed.
      *
-     * @param  array             $params Params to return (default none). Possible options: settings, os, process, jvm, thread_pool, network, transport, http, plugin
+     * @param array $params Params to return (default none). Possible options: settings, os, process, jvm, thread_pool, network, transport, http, plugin
+     *
      * @return \Elastica\Response Response object
      */
-    public function refresh(array $params = array())
+    public function refresh(array $params = [])
     {
         $this->_params = $params;
 
-        $path = '_nodes/' . $this->getNode()->getName();
+        $endpoint = new \Elasticsearch\Endpoints\Cluster\Nodes\Info();
+        $endpoint->setNodeID($this->getNode()->getId());
 
         if (!empty($params)) {
-            $path .= '?';
-            foreach ($params as $param) {
-                $path .= $param . '=true&';
-            }
+            $endpoint->setMetric($params);
         }
 
-        $this->_response = $this->getNode()->getClient()->request($path, Request::GET);
+        $this->_response = $this->getNode()->getClient()->requestEndpoint($endpoint);
         $data = $this->getResponse()->getData();
+
         $this->_data = reset($data['nodes']);
+        $this->_id = key($data['nodes']);
+        $this->getNode()->setId($this->getId());
     }
 }

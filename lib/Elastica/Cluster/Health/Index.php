@@ -1,27 +1,22 @@
 <?php
-
 namespace Elastica\Cluster\Health;
 
 /**
  * Wraps status information for an index.
  *
- * @package Elastica
  * @author Ray Ward <ray.ward@bigcommerce.com>
- * @link http://www.elasticsearch.org/guide/reference/api/admin-cluster-health.html
+ *
+ * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/cluster-health.html
  */
 class Index
 {
     /**
-     * The name of the index.
-     *
-     * @var string
+     * @var string The name of the index.
      */
     protected $_name;
 
     /**
-     * The index health data.
-     *
-     * @var array
+     * @var array The index health data.
      */
     protected $_data;
 
@@ -132,7 +127,7 @@ class Index
      */
     public function getShards()
     {
-        $shards = array();
+        $shards = [];
         foreach ($this->_data['shards'] as $shardNumber => $shard) {
             $shards[] = new Shard($shardNumber, $shard);
         }

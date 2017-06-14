@@ -1,32 +1,27 @@
 <?php
-
 namespace Elastica\Cluster;
+
 use Elastica\Client;
 use Elastica\Cluster\Health\Index;
-use Elastica\Request;
 
 /**
  * Elastic cluster health.
  *
- * @package Elastica
  * @author Ray Ward <ray.ward@bigcommerce.com>
- * @link http://www.elasticsearch.org/guide/reference/api/admin-cluster-health.html
+ *
+ * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/cluster-health.html
  */
 class Health
 {
     /**
-     * Elastica client.
-     *
-     * @var \Elastica\Client Client object
+     * @var \Elastica\Client Client object.
      */
-    protected $_client = null;
+    protected $_client;
 
     /**
-     * The cluster health data.
-     *
-     * @var array
+     * @var array The cluster health data.
      */
-    protected $_data = null;
+    protected $_data;
 
     /**
      * @param \Elastica\Client $client The Elastica client.
@@ -44,8 +39,10 @@ class Health
      */
     protected function _retrieveHealthData()
     {
-        $path = '_cluster/health?level=shards';
-        $response = $this->_client->request($path, Request::GET);
+        $endpoint = new \Elasticsearch\Endpoints\Cluster\Health();
+        $endpoint->setParams(['level' => 'shards']);
+
+        $response = $this->_client->requestEndpoint($endpoint);
 
         return $response->getData();
     }
@@ -63,7 +60,7 @@ class Health
     /**
      * Refreshes the health data for the cluster.
      *
-     * @return \Elastica\Cluster\Health
+     * @return $this
      */
     public function refresh()
     {
@@ -173,15 +170,57 @@ class Health
     }
 
     /**
+     * get the number of delayed unassined shards.
+     *
+     * @return int
+     */
+    public function getDelayedUnassignedShards()
+    {
+        return $this->_data['delayed_unassigned_shards'];
+    }
+
+    /**
+     * @return int
+     */
+    public function getNumberOfPendingTasks()
+    {
+        return $this->_data['number_of_pending_tasks'];
+    }
+
+    /**
+     * @return int
+     */
+    public function getNumberOfInFlightFetch()
+    {
+        return $this->_data['number_of_in_flight_fetch'];
+    }
+
+    /**
+     * @return int
+     */
+    public function getTaskMaxWaitingInQueueMillis()
+    {
+        return $this->_data['task_max_waiting_in_queue_millis'];
+    }
+
+    /**
+     * @return int
+     */
+    public function getActiveShardsPercentAsNumber()
+    {
+        return $this->_data['active_shards_percent_as_number'];
+    }
+
+    /**
      * Gets the status of the indices.
      *
      * @return \Elastica\Cluster\Health\Index[]
      */
     public function getIndices()
     {
-        $indices = array();
+        $indices = [];
         foreach ($this->_data['indices'] as $indexName => $index) {
-            $indices[] = new Index($indexName, $index);
+            $indices[$indexName] = new Index($indexName, $index);
         }
 
         return $indices;

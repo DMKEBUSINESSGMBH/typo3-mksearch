@@ -1,5 +1,4 @@
 <?php
-
 namespace Elastica\Exception\Bulk;
 
 use Elastica\Bulk\ResponseSet;
@@ -7,16 +6,11 @@ use Elastica\Exception\Bulk\Response\ActionException;
 use Elastica\Exception\BulkException;
 
 /**
- * Bulk Response exception
- *
- * @category Xodoa
- * @package Elastica
+ * Bulk Response exception.
  */
 class ResponseException extends BulkException
 {
     /**
-     * Response
-     *
      * @var \Elastica\Bulk\ResponseSet ResponseSet object
      */
     protected $_responseSet;
@@ -24,10 +18,10 @@ class ResponseException extends BulkException
     /**
      * @var \Elastica\Exception\Bulk\Response\ActionException[]
      */
-    protected $_actionExceptions = array();
+    protected $_actionExceptions = [];
 
     /**
-     * Construct Exception
+     * Construct Exception.
      *
      * @param \Elastica\Bulk\ResponseSet $responseSet
      */
@@ -35,8 +29,8 @@ class ResponseException extends BulkException
     {
         $this->_init($responseSet);
 
-        $message = 'Error in one or more bulk request actions:' . PHP_EOL . PHP_EOL;
-        $message.= $this->getActionExceptionsAsString();
+        $message = 'Error in one or more bulk request actions:'.PHP_EOL.PHP_EOL;
+        $message .= $this->getActionExceptionsAsString();
 
         parent::__construct($message);
     }
@@ -56,7 +50,7 @@ class ResponseException extends BulkException
     }
 
     /**
-     * Returns bulk response set object
+     * Returns bulk response set object.
      *
      * @return \Elastica\Bulk\ResponseSet
      */
@@ -66,13 +60,13 @@ class ResponseException extends BulkException
     }
 
     /**
-     * Returns array of failed actions
+     * Returns array of failed actions.
      *
      * @return array Array of failed actions
      */
     public function getFailures()
     {
-        $errors = array();
+        $errors = [];
 
         foreach ($this->getActionExceptions() as $actionException) {
             $errors[] = $actionException->getMessage();
@@ -96,8 +90,9 @@ class ResponseException extends BulkException
     {
         $message = '';
         foreach ($this->getActionExceptions() as $actionException) {
-            $message.= $actionException->getMessage() . PHP_EOL;
+            $message .= $actionException->getMessage().PHP_EOL;
         }
+
         return $message;
     }
 }
