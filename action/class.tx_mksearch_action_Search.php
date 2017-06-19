@@ -92,11 +92,14 @@ class tx_mksearch_action_Search extends tx_rnbase_action_BaseIOC
      * @param unknown $viewdata
      * @param unknown $fields
      * @param unknown $options
+     *
+     * @todo 404 werfen wenn Seite außerhalb des Bereichs -> siehe $pageBrowser->markPageNotFoundIfPointerOutOfRange()
      */
     protected function handlePageBrowser($parameters, $configurations, $viewdata, &$fields, &$options)
     {
         $confId = $this->getConfId();
-        if (is_array($conf = $configurations->get($confId.'hit.pagebrowser.'))) {
+        $typoScriptPathPageBrowser = $confId . 'hit.pagebrowser.';
+        if (is_array($conf = $configurations->get($typoScriptPathPageBrowser))) {
             // PageBrowser initialisieren
             $pageBrowserId = $conf['pbid'] ? $conf['pbid'] : 'search'.$configurations->getPluginId();
             /* @var $pageBrowser tx_rnbase_util_PageBrowser */

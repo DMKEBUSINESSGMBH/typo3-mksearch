@@ -137,6 +137,7 @@ class tx_mksearch_action_ElasticSearch extends tx_rnbase_action_BaseIOC
         array &$options,
         tx_mksearch_service_engine_ElasticSearch $searchEngine
     ) {
+        $typoScriptPathPageBrowser = $confId . 'hit.pagebrowser.';
         if ((isset($options['limit']))
             && is_array($conf = $configurations->get($confId.'hit.pagebrowser.'))
         ) {
@@ -156,6 +157,8 @@ class tx_mksearch_action_ElasticSearch extends tx_rnbase_action_BaseIOC
 
             $pageBrowser->setState($parameters, $listSize, $options['limit']);
             $state = $pageBrowser->getState();
+
+            $pageBrowser->markPageNotFoundIfPointerOutOfRange($configurations, $typoScriptPathPageBrowser);
 
             $options = array_merge($options, $state);
             $viewdata->offsetSet('pagebrowser', $pageBrowser);

@@ -257,8 +257,9 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC
     public function handlePageBrowser($parameters, $configurations, $confId, $viewdata, &$fields, &$options, $index)
     {
         // handle page browser only, if configured and the limit is greater than zero.
+        $typoScriptPathPageBrowser = $confId . 'hit.pagebrowser.';
         if ((isset($options['limit']) && $options['limit'] > 0)
-            && is_array($conf = $configurations->get($confId.'hit.pagebrowser.'))
+            && is_array($conf = $configurations->get($typoScriptPathPageBrowser))
         ) {
             // PageBrowser initialisieren
             $pageBrowserId = $conf['pbid'] ? $conf['pbid'] : 'search'.$configurations->getPluginId();
@@ -304,6 +305,8 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC
             }
             $pageBrowser->setState($parameters, $listSize, $pageSize);
             $state = $pageBrowser->getState();
+
+            $pageBrowser->markPageNotFoundIfPointerOutOfRange($configurations, $typoScriptPathPageBrowser);
 
             $options = array_merge($options, $state);
             $viewdata->offsetSet('pagebrowser', $pageBrowser);
