@@ -198,7 +198,7 @@ Ein letzter Hinweis zu diesem Beispiel: Die PHP-Klasse kann leider nicht über i
 DFS-Feld direkt im Indexer hinzufügen
 ---------------------------
 
-Das hinzufügen von DFS Feldern, kann auch direkt in Indexern genutzt werden.
+Das hinzufügen von DFS Feldern bzw. Key-Value-Facetten, kann auch direkt in Indexern genutzt werden.
 
 ~~~~ {.sourceCode .php}
     $recordIndexMapping = array(
@@ -220,7 +220,7 @@ Das hinzufügen von DFS Feldern, kann auch direkt in Indexern genutzt werden.
     );
 ~~~~
 
-Somit hat das Feld my_facet_dfs_ms z.B. den Wert "UID-der-Facette<DFS>Label-der-Facette". Wichtig ist, dass es in diesem Fall noch ein extra Feld für die UID gibt. Dieses wird dann für die tatsächliche Anfrage genutzt, mit dem entsprechenden Mapping.
+Somit hat das Feld my_facet_dfs_ms z.B. den Wert "UID-der-Facette<DFS>Label-der-Facette". Wichtig ist, dass es in diesem Fall noch ein extra Feld gibt, welches den Wert aus dem ersten Teil des DFS Strings einzeln enthält. In diesem Fall wäre es die UID bzw. das Feld uid_mi. Dieses wird dann für die tatsächliche Anfrage genutzt, mit dem entsprechenden Mapping.
 
 ~~~~ {.sourceCode .ts}
     plugin.tx_mksearch.searchsolr {
@@ -236,7 +236,9 @@ Somit hat das Feld my_facet_dfs_ms z.B. den Wert "UID-der-Facette<DFS>Label-der-
     }
 ~~~~
 
-Somit lassen sich Facetten anhand von Strings bauen (immer der 2. Teil des DFS Wert), für die tatsächliche Abfrage wird aber die UID verwendet (immer der 1. Teil des DFS Wert). Als Feld für Links wird immer das gemappte genommen. Das DFS Feld ermittelt lediglich die Kandidaten für die Facetten. Bei der Konfiguration für die erlaubten Facettenfelder, muss dann das gemappte Feld (my_facet_uid_mi) verwendet werden, da dieses in Links verwendet wird.
+Somit lassen sich Facetten anhand von Strings bauen (der 2. Teil des DFS Wert wird als Label verwendet), für die tatsächliche Abfrage wird aber die UID verwendet (immer der 1. Teil des DFS Wert). Als Feld für Links wird immer das gemappte genommen. Das DFS Feld ermittelt lediglich die Kandidaten für die Facetten.
+
+**Achtung**: Bei der Konfiguration für die erlaubten Facettenfelder (allowedFqParams), muss dann das gemappte Feld (uid_mi) verwendet werden, da dieses in Links verwendet wird nud somit das tatsächlich verwendete Feld ist.
 
 Damit umgeht man Beschränkungen, wenn nach Strings facettiert wird. Denn enthält ein Wert z.B. ein Solr Kontrollzeichen wie "-", dann wird das zwar indiziert und auch als Wert in einem fq Link verwendet, vor der Solr Anfrage werden die Kontrollzeichen aber entfernt. Damit erhält man keine Ergebnisse.
 
