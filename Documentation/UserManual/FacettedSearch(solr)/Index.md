@@ -220,7 +220,7 @@ Das hinzufügen von DFS Feldern bzw. Key-Value-Facetten, kann auch direkt in Ind
     );
 ~~~~
 
-Somit hat das Feld my_facet_dfs_ms z.B. den Wert "UID-der-Facette<DFS>Label-der-Facette". Wichtig ist, dass es in diesem Fall noch ein extra Feld gibt, welches den Wert aus dem ersten Teil des DFS Strings einzeln enthält. In diesem Fall wäre es die UID bzw. das Feld uid_mi. Dieses wird dann für die tatsächliche Anfrage genutzt, mit dem entsprechenden Mapping.
+Somit hat das Feld my_facet_dfs_ms z.B. den Wert "UID-der-Facette\<DFS\>Label-der-Facette". Wichtig ist, dass es in diesem Fall noch ein extra Feld gibt, welches den Wert aus dem ersten Teil des DFS Strings einzeln enthält. In diesem Fall wäre es die UID bzw. das Feld uid_mi. Dieses wird dann für die tatsächliche Anfrage genutzt, mit dem entsprechenden Mapping.
 
 ~~~~ {.sourceCode .ts}
     plugin.tx_mksearch.searchsolr {
