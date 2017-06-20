@@ -238,7 +238,7 @@ Somit hat das Feld my_facet_dfs_ms z.B. den Wert "UID-der-Facette\<DFS\>Label-de
 
 Somit lassen sich Facetten anhand von Strings bauen (der 2. Teil des DFS Wert wird als Label verwendet), für die tatsächliche Abfrage wird aber die UID verwendet (immer der 1. Teil des DFS Wert). Als Feld für Links wird immer das gemappte genommen. Das DFS Feld ermittelt lediglich die Kandidaten für die Facetten.
 
-**Achtung**: Bei der Konfiguration für die erlaubten Facettenfelder (allowedFqParams), muss dann das gemappte Feld (uid_mi) verwendet werden, da dieses in Links verwendet wird nud somit das tatsächlich verwendete Feld ist.
+**Achtung**: Bei der Konfiguration für die erlaubten Facettenfelder (allowedFqParams), muss dann das gemappte Feld (uid_mi) verwendet werden, da dieses in Links verwendet wird und somit das tatsächlich verwendete Feld ist.
 
 Damit umgeht man Beschränkungen, wenn nach Strings facettiert wird. Denn enthält ein Wert z.B. ein Solr Kontrollzeichen wie "-", dann wird das zwar indiziert und auch als Wert in einem fq Link verwendet, vor der Solr Anfrage werden die Kontrollzeichen aber entfernt. Damit erhält man keine Ergebnisse.
 
