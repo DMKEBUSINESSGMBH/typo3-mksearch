@@ -171,7 +171,7 @@ class tx_mksearch_util_TCA
         $pid = is_array($params['flexParentDatabaseRow']) ?
             $params['flexParentDatabaseRow']['pid'] : $params['row']['pid'];
 
-        $rootOfPlugin = tx_mksearch_service_indexer_core_Config::getSiteRootPage(35);
+        $rootOfPlugin = tx_mksearch_service_indexer_core_Config::getSiteRootPage($pid);
 
         // Wir suchen alle Indexes, da die aktuelle PageId oder die RootPageId
         // nicht die der PageId des Indexes entsprechen muss.
