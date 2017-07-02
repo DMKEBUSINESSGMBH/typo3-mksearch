@@ -40,8 +40,8 @@
                                     </numIndex>
                                 </items>
                                 <multiple>0</multiple>
-                                <maxitems>10</maxitems>
-                                <size>10</size>
+                                <maxitems>1</maxitems>
+                                <size>1</size>
                             </config>
                         </TCEforms>
                     </action>
