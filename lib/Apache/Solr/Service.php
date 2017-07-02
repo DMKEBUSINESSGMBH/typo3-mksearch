@@ -281,7 +281,8 @@ class Apache_Solr_Service
 			$queryString = '';
 		}
 
-		return 'http://' . $this->_host . ':' . $this->_port . $this->_path . $servlet . $queryString;
+		$protocol = (strpos((string)$this->_host, 'http', 0) === 0) ? '' : 'http://';
+		return $protocol . $this->_host . ':' . $this->_port . $this->_path . $servlet . $queryString;
 	}
 
 	/**
