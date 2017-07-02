@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2009 das Medienkombinat
+*  (c) 2009-2017 das Medienkombinat
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -52,18 +52,16 @@ class tx_mksearch_marker_Search extends tx_rnbase_util_SimpleMarker
         if ($this->containsMarker($template, $marker.'_EXTRAINFO')) {
             $template = $this->addInfo($template, $item, $formatter, $confId.'extrainfo.', $marker.'_EXTRAINFO');
         }
-
         // Fill MarkerArray
-        $unused = $this->findUnusedCols($item->record, $template, $marker);
+        $unused = $this->findUnusedCols($item->getProperty(), $template, $marker);
         $initFields = $this->getInitFields($template, $item, $formatter, $confId, $marker);
-        $markerArray = $formatter->getItemMarkerArrayWrapped($item->record, $confId, $unused, $marker.'_', $initFields);
+        $markerArray = $formatter->getItemMarkerArrayWrapped($item->getProperty(), $confId, $unused, $marker.'_', $initFields);
 
         // subparts erzeugen
         $subpartArray = $wrappedSubpartArray = array();
         $this->prepareSubparts($wrappedSubpartArray, $subpartArray, $template, $item, $formatter, $confId, $marker);
 
         $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
-
         return $out;
     }
 
@@ -75,7 +73,7 @@ class tx_mksearch_marker_Search extends tx_rnbase_util_SimpleMarker
      * @param string $marker name of marker
      * @return void
      */
-    protected function prepareHit($template, &$item, &$formatter, $confId, $marker)
+    protected function prepareHit($template, $item, $formatter, $confId, $marker)
     {
         $this->prepareItem($item, $formatter->getConfigurations(), $confId);
         $configurations = $formatter->getConfigurations();
@@ -87,10 +85,9 @@ class tx_mksearch_marker_Search extends tx_rnbase_util_SimpleMarker
             $glue = explode($splitter, $glue);
             $glue = $glue[1];
         }
-
         //wenn wir ein array haben, holen wir uns dazu eine
         //kommaseparierte Liste um damit einfach im FE arbeiten zu können
-        foreach ($item->record as $field => $value) {
+        foreach ($item as $field => $value) {
             // wir sichern den originalen Wert von 'field' nach '_field'
             // beser wäre gewesen, den originalen wert beizubehalten
             // und das array von 'field' nach 'field_s' zu parsen
@@ -99,11 +96,11 @@ class tx_mksearch_marker_Search extends tx_rnbase_util_SimpleMarker
             // anstelle eines Arrays geliefert.
             // Hier scheint die ApacheSolrLib nicht richtig zu arbeiten.
             if (is_array($value)) {
-                $item->record['_'.$field] = $value;
+                $item->setProperty('_'.$field, $value);
                 if ($removeEmptyValues) {
                     $value = tx_mksearch_util_Misc::removeEmptyValues($value);
                 }
-                $item->record[$field] = implode($glue, $value);
+                $item->setProperty($field, implode($glue, $value));
             }
         }
     }
@@ -121,37 +118,33 @@ class tx_mksearch_marker_Search extends tx_rnbase_util_SimpleMarker
      */
     protected function addInfo($template, $item, $formatter, $confId, $markerPrefix)
     {
-        $typeConfId = $confId . $item->record['extKey'].'.'.$item->record['contentType'].'.';
+        $typeConfId = $confId . $item->getProperty('extKey').'.'.$item->getProperty('contentType').'.';
         $markerClass = $formatter->getConfigurations()->get($typeConfId.'markerClass');
         if ($markerClass) {
             // Jetzt das Template laden
             $file = $formatter->getConfigurations()->get($typeConfId.'template', true);
-            $templateCode = $formatter->getConfigurations()->getCObj()->fileResource($file);
 
-            if ($templateCode) {
-                $subpartName = $formatter->getConfigurations()->get($typeConfId.'subpartName');
-                if (!$subpartName) {
-                    $subpartName = strtoupper($item->record['extKey'].'_'.$item->record['contentType']);
-                }
-                $typeTemplate = tx_rnbase_util_Templates::getSubpart($templateCode, '###'.$subpartName.'###');
-
-                if ($typeTemplate) {
-                    $marker = tx_rnbase::makeInstance($markerClass);
-                    // Ist es sinnvoll hier den Marker-Prefix nicht zu übergeben? Wenn man einen eigenen
-                    // Marker verwendet, fällt man dadurch immer auf den Default zurück. Bei Wechsel des Markers
-                    // muss also das Template angepasst werden...
-                    $extraInfo = $marker->parseTemplate($typeTemplate, $item, $formatter, $typeConfId.'hit.');
-                } else {
-                    $extraInfo = '<!-- NO SUBPART '.$subpartName.' FOUND -->';
-                }
-            } else {
-                $extraInfo = '<!-- NO INFO-TEMPLATE FOUND: '.$typeConfId.'template'.' -->';
+            $subpartName = $formatter->getConfigurations()->get($typeConfId.'subpartName');
+            if (!$subpartName) {
+                $subpartName = strtoupper($item->getProperty('extKey').'_'.$item->getProperty('contentType'));
             }
+            try {
+                $typeTemplate = tx_rnbase_util_Templates::getSubpartFromFile($file, '###'.$subpartName.'###');
+                $marker = tx_rnbase::makeInstance($markerClass);
+                // Ist es sinnvoll hier den Marker-Prefix nicht zu übergeben? Wenn man einen eigenen
+                // Marker verwendet, fällt man dadurch immer auf den Default zurück. Bei Wechsel des Markers
+                // muss also das Template angepasst werden...
+                $extraInfo = $marker->parseTemplate($typeTemplate, $item, $formatter, $typeConfId.'hit.');
+            }
+            catch (\Exception $e) {
+                $extraInfo = sprintf('<!-- NO FILE OR SUBPART FOUND: %s -->', $e->getMessage());
+            }
+
         } else {
             $extraInfo = '<!-- NO MARKER-CLASS FOUND: '.$typeConfId.'markerClass'.' -->';
         }
 
-        $markerArray = array('###'.$markerPrefix.'###' => $extraInfo);
+        $markerArray = ['###'.$markerPrefix.'###' => $extraInfo];
 
         $template = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray);
 
@@ -168,7 +161,7 @@ class tx_mksearch_marker_Search extends tx_rnbase_util_SimpleMarker
      * @param string $marker name of marker
      * @return array
      */
-    protected function getInitFields($template, &$item, &$formatter, $confId, $marker)
+    protected function getInitFields($template, $item, $formatter, $confId, $marker)
     {
         $fields = $formatter->getConfigurations()->get($confId.'initFields.');
 
@@ -177,8 +170,4 @@ class tx_mksearch_marker_Search extends tx_rnbase_util_SimpleMarker
             is_array($fields) ? $fields : array()
         );
     }
-}
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/marker/class.tx_mksearch_marker_Search.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/marker/class.tx_mksearch_marker_Search.php']);
 }
