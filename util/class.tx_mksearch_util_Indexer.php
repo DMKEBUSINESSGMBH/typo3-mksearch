@@ -618,8 +618,16 @@ class tx_mksearch_util_Indexer
         $sysLanguageUidField = tx_mksearch_util_TCA::getLanguageFieldForTable($tableName);
         if (isset($sourceRecord[$sysLanguageUidField])) {
             // @TODO: getTransOrigPointerFieldForTable abprüfen, wenn $lang!=0 !
-            $lang = isset($options['lang']) ? (int) $options['lang'] : 0;
-            if ($sourceRecord[$sysLanguageUidField] != $lang) {
+            $languages = array(0);
+            if (isset($options['lang'])) {
+                $languages = Tx_Rnbase_Utility_Strings::intExplode(',', $options['lang'], true);
+            }
+
+            // stop if not set to "All languages" and lang doesn't match
+            if (
+                $sourceRecord[$sysLanguageUidField] >= 0 &&
+                !in_array($sourceRecord[$sysLanguageUidField], $languages)
+            ) {
                 return true;
             }
         }

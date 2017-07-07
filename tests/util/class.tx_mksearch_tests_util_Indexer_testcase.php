@@ -789,6 +789,26 @@ class tx_mksearch_tests_util_Indexer_testcase extends tx_mksearch_tests_Testcase
             $utility->stopIndexing($tableName, $sourceRecord, $indexDoc, $options)
         );
     }
+    /**
+     * @group unit
+     */
+    public function testStopIndexingReturnsFalseIfSysLanguageUidFieldMatchesLanguageFromOptionsWithMultipleValues()
+    {
+        /* @var $utility tx_mksearch_util_Indexer */
+        $utility = tx_rnbase::makeInstance('tx_mksearch_util_Indexer');
+        $tableName = 'tt_content';
+        $sourceRecord = array('sys_language_uid' => 222);
+        $options = array('lang' => '0,222,666');
+        $indexDoc = tx_rnbase::makeInstance(
+            'tx_mksearch_model_IndexerDocumentBase',
+            '',
+            ''
+        );
+
+        self::assertFalse(
+            $utility->stopIndexing($tableName, $sourceRecord, $indexDoc, $options)
+        );
+    }
 
     /**
      * @group unit
@@ -807,6 +827,48 @@ class tx_mksearch_tests_util_Indexer_testcase extends tx_mksearch_tests_Testcase
         );
 
         self::assertTrue(
+            $utility->stopIndexing($tableName, $sourceRecord, $indexDoc, $options)
+        );
+    }
+
+    /**
+     * @group unit
+     */
+    public function testStopIndexingReturnsTrueIfSysLanguageUidFieldMatchesNotLanguageFromOptionsWithMultipleValues()
+    {
+        /* @var $utility tx_mksearch_util_Indexer */
+        $utility = tx_rnbase::makeInstance('tx_mksearch_util_Indexer');
+        $tableName = 'tt_content';
+        $sourceRecord = array('sys_language_uid' => 123);
+        $options = array('lang' => '0,456,789');
+        $indexDoc = tx_rnbase::makeInstance(
+            'tx_mksearch_model_IndexerDocumentBase',
+            '',
+            ''
+        );
+
+        self::assertTrue(
+            $utility->stopIndexing($tableName, $sourceRecord, $indexDoc, $options)
+        );
+    }
+
+    /**
+     * @group unit
+     */
+    public function testStopIndexingReturnsFalseIfSysLanguageUidFieldIsSetToAllLanguages()
+    {
+        /* @var $utility tx_mksearch_util_Indexer */
+        $utility = tx_rnbase::makeInstance('tx_mksearch_util_Indexer');
+        $tableName = 'tt_content';
+        $sourceRecord = array('sys_language_uid' => '-1');
+        $options = array('lang' => '456');
+        $indexDoc = tx_rnbase::makeInstance(
+            'tx_mksearch_model_IndexerDocumentBase',
+            '',
+            ''
+        );
+
+        self::assertFalse(
             $utility->stopIndexing($tableName, $sourceRecord, $indexDoc, $options)
         );
     }
