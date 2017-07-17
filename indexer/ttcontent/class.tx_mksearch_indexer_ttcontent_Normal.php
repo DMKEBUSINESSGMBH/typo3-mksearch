@@ -410,10 +410,44 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
         tx_mksearch_interface_IndexerDocument $oIndexDoc,
         $aOptions = array()
     ) {
-        // checkPageRights() considers deleted and parent::hasDocToBeDeleted() takes
+        // checkPageRights() considers deleted,
+        // isPageSetIncludeInSearchDisable() checks the no_search field of page
+        // and parent::hasDocToBeDeleted() takes
         // care of all possible hidden parent pages
-        return (!$this->getPageContent($model->record['pid'])
+        return (
+            !$this->getPageContent($model->record['pid'])
+            || $this->isPageSetIncludeInSearchDisable($model, $aOptions)
             || parent::hasDocToBeDeleted($model, $oIndexDoc, $aOptions));
+    }
+
+
+    /**
+     *  Checks if the field "Include in Search" of current models page
+     *  is set to "Disable"
+     *
+     * @param tx_rnbase_IModel $model
+     * @param array $options
+     * @return boolean
+     */
+    protected function isPageSetIncludeInSearchDisable($model, $options) {
+        if ($this->shouldRespectIncludeInSearchDisable($options)) {
+            $page = $this->getPageContent($model->record['pid']);
+            if (array_key_exists('no_search', $page) && $page['no_search'] == 1) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     *  Checks if the indexer configuration "respectIncludeInSearchDisable" is set
+     *
+     * @param array $options
+     * @return boolean
+     */
+    protected function shouldRespectIncludeInSearchDisable($options) {
+        $config = $this->getConfigValue('respectIncludeInSearchDisable', $options);
+        return ((is_array($config) && !empty($config) && reset($config) == 1));
     }
 
     /**

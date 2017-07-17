@@ -203,4 +203,135 @@ class tx_mksearch_tests_indexer_ttcontent_Normal_testcase extends tx_mksearch_te
 
         return $options;
     }
+
+    /**
+     * @group unit
+     */
+    public function testIsPageSetIncludeInSearchDisableIfPageIsSetDisable()
+    {
+        $indexer = $this->getAccessibleMock(
+            'tx_mksearch_indexer_ttcontent_Normal',
+            array('shouldRespectIncludeInSearchDisable', 'getPageContent')
+            );
+        $options = array();
+        $model = tx_rnbase::makeInstance('tx_rnbase_model_Base', array('pid' => 123));
+
+        $indexer->expects($this->once())
+            ->method('shouldRespectIncludeInSearchDisable')
+            ->with($options)
+            ->will($this->returnValue(array(true)));
+
+        $indexer->expects($this->once())
+            ->method('getPageContent')
+            ->with(123)
+            ->will($this->returnValue(array('no_search' => 1)));
+
+        self::assertTrue(
+            $this->callInaccessibleMethod(
+                $indexer,
+                'isPageSetIncludeInSearchDisable',
+                $model, $options
+            )
+        );
+    }
+
+    /**
+     * @group unit
+     */
+    public function testIsPageSetIncludeInSearchDisableIfPageIsNotSetDisable()
+    {
+        $indexer = $this->getAccessibleMock(
+            'tx_mksearch_indexer_ttcontent_Normal',
+            array('shouldRespectIncludeInSearchDisable', 'getPageContent')
+            );
+        $options = array();
+        $model = tx_rnbase::makeInstance('tx_rnbase_model_Base', array('pid' => 123));
+
+        $indexer->expects($this->once())
+            ->method('shouldRespectIncludeInSearchDisable')
+            ->with($options)
+            ->will($this->returnValue(array(true)));
+
+        $indexer->expects($this->once())
+            ->method('getPageContent')
+            ->with(123)
+            ->will($this->returnValue(array('no_search' => 0)));
+
+        self::assertFalse(
+            $this->callInaccessibleMethod(
+                $indexer,
+                'isPageSetIncludeInSearchDisable',
+                $model, $options
+            )
+        );
+    }
+
+    /**
+     * @group unit
+     */
+    public function testIsPageSetIncludeInSearchDisableIfPageIsNotValid()
+    {
+        $indexer = $this->getAccessibleMock(
+            'tx_mksearch_indexer_ttcontent_Normal',
+            array('shouldRespectIncludeInSearchDisable', 'getPageContent')
+            );
+        $options = array();
+        $model = tx_rnbase::makeInstance('tx_rnbase_model_Base', array('pid' => 123));
+
+        $indexer->expects($this->once())
+            ->method('shouldRespectIncludeInSearchDisable')
+            ->with($options)
+            ->will($this->returnValue(array(true)));
+
+        $indexer->expects($this->once())
+            ->method('getPageContent')
+            ->with(123)
+            ->will($this->returnValue(array()));
+
+        self::assertFalse(
+            $this->callInaccessibleMethod(
+                $indexer,
+                'isPageSetIncludeInSearchDisable',
+                $model, $options
+            )
+        );
+    }
+
+    /**
+     * @group unit
+     * @dataProvider getTestDataForShouldRespectIncludeInSearchDisable
+     */
+    public function testShouldRespectIncludeInSearchDisable($options, $expected)
+    {
+        $indexer = $this->getAccessibleMock(
+            'tx_mksearch_indexer_ttcontent_Normal'
+            );
+
+        self::assertEquals(
+            $expected,
+            $this->callInaccessibleMethod(
+                $indexer,
+                'shouldRespectIncludeInSearchDisable',
+                $options
+                )
+            );
+    }
+
+    public function getTestDataForShouldRespectIncludeInSearchDisable()
+    {
+        return array(
+            __LINE__ => array(
+                'options' => array('respectIncludeInSearchDisable' => '1'),
+                'expected' => true,
+            ),
+            __LINE__ => array(
+                'options' => array('respectIncludeInSearchDisable' => '0'),
+                'expected' => false,
+            ),
+            __LINE__ => array(
+                'options' => array(),
+                'expected' => false,
+            ),
+        );
+    }
 }

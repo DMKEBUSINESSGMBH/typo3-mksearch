@@ -175,6 +175,10 @@ includeCTypes = text,textpic,textmedia,bullets,image,table,gridelements_pi1,temp
 ### delete from or abort indexing for the record if isIndexableRecord or no record?
 deleteIfNotIndexable = 0
 
+### if set, the field "Include in Search" of current items page is checked.
+### If "Include in Search" is set to "Disable", the record will not be indexed
+respectIncludeInSearchDisable = 0
+
 ### disable the fallback to page title, if the content title is empty
 leaveHeaderEmpty = 0
 
