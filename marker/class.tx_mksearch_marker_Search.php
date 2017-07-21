@@ -144,7 +144,7 @@ class tx_mksearch_marker_Search extends tx_rnbase_util_SimpleMarker
             $extraInfo = '<!-- NO MARKER-CLASS FOUND: '.$typeConfId.'markerClass'.' -->';
         }
 
-        $markerArray = ['###'.$markerPrefix.'###' => $extraInfo];
+        $markerArray = array('###'.$markerPrefix.'###' => $extraInfo);
 
         $template = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray);
 
