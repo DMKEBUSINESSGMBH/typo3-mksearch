@@ -61,8 +61,9 @@ class tx_mksearch_util_SolrResponseProcessor
         }
 
         if (!$instance) {
-            $processorClass = get_called_class();
-            $instance = new $processorClass($configurations, $confId);
+            $processorClass = $configurations->get($confId . 'class');
+            $processorClass = $processorClass ? $processorClass : get_called_class();
+            $instance = tx_rnbase::makeInstance($processorClass, $configurations, $confId);
         }
 
         $response = &$result['response'];
