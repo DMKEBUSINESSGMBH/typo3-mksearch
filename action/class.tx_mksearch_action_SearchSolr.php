@@ -146,7 +146,7 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC
      *
      * @return array|false
      */
-    private function searchSolr(&$fields, &$options, $configurations, $index)
+    protected function searchSolr(&$fields, &$options, $configurations, $index)
     {
         // erstmal den cache fragen. Das ist vor allem interessant wenn
         // das plugin mehrfach auf einer Seite eingebunden wird. Dadurch
