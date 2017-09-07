@@ -870,7 +870,7 @@
 		<copyField source="title" dest="title_english" />
 
 		<field name="content_german" type="text_german" indexed="true" stored="false" multiValued="true" />
-		<field name="content_english" type="text_english" indexed="true" stored="false" multiValued="true"  />
+		<field name="content_english" type="text_english" indexed="true" stored="false" multiValued="true" />
 		<copyField source="content" dest="content_german" />
 		<copyField source="content" dest="content_english" />
 

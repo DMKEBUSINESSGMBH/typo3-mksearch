@@ -29,7 +29,10 @@ plugin.tx_mksearch.searchsolr.filter.(dismax|default).options {
      ### per default ist die Anzahl der Ergebnisse gleich den gefundenen Dokumenten.
      ### durch die Gruppierung liefert Solr aber natürlich weniger Gruppen
      ### als Dokumente. Mit dieser Anweisung wird statt der Anzahl der gefundenen
-     ### Dokumente die Anzahl der Gruppen verwendet
+     ### Dokumente die Anzahl der Gruppen verwendet 
+     ### Wenn Facetten im Einsatz sind, so werden diese auf gleiche weise reduziert.
+     ### Falls dies nicht gewünscht ist, müssen im TS die Werte 
+     ### group.ngroups und group.truncate direkt gesetzt werden!
      useNumberOfGroupsAsSearchResultCount = 1
 
      ### Weitere Optionen wie group.limit noch nicht implementiert.
