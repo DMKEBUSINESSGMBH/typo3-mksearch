@@ -78,15 +78,19 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base im
      */
     public function __construct()
     {
-        spl_autoload_register(function ($class) {
-            if (strpos($class, 'Elastica') !== false) {
-                $class = str_replace('\\', '/', $class);
-                $filePath = tx_rnbase_util_Extensions::extPath('mksearch').'lib/' . $class . '.php';
-                if (file_exists($filePath)) {
-                    require_once($filePath);
+        //TODO: test autoloading for non composer projects
+        if (!defined('TYPO3_COMPOSER_MODE') || !TYPO3_COMPOSER_MODE) {
+            spl_autoload_register(function ($class) {
+                    if (strpos($class, 'Elastica') !== false || strpos($class,
+                            'Psr') !== false || strpos($class, 'Elasticsearch') !== false) {
+                    $class = str_replace('\\', '/', $class);
+                    $filePath = tx_rnbase_util_Extensions::extPath('mksearch').'lib/' . $class . '.php';
+                    if (file_exists($filePath)) {
+                        require_once($filePath);
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     /**
