@@ -323,6 +323,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
      *                      no:     Number of items to be indexed
      *                      pid:    trigger only records for this pageid
      * @return  array
+     * @deprecated
      */
     public function triggerQueueIndexing($config = array())
     {
@@ -335,7 +336,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
         $options['where'] = 'deleted=0';
         $options['enablefieldsoff'] = 1;
 
-        $data = tx_rnbase_util_DB::doSelect('*', self::$queueTable, $options);
+        $data = $this->getDatabaseConnection()->doSelect('*', self::$queueTable, $options);
 
         // Nothing found in queue? Stop
         if (empty($data)) {
@@ -355,7 +356,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
             $rows[$queue['tablename']][] = $queue['recid'];
         }
         if ($GLOBALS['TYPO3_CONF_VARS']['MKSEARCH_testmode'] != 1) {
-            $ret = tx_rnbase_util_DB::doUpdate(self::$queueTable, 'uid IN ('. implode(',', $uids) . ')', array('deleted' => 1));
+        	$ret = $this->getDatabaseConnection()->doUpdate(self::$queueTable, 'uid IN ('. implode(',', $uids) . ')', array('deleted' => 1));
             $this->deleteOldQueueEntries();
             tx_rnbase_util_Logger::info(
                 'Indexing run finished with '.$ret. ' items executed.',
@@ -378,6 +379,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
      * @param   array   $config
      *                      pid:    trigger only records for this pageid
      * @return  void
+     * @deprecated
      */
     private function executeQueueData($data, array $config = array())
     {
@@ -408,7 +410,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
                     tx_rnbase_util_Logger::notice(
                         '[INDEXQUEUE] No indexer config found! Re-check your settings in mksearch BE-Module!',
                         'mksearch',
-                        array('Index' => $index->getTitle() . ' ('.$index->getUid().')', 'indexerClass' => get_class($index), 'indexdata' => $uids)
+                        array('Index' => $index->getTitle() . ' ('.$index->getUid().')', 'indexerClass' => get_class($index))
                     );
                     continue; // Continue with next index
                 }
@@ -540,6 +542,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
      * @param tx_mksearch_interface_IndexerDocument $indexDocument
      *
      * @return void
+     * @deprecated
      */
     protected function deleteDocumentIfNotCorrectWorkspace(
         array $configurationByContentType,
@@ -682,10 +685,11 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 
     /**
      * @return void
+     * @deprecated
      */
     protected function deleteOldQueueEntries()
     {
-        $this->getDatabaseUtility()->doDelete(
+        $this->getDatabaseConnection()->doDelete(
             self::$queueTable,
             'deleted = 1 AND cr_date < NOW() - ' . $this->getSecondsToKeepQueueEntries()
         );
@@ -693,16 +697,8 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 
     /**
      *
-     * @return Tx_Rnbase_Database_Connection
-     */
-    protected function getDatabaseUtility()
-    {
-        return tx_rnbase::makeInstance('Tx_Rnbase_Database_Connection');
-    }
-
-    /**
-     *
      * @return string
+     * @deprecated
      */
     protected function getSecondsToKeepQueueEntries()
     {
