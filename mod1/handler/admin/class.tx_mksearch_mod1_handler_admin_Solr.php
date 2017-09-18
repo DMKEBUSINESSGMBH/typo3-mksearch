@@ -132,6 +132,8 @@ class tx_mksearch_mod1_handler_admin_Solr implements tx_rnbase_mod_IModHandler
 
     protected function findSolrCores(tx_rnbase_mod_IModule $mod)
     {
+        tx_rnbase::load('tx_rnbase_util_SearchBase');
+
         $fields = $options = array();
         $options['enablefieldsfe'] = 1;
         // Solr-Core auf der aktuellen Seite suchen

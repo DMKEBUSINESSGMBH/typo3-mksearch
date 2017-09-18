@@ -42,9 +42,9 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase extends tx_mksearc
 {
     public function setUp()
     {
-        if (version_compare(phpversion(), '7.0.0') >= 0) {
-            $this->markTestSkipped('Elastic does not support php 7 currently');
-        }
+//        if (version_compare(phpversion(), '7.0.0') >= 0) {
+//            $this->markTestSkipped('Elastic does not support php 7 currently');
+//        }
     }
 
     /**
@@ -95,13 +95,21 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase extends tx_mksearc
      */
     public function testIsServerAvailable($returnCode, $expectedReturn)
     {
+        $response = $this->getMock(
+            'stdClass',
+            array('getStatus')
+        );
+        $response->expects($this->once())
+            ->method('getStatus')
+            ->will($this->returnValue($returnCode));
+
         $status = $this->getMock(
             'stdClass',
-            array('getServerStatus')
+            array('getResponse')
         );
         $status->expects($this->once())
-            ->method('getServerStatus')
-            ->will($this->returnValue(array('status' => $returnCode)));
+            ->method('getResponse')
+            ->will($this->returnValue($response));
 
         $client = $this->getMock(
             'stdClass',
@@ -1090,9 +1098,9 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase extends tx_mksearc
 
         $fields['term'] = 'test term';
         $elasticaQuery = $this->callInaccessibleMethod($service, 'getElasticaQuery', $fields, array());
+        $expectedQuery = Elastica\Query::create('test term');
 
-        $expectedQuery = array('query_string' => array('query' => 'test term'));
-        self::assertEquals($expectedQuery, $elasticaQuery->getQuery(), 'query falsch');
+        self::assertEquals($expectedQuery->getQuery(), $elasticaQuery->getQuery(), 'query falsch');
     }
 
     /**
@@ -1111,6 +1119,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase extends tx_mksearc
         );
 
         $expectedSort = array(0 => array('uid' => array('order' => 'desc')));
+
         self::assertEquals($expectedSort, $elasticaQuery->getParam('sort'), 'sort falsch');
     }
 
@@ -1160,7 +1169,13 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase extends tx_mksearc
      */
     public function testGetItemsFromSearchResult()
     {
-        $searchResult = Elastica\ResultSet::create(new Elastica\Response(''), Elastica\Query::create(''));
+        $resultSetBuilder = new Elastica\ResultSet\DefaultBuilder();
+
+        $searchResult = $resultSetBuilder->buildResultSet(
+            new Elastica\Response(''),
+            Elastica\Query::create('')
+        );
+
         $resultProperty = new ReflectionProperty('\\Elastica\\ResultSet', '_results');
         $results = array(
             0 => new Elastica\Result(array('_source' => array('title' => 'hit data one'))),
@@ -1248,20 +1263,27 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase extends tx_mksearc
             ->with($options)
             ->will($this->returnValue(123));
 
-        $response = $this->getMock('\\Elastica\\Response', array('getError'), array(''));
+        $response = $this->getMock(
+            '\\Elastica\\Response',
+            ['getError'],
+            [[
+                'hits' => [
+                    'total' => 123
+                ],
+                'took' => 456
+            ]]
+        );
+
         $response->expects($this->any())
             ->method('getError')
             ->will($this->returnValue('es gab einen Fehler'));
 
-        $searchResult = Elastica\ResultSet::create($response, Elastica\Query::create(''));
+        $resultSetBuilder = new Elastica\ResultSet\DefaultBuilder();
 
-        $totalHits = new ReflectionProperty('\\Elastica\\ResultSet', '_totalHits');
-        $totalHits->setAccessible(true);
-        $totalHits->setValue($searchResult, 123);
-
-        $totalTime = new ReflectionProperty('\\Elastica\\ResultSet', '_took');
-        $totalTime->setAccessible(true);
-        $totalTime->setValue($searchResult, 456);
+        $searchResult = $resultSetBuilder->buildResultSet(
+            $response,
+            Elastica\Query::create('')
+        );
 
         $index->expects($this->once())
             ->method('search')
@@ -1341,7 +1363,12 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase extends tx_mksearc
         $fields = array('fields');
         $options = array('options');
 
-        $searchResult = Elastica\ResultSet::create(new Elastica\Response(''), Elastica\Query::create(''));
+        $resultSetBuilder = new Elastica\ResultSet\DefaultBuilder();
+
+        $searchResult = $resultSetBuilder->buildResultSet(
+            new Elastica\Response(''),
+            Elastica\Query::create('')
+        );
 
         $index->expects($this->once())
             ->method('search')
@@ -1358,7 +1385,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase extends tx_mksearc
         // es reicht zu prüfen ob einige Teile des Debug vorhanden sind
         // "s" modifier, damit auf der CLI alle Zeilen in Betracht gezogen werden. Sonst
         // wird nur die Zeile genommen, mit dem ersten Treffer.
-        $regularExpression =    '/.*(tx_mksearch_service_engine_ElasticSearch\:\:search).*(Line).*/s';
+        $regularExpression =    '/.*(debug.+=>.+TRUE).*/s';
         $this->expectOutputRegex($regularExpression);
 
         $lastRequest = $this->getMock(
@@ -1395,7 +1422,12 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase extends tx_mksearc
         $fields = array('fields');
         $options = array('debug' => true);
 
-        $searchResult = Elastica\ResultSet::create(new Elastica\Response(''), Elastica\Query::create(''));
+        $resultSetBuilder = new Elastica\ResultSet\DefaultBuilder();
+
+        $searchResult = $resultSetBuilder->buildResultSet(
+            new Elastica\Response(''),
+            Elastica\Query::create('')
+        );
 
         $index->expects($this->once())
             ->method('search')
