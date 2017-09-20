@@ -479,7 +479,16 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
                             }
                         }
                     } catch (Exception $e) {
-                        tx_rnbase_util_Logger::warn('[INDEXQUEUE] Error processing queue item ' . $queueRecord['uid'], 'mksearch', array('Exception' => $e->getMessage(), 'Queue-Item' => $queueRecord));
+                        tx_rnbase_util_Logger::warn(
+                            '[INDEXQUEUE] Error processing queue item ' . $queueRecord['uid'],
+                            'mksearch',
+                            array(
+                                'Exception' => $e->getMessage(),
+                                'On' => $e->getFile() . '#' . $e->getLine(),
+                                'Queue-Item' => $queueRecord,
+                                'Trace' => $e->getTraceAsString(),
+                            )
+                        );
                     }
                 }
                 // Finally, actually do the index update, if there is sth. to do:
