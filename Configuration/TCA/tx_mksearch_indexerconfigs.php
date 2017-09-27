@@ -1,5 +1,17 @@
 <?php
 
+$configurationFieldWizard = tx_rnbase_util_TYPO3::isTYPO76OrHigher() ? array() : array(
+    'appendDefaultTSConfig' => array(
+        'type'   => 'userFunc',
+        'notNewRecords' => 1,
+        'userFunc' => 'EXT:mksearch/util/class.tx_mksearch_util_TCA.php:tx_mksearch_util_TCA->insertIndexerDefaultTSConfig',
+        'params' => array(
+            'insertBetween' => array('>', '</textarea'),
+            'onMatchOnly' => '/^\s*$/',
+        ),
+    ),
+);
+
 return array(
     'ctrl' => array(
         'title'     => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indexerconfigs',
@@ -80,17 +92,9 @@ return array(
                 'type' => 'text',
                 'cols' => '200',
                 'rows' => '50',
-                'wizards' => array(
-                    'appendDefaultTSConfig' => array(
-                        'type'   => 'userFunc',
-                        'notNewRecords' => 1,
-                        'userFunc' => 'EXT:mksearch/util/class.tx_mksearch_util_TCA.php:tx_mksearch_util_TCA->insertIndexerDefaultTSConfig',
-                        'params' => array(
-                            'insertBetween' => array('>', '</textarea'),
-                            'onMatchOnly' => '/^\s*$/',
-                        ),
-                    ),
-                )
+                'wizards' => $configurationFieldWizard,
+                // @see \DMK\Mksearch\Backend\Form\Element\IndexerConfigurationField
+                'renderType' => 'indexerConfigurationField',
             )
         ),
         'composites' => array(
