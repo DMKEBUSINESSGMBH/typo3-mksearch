@@ -85,8 +85,9 @@ return array(
                     array('LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices_engine_elasticsearch','elasticsearch'),
                 ),
                 'eval' => 'required',
-                'default' => 'zend_lucene'
-            )
+                'default' => 'zend_lucene',
+            ),
+            'onChange' => 'reload'
         ),
         'solrversion' => array(
             'exclude' => 1,

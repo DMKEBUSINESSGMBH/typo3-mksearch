@@ -56,7 +56,8 @@ return array(
                 'itemsProcFunc' => 'EXT:mksearch/util/class.tx_mksearch_util_TCA.php:tx_mksearch_util_TCA->getIndexerExtKeys',
                 'size' => '1',
                 'maxitems' => '1',
-            )
+            ),
+            'onChange' => 'reload'
         ),
         'contenttype' => array(
             'exclude' => 0,
@@ -69,7 +70,8 @@ return array(
                 'size' => '1',
                 'maxitems' => '1',
                 'eval' => 'required,trim',
-            )
+            ),
+            'onChange' => 'reload'
         ),
         'configuration' => array(
             'exclude' => 0,
