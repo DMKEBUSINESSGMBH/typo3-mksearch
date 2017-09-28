@@ -89,6 +89,6 @@ if (tx_rnbase_util_TYPO3::isTYPO76OrHigher()) {
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry']['mksearch_indexerConfigurationField'] = array(
         'nodeName' => 'indexerConfigurationField',
         'priority' => '70',
-        'class' => \DMK\Mksearch\Backend\Form\Element\IndexerConfigurationField::class,
+        'class' => '\\DMK\\Mksearch\\Backend\\Form\\Element\\IndexerConfigurationField',
     );
 }
