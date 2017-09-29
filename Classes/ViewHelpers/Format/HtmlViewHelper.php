@@ -26,10 +26,13 @@ namespace DMK\Mksearch\ViewHelpers\Format;
  */
 
 \tx_rnbase::load('tx_rnbase_util_TYPO3');
+// needed in TYPO3 6.2 (question is why?)
+\tx_rnbase::load('tx_mksearch_service_internal_Index');
+
 if (\tx_rnbase_util_TYPO3::isTYPO70OrHigher()) {
     class HtmlViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Format\HtmlViewHelper
     {
-    
+
         /**
          * nähere Infos in Configuration/XClasses.php
          *
@@ -41,7 +44,7 @@ if (\tx_rnbase_util_TYPO3::isTYPO70OrHigher()) {
                 parent::simulateFrontendEnvironment();
             }
         }
-    
+
         /**
          * @return void
          * @see simulateFrontendEnvironment()
@@ -56,7 +59,7 @@ if (\tx_rnbase_util_TYPO3::isTYPO70OrHigher()) {
 } else {
     class HtmlViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Format\HtmlViewHelper
     {
-    
+
         /**
          * nähere Infos in Configuration/XClasses.php
          *
@@ -68,7 +71,7 @@ if (\tx_rnbase_util_TYPO3::isTYPO70OrHigher()) {
                 parent::simulateFrontendEnvironment();
             }
         }
-    
+
         /**
          * @return void
          * @see simulateFrontendEnvironment()
