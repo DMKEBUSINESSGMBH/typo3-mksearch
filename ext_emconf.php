@@ -40,6 +40,7 @@ $EM_CONF[$_EXTKEY] = array(
     ),
     'suggests' => array(),
     'classmap' => array(
+        'Classes/',
         'action/',
         'filter/',
         'hooks/',
