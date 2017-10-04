@@ -63,7 +63,7 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base
      * (non-PHPdoc)
      * @see tx_mksearch_indexer_Base::createModel()
      */
-    protected function createModel(array $rawData)
+    protected function createModel(array $rawData, $tableName = null, $options = array())
     {
         return tx_rnbase::makeInstance('tx_mksearch_model_cal_Event', $rawData);
     }
