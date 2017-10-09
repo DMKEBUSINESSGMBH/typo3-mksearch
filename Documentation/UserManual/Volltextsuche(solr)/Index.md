@@ -5,6 +5,10 @@ Für die deutsche Sprache gibt es einen Feldtyp, der dafür prädestiniert ist: 
 
 Folgende Möglichkeiten hat man um die Felder des Suchformulars für die Suche bekannt zu machen. In diesem Beispiel wird mit dem Parameter mksearch[term] im Feld “text” gesucht. Dabei wird zusätzlich immer “contentType:\*” gesetzt.
 
+HINWEIS: Der default Solrfilter sucht standardmäßig im Feld "text". Das muss angepasst werden, wenn die mitgelieferte schema.xml verwendet wird. Stattdessen das Feld "full_text_german" verwenden!
+
+HINWEIS: Bei einer Dismax Suche kann der Request Handler "sitesearch_german" aus der mitgelieferten solrconfig.xml verwendet werden. (Konfiguration entweder über TypoScript (plugin.tx_mksearch.searchsolr.requestHandler) oder direkt im Plugin) Ansonsten muss evtl. ein passender Request Handler konfiguriert werden.
+
 ~~~~ {.sourceCode .ts}
 plugin.tx_mksearch.searchsolr.filter{
    # Die hier konfigurierten Parameter werden als Marker im Term-String verwendet

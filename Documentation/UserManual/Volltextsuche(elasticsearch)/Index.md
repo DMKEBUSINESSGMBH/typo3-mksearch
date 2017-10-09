@@ -10,7 +10,7 @@ plugin.tx_mksearch.elasticsearch.filter{
    # Die hier konfigurierten Parameter werden als Marker im Term-String verwendet
    # Es sind verschiedene Extensions möglich
    params.mksearch {
-      term = TEXT   
+      term = TEXT
       term {
          field = term
          #wrap = AND text:|
@@ -25,8 +25,6 @@ plugin.tx_mksearch.elasticsearch.filter{
 
    fields {
       ### Die Marker haben das Format ###PARAM_EXTQUALIFIER_PARAMNAME###
-      ### beim DisMaxRequestHandler darf hier nur
-      ### PARAM_MKSEARCH_TERM### stehen!
       term = contentType:* ###PARAM_MKSEARCH_TERM###
    }
 }
