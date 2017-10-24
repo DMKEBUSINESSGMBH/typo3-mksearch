@@ -338,12 +338,10 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base
     }
 
     /**
-     * Returns the model to be indexed
-     *
-     * @param array $rawData
-     * @return tx_mksearch_model_irfaq_Question
+     * {@inheritDoc}
+     * @see tx_mksearch_indexer_Base::createModel()
      */
-    protected function createModel(array $rawData)
+    protected function createModel(array $rawData, $tableName = NULL, $options = array())
     {
         return tx_rnbase::makeInstance('tx_rnbase_model_Base', $rawData);
     }
