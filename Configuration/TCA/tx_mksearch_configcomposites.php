@@ -97,7 +97,7 @@ return array(
         ),
     ),
     'types' => array(
-        '0' => array('showitem' => 'hidden;;1, title, description, indices, configs, configuration')
+        '0' => array('showitem' => 'hidden, title, description, indices, configs, configuration')
     ),
     'palettes' => array(
         '1' => array('showitem' => '')

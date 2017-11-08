@@ -118,7 +118,7 @@ return array(
         ),
     ),
     'types' => array(
-        '0' => array('showitem' => 'hidden;;1, title, description, extkey, contenttype, configuration, composites')
+        '0' => array('showitem' => 'hidden, title, description, extkey, contenttype, configuration, composites')
     ),
     'palettes' => array(
         '1' => array('showitem' => '')
