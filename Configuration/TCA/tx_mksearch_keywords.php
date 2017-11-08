@@ -55,7 +55,7 @@ return array(
         ),
     ),
     'types' => array(
-        '0' => array('showitem' => 'hidden;;1;;1-1-1, keyword, link')
+        '0' => array('showitem' => 'hidden, keyword, link')
     ),
     'palettes' => array(
         '1' => array('showitem' => '')
