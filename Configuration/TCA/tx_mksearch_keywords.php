@@ -46,11 +46,12 @@ return array(
                 'size' => '15',
                 'max' => '255',
                 'checkbox' => '',
+                'renderType' => 'inputLink',
                 'eval' => 'trim',
-                    'wizards' => Tx_Rnbase_Utility_TcaTool::getWizards(
-                        '',
-                        array('link' => true)
-                    )
+                'wizards' => Tx_Rnbase_Utility_TcaTool::getWizards(
+                    '',
+                    array('link' => true)
+                )
             )
         ),
     ),
