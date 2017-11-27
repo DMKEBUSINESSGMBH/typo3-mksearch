@@ -699,6 +699,9 @@ plugin.tx_mksearch {
                 ### dabei wird direkt mksearch[fq] gesetzt
                 show{
                     useKeepVars = 1
+                    ### we don't want page browser parameters to be added for facet links by default
+                    ### and we don't need the value of the submit button
+                    useKeepVars.deny = pb-search-pointer,submit
                     ### shall the field name not be taken into the link so
                     ### we don't have something like mksearch[fq]=contentType:media
                     ### but something like mksearch[fq]=media. This is strongly
