@@ -212,7 +212,7 @@ class tx_mksearch_tests_indexer_ttcontent_Normal_testcase extends tx_mksearch_te
         $indexer = $this->getAccessibleMock(
             'tx_mksearch_indexer_ttcontent_Normal',
             array('shouldRespectIncludeInSearchDisable', 'getPageContent')
-            );
+        );
         $options = array();
         $model = tx_rnbase::makeInstance('tx_rnbase_model_Base', array('pid' => 123));
 
@@ -230,7 +230,8 @@ class tx_mksearch_tests_indexer_ttcontent_Normal_testcase extends tx_mksearch_te
             $this->callInaccessibleMethod(
                 $indexer,
                 'isPageSetIncludeInSearchDisable',
-                $model, $options
+                $model,
+                $options
             )
         );
     }
@@ -243,7 +244,7 @@ class tx_mksearch_tests_indexer_ttcontent_Normal_testcase extends tx_mksearch_te
         $indexer = $this->getAccessibleMock(
             'tx_mksearch_indexer_ttcontent_Normal',
             array('shouldRespectIncludeInSearchDisable', 'getPageContent')
-            );
+        );
         $options = array();
         $model = tx_rnbase::makeInstance('tx_rnbase_model_Base', array('pid' => 123));
 
@@ -261,7 +262,8 @@ class tx_mksearch_tests_indexer_ttcontent_Normal_testcase extends tx_mksearch_te
             $this->callInaccessibleMethod(
                 $indexer,
                 'isPageSetIncludeInSearchDisable',
-                $model, $options
+                $model,
+                $options
             )
         );
     }
@@ -274,7 +276,7 @@ class tx_mksearch_tests_indexer_ttcontent_Normal_testcase extends tx_mksearch_te
         $indexer = $this->getAccessibleMock(
             'tx_mksearch_indexer_ttcontent_Normal',
             array('shouldRespectIncludeInSearchDisable', 'getPageContent')
-            );
+        );
         $options = array();
         $model = tx_rnbase::makeInstance('tx_rnbase_model_Base', array('pid' => 123));
 
@@ -292,7 +294,8 @@ class tx_mksearch_tests_indexer_ttcontent_Normal_testcase extends tx_mksearch_te
             $this->callInaccessibleMethod(
                 $indexer,
                 'isPageSetIncludeInSearchDisable',
-                $model, $options
+                $model,
+                $options
             )
         );
     }
@@ -305,7 +308,7 @@ class tx_mksearch_tests_indexer_ttcontent_Normal_testcase extends tx_mksearch_te
     {
         $indexer = $this->getAccessibleMock(
             'tx_mksearch_indexer_ttcontent_Normal'
-            );
+        );
 
         self::assertEquals(
             $expected,
@@ -313,8 +316,8 @@ class tx_mksearch_tests_indexer_ttcontent_Normal_testcase extends tx_mksearch_te
                 $indexer,
                 'shouldRespectIncludeInSearchDisable',
                 $options
-                )
-            );
+            )
+        );
     }
 
     public function getTestDataForShouldRespectIncludeInSearchDisable()
@@ -338,7 +341,8 @@ class tx_mksearch_tests_indexer_ttcontent_Normal_testcase extends tx_mksearch_te
     /**
      * @group unit
      */
-    public function testIsIndexableRecordWithIsOnIndexablePage(){
+    public function testIsIndexableRecordWithIsOnIndexablePage()
+    {
         $indexer = $this->getAccessibleMock(
             'tx_mksearch_indexer_ttcontent_Normal',
             array('isOnIndexablePage', 'checkCTypes', 'isIndexableColumn')
@@ -349,26 +353,27 @@ class tx_mksearch_tests_indexer_ttcontent_Normal_testcase extends tx_mksearch_te
         $options['include.']['columns'] = '0,1';
 
         $indexer->expects(self::once())
-        ->method('isOnIndexablePage')
-        ->with($sourceRecord, $options)
-        ->will($this->returnValue(false));
+            ->method('isOnIndexablePage')
+            ->with($sourceRecord, $options)
+            ->will($this->returnValue(false));
 
         $indexer->expects(self::never())
-        ->method('checkCTypes')
-        ->with($sourceRecord, $options)
-        ->will($this->returnValue(false));
+            ->method('checkCTypes')
+            ->with($sourceRecord, $options)
+            ->will($this->returnValue(false));
 
         $indexer->expects(self::never())
-        ->method('isIndexableColumn')
-        ->with($sourceRecord, $options)
-        ->will($this->returnValue(false));
+            ->method('isIndexableColumn')
+            ->with($sourceRecord, $options)
+            ->will($this->returnValue(false));
 
         self::assertEquals(
             false,
             $this->callInaccessibleMethod(
                 $indexer,
                 'isIndexableRecord',
-                $sourceRecord, $options
+                $sourceRecord,
+                $options
             )
         );
     }
@@ -376,7 +381,8 @@ class tx_mksearch_tests_indexer_ttcontent_Normal_testcase extends tx_mksearch_te
     /**
      * @group unit
      */
-    public function testIsIndexableRecordWithIsOnIndexablePageAndCheckCTypes(){
+    public function testIsIndexableRecordWithIsOnIndexablePageAndCheckCTypes()
+    {
         $indexer = $this->getAccessibleMock(
             'tx_mksearch_indexer_ttcontent_Normal',
             array('isOnIndexablePage', 'checkCTypes', 'isIndexableColumn')
@@ -387,26 +393,27 @@ class tx_mksearch_tests_indexer_ttcontent_Normal_testcase extends tx_mksearch_te
         $options['include.']['columns'] = '0,1';
 
         $indexer->expects(self::once())
-        ->method('isOnIndexablePage')
-        ->with($sourceRecord, $options)
-        ->will($this->returnValue(true));
+            ->method('isOnIndexablePage')
+            ->with($sourceRecord, $options)
+            ->will($this->returnValue(true));
 
         $indexer->expects(self::once())
-        ->method('checkCTypes')
-        ->with($sourceRecord, $options)
-        ->will($this->returnValue(false));
+            ->method('checkCTypes')
+            ->with($sourceRecord, $options)
+            ->will($this->returnValue(false));
 
         $indexer->expects(self::never())
-        ->method('isIndexableColumn')
-        ->with($sourceRecord, $options)
-        ->will($this->returnValue(false));
+            ->method('isIndexableColumn')
+            ->with($sourceRecord, $options)
+            ->will($this->returnValue(false));
 
         self::assertEquals(
             false,
             $this->callInaccessibleMethod(
                 $indexer,
                 'isIndexableRecord',
-                $sourceRecord, $options
+                $sourceRecord,
+                $options
             )
         );
     }
@@ -414,7 +421,8 @@ class tx_mksearch_tests_indexer_ttcontent_Normal_testcase extends tx_mksearch_te
     /**
      * @group unit
      */
-    public function testIsIndexableRecordWithIsOnIndexablePageAndCheckCTypesAndIsIndexableColumn(){
+    public function testIsIndexableRecordWithIsOnIndexablePageAndCheckCTypesAndIsIndexableColumn()
+    {
         $indexer = $this->getAccessibleMock(
             'tx_mksearch_indexer_ttcontent_Normal',
             array('isOnIndexablePage', 'checkCTypes', 'isIndexableColumn')
@@ -425,26 +433,27 @@ class tx_mksearch_tests_indexer_ttcontent_Normal_testcase extends tx_mksearch_te
         $options['include.']['columns'] = '0,1';
 
         $indexer->expects(self::once())
-        ->method('isOnIndexablePage')
-        ->with($sourceRecord, $options)
-        ->will($this->returnValue(true));
+            ->method('isOnIndexablePage')
+            ->with($sourceRecord, $options)
+            ->will($this->returnValue(true));
 
         $indexer->expects(self::once())
-        ->method('checkCTypes')
-        ->with($sourceRecord, $options)
-        ->will($this->returnValue(true));
+            ->method('checkCTypes')
+            ->with($sourceRecord, $options)
+            ->will($this->returnValue(true));
 
         $indexer->expects(self::once())
-        ->method('isIndexableColumn')
-        ->with($sourceRecord, $options)
-        ->will($this->returnValue(true));
+            ->method('isIndexableColumn')
+            ->with($sourceRecord, $options)
+            ->will($this->returnValue(true));
 
         self::assertEquals(
             true,
             $this->callInaccessibleMethod(
                 $indexer,
                 'isIndexableRecord',
-                $sourceRecord, $options
+                $sourceRecord,
+                $options
             )
         );
     }
@@ -453,7 +462,8 @@ class tx_mksearch_tests_indexer_ttcontent_Normal_testcase extends tx_mksearch_te
      * @group unit
      * @dataProvider getTestDataForIsIndexableRecordWithAllMethodPossibilities
      */
-    public function testIsIndexableRecordWithAllMethodPossibilities($sourceRecord, $expected){
+    public function testIsIndexableRecordWithAllMethodPossibilities($sourceRecord, $expected)
+    {
         $indexer = $this->getAccessibleMock(
             'tx_mksearch_indexer_ttcontent_Normal',
             array('isOnIndexablePage', 'checkCTypes', 'isIndexableColumn')
@@ -463,26 +473,27 @@ class tx_mksearch_tests_indexer_ttcontent_Normal_testcase extends tx_mksearch_te
         $options['include.']['columns'] = '0,1';
 
         $indexer->expects($expected['isOnIndexablePage']['espects'])
-        ->method('isOnIndexablePage')
-        ->with($sourceRecord, $options)
-        ->will($this->returnValue($expected['isOnIndexablePage']['value']));
+            ->method('isOnIndexablePage')
+            ->with($sourceRecord, $options)
+            ->will($this->returnValue($expected['isOnIndexablePage']['value']));
 
         $indexer->expects($expected['checkCTypes']['espects'])
-        ->method('checkCTypes')
-        ->with($sourceRecord, $options)
-        ->will($this->returnValue($expected['checkCTypes']['value']));
+            ->method('checkCTypes')
+            ->with($sourceRecord, $options)
+            ->will($this->returnValue($expected['checkCTypes']['value']));
 
         $indexer->expects($expected['isIndexableColumn']['espects'])
-        ->method('isIndexableColumn')
-        ->with($sourceRecord, $options)
-        ->will($this->returnValue($expected['isIndexableColumn']['value']));
+            ->method('isIndexableColumn')
+            ->with($sourceRecord, $options)
+            ->will($this->returnValue($expected['isIndexableColumn']['value']));
 
         self::assertEquals(
             $expected['isIndexableRecord'],
             $this->callInaccessibleMethod(
                 $indexer,
                 'isIndexableRecord',
-                $sourceRecord, $options
+                $sourceRecord,
+                $options
             )
         );
     }
@@ -622,7 +633,8 @@ class tx_mksearch_tests_indexer_ttcontent_Normal_testcase extends tx_mksearch_te
     /**
      * @group unit
      */
-    public function testIsIndexableRecordWithoutDefinedColumnsAndColPos(){
+    public function testIsIndexableRecordWithoutDefinedColumnsAndColPos()
+    {
         $indexer = $this->getAccessibleMock(
             'tx_mksearch_indexer_ttcontent_Normal',
             array('isOnIndexablePage', 'checkCTypes', 'isIndexableColumn')
@@ -633,26 +645,27 @@ class tx_mksearch_tests_indexer_ttcontent_Normal_testcase extends tx_mksearch_te
         $options = self::getDefaultOptions();
 
         $indexer->expects($this->once())
-        ->method('isOnIndexablePage')
-        ->with($sourceRecord, $options)
-        ->will($this->returnValue(true ));
+            ->method('isOnIndexablePage')
+            ->with($sourceRecord, $options)
+            ->will($this->returnValue(true ));
 
         $indexer->expects($this->once())
-        ->method('checkCTypes')
-        ->with($sourceRecord, $options)
-        ->will($this->returnValue(true));
+            ->method('checkCTypes')
+            ->with($sourceRecord, $options)
+            ->will($this->returnValue(true));
 
         $indexer->expects($this->once())
-        ->method('isIndexableColumn')
-        ->with($sourceRecord, $options)
-        ->will($this->returnValue(true));
+            ->method('isIndexableColumn')
+            ->with($sourceRecord, $options)
+            ->will($this->returnValue(true));
 
         self::assertEquals(
             true,
             $this->callInaccessibleMethod(
                 $indexer,
                 'isIndexableRecord',
-                $sourceRecord, $options
+                $sourceRecord,
+                $options
             )
         );
     }
@@ -684,7 +697,8 @@ class tx_mksearch_tests_indexer_ttcontent_Normal_testcase extends tx_mksearch_te
             $this->callInaccessibleMethod(
                 $indexer,
                 'isIndexableRecord',
-                $sourceRecord, $options
+                $sourceRecord,
+                $options
             )
         );
     }
@@ -708,7 +722,8 @@ class tx_mksearch_tests_indexer_ttcontent_Normal_testcase extends tx_mksearch_te
     /**
      * @group unit
      */
-    public function testIsIndexableColumnWithColPosAndColumns(){
+    public function testIsIndexableColumnWithColPosAndColumns()
+    {
         $indexer = $this->getAccessibleMock(
             'tx_mksearch_indexer_ttcontent_Normal'
         );
@@ -721,7 +736,8 @@ class tx_mksearch_tests_indexer_ttcontent_Normal_testcase extends tx_mksearch_te
             $this->callInaccessibleMethod(
                 $indexer,
                 'isIndexableColumn',
-                $sourceRecord, $options
+                $sourceRecord,
+                $options
             )
         );
     }
@@ -729,7 +745,8 @@ class tx_mksearch_tests_indexer_ttcontent_Normal_testcase extends tx_mksearch_te
     /**
      * @group unit
      */
-    public function testIsIndexableColumnWithColPosAndWithoutColumns(){
+    public function testIsIndexableColumnWithColPosAndWithoutColumns()
+    {
         $indexer = $this->getAccessibleMock(
             'tx_mksearch_indexer_ttcontent_Normal'
         );
@@ -742,7 +759,8 @@ class tx_mksearch_tests_indexer_ttcontent_Normal_testcase extends tx_mksearch_te
             $this->callInaccessibleMethod(
                 $indexer,
                 'isIndexableColumn',
-                $sourceRecord, $options
+                $sourceRecord,
+                $options
             )
         );
     }
@@ -750,7 +768,8 @@ class tx_mksearch_tests_indexer_ttcontent_Normal_testcase extends tx_mksearch_te
     /**
      * @group unit
      */
-    public function testIsIndexableColumnWithoutColPosAndWithColumns(){
+    public function testIsIndexableColumnWithoutColPosAndWithColumns()
+    {
         $indexer = $this->getAccessibleMock(
             'tx_mksearch_indexer_ttcontent_Normal'
         );
@@ -763,7 +782,8 @@ class tx_mksearch_tests_indexer_ttcontent_Normal_testcase extends tx_mksearch_te
             $this->callInaccessibleMethod(
                 $indexer,
                 'isIndexableColumn',
-                $sourceRecord, $options
+                $sourceRecord,
+                $options
             )
         );
     }
@@ -771,7 +791,8 @@ class tx_mksearch_tests_indexer_ttcontent_Normal_testcase extends tx_mksearch_te
     /**
      * @group unit
      */
-    public function testIsIndexableColumnWithoutColPosAndColumns(){
+    public function testIsIndexableColumnWithoutColPosAndColumns()
+    {
         $indexer = $this->getAccessibleMock(
             'tx_mksearch_indexer_ttcontent_Normal'
         );
@@ -784,7 +805,8 @@ class tx_mksearch_tests_indexer_ttcontent_Normal_testcase extends tx_mksearch_te
             $this->callInaccessibleMethod(
                 $indexer,
                 'isIndexableColumn',
-                $sourceRecord, $options
+                $sourceRecord,
+                $options
             )
         );
     }
