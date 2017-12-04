@@ -132,25 +132,25 @@ indexPageData = 0
 
 # Configuration for each cType:
 CType {
-	# Default configuration for unconfigured cTypes:
-	_default_ {
-		# Fields used for building the index:
-		indexedFields {
-			0 = bodytext
-			1 = imagecaption
-			2 = altText
-			3 = titleText
-		}
-	}
-	# cType "text":
-	text.indexedFields {
-		0 = bodytext
-	}
-	gridelements_pi1.indexedFields {
-	}
-	templavoila_pi1.indexedFields {
-		0 = tx_templavoila_flex
-	}
+  # Default configuration for unconfigured cTypes:
+  _default_ {
+    # Fields used for building the index:
+    indexedFields {
+      0 = bodytext
+      1 = imagecaption
+      2 = altText
+      3 = titleText
+    }
+  }
+  # cType "text":
+  text.indexedFields {
+    0 = bodytext
+  }
+  gridelements_pi1.indexedFields {
+  }
+  templavoila_pi1.indexedFields {
+    0 = tx_templavoila_flex
+  }
 }
 
 # cTypes of content elements to be in-/excluded from indexing.
@@ -205,6 +205,9 @@ include {
 #    # Include page  tree with root page #28
 #    1 = 28
 #  }
+# Only Include specific Content Columns
+#  # Include colPos value
+#  columns = 0,1,2,3,-1
 }
 # Black lists: Exclude pages from indexing by various conditions.
 # May also be combined with option "include", while "exclude" option
