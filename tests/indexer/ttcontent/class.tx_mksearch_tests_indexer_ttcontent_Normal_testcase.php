@@ -307,7 +307,8 @@ class tx_mksearch_tests_indexer_ttcontent_Normal_testcase extends tx_mksearch_te
     public function testShouldRespectIncludeInSearchDisable($options, $expected)
     {
         $indexer = $this->getAccessibleMock(
-            'tx_mksearch_indexer_ttcontent_Normal'
+            'tx_mksearch_indexer_ttcontent_Normal',
+            array('checkCTypes')
         );
 
         self::assertEquals(
@@ -347,6 +348,9 @@ class tx_mksearch_tests_indexer_ttcontent_Normal_testcase extends tx_mksearch_te
             'tx_mksearch_indexer_ttcontent_Normal',
             array('isOnIndexablePage', 'checkCTypes', 'isIndexableColumn')
         );
+        $reflection = new Reflection('tx_mksearch_indexer_ttcontent_Normal');
+        $class = new ReflectionClass('tx_mksearch_indexer_ttcontent_Normal');
+
 
         $sourceRecord = array();
         $options = self::getDefaultOptions();
@@ -358,14 +362,10 @@ class tx_mksearch_tests_indexer_ttcontent_Normal_testcase extends tx_mksearch_te
             ->will($this->returnValue(false));
 
         $indexer->expects(self::never())
-            ->method('checkCTypes')
-            ->with($sourceRecord, $options)
-            ->will($this->returnValue(false));
+            ->method('checkCTypes');
 
         $indexer->expects(self::never())
-            ->method('isIndexableColumn')
-            ->with($sourceRecord, $options)
-            ->will($this->returnValue(false));
+            ->method('isIndexableColumn');
 
         self::assertEquals(
             false,
@@ -403,9 +403,7 @@ class tx_mksearch_tests_indexer_ttcontent_Normal_testcase extends tx_mksearch_te
             ->will($this->returnValue(false));
 
         $indexer->expects(self::never())
-            ->method('isIndexableColumn')
-            ->with($sourceRecord, $options)
-            ->will($this->returnValue(false));
+            ->method('isIndexableColumn');
 
         self::assertEquals(
             false,
@@ -472,20 +470,30 @@ class tx_mksearch_tests_indexer_ttcontent_Normal_testcase extends tx_mksearch_te
         $options = self::getDefaultOptions();
         $options['include.']['columns'] = '0,1';
 
-        $indexer->expects($expected['isOnIndexablePage']['espects'])
+        $indexer->expects($expected['isOnIndexablePage']['expects'])
             ->method('isOnIndexablePage')
             ->with($sourceRecord, $options)
             ->will($this->returnValue($expected['isOnIndexablePage']['value']));
 
-        $indexer->expects($expected['checkCTypes']['espects'])
-            ->method('checkCTypes')
-            ->with($sourceRecord, $options)
-            ->will($this->returnValue($expected['checkCTypes']['value']));
+        if ($expected['checkCTypes']['expects'] == self::never()) {
+            $indexer->expects(self::never())
+                ->method('checkCTypes');
+        } else {
+            $indexer->expects($expected['checkCTypes']['expects'])
+                ->method('checkCTypes')
+                ->with($sourceRecord, $options)
+                ->will($this->returnValue($expected['checkCTypes']['value']));
+        }
 
-        $indexer->expects($expected['isIndexableColumn']['espects'])
-            ->method('isIndexableColumn')
-            ->with($sourceRecord, $options)
-            ->will($this->returnValue($expected['isIndexableColumn']['value']));
+        if ($expected['isIndexableColumn']['expects'] == self::never()) {
+            $indexer->expects(self::never())
+                ->method('isIndexableColumn');
+        } else {
+            $indexer->expects($expected['isIndexableColumn']['expects'])
+                ->method('isIndexableColumn')
+                ->with($sourceRecord, $options)
+                ->will($this->returnValue($expected['isIndexableColumn']['value']));
+        }
 
         self::assertEquals(
             $expected['isIndexableRecord'],
@@ -505,126 +513,126 @@ class tx_mksearch_tests_indexer_ttcontent_Normal_testcase extends tx_mksearch_te
                 'sourceRecord' => array('colPos' => -1),
                 'expected' => array(
                     'isIndexableRecord' => false,
-                    'isOnIndexablePage' => array('espects' => self::once(),'value' => true),
-                    'checkCTypes' => array('espects' => self::once(),'value' => false),
-                    'isIndexableColumn' => array('espects' => self::never(),'value' => false),
+                    'isOnIndexablePage' => array('expects' => self::once(),'value' => true),
+                    'checkCTypes' => array('expects' => self::once(),'value' => false),
+                    'isIndexableColumn' => array('expects' => self::never(),'value' => false),
                 ),
             ),
             __LINE__ => array(
                 'sourceRecord' => array('colPos' => -1),
                 'expected' => array(
                     'isIndexableRecord' => false,
-                    'isOnIndexablePage' => array('espects' => self::once(),'value' => true),
-                    'checkCTypes' => array('espects' => self::once(),'value' => true),
-                    'isIndexableColumn' => array('espects' => self::once(),'value' => false),
+                    'isOnIndexablePage' => array('expects' => self::once(),'value' => true),
+                    'checkCTypes' => array('expects' => self::once(),'value' => true),
+                    'isIndexableColumn' => array('expects' => self::once(),'value' => false),
                 ),
             ),
             __LINE__ => array(
                 'sourceRecord' => array('colPos' => 0),
                 'expected' => array(
                     'isIndexableRecord' => true,
-                    'isOnIndexablePage' => array('espects' => self::once(),'value' => true),
-                    'checkCTypes' => array('espects' => self::once(),'value' => true),
-                    'isIndexableColumn' => array('espects' => self::once(),'value' => true),
+                    'isOnIndexablePage' => array('expects' => self::once(),'value' => true),
+                    'checkCTypes' => array('expects' => self::once(),'value' => true),
+                    'isIndexableColumn' => array('expects' => self::once(),'value' => true),
                 ),
             ),
             __LINE__ => array(
                 'sourceRecord' => array('colPos' => 1),
                 'expected' => array(
                     'isIndexableRecord' => false,
-                    'isOnIndexablePage' => array('espects' => self::once(),'value' => false),
-                    'checkCTypes' => array('espects' => self::never(),'value' => true),
-                    'isIndexableColumn' => array('espects' => self::never(),'value' => false),
+                    'isOnIndexablePage' => array('expects' => self::once(),'value' => false),
+                    'checkCTypes' => array('expects' => self::never(),'value' => true),
+                    'isIndexableColumn' => array('expects' => self::never(),'value' => false),
                 ),
             ),
             __LINE__ => array(
                 'sourceRecord' => array('colPos' => 0),
                 'expected' => array(
                     'isIndexableRecord' => false,
-                    'isOnIndexablePage' => array('espects' => self::once(),'value' => false),
-                    'checkCTypes' => array('espects' => self::never(),'value' => true),
-                    'isIndexableColumn' => array('espects' => self::never(),'value' => true),
+                    'isOnIndexablePage' => array('expects' => self::once(),'value' => false),
+                    'checkCTypes' => array('expects' => self::never(),'value' => true),
+                    'isIndexableColumn' => array('expects' => self::never(),'value' => true),
                 ),
             ),
             __LINE__ => array(
                 'sourceRecord' => array('colPos' => 0),
                 'expected' => array(
                     'isIndexableRecord' => false,
-                    'isOnIndexablePage' => array('espects' => self::once(),'value' => false),
-                    'checkCTypes' => array('espects' => self::never(),'value' => false),
-                    'isIndexableColumn' => array('espects' => self::never(),'value' => true),
+                    'isOnIndexablePage' => array('expects' => self::once(),'value' => false),
+                    'checkCTypes' => array('expects' => self::never(),'value' => false),
+                    'isIndexableColumn' => array('expects' => self::never(),'value' => true),
                 ),
             ),
             __LINE__ => array(
                 'sourceRecord' => array('colPos' => -1),
                 'expected' => array(
                     'isIndexableRecord' => false,
-                    'isOnIndexablePage' => array('espects' => self::once(),'value' => false),
-                    'checkCTypes' => array('espects' => self::never(),'value' => false),
-                    'isIndexableColumn' => array('espects' => self::never(),'value' => false),
+                    'isOnIndexablePage' => array('expects' => self::once(),'value' => false),
+                    'checkCTypes' => array('expects' => self::never(),'value' => false),
+                    'isIndexableColumn' => array('expects' => self::never(),'value' => false),
                 ),
             ),
             __LINE__ => array(
                 'sourceRecord' => array('colPos' => -1, 'tx_mksearch_is_indexable' => tx_mksearch_indexer_ttcontent_Normal::USE_INDEXER_CONFIGURATION),
                 'expected' => array(
                     'isIndexableRecord' => false,
-                    'isOnIndexablePage' => array('espects' => self::once(),'value' => true),
-                    'checkCTypes' => array('espects' => self::once(),'value' => false),
-                    'isIndexableColumn' => array('espects' => self::never(),'value' => false),
+                    'isOnIndexablePage' => array('expects' => self::once(),'value' => true),
+                    'checkCTypes' => array('expects' => self::once(),'value' => false),
+                    'isIndexableColumn' => array('expects' => self::never(),'value' => false),
                 ),
             ),
             __LINE__ => array(
                 'sourceRecord' => array('colPos' => -1, 'tx_mksearch_is_indexable' => tx_mksearch_indexer_ttcontent_Normal::USE_INDEXER_CONFIGURATION),
                 'expected' => array(
                     'isIndexableRecord' => false,
-                    'isOnIndexablePage' => array('espects' => self::once(),'value' => true),
-                    'checkCTypes' => array('espects' => self::once(),'value' => true),
-                    'isIndexableColumn' => array('espects' => self::once(),'value' => false),
+                    'isOnIndexablePage' => array('expects' => self::once(),'value' => true),
+                    'checkCTypes' => array('expects' => self::once(),'value' => true),
+                    'isIndexableColumn' => array('expects' => self::once(),'value' => false),
                 ),
             ),
             __LINE__ => array(
                 'sourceRecord' => array('colPos' => 0, 'tx_mksearch_is_indexable' => tx_mksearch_indexer_ttcontent_Normal::USE_INDEXER_CONFIGURATION),
                 'expected' => array(
                     'isIndexableRecord' => true,
-                    'isOnIndexablePage' => array('espects' => self::once(),'value' => true),
-                    'checkCTypes' => array('espects' => self::once(),'value' => true),
-                    'isIndexableColumn' => array('espects' => self::once(),'value' => true),
+                    'isOnIndexablePage' => array('expects' => self::once(),'value' => true),
+                    'checkCTypes' => array('expects' => self::once(),'value' => true),
+                    'isIndexableColumn' => array('expects' => self::once(),'value' => true),
                 ),
             ),
             __LINE__ => array(
                 'sourceRecord' => array('colPos' => 1, 'tx_mksearch_is_indexable' => tx_mksearch_indexer_ttcontent_Normal::USE_INDEXER_CONFIGURATION),
                 'expected' => array(
                     'isIndexableRecord' => false,
-                    'isOnIndexablePage' => array('espects' => self::once(),'value' => false),
-                    'checkCTypes' => array('espects' => self::never(),'value' => true),
-                    'isIndexableColumn' => array('espects' => self::never(),'value' => false),
+                    'isOnIndexablePage' => array('expects' => self::once(),'value' => false),
+                    'checkCTypes' => array('expects' => self::never(),'value' => true),
+                    'isIndexableColumn' => array('expects' => self::never(),'value' => false),
                 ),
             ),
             __LINE__ => array(
                 'sourceRecord' => array('colPos' => 0, 'tx_mksearch_is_indexable' => tx_mksearch_indexer_ttcontent_Normal::USE_INDEXER_CONFIGURATION),
                 'expected' => array(
                     'isIndexableRecord' => false,
-                    'isOnIndexablePage' => array('espects' => self::once(),'value' => false),
-                    'checkCTypes' => array('espects' => self::never(),'value' => true),
-                    'isIndexableColumn' => array('espects' => self::never(),'value' => true),
+                    'isOnIndexablePage' => array('expects' => self::once(),'value' => false),
+                    'checkCTypes' => array('expects' => self::never(),'value' => true),
+                    'isIndexableColumn' => array('expects' => self::never(),'value' => true),
                 ),
             ),
             __LINE__ => array(
                 'sourceRecord' => array('colPos' => 0, 'tx_mksearch_is_indexable' => tx_mksearch_indexer_ttcontent_Normal::USE_INDEXER_CONFIGURATION),
                 'expected' => array(
                     'isIndexableRecord' => false,
-                    'isOnIndexablePage' => array('espects' => self::once(),'value' => false),
-                    'checkCTypes' => array('espects' => self::never(),'value' => false),
-                    'isIndexableColumn' => array('espects' => self::never(),'value' => true),
+                    'isOnIndexablePage' => array('expects' => self::once(),'value' => false),
+                    'checkCTypes' => array('expects' => self::never(),'value' => false),
+                    'isIndexableColumn' => array('expects' => self::never(),'value' => true),
                 ),
             ),
             __LINE__ => array(
                 'sourceRecord' => array('colPos' => -1,'tx_mksearch_is_indexable' => tx_mksearch_indexer_ttcontent_Normal::USE_INDEXER_CONFIGURATION),
                 'expected' => array(
                     'isIndexableRecord' => false,
-                    'isOnIndexablePage' => array('espects' => self::once(),'value' => false),
-                    'checkCTypes' => array('espects' => self::never(),'value' => false),
-                    'isIndexableColumn' => array('espects' => self::never(),'value' => false),
+                    'isOnIndexablePage' => array('expects' => self::once(),'value' => false),
+                    'checkCTypes' => array('expects' => self::never(),'value' => false),
+                    'isIndexableColumn' => array('expects' => self::never(),'value' => false),
                 ),
             ),
         );
@@ -681,16 +689,13 @@ class tx_mksearch_tests_indexer_ttcontent_Normal_testcase extends tx_mksearch_te
         );
 
         $indexer->expects($this->never())
-            ->method('isOnIndexablePage')
-            ->with($sourceRecord, $options);
+            ->method('isOnIndexablePage');
 
         $indexer->expects($this->never())
-            ->method('checkCTypes')
-            ->with($sourceRecord, $options);
+            ->method('checkCTypes');
 
         $indexer->expects($this->never())
-            ->method('isIndexableColumn')
-            ->with($sourceRecord, $options);
+            ->method('isIndexableColumn');
 
         self::assertEquals(
             $expected,
