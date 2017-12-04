@@ -429,7 +429,8 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
      * @param array $options
      * @return boolean
      */
-    protected function isPageSetIncludeInSearchDisable($model, $options) {
+    protected function isPageSetIncludeInSearchDisable($model, $options)
+    {
         if ($this->shouldRespectIncludeInSearchDisable($options)) {
             $page = $this->getPageContent($model->record['pid']);
             if (array_key_exists('no_search', $page) && $page['no_search'] == 1) {
@@ -445,7 +446,8 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
      * @param array $options
      * @return boolean
      */
-    protected function shouldRespectIncludeInSearchDisable($options) {
+    protected function shouldRespectIncludeInSearchDisable($options)
+    {
         $config = $this->getConfigValue('respectIncludeInSearchDisable', $options);
         return ((is_array($config) && !empty($config) && reset($config) == 1));
     }
@@ -483,7 +485,8 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
      * @param array $options
      * @return bool
      */
-    protected function isIndexableColumn($sourceRecord, $options){
+    protected function isIndexableColumn($sourceRecord, $options)
+    {
         $columns = $this->getConfigValue('columns', $options['include.']);
         $isIndexableColumn = true;
 
