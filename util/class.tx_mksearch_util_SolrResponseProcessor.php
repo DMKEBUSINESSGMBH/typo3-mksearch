@@ -72,7 +72,7 @@ class tx_mksearch_util_SolrResponseProcessor
         return true;
     }
 
-    public function tx_mksearch_util_SolrResponseProcessor(&$configurations, $confId)
+    public function __construct(&$configurations, $confId)
     {
         $this->configurations = $configurations;
         $this->confId = $confId;
