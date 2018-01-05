@@ -188,7 +188,7 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
         if (!$news){
             $abort = true;
         }
-        
+
         // At least one of the news' categories was found on black list
         if ($abort) {
             tx_rnbase::load('tx_rnbase_util_Logger');
@@ -205,7 +205,7 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
             }
         }
 
-        $this->indexNews($rawData, $news, $indexDoc);
+        $this->indexNews($rawData, $news, $indexDoc, $options);
         $this->indexNewsTags($rawData, $news, $indexDoc);
         $this->indexNewsCategories($rawData, $news, $indexDoc);
 
@@ -256,6 +256,8 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
                     $news->getTeaser(),
                     $news->getBodytext(),
                     $news->getDescription(),
+                    // Add contentelements to indexer content
+                    $this->indexNewsContentElements($news, $indexDoc, $options),
                 )
             )
         );
@@ -374,6 +376,42 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
     }
 
     /**
+     * Add category data of the News to the index
+     *
+     * @param array $rawData
+     * @param \GeorgRinger\News\Domain\Model\News $news
+     * @param tx_mksearch_interface_IndexerDocument $indexDoc
+     * @param array $options
+     */
+    protected function indexNewsContentElements(
+        /* \GeorgRinger\News\Domain\Model\News */ $news,
+        tx_mksearch_interface_IndexerDocument $indexDoc,
+        array $options = array()
+    ) {
+        if (empty($options['indexInlineContentElements'])) {
+            return '';
+        }
+        tx_mksearch_util_Indexer::prepareTSFE($options['defaultSinglePid']);
+
+        $ce = array();
+        $contentElements = $news->getContentElements();
+        foreach ($contentElements as $contentElement) {
+//             $ttContent = tx_rnbase_util_TYPO3::getSysPage()->checkRecord(
+//                 'tt_content',
+//                 $contentElement->getUid()
+//             );
+            $cObj = tx_mktools_util_T3Loader::getContentObject($contentElement->getUid());
+
+            // jetzt das contentelement parsen
+            $cObj->start($contentElement->_getProperties(), 'tt_content');
+            $ce[$contentElement->getUid()] = $cObj->cObjGetSingle('<tt_content', array());
+            $ce[] = trim($ce[$contentElement->getUid()]);
+        }
+
+        return implode(CRLF . CRLF, $ce);
+    }
+
+    /**
      * The conection to the db.
      *
      * @return Tx_Rnbase_Database_Connection
@@ -419,6 +457,12 @@ deleteOnAbort = 0
 
 ### should the Root Page of the current records page be indexed?
 # indexSiteRootPage = 0
+
+### should inline contentelements be indexed?
+# indexInlineContentElements = 0
+
+### news detail pid to get TSFE in indexer
+# defaultSinglePid = 0
 
 # you should always configure the root pageTree for this indexer in the includes. mostly the domain
 # include.pageTrees {
