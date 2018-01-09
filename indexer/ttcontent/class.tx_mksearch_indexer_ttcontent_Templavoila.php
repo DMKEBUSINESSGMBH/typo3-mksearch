@@ -263,7 +263,7 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
     private function getRelativePathPrefixFromCurrentExecutionDirToWebroot()
     {
         // indexing via Scheduler in CLI
-        if (tx_rnbase_util_TYPO3::isCliMode()) {
+        if (defined('TYPO3_cliMode')) {
             // somewhere inside typo3 but not in webroot
             if (strlen(getcwd()) > strlen(PATH_site)) {
                 $relativePathInsideTypo3 = str_replace(PATH_site, '', getcwd());
