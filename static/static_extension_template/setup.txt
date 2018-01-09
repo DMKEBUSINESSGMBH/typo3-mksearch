@@ -1191,7 +1191,9 @@ lib.mksearchAjaxPage {
         }
         requestHandler = /suggest
         usedIndex = {$plugin.tx_mksearch.usedIndex}
+        viewClassName = tx_mksearch_view_SearchSolr
     }
+    searchsolrTemplate = EXT:mksearch/templates/searchsolr.html
 }
 
 ### our own page type for the autocomplete plugin so we dont have to init
