@@ -262,6 +262,8 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
             )
         );
 
+        $this->indexNewsMedia($news, $indexDoc);
+
         $abstract = $news->getTeaser();
         if (empty($abstract)) {
             $abstract = $content;
@@ -378,7 +380,6 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
     /**
      * Add category data of the News to the index
      *
-     * @param array $rawData
      * @param \GeorgRinger\News\Domain\Model\News $news
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
      * @param array $options
@@ -409,6 +410,33 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
         }
 
         return implode(CRLF . CRLF, $ce);
+    }
+
+    /**
+     * Index media data
+     *
+     * @param \GeorgRinger\News\Domain\Model\News $news
+     * @param tx_mksearch_interface_IndexerDocument $indexDoc
+     */
+    public function indexNewsMedia(
+        $news,
+        $indexDoc
+    ) {
+        if (!$news->getMedia()->count()) {
+            return;
+        }
+
+        $titles = $descriptions = array();
+        foreach ($news->getMedia() as $media) {
+            $titles[] = $media->getTitle();
+            $descriptions[] = $media->getDescription();
+        }
+
+        $indexDoc->addField('news_listimage_ref_uid_i', $news->getFirstPreview()->getUid());
+        $indexDoc->addField('news_listimage_ref_title_s', $news->getFirstPreview()->getTitle());
+        $indexDoc->addField('news_listimage_ref_desc_s', $news->getFirstPreview()->getDescription());
+        $indexDoc->addField('news_images_ref_title_ms', $titles);
+        $indexDoc->addField('news_images_ref_desc_ms', $descriptions);
     }
 
     /**
