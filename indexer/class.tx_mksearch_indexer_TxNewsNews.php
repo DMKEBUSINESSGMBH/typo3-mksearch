@@ -397,10 +397,6 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
         $ce = array();
         $contentElements = $news->getContentElements();
         foreach ($contentElements as $contentElement) {
-//             $ttContent = tx_rnbase_util_TYPO3::getSysPage()->checkRecord(
-//                 'tt_content',
-//                 $contentElement->getUid()
-//             );
             $cObj = tx_mktools_util_T3Loader::getContentObject($contentElement->getUid());
 
             // jetzt das contentelement parsen
