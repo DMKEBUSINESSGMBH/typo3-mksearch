@@ -445,6 +445,8 @@
             <str name="defType">dismax</str>
             <str name="echoParams">explicit</str>
             <int name="rows">25</int>
+            <str name="q.op">OR</str>
+            <str name="df">fulltext</str>
             <!-- the fields to search in -->
             <str name="qf">
                 title_german
@@ -513,6 +515,8 @@
             <str name="defType">dismax</str>
             <str name="echoParams">explicit</str>
             <int name="rows">25</int>
+            <str name="q.op">OR</str>
+            <str name="df">fulltext</str>
             <!-- the fields to search in -->
             <str name="qf">
                 title_english
@@ -583,7 +587,8 @@
         <lst name="defaults">
             <str name="echoParams">explicit</str>
             <int name="rows">10</int>
-            <!-- <str name="df">text</str> -->
+            <str name="q.op">OR</str>
+            <str name="df">fulltext</str>
         </lst>
         <!-- In addition to defaults, "appends" params can be specified to identify
             values which should be appended to the list of multi-val params from the
