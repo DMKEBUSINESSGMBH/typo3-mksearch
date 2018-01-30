@@ -110,7 +110,7 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC
         }
         $viewData->offsetSet('result', $result);
 
-        return null;
+        return $this->processAutocomplete();
     }
 
     /**
@@ -422,6 +422,29 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC
                 $configurations->get($this->getConfId() . $this->autocompleteConfId . 'javaScriptSnippetSuffix') :
                 $this->getConfigurations()->getPluginId();
         $pageRenderer->addJsFooterInlineCode('mksearch_autocomplete_' . $javaScriptSnippetSuffix, $autocompleteJS);
+    }
+
+    /**
+     * Process a autocomplete call and return the json directly!
+     *
+     * @return void
+     */
+    protected function processAutocomplete()
+    {
+        //shall we parse the content just as json
+        if ($this->getParameters()->get('ajax')) {
+            // if the frontend debug is enabled, so the json will be invalid.
+            // so we has to disable the debug.
+            $GLOBALS['TYPO3_CONF_VARS']['FE']['debug'] = 0;
+            tx_rnbase::load('tx_rnbase_util_TYPO3');
+            if (tx_rnbase_util_TYPO3::isTYPO60OrHigher()) {
+                $tsfe = tx_rnbase_util_TYPO3::getTSFE();
+                $tsfe->config['config']['debug'] = 0;
+                $tsfe->TYPO3_CONF_VARS['FE']['debug'] = 0;
+            }
+
+            return json_encode($this->getViewData()->offsetGet('result'));
+        }
     }
 
     /**
