@@ -428,7 +428,7 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
             $descriptions[] = $media->getDescription();
         }
 
-        if($news->getFirstPreview()) {
+        if ($news->getFirstPreview()) {
             $indexDoc->addField('news_listimage_ref_uid_i', $news->getFirstPreview()->getUid());
             $indexDoc->addField('news_listimage_ref_title_s', $news->getFirstPreview()->getTitle());
             $indexDoc->addField('news_listimage_ref_desc_s', $news->getFirstPreview()->getDescription());
