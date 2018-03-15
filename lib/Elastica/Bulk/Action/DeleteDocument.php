@@ -1,5 +1,4 @@
 <?php
-
 namespace Elastica\Bulk\Action;
 
 use Elastica\AbstractUpdateAction;
@@ -13,19 +12,20 @@ class DeleteDocument extends AbstractDocument
 
     /**
      * @param \Elastica\AbstractUpdateAction $action
+     *
      * @return array
      */
     protected function _getMetadata(AbstractUpdateAction $action)
     {
-        $params = array(
+        $params = [
             'index',
             'type',
             'id',
             'version',
             'version_type',
             'routing',
-            'parent'
-        );
+            'parent',
+        ];
         $metadata = $action->getOptions($params, true);
 
         return $metadata;

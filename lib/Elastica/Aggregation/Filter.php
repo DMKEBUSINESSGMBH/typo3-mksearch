@@ -1,39 +1,58 @@
 <?php
-
 namespace Elastica\Aggregation;
 
-
-use Elastica\Filter\AbstractFilter;
+use Elastica\Exception\InvalidException;
+use Elastica\Query\AbstractQuery;
 
 /**
- * Class Filter
- * @package Elastica\Aggregation
- * @link http://www.elasticsearch.org/guide/en/elasticsearch/reference/master/search-aggregations-bucket-filter-aggregation.html
+ * Class Filter.
+ *
+ * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-filter-aggregation.html
  */
 class Filter extends AbstractAggregation
 {
     /**
-     * Set the filter for this aggregation
-     * @param AbstractFilter $filter
-     * @return Filter
+     * @param string        $name
+     * @param AbstractQuery $filter
      */
-    public function setFilter(AbstractFilter $filter)
+    public function __construct($name, AbstractQuery $filter = null)
     {
-        return $this->setParam("filter", $filter->toArray());
+        parent::__construct($name);
+
+        if ($filter !== null) {
+            $this->setFilter($filter);
+        }
     }
 
     /**
+     * Set the filter for this aggregation.
+     *
+     * @param AbstractQuery $filter
+     *
+     * @return $this
+     */
+    public function setFilter(AbstractQuery $filter)
+    {
+        return $this->setParam('filter', $filter);
+    }
+
+    /**
+     * @throws \Elastica\Exception\InvalidException If filter is not set
+     *
      * @return array
      */
     public function toArray()
     {
-        $array = array(
-            "filter" => $this->getParam("filter")
-        );
+        if (!$this->hasParam('filter')) {
+            throw new InvalidException('Filter is required');
+        }
 
-        if($this->_aggs)
-        {
-            $array['aggs'] = $this->_aggs;
+        $array = [
+            'filter' => $this->getParam('filter')->toArray(),
+        ];
+
+        if ($this->_aggs) {
+            $array['aggs'] = $this->_convertArrayable($this->_aggs);
         }
 
         return $array;

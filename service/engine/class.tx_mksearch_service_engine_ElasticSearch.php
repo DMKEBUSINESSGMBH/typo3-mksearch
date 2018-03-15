@@ -79,7 +79,7 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base im
     public function __construct()
     {
         spl_autoload_register(function ($class) {
-            if (strpos($class, 'Elastica') !== false) {
+            if (strpos($class, 'Elastica') !== false || strpos($class, 'Psr') !== false || strpos($class, 'Elasticsearch') !== false) {
                 $class = str_replace('\\', '/', $class);
                 $filePath = tx_rnbase_util_Extensions::extPath('mksearch').'lib/' . $class . '.php';
                 if (file_exists($filePath)) {
@@ -133,9 +133,9 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base im
      */
     protected function isServerAvailable()
     {
-        $serverStatus = $this->getIndex()->getClient()->getStatus()->getServerStatus();
+        $response = $this->getIndex()->getClient()->getStatus()->getResponse();
 
-        return $serverStatus['status'] == 200;
+        return $response->isOk();
     }
 
     /**

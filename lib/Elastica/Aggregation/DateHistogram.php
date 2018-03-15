@@ -1,82 +1,84 @@
 <?php
-
 namespace Elastica\Aggregation;
 
 /**
- * Class DateHistogram
- * @package Elastica\Aggregation
- * @link http://www.elasticsearch.org/guide/en/elasticsearch/reference/master/search-aggregations-bucket-datehistogram-aggregation.html
+ * Class DateHistogram.
+ *
+ * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-datehistogram-aggregation.html
  */
 class DateHistogram extends Histogram
 {
     /**
-     * Set pre-rounding based on interval
-     * @param string $preZone
-     * @return DateHistogram
+     * Set time_zone option.
+     *
+     * @param  string
+     *
+     * @return $this
      */
-    public function setPreZone($preZone)
+    public function setTimezone($timezone)
     {
-        return $this->setParam("pre_zone", $preZone);
+        return $this->setParam('time_zone', $timezone);
     }
 
     /**
-     * Set post-rounding based on interval
-     * @param string $postZone
-     * @return DateHistogram
-     */
-    public function setPostZone($postZone)
-    {
-        return $this->setParam("post_zone", $postZone);
-    }
-
-    /**
-     * Set pre-zone adjustment for larger time intervals (day and above)
-     * @param string $adjust
-     * @return DateHistogram
-     */
-    public function setPreZoneAdjustLargeInterval($adjust)
-    {
-        return $this->setParam("pre_zone_adjust_large_interval", $adjust);
-    }
-
-    /**
-     * Adjust for granularity of date data
+     * Adjust for granularity of date data.
+     *
      * @param int $factor set to 1000 if date is stored in seconds rather than milliseconds
-     * @return DateHistogram
+     *
+     * @return $this
      */
     public function setFactor($factor)
     {
-        return $this->setParam("factor", $factor);
+        return $this->setParam('factor', $factor);
     }
 
     /**
-     * Set the offset for pre-rounding
-     * @param string $offset "1d", for example
-     * @return DateHistogram
+     * Set offset option.
+     *
+     * @param string
+     *
+     * @return $this
      */
-    public function setPreOffset($offset)
+    public function setOffset($offset)
     {
-        return $this->setParam("pre_offset", $offset);
+        return $this->setParam('offset', $offset);
     }
 
     /**
-     * Set the offset for post-rounding
-     * @param string $offset "1d", for example
-     * @return DateHistogram
-     */
-    public function setPostOffset($offset)
-    {
-        return $this->setParam("post_offset", $offset);
-    }
-
-    /**
-     * Set the format for returned bucket key_as_string values
-     * @link http://www.elasticsearch.org/guide/en/elasticsearch/reference/master/search-aggregations-bucket-daterange-aggregation.html#date-format-pattern
+     * Set the format for returned bucket key_as_string values.
+     *
+     * @link https://www.elastic.co/guide/en/elasticsearch/reference/master/search-aggregations-bucket-daterange-aggregation.html#date-format-pattern
+     *
      * @param string $format see link for formatting options
-     * @return DateHistogram
+     *
+     * @return $this
      */
     public function setFormat($format)
     {
-        return $this->setParam("format", $format);
+        return $this->setParam('format', $format);
     }
-} 
+
+    /**
+     * Set extended bounds option.
+     *
+     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-histogram-aggregation.html#search-aggregations-bucket-histogram-aggregation-extended-bounds
+     *
+     * @param string $min see link for formatting options
+     * @param string $max see link for formatting options
+     *
+     * @return $this
+     */
+    public function setExtendedBounds($min = '', $max = '')
+    {
+        $bounds = [];
+        $bounds['min'] = $min;
+        $bounds['max'] = $max;
+        // switch if min is higher then max
+        if (strtotime($min) > strtotime($max)) {
+            $bounds['min'] = $max;
+            $bounds['max'] = $min;
+        }
+
+        return $this->setParam('extended_bounds', $bounds);
+    }
+}

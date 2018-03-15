@@ -1,5 +1,4 @@
 <?php
-
 namespace Elastica\Bulk;
 
 use Elastica\Response as BaseResponse;
@@ -9,7 +8,7 @@ class ResponseSet extends BaseResponse implements \Iterator, \Countable
     /**
      * @var \Elastica\Bulk\Response[]
      */
-    protected $_bulkResponses = array();
+    protected $_bulkResponses = [];
 
     /**
      * @var int
@@ -17,7 +16,7 @@ class ResponseSet extends BaseResponse implements \Iterator, \Countable
     protected $_position = 0;
 
     /**
-     * @param \Elastica\Response $response
+     * @param \Elastica\Response        $response
      * @param \Elastica\Bulk\Response[] $bulkResponses
      */
     public function __construct(BaseResponse $response, array $bulkResponses)
@@ -36,22 +35,35 @@ class ResponseSet extends BaseResponse implements \Iterator, \Countable
     }
 
     /**
-     * Returns first found error
+     * Returns first found error.
      *
      * @return string
      */
     public function getError()
     {
-        $error = '';
-
         foreach ($this->getBulkResponses() as $bulkResponse) {
             if ($bulkResponse->hasError()) {
-                $error = $bulkResponse->getError();
-                break;
+                return $bulkResponse->getError();
             }
         }
 
-        return $error;
+        return '';
+    }
+
+    /**
+     * Returns first found error (full array).
+     *
+     * @return array|string
+     */
+    public function getFullError()
+    {
+        foreach ($this->getBulkResponses() as $bulkResponse) {
+            if ($bulkResponse->hasError()) {
+                return $bulkResponse->getFullError();
+            }
+        }
+
+        return '';
     }
 
     /**
@@ -59,16 +71,13 @@ class ResponseSet extends BaseResponse implements \Iterator, \Countable
      */
     public function isOk()
     {
-        $return = true;
-
         foreach ($this->getBulkResponses() as $bulkResponse) {
             if (!$bulkResponse->isOk()) {
-                $return = false;
-                break;
+                return false;
             }
         }
 
-        return $return;
+        return true;
     }
 
     /**
@@ -76,16 +85,13 @@ class ResponseSet extends BaseResponse implements \Iterator, \Countable
      */
     public function hasError()
     {
-        $return = false;
-
         foreach ($this->getBulkResponses() as $bulkResponse) {
             if ($bulkResponse->hasError()) {
-                $return = true;
-                break;
+                return true;
             }
         }
 
-        return $return;
+        return false;
     }
 
     /**
@@ -93,19 +99,16 @@ class ResponseSet extends BaseResponse implements \Iterator, \Countable
      */
     public function current()
     {
-        if ($this->valid()) {
-            return $this->_bulkResponses[$this->key()];
-        } else {
-            return false;
-        }
+        return $this->valid()
+            ? $this->_bulkResponses[$this->key()]
+            : false;
     }
 
     /**
-     *
      */
     public function next()
     {
-        $this->_position++;
+        ++$this->_position;
     }
 
     /**
@@ -125,7 +128,6 @@ class ResponseSet extends BaseResponse implements \Iterator, \Countable
     }
 
     /**
-     *
      */
     public function rewind()
     {

@@ -1,43 +1,40 @@
 <?php
-
 namespace Elastica\Node;
 
 use Elastica\Node as BaseNode;
-use Elastica\Request;
 
 /**
- * Elastica cluster node object
+ * Elastica cluster node object.
  *
- * @category Xodoa
- * @package Elastica
  * @author Nicolas Ruflin <spam@ruflin.com>
- * @link http://www.elasticsearch.org/guide/reference/api/admin-indices-status.html
+ *
+ * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-status.html
  */
 class Stats
 {
     /**
-     * Response
+     * Response.
      *
      * @var \Elastica\Response Response object
      */
-    protected $_response = null;
+    protected $_response;
 
     /**
-     * Stats data
+     * Stats data.
      *
      * @var array stats data
      */
-    protected $_data = array();
+    protected $_data = [];
 
     /**
-     * Node
+     * Node.
      *
      * @var \Elastica\Node Node object
      */
-    protected $_node = null;
+    protected $_node;
 
     /**
-     * Create new stats for node
+     * Create new stats for node.
      *
      * @param \Elastica\Node $node Elastica node object
      */
@@ -48,7 +45,7 @@ class Stats
     }
 
     /**
-     * Returns all node stats as array based on the arguments
+     * Returns all node stats as array based on the arguments.
      *
      * Several arguments can be use
      * get('index', 'test', 'example')
@@ -63,7 +60,7 @@ class Stats
             if (isset($data[$arg])) {
                 $data = $data[$arg];
             } else {
-                return null;
+                return;
             }
         }
 
@@ -71,7 +68,7 @@ class Stats
     }
 
     /**
-     * Returns all stats data
+     * Returns all stats data.
      *
      * @return array Data array
      */
@@ -81,7 +78,7 @@ class Stats
     }
 
     /**
-     * Returns node object
+     * Returns node object.
      *
      * @return \Elastica\Node Node object
      */
@@ -91,7 +88,7 @@ class Stats
     }
 
     /**
-     * Returns response object
+     * Returns response object.
      *
      * @return \Elastica\Response Response object
      */
@@ -101,14 +98,16 @@ class Stats
     }
 
     /**
-     * Reloads all nodes information. Has to be called if informations changed
+     * Reloads all nodes information. Has to be called if informations changed.
      *
      * @return \Elastica\Response Response object
      */
     public function refresh()
     {
-        $path = '_nodes/' . $this->getNode()->getName() . '/stats';
-        $this->_response = $this->getNode()->getClient()->request($path, Request::GET);
+        $endpoint = new \Elasticsearch\Endpoints\Cluster\Nodes\Stats();
+        $endpoint->setNodeID($this->getNode()->getName());
+
+        $this->_response = $this->getNode()->getClient()->requestEndpoint($endpoint);
         $data = $this->getResponse()->getData();
         $this->_data = reset($data['nodes']);
     }
