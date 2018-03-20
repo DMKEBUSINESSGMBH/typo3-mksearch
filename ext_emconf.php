@@ -31,7 +31,7 @@ $EM_CONF[$_EXTKEY] = array(
     'author_company' => 'DMK E-Business GmbH',
     'constraints' => array(
         'depends' => array(
-            'rn_base' => '1.4.0-',
+            'rn_base' => '1.6.3-',
             'typo3' => '4.5.0-8.7.99',
             'scheduler' => '1.0.0-8.7.99'
         ),
