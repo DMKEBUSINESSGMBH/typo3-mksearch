@@ -30,3 +30,13 @@ $signalSlotDispatcher->connect(
     'putFileIntoQueue',
     false
 );
+
+if (tx_rnbase_util_TYPO3::isTYPO76OrHigher()) {
+    $signalSlotDispatcher->connect(
+        'TYPO3\\CMS\\Core\\Resource\\Index\\FileIndexRepository',
+        'recordMarkedAsMissing',
+        'tx_mksearch_signalSlotDispatcher_FileIndexRepsitory',
+        'putFileIntoQueue',
+        false
+    );
+}
