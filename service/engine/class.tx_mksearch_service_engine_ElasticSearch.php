@@ -79,31 +79,18 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base
      */
     public function __construct()
     {
-        if (!defined('TYPO3_COMPOSER_MODE') || !TYPO3_COMPOSER_MODE) {
+        $useInternalElasticaLib = (int) Tx_Rnbase_Configuration_Processor::getExtensionCfgValue(
+            'mksearch',
+            'useInternalElasticaLib'
+        );
+        if ($useInternalElasticaLib) {
             spl_autoload_register(function ($class) {
-                if ((
-                    strpos($class, 'Elastica') !== false ||
-                    strpos($class, 'Psr') !== false ||
-                    strpos($class, 'Elasticsearch') !== false
-                )) {
-
-                    // check the elastica lib directory
-                    $elasticaLib = Tx_Rnbase_Configuration_Processor::getExtensionCfgValue(
-                        'mksearch',
-                        'elasticaLib'
-                    );
-                    $elasticaLib = tx_rnbase_util_Files::getFileAbsFileName(
-                        rtrim(
-                            ($elasticaLib ?: 'EXT:mksearch/lib'),
-                            '/'
-                        ) . '/'
-                    );
-
-                    // build the path to the file by namespace
+                if (strpos($class, 'Elastica') !== false) {
                     $class = str_replace('\\', '/', $class);
-                    $filePath = $elasticaLib . $class . '.php';
-
-                    // require if file exists
+                    $filePath = tx_rnbase_util_Extensions::extPath(
+                        'mksearch',
+                        'lib/' . $class . '.php'
+                    );
                     if (file_exists($filePath)) {
                         require_once($filePath);
                     }
