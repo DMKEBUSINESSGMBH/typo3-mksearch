@@ -10,10 +10,13 @@ tikaJar =
 # cat=mksearch/basic/file; type=string; label= When sending a file to tika with umlauts in the filename, the LC_CTYPE must be set so umlauts are not removed and the file can be read correct. Leave empty if setting the locale is not desired. On Windows systems this is ignored!
 tikaLocaleType = de_DE.UTF-8
 
-# cat=mksearch/basic/file; type=string;label=Default index to use for search
+# cat=mksearch/basic; type=string;label=Default index to use for search
 defaultIndex = default
 
-# cat=mksearch/basic/dims/a; type=string;label=[all types] max. abstract length: Max. abstract length abstract, used for display in search result list, for content types without explicitely defined limit. Note: Indexers are free to ignore this limit! 
+# cat=mksearch/basic; type=string;label=Elastica Lib Path: The path to the lib Folder of the elastica library (https://github.com/ruflin/Elastica)
+elasticaLib = EXT:mksearch/lib/
+
+# cat=mksearch/basic/dims/a; type=string;label=[all types] max. abstract length: Max. abstract length abstract, used for display in search result list, for content types without explicitely defined limit. Note: Indexers are free to ignore this limit!
 abstractMaxLength_fallback = 200
 
 # cat=mksearch/basic; type=boolean; label= Curl usage: Shall Curl be used for saver Http Transport? Default is file_get_contents which needs allow_url_fopen to be active which in turn is unsafe!
