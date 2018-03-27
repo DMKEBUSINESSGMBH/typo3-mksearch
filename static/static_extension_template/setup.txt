@@ -1,7 +1,8 @@
 includeLibs.tx_rnbase_controller = EXT:rn_base/class.tx_rnbase_controller.php
 includeLibs.tx_mksearch_util_UserFunc = EXT:mksearch/util/class.tx_mksearch_util_UserFunc.php
 
-plugin.tx_mksearch = USER_INT
+plugin.tx_mksearch = USER
+
 plugin.tx_mksearch {
     # flexform            = flexform_main.xml
     userFunc            = tx_rnbase_controller->main
@@ -451,6 +452,8 @@ lib.mksearch.defaultElasticSearchFilter {
 plugin.tx_mksearch {
     # lucene search
     searchlucene {
+        toUserInt = 1
+
         # Filter configuration - default filter is the form filter
         filter < lib.mksearch.lucenefilter.searchForm
 
@@ -607,6 +610,8 @@ plugin.tx_mksearch {
     }
 
     searchsolr {
+        toUserInt = 1
+
         # soll gesucht oder nur die Templates geparsed werden?
         nosearch = 0
 
@@ -699,6 +704,9 @@ plugin.tx_mksearch {
                 ### dabei wird direkt mksearch[fq] gesetzt
                 show{
                     useKeepVars = 1
+                    ### we don't want page browser parameters to be added for facet links by default
+                    ### and we don't need the value of the submit button
+                    useKeepVars.deny = pb-search-pointer,submit
                     ### shall the field name not be taken into the link so
                     ### we don't have something like mksearch[fq]=contentType:media
                     ### but something like mksearch[fq]=media. This is strongly
@@ -810,6 +818,8 @@ plugin.tx_mksearch {
     }
 
     showhit {
+        toUserInt = 1
+
         _caching {
             class = tx_mksearch_action_CacheHandler
             ### für den cachekey werden folgende parameter mit genutzt.
@@ -827,6 +837,8 @@ plugin.tx_mksearch {
     }
 
     elasticsearch {
+        toUserInt = 1
+
         # soll gesucht oder nur die Templates geparsed werden?
         nosearch = 0
 

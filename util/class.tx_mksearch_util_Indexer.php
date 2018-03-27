@@ -58,12 +58,7 @@ class tx_mksearch_util_Indexer
      */
     public function getRecordsUid($tableName, array $rawData, array $options)
     {
-        // Take care for localized records where uid of original record
-        // is stored in $rawData['l18n_parent'] instead of $rawData['uid']!
-        $sysLanguageUidField = tx_mksearch_util_TCA::getLanguageFieldForTable($tableName);
-        $lnParentField = tx_mksearch_util_TCA::getTransOrigPointerFieldForTable($tableName);
-
-        return isset($rawData[$sysLanguageUidField]) && $rawData[$sysLanguageUidField] && isset($rawData[$lnParentField]) ? $rawData[$lnParentField] : $rawData['uid'];
+        return tx_rnbase_util_TCA::getUid($tableName, $rawData);
     }
 
     /**

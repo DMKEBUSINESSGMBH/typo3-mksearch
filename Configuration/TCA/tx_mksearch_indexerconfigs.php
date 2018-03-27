@@ -1,5 +1,17 @@
 <?php
 
+$configurationFieldWizard = tx_rnbase_util_TYPO3::isTYPO76OrHigher() ? array() : array(
+    'appendDefaultTSConfig' => array(
+        'type'   => 'userFunc',
+        'notNewRecords' => 1,
+        'userFunc' => 'EXT:mksearch/util/class.tx_mksearch_util_TCA.php:tx_mksearch_util_TCA->insertIndexerDefaultTSConfig',
+        'params' => array(
+            'insertBetween' => array('>', '</textarea'),
+            'onMatchOnly' => '/^\s*$/',
+        ),
+    ),
+);
+
 return array(
     'ctrl' => array(
         'title'     => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indexerconfigs',
@@ -56,7 +68,8 @@ return array(
                 'itemsProcFunc' => 'EXT:mksearch/util/class.tx_mksearch_util_TCA.php:tx_mksearch_util_TCA->getIndexerExtKeys',
                 'size' => '1',
                 'maxitems' => '1',
-            )
+            ),
+            'onChange' => 'reload'
         ),
         'contenttype' => array(
             'exclude' => 0,
@@ -69,7 +82,8 @@ return array(
                 'size' => '1',
                 'maxitems' => '1',
                 'eval' => 'required,trim',
-            )
+            ),
+            'onChange' => 'reload'
         ),
         'configuration' => array(
             'exclude' => 0,
@@ -78,17 +92,9 @@ return array(
                 'type' => 'text',
                 'cols' => '200',
                 'rows' => '50',
-                'wizards' => array(
-                    'appendDefaultTSConfig' => array(
-                        'type'   => 'userFunc',
-                        'notNewRecords' => 1,
-                        'userFunc' => 'EXT:mksearch/util/class.tx_mksearch_util_TCA.php:tx_mksearch_util_TCA->insertIndexerDefaultTSConfig',
-                        'params' => array(
-                            'insertBetween' => array('>', '</textarea'),
-                            'onMatchOnly' => '/^\s*$/',
-                        ),
-                    ),
-                )
+                'wizards' => $configurationFieldWizard,
+                // @see \DMK\Mksearch\Backend\Form\Element\IndexerConfigurationField
+                'renderType' => 'indexerConfigurationField',
             )
         ),
         'composites' => array(
@@ -104,6 +110,7 @@ return array(
                 'size' => 20,
                 'minitems' => 0,
                 'maxitems' => 100,
+                'fieldControl' => array('editPopup' => true, 'addRecord' => true),
                 'wizards' => Tx_Rnbase_Utility_TcaTool::getWizards(
                     'tx_mksearch_configcomposites',
                     array('add' => true, 'edit' => true, 'list' => true)
@@ -112,7 +119,7 @@ return array(
         ),
     ),
     'types' => array(
-        '0' => array('showitem' => 'hidden;;1, title, description, extkey, contenttype, configuration, composites')
+        '0' => array('showitem' => 'hidden, title, description, extkey, contenttype, configuration, composites')
     ),
     'palettes' => array(
         '1' => array('showitem' => '')

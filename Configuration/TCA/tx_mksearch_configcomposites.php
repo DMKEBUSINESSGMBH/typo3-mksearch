@@ -58,6 +58,7 @@ return array(
                 'size' => 20,
                 'minitems' => 0,
                 'maxitems' => 100,
+                'fieldControl' => array('editPopup' => true, 'addRecord' => true),
                 'wizards' => Tx_Rnbase_Utility_TcaTool::getWizards(
                     'tx_mksearch_indices',
                     array('add' => true, 'edit' => true, 'list' => true)
@@ -76,6 +77,7 @@ return array(
                 'size' => 20,
                 'minitems' => 0,
                 'maxitems' => 100,
+                'fieldControl' => array('editPopup' => true, 'addRecord' => true),
                 'wizards' => Tx_Rnbase_Utility_TcaTool::getWizards(
                     'tx_mksearch_indexerconfigs',
                     array('add' => true, 'edit' => true, 'list' => true)
@@ -97,7 +99,7 @@ return array(
         ),
     ),
     'types' => array(
-        '0' => array('showitem' => 'hidden;;1, title, description, indices, configs, configuration')
+        '0' => array('showitem' => 'hidden, title, description, indices, configs, configuration')
     ),
     'palettes' => array(
         '1' => array('showitem' => '')

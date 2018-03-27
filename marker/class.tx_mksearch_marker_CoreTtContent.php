@@ -41,7 +41,7 @@ class tx_mksearch_marker_CoreTtContent extends tx_mksearch_marker_SearchResultSi
      * @param string $confId
      * @param tx_rnbase_util_FormatUtil $formatter
      */
-    public function prepareLinks(&$item, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, &$formatter, $template)
+    public function prepareLinks($item, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, $formatter, $template)
     {
         // Fill TSFE register with adequate page id.
         // Usually you won't need that - it's a special case for core.tt_content.

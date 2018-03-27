@@ -373,7 +373,7 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
      * @param array $options
      * @return bool
      */
-    private function checkCTypes($sourceRecord, $options)
+    protected function checkCTypes($sourceRecord, $options)
     {
         $ctypes = $this->getConfigValue('ignoreCTypes', $options);
         if (is_array($ctypes) && count($ctypes)) {
@@ -429,7 +429,8 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
      * @param array $options
      * @return boolean
      */
-    protected function isPageSetIncludeInSearchDisable($model, $options) {
+    protected function isPageSetIncludeInSearchDisable($model, $options)
+    {
         if ($this->shouldRespectIncludeInSearchDisable($options)) {
             $page = $this->getPageContent($model->record['pid']);
             if (array_key_exists('no_search', $page) && $page['no_search'] == 1) {
@@ -445,13 +446,14 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
      * @param array $options
      * @return boolean
      */
-    protected function shouldRespectIncludeInSearchDisable($options) {
+    protected function shouldRespectIncludeInSearchDisable($options)
+    {
         $config = $this->getConfigValue('respectIncludeInSearchDisable', $options);
         return ((is_array($config) && !empty($config) && reset($config) == 1));
     }
 
     /**
-     * Prüft ob das Element speziell in einem Seitenbaum oder auf einer Seite liegt,
+     * Prüft ob das Element speziell in einer Spalte, einem Seitenbaum oder auf einer Seite liegt,
      * der/die inkludiert oder ausgeschlossen werden soll.
      * Der Entscheidungsbaum dafür ist relativ, sollte aber durch den Code
      * illustriert werden.
@@ -465,16 +467,33 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
         if (!isset($sourceRecord['tx_mksearch_is_indexable']) ||
             ($sourceRecord['tx_mksearch_is_indexable'] == self::USE_INDEXER_CONFIGURATION)
         ) {
-            return
+            $isIndexablePage =
                 $this->isOnIndexablePage($sourceRecord, $options) &&
-                $this->checkCTypes($sourceRecord, $options);
+                $this->checkCTypes($sourceRecord, $options) &&
+                $this->isIndexableColumn($sourceRecord, $options);
         } else {
-            $isIndexable = ($sourceRecord['tx_mksearch_is_indexable'] == self::IS_INDEXABLE);
-
-            return $isIndexable ? true : false;
+            $isIndexablePage = ($sourceRecord['tx_mksearch_is_indexable'] == self::IS_INDEXABLE);
         }
 
-        return false;
+        return $isIndexablePage;
+    }
+
+    /**
+     * Prüft ob das Element anhand der Spalte inkludiert oder ausgeschlossen werden soll
+     *
+     * @param array $sourceRecord
+     * @param array $options
+     * @return bool
+     */
+    protected function isIndexableColumn($sourceRecord, $options)
+    {
+        $columns = $this->getConfigValue('columns', $options['include.']);
+        $isIndexableColumn = true;
+
+        if (is_array($columns) && count($columns)) {
+            $isIndexableColumn = in_array($sourceRecord['colPos'], $columns);
+        }
+        return $isIndexableColumn;
     }
 
     /**

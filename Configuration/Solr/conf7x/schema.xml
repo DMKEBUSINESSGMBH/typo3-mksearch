@@ -857,7 +857,7 @@
 
         <!--  make title sortable -->
         <field name="title_sort" type="string" indexed="true" stored="false" multiValued="false" />
-         <copyField source="title" dest="title_sort" />
+        <copyField source="title" dest="title_sort" />
 
         <field name="content" type="text" indexed="true" stored="true" />
 
@@ -952,27 +952,27 @@
         <!--dynamicField name="*" type="ignored" multiValued="true" / -->
 
         <!-- Cal Event -->
-           <!-- <copyField source="organizer_s" dest="fulltext"/>
-           <copyField source="organizer_link_s" dest="fulltext"/>
-           <copyField source="location_s" dest="fulltext"/>
-           <copyField source="description_s" dest="fulltext"/>
-           <copyField source="calendar_title_s" dest="fulltext"/>
-           <copyField source="category_title_ms" dest="fulltext"/> -->
+        <!-- <copyField source="organizer_s" dest="fulltext"/>
+        <copyField source="organizer_link_s" dest="fulltext"/>
+        <copyField source="location_s" dest="fulltext"/>
+        <copyField source="description_s" dest="fulltext"/>
+        <copyField source="calendar_title_s" dest="fulltext"/>
+        <copyField source="category_title_ms" dest="fulltext"/> -->
 
-           <!-- News -->
-           <!-- <copyField source="news_text_s" dest="fulltext"/> -->
-           <!-- <copyField source="categoriesTitle_ms" dest="fulltext"/> -->
+        <!-- News -->
+        <!-- <copyField source="news_text_s" dest="fulltext"/> -->
+        <!-- <copyField source="categoriesTitle_ms" dest="fulltext"/> -->
         <!-- <copyField source="short_t" dest="fulltext"/> -->
         <!-- <copyField source="keywords_s" dest="fulltext"/> -->
         <!-- <copyField source="author_s" dest="fulltext"/> -->
 
-           <!-- irfaq -->
-           <!-- <copyField source="q_s" dest="fulltext"/>
-           <copyField source="a_s" dest="fulltext"/>
-           <copyField source="related_s" dest="fulltext"/>
-           <copyField source="related_links_s" dest="fulltext"/>
-           <copyField source="expert_name_s" dest="fulltext"/>
-           <copyField source="category_title_ms" dest="fulltext"/> -->
+        <!-- irfaq -->
+        <!-- <copyField source="q_s" dest="fulltext"/>
+        <copyField source="a_s" dest="fulltext"/>
+        <copyField source="related_s" dest="fulltext"/>
+        <copyField source="related_links_s" dest="fulltext"/>
+        <copyField source="expert_name_s" dest="fulltext"/>
+        <copyField source="category_title_ms" dest="fulltext"/> -->
 
     </fields>
 

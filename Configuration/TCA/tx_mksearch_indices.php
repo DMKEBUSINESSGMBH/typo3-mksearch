@@ -68,6 +68,7 @@ return array(
                 'size' => 20,
                 'minitems' => 0,
                 'maxitems' => 100,
+                'fieldControl' => array('editPopup' => true, 'addRecord' => true),
                 'wizards' => Tx_Rnbase_Utility_TcaTool::getWizards(
                     'tx_mksearch_configcomposites',
                     array('add' => true, 'edit' => true, 'list' => true)
@@ -85,8 +86,9 @@ return array(
                     array('LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices_engine_elasticsearch','elasticsearch'),
                 ),
                 'eval' => 'required',
-                'default' => 'zend_lucene'
-            )
+                'default' => 'zend_lucene',
+            ),
+            'onChange' => 'reload'
         ),
         'solrversion' => array(
             'exclude' => 1,
@@ -113,7 +115,7 @@ return array(
         )
     ),
     'types' => array(
-        '0' => array('showitem' => 'hidden;;1, title, description, engine, solrversion, configuration, name, composites')
+        '0' => array('showitem' => 'hidden, title, description, engine, solrversion, configuration, name, composites')
     ),
     'palettes' => array(
         '1' => array('showitem' => '')

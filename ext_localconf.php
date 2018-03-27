@@ -83,3 +83,12 @@ Tx_Rnbase_Utility_Cache::addExcludedParametersForCacheHash(array(
     'mksearch[submit]',
     'mksearch[term]',
 ));
+
+if (tx_rnbase_util_TYPO3::isTYPO76OrHigher()) {
+    // eigenes Feld für Vorbelegung je nach Indexer
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry']['mksearch_indexerConfigurationField'] = array(
+        'nodeName' => 'indexerConfigurationField',
+        'priority' => '70',
+        'class' => 'DMK\\Mksearch\\Backend\\Form\\Element\\IndexerConfigurationField',
+    );
+}
