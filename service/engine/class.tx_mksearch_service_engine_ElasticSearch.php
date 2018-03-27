@@ -79,11 +79,13 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base
      */
     public function __construct()
     {
-        $useInternalElasticaLib = (int) Tx_Rnbase_Configuration_Processor::getExtensionCfgValue(
+        $useInternalElasticaLib = Tx_Rnbase_Configuration_Processor::getExtensionCfgValue(
             'mksearch',
             'useInternalElasticaLib'
         );
-        if ($useInternalElasticaLib) {
+        // if no config is set, enable the internal lib by default!
+        $useInternalElasticaLib = $useInternalElasticaLib === false ? true : (int) $useInternalElasticaLib > 0;
+        if ($useInternalElasticaLib > 0) {
             spl_autoload_register(function ($class) {
                 if (strpos($class, 'Elastica') !== false) {
                     $class = str_replace('\\', '/', $class);
