@@ -58,6 +58,10 @@ Bei Apache Solr müssen im Feld für den Indexnamen die Zugriffsdaten im Format 
 
 Bei ElasticSearch müssen im Feld für den Indexnamen die Zugriffsdaten im Format **index;host1,port1,core1;host2,port2,core2...** angebenen werden. Also zum Beispiel **index-name;server-one,9200,/;server-two,9200,/** . Speichern und schließen Sie den neuen Datensatz. Im Backend-Modul wird der Index nun mit einer Statusinformation angezeigt. Wenn der Status grün ist, dann können Sie mit den weiteren Schritten fortfahren. Andernfalls sollten Sie zunächst das Problem beheben. Wenn Sie die Maus über das Statusfeld bewegen, erhalten Sie einen Tooltip mit Hinweisen zum Problem.
 
+**Unterschiedliche Versionen von ElasticSearch**
+
+MKSearch bringt die Benötigten Bibliotheken mit, um ElasticSearch in Version 1 anbinden zu können. Wenn eine aktuellere Version verwendet wird, muss diese Library aktualisiert werden. Mehr dazu Siehe [Developers - Elastica](../Developers/Elastica.md).
+
 **Ein Indexer-Composite anlegen**
 
 Wir wechseln nun in das Tab **Indexer Composites** und legen einen neuen Datensatz an. Vergeben Sie einen Namen und wählen Sie den soeben angelegten Index aus. Anschließend können Sie speichern und schließen.

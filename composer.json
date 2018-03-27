@@ -51,7 +51,6 @@
             "hooks/",
             "indexer/",
             "interface/",
-            "lib/",
             "marker/",
             "mod1/",
             "model/",
@@ -63,6 +62,7 @@
             "util/",
             "view/"
         ],
+        "exclude-from-classmap": ["lib/Elastica/"],
         "psr-4": {
             "DMK\\Mksearch\\" : "Classes"
         }
