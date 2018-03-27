@@ -1,7 +1,7 @@
 #Elastica
 
 
-MKSearch bringt die Benötigten Bibliotheken mit, um ElasticSearch in Version 1 anbinden zu können. 
+MKSearch bringt die benötigten Bibliotheken mit, um ElasticSearch in Version 5.x anbinden zu können. 
 Wenn eine aktuellere Version verwendet wird, muss diese Bibliothek aktualisiert werden.
 
 Als Client wird [Elastica](http://elastica.io/) verwendet. Diese Bibliothek steht in verschiedenen Versionen zur Verfügung

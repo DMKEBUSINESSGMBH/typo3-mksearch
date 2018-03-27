@@ -1,0 +1,8 @@
+{
+    "config": {
+        "vendor-dir": "Composer"
+    },
+    "require": {
+        "ruflin/elastica": "~5.3"
+    }
+}
