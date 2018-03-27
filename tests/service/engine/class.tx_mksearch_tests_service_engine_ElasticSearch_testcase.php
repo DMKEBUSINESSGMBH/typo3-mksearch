@@ -42,9 +42,9 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase extends tx_mksearc
 {
     public function setUp()
     {
-       if (version_compare(phpversion(), '7.0.0') >= 0) {
+        if (version_compare(phpversion(), '7.0.0') >= 0) {
            $this->markTestSkipped('Elastic does not support php 7 currently');
-       }
+        }
     }
 
     /**
