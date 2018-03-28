@@ -121,6 +121,10 @@ abstract class tx_mksearch_action_AbstractSearch extends tx_rnbase_action_BaseIO
             $confId
         );
 
+        if ($filter instanceof tx_mksearch_filter_IStoreIndex) {
+            $filter->setSearchIndex($this->getSearchIndex());
+        }
+
         return $filter;
     }
 
