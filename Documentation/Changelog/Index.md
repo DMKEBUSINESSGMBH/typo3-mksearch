@@ -1,8 +1,16 @@
 Changelog
 =========
 
+3.1.0
+-----
+
+-   Elastica Library updated to 5.3.2  
+    MK Search is compatible with all elasticsearch 5.x releases now.  
+    Older Version are not supported anymore.
+ 
 3.0.0
 -----
+
 -   Initial TYPO3 8.7 LTS Support 
 
 2.0.25
