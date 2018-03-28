@@ -178,6 +178,7 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base
             $lastRequest = $this->getIndex()->getClient()->getLastRequest();
             $result['searchUrl'] = $lastRequest->getPath();
             $result['searchQuery'] = $lastRequest->getQuery();
+            $result['searchData'] = $lastRequest->getData();
             $result['searchTime'] = (microtime(true) - $startTime) . ' ms';
             $result['queryTime'] = $searchResult->getTotalTime() . ' ms';
             $result['numFound'] = $searchResult->getTotalHits();
