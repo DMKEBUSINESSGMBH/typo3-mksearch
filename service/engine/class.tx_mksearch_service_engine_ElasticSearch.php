@@ -270,11 +270,11 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base
                 $hit = tx_rnbase::makeInstance(
                     'tx_mksearch_model_SearchHit',
                     $item->getData()
-                );
-                $hit->setIndex($item->getIndex());
-                $hit->setType($item->getType());
-                $hit->setId($item->getId());
-                $hit->setScore($item->getScore());
+                    );
+                $item->getIndex() && $hit->setIndex($item->getIndex());
+                $item->getType() && $hit->setType($item->getType());
+                $item->getId() && $hit->setId($item->getId());
+                $item->getScore() && $hit->setScore($item->getScore());
                 $items[] = $hit;
             }
         }

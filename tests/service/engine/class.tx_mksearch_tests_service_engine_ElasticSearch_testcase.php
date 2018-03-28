@@ -1178,7 +1178,15 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase extends tx_mksearc
 
         $resultProperty = new ReflectionProperty('\\Elastica\\ResultSet', '_results');
         $results = array(
-            0 => new Elastica\Result(array('_source' => array('title' => 'hit data one'))),
+            0 => new Elastica\Result(
+                array(
+                    '_index' => 'main',
+                    '_type' => 'content',
+                    '_id' => '5',
+                    '_score' => '1',
+                    '_source' => array('title' => 'hit data one')
+                )
+            ),
             1 => new Elastica\Result(array('_source' => array('title' => 'hit data two'))),
         );
         $resultProperty->setAccessible(true);
@@ -1192,22 +1200,15 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase extends tx_mksearc
             $searchResult
         );
 
-        $expectedSearchHits = array(
-            0 => tx_rnbase::makeInstance(
-                'tx_mksearch_model_SearchHit',
-                array('title' => 'hit data one')
-            ),
-            1 => tx_rnbase::makeInstance(
-                'tx_mksearch_model_SearchHit',
-                array('title' => 'hit data two')
-            ),
-        );
-
-        self::assertEquals(
-            $expectedSearchHits,
-            $searchHits,
-            'die search hits wurden nicht richtig erstellt'
-        );
+        $this->assertCount(2, $searchHits);
+        $this->assertCount(5, $searchHits[0]->getRecord());
+        $this->assertSame('hit data one', $searchHits[0]->getProperty('title'));
+        $this->assertSame('main', $searchHits[0]->getProperty('index'));
+        $this->assertSame('content', $searchHits[0]->getProperty('type'));
+        $this->assertSame('5', $searchHits[0]->getProperty('id'));
+        $this->assertSame('1', $searchHits[0]->getProperty('score'));
+        $this->assertCount(1, $searchHits[1]->getRecord());
+        $this->assertSame('hit data two', $searchHits[1]->getProperty('title'));
     }
 
     /**
