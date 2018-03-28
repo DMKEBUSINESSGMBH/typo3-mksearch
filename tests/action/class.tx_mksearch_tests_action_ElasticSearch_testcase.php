@@ -45,18 +45,22 @@ class tx_mksearch_tests_action_ElasticSearch_testcase extends tx_mksearch_tests_
     public function testHandlePagebrowser()
     {
         $confId = 'elasticsearch.';
-        $configurations = $this->createConfigurations(
-            array($confId => array('hit.' => array('pagebrowser.' => array('limit' => 20)))),
-            'mksearch'
-        );
-        $pluginUid = new ReflectionProperty('tx_rnbase_configurations', 'pluginUid');
-        $pluginUid->setAccessible(true);
-        $pluginUid->setValue($configurations, 456);
-
         $parameters = tx_rnbase::makeInstance(
             'tx_rnbase_parameters',
             array('pb-search456-pointer' => 2)
         );
+        $configurations = $this->createConfigurations(
+            array($confId => array('hit.' => array('pagebrowser.' => array('limit' => 20)))),
+            'mksearch',
+            '',
+            $parameters
+        );
+        $configurations->setParameters($parameters);
+
+        $pluginUid = new ReflectionProperty('tx_rnbase_configurations', 'pluginUid');
+        $pluginUid->setAccessible(true);
+        $pluginUid->setValue($configurations, 456);
+
         $viewData = $configurations->getViewData();
         $fields = array();
         $options = array('limit' => 10);
@@ -114,15 +118,18 @@ class tx_mksearch_tests_action_ElasticSearch_testcase extends tx_mksearch_tests_
     public function testHandlePagebrowserWhenPageBrowserIdConfigured()
     {
         $confId = 'elasticsearch.';
+        $parameters = tx_rnbase::makeInstance('tx_rnbase_parameters', array());
         $configurations = $this->createConfigurations(
             array($confId => array('hit.' => array('pagebrowser.' => array(
                 'limit' => 20,
                 'pbid' => 'pagebrowserId'
             )))),
-            'mksearch'
+            'mksearch',
+            '',
+            $parameters
         );
+        $configurations->setParameters($parameters);
 
-        $parameters = tx_rnbase::makeInstance('tx_rnbase_parameters', array());
         $viewData = $configurations->getViewData();
         $fields = array();
         $options = array('limit' => 10);
@@ -177,20 +184,6 @@ class tx_mksearch_tests_action_ElasticSearch_testcase extends tx_mksearch_tests_
     /**
      * @group unit
      */
-    public function testGetSearchSolrAction()
-    {
-        self::assertInstanceOf(
-            'tx_mksearch_action_SearchSolr',
-            $this->callInaccessibleMethod(
-                tx_rnbase::makeInstance('tx_mksearch_action_ElasticSearch'),
-                'getSearchSolrAction'
-            )
-        );
-    }
-
-    /**
-     * @group unit
-     */
     public function testGetServiceRegistry()
     {
         self::assertEquals(
@@ -208,24 +201,28 @@ class tx_mksearch_tests_action_ElasticSearch_testcase extends tx_mksearch_tests_
     public function testHandleRequestReturnsNullIfNosearchConfigured()
     {
         $confId = 'elasticsearch.';
+        $parameters = tx_rnbase::makeInstance('tx_rnbase_parameters', array());
         $configurations = $this->createConfigurations(
             array($confId => array('nosearch' => true)),
-            'mksearch'
+            'mksearch',
+            '',
+            $parameters
         );
+        $configurations->setParameters($parameters);
 
-        $parameters = tx_rnbase::makeInstance('tx_rnbase_parameters', array());
         $viewData = $configurations->getViewData();
 
         $action = $this->getMock(
             'tx_mksearch_action_ElasticSearch',
-            array('getSearchSolrAction', 'getServiceRegistry', 'handlePageBrowser')
+            array('getServiceRegistry', 'handlePageBrowser', 'getConfigurations')
         );
-        $action->expects($this->never())
-            ->method('getSearchSolrAction');
         $action->expects($this->never())
             ->method('getServiceRegistry');
         $action->expects($this->never())
             ->method('handlePageBrowser');
+        $action->expects($this->any())
+            ->method('getConfigurations')
+            ->will($this->returnValue($configurations));
 
         $actionReturn = $action->handleRequest($parameters, $configurations, $viewData);
 
@@ -249,6 +246,7 @@ class tx_mksearch_tests_action_ElasticSearch_testcase extends tx_mksearch_tests_
     public function testHandleRequest()
     {
         $confId = 'elasticsearch.';
+        $parameters = tx_rnbase::makeInstance('tx_rnbase_parameters', array());
         $configurations = $this->createConfigurations(
             array($confId => array(
                 'filter.' => array(
@@ -258,28 +256,25 @@ class tx_mksearch_tests_action_ElasticSearch_testcase extends tx_mksearch_tests_
                     'options.' => array('limt' => 123),
                 )
             )),
-            'mksearch'
+            'mksearch',
+            '',
+            $parameters
         );
+        $configurations->setParameters($parameters);
 
-        $parameters = tx_rnbase::makeInstance('tx_rnbase_parameters', array());
         $viewData = $configurations->getViewData();
 
         $action = $this->getMock(
             'tx_mksearch_action_ElasticSearch',
-            array('getSearchSolrAction', 'getServiceRegistry', 'handlePageBrowser')
-        );
-        $searchSolrAction = $this->getMock(
-            'tx_mksearch_action_SearchSolr',
-            array('findSearchIndex')
+            array('getSearchIndex', 'getServiceRegistry', 'handlePageBrowser', 'getConfigurations')
         );
         $index = tx_rnbase::makeInstance('tx_mksearch_model_internal_Index', array());
-        $searchSolrAction->expects($this->once())
-            ->method('findSearchIndex')
-            ->with($configurations, $confId)
-            ->will($this->returnValue($index));
         $action->expects($this->once())
-            ->method('getSearchSolrAction')
-            ->will($this->returnValue($searchSolrAction));
+            ->method('getSearchIndex')
+            ->will($this->returnValue($index));
+        $action->expects($this->any())
+            ->method('getConfigurations')
+            ->will($this->returnValue($configurations));
 
         $serviceRegistry = $this->getMock(
             'stdClass',
