@@ -1,28 +1,26 @@
 <?php
 /***************************************************************
- *  Copyright notice
+ * Copyright notice
  *
- *  (c) 2011-2013 das Medienkombinat
- *  All rights reserved
+ * (c) 2009-2018 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
  *
- *  This script is part of the TYPO3 project. The TYPO3 project is
- *  free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
  *
- *  The GNU General Public License can be found at
- *  http://www.gnu.org/copyleft/gpl.html.
+ * The GNU General Public License can be found at
+ * http://www.gnu.org/copyleft/gpl.html.
  *
- *  This script is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *  This copyright notice MUST APPEAR in all copies of the script!
+ * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-
-
 
 tx_rnbase::load('tx_rnbase_action_BaseIOC');
 tx_rnbase::load('tx_rnbase_filter_BaseFilter');
@@ -31,9 +29,16 @@ tx_rnbase::load('tx_mksearch_util_Misc');
 tx_rnbase::load('tx_mksearch_util_SolrAutocomplete');
 
 /**
- * Controller to show a list of modular products
+ * Solr search action
+ *
+ * @package TYPO3
+ * @subpackage tx_mksearch
+ * @author Hannes Bochmann
+ * @author Michael Wagner
+ * @license http://www.gnu.org/licenses/lgpl.html
+ *          GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC
+class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
 {
 
     /**
@@ -51,10 +56,11 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC
     public function handleRequest(&$parameters, &$configurations, &$viewData)
     {
         $confId = $this->getConfId();
-        self::handleSoftLink($parameters, $configurations, $confId);
+
+        $this->handleSoftLink();
 
         // Filter erstellen (z.B. Formular parsen)
-        $filter = tx_rnbase_filter_BaseFilter::createFilter($parameters, $configurations, $viewData, $confId);
+        $filter = $this->createFilter($confId);
 
         // shall we prepare the javascript for the autocomplete feature
         $this->prepareAutocomplete();
@@ -85,7 +91,7 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC
             }
 
             //get the index we shall search in
-            $index = $this->findSearchIndex($configurations, $confId);
+            $index = $this->getSearchIndex();
             $pageBrowser = $this->handlePageBrowser($parameters, $configurations, $confId, $viewData, $fields, $options, $index);
 
             if ($result = $this->searchSolr($fields, $options, $configurations, $index)) {
@@ -216,34 +222,6 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC
         $oCache->set($sCacheKey, $result);
 
         return $result;
-    }
-
-    /**
-     * Special links for configured keywords.
-     * @param tx_rnbase_IParameters $parameters
-     * @param tx_rnbase_configurations $configurations
-     */
-    public static function handleSoftLink($parameters, $configurations, $confId)
-    {
-        // Softlink Config beginnt direkt im Root, damit sie auch für andere
-        // Suchen genutzt werden kann
-        if (!$configurations->get('softlink.enable')) {
-            return;
-        }
-        $paramName = $configurations->get($confId.'softlink.parameter');
-        $paramName = $paramName ? $paramName : 'term';
-        $value = $parameters->get($paramName);
-        $value = $value ? substr($value, 0, 150) : '';
-        $options = array();
-        tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, 'softlink.options.');
-        $options['where'] = 'keyword=' . $GLOBALS['TYPO3_DB']->fullQuoteStr($value, 'tx_mksearch_keywords');
-        $rows = tx_rnbase_util_DB::doSelect('link', 'tx_mksearch_keywords', $options);
-
-        if (count($rows) == 1) {
-            $link = $configurations->createLink(false);
-            $link->destination($rows[0]['link']);
-            $link->redirect();
-        }
     }
 
     /**
@@ -445,31 +423,6 @@ class tx_mksearch_action_SearchSolr extends tx_rnbase_action_BaseIOC
 
             return json_encode($this->getViewData()->offsetGet('result'));
         }
-    }
-
-    /**
-     * returns the model for the current used index
-     *
-     * @param tx_rnbase_configurations $configurations
-     * @param string $confId
-     * @throws Exception
-     * @return tx_mksearch_service_internal_Index
-     */
-    public function findSearchIndex($configurations, $confId)
-    {
-        $indexUid = $configurations->get($confId. 'usedIndex');
-        //let's see if we got a index to use via parameters
-        if (empty($indexUid)) {
-            $indexUid = $configurations->getParameters()->get('usedIndex');
-        }
-
-        $index = tx_mksearch_util_ServiceRegistry::getIntIndexService()->get($indexUid);
-
-        if (!$index->isValid()) {
-            throw new Exception('Configured search index not found!');
-        }
-
-        return $index;
     }
 
     public function getTemplateName()

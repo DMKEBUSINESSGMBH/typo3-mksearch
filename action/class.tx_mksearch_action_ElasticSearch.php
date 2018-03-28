@@ -1,39 +1,43 @@
 <?php
 /***************************************************************
- *  Copyright notice
+ * Copyright notice
  *
- *  (c) 2009-2014 DMK E-BUSINESS GmbH
- *  All rights reserved
+ * (c) 2009-2018 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
  *
- *  This script is part of the TYPO3 project. The TYPO3 project is
- *  free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
  *
- *  The GNU General Public License can be found at
- *  http://www.gnu.org/copyleft/gpl.html.
+ * The GNU General Public License can be found at
+ * http://www.gnu.org/copyleft/gpl.html.
  *
- *  This script is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *  This copyright notice MUST APPEAR in all copies of the script!
+ * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-
-
-tx_rnbase::load('tx_rnbase_action_BaseIOC');
+tx_rnbase::load('tx_mksearch_action_AbstractSearch');
 tx_rnbase::load('tx_rnbase_filter_BaseFilter');
 tx_rnbase::load('tx_mksearch_util_ServiceRegistry');
 tx_rnbase::load('tx_mksearch_action_SearchSolr');
 
-
 /**
- * @author Hannes Bochmann <hannes.bochmann@dmk-business.de>
+ * Elastic search action
+ *
+ * @package TYPO3
+ * @subpackage tx_mksearch
+ * @author Hannes Bochmann
+ * @author Michael Wagner
+ * @license http://www.gnu.org/licenses/lgpl.html
+ *          GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_action_ElasticSearch extends tx_rnbase_action_BaseIOC
+class tx_mksearch_action_ElasticSearch extends tx_mksearch_action_AbstractSearch
 {
 
     /**
@@ -46,18 +50,9 @@ class tx_mksearch_action_ElasticSearch extends tx_rnbase_action_BaseIOC
     public function handleRequest(&$parameters, &$configurations, &$viewData)
     {
         $confId = $this->getConfId();
-        tx_mksearch_action_SearchSolr::handleSoftLink(
-            $parameters,
-            $configurations,
-            $confId
-        );
+        $this->handleSoftLink();
 
-        $filter = tx_rnbase_filter_BaseFilter::createFilter(
-            $parameters,
-            $configurations,
-            $viewData,
-            $confId  .'filter.'
-        );
+        $filter = $this->createFilter();
 
         if ($configurations->get($confId . 'nosearch')) {
             return null;
@@ -66,12 +61,9 @@ class tx_mksearch_action_ElasticSearch extends tx_rnbase_action_BaseIOC
         $fields = array();
         $options = array();
         $items = array();
+
         if ($filter->init($fields, $options)) {
-            $searchSolrAction = $this->getSearchSolrAction();
-            $index = $searchSolrAction->findSearchIndex(
-                $configurations,
-                $confId
-            );
+            $index = $this->getSearchIndex();
 
             // wir rufen die Methode mit call_user_func_array auf, da sie
             // statisch ist, womit wir diese nicht mocken könnten
