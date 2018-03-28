@@ -94,6 +94,7 @@ class tx_mksearch_action_ElasticSearch extends tx_rnbase_action_BaseIOC
             $searchResult = $searchEngine->search($fields, $options, $configurations);
         }
 
+        $viewData->offsetSet('result', $searchResult);
         $viewData->offsetSet('searchcount', $searchResult['numFound']);
         $viewData->offsetSet('search', $searchResult['items']);
 
