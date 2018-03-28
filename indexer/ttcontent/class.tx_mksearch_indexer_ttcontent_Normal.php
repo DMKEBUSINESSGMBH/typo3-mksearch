@@ -29,7 +29,6 @@
 /**
  * benötigte Klassen einbinden
  */
-
 tx_rnbase::load('tx_mksearch_indexer_Base');
 tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
 tx_rnbase::load('tx_mksearch_util_Misc');
@@ -80,7 +79,7 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
 
         // Set uid. Take care for localized records where uid of original record
         // is stored in $rawData['l18n_parent'] instead of $rawData['uid']!
-        $indexDoc->setUid($rawData['sys_language_uid'] ? $rawData['l18n_parent'] : $rawData['uid']);
+        $indexDoc->setUid(tx_rnbase_util_TCA::getUid($tableName, $rawData));
 
         // @TODO: l18n_parent abprüfen, wenn $lang!=0 !?
         $lang = isset($options['lang']) ? $options['lang'] : 0;
