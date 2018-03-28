@@ -252,7 +252,8 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base
             $lastRequest = $this->getIndex()->getClient()->getLastRequest();
             $message = 'Error requesting ElasticSearch. HTTP status: ' . $httpStatus .
                 '; Path: ' . $lastRequest->getPath() .
-                '; Query: ' . $lastRequest->getQuery();
+                '; Query: ' . $lastRequest->getQuery().
+                '; Data: ' . $lastRequest->getData();
             throw new RuntimeException($message);
         }
     }

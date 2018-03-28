@@ -1058,7 +1058,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase extends tx_mksearc
 
         $lastRequest = $this->getMock(
             'stdClass',
-            array('getPath', 'getQuery')
+            array('getPath', 'getQuery', 'getData')
         );
         $lastRequest->expects($this->once())
             ->method('getPath')
@@ -1066,6 +1066,9 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase extends tx_mksearc
         $lastRequest->expects($this->once())
             ->method('getQuery')
             ->will($this->returnValue('query'));
+        $lastRequest->expects($this->once())
+            ->method('getData')
+            ->will($this->returnValue('data'));
         $client = $this->getMock(
             'stdClass',
             array('getLastRequest')
@@ -1218,7 +1221,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase extends tx_mksearc
     {
         $lastRequest = $this->getMock(
             'stdClass',
-            array('getPath', 'getQuery')
+            array('getPath', 'getQuery', 'getData')
         );
         $lastRequest->expects($this->once())
             ->method('getPath')
@@ -1226,6 +1229,9 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase extends tx_mksearc
         $lastRequest->expects($this->once())
             ->method('getQuery')
             ->will($this->returnValue('query'));
+        $lastRequest->expects($this->once())
+            ->method('getData')
+            ->will($this->returnValue('data'));
         $client = $this->getMock(
             'stdClass',
             array('getLastRequest')
@@ -1305,6 +1311,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase extends tx_mksearc
         self::assertEquals(array('search results'), $result['items'], 'items falsch');
         self::assertEquals('pfad', $result['searchUrl'], 'searchUrl falsch');
         self::assertEquals('query', $result['searchQuery'], 'searchQuery falsch');
+        self::assertEquals('data', $result['searchData'], 'searchQuery falsch');
         self::assertContains(
             ' ms',
             $result['searchTime'],
@@ -1332,7 +1339,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase extends tx_mksearc
 
         $lastRequest = $this->getMock(
             'stdClass',
-            array('getPath', 'getQuery')
+            array('getPath', 'getQuery', 'getData')
         );
         $client = $this->getMock(
             'stdClass',
@@ -1394,7 +1401,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase extends tx_mksearc
 
         $lastRequest = $this->getMock(
             'stdClass',
-            array('getPath', 'getQuery')
+            array('getPath', 'getQuery', 'getData')
         );
         $client = $this->getMock(
             'stdClass',
