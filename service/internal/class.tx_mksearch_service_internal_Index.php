@@ -383,7 +383,6 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
     {
         self::setSignalThatIndexingIsInProgress();
 
-        $rootline = 0;
         // alle indexer fragen oder nur von der aktuellen pid?
         if ($config['pid']) {
             $indices = $this->getByPageId($config['pid']);
