@@ -267,10 +267,15 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base
         if ($elasticSearchResult = $searchResult->getResults()) {
             /* @var $item Result */
             foreach ($elasticSearchResult as $item) {
-                $items[] = tx_rnbase::makeInstance(
+                $hit = tx_rnbase::makeInstance(
                     'tx_mksearch_model_SearchHit',
                     $item->getData()
                 );
+                $hit->setIndex($item->getIndex());
+                $hit->setType($item->getType());
+                $hit->setId($item->getId());
+                $hit->setScore($item->getScore());
+                $items[] = $hit;
             }
         }
 
