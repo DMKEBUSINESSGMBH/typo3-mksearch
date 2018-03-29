@@ -81,12 +81,6 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
         // is stored in $rawData['l18n_parent'] instead of $rawData['uid']!
         $indexDoc->setUid(tx_rnbase_util_TCA::getUid($tableName, $rawData));
 
-        // @TODO: l18n_parent abprüfen, wenn $lang!=0 !?
-        $lang = isset($options['lang']) ? $options['lang'] : 0;
-        if ($rawData['sys_language_uid'] != $lang) {
-            return null;
-        }
-
         $title = $this->getTitle($options);
         $indexDoc->setTitle($title);
 
