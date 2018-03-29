@@ -142,6 +142,12 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
             $indexDoc,
             $options
         );
+        $indexDoc = $this->indexLanguageFields(
+            $this->modelToIndex,
+            $tableName,
+            $indexDoc,
+            $options
+        );
         $indexDoc->addField('group_s', $this->getGroupFieldValue($indexDoc));
         $indexDoc = $this->indexData(
             $this->modelToIndex,
@@ -441,6 +447,33 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
         $config = $this->getConfigValue('indexSiteRootPage', $options);
 
         return ((is_array($config) && !empty($config) && reset($config) == 1));
+    }
+
+    /**
+     * Indexes the language of the current model
+     *
+     * @param tx_rnbase_IModel $model
+     * @param string $tableName
+     * @param tx_mksearch_interface_IndexerDocument $indexDoc
+     * @param array $options
+     *
+     * @return tx_mksearch_interface_IndexerDocument
+     */
+    protected function indexLanguageFields(
+        tx_rnbase_IModel $model,
+        $tableName,
+        tx_mksearch_interface_IndexerDocument $indexDoc,
+        $options = array()
+    ) {
+        if ($model instanceof Tx_Rnbase_Domain_Model_DataInterface) {
+            $sysLanguageUid = $model->getProperty(
+                tx_mksearch_util_TCA::getLanguageFieldForTable($tableName)
+            );
+            if ($sysLanguageUid !== null) {
+                $indexDoc->addField('language_uid_i', $sysLanguageUid);
+            }
+        }
+        return $indexDoc;
     }
 
     /**
