@@ -162,12 +162,13 @@ class tx_mksearch_marker_Facet extends tx_mksearch_marker_SearchResultSimple
     /**
      * Links vorbereiten
      *
-     * @param tx_a4base_models_organisation $item
+     * @param tx_mksearch_model_Facet $item
      * @param string $marker
      * @param array $markerArray
      * @param array $wrappedSubpartArray
      * @param string $confId
      * @param tx_rnbase_util_FormatUtil $formatter
+     * @param string $template
      */
     public function prepareLinks($item, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, $formatter, $template)
     {

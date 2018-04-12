@@ -40,6 +40,7 @@ class tx_mksearch_marker_CoreTtContent extends tx_mksearch_marker_SearchResultSi
      * @param array $wrappedSubpartArray
      * @param string $confId
      * @param tx_rnbase_util_FormatUtil $formatter
+     * @param string $template
      */
     public function prepareLinks($item, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, $formatter, $template)
     {
