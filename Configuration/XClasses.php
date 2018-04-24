@@ -9,12 +9,12 @@ if (!defined('TYPO3_MODE')) {
 // Rasterelement indiziert wird, in dessen fluid Template ein cObj Viewhelper verwendet wird und
 // das cObj ein LOAD_REGISTER enthält, dann kommt es zu einer PHP Warnung, die wir nicht wollen.
 // Also verhindern wir das zurücksetzen des TSFE in diesen ViewHelpern während der Indizierungim BE.
-// dies ist nur für TYPO3 6 bis TYPO3 7n notwendig
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Fluid\\ViewHelpers\\CObjectViewHelper'] =
+    array('className' => 'DMK\\Mksearch\\ViewHelpers\\CObjectViewHelper');
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Fluid\\ViewHelpers\\Format\\HtmlViewHelper'] =
+    array('className' => 'DMK\\Mksearch\\ViewHelpers\\Format\\HtmlViewHelper');
+// im crop view helper ist es nur bis TYPO3 8 nötig.
 if (!\tx_rnbase_util_TYPO3::isTYPO80OrHigher()) {
-    $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Fluid\\ViewHelpers\\CObjectViewHelper'] =
-        array('className' => 'DMK\\Mksearch\\ViewHelpers\\CObjectViewHelper');
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Fluid\\ViewHelpers\\Format\\CropViewHelper'] =
         array('className' => 'DMK\\Mksearch\\ViewHelpers\\Format\\CropViewHelper');
-    $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Fluid\\ViewHelpers\\Format\\HtmlViewHelper'] =
-        array('className' => 'DMK\\Mksearch\\ViewHelpers\\Format\\HtmlViewHelper');
 }

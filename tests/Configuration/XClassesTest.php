@@ -38,16 +38,6 @@ namespace DMK\Mksearch\Tests;
 class XClassesTest extends \tx_mksearch_tests_Testcase
 {
     /**
-     * {@inheritDoc}
-     * @see tx_mksearch_tests_Testcase::setUp()
-     */
-    protected function setUp()
-    {
-        if (\tx_rnbase_util_TYPO3::isTYPO80OrHigher()) {
-            $this->markTestSkipped('Not required for TYPO3 8 or higher');
-        }
-    }
-    /**
      * @group unit
      */
     public function testFluidCObjViewHelperIsXClassed()
@@ -63,6 +53,10 @@ class XClassesTest extends \tx_mksearch_tests_Testcase
      */
     public function testFluidCropViewHelperIsXClassed()
     {
+        if (\tx_rnbase_util_TYPO3::isTYPO80OrHigher()) {
+            $this->markTestSkipped('Not required for TYPO3 8 or higher');
+        }
+
         self::assertInstanceOf(
             'DMK\\Mksearch\\ViewHelpers\\Format\\CropViewHelper',
             \tx_rnbase::makeInstance('TYPO3\\CMS\\Fluid\\ViewHelpers\\Format\\CropViewHelper')
