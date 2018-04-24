@@ -73,9 +73,6 @@ if (TYPO3_MODE == 'BE') {
     }
 }
 
-//TCA registrieren
-require(tx_rnbase_util_Extensions::extPath($_EXTKEY).'tca/ext_tables.php');
-
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_mksearch_indices');
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_mksearch_configcomposites');
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_mksearch_indexerconfigs');
