@@ -196,12 +196,20 @@ class tx_mksearch_hooks_IndexerAutoUpdate
      *         'tt_content' => array('1', '2', '3'. '5', '8', '13'),
      *     );
      * @return NULL
+     *
+     * @todo this method needs to be refactored as all indices and indexers
+     * are retrieved from database for every action, for example for every insert that is made with
+     * Tx_Rnbase_Database_Connection.
      */
     public function processAutoUpdate(array $records)
     {
         if (empty($records)) {
             return null;
         }
+
+        // when we are in an eID the finding all indices would fail as the TCA might be missing.
+        // we don't need to check if we are in an eID as this is done internally
+        tx_rnbase_util_TCA::loadTCA('');
 
         // Cores suchen:
         $intIndexSrv = $this->getIntIndexService();
