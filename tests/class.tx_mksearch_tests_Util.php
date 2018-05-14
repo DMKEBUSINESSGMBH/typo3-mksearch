@@ -241,7 +241,7 @@ class tx_mksearch_tests_Util
         $cObj = tx_rnbase::makeInstance(tx_rnbase_util_Typo3Classes::getContentObjectRendererClass());
 
         $configurations = new tx_rnbase_configurations();
-        $configurations->init($pageTSconfig, $cObj, 'mksearch', 'mksearch');
+        $configurations->init((array) $pageTSconfig, $cObj, 'mksearch', 'mksearch');
         $configurations->setParameters(tx_rnbase::makeInstance('tx_rnbase_parameters'));
 
         return $configurations;
