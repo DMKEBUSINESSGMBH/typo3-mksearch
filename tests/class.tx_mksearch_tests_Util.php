@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package tx_mksearch
  * @subpackage tx_mksearch_tests
@@ -69,6 +70,11 @@ class tx_mksearch_tests_Util
     private static $addRootLineFieldsBackup = null;
 
     /**
+     * @var array
+     */
+    private static $categoryRegistry;
+
+    /**
      * Sichert die hoocks unt entfernt diese in der globalconf.
      *
      * @param array $hooks
@@ -116,6 +122,14 @@ class tx_mksearch_tests_Util
         if (tx_rnbase_util_TYPO3::isTYPO60OrHigher()) {
             self::$TCA = $GLOBALS['TCA'];
             $GLOBALS['TCA'] = array();
+            // otherwise we may get warnings like ...no category registered for table..Key was already registered
+            $categoryRegistryClass = 'TYPO3\\CMS\\Core\\Category\\CategoryRegistry';
+            $registry = new ReflectionProperty($categoryRegistryClass, 'registry');
+            $registry->setAccessible(true);
+            $categoryRegistry = $categoryRegistryClass::getInstance();
+            self::$categoryRegistry = $registry->getValue($categoryRegistry);
+            $registry->setValue($categoryRegistry, array());
+
             // \TYPO3\CMS\Core\Core\Bootstrap::getInstance()->loadExtensionTables(FALSE);
             \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::loadBaseTca(false);
             // spezielle Extension TCA's laden!?
@@ -133,6 +147,13 @@ class tx_mksearch_tests_Util
         if (self::$TCA !== null) {
             $GLOBALS['TCA'] = self::$TCA;
             self::$TCA = null;
+
+            $categoryRegistryClass = 'TYPO3\\CMS\\Core\\Category\\CategoryRegistry';
+            $registry = new ReflectionProperty($categoryRegistryClass, 'registry');
+            $registry->setAccessible(true);
+            $categoryRegistry = $categoryRegistryClass::getInstance();
+            $registry->setValue($categoryRegistry, self::$categoryRegistry);
+            self::$categoryRegistry = null;
         }
     }
 

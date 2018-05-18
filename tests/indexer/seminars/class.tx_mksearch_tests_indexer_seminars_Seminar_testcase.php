@@ -74,6 +74,10 @@ class tx_mksearch_tests_indexer_seminars_Seminar_testcase extends tx_mksearch_te
      */
     protected function setUp()
     {
+        if (!tx_rnbase_util_Extensions::isLoaded('seminars')) {
+            self::markTestSkipped('seminars is not installed');
+        }
+
         parent::setUp();
 
         //if we got here all extensions got successfully imported

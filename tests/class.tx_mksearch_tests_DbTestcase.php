@@ -1,4 +1,6 @@
 <?php
+use TYPO3\CMS\Core\Database\ConnectionPool;
+
 /***************************************************************
 *  Copyright notice
 *
@@ -40,6 +42,11 @@ abstract class tx_mksearch_tests_DbTestcase extends Tx_Phpunit_Database_TestCase
     protected $workspaceBackup;
     protected $templaVoilaConfigBackup = null;
     protected $db;
+
+    /**
+     * @var array
+     */
+    private $originalDatabaseName;
 
     /**
      * @var boolean
@@ -141,6 +148,10 @@ abstract class tx_mksearch_tests_DbTestcase extends Tx_Phpunit_Database_TestCase
         // assuming that test-database can be created otherwise PHPUnit will skip the test
         $this->db = $this->useTestDatabase();
 
+        if (tx_rnbase_util_TYPO3::isTYPO87OrHigher()) {
+            $this->setUpTestDatabaseForConnectionPool();
+        }
+
         $this->importStdDB();
         $this->importExtensions($this->importExtensions);
 
@@ -177,10 +188,7 @@ abstract class tx_mksearch_tests_DbTestcase extends Tx_Phpunit_Database_TestCase
         // wir aktivieren den relation manager wieder
         tx_mksearch_tests_Util::restoreRelationManager();
 
-        // tear down DB
-        $this->cleanDatabase();
-        $this->dropDatabase();
-        $GLOBALS['TYPO3_DB']->sql_select_db(TYPO3_db);
+        $this->tearDownDatabase();
 
         // tear down Workspace
         $GLOBALS['BE_USER']->setWorkspace($this->workspaceBackup);
@@ -209,6 +217,49 @@ abstract class tx_mksearch_tests_DbTestcase extends Tx_Phpunit_Database_TestCase
         if (tx_rnbase_util_TYPO3::isTYPO62OrHigher()) {
             \TYPO3\CMS\Core\Utility\RootlineUtility::purgeCaches();
         }
+    }
+
+    /**
+     * We need to set the new database for the connection pool connections aswell
+     * because it is used for example in the rootline utility
+     * @todo we should not only support the default connection
+     * @return void
+     */
+    protected function setUpTestDatabaseForConnectionPool()
+    {
+        // truncate connections so they can be reinitialized with $this->testDatabase
+        // when needed
+        $connections = new ReflectionProperty(ConnectionPool::class, 'connections');
+        $connections->setAccessible(true);
+        $connections->setValue(null, array());
+
+        $this->originalDatabaseName = $GLOBALS['TYPO3_CONF_VARS']['DB']['Connections']['Default']['dbname'];
+        $GLOBALS['TYPO3_CONF_VARS']['DB']['Connections']['Default']['dbname'] = $this->testDatabase;
+    }
+
+    /**
+     * @return void
+     */
+    protected function tearDownDatabase()
+    {
+        if (tx_rnbase_util_TYPO3::isTYPO87OrHigher() && $this->originalDatabaseName) {
+            // $GLOBALS['TYPO3_CONF_VARS']['DB']['Connections']['Default']['dbname'] is used
+            // inside phpunit to get the original database so we need to reset that
+            // before anything is done
+            $GLOBALS['TYPO3_CONF_VARS']['DB']['Connections']['Default']['dbname'] = $this->originalDatabaseName;
+        }
+        $this->cleanDatabase();
+        $this->dropDatabase();
+
+        // we need to reset the database for the connection pool connections aswell
+        if (tx_rnbase_util_TYPO3::isTYPO87OrHigher()) {
+            // truncate connections so they can be reinitialized with the real configuration
+            $connections = new ReflectionProperty(ConnectionPool::class, 'connections');
+            $connections->setAccessible(true);
+            $connections->setValue(null, array());
+        }
+
+        $this->switchToTypo3Database();
     }
 }
 
