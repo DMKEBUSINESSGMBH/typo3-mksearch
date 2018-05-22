@@ -107,8 +107,6 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
 
         $indexDoc->addField('pid', $rawData['pid'], 'keyword');
 
-        //@TODO: adressgruppen integrieren!
-
         $indexDoc->addField('name_s', $rawData['name'], 'unindexed', $boost, 'string');
         $indexDoc->addField('gender_s', $rawData['gender'], 'unindexed', $boost, 'string');
         $indexDoc->addField('first_name_s', $rawData['first_name'], 'unindexed', $boost, 'string');
@@ -130,7 +128,11 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
         $indexDoc->addField('country_s', $rawData['country'], 'unindexed', $boost, 'string');
         $indexDoc->addField('fax_s', $rawData['fax'], 'unindexed', $boost, 'string');
         $indexDoc->addField('description_s', $rawData['description'], 'unindexed', $boost, 'text');
-        $indexDoc->addField('addressgroup_i', $rawData['addressgroup'], 'unindexed', $boost, 'int');
+
+        //@TODO: adressgruppen integrieren!
+        if (!empty($rawData['addressgroup'])) {
+            $indexDoc->addField('addressgroup_i', $rawData['addressgroup'], 'unindexed', $boost, 'int');
+        }
 
         $sContent = $this->getContentFromFields($rawData, $options['content.']);
         $indexDoc->setContent($sContent);
