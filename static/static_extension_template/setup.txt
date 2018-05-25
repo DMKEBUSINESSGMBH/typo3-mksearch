@@ -1202,7 +1202,13 @@ mksearchAjaxPage {
     config.disableAllHeaderCode = 1
     config.metaCharset = utf-8
     ### X-Robots-Tag, wir wollen vermeiden, dass der inhalt des calls indiziert wird.
+    ### notation for TYPO3 6.2
     config.additionalHeaders = Content-Type: text/plain; charset=utf-8|X-Robots-Tag: noindex;
+    ### notation since TYPO3 7.6
+    config.additionalHeaders {
+        10.header = Content-Type: text/plain; charset=UTF-8
+        20.header = X-Robots-Tag: noindex;
+    }
     config.xhtml_cleaning = 0
     config.admPanel = 0
     config.sendNoCacheHeaders = 1
