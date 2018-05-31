@@ -147,8 +147,8 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base
         tx_mksearch_interface_IndexerDocument $indexDoc,
         $options
     ) {
-        $this->indexEvent($model, $indexDoc);
-        $this->indexLocation($model, $indexDoc);
+        $this->indexEvent($model, $indexDoc, $options);
+        $this->indexLocation($model, $indexDoc, $options);
         $this->indexCalendar($model, $indexDoc);
         $this->indexCategories($model, $indexDoc);
 
@@ -163,7 +163,8 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base
      */
     private function indexEvent(
         tx_mksearch_model_cal_Event $calEvent,
-        tx_mksearch_interface_IndexerDocument $indexDoc
+        tx_mksearch_interface_IndexerDocument $indexDoc,
+        $options
     ) {
         $calEvent = $this->prepareDates($calEvent);
 
@@ -181,7 +182,7 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base
 
         $this->indexModelByMapping(
             $calEvent,
-            $this->getEventMapping(),
+            $this->getEventMapping($options),
             $indexDoc
         );
 
@@ -198,7 +199,8 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base
      */
     private function indexLocation(
         tx_mksearch_model_cal_Event $calEvent,
-        tx_mksearch_interface_IndexerDocument $indexDoc
+        tx_mksearch_interface_IndexerDocument $indexDoc,
+        $options
     ) {
         $location = $calEvent->getLocation();
 
@@ -210,6 +212,13 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base
         $indexDoc->addField('location_street_s', $location->getStreet());
         $indexDoc->addField('location_zip_s', $location->getZip());
         $indexDoc->addField('location_city_s', $location->getCity());
+
+        if (is_array($options['loactionDataFieldMapping.'])) {
+            foreach ($options['loactionDataFieldMapping.'] as $dbField => $solrField) {
+                $indexDoc->addField($solrField, $location->getProperty($dbField));
+            };
+        }
+
     }
 
     /**
@@ -313,31 +322,34 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base
     /**
      * @return array
      */
-    private function getEventMapping()
+    private function getEventMapping($options)
     {
-        return array(
-            'start_time'            => 'start_time_i',
-            'end_time'                => 'end_time_i',
-            'allday'                => 'allday_b',
-            'timezone'                => 'timezone_s',
-            'title'                => 'title',
-            'organizer'            => 'organizer_s',
-            'organizer_link'        => 'organizer_link_s',
-            'location'                => 'location_s',
-            'type'                    => 'type_i',
-            'start_date'            => 'start_date_s',
-            'end_date'                => 'end_date_s',
-            'start_date_datetime'    => 'start_date_dt',
-            'end_date_datetime'        => 'end_date_dt',
-            'start_date_timestamp'    => 'start_date_i',
-            'end_date_timestamp'    => 'end_date_i',
-            'start_date_year'        => 'start_date_year_i',
-            'start_date_month'        => 'start_date_month_i',
-            'start_date_day'        => 'start_date_day_i',
-            'end_date_year'            => 'end_date_year_i',
-            'end_date_month'        => 'end_date_month_i',
-            'end_date_day'            => 'end_date_day_i',
-            'description'            => 'description_s'
+        return array_merge(
+            array(
+                'start_time'            => 'start_time_i',
+                'end_time'                => 'end_time_i',
+                'allday'                => 'allday_b',
+                'timezone'                => 'timezone_s',
+                'title'                => 'title',
+                'organizer'            => 'organizer_s',
+                'organizer_link'        => 'organizer_link_s',
+                'location'                => 'location_s',
+                'type'                    => 'type_i',
+                'start_date'            => 'start_date_s',
+                'end_date'                => 'end_date_s',
+                'start_date_datetime'    => 'start_date_dt',
+                'end_date_datetime'        => 'end_date_dt',
+                'start_date_timestamp'    => 'start_date_i',
+                'end_date_timestamp'    => 'end_date_i',
+                'start_date_year'        => 'start_date_year_i',
+                'start_date_month'        => 'start_date_month_i',
+                'start_date_day'        => 'start_date_day_i',
+                'end_date_year'            => 'end_date_year_i',
+                'end_date_month'        => 'end_date_month_i',
+                'end_date_day'            => 'end_date_day_i',
+                'description'            => 'description_s'
+            ),
+            is_array($options['eventDataFieldMapping.']) ? $options['eventDataFieldMapping.'] : []
         );
     }
 
