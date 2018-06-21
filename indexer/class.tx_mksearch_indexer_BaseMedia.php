@@ -484,7 +484,7 @@ tikafields {
     Content-Length = filesize_i
     Content-Type = contenttype_s
     Creation-Date = creationdate_dt
-    title = title
+    title = metatitle
     resourceName = resource_name_s
   }
 }
