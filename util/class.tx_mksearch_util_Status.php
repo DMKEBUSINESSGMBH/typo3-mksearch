@@ -31,13 +31,13 @@ class tx_mksearch_util_Status
     const STATUS_OKAY = 1;
     const STATUS_UNKNOWN = 0;
     const STATUS_ERROR = -1;
-    
+
     private $status;
     private $message;
 
     public function __construct()
     {
-        $this->status = STATUS_UNKNOWN;
+        $this->status = self::STATUS_UNKNOWN;
     }
     /**
      * Get status id.
