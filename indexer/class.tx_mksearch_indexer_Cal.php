@@ -230,13 +230,14 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base
     {
         $datePrefixes = array('start', 'end');
         foreach ($datePrefixes as $datePrefix) {
-            $calEvent->record[$datePrefix . '_date_timestamp'] = $this->getTimestampFromCalDateString(
-                $calEvent->record[$datePrefix . '_date'],
-                $calEvent->record['timezone']
-            );
-            $calEvent->record[$datePrefix . '_date_datetime'] = $this->getCalDateStringAsSolrDateTimeString(
-                $calEvent->record[$datePrefix . '_date'],
-                $calEvent->record['timezone']
+            $calEvent->record[$datePrefix . '_date_timestamp'] =
+                $this->getTimestampFromCalDateString(
+                    $calEvent->record[$datePrefix . '_date'],
+                    $calEvent->record['timezone']
+                )
+                + $calEvent->record[$datePrefix . '_time'];
+            $calEvent->record[$datePrefix . '_date_datetime'] = $this->convertTimestampToDateTime(
+                $calEvent->record[$datePrefix . '_date_timestamp']
             );
 
             $calDate = tx_rnbase::makeInstance(
