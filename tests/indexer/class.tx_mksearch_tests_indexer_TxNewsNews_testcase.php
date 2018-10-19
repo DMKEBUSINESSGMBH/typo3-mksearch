@@ -171,9 +171,7 @@ class tx_mksearch_tests_indexer_TxNewsNews_testcase extends tx_mksearch_tests_Te
     {
         $model = $this->getNewsModel();
 
-        $indexer = $this->getIndexerMock(
-            $model->getRecord()
-        );
+        $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TxNewsNews');
 
         $indexDoc = $this->callInaccessibleMethod(
             array($indexer, 'indexData'),
@@ -270,29 +268,6 @@ class tx_mksearch_tests_indexer_TxNewsNews_testcase extends tx_mksearch_tests_Te
                 ),
             )
         );
-    }
-
-    /**
-     * Creates a Mock of the indexer object
-     *
-     * @return PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getIndexerMock()
-    {
-        $model = $this->getNewsModel();
-
-        $indexer = $this->getMock(
-            'tx_mksearch_indexer_TxNewsNews',
-            array('createNewsModel')
-        );
-
-        ($indexer
-            ->expects(self::once())
-            ->method('createNewsModel')
-            ->will(self::returnValue($model))
-        );
-
-        return $indexer;
     }
 }
 

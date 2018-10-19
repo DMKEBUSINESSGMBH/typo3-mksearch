@@ -1,4 +1,7 @@
 <?php
+use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Persistence\Generic\Session;
+
 /**
  * @package tx_mksearch
  * @subpackage tx_mksearch_indexer
@@ -780,6 +783,60 @@ CONFIG;
         if (!empty($tableName)) {
             $model->setTableName($tableName);
         }
+
+        return $model;
+    }
+
+    /**
+     * Returns the model to be indexed,
+     * The indexer should override this method to return a specific model
+     *
+     * @param array $rawData
+     * @param string $tableName
+     * @param array $options
+     * @return tx_rnbase_IModel
+     */
+    protected function createLocalizedExtbaseDomainModel(
+        array $rawData,
+        $tableName = null,
+        $repositoryClass = null
+    ) {
+        $uid = (int) $rawData['uid'];
+
+        if (!$uid) {
+            return null;
+        }
+
+        /* @var $objectManager \TYPO3\CMS\Extbase\Object\ObjectManager */
+        $objectManager = tx_rnbase::makeInstance(ObjectManager::class);
+        $repository = $objectManager->get($repositoryClass);
+        /* @var $persistenceSession \TYPO3\CMS\Extbase\Persistence\Generic\Session */
+        $persistenceSession = $objectManager->get(Session::class);
+
+        // update query settings to respect the current language
+        $querySettings = $repository->createQuery()->getQuerySettings();
+        $newQuerySettings = clone $querySettings;
+        $newQuerySettings->setRespectStoragePage(false);
+        $newQuerySettings->setRespectSysLanguage(false);
+        $language = 0;
+        $languageField = tx_mksearch_util_TCA::getLanguageFieldForTable($tableName);
+        if ($languageField) {
+            $language = (int) $rawData[$languageField];
+        }
+        $newQuerySettings->setLanguageUid($language);
+        $repository->setDefaultQuerySettings($newQuerySettings);
+
+        // clear the current persistent session
+        $persistenceSession->destroy();
+
+        // perform the search
+        $model = $repository->findByUid($uid);
+
+        // restore old settings
+        $repository->setDefaultQuerySettings($querySettings);
+
+        // clear the current persistent session
+        $persistenceSession->destroy();
 
         return $model;
     }
