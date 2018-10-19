@@ -793,8 +793,8 @@ CONFIG;
      *
      * @param array $rawData
      * @param string $tableName
-     * @param array $options
-     * @return tx_rnbase_IModel
+     * @param string $repositoryClass
+     * @return \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected function createLocalizedExtbaseDomainModel(
         array $rawData,
