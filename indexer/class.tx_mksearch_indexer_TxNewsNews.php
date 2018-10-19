@@ -59,55 +59,13 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
      *
      * @return \GeorgRinger\News\Domain\Model\News
      */
-    protected function createNewsModel(array $rawData)
+    protected function createModel(array $rawData, $tableName = null, $options = array())
     {
-        $uid = (int) $rawData['uid'];
-
-        if (!$uid) {
-            return null;
-        }
-
-        /* @var $objectManager \TYPO3\CMS\Extbase\Object\ObjectManager */
-        $objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-            'TYPO3\\CMS\\Extbase\\Object\\ObjectManager'
-        );
-        /* @var $repository \GeorgRinger\News\Domain\Repository\NewsRepository */
-        $repository = $objectManager->get(
+        return $this->createLocalizedExtbaseDomainModel(
+            $rawData,
+            $tableName,
             'GeorgRinger\\News\\Domain\\Repository\\NewsRepository'
         );
-        /* @var $persistenceSession \TYPO3\CMS\Extbase\Persistence\Generic\Session */
-        $persistenceSession = $objectManager->get(
-            'TYPO3\\CMS\\Extbase\\Persistence\\Generic\\Session'
-        );
-
-        // check currend record language
-        $language = 0;
-        $langField = tx_mksearch_util_TCA::getLanguageFieldForTable('tx_news_domain_model_news');
-        if ($langField) {
-            $language = (int) $rawData[$langField];
-        }
-
-        // update query settings to respect the current language
-        $querySettings = $repository->createQuery()->getQuerySettings();
-        $newQuerySettings = clone $querySettings;
-        $newQuerySettings->setRespectStoragePage(false);
-        $newQuerySettings->setRespectSysLanguage(false);
-        $newQuerySettings->setLanguageUid($language);
-        $repository->setDefaultQuerySettings($newQuerySettings);
-
-        // clear the current persistent session
-        $persistenceSession->destroy();
-
-        // perform the search
-        $news = $repository->findByUid($uid);
-
-        // restore old settings
-        $repository->setDefaultQuerySettings($querySettings);
-
-        // clear the current persistent session
-        $persistenceSession->destroy();
-
-        return $news;
     }
 
     /**
@@ -193,7 +151,7 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
      */
     // @codingStandardsIgnoreStart (interface/abstract mistake)
     public function indexData(
-        tx_rnbase_IModel $oModel,
+        tx_rnbase_IModel $news,
         $tableName,
         $rawData,
         tx_mksearch_interface_IndexerDocument $indexDoc,
@@ -201,8 +159,6 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
     ) {
         // @codingStandardsIgnoreEnd
         $abort = false;
-
-        $news = $this->createNewsModel($rawData);
 
         // Hook to append indexer data
         tx_rnbase_util_Misc::callHook(
@@ -451,7 +407,7 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
         $news,
         $indexDoc
     ) {
-        if (!$news->getMedia()->count()) {
+        if (!$news->getMedia() || !$news->getMedia()->count()) {
             return;
         }
 
