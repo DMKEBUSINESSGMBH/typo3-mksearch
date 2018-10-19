@@ -53,22 +53,6 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
     }
 
     /**
-     * Creates the extbase model of the raw datas uid.
-     *
-     * @param array $rawData
-     *
-     * @return \GeorgRinger\News\Domain\Model\News
-     */
-    protected function createModel(array $rawData, $tableName = null, $options = array())
-    {
-        return $this->createLocalizedExtbaseDomainModel(
-            $rawData,
-            $tableName,
-            'GeorgRinger\\News\\Domain\\Repository\\NewsRepository'
-        );
-    }
-
-    /**
      * check if related data has changed
      *
      * @param string $tableName
@@ -151,7 +135,7 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
      */
     // @codingStandardsIgnoreStart (interface/abstract mistake)
     public function indexData(
-        tx_rnbase_IModel $news,
+        tx_rnbase_IModel $model,
         $tableName,
         $rawData,
         tx_mksearch_interface_IndexerDocument $indexDoc,
@@ -159,6 +143,12 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
     ) {
         // @codingStandardsIgnoreEnd
         $abort = false;
+
+        $news = $this->createLocalizedExtbaseDomainModel(
+            $rawData,
+            $tableName,
+            'GeorgRinger\\News\\Domain\\Repository\\NewsRepository'
+        );
 
         // Hook to append indexer data
         tx_rnbase_util_Misc::callHook(
