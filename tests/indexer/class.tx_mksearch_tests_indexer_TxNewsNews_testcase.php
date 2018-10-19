@@ -94,7 +94,7 @@ class tx_mksearch_tests_indexer_TxNewsNews_testcase extends tx_mksearch_tests_Te
                 $this->equalTo(
                     array(
                         'tx_news_domain_model_news AS NEWS' .
-                            ' JOIN sys_category_record_mm AS CATMM ON NEWS.uid = CATMM.uid_foreign',
+                        ' JOIN sys_category_record_mm AS CATMM ON NEWS.uid = CATMM.uid_foreign',
                         'tx_news_domain_model_news',
                         'NEWS',
                     )
@@ -171,7 +171,9 @@ class tx_mksearch_tests_indexer_TxNewsNews_testcase extends tx_mksearch_tests_Te
     {
         $model = $this->getNewsModel();
 
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TxNewsNews');
+        $indexer = $this->getIndexerMock(
+            $model->getRecord()
+        );
 
         $indexDoc = $this->callInaccessibleMethod(
             array($indexer, 'indexData'),
@@ -269,13 +271,41 @@ class tx_mksearch_tests_indexer_TxNewsNews_testcase extends tx_mksearch_tests_Te
             )
         );
     }
+
+    /**
+     * Creates a Mock of the indexer object
+     *
+     * @return PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getIndexerMock(array $newsRecord)
+    {
+        $model = $this->getNewsModel();
+
+        $indexer = $this->getMock(
+            'tx_mksearch_indexer_TxNewsNews',
+            array('createLocalizedExtbaseDomainModel')
+        );
+
+        ($indexer
+            ->expects(self::once())
+            ->method('createLocalizedExtbaseDomainModel')
+            ->with(
+                $newsRecord,
+                'tx_news_domain_model_news',
+                'GeorgRinger\\News\\Domain\\Repository\\NewsRepository'
+            )
+            ->will(self::returnValue($model))
+        );
+
+        return $indexer;
+    }
 }
 
 if ((
     defined('TYPO3_MODE') &&
     $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']
-        ['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TxNewsNews_testcase.php']
+    ['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TxNewsNews_testcase.php']
 )) {
     include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']
-        ['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TxNewsNews_testcase.php'];
+    ['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TxNewsNews_testcase.php'];
 }
