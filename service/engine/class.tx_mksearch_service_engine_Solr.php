@@ -80,6 +80,9 @@ class tx_mksearch_service_engine_Solr extends Tx_Rnbase_Service_Base implements 
     {
         $this->index = new Apache_Solr_Service($host, $port, $path);
 
+        // multivalue fields should always be an array
+        $this->index->setCollapseSingleValueArrays(false);
+
         $this->index->setSolrVersion($this->indexModel->getSolrVersion());
 
         //per default werden alle HTTP Aufrufe per file_get_contents erledigt.
