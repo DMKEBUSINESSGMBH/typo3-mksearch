@@ -258,6 +258,9 @@ class tx_mksearch_indexer_Page extends tx_mksearch_indexer_Base
 #   }
 # }
 
+### if one page in the rootline of an element has the no_search flag the element won't be indexed
+respectNoSearchFlagInRootline = 1
+
 # the mapping which record field should be put into which solr field
  mapping {
    nav_title = nav_title_s

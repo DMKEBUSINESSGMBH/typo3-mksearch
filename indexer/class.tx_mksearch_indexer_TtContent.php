@@ -116,6 +116,9 @@ class tx_mksearch_indexer_TtContent implements tx_mksearch_interface_Indexer
 #   }
 # }
 
+### if one page in the rootline of an element has the no_search flag the element won't be indexed
+respectNoSearchFlagInRootline = 1
+
 addPageMetaData = 0
 addPageMetaData.separator = ,
 

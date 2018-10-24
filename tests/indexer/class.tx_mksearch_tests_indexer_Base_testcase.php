@@ -839,6 +839,95 @@ class tx_mksearch_tests_indexer_Base_testcase extends tx_mksearch_tests_Testcase
     /**
      * @group unit
      */
+    public function testHasDocToBeDeletedReturnsTrueIfOnePageInRootlineHasNoSearchFlag()
+    {
+        $coreConfigUtility = $this->getMock(
+            'stdClass',
+            array('getRootline')
+        );
+        $coreConfigUtility->expects($this->once())
+            ->method('getRootline')
+            ->will($this->returnValue(array(
+                0 => array('uid' => 1, 'no_search' => 1),
+                1 => array('uid' => 2, 'no_search' => 0)
+            )));
+
+        $indexer = $this->getMock(
+            'tx_mksearch_tests_fixtures_indexer_Dummy',
+            array('getCoreConfigUtility')
+        );
+        $indexer->expects($this->once())
+            ->method('getCoreConfigUtility')
+            ->will($this->returnValue($coreConfigUtility));
+
+        $indexDoc = tx_rnbase::makeInstance(
+            'tx_mksearch_model_IndexerDocumentBase',
+            '',
+            ''
+        );
+        $model = tx_rnbase::makeInstance(
+            'tx_rnbase_model_base',
+            array('pid' => 123)
+        );
+
+        self::assertTrue(
+            $this->callInaccessibleMethod(
+                $indexer,
+                'hasDocToBeDeleted',
+                $model,
+                $indexDoc,
+                ['respectNoSearchFlagInRootline' => 1]
+            )
+        );
+    }
+
+    /**
+     * @group unit
+     */
+    public function testHasDocToBeDeletedReturnsTrueIfOnePageInRootlineHasNoSearchFlagButFlagShoudNotBeRespected()
+    {
+        $coreConfigUtility = $this->getMock(
+            'stdClass',
+            array('getRootline')
+        );
+        $coreConfigUtility->expects($this->once())
+            ->method('getRootline')
+            ->will($this->returnValue(array(
+                0 => array('uid' => 1, 'no_search' => 1),
+                1 => array('uid' => 2, 'no_search' => 0)
+            )));
+
+        $indexer = $this->getMock(
+            'tx_mksearch_tests_fixtures_indexer_Dummy',
+            array('getCoreConfigUtility')
+        );
+        $indexer->expects($this->once())
+            ->method('getCoreConfigUtility')
+            ->will($this->returnValue($coreConfigUtility));
+
+        $indexDoc = tx_rnbase::makeInstance(
+            'tx_mksearch_model_IndexerDocumentBase',
+            '',
+            ''
+        );
+        $model = tx_rnbase::makeInstance(
+            'tx_rnbase_model_base',
+            array('pid' => 123)
+        );
+
+        self::assertFalse(
+            $this->callInaccessibleMethod(
+                $indexer,
+                'hasDocToBeDeleted',
+                $model,
+                $indexDoc
+            )
+        );
+    }
+
+    /**
+     * @group unit
+     */
     public function testHasDocToBeDeletedReturnsFalseIfAllPagesInRootlineAreOkay()
     {
         $coreConfigUtility = $this->getMock(

@@ -193,3 +193,11 @@ Im folgenden Beispiel wird nichts aus dem Live Workspace indiziert sondern aus d
 ~~~~ {.sourceCode .ts}
 workspaceIds = 1,2,3
 ~~~~
+
+no_search Flag
+-------------------
+In jeder Seite kann gewählt werden, dass die Seite nicht in der Suche auftaucht. Mit der Konfiguration respectNoSearchFlagInRootline können die meisten Indexer angewiesen werden, dieses Flag für die ganze Rootline zu beachten. D.h. wenn in der Rootline irgendeine Seite das Flag hat, wird der gesame Seitenbereich nicht indiziert.
+
+~~~~ {.sourceCode .ts}
+respectNoSearchFlagInRootline = 1
+~~~~

@@ -359,6 +359,10 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base
 #      1 = second
 #   }
 # }
+
+### if one page in the rootline of an element has the no_search flag the element won't be indexed
+respectNoSearchFlagInRootline = 1
+
 # include {
 #   as array
 #   categories{
