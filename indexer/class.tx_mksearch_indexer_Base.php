@@ -59,6 +59,16 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
     protected $modelToIndex;
 
     /**
+     * Set this to true in your indexer if you want the frontend
+     * to be loaded. This comes in handy if you index extbase models
+     * and need proper localization. This is only loaded if you index
+     * an non default language (>0)
+     *
+     * @var bool
+     */
+    protected $loadFrontendForLocalization = false;
+
+    /**
      * Prepare a searchable document from a source record.
      *
      * @param string $tableName
@@ -72,6 +82,9 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
      */
     public function prepareSearchData($tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options)
     {
+        if ($this->loadFrontendForLocalization && $options['lang'] > 0) {
+            tx_mksearch_util_Indexer::prepareTSFE(0, $options['lang']);
+        }
 
         // Set base id for specific indexer.
         // @TODO use getUid of the model as it will return the correct uid in respect of localisation
@@ -796,11 +809,8 @@ CONFIG;
      * @param string $repositoryClass
      * @return \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
-    protected function createLocalizedExtbaseDomainModel(
-        array $rawData,
-        $tableName = null,
-        $repositoryClass = null
-    ) {
+    protected function createLocalizedExtbaseDomainModel(array $rawData, $tableName, $repositoryClass)
+    {
         $uid = (int) $rawData['uid'];
 
         if (!$uid) {
