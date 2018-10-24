@@ -42,6 +42,37 @@ class tx_mksearch_tests_indexer_Base_testcase extends tx_mksearch_tests_Testcase
 {
 
     /**
+     * {@inheritDoc}
+     * @see tx_mksearch_tests_Testcase::setUp()
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->destroyFrontend();
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see tx_mksearch_tests_Testcase::tearDown()
+     */
+    protected function tearDown()
+    {
+        parent::tearDown();
+        $this->destroyFrontend();
+    }
+
+    /**
+     * @return void
+     */
+    protected function destroyFrontend()
+    {
+        if (isset($GLOBALS['TSFE'])){
+            unset($GLOBALS['TSFE']);
+        }
+
+    }
+
+    /**
      * Check if the uid is set correct
      */
     public function testGetPrimarKey()
@@ -1225,5 +1256,62 @@ class tx_mksearch_tests_indexer_Base_testcase extends tx_mksearch_tests_Testcase
             __LINE__ => array('title' => 'über', 'first_char' => 'U'),
             __LINE__ => array('title' => '0815', 'first_char' => '0-9'),
         );
+    }
+
+    /**
+     * @param int $languageUid
+     * @param bool $loadFrontendForLocalization
+     * @param bool $frontendLoaded
+     * @dataProvider dataProviderPrepareSearchDataLoadsFrontendIfDesiredAndNeeded
+     */
+    public function testPrepareSearchDataLoadsFrontendIfDesiredAndNeeded(
+        $languageUid,
+        $loadFrontendForLocalization,
+        $frontendLoaded
+    ) {
+        $indexer = $this->getMockForAbstractClass(
+            $this->buildAccessibleProxy('tx_mksearch_indexer_Base'),
+            [],
+            '',
+            false,
+            false,
+            false,
+            ['stopIndexing']
+        );
+        $indexer
+            ->expects(self::any())
+            ->method('stopIndexing')
+            ->will(self::returnValue(true));
+
+        $indexer->_set('loadFrontendForLocalization', $loadFrontendForLocalization);
+
+        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', 'na', 'na');
+        $options = ['lang' => $languageUid];
+
+        self::assertFalse(is_object($GLOBALS['TSFE']));
+
+        $indexer->prepareSearchData('doesnt_matter', [], $indexDoc, $options);
+
+        if (!$frontendLoaded) {
+            self::assertFalse($frontendLoaded, is_object($GLOBALS['TSFE']));
+        } else {
+            self::assertTrue(is_object($GLOBALS['TSFE']));
+            self::assertEquals($languageUid, $GLOBALS['TSFE']->sys_language_content);
+        }
+
+    }
+
+    /**
+     * @return number[][]|boolean[][]
+     */
+    public function dataProviderPrepareSearchDataLoadsFrontendIfDesiredAndNeeded()
+    {
+        return [
+            [0, false, false],
+            [1, false, false],
+            [0, true, false],
+            [1, true, true],
+            [123, true, true],
+        ];
     }
 }
