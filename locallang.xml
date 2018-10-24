@@ -38,7 +38,7 @@
             <label index="label_search_yoursearchtermwas">Your search term was:</label>
             <label index="label_search_readmore">read more</label>
             <label index="label_search_readmorefaqs">read more related questions</label>
-            <label index="label_search_noresultsfound"><![CDATA[<div class="noResultsFound">Your search did not return any results.</div>]]></label>
+            <label index="label_search_noresultsfound">Your search did not return any results.</label>
 
             <label index="label_search_reset">reset Search</label>
 
@@ -128,7 +128,7 @@
             <label index="label_search_yoursearchtermwas">Uw zoekterm was:</label>
             <label index="label_search_readmore">lees meer</label>
             <label index="label_search_readmorefaqs">lees meer gerelateerde vragen</label>
-            <label index="label_search_noresultsfound"><![CDATA[<div class="noResultsFound">Uw zoekopdracht heeft geen resultaten.</div>]]></label>
+            <label index="label_search_noresultsfound">Uw zoekopdracht heeft geen resultaten.</label>
 
             <label index="label_search_reset">reset Zoeken</label>
 
