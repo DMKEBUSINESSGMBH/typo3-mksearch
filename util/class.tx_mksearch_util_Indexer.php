@@ -634,10 +634,11 @@ class tx_mksearch_util_Indexer
      * Initializes the tsfe for the tv elements
      *
      * @param int $pid
+     * @param int $sysLanguage
      *
      * @return void
      */
-    public static function prepareTSFE($pid)
+    public static function prepareTSFE($pid, $sysLanguage = 0)
     {
         tx_rnbase::load('tx_rnbase_util_Misc');
         $tsfe = tx_rnbase_util_Misc::prepareTSFE(
@@ -659,5 +660,6 @@ class tx_mksearch_util_Indexer
         $tsfe->no_cache = true;
         $tsfe->tmpl->start($rootlineByPid);
         $tsfe->rootLine = $rootlineByPid;
+        $tsfe->sys_language_content = intval($sysLanguage);
     }
 }

@@ -29,3 +29,11 @@ Mit folgender Anweisung in der ext\_localconf.php kann ein Indexer registriert w
 In diesem Beispiel kann man sehr schön sehen, daß sich ein Indexer für mehrere Datenbank-Tabellen registrieren kann. Dies ist notwendig, wenn man die Frage betrachtet, was eigentlich indiziert werden sollte. Suchmaschinen indizieren Dokumente. Ein Dokument ist dabei ein Datensatz, der sich aus mehreren relationalen Datensätzen zusammensetzt. Redundanz ist hier ausdrücklich erwünscht! Der Indexer von irfaq indiziert in jedem Dokument die Frage/Antwort, die Kategorie und den Experten mit allen Informationen. Somit muss sich der Indexer auch für alle drei Tabellen registrieren, damit er den Index immer auf dem aktuellen Stand halten kann.
 
 Dabei wird der Indexer aber nicht bei jeder Änderung sofort neue Daten indizieren. Wenn bspw. eine Änderung des Kategorienamens erfolgt, dann wird der Indexer darüber informiert. Er sollte dann alle betroffenen FAQ-Fragen dieser Kategorie ermitteln und in die Warteschlange legen. Dieser Vorgang kann sehr schnell ausgeführt werden und blockiert dadurch die Warteschlange nicht.
+
+# Extbase
+Wenn ein Extbase Model indiziert werden sollen, dann müssen einige Dinge beachtet werden:
+
+1.  Wenn das Model bzw. daran hängende Models Mehrsprachigkeit unterstützen, dann sollte in der Indexerklasse für das Model die Klassenvariable $loadFrontendForLocalization auf true gesetzt werden. Ansonsten werden die Overlays bei Übersetzungen nicht korrekt geladen.
+2.  Wenn bei Änderungen in anderen Tabellen daran hängende Models in die Queue gelegt werden sollen, muss sich der Indexer darum kümmern. Unterstützt das Model dabei Mehrsprachigkeit, können nicht ohne weiteres die eigentlichen Extbase Repositories genutzt werden, um Models zu holen, die zu Datensätzen in anderen Tabellen gehören. Auf Grund des Handling der Mehrsprachigkeit von Extbase, wäre es nie möglich an die tatsächliche UID eines übersetzten Models zu kommen. Sprich, Übersetzungen würden in diesem Fall nie in der Queue landen.
+
+Ein Beispiel für so einen Indexer ist der tx_news Indexer (tx_mksearch_indexer_TxNewsNews).

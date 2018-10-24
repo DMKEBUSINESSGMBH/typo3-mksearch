@@ -214,7 +214,7 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
     {
         $ttContentModel = $this->getModelToIndex();
         $record = $ttContentModel->getRecord();
-        tx_mksearch_util_Indexer::prepareTSFE($record['pid']);
+        tx_mksearch_util_Indexer::prepareTSFE($record['pid'], $options['lang']);
         $this->adjustIncludeLibsPathForBe();
 
         $templavoilaPlugin = tx_rnbase::makeInstance('tx_templavoila_pi1');

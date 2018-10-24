@@ -35,6 +35,12 @@ tx_rnbase::load('tx_mksearch_indexer_Base');
  */
 class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
 {
+
+    /**
+     * @var bool
+     */
+    protected $loadFrontendForLocalization = true;
+
     /**
      * Return content type identification.
      *
@@ -371,7 +377,7 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
         if (empty($options['indexInlineContentElements'])) {
             return '';
         }
-        tx_mksearch_util_Indexer::prepareTSFE($options['defaultSinglePid']);
+        tx_mksearch_util_Indexer::prepareTSFE($options['defaultSinglePid'], $options['lang']);
 
         $ce = array();
         $contentElements = $news->getContentElements();

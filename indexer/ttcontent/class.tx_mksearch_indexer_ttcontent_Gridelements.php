@@ -154,7 +154,7 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
         array $record,
         array $options
     ) {
-        tx_mksearch_util_Indexer::prepareTSFE($record['pid']);
+        tx_mksearch_util_Indexer::prepareTSFE($record['pid'], $options['lang']);
         $uid = $this->getUid('tt_content', $record, array());
 
         $allowedCTypes = $this->getAllowedCTypes($options);
