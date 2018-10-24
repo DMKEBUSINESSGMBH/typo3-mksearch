@@ -348,7 +348,8 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
         $sysPage = tx_rnbase_util_TYPO3::getSysPage();
         foreach ($rootline as $page) {
             if ($page['hidden'] ||
-                ($page['doktype'] == $sysPage::DOKTYPE_BE_USER_SECTION)
+                ($page['doktype'] == $sysPage::DOKTYPE_BE_USER_SECTION) ||
+                ($this->getConfigValue('respectNoSearchFlagInRootline', $options) && $page['no_search'] == 1)
             ) {
                 return true;
             }
@@ -612,6 +613,10 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 #      1 = second
 #   }
 # }
+#
+### if one page in the rootline of an element has the no_search flag the element won't be indexed
+# respectNoSearchFlagInRootline = 1
+#
 ### delete from or abort indexing for the record if isIndexableRecord or no record?
 # deleteIfNotIndexable = 0
 

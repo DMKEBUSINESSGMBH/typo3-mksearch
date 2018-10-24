@@ -446,6 +446,10 @@ deleteIfNotIndexable = 0
 ### delete from indexing or abort indexing for the record?
 deleteOnAbort = 0
 
+### if one page in the rootline of an element has the no_search flag the element won't be indexed
+respectNoSearchFlagInRootline = 1
+
+
 ### should the Root Page of the current records page be indexed?
 # indexSiteRootPage = 0
 

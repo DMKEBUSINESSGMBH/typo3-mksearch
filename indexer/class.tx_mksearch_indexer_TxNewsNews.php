@@ -461,6 +461,9 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
 # by default every HTML Markup is removed
 # keepHtml = 1
 
+### if one page in the rootline of an element has the no_search flag the element won't be indexed
+respectNoSearchFlagInRootline = 1
+
 ### delete from or abort indexing for the record if isIndexableRecord or no record?
 deleteIfNotIndexable = 0
 ### delete from indexing or abort indexing for the record?

@@ -432,6 +432,10 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base
 #   }
 # }
 # }
+
+### if one page in the rootline of an element has the no_search flag the element won't be indexed
+respectNoSearchFlagInRootline = 1
+
 ### should the Root Page of the current records page be indexed?
 # indexSiteRootPage = 0
 
