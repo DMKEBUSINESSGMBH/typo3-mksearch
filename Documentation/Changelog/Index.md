@@ -1,6 +1,14 @@
 Changelog
 =========
 
+3.2.0
+-----
+
+-   method to get localized extbase model
+-   bugfix multivalue fields should always be an array
+-   make it possible to respect the no_:search flag for the rootline
+-   bugfix getting tx_news model
+
 3.1.0
 -----
 
