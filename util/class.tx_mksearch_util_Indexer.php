@@ -645,6 +645,8 @@ class tx_mksearch_util_Indexer
             array(
                 'force' => true,
                 'pid'    => $pid,
+                // usually 0 is the normal page type
+                // @todo make configurable
                 'type' => 0
             )
         );
@@ -654,15 +656,20 @@ class tx_mksearch_util_Indexer
             tx_rnbase_util_Typo3Classes::getContentObjectRendererClass()
         );
 
-        tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
-        $rootlineByPid = tx_mksearch_service_indexer_core_Config::getRootLine($pid);
-
         // disable cache for be indexing!
         $tsfe->no_cache = true;
-        $tsfe->tmpl->start($rootlineByPid);
-        $tsfe->rootLine = $rootlineByPid;
+
+        // load TypoScript templates
+        if ($pid) {
+            tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
+            $rootlineByPid = tx_mksearch_service_indexer_core_Config::getRootLine($pid);
+
+            $tsfe->rootLine = $rootlineByPid;
+            $tsfe->forceTemplateParsing = true;
+            $GLOBALS['TSFE']->getConfigArray();
+        }
+
+        // handle language
         $tsfe->sys_language_content = intval($sysLanguage);
-        $tsfe->forceTemplateParsing = true;
-        $GLOBALS['TSFE']->getConfigArray();
     }
 }
