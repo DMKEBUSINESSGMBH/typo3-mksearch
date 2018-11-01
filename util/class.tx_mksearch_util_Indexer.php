@@ -644,7 +644,8 @@ class tx_mksearch_util_Indexer
         $tsfe = tx_rnbase_util_Misc::prepareTSFE(
             array(
                 'force' => true,
-                'pid'    => $pid
+                'pid'    => $pid,
+                'type' => 0
             )
         );
 
@@ -661,5 +662,7 @@ class tx_mksearch_util_Indexer
         $tsfe->tmpl->start($rootlineByPid);
         $tsfe->rootLine = $rootlineByPid;
         $tsfe->sys_language_content = intval($sysLanguage);
+        $tsfe->forceTemplateParsing = true;
+        $GLOBALS['TSFE']->getConfigArray();
     }
 }
