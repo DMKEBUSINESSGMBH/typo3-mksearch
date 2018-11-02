@@ -325,7 +325,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
             $sFqField = $configurations->get($confId.'fqField');
             foreach ($fqParams as $fqField => $fqValues) {
                 $fieldOptions = array();
-                $fqValues = is_array($fqValues) ? $fqValues : array(trim($fqValues));
+                $fqValues = is_array($fqValues) ? $fqValues : (trim($fqValues) ? array(trim($fqValues)) : array());
                 if (empty($fqValues)) {
                     continue;
                 }
