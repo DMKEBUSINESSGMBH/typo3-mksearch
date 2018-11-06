@@ -53,45 +53,59 @@ class tx_mksearch_tests_util_Misc_testcase extends tx_mksearch_tests_Testcase
         foreach (array(
                     // array($before, $after),
                 __LINE__ => array(
-                        'Kapstadt Messetrailer <object width="5" height="5"><param name="movie" value="hier muss eigentlich die url rein ^^" /><param name="allowFullScreen" value="true" /><param name="allowscriptaccess" value="always" /><embed src="hier gehts zum player" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="5" height="5"></embed></object> Eternit Schönes Beschützen',
-                        array(), // emty option
-                        'Kapstadt Messetrailer   Eternit Schönes Beschützen',
-                    ),
+                    'Kapstadt Messetrailer <object width="5" height="5"><param name="movie" value="hier muss eigentlich die url rein ^^" /><param name="allowFullScreen" value="true" /><param name="allowscriptaccess" value="always" /><embed src="hier gehts zum player" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="5" height="5"></embed></object> Eternit Schönes Beschützen',
+                    array(), // emty option
+                    'Kapstadt Messetrailer   Eternit Schönes Beschützen',
+                ),
                 __LINE__ => array(
-                        'Hallo Welt',
-                        array(), // emty option
-                        'Hallo Welt',
-                    ),
+                    'Hallo Welt',
+                    array(), // emty option
+                    'Hallo Welt',
+                ),
                 __LINE__ => array(
-                        'Hallo <!-- Kommentar --> Welt',
-                        array(), // emty option
-                        'Hallo   Welt',
-                    ),
+                    'Hallo <!-- Kommentar --> Welt',
+                    array(), // emty option
+                    'Hallo   Welt',
+                ),
                 __LINE__ => array(
-                        '<br>Hallo</br> <i>Welt</i>',
-                        array(), // emty option
-                        'Hallo   Welt',
-                    ),
+                    '<br>Hallo</br> <i>Welt</i>',
+                    array(), // emty option
+                    'Hallo   Welt',
+                ),
                 __LINE__ => array(
-                        'Umlaute encoded F&ouml;rderm&ouml;glichkeiten',
-                        array(), // emty option
-                        'Umlaute encoded Fördermöglichkeiten',
-                    ),
+                    'Umlaute encoded F&ouml;rderm&ouml;glichkeiten',
+                    array(), // emty option
+                    'Umlaute encoded Fördermöglichkeiten',
+                ),
                 __LINE__ => array(
-                        'Zeile1' . PHP_EOL . 'Zeile2',
-                        array(), // emty option
-                        'Zeile1 Zeile2',
-                    ),
+                    'Zeile1' . PHP_EOL . 'Zeile2',
+                    array(), // emty option
+                    'Zeile1 Zeile2',
+                ),
                 __LINE__ => array(
-                        'Zeile1' . PHP_EOL . 'Zeile2',
-                        array('lineendings' => true),
-                        'Zeile1' . PHP_EOL . 'Zeile2',
-                    ),
+                    'Zeile1' . PHP_EOL . 'Zeile2',
+                    array('lineendings' => true),
+                    'Zeile1' . PHP_EOL . 'Zeile2',
+                ),
                 __LINE__ => array(
                         'one two  three   one five     zero',
-                        array('removedoublespaces' => true),
-                        'one two three one five zero',
-                    ),
+                    array('removedoublespaces' => true),
+                    'one two three one five zero',
+                ),
+                __LINE__ => array(
+                    '<a class="collapsed"
+                aria-controls="collapse3379"
+                aria-expanded="false"
+                data-parent="#accordion3383"
+                data-toggle="collapse"
+                href="#collapse3379"
+                role="button"
+            >
+                HTML tags with line breaks
+            </a>',
+                    array(),
+                    'HTML tags with line breaks',
+                ),
             ) as $key => $row) {
             $key = 'Line:'.$key;
             $return[$key] = $row;

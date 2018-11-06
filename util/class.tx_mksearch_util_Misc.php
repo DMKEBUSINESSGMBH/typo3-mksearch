@@ -139,7 +139,9 @@ class tx_mksearch_util_Misc
 
         $replaces = array(
             // whitespaces durch leerzeichen ersetzen
-            '/('.$whitespaces.'+|(<.*?>)+)/' => ' ',
+            '/('.$whitespaces.'+)/' => ' ',
+            // alle HTML Tags entfernen
+            '/((<.*?>)+)/' => ' ',
             // html kommentare entfernen
             '/<!--.*?-->/' => ' ',
         );
