@@ -92,3 +92,7 @@ if (tx_rnbase_util_TYPO3::isTYPO76OrHigher()) {
         'class' => 'DMK\\Mksearch\\Backend\\Form\\Element\\IndexerConfigurationField',
     );
 }
+
+// no_search needs to be in the rootline fields so respectNoSearchFlagInRootline
+// in indexers works correct
+$GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'] .= ',no_search';
