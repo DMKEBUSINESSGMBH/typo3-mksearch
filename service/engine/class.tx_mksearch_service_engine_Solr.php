@@ -818,9 +818,6 @@ class tx_mksearch_service_engine_Solr extends Tx_Rnbase_Service_Base implements 
                 foreach ($group->doclist->docs as $doc) {
                     $solrDocument = new Apache_Solr_Document();
                     foreach ($doc as $field => $value) {
-                        if (is_array($value) && count($value) <= 1) {
-                            $value = array_shift($value);
-                        }
                         $solrDocument->$field = $value;
                     }
                     $docs[] = $solrDocument;

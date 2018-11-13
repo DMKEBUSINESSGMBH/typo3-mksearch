@@ -93,7 +93,7 @@ class tx_mksearch_tests_service_engine_Solr_testcase extends tx_mksearch_tests_T
         $hits = tx_mksearch_service_engine_Solr::getHitsFromSolrResponse($response, array('group' => 'true', 'group.field' => 'groupField'));
 
         self::assertEquals(array('someField' => 'someValue'), $hits[0]->getRecord());
-        self::assertEquals(array('someOtherField' => '2'), $hits[1]->getRecord());
+        self::assertEquals(array('someOtherField' => ['2']), $hits[1]->getRecord());
         self::assertEquals(array('againSomeOtherField' => array(1, 2)), $hits[2]->getRecord());
     }
 
