@@ -744,7 +744,7 @@
         <!-- This is an example of using the KeywordTokenizer along
             With various TokenFilterFactories to produce a sortable field
             that does not include some properties of the source text
-            for the german language
+            for the german language, too
         -->
         <fieldType name="text_sort" class="solr.TextField" sortMissingLast="true" omitNorms="true">
             <analyzer>
@@ -856,7 +856,7 @@
         <field name="title" type="text" indexed="true" stored="true" multiValued="false" />
 
         <!--  make title sortable -->
-        <field name="title_sort" type="string" indexed="true" stored="false" multiValued="false" />
+        <field name="title_sort" type="text_sort" indexed="true" stored="false" multiValued="false" />
          <copyField source="title" dest="title_sort" />
 
         <field name="content" type="text" indexed="true" stored="true" />
