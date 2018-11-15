@@ -741,46 +741,12 @@
             </analyzer>
         </fieldType>
 
-        <!-- This is an example of using the KeywordTokenizer along
-            With various TokenFilterFactories to produce a sortable field
-            that does not include some properties of the source text
-            for the german language, too
-        -->
-        <fieldType name="text_sort" class="solr.TextField" sortMissingLast="true" omitNorms="true">
-            <analyzer>
-                <!-- KeywordTokenizer does no actual tokenizing, so the entire
-                    input string is preserved as a single token
-                -->
-                <tokenizer class="solr.KeywordTokenizerFactory"/>
-
-                <!-- The LowerCase TokenFilter does what you expect, which can be
-                    when you want your sorting to be case insensitive
-                -->
-                <filter class="solr.LowerCaseFilterFactory" />
-                <!-- The TrimFilter removes any leading or trailing whitespace -->
-                <filter class="solr.TrimFilterFactory" />
-                <!-- The PatternReplaceFilter gives you the flexibility to use
-                    Java Regular expression to replace any sequence of characters
-                    matching a pattern with an arbitrary replacement string,
-                    which may include back refrences to portions of the orriginal
-                    string matched by the pattern.
-
-                    See the Java Regular Expression documentation for more
-                    infomation on pattern and replacement string syntax.
-
-                    http://java.sun.com/j2se/1.5.0/docs/api/java/util/regex/package-summary.html
-                -->
-                <!--
-                    so we have umlauts transformend (ä => ae, etc.)
-                    try around with this configuration
-                <filter class="solr.GermanNormalizationFilterFactory"/>
-                -->
-                <!-- only alpha num and whitespaces -->
-                <filter class="solr.PatternReplaceFilterFactory" pattern="([^a-zäöüÄÖÜß0-9 ])"
-                    replacement="" replace="all" />
-            </analyzer>
-        </fieldType>
-
+        <fieldType
+            name="text_sort"
+            class="solr.CollationField"
+            language=""
+            strength="primary"
+        />
 
         <!-- since fields of this type are by default not stored or indexed, any
             data added to them will be ignored outright. -->
