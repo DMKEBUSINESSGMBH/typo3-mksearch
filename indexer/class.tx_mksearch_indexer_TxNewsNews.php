@@ -192,6 +192,7 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
 
         $this->indexNews($rawData, $news, $indexDoc, $options);
         $this->indexNewsTags($rawData, $news, $indexDoc);
+        $this->indexRelatedLinks($news, $indexDoc);
         $this->indexNewsCategories($rawData, $news, $indexDoc);
 
         // Hook to extend indexer
@@ -360,6 +361,34 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
         $dfs = tx_mksearch_util_KeyValueFacet::getInstance();
         $tagDfs = $dfs->buildFacetValues(array_keys($categories), array_values($categories));
         $indexDoc->addField('categories_dfs_ms', $tagDfs, 'keyword');
+    }
+
+    /**
+     * Add tag data of the News to the index
+     *
+     * @param \GeorgRinger\News\Domain\Model\News $news
+     * @param tx_mksearch_interface_IndexerDocument $indexDoc
+     * @return void
+     */
+    // @codingStandardsIgnoreStart (interface/abstract/unittest mistake)
+    protected function indexRelatedLinks($news, tx_mksearch_interface_IndexerDocument $indexDoc) {
+        // @codingStandardsIgnoreEnd
+        $linksData = [];
+        $mapping = [
+            'related_links_title_ms' => 'getTitle',
+            'related_links_title_mt' => 'getTitle',
+            'related_links_description_ms' => 'getDescription',
+            'related_links_description_mt' => 'getDescription',
+            'related_links_uri_ms' => 'getUri',
+        ];
+        foreach ($news->getRelatedLinks() as $link) {
+            foreach ($mapping as $solrField => $getterMethod) {
+                $linksData[$solrField][] = $link->$getterMethod();
+            }
+        }
+        foreach ($linksData as $solrField => $data) {
+            $indexDoc->addField($solrField, $data);
+        }
     }
 
     /**

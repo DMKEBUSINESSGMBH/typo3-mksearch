@@ -210,6 +210,11 @@ class tx_mksearch_tests_indexer_TxNewsNews_testcase extends tx_mksearch_tests_Te
                 'categories_mi' => array('71', '72', '73'),
                 'categoriesTitle_ms' => array('Cat1', 'Cat2', 'Cat3'),
                 'categories_dfs_ms' => array('71<[DFS]>Cat1', '72<[DFS]>Cat2', '73<[DFS]>Cat3'),
+                'related_links_title_ms' => array('first link', 'second link'),
+                'related_links_title_mt' => array('first link', 'second link'),
+                'related_links_description_ms' => array('first link description', 'second link description'),
+                'related_links_description_mt' => array('first link description', 'second link description'),
+                'related_links_uri_ms' => array('www.example.com', 'example.com'),
             )
         );
     }
@@ -265,6 +270,22 @@ class tx_mksearch_tests_indexer_TxNewsNews_testcase extends tx_mksearch_tests_Te
                             'uid' => '73',
                             'title' => 'Cat3',
                             'single_pid' => '0',
+                        )
+                    ),
+                ),
+                'related_links' => array(
+                    $this->getModel(
+                        array(
+                            'uri' => 'www.example.com',
+                            'title' => 'first link',
+                            'description' => 'first link description',
+                        )
+                    ),
+                    $this->getModel(
+                        array(
+                            'uri' => 'example.com',
+                            'title' => 'second link',
+                            'description' => 'second link description',
                         )
                     ),
                 ),
