@@ -373,21 +373,23 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
     // @codingStandardsIgnoreStart (interface/abstract/unittest mistake)
     protected function indexRelatedLinks($news, tx_mksearch_interface_IndexerDocument $indexDoc) {
         // @codingStandardsIgnoreEnd
-        $linksData = [];
-        $mapping = [
-            'related_links_title_ms' => 'getTitle',
-            'related_links_title_mt' => 'getTitle',
-            'related_links_description_ms' => 'getDescription',
-            'related_links_description_mt' => 'getDescription',
-            'related_links_uri_ms' => 'getUri',
-        ];
-        foreach ($news->getRelatedLinks() as $link) {
-            foreach ($mapping as $solrField => $getterMethod) {
-                $linksData[$solrField][] = $link->$getterMethod();
+        if ($relatedLinks = $news->getRelatedLinks()) {
+            $linksData = [];
+            $mapping = [
+                'related_links_title_ms' => 'getTitle',
+                'related_links_title_mt' => 'getTitle',
+                'related_links_description_ms' => 'getDescription',
+                'related_links_description_mt' => 'getDescription',
+                'related_links_uri_ms' => 'getUri',
+            ];
+            foreach ($relatedLinks as $link) {
+                foreach ($mapping as $solrField => $getterMethod) {
+                    $linksData[$solrField][] = $link->$getterMethod();
+                }
             }
-        }
-        foreach ($linksData as $solrField => $data) {
-            $indexDoc->addField($solrField, $data);
+            foreach ($linksData as $solrField => $data) {
+                $indexDoc->addField($solrField, $data);
+            }
         }
     }
 
