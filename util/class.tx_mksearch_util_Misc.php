@@ -173,6 +173,7 @@ class tx_mksearch_util_Misc
      * @todo sollte hier nicht Apache_Solr_Service::escape() genutzt werden!?
      * siehe auch die escape Methode aus der Apache Solr TYPO3 Extension wie Phrasen
      * unterstützt werden könnten? Sollte aber alles nur fir nicht dismax interessant sein.
+     * @todo dont remove the characters but escape them like sanitizeFq() does.
      */
     public static function sanitizeTerm($sTerm)
     {
