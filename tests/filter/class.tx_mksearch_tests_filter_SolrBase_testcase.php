@@ -200,7 +200,7 @@ class tx_mksearch_tests_filter_SolrBase_testcase extends tx_mksearch_tests_Testc
 
         self::assertEquals(array(
             0 => '(-fe_group_mi:[* TO *] AND id:[* TO *]) OR fe_group_mi:0',
-            1 => 'facet_field:"facet value"'
+            1 => 'facet_field:"\"facet value\""'
         ), $options['fq'], 'fq wurde falsch übernommen!');
     }
 
@@ -222,7 +222,7 @@ class tx_mksearch_tests_filter_SolrBase_testcase extends tx_mksearch_tests_Testc
 
         self::assertEquals(array(
             0 => '(-fe_group_mi:[* TO *] AND id:[* TO *]) OR fe_group_mi:0',
-            1 => 'facet_dummy:"facet value"'
+            1 => 'facet_dummy:"\"facet value\""'
         ), $options['fq'], 'fq wuede falsch übernommen!');
     }
 
