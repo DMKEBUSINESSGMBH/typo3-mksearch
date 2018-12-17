@@ -84,7 +84,7 @@ class tx_mksearch_mod1_Module extends tx_rnbase_mod_BaseModule
             $this->getPid(),
             'function',
             $this->getName(),
-            $this->MOD_MENU['function']
+            $this->getFuncMenuItems($this->MOD_MENU['function'])
         );
 
         return $mainmenu['menu'];
