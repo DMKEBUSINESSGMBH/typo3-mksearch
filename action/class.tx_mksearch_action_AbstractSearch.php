@@ -99,7 +99,17 @@ abstract class tx_mksearch_action_AbstractSearch extends tx_rnbase_action_BaseIO
         if (count($rows) == 1) {
             $link = $configurations->createLink(false);
             $link->destination($rows[0]['link']);
-            $link->redirect();
+
+            // an own header name for the redirect can be useful if the redirect is done
+            // during an ajax request. otherwise it's not possible to handle the redirect with
+            // javascript as normal Location header is followed by the browser automatically.
+            if ($redirectHeaderName = $configurations->get($confId . 'softlink.redirectHeaderName')) {
+                $utility = tx_rnbase_util_Typo3Classes::getHttpUtilityClass();
+                header($utility::HTTP_STATUS_303);
+                header($redirectHeaderName . ': ' . tx_rnbase_util_Network::locationHeaderUrl($link->makeUrl(false)));
+            } else {
+                $link->redirect();
+            }
         }
     }
 
