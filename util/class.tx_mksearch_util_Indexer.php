@@ -93,15 +93,17 @@ class tx_mksearch_util_Indexer
         array $options = array(),
         $dontIndexHidden = true
     ) {
+        // get the record from the model, so the new rnbase models are supportet, who do not have access to ->record!
+        $record = $model->getRecord();
         foreach ($recordIndexMapping as $recordKey => $indexDocKey) {
             if ($dontIndexHidden && $model->isHidden()) {
                 continue;
             }
-            if (!empty($model->record[$recordKey]) || $options['keepEmpty']) {
+            if (!empty($record[$recordKey]) || $options['keepEmpty']) {
                 $indexDoc->addField(
                     $prefix.$indexDocKey,
-                    $options['keepHtml'] ? $model->record[$recordKey] :
-                        tx_mksearch_util_Misc::html2plain($model->record[$recordKey])
+                    $options['keepHtml'] ? $record[$recordKey] :
+                        tx_mksearch_util_Misc::html2plain($record[$recordKey])
                 );
             }
         }
