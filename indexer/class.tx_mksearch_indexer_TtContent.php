@@ -125,13 +125,13 @@ addPageMetaData.separator = ,
 ### should the data of the page where the tt_content element resides be indexed?
 ### if so than you need to provide the mapping in the pageDataFieldMapping option like it
 ### is needed for the page indexer
-indexPageData = 0
+indexPageData = 1
 # "page_" is automatically prefixed. so the resulting fields will be page_title_s, page_nav_title_s...
-# pageDataFieldMapping {
-#  title = title_s
-#  nav_title = nav_title_s
-#  my_record_field = my_solr_field
-#}
+pageDataFieldMapping {
+    title = title_s
+    nav_title = nav_title_s
+#   my_record_field = my_solr_field
+}
 
 # Configuration for each cType:
 CType {
@@ -180,7 +180,7 @@ deleteIfNotIndexable = 0
 
 ### if set, the field "Include in Search" of current items page is checked.
 ### If "Include in Search" is set to "Disable", the record will not be indexed
-respectIncludeInSearchDisable = 0
+respectIncludeInSearchDisable = 1
 
 ### disable the fallback to page title, if the content title is empty
 leaveHeaderEmpty = 0
@@ -211,6 +211,7 @@ include {
 # Only Include specific Content Columns
 #  # Include colPos value
 #  columns = 0,1,2,3,-1
+    columns = 0
 }
 # Black lists: Exclude pages from indexing by various conditions.
 # May also be combined with option "include", while "exclude" option
