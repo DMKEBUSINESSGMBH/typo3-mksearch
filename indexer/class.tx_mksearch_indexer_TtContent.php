@@ -232,6 +232,10 @@ exclude {
 # cTypes of content elements to be included in rendering from gridelements
 includeCTypesInGridelementRendering = text,textpic,textmedia,shortcut,image,table,gridelements_pi1
 
+# the dok types which are supported. If a tt_content element is on a page with another doktype
+# it wont be indexed. If nothing is configured by default only standard pages are considered.
+#supportedDokTypes = 1,2,3
+
 CONF;
     }
 }

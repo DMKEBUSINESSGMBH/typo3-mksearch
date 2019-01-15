@@ -407,12 +407,28 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
         // isPageSetIncludeInSearchDisable() checks the no_search field of page
         // and parent::hasDocToBeDeleted() takes
         // care of all possible hidden parent pages
+        $sysPage = tx_rnbase_util_TYPO3::getSysPage();
         return (
-            !$this->getPageContent($model->record['pid'])
+            !($pageData = $this->getPageContent($model->record['pid']))
+            || !in_array($pageData['doktype'], $this->getSupportedDokTypes($aOptions))
             || $this->isPageSetIncludeInSearchDisable($model, $aOptions)
             || parent::hasDocToBeDeleted($model, $oIndexDoc, $aOptions));
     }
 
+    /**
+     * @param array $options
+     * @return array
+     */
+    protected function getSupportedDokTypes(array $options)
+    {
+        $sysPage = tx_rnbase_util_TYPO3::getSysPage();
+        $supportedDokTypes = $this->getConfigValue('supportedDokTypes', $options);
+        if (!$supportedDokTypes) {
+            $supportedDokTypes[] = $sysPage::DOKTYPE_DEFAULT;
+        }
+
+        return $supportedDokTypes;
+    }
 
     /**
      *  Checks if the field "Include in Search" of current models page
