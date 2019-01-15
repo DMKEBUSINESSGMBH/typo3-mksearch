@@ -61,12 +61,14 @@ interface tx_mksearch_interface_IndexerDocument
     /**
      * Add field to indexer document
      *
-     * @param string    $key Field name
-     * @param string    $data
-     * @param string    $storageOptionsOrType -> @see tx_mksearch_model_IndexerFieldBase::$_storageOptions and tx_mksearch_model_IndexerFieldBase::$_storageType
-     * @param float     $boost
-     * @param string    $dataType
-     * @param string    $encoding=null
+     * @param string $key Field name
+     * @param string|array $data
+     * @param string $storageOptionsOrType
+     *  See tx_mksearch_model_IndexerFieldBase::$_storageOptions and tx_mksearch_model_IndexerFieldBase::$_storageType
+     * @param float $boost
+     * @param string $dataType
+     * @param string $encoding
+     *
      * @return void
      */
     public function addField($key, $data, $storageOptionsOrType = 'keyword', $boost = 1.0, $dataType = null, $encoding = null);
