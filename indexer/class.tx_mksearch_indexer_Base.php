@@ -793,9 +793,9 @@ CONFIG;
      */
     protected function createModel(array $rawData, $tableName = null, $options = array())
     {
-        /* @var $model tx_rnbase_model_Base */
+        /* @var $model tx_rnbase_model_base */
         $model = tx_rnbase::makeInstance(
-            'tx_rnbase_model_Base',
+            'tx_rnbase_model_base',
             $rawData
         );
         if (!empty($tableName)) {
