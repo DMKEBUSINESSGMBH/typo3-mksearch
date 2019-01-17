@@ -624,8 +624,8 @@
 
     <!-- for more information on how to configure autocomplete take a look into
         the Solr Wiki (http://wiki.apache.org/solr/SpellCheckComponent) or here:
-        http://solr.pl/en/2010/11/15/solr-and-autocomplete-part-2/ the slash makes
-        it possible to call this handler via an url, which is needed if the autocomplete
+        http://solr.pl/en/2010/11/15/solr-and-autocomplete-part-2/
+        the slash makes it possible to call this handler via an url, which is needed if the autocomplete
         index shall be built -->
     <requestHandler name="/suggest"
         class="org.apache.solr.handler.component.SearchHandler">
@@ -739,6 +739,15 @@
         </arr> <arr name="last-components"> <str>myLastComponentName</str> </arr>
         NOTE: The component registered with the name "debug" will always be executed
         after the "last-components" -->
+    <!-- our own query converter supports phrases. default contains a whitespace tokenizer so we
+		can not suggest phrases. place this .jar simply in $SOLRHOME/lib
+		and Solr will find it automatically. $SOLRHOME is either the "real" Solr Home containing the solr.xml
+		or it is the core home. Just open the Solr management console, select the appropiate core
+		and check the output on what $SOLRHOME is set. If lib folder does not exist, create it!
+		But you might also wanna try the new Suggester (https://lucene.apache.org/solr/guide/7_6/suggester.html) which
+		might not need an own query converter
+    -->
+    <queryConverter name="queryConverter" class="org.dmk.solr.spelling.MultiWordSpellingQueryConverter"/>
     <searchComponent name="suggest_fst" class="solr.SpellCheckComponent">
         <lst name="spellchecker">
             <!-- From Solr 4.1.x on the AnalyzingLookupFactory should be tried cause
