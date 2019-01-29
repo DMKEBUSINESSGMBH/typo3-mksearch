@@ -13,6 +13,9 @@ namespace DMK\Mksearch\ViewHelpers\Format;
  * TABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General      *
  * Public License for more details.                                       *
  *                                                                        */
+use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 /**
  * DMK\Mksearch\ViewHelpers\Format$HtmlViewHelper
  *
@@ -31,6 +34,32 @@ namespace DMK\Mksearch\ViewHelpers\Format;
 if (\tx_rnbase_util_TYPO3::isTYPO70OrHigher()) {
     class HtmlViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Format\HtmlViewHelper
     {
+
+        ////////
+        // We have to overwrite the whole renderStatic() method, because it uses self for the method call
+        ////////
+        /**
+         * @param array $arguments
+         * @param \Closure $renderChildrenClosure
+         * @param RenderingContextInterface $renderingContext
+         *
+         * @return string the parsed string.
+         */
+        public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext)
+        {
+            $parseFuncTSPath = $arguments['parseFuncTSPath'];
+            if (TYPO3_MODE === 'BE') {
+                static::simulateFrontendEnvironment();
+            }
+            $value = $renderChildrenClosure();
+            $contentObject = GeneralUtility::makeInstance(ContentObjectRenderer::class);
+            $contentObject->start([]);
+            $content = $contentObject->parseFunc($value, [], '< ' . $parseFuncTSPath);
+            if (TYPO3_MODE === 'BE') {
+                static::resetFrontendEnvironment();
+            }
+            return $content;
+        }
 
         /**
          * nähere Infos in Configuration/XClasses.php
