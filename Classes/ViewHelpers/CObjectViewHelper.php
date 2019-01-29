@@ -28,6 +28,22 @@ class CObjectViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\CObjectViewHelper
 {
 
     /**
+     * @param \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface $configurationManager
+     */
+    public function injectConfigurationManager(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface $configurationManager)
+    {
+        parent::injectConfigurationManager($configurationManager);
+        if (
+            \tx_mksearch_service_internal_Index::isIndexingInProgress()
+            && !empty($GLOBALS['TSFE'])
+            && is_object($GLOBALS['TSFE'])
+            && is_object($GLOBALS['TSFE']->tmpl)
+        ) {
+            $this->typoScriptSetup = $GLOBALS['TSFE']->tmpl->setup;
+        }
+    }
+
+    /**
      * nähere Infos in Configuration/XClasses.php
      *
      * @return void
