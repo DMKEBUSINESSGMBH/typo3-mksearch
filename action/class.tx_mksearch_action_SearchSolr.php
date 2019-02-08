@@ -422,7 +422,8 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
             }
 
             $result = $this->getViewData()->offsetGet('result');
-            return json_encode(array('suggestions' => $result['suggestions']));
+            $forbiddenResultItems = array('searchUrl' => null, 'searchTime' => null, 'response' => null);
+            return json_encode(array_diff_key($result,$forbiddenResultItems));
         }
     }
 
