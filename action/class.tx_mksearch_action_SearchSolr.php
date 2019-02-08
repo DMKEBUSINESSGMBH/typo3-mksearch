@@ -421,7 +421,8 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
                 $tsfe->TYPO3_CONF_VARS['FE']['debug'] = 0;
             }
 
-            return json_encode($this->getViewData()->offsetGet('result'));
+            $result = $this->getViewData()->offsetGet('result');
+            return json_encode(array('suggestions' => $result['suggestions']));
         }
     }
 
