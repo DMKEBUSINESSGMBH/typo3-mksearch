@@ -61,3 +61,20 @@ Für Treffer aus der Tabelle tt\_address hat diese Vorlage bspw. folgendes Ausse
 Wenn man wissen möchte, welche Attribute überhaupt vorhanden sind, kann sich diese über den speziellen Marker \_\_MINFO\#\#\# ausgeben lassen. Im Beispiel für tt\_address wäre der Marker als \#\#\#ITEM\_\_\_MINFO\#\#\#. Zusätzlich wird damit auch die gefundene Typoscript-Konfiguration für die Marker mit angezeigt.
 
 Bitte beachten Sie im Screenshot des lib-Objektes auch die Konfiguration für “links”. In diesem Abschnitt wird die Zielseite für die Verlinkung des Treffers angegeben.
+
+## Ausgabe von Multivalue-Feldern in Marker-Templates
+
+Multivaluefelder werden per default mit einem Komma verbunden. Das kann 
+aber auch anders konfiguriert werden (s.u.). Z.B. können die Werte auch sortiert werden,
+um eine alphabetische Reihenfolge der Werte zu erhalten.
+
+    lib.mksearch.hit {
+        multiValuedGlue = |, |
+        multiValuedGlue{
+            noTrim = 1
+            removeEmptyValues = 0
+            sort = 0
+        }
+        #multiValuedGlue = 0| 0
+        #multiValuedGlue.noTrim.splitChar = 0
+    }

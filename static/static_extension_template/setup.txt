@@ -862,7 +862,12 @@ lib.mksearch.hit {
     content.override.cObject.field = content_hl
 
     multiValuedGlue = |, |
-    multiValuedGlue.noTrim = 1
+    multiValuedGlue{
+        noTrim = 1
+        removeEmptyValues = 0
+        ### sort multivalue array with sort() PHP method
+        sort = 0
+    }
     #multiValuedGlue = 0| 0
     #multiValuedGlue.noTrim.splitChar = 0
 
