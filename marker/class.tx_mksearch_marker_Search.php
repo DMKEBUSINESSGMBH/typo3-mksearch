@@ -100,6 +100,9 @@ class tx_mksearch_marker_Search extends tx_rnbase_util_SimpleMarker
                 if ($removeEmptyValues) {
                     $value = tx_mksearch_util_Misc::removeEmptyValues($value);
                 }
+                if ($configurations->getBool($confId . 'multiValuedGlue.sort')) {
+                    sort($value);
+                }
                 $item->setProperty($field, implode($glue, $value));
             }
         }
