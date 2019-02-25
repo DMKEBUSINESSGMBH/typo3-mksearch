@@ -242,7 +242,42 @@ Somit lassen sich Facetten anhand von Strings bauen (der 2. Teil des DFS Wert wi
 
 Damit umgeht man Beschränkungen, wenn nach Strings facettiert wird. Denn enthält ein Wert z.B. ein Solr Kontrollzeichen wie "-", dann wird das zwar indiziert und auch als Wert in einem fq Link verwendet, vor der Solr Anfrage werden die Kontrollzeichen aber entfernt. Damit erhält man keine Ergebnisse.
 
-@TODO Sortieroption der DFS Facetten erläutern!
+### Sortierung
+Solr bietet nur die Möglichkeit Facetten nach Anzahl oder alphabetisch zu sortieren. Um das zu umgehen, kann den 
+Facetten eine individuelle Sortierung gegeben werden. Diese muss beim hinzufügen der Facetten direkt übergeben werden:
+
+~~~~ {.sourceCode .php}
+    $recordIndexMapping = array(
+        'uid' => 'uid_mi',
+    );
+    $this->indexArrayOfModelsByMapping(
+        $models,
+        $recordIndexMapping,
+        $indexDoc
+    );
+    $facetValues = array();
+    $sortingValues = array();
+    foreach ($models as $model) {
+        $facetValues[$model->getUid()] = $model->getTitle();
+        $sortingValues[] = $model->getSorting(); 
+    }
+    $indexDoc->addField(
+        'my_facet_dfs_ms',
+        tx_mksearch_util_KeyValueFacet::getInstance()->buildFacetValues(
+            array_keys($facetValues), 
+            array_values($facetValues),
+            $sortingValues
+        ),
+        'keyword'
+    );
+~~~~
+
+Anschließend muss die Sortierung noch in der Suche aktiviert werden:
+
+~~~~ {.sourceCode .ts}
+    plugin.tx_mksearch.searchsolr.responseProcessor.facet.sorting = 1
+~~~~
+
 
 Query facets
 ------------
