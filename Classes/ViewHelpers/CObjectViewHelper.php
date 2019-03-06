@@ -33,6 +33,9 @@ class CObjectViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\CObjectViewHelper
     public function injectConfigurationManager(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface $configurationManager)
     {
         parent::injectConfigurationManager($configurationManager);
+
+        \tx_rnbase::load('tx_mksearch_service_internal_Index');
+
         if (
             \tx_mksearch_service_internal_Index::isIndexingInProgress()
             && !empty($GLOBALS['TSFE'])
