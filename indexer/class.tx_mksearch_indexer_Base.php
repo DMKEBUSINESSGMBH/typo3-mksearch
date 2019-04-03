@@ -363,7 +363,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
      */
     protected function getCoreConfigUtility()
     {
-        return tx_mksearch_service_indexer_core_Config;
+        return 'tx_mksearch_service_indexer_core_Config';
     }
 
     /**
