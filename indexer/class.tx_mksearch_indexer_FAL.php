@@ -74,15 +74,10 @@ class tx_mksearch_indexer_FAL extends tx_mksearch_indexer_BaseMedia
         tx_mksearch_interface_IndexerDocument $indexDoc,
         $options
     ) {
-        //den Titel aus den Metadaten holen
-        $resourceFile = $this->getFileFromRecord($sourceRecord);
-        if ($resourceFile && $resourceFile->hasProperty('title')) {
-            //oder mergen? $resourceFile->getProperties()
-            $sourceRecord['title'] = $resourceFile->getProperty('title');
-        }
-        //die Beschreibung aus den Metadaten holen
-        if ($resourceFile && $resourceFile->hasProperty('description')) {
-            $sourceRecord['abstract'] = $resourceFile->getProperty('description');
+        // get meta data, too, and fill the abstract
+        if ($resourceFile = $this->getFileFromRecord($sourceRecord)) {
+            $sourceRecord = $resourceFile->getProperties();
+            $sourceRecord['abstract'] = $sourceRecord['description'];
         }
 
         return parent::prepareSearchData($tableName, $sourceRecord, $indexDoc, $options);
