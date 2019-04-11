@@ -77,7 +77,6 @@ class tx_mksearch_indexer_FAL extends tx_mksearch_indexer_BaseMedia
         // get meta data, too, and fill the abstract
         if ($resourceFile = $this->getFileFromRecord($sourceRecord)) {
             $sourceRecord = $resourceFile->getProperties();
-            $sourceRecord['abstract'] = $sourceRecord['description'];
         }
 
         return parent::prepareSearchData($tableName, $sourceRecord, $indexDoc, $options);
