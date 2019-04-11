@@ -133,13 +133,14 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
         $indexDoc->setTitle($title);
         $indexDoc->setTimestamp($sourceRecord['tstamp']);
 
-        $content = $sourceRecord['description'] ? $sourceRecord['description'] : $sourceRecord['alternative'];
-        $content = $content ? $content : $title;
-        $indexDoc->setContent($content);
+        $indexDoc->setContent(
+            $sourceRecord['description'] ? $sourceRecord['description'] : $sourceRecord['alternative']
+        );
 
-        $abstract = $sourceRecord['abstract'] ? $sourceRecord['abstract'] : $sourceRecord['alternative'];
-        $abstract = $abstract ? $abstract : $content;
-        $indexDoc->setAbstract($abstract);
+        $indexDoc->setAbstract(
+            $sourceRecord['abstract'] ? $sourceRecord['abstract'] : $sourceRecord['alternative'],
+            $indexDoc->getMaxAbstractLength()
+        );
 
         //den kompletten, relativen Pfad zum Dam Dokument indizieren
         $indexDoc->addField('file_relpath_s', $this->getRelFileName($tableName, $sourceRecord));

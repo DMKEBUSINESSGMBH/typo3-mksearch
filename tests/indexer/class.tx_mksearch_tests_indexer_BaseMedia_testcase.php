@@ -366,6 +366,100 @@ class tx_mksearch_tests_indexer_BaseMedia_testcase extends tx_mksearch_tests_Tes
     }
 
     /**
+     * @group unit
+     */
+    public function testContentFromSourceRecordIsIndexedCorrect()
+    {
+        $indexer = $this->getIndexerMock(array(
+            'getBaseTableName', 'getFileExtension',
+            'getFilePath', 'getRelFileName', 'stopIndexing', 'isIndexableRecord'
+        ));
+        $indexer->expects(self::any())
+            ->method('isIndexableRecord')
+            ->will(self::returnValue(true));
+
+        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', 'core', 'file');
+
+        $indexDoc = $indexer->prepareSearchData(
+            'doesnt_matter',
+            array('uid' => 123, 'title' => 'title', 'description' => 'content'),
+            $indexDoc,
+            array('indexMode' => 'none')
+        );
+
+        $indexedData = $indexDoc->getData();
+        self::assertEquals('content', $indexedData['content']->getValue());
+
+        $indexDoc = $indexer->prepareSearchData(
+            'doesnt_matter',
+            array('uid' => 123, 'title' => 'title', 'alternative' => 'content'),
+            $indexDoc,
+            array('indexMode' => 'none')
+        );
+
+        $indexedData = $indexDoc->getData();
+        self::assertEquals('content', $indexedData['content']->getValue());
+
+
+        $indexDoc = $indexer->prepareSearchData(
+            'doesnt_matter',
+            array('uid' => 123, 'title' => 'title'),
+            $indexDoc,
+            array('indexMode' => 'none')
+        );
+
+        $indexedData = $indexDoc->getData();
+        self::assertEmpty($indexedData['content']->getValue());
+    }
+
+    /**
+     * @group unit
+     */
+    public function testAbstractFromSourceRecordIsIndexedCorrect()
+    {
+        $indexer = $this->getIndexerMock(array(
+            'getBaseTableName', 'getFileExtension',
+            'getFilePath', 'getRelFileName', 'stopIndexing', 'isIndexableRecord'
+        ));
+        $indexer->expects(self::any())
+            ->method('isIndexableRecord')
+            ->will(self::returnValue(true));
+
+        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', 'core', 'file');
+
+        $indexDoc = $indexer->prepareSearchData(
+            'doesnt_matter',
+            array('uid' => 123, 'title' => 'title', 'abstract' => 'abstract'),
+            $indexDoc,
+            array('indexMode' => 'none')
+        );
+
+        $indexedData = $indexDoc->getData();
+        self::assertEquals('abstract', $indexedData['abstract']->getValue());
+
+        $indexDoc = $indexer->prepareSearchData(
+            'doesnt_matter',
+            array('uid' => 123, 'title' => 'title', 'alternative' => 'abstract'),
+            $indexDoc,
+            array('indexMode' => 'none')
+        );
+
+        $indexedData = $indexDoc->getData();
+        self::assertEquals('abstract', $indexedData['abstract']->getValue());
+
+
+        $indexDoc = $indexer->prepareSearchData(
+            'doesnt_matter',
+            array('uid' => 123, 'title' => 'title'),
+            $indexDoc,
+            array('indexMode' => 'none')
+        );
+
+        $indexedData = $indexDoc->getData();
+        self::assertEmpty($indexedData['abstract']->getValue());
+    }
+
+    /**
      * @param array $mockedMethods
      * @return Ambigous <PHPUnit_Framework_MockObject_MockObject, tx_mksearch_indexer_BaseMedia>
      */
@@ -381,7 +475,7 @@ class tx_mksearch_tests_indexer_BaseMedia_testcase extends tx_mksearch_tests_Tes
             '',
             false,
             false,
-            false,
+            true,
             $mockedMethods
         );
     }
