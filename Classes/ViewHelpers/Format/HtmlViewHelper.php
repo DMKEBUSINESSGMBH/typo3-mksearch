@@ -13,9 +13,6 @@ namespace DMK\Mksearch\ViewHelpers\Format;
  * TABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General      *
  * Public License for more details.                                       *
  *                                                                        */
-use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 /**
  * DMK\Mksearch\ViewHelpers\Format$HtmlViewHelper
  *
@@ -28,10 +25,14 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
  *                  GNU Lesser General Public License, version 3 or later
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
+
 \tx_rnbase::load('tx_rnbase_util_TYPO3');
 \tx_rnbase::load('tx_mksearch_service_internal_Index');
 
-if (\tx_rnbase_util_TYPO3::isTYPO70OrHigher()) {
+if (\tx_rnbase_util_TYPO3::isTYPO90OrHigher()) {
+
     class HtmlViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Format\HtmlViewHelper
     {
 
@@ -45,7 +46,7 @@ if (\tx_rnbase_util_TYPO3::isTYPO70OrHigher()) {
          *
          * @return string the parsed string.
          */
-        public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext)
+        public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, \TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface $renderingContext)
         {
             $parseFuncTSPath = $arguments['parseFuncTSPath'];
             if (TYPO3_MODE === 'BE') {
@@ -84,6 +85,34 @@ if (\tx_rnbase_util_TYPO3::isTYPO70OrHigher()) {
             }
         }
     }
+} elseif (\tx_rnbase_util_TYPO3::isTYPO70OrHigher()) {
+
+    class HtmlViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Format\HtmlViewHelper
+    {
+        /**
+         * nähere Infos in Configuration/XClasses.php
+         *
+         * @return void
+         */
+        protected static function simulateFrontendEnvironment()
+        {
+            if (!\tx_mksearch_service_internal_Index::isIndexingInProgress()) {
+                parent::simulateFrontendEnvironment();
+            }
+        }
+
+        /**
+         * @return void
+         * @see simulateFrontendEnvironment()
+         */
+        protected static function resetFrontendEnvironment()
+        {
+            if (!\tx_mksearch_service_internal_Index::isIndexingInProgress()) {
+                parent::resetFrontendEnvironment();
+            }
+        }
+    }
+
 } else {
     class HtmlViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Format\HtmlViewHelper
     {
