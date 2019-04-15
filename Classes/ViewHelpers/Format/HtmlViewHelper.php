@@ -31,7 +31,7 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 \tx_rnbase::load('tx_rnbase_util_TYPO3');
 \tx_rnbase::load('tx_mksearch_service_internal_Index');
 
-if (\tx_rnbase_util_TYPO3::isTYPO90OrHigher()) {
+if (\tx_rnbase_util_TYPO3::isTYPO86OrHigher()) {
 
     class HtmlViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Format\HtmlViewHelper
     {
