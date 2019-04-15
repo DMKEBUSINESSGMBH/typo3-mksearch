@@ -90,6 +90,29 @@ if (\tx_rnbase_util_TYPO3::isTYPO86OrHigher()) {
     class HtmlViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Format\HtmlViewHelper
     {
         /**
+         * @param array $arguments
+         * @param \Closure $renderChildrenClosure
+         * @param \TYPO3\CMS\Fluid\Core\Rendering\RenderingContextInterface $renderingContext
+         *
+         * @return string the parsed string.
+         */
+        public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, \TYPO3\CMS\Fluid\Core\Rendering\RenderingContextInterface $renderingContext)
+        {
+            $parseFuncTSPath = $arguments['parseFuncTSPath'];
+            if (TYPO3_MODE === 'BE') {
+                static::simulateFrontendEnvironment();
+            }
+            $value = $renderChildrenClosure();
+            $contentObject = GeneralUtility::makeInstance(ContentObjectRenderer::class);
+            $contentObject->start([]);
+            $content = $contentObject->parseFunc($value, [], '< ' . $parseFuncTSPath);
+            if (TYPO3_MODE === 'BE') {
+                static::resetFrontendEnvironment();
+            }
+            return $content;
+        }
+
+        /**
          * nähere Infos in Configuration/XClasses.php
          *
          * @return void
