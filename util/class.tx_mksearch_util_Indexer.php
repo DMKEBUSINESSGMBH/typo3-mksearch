@@ -133,7 +133,7 @@ class tx_mksearch_util_Indexer
     ) {
 
         //collect values
-        $tempIndexDoc = array();
+        $tempIndexDoc = [];
         /* @var $model tx_rnbase_IModel */
         foreach ($models as $model) {
             if (!$model) {
@@ -143,12 +143,12 @@ class tx_mksearch_util_Indexer
                 if ($dontIndexHidden && $model->isHidden()) {
                     continue;
                 }
-                if (!empty($model->record[$recordKey])) {
+                if (!empty($model->getProperty($recordKey))) {
                     // Attributes can be commaseparated to index values into different fields
-                    $indexDocKeys = tx_rnbase_util_Strings::trimExplode(',', $indexDocKey);
+                    $indexDocKeys = Tx_Rnbase_Utility_Strings::trimExplode(',', $indexDocKey);
                     foreach ($indexDocKeys as $indexDocKey) {
-                        $value = $model->record[$recordKey];
-                        $tempIndexDoc[$prefix.$indexDocKey][] = $this->doValueConversion($value, $indexDocKey, $model->record, $recordKey, $options);
+                        $value = $model->getProperty($recordKey);
+                        $tempIndexDoc[$prefix.$indexDocKey][] = $this->doValueConversion($value, $indexDocKey, $model->getProperty(), $recordKey, $options);
                     }
                 }
             }
