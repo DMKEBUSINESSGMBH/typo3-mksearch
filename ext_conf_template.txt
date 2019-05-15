@@ -10,6 +10,9 @@ tikaJar =
 # cat=mksearch/basic/file; type=string; label= When sending a file to tika with umlauts in the filename, the LC_CTYPE must be set so umlauts are not removed and the file can be read correct. Leave empty if setting the locale is not desired. On Windows systems this is ignored!
 tikaLocaleType = de_DE.UTF-8
 
+# cat=mksearch/basic/file; type=string; label= Parameters inserted after the tika command. Usually used to redirect STDERR somewhere like "2>/dev/null" to suppress errors of tika.
+postTikaCommandParameters =
+
 # cat=mksearch/basic; type=string;label=Default index to use for search
 defaultIndex = default
 

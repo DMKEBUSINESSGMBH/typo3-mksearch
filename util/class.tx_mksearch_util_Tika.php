@@ -212,7 +212,11 @@ class tx_mksearch_util_Tika
         $tikaCommand = $commandUtilityClass::getCommand('java')
             . ' -Dfile.encoding=UTF-8' // forces UTF8 output
             . ' -jar ' . escapeshellarg($this->tikaJar)
-            . ' -' . $tikaCmdType . ' ' . escapeshellarg($absFile);
+            . ' -' . $tikaCmdType . ' ' . escapeshellarg($absFile)
+            . ' ' . tx_rnbase_configurations::getExtensionCfgValue(
+                'mksearch',
+                'postTikaCommandParameters'
+            );
 
         $this->resetLocaleType();
 
