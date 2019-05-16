@@ -179,12 +179,17 @@ class tx_mksearch_util_Tika
         $tikaCommand = $commandUtilityClass::getCommand('java')
             . ' -Dfile.encoding=UTF8' // forces UTF8 output
             . ' -jar ' . escapeshellarg($this->tikaJar)
-            . ' -m ' . escapeshellarg($absFile);
+            . ' -m ' . escapeshellarg($absFile)
+            . ' ' . tx_rnbase_configurations::getExtensionCfgValue(
+                'mksearch',
+                'postTikaCommandParameters'
+            );
 
         $this->resetLocaleType();
 
         $shellOutput = array();
         $tikaCommand = $this->getTikaCommandWithLocaleTypePrefixForNonWindowsSystems($tikaCommand);
+        // we use exec instead of shell_exec at this point to get all lines as array and not as simple string
         exec($tikaCommand, $shellOutput);
 
         $ret = array();
