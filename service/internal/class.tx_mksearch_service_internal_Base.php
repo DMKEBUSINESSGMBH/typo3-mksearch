@@ -24,13 +24,12 @@
 tx_rnbase::load('Tx_Rnbase_Service_Base');
 
 /**
- * Service for accessing models from database
+ * Service for accessing models from database.
  */
 class tx_mksearch_service_internal_Base extends Tx_Rnbase_Service_Base
 {
-
     /**
-     * Search class - set this to the search class name
+     * Search class - set this to the search class name.
      *
      * @var string
      */
@@ -45,21 +44,26 @@ class tx_mksearch_service_internal_Base extends Tx_Rnbase_Service_Base
 
         return tx_rnbase_util_SearchBase::getInstance($this->searchClass);
     }
+
     /**
-     * Search database
+     * Search database.
      *
      * @param array $fields
      * @param array $options
+     *
      * @return array[tx_mksearch_model_internal_Index]
      */
     public function search($fields, $options)
     {
         return $this->getSearcher()->search($fields, $options);
     }
+
     /**
      * Check if a indexer is defined to index data into a given core.
+     *
      * @param tx_mksearch_model_internal_Index $core
-     * @param tx_mksearch_interface_Indexer $indexer keys: extKey and contentType
+     * @param tx_mksearch_interface_Indexer    $indexer keys: extKey and contentType
+     *
      * @return bool
      */
     public function isIndexerDefined($core, tx_mksearch_interface_Indexer $indexer)
@@ -69,7 +73,6 @@ class tx_mksearch_service_internal_Base extends Tx_Rnbase_Service_Base
         $indexerType = $indexer->getContentType();
         list($extKey, $contentType) = $indexer->getContentType();
         $indexerData = array('extKey' => $extKey, 'contentType' => $contentType);
-
 
         if (array_key_exists($indexerData['extKey'].'.', $cfg)) {
             if (array_key_exists($indexerData['contentType'].'.', $cfg[$indexerData['extKey'].'.'])) {
@@ -81,10 +84,11 @@ class tx_mksearch_service_internal_Base extends Tx_Rnbase_Service_Base
     }
 
     /**
-     * Search database for all configurated Indices
+     * Search database for all configurated Indices.
      *
      * @param array $fields
      * @param array $options
+     *
      * @return array[tx_mksearch_model_internal_Index]
      */
     public function findAll()
@@ -97,10 +101,11 @@ class tx_mksearch_service_internal_Base extends Tx_Rnbase_Service_Base
     }
 
     /**
-     * Search database for all configurated Indices
+     * Search database for all configurated Indices.
      *
      * @param array $fields
      * @param array $options
+     *
      * @return array[tx_mksearch_model_internal_Index]
      */
     public function getByPageId($pageId)
@@ -116,10 +121,11 @@ class tx_mksearch_service_internal_Base extends Tx_Rnbase_Service_Base
     }
 
     /**
-     * Get model from database by its uid
+     * Get model from database by its uid.
      *
      * @param array $fields
      * @param array $options
+     *
      * @return tx_mksearch_model_*
      */
     public function get($uid)
@@ -129,5 +135,5 @@ class tx_mksearch_service_internal_Base extends Tx_Rnbase_Service_Base
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/internal/class.tx_mksearch_service_internal_Base.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/internal/class.tx_mksearch_service_internal_Base.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/internal/class.tx_mksearch_service_internal_Base.php'];
 }

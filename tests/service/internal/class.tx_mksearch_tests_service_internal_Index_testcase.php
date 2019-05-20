@@ -22,23 +22,19 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-
 tx_rnbase::load('tx_mksearch_tests_Testcase');
 tx_rnbase::load('tx_mksearch_tests_Util');
 
 /**
- *
- * @package TYPO3
- * @subpackage mksearch
  * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
 class tx_mksearch_tests_service_internal_Index_testcase extends tx_mksearch_tests_Testcase
 {
-
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
+     *
      * @see tx_mksearch_tests_Testcase::setUp()
      */
     protected function setUp()
@@ -49,7 +45,8 @@ class tx_mksearch_tests_service_internal_Index_testcase extends tx_mksearch_test
     }
 
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
+     *
      * @see tx_mksearch_tests_Testcase::tearDown()
      */
     protected function tearDown()
@@ -135,7 +132,6 @@ class tx_mksearch_tests_service_internal_Index_testcase extends tx_mksearch_test
 
         $indexService->_call('deleteOldQueueEntries');
     }
-
 
     /**
      * test for tx_mksearch_service_internal_Index::addModelsToIndex.
@@ -229,12 +225,12 @@ class tx_mksearch_tests_service_internal_Index_testcase extends tx_mksearch_test
             ->with(
                 'tx_mksearch_queue',
                 array(
-                    'cr_date'    => tx_rnbase_util_Dates::datetime_tstamp2mysql($GLOBALS['EXEC_TIME']),
-                    'prefer'    => 0,
-                    'recid'        => 50,
-                    'tablename'    => 'tx_mktest_table',
-                    'data'        => '',
-                    'resolver'    => '',
+                    'cr_date' => tx_rnbase_util_Dates::datetime_tstamp2mysql($GLOBALS['EXEC_TIME']),
+                    'prefer' => 0,
+                    'recid' => 50,
+                    'tablename' => 'tx_mktest_table',
+                    'data' => '',
+                    'resolver' => '',
                 )
             )
             ->will(self::returnValue(123));
@@ -260,12 +256,12 @@ class tx_mksearch_tests_service_internal_Index_testcase extends tx_mksearch_test
             ->with(
                 'tx_mksearch_queue',
                 array(
-                        'cr_date'    => tx_rnbase_util_Dates::datetime_tstamp2mysql($GLOBALS['EXEC_TIME']),
-                        'prefer'    => 0,
-                        'recid'        => 50,
-                        'tablename'    => 'tx_mktest_table',
-                        'data'        => '',
-                        'resolver'    => 'tx_mksearch_resolver_Test',
+                        'cr_date' => tx_rnbase_util_Dates::datetime_tstamp2mysql($GLOBALS['EXEC_TIME']),
+                        'prefer' => 0,
+                        'recid' => 50,
+                        'tablename' => 'tx_mktest_table',
+                        'data' => '',
+                        'resolver' => 'tx_mksearch_resolver_Test',
                 )
             )
             ->will(self::returnValue(123));
@@ -342,11 +338,11 @@ class tx_mksearch_tests_service_internal_Index_testcase extends tx_mksearch_test
     public function testAddRecordsToIndexWithMoreThan500Records()
     {
         $execTimeFormatted = tx_rnbase_util_Dates::datetime_tstamp2mysql($GLOBALS['EXEC_TIME']);
-        for ($i = 1; $i <= 501; $i++) {
+        for ($i = 1; $i <= 501; ++$i) {
             $records[] = array('tablename' => 'tx_mktest_table', 'uid' => $i);
         }
         foreach ($records as $record) {
-            $expectedRecordsToInsert[] = "('$execTimeFormatted','0','" . $record['uid'] . "','" . $record['tablename'] . "','','')";
+            $expectedRecordsToInsert[] = "('$execTimeFormatted','0','".$record['uid']."','".$record['tablename']."','','')";
         }
 
         $service = $this->getMock('tx_mksearch_service_internal_Index', array('doInsertRecords'));

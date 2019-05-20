@@ -1,7 +1,5 @@
 <?php
 /**
- * @package tx_mksearch
- * @subpackage tx_mksearch_tests_filter
  * @author Hannes Bochmann
  *
  *  Copyright notice
@@ -27,9 +25,8 @@
  */
 
 /**
- * benötigte Klassen einbinden
+ * benötigte Klassen einbinden.
  */
-
 tx_rnbase::load('tx_mksearch_tests_Testcase');
 tx_rnbase::load('tx_mksearch_filter_SolrBase');
 //damit die User func ausgeführt werden kann, muss sie geladen werden, was auf dem
@@ -39,10 +36,8 @@ tx_rnbase::load('tx_mksearch_filter_SolrBase');
 tx_rnbase::load('tx_mksearch_util_UserFunc');
 
 /**
- * Testfälle für tx_mksearch_filter_SolrBase
+ * Testfälle für tx_mksearch_filter_SolrBase.
  *
- * @package tx_mksearch
- * @subpackage tx_mksearch_tests
  * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
  * @author Michael Wagner <michael.wagner@dmk-ebusiness.de>
  * @license http://www.gnu.org/licenses/lgpl.html
@@ -200,7 +195,7 @@ class tx_mksearch_tests_filter_SolrBase_testcase extends tx_mksearch_tests_Testc
 
         self::assertEquals(array(
             0 => '(-fe_group_mi:[* TO *] AND id:[* TO *]) OR fe_group_mi:0',
-            1 => 'facet_field:"\"facet value\""'
+            1 => 'facet_field:"\"facet value\""',
         ), $options['fq'], 'fq wurde falsch übernommen!');
     }
 
@@ -222,7 +217,7 @@ class tx_mksearch_tests_filter_SolrBase_testcase extends tx_mksearch_tests_Testc
 
         self::assertEquals(array(
             0 => '(-fe_group_mi:[* TO *] AND id:[* TO *]) OR fe_group_mi:0',
-            1 => 'facet_dummy:"\"facet value\""'
+            1 => 'facet_dummy:"\"facet value\""',
         ), $options['fq'], 'fq wuede falsch übernommen!');
     }
 
@@ -253,7 +248,7 @@ class tx_mksearch_tests_filter_SolrBase_testcase extends tx_mksearch_tests_Testc
     public function testSettingOfFeGroupsToFilterQuery()
     {
         $tsFeBackup = $GLOBALS['TSFE']->fe_user->groupData['uid'];
-        $GLOBALS['TSFE']->fe_user->groupData['uid'] = array(1,2);
+        $GLOBALS['TSFE']->fe_user->groupData['uid'] = array(1, 2);
 
         $config = $this->getDefaultConfig();
 
@@ -615,6 +610,7 @@ class tx_mksearch_tests_filter_SolrBase_testcase extends tx_mksearch_tests_Testc
 
     /**
      * @param array $config
+     *
      * @return tx_mksearch_filter_SolrBase
      */
     private function getFilter($config = array())
@@ -631,5 +627,5 @@ class tx_mksearch_tests_filter_SolrBase_testcase extends tx_mksearch_tests_Testc
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mkmarketplace/tests/filter/class.tx_mkmarketplace_tests_filter_SearchAds_testcase.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mkmarketplace/tests/filter/class.tx_mkmarketplace_tests_filter_SearchAds_testcase.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mkmarketplace/tests/filter/class.tx_mkmarketplace_tests_filter_SearchAds_testcase.php'];
 }

@@ -1,7 +1,5 @@
 <?php
 /**
- * @package tx_mksearch
- * @subpackage tx_mksearch_indexer_seminars
  * @author Hannes Bochmann
  *
  *  Copyright notice
@@ -27,29 +25,26 @@
  */
 
 /**
- * benötigte Klassen einbinden
+ * benötigte Klassen einbinden.
  */
-
 tx_rnbase::load('tx_mksearch_indexer_seminars_Seminar');
 tx_rnbase::load('tx_mksearch_util_Misc');
 
 /**
- * Indexes seminars with the object_type = 0
- *
- * @package tx_mksearch
- * @subpackage tx_mksearch_indexer_seminars
+ * Indexes seminars with the object_type = 0.
  */
 class tx_mksearch_indexer_seminars_SeminarObjectType1 extends tx_mksearch_indexer_seminars_Seminar
 {
-
     /**
-     * All seminar dates which are related to the current topic
+     * All seminar dates which are related to the current topic.
+     *
      * @var array
      */
     protected $aDates;
-    
+
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
+     *
      * @see tx_mksearch_interface_Indexer::prepareSearchData()
      */
     public function prepareSearchData($tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options)
@@ -64,7 +59,7 @@ class tx_mksearch_indexer_seminars_SeminarObjectType1 extends tx_mksearch_indexe
             return null;
         }//nothing to do as we have no dates
         //else
-        
+
         //now we can start the real indexing
         //those functions are provided by our parent
         $this->indexSeminar($indexDoc);
@@ -79,12 +74,12 @@ class tx_mksearch_indexer_seminars_SeminarObjectType1 extends tx_mksearch_indexe
         //about lodgings, foods and payments
         return $indexDoc;
     }
-    
+
     /**
      * the begin_date and end_date comes from the dates so we have to fetch them
-     * from there and override the existing (mostly) empty dates
+     * from there and override the existing (mostly) empty dates.
+     *
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @return void
      */
     protected function indexSeminar(tx_mksearch_interface_IndexerDocument $indexDoc)
     {
@@ -104,17 +99,17 @@ class tx_mksearch_indexer_seminars_SeminarObjectType1 extends tx_mksearch_indexe
             $indexDoc->addField('end_date_ms', $aEndDates);
         }
     }
-    
+
     /**
-     * Indexes everything about the seminar target groups
+     * Indexes everything about the seminar target groups.
+     *
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @return void
      */
     protected function indexSeminarOrganizers(tx_mksearch_interface_IndexerDocument $indexDoc)
     {
         //Mapping which function fills which field
         $aFunctionFieldMapping = $this->getOrganizersMapping();
-        
+
         //get all organizers by the related dates
         $aOrganizersByDates = $this->getRelatedDataByDates('getOrganizerBag');
         $aTempIndexDocs = $this->getMultiValueFieldsByListObjectArray($aOrganizersByDates, $aFunctionFieldMapping);
@@ -125,21 +120,21 @@ class tx_mksearch_indexer_seminars_SeminarObjectType1 extends tx_mksearch_indexe
             }
         }
     }
-    
+
     /**
-     * Indexes everything about the seminar places
+     * Indexes everything about the seminar places.
+     *
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @return void
      */
     protected function indexSeminarPlaces(tx_mksearch_interface_IndexerDocument $indexDoc)
     {
         //Mapping which function fills which field
         $aFunctionFieldMapping = $this->getPlacesMapping();
-        
+
         $aPlacesByDates = $this->getRelatedDataByDates('getPlaces');
-        
+
         $aTempIndexDocs = $this->getMultiValueFieldsByListObjectArray($aPlacesByDates, $aFunctionFieldMapping);
-        
+
         //add fields
         foreach ($aTempIndexDocs as $sIndexKey => $mValue) {
             if (!empty($mValue)) {
@@ -147,24 +142,24 @@ class tx_mksearch_indexer_seminars_SeminarObjectType1 extends tx_mksearch_indexe
             }
         }
     }
-    
+
     /**
-     * Indexes everything about the seminar speakers
+     * Indexes everything about the seminar speakers.
+     *
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @return void
      */
     protected function indexSeminarSpeakers(tx_mksearch_interface_IndexerDocument $indexDoc)
     {
         //Mapping which function fills which field
         $aFunctionFieldMapping = $this->getSpeakersMapping();
-        
+
         $aSpeakersByDates = array();
         foreach ($this->aDates as $oDate) {
             $aSpeakersByDates[] = $this->getSpeakerBag($oDate->getUid());
         }
-        
+
         $aTempIndexDoc = $this->getMultiValueFieldsByListObjectArray($aSpeakersByDates, $aFunctionFieldMapping);
-        
+
         foreach ($aTempIndexDoc as $sIndexKey => $mValue) {
             if (!empty($mValue)) {
                 $indexDoc->addField($sIndexKey, $mValue);
@@ -173,16 +168,16 @@ class tx_mksearch_indexer_seminars_SeminarObjectType1 extends tx_mksearch_indexe
     }
 
     /**
-     * Indexes everything about the seminar timeslots
+     * Indexes everything about the seminar timeslots.
+     *
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @return void
      */
     protected function indexSeminarTimeslots(tx_mksearch_interface_IndexerDocument $indexDoc)
     {
         //Mapping which function fills which field
         $aRecordFieldMapping = $this->getTimeslotsMapping();
         $aTimeslotsByDate = $this->getRelatedDataByDates('getTimeSlotsAsArrayWithMarkers');
-    
+
         //as the speakers will be a comma separated list we have to make
         //an array out of it
         if (empty($aTimeslotsByDate)) {
@@ -197,18 +192,19 @@ class tx_mksearch_indexer_seminars_SeminarObjectType1 extends tx_mksearch_indexe
             }
         }
         $aTempIndexDoc = $this->getMultiValueFieldsByArray($aMergedTimeslots, $aRecordFieldMapping);
-        
+
         //now we index the collected fields
         $this->indexArrayByMapping($indexDoc, $aRecordFieldMapping, $aTempIndexDoc);
     }
-    
+
     /**
      * Collects the values from objects. the objects
      * reside inside an list object. these list objects reside inside an
-     * array
+     * array.
      *
-     * @param array $aValues    | array of array of objects
-     * @param array $aMapping   | the field key and the function name delivering the data
+     * @param array $aValues  | array of array of objects
+     * @param array $aMapping | the field key and the function name delivering the data
+     *
      * @return array
      */
     private function getMultiValueFieldsByListObjectArray($aValues, array $aMapping)
@@ -222,7 +218,7 @@ class tx_mksearch_indexer_seminars_SeminarObjectType1 extends tx_mksearch_indexe
         foreach ($aValues as $aValue) {
             $aTempIndexDocs[] = $this->getMultiValueFieldsByListObject($aValue, $aMapping);
         }
-            
+
         //nothing found?
         if (empty($aTempIndexDocs)) {
             return null;
@@ -237,12 +233,13 @@ class tx_mksearch_indexer_seminars_SeminarObjectType1 extends tx_mksearch_indexe
                 }
             }
         }
-        
+
         return $aNewTempIndexDoc;
     }
-    
+
     /**
-     * fetches all dates related to this topic
+     * fetches all dates related to this topic.
+     *
      * @return array
      */
     private function getSeminarDatesByTopic()
@@ -251,10 +248,10 @@ class tx_mksearch_indexer_seminars_SeminarObjectType1 extends tx_mksearch_indexe
         //we have to take an own method as the seminars extension seems not to provide
         //a method to do that
         $aOptions = array();
-        $aOptions['where'] = SEMINARS_TABLE_SEMINARS.'.topic=' . $this->oSeminar->getUid();
+        $aOptions['where'] = SEMINARS_TABLE_SEMINARS.'.topic='.$this->oSeminar->getUid();
         $aFrom = array(SEMINARS_TABLE_SEMINARS, SEMINARS_TABLE_SEMINARS);
-        $aRows = tx_rnbase_util_DB::doSelect(SEMINARS_TABLE_SEMINARS . '.uid', $aFrom, $aOptions);
-        
+        $aRows = tx_rnbase_util_DB::doSelect(SEMINARS_TABLE_SEMINARS.'.uid', $aFrom, $aOptions);
+
         //now we get the according objects
         $aSeminars = array();
         if (!empty($aRows)) {
@@ -262,15 +259,16 @@ class tx_mksearch_indexer_seminars_SeminarObjectType1 extends tx_mksearch_indexe
                 $aSeminars[] = $this->getSeminar($aRow);
             }
         }
-        
+
         return $aSeminars;
     }
-    
+
     /**
      * Gets data which is related to the dates
-     * for example deliviering all places of the several dates
+     * for example deliviering all places of the several dates.
      *
      * @param string $sFunction
+     *
      * @return array
      */
     private function getRelatedDataByDates($sFunction)
@@ -279,11 +277,11 @@ class tx_mksearch_indexer_seminars_SeminarObjectType1 extends tx_mksearch_indexe
         foreach ($this->aDates as $oDate) {
             $aRelatedDataByDates[] = $oDate->$sFunction();
         }
-        
+
         return $aRelatedDataByDates;
     }
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/seminars/class.tx_mksearch_indexer_seminars_SeminarObjectType1.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/seminars/class.tx_mksearch_indexer_seminars_SeminarObjectType1.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/seminars/class.tx_mksearch_indexer_seminars_SeminarObjectType1.php'];
 }

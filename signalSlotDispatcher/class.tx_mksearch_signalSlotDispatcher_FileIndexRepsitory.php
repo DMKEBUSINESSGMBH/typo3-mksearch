@@ -1,7 +1,5 @@
 <?php
 /**
- * @package tx_mksearch
- * @subpackage tx_mksearch_service
  * @author Hannes Bochmann
  *
  *  Copyright notice
@@ -27,19 +25,16 @@
  */
 
 /**
- * tx_mksearch_signalSlotDispatcher_FileIndexRepsitory
+ * tx_mksearch_signalSlotDispatcher_FileIndexRepsitory.
  *
- * @package         TYPO3
- * @subpackage      mksearch
  * @author          Hannes Bochmann <dev@dmk-ebusiness.de>
  * @license         http://www.gnu.org/licenses/lgpl.html
  *                  GNU Lesser General Public License, version 3 or later
  */
 class tx_mksearch_signalSlotDispatcher_FileIndexRepsitory
 {
-
     /**
-     * @param integer || array $fileData
+     * @param int || array $fileData
      */
     public function putFileIntoQueue($data)
     {
@@ -50,7 +45,6 @@ class tx_mksearch_signalSlotDispatcher_FileIndexRepsitory
     }
 
     /**
-     *
      * @return tx_mksearch_service_internal_Index
      */
     protected function getInternalIndexService()
@@ -60,5 +54,5 @@ class tx_mksearch_signalSlotDispatcher_FileIndexRepsitory
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/signalSlotDispatcher/class.tx_mksearch_signalSlotDispatcher_FileIndexRepsitory.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/signalSlotDispatcher/class.tx_mksearch_signalSlotDispatcher_FileIndexRepsitory.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/signalSlotDispatcher/class.tx_mksearch_signalSlotDispatcher_FileIndexRepsitory.php'];
 }

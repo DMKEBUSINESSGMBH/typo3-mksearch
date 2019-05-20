@@ -1,7 +1,5 @@
 <?php
 /**
- * @package tx_mksearch
- * @subpackage tx_mksearch_tests
  * @author Hannes Bochmann
  *
  *  Copyright notice
@@ -25,15 +23,11 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
-
 tx_rnbase::load('tx_mksearch_tests_Testcase');
 tx_rnbase::load('tx_mksearch_service_engine_ElasticSearch');
 tx_rnbase::load('tx_mksearch_model_internal_Index');
 
 /**
- *
- * @package tx_mksearch
- * @subpackage tx_mksearch_tests
  * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
@@ -43,7 +37,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase extends tx_mksearc
     public function setUp()
     {
         if (version_compare(phpversion(), '7.0.0') >= 0) {
-           $this->markTestSkipped('Elastic does not support php 7 currently');
+            $this->markTestSkipped('Elastic does not support php 7 currently');
         }
     }
 
@@ -52,7 +46,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase extends tx_mksearc
      */
     public function testGetElasticIndex()
     {
-        $service  = tx_rnbase::makeInstance('tx_mksearch_service_engine_ElasticSearch');
+        $service = tx_rnbase::makeInstance('tx_mksearch_service_engine_ElasticSearch');
         $indexName = new ReflectionProperty(
             'tx_mksearch_service_engine_ElasticSearch',
             'indexName'
@@ -196,7 +190,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase extends tx_mksearc
 
         self::assertEquals(
             $index,
-            $indexProperty ->getValue($service),
+            $indexProperty->getValue($service),
             'index property falsch'
         );
     }
@@ -244,7 +238,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase extends tx_mksearc
 
         self::assertEquals(
             $index,
-            $indexProperty ->getValue($service),
+            $indexProperty->getValue($service),
             'index property falsch'
         );
     }
@@ -379,7 +373,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase extends tx_mksearc
                         'port' => 2,
                         'path' => 3,
                     ),
-                )
+                ),
             ),
             $this->callInaccessibleMethod(
                 tx_rnbase::makeInstance('tx_mksearch_service_engine_ElasticSearch'),
@@ -403,7 +397,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase extends tx_mksearc
                         'port' => 2,
                         'path' => 3,
                     ),
-                )
+                ),
             ),
             $this->callInaccessibleMethod(
                 tx_rnbase::makeInstance('tx_mksearch_service_engine_ElasticSearch'),
@@ -432,7 +426,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase extends tx_mksearc
                         'port' => 6,
                         'path' => 7,
                     ),
-                )
+                ),
             ),
             $this->callInaccessibleMethod(
                 tx_rnbase::makeInstance('tx_mksearch_service_engine_ElasticSearch'),
@@ -452,7 +446,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase extends tx_mksearc
             'tx_mksearch_service_engine_ElasticSearch',
             array(
                 'getElasticaCredentialsFromCredentialsString',
-                'initElasticSearchConnection'
+                'initElasticSearchConnection',
             )
         );
         $index = $this->getMock(
@@ -861,7 +855,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase extends tx_mksearc
      */
     public function testGetOpenIndexName()
     {
-        $service  = tx_rnbase::makeInstance('tx_mksearch_service_engine_ElasticSearch');
+        $service = tx_rnbase::makeInstance('tx_mksearch_service_engine_ElasticSearch');
         $indexName = new ReflectionProperty(
             'tx_mksearch_service_engine_ElasticSearch',
             'indexName'
@@ -936,7 +930,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase extends tx_mksearc
                 'second_field' => array('multi', 'value'),
                 'extKey' => 'mksearch',
                 'contentType' => 'tt_content',
-                'uid' => 123
+                'uid' => 123,
             )
         );
         $elasticaDocument->setType('mksearch:tt_content');
@@ -1142,19 +1136,18 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase extends tx_mksearc
         );
 
         $expectedMappedOptions = array();
-        if ($expectedMappedOption !== null) {
+        if (null !== $expectedMappedOption) {
             $expectedMappedOptions = array($expectedMappedOption => 'test value');
         }
         self::assertEquals(
             $expectedMappedOptions,
             $mappedOptions,
-            'option ' . $initialOption . ' falsch gemapped'
+            'option '.$initialOption.' falsch gemapped'
         );
     }
 
     /**
-     *
-     * @return multitype:multitype:string  multitype:string NULL
+     * @return multitype:multitype:string multitype:string NULL
      */
     public function getOptionsForElastica()
     {
@@ -1187,7 +1180,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase extends tx_mksearc
                     '_type' => 'content',
                     '_id' => '5',
                     '_score' => '1',
-                    '_source' => array('title' => 'hit data one')
+                    '_source' => array('title' => 'hit data one'),
                 )
             ),
             1 => new Elastica\Result(array('_source' => array('title' => 'hit data two'))),
@@ -1252,7 +1245,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase extends tx_mksearc
             'tx_mksearch_service_engine_ElasticSearch',
             array(
                 'getIndex', 'getElasticaQuery', 'getOptionsForElastica',
-                'checkResponseOfSearchResult', 'getItemsFromSearchResult'
+                'checkResponseOfSearchResult', 'getItemsFromSearchResult',
             )
         );
         $service->expects($this->any())
@@ -1275,9 +1268,9 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase extends tx_mksearc
             ['getError'],
             [[
                 'hits' => [
-                    'total' => 123
+                    'total' => 123,
                 ],
-                'took' => 456
+                'took' => 456,
             ]]
         );
 
@@ -1361,7 +1354,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase extends tx_mksearc
             'tx_mksearch_service_engine_ElasticSearch',
             array(
                 'getIndex', 'getElasticaQuery', 'getOptionsForElastica',
-                'checkResponseOfSearchResult', 'getItemsFromSearchResult'
+                'checkResponseOfSearchResult', 'getItemsFromSearchResult',
             )
         );
         $service->expects($this->any())
@@ -1396,7 +1389,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase extends tx_mksearc
         // es reicht zu prüfen ob einige Teile des Debug vorhanden sind
         // "s" modifier, damit auf der CLI alle Zeilen in Betracht gezogen werden. Sonst
         // wird nur die Zeile genommen, mit dem ersten Treffer.
-        $regularExpression =    '/.*(debug.+=>.+TRUE).*/s';
+        $regularExpression = '/.*(debug.+=>.+TRUE).*/s';
         $this->expectOutputRegex($regularExpression);
 
         $lastRequest = $this->getMock(
@@ -1423,7 +1416,7 @@ class tx_mksearch_tests_service_engine_ElasticSearch_testcase extends tx_mksearc
             'tx_mksearch_service_engine_ElasticSearch',
             array(
                 'getIndex', 'getElasticaQuery', 'getOptionsForElastica',
-                'checkResponseOfSearchResult', 'getItemsFromSearchResult'
+                'checkResponseOfSearchResult', 'getItemsFromSearchResult',
             )
         );
         $service->expects($this->any())

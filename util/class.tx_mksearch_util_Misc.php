@@ -21,16 +21,16 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
-require_once(tx_rnbase_util_Extensions::extPath('mksearch').'lib/Apache/Solr/Service.php');
+require_once tx_rnbase_util_Extensions::extPath('mksearch').'lib/Apache/Solr/Service.php';
 tx_rnbase::load('tx_rnbase_util_Strings');
 
 /**
- * Miscellaneous methods
+ * Miscellaneous methods.
  */
 class tx_mksearch_util_Misc
 {
     /**
-     * Convert a Timestamp to a ISO formatted DateTime string in GMT time zone
+     * Convert a Timestamp to a ISO formatted DateTime string in GMT time zone.
      *
      * @param \DateTime $datetime
      *
@@ -42,7 +42,7 @@ class tx_mksearch_util_Misc
     }
 
     /**
-     * Convert a Timestamp to a ISO formatted DateTime string in GMT time zone
+     * Convert a Timestamp to a ISO formatted DateTime string in GMT time zone.
      *
      * @param int $tstamp
      * @param int $offset
@@ -52,15 +52,16 @@ class tx_mksearch_util_Misc
     public static function getISODateFromTimestamp($tstamp, $offset = 0)
     {
         return self::getIsoDate(
-            new \DateTime('@' . ($tstamp + $offset))
+            new \DateTime('@'.($tstamp + $offset))
         );
     }
 
     /**
-     * Allgemeine Include/exclude-Prüfung. Derzeit auf PID-Ebene
+     * Allgemeine Include/exclude-Prüfung. Derzeit auf PID-Ebene.
      *
-     * @param array     $sourceRecord
-     * @param array     $options
+     * @param array $sourceRecord
+     * @param array $options
+     *
      * @return bool
      *
      * @deprecated unbedingt tx_mksearch_util_Indexer::getInstance()->isOnIndexablePage nutzen.
@@ -98,12 +99,13 @@ class tx_mksearch_util_Misc
     }
 
     /**
-     * Liefert einen UTF8 codierten String
+     * Liefert einen UTF8 codierten String.
      *
      * @TODO: wäre in der tx_rnbase_util_Strings besser aufgehoben?
      *
-     * @param   mixed   $t
-     * @return  mixed
+     * @param mixed $t
+     *
+     * @return mixed
      */
     public static function utf8Encode($mixed)
     {
@@ -118,13 +120,14 @@ class tx_mksearch_util_Misc
     }
 
     /**
-     * Convert HTML to plain text
+     * Convert HTML to plain text.
      *
      * Removes HTML tags and HTML comments and converts HTML entities
      * to their applicable characters.
      *
      * @param string $text
-     * @param array $options
+     * @param array  $options
+     *
      * @return string Converted string (utf8-encoded)
      */
     public static function html2plain($text, array $options = array())
@@ -168,8 +171,11 @@ class tx_mksearch_util_Misc
      * Sanitizes the given term and removes all unwanted
      * chars. These are for example some for the solr
      * search syntax.
+     *
      * @param string $sTerm
+     *
      * @return string
+     *
      * @todo sollte hier nicht Apache_Solr_Service::escape() genutzt werden!?
      * siehe auch die escape Methode aus der Apache Solr TYPO3 Extension wie Phrasen
      * unterstützt werden könnten? Sollte aber alles nur fir nicht dismax interessant sein.
@@ -199,7 +205,9 @@ class tx_mksearch_util_Misc
      * , . / # ' % < >
      *
      * @param string $sTerm
+     *
      * @return string
+     *
      * @see Apache_Solr_Service::escape()
      */
     public static function sanitizeFq($value)
@@ -211,11 +219,12 @@ class tx_mksearch_util_Misc
     }
 
     /**
-     * IP-based Access restrictions
+     * IP-based Access restrictions.
      *
-     * @param   string      $remoteAddress
-     * @param   string      $devIPmask
-     * @return  bool
+     * @param string $remoteAddress
+     * @param string $devIPmask
+     *
+     * @return bool
      */
     public static function isDevIpMask($remoteAddress = '', $devIPmask = '')
     {
@@ -227,7 +236,8 @@ class tx_mksearch_util_Misc
     }
 
     /**
-     * Parse the configuration of the given models
+     * Parse the configuration of the given models.
+     *
      * @param string $sTs
      */
     public static function parseTsConfig($sTs)
@@ -244,8 +254,9 @@ class tx_mksearch_util_Misc
      *
      * @author 2011 mwagner
      *
-     * @param array  $aArray
-     * @param bool    $bResetIndex    Setzt die Array Keys zurück, falls sie numerisch sind.
+     * @param array $aArray
+     * @param bool  $bResetIndex setzt die Array Keys zurück, falls sie numerisch sind
+     *
      * @return array
      */
     public static function removeEmptyValues(array $aArray, $bResetIndex = false)
@@ -259,5 +270,5 @@ class tx_mksearch_util_Misc
     }
 }
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_Misc.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_Misc.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_Misc.php'];
 }

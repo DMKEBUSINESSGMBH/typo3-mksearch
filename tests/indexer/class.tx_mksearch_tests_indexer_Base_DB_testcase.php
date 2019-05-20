@@ -22,7 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-
 tx_rnbase::load('tx_mksearch_tests_DbTestcase');
 tx_rnbase::load('tx_mksearch_tests_fixtures_indexer_Dummy');
 tx_rnbase::load('tx_mksearch_tests_Util');
@@ -36,8 +35,6 @@ tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
  * zu haben. Sonst werden die tatsächlich vorhandenen pages geprüft und
  * diese können auf jedem system unterschiedlich sein.
  *
- * @package tx_mksearch
- * @subpackage tx_mksearch_tests
  * @author Hannes Bochmann
  * @author Michael Wagner <michael.wagner@dmk-ebusiness.de>
  * @license http://www.gnu.org/licenses/lgpl.html
@@ -45,10 +42,6 @@ tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
  */
 class tx_mksearch_tests_indexer_Base_DB_testcase extends tx_mksearch_tests_DbTestcase
 {
-
-    /**
-     *
-     */
     public function testIsIndexableRecordWithInclude()
     {
         $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
@@ -91,16 +84,13 @@ class tx_mksearch_tests_indexer_Base_DB_testcase extends tx_mksearch_tests_DbTes
         self::assertNotNull($aIndexDoc, 'Die Indizierung wurde doch indiziert! 5');
     }
 
-    /**
-     *
-     */
     public function testIsIndexableRecordWithIncludeAndDeleteIfNotIndexableOption()
     {
         $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
         list($extKey, $cType) = $indexer->getContentType();
         $options = array(
                 'include.' => array('pages.' => array(2)),
-                'deleteIfNotIndexable' => 1
+                'deleteIfNotIndexable' => 1,
         );
 
         $aRawData = array('uid' => 1, 'pid' => 1);
@@ -117,15 +107,12 @@ class tx_mksearch_tests_indexer_Base_DB_testcase extends tx_mksearch_tests_DbTes
         self::assertFalse($oIndexDoc->getDeleted(), 'Das Element wurde doch indiziert! pid:2');
     }
 
-    /**
-     *
-     */
     public function testIsIndexableRecordWithExclude()
     {
         $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
         list($extKey, $cType) = $indexer->getContentType();
         $options = array(
-                'exclude.' => array('pages.' => array(2))
+                'exclude.' => array('pages.' => array(2)),
         );
 
         $aRawData = array('uid' => 1, 'pid' => 1);
@@ -141,7 +128,7 @@ class tx_mksearch_tests_indexer_Base_DB_testcase extends tx_mksearch_tests_DbTes
         $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
         list($extKey, $cType) = $indexer->getContentType();
         $options = array(
-                'exclude.' => array('pages' => '2,3')
+                'exclude.' => array('pages' => '2,3'),
         );
 
         $aRawData = array('uid' => 1, 'pid' => 1);
@@ -160,9 +147,6 @@ class tx_mksearch_tests_indexer_Base_DB_testcase extends tx_mksearch_tests_DbTes
         self::assertNull($aIndexDoc, 'Das Element wurde doch indiziert! 5');
     }
 
-    /**
-     *
-     */
     public function testIndexModelByMapping()
     {
         $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
@@ -181,9 +165,6 @@ class tx_mksearch_tests_indexer_Base_DB_testcase extends tx_mksearch_tests_DbTes
         self::assertEquals('test value 2', $aIndexDoc['keepHtml_test_field_2_s']->getValue(), 'Es wurde nicht das zweite Feld richtig gesetzt!');
     }
 
-    /**
-     *
-     */
     public function testIndexArrayOfModelsByMapping()
     {
         $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
@@ -195,13 +176,12 @@ class tx_mksearch_tests_indexer_Base_DB_testcase extends tx_mksearch_tests_DbTes
 
         $aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options)->getData();
 
-        self::assertEquals(array(0 => 'test value 1',1 => 'test value 1'), $aIndexDoc['multivalue_test_field_1_s']->getValue(), 'Es wurde nicht das erste Feld richtig gesetzt!');
-        self::assertEquals(array(0 => 'test value 2',1 => 'test value 2'), $aIndexDoc['multivalue_test_field_2_s']->getValue(), 'Es wurde nicht das zweite Feld richtig gesetzt!');
+        self::assertEquals(array(0 => 'test value 1', 1 => 'test value 1'), $aIndexDoc['multivalue_test_field_1_s']->getValue(), 'Es wurde nicht das erste Feld richtig gesetzt!');
+        self::assertEquals(array(0 => 'test value 2', 1 => 'test value 2'), $aIndexDoc['multivalue_test_field_2_s']->getValue(), 'Es wurde nicht das zweite Feld richtig gesetzt!');
     }
 
-
     /**
-     * Check if setting the doc to deleted works
+     * Check if setting the doc to deleted works.
      */
     public function testHasDocToBeDeletedConsideringOnlyTheModelItself()
     {
@@ -258,9 +238,6 @@ class tx_mksearch_tests_indexer_Base_DB_testcase extends tx_mksearch_tests_DbTes
         self::assertEquals(false, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
     }
 
-    /**
-     *
-     */
     public function testStopIndexing()
     {
         $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
@@ -279,5 +256,5 @@ class tx_mksearch_tests_indexer_Base_DB_testcase extends tx_mksearch_tests_DbTes
     }
 }
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php'];
 }

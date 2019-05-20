@@ -25,42 +25,38 @@ tx_rnbase::load('Tx_Rnbase_Scheduler_FieldProvider');
 define('FIELD_ITEMS', 'amountOfItems');
 
 /**
- * tx_mksearch_scheduler_IndexTaskAddFieldProvider
+ * tx_mksearch_scheduler_IndexTaskAddFieldProvider.
  *
- * @package         TYPO3
- * @subpackage      mksearch
  * @author          Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
  * @license         http://www.gnu.org/licenses/lgpl.html
  *                  GNU Lesser General Public License, version 3 or later
  */
 class tx_mksearch_scheduler_IndexTaskAddFieldProvider extends Tx_Rnbase_Scheduler_FieldProvider
 {
-
     /**
      * This method is used to define new fields for adding or editing a task
-     * In this case, it adds an email field
+     * In this case, it adds an email field.
      *
-     * @param   array                   $taskInfo: reference to the array containing the info used in the add/edit form
-     * @param   Tx_Rnbase_Scheduler_Task                    $task: when editing, reference to the current task object. Null when adding.
-     * @param   \TYPO3\CMS\Scheduler\Controller\SchedulerModuleController       $parentObject: reference to the calling object (Scheduler's BE module)
-     * @return  array                   Array containg all the information pertaining to the additional fields
-     *                                  The array is multidimensional, keyed to the task class name and each field's id
-     *                                  For each field it provides an associative sub-array with the following:
-     *                                      ['code']        => The HTML code for the field
-     *                                      ['label']       => The label of the field (possibly localized)
-     *                                      ['cshKey']      => The CSH key for the field
-     *                                      ['cshLabel']    => The code of the CSH label
+     * @param array                                                     $taskInfo:     reference to the array containing the info used in the add/edit form
+     * @param Tx_Rnbase_Scheduler_Task                                  $task:         when editing, reference to the current task object. Null when adding.
+     * @param \TYPO3\CMS\Scheduler\Controller\SchedulerModuleController $parentObject: reference to the calling object (Scheduler's BE module)
+     *
+     * @return array Array containg all the information pertaining to the additional fields
+     *               The array is multidimensional, keyed to the task class name and each field's id
+     *               For each field it provides an associative sub-array with the following:
+     *               ['code']        => The HTML code for the field
+     *               ['label']       => The label of the field (possibly localized)
+     *               ['cshKey']      => The CSH key for the field
+     *               ['cshLabel']    => The code of the CSH label
      */
     protected function _getAdditionalFields(array &$taskInfo, $task, $parentObject)
     {
-
-
         // Initialize extra field value
         if (!array_key_exists(FIELD_ITEMS, $taskInfo) || empty($taskInfo[FIELD_ITEMS])) {
-            if ($parentObject->CMD == 'add') {
+            if ('add' == $parentObject->CMD) {
                 // New task
                 $taskInfo[FIELD_ITEMS] = '';
-            } elseif ($parentObject->CMD == 'edit') {
+            } elseif ('edit' == $parentObject->CMD) {
                 // Editing a task, set to internal value if data was not submitted already
                 $taskInfo[FIELD_ITEMS] = $task->getAmountOfItems();
             } else {
@@ -72,24 +68,23 @@ class tx_mksearch_scheduler_IndexTaskAddFieldProvider extends Tx_Rnbase_Schedule
         // Write the code for the field
         $fieldID = 'field_'.FIELD_ITEMS;
         // Note: Name qualifier MUST be "tx_scheduler" as the tx_scheduler's BE module is used!
-        $fieldCode = '<input type="text" name="tx_scheduler['.FIELD_ITEMS.']" id="' . $fieldID .
-                        '" value="' . $taskInfo[FIELD_ITEMS] . '" size="10" />';
+        $fieldCode = '<input type="text" name="tx_scheduler['.FIELD_ITEMS.']" id="'.$fieldID.
+                        '" value="'.$taskInfo[FIELD_ITEMS].'" size="10" />';
         $additionalFields = array();
         $additionalFields[$fieldID] = array(
-            'code'     => $fieldCode,
-            'label'    => 'LLL:EXT:mksearch/locallang_db.xml:scheduler_indexTask_field_'.FIELD_ITEMS,
-            'cshKey'   => '_MOD_web_txschedulerM1',
+            'code' => $fieldCode,
+            'label' => 'LLL:EXT:mksearch/locallang_db.xml:scheduler_indexTask_field_'.FIELD_ITEMS,
+            'cshKey' => '_MOD_web_txschedulerM1',
         );
 
         return $additionalFields;
 
-
-            // Initialize extra field value
+        // Initialize extra field value
         if (empty($taskInfo[ADDFIELD_TYPE])) {
-            if ($parentObject->CMD == 'add') {
+            if ('add' == $parentObject->CMD) {
                 // In case of new task
                 $taskInfo[ADDFIELD_TYPE] = '';
-            } elseif ($parentObject->CMD == 'edit') {
+            } elseif ('edit' == $parentObject->CMD) {
                 // In case of edit, and editing a test task, set to internal value if not data was submitted already
                 $taskInfo[ADDFIELD_TYPE] = $task->email;
             } else {
@@ -100,11 +95,11 @@ class tx_mksearch_scheduler_IndexTaskAddFieldProvider extends Tx_Rnbase_Schedule
 
         // Write the code for the field
         $fieldID = 'task_items';
-        $fieldCode = '<input type="text" name="tx_scheduler['.ADDFIELD_TYPE.']" id="' . $fieldID . '" value="' . $taskInfo[ADDFIELD_TYPE] . '" size="30" />';
+        $fieldCode = '<input type="text" name="tx_scheduler['.ADDFIELD_TYPE.']" id="'.$fieldID.'" value="'.$taskInfo[ADDFIELD_TYPE].'" size="30" />';
         $additionalFields = array();
         $additionalFields[$fieldID] = array(
-            'code'     => $fieldCode,
-            'label'    => 'LLL:EXT:mksearch/locallang_db.xml:indexTask.fieldType',
+            'code' => $fieldCode,
+            'label' => 'LLL:EXT:mksearch/locallang_db.xml:indexTask.fieldType',
         );
 
         return $additionalFields;
@@ -112,11 +107,12 @@ class tx_mksearch_scheduler_IndexTaskAddFieldProvider extends Tx_Rnbase_Schedule
 
     /**
      * This method checks any additional data that is relevant to the specific task
-     * If the task class is not relevant, the method is expected to return true
+     * If the task class is not relevant, the method is expected to return true.
      *
-     * @param   array                   $submittedData: reference to the array containing the data submitted by the user
-     * @param   \TYPO3\CMS\Scheduler\Controller\SchedulerModuleController       $parentObject: reference to the calling object (Scheduler's BE module)
-     * @return  bool                 True if validation was ok (or selected class is not relevant), false otherwise
+     * @param array                                                     $submittedData: reference to the array containing the data submitted by the user
+     * @param \TYPO3\CMS\Scheduler\Controller\SchedulerModuleController $parentObject:  reference to the calling object (Scheduler's BE module)
+     *
+     * @return bool True if validation was ok (or selected class is not relevant), false otherwise
      */
     protected function _validateAdditionalFields(array &$submittedData, $parentObject)
     {
@@ -138,11 +134,10 @@ class tx_mksearch_scheduler_IndexTaskAddFieldProvider extends Tx_Rnbase_Schedule
 
     /**
      * This method is used to save any additional input into the current task object
-     * if the task class matches
+     * if the task class matches.
      *
-     * @param   array               $submittedData: array containing the data submitted by the user
-     * @param   tx_mksearch_scheduler_IndexTask $task: reference to the current task object
-     * @return  void
+     * @param array                           $submittedData: array containing the data submitted by the user
+     * @param tx_mksearch_scheduler_IndexTask $task:          reference to the current task object
      */
     protected function _saveAdditionalFields(array $submittedData, Tx_Rnbase_Scheduler_Task $task)
     {
@@ -151,5 +146,5 @@ class tx_mksearch_scheduler_IndexTaskAddFieldProvider extends Tx_Rnbase_Schedule
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/scheduler/class.tx_mksearch_scheduler_IndexTaskAddFieldProvider.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/scheduler/class.tx_mksearch_scheduler_IndexTaskAddFieldProvider.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/scheduler/class.tx_mksearch_scheduler_IndexTaskAddFieldProvider.php'];
 }

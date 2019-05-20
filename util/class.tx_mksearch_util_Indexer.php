@@ -22,18 +22,12 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-
 tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
 tx_rnbase::load('tx_mksearch_util_Misc');
 tx_rnbase::load('tx_mksearch_util_TCA');
 
-
-
-/**
- */
 class tx_mksearch_util_Indexer
 {
-
     /**
      * @return tx_mksearch_util_Indexer
      */
@@ -48,12 +42,14 @@ class tx_mksearch_util_Indexer
     }
 
     /**
-     * Liefert die UID des Datensatzes
+     * Liefert die UID des Datensatzes.
      *
      * @param string $tableName
-     * @param array $rawData
-     * @param array $options
+     * @param array  $rawData
+     * @param array  $options
+     *
      * @return int
+     *
      * @deprecated use getUid of the rnbase model as it will return the correct uid in respect of localisation
      */
     public function getRecordsUid($tableName, array $rawData, array $options)
@@ -62,8 +58,10 @@ class tx_mksearch_util_Indexer
     }
 
     /**
-     * Liefert eine Datumsfeld für Solr
-     * @param   string  $date | insert "@" before timestamps
+     * Liefert eine Datumsfeld für Solr.
+     *
+     * @param string $date | insert "@" before timestamps
+     *
      * @return string
      */
     public function getDateTime($date)
@@ -75,14 +73,15 @@ class tx_mksearch_util_Indexer
     }
 
     /**
-     * Indexes all fields of the model according to the given mapping
+     * Indexes all fields of the model according to the given mapping.
      *
-     * @param tx_rnbase_IModel $model
-     * @param array $aMapping
+     * @param tx_rnbase_IModel                      $model
+     * @param array                                 $aMapping
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @param string $prefix
-     * @param array $options
-     * @param bool $dontIndexHidden
+     * @param string                                $prefix
+     * @param array                                 $options
+     * @param bool                                  $dontIndexHidden
+     *
      * @return tx_mksearch_interface_IndexerDocument
      */
     public function indexModelByMapping(
@@ -113,14 +112,15 @@ class tx_mksearch_util_Indexer
 
     /**
      * Collects the values of all models inside the given array
-     * and adds them as multivalue (array)
+     * and adds them as multivalue (array).
      *
-     * @param array[tx_rnbase_IModel] $model
-     * @param array $aMapping
+     * @param array[tx_rnbase_IModel]               $model
+     * @param array                                 $aMapping
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @param string $prefix
-     * @param array $options
-     * @param bool $dontIndexHidden
+     * @param string                                $prefix
+     * @param array                                 $options
+     * @param bool                                  $dontIndexHidden
+     *
      * @return tx_mksearch_interface_IndexerDocument
      */
     public function indexArrayOfModelsByMapping(
@@ -131,7 +131,6 @@ class tx_mksearch_util_Indexer
         array $options = array(),
         $dontIndexHidden = true
     ) {
-
         //collect values
         $tempIndexDoc = [];
         /* @var $model tx_rnbase_IModel */
@@ -165,13 +164,14 @@ class tx_mksearch_util_Indexer
     }
 
     /**
-     * Handle fieldsConversion from indexer configuration
+     * Handle fieldsConversion from indexer configuration.
      *
      * @param string $value
      * @param string $indexDocKey
-     * @param array $rawData
+     * @param array  $rawData
      * @param string $sRecordKey
-     * @param array $options
+     * @param array  $options
+     *
      * @return array
      */
     public function doValueConversion($value, $indexDocKey, $rawData, $sRecordKey, $options)
@@ -202,25 +202,25 @@ class tx_mksearch_util_Indexer
             $value = $cObj->stdWrap($value, $options['fieldsConversion.'][$indexDocKey.'.']);
         }
         // userFunc can return serialized strings to support arrays as return value
-        if (($data = @unserialize($value)) !== false) {
+        if (false !== ($data = @unserialize($value))) {
             $value = $data;
         }
 
         return $value;
     }
+
     /**
-     * Adds a element to the queue
+     * Adds a element to the queue.
      *
      * @TODO refactor to tx_mksearch_service_internal_Index::addModelsToIndex
      * @TODO remove static indexSrv cache
      *
      * @param tx_rnbase_IModel $model
-     * @param string $tableName
-     * @param bool $prefer
-     * @param string $resolver class name of record resolver
-     * @param array $data
-     * @param array $options
-     * @return void
+     * @param string           $tableName
+     * @param bool             $prefer
+     * @param string           $resolver  class name of record resolver
+     * @param array            $data
+     * @param array            $options
      */
     public function addModelToIndex(
         Tx_Rnbase_Domain_Model_RecordInterface $model,
@@ -255,17 +255,16 @@ class tx_mksearch_util_Indexer
     }
 
     /**
-     * just a wrapper for addModelToIndex and an array of models
+     * just a wrapper for addModelToIndex and an array of models.
      *
      * @TODO refactor to tx_mksearch_service_internal_Index::addModelsToIndex
      *
-     * @param array $models
+     * @param array  $models
      * @param string $tableName
-     * @param bool $prefer
-     * @param string $resolver class name of record resolver
-     * @param array $data
-     * @param array $options
-     * @return void
+     * @param bool   $prefer
+     * @param string $resolver  class name of record resolver
+     * @param array  $data
+     * @param array  $options
      */
     public function addModelsToIndex(
         $models,
@@ -295,11 +294,12 @@ class tx_mksearch_util_Indexer
      * if set we check if at least one of the uids given in the options
      * is found in the given models
      * for the include option returning true means no option set or we have a hit
-     * for the exclude option returning true means no option was set or we have no hit
+     * for the exclude option returning true means no option was set or we have no hit.
      *
-     * @param array $models | array of models
+     * @param array $models  | array of models
      * @param array $options
-     * @param int $mode  | 0 stands for "include" and 1 "exclude"
+     * @param int   $mode    | 0 stands for "include" and 1 "exclude"
+     *
      * @return bool
      *
      * @todo move function to a helper class as the method has nothing to do
@@ -312,19 +312,19 @@ class tx_mksearch_util_Indexer
             case 0:
             default:
                 $mode = 'include';
-                $noHit = false;//if we have no hit
-                $isHit = true;//if we have a hit
+                $noHit = false; //if we have no hit
+                $isHit = true; //if we have a hit
                 break;
             case 1:
                 $mode = 'exclude';
-                $noHit = true;//if we have no hit
-                $isHit = false;//if we have a hit
+                $noHit = true; //if we have no hit
+                $isHit = false; //if we have a hit
                 break;
         }
 
         //should only elements with a special category etc. be indexed?
-        if (!empty($options[$mode.'.'][$optionKey.'.']) || !empty($options[$mode . '.'][$optionKey])) {
-            $isValid = $noHit;//no option given
+        if (!empty($options[$mode.'.'][$optionKey.'.']) || !empty($options[$mode.'.'][$optionKey])) {
+            $isValid = $noHit; //no option given
             if (!empty($models)) {
                 //include categories as array like
                 //include.categories{
@@ -367,6 +367,7 @@ class tx_mksearch_util_Indexer
      *
      * @param array $sourceRecord
      * @param array $options
+     *
      * @return bool
      */
     public function isOnIndexablePage($sourceRecord, $options)
@@ -383,9 +384,9 @@ class tx_mksearch_util_Indexer
 
     /**
      * entweder sind die include pages leer oder es wurde kein eintrag gefunden.
-     * was der fall wird in
+     * was der fall wird in.
      *
-     * @param int $pid
+     * @param int   $pid
      * @param array $options
      *
      * @return bool
@@ -402,7 +403,7 @@ class tx_mksearch_util_Indexer
     }
 
     /**
-     * @param int $pid
+     * @param int   $pid
      * @param array $options
      *
      * @return bool
@@ -411,7 +412,7 @@ class tx_mksearch_util_Indexer
     {
         $excludePageTrees = $this->getConfigValue('pageTrees', $options['exclude.']);
 
-        if ($this->getFirstRootlineIndexInPageTrees($pid, $excludePageTrees) !== false) {
+        if (false !== $this->getFirstRootlineIndexInPageTrees($pid, $excludePageTrees)) {
             return false;
         } else {
             return $this->pageIsNotInExcludePageTrees($pid, $options);
@@ -419,7 +420,7 @@ class tx_mksearch_util_Indexer
     }
 
     /**
-     * @param int $pid
+     * @param int   $pid
      * @param array $options
      *
      * @return bool
@@ -436,7 +437,7 @@ class tx_mksearch_util_Indexer
     }
 
     /**
-     * @param int $pid
+     * @param int   $pid
      * @param array $options
      *
      * @return bool
@@ -449,7 +450,7 @@ class tx_mksearch_util_Indexer
     }
 
     /**
-     * @param int $pid
+     * @param int   $pid
      * @param array $options
      *
      * @return bool
@@ -460,7 +461,7 @@ class tx_mksearch_util_Indexer
         $firstRootlineIndexInIncludePageTrees =
             $this->getFirstRootlineIndexInPageTrees($pid, $includePageTrees);
 
-        if ($firstRootlineIndexInIncludePageTrees === false) {
+        if (false === $firstRootlineIndexInIncludePageTrees) {
             return false;
         } else {
             return $this->pageIsInIncludePageTrees($pid, $options, $firstRootlineIndexInIncludePageTrees);
@@ -468,9 +469,9 @@ class tx_mksearch_util_Indexer
     }
 
     /**
-     * @param int $pid
-     * @param array $options
-     * @param integer || boolean $firstRootlineIndexInIncludePageTrees
+     * @param int            $pid
+     * @param array          $options
+     * @param int || boolean $firstRootlineIndexInIncludePageTrees
      *
      * @return bool
      */
@@ -508,10 +509,10 @@ class tx_mksearch_util_Indexer
     }
 
     /**
-     * @param int $pid
+     * @param int   $pid
      * @param array $pageTrees
      *
-     * @return integer the index in the rootline of the hit || boolean
+     * @return int the index in the rootline of the hit || boolean
      */
     private function getFirstRootlineIndexInPageTrees($pid, $pageTrees)
     {
@@ -546,10 +547,11 @@ class tx_mksearch_util_Indexer
      * Liefert einen Wert aus der Konfig
      * Beispiel: $key = test
      * Dann wird geprüft ob test eine kommaseparierte Liste liegt
-     * Ist das nicht der Fall wird noch geprüft ob test. ein array ist
+     * Ist das nicht der Fall wird noch geprüft ob test. ein array ist.
      *
      * @param string $key
-     * @param array $options
+     * @param array  $options
+     *
      * @return array
      */
     public function getConfigValue($key, $options)
@@ -567,9 +569,10 @@ class tx_mksearch_util_Indexer
     }
 
     /**
-     * Get's the page of the content element if it's not hidden/deleted
+     * Get's the page of the content element if it's not hidden/deleted.
      *
      * @param int $pid
+     *
      * @return array
      */
     public function getPageContent($pid)
@@ -580,9 +583,9 @@ class tx_mksearch_util_Indexer
         }
         //first of all we have to check if the page is not hidden/deleted
         $sqlOptions = array(
-            'where' => 'pages.uid=' . $pid . ' AND hidden=0 AND deleted=0',
-            'enablefieldsoff' => true,//ignore fe_group and so on
-            'limit' => 1
+            'where' => 'pages.uid='.$pid.' AND hidden=0 AND deleted=0',
+            'enablefieldsoff' => true, //ignore fe_group and so on
+            'limit' => 1,
         );
         $from = array('pages', 'pages');
         $page = tx_rnbase_util_DB::doSelect('*', $from, $sqlOptions);
@@ -599,10 +602,11 @@ class tx_mksearch_util_Indexer
      * do something different like putting a record into the queue
      * if it's not the table that should be indexed
      *
-     * @param string $tableName
-     * @param array $sourceRecord
+     * @param string                                $tableName
+     * @param array                                 $sourceRecord
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @param array $options
+     * @param array                                 $options
+     *
      * @return bool
      */
     public function stopIndexing(
@@ -633,12 +637,10 @@ class tx_mksearch_util_Indexer
     }
 
     /**
-     * Initializes the tsfe for the tv elements
+     * Initializes the tsfe for the tv elements.
      *
      * @param int $pid
      * @param int $sysLanguage
-     *
-     * @return void
      */
     public static function prepareTSFE($pid, $sysLanguage = 0)
     {
@@ -646,10 +648,10 @@ class tx_mksearch_util_Indexer
         $tsfe = tx_rnbase_util_Misc::prepareTSFE(
             array(
                 'force' => true,
-                'pid'    => $pid,
+                'pid' => $pid,
                 // usually 0 is the normal page type
                 // @todo make configurable
-                'type' => 0
+                'type' => 0,
             )
         );
 

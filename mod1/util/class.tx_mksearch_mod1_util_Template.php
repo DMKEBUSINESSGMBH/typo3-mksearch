@@ -1,38 +1,10 @@
 <?php
-/**
- *
- * @package tx_mksearch
- * @subpackage tx_mksearch_mod1
- *
- *  Copyright notice
- *
- *  (c) 2011 DMK E-Business GmbH <dev@dmk-ebusiness.de>
- *  All rights reserved
- *
- *  This script is part of the TYPO3 project. The TYPO3 project is
- *  free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  The GNU General Public License can be found at
- *  http://www.gnu.org/copyleft/gpl.html.
- *
- *  This script is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  This copyright notice MUST APPEAR in all copies of the script!
- */
 
 tx_rnbase::load('tx_rnbase_util_Templates');
 
 /**
- * Die Klasse stellt Auswahlmenus zur Verfügung
+ * Die Klasse stellt Auswahlmenus zur Verfügung.
  *
- * @package tx_mksearch
- * @subpackage tx_mksearch_mod1
  * @author Michael Wagner <dev@dmk-ebusiness.de>
  */
 class tx_mksearch_mod1_util_Template
@@ -55,6 +27,7 @@ class tx_mksearch_mod1_util_Template
 
         return $out;
     }
+
     private static function parseRootPage($template, tx_rnbase_mod_IModFunc $module)
     {
         $out = $template;
@@ -115,13 +88,13 @@ class tx_mksearch_mod1_util_Template
     }
 
     /**
+     * @param string                                 $template
+     * @param tx_rnbase_mod_IModule                  $mod
+     * @param array                                  $markerArray
+     * @param tx_mksearch_mod1_searcher_abstractBase $searcher
+     * @param string                                 $marker
      *
-     * @param   string                                  $template
-     * @param   tx_rnbase_mod_IModule                   $mod
-     * @param   array                                   $markerArray
-     * @param   tx_mksearch_mod1_searcher_abstractBase  $searcher
-     * @param   string                                  $marker
-     * @return  string
+     * @return string
      */
     public static function parseList($template, $mod, &$markerArray, $searcher, $marker)
     {
@@ -150,10 +123,11 @@ class tx_mksearch_mod1_util_Template
 
     /**
      * Setzt das Table Layout.
-     * Im moment wird nur width bearbeidet
+     * Im moment wird nur width bearbeidet.
      *
-     * @param array                     $columns
-     * @param tx_rnbase_mod_IModule     $mod
+     * @param array                 $columns
+     * @param tx_rnbase_mod_IModule $mod
+     *
      * @return columns
      */
     public static function getTableLayout(array $columns, tx_rnbase_mod_IModule $mod)
@@ -169,8 +143,8 @@ class tx_mksearch_mod1_util_Template
                     $aAddParams[] = $sAllowed.'="'.intval($column[$sAllowed]).'%"';
                 }
             }
-            $aTableLayout[0][$iCol] = array('<td '. implode(' ', $aAddParams).'>','</td>');
-            $iCol++;
+            $aTableLayout[0][$iCol] = array('<td '.implode(' ', $aAddParams).'>', '</td>');
+            ++$iCol;
         }
 
         return $aTableLayout;
@@ -178,5 +152,5 @@ class tx_mksearch_mod1_util_Template
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/util/class.tx_mksearch_mod1_util_Template.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/util/class.tx_mksearch_mod1_util_Template.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/util/class.tx_mksearch_mod1_util_Template.php'];
 }

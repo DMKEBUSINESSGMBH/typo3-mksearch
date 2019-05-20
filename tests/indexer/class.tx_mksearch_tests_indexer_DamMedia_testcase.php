@@ -22,15 +22,12 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-
 tx_rnbase::load('tx_mksearch_tests_Testcase');
 tx_rnbase::load('tx_mksearch_indexer_DamMedia');
 
 /**
  * Kindklasse des Indexers, um auf private Methoden zuzugreifen.
  *
- * @package tx_mksearch
- * @subpackage tx_mksearch_tests
  * @author Michael Wagner <michael.wagner@dmk-ebusiness.de>
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
@@ -45,10 +42,8 @@ class tx_mksearch_indexer_DamMediaTest extends tx_mksearch_indexer_DamMedia
 }
 
 /**
- * Tests für den Dam Media Indexer
+ * Tests für den Dam Media Indexer.
  *
- * @package tx_mksearch
- * @subpackage tx_mksearch_tests
  * @author Michael Wagner <michael.wagner@dmk-ebusiness.de>
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
@@ -61,7 +56,7 @@ class tx_mksearch_tests_indexer_DamMedia_testcase extends tx_mksearch_tests_Test
      * Constructs a test case with the given name.
      *
      * @param string $name
-     * @param array $data
+     * @param array  $data
      * @param string $dataName
      */
     public function __construct($name = null, array $data = array(), $dataName = '')
@@ -80,114 +75,112 @@ class tx_mksearch_tests_indexer_DamMedia_testcase extends tx_mksearch_tests_Test
             self::$oDamMediaTest->testIsIndexableRecord('tx_dam', $aSourceRecord, array('tx_dam.' => $aOptions))
         );
     }
+
     public function providerIsIndexableRecord()
     {
         return array(
-                'Line: '. __LINE__ => array(
+                'Line: '.__LINE__ => array(
                     array(
                         'file_path' => 'fileadmin/unterordner/',
-                        'file_type' => 'html'
+                        'file_type' => 'html',
                     ), array(
                         'byFileExtension' => 'pdf, html',
                         'byDirectory' => '/^fileadmin\/.*\//',
-                    ), true
+                    ), true,
                 ),
-                'Line: '. __LINE__ => array(
+                'Line: '.__LINE__ => array(
                     array(
                         'file_path' => 'fileadmin/unterordner/',
-                        'file_type' => 'html'
+                        'file_type' => 'html',
                     ), array(
                         'byFileExtension' => 'pdf, html',
                         'byDirectory' => '/^fileadmin\/unterordner.*\//',
-                    ), true
+                    ), true,
                 ),
-                'Line: '. __LINE__ => array(
+                'Line: '.__LINE__ => array(
                     array(
                         'file_path' => 'fileadmin/unterordner/',
-                        'file_type' => 'txt'
+                        'file_type' => 'txt',
                     ), array(
                         'byFileExtension' => 'pdf, html',
                         'byDirectory' => '/^fileadmin\/unterordner.*\//',
-                    ), false
+                    ), false,
                 ),
-                'Line: '. __LINE__ => array(
+                'Line: '.__LINE__ => array(
                     array(
                         'file_path' => 'fileadmin/denied/',
-                        'file_type' => 'txt'
+                        'file_type' => 'txt',
                     ), array(
                         'byFileExtension' => 'pdf, html',
                         'byDirectory' => '/^fileadmin\/unterordner.*\//',
-                    ), false
+                    ), false,
                 ),
-                'Line: '. __LINE__ => array(
+                'Line: '.__LINE__ => array(
                     array(
                         'file_path' => 'fileadmin/allowed/',
-                        'file_type' => 'pdf'
+                        'file_type' => 'pdf',
                     ), array(
                         'byFileExtension.' => array('pdf', 'txt'),
                         'byDirectory.' => array('fileadmin/unterordner/', 'fileadmin/allowed/'),
-                    ), true
+                    ), true,
                 ),
-                'Line: '. __LINE__ => array(
+                'Line: '.__LINE__ => array(
                     array(
                         'file_path' => 'fileadmin/denied/',
-                        'file_type' => 'pdf'
+                        'file_type' => 'pdf',
                     ), array(
                         'byFileExtension' => 'pdf, html',
                         'byDirectory.' => array('fileadmin/unterordner/', 'fileadmin/allowed/'),
-                    ), false
+                    ), false,
                 ),
-                'Line: '. __LINE__ => array(
+                'Line: '.__LINE__ => array(
                     array(
                         'file_path' => 'fileadmin/unterordner/',
-                        'file_type' => 'txt'
+                        'file_type' => 'txt',
                     ), array(
                         'byFileExtension' => 'html, xhtml',
                         'byFileExtension.' => array('pdf', 'txt'),
                         'byDirectory' => '/^fileadmin\/.*\//',
                         'byDirectory.' => array('fileadmin/unterordner/', 'fileadmin/allowed/'),
-                    ), true
+                    ), true,
                 ),
-                'Line: '. __LINE__ => array(
+                'Line: '.__LINE__ => array(
                     array(
                         'file_path' => 'fileadmin/unterordner/subfolder/',
-                        'file_type' => 'txt'
+                        'file_type' => 'txt',
                     ), array(
                         'byFileExtension' => 'html, xhtml',
                         'byFileExtension.' => array('pdf', 'txt'),
                         'byDirectory' => '/^fileadmin\/.*\//',
                         'byDirectory.' => array('fileadmin/unterordner/', 'fileadmin/allowed/'),
-                    ), false
+                    ), false,
                 ),
-                'Line: '. __LINE__ => array(
+                'Line: '.__LINE__ => array(
                     array(
                         'file_path' => 'fileadmin/unterordner/subfolder/',
-                        'file_type' => 'txt'
+                        'file_type' => 'txt',
                     ), array(
                         'byFileExtension' => 'html, xhtml',
                         'byFileExtension.' => array('pdf', 'txt'),
                         'byDirectory' => '/^fileadmin\/.*\//',
-                        'byDirectory.' => array('checkSubFolder' => 1,'fileadmin/unterordner/', 'fileadmin/allowed/'),
-                    ), true
+                        'byDirectory.' => array('checkSubFolder' => 1, 'fileadmin/unterordner/', 'fileadmin/allowed/'),
+                    ), true,
                 ),
                 // spezieller eternit fall
-                'Line: '. __LINE__ => array(
+                'Line: '.__LINE__ => array(
                     array(
                         'file_path' => 'fileadmin/downloads/tx_eternitdownload/',
-                        'file_type' => 'txt'
+                        'file_type' => 'txt',
                     ), array(
                         'byFileExtension' => 'html, xhtml',
                         'byFileExtension.' => array('pdf', 'txt'),
                         'byDirectory' => '/^fileadmin\/.*\//',
-                        'byDirectory.' => array('checkSubFolder' => '1', 'fileadmin/downloads/' , '10' => 'fileadmin/downloads/tx_eternitdownload/', '10.' => array('disallow' => 1)),
-                    ), false
+                        'byDirectory.' => array('checkSubFolder' => '1', 'fileadmin/downloads/', '10' => 'fileadmin/downloads/tx_eternitdownload/', '10.' => array('disallow' => 1)),
+                    ), false,
                 ),
             );
     }
 
-    /**
-     *
-     */
     public function testIsIndexableRecordWithoutDeleteIfNotIndexableOption()
     {
         $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_DamMedia');
@@ -196,7 +189,7 @@ class tx_mksearch_tests_indexer_DamMedia_testcase extends tx_mksearch_tests_Test
             'filter.' => array(
                 'tx_dam.' => array('byFileExtension' => 'pdf, html'),
             ),
-            'deleteIfNotIndexable' => 0
+            'deleteIfNotIndexable' => 0,
         );
 
         $aRawData = array('uid' => 1, 'file_type' => 'something_else');
@@ -205,9 +198,6 @@ class tx_mksearch_tests_indexer_DamMedia_testcase extends tx_mksearch_tests_Test
         self::assertNull($oIndexDoc, 'Es wurde nicht null geliefert!');
     }
 
-    /**
-     *
-     */
     public function testIsIndexableRecordWithDeleteIfNotIndexableOption()
     {
         $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_DamMedia');
@@ -216,7 +206,7 @@ class tx_mksearch_tests_indexer_DamMedia_testcase extends tx_mksearch_tests_Test
             'filter.' => array(
                 'tx_dam.' => array('byFileExtension' => 'pdf, html'),
             ),
-            'deleteIfNotIndexable' => 1
+            'deleteIfNotIndexable' => 1,
         );
 
         $aRawData = array('uid' => 1, 'file_type' => 'something_else');
@@ -227,5 +217,5 @@ class tx_mksearch_tests_indexer_DamMedia_testcase extends tx_mksearch_tests_Test
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_DamMedia_testcase.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_DamMedia_testcase.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_DamMedia_testcase.php'];
 }

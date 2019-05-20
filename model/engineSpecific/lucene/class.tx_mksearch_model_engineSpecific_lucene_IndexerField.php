@@ -25,30 +25,30 @@
 tx_rnbase::load('tx_mksearch_model_IndexerFieldBase');
 
 /**
- * Model for indexer fields
+ * Model for indexer fields.
  *
  * @deprecated
  */
 class tx_mksearch_model_engineSpecific_lucene_IndexerField extends tx_mksearch_model_IndexerFieldBase
 {
-
     /**
-     * Storage type
+     * Storage type.
      *
      * @var string
+     *
      * @see self::$_possibleStorageTypes
      */
     private $_storageType;
 
     /**
-     * Charset encoding
+     * Charset encoding.
      *
      * @var string
      */
     private $_encoding;
 
     /**
-     * Possible storage types for Zend Lucene:
+     * Possible storage types for Zend Lucene:.
      *
      * The storage type defines how a field is indexed / stored. Possible values are (borrowed from Zend_Lucene):
      *          * 'text':       Constructs a String-valued Field that is tokenized and indexed,
@@ -76,9 +76,8 @@ class tx_mksearch_model_engineSpecific_lucene_IndexerField extends tx_mksearch_m
      */
     private static $_possibleStorageTypes = array('text', 'keyword', 'unindexed', 'unstored', 'binary');
 
-
     /**
-     * Constructor
+     * Constructor.
      *
      * @param string $value
      * @param string $storageType   One of the values of self::$_possibleStorageTypes
@@ -93,7 +92,7 @@ class tx_mksearch_model_engineSpecific_lucene_IndexerField extends tx_mksearch_m
         $this->_storageType = $storageType;
         $this->_encoding = $encoding;
 
-        if ($value == 33) {
+        if (33 == $value) {
             tx_rnbase::load('tx_rnbase_util_Debug');
             tx_rnbase_util_Debug::debug(
                 $encoding,
@@ -104,7 +103,7 @@ class tx_mksearch_model_engineSpecific_lucene_IndexerField extends tx_mksearch_m
     }
 
     /**
-     * Update value
+     * Update value.
      *
      * @param string $value
      */
@@ -114,7 +113,7 @@ class tx_mksearch_model_engineSpecific_lucene_IndexerField extends tx_mksearch_m
     }
 
     /**
-     * Return storage type
+     * Return storage type.
      *
      * @return string
      */
@@ -124,7 +123,7 @@ class tx_mksearch_model_engineSpecific_lucene_IndexerField extends tx_mksearch_m
     }
 
     /**
-     * Update storage type
+     * Update storage type.
      *
      * @param string $storageType
      */
@@ -137,7 +136,7 @@ class tx_mksearch_model_engineSpecific_lucene_IndexerField extends tx_mksearch_m
     }
 
     /**
-     * Return encoding
+     * Return encoding.
      *
      * @return string
      */
@@ -147,7 +146,7 @@ class tx_mksearch_model_engineSpecific_lucene_IndexerField extends tx_mksearch_m
     }
 
     /**
-     * Update encoding
+     * Update encoding.
      *
      * @param string $encoding
      */
@@ -158,5 +157,5 @@ class tx_mksearch_model_engineSpecific_lucene_IndexerField extends tx_mksearch_m
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/engineSpecific/lucene/class.tx_mksearch_model_engineSpecific_lucene_IndexerField.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/engineSpecific/lucene/class.tx_mksearch_model_engineSpecific_lucene_IndexerField.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/engineSpecific/lucene/class.tx_mksearch_model_engineSpecific_lucene_IndexerField.php'];
 }

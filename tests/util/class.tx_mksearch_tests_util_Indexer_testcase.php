@@ -22,14 +22,9 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-
 tx_rnbase::load('tx_mksearch_tests_Testcase');
 
 /**
- *
- *
- * @package tx_mksearch
- * @subpackage tx_mksearch_tests
  * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
  * @author Michael Wagner <michael.wagner@dmk-ebusiness.de>
  * @license http://www.gnu.org/licenses/lgpl.html
@@ -37,7 +32,6 @@ tx_rnbase::load('tx_mksearch_tests_Testcase');
  */
 class tx_mksearch_tests_util_Indexer_testcase extends tx_mksearch_tests_Testcase
 {
-
     /**
      * @group unit
      */
@@ -70,8 +64,8 @@ class tx_mksearch_tests_util_Indexer_testcase extends tx_mksearch_tests_Testcase
         $sourceRecord = array('pid' => 1);
         $options = array(
             'include.' => array(
-                'pages' => 1
-            )
+                'pages' => 1,
+            ),
         );
 
         $isOnIndexablePage = tx_mksearch_util_Indexer::getInstance()
@@ -88,8 +82,8 @@ class tx_mksearch_tests_util_Indexer_testcase extends tx_mksearch_tests_Testcase
         $sourceRecord = array('pid' => 2);
         $options = array(
             'include.' => array(
-                'pages' => 1
-            )
+                'pages' => 1,
+            ),
         );
 
         $isOnIndexablePage = tx_mksearch_util_Indexer::getInstance()
@@ -106,8 +100,8 @@ class tx_mksearch_tests_util_Indexer_testcase extends tx_mksearch_tests_Testcase
         $sourceRecord = array('pid' => 3);
         $options = array(
             'exclude.' => array(
-                'pageTrees' => 1
-            )
+                'pageTrees' => 1,
+            ),
         );
 
         $rootline = array(
@@ -130,8 +124,8 @@ class tx_mksearch_tests_util_Indexer_testcase extends tx_mksearch_tests_Testcase
         $sourceRecord = array('pid' => 3);
         $options = array(
             'include.' => array(
-                'pageTrees' => 2
-            )
+                'pageTrees' => 2,
+            ),
         );
 
         $rootline = array(
@@ -153,8 +147,8 @@ class tx_mksearch_tests_util_Indexer_testcase extends tx_mksearch_tests_Testcase
         $sourceRecord = array('pid' => 3);
         $options = array(
             'include.' => array(
-                'pageTrees' => 1
-            )
+                'pageTrees' => 1,
+            ),
         );
 
         $rootline = array(
@@ -176,8 +170,8 @@ class tx_mksearch_tests_util_Indexer_testcase extends tx_mksearch_tests_Testcase
         $sourceRecord = array('pid' => 1);
         $options = array(
             'exclude.' => array(
-                'pages' => 1
-            )
+                'pages' => 1,
+            ),
         );
 
         $isOnIndexablePage = tx_mksearch_util_Indexer::getInstance()
@@ -194,8 +188,8 @@ class tx_mksearch_tests_util_Indexer_testcase extends tx_mksearch_tests_Testcase
         $sourceRecord = array('pid' => 2);
         $options = array(
             'exclude.' => array(
-                'pages' => 1
-            )
+                'pages' => 1,
+            ),
         );
 
         $isOnIndexablePage = tx_mksearch_util_Indexer::getInstance()
@@ -212,11 +206,11 @@ class tx_mksearch_tests_util_Indexer_testcase extends tx_mksearch_tests_Testcase
         $sourceRecord = array('pid' => 3);
         $options = array(
             'include.' => array(
-                'pageTrees' => 1
+                'pageTrees' => 1,
             ),
             'exclude.' => array(
-                'pages' => 3
-            )
+                'pages' => 3,
+            ),
         );
 
         $rootline = array(
@@ -239,11 +233,11 @@ class tx_mksearch_tests_util_Indexer_testcase extends tx_mksearch_tests_Testcase
         $sourceRecord = array('pid' => 3);
         $options = array(
             'include.' => array(
-                'pageTrees' => 1
+                'pageTrees' => 1,
             ),
             'exclude.' => array(
-                'pages' => 2
-            )
+                'pages' => 2,
+            ),
         );
 
         $rootline = array(
@@ -266,11 +260,11 @@ class tx_mksearch_tests_util_Indexer_testcase extends tx_mksearch_tests_Testcase
         $sourceRecord = array('pid' => 3);
         $options = array(
             'include.' => array(
-                'pageTrees' => 1
+                'pageTrees' => 1,
             ),
             'exclude.' => array(
-                'pageTrees' => 2
-            )
+                'pageTrees' => 2,
+            ),
         );
 
         $rootline = array(
@@ -285,10 +279,6 @@ class tx_mksearch_tests_util_Indexer_testcase extends tx_mksearch_tests_Testcase
         self::assertFalse($isOnIndexablePage, 'Seite indizierbar');
     }
 
-
-    /**
-     *
-     */
     public function testIndexModelByMapping()
     {
         $indexDoc = tx_rnbase::makeInstance(
@@ -316,9 +306,6 @@ class tx_mksearch_tests_util_Indexer_testcase extends tx_mksearch_tests_Testcase
         );
     }
 
-    /**
-     *
-     */
     public function testIndexModelByMappingDoesNotIndexHiddenModelsByDefault()
     {
         $indexDoc = tx_rnbase::makeInstance(
@@ -345,9 +332,6 @@ class tx_mksearch_tests_util_Indexer_testcase extends tx_mksearch_tests_Testcase
         );
     }
 
-    /**
-     *
-     */
     public function testIndexModelByMappingIndexesHiddenModelsIfSet()
     {
         $indexDoc = tx_rnbase::makeInstance(
@@ -378,9 +362,6 @@ class tx_mksearch_tests_util_Indexer_testcase extends tx_mksearch_tests_Testcase
         );
     }
 
-    /**
-     *
-     */
     public function testIndexModelByMappingWithPrefix()
     {
         $indexDoc = tx_rnbase::makeInstance(
@@ -409,9 +390,6 @@ class tx_mksearch_tests_util_Indexer_testcase extends tx_mksearch_tests_Testcase
         );
     }
 
-    /**
-     *
-     */
     public function testIndexModelByMappingMapsNotEmptyFields()
     {
         $indexDoc = tx_rnbase::makeInstance(
@@ -438,9 +416,6 @@ class tx_mksearch_tests_util_Indexer_testcase extends tx_mksearch_tests_Testcase
         );
     }
 
-    /**
-     *
-     */
     public function testIndexModelByMappingMapsEmptyFieldsIfKeepEmptyOption()
     {
         $indexDoc = tx_rnbase::makeInstance(
@@ -470,9 +445,6 @@ class tx_mksearch_tests_util_Indexer_testcase extends tx_mksearch_tests_Testcase
         );
     }
 
-    /**
-     *
-     */
     public function testIndexArrayOfModelsByMapping()
     {
         $indexDoc = tx_rnbase::makeInstance(
@@ -489,7 +461,7 @@ class tx_mksearch_tests_util_Indexer_testcase extends tx_mksearch_tests_Testcase
             tx_rnbase::makeInstance(
                 'tx_rnbase_model_base',
                 array('recordField' => 456)
-            )
+            ),
         );
 
         tx_mksearch_util_Indexer::getInstance()->indexArrayOfModelsByMapping(
@@ -506,9 +478,6 @@ class tx_mksearch_tests_util_Indexer_testcase extends tx_mksearch_tests_Testcase
         );
     }
 
-    /**
-     *
-     */
     public function testIndexArrayOfModelsByMappingWithFieldConversion()
     {
         $indexDoc = tx_rnbase::makeInstance(
@@ -524,12 +493,12 @@ class tx_mksearch_tests_util_Indexer_testcase extends tx_mksearch_tests_Testcase
                 tx_rnbase::makeInstance(
                     'tx_rnbase_model_base',
                     array('recordField' => 1439034300)
-                )
+                ),
         );
         $options = array(
                 'fieldsConversion.' => array('documentField.' => array(
-                        'unix2isodate' => 1
-                ))
+                        'unix2isodate' => 1,
+                )),
         );
 
         tx_mksearch_util_Indexer::getInstance()->indexArrayOfModelsByMapping(
@@ -563,7 +532,7 @@ class tx_mksearch_tests_util_Indexer_testcase extends tx_mksearch_tests_Testcase
                 tx_rnbase::makeInstance(
                     'tx_rnbase_model_base',
                     array('recordField' => 456)
-                )
+                ),
         );
 
         tx_mksearch_util_Indexer::getInstance()->indexArrayOfModelsByMapping(
@@ -585,9 +554,6 @@ class tx_mksearch_tests_util_Indexer_testcase extends tx_mksearch_tests_Testcase
         );
     }
 
-    /**
-     *
-     */
     public function testIndexArrayOfModelsByMappingDoesNotIndexHiddenModelsByDefault()
     {
         $indexDoc = tx_rnbase::makeInstance(
@@ -604,7 +570,7 @@ class tx_mksearch_tests_util_Indexer_testcase extends tx_mksearch_tests_Testcase
             tx_rnbase::makeInstance(
                 'tx_rnbase_model_base',
                 array('recordField' => 456, 'hidden' => 1)
-            )
+            ),
         );
 
         tx_mksearch_util_Indexer::getInstance()->indexArrayOfModelsByMapping(
@@ -621,9 +587,6 @@ class tx_mksearch_tests_util_Indexer_testcase extends tx_mksearch_tests_Testcase
         );
     }
 
-    /**
-     *
-     */
     public function testIndexArrayOfModelsByMappingIndexesHiddenModelsIfSet()
     {
         $indexDoc = tx_rnbase::makeInstance(
@@ -640,7 +603,7 @@ class tx_mksearch_tests_util_Indexer_testcase extends tx_mksearch_tests_Testcase
             tx_rnbase::makeInstance(
                 'tx_rnbase_model_base',
                 array('recordField' => 456, 'hidden' => 1)
-            )
+            ),
         );
 
         tx_mksearch_util_Indexer::getInstance()->indexArrayOfModelsByMapping(
@@ -660,9 +623,6 @@ class tx_mksearch_tests_util_Indexer_testcase extends tx_mksearch_tests_Testcase
         );
     }
 
-    /**
-     *
-     */
     public function testIndexArrayOfModelsByMappingWithPrefix()
     {
         $indexDoc = tx_rnbase::makeInstance(
@@ -679,7 +639,7 @@ class tx_mksearch_tests_util_Indexer_testcase extends tx_mksearch_tests_Testcase
             tx_rnbase::makeInstance(
                 'tx_rnbase_model_base',
                 array('recordField' => 456)
-            )
+            ),
         );
 
         tx_mksearch_util_Indexer::getInstance()->indexArrayOfModelsByMapping(
@@ -697,9 +657,6 @@ class tx_mksearch_tests_util_Indexer_testcase extends tx_mksearch_tests_Testcase
         );
     }
 
-    /**
-     *
-     */
     public function testIndexArrayOfModelsByMappingMapsNotEmptyFields()
     {
         $indexDoc = tx_rnbase::makeInstance(
@@ -716,7 +673,7 @@ class tx_mksearch_tests_util_Indexer_testcase extends tx_mksearch_tests_Testcase
             tx_rnbase::makeInstance(
                 'tx_rnbase_model_base',
                 array('recordField' => '')
-            )
+            ),
         );
 
         tx_mksearch_util_Indexer::getInstance()->indexArrayOfModelsByMapping(
@@ -734,6 +691,7 @@ class tx_mksearch_tests_util_Indexer_testcase extends tx_mksearch_tests_Testcase
 
     /**
      * @param array $rootline
+     *
      * @return tx_mksearch_util_Indexer
      */
     protected function getMockClassForIsOnIndexablePageTests(array $rootline)
@@ -789,6 +747,7 @@ class tx_mksearch_tests_util_Indexer_testcase extends tx_mksearch_tests_Testcase
             $utility->stopIndexing($tableName, $sourceRecord, $indexDoc, $options)
         );
     }
+
     /**
      * @group unit
      */
@@ -880,7 +839,7 @@ class tx_mksearch_tests_util_Indexer_testcase extends tx_mksearch_tests_Testcase
     {
         $models = array(
             tx_rnbase::makeInstance('tx_rnbase_model_base', array('uid' => 1)),
-            tx_rnbase::makeInstance('tx_rnbase_model_base', array('uid' => 2))
+            tx_rnbase::makeInstance('tx_rnbase_model_base', array('uid' => 2)),
         );
         $tableName = 'test_table';
         $prefer = 'prefer_me';

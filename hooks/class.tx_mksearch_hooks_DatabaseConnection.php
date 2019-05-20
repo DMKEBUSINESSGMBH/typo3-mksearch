@@ -24,24 +24,21 @@
 tx_rnbase::load('tx_mksearch_service_internal_Index');
 
 /**
- * tx_mksearch_hooks_DatabaseConnection
+ * tx_mksearch_hooks_DatabaseConnection.
  *
- * @package         TYPO3
- * @subpackage      mksearch
  * @author          Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
  * @license         http://www.gnu.org/licenses/lgpl.html
  *                  GNU Lesser General Public License, version 3 or later
  */
 class tx_mksearch_hooks_DatabaseConnection
 {
-
     /**
-     * @var integer
+     * @var int
      */
     private static $loadHiddenObjectsConfigurationBackup;
 
     /**
-     * @var boolean
+     * @var bool
      */
     private static $loadHiddenObjectsConfigurationBackupSet = false;
 
@@ -74,12 +71,9 @@ class tx_mksearch_hooks_DatabaseConnection
         }
     }
 
-    /**
-     * @return void
-     */
     public function doSelectPost()
     {
-        if (self::$loadHiddenObjectsConfigurationBackupSet === true) {
+        if (true === self::$loadHiddenObjectsConfigurationBackupSet) {
             $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects'] = self::$loadHiddenObjectsConfigurationBackup;
             self::$loadHiddenObjectsConfigurationBackup = null;
             self::$loadHiddenObjectsConfigurationBackupSet = false;

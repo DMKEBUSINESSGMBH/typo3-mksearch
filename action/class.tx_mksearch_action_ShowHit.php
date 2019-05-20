@@ -1,30 +1,4 @@
 <?php
-/**
- * @package tx_mksearch
- * @subpackage tx_mksearch_action
- *
- * Copyright notice
- *
- * (c) 2013 DMK E-Business GmbH <dev@dmk-ebusiness.de>
- * All rights reserved
- *
- * This script is part of the TYPO3 project. The TYPO3 project is
- * free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * The GNU General Public License can be found at
- * http://www.gnu.org/copyleft/gpl.html.
- *
- * This script is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * This copyright notice MUST APPEAR in all copies of the script!
- */
-
 
 tx_rnbase::load('tx_rnbase_action_BaseIOC');
 tx_rnbase::load('tx_mksearch_util_ServiceRegistry');
@@ -32,25 +6,20 @@ tx_rnbase::load('tx_mksearch_util_ServiceRegistry');
 /**
  * Detailseite eines beliebigen Datensatzes aus Momentan Lucene oder Solr.
  *
- * @package tx_mksearch
- * @subpackage tx_mksearch_action
  * @author Michael Wagner <dev@dmk-ebusiness.de>
  */
 class tx_mksearch_action_ShowHit extends tx_rnbase_action_BaseIOC
 {
-
     /**
-     *
      * @var tx_mksearch_model_internal_Index
      */
     private $index = false;
 
     /**
-     *
-     *
-     * @param tx_rnbase_IParameters $parameters
+     * @param tx_rnbase_IParameters    $parameters
      * @param tx_rnbase_configurations $configurations
-     * @param ArrayObject $viewdata
+     * @param ArrayObject              $viewdata
+     *
      * @return string Errorstring or null
      */
     protected function handleRequest(&$parameters, &$configurations, &$viewdata)
@@ -62,9 +31,9 @@ class tx_mksearch_action_ShowHit extends tx_rnbase_action_BaseIOC
     }
 
     /**
-     *
      * @throws InvalidArgumentException
-     * @throws Ambigous <Exception, LogicException, LogicException, tx_mksearch_service_engine_SolrException>
+     * @throws Ambigous                 <Exception, LogicException, LogicException, tx_mksearch_service_engine_SolrException>
+     *
      * @return tx_mksearch_interface_SearchHit
      */
     protected function findItem()
@@ -116,7 +85,7 @@ class tx_mksearch_action_ShowHit extends tx_rnbase_action_BaseIOC
         if (!$item instanceof tx_mksearch_interface_SearchHit) {
             throw new LogicException(
                 'The hit has to be an object instance of "tx_mksearch_interface_SearchHit",'
-                . '"' . (is_object($item) ? get_class($item) : gettype($item)) . '" given.',
+                .'"'.(is_object($item) ? get_class($item) : gettype($item)).'" given.',
                 1377774178
             );
         }
@@ -125,11 +94,12 @@ class tx_mksearch_action_ShowHit extends tx_rnbase_action_BaseIOC
     }
 
     /**
-     *
-     * @param int $uid
+     * @param int    $uid
      * @param string $extKey
      * @param string $contentType
+     *
      * @throws Ambigous <Exception, InvalidArgumentException, tx_mksearch_service_engine_SolrException>
+     *
      * @return
      */
     protected function searchByContentUid($uid, $extKey, $contentType)
@@ -163,11 +133,11 @@ class tx_mksearch_action_ShowHit extends tx_rnbase_action_BaseIOC
                 'mksearch',
                 array(
                     'Exception' => $e->getMessage(),
-                    'URL' => $lastUrl
+                    'URL' => $lastUrl,
                 )
             );
             $configurations = $this->getConfigurations();
-            if ($configurations->getBool($this->getConfId() . 'throwSolrSearchException')) {
+            if ($configurations->getBool($this->getConfId().'throwSolrSearchException')) {
                 throw $e;
             }
         }
@@ -176,15 +146,16 @@ class tx_mksearch_action_ShowHit extends tx_rnbase_action_BaseIOC
     }
 
     /**
-     * returns the dataset for the current used index
+     * returns the dataset for the current used index.
      *
      * @throws Exception
+     *
      * @return tx_mksearch_model_internal_Index
      */
     protected function getIndex()
     {
-        if ($this->index === false) {
-            $indexUid = $this->getConfigurations()->get($this->getConfId(). 'usedIndex');
+        if (false === $this->index) {
+            $indexUid = $this->getConfigurations()->get($this->getConfId().'usedIndex');
             //let's see if we got a index to use via parameters
             if (empty($indexUid)) {
                 $indexUid = $this->getConfigurations()->getParameters()->get('usedIndex');
@@ -214,5 +185,5 @@ class tx_mksearch_action_ShowHit extends tx_rnbase_action_BaseIOC
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/action/class.tx_mksearch_action_ShowHit.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/action/class.tx_mksearch_action_ShowHit.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/action/class.tx_mksearch_action_ShowHit.php'];
 }

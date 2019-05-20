@@ -21,28 +21,26 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  ***************************************************************/
 
-
-
 tx_rnbase::load('tx_mksearch_filter_SolrBase');
 
 /**
  * Die eigentlich nur dazu fq immer leer zu lassen
- * und limit auf 0 zu setzen da wir alle facetten wollen, mehr nicht
+ * und limit auf 0 zu setzen da wir alle facetten wollen, mehr nicht.
  *
  * @author Hannes Bochmann
  */
 class tx_mksearch_filter_FacetBase extends tx_mksearch_filter_SolrBase
 {
-
     /**
      * Die eigentliche Konfiguration der facetten sollte
-     * über den request Handler geschehen und nicht im Filter
+     * über den request Handler geschehen und nicht im Filter.
      *
-     * @param array $fields
-     * @param array $options
-     * @param tx_rnbase_parameters $parameters
+     * @param array                    $fields
+     * @param array                    $options
+     * @param tx_rnbase_parameters     $parameters
      * @param tx_rnbase_configurations $configurations
-     * @param string $confId
+     * @param string                   $confId
+     *
      * @return bool Should subsequent query be executed at all?
      */
     protected function initFilter(&$fields, &$options, &$parameters, &$configurations, $confId)
@@ -52,15 +50,15 @@ class tx_mksearch_filter_FacetBase extends tx_mksearch_filter_SolrBase
             //dann setzen wir die Werte fest, da Facetten weder echte Ergebnisse benötigen
             //noch eingeschränkt werden wollen. Sollen sie doch eingeschränkt werden
             //dann einfach einen Filter verwenden der "fq" nicht statisch auf nichts setzt
-            $options['limit'] = 0;//nie wirklich suchen
+            $options['limit'] = 0; //nie wirklich suchen
             $options['facet'] = 'true';
 
-            return true;//damit der Filter als valide betrachtet wird
+            return true; //damit der Filter als valide betrachtet wird
         }
     }
 
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
      *
      * @see tx_mksearch_filter_SolrBase::handleFq()
      *
@@ -76,5 +74,5 @@ class tx_mksearch_filter_FacetBase extends tx_mksearch_filter_SolrBase
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/filter/class.tx_mksearch_filter_SearchForm.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/filter/class.tx_mksearch_filter_SearchForm.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/filter/class.tx_mksearch_filter_SearchForm.php'];
 }

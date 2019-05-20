@@ -1,7 +1,5 @@
 <?php
 /**
- * @package TYPO3
- * @subpackage mksearch
  * @author Hannes Bochmann
  *
  *  Copyright notice
@@ -30,19 +28,17 @@ tx_rnbase::load('tx_mksearch_util_SolrAutocomplete');
 tx_rnbase::load('tx_rnbase_util_Link');
 
 /**
- * tx_mksearch_tests_util_SolrAutocomplete_testcase
+ * tx_mksearch_tests_util_SolrAutocomplete_testcase.
  *
- * @package         TYPO3
- * @subpackage      mksearch
  * @author          Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
  * @license         http://www.gnu.org/licenses/lgpl.html
  *                  GNU Lesser General Public License, version 3 or later
  */
 class tx_mksearch_tests_util_SolrAutocomplete_testcase extends tx_mksearch_tests_Testcase
 {
-
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
+     *
      * @see tx_mksearch_tests_Testcase::setUp()
      */
     protected function setUp()
@@ -75,32 +71,32 @@ class tx_mksearch_tests_util_SolrAutocomplete_testcase extends tx_mksearch_tests
             $link
         );
 
-        $expectedJavaScript = '<script type="text/javascript">jQuery(document).ready(function(){' .
-			'jQuery(testSelector).autocomplete({' .
-				'source: function( request, response ) {' .
-					'jQuery.ajax({' .
-						'url: "myLink&mksearch[term]="+encodeURIComponent(request.term),' .
-						'dataType: "json",' .
-						'success: function( data ) {' .
-							'var suggestions = [];' .
-							'jQuery.each(data.suggestions, function(key, value) {' .
-								'jQuery.each(value, function(key, suggestion) {' .
-									'suggestions.push(suggestion.record.value);' .
-								'});' .
-							'});' .
-							'response( jQuery.map( suggestions, function( item ) {' .
-								'return {' .
-									'label: item,' .
-									'value: item' .
-								'};' .
-							'}));' .
-						'}' .
-					'});' .
-				'},' .
-				'minLength: 123' .
-			'});' .
-		'});' .
-		'jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();' .
+        $expectedJavaScript = '<script type="text/javascript">jQuery(document).ready(function(){'.
+            'jQuery(testSelector).autocomplete({'.
+                'source: function( request, response ) {'.
+                    'jQuery.ajax({'.
+                        'url: "myLink&mksearch[term]="+encodeURIComponent(request.term),'.
+                        'dataType: "json",'.
+                        'success: function( data ) {'.
+                            'var suggestions = [];'.
+                            'jQuery.each(data.suggestions, function(key, value) {'.
+                                'jQuery.each(value, function(key, suggestion) {'.
+                                    'suggestions.push(suggestion.record.value);'.
+                                '});'.
+                            '});'.
+                            'response( jQuery.map( suggestions, function( item ) {'.
+                                'return {'.
+                                    'label: item,'.
+                                    'value: item'.
+                                '};'.
+                            '}));'.
+                        '}'.
+                    '});'.
+                '},'.
+                'minLength: 123'.
+            '});'.
+        '});'.
+        'jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();'.
         '</script>';
 
         self::assertEquals($expectedJavaScript, $autocompleteJavaScript);
@@ -124,32 +120,32 @@ class tx_mksearch_tests_util_SolrAutocomplete_testcase extends tx_mksearch_tests
             false
         );
 
-        $expectedJavaScript = 'jQuery(document).ready(function(){' .
-			'jQuery(testSelector).autocomplete({' .
-				'source: function( request, response ) {' .
-					'jQuery.ajax({' .
-						'url: "myLink&mksearch[term]="+encodeURIComponent(request.term),' .
-						'dataType: "json",' .
-						'success: function( data ) {' .
-							'var suggestions = [];' .
-							'jQuery.each(data.suggestions, function(key, value) {' .
-								'jQuery.each(value, function(key, suggestion) {' .
-									'suggestions.push(suggestion.record.value);' .
-								'});' .
-							'});' .
-							'response( jQuery.map( suggestions, function( item ) {' .
-								'return {' .
-									'label: item,' .
-									'value: item' .
-								'};' .
-							'}));' .
-						'}' .
-					'});' .
-				'},' .
-				'minLength: 123' .
-			'});' .
-		'});' .
-		'jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();';
+        $expectedJavaScript = 'jQuery(document).ready(function(){'.
+            'jQuery(testSelector).autocomplete({'.
+                'source: function( request, response ) {'.
+                    'jQuery.ajax({'.
+                        'url: "myLink&mksearch[term]="+encodeURIComponent(request.term),'.
+                        'dataType: "json",'.
+                        'success: function( data ) {'.
+                            'var suggestions = [];'.
+                            'jQuery.each(data.suggestions, function(key, value) {'.
+                                'jQuery.each(value, function(key, suggestion) {'.
+                                    'suggestions.push(suggestion.record.value);'.
+                                '});'.
+                            '});'.
+                            'response( jQuery.map( suggestions, function( item ) {'.
+                                'return {'.
+                                    'label: item,'.
+                                    'value: item'.
+                                '};'.
+                            '}));'.
+                        '}'.
+                    '});'.
+                '},'.
+                'minLength: 123'.
+            '});'.
+        '});'.
+        'jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();';
 
         self::assertEquals($expectedJavaScript, $autocompleteJavaScript);
     }

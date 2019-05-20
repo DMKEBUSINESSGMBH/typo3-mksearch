@@ -22,15 +22,11 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-
 require_once tx_rnbase_util_Extensions::extPath('mksearch', 'lib/Apache/Solr/Document.php');
 tx_rnbase::load('tx_mksearch_tests_Testcase');
 tx_rnbase::load('tx_mksearch_indexer_ttcontent_Normal');
 
 /**
- *
- * @package tx_mksearch
- * @subpackage tx_mksearch_tests
  * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
  * @author Michael Wagner <michael.wagner@dmk-ebusiness.de>
  * @license http://www.gnu.org/licenses/lgpl.html
@@ -39,7 +35,8 @@ tx_rnbase::load('tx_mksearch_indexer_ttcontent_Normal');
 class tx_mksearch_tests_indexer_TtContent_testcase extends tx_mksearch_tests_Testcase
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
+     *
      * @see tx_mksearch_tests_Testcase::setUp()
      */
     protected function setUp()
@@ -52,19 +49,17 @@ class tx_mksearch_tests_indexer_TtContent_testcase extends tx_mksearch_tests_Tes
     {
         $options = array();
         $options['CType.']['_default_.']['indexedFields.'] = array(
-            'bodytext', 'imagecaption' , 'altText', 'titleText'
+            'bodytext', 'imagecaption', 'altText', 'titleText',
         );
 
         return $options;
     }
 
     /**
-     *
-     * @param array $record
-     * @param array $options
+     * @param array  $record
+     * @param array  $options
      * @param string $expectedTitle
      *
-     * @return void
      *
      * @group unit
      * @test
@@ -181,13 +176,13 @@ class tx_mksearch_tests_indexer_TtContent_testcase extends tx_mksearch_tests_Tes
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $record = array('uid' => 123, 'pid' => 1, 'deleted' => 0, 'hidden' => 0, 'sectionIndex' => 1, 'CType' => 'list', 'header' => 'test');
         $options = self::getDefaultOptions();
-        $options['ignoreCTypes.'] = array('search','mailform','login');
+        $options['ignoreCTypes.'] = array('search', 'mailform', 'login');
         $result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
         self::assertNotNull($result, 'Null returned for uid '.$record['uid']);
 
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $options = self::getDefaultOptions();
-        $options['ignoreCTypes.'] = array('search','mailform','list');
+        $options['ignoreCTypes.'] = array('search', 'mailform', 'list');
         $result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
         self::assertNull($result, 'Not Null returned for uid '.$record['uid']);
 
@@ -215,13 +210,13 @@ class tx_mksearch_tests_indexer_TtContent_testcase extends tx_mksearch_tests_Tes
         $record = array('uid' => 123, 'pid' => 1, 'deleted' => 0, 'hidden' => 0, 'sectionIndex' => 1, 'CType' => 'list', 'header' => 'test');
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $options = self::getDefaultOptions();
-        $options['includeCTypes.'] = array('search','mailform','login');
+        $options['includeCTypes.'] = array('search', 'mailform', 'login');
         $result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
         self::assertNull($result, 'Not Null returned for uid '.$record['uid'].' when CType not in includeCTypes');
 
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $options = self::getDefaultOptions();
-        $options['includeCTypes.'] = array('search','mailform','list');
+        $options['includeCTypes.'] = array('search', 'mailform', 'list');
         $result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
         self::assertNotNull($result, 'Null returned for uid '.$record['uid'].' when CType in includeCTypes');
     }

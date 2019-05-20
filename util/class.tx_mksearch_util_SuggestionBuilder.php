@@ -1,7 +1,5 @@
 <?php
 /**
- *  @package tx_mksearch
- *  @subpackage tx_mksearch_util
  *  @author Hannes Bochmann
  *
  *  Copyright notice
@@ -27,37 +25,38 @@
  */
 
 /**
- * benötigte Klassen einbinden
+ * benötigte Klassen einbinden.
  */
-
 
 /**
  * Der SuggestionBuilder erstellt aus den Rohdaten der Suggestions passende Objekte für das Rendering.
- * @package tx_mksearch
- * @subpackage tx_mksearch_util
+ *
  * @author Hannes Bochmann <dev@dmk-ebusiness.de>
  * @author Michael Wagner <dev@dmk-ebusiness.de>
  */
 class tx_mksearch_util_SuggestionBuilder
 {
-
     /**
      * @param string $class
+     *
      * @return tx_mksearch_util_SuggestionBuilder
      */
-    public static function getInstance($class='')
+    public static function getInstance($class = '')
     {
         static $instance;
         $class = empty($class) ? 'tx_mksearch_util_SuggestionBuilder' : $class;
         if (!$instance[$class]) {
             $instance[$class] = tx_rnbase::makeInstance($class);
         }
+
         return $instance[$class];
     }
 
     /**
-     * Baut die Daten für die Suggestions zusammen
+     * Baut die Daten für die Suggestions zusammen.
+     *
      * @param array $aSuggestionData Daten von Solr
+     *
      * @return array Ausgabedaten
      */
     public function buildSuggestions($aSuggestionData)
@@ -81,12 +80,15 @@ class tx_mksearch_util_SuggestionBuilder
                 }
             }
         }
+
         return $aSuggestions;
     }
 
     /**
-     * Liefert eine simple Suggestion zurück
+     * Liefert eine simple Suggestion zurück.
+     *
      * @param string $field
+     *
      * @return tx_mksearch_model_Suggestion
      */
     protected function getSimpleSuggestion($aSuggestion)
@@ -96,5 +98,5 @@ class tx_mksearch_util_SuggestionBuilder
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_SuggestionBuilder.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_SuggestionBuilder.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_SuggestionBuilder.php'];
 }

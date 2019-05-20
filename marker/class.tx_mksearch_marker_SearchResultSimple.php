@@ -22,7 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-
 tx_rnbase::load('tx_mksearch_marker_Search');
 
 /**
@@ -31,13 +30,13 @@ tx_rnbase::load('tx_mksearch_marker_Search');
  */
 class tx_mksearch_marker_SearchResultSimple extends tx_mksearch_marker_Search
 {
-
     /**
-     * @param string $template HTML template
-     * @param tx_mksearch_model_SearchHit $item search hit
-     * @param tx_rnbase_util_FormatUtil $formatter
-     * @param string $confId path of typoscript configuration
-     * @param string $marker name of marker
+     * @param string                      $template  HTML template
+     * @param tx_mksearch_model_SearchHit $item      search hit
+     * @param tx_rnbase_util_FormatUtil   $formatter
+     * @param string                      $confId    path of typoscript configuration
+     * @param string                      $marker    name of marker
+     *
      * @return string readily parsed template
      */
     public function parseTemplate($template, &$item, &$formatter, $confId, $marker = 'ITEM')
@@ -74,15 +73,15 @@ class tx_mksearch_marker_SearchResultSimple extends tx_mksearch_marker_Search
     }
 
     /**
-     * Prepare links
+     * Prepare links.
      *
      * @param tx_mksearch_model_SearchHit $item
-     * @param string $marker
-     * @param array $markerArray
-     * @param array $wrappedSubpartArray
-     * @param string $confId
-     * @param tx_rnbase_util_FormatUtil $formatter
-     * @param string $template
+     * @param string                      $marker
+     * @param array                       $markerArray
+     * @param array                       $wrappedSubpartArray
+     * @param string                      $confId
+     * @param tx_rnbase_util_FormatUtil   $formatter
+     * @param string                      $template
      */
     public function prepareLinks($item, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, $formatter, $template)
     {
@@ -96,14 +95,14 @@ class tx_mksearch_marker_SearchResultSimple extends tx_mksearch_marker_Search
          * Andernfalls wird der Alte Weg genutzt.
          * Hier wurd nur der SHOWLINK gerendert und alle anderen ignoriert.
          */
-        $linkMethod    = $config->get($confId.'linkMethod');
-        if ($linkMethod == 'generic') {
+        $linkMethod = $config->get($confId.'linkMethod');
+        if ('generic' == $linkMethod) {
             parent::prepareLinks($item, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter, $template);
         }
 
         // @deprecated. Wenn generic, dann sollte der alte Link nie erstellt werden.
         // das ist aber aus Gründen der Abwärtskompatibiltät schwierig.
-        if (!$config->get($confId . 'disableOldShowLink')) {
+        if (!$config->get($confId.'disableOldShowLink')) {
             $linkId = 'show';
             $linkConfId = $confId.'links.'.$linkId.'.';
             //cObject Daten sichern und durch unseren solr record ersetzen
@@ -115,7 +114,7 @@ class tx_mksearch_marker_SearchResultSimple extends tx_mksearch_marker_Search
             // Link entfernen, wenn nicht gesetzt
             if (empty($pid)) {
                 $remove = intval($formatter->getConfigurations()->get($linkConfId.'removeIfDisabled'));
-                $linkMarker = $marker . '_' . strtoupper($linkId).'LINK';
+                $linkMarker = $marker.'_'.strtoupper($linkId).'LINK';
                 self::disableLink($markerArray, $subpartArray, $wrappedSubpartArray, $linkMarker, $remove > 0);
             } elseif (self::checkLinkExistence($linkId, $marker, $template)) {
                 // Try to get parameter name from TS
@@ -148,5 +147,5 @@ class tx_mksearch_marker_SearchResultSimple extends tx_mksearch_marker_Search
     }
 }
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/marker/class.tx_mksearch_marker_SearchResultSimple.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/marker/class.tx_mksearch_marker_SearchResultSimple.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/marker/class.tx_mksearch_marker_SearchResultSimple.php'];
 }

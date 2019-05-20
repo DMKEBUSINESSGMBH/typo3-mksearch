@@ -25,10 +25,8 @@
 tx_rnbase::load('tx_rnbase_model_base');
 
 /**
- * Cal location model
+ * Cal location model.
  *
- * @package TYPO3
- * @subpackage tx_mksearch
  * @author Michael Wagner
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
@@ -36,7 +34,7 @@ tx_rnbase::load('tx_rnbase_model_base');
 class tx_mksearch_model_cal_Location extends tx_rnbase_model_base
 {
     /**
-     * Tablename
+     * Tablename.
      *
      * @return string
      */
@@ -47,5 +45,5 @@ class tx_mksearch_model_cal_Location extends tx_rnbase_model_base
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/cal/class.tx_mksearch_model_cal_Location.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/cal/class.tx_mksearch_model_cal_Location.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/cal/class.tx_mksearch_model_cal_Location.php'];
 }

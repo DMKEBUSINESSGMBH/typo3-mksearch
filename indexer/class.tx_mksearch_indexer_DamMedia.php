@@ -22,19 +22,16 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-
 tx_rnbase::load('tx_mksearch_indexer_BaseMedia');
 tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
 tx_rnbase::load('tx_mksearch_util_Misc');
 tx_rnbase::load('tx_rnbase_util_Logger');
-
 
 /**
  * Indexer service for dam.media called by the "mksearch" extension.
  */
 class tx_mksearch_indexer_DamMedia extends tx_mksearch_indexer_BaseMedia
 {
-
     /**
      * Return content type identification.
      * This identification is part of the indexed data
@@ -52,7 +49,7 @@ class tx_mksearch_indexer_DamMedia extends tx_mksearch_indexer_BaseMedia
     }
 
     /**
-     * Liefert den namen zur Basistabelle
+     * Liefert den namen zur Basistabelle.
      *
      * @return string
      */
@@ -65,19 +62,21 @@ class tx_mksearch_indexer_DamMedia extends tx_mksearch_indexer_BaseMedia
      * Den Absoluten Server-Pfad zur Datei.
      *
      * @param string $tableName
-     * @param array $sourceRecord
+     * @param array  $sourceRecord
+     *
      * @return string
      */
     protected function getRelFileName($tableName, $sourceRecord)
     {
-        return $sourceRecord['file_path'] . $sourceRecord['file_name'];
+        return $sourceRecord['file_path'].$sourceRecord['file_name'];
     }
 
     /**
      * Liefert die Dateiendung.
      *
      * @param string $tableName
-     * @param array $sourceRecord
+     * @param array  $sourceRecord
+     *
      * @return string
      */
     protected function getFileExtension($tableName, $sourceRecord)
@@ -89,7 +88,8 @@ class tx_mksearch_indexer_DamMedia extends tx_mksearch_indexer_BaseMedia
      * Liefert den Pfad zur Datei (ohne Dateinamen).
      *
      * @param string $tableName
-     * @param array $sourceRecord
+     * @param array  $sourceRecord
+     *
      * @return string
      */
     protected function getFilePath($tableName, $sourceRecord)
@@ -99,5 +99,5 @@ class tx_mksearch_indexer_DamMedia extends tx_mksearch_indexer_BaseMedia
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_DamMedia.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_DamMedia.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_DamMedia.php'];
 }

@@ -22,17 +22,11 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-
 require_once tx_rnbase_util_Extensions::extPath('mksearch', 'lib/Apache/Solr/Document.php');
 tx_rnbase::load('tx_mksearch_tests_Testcase');
 tx_rnbase::load('tx_rnbase_util_Dates');
 
-
-
 /**
- *
- * @package tx_mksearch
- * @subpackage tx_mksearch_tests
  * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
  * @author Michael Wagner <michael.wagner@dmk-ebusiness.de>
  * @license http://www.gnu.org/licenses/lgpl.html
@@ -53,7 +47,7 @@ class tx_mksearch_tests_indexer_TtNewsNews_testcase extends tx_mksearch_tests_Te
         $options = array();
         $options['indexedFields.'] = array(
             'uid_i' => 'uid',
-            'bodytext_s' => 'bodytext'
+            'bodytext_s' => 'bodytext',
         );
 
         $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtNewsNews');
@@ -82,7 +76,7 @@ class tx_mksearch_tests_indexer_TtNewsNews_testcase extends tx_mksearch_tests_Te
         $options = array();
         $options['indexedFields.'] = array(
             'uid_i' => 'uid',
-            'bodytext_s' => 'bodytext'
+            'bodytext_s' => 'bodytext',
         );
 
         $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtNewsNews');
@@ -111,9 +105,9 @@ class tx_mksearch_tests_indexer_TtNewsNews_testcase extends tx_mksearch_tests_Te
         $options = array(
             'indexedFields.' => array(
                 'uid_i' => 'uid',
-                'bodytext_s' => 'bodytext'
+                'bodytext_s' => 'bodytext',
             ),
-            'keepHtml' => 1
+            'keepHtml' => 1,
         );
 
         $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtNewsNews');
@@ -283,5 +277,5 @@ class tx_mksearch_tests_indexer_TtNewsNews_testcase extends tx_mksearch_tests_Te
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtNewsNews_testcase.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtNewsNews_testcase.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtNewsNews_testcase.php'];
 }

@@ -22,13 +22,9 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-
 tx_rnbase::load('tx_mksearch_tests_Testcase');
 
 /**
- *
- * @package tx_mksearch
- * @subpackage tx_mksearch_tests
  * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
  * @author Michael Wagner <michael.wagner@dmk-ebusiness.de>
  * @license http://www.gnu.org/licenses/lgpl.html
@@ -36,7 +32,6 @@ tx_rnbase::load('tx_mksearch_tests_Testcase');
  */
 class tx_mksearch_tests_util_ResolverT3DB_testcase extends tx_mksearch_tests_Testcase
 {
-
     /**
      * @group integration
      */
@@ -48,8 +43,8 @@ class tx_mksearch_tests_util_ResolverT3DB_testcase extends tx_mksearch_tests_Tes
         $resolverT3Db = tx_rnbase::makeInstance('tx_mksearch_util_ResolverT3DB');
 
         $queueData = array(
-            'tablename'    =>    'tt_content',
-            'recid'        =>    1215752191
+            'tablename' => 'tt_content',
+            'recid' => 1215752191,
         );
         $records = $resolverT3Db->getRecords($queueData);
 

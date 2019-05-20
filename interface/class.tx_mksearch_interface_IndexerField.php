@@ -23,28 +23,28 @@
 ***************************************************************/
 
 /**
- * Interface for indexer fields
+ * Interface for indexer fields.
  */
 interface tx_mksearch_interface_IndexerField
 {
     /**
-     * Constructor
+     * Constructor.
      *
-     * @param mixed     $value                  Either a scalar or an array value. Possibly not supported by every implementation!
-     * @param mixed     $storageOptionsOrType   Array (@see self::$_storageOptions) OR short cut string (@see self::$_storageType)
-     * @param string    $encoding
+     * @param mixed  $value                Either a scalar or an array value. Possibly not supported by every implementation!
+     * @param mixed  $storageOptionsOrType Array (@see self::$_storageOptions) OR short cut string (@see self::$_storageType)
+     * @param string $encoding
      */
     public function __construct($value, $storageOptionsOrType, $encoding = null);
-    
+
     /**
-     * Return value
+     * Return value.
      *
      * @return string
      */
     public function getValue();
-    
+
     /**
-     * Return the field's boost
+     * Return the field's boost.
      *
      * Returned value has / should always have the cardinality like self::$_value.
      *
@@ -53,67 +53,69 @@ interface tx_mksearch_interface_IndexerField
     public function getBoost();
 
     /**
-     * Update the field's value
+     * Update the field's value.
      *
      * @param mixed $value
-     * @param mixed $boost  @see self::$_boost
+     * @param mixed $boost @see self::$_boost
      */
     public function updateValue($value, $boost = 1.0);
-    
+
     /**
-     * Return storage options
+     * Return storage options.
      *
      * @return array
      */
     public function getStorageOptions();
-    
+
     /**
-     * Return storage type (shortcut)
+     * Return storage type (shortcut).
      *
      * @return string
      */
     public function getStorageType();
-    
+
     /**
-     * Update storage options
+     * Update storage options.
      *
      * @param array $storageOptions
      */
     public function updateStorageOptions($storageOptions);
-    
+
     /**
-     * Return requested storage option or null, if option does not exist
+     * Return requested storage option or null, if option does not exist.
      *
      * @param string $key
+     *
      * @return mixed
      */
     public function getStorageOption($key);
-        
+
     /**
-     * Update storage option
+     * Update storage option.
      *
      * @param string $key
-     * @param mixed $storageOption
+     * @param mixed  $storageOption
      */
     public function updateStorageOption($key, $storageOption);
-    
+
     /**
-     * Update storage type (shortcut)
+     * Update storage type (shortcut).
      *
-     * @param mixed     $value
+     * @param mixed $value
+     *
      * @see self::$_storageType
      */
     public function updateStorageType($value);
-    
+
     /**
-     * Return encoding
+     * Return encoding.
      *
      * @return string
      */
     public function getEncoding();
-    
+
     /**
-     * Update encoding
+     * Update encoding.
      *
      * @param string $encoding
      */
@@ -121,5 +123,5 @@ interface tx_mksearch_interface_IndexerField
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/interface/class.tx_mksearch_interface_IndexerField.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/interface/class.tx_mksearch_interface_IndexerField.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/interface/class.tx_mksearch_interface_IndexerField.php'];
 }

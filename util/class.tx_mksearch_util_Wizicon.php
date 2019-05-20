@@ -23,21 +23,17 @@
  ***************************************************************/
 
 /**
- * tx_mksearch_util_Wizicon
+ * tx_mksearch_util_Wizicon.
  *
- * @package        TYPO3
- * @subpackage     mkserach
  * @author         Eric Hertwig <dev@dmk-ebusiness.de>
  * @license        http://www.gnu.org/licenses/lgpl.html
  *                 GNU Lesser General Public License, version 3 or later
  */
-
 tx_rnbase::load('tx_rnbase_util_Extensions');
 tx_rnbase::load('tx_rnbase_util_Wizicon');
 
 class tx_mksearch_util_Wizicon extends tx_rnbase_util_Wizicon
 {
-
     /**
      * @return array
      */
@@ -45,10 +41,10 @@ class tx_mksearch_util_Wizicon extends tx_rnbase_util_Wizicon
     {
         return array(
             'tx_mksearch' => array(
-                'icon'        => tx_rnbase_util_Extensions::extRelPath('mksearch') . 'ext_icon.gif',
-                'title'       => 'plugin.mksearch.label',
-                'description' => 'plugin.mksearch.description'
-            )
+                'icon' => tx_rnbase_util_Extensions::extRelPath('mksearch').'ext_icon.gif',
+                'title' => 'plugin.mksearch.label',
+                'description' => 'plugin.mksearch.description',
+            ),
         );
     }
 
@@ -57,10 +53,10 @@ class tx_mksearch_util_Wizicon extends tx_rnbase_util_Wizicon
      */
     protected function getLLFile()
     {
-        return tx_rnbase_util_Extensions::extPath('mksearch') . 'locallang_db.xml';
+        return tx_rnbase_util_Extensions::extPath('mksearch').'locallang_db.xml';
     }
 }
 
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][ TYPO3_MODE ]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_Wizicon.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][ TYPO3_MODE ]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_Wizicon.php']);
+if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_Wizicon.php']) {
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_Wizicon.php'];
 }

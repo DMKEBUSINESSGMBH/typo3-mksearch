@@ -1,8 +1,6 @@
 <?php
 
 /**
- * @package tx_mksearch
- * @subpackage tx_mksearch_tests
  * @author Hannes Bochmann
  *
  *  Copyright notice
@@ -28,36 +26,30 @@
  */
 
 /**
- * benötigte Klassen einbinden
+ * benötigte Klassen einbinden.
  */
-
 tx_rnbase::load('tx_rnbase_cache_Manager');
 tx_rnbase::load('tx_rnbase_util_TYPO3');
 tx_rnbase::load('tx_rnbase_util_Spyc');
 
 /**
- * Statische Hilfsmethoden für Tests
- *
- * @package tx_mksearch
- * @subpackage tx_mksearch_tests
+ * Statische Hilfsmethoden für Tests.
  */
 class tx_mksearch_tests_Util
 {
-
     /**
-     * Sicherung von hoocks
+     * Sicherung von hoocks.
      *
      * @var array
      */
     private static $hooks = array();
 
     /**
-     * Sicherung der TCA
+     * Sicherung der TCA.
      *
      * @var array
      */
     private static $TCA = null;
-
 
     /**
      * @var array
@@ -78,7 +70,6 @@ class tx_mksearch_tests_Util
      * Sichert die hoocks unt entfernt diese in der globalconf.
      *
      * @param array $hooks
-     * @return void
      */
     public static function hooksSetUp($hooks = null)
     {
@@ -92,10 +83,9 @@ class tx_mksearch_tests_Util
             $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch'][$hook] = array();
         }
     }
+
     /**
-     * Setzt die im setUp gesetzten Hooks zurück
-     *
-     * @return void
+     * Setzt die im setUp gesetzten Hooks zurück.
      */
     public static function hooksTearDown()
     {
@@ -114,7 +104,6 @@ class tx_mksearch_tests_Util
      * welche in einem DB-TestCase nicht existieren.
      *
      * @param array $extensions
-     * @return void
      */
     public static function tcaSetUp(array $extensions = array())
     {
@@ -138,13 +127,11 @@ class tx_mksearch_tests_Util
     }
 
     /**
-     * Setzt die TCA zurück
-     *
-     * @return void
+     * Setzt die TCA zurück.
      */
     public static function tcaTearDown()
     {
-        if (self::$TCA !== null) {
+        if (null !== self::$TCA) {
             $GLOBALS['TCA'] = self::$TCA;
             self::$TCA = null;
 
@@ -158,13 +145,12 @@ class tx_mksearch_tests_Util
     }
 
     /**
-     * Load ext_tables.php as single files
+     * Load ext_tables.php as single files.
      *
      * This Method is taken from
      *     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::loadSingleExtTablesFiles
      *
      * @param array $extensions
-     * @return void
      */
     public static function loadSingleExtTablesFiles(array $extensions)
     {
@@ -193,10 +179,12 @@ class tx_mksearch_tests_Util
     }
 
     /**
-     * Liefert einen kompletten Dateipfad für eine Datei in einer Extension
+     * Liefert einen kompletten Dateipfad für eine Datei in einer Extension.
+     *
      * @param $filename
      * @param $dir
      * @param $extKey
+     *
      * @return string
      */
     public static function getFixturePath($filename, $dir = 'tests/fixtures/', $extKey = 'mksearch')
@@ -207,7 +195,8 @@ class tx_mksearch_tests_Util
     /**
      * Lädt ein COnfigurations Objekt nach mit der TS aus der Extension
      * Dabei wird alles geholt was in "plugin.tx_$extKey", "lib.$extKey." und
-     * "lib.links." liegt
+     * "lib.links." liegt.
+     *
      * @return tx_rnbase_configurations
      */
     public static function loadPageTS4BE()
@@ -228,7 +217,7 @@ class tx_mksearch_tests_Util
     }
 
     /**
-     * wrapper funktion
+     * wrapper funktion.
      *
      * @param number $pageId
      *
@@ -247,12 +236,13 @@ class tx_mksearch_tests_Util
         return Tx_Rnbase_Backend_Utility::getPagesTSconfig($pageId, $rootLine);
     }
 
-/**
- * Lädt ein COnfigurations Objekt nach mit der TS aus der Extension
- * Dabei wird alles geholt was in "plugin.tx_$extKey", "lib.$extKey." und
- * "lib.links." liegt
- * @return tx_rnbase_configurations
- */
+    /**
+     * Lädt ein COnfigurations Objekt nach mit der TS aus der Extension
+     * Dabei wird alles geholt was in "plugin.tx_$extKey", "lib.$extKey." und
+     * "lib.links." liegt.
+     *
+     * @return tx_rnbase_configurations
+     */
     public static function loadConfig4BE($pageTSconfig)
     {
         tx_rnbase::load('tx_rnbase_configurations');
@@ -275,6 +265,7 @@ class tx_mksearch_tests_Util
      * @param string $extKeyOrIndexer
      * @param string $cType
      * @param string $documentClass
+     *
      * @return tx_mksearch_model_IndexerDocumentBase
      */
     public static function getIndexerDocument(
@@ -292,8 +283,8 @@ class tx_mksearch_tests_Util
         else {
             throw new Exception(
                 'First argument of getIndexerDocument has to be an "string"'
-                . ' or instance of "tx_mksearch_interface_Indexer", '
-                . (is_object($extKeyOrIndexer) ? get_class($extKeyOrIndexer) : gettype($extKeyOrIndexer))
+                .' or instance of "tx_mksearch_interface_Indexer", '
+                .(is_object($extKeyOrIndexer) ? get_class($extKeyOrIndexer) : gettype($extKeyOrIndexer))
                 .' given.'
             );
         }
@@ -303,10 +294,10 @@ class tx_mksearch_tests_Util
 
     /**
      * Disabled das Logging über die Devlog Extension für die
-     * gegebene Extension
+     * gegebene Extension.
      *
-     * @param   string  $extKey
-     * @param   bool     $bDisable
+     * @param string $extKey
+     * @param bool   $bDisable
      */
     public static function disableDevlog($extKey = 'devlog', $bDisable = true)
     {
@@ -314,7 +305,7 @@ class tx_mksearch_tests_Util
     }
 
     /**
-     * Setzt eine XCLASS, um den Relationmanager von Typo3 > 6 zu deaktivieren
+     * Setzt eine XCLASS, um den Relationmanager von Typo3 > 6 zu deaktivieren.
      */
     public static function disableRelationManager()
     {
@@ -326,8 +317,9 @@ class tx_mksearch_tests_Util
             'className' => 'tx_mksearch_tests_fixtures_typo3_CoreDbRelationHandler',
         );
     }
+
     /**
-     * entfernt eine XCLASS, um den Relationmanager von Typo3 > 6 zu deaktivieren
+     * entfernt eine XCLASS, um den Relationmanager von Typo3 > 6 zu deaktivieren.
      */
     public static function restoreRelationManager()
     {
@@ -344,8 +336,6 @@ class tx_mksearch_tests_Util
      * nach dem deaktiveren wieder einfügen können
      *
      * @param string $extensionKey
-     *
-     * @return void
      */
     public static function unloadExtensionForTypo362OrHigher($extensionKey)
     {
@@ -360,7 +350,7 @@ class tx_mksearch_tests_Util
 
         // backup machen
         $packageStatesFile = $packageStatesPathAndFilename->getValue($packageManager);
-        $backupPackageStatesFile = $packageStatesFile . '.bak';
+        $backupPackageStatesFile = $packageStatesFile.'.bak';
         copy($packageStatesFile, $backupPackageStatesFile);
 
         $extensionManagementUtility = new TYPO3\CMS\Core\Utility\ExtensionManagementUtility();
@@ -373,7 +363,7 @@ class tx_mksearch_tests_Util
             $packageKey = $package->getPackageMetaData()->getPackageKey();
             $dependencies = $method->invokeArgs($packageManager, array($packageKey));
 
-            if (array_search($extensionKey, $dependencies) !== false) {
+            if (false !== array_search($extensionKey, $dependencies)) {
                 $extensionManagementUtility->unloadExtension($packageKey);
             }
         }
@@ -397,7 +387,7 @@ class tx_mksearch_tests_Util
      * Wurde bereits eine Extension Konfiguration gesichert,
      * wird diese nur überschrieben wenn bOverwrite wahr ist!
      *
-     * @param string    $extKey
+     * @param string $extKey
      * @param bool   $overwrite
      */
     public static function storeExtConf($extKey = 'mksearch', $overwrite = false)
@@ -406,11 +396,13 @@ class tx_mksearch_tests_Util
             self::$extConf[$extKey] = $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$extKey];
         }
     }
+
     /**
      * Setzt eine gesicherte Extension Konfiguration zurück.
      *
      * @param string $extKey
-     * @return bool      wurde die Konfiguration zurückgesetzt?
+     *
+     * @return bool wurde die Konfiguration zurückgesetzt?
      */
     public static function restoreExtConf($extKey = 'mksearch')
     {
@@ -426,9 +418,10 @@ class tx_mksearch_tests_Util
     /**
      * Setzt eine Vaiable in die Extension Konfiguration.
      * Achtung im setUp sollte storeExtConf und im tearDown restoreExtConf aufgerufen werden.
-     * @param string    $cfgKey
-     * @param string    $cfgValue
-     * @param string    $extKey
+     *
+     * @param string $cfgKey
+     * @param string $cfgValue
+     * @param string $extKey
      */
     public static function setExtConfVar($cfgKey, $cfgValue, $extKey = 'mksearch')
     {
@@ -448,8 +441,6 @@ class tx_mksearch_tests_Util
      * wenn in addRootLineFields Felder stehen, die von anderen Extensions bereitgestellt werden,
      * aber nicht importiert wurden, führt das zu Testfehlern. Also machen wir die einfach leer.
      * sollte nicht stören.
-     *
-     * @return void
      */
     public static function emptyAddRootlineFields()
     {
@@ -463,12 +454,9 @@ class tx_mksearch_tests_Util
         }
     }
 
-    /**
-     * @return void
-     */
     public static function resetAddRootlineFields()
     {
-        if (self::$addRootLineFieldsBackup != null) {
+        if (null != self::$addRootLineFieldsBackup) {
             $GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'] = self::$addRootLineFieldsBackup;
             if (tx_rnbase_util_TYPO3::isTYPO62OrHigher()) {
                 $property = new ReflectionProperty('TYPO3\\CMS\\Core\\Utility\\RootlineUtility', 'rootlineFields');
@@ -482,5 +470,5 @@ class tx_mksearch_tests_Util
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/class.tx_mksearch_tests_Util.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/class.tx_mksearch_tests_Util.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/class.tx_mksearch_tests_Util.php'];
 }

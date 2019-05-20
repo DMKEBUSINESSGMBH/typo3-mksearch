@@ -22,23 +22,20 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-
 tx_rnbase::load('tx_mksearch_util_ServiceRegistry');
 tx_rnbase::load('tx_mksearch_util_Config');
 tx_rnbase::load('tx_mksearch_util_Tree');
 
 /**
- * Hooks for auto-updating search indices
+ * Hooks for auto-updating search indices.
  */
 class tx_mksearch_hooks_IndexerAutoUpdate
 {
-
     /**
      * Hook after saving a record in Typo3 backend:
-     * Perform index update depending on given data
+     * Perform index update depending on given data.
      *
      * @param \TYPO3\CMS\Core\DataHandling\DataHandler $dataHandler
-     * @return void
      */
     public function processDatamap_afterAllOperations($dataHandler)
     {
@@ -83,14 +80,14 @@ class tx_mksearch_hooks_IndexerAutoUpdate
 
     /**
      * Hook after performing different record actions in Typo3 backend:
-     * Update indexes according to the just performed action
+     * Update indexes according to the just performed action.
      *
-     * @param string $command
-     * @param string $table
-     * @param int $id
-     * @param int $value
+     * @param string                                   $command
+     * @param string                                   $table
+     * @param int                                      $id
+     * @param int                                      $value
      * @param \TYPO3\CMS\Core\DataHandling\DataHandler $dataHandler
-     * @return void
+     *
      * @todo Treatment of any additional actions necessary?
      */
     public function processCmdmap_postProcess($command, $table, $id, $value, $dataHandler)
@@ -115,10 +112,9 @@ class tx_mksearch_hooks_IndexerAutoUpdate
 
     /**
      * rn_base hook nachdem ein insert durchgeführt wurde.
-     * Requires rn_base 0.14.6
+     * Requires rn_base 0.14.6.
      *
      * @param array &$params
-     * @return NULL
      */
     public function rnBaseDoInsertPost(&$params)
     {
@@ -129,18 +125,17 @@ class tx_mksearch_hooks_IndexerAutoUpdate
         return $this->processAutoUpdate(
             array(
                 $params['tablename'] => array(
-                    $params['uid']
-                )
+                    $params['uid'],
+                ),
             )
         );
     }
 
     /**
      * rn_base hook nachdem ein Update durchgeführt wurde.
-     * Requires rn_base 0.14.6
+     * Requires rn_base 0.14.6.
      *
      * @param array &$params
-     * @return NULL
      */
     public function rnBaseDoUpdatePost(&$params)
     {
@@ -167,6 +162,7 @@ class tx_mksearch_hooks_IndexerAutoUpdate
 
     /**
      * Wir prüfen das nochmal für den Fall dass die Hooks zur Laufzeit deaktiviert wurden.
+     *
      * @return bool
      */
     protected function isRnBaseUtilDbHookActivated()
@@ -176,10 +172,9 @@ class tx_mksearch_hooks_IndexerAutoUpdate
 
     /**
      * rn_base hook nachdem ein Update durchgeführt wurde.
-     * Requires rn_base 0.14.6
+     * Requires rn_base 0.14.6.
      *
      * @param array &$params
-     * @return NULL
      */
     public function rnBaseDoDeletePre(&$params)
     {
@@ -188,14 +183,13 @@ class tx_mksearch_hooks_IndexerAutoUpdate
     }
 
     /**
-     * check for updatable records and fill queue
+     * check for updatable records and fill queue.
      *
      * @param array $records
-     *     array(
-     *         'pages' => array('1', '2', '3'. '5', '8', '13'),
-     *         'tt_content' => array('1', '2', '3'. '5', '8', '13'),
-     *     );
-     * @return NULL
+     *                       array(
+     *                       'pages' => array('1', '2', '3'. '5', '8', '13'),
+     *                       'tt_content' => array('1', '2', '3'. '5', '8', '13'),
+     *                       );
      *
      * @todo this method needs to be refactored as all indices and indexers
      * are retrieved from database for every action, for example for every insert that is made with
@@ -221,7 +215,7 @@ class tx_mksearch_hooks_IndexerAutoUpdate
         }
 
         foreach ($records as $table => $uidList) {
-            if (strstr($table, 'tx_mksearch_') !== false) {
+            if (false !== strstr($table, 'tx_mksearch_')) {
                 // Ignore internal tables
                 continue;
             }
@@ -258,7 +252,8 @@ class tx_mksearch_hooks_IndexerAutoUpdate
      * fügt einen datensatz für die indizierung in die queu.
      *
      * @param string $table
-     * @param mixed $data uid or where clause
+     * @param mixed  $data  uid or where clause
+     *
      * @return bool
      */
     protected function addRecordToIndex($table, $data)
@@ -283,6 +278,7 @@ class tx_mksearch_hooks_IndexerAutoUpdate
      * um die uids zu erfahren.
      *
      * @param mixed $data
+     *
      * @return array
      */
     protected function getUidsToIndex($table, $data)
@@ -291,9 +287,8 @@ class tx_mksearch_hooks_IndexerAutoUpdate
             return array((int) $data);
         }
 
-        //
         if (is_array($data) && isset($data['type'])) {
-            if ($data['type'] === 'select') {
+            if ('select' === $data['type']) {
                 $from = empty($data['from']) ? $table : $data['from'];
                 $options = empty($data['options']) || !is_array($data['options']) ? array() : $data['options'];
                 $options['where'] = empty($options['where']) ? $data['where'] : $options['where'];
@@ -323,14 +318,15 @@ class tx_mksearch_hooks_IndexerAutoUpdate
 
     /**
      * @param string $table
+     *
      * @return array
      */
     protected function getIndexersForTable($table)
     {
         return tx_mksearch_util_Config::getIndexersForTable($table);
     }
+
     /**
-     *
      * @return tx_mksearch_service_internal_Index
      */
     protected function getIntIndexService()
@@ -340,5 +336,5 @@ class tx_mksearch_hooks_IndexerAutoUpdate
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/hooks/class.tx_mksearch_hooks_IndexerAutoUpdate.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/hooks/class.tx_mksearch_hooks_IndexerAutoUpdate.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/hooks/class.tx_mksearch_hooks_IndexerAutoUpdate.php'];
 }

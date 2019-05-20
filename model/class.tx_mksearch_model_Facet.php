@@ -1,7 +1,5 @@
 <?php
 /**
- * @package tx_mksearch
- * @subpackage tx_mksearch_model
  * @author Hannes Bochmann
  *
  *  Copyright notice
@@ -27,15 +25,12 @@
  */
 
 /**
- * benötigte Klassen einbinden
+ * benötigte Klassen einbinden.
  */
-
 tx_rnbase::load('tx_rnbase_model_base');
 
 /**
- * Model für eine Facette
- * @package tx_mksearch
- * @subpackage tx_mksearch_model
+ * Model für eine Facette.
  */
 class tx_mksearch_model_Facet extends tx_rnbase_model_base
 {
@@ -48,13 +43,13 @@ class tx_mksearch_model_Facet extends tx_rnbase_model_base
     private $childs = array();
 
     /**
-     * Gibt ein Facet Model zurück
+     * Gibt ein Facet Model zurück.
+     *
      * @param string $field
      * @param string $id
-     * @param mixed $label Das Label kann ein String, oder ein Array sein
-     * @param int $count
-     * @param bool $head
-     * @return void
+     * @param mixed  $label Das Label kann ein String, oder ein Array sein
+     * @param int    $count
+     * @param bool   $head
      */
     public function __construct($field, $id, $label, $count, $head = false)
     {
@@ -70,16 +65,20 @@ class tx_mksearch_model_Facet extends tx_rnbase_model_base
         $this->record['head'] = $head;
         $this->record['type'] = self::TYPE_FIELD; // Als default ein Field-Facet verwenden
     }
+
     /**
      * Gibt die Art der Fassette zurück.
+     *
      * @return string
      */
     public function getFacetType()
     {
         return $this->record['type'];
     }
+
     /**
-     * Setzt die Art der Fassette
+     * Setzt die Art der Fassette.
+     *
      * @param string $type
      */
     public function setFacetType($type)
@@ -88,9 +87,10 @@ class tx_mksearch_model_Facet extends tx_rnbase_model_base
     }
 
     /**
-     * adds one ore more child facets
+     * adds one ore more child facets.
      *
      * @param mixed <multitype:tx_mksearch_model_Facet, tx_mksearch_model_Facet> $child
+     *
      * @return tx_mksearch_model_Facet
      */
     public function addChild($child)
@@ -105,10 +105,12 @@ class tx_mksearch_model_Facet extends tx_rnbase_model_base
 
         return $this;
     }
+
     /**
-     * returns all childs a child facet
+     * returns all childs a child facet.
      *
      * @param array <multitype:tx_mksearch_model_Facet, tx_mksearch_model_Facet> $child
+     *
      * @return tx_mksearch_model_Facet
      */
     public function setChilds(array $childs)
@@ -118,8 +120,9 @@ class tx_mksearch_model_Facet extends tx_rnbase_model_base
 
         return $this;
     }
+
     /**
-     * returns all childs a child facet
+     * returns all childs a child facet.
      *
      * @return multitype:tx_mksearch_model_Facet $child
      */
@@ -127,6 +130,7 @@ class tx_mksearch_model_Facet extends tx_rnbase_model_base
     {
         return $this->childs;
     }
+
     /**
      * there are childs?
      *
@@ -139,5 +143,5 @@ class tx_mksearch_model_Facet extends tx_rnbase_model_base
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/class.tx_mksearch_model_Facet.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/class.tx_mksearch_model_Facet.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/class.tx_mksearch_model_Facet.php'];
 }

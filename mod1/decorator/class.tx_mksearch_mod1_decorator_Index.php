@@ -22,11 +22,10 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-
 tx_rnbase::load('tx_mksearch_mod1_util_IndexStatusHandler');
 
 /**
- * Diese Klasse ist für die Darstellung von Indexer tabellen im Backend verantwortlich
+ * Diese Klasse ist für die Darstellung von Indexer tabellen im Backend verantwortlich.
  */
 class tx_mksearch_mod1_decorator_Index
 {
@@ -36,18 +35,19 @@ class tx_mksearch_mod1_decorator_Index
     }
 
     /**
-     * Returns the module
+     * Returns the module.
+     *
      * @return tx_rnbase_mod_IModule
      */
     private function getModule()
     {
         return $this->mod;
     }
+
     /**
-     *
-     * @param string $value
-     * @param string $colName
-     * @param array $record
+     * @param string                           $value
+     * @param string                           $colName
+     * @param array                            $record
      * @param tx_mksearch_model_internal_Index $item
      */
     public function format($value, $colName, $record, $item)
@@ -55,7 +55,7 @@ class tx_mksearch_mod1_decorator_Index
         $ret = '';
         switch ($colName) {
             case 'core':
-                $ret  = '';
+                $ret = '';
                 $ret .= tx_mksearch_mod1_util_IndexStatusHandler::getInstance()->handleRequest4Index($item);
                 if (!empty($record->record['description'])) {
                     $ret .= '<br /><pre>'.$record->record['description'].'</pre>';
@@ -99,10 +99,10 @@ class tx_mksearch_mod1_decorator_Index
     }
 
     /**
+     * @param array $items
+     * @param array $options
      *
-     * @param   array       $items
-     * @param   array       $options
-     * @return  string
+     * @return string
      */
     public function getIndexInfos($items, $options = array())
     {
@@ -113,17 +113,18 @@ class tx_mksearch_mod1_decorator_Index
 
         return '<ul><li>'.$ret.'</li></ul>';
     }
+
     /**
+     * @param tx_mksearch_model_internal_Composite $item
+     * @param array                                $options
      *
-     * @param   tx_mksearch_model_internal_Composite    $item
-     * @param   array                                   $options
-     * @return  string
+     * @return string
      */
     public function getIndexInfo(tx_mksearch_model_internal_Index $item, $options = array())
     {
         $formtool = $this->getModule()->getFormTool();
 
-        $out  = '';
+        $out = '';
         $out .= $formtool->createEditLink($item->getTableName(), $item->getUid(), '');
         $out .= $item->getTitle();
         // $out .= '<br />'; // @TODO: verbundene tabellen anhand von options ausgeben
@@ -131,7 +132,6 @@ class tx_mksearch_mod1_decorator_Index
     }
 }
 
-
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/decorator/class.tx_mksearch_mod1_decorator_Index.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/decorator/class.tx_mksearch_mod1_decorator_Index.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/decorator/class.tx_mksearch_mod1_decorator_Index.php'];
 }

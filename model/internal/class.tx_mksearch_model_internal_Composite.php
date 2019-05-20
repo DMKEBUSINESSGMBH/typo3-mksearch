@@ -22,17 +22,15 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-
 tx_rnbase::load('tx_rnbase_model_base');
 
 /**
- * Model for indexer configuration composites
+ * Model for indexer configuration composites.
  */
 class tx_mksearch_model_internal_Composite extends tx_rnbase_model_base
 {
-
     /**
-     * Return this model's table name
+     * Return this model's table name.
      *
      * @return string
      */
@@ -43,5 +41,5 @@ class tx_mksearch_model_internal_Composite extends tx_rnbase_model_base
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/internal/class.tx_mksearch_model_internal_Composite.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/internal/class.tx_mksearch_model_internal_Composite.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/internal/class.tx_mksearch_model_internal_Composite.php'];
 }

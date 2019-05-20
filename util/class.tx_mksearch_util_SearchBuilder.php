@@ -22,7 +22,6 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-
 tx_rnbase::load('tx_rnbase_configurations');
 tx_rnbase::load('tx_mksearch_util_ServiceRegistry');
 
@@ -38,19 +37,19 @@ define('MKSEARCH_OP_NONE', 'none');
  */
 class tx_mksearch_util_SearchBuilder
 {
-
     /**
      * Setzt jedes Wort in Anführungszeichen.
-     * Dabei werden operatoren wie + und - beachtet
+     * Dabei werden operatoren wie + und - beachtet.
      *
-     * @param   array   $terms
-     * @return  array
+     * @param array $terms
+     *
+     * @return array
      */
     private static function quoteTerms(array $terms)
     {
         foreach ($terms as &$term) {
             // minus und plus dürfen nicht mit in die quotes
-            $operator = $term{0};
+            $operator = $term[0];
             switch ($operator) {
                 case '-':
                 case '+':
@@ -68,8 +67,9 @@ class tx_mksearch_util_SearchBuilder
     /**
      * Setzt hinter jedes Wort eine tilde für die fuzzy search.
      *
-     * @param   array   $terms
-     * @return  array
+     * @param array $terms
+     *
+     * @return array
      */
     private static function fuzzyTerms(array $terms, $slop = '0.2')
     {
@@ -81,10 +81,11 @@ class tx_mksearch_util_SearchBuilder
     }
 
     /**
-     * Removes all solr control characters
+     * Removes all solr control characters.
      *
-     * @param   array   $terms
-     * @return  array
+     * @param array $terms
+     *
+     * @return array
      */
     private static function sanitizeTerms(array $terms)
     {
@@ -106,10 +107,11 @@ class tx_mksearch_util_SearchBuilder
     }
 
     /**
-     * wraps terms in wildcards
+     * wraps terms in wildcards.
      *
-     * @param   array   $terms
-     * @return  array
+     * @param array $terms
+     *
+     * @return array
      */
     private static function wrapTermsInWildcards(array $terms)
     {
@@ -118,7 +120,7 @@ class tx_mksearch_util_SearchBuilder
         }
 
         foreach ($terms as $key => &$term) {
-            $term = '*' . $term . '*';
+            $term = '*'.$term.'*';
         }
 
         return $terms;
@@ -130,11 +132,11 @@ class tx_mksearch_util_SearchBuilder
      *
      * @todo: tests schreiben
      *
-     * @param   array                       $fields
-     * @param   array                       $options
-     * @param   tx_rnbase_IParameters       $parameters
-     * @param   tx_rnbase_configurations    $configurations
-     * @param   string                      $confId
+     * @param array                    $fields
+     * @param array                    $options
+     * @param tx_rnbase_IParameters    $parameters
+     * @param tx_rnbase_configurations $configurations
+     * @param string                   $confId
      */
     public static function handleMinShouldMatch(&$fields, &$options, &$parameters, &$configurations, $confId)
     {
@@ -158,17 +160,18 @@ class tx_mksearch_util_SearchBuilder
 //             }
         }
     }
+
     /**
      * Bei aktiviertem DisMaxRequestHandler und fuzzy muss die query leer sein.
-     * Der term muss dann im filter query stehen ( fq=text:fuzzystring~0.2^1.0 )
+     * Der term muss dann im filter query stehen ( fq=text:fuzzystring~0.2^1.0 ).
      *
      * @todo: tests schreiben
      *
-     * @param   array                       $fields
-     * @param   array                       $options
-     * @param   tx_rnbase_IParameters       $parameters
-     * @param   tx_rnbase_configurations    $configurations
-     * @param   string                      $confId
+     * @param array                    $fields
+     * @param array                    $options
+     * @param tx_rnbase_IParameters    $parameters
+     * @param tx_rnbase_configurations $configurations
+     * @param string                   $confId
      */
     public static function handleDismaxFuzzySearch(&$fields, &$options, &$parameters, &$configurations, $confId)
     {
@@ -180,7 +183,7 @@ class tx_mksearch_util_SearchBuilder
                 case MKSEARCH_OP_FREE:
                     break;
                 default:
-                    $options['qf']  = $options['qf'] ? $options['qf'].' ' : '';
+                    $options['qf'] = $options['qf'] ? $options['qf'].' ' : '';
                     //@TODO: das feld indem gesucht werden soll konfigurierbar machen
                     // am besten generich wie handleMinShouldMatch umstellen
                     $options['qf'] .= 'text:'.$fields['term'];
@@ -188,15 +191,17 @@ class tx_mksearch_util_SearchBuilder
             }
         }
     }
+
     /**
      * Setzt den Term entsprechend des combination parameters zusammen.
      * Mögliche Werte: 'none', 'free', 'or', 'and', 'exact'.
      *
      * Wurde nichts oder none übergeben wird die auswertung solr überlassen
      *
-     * @param   string  $content
-     * @param   array   $options
-     * @return  string
+     * @param string $content
+     * @param array  $options
+     *
+     * @return string
      */
     public static function searchSolrOptions($term = '', $combination, $options = array())
     {
@@ -277,7 +282,7 @@ class tx_mksearch_util_SearchBuilder
                     break;
                 case MKSEARCH_OP_EXACT:
                     // in anführungszeichen setzen, bei fuzzy auch die tilde anfügen!
-                    $return = '"'.implode(' ', $terms).'"'. ($fuzzy ? '~'.$fuzzySlop : '');
+                    $return = '"'.implode(' ', $terms).'"'.($fuzzy ? '~'.$fuzzySlop : '');
                     // wenn nicht dismax, klammern drum rum
                     $return = $dismax ? $return : '('.$return.')';
                     break;
@@ -301,21 +306,21 @@ class tx_mksearch_util_SearchBuilder
     }
 
     /**
-     *
      * @param mixed $term
+     *
      * @return bool
      */
     public static function emptyTerm($term)
     {
         if (is_array($term)) {
-            return count($term) == 0;
+            return 0 == count($term);
         } else {
             // wir nutzen strlen und nicht empty damit auch bei "0" gesucht wird
-            return strlen($term) == 0;
+            return 0 == strlen($term);
         }
     }
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_SearchBuilder.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_SearchBuilder.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_SearchBuilder.php'];
 }
