@@ -168,11 +168,10 @@ class tx_mksearch_util_TCA
     public static function getIndexes(array &$params)
     {
         // rootpage des aktuellen plugins
-        tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
         $pid = is_array($params['flexParentDatabaseRow']) ?
             $params['flexParentDatabaseRow']['pid'] : $params['row']['pid'];
 
-        $rootOfPlugin = tx_mksearch_service_indexer_core_Config::getSiteRootPage($pid);
+        $rootOfPlugin = tx_mksearch_util_Indexer::getInstance()->getSiteRootPage($pid);
 
         // Wir suchen alle Indexes, da die aktuelle PageId oder die RootPageId
         // nicht die der PageId des Indexes entsprechen muss.
@@ -185,7 +184,7 @@ class tx_mksearch_util_TCA
         foreach ($indexer as $index) {
             /* @var $index tx_mksearch_model_internal_Index */
             // rootpage des indexes
-            $rootOfIndex = tx_mksearch_service_indexer_core_Config::getSiteRootPage($index->record['pid']);
+            $rootOfIndex = tx_mksearch_util_Indexer::getInstance()->getSiteRootPage($index->record['pid']);
             // Sind die RootPages identisch oder ist der Index global,
             // kann der Index verwendet werden.
             if (empty($rootOfIndex['uid']) || $rootOfIndex['uid'] == $rootOfPlugin['uid']) {

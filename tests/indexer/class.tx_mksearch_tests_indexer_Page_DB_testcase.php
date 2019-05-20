@@ -24,7 +24,6 @@
 
 tx_rnbase::load('tx_mksearch_tests_DbTestcase');
 tx_rnbase::load('tx_mksearch_tests_Util');
-tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
 
 require_once tx_rnbase_util_Extensions::extPath('mksearch').'lib/Apache/Solr/Document.php';
 

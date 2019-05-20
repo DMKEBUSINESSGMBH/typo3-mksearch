@@ -22,7 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
 tx_rnbase::load('tx_mksearch_util_Misc');
 tx_rnbase::load('tx_mksearch_util_TCA');
 
@@ -538,9 +537,44 @@ class tx_mksearch_util_Indexer
      *
      * @return array
      */
-    protected function getRootlineByPid($pid)
+    public function getRootlineByPid($pid)
     {
-        return tx_mksearch_service_indexer_core_Config::getRootLine($pid);
+        return tx_rnbase_util_TYPO3::getSysPage()->getRootLine($pid);
+    }
+
+    /**
+     * Returns the siteroot page of the given page.
+     *
+     * @param int $uid
+     *
+     * @return array
+     */
+    public function getSiteRootPage($uid)
+    {
+        foreach ($this->getRootlineByPid($uid) as $page) {
+            if ($page['is_siteroot']) {
+                return $page;
+            }
+        }
+
+        return array();
+    }
+
+    /**
+     * Returns al list of page ids from the siteroot page of the given page.
+     *
+     * @param int $uid
+     *
+     * @return string
+     */
+    public function getPidListFromSiteRootPage($uid, $recursive = 0)
+    {
+        $rootPage = $this->getSiteRootPage($uid);
+        if (empty($rootPage)) {
+            return '';
+        }
+
+        return tx_rnbase_util_Misc::getPidList($rootPage['uid'], $recursive);
     }
 
     /**
@@ -665,8 +699,7 @@ class tx_mksearch_util_Indexer
 
         // load TypoScript templates
         if ($pid) {
-            tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
-            $rootlineByPid = tx_mksearch_service_indexer_core_Config::getRootLine($pid);
+            $rootlineByPid = self::getInstance()->getRootlineByPid($pid);
 
             $tsfe->rootLine = $rootlineByPid;
             $tsfe->forceTemplateParsing = true;

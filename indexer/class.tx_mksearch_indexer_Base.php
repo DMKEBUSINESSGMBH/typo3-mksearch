@@ -38,7 +38,6 @@ tx_rnbase::load('tx_mksearch_interface_Indexer');
 tx_rnbase::load('tx_mksearch_interface_IndexerDocument');
 tx_rnbase::load('tx_mksearch_util_Misc');
 tx_rnbase::load('tx_mksearch_util_TCA');
-tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
 tx_rnbase::load('tx_mksearch_util_Indexer');
 
 /**
@@ -337,10 +336,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 
         // wir rufen die Methode mit call_user_func_array auf, da sie
         // statisch ist, womit wir diese nicht mocken könnten
-        $rootline = call_user_func_array(
-            array($this->getCoreConfigUtility(), 'getRootLine'),
-            array($model->record['pid'])
-        );
+        $rootline = $this->getIndexerUtility()->getRootlineByPid($model->record['pid']);
 
         // @todo sollten nicht auch Shortcuts etc. invalide sein?
         $sysPage = tx_rnbase_util_TYPO3::getSysPage();
@@ -354,14 +350,6 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
         }
         // else
         return false;
-    }
-
-    /**
-     * @return string
-     */
-    protected function getCoreConfigUtility()
-    {
-        return 'tx_mksearch_service_indexer_core_Config';
     }
 
     /**
@@ -443,10 +431,8 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
             $pageId = ('pages' == $tableName ? $model->getUid() : $model->record['pid']);
             // wir rufen die Methode mit call_user_func_array auf, da sie
             // statisch ist, womit wir diese nicht mocken könnten
-            $siteRootPage = call_user_func_array(
-                array($this->getCoreConfigUtility(), 'getSiteRootPage'),
-                array($pageId)
-            );
+            $siteRootPage = $this->getIndexerUtility()->getSiteRootPage($pageId) ;
+
             if (is_array($siteRootPage) && !empty($siteRootPage)) {
                 $indexDoc->addField('siteRootPage', $siteRootPage['uid']);
             }
@@ -587,9 +573,9 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
      */
     protected function getEffectiveFeGroups($fegroups, $pid)
     {
-        return tx_mksearch_service_indexer_core_Config::getEffectiveContentElementFeGroups(
+        return tx_mksearch_util_UserGroups::getInstance()->getEffectiveContentElementFeGroups(
             $pid,
-            tx_rnbase_util_Strings::trimExplode(',', $fegroups, true)
+            Tx_Rnbase_Utility_Strings::trimExplode(',', $fegroups, true)
         );
     }
 
