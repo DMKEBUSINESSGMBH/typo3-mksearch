@@ -221,7 +221,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
             // ready to insert
             if (is_array($record)) {
                 // quote and escape values
-                $record = $GLOBALS['TYPO3_DB']->fullQuoteArray($record, self::$queueTable);
+                $record = Tx_Rnbase_Database_Connection::getInstance()->fullQuoteArray($record, self::$queueTable);
                 // build the query part
                 $sqlValues[] = '('.implode(',', $record).')';
                 // insert max. 500 items
@@ -235,9 +235,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
                 }
             }
         }
-        $this->doInsertRecords($sqlValues);
-
-        return $GLOBALS['TYPO3_DB']->sql_insert_id() > 0;
+        return $this->doInsertRecords($sqlValues);
     }
 
     /**
@@ -302,21 +300,22 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
             tx_rnbase_util_Logger::debug('New records to be indexed added to queue.', 'mksearch', array('sqlQuery' => $sqlQuery));
         }
 
-        return $GLOBALS['TYPO3_DB']->sql_insert_id() > 0;
+        return true;
     }
 
     public function countItemsInQueue($tablename = '')
     {
+        $database = Tx_Rnbase_Database_Connection::getInstance();
         $options = array();
         $options['count'] = 1;
         $options['where'] = 'deleted=0';
         if (strcmp($tablename, '')) {
-            $fullQuoted = $GLOBALS['TYPO3_DB']->fullQuoteStr($tablename, self::$queueTable);
+            $fullQuoted = $database->fullQuoteStr($tablename, self::$queueTable);
             $options['where'] .= ($tablename ? ' AND tablename='.$fullQuoted : '');
         }
         $options['enablefieldsoff'] = 1;
 
-        $data = tx_rnbase_util_DB::doSelect('count(*) As cnt', self::$queueTable, $options);
+        $data = $database->doSelect('count(*) As cnt', self::$queueTable, $options);
 
         return $data[0]['cnt'];
     }
@@ -640,10 +639,10 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
      */
     public static function clearIndexingQueueForTable($table)
     {
-        global $GLOBALS;
-        $fullQuoted = $GLOBALS['TYPO3_DB']->fullQuoteStr($table, self::$queueTable);
+        $database = Tx_Rnbase_Database_Connection::getInstance();
+        $fullQuoted = $database->fullQuoteStr($table, self::$queueTable);
 
-        return tx_rnbase_util_DB::doDelete(self::$queueTable, 'tablename='.$fullQuoted);
+        return $database->doDelete(self::$queueTable, 'tablename='.$fullQuoted);
     }
 
     /**
@@ -657,13 +656,14 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
      */
     public static function resetIndexingQueueForTable($table, array $options)
     {
-        global $GLOBALS;
         self::clearIndexingQueueForTable($table);
+
+        $database = Tx_Rnbase_Database_Connection::getInstance();
 
         $resolver = tx_mksearch_util_Config::getResolverForDatabaseTable($table);
         $resolver = count($resolver) ? $resolver['className'] : '';
 
-        $fullQuoted = $GLOBALS['TYPO3_DB']->fullQuoteStr($table, self::$queueTable);
+        $fullQuoted = $database->fullQuoteStr($table, self::$queueTable);
         $uidName = isset($options['uidcol']) ? $options['uidcol'] : 'uid';
         $from = isset($options['from']) ? $options['from'] : $table;
         $where = isset($options['where']) ? ' WHERE '.$options['where'] : '';
@@ -679,7 +679,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
                 'class.tx_mksearch_srv_Search.php : '.__LINE__
             );
         }
-        $GLOBALS['TYPO3_DB']->sql_query($query);
+        $database->doQuery($query);
     }
 
     public function getRandomSolrIndex()
