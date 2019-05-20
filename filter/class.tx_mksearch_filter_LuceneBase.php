@@ -208,7 +208,7 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
         // Form template required?
         if (tx_rnbase_util_BaseMarker::containsMarker($template, $conf['config']['marker'])) {
             // Get template from TS
-            $templateCode = $configurations->getCObj()->fileResource($conf['config.']['template']);
+            $templateCode = tx_rnbase_util_Files::getFileResource($conf['config.']['template']);
             if ($templateCode) {
                 // Get subpart from TS
                 $subpartName = $conf['config.']['subpart'];
