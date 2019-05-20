@@ -4,7 +4,6 @@ if (!defined('TYPO3_MODE')) {
 }
 
 $_EXT_PATH = tx_rnbase_util_Extensions::extPath($_EXTKEY);
-$_EXT_RELPATH = tx_rnbase_util_Extensions::extRelPath($_EXTKEY);
 
 // Show tt_content-field pi_flexform
 $TCA['tt_content']['types']['list']['subtypes_addlist']['tx_mksearch'] = 'pi_flexform';
@@ -21,7 +20,11 @@ $TCA['tt_content']['columns']['header_layout']['config']['items'] = $aTempConfig
 
 // Add flexform and plugin
 tx_rnbase_util_Extensions::addPiFlexFormValue('tx_mksearch', 'FILE:EXT:'.$_EXTKEY.'/flexform_main.xml');
-tx_rnbase_util_Extensions::addPlugin(array('LLL:EXT:'.$_EXTKEY.'/locallang_db.xml:plugin.mksearch.label','tx_mksearch'));
+tx_rnbase_util_Extensions::addPlugin(
+    ['LLL:EXT:'.$_EXTKEY.'/locallang_db.xml:plugin.mksearch.label','tx_mksearch'],
+    'list_type',
+    'mksearch'
+);
 
 tx_rnbase_util_Extensions::addStaticFile($_EXTKEY, 'static/static_extension_template/', 'MK Search');
 
@@ -73,14 +76,11 @@ if (TYPO3_MODE == 'BE') {
         $GLOBALS['TCA']['pages']['columns']['module']['config']['items'][] = array(
             'MK Search',
             'mksearch',
-            $_EXT_RELPATH.'icons/icon_folder.gif'
+            'EXT:mksearch/icons/icon_folder.gif'
         );
-        if (tx_rnbase_util_TYPO3::isTYPO44OrHigher()) {
-            $spriteManager = tx_rnbase_util_Typo3Classes::getSpriteManagerClass();
-            $spriteManager::addTcaTypeIcon('pages', 'contains-'.$_EXTKEY, $_EXT_RELPATH.'icons/icon_folder.gif');
-        } else {
-            $ICON_TYPES[$_EXTKEY] = array('icon' => $_EXT_RELPATH.'icons/icon_folder.gif');
-        }
+
+        $spriteManager = tx_rnbase_util_Typo3Classes::getSpriteManagerClass();
+        $spriteManager::addTcaTypeIcon('pages', 'contains-'.$_EXTKEY, 'EXT:mksearch/icons/icon_folder.gif');
     }
 }
 
