@@ -212,7 +212,7 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
             if ($templateCode) {
                 // Get subpart from TS
                 $subpartName = $conf['config.']['subpart'];
-                $typeTemplate = $configurations->getCObj()->getSubpart($templateCode, '###'.$subpartName.'###');
+                $typeTemplate = tx_rnbase_util_Templates::getSubpart($templateCode, '###'.$subpartName.'###');
                 if ($typeTemplate) {
                     $parameters = $this->getParameters();
                     $paramArray = $parameters->getArrayCopy();
