@@ -66,7 +66,7 @@ if (tx_rnbase_util_Extensions::isLoaded('mksanitizedparameters')) {
 }
 
 require_once tx_rnbase_util_Extensions::extPath($_EXTKEY, 'Configuration/SignalSlotDispatcher.php');
-require_once tx_rnbase_util_Extensions::extPath($_EXTKEY,'Configuration/XClasses.php');
+require_once tx_rnbase_util_Extensions::extPath($_EXTKEY, 'Configuration/XClasses.php');
 
 tx_rnbase::load('tx_rnbase_util_Misc');
 tx_rnbase::load('tx_rnbase_util_Strings');

@@ -431,7 +431,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
             $pageId = ('pages' == $tableName ? $model->getUid() : $model->record['pid']);
             // wir rufen die Methode mit call_user_func_array auf, da sie
             // statisch ist, womit wir diese nicht mocken könnten
-            $siteRootPage = $this->getIndexerUtility()->getSiteRootPage($pageId) ;
+            $siteRootPage = $this->getIndexerUtility()->getSiteRootPage($pageId);
 
             if (is_array($siteRootPage) && !empty($siteRootPage)) {
                 $indexDoc->addField('siteRootPage', $siteRootPage['uid']);
