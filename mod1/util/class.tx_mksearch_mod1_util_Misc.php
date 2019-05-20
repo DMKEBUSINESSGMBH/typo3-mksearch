@@ -22,7 +22,7 @@ class tx_mksearch_mod1_util_Misc
         }
         foreach ($pages as $pid => &$page) {
             $pageRecord = Tx_Rnbase_Backend_Utility::getRecord('pages', $pid);
-            if ($pageRecord == null) {
+            if (null == $pageRecord) {
                 continue;
             }
             $pageinfo = Tx_Rnbase_Backend_Utility::readPageAccess($pid, $mod->perms_clause);

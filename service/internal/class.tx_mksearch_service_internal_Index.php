@@ -235,6 +235,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
                 }
             }
         }
+
         return $this->doInsertRecords($sqlValues);
     }
 
