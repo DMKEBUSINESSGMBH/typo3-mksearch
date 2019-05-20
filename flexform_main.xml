@@ -166,7 +166,7 @@
                                     <numIndex index="1"></numIndex>
                                   </numIndex>
                                 </items>
-                                <itemsProcFunc>EXT:mksearch/util/class.tx_mksearch_util_TCA.php:tx_mksearch_util_TCA->getIndexes</itemsProcFunc>
+                                <itemsProcFunc>tx_mksearch_util_TCA->getIndexes</itemsProcFunc>
                                 <!--foreign_table>tx_mksearch_indices</foreign_table>
                                 <foreign_table_where>AND engine='solr' ORDER BY name</foreign_table_where-->
                                 <multiple>0</multiple>
@@ -552,7 +552,7 @@
                                     <numIndex index="1"></numIndex>
                                   </numIndex>
                                 </items>
-                                <itemsProcFunc>EXT:mksearch/util/class.tx_mksearch_util_TCA.php:tx_mksearch_util_TCA->getIndexes</itemsProcFunc>
+                                <itemsProcFunc>tx_mksearch_util_TCA->getIndexes</itemsProcFunc>
                                 <multiple>0</multiple>
                                 <maxitems>1</maxitems>
                                 <size>1</size>
@@ -572,7 +572,7 @@
                                         <numIndex index="1"></numIndex>
                                     </numIndex>
                                 </items>
-                                <itemsProcFunc>EXT:mksearch/util/class.tx_mksearch_util_TCA.php:tx_mksearch_util_TCA->getIndexerExtKeys</itemsProcFunc>
+                                <itemsProcFunc>tx_mksearch_util_TCA->getIndexerExtKeys</itemsProcFunc>
                                 <size>1</size>
                                 <maxitems>1</maxitems>
                                 <eval>trim</eval>
@@ -592,7 +592,7 @@
                                         <numIndex index="1"></numIndex>
                                     </numIndex>
                                 </items>
-                                <itemsProcFunc>EXT:mksearch/util/class.tx_mksearch_util_TCA.php:tx_mksearch_util_TCA->getIndexerContentTypes</itemsProcFunc>
+                                <itemsProcFunc>tx_mksearch_util_TCA->getIndexerContentTypes</itemsProcFunc>
                                 <extKeySection>s_showhit</extKeySection>
                                 <extKeyField>showhit.extkey</extKeyField>
                                 <size>1</size>
