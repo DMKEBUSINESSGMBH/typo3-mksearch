@@ -4,7 +4,7 @@ $configurationFieldWizard = tx_rnbase_util_TYPO3::isTYPO76OrHigher() ? array() :
     'appendDefaultTSConfig' => array(
         'type' => 'userFunc',
         'notNewRecords' => 1,
-        'userFunc' => 'EXT:mksearch/util/class.tx_mksearch_util_TCA.php:tx_mksearch_util_TCA->insertIndexerDefaultTSConfig',
+        'userFunc' => 'tx_mksearch_util_TCA->insertIndexerDefaultTSConfig',
         'params' => array(
             'insertBetween' => array('>', '</textarea'),
             'onMatchOnly' => '/^\s*$/',
@@ -65,7 +65,7 @@ return array(
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'items' => array(array('', '')),
-                'itemsProcFunc' => 'EXT:mksearch/util/class.tx_mksearch_util_TCA.php:tx_mksearch_util_TCA->getIndexerExtKeys',
+                'itemsProcFunc' => 'tx_mksearch_util_TCA->getIndexerExtKeys',
                 'size' => '1',
                 'maxitems' => '1',
             ),
@@ -78,7 +78,7 @@ return array(
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'items' => array(array('', '')),
-                'itemsProcFunc' => 'EXT:mksearch/util/class.tx_mksearch_util_TCA.php:tx_mksearch_util_TCA->getIndexerContentTypes',
+                'itemsProcFunc' => 'tx_mksearch_util_TCA->getIndexerContentTypes',
                 'size' => '1',
                 'maxitems' => '1',
                 'eval' => 'required,trim',
