@@ -24,14 +24,10 @@
 tx_rnbase::load('tx_mksearch_tests_Testcase');
 tx_rnbase::load('tx_mksearch_tests_Util');
 
-
-
 /**
  * Wir müssen in diesem Fall mit der DB testen da wir die pages
- * Tabelle benötigen
+ * Tabelle benötigen.
  *
- * @package tx_mksearch
- * @subpackage tx_mksearch_tests
  * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
  * @author Michael Wagner <michael.wagner@dmk-ebusiness.de>
  * @license http://www.gnu.org/licenses/lgpl.html
@@ -39,9 +35,9 @@ tx_rnbase::load('tx_mksearch_tests_Util');
  */
 class tx_mksearch_tests_model_cal_Event_testcase extends tx_mksearch_tests_Testcase
 {
-
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
+     *
      * @see tx_mksearch_tests_Testcase::setUp()
      */
     protected function setUp()
@@ -67,7 +63,7 @@ class tx_mksearch_tests_model_cal_Event_testcase extends tx_mksearch_tests_Testc
     }
 
     /**
-     * group unit
+     * group unit.
      */
     public function testGetCategories()
     {
@@ -76,7 +72,7 @@ class tx_mksearch_tests_model_cal_Event_testcase extends tx_mksearch_tests_Testc
             'getCategoriesByEvent' => array(
                 0 => array('uid_foreign' => array('title' => 'First Category')),
                 1 => array('uid_foreign' => array('title' => 'Second Category')),
-            )
+            ),
         ));
 
         $categories = $event->getCategories();

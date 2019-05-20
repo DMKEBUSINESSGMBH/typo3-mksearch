@@ -1,7 +1,5 @@
 <?php
 /**
- * @package tx_mksearch
- * @subpackage tx_mksearch_indexer
  * @author Hannes Bochmann <dev@dmk-ebusiness.de>
  *
  *  Copyright notice
@@ -27,9 +25,8 @@
  */
 
 /**
- * benötigte Klassen einbinden
+ * benötigte Klassen einbinden.
  */
-
 tx_rnbase::load('tx_mksearch_indexer_Base');
 tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
 tx_rnbase::load('tx_mksearch_util_Misc');
@@ -37,19 +34,20 @@ tx_rnbase::load('tx_mksearch_util_Misc');
 /**
  * Just a wrapper for the different tt_content indexers.
  * it's a facade.
+ *
  * @author Hannes Bochmann <dev@dmk-ebusiness.de>
  */
 class tx_mksearch_indexer_TtContent implements tx_mksearch_interface_Indexer
 {
-
     /**
-     * the appropriate indexer depending on templavoila
+     * the appropriate indexer depending on templavoila.
+     *
      * @var tx_mksearch_indexer_Base
      */
     protected $actualIndexer;
 
     /**
-     * load the appropriate indexer depending on templavoila or gridelements
+     * load the appropriate indexer depending on templavoila or gridelements.
      */
     public function __construct()
     {
@@ -65,8 +63,9 @@ class tx_mksearch_indexer_TtContent implements tx_mksearch_interface_Indexer
     /**
      * Prepare a searchable document from a source record.
      *
-     * @param tx_mksearch_interface_IndexerDocument     $indexDoc   Indexer document to be "filled", instantiated based on self::getContentType()
-     * @return null|tx_mksearch_interface_IndexerDocument or null if nothing should be indexed.
+     * @param tx_mksearch_interface_IndexerDocument $indexDoc Indexer document to be "filled", instantiated based on self::getContentType()
+     *
+     * @return tx_mksearch_interface_IndexerDocument|null or null if nothing should be indexed
      */
     public function prepareSearchData($tableName, $sourceRecord, tx_mksearch_interface_IndexerDocument $indexDoc, $options)
     {
@@ -90,7 +89,7 @@ class tx_mksearch_indexer_TtContent implements tx_mksearch_interface_Indexer
     }
 
     /**
-     * Return the default Typoscript configuration for this indexer
+     * Return the default Typoscript configuration for this indexer.
      *
      * This config is not used for actual indexing but serves only as assistance
      * when actually configuring an indexer via Typo3 backend by creating
@@ -241,5 +240,5 @@ CONF;
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_TtContent.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_TtContent.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_TtContent.php'];
 }

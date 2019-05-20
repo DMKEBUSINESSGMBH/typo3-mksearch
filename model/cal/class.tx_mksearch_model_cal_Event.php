@@ -25,10 +25,8 @@
 tx_rnbase::load('tx_rnbase_model_base');
 
 /**
- * Cal model
+ * Cal model.
  *
- * @package TYPO3
- * @subpackage tx_mksearch
  * @author Hannes Bochmann
  * @author Michael Wagner
  * @license http://www.gnu.org/licenses/lgpl.html
@@ -37,28 +35,28 @@ tx_rnbase::load('tx_rnbase_model_base');
 class tx_mksearch_model_cal_Event extends tx_rnbase_model_base
 {
     /**
-     * Calender model for this event
+     * Calender model for this event.
      *
      * @var tx_mksearch_model_cal_Calendar
      */
     private $calendar = null;
 
     /**
-     * Location model for this event
+     * Location model for this event.
      *
      * @var tx_mksearch_model_cal_Location
      */
     private $location = null;
 
     /**
-     * Category models for this event
+     * Category models for this event.
      *
      * @var array[tx_mksearch_model_cal_Category]
      */
     private $categories = array();
 
     /**
-     * Tablename
+     * Tablename.
      *
      * @return string
      */
@@ -68,13 +66,13 @@ class tx_mksearch_model_cal_Event extends tx_rnbase_model_base
     }
 
     /**
-     * Calender model for this event
+     * Calender model for this event.
      *
      * @return tx_mksearch_model_cal_Calendar
      */
     public function getCalendar()
     {
-        if ($this->calendar === null) {
+        if (null === $this->calendar) {
             $this->calendar = tx_rnbase::makeInstance(
                 'tx_mksearch_model_cal_Calendar',
                 $this->record['calendar_id']
@@ -85,13 +83,13 @@ class tx_mksearch_model_cal_Event extends tx_rnbase_model_base
     }
 
     /**
-     * Location model for this event
+     * Location model for this event.
      *
      * @return tx_mksearch_model_cal_Location
      */
     public function getLocation()
     {
-        if ($this->location === null) {
+        if (null === $this->location) {
             $this->location = tx_rnbase::makeInstance(
                 'tx_mksearch_model_cal_Location',
                 $this->record['location_id']
@@ -102,7 +100,7 @@ class tx_mksearch_model_cal_Event extends tx_rnbase_model_base
     }
 
     /**
-     * Category models for this event
+     * Category models for this event.
      *
      * @return null|array[tx_mksearch_model_cal_Category]
      */
@@ -123,7 +121,7 @@ class tx_mksearch_model_cal_Event extends tx_rnbase_model_base
     }
 
     /**
-     * Category mm rows for this event
+     * Category mm rows for this event.
      *
      * @return array
      */
@@ -131,18 +129,18 @@ class tx_mksearch_model_cal_Event extends tx_rnbase_model_base
     {
         return Tx_Rnbase_Database_Connection::getInstance()->doSelect(
             'uid_foreign',
-            'tx_cal_event_category_mm AS MM JOIN tx_cal_category AS CAT ON ' .
+            'tx_cal_event_category_mm AS MM JOIN tx_cal_category AS CAT ON '.
             'MM.uid_foreign = CAT.uid',
             array(
                 //da MM keine TCA hat
                 'enablefieldsoff' => true,
                 //keine versteckten kategorien
-                'where'    =>    'MM.uid_local = ' . intval($this->getUid()) . ' AND CAT.hidden = 0'
+                'where' => 'MM.uid_local = '.intval($this->getUid()).' AND CAT.hidden = 0',
             )
         );
     }
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/cal/class.tx_mksearch_model_cal_Event.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/cal/class.tx_mksearch_model_cal_Event.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/cal/class.tx_mksearch_model_cal_Event.php'];
 }

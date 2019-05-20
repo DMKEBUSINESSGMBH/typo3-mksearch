@@ -1,7 +1,5 @@
 <?php
 /**
- * @package tx_mkkvbb
- * @subpackage tx_mkkvbb_tests_action
  * @author Hannes Bochmann
  *
  *  Copyright notice
@@ -25,20 +23,16 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
-
 tx_rnbase::load('tx_mksearch_tests_Testcase');
 tx_rnbase::load('tx_mksearch_action_ElasticSearch');
 
 /**
- * @package tx_mksearch
- * @subpackage tx_mksearch_tests
  * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
 class tx_mksearch_tests_action_ElasticSearch_testcase extends tx_mksearch_tests_Testcase
 {
-
     /**
      * @group unit
      */
@@ -122,7 +116,7 @@ class tx_mksearch_tests_action_ElasticSearch_testcase extends tx_mksearch_tests_
         $configurations = $this->createConfigurations(
             array($confId => array('hit.' => array('pagebrowser.' => array(
                 'limit' => 20,
-                'pbid' => 'pagebrowserId'
+                'pbid' => 'pagebrowserId',
             )))),
             'mksearch',
             '',
@@ -254,7 +248,7 @@ class tx_mksearch_tests_action_ElasticSearch_testcase extends tx_mksearch_tests_
                     'class' => 'tx_mksearch_filter_ElasticSearchBase',
                     'fields.' => array('term' => 'testterm'),
                     'options.' => array('limt' => 123),
-                )
+                ),
             )),
             'mksearch',
             '',

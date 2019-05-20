@@ -1,7 +1,6 @@
 <?php
 /**
- *
- *  Copyright notice
+ *  Copyright notice.
  *
  *  (c) 2011 René Nitzsche <dev@dmk-ebusiness.de>
  *  All rights reserved
@@ -23,7 +22,6 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
 
-
 // ////////////////////////////////////////////////////////// //
 // deprecated, will be removed, when TYPO3 4.x support drops! //
 // ////////////////////////////////////////////////////////// //
@@ -31,18 +29,16 @@
 tx_rnbase::load('tx_mksearch_mod1_Module');
 
 /**
- * Backend Modul für mksearch
+ * Backend Modul für mksearch.
  *
  * @author René Nitzsche
- * @package tx_mksearch
- * @subpackage tx_mksearch_mod1
  */
 class tx_mksearch_module1 extends tx_mksearch_mod1_Module
 {
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/index.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/index.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/index.php'];
 }
 
 /* @var $SOBE tx_mksearch_module1 */

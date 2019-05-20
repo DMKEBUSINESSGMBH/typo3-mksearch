@@ -1,7 +1,5 @@
 <?php
 /**
- * @package tx_mksearch
- * @subpackage tx_mksearch_indexer
  * @author Hannes Bochmann
  *
  *  Copyright notice
@@ -27,20 +25,15 @@
  */
 
 /**
- * benötigte Klassen einbinden
+ * benötigte Klassen einbinden.
  */
-
 tx_rnbase::load('tx_mksearch_indexer_Base');
 
 /**
- * Dummy Indexer for testing the base class as it is abstract
- *
- * @package tx_mksearch
- * @subpackage tx_mksearch_indexer
+ * Dummy Indexer for testing the base class as it is abstract.
  */
 class tx_mksearch_tests_fixtures_indexer_Dummy extends tx_mksearch_indexer_Base
 {
-
     /**
      * Return content type identification.
      * This identification is part of the indexed data
@@ -58,10 +51,10 @@ class tx_mksearch_tests_fixtures_indexer_Dummy extends tx_mksearch_indexer_Base
     }
 
     /**
-     * @param string $sTableName
-     * @param array $aRawData
+     * @param string                                $sTableName
+     * @param array                                 $aRawData
      * @param tx_mksearch_interface_IndexerDocument $oIndexDoc
-     * @param array $aOptions
+     * @param array                                 $aOptions
      *
      * @return bool
      */
@@ -72,7 +65,8 @@ class tx_mksearch_tests_fixtures_indexer_Dummy extends tx_mksearch_indexer_Base
     }
 
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
+     *
      * @see tx_mksearch_interface_Indexer::prepareSearchData()
      */
     public function indexData(tx_rnbase_IModel $oModel, $sTableName, $aRawData, tx_mksearch_interface_IndexerDocument $oIndexDoc, $aOptions)
@@ -82,7 +76,7 @@ class tx_mksearch_tests_fixtures_indexer_Dummy extends tx_mksearch_indexer_Base
         $this->indexModelByMapping($oModel, $this->getTestMapping(), $oIndexDoc, 'keepHtml_', array('keepHtml' => 1));
 
         if ($oModel->record['multiValue']) {
-            $aModels = array($oModel,$oModel);
+            $aModels = array($oModel, $oModel);
             $this->indexArrayOfModelsByMapping(
                 $aModels,
                 $this->getTestMapping(),
@@ -114,7 +108,8 @@ class tx_mksearch_tests_fixtures_indexer_Dummy extends tx_mksearch_indexer_Base
 
     /**
      * Returns the mapping of the record fields to the
-     * solr doc fields
+     * solr doc fields.
+     *
      * @return array
      */
     protected function getTestMapping()
@@ -126,7 +121,7 @@ class tx_mksearch_tests_fixtures_indexer_Dummy extends tx_mksearch_indexer_Base
     }
 
     /**
-     * Returns the model to be indexed
+     * Returns the model to be indexed.
      *
      * @param array $aRawData
      *
@@ -160,5 +155,5 @@ class tx_mksearch_tests_fixtures_indexer_Dummy extends tx_mksearch_indexer_Base
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/seminars/class.tx_mksearch_indexer_seminars_Seminar.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/seminars/class.tx_mksearch_indexer_seminars_Seminar.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/seminars/class.tx_mksearch_indexer_seminars_Seminar.php'];
 }

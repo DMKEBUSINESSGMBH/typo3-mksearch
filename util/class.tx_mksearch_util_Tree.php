@@ -22,12 +22,10 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-
-
 tx_rnbase::load('tx_rnbase_util_SearchBase');
 
 /**
- * Class for working on hierarchical tree data
+ * Class for working on hierarchical tree data.
  *
  * @TODO: replace by ext:tx_mkstats_util_Tree (to come...)
  */
@@ -42,27 +40,27 @@ class tx_mksearch_util_Tree
     private static $treeCache = array();
 
     /**
-     * Get a flat list of children of a generic node defined by configuration
+     * Get a flat list of children of a generic node defined by configuration.
      *
      *
-     * @param array $fields		Fields for the tx_rnbase_util_SearchGeneric search
-     * @param array $options	Options for the tx_rnbase_util_SearchGeneric search
-     * 							Example:
-     * 							options {
-     * 								// You're encouraged to define field aliases via "as" sql clause to prevent hard to debug naming problems. Then, use THIS alias for $config['keyField']
-     * 								what = PAGES.uid as uid, PAGES.title, PAGES.pid
-     * 								searchdef {
-     * 									basetable = pages
-     * 									basetablealias = PAGES
-     * 									usealias = 1
-     * 								}
-     *							}
+     * @param array $fields  Fields for the tx_rnbase_util_SearchGeneric search
+     * @param array $options Options for the tx_rnbase_util_SearchGeneric search
+     *                       Example:
+     *                       options {
+     *                       // You're encouraged to define field aliases via "as" sql clause to prevent hard to debug naming problems. Then, use THIS alias for $config['keyField']
+     *                       what = PAGES.uid as uid, PAGES.title, PAGES.pid
+     *                       searchdef {
+     *                       basetable = pages
+     *                       basetablealias = PAGES
+     *                       usealias = 1
+     *                       }
+     *                       }
+     * @param array $config  Additional configuration:
+     *                       * string			keyField	Name of the field containing the record uid
+     *                       * string			parentField	Name of the field which contains the uid of the parent record
+     *                       * array | string	rootPoints	UID(s) of starting point(s) for which the children are to be searched
+     *                       * int optional=10	maxLevel	Max. number of levels to traverse. Note this is your safety net if something goes wrong with the db query so we find us back in an infinite loop!
      *
-     * @param array $config		Additional configuration:
-     * 							* string			keyField	Name of the field containing the record uid
-     * 							* string			parentField	Name of the field which contains the uid of the parent record
-     * 							* array | string	rootPoints	UID(s) of starting point(s) for which the children are to be searched
-     * 							* int optional=10	maxLevel	Max. number of levels to traverse. Note this is your safety net if something goes wrong with the db query so we find us back in an infinite loop!
      * @return array
      */
     public static function getFlatChildren(array $fields, array $options, array $config)
@@ -82,7 +80,7 @@ class tx_mksearch_util_Tree
 
         $result = array();
         $searcher = tx_rnbase_util_SearchBase::getInstance('tx_rnbase_util_SearchGeneric');
-        $config['parentField'] = $options['searchdef']['basetablealias'].'.'. $config['parentField'];
+        $config['parentField'] = $options['searchdef']['basetablealias'].'.'.$config['parentField'];
 
         $parentIds = is_array($config['rootPoints']) ? implode(',', $config['rootPoints']) : $config['rootPoints'];
 
@@ -101,20 +99,21 @@ class tx_mksearch_util_Tree
             }
             $parentIds = implode(',', $parentIds);
         } while ($children and ++$i < $config['maxLevel']);
+
         return $result;
     }
 
     /**
-     * Get ancestors of a generic node according to configuration
+     * Get ancestors of a generic node according to configuration.
      *
-     * @param array $fields		Fields for the tx_rnbase_util_SearchGeneric search
-     * @param array $options	Options for the tx_rnbase_util_SearchGeneric search
-     * @param array $config		Additional configuration:
-     * 							* string					keyField		Name of the field containing the record uid
-     * 							* string					parentField		Name of the field which contains the uid of the parent record
-     * 							* string					startingPoint	UID of starting point for which the ancestors are to be searched
-     * 							* string | array optional	endingPoint		UID(s) of ancestor(s) where traversal stops
-     * 							* int optional=10			maxLevel		Max. number of levels to traverse. Note this is your safety net if something goes wrong with the db query so we find us back in an infinite loop!
+     * @param array $fields  Fields for the tx_rnbase_util_SearchGeneric search
+     * @param array $options Options for the tx_rnbase_util_SearchGeneric search
+     * @param array $config  Additional configuration:
+     *                       * string					keyField		Name of the field containing the record uid
+     *                       * string					parentField		Name of the field which contains the uid of the parent record
+     *                       * string					startingPoint	UID of starting point for which the ancestors are to be searched
+     *                       * string | array optional	endingPoint		UID(s) of ancestor(s) where traversal stops
+     *                       * int optional=10			maxLevel		Max. number of levels to traverse. Note this is your safety net if something goes wrong with the db query so we find us back in an infinite loop!
      *
      * @return array
      *
@@ -140,7 +139,7 @@ class tx_mksearch_util_Tree
 
         $result = array();
         $searcher = tx_rnbase_util_SearchBase::getInstance('tx_rnbase_util_SearchGeneric');
-        $config['keyField'] = $options['searchdef']['basetablealias'].'.'. $config['keyField'];
+        $config['keyField'] = $options['searchdef']['basetablealias'].'.'.$config['keyField'];
 
         // Prepare search
         $fields[$config['keyField']] = array(OP_EQ_INT => $config['startingPoint']);
@@ -163,16 +162,15 @@ class tx_mksearch_util_Tree
         return $result;
     }
 
-
     /**
-     * Page instance
+     * Page instance.
      *
      * @var \TYPO3\CMS\Frontend\Page\PageRepository
      */
     private static $page;
 
     /**
-     * Return page instance
+     * Return page instance.
      *
      * @return \TYPO3\CMS\Frontend\Page\PageRepository
      */
@@ -181,6 +179,7 @@ class tx_mksearch_util_Tree
         if (!isset(self::$page)) {
             self::$page = tx_rnbase_util_TYPO3::getSysPage();
         }
+
         return self::$page;
     }
 
@@ -190,9 +189,10 @@ class tx_mksearch_util_Tree
      * This is a specialisation of self::getFlatChildren().
      *
      * @param array $uids
+     *
      * @return array
      */
-    public static function getTreeUids(array $uids, $table, $keyField='uid', $parentField='pid')
+    public static function getTreeUids(array $uids, $table, $keyField = 'uid', $parentField = 'pid')
     {
         global $GLOBALS;
         $cacheKey = serialize($uids);
@@ -210,7 +210,7 @@ class tx_mksearch_util_Tree
         if (isset($GLOBALS['TCA'][$table]['ctrl']) && is_array($GLOBALS['TCA'][$table]['ctrl'])) {
             $enable = self::page()->enableFields($table, null, array('fe_group' => true));
             // Cut "AND" in the beginning
-            $enable = substr($enable, strpos($enable, "AND ") + 4);
+            $enable = substr($enable, strpos($enable, 'AND ') + 4);
             $ffields[SEARCH_FIELD_CUSTOM] = $enable;
         }
 
@@ -240,10 +240,11 @@ class tx_mksearch_util_Tree
             self::$treeCache[$table] = array();
         }
         self::$treeCache[$table][$cacheKey] = array_unique($result);
+
         return self::$treeCache[$table][$cacheKey];
     }
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_Tree.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_Tree.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_Tree.php'];
 }

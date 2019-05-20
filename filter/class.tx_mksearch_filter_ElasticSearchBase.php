@@ -21,7 +21,6 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  ***************************************************************/
 
-
 tx_rnbase::load('tx_rnbase_util_SearchBase');
 tx_rnbase::load('tx_mksearch_util_Misc');
 tx_rnbase::load('tx_rnbase_filter_BaseFilter');
@@ -29,20 +28,17 @@ tx_rnbase::load('tx_rnbase_util_ListBuilderInfo');
 tx_rnbase::load('tx_mksearch_util_Filter');
 
 /**
- *
  * @author Hannes Bochmann <hannes.bochmann@dmk-business.de>
  */
 class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter
 {
-
     /**
-     *
      * @var tx_mksearch_util_Filter
      */
     protected $filterUtility;
 
     /**
-     * Initialize filter
+     * Initialize filter.
      *
      * @param array $fields
      * @param array $options
@@ -50,11 +46,11 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter
     public function init(&$fields, &$options)
     {
         $confId = $this->getConfId();
-        $fields = $this->getConfigurations()->get($confId . 'fields.');
+        $fields = $this->getConfigurations()->get($confId.'fields.');
         tx_rnbase_util_SearchBase::setConfigOptions(
             $options,
             $this->getConfigurations(),
-            $confId . 'options.'
+            $confId.'options.'
         );
 
         return $this->initFilter(
@@ -67,13 +63,14 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter
     }
 
     /**
-     * Filter for search form
+     * Filter for search form.
      *
-     * @param array $fields
-     * @param array $options
-     * @param tx_rnbase_parameters $parameters
+     * @param array                    $fields
+     * @param array                    $options
+     * @param tx_rnbase_parameters     $parameters
      * @param tx_rnbase_configurations $configurations
-     * @param string $confId
+     * @param string                   $confId
+     *
      * @return bool Should subsequent query be executed at all?
      */
     protected function initFilter(
@@ -85,7 +82,7 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter
     ) {
         // Es muss ein Submit-Parameter im request liegen, damit der Filter greift
         if (!($parameters->offsetExists('submit') ||
-            $configurations->get($confId . 'forceSearch'))
+            $configurations->get($confId.'forceSearch'))
         ) {
             return false;
         }
@@ -99,11 +96,11 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter
     /**
      * Fügt den Suchstring zu dem Filter hinzu.
      *
-     * @param   array                       $fields
-     * @param   array                       $options
-     * @param   tx_rnbase_IParameters       $parameters
-     * @param   tx_rnbase_configurations    $configurations
-     * @param   string                      $confId
+     * @param array                    $fields
+     * @param array                    $options
+     * @param tx_rnbase_IParameters    $parameters
+     * @param tx_rnbase_configurations $configurations
+     * @param string                   $confId
      */
     protected function handleTerm(&$fields, &$parameters, &$configurations, $confId)
     {
@@ -123,8 +120,8 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter
      *
      * @TODO: das klappt zurzeit nur bei einfacher sortierung!
      *
-     * @param   array                   $options
-     * @param   tx_rnbase_IParameters   $parameters
+     * @param array                 $options
+     * @param tx_rnbase_IParameters $parameters
      */
     protected function handleSorting(&$options)
     {
@@ -137,16 +134,16 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter
     }
 
     /**
-     *
-     * @param string $template HTML template
+     * @param string                    $template  HTML template
      * @param tx_rnbase_util_FormatUtil $formatter
-     * @param string $confId
-     * @param string $marker
+     * @param string                    $confId
+     * @param string                    $marker
+     *
      * @return string
      */
     public function parseTemplate($template, &$formatter, $confId, $marker = 'FILTER')
     {
-        $markArray = $subpartArray  = $wrappedSubpartArray = array();
+        $markArray = $subpartArray = $wrappedSubpartArray = array();
 
         $this->parseSearchForm(
             $template,
@@ -177,15 +174,16 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter
     }
 
     /**
-     * Treat search form
+     * Treat search form.
      *
-     * @param string $template HTML template
-     * @param array $markArray
-     * @param array $subpartArray
-     * @param array $wrappedSubpartArray
+     * @param string                    $template            HTML template
+     * @param array                     $markArray
+     * @param array                     $subpartArray
+     * @param array                     $wrappedSubpartArray
      * @param tx_rnbase_util_FormatUtil $formatter
-     * @param string $confId
-     * @param string $marker
+     * @param string                    $confId
+     * @param string                    $marker
+     *
      * @return string
      *
      * @todo refactoring da die gleiche Methode wie in tx_mksearch_filter_LuceneBase
@@ -208,9 +206,9 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter
 
         $configurations = $formatter->getConfigurations();
         tx_rnbase::load('tx_rnbase_util_Templates');
-        $formTemplate = $configurations->get($confId . 'template.file');
+        $formTemplate = $configurations->get($confId.'template.file');
 
-        $subpart = $configurations->get($confId . 'template.subpart');
+        $subpart = $configurations->get($confId.'template.subpart');
         $formTemplate = tx_rnbase_util_Templates::getSubpartFromFile(
             $formTemplate,
             $subpart
@@ -246,7 +244,7 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter
             $availableModes = $this->getModeValuesAvailable();
             if ($currentOptions['mode']) {
                 foreach ($availableModes as $availableMode) {
-                    $formData['mode_' . $availableMode . '_selected'] =
+                    $formData['mode_'.$availableMode.'_selected'] =
                         $currentOptions['mode'] == $availableMode ? 'checked=checked' : '';
                 }
             } else {
@@ -265,7 +263,8 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter
 
     /**
      * Werte für Formularfelder aufbereiten. Daten aus dem Request übernehmen und wieder füllen.
-     * @param array $formData
+     *
+     * @param array                $formData
      * @param tx_rnbase_parameters $parameters
      */
     protected function prepareFormFields(&$formData, $parameters)
@@ -300,13 +299,14 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter
     /**
      * Returns all values possible for form field mksearch[options][mode].
      * Makes it possible to easily add more modes in other filters/forms.
+     *
      * @return array
      */
     protected function getModeValuesAvailable()
     {
         $availableModes = tx_rnbase_util_Strings::trimExplode(
             ',',
-            $this->getConfigurations()->get($this->getConfId() . 'availableModes')
+            $this->getConfigurations()->get($this->getConfId().'availableModes')
         );
 
         return (array) $availableModes;
@@ -315,9 +315,9 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter
     /**
      * ist notwendig weil sonst die Marker, welche die Formulardaten
      * enthalten ungeparsed rauskommen, falls das Formular noch
-     * nicht abgeschickt wurde
+     * nicht abgeschickt wurde.
      *
-     * @param array $formData
+     * @param array                $formData
      * @param tx_rnbase_parameters $parameters
      *
      * @return array
@@ -328,7 +328,7 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter
     ) {
         $formFields = tx_rnbase_util_Strings::trimExplode(
             ',',
-            $this->getConfigurations()->get($this->getConfId() . 'requiredFormFields')
+            $this->getConfigurations()->get($this->getConfId().'requiredFormFields')
         );
 
         foreach ($formFields as $formField) {
@@ -341,15 +341,15 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter
     }
 
     /**
-     * die methode ist nur noch da für abwärtskompatiblität
+     * die methode ist nur noch da für abwärtskompatiblität.
      *
-     * @param string $template HTML template
-     * @param array $markArray
-     * @param array $subpartArray
-     * @param array $wrappedSubpartArray
+     * @param string                    $template            HTML template
+     * @param array                     $markArray
+     * @param array                     $subpartArray
+     * @param array                     $wrappedSubpartArray
      * @param tx_rnbase_util_FormatUtil $formatter
-     * @param string $confId
-     * @param string $marker
+     * @param string                    $confId
+     * @param string                    $marker
      */
     public function parseSortFields(
         $template,
@@ -380,7 +380,6 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter
     }
 
     /**
-     *
      * @return tx_mksearch_util_Filter
      */
     protected function getFilterUtility()
@@ -394,5 +393,5 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/filter/class.tx_mksearch_filter_ElasticSearchBase.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/filter/class.tx_mksearch_filter_ElasticSearchBase.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/filter/class.tx_mksearch_filter_ElasticSearchBase.php'];
 }

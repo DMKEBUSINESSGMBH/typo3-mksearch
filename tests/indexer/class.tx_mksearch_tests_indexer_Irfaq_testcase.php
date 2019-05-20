@@ -27,10 +27,8 @@ tx_rnbase::load('tx_mksearch_tests_Util');
 tx_rnbase::load('tx_mksearch_indexer_Irfaq');
 
 /**
- * tx_mksearch_tests_indexer_Irfaq_testcase
+ * tx_mksearch_tests_indexer_Irfaq_testcase.
  *
- * @package tx_mksearch
- * @subpackage tx_mksearch_tests
  * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
  * @author Michael Wagner <michael.wagner@dmk-ebusiness.de>
  * @license http://www.gnu.org/licenses/lgpl.html
@@ -38,9 +36,9 @@ tx_rnbase::load('tx_mksearch_indexer_Irfaq');
  */
 class tx_mksearch_tests_indexer_Irfaq_testcase extends tx_mksearch_tests_Testcase
 {
-
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
+     *
      * @see tx_mksearch_tests_Testcase::setUp()
      */
     protected function setUp()
@@ -265,7 +263,7 @@ class tx_mksearch_tests_indexer_Irfaq_testcase extends tx_mksearch_tests_Testcas
                         'title' => '2. FAQ Category',
                         'shortcut' => '2. Shortcut',
                     )
-                )
+                ),
             )));
 
         $indexer = $this->getMock('tx_mksearch_indexer_Irfaq', array('getIrfaqCategoryService', 'getIrfaqExpertService'));
@@ -354,7 +352,7 @@ class tx_mksearch_tests_indexer_Irfaq_testcase extends tx_mksearch_tests_Testcas
         $questionService = $this->getMock('tx_mksearch_service_irfaq_Question', array('getByMyTestMethod'));
         $questionService->expects(self::once())
             ->method('getByMyTestMethod')
-            ->will(self::returnValue(array(1,2,3)));
+            ->will(self::returnValue(array(1, 2, 3)));
 
         $indexer = $this->getMock('tx_mksearch_indexer_Irfaq', array('getIrfaqQuestionService', 'addModelsToIndex'));
         $indexer->expects(self::once())
@@ -363,7 +361,7 @@ class tx_mksearch_tests_indexer_Irfaq_testcase extends tx_mksearch_tests_Testcas
 
         $indexer->expects(self::once())
             ->method('addModelsToIndex')
-            ->with(array(1,2,3), 'tx_irfaq_q');
+            ->with(array(1, 2, 3), 'tx_irfaq_q');
 
         $this->callInaccessibleMethod($indexer, 'handleRelatedTableChanged', array('uid' => 123), 'MyTestMethod');
     }
@@ -373,7 +371,7 @@ class tx_mksearch_tests_indexer_Irfaq_testcase extends tx_mksearch_tests_Testcas
      * @dataProvider getIncludeOptions
      *
      * @param array $options
-     * @param boolean $isDeleted
+     * @param bool  $isDeleted
      */
     public function testPrepareSearchDataSetsDocDeletedDependingOnIncludeOptions(array $options, $isDeleted, $noCategories = false)
     {
@@ -401,7 +399,7 @@ class tx_mksearch_tests_indexer_Irfaq_testcase extends tx_mksearch_tests_Testcas
                     array(
                         'uid' => 2,
                     )
-                )
+                ),
             );
         }
 
@@ -440,9 +438,10 @@ class tx_mksearch_tests_indexer_Irfaq_testcase extends tx_mksearch_tests_Testcas
 
     /**
      * @param tx_mksearch_indexer_Irfaq $indexer
-     * @param array $record
-     * @param string $table
-     * @param array $options
+     * @param array                     $record
+     * @param string                    $table
+     * @param array                     $options
+     *
      * @return tx_mksearch_interface_IndexerField[]
      */
     protected function prepareSearchData(

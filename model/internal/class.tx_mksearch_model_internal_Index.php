@@ -22,26 +22,25 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-
 tx_rnbase::load('tx_rnbase_model_base');
 tx_rnbase::load('tx_mksearch_util_ServiceRegistry');
 
 /**
- * Model for indices
+ * Model for indices.
  */
 class tx_mksearch_model_internal_Index extends tx_rnbase_model_base
 {
     private $options = false;
 
     /**
-     * Index service instance
+     * Index service instance.
      *
      * @var tx_mksearch_interface_SearchEngine
      */
     private $indexSrv = null;
 
     /**
-     * Return this model's table name
+     * Return this model's table name.
      *
      * @return string
      */
@@ -49,30 +48,37 @@ class tx_mksearch_model_internal_Index extends tx_rnbase_model_base
     {
         return 'tx_mksearch_indices';
     }
+
     /**
-     * Returns the plain credential string for this index
+     * Returns the plain credential string for this index.
+     *
      * @return string
      */
     public function getCredentialString()
     {
         return $this->record['name'];
     }
+
     /**
-     * Returns the index title
+     * Returns the index title.
+     *
      * @return string
      */
     public function getTitle()
     {
         return $this->record['title'];
     }
+
     /**
-     * Returns the search engine type
+     * Returns the search engine type.
+     *
      * @return string
      */
     public function getEngineType()
     {
         return $this->record['engine'];
     }
+
     /**
      * @return tx_mksearch_interface_SearchEngine
      */
@@ -80,8 +86,9 @@ class tx_mksearch_model_internal_Index extends tx_rnbase_model_base
     {
         return tx_mksearch_util_ServiceRegistry::getSearchEngine($this);
     }
+
     /**
-     * Return options of all active indexers for this index
+     * Return options of all active indexers for this index.
      *
      * @return array
      */
@@ -135,26 +142,28 @@ class tx_mksearch_model_internal_Index extends tx_rnbase_model_base
     }
 
     /**
-     * Returns the configuration for this index
+     * Returns the configuration for this index.
+     *
      * @param tx_mksearch_model_internal_Index $oIndex
+     *
      * @return array configuration array
      */
     public function getIndexConfig()
     {
         tx_rnbase::load('tx_mksearch_util_Misc');
 
-        return tx_mksearch_util_Misc::parseTsConfig("{\n" . $this->record['configuration'] . "\n}");
+        return tx_mksearch_util_Misc::parseTsConfig("{\n".$this->record['configuration']."\n}");
     }
 
     public function __toString()
     {
-        $out = get_class($this). "\n\nRecord:\n";
+        $out = get_class($this)."\n\nRecord:\n";
         while (list($key, $val) = each($this->record)) {
-            $out .= $key. ' = ' . $val . "\n";
+            $out .= $key.' = '.$val."\n";
         }
         $out = "\n\nIndexer Options:\n";
         while (list($key, $val) = each($this->getIndexerOptions())) {
-            $out .= $key. ' = ' . $val . "\n";
+            $out .= $key.' = '.$val."\n";
         }
 
         reset($this->record);
@@ -163,7 +172,8 @@ class tx_mksearch_model_internal_Index extends tx_rnbase_model_base
     }
 
     /**
-     * Returns version number of search engine
+     * Returns version number of search engine.
+     *
      * @return int
      */
     public function getEngineVersion()
@@ -171,8 +181,10 @@ class tx_mksearch_model_internal_Index extends tx_rnbase_model_base
         // FIXME: Das Feld in der db neutral gestalten
         return $this->record['solrversion'];
     }
+
     /**
      * @return int
+     *
      * @deprecated use getEngineVersion()
      */
     public function getSolrVersion()
@@ -182,14 +194,15 @@ class tx_mksearch_model_internal_Index extends tx_rnbase_model_base
 
     /**
      * @return bool
+     *
      * @deprecated wrong place for engine specific version check
      */
     public function isSolr4()
     {
-        return $this->getSolrVersion() == 40;
+        return 40 == $this->getSolrVersion();
     }
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/internal/class.tx_mksearch_model_internal_Index.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/internal/class.tx_mksearch_model_internal_Index.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/internal/class.tx_mksearch_model_internal_Index.php'];
 }

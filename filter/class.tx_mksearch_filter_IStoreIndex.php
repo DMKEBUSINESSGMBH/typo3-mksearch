@@ -23,10 +23,8 @@
  ***************************************************************/
 
 /**
- * Filter interface to store the search index
+ * Filter interface to store the search index.
  *
- * @package TYPO3
- * @subpackage tx_mksearch
  * @author Michael Wagner
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later

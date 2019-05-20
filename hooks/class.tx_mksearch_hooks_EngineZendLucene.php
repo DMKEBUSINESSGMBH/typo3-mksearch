@@ -23,19 +23,17 @@
 ***************************************************************/
 
 /**
- * Hooks for search engine Zend_Lucene
+ * Hooks for search engine Zend_Lucene.
  */
 class tx_mksearch_hooks_EngineZendLucene
 {
-
     /**
-     * Hook for converting fields before actual indexing
+     * Hook for converting fields before actual indexing.
      *
      * This method has to do some additional work the Zend Analyzer can't do.
      *
      * @param array $params:
-     *                      ['data']    => &associative array[tx_mksearch_interface_IndexerField]
-     * @return void
+     *                       ['data']    => &associative array[tx_mksearch_interface_IndexerField]
      */
     public function convertFields($p)
     {
@@ -44,14 +42,13 @@ class tx_mksearch_hooks_EngineZendLucene
     }
 
     /**
-     * Manipulate one single search term
+     * Manipulate one single search term.
      *
      * This method can be used to normalize search terms
      * to match conditions of indexed data, e. g. adapt charse encoding.
      *
      * @param array $params:
-     *                      ['term']    => string
-     * @return void
+     *                       ['term']    => string
      */
     public function manipulateSingleTerm($p)
     {
@@ -64,5 +61,5 @@ class tx_mksearch_hooks_EngineZendLucene
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/hooks/class.tx_mksearch_hooks_EngineZendLucene.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/hooks/class.tx_mksearch_hooks_EngineZendLucene.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/hooks/class.tx_mksearch_hooks_EngineZendLucene.php'];
 }

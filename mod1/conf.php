@@ -5,7 +5,7 @@
 // ////////////////////////////////////////////////////////// //
 
 $MCONF['name'] = 'web_MksearchM1';
-$MCONF['script']='_DISPATCH';
+$MCONF['script'] = '_DISPATCH';
 
 $MCONF['access'] = 'user,group';
 

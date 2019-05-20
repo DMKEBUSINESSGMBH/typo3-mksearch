@@ -22,13 +22,9 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-
 tx_rnbase::load('tx_mksearch_tests_Testcase');
 
 /**
- *
- * @package tx_mksearch
- * @subpackage tx_mksearch_tests
  * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
  * @author Michael Wagner <michael.wagner@dmk-ebusiness.de>
  * @license http://www.gnu.org/licenses/lgpl.html
@@ -36,7 +32,6 @@ tx_rnbase::load('tx_mksearch_tests_Testcase');
  */
 class tx_mksearch_tests_indexer_BaseMedia_testcase extends tx_mksearch_tests_Testcase
 {
-
     /**
      * @group unit
      */
@@ -142,7 +137,7 @@ class tx_mksearch_tests_indexer_BaseMedia_testcase extends tx_mksearch_tests_Tes
         $indexer = $this->getIndexerMock(
             array(
                 'getBaseTableName', 'getFileExtension',
-                'getFilePath', 'getRelFileName', 'getIndexerUtility'
+                'getFilePath', 'getRelFileName', 'getIndexerUtility',
             )
         );
         $indexerUtility = $this->getMock(
@@ -187,7 +182,7 @@ class tx_mksearch_tests_indexer_BaseMedia_testcase extends tx_mksearch_tests_Tes
     {
         $indexer = $this->getIndexerMock(array(
             'getBaseTableName', 'getFileExtension',
-            'getFilePath', 'getRelFileName', 'stopIndexing', 'isIndexableRecord'
+            'getFilePath', 'getRelFileName', 'stopIndexing', 'isIndexableRecord',
         ));
 
         $indexDoc = tx_rnbase::makeInstance(
@@ -216,7 +211,7 @@ class tx_mksearch_tests_indexer_BaseMedia_testcase extends tx_mksearch_tests_Tes
     {
         $indexer = $this->getIndexerMock(array(
             'getBaseTableName', 'getFileExtension',
-            'getFilePath', 'getRelFileName', 'stopIndexing', 'isIndexableRecord'
+            'getFilePath', 'getRelFileName', 'stopIndexing', 'isIndexableRecord',
         ));
 
         $indexDoc = tx_rnbase::makeInstance(
@@ -245,7 +240,7 @@ class tx_mksearch_tests_indexer_BaseMedia_testcase extends tx_mksearch_tests_Tes
     {
         $indexer = $this->getIndexerMock(array(
             'getBaseTableName', 'getFileExtension',
-            'getFilePath', 'getRelFileName', 'stopIndexing', 'isIndexableRecord'
+            'getFilePath', 'getRelFileName', 'stopIndexing', 'isIndexableRecord',
         ));
 
         $indexDoc = tx_rnbase::makeInstance(
@@ -255,7 +250,6 @@ class tx_mksearch_tests_indexer_BaseMedia_testcase extends tx_mksearch_tests_Tes
         );
         $options = array();
         $sourceRecord = array('uid' => 1, 'deleted' => 1);
-
 
         $indexDoc = $indexer->prepareSearchData(
             'tt_content',
@@ -274,7 +268,7 @@ class tx_mksearch_tests_indexer_BaseMedia_testcase extends tx_mksearch_tests_Tes
     {
         $indexer = $this->getIndexerMock(array(
             'getBaseTableName', 'getFileExtension',
-            'getFilePath', 'getRelFileName', 'stopIndexing', 'isIndexableRecord'
+            'getFilePath', 'getRelFileName', 'stopIndexing', 'isIndexableRecord',
         ));
 
         $indexDoc = tx_rnbase::makeInstance(
@@ -284,7 +278,6 @@ class tx_mksearch_tests_indexer_BaseMedia_testcase extends tx_mksearch_tests_Tes
         );
         $options = array();
         $sourceRecord = array('uid' => 1, 'hidden' => 1);
-
 
         $indexDoc = $indexer->prepareSearchData(
             'tt_content',
@@ -349,7 +342,7 @@ class tx_mksearch_tests_indexer_BaseMedia_testcase extends tx_mksearch_tests_Tes
     {
         $indexer = $this->getIndexerMock(array(
             'getBaseTableName', 'getFileExtension',
-            'getFilePath', 'getRelFileName', 'stopIndexing', 'isIndexableRecord'
+            'getFilePath', 'getRelFileName', 'stopIndexing', 'isIndexableRecord',
         ));
         $indexer->expects(self::once())
             ->method('isIndexableRecord')
@@ -372,7 +365,7 @@ class tx_mksearch_tests_indexer_BaseMedia_testcase extends tx_mksearch_tests_Tes
     {
         $indexer = $this->getIndexerMock(array(
             'getBaseTableName', 'getFileExtension',
-            'getFilePath', 'getRelFileName', 'stopIndexing', 'isIndexableRecord'
+            'getFilePath', 'getRelFileName', 'stopIndexing', 'isIndexableRecord',
         ));
         $indexer->expects(self::any())
             ->method('isIndexableRecord')
@@ -416,12 +409,13 @@ class tx_mksearch_tests_indexer_BaseMedia_testcase extends tx_mksearch_tests_Tes
 
     /**
      * @param array $mockedMethods
+     *
      * @return Ambigous <PHPUnit_Framework_MockObject_MockObject, tx_mksearch_indexer_BaseMedia>
      */
     private function getIndexerMock(
         array $mockedMethods = array(
             'getBaseTableName', 'getFileExtension',
-            'getFilePath', 'getRelFileName', 'stopIndexing'
+            'getFilePath', 'getRelFileName', 'stopIndexing',
         )
     ) {
         return $this->getMockForAbstractClass(

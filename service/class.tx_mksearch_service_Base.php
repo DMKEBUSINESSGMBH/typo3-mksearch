@@ -1,7 +1,5 @@
 <?php
 /**
- * @package tx_mksearch
- * @subpackage tx_mksearch_service
  * @author Hannes Bochmann
  *
  *  Copyright notice
@@ -29,16 +27,12 @@ tx_rnbase::load('Tx_Rnbase_Service_Base');
 tx_rnbase::load('tx_rnbase_util_SearchBase');
 
 /**
- * Base service class
- *
- * @package tx_mksearch
- * @subpackage tx_mksearch_service
+ * Base service class.
  */
 abstract class tx_mksearch_service_Base extends Tx_Rnbase_Service_Base
 {
-
     /**
-     * Return name of search class
+     * Return name of search class.
      *
      * @return string
      */
@@ -53,10 +47,11 @@ abstract class tx_mksearch_service_Base extends Tx_Rnbase_Service_Base
     }
 
     /**
-     * Search database
+     * Search database.
      *
      * @param array $fields
      * @param array $options
+     *
      * @return array[tx_rnbase_model_base]
      */
     public function search($fields, $options)
@@ -77,12 +72,13 @@ abstract class tx_mksearch_service_Base extends Tx_Rnbase_Service_Base
     }
 
     /**
-     * Search the item for the given uid
+     * Search the item for the given uid.
      *
      * @TODO:   Achtung,
      *          tx_rnbase_util_SearchBase::getWrapperClass() ist eigentlich protected!
      *
      * @param int $ct
+     *
      * @return tx_rnbase_model_base
      */
     public function get($uid)
@@ -93,7 +89,7 @@ abstract class tx_mksearch_service_Base extends Tx_Rnbase_Service_Base
     }
 
     /**
-     * Find all records
+     * Find all records.
      *
      * @return array[tx_rnbase_model_base]
      */
@@ -104,5 +100,5 @@ abstract class tx_mksearch_service_Base extends Tx_Rnbase_Service_Base
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/class.tx_mksearch_service_Base.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/class.tx_mksearch_service_Base.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/class.tx_mksearch_service_Base.php'];
 }

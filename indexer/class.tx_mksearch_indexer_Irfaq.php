@@ -1,7 +1,5 @@
 <?php
 /**
- * @package tx_mksearch
- * @subpackage tx_mksearch_indexer
  * @author Hannes Bochmann
  *
  *  Copyright notice
@@ -27,20 +25,15 @@
  */
 
 /**
- * benötigte Klassen einbinden
+ * benötigte Klassen einbinden.
  */
-
 tx_rnbase::load('tx_mksearch_indexer_Base');
 
 /**
  * Indexer service for irfaq.question called by the "mksearch" extension.
- *
- * @package tx_mksearch
- * @subpackage tx_mksearch_indexer
  */
 class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base
 {
-
     /**
      * Return content type identification.
      * This identification is part of the indexed data
@@ -58,7 +51,7 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @see tx_mksearch_indexer_Base::hasDocToBeDeleted($model, $indexDoc, $options)
      *
@@ -74,7 +67,8 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base
     }
 
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
+     *
      * @see tx_mksearch_interface_Indexer::prepareSearchData()
      */
     protected function indexData(
@@ -158,7 +152,7 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base
     }
 
     /**
-     * @param tx_rnbase_IModel $model
+     * @param tx_rnbase_IModel                      $model
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
      *
      * @return tx_mksearch_interface_IndexerDocument
@@ -173,7 +167,7 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base
     }
 
     /**
-     * @param array $categories
+     * @param array                                 $categories
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
      *
      * @return tx_mksearch_interface_IndexerDocument
@@ -192,12 +186,11 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base
     }
 
     /**
-     * Adds Categories
+     * Adds Categories.
      *
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @param array $categories
-     * @param array $options
-     * @return void
+     * @param array                                 $categories
+     * @param array                                 $options
      */
     private function addCategoryData(
         tx_mksearch_interface_IndexerDocument $indexDoc,
@@ -225,22 +218,22 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base
     }
 
     /**
-     * check if related data has changed
+     * check if related data has changed.
      *
-     * @param string $tableName
-     * @param array $rawData
+     * @param string                                $tableName
+     * @param array                                 $rawData
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @param array $options
+     * @param array                                 $options
      *
      * @return bool
      */
     protected function stopIndexing($tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options)
     {
-        if ($tableName == 'tx_irfaq_expert') {
+        if ('tx_irfaq_expert' == $tableName) {
             $this->handleRelatedTableChanged($rawData, 'Expert');
 
             return true;
-        } elseif ($tableName == 'tx_irfaq_cat') {
+        } elseif ('tx_irfaq_cat' == $tableName) {
             $this->handleRelatedTableChanged($rawData, 'Category');
 
             return true;
@@ -250,12 +243,13 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base
     }
 
     /**
-     * Adds all given models to the queue
+     * Adds all given models to the queue.
+     *
      * @param array $aModels
      */
     protected function handleRelatedTableChanged(array $rawData, $callback)
     {
-        $callback = 'getBy' . $callback;
+        $callback = 'getBy'.$callback;
 
         $this->addModelsToIndex(
             $this->getIrfaqQuestionService()->$callback($rawData['uid']),
@@ -273,7 +267,8 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base
 
     /**
      * Returns the mapping of the record fields to the
-     * solr doc fields
+     * solr doc fields.
+     *
      * @return array
      */
     protected function getQuestionMapping()
@@ -291,7 +286,8 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base
 
     /**
      * Returns the mapping of the record fields to the
-     * solr doc fields
+     * solr doc fields.
+     *
      * @return array
      */
     protected function getExpertMapping()
@@ -306,7 +302,8 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base
 
     /**
      * Returns the mapping of the record fields to the
-     * solr doc fields
+     * solr doc fields.
+     *
      * @return array
      */
     protected function getCategoryMapping()
@@ -320,11 +317,11 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base
     }
 
     /**
-     * Returns the model to be indexed
+     * Returns the model to be indexed.
      *
-     * @param array $rawData
+     * @param array  $rawData
      * @param string $tableName
-     * @param array $options
+     * @param array  $options
      *
      * @return tx_mksearch_model_irfaq_Question
      */
@@ -387,5 +384,5 @@ CONFIG;
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/seminars/class.tx_mksearch_indexer_seminars_Seminar.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/seminars/class.tx_mksearch_indexer_seminars_Seminar.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/seminars/class.tx_mksearch_indexer_seminars_Seminar.php'];
 }

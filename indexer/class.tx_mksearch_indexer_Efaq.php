@@ -1,7 +1,5 @@
 <?php
 /**
- * @package tx_mksearch
- * @subpackage tx_mksearch_indexer
  * @author Hannes Bochmann
  *
  *  Copyright notice
@@ -27,21 +25,16 @@
  */
 
 /**
- * benötigte Klassen einbinden
+ * benötigte Klassen einbinden.
  */
-
 tx_rnbase::load('tx_mksearch_interface_Indexer');
 tx_rnbase::load('tx_mksearch_util_Misc');
 
 /**
  * Indexer service for irfaq.question called by the "mksearch" extension.
- *
- * @package tx_mksearch
- * @subpackage tx_mksearch_indexer
  */
 class tx_mksearch_indexer_Efaq implements tx_mksearch_interface_Indexer
 {
-
     /**
      * Return content type identification.
      * This identification is part of the indexed data
@@ -61,8 +54,9 @@ class tx_mksearch_indexer_Efaq implements tx_mksearch_interface_Indexer
     /**
      * Prepare a searchable document from a source record.
      *
-     * @param tx_mksearch_interface_IndexerDocument     $indexDoc   Indexer document to be "filled", instantiated based on self::getContentType()
-     * @return null|tx_mksearch_interface_IndexerDocument or null if nothing should be indexed.
+     * @param tx_mksearch_interface_IndexerDocument $indexDoc Indexer document to be "filled", instantiated based on self::getContentType()
+     *
+     * @return tx_mksearch_interface_IndexerDocument|null or null if nothing should be indexed
      */
     public function prepareSearchData($tableName, $sourceRecord, tx_mksearch_interface_IndexerDocument $indexDoc, $options)
     {
@@ -70,8 +64,8 @@ class tx_mksearch_indexer_Efaq implements tx_mksearch_interface_Indexer
 
         $title = empty($sourceRecord['kat']) ? '' : (
                 isset($options['titlePrefix']) ? $options['titlePrefix'].' ' : ''
-            ) . trim($sourceRecord['kat']);
-        $content = trim(trim($sourceRecord['question']) . PHP_EOL . trim($sourceRecord['answer']));
+            ).trim($sourceRecord['kat']);
+        $content = trim(trim($sourceRecord['question']).PHP_EOL.trim($sourceRecord['answer']));
 
         // indizieren?
         if ($sourceRecord['deleted'] || $sourceRecord['hidden'] || (empty($title) && empty($content))) {
@@ -85,7 +79,6 @@ class tx_mksearch_indexer_Efaq implements tx_mksearch_interface_Indexer
         $indexDoc->setTitle($title);
         $indexDoc->setTimestamp($sourceRecord['tstamp']);
         $indexDoc->addField('pid', $sourceRecord['pid'], 'keyword');
-
 
         foreach ($this->getFieldMapping() as $recordKey => $indexKey) {
             if (empty($sourceRecord[$recordKey])) {
@@ -144,5 +137,5 @@ CONFIG;
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_Efaq.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_Efaq.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_Efaq.php'];
 }

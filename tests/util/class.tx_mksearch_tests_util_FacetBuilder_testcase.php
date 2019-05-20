@@ -22,15 +22,10 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-
 tx_rnbase::load('tx_mksearch_tests_Testcase');
 tx_rnbase::load('tx_mksearch_util_FacetBuilder');
 
 /**
- *
- *
- * @package tx_mksearch
- * @subpackage tx_mksearch_tests
  * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
  * @author Michael Wagner <michael.wagner@dmk-ebusiness.de>
  * @license http://www.gnu.org/licenses/lgpl.html
@@ -122,7 +117,6 @@ class tx_mksearch_tests_util_FacetBuilder_testcase extends tx_mksearch_tests_Tes
         self::assertEquals('7', $facetChilds[0]->getCount());
         self::assertFalse($facetChilds[0]->hasChilds());
 
-
         $facetGroup = array_shift($facetGroups);
         self::assertInstanceOf('tx_rnbase_model_base', $facetGroup);
         self::assertEquals('field_main-fiel_sub', $facetGroup->getField());
@@ -147,7 +141,6 @@ class tx_mksearch_tests_util_FacetBuilder_testcase extends tx_mksearch_tests_Tes
         self::assertFalse($facetChilds[0]->hasChilds());
     }
 
-
     public function testBuildFacetsWithFieldFacets()
     {
         $facetCount = new stdClass();
@@ -171,7 +164,6 @@ class tx_mksearch_tests_util_FacetBuilder_testcase extends tx_mksearch_tests_Tes
         // die facetten kommen immer grupiert!
         $facetGroups = tx_mksearch_util_FacetBuilder::getInstance()->buildFacets($facetData);
 
-
         self::assertTrue(is_array($facetGroups), 'es wurde kein array zurück gegeben!');
         self::assertEquals(1, count($facetGroups), 'Das array hat nicht die richtige Größe!');
 
@@ -181,6 +173,7 @@ class tx_mksearch_tests_util_FacetBuilder_testcase extends tx_mksearch_tests_Tes
 
         $this->doFieldFacetAssertations($facetGroup);
     }
+
     public function testSortFacets()
     {
         $facets = array(
@@ -232,7 +225,6 @@ class tx_mksearch_tests_util_FacetBuilder_testcase extends tx_mksearch_tests_Tes
             $facets
         );
 
-
         self::assertTrue(is_array($sorted));
         self::assertInstanceOf(tx_rnbase_model_base, $sorted[0]);
         self::assertTrue(is_array($sorted[0]->record['items']));
@@ -241,8 +233,10 @@ class tx_mksearch_tests_util_FacetBuilder_testcase extends tx_mksearch_tests_Tes
         self::assertSame('B', $sorted[0]->record['items'][1]->record['label']);
         self::assertSame('A', $sorted[0]->record['items'][2]->record['label']);
     }
+
     /**
-     * Check assertations for field facet contentType
+     * Check assertations for field facet contentType.
+     *
      * @param unknown $facetGroup
      */
     private function doFieldFacetAssertations($facetGroup)
@@ -276,8 +270,10 @@ class tx_mksearch_tests_util_FacetBuilder_testcase extends tx_mksearch_tests_Tes
         $facetData->contentType->news = 2;
         $facetData->contentType->offer = 34;
         $facetData->contentType->product = 6;
+
         return $facetData;
     }
+
     private function buildQueryFacets()
     {
         $facetData = new stdClass();
@@ -286,8 +282,10 @@ class tx_mksearch_tests_util_FacetBuilder_testcase extends tx_mksearch_tests_Tes
         $facetData->date_query3 = 6;
         $facetData->price_query1 = 12;
         $facetData->price_query2 = 25;
+
         return $facetData;
     }
+
     private function buildPivotFacets()
     {
         $facetData = (object) array(
@@ -307,14 +305,14 @@ class tx_mksearch_tests_util_FacetBuilder_testcase extends tx_mksearch_tests_Tes
                                     'value' => 'Three',
                                     'count' => 7,
                                 ),
-                            )
+                            ),
                         ),
                         (object) array(
                             'field' => 'fiel_two',
                             'value' => 'Two 2',
                             'count' => 2,
                         ),
-                    )
+                    ),
                 ),
             ),
             'field_main,fiel_sub' => array(
@@ -328,14 +326,15 @@ class tx_mksearch_tests_util_FacetBuilder_testcase extends tx_mksearch_tests_Tes
                             'value' => 'Sub',
                             'count' => 5,
                         ),
-                    )
+                    ),
                 ),
             ),
         );
+
         return $facetData;
     }
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/util/class.tx_mksearch_tests_util_Misc_testcase.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/util/class.tx_mksearch_tests_util_Misc_testcase.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/util/class.tx_mksearch_tests_util_Misc_testcase.php'];
 }

@@ -29,13 +29,12 @@ tx_rnbase::load('tx_rnbase_util_Network');
 tx_rnbase::load('tx_rnbase_mod_BaseModFunc');
 
 /**
- * Mksearch backend module
+ * Mksearch backend module.
  */
 class tx_mksearch_mod1_ConfigIndizesDbList extends tx_rnbase_mod_BaseModFunc
 {
-
     /**
-     * Return function id (used in page typoscript etc.)
+     * Return function id (used in page typoscript etc.).
      *
      * @return string
      */
@@ -45,15 +44,16 @@ class tx_mksearch_mod1_ConfigIndizesDbList extends tx_rnbase_mod_BaseModFunc
     }
 
     /**
-     * Return the actual html content
+     * Return the actual html content.
      *
      * Actually, just the list view of the defined storage folder
      * is displayed within an iframe.
      *
-     * @param string $template
-     * @param tx_rnbase_configurations $configurations
+     * @param string                    $template
+     * @param tx_rnbase_configurations  $configurations
      * @param tx_rnbase_util_FormatUtil $formatter
-     * @param tx_rnbase_util_FormTool $formTool
+     * @param tx_rnbase_util_FormTool   $formTool
+     *
      * @return string
      */
     protected function getContent($template, &$configurations, &$formatter, $formTool)
@@ -74,5 +74,5 @@ class tx_mksearch_mod1_ConfigIndizesDbList extends tx_rnbase_mod_BaseModFunc
     }
 }
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/class.tx_mksearch_mod1_ConfigIndizesDbList.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/class.tx_mksearch_mod1_ConfigIndizesDbList.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/class.tx_mksearch_mod1_ConfigIndizesDbList.php'];
 }

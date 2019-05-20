@@ -1,7 +1,5 @@
 <?php
 /**
- * @package TYPO3
- * @subpackage tx_mksearch
  * @author Hannes Bochmann <dev@dmk-ebusiness.de>
  *
  *  Copyright notice
@@ -27,9 +25,8 @@
  */
 
 /**
- * benötigte Klassen einbinden
+ * benötigte Klassen einbinden.
  */
-
 tx_rnbase::load('tx_mksearch_filter_ElasticSearchBase');
 tx_rnbase::load('tx_mksearch_tests_Testcase');
 
@@ -40,13 +37,10 @@ tx_rnbase::load('tx_mksearch_tests_Testcase');
 tx_rnbase::load('tx_mksearch_util_UserFunc');
 
 /**
- * @package TYPO3
- * @subpackage tx_mksearch
  * @author Hannes Bochmann <dev@dmk-ebusiness.de>
  */
 class tx_mksearch_tests_filter_ElasticSearchBase_testcase extends tx_mksearch_tests_Testcase
 {
-
     /**
      * @var string
      */
@@ -101,7 +95,7 @@ class tx_mksearch_tests_filter_ElasticSearchBase_testcase extends tx_mksearch_te
     public function testGetModeValuesAvailable()
     {
         $configArray = array($this->confId => array(
-            'filter.' => array('availableModes' => 'newCheckedMode,newNotCheckedMode'))
+            'filter.' => array('availableModes' => 'newCheckedMode,newNotCheckedMode'), ),
         );
         $filter = $this->getFilter($configArray);
 
@@ -122,7 +116,7 @@ class tx_mksearch_tests_filter_ElasticSearchBase_testcase extends tx_mksearch_te
         $parameters->init('mksearch');
         $formData = array();
         $configArray = array($this->confId => array(
-            'filter.' => array('availableModes' => 'newCheckedMode,newNotCheckedMode'))
+            'filter.' => array('availableModes' => 'newCheckedMode,newNotCheckedMode'), ),
         );
         $filter = $this->getFilter($configArray);
         $reflectionObject = new ReflectionObject($filter);
@@ -217,10 +211,10 @@ class tx_mksearch_tests_filter_ElasticSearchBase_testcase extends tx_mksearch_te
             $this->confId => array(
                 'filter.' => array(
                     'fields.' => array(
-                        'term' => 'contentType:* AND text:"###PARAM_MKSEARCH_TERM###"'
-                    )
-                )
-            )
+                        'term' => 'contentType:* AND text:"###PARAM_MKSEARCH_TERM###"',
+                    ),
+                ),
+            ),
         );
         $filter = $this->getFilter($configArray);
         $filter->init($fields, $options);
@@ -244,10 +238,10 @@ class tx_mksearch_tests_filter_ElasticSearchBase_testcase extends tx_mksearch_te
             $this->confId => array(
                 'filter.' => array(
                     'fields.' => array(
-                        'term' => 'contentType:* ###PARAM_MKSEARCH_TERM###'
-                    )
-                )
-            )
+                        'term' => 'contentType:* ###PARAM_MKSEARCH_TERM###',
+                    ),
+                ),
+            ),
         );
         $filter = $this->getFilter($configArray);
         $filter->init($fields, $options);
@@ -265,10 +259,10 @@ class tx_mksearch_tests_filter_ElasticSearchBase_testcase extends tx_mksearch_te
             $this->confId => array(
                 'filter.' => array(
                     'fields.' => array(
-                        'term' => 'contentType:* ###PARAM_MKSEARCH_TERM###'
-                    )
-                )
-            )
+                        'term' => 'contentType:* ###PARAM_MKSEARCH_TERM###',
+                    ),
+                ),
+            ),
         );
         $filter = $this->getFilter($configArray);
         $filter->init($fields, $options);
@@ -404,9 +398,9 @@ class tx_mksearch_tests_filter_ElasticSearchBase_testcase extends tx_mksearch_te
         $config = array($this->confId => array('filter.' => array(
             'sort.' => array(
                 'fields' => 'uid, title',
-                'link.' => array('noHash' => true)
+                'link.' => array('noHash' => true),
             ),
-            'config.' => array('template' => '')
+            'config.' => array('template' => ''),
         )));
 
         $filter = $this->getFilter($config);
@@ -484,7 +478,7 @@ class tx_mksearch_tests_filter_ElasticSearchBase_testcase extends tx_mksearch_te
             'tx_mksearch_filter_ElasticSearchBase',
             $parameters,
             $configurations,
-            $this->confId . 'filter.'
+            $this->confId.'filter.'
         );
     }
 }

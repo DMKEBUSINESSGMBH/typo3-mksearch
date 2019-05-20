@@ -1,7 +1,5 @@
 <?php
 /**
- * @package tx_mksearch
- * @subpackage tx_mksearch_indexer_seminars
  * @author Hannes Bochmann
  *
  *  Copyright notice
@@ -27,30 +25,26 @@
  */
 
 /**
- * benötigte Klassen einbinden
+ * benötigte Klassen einbinden.
  */
-
 tx_rnbase::load('tx_mksearch_indexer_seminars_Seminar');
 tx_rnbase::load('tx_mksearch_util_Misc');
 
 /**
- * Indexes seminars with the object_type = 0
- *
- * @package tx_mksearch
- * @subpackage tx_mksearch_indexer_seminars
+ * Indexes seminars with the object_type = 0.
  */
 class tx_mksearch_indexer_seminars_SeminarObjectType0 extends tx_mksearch_indexer_seminars_Seminar
 {
-    
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
+     *
      * @see tx_mksearch_interface_Indexer::prepareSearchData()
      */
     public function prepareSearchData($tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options)
     {
         //we have to init the seminar again
         $this->oSeminar = $this->getSeminar($rawData);
-        
+
         //now we can start the real indexing
         //those functions are provided by our parent
         $this->indexSeminar($indexDoc);
@@ -63,22 +57,22 @@ class tx_mksearch_indexer_seminars_SeminarObjectType0 extends tx_mksearch_indexe
         $this->indexSeminarTimeslots($indexDoc);
         //@todo handle skills of speakers, tutors etc and everything
         //about lodgings, foods and payments
-        
+
         return $indexDoc;
     }
-    
+
     /**
-     * Indexes everything about the seminar target groups
+     * Indexes everything about the seminar target groups.
+     *
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @return void
      */
     protected function indexSeminarOrganizers(tx_mksearch_interface_IndexerDocument $indexDoc)
     {
         //Mapping which function fills which field
         $aFunctionFieldMapping = $this->getOrganizersMapping();
-        
+
         $oOrganizers = $this->oSeminar->getOrganizerBag();
-        
+
         $aTempIndexDoc = $this->getMultiValueFieldsByListObject($oOrganizers, $aFunctionFieldMapping);
         foreach ($aTempIndexDoc as $sIndexKey => $mValue) {
             if (!empty($mValue)) {
@@ -86,19 +80,19 @@ class tx_mksearch_indexer_seminars_SeminarObjectType0 extends tx_mksearch_indexe
             }
         }
     }
-    
+
     /**
-     * Indexes everything about the seminar places
+     * Indexes everything about the seminar places.
+     *
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @return void
      */
     protected function indexSeminarPlaces(tx_mksearch_interface_IndexerDocument $indexDoc)
     {
         //Mapping which function fills which field
         $aFunctionFieldMapping = $this->getPlacesMapping();
-        
+
         $oPlaces = $this->oSeminar->getPlaces();
-        
+
         $aTempIndexDoc = $this->getMultiValueFieldsByListObject($oPlaces, $aFunctionFieldMapping);
         foreach ($aTempIndexDoc as $sIndexKey => $mValue) {
             if (!empty($mValue)) {
@@ -106,37 +100,37 @@ class tx_mksearch_indexer_seminars_SeminarObjectType0 extends tx_mksearch_indexe
             }
         }
     }
-    
+
     /**
-     * Indexes everything about the seminar speakers
+     * Indexes everything about the seminar speakers.
+     *
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @return void
      */
     protected function indexSeminarSpeakers(tx_mksearch_interface_IndexerDocument $indexDoc)
     {
         //Mapping which function fills which field
         $aFunctionFieldMapping = $this->getSpeakersMapping();
         $oSpeakers = $this->getSpeakerBag($this->oSeminar->getUid());
-        
+
         $aTempIndexDoc = $this->getMultiValueFieldsByListObject($oSpeakers, $aFunctionFieldMapping);
-        
+
         foreach ($aTempIndexDoc as $sIndexKey => $mValue) {
             if (!empty($mValue)) {
                 $indexDoc->addField($sIndexKey, $mValue);
             }
         }
     }
-    
+
     /**
-     * Indexes everything about the seminar timeslots
+     * Indexes everything about the seminar timeslots.
+     *
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @return void
      */
     protected function indexSeminarTimeslots(tx_mksearch_interface_IndexerDocument $indexDoc)
     {
         //Mapping which function fills which field
         $aTimeslots = $this->oSeminar->getTimeSlotsAsArrayWithMarkers();
-        
+
         $aRecordFieldMapping = $this->getTimeslotsMapping();
         //as the speakers will be a comma separated list we have to make
         //an array out of it
@@ -144,12 +138,12 @@ class tx_mksearch_indexer_seminars_SeminarObjectType0 extends tx_mksearch_indexe
             $aTimeslot['speakers'] = tx_rnbase_util_Strings::trimExplode(',', $aTimeslot['speakers']);
         }
         $aTempIndexDoc = $this->getMultiValueFieldsByArray($aTimeslots, $aRecordFieldMapping);
-        
+
         //now we index the collected fields
         $this->indexArrayByMapping($indexDoc, $aRecordFieldMapping, $aTempIndexDoc);
     }
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/seminars/class.tx_mksearch_indexer_seminars_Seminar.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/seminars/class.tx_mksearch_indexer_seminars_Seminar.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/seminars/class.tx_mksearch_indexer_seminars_Seminar.php'];
 }

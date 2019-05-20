@@ -27,11 +27,10 @@ tx_rnbase::load('tx_rnbase_util_BaseMarker');
 tx_rnbase::load('tx_rnbase_util_Templates');
 
 /**
- * View class for displaying a list of solr search results
+ * View class for displaying a list of solr search results.
  */
 class tx_mksearch_view_SearchSolr extends tx_rnbase_view_Base
 {
-
     /**
      * @var string
      */
@@ -42,16 +41,15 @@ class tx_mksearch_view_SearchSolr extends tx_rnbase_view_Base
     private $configurations = null;
 
     /**
-     *
-     * @param string                        $template
-     * @param ArrayObject                   $viewData
-     * @param tx_rnbase_configurations      $configurations
-     * @param tx_rnbase_util_FormatUtil     $formatter
+     * @param string                    $template
+     * @param ArrayObject               $viewData
+     * @param tx_rnbase_configurations  $configurations
+     * @param tx_rnbase_util_FormatUtil $formatter
      */
     public function createOutput($template, &$viewData, &$configurations, &$formatter)
     {
         // Get data from action
-        $result =& $viewData->offsetGet('result');
+        $result = &$viewData->offsetGet('result');
 
         $items = $result ? $result['items'] : array();
         /* @var $listBuilder tx_rnbase_util_ListBuilder */
@@ -77,22 +75,22 @@ class tx_mksearch_view_SearchSolr extends tx_rnbase_view_Base
             $markerParams
         );
 
-
         //noch die Facetten parsen wenn da
         $out = $this->handleFacets($out, $viewData, $configurations, $formatter, $listBuilder, $result);
         $out = $this->handleSuggestions($out, $viewData, $configurations, $formatter, $listBuilder, $result);
 
         return $out;
     }
+
     /**
-     * Ausgabe von Suggestions für alternative Suchbegriffe
+     * Ausgabe von Suggestions für alternative Suchbegriffe.
      *
-     * @param string $template
-     * @param array_object $viewData
-     * @param tx_rnbase_configurations $configurations
-     * @param tx_rnbase_util_FormatUtil $formatter
+     * @param string                     $template
+     * @param array_object               $viewData
+     * @param tx_rnbase_configurations   $configurations
+     * @param tx_rnbase_util_FormatUtil  $formatter
      * @param tx_rnbase_util_ListBuilder $listBuilder
-     * @param array $result
+     * @param array                      $result
      *
      * @return string
      */
@@ -113,7 +111,7 @@ class tx_mksearch_view_SearchSolr extends tx_rnbase_view_Base
                 $viewData,
                 $template,
                 $markerClass,
-                $this->confId . 'suggestions.',
+                $this->confId.'suggestions.',
                 'SUGGESTION',
                 $formatter
             );
@@ -123,14 +121,14 @@ class tx_mksearch_view_SearchSolr extends tx_rnbase_view_Base
     }
 
     /**
-     * Kümmert sich um das Parsen der Facetten
+     * Kümmert sich um das Parsen der Facetten.
      *
-     * @param string $template
-     * @param array_object $viewData
-     * @param tx_rnbase_configurations $configurations
-     * @param tx_rnbase_util_FormatUtil $formatter
+     * @param string                     $template
+     * @param array_object               $viewData
+     * @param tx_rnbase_configurations   $configurations
+     * @param tx_rnbase_util_FormatUtil  $formatter
      * @param tx_rnbase_util_ListBuilder $listBuilder
-     * @param array $result
+     * @param array                      $result
      *
      * @return string
      */
@@ -197,7 +195,7 @@ class tx_mksearch_view_SearchSolr extends tx_rnbase_view_Base
                 $viewData,
                 $out,
                 $groupedMarkerClass,
-                $this->confId . 'groupedfacet.',
+                $this->confId.'groupedfacet.',
                 'GROUPEDFACET',
                 $formatter
             );
@@ -221,7 +219,8 @@ class tx_mksearch_view_SearchSolr extends tx_rnbase_view_Base
      * Subpart der im HTML-Template geladen werden soll. Dieser wird der Methode
      * createOutput automatisch als $template übergeben.
      *
-     * @param ArrayObject                   $viewData
+     * @param ArrayObject $viewData
+     *
      * @return string
      */
     public function getMainSubpart(&$viewData)
@@ -237,5 +236,5 @@ class tx_mksearch_view_SearchSolr extends tx_rnbase_view_Base
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/view/class.tx_mksearch_view_SearchSolr.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/view/class.tx_mksearch_view_SearchSolr.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/view/class.tx_mksearch_view_SearchSolr.php'];
 }

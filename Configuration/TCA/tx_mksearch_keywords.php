@@ -18,7 +18,7 @@ return array(
         'fe_admin_fieldList' => 'hidden, keyword, link',
     ),
     'interface' => array(
-        'showRecordFieldList' => 'hidden,searchword,link'
+        'showRecordFieldList' => 'hidden,searchword,link',
     ),
     'columns' => array(
         'hidden' => array(
@@ -26,8 +26,8 @@ return array(
             'label' => 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.hidden',
             'config' => array(
                 'type' => 'check',
-                'default' => '0'
-            )
+                'default' => '0',
+            ),
         ),
         'keyword' => array(
             'exclude' => 1,
@@ -36,7 +36,7 @@ return array(
                 'type' => 'input',
                 'size' => '30',
                 'eval' => 'required',
-            )
+            ),
         ),
         'link' => array(
             'exclude' => 1,
@@ -51,14 +51,14 @@ return array(
                 'wizards' => Tx_Rnbase_Utility_TcaTool::getWizards(
                     '',
                     array('link' => true)
-                )
-            )
+                ),
+            ),
         ),
     ),
     'types' => array(
-        '0' => array('showitem' => 'hidden, keyword, link')
+        '0' => array('showitem' => 'hidden, keyword, link'),
     ),
     'palettes' => array(
-        '1' => array('showitem' => '')
+        '1' => array('showitem' => ''),
     ),
 );

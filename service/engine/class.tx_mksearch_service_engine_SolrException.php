@@ -24,17 +24,19 @@
 tx_rnbase::load('tx_rnbase_util_Exception');
 
 /**
- * Solr exception
+ * Solr exception.
  */
 class tx_mksearch_service_engine_SolrException extends tx_rnbase_util_Exception
 {
     private $lastUrl = '';
     private $parent = false;
+
     /**
-     * Erstellt eine neue Exeption
+     * Erstellt eine neue Exeption.
+     *
      * @param string $message
-     * @param int $code
-     * @param mixed $additional
+     * @param int    $code
+     * @param mixed  $additional
      */
     public function __construct($message, $code = 0, $lastUrl = false, $parent = false)
     {
@@ -47,6 +49,7 @@ class tx_mksearch_service_engine_SolrException extends tx_rnbase_util_Exception
     {
         return $this->lastUrl;
     }
+
     public function getParent()
     {
         return $this->parent;
@@ -54,6 +57,7 @@ class tx_mksearch_service_engine_SolrException extends tx_rnbase_util_Exception
 
     /**
      * Liefert zusätzliche Daten.
+     *
      * @return mixed string or plain data
      */
     public function getAdditional($asString = true)
@@ -63,5 +67,5 @@ class tx_mksearch_service_engine_SolrException extends tx_rnbase_util_Exception
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/engine/class.tx_mksearch_service_engine_SolrException.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/engine/class.tx_mksearch_service_engine_SolrException.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/engine/class.tx_mksearch_service_engine_SolrException.php'];
 }

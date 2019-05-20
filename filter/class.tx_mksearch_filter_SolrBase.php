@@ -21,7 +21,6 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  ***************************************************************/
 
-
 tx_rnbase::load('tx_rnbase_util_SearchBase');
 tx_rnbase::load('tx_mksearch_util_Misc');
 tx_rnbase::load('tx_rnbase_filter_BaseFilter');
@@ -29,7 +28,6 @@ tx_rnbase::load('tx_rnbase_util_ListBuilderInfo');
 tx_rnbase::load('tx_mksearch_util_Filter');
 tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
 tx_rnbase::load('tx_mksearch_model_Facet');
-
 
 /**
  * Der Filter liest seine Konfiguration passend zum Typ des Solr RequestHandlers. Der Typ
@@ -53,7 +51,6 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
     protected $confIdExtended = '';
 
     /**
-     *
      * @var tx_mksearch_util_Filter
      */
     protected $filterUtility;
@@ -65,6 +62,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
     {
         return $this->getConfId(false).'filter._overwrite.';
     }
+
     /**
      * Liefert die ConfId für den Filter
      * Die ID ist hier jeweils dismax oder default.
@@ -88,7 +86,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
     }
 
     /**
-     * Initialize filter
+     * Initialize filter.
      *
      * @param array $fields
      * @param array $options
@@ -107,6 +105,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
      * oder aus dem Typoscript.
      *
      * @param string $confId
+     *
      * @return Ambigous <multitype:, unknown>
      */
     protected function getConfValue($confId)
@@ -127,14 +126,16 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
 
         return $value;
     }
+
     /**
-     * Filter for search form
+     * Filter for search form.
      *
-     * @param array $fields
-     * @param array $options
-     * @param tx_rnbase_parameters $parameters
+     * @param array                    $fields
+     * @param array                    $options
+     * @param tx_rnbase_parameters     $parameters
      * @param tx_rnbase_configurations $configurations
-     * @param string $confId
+     * @param string                   $confId
+     *
      * @return bool Should subsequent query be executed at all?
      */
     protected function initFilter(&$fields, &$options, &$parameters, &$configurations, $confId)
@@ -181,15 +182,13 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
         return true;
     }
 
-
-
     /**
-     * Setzt die Anzahl der Treffer pro Seite
+     * Setzt die Anzahl der Treffer pro Seite.
      *
-     * @param   array                       $options
-     * @param   tx_rnbase_IParameters   $parameters
-     * @param   tx_rnbase_configurations $configurations
-     * @param   string                      $confId
+     * @param array                    $options
+     * @param tx_rnbase_IParameters    $parameters
+     * @param tx_rnbase_configurations $configurations
+     * @param string                   $confId
      */
     protected function handleLimit(&$options)
     {
@@ -204,11 +203,11 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
     /**
      * Fügt den Suchstring zu dem Filter hinzu.
      *
-     * @param   array                       $fields
-     * @param   array                       $options
-     * @param   tx_rnbase_IParameters       $parameters
-     * @param   tx_rnbase_configurations    $configurations
-     * @param   string                      $confId
+     * @param array                    $fields
+     * @param array                    $options
+     * @param tx_rnbase_IParameters    $parameters
+     * @param tx_rnbase_configurations $configurations
+     * @param string                   $confId
      */
     protected function handleTerm(&$fields, &$parameters, &$configurations, $confId)
     {
@@ -227,12 +226,10 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
     }
 
     /**
-     *
-     * @param array $options
-     * @param tx_rnbase_IParameters $parameters
+     * @param array                    $options
+     * @param tx_rnbase_IParameters    $parameters
      * @param tx_rnbase_configurations $configurations
-     * @param string $confId
-     * @return void
+     * @param string                   $confId
      */
     protected function handleFacet(&$options, &$parameters, &$configurations, $confId)
     {
@@ -269,17 +266,17 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
     }
 
     /**
-     * Handelt operatoren wie AND OR
+     * Handelt operatoren wie AND OR.
      *
      * Die hauptaufgabe macht bereits fie userfunc in handleTerm.
      *
      * @see tx_mksearch_util_SearchBuilder::searchSolrOptions
      *
-     * @param   array                       $fields
-     * @param   array                       $options
-     * @param   tx_rnbase_IParameters       $parameters
-     * @param   tx_rnbase_configurations    $configurations
-     * @param   string                      $confId
+     * @param array                    $fields
+     * @param array                    $options
+     * @param tx_rnbase_IParameters    $parameters
+     * @param tx_rnbase_configurations $configurations
+     * @param string                   $confId
      */
     protected function handleOperators(&$fields, &$options, &$parameters, &$configurations, $confId)
     {
@@ -294,10 +291,10 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
     /**
      * Fügt eine Filter Query (Einschränkung) zu dem Filter hinzu.
      *
-     * @param   array                   $options
-     * @param   tx_rnbase_IParameters   $parameters
-     * @param   tx_rnbase_configurations    $configurations
-     * @param   string                      $confId
+     * @param array                    $options
+     * @param tx_rnbase_IParameters    $parameters
+     * @param tx_rnbase_configurations $configurations
+     * @param string                   $confId
      */
     protected function handleFq(&$options, &$parameters, &$configurations, $confId)
     {
@@ -334,18 +331,18 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
                     $fqValue = trim($fqValue);
                     if ($sFqField) {
                         // deprecated: sollte nicht mehr vorkommen
-                        $fq = $sFqField . ':"' . tx_mksearch_util_Misc::sanitizeFq($fqValue) . '"';
+                        $fq = $sFqField.':"'.tx_mksearch_util_Misc::sanitizeFq($fqValue).'"';
                     } else {
                         // Query-Facet prüfen
-                        if ($fqField === tx_mksearch_model_Facet::TYPE_QUERY) {
+                        if (tx_mksearch_model_Facet::TYPE_QUERY === $fqField) {
                             $fq = $this->buildFq4QueryFacet($fqName, $configurations, $confId);
                         } else {
                             // check field facets
                             // field value konstellation prüfen
                             $fq = $this->parseFieldAndValue($fqValue, $allowedFqParams);
                             if (empty($fq) && !empty($fqField) && in_array($fqField, $allowedFqParams)) {
-                                $fq  = tx_mksearch_util_Misc::sanitizeFq($fqField);
-                                $fq .= ':"' . tx_mksearch_util_Misc::sanitizeFq($fqValue) . '"';
+                                $fq = tx_mksearch_util_Misc::sanitizeFq($fqField);
+                                $fq .= ':"'.tx_mksearch_util_Misc::sanitizeFq($fqValue).'"';
                             }
                         }
                     }
@@ -354,9 +351,9 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
                 if (!empty($fieldOptions['fq'])) {
                     $fieldQuery = $fieldOptions['fq'];
                     if (is_array($fieldQuery)) {
-                        $fqOperator = $configurations->get($confId . 'filterQuery.' . $fqField . '.operator');
-                        $fqOperator = $fqOperator == 'OR' ? 'OR' : 'AND';
-                        $fieldQuery = implode(' ' . $fqOperator . ' ', $fieldQuery);
+                        $fqOperator = $configurations->get($confId.'filterQuery.'.$fqField.'.operator');
+                        $fqOperator = 'OR' == $fqOperator ? 'OR' : 'AND';
+                        $fieldQuery = implode(' '.$fqOperator.' ', $fieldQuery);
                     }
                     self::addFilterQuery($options, $this->handleFqTags($fieldQuery));
                 }
@@ -382,7 +379,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
     }
 
     /**
-     * Handles the filter query tags and prefix the tag to the query
+     * Handles the filter query tags and prefix the tag to the query.
      *
      * @param string $query
      *
@@ -394,12 +391,12 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
         $field = substr($query, 0, strpos($query, ':'));
         // get the tag config
         $tag = $this->getConfigurations()->get(
-            $this->getConfId() . 'filterQuery.' . $field . '.tag'
+            $this->getConfId().'filterQuery.'.$field.'.tag'
         );
         // addd the tag to the query
         if ($tag) {
-            $tag = '{!tag="' . $tag . '"}';
-            $query = $tag . $query;
+            $tag = '{!tag="'.$tag.'"}';
+            $query = $tag.$query;
         }
 
         return $query;
@@ -409,9 +406,10 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
      * Baut den fq-Parameter für eine Query-Facette zusammen. Die Filter-Anweisung dafür muss im Typoscript
      * konfiguriert sein. Sie sollte identisch mit der Anweisung in der solrconfig.xml sein.
      *
-     * @param string $queryFacetAlias
+     * @param string                   $queryFacetAlias
      * @param tx_rnbase_configurations $configurations
-     * @param string $confId
+     * @param string                   $confId
+     *
      * @return string
      */
     private function buildFq4QueryFacet($queryFacetAlias, $configurations, $confId)
@@ -429,11 +427,11 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
         if (is_array($GLOBALS['TSFE']->fe_user->groupData['uid'])) {
             $filterQueriesByFeGroup = array();
             foreach ($GLOBALS['TSFE']->fe_user->groupData['uid'] as $feGroup) {
-                $filterQueriesByFeGroup[] = 'fe_group_mi:' . $feGroup.'';
+                $filterQueriesByFeGroup[] = 'fe_group_mi:'.$feGroup.'';
             }
 
             if (!empty($filterQueriesByFeGroup)) {
-                $filterQuery .= ' OR ' . join(' OR ', $filterQueriesByFeGroup);
+                $filterQuery .= ' OR '.join(' OR ', $filterQueriesByFeGroup);
             }
         }
 
@@ -441,18 +439,18 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
     }
 
     /**
-     * Fügt die SiteRootPage zur Filter Query hinzu
+     * Fügt die SiteRootPage zur Filter Query hinzu.
      *
-     * @param   array $options
-     * @param   tx_rnbase_configurations $configurations
-     * @param   string $confId
+     * @param array                    $options
+     * @param tx_rnbase_configurations $configurations
+     * @param string                   $confId
      */
     public function handleFqForSiteRootPage(
         &$options,
         &$configurations,
         $confId
     ) {
-        if ($configurations->getBool($confId . 'respectSiteRootPage')) {
+        if ($configurations->getBool($confId.'respectSiteRootPage')) {
             $siteRootPage = tx_mksearch_service_indexer_core_Config::getSiteRootPage(
                 $GLOBALS['TSFE']->id
             );
@@ -462,26 +460,24 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
             if (is_array($siteRootPage) && !empty($siteRootPage)) {
                 self::addFilterQuery(
                     $options,
-                    'siteRootPage:' . $siteRootPage['uid']
+                    'siteRootPage:'.$siteRootPage['uid']
                 );
             }
         }
     }
 
     /**
-     * Adds filter for the charbrowser
+     * Adds filter for the charbrowser.
      *
      * @param array $options
-     *
-     * @return void
      */
     public function handleFqForCharBrowser(
         &$options
     ) {
-        $confId = $this->getConfId(false) . 'charbrowser.';
+        $confId = $this->getConfId(false).'charbrowser.';
         $configurations = $this->getConfigurations();
 
-        $pointername = $configurations->get($confId . 'cbid') ?: 'solr-cb';
+        $pointername = $configurations->get($confId.'cbid') ?: 'solr-cb';
 
         $firstChar = $this->getParameters()->get($pointername);
 
@@ -493,25 +489,27 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
         $firstChar = substr(
             strtoupper($firstChar),
             0,
-            ($firstChar{0} == '0' ? 3 : 1)
+            ('0' == $firstChar[0] ? 3 : 1)
         );
 
         // store firstchar
         $configurations->getViewData()->offsetSet('charpointer', $firstChar);
 
-        $facetField  = $configurations->get($confId . 'facetField') ?: 'first_letter_s';
+        $facetField = $configurations->get($confId.'facetField') ?: 'first_letter_s';
         self::addFilterQuery(
             $options,
             $this->handleFqTags(
-                $facetField  . ':"' . $firstChar . '"'
+                $facetField.':"'.$firstChar.'"'
             )
         );
     }
 
     /**
-     * Fügt einen Parameter zu der FilterQuery hinzu
+     * Fügt einen Parameter zu der FilterQuery hinzu.
+     *
      * @TODO: kann die fq nicht immer ein array sein!? dann könnten wir uns das sparen!
-     * @param array $options
+     *
+     * @param array        $options
      * @param unknown_type $sFQ
      */
     public static function addFilterQuery(array &$options, $sFQ)
@@ -538,7 +536,8 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
      * Prüft den fq parameter auf richtigkeit.
      *
      * @param string $sFq
-     * @param array $allowedFqParams
+     * @param array  $allowedFqParams
+     *
      * @return string
      */
     private function parseFieldAndValue($sFq, $allowedFqParams)
@@ -577,7 +576,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
     /**
      * Prüft Filter for eine Umkreissuche.
      * Damit dies Funktioniert, muss in den Solr-Dokumenten ein Feld
-     * mit den Koordionaten existieren. Siehe schema.xml dynamicField *_latlon
+     * mit den Koordionaten existieren. Siehe schema.xml dynamicField *_latlon.
      *
      * Dieses Feld muss konfiguriert werden,
      * da darin die Umkreissuche stattfindet.
@@ -593,11 +592,11 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
             return;
         }
 
-        $confId = $this->getConfId() . 'spatial.';
+        $confId = $this->getConfId().'spatial.';
         $configurations = $this->getConfigurations();
 
         // wir prüfen das feld wo die koordinaten im solr liegen
-        $coordField = $configurations->get($confId . 'sfield');
+        $coordField = $configurations->get($confId.'sfield');
         if (empty($coordField)) {
             return;
         }
@@ -606,7 +605,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
         // die distanz bzw. den umkreis für die umkreissuche ermitteln
         $options['d'] = (int) $this->getSpatialDistance();
         if (empty($options['d'])) {
-            $options['d'] = $configurations->getInt($confId . 'default.distance');
+            $options['d'] = $configurations->getInt($confId.'default.distance');
         }
 
         $options['pt'] = $point;
@@ -635,8 +634,8 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
      *
      * @TODO: das klappt zurzeit nur bei einfacher sortierung!
      *
-     * @param   array                   $options
-     * @param   tx_rnbase_IParameters   $parameters
+     * @param array                 $options
+     * @param tx_rnbase_IParameters $parameters
      */
     protected function handleSorting(&$options)
     {
@@ -646,16 +645,16 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
     }
 
     /**
-     *
-     * @param string $template HTML template
+     * @param string                    $template  HTML template
      * @param tx_rnbase_util_FormatUtil $formatter
-     * @param string $confId
-     * @param string $marker
+     * @param string                    $confId
+     * @param string                    $marker
+     *
      * @return string
      */
     public function parseTemplate($template, &$formatter, $confId, $marker = 'FILTER')
     {
-        $markArray = $subpartArray  = $wrappedSubpartArray = array();
+        $markArray = $subpartArray = $wrappedSubpartArray = array();
 
         $this->parseSearchForm(
             $template,
@@ -688,10 +687,9 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
     }
 
     /**
-     *
-     * @param string $formTemplate
+     * @param string                    $formTemplate
      * @param tx_rnbase_util_FormatUtil $formatter
-     * @param string $confId
+     * @param string                    $confId
      */
     protected function renderSearchForm($formTemplate, tx_rnbase_util_FormatUtil $formatter, $confId, $templateConfId)
     {
@@ -727,7 +725,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
             $availableModes = $this->getModeValuesAvailable();
             if ($currentOptions['mode']) {
                 foreach ($availableModes as $availableMode) {
-                    $formData['mode_' . $availableMode . '_selected'] =
+                    $formData['mode_'.$availableMode.'_selected'] =
                     $currentOptions['mode'] == $availableMode ? 'checked=checked' : '';
                 }
             } else {
@@ -744,17 +742,19 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
 
         return $formTemplate;
     }
+
     /**
      * protected
-     * Treat search form
+     * Treat search form.
      *
-     * @param string $template HTML template
-     * @param array $markArray
-     * @param array $subpartArray
-     * @param array $wrappedSubpartArray
+     * @param string                    $template            HTML template
+     * @param array                     $markArray
+     * @param array                     $subpartArray
+     * @param array                     $wrappedSubpartArray
      * @param tx_rnbase_util_FormatUtil $formatter
-     * @param string $confId
-     * @param string $marker
+     * @param string                    $confId
+     * @param string                    $marker
+     *
      * @return string
      */
     public function parseSearchForm($template, &$markArray, &$subpartArray, &$wrappedSubpartArray, &$formatter, $confId, $marker = 'FILTER')
@@ -796,6 +796,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
     /**
      * Returns all values possible for form field mksearch[options][mode].
      * Makes it possible to easily add more modes in other filters/forms.
+     *
      * @return array
      */
     protected function getModeValuesAvailable()
@@ -809,15 +810,15 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
     }
 
     /**
-     * die methode ist nur noch da für abwärtskompatiblität
+     * die methode ist nur noch da für abwärtskompatiblität.
      *
-     * @param string $template HTML template
-     * @param array $markArray
-     * @param array $subpartArray
-     * @param array $wrappedSubpartArray
+     * @param string                    $template            HTML template
+     * @param array                     $markArray
+     * @param array                     $subpartArray
+     * @param array                     $wrappedSubpartArray
      * @param tx_rnbase_util_FormatUtil $formatter
-     * @param string $confId
-     * @param string $marker
+     * @param string                    $confId
+     * @param string                    $marker
      */
     public function parseSortFields($template, &$markArray, &$subpartArray, &$wrappedSubpartArray, &$formatter, $confId, $marker = 'FILTER')
     {
@@ -841,7 +842,6 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
     }
 
     /**
-     *
      * @return tx_mksearch_util_Filter
      */
     protected function getFilterUtility()
@@ -855,7 +855,6 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
 
     /**
      * @param array $options
-     * @return void
      */
     protected function handleGrouping(array &$options)
     {
@@ -877,8 +876,6 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
 
     /**
      * @param array $options
-     *
-     * @return void
      */
     protected function handleWhat(array &$options)
     {
@@ -890,5 +887,5 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/filter/class.tx_mksearch_filter_SolrBase.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/filter/class.tx_mksearch_filter_SolrBase.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/filter/class.tx_mksearch_filter_SolrBase.php'];
 }

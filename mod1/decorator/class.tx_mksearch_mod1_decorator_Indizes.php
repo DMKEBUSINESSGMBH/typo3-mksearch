@@ -22,12 +22,9 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-
-
-
 /**
  * Diese Klasse ist für die Darstellung von Indexer tabellen im Backend verantwortlich
- * Wird für die Indexing Wueue benötigt
+ * Wird für die Indexing Wueue benötigt.
  */
 class tx_mksearch_mod1_decorator_Indizes
 {
@@ -37,19 +34,20 @@ class tx_mksearch_mod1_decorator_Indizes
     }
 
     /**
-     * Returns the module
+     * Returns the module.
+     *
      * @return tx_rnbase_mod_IModule
      */
     private function getModule()
     {
         return $this->mod;
     }
+
     /**
-     *
      * @param string $value
      * @param string $colName
-     * @param array $record
-     * @param array $item
+     * @param array  $record
+     * @param array  $item
      */
     public function format($value, $colName, $record, $item)
     {
@@ -79,7 +77,6 @@ class tx_mksearch_mod1_decorator_Indizes
     }
 }
 
-
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/decorator/class.tx_mksearch_mod1_decorator_Indizes.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/decorator/class.tx_mksearch_mod1_decorator_Indizes.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/decorator/class.tx_mksearch_mod1_decorator_Indizes.php'];
 }

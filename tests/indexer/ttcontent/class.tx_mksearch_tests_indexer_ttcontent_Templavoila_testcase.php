@@ -22,24 +22,19 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-
 require_once tx_rnbase_util_Extensions::extPath('mksearch', 'lib/Apache/Solr/Document.php');
 tx_rnbase::load('tx_mksearch_tests_Testcase');
 tx_rnbase::load('tx_mksearch_indexer_ttcontent_Templavoila');
 
 /**
- *
- * @package tx_mksearch
- * @subpackage tx_mksearch_tests
  * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
 class tx_mksearch_tests_indexer_ttcontent_Templavoila_testcase extends tx_mksearch_tests_Testcase
 {
-
     /**
-     * @var boolean
+     * @var bool
      */
     protected $unloadTemplavoila = false;
 
@@ -81,7 +76,7 @@ class tx_mksearch_tests_indexer_ttcontent_Templavoila_testcase extends tx_mksear
         $options = self::getDefaultOptions();
         $options['addPageMetaData'] = 1;
         $options['addPageMetaData.']['separator'] = ',';
-        $options['includeCTypes.'] = array('search','mailform','list');
+        $options['includeCTypes.'] = array('search', 'mailform', 'list');
         $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
         $indexDocData = $indexDoc->getData();
 
@@ -159,7 +154,7 @@ class tx_mksearch_tests_indexer_ttcontent_Templavoila_testcase extends tx_mksear
             'pageDataFieldMapping.' => array(
                 'title' => 'title_t',
                 'description' => 'description_t',
-            )
+            ),
         );
 
         $indexer->expects($this->once())
@@ -167,7 +162,7 @@ class tx_mksearch_tests_indexer_ttcontent_Templavoila_testcase extends tx_mksear
             ->will($this->returnValue(array(
                 'title' => 'Homepage',
                 'description' => 'Starting point',
-                'subtitle' => 'not to be indexed'
+                'subtitle' => 'not to be indexed',
             )));
 
         $this->callInaccessibleMethod($indexer, 'indexPageData', $indexDoc, $options);
@@ -199,7 +194,7 @@ class tx_mksearch_tests_indexer_ttcontent_Templavoila_testcase extends tx_mksear
     {
         $options = array();
         $options['CType.']['_default_.']['indexedFields.'] = array(
-            'bodytext', 'imagecaption' , 'altText', 'titleText'
+            'bodytext', 'imagecaption', 'altText', 'titleText',
         );
 
         return $options;

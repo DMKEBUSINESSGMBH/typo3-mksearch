@@ -28,10 +28,8 @@ tx_rnbase::load('tx_mksearch_util_ServiceRegistry');
 tx_rnbase::load('tx_mksearch_action_SearchSolr');
 
 /**
- * Base search action
+ * Base search action.
  *
- * @package TYPO3
- * @subpackage tx_mksearch
  * @author Hannes Bochmann
  * @author Michael Wagner
  * @license http://www.gnu.org/licenses/lgpl.html
@@ -39,12 +37,11 @@ tx_rnbase::load('tx_mksearch_action_SearchSolr');
  */
 class tx_mksearch_action_Search extends tx_mksearch_action_AbstractSearch
 {
-
     /**
-     *
-     * @param array_object $parameters
+     * @param array_object             $parameters
      * @param tx_rnbase_configurations $configurations
-     * @param array_object $viewData
+     * @param array_object             $viewData
+     *
      * @return string error msg or null
      */
     public function handleRequest(&$parameters, &$configurations, &$viewData)
@@ -100,7 +97,7 @@ class tx_mksearch_action_Search extends tx_mksearch_action_AbstractSearch
     protected function handlePageBrowser($parameters, $configurations, $viewdata, &$fields, &$options)
     {
         $confId = $this->getConfId();
-        $typoScriptPathPageBrowser = $confId . 'hit.pagebrowser.';
+        $typoScriptPathPageBrowser = $confId.'hit.pagebrowser.';
         if (is_array($conf = $configurations->get($typoScriptPathPageBrowser))) {
             // PageBrowser initialisieren
             $pageBrowserId = $conf['pbid'] ? $conf['pbid'] : 'search'.$configurations->getPluginId();
@@ -115,11 +112,11 @@ class tx_mksearch_action_Search extends tx_mksearch_action_AbstractSearch
         }
     }
 
-
     public function getTemplateName()
     {
         return 'searchlucene';
     }
+
     public function getViewClassName()
     {
         return 'tx_mksearch_view_Search';
@@ -127,5 +124,5 @@ class tx_mksearch_action_Search extends tx_mksearch_action_AbstractSearch
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/action/class.tx_mksearch_action_Search.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/action/class.tx_mksearch_action_Search.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/action/class.tx_mksearch_action_Search.php'];
 }

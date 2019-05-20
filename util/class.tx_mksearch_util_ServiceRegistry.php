@@ -23,14 +23,15 @@
 ***************************************************************/
 
 /**
- * Access a service instance
+ * Access a service instance.
  */
 class tx_mksearch_util_ServiceRegistry
 {
-
     /**
-     * Return best search engine service which implements tx_mksearch_interface_SearchEngine
+     * Return best search engine service which implements tx_mksearch_interface_SearchEngine.
+     *
      * @param tx_mksearch_model_internal_Index $index
+     *
      * @return tx_mksearch_interface_SearchEngine
      */
     public static function getSearchEngine($index)
@@ -41,19 +42,22 @@ class tx_mksearch_util_ServiceRegistry
         }
         $srv = tx_rnbase::makeInstanceService('mksearch_engine', $type);
         if (!is_object($srv)) {
-            throw new Exception('Service mksearch_engine not found for type: ' . $type);
+            throw new Exception('Service mksearch_engine not found for type: '.$type);
         }
         if (!$srv instanceof tx_mksearch_interface_SearchEngine) {
-            throw new Exception('Service "' . $srv->info['className'] . '" does not implement tx_mksearch_interface_SearchEngine!');
+            throw new Exception('Service "'.$srv->info['className'].'" does not implement tx_mksearch_interface_SearchEngine!');
         }
 
         $srv->setIndexModel($index);
 
         return $srv;
     }
+
     /**
-     * Return best search engine service which implements tx_mksearch_interface_SearchEngine
+     * Return best search engine service which implements tx_mksearch_interface_SearchEngine.
+     *
      * @return tx_mksearch_interface_SearchEngine
+     *
      * @deprecated request search engine via configured index
      */
     public static function getSearchEngineService()
@@ -64,7 +68,7 @@ class tx_mksearch_util_ServiceRegistry
         }
         // else
         if (!$srv instanceof tx_mksearch_interface_SearchEngine) {
-            throw new Exception('Service "' . $srv->info['className'] . '" does not implement tx_mksearch_interface_SearchEngine!');
+            throw new Exception('Service "'.$srv->info['className'].'" does not implement tx_mksearch_interface_SearchEngine!');
         }
 
         // else
@@ -72,32 +76,33 @@ class tx_mksearch_util_ServiceRegistry
     }
 
     /**
-     * Return best search engine service which implements tx_mksearch_interface_Indexer
+     * Return best search engine service which implements tx_mksearch_interface_Indexer.
      *
      * This method does NOT use tx_rnbase_util_Misc::getService intentionally,
      * as we do not want to "mayday" in case of an error!
      *
      * @param string $extKey
      * @param string $contentType
+     *
      * @return tx_mksearch_interface_Indexer
      */
     public static function getIndexerService($extKey, $contentType)
     {
-        $subType = $extKey . '.' . $contentType;
+        $subType = $extKey.'.'.$contentType;
         $srv = tx_rnbase::makeInstanceService('mksearch_indexer', $subType);
         if (!is_object($srv)) {
-            throw new Exception('Service "mksearch_indexer.' . $subType . '" not found!');
+            throw new Exception('Service "mksearch_indexer.'.$subType.'" not found!');
         }
         // else
         if (!$srv instanceof tx_mksearch_interface_Indexer) {
-            throw new Exception('Service "' . $srv->info['className'] . '" does not implement tx_mksearch_interface_Indexer!');
+            throw new Exception('Service "'.$srv->info['className'].'" does not implement tx_mksearch_interface_Indexer!');
         }
         // else
         return $srv;
     }
 
     /**
-     * Return internal index service
+     * Return internal index service.
      *
      * @return tx_mksearch_service_internal_Index
      */
@@ -105,8 +110,9 @@ class tx_mksearch_util_ServiceRegistry
     {
         return tx_rnbase_util_Misc::getService('mksearch', 'int_index');
     }
+
     /**
-     * Return internal indexer configuration composite service
+     * Return internal indexer configuration composite service.
      *
      * @return tx_mksearch_service_internal_Composite
      */
@@ -116,7 +122,7 @@ class tx_mksearch_util_ServiceRegistry
     }
 
     /**
-     * Return internal indexer configuration service
+     * Return internal indexer configuration service.
      *
      * @return tx_mksearch_service_internal_Config
      */
@@ -124,8 +130,9 @@ class tx_mksearch_util_ServiceRegistry
     {
         return tx_rnbase_util_Misc::getService('mksearch', 'int_config');
     }
+
     /**
-     * Return internal indexer configuration service
+     * Return internal indexer configuration service.
      *
      * @return tx_mksearch_service_internal_Keyword
      */
@@ -136,7 +143,7 @@ class tx_mksearch_util_ServiceRegistry
 
     /**
      * Return tx_irfaq expert service
-     * as the extension offers none
+     * as the extension offers none.
      *
      * @return tx_mksearch_service_irfaq_Expert
      */
@@ -147,7 +154,7 @@ class tx_mksearch_util_ServiceRegistry
 
     /**
      * Return tx_irfaq category service
-     * as the extension offers none
+     * as the extension offers none.
      *
      * @return tx_mksearch_service_irfaq_Category
      */
@@ -158,7 +165,7 @@ class tx_mksearch_util_ServiceRegistry
 
     /**
      * Return tx_irfaq category service
-     * as the extension offers none
+     * as the extension offers none.
      *
      * @return tx_mksearch_service_irfaq_Question
      */
@@ -168,5 +175,5 @@ class tx_mksearch_util_ServiceRegistry
     }
 }
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_ServiceRegistry.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_ServiceRegistry.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_ServiceRegistry.php'];
 }
