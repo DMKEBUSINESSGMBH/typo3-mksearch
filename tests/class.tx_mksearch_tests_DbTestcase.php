@@ -1,4 +1,5 @@
 <?php
+
 use TYPO3\CMS\Core\Database\ConnectionPool;
 
 /***************************************************************
@@ -24,15 +25,12 @@ use TYPO3\CMS\Core\Database\ConnectionPool;
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-
 tx_rnbase::load('tx_mksearch_tests_Util');
 tx_rnbase::load('tx_rnbase_util_TYPO3');
 
 /**
- * Base Testcase for DB Tests
+ * Base Testcase for DB Tests.
  *
- * @package tx_mksearch
- * @subpackage tx_mksearch_tests
  * @author Michael Wagner <michael.wagner@dmk-ebusiness.de>
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
@@ -49,7 +47,7 @@ abstract class tx_mksearch_tests_DbTestcase extends Tx_Phpunit_Database_TestCase
     private $originalDatabaseName;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $unloadTemplavoila = true;
 
@@ -75,8 +73,8 @@ abstract class tx_mksearch_tests_DbTestcase extends Tx_Phpunit_Database_TestCase
     /**
      * Constructs a test case with the given name.
      *
-     * @param string $name the name of a testcase
-     * @param array $data ?
+     * @param string $name     the name of a testcase
+     * @param array  $data     ?
      * @param string $dataName ?
      */
     public function __construct($name = null, array $data = array(), $dataName = '')
@@ -194,7 +192,7 @@ abstract class tx_mksearch_tests_DbTestcase extends Tx_Phpunit_Database_TestCase
         $GLOBALS['BE_USER']->setWorkspace($this->workspaceBackup);
 
         // tear down tv
-        if ($this->templaVoilaConfigBackup !== null) {
+        if (null !== $this->templaVoilaConfigBackup) {
             $GLOBALS['TYPO3_LOADED_EXT']['templavoila'] = $this->templaVoilaConfigBackup;
             $this->templaVoilaConfigBackup = null;
 
@@ -209,9 +207,6 @@ abstract class tx_mksearch_tests_DbTestcase extends Tx_Phpunit_Database_TestCase
         $this->purgeRootlineCaches();
     }
 
-    /**
-     * @return void
-     */
     protected function purgeRootlineCaches()
     {
         if (tx_rnbase_util_TYPO3::isTYPO62OrHigher()) {
@@ -221,9 +216,9 @@ abstract class tx_mksearch_tests_DbTestcase extends Tx_Phpunit_Database_TestCase
 
     /**
      * We need to set the new database for the connection pool connections aswell
-     * because it is used for example in the rootline utility
+     * because it is used for example in the rootline utility.
+     *
      * @todo we should not only support the default connection
-     * @return void
      */
     protected function setUpTestDatabaseForConnectionPool()
     {
@@ -237,9 +232,6 @@ abstract class tx_mksearch_tests_DbTestcase extends Tx_Phpunit_Database_TestCase
         $GLOBALS['TYPO3_CONF_VARS']['DB']['Connections']['Default']['dbname'] = $this->testDatabase;
     }
 
-    /**
-     * @return void
-     */
     protected function tearDownDatabase()
     {
         if (tx_rnbase_util_TYPO3::isTYPO87OrHigher() && $this->originalDatabaseName) {
@@ -264,5 +256,5 @@ abstract class tx_mksearch_tests_DbTestcase extends Tx_Phpunit_Database_TestCase
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/class.tx_mksearch_tests_DbTestcase.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/class.tx_mksearch_tests_DbTestcase.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/class.tx_mksearch_tests_DbTestcase.php'];
 }

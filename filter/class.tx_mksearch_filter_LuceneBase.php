@@ -21,15 +21,14 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  ***************************************************************/
 
-
-
 tx_rnbase::load('tx_rnbase_util_SearchBase');
 tx_rnbase::load('tx_rnbase_util_ListBuilderInfo');
 tx_rnbase::load('tx_rnbase_filter_BaseFilter');
 tx_rnbase::load('tx_mksearch_util_Filter');
 
 /**
- * Dieser Filter verarbeitet Anfragen für Lucene
+ * Dieser Filter verarbeitet Anfragen für Lucene.
+ *
  * @author rene
  */
 class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implements ListBuilderInfo
@@ -37,19 +36,19 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
     private static $formData = array();
 
     /**
-     *
      * @var tx_mksearch_util_Filter
      */
     protected $filterUtility;
 
     /**
-     * Store info if a search request was submitted - needed for empty list message
+     * Store info if a search request was submitted - needed for empty list message.
+     *
      * @var bool
      */
     private $isSearch = false;
 
     /**
-     * Initialize filter
+     * Initialize filter.
      *
      * @param array $fields
      * @param array $options
@@ -64,20 +63,21 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
     }
 
     /**
-     * Filter for search form
+     * Filter for search form.
      *
-     * @param array $fields
-     * @param array $options
-     * @param tx_rnbase_parameters $parameters
+     * @param array                    $fields
+     * @param array                    $options
+     * @param tx_rnbase_parameters     $parameters
      * @param tx_rnbase_configurations $configurations
-     * @param string $confId
+     * @param string                   $confId
+     *
      * @return bool Should subsequent query be executed at all?
      */
     protected function initFilter(&$fields, &$options, &$parameters, &$configurations, $confId)
     {
-        if ($configurations->get($confId . 'filter.formOnly') ||
+        if ($configurations->get($confId.'filter.formOnly') ||
             !($parameters->offsetExists('submit') ||
-            $configurations->get($confId . 'filter.forceSearch'))
+            $configurations->get($confId.'filter.forceSearch'))
         ) {
             return false;
         }
@@ -105,7 +105,7 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
                 $termTemplate,
                 $this->getParameters(),
                 $this->getConfigurations(),
-                $this->getConfId() . 'filter.'
+                $this->getConfId().'filter.'
             );
 
             $fields['term'] = trim($termTemplate);
@@ -117,8 +117,8 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
      *
      * @TODO: das klappt zurzeit nur bei einfacher sortierung!
      *
-     * @param   array                   $options
-     * @param   tx_rnbase_IParameters   $parameters
+     * @param array                 $options
+     * @param tx_rnbase_IParameters $parameters
      */
     protected function handleSorting(&$options)
     {
@@ -128,7 +128,6 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
     }
 
     /**
-     *
      * @param array $options
      *
      * @return array
@@ -154,10 +153,11 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
     /**
      * Treat search form, sorting fields etc.
      *
-     * @param string $template HTML template
+     * @param string                    $template  HTML template
      * @param tx_rnbase_util_FormatUtil $formatter
-     * @param string $confId
-     * @param string $marker
+     * @param string                    $confId
+     * @param string                    $marker
+     *
      * @return string
      */
     public function parseTemplate($template, &$formatter, $confId, $marker = 'FILTER')
@@ -166,7 +166,7 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
 
         $template = $this->parseSearchForm($template, $formatter, $confId, $marker);
 
-        $markArray = $subpartArray  = $wrappedSubpartArray = array();
+        $markArray = $subpartArray = $wrappedSubpartArray = array();
 
         $this->getFilterUtility()->parseSortFields(
             $template,
@@ -187,12 +187,13 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
     }
 
     /**
-     * Treat search form
+     * Treat search form.
      *
-     * @param string $template HTML template
+     * @param string                    $template  HTML template
      * @param tx_rnbase_util_FormatUtil $formatter
-     * @param string $confId
-     * @param string $marker
+     * @param string                    $confId
+     * @param string                    $marker
+     *
      * @return string
      *
      * @todo refactoring da die gleiche Methode wie in tx_mksearch_filter_ElasticSearchBase
@@ -243,7 +244,8 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
 
     /**
      * Werte für Formularfelder aufbereiten. Daten aus dem Request übernehmen und wieder füllen.
-     * @param array $formData
+     *
+     * @param array                $formData
      * @param tx_rnbase_parameters $parameters
      */
     protected function prepareFormFields(&$formData, $parameters)
@@ -278,23 +280,25 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
     /**
      * Returns all values possible for form field mksearch[options][mode].
      * Makes it possible to easily add more modes in other filters/forms.
+     *
      * @return array
      */
     protected function getModeValuesAvailable()
     {
         $availableModes = tx_rnbase_util_Strings::trimExplode(
             ',',
-            $this->getConfigurations()->get($this->getConfId() . 'filter.availableModes')
+            $this->getConfigurations()->get($this->getConfId().'filter.availableModes')
         );
 
         return (array) $availableModes;
     }
+
     /**
      * ist notwendig weil sonst die Marker, welche die Formulardaten
      * enthalten ungeparsed rauskommen, falls das Formular noch
-     * nicht abgeschickt wurde
+     * nicht abgeschickt wurde.
      *
-     * @param array $formData
+     * @param array                $formData
      * @param tx_rnbase_parameters $parameters
      *
      * @return array
@@ -305,7 +309,7 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
     ) {
         $formFields = tx_rnbase_util_Strings::trimExplode(
             ',',
-            $this->getConfigurations()->get($this->getConfId() . 'filter.requiredFormFields')
+            $this->getConfigurations()->get($this->getConfId().'filter.requiredFormFields')
         );
 
         foreach ($formFields as $formField) {
@@ -319,10 +323,11 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
 
     /**
      * Get a message string for empty list. This is an language string. The key is
-     * taken from ts-config: [item].listinfo.llkeyEmpty
+     * taken from ts-config: [item].listinfo.llkeyEmpty.
      *
-     * @param array_object $viewData
+     * @param array_object             $viewData
      * @param tx_rnbase_configurations $configurations
+     *
      * @return string
      */
     public function getEmptyListMessage($confId, &$viewData, &$configurations)
@@ -350,7 +355,6 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
     }
 
     /**
-     *
      * @return tx_mksearch_util_Filter
      */
     protected function getFilterUtility()
@@ -364,5 +368,5 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/filter/class.tx_mksearch_filter_LuceneBase.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/filter/class.tx_mksearch_filter_LuceneBase.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/filter/class.tx_mksearch_filter_LuceneBase.php'];
 }

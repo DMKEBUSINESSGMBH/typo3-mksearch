@@ -26,31 +26,28 @@ tx_rnbase::load('Tx_Rnbase_Service_Base');
 tx_rnbase::load('tx_mksearch_interface_Indexer');
 
 /**
- * Service "Indexer" base class for content types which can be found via rn_base search
+ * Service "Indexer" base class for content types which can be found via rn_base search.
  *
  * @author  Lars Heber <dev@dmk-ebusiness.de>
- * @package     TYPO3
- * @subpackage  tx_mksearch
  */
 abstract class tx_mksearch_service_indexer_BaseRnBaseSearch extends Tx_Rnbase_Service_Base implements tx_mksearch_interface_Indexer
 {
-
     /**
-     * Options used for indexing
+     * Options used for indexing.
      *
      * @var array
      */
     protected $options = array();
 
     /**
-     * Container for sql resource
+     * Container for sql resource.
      *
      * @var sql resource
      */
     protected $sqlRes;
 
     /**
-     * Prepare indexer
+     * Prepare indexer.
      *
      * This method prepares things for indexing,
      * i. e. evaluate options, prepare db query etc.
@@ -67,9 +64,8 @@ abstract class tx_mksearch_service_indexer_BaseRnBaseSearch extends Tx_Rnbase_Se
      * => Aktivierung des Index-Updates erst beim "Herunterfahren" des ganzen Typo3-
      * Prozesses / Beendigung des HTTP-Requests (evtl. im Destructor?)
      *
-     * @param array $options    Indexer options
-     * @param array $data       Tablename <-> uids matrix of records to be indexed (array('tab1' => array(2,5,6), 'tab2' => array(4,5,8))
-     * @return void
+     * @param array $options Indexer options
+     * @param array $data    Tablename <-> uids matrix of records to be indexed (array('tab1' => array(2,5,6), 'tab2' => array(4,5,8))
      */
     public function prepare(array $options = array(), array $data = array())
     {
@@ -77,13 +73,12 @@ abstract class tx_mksearch_service_indexer_BaseRnBaseSearch extends Tx_Rnbase_Se
 
         $searcher = tx_rnbase_util_SearchBase::getInstance($this->getSearchClass($this->options));
 
-
         list($f, $o) = $this->getFieldsOptions($this->options, $data);
 
         // If no "enablefields*" option is explicitely set, implicitely force FE mode
         $isSomeEnableFieldsOptionSet = false;
         foreach ($o as $key => $value) {
-            if (substr($key, 0, 12) == 'enablefields') {
+            if ('enablefields' == substr($key, 0, 12)) {
                 $isSomeEnableFieldsOptionSet = true;
                 break;
             }
@@ -101,10 +96,11 @@ abstract class tx_mksearch_service_indexer_BaseRnBaseSearch extends Tx_Rnbase_Se
     }
 
     /**
-     * Return next item which is to be indexed
+     * Return next item which is to be indexed.
      *
-     * @param tx_mksearch_interface_IndexerDocument     $indexDoc   Indexer document to be "filled", instantiated based on self::getContentType()
-     * @return null|tx_mksearch_interface_IndexerDocument
+     * @param tx_mksearch_interface_IndexerDocument $indexDoc Indexer document to be "filled", instantiated based on self::getContentType()
+     *
+     * @return tx_mksearch_interface_IndexerDocument|null
      */
     public function nextItem(tx_mksearch_interface_IndexerDocument $indexDoc)
     {
@@ -120,23 +116,23 @@ abstract class tx_mksearch_service_indexer_BaseRnBaseSearch extends Tx_Rnbase_Se
     }
 
     /**
-     * Quasi-destructor
+     * Quasi-destructor.
      *
      * Nothing to do here... @todo: REALLY???
      *
-     * @return array    Matrix of records to be deleted
+     * @return array Matrix of records to be deleted
      */
     public function cleanup()
     {
     }
 
-
     /**
-     * Prepare / transform raw data from database for indexing
+     * Prepare / transform raw data from database for indexing.
      *
-     * @param array                                 $rawData from SQL query, NOT the model!
-     * @param array                                 $options from service configuration
+     * @param array                                 $rawData  from SQL query, NOT the model!
+     * @param array                                 $options  from service configuration
      * @param tx_mksearch_interface_IndexerDocument $indexDoc Model to be filled
+     *
      * @return tx_mksearch_interface_IndexerDocument or null, if record is not to be indexed
      */
     abstract protected function prepareData(
@@ -146,25 +142,27 @@ abstract class tx_mksearch_service_indexer_BaseRnBaseSearch extends Tx_Rnbase_Se
     );
 
     /**
-     * Get name of rn_base based search class
+     * Get name of rn_base based search class.
      *
      * @param array $options
+     *
      * @return string
      */
     abstract protected function getSearchClass(array $options);
 
     /**
-     * Get parameters $fields and $options for rn_base based search
+     * Get parameters $fields and $options for rn_base based search.
      *
-     * @param array $options    from service configuration
-     * @param array $data       Tablename <-> uids matrix of records to be indexed (array('tab1' => array(2,5,6), 'tab2' => array(4,5,8))
+     * @param array $options from service configuration
+     * @param array $data    Tablename <-> uids matrix of records to be indexed (array('tab1' => array(2,5,6), 'tab2' => array(4,5,8))
+     *
      * @return array:
-     *              * array $fields
-     *              * array $options
+     *                * array $fields
+     *                * array $options
      */
     abstract protected function getFieldsOptions(array $options, array $data = array());
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/indexer/class.tx_mksearch_service_indexer_BaseDataBase.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/indexer/class.tx_mksearch_service_indexer_BaseDataBase.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/indexer/class.tx_mksearch_service_indexer_BaseDataBase.php'];
 }

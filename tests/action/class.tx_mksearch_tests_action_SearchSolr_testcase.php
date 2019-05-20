@@ -1,7 +1,5 @@
 <?php
 /**
- * @package tx_mkkvbb
- * @subpackage tx_mkkvbb_tests_action
  * @author Hannes Bochmann
  *
  *  Copyright notice
@@ -25,16 +23,13 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
-
 tx_rnbase::load('tx_mksearch_tests_Testcase');
 tx_rnbase::load('tx_mksearch_action_SearchSolr');
 tx_rnbase::load('Tx_Phpunit_Framework');
 
 /**
- * Testfälle
+ * Testfälle.
  *
- * @package tx_mksearch
- * @subpackage tx_mksearch_tests
  * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
  * @author Michael Wagner <michael.wagner@dmk-ebusiness.de>
  * @license http://www.gnu.org/licenses/lgpl.html
@@ -42,12 +37,12 @@ tx_rnbase::load('Tx_Phpunit_Framework');
  */
 class tx_mksearch_tests_action_SearchSolr_testcase extends tx_mksearch_tests_Testcase
 {
-
     /**
-     * unsere link id. entweder die id oder der alias wenn gesetzt
+     * unsere link id. entweder die id oder der alias wenn gesetzt.
+     *
      * @var string or integer
      */
-    protected $linkId  = '';
+    protected $linkId = '';
 
     protected function setUp()
     {
@@ -145,23 +140,21 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends tx_mksearch_tests_Tes
         return $action;
     }
 
-    /**
-     */
     public function testHandleRequestWithDisabledAutocomplete()
     {
         //action initialisieren
         $aConfig['searchsolr.'] = array(
-            'nosearch' => 1,//keine echte Suche
+            'nosearch' => 1, //keine echte Suche
             'autocomplete.' => array(
-                'enable' => 0
-            )
+                'enable' => 0,
+            ),
         );
         //mock getIndex() so its not called for real
         $aMockFunctions = array(
             'getIndex' => array(
                 'expects' => $this->never(),
                 'returnValue' => true,
-            )
+            ),
         );
         $out = true;
         $action = $this->getAction($aMockFunctions, $aConfig, $out);
@@ -177,13 +170,11 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends tx_mksearch_tests_Tes
         self::assertEmpty($inlineJavaScripts, 'Daten für JS doch gesetzt?');
     }
 
-    /**
-     */
     public function testHandleRequestWithEnabledAutocomplete()
     {
         //action initialisieren
         $aConfig['searchsolr.'] = array(
-            'nosearch' => 1,//keine echte Suche
+            'nosearch' => 1, //keine echte Suche
             'autocomplete.' => array(
                 'enable' => 1,
                 'minLength' => 2,
@@ -191,19 +182,19 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends tx_mksearch_tests_Tes
                 'actionLink.' => array(
                     'useKeepVars' => 1,
                     'useKeepVars.' => array(
-                        'add' => '::type=540'
+                        'add' => '::type=540',
                     ),
                     'noHash' => 1,
-                )
+                ),
             ),
-            'usedIndex' => 1
+            'usedIndex' => 1,
         );
         //mock getIndex() so its not called for real
         $aMockFunctions = array(
             'getIndex' => array(
                 'expects' => $this->never(),
                 'returnValue' => true,
-            )
+            ),
         );
         $out = true;
         $action = $this->getAction($aMockFunctions, $aConfig, $out);
@@ -212,32 +203,32 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends tx_mksearch_tests_Tes
         //view daten sollten nicht gesetzt sein
         self::assertFalse($action->getConfigurations()->getViewData()->offsetExists('result'), 'es wurde doch ein result gesetzt in den view daten. doch gesucht?');
 
-        $expectedJavaScript = 'jQuery(document).ready(function(){' .
-			'jQuery(myElementSelector).autocomplete({' .
-				'source: function( request, response ) {' .
-					'jQuery.ajax({' .
-						'url: "?id='.$this->linkId.'&type=540&mksearch%5Bajax%5D=1&mksearch%5BusedIndex%5D=1&mksearch[term]="+encodeURIComponent(request.term),' .
-						'dataType: "json",' .
-						'success: function( data ) {' .
-							'var suggestions = [];' .
-							'jQuery.each(data.suggestions, function(key, value) {' .
-								'jQuery.each(value, function(key, suggestion) {' .
-									'suggestions.push(suggestion.record.value);' .
-								'});' .
-							'});' .
-							'response( jQuery.map( suggestions, function( item ) {' .
-								'return {' .
-									'label: item,' .
-									'value: item' .
-								'};' .
-							'}));' .
-						'}' .
-					'});' .
-				'},' .
-				'minLength: 2' .
-			'});' .
-		'});' .
-		'jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();' . LF;
+        $expectedJavaScript = 'jQuery(document).ready(function(){'.
+            'jQuery(myElementSelector).autocomplete({'.
+                'source: function( request, response ) {'.
+                    'jQuery.ajax({'.
+                        'url: "?id='.$this->linkId.'&type=540&mksearch%5Bajax%5D=1&mksearch%5BusedIndex%5D=1&mksearch[term]="+encodeURIComponent(request.term),'.
+                        'dataType: "json",'.
+                        'success: function( data ) {'.
+                            'var suggestions = [];'.
+                            'jQuery.each(data.suggestions, function(key, value) {'.
+                                'jQuery.each(value, function(key, suggestion) {'.
+                                    'suggestions.push(suggestion.record.value);'.
+                                '});'.
+                            '});'.
+                            'response( jQuery.map( suggestions, function( item ) {'.
+                                'return {'.
+                                    'label: item,'.
+                                    'value: item'.
+                                '};'.
+                            '}));'.
+                        '}'.
+                    '});'.
+                '},'.
+                'minLength: 2'.
+            '});'.
+        '});'.
+        'jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();'.LF;
 
         $property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsInline');
         $property->setAccessible(true);
@@ -247,13 +238,11 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends tx_mksearch_tests_Tes
         self::assertEquals($expectedJavaScript, $inlineJavaScripts['mksearch_autocomplete_123']['code']);
     }
 
-    /**
-     */
     public function testHandleRequestWithEnabledAutocompleteAndInclusionOfSomeJqueryLibs()
     {
         //action initialisieren
         $aConfig['searchsolr.'] = array(
-            'nosearch' => 1,//keine echte Suche
+            'nosearch' => 1, //keine echte Suche
             'autocomplete.' => array(
                 'enable' => 1,
                 'minLength' => 2,
@@ -261,7 +250,7 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends tx_mksearch_tests_Tes
                 'actionLink.' => array(
                     'useKeepVars' => 1,
                     'useKeepVars.' => array(
-                        'add' => '::type=540'
+                        'add' => '::type=540',
                     ),
                     'noHash' => 1,
                 ),
@@ -269,14 +258,14 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends tx_mksearch_tests_Tes
                 'includeJqueryUiCore' => 1,
                 'includeJqueryUiAutocomplete' => 0,
             ),
-            'usedIndex' => 1
+            'usedIndex' => 1,
         );
         //mock getIndex() so its not called for real
         $aMockFunctions = array(
             'getIndex' => array(
                 'expects' => $this->never(),
                 'returnValue' => true,
-            )
+            ),
         );
         $out = true;
         $action = $this->getAction($aMockFunctions, $aConfig, $out);
@@ -285,32 +274,32 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends tx_mksearch_tests_Tes
         //view daten sollten nicht gesetzt sein
         self::assertFalse($action->getConfigurations()->getViewData()->offsetExists('result'), 'es wurde doch ein result gesetzt in den view daten. doch gesucht?');
 
-        $expectedJavaScript = 'jQuery(document).ready(function(){' .
-			'jQuery(myElementSelector).autocomplete({' .
-				'source: function( request, response ) {' .
-					'jQuery.ajax({' .
-						'url: "?id='.$this->linkId.'&type=540&mksearch%5Bajax%5D=1&mksearch%5BusedIndex%5D=1&mksearch[term]="+encodeURIComponent(request.term),' .
-						'dataType: "json",' .
-						'success: function( data ) {' .
-							'var suggestions = [];' .
-							'jQuery.each(data.suggestions, function(key, value) {' .
-								'jQuery.each(value, function(key, suggestion) {' .
-									'suggestions.push(suggestion.record.value);' .
-								'});' .
-							'});' .
-							'response( jQuery.map( suggestions, function( item ) {' .
-								'return {' .
-									'label: item,' .
-									'value: item' .
-								'};' .
-							'}));' .
-						'}' .
-					'});' .
-				'},' .
-				'minLength: 2' .
-			'});' .
-		'});' .
-		'jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();' . LF;
+        $expectedJavaScript = 'jQuery(document).ready(function(){'.
+            'jQuery(myElementSelector).autocomplete({'.
+                'source: function( request, response ) {'.
+                    'jQuery.ajax({'.
+                        'url: "?id='.$this->linkId.'&type=540&mksearch%5Bajax%5D=1&mksearch%5BusedIndex%5D=1&mksearch[term]="+encodeURIComponent(request.term),'.
+                        'dataType: "json",'.
+                        'success: function( data ) {'.
+                            'var suggestions = [];'.
+                            'jQuery.each(data.suggestions, function(key, value) {'.
+                                'jQuery.each(value, function(key, suggestion) {'.
+                                    'suggestions.push(suggestion.record.value);'.
+                                '});'.
+                            '});'.
+                            'response( jQuery.map( suggestions, function( item ) {'.
+                                'return {'.
+                                    'label: item,'.
+                                    'value: item'.
+                                '};'.
+                            '}));'.
+                        '}'.
+                    '});'.
+                '},'.
+                'minLength: 2'.
+            '});'.
+        '});'.
+        'jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();'.LF;
 
         $property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsInline');
         $property->setAccessible(true);
@@ -334,13 +323,11 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends tx_mksearch_tests_Tes
         );
     }
 
-    /**
-     */
     public function testHandleRequestWithEnabledAutocompleteAndInclusionOfAllJqueryLibs()
     {
         //action initialisieren
         $aConfig['searchsolr.'] = array(
-            'nosearch' => 1,//keine echte Suche
+            'nosearch' => 1, //keine echte Suche
             'autocomplete.' => array(
                 'enable' => 1,
                 'minLength' => 2,
@@ -348,7 +335,7 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends tx_mksearch_tests_Tes
                 'actionLink.' => array(
                     'useKeepVars' => 1,
                     'useKeepVars.' => array(
-                        'add' => '::type=540'
+                        'add' => '::type=540',
                     ),
                     'noHash' => 1,
                 ),
@@ -356,14 +343,14 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends tx_mksearch_tests_Tes
                 'includeJqueryUiCore' => 1,
                 'includeJqueryUiAutocomplete' => 1,
             ),
-            'usedIndex' => 1
+            'usedIndex' => 1,
         );
         //mock getIndex() so its not called for real
         $aMockFunctions = array(
             'getIndex' => array(
                 'expects' => $this->never(),
                 'returnValue' => true,
-            )
+            ),
         );
         $out = true;
         $action = $this->getAction($aMockFunctions, $aConfig, $out);
@@ -372,32 +359,32 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends tx_mksearch_tests_Tes
         //view daten sollten nicht gesetzt sein
         self::assertFalse($action->getConfigurations()->getViewData()->offsetExists('result'), 'es wurde doch ein result gesetzt in den view daten. doch gesucht?');
 
-        $expectedJavaScript = 'jQuery(document).ready(function(){' .
-			'jQuery(myElementSelector).autocomplete({' .
-				'source: function( request, response ) {' .
-					'jQuery.ajax({' .
-						'url: "?id='.$this->linkId.'&type=540&mksearch%5Bajax%5D=1&mksearch%5BusedIndex%5D=1&mksearch[term]="+encodeURIComponent(request.term),' .
-						'dataType: "json",' .
-						'success: function( data ) {' .
-							'var suggestions = [];' .
-							'jQuery.each(data.suggestions, function(key, value) {' .
-								'jQuery.each(value, function(key, suggestion) {' .
-									'suggestions.push(suggestion.record.value);' .
-								'});' .
-							'});' .
-							'response( jQuery.map( suggestions, function( item ) {' .
-								'return {' .
-									'label: item,' .
-									'value: item' .
-								'};' .
-							'}));' .
-						'}' .
-					'});' .
-				'},' .
-				'minLength: 2' .
-			'});' .
-		'});' .
-		'jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();' . LF;
+        $expectedJavaScript = 'jQuery(document).ready(function(){'.
+            'jQuery(myElementSelector).autocomplete({'.
+                'source: function( request, response ) {'.
+                    'jQuery.ajax({'.
+                        'url: "?id='.$this->linkId.'&type=540&mksearch%5Bajax%5D=1&mksearch%5BusedIndex%5D=1&mksearch[term]="+encodeURIComponent(request.term),'.
+                        'dataType: "json",'.
+                        'success: function( data ) {'.
+                            'var suggestions = [];'.
+                            'jQuery.each(data.suggestions, function(key, value) {'.
+                                'jQuery.each(value, function(key, suggestion) {'.
+                                    'suggestions.push(suggestion.record.value);'.
+                                '});'.
+                            '});'.
+                            'response( jQuery.map( suggestions, function( item ) {'.
+                                'return {'.
+                                    'label: item,'.
+                                    'value: item'.
+                                '};'.
+                            '}));'.
+                        '}'.
+                    '});'.
+                '},'.
+                'minLength: 2'.
+            '});'.
+        '});'.
+        'jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();'.LF;
 
         $property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsInline');
         $property->setAccessible(true);
@@ -425,13 +412,11 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends tx_mksearch_tests_Tes
         );
     }
 
-    /**
-     */
     public function testHandleRequestWithEnabledAutocompleteAndConfiguredUsedIndex()
     {
         //action initialisieren
         $aConfig['searchsolr.'] = array(
-            'nosearch' => 1,//keine echte Suche
+            'nosearch' => 1, //keine echte Suche
             'autocomplete.' => array(
                 'enable' => 1,
                 'minLength' => 2,
@@ -439,19 +424,19 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends tx_mksearch_tests_Tes
                 'actionLink.' => array(
                     'useKeepVars' => 1,
                     'useKeepVars.' => array(
-                        'add' => '::type=540'
+                        'add' => '::type=540',
                     ),
                     'noHash' => 1,
-                )
+                ),
             ),
-            'usedIndex' => 2
+            'usedIndex' => 2,
         );
         //mock getIndex() so its not called for real
         $aMockFunctions = array(
             'getIndex' => array(
                 'expects' => $this->never(),
                 'returnValue' => true,
-            )
+            ),
         );
         $out = true;
         $action = $this->getAction($aMockFunctions, $aConfig, $out);
@@ -460,32 +445,32 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends tx_mksearch_tests_Tes
         //view daten sollten nicht gesetzt sein
         self::assertFalse($action->getConfigurations()->getViewData()->offsetExists('result'), 'es wurde doch ein result gesetzt in den view daten. doch gesucht?');
 
-        $expectedJavaScript = 'jQuery(document).ready(function(){' .
-			'jQuery(myElementSelector).autocomplete({' .
-				'source: function( request, response ) {' .
-					'jQuery.ajax({' .
-						'url: "?id=' . $this->linkId . '&type=540&mksearch%5Bajax%5D=1&mksearch%5BusedIndex%5D=2&mksearch[term]="+encodeURIComponent(request.term),' .
-						'dataType: "json",' .
-						'success: function( data ) {' .
-							'var suggestions = [];' .
-							'jQuery.each(data.suggestions, function(key, value) {' .
-								'jQuery.each(value, function(key, suggestion) {' .
-									'suggestions.push(suggestion.record.value);' .
-								'});' .
-							'});' .
-							'response( jQuery.map( suggestions, function( item ) {' .
-								'return {' .
-									'label: item,' .
-									'value: item' .
-								'};' .
-							'}));' .
-						'}' .
-					'});' .
-				'},' .
-				'minLength: 2' .
-			'});' .
-		'});' .
-		'jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();' . LF;
+        $expectedJavaScript = 'jQuery(document).ready(function(){'.
+            'jQuery(myElementSelector).autocomplete({'.
+                'source: function( request, response ) {'.
+                    'jQuery.ajax({'.
+                        'url: "?id='.$this->linkId.'&type=540&mksearch%5Bajax%5D=1&mksearch%5BusedIndex%5D=2&mksearch[term]="+encodeURIComponent(request.term),'.
+                        'dataType: "json",'.
+                        'success: function( data ) {'.
+                            'var suggestions = [];'.
+                            'jQuery.each(data.suggestions, function(key, value) {'.
+                                'jQuery.each(value, function(key, suggestion) {'.
+                                    'suggestions.push(suggestion.record.value);'.
+                                '});'.
+                            '});'.
+                            'response( jQuery.map( suggestions, function( item ) {'.
+                                'return {'.
+                                    'label: item,'.
+                                    'value: item'.
+                                '};'.
+                            '}));'.
+                        '}'.
+                    '});'.
+                '},'.
+                'minLength: 2'.
+            '});'.
+        '});'.
+        'jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();'.LF;
 
         $property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsInline');
         $property->setAccessible(true);
@@ -495,13 +480,11 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends tx_mksearch_tests_Tes
         self::assertEquals($expectedJavaScript, $inlineJavaScripts['mksearch_autocomplete_123']['code']);
     }
 
-    /**
-     */
     public function testHandleRequestWithEnabledAutocompleteAndAutocompleteJavaScriptSuffix()
     {
         //action initialisieren
         $aConfig['searchsolr.'] = array(
-            'nosearch' => 1,//keine echte Suche
+            'nosearch' => 1, //keine echte Suche
             'autocomplete.' => array(
                 'enable' => 1,
                 'minLength' => 2,
@@ -509,20 +492,20 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends tx_mksearch_tests_Tes
                 'actionLink.' => array(
                     'useKeepVars' => 1,
                     'useKeepVars.' => array(
-                            'add' => '::type=540'
+                            'add' => '::type=540',
                     ),
                     'noHash' => 1,
                 ),
-                'javaScriptSnippetSuffix' => 'my_custom_suffix'
+                'javaScriptSnippetSuffix' => 'my_custom_suffix',
             ),
-            'usedIndex' => 1
+            'usedIndex' => 1,
         );
         //mock getIndex() so its not called for real
         $aMockFunctions = array(
             'getIndex' => array(
                 'expects' => $this->never(),
                 'returnValue' => true,
-            )
+            ),
         );
         $out = true;
         $action = $this->getAction($aMockFunctions, $aConfig, $out);
@@ -531,32 +514,32 @@ class tx_mksearch_tests_action_SearchSolr_testcase extends tx_mksearch_tests_Tes
         //view daten sollten nicht gesetzt sein
         self::assertFalse($action->getConfigurations()->getViewData()->offsetExists('result'), 'es wurde doch ein result gesetzt in den view daten. doch gesucht?');
 
-        $expectedJavaScript = 'jQuery(document).ready(function(){' .
-			'jQuery(myElementSelector).autocomplete({' .
-				'source: function( request, response ) {' .
-					'jQuery.ajax({' .
-						'url: "?id='.$this->linkId.'&type=540&mksearch%5Bajax%5D=1&mksearch%5BusedIndex%5D=1&mksearch[term]="+encodeURIComponent(request.term),' .
-						'dataType: "json",' .
-						'success: function( data ) {' .
-							'var suggestions = [];' .
-							'jQuery.each(data.suggestions, function(key, value) {' .
-								'jQuery.each(value, function(key, suggestion) {' .
-									'suggestions.push(suggestion.record.value);' .
-								'});' .
-							'});' .
-							'response( jQuery.map( suggestions, function( item ) {' .
-								'return {' .
-									'label: item,' .
-									'value: item' .
-								'};' .
-							'}));' .
-						'}' .
-					'});' .
-				'},' .
-				'minLength: 2' .
-			'});' .
-		'});' .
-		'jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();' . LF;
+        $expectedJavaScript = 'jQuery(document).ready(function(){'.
+            'jQuery(myElementSelector).autocomplete({'.
+                'source: function( request, response ) {'.
+                    'jQuery.ajax({'.
+                        'url: "?id='.$this->linkId.'&type=540&mksearch%5Bajax%5D=1&mksearch%5BusedIndex%5D=1&mksearch[term]="+encodeURIComponent(request.term),'.
+                        'dataType: "json",'.
+                        'success: function( data ) {'.
+                            'var suggestions = [];'.
+                            'jQuery.each(data.suggestions, function(key, value) {'.
+                                'jQuery.each(value, function(key, suggestion) {'.
+                                    'suggestions.push(suggestion.record.value);'.
+                                '});'.
+                            '});'.
+                            'response( jQuery.map( suggestions, function( item ) {'.
+                                'return {'.
+                                    'label: item,'.
+                                    'value: item'.
+                                '};'.
+                            '}));'.
+                        '}'.
+                    '});'.
+                '},'.
+                'minLength: 2'.
+            '});'.
+        '});'.
+        'jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();'.LF;
 
         $property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsInline');
         $property->setAccessible(true);

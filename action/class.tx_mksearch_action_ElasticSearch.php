@@ -28,10 +28,8 @@ tx_rnbase::load('tx_mksearch_util_ServiceRegistry');
 tx_rnbase::load('tx_mksearch_action_SearchSolr');
 
 /**
- * Elastic search action
+ * Elastic search action.
  *
- * @package TYPO3
- * @subpackage tx_mksearch
  * @author Hannes Bochmann
  * @author Michael Wagner
  * @license http://www.gnu.org/licenses/lgpl.html
@@ -39,12 +37,11 @@ tx_rnbase::load('tx_mksearch_action_SearchSolr');
  */
 class tx_mksearch_action_ElasticSearch extends tx_mksearch_action_AbstractSearch
 {
-
     /**
-     *
-     * @param array_object $parameters
+     * @param array_object             $parameters
      * @param tx_rnbase_configurations $configurations
-     * @param array_object $viewData
+     * @param array_object             $viewData
+     *
      * @return string error msg or null
      */
     public function handleRequest(&$parameters, &$configurations, &$viewData)
@@ -54,7 +51,7 @@ class tx_mksearch_action_ElasticSearch extends tx_mksearch_action_AbstractSearch
 
         $filter = $this->createFilter();
 
-        if ($configurations->get($confId . 'nosearch')) {
+        if ($configurations->get($confId.'nosearch')) {
             return null;
         }
 
@@ -94,7 +91,6 @@ class tx_mksearch_action_ElasticSearch extends tx_mksearch_action_AbstractSearch
     }
 
     /**
-     *
      * @return string
      */
     protected function getSearchSolrAction()
@@ -103,7 +99,6 @@ class tx_mksearch_action_ElasticSearch extends tx_mksearch_action_AbstractSearch
     }
 
     /**
-     *
      * @return string
      */
     protected function getServiceRegistry()
@@ -112,14 +107,13 @@ class tx_mksearch_action_ElasticSearch extends tx_mksearch_action_AbstractSearch
     }
 
     /**
-     * @param tx_rnbase_parameters $parameters
-     * @param tx_rnbase_configurations $configurations
-     * @param unknown $confId
-     * @param ArrayObject $viewdata
-     * @param array $fields
-     * @param array $options
+     * @param tx_rnbase_parameters                     $parameters
+     * @param tx_rnbase_configurations                 $configurations
+     * @param unknown                                  $confId
+     * @param ArrayObject                              $viewdata
+     * @param array                                    $fields
+     * @param array                                    $options
      * @param tx_mksearch_service_engine_ElasticSearch $index
-     * @return void
      */
     public function handlePageBrowser(
         tx_rnbase_parameters $parameters,
@@ -130,13 +124,13 @@ class tx_mksearch_action_ElasticSearch extends tx_mksearch_action_AbstractSearch
         array &$options,
         tx_mksearch_service_engine_ElasticSearch $searchEngine
     ) {
-        $typoScriptPathPageBrowser = $confId . 'hit.pagebrowser.';
+        $typoScriptPathPageBrowser = $confId.'hit.pagebrowser.';
         if ((isset($options['limit']))
             && is_array($conf = $configurations->get($confId.'hit.pagebrowser.'))
         ) {
             // PageBrowser initialisieren
             $pageBrowserId = $conf['pbid'] ? $conf['pbid'] :
-                            'search' . $configurations->getPluginId();
+                            'search'.$configurations->getPluginId();
             /* @var $pageBrowser tx_rnbase_util_PageBrowser */
             $pageBrowser = tx_rnbase::makeInstance(
                 'tx_rnbase_util_PageBrowser',
@@ -159,7 +153,8 @@ class tx_mksearch_action_ElasticSearch extends tx_mksearch_action_AbstractSearch
     }
 
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
+     *
      * @see tx_rnbase_action_BaseIOC::getTemplateName()
      */
     public function getTemplateName()
@@ -168,7 +163,8 @@ class tx_mksearch_action_ElasticSearch extends tx_mksearch_action_AbstractSearch
     }
 
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
+     *
      * @see tx_rnbase_action_BaseIOC::getViewClassName()
      */
     public function getViewClassName()
@@ -178,5 +174,5 @@ class tx_mksearch_action_ElasticSearch extends tx_mksearch_action_AbstractSearch
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/action/class.tx_mksearch_action_ElasticSearch.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/action/class.tx_mksearch_action_ElasticSearch.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/action/class.tx_mksearch_action_ElasticSearch.php'];
 }

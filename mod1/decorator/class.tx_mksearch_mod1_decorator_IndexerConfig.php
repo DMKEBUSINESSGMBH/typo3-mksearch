@@ -22,11 +22,8 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-
-
-
 /**
- * Diese Klasse ist für die Darstellung von Indexer tabellen im Backend verantwortlich
+ * Diese Klasse ist für die Darstellung von Indexer tabellen im Backend verantwortlich.
  */
 class tx_mksearch_mod1_decorator_IndexerConfig
 {
@@ -36,25 +33,26 @@ class tx_mksearch_mod1_decorator_IndexerConfig
     }
 
     /**
-     * Returns the module
+     * Returns the module.
+     *
      * @return tx_rnbase_mod_IModule
      */
     private function getModule()
     {
         return $this->mod;
     }
+
     /**
-     *
-     * @param   string                              $value
-     * @param   string                              $colName
-     * @param   array                               $record
-     * @param   tx_mksearch_model_internal_Config   $item
+     * @param string                            $value
+     * @param string                            $colName
+     * @param array                             $record
+     * @param tx_mksearch_model_internal_Config $item
      */
     public function format($value, $colName, $record, $item)
     {
         switch ($colName) {
             case 'title':
-                $ret  = '';
+                $ret = '';
                 $ret .= $value;
                 if (!empty($record->record['description'])) {
                     $ret .= '<br /><pre>'.$record->record['description'].'</pre>';
@@ -71,7 +69,7 @@ class tx_mksearch_mod1_decorator_IndexerConfig
                 break;
             case 'actions':
                 $formtool = $this->getModule()->getFormTool();
-                $ret  = '';
+                $ret = '';
                 // bearbeiten link
                 $ret .= $formtool->createEditLink($item->getTableName(), $item->getUid(), '');
                 // hide undhide link
@@ -87,10 +85,10 @@ class tx_mksearch_mod1_decorator_IndexerConfig
     }
 
     /**
+     * @param array $items
+     * @param array $options
      *
-     * @param   array       $items
-     * @param   array       $options
-     * @return  string
+     * @return string
      */
     public function getConfigInfos($items, $options = array())
     {
@@ -101,17 +99,18 @@ class tx_mksearch_mod1_decorator_IndexerConfig
 
         return '<ul><li>'.$ret.'</li></ul>';
     }
+
     /**
+     * @param tx_mksearch_model_internal_Composite $item
+     * @param array                                $options
      *
-     * @param   tx_mksearch_model_internal_Composite    $item
-     * @param   array                                   $options
-     * @return  string
+     * @return string
      */
     public function getConfigInfo(tx_mksearch_model_internal_Config $item, $options = array())
     {
         $formtool = $this->getModule()->getFormTool();
 
-        $out  = '';
+        $out = '';
         $out .= $formtool->createEditLink($item->getTableName(), $item->getUid(), '');
         $out .= $item->getTitle();
         // $out .= '<br />'; // @TODO: in indices und configs wahlweise mit ausgeben
@@ -119,7 +118,6 @@ class tx_mksearch_mod1_decorator_IndexerConfig
     }
 }
 
-
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/decorator/class.tx_mksearch_mod1_decorator_IndexerConfig.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/decorator/class.tx_mksearch_mod1_decorator_IndexerConfig.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/decorator/class.tx_mksearch_mod1_decorator_IndexerConfig.php'];
 }

@@ -29,10 +29,8 @@ tx_rnbase::load('tx_mksearch_util_Misc');
 tx_rnbase::load('tx_mksearch_util_SolrAutocomplete');
 
 /**
- * Solr search action
+ * Solr search action.
  *
- * @package TYPO3
- * @subpackage tx_mksearch
  * @author Hannes Bochmann
  * @author Michael Wagner
  * @license http://www.gnu.org/licenses/lgpl.html
@@ -40,17 +38,16 @@ tx_rnbase::load('tx_mksearch_util_SolrAutocomplete');
  */
 class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
 {
-
     /**
      * @var string
      */
     protected $autocompleteConfId = 'autocomplete.';
 
     /**
-     *
-     * @param array_object $parameters
+     * @param array_object             $parameters
      * @param tx_rnbase_configurations $configurations
-     * @param array_object $viewData
+     * @param array_object             $viewData
+     *
      * @return string error msg or null
      */
     public function handleRequest(&$parameters, &$configurations, &$viewData)
@@ -109,7 +106,7 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
             tx_rnbase_util_Debug::debug(
                 array(
                     'Filter returns false, no search done.',
-                    $fields, $options
+                    $fields, $options,
                 ),
                 'class.tx_mksearch_action_SearchSolr.php Line: '.__LINE__
             );
@@ -120,10 +117,11 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
     }
 
     /**
-     * Generiert den Cache-Schlüssel für die aktuelle Anfrage
+     * Generiert den Cache-Schlüssel für die aktuelle Anfrage.
      *
      * @param array $fields
      * @param array $options
+     *
      * @return string
      */
     private function generateCacheKey(
@@ -136,18 +134,18 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
             if (is_array($value)) {
                 $value = $this->generateCacheKey($value);
             }
-            $data[$key] = $key . $value;
+            $data[$key] = $key.$value;
         }
 
-        return 'search_' . md5(serialize($data));
+        return 'search_'.md5(serialize($data));
     }
 
     /**
-     * Sucht in Solr
+     * Sucht in Solr.
      *
-     * @param array $fields
-     * @param array $options
-     * @param tx_rnbase_configurations $configurations
+     * @param array                            $fields
+     * @param array                            $options
+     * @param tx_rnbase_configurations         $configurations
      * @param tx_mksearch_model_internal_Index $index
      *
      * @return array|false
@@ -180,7 +178,7 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
                 $result,
                 $options,
                 $configurations,
-                $this->getConfId() . 'responseProcessor.'
+                $this->getConfId().'responseProcessor.'
             );
             $this->findCharBrowserData($result);
         } catch (Exception $e) {
@@ -205,7 +203,7 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
                         'Exception' => $e->getMessage(),
                         'fields' => $fields,
                         'options' => $options,
-                        'URL' => $lastUrl
+                        'URL' => $lastUrl,
                     ),
                     'class.tx_mksearch_action_SearchSolr.php Line: '.__LINE__
                 );
@@ -228,14 +226,16 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
      * PageBrowser Integration für Solr
      * Solr liefert bei einer Suchanfrage immer die Gesamtzahl der Treffer mit.
      * Somit ist eine spezielle Suche für die Trefferzahl nicht notwendig.
-     * @param tx_rnbase_IParameters $parameters
+     *
+     * @param tx_rnbase_IParameters    $parameters
      * @param tx_rnbase_configurations $configurations
+     *
      * @return tx_rnbase_util_PageBrowser
      */
     public function handlePageBrowser($parameters, $configurations, $confId, $viewdata, &$fields, &$options, $index)
     {
         // handle page browser only, if configured and the limit is greater than zero.
-        $typoScriptPathPageBrowser = $confId . 'hit.pagebrowser.';
+        $typoScriptPathPageBrowser = $confId.'hit.pagebrowser.';
         if ((isset($options['limit']) && $options['limit'] > 0)
             && is_array($conf = $configurations->get($typoScriptPathPageBrowser))
         ) {
@@ -295,11 +295,9 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
 
     /**
      * Extracts the charbrowser data from the facets
-     * and fills the viewdata for the tempate output
+     * and fills the viewdata for the tempate output.
      *
      * @param array $result
-     *
-     * @return void
      */
     protected function findCharBrowserData(array &$result)
     {
@@ -309,7 +307,7 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
 
         $facet = null;
 
-        $facetField  = $this->getConfigurations()->get($this->getConfId(). 'facetField') ?: 'first_letter_s';
+        $facetField = $this->getConfigurations()->get($this->getConfId().'facetField') ?: 'first_letter_s';
 
         // check if there are a first_letter_s
         foreach ($result['facets'] as $key => $group) {
@@ -324,10 +322,10 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
             return;
         }
 
-        $confId = $this->getConfId() . 'charbrowser.';
+        $confId = $this->getConfId().'charbrowser.';
         $configurations = $this->getConfigurations();
         $viewData = $configurations->getViewData();
-        $pointername = $configurations->get($confId . 'cbid') ?: 'solr-cb';
+        $pointername = $configurations->get($confId.'cbid') ?: 'solr-cb';
 
         $list = array();
         // now build the pagerdate based on the faccets
@@ -349,14 +347,12 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
     }
 
     /**
-     * Include the neccessary javascripts for the autocomplete feature
-     *
-     * @return void
+     * Include the neccessary javascripts for the autocomplete feature.
      */
     protected function prepareAutocomplete()
     {
         $configurations = $this->getConfigurations();
-        $autocompleteTsPath = $this->getConfId() . $this->autocompleteConfId;
+        $autocompleteTsPath = $this->getConfId().$this->autocompleteConfId;
 
         if (!$configurations->get($autocompleteTsPath.'enable')) {
             return;
@@ -380,7 +376,7 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
         $pageRenderer = tx_rnbase_util_TYPO3::getPageRenderer();
         if (!empty($jsScripts)) {
             foreach ($jsScripts as $javaScriptFilename) {
-                $pageRenderer->addJsLibrary($javaScriptFilename, $javascriptsPath . $javaScriptFilename);
+                $pageRenderer->addJsLibrary($javaScriptFilename, $javascriptsPath.$javaScriptFilename);
             }
         }
 
@@ -390,22 +386,20 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
         );
 
         $autocompleteJS = tx_mksearch_util_SolrAutocomplete::getAutocompleteJavaScriptByConfigurationArrayAndLink(
-            $configurations->get($this->getConfId() . $this->autocompleteConfId),
+            $configurations->get($this->getConfId().$this->autocompleteConfId),
             $link,
             false
         );
 
         $javaScriptSnippetSuffix =
-            $configurations->get($this->getConfId() . $this->autocompleteConfId . 'javaScriptSnippetSuffix') ?
-                $configurations->get($this->getConfId() . $this->autocompleteConfId . 'javaScriptSnippetSuffix') :
+            $configurations->get($this->getConfId().$this->autocompleteConfId.'javaScriptSnippetSuffix') ?
+                $configurations->get($this->getConfId().$this->autocompleteConfId.'javaScriptSnippetSuffix') :
                 $this->getConfigurations()->getPluginId();
-        $pageRenderer->addJsFooterInlineCode('mksearch_autocomplete_' . $javaScriptSnippetSuffix, $autocompleteJS);
+        $pageRenderer->addJsFooterInlineCode('mksearch_autocomplete_'.$javaScriptSnippetSuffix, $autocompleteJS);
     }
 
     /**
      * Process a autocomplete call and return the json directly!
-     *
-     * @return void
      */
     protected function processAutocomplete()
     {
@@ -423,7 +417,8 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
 
             $result = $this->getViewData()->offsetGet('result');
             $forbiddenResultItems = array('searchUrl' => null, 'searchTime' => null, 'response' => null);
-            return json_encode(array_diff_key($result,$forbiddenResultItems));
+
+            return json_encode(array_diff_key($result, $forbiddenResultItems));
         }
     }
 
@@ -431,6 +426,7 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
     {
         return 'searchsolr';
     }
+
     public function getViewClassName()
     {
         return 'tx_mksearch_view_SearchSolr';
@@ -438,5 +434,5 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/action/class.tx_mksearch_action_SearchSolr.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/action/class.tx_mksearch_action_SearchSolr.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/action/class.tx_mksearch_action_SearchSolr.php'];
 }

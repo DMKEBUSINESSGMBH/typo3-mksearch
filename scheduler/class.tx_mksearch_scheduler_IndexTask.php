@@ -23,24 +23,18 @@
 ***************************************************************/
 tx_rnbase::load('Tx_Rnbase_Scheduler_Task');
 
-/**
- *
- */
 class tx_mksearch_scheduler_IndexTask extends Tx_Rnbase_Scheduler_Task
 {
-
     /**
-     * Amount of items to be indexed at one run
+     * Amount of items to be indexed at one run.
      *
-     * @var     int
+     * @var int
      */
     private $amountOfItems;
 
     /**
      * Function executed from the Scheduler.
-     * Sends an email
-     *
-     * @return  void
+     * Sends an email.
      */
     public function execute()
     {
@@ -71,7 +65,7 @@ class tx_mksearch_scheduler_IndexTask extends Tx_Rnbase_Scheduler_Task
     }
 
     /**
-     * Return amount of items
+     * Return amount of items.
      *
      * @return int
      */
@@ -81,10 +75,9 @@ class tx_mksearch_scheduler_IndexTask extends Tx_Rnbase_Scheduler_Task
     }
 
     /**
-     * Set amount of items
+     * Set amount of items.
      *
-     * @param int   $val
-     * @return void
+     * @param int $val
      */
     public function setAmountOfItems($val)
     {
@@ -98,9 +91,9 @@ class tx_mksearch_scheduler_IndexTask extends Tx_Rnbase_Scheduler_Task
     }
 
     /**
-     * This method returns the destination mail address as additional information
+     * This method returns the destination mail address as additional information.
      *
-     * @return  string  Information to display
+     * @return string Information to display
      */
     public function getAdditionalInformation()
     {
@@ -110,6 +103,7 @@ class tx_mksearch_scheduler_IndexTask extends Tx_Rnbase_Scheduler_Task
             $this->getItemsInQueue()
         );
     }
+
     private function getItemsInQueue()
     {
         return tx_mksearch_util_ServiceRegistry::getIntIndexService()->countItemsInQueue();
@@ -117,5 +111,5 @@ class tx_mksearch_scheduler_IndexTask extends Tx_Rnbase_Scheduler_Task
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/scheduler/class.tx_mksearch_scheduler_IndexTask.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/scheduler/class.tx_mksearch_scheduler_IndexTask.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/scheduler/class.tx_mksearch_scheduler_IndexTask.php'];
 }

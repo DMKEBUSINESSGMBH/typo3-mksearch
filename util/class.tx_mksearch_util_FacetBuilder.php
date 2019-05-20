@@ -29,8 +29,6 @@ tx_rnbase::load('Tx_Rnbase_Domain_Model_Data');
  * Der FacetBuilder erstellt aus den Rohdaten
  * der Facets passende Objekte für das Rendering.
  *
- * @package TYPO3
- * @subpackage tx_mksearch
  * @author Hannes Bochmann
  * @author Michael Wagner
  */
@@ -42,16 +40,15 @@ class tx_mksearch_util_FacetBuilder
     private $options = null;
 
     /**
-     *
-     * @var tx_mksearch_util_KeyValueFacet|NULL
+     * @var tx_mksearch_util_KeyValueFacet|null
      */
     private $keyValueFacetInstance = null;
 
     /**
-     * Get singelton
+     * Get singelton.
      *
      * @param string $class
-     * @param array $options
+     * @param array  $options
      *
      * @return tx_mksearch_util_FacetBuilder
      */
@@ -67,7 +64,7 @@ class tx_mksearch_util_FacetBuilder
     }
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param array $options
      */
@@ -78,7 +75,7 @@ class tx_mksearch_util_FacetBuilder
     }
 
     /**
-     * The options for this builder
+     * The options for this builder.
      *
      * @return Tx_Rnbase_Domain_Model_Data
      */
@@ -92,7 +89,7 @@ class tx_mksearch_util_FacetBuilder
      */
     protected function getKeyValueFacetInstance()
     {
-        if ($this->keyValueFacetInstance === null) {
+        if (null === $this->keyValueFacetInstance) {
             $this->keyValueFacetInstance = tx_rnbase::makeInstance(
                 'tx_mksearch_util_KeyValueFacet'
             );
@@ -102,9 +99,10 @@ class tx_mksearch_util_FacetBuilder
     }
 
     /**
-     * Baut die Daten für die Facets zusammen
+     * Baut die Daten für die Facets zusammen.
      *
      * @param array|stdClass $facetData Alle Daten von Solr
+     *
      * @return array[] Ausgabedaten
      */
     public function buildFacets($facetData)
@@ -121,7 +119,7 @@ class tx_mksearch_util_FacetBuilder
 
     /**
      * Query-Facets kommen von Solr nicht in Gruppen strukturiert. Damit wir mehrere Query-Gruppen unterscheiden
-     * können, müssen die Queries IMMER mit einem Key angelegt werden. Folgende Form:
+     * können, müssen die Queries IMMER mit einem Key angelegt werden. Folgende Form:.
      *
      *  <str name="facet.query">{!key="date_lastweek"}datetime:[NOW-7DAYS/DAY TO NOW]</str>
      *  <str name="facet.query">{!key="date_lastmonth"}datetime:[NOW-1MONTH/MONTH TO NOW]</str>
@@ -129,6 +127,7 @@ class tx_mksearch_util_FacetBuilder
      * Damit splitten gruppieren wir nach dem String vor dem ersten Unterstrich.
      *
      * @param array[stdClass] $facetData Query-Facet Daten von Solr
+     *
      * @return array[tx_rnbase_model_base] Ausgabedaten
      */
     protected function buildQueryFacets($facetData)
@@ -164,7 +163,7 @@ class tx_mksearch_util_FacetBuilder
 
     /**
      * Query-Facets kommen von Solr nicht in Gruppen strukturiert. Damit wir mehrere Query-Gruppen unterscheiden
-     * können, müssen die Queries IMMER mit einem Key angelegt werden. Folgende Form:
+     * können, müssen die Queries IMMER mit einem Key angelegt werden. Folgende Form:.
      *
      *  <str name="facet.query">{!key="date_lastweek"}datetime:[NOW-7DAYS/DAY TO NOW]</str>
      *  <str name="facet.query">{!key="date_lastmonth"}datetime:[NOW-1MONTH/MONTH TO NOW]</str>
@@ -172,6 +171,7 @@ class tx_mksearch_util_FacetBuilder
      * Damit splitten gruppieren wir nach dem String vor dem ersten Unterstrich.
      *
      * @param array[stdClass] $facetData Query-Facet Daten von Solr
+     *
      * @return array[tx_rnbase_model_base] Ausgabedaten
      */
     protected function buildPivotFacets($facetData)
@@ -199,6 +199,7 @@ class tx_mksearch_util_FacetBuilder
      * Creates Hierarchical Facets.
      *
      * @param array $pivots
+     *
      * @return multitype:tx_mksearch_model_Facet
      */
     protected function buildPivotChildFacets($pivots)
@@ -222,9 +223,10 @@ class tx_mksearch_util_FacetBuilder
     }
 
     /**
-     * Baut die Daten für die Field-Facets zusammen
+     * Baut die Daten für die Field-Facets zusammen.
      *
      * @param array|stdClass $facetData Field-Facet Daten von Solr
+     *
      * @return array Ausgabedaten
      */
     protected function buildFieldFacets($facetData)
@@ -258,11 +260,12 @@ class tx_mksearch_util_FacetBuilder
     }
 
     /**
-     * Liefert eine simple Facette zurück
+     * Liefert eine simple Facette zurück.
      *
      * @param string $field
-     * @param int $id
-     * @param int $count
+     * @param int    $id
+     * @param int    $count
+     *
      * @return tx_mksearch_model_Facet
      */
     protected function getSimpleFacet(
@@ -302,6 +305,7 @@ class tx_mksearch_util_FacetBuilder
      * checks the sorting field of the facets and and sorts afterwards.
      *
      * @param array $facets
+     *
      * @return array
      */
     public function sortFacets(array $facets)
@@ -333,6 +337,7 @@ class tx_mksearch_util_FacetBuilder
      *
      * @param tx_mksearch_model_Facet $a
      * @param tx_mksearch_model_Facet $b
+     *
      * @return int
      */
     public static function cbSortFacets($a, $b)
@@ -344,11 +349,10 @@ class tx_mksearch_util_FacetBuilder
         return ($a->getSorting() < $b->getSorting()) ? -1 : 1;
     }
 
-
     /**
      * Debugs the big facet array for better readability.
      *
-     * @param mixed $var
+     * @param mixed  $var
      * @param number $levels
      * @param mixed
      */
@@ -362,7 +366,7 @@ class tx_mksearch_util_FacetBuilder
             $childs = $var instanceof tx_mksearch_model_Facet ? $var->getChilds() : $var->getItems();
             $childs = is_array($childs) ? $childs : array();
             $var = array_map('strval', $var->getProperty());
-            $var['childs'] = $levels-- <= 0 ? 'length: ' . count($childs) : self::debugFacets($childs, $levels);
+            $var['childs'] = $levels-- <= 0 ? 'length: '.count($childs) : self::debugFacets($childs, $levels);
         }
 
         return $var;
@@ -370,5 +374,5 @@ class tx_mksearch_util_FacetBuilder
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_FacetBuilder.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_FacetBuilder.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_FacetBuilder.php'];
 }

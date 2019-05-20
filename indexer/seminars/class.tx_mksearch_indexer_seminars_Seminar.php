@@ -1,7 +1,5 @@
 <?php
 /**
- * @package tx_mksearch
- * @subpackage tx_mksearch_indexer_seminars
  * @author Hannes Bochmann
  *
  *  Copyright notice
@@ -27,9 +25,8 @@
  */
 
 /**
- * benötigte Klassen einbinden
+ * benötigte Klassen einbinden.
  */
-
 tx_rnbase::load('tx_mksearch_interface_Indexer');
 tx_rnbase::load('tx_mksearch_util_Misc');
 tx_rnbase::load('tx_mksearch_util_Indexer');
@@ -38,10 +35,7 @@ tx_rnbase::load('tx_mksearch_util_Indexer');
  * Indexer service for seminars.seminar called by the "mksearch" extension.
  * This is just a wrapper for the different object types of seminars. This
  * class doesnt do the actual indexing. this happens in the classes which are
- * responsible for the diffenrent types
- *
- * @package tx_mksearch
- * @subpackage tx_mksearch_indexer_seminars
+ * responsible for the diffenrent types.
  */
 class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Indexer
 {
@@ -52,9 +46,9 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
     const SEMINARS_TABLE_SEMINARS_LEADERS_MM = 'tx_seminars_seminars_speakers_mm_leaders';
     const SEMINARS_TABLE_SPEAKERS = 'tx_seminars_speakers';
 
-
     /**
-     * Our seminar object
+     * Our seminar object.
+     *
      * @var tx_seminars_seminar
      */
     protected $oSeminar;
@@ -76,33 +70,34 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
     }
 
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
+     *
      * @see tx_mksearch_interface_Indexer::prepareSearchData()
      */
     public function prepareSearchData($tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options)
     {
         //was a related table changed?
-        if ($tableName == 'tx_seminars_categories') {
+        if ('tx_seminars_categories' == $tableName) {
             $this->handleRelatedMmChanged(SEMINARS_TABLE_SEMINARS_CATEGORIES_MM, $rawData);
 
             return null;
-        } elseif ($tableName == 'tx_seminars_organizers') {
+        } elseif ('tx_seminars_organizers' == $tableName) {
             $this->handleRelatedMmChanged(SEMINARS_TABLE_SEMINARS_ORGANIZERS_MM, $rawData);
 
             return null;
-        } elseif ($tableName == 'tx_seminars_sites') {
+        } elseif ('tx_seminars_sites' == $tableName) {
             $this->handleRelatedMmChanged(SEMINARS_TABLE_SEMINARS_SITES_MM, $rawData);
 
             return null;
-        } elseif ($tableName == 'tx_seminars_speakers') {
+        } elseif ('tx_seminars_speakers' == $tableName) {
             $this->handleRelatedMmChanged(SEMINARS_TABLE_SEMINARS_SPEAKERS_MM, $rawData);
 
             return null;
-        } elseif ($tableName == 'tx_seminars_target_groups') {
+        } elseif ('tx_seminars_target_groups' == $tableName) {
             $this->handleRelatedMmChanged(SEMINARS_TABLE_SEMINARS_TARGET_GROUPS_MM, $rawData);
 
             return null;
-        } elseif ($tableName == 'tx_seminars_timeslots') {
+        } elseif ('tx_seminars_timeslots' == $tableName) {
             //we have no mm for timeslots
             $this->addSeminarToIndex($rawData['seminar']);
 
@@ -129,13 +124,13 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
         }
 
         //redirect the indexing to the responsible class
-        if ($rawData['object_type'] == 0) {
+        if (0 == $rawData['object_type']) {
             $oIndexer = tx_rnbase::makeInstance('tx_mksearch_indexer_seminars_SeminarObjectType0');
-        } elseif ($rawData['object_type'] == 1) {
+        } elseif (1 == $rawData['object_type']) {
             $oIndexer = tx_rnbase::makeInstance('tx_mksearch_indexer_seminars_SeminarObjectType1');
         } //we dont need to index a event date as this happens when we index
         //a event topic
-        elseif ($rawData['object_type'] == 2) {
+        elseif (2 == $rawData['object_type']) {
             $this->addSeminarToIndex($rawData['topic']);
 
             return null;
@@ -147,11 +142,10 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
     /**
      * Collects all seminar uids found via an MM Relation (given table)
      * and the given foreign uid (e.g. of a category). All seminars that
-     * are found will be put into the queue
+     * are found will be put into the queue.
      *
-     * @param string $sTable    | the MM Table
-     * @param array $aRawData   | the record (non seminar; e.g. category) containing the foreign uid
-     * @return void
+     * @param string $sTable   | the MM Table
+     * @param array  $aRawData | the record (non seminar; e.g. category) containing the foreign uid
      */
     private function handleRelatedMmChanged($sTable, $aRawData)
     {
@@ -171,9 +165,9 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
     }
 
     /**
-     * Indexes everything about the seminar
+     * Indexes everything about the seminar.
+     *
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @return void
      */
     protected function indexSeminar(tx_mksearch_interface_IndexerDocument $indexDoc)
     {
@@ -203,9 +197,9 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
     }
 
     /**
-     * Indexes everything about the seminar categories
+     * Indexes everything about the seminar categories.
+     *
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @return void
      */
     protected function indexSeminarCategories(tx_mksearch_interface_IndexerDocument $indexDoc)
     {
@@ -220,9 +214,9 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
     }
 
     /**
-     * Indexes everything about the seminar organizers
+     * Indexes everything about the seminar organizers.
+     *
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @return void
      */
     protected function indexSeminarTargetGroups(tx_mksearch_interface_IndexerDocument $indexDoc)
     {
@@ -234,7 +228,8 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
     }
 
     /**
-     * Puts a seminar into the mksearch queue
+     * Puts a seminar into the mksearch queue.
+     *
      * @param int $iUid
      */
     protected function addSeminarToIndex($iUid)
@@ -245,10 +240,11 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
 
     /**
      * Collects the values from objects. the objects
-     * reside inside an list object
+     * reside inside an list object.
      *
-     * @param array $aValues    | array of objects
-     * @param array $aMapping   | the field key and the function name delivering the data
+     * @param array $aValues  | array of objects
+     * @param array $aMapping | the field key and the function name delivering the data
+     *
      * @return array
      */
     protected function getMultiValueFieldsByListObject($aValues, array $aMapping)
@@ -275,7 +271,7 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
     }
 
     /**
-     * Collects the values from an array
+     * Collects the values from an array.
      *
      * @param array $aValues
      * @param array $aMapping
@@ -310,11 +306,11 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
     }
 
     /**
-     * Indexes the given array by the mapping
+     * Indexes the given array by the mapping.
      *
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @param array $aMapping
-     * @param array $aValues
+     * @param array                                 $aMapping
+     * @param array                                 $aValues
      */
     protected function indexArrayByMapping(tx_mksearch_interface_IndexerDocument $indexDoc, array $aMapping, array $aValues)
     {
@@ -327,7 +323,8 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
 
     /**
      * Prüft anhand der Konfiguration, ob der übergebene Datensatz indiziert werden soll.
-     * TODO: implement
+     * TODO: implement.
+     *
      * @param array $sourceRecord
      * @param array $options
      */
@@ -340,15 +337,16 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
     }
 
     /**
-     * Liefert das Seminar Objekt zur gegebenen Uid
+     * Liefert das Seminar Objekt zur gegebenen Uid.
+     *
      * @param array $rawData
+     *
      * @return tx_seminars_seminar
      */
     protected function getSeminar($rawData)
     {
         return new tx_seminars_seminar($rawData['uid']);
     }
-
 
     /**
      * This method is directly taken from tx_seminars_seminar. We have no
@@ -381,15 +379,15 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
         if (tx_rnbase_util_TYPO3::isTYPO60OrHigher()) {
             return tx_rnbase::makeInstance(
                 'tx_seminars_Bag_Speaker',
-                $mmTable . '.uid_local = ' . $uid . ' AND ' . 'tx_seminars_speakers.uid = ' . $mmTable . '.uid_foreign',
+                $mmTable.'.uid_local = '.$uid.' AND '.'tx_seminars_speakers.uid = '.$mmTable.'.uid_foreign',
                 $mmTable,
                 'sorting'
             );
         } else {
             return tx_oelib_ObjectFactory::make(
                 'tx_seminars_speakerbag',
-                $mmTable . '.uid_local = ' . $uid . ' AND ' .
-                    self::SEMINARS_TABLE_SPEAKERS . '.uid = ' . $mmTable . '.uid_foreign',
+                $mmTable.'.uid_local = '.$uid.' AND '.
+                    self::SEMINARS_TABLE_SPEAKERS.'.uid = '.$mmTable.'.uid_foreign',
                 $mmTable
             );
         }
@@ -397,7 +395,8 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
 
     /**
      * Provides the mapping for the fields in Solr
-     * and the fields in the category object
+     * and the fields in the category object.
+     *
      * @return array
      */
     protected function getCategoriesMapping()
@@ -410,7 +409,8 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
     /**
      * Provides the mapping for the fields in Solr
      * and the functions of the organizer object delivering
-     * the data
+     * the data.
+     *
      * @return array
      */
     protected function getOrganizersMapping()
@@ -426,7 +426,8 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
     /**
      * Provides the mapping for the fields in Solr
      * and the functions of the places object delivering
-     * the data
+     * the data.
+     *
      * @return array
      */
     protected function getPlacesMapping()
@@ -435,7 +436,7 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
             'getAddress' => 'place_adress_ms',
             'getCity' => 'place_city_ms',
             // Das Land wird ggf. als Tx_Oelib_Model_Country geliefert
-            'getCountry' => array('indexfield' => 'place_country_ms', 'getter' => 'getLocalShortName' ),
+            'getCountry' => array('indexfield' => 'place_country_ms', 'getter' => 'getLocalShortName'),
             'getDirections' => 'place_directions_ms',
             'getHomepage' => 'place_homepage_ms',
             'getNotes' => 'place_notes_ms',
@@ -447,7 +448,8 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
     /**
      * Provides the mapping for the fields in Solr
      * and the functions of the speakers object delivering
-     * the data
+     * the data.
+     *
      * @return array
      */
     protected function getSpeakersMapping()
@@ -469,7 +471,8 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
 
     /**
      * Provides the mapping for the fields in Solr
-     * and the fields in the timeslots object
+     * and the fields in the timeslots object.
+     *
      * @return array
      */
     protected function getTimeslotsMapping()
@@ -526,5 +529,5 @@ LH;
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/seminars/class.tx_mksearch_indexer_seminars_Seminar.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/seminars/class.tx_mksearch_indexer_seminars_Seminar.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/seminars/class.tx_mksearch_indexer_seminars_Seminar.php'];
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace DMK\Mksearch\Backend\Form\Element;
 
 /***************************************************************
@@ -25,10 +26,8 @@ namespace DMK\Mksearch\Backend\Form\Element;
  ***************************************************************/
 
 /**
- * DMK\Mksearch\Backend\Form\Element$IndexerConfigurationField
+ * DMK\Mksearch\Backend\Form\Element$IndexerConfigurationField.
  *
- * @package         TYPO3
- * @subpackage      mksearch
  * @author          Hannes Bochmann
  * @license         http://www.gnu.org/licenses/lgpl.html
  *                  GNU Lesser General Public License, version 3 or later
@@ -36,7 +35,8 @@ namespace DMK\Mksearch\Backend\Form\Element;
 class IndexerConfigurationField extends \TYPO3\CMS\Backend\Form\Element\TextElement
 {
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
+     *
      * @see TYPO3\CMS\Backend\Form\Element\TextElement::render()
      */
     public function render()
@@ -58,7 +58,8 @@ class IndexerConfigurationField extends \TYPO3\CMS\Backend\Form\Element\TextElem
     }
 
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
+     *
      * @see TYPO3\CMS\Backend\Form\Element\TextElement::render()
      */
     protected function callRenderOnParent()

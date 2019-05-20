@@ -22,7 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-
 tx_rnbase::load('tx_mksearch_service_indexer_core_Page');
 
 /**
@@ -60,33 +59,34 @@ tx_rnbase::load('tx_mksearch_service_indexer_core_Page');
  */
 class tx_mksearch_service_indexer_core_PageTV extends tx_mksearch_service_indexer_core_Page
 {
-
     /**
-     * Special TV fields needed in background, but not for actual indexing
+     * Special TV fields needed in background, but not for actual indexing.
      *
      * @var unknown_type
      */
     private $tvFields = array('tx_templavoila_flex');
 
     /**
-     * Shortcut to templavoila.tt_content include pages configuration
+     * Shortcut to templavoila.tt_content include pages configuration.
      *
      * @var array
      */
     private $ttcConfInclude = array();
 
     /**
-     * Shortcut to templavoila.tt_content mapping configuration
+     * Shortcut to templavoila.tt_content mapping configuration.
      *
      * @var array
      */
     private $ttcConfMap = array();
 
     /**
-     * Get sql data necessary to grab data to be indexed from data base
+     * Get sql data necessary to grab data to be indexed from data base.
      *
      * @param array $options from service configuration
+     *
      * @return array
+     *
      * @see tx_mksearch_service_indexer_BaseDataBase::getSqlData()
      */
     protected function getSqlData(array $options)
@@ -106,11 +106,12 @@ class tx_mksearch_service_indexer_core_PageTV extends tx_mksearch_service_indexe
     }
 
     /**
-     * Prepare / transform data from database for indexing
+     * Prepare / transform data from database for indexing.
      *
      * @param array                             $rawData
-     * @param array                             $options from service configuration
+     * @param array                             $options  from service configuration
      * @param tx_mksearch_model_IndexerDocument $indexDoc Model to be filled
+     *
      * @return tx_mksearch_model_IndexerDocument or null, if record is not to be indexed
      */
     protected function prepareData(array $rawData, array $options, tx_mksearch_model_IndexerDocument $indexDoc)
@@ -138,5 +139,5 @@ class tx_mksearch_service_indexer_core_PageTV extends tx_mksearch_service_indexe
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/indexer/core/class.tx_mksearch_service_indexer_core_PageTV.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/indexer/core/class.tx_mksearch_service_indexer_core_PageTV.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/indexer/core/class.tx_mksearch_service_indexer_core_PageTV.php'];
 }

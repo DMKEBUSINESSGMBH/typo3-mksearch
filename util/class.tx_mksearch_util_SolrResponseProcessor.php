@@ -1,42 +1,15 @@
 <?php
-/**
- * @package tx_mksearch
- * @subpackage tx_mksearch_util
- *
- *  Copyright notice
- *
- *  (c) 2011 DMK E-Business GmbH <dev@dmk-ebusiness.de>
- *  All rights reserved
- *
- *  This script is part of the TYPO3 project. The TYPO3 project is
- *  free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  The GNU General Public License can be found at
- *  http://www.gnu.org/copyleft/gpl.html.
- *
- *  This script is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  This copyright notice MUST APPEAR in all copies of the script!
- */
-
-
 
 /**
  * Der FacetBuilder erstellt aus den Rohdaten der Facets passende Objekte für das Rendering.
- * @package tx_mksearch
- * @subpackage tx_mksearch_util
+ *
  * @author Michael Wagner <dev@dmk-ebusiness.de>
  */
 class tx_mksearch_util_SolrResponseProcessor
 {
     /**
-     * Konfigurations Objekt
+     * Konfigurations Objekt.
+     *
      * @var tx_rnbase_configurations
      */
     private $configurations = null;
@@ -44,10 +17,12 @@ class tx_mksearch_util_SolrResponseProcessor
 
     /**
      * Enter description here ...
-     * @param array $response
-     * @param array $options
+     *
+     * @param array                    $response
+     * @param array                    $options
      * @param tx_rnbase_configurations $configurations
-     * @param string $confId
+     * @param string                   $confId
+     *
      * @return bool
      */
     public static function processSolrResult(array &$result, $options, &$configurations, $confId)
@@ -61,7 +36,7 @@ class tx_mksearch_util_SolrResponseProcessor
         }
 
         if (!$instance) {
-            $processorClass = $configurations->get($confId . 'class');
+            $processorClass = $configurations->get($confId.'class');
             $processorClass = $processorClass ? $processorClass : get_called_class();
             $instance = tx_rnbase::makeInstance($processorClass, $configurations, $confId);
         }
@@ -77,6 +52,7 @@ class tx_mksearch_util_SolrResponseProcessor
         $this->configurations = $configurations;
         $this->confId = $confId;
     }
+
     /**
      * @return tx_rnbase_configurations
      */
@@ -84,6 +60,7 @@ class tx_mksearch_util_SolrResponseProcessor
     {
         return $this->configurations;
     }
+
     /**
      * @return string
      */
@@ -94,8 +71,9 @@ class tx_mksearch_util_SolrResponseProcessor
 
     /**
      * Enter description here ...
+     *
      * @param Apache_Solr_Response $response
-     * @param unknown_type $result
+     * @param unknown_type         $result
      */
     public function processSolrResponse(Apache_Solr_Response &$response, $options, $result = array())
     {
@@ -110,6 +88,7 @@ class tx_mksearch_util_SolrResponseProcessor
      * @TODO: sollte es hierfür nicht auch eine klasse wie tx_mksearch_util_HitBuilder geben?
      *
      * @param Apache_Solr_Response $response
+     *
      * @return array
      */
     public function processHits(Apache_Solr_Response &$response, array $options, array $hits = array())
@@ -165,7 +144,8 @@ class tx_mksearch_util_SolrResponseProcessor
      *
      * @param string $originalValue
      * @param string $highlightedValue
-     * @param array $options
+     * @param array  $options
+     *
      * @return string
      */
     protected function handleHellip(
@@ -205,7 +185,7 @@ class tx_mksearch_util_SolrResponseProcessor
                 $cleanHighlighted
             )
             ) {
-                $highlightedValue = $wrap[0] . $highlightedValue;
+                $highlightedValue = $wrap[0].$highlightedValue;
             }
             // add post, if the last part is not the same!
             if (!tx_rnbase_util_Strings::isLastPartOfStr(
@@ -213,7 +193,7 @@ class tx_mksearch_util_SolrResponseProcessor
                 $cleanHighlighted
             )
             ) {
-                $highlightedValue = $highlightedValue . $wrap[1];
+                $highlightedValue = $highlightedValue.$wrap[1];
             }
         }
 
@@ -221,8 +201,8 @@ class tx_mksearch_util_SolrResponseProcessor
     }
 
     /**
-     *
      * @param Apache_Solr_Response $response
+     *
      * @return array
      */
     public function processFacets(Apache_Solr_Response &$response)
@@ -232,10 +212,10 @@ class tx_mksearch_util_SolrResponseProcessor
         }
 
         // usually "searchsolr.responseProcessor.facet."
-        $confId = $this->getConfId() . 'facet.';
+        $confId = $this->getConfId().'facet.';
         $configurations = $this->getConfigurations();
 
-        $builderClass = $configurations->get($confId . 'builderClass');
+        $builderClass = $configurations->get($confId.'builderClass');
         $builderClass = $builderClass ? $builderClass : 'tx_mksearch_util_FacetBuilder';
 
         tx_rnbase::load('tx_mksearch_util_FacetBuilder');
@@ -246,15 +226,16 @@ class tx_mksearch_util_SolrResponseProcessor
 
         $facets = $facetBuilder->buildFacets($response->facet_counts);
 
-        if ($configurations->getBool($confId . 'sorting')) {
+        if ($configurations->getBool($confId.'sorting')) {
             $facets = $facetBuilder->sortFacets($facets);
         }
 
         return $facets;
     }
+
     /**
-     *
      * @param Apache_Solr_Response $response
+     *
      * @return array
      */
     public function processSuggestions(Apache_Solr_Response &$response)
@@ -275,9 +256,10 @@ class tx_mksearch_util_SolrResponseProcessor
     }
 
     /**
-     * Checks if we got highlightings and wraps them in case in an array
+     * Checks if we got highlightings and wraps them in case in an array.
      *
      * @param Apache_Solr_Response $response
+     *
      * @return array
      */
     protected function getHighlighting(Apache_Solr_Response $response)
@@ -302,5 +284,5 @@ class tx_mksearch_util_SolrResponseProcessor
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_SolrResponseProcessor.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_SolrResponseProcessor.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_SolrResponseProcessor.php'];
 }

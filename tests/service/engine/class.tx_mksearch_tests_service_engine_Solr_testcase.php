@@ -1,12 +1,6 @@
 <?php
-use Elastica\Document;
-use Elastica\Bulk\Action;
-use Elastica\Query;
-use Elastica\ResultSet;
-use Elastica\Response;
-use Elastica\Result;
 
-/**
+/*
  *  @package tx_mksearch
  *  @subpackage tx_mksearch_tests
  *  @author Hannes Bochmann
@@ -39,9 +33,6 @@ tx_rnbase::load('Apache_Solr_Document');
 tx_rnbase::load('Apache_Solr_Response');
 
 /**
- *
- * @package tx_mksearch
- * @subpackage tx_mksearch_tests
  * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
@@ -118,7 +109,7 @@ class tx_mksearch_tests_service_engine_Solr_testcase extends tx_mksearch_tests_T
             ->method('search')
             ->will(self::returnValue($response));
 
-        $service  = $this->getMock('tx_mksearch_service_engine_Solr', array('getSolr'));
+        $service = $this->getMock('tx_mksearch_service_engine_Solr', array('getSolr'));
         $service->expects(self::any())
             ->method('getSolr')
             ->will(self::returnValue($solr));
@@ -150,7 +141,7 @@ class tx_mksearch_tests_service_engine_Solr_testcase extends tx_mksearch_tests_T
             ->method('search')
             ->will(self::returnValue($response));
 
-        $service  = $this->getMock('tx_mksearch_service_engine_Solr', array('getSolr'));
+        $service = $this->getMock('tx_mksearch_service_engine_Solr', array('getSolr'));
         $service->expects(self::any())
             ->method('getSolr')
             ->will(self::returnValue($solr));

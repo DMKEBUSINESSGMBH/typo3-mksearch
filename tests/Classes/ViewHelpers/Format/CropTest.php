@@ -1,4 +1,5 @@
 <?php
+
 namespace DMK\Mksearch\Tests\ViewHelpers\Format;
 
 /***************************************************************
@@ -28,10 +29,8 @@ namespace DMK\Mksearch\Tests\ViewHelpers\Format;
 \tx_rnbase::load('tx_mksearch_tests_Testcase');
 
 /**
- * DMK\Mksearch\Tests\ViewHelpers$CObjectViewHelperTest
+ * DMK\Mksearch\Tests\ViewHelpers$CObjectViewHelperTest.
  *
- * @package         TYPO3
- * @subpackage      mksearch
  * @author          Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
  * @license         http://www.gnu.org/licenses/lgpl.html
  *                  GNU Lesser General Public License, version 3 or later
@@ -39,7 +38,8 @@ namespace DMK\Mksearch\Tests\ViewHelpers\Format;
 class CropViewHelperTest extends \tx_mksearch_tests_Testcase
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
+     *
      * @see tx_mksearch_tests_Testcase::setUp()
      */
     protected function setUp()
@@ -48,8 +48,10 @@ class CropViewHelperTest extends \tx_mksearch_tests_Testcase
             $this->markTestSkipped('Not required for TYPO3 8 or higher');
         }
     }
+
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
+     *
      * @see tx_mksearch_tests_Testcase::tearDown()
      */
     protected function tearDown()

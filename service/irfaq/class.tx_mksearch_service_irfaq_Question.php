@@ -24,15 +24,15 @@
 tx_rnbase::load('tx_mksearch_service_Base');
 
 /**
- * Service for accessing models from database
+ * Service for accessing models from database.
  */
 class tx_mksearch_service_irfaq_Question extends tx_mksearch_service_Base
 {
-
     /**
-     * returns all categories of the given question
+     * returns all categories of the given question.
      *
      * @param int $iExpert
+     *
      * @return array[tx_mksearch_model_irfaq_Question]
      */
     public function getByExpert($iExpert)
@@ -45,9 +45,10 @@ class tx_mksearch_service_irfaq_Question extends tx_mksearch_service_Base
     }
 
     /**
-     * returns all questions with the given category
+     * returns all questions with the given category.
      *
      * @param int $iCategory
+     *
      * @return array[tx_mksearch_model_irfaq_Question]
      */
     public function getByCategory($iCategory)
@@ -60,7 +61,7 @@ class tx_mksearch_service_irfaq_Question extends tx_mksearch_service_Base
     }
 
     /**
-     * Liefert die zugehörige Search-Klasse zurück
+     * Liefert die zugehörige Search-Klasse zurück.
      *
      * @return string
      */
@@ -71,5 +72,5 @@ class tx_mksearch_service_irfaq_Question extends tx_mksearch_service_Base
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/internal/class.tx_mksearch_service_internal_Base.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/internal/class.tx_mksearch_service_internal_Base.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/internal/class.tx_mksearch_service_internal_Base.php'];
 }

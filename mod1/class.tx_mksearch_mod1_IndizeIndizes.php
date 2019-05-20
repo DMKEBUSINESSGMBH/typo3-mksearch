@@ -1,31 +1,4 @@
 <?php
-/**
- *
- * @package tx_mksearch
- * @subpackage tx_mksearch_mod1
- *
- *  Copyright notice
- *
- *  (c) 2011 DMK E-Business GmbH <dev@dmk-ebusiness.de>
- *  All rights reserved
- *
- *  This script is part of the TYPO3 project. The TYPO3 project is
- *  free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  The GNU General Public License can be found at
- *  http://www.gnu.org/copyleft/gpl.html.
- *
- *  This script is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
-
 
 tx_rnbase::load('tx_rnbase_mod_BaseModFunc');
 tx_rnbase::load('tx_mksearch_mod1_util_Template');
@@ -33,19 +6,15 @@ tx_rnbase::load('tx_rnbase_util_Templates');
 tx_rnbase::load('tx_mksearch_util_ServiceRegistry');
 tx_rnbase::load('tx_mksearch_mod1_util_IndexStatusHandler');
 
-
 /**
- * Mksearch backend module
+ * Mksearch backend module.
  *
- * @package tx_mksearch
- * @subpackage tx_mksearch_mod1
  * @author Michael Wagner <dev@dmk-ebusiness.de>
  */
 class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc
 {
-
     /**
-     * Return function id (used in page typoscript etc.)
+     * Return function id (used in page typoscript etc.).
      *
      * @return string
      */
@@ -68,15 +37,16 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc
     }
 
     /**
-     * Return the actual html content
+     * Return the actual html content.
      *
      * Actually, just the list view of the defined storage folder
      * is displayed within an iframe.
      *
-     * @param string $template
-     * @param tx_rnbase_configurations $configurations
+     * @param string                    $template
+     * @param tx_rnbase_configurations  $configurations
      * @param tx_rnbase_util_FormatUtil $formatter
-     * @param tx_rnbase_util_FormTool $formTool
+     * @param tx_rnbase_util_FormTool   $formTool
+     *
      * @return string
      */
     protected function getContent($template, &$configurations, &$formatter, $formTool)
@@ -110,13 +80,15 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc
 
         return $out;
     }
+
     /**
-     * Returns search form
-     * @param   string $template
-     * @param   tx_rnbase_configurations $configurations
-     * @param   tx_rnbase_util_FormTool $formTool
-     * @param   array $markerArray
-     * @param   tx_mksearch_service_internal_Index $oIntIndexSrv
+     * Returns search form.
+     *
+     * @param string                             $template
+     * @param tx_rnbase_configurations           $configurations
+     * @param tx_rnbase_util_FormTool            $formTool
+     * @param array                              $markerArray
+     * @param tx_mksearch_service_internal_Index $oIntIndexSrv
      */
     protected function showTables($template, $configurations, $formTool, &$markerArray, $oIntIndexSrv)
     {
@@ -196,8 +168,10 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc
     /**
      * Handle clear command from request. This means all record of selected tables have to be removed from
      * indexing queue.
+     *
      * @param tx_mksearch_service_internal_Index $oIntIndexSrv
-     * @param   tx_rnbase_configurations $configurations
+     * @param tx_rnbase_configurations           $configurations
+     *
      * @return string
      */
     private function handleClear($oIntIndexSrv, &$configurations)
@@ -218,9 +192,11 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc
     }
 
     /**
-     * Handle reset command from request
+     * Handle reset command from request.
+     *
      * @param tx_mksearch_service_internal_Index $oIntIndexSrv
-     * @param   tx_rnbase_configurations $configurations
+     * @param tx_rnbase_configurations           $configurations
+     *
      * @return string
      */
     private function handleReset($oIntIndexSrv, &$configurations)
@@ -253,7 +229,7 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc
                 foreach ($aResets as $sTable) {
                     $tableOptions = $options;
 
-                    if ($key == 'pid') {
+                    if ('pid' == $key) {
                         // wir holen uns eine liste von page ids
                         // nur elemente dieser page id dürfen in der Queue landen
                         $pidList = $this->getPidList();
@@ -266,7 +242,7 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc
             }
         }
 
-        $status .=    '<ul><li>'.
+        $status .= '<ul><li>'.
                     implode(
                         '</li><li/>',
                         array_unique(
@@ -282,9 +258,11 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc
     }
 
     /**
-     * Handle trigger command from request
+     * Handle trigger command from request.
+     *
      * @param tx_mksearch_service_internal_Index $oIntIndexSrv
-     * @param   tx_rnbase_configurations $configurations
+     * @param tx_rnbase_configurations           $configurations
+     *
      * @return string
      */
     private function handleTrigger($oIntIndexSrv, &$configurations)
@@ -319,5 +297,5 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc
     }
 }
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/class.tx_mksearch_mod1_IndizeIndizes.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/class.tx_mksearch_mod1_IndizeIndizes.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/class.tx_mksearch_mod1_IndizeIndizes.php'];
 }

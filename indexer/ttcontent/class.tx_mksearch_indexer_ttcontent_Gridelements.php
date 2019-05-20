@@ -26,10 +26,8 @@ tx_rnbase::load('tx_mksearch_indexer_ttcontent_Normal');
 tx_rnbase::load('tx_mksearch_util_Indexer');
 
 /**
- * Gridelements indexer
+ * Gridelements indexer.
  *
- * @package TYPO3
- * @subpackage mksearch
  * @author Michael Wagner
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
@@ -37,11 +35,11 @@ tx_rnbase::load('tx_mksearch_util_Indexer');
 class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttcontent_Normal
 {
     /**
-     * Sets the index doc to deleted if neccessary
+     * Sets the index doc to deleted if neccessary.
      *
-     * @param tx_rnbase_IModel $oModel
+     * @param tx_rnbase_IModel                      $oModel
      * @param tx_mksearch_interface_IndexerDocument $oIndexDoc
-     * @param array $aOptions
+     * @param array                                 $aOptions
      *
      * @return bool
      */
@@ -57,7 +55,7 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
             // only for gridelements? no, other elements should be deleted too!
             // $this->isGridelement($oModel->getRecord()) &&
             // only if not directly set do indexable or not indexable!
-            $oModel->getTxMksearchIsIndexable() == self::USE_INDEXER_CONFIGURATION &&
+            self::USE_INDEXER_CONFIGURATION == $oModel->getTxMksearchIsIndexable() &&
             // only, if there are a parent container
             $oModel->getTxGridelementsContainer() > 0
         )) {
@@ -71,11 +69,11 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
     }
 
     /**
-     * Sets the index doc to deleted if neccessary
+     * Sets the index doc to deleted if neccessary.
      *
-     * @param tx_rnbase_IModel $oModel
+     * @param tx_rnbase_IModel                      $oModel
      * @param tx_mksearch_interface_IndexerDocument $oIndexDoc
-     * @param array $aOptions
+     * @param array                                 $aOptions
      *
      * @return bool
      */
@@ -90,11 +88,9 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
     }
 
     /**
-     * Adds the parent to index
+     * Adds the parent to index.
      *
      * @param tx_rnbase_IModel $oModel
-     *
-     * @return void
      */
     protected function addGridelementsContainerToIndex(
         tx_rnbase_IModel $oModel
@@ -108,7 +104,7 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
     }
 
     /**
-     * Get the content by CType
+     * Get the content by CType.
      *
      * @param array $rawData
      * @param array $options
@@ -136,14 +132,14 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
     protected function isGridelement(
         array $rawData
     ) {
-        return (
+        return
             tx_rnbase_util_Extensions::isLoaded('gridelements') &&
-            $rawData['CType'] == 'gridelements_pi1'
-        );
+            'gridelements_pi1' == $rawData['CType']
+        ;
     }
 
     /**
-     * Fetches the content of an grid element
+     * Fetches the content of an grid element.
      *
      * @param array $record
      * @param array $options
@@ -162,7 +158,7 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
         if (is_array($allowedCTypes)) {
             foreach ($GLOBALS['TSFE']->tmpl->setup['tt_content.'] as
                 $currentCType => $conf) {
-                if ($currentCType == 'key.') {
+                if ('key.' == $currentCType) {
                     continue;
                 }
                 // Config der nicht definierten ContentTypen entfernen, damit
@@ -174,7 +170,7 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
         }
         $cObj = $GLOBALS['TSFE']->cObj;
         $cObj->data = $record;
-        $cObj->currentRecord = 'tt_content:' . $uid;
+        $cObj->currentRecord = 'tt_content:'.$uid;
 
         $content = $cObj->callUserFunction(
             'GridElementsTeam\\Gridelements\\Plugin\\Gridelements->main',
@@ -186,9 +182,10 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
     }
 
     /**
-     * Gets the allowed CTypes from Configuration for Gridelement Rendering
+     * Gets the allowed CTypes from Configuration for Gridelement Rendering.
      *
      * @param array $options
+     *
      * @return array $allowedCTypes
      */
     protected function getAllowedCTypes($options)
@@ -198,7 +195,7 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
             $options
         );
         foreach ($allowedCTypes as $allowedCType) {
-            $allowedCTypes[] = $allowedCType . '.';
+            $allowedCTypes[] = $allowedCType.'.';
         }
 
         return $allowedCTypes;
@@ -206,5 +203,5 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/ttcontent/class.tx_mksearch_indexer_ttcontent_Gridelements.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/ttcontent/class.tx_mksearch_indexer_ttcontent_Gridelements.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/ttcontent/class.tx_mksearch_indexer_ttcontent_Gridelements.php'];
 }

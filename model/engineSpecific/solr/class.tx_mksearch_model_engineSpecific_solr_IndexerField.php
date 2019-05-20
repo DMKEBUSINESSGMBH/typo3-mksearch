@@ -24,17 +24,16 @@
 
 tx_rnbase::load('tx_mksearch_model_IndexerFieldBase');
 
-
 /**
- * Model for solr specific indexer fields
+ * Model for solr specific indexer fields.
  */
 class tx_mksearch_model_engineSpecific_solr_IndexerField extends tx_mksearch_model_IndexerFieldBase
 {
-
     /**
      * Return the field's value
      * FIXEME Wenn hier nacharbeiten notwendig sind, dann gehören die in die Engine-Implementierung bei der Übergabe der
      * Daten in den Indexer.
+     *
      * @return mixed
      */
     /*
@@ -72,7 +71,7 @@ class tx_mksearch_model_engineSpecific_solr_IndexerField extends tx_mksearch_mod
     */
 
     /**
-     * Update the field's value
+     * Update the field's value.
      *
      * Solr-specific: Set storage option "multiValued" if $value is an array.
      * // Note that the self::$_storageOption['boost'] may also be ... (???)
@@ -123,5 +122,5 @@ class tx_mksearch_model_engineSpecific_solr_IndexerField extends tx_mksearch_mod
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/engineSpecific/solr/class.tx_mksearch_model_engineSpecific_solr_IndexerField']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/engineSpecific/solr/class.tx_mksearch_model_engineSpecific_solr_IndexerField.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/engineSpecific/solr/class.tx_mksearch_model_engineSpecific_solr_IndexerField.php'];
 }

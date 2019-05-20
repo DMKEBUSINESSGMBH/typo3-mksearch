@@ -20,17 +20,15 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  ***************************************************************/
 
-
 tx_rnbase::load('tx_rnbase_util_SearchBase');
 
 /**
- * Class to search index configurations from database
+ * Class to search index configurations from database.
  */
 class tx_mksearch_search_Config extends tx_rnbase_util_SearchBase
 {
-
     /**
-     * Return table mappings
+     * Return table mappings.
      *
      * MUST be public as we need these data from external!
      */
@@ -49,60 +47,63 @@ class tx_mksearch_search_Config extends tx_rnbase_util_SearchBase
     /**
      * return name of base table
      * MUST be public as we need these data from external!
+     *
      * @see tx_rnbase_util_SearchBase::getBaseTable()
      */
     public function getBaseTable()
     {
         return 'tx_mksearch_indexerconfigs';
     }
+
     /**
      * return name of base table
      * MUST be public as we need these data from external!
+     *
      * @see util/tx_rnbase_util_SearchBase#getBaseTable()
      */
     public function getBaseTableAlias()
     {
         return 'CFG';
     }
-    
+
     public function getWrapperClass()
     {
         return 'tx_mksearch_model_internal_Config';
     }
-    
+
     protected function getJoins($tableAliases)
     {
         $join = '';
         $tableMapping = $this->getTableMappings();
-        
-         // Additional table "composites" or its MM table?
+
+        // Additional table "composites" or its MM table?
         if (isset($tableAliases['CMPCFGMM']) or isset($tableAliases['CMP'])) {
             $join .=
-                ' JOIN ' . $tableMapping['CMPCFGMM'] .
-                    ' ON ' . $tableMapping['CFG'] . '.uid = ' . $tableMapping['CMPCFGMM'] . '.uid_foreign';
+                ' JOIN '.$tableMapping['CMPCFGMM'].
+                    ' ON '.$tableMapping['CFG'].'.uid = '.$tableMapping['CMPCFGMM'].'.uid_foreign';
         }
-        
+
         // Additional table "composites"?
         if (isset($tableAliases['CMP'])) {
-            $join .= ' JOIN ' . $tableMapping['CMP'] . ' ON ' . $tableMapping['CMPCFGMM'] . '.uid_local = ' . $tableMapping['CMP'] . '.uid';
+            $join .= ' JOIN '.$tableMapping['CMP'].' ON '.$tableMapping['CMPCFGMM'].'.uid_local = '.$tableMapping['CMP'].'.uid';
         }
-        
+
         // Additional table "indices" or its MM table?
         if (isset($tableAliases['INDXCMPMM']) or isset($tableAliases['INDX'])) {
             $join .=
-                ' JOIN ' . $tableMapping['INDXCMPMM'] .
-                    ' ON ' . $tableMapping['CMP'] . '.uid = ' . $tableMapping['INDXCMPMM'] . '.uid_foreign';
+                ' JOIN '.$tableMapping['INDXCMPMM'].
+                    ' ON '.$tableMapping['CMP'].'.uid = '.$tableMapping['INDXCMPMM'].'.uid_foreign';
         }
-        
+
         // Additional table "indice"?
         if (isset($tableAliases['INDX'])) {
-            $join .= ' JOIN ' . $tableMapping['INDX'] . ' ON ' . $tableMapping['INDXCMPMM'] . '.uid_local = ' . $tableMapping['INDX'] . '.uid';
+            $join .= ' JOIN '.$tableMapping['INDX'].' ON '.$tableMapping['INDXCMPMM'].'.uid_local = '.$tableMapping['INDX'].'.uid';
         }
-            
+
         return $join;
     }
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/search/class.tx_mksearch_search_Config.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/search/class.tx_mksearch_search_Config.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/search/class.tx_mksearch_search_Config.php'];
 }

@@ -22,7 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-
 /**
  * Status information for indexes.
  */
@@ -39,23 +38,28 @@ class tx_mksearch_util_Status
     {
         $this->status = self::STATUS_UNKNOWN;
     }
+
     /**
      * Get status id.
-     * 0 - unknown, greater then 0 means okay, lower then 0 means error
+     * 0 - unknown, greater then 0 means okay, lower then 0 means error.
+     *
      * @return int
      */
     public function getStatus()
     {
         return $this->status;
     }
+
     /**
      * Returns a status message from core.
+     *
      * @return string
      */
     public function getMessage()
     {
         return $this->message;
     }
+
     public function setStatus($status, $message = '')
     {
         $this->status = $status;
@@ -63,5 +67,5 @@ class tx_mksearch_util_Status
     }
 }
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_Status.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_Status.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_Status.php'];
 }

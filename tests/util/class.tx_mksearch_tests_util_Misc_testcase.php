@@ -22,15 +22,10 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-
 tx_rnbase::load('tx_mksearch_tests_Testcase');
 tx_rnbase::load('tx_mksearch_util_Misc');
 
 /**
- *
- *
- * @package tx_mksearch
- * @subpackage tx_mksearch_tests
  * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
  * @author Michael Wagner <michael.wagner@dmk-ebusiness.de>
  * @license http://www.gnu.org/licenses/lgpl.html
@@ -38,7 +33,6 @@ tx_rnbase::load('tx_mksearch_util_Misc');
  */
 class tx_mksearch_tests_util_Misc_testcase extends tx_mksearch_tests_Testcase
 {
-
     /**
      * @dataProvider providerHtml2Plain
      */
@@ -47,6 +41,7 @@ class tx_mksearch_tests_util_Misc_testcase extends tx_mksearch_tests_Testcase
         $res = tx_mksearch_util_Misc::html2plain($before, $options);
         self::assertEquals($res, $after);
     }
+
     public function providerHtml2Plain()
     {
         $return = array();
@@ -78,14 +73,14 @@ class tx_mksearch_tests_util_Misc_testcase extends tx_mksearch_tests_Testcase
                     'Umlaute encoded Fördermöglichkeiten',
                 ),
                 __LINE__ => array(
-                    'Zeile1' . PHP_EOL . 'Zeile2',
+                    'Zeile1'.PHP_EOL.'Zeile2',
                     array(), // emty option
                     'Zeile1 Zeile2',
                 ),
                 __LINE__ => array(
-                    'Zeile1' . PHP_EOL . 'Zeile2',
+                    'Zeile1'.PHP_EOL.'Zeile2',
                     array('lineendings' => true),
-                    'Zeile1' . PHP_EOL . 'Zeile2',
+                    'Zeile1'.PHP_EOL.'Zeile2',
                 ),
                 __LINE__ => array(
                         'one two  three   one five     zero',
@@ -113,6 +108,7 @@ class tx_mksearch_tests_util_Misc_testcase extends tx_mksearch_tests_Testcase
 
         return $return;
     }
+
     public function test_isIndexable_NoConfig()
     {
         $record = array('uid' => 123, 'pid' => '1');
@@ -136,7 +132,7 @@ class tx_mksearch_tests_util_Misc_testcase extends tx_mksearch_tests_Testcase
     {
         $record = array('uid' => 123, 'pid' => '1');
         $options = array();
-        $options['include.']['pages.'] = array(2,10,1,1145);
+        $options['include.']['pages.'] = array(2, 10, 1, 1145);
         self::assertEquals(true, tx_mksearch_util_Misc::isOnValidPage($record, $options));
 
         $options = array();
@@ -160,7 +156,7 @@ class tx_mksearch_tests_util_Misc_testcase extends tx_mksearch_tests_Testcase
     {
         $record = array('uid' => 123, 'pid' => '11');
         $options = array();
-        $options['exclude.']['pages.'] = array(2,10,11,1145);
+        $options['exclude.']['pages.'] = array(2, 10, 11, 1145);
         self::assertEquals(false, tx_mksearch_util_Misc::isOnValidPage($record, $options));
 
         $options = array();
@@ -185,6 +181,7 @@ class tx_mksearch_tests_util_Misc_testcase extends tx_mksearch_tests_Testcase
     {
         self::assertEquals($sExpected, tx_mksearch_util_Misc::sanitizeTerm($sTerm), 'Der Term wurde nicht korrekt bereinigt!');
     }
+
     public function termProvider()
     {
         return array(
@@ -192,6 +189,7 @@ class tx_mksearch_tests_util_Misc_testcase extends tx_mksearch_tests_Testcase
             array('\'test\'+-&|!(){}\[]^"~+*?<>:', 'test'),
         );
     }
+
     /**
      * @dataProvider sanitizeFqProvider
      */
@@ -199,6 +197,7 @@ class tx_mksearch_tests_util_Misc_testcase extends tx_mksearch_tests_Testcase
     {
         self::assertEquals($sExpected, tx_mksearch_util_Misc::sanitizeFq($sTerm));
     }
+
     public function sanitizeFqProvider()
     {
         return array(
@@ -209,5 +208,5 @@ class tx_mksearch_tests_util_Misc_testcase extends tx_mksearch_tests_Testcase
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/util/class.tx_mksearch_tests_util_Misc_testcase.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/util/class.tx_mksearch_tests_util_Misc_testcase.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/util/class.tx_mksearch_tests_util_Misc_testcase.php'];
 }

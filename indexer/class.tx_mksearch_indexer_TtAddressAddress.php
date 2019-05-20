@@ -22,7 +22,6 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-
 tx_rnbase::load('tx_mksearch_interface_Indexer');
 tx_rnbase::load('tx_mksearch_util_Misc');
 tx_rnbase::load('tx_mksearch_util_Indexer');
@@ -33,7 +32,6 @@ tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
  */
 class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Indexer
 {
-
     /**
      * Return content type identification.
      * This identification is part of the indexed data
@@ -51,14 +49,15 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
     }
 
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
+     *
      * @see tx_mksearch_interface_Indexer::prepareSearchData()
      */
     public function prepareSearchData($tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options)
     {
-        if ($tableName != 'tt_address') {
+        if ('tt_address' != $tableName) {
             if (tx_rnbase_util_Logger::isWarningEnabled()) {
-                tx_rnbase_util_Logger::warn(__METHOD__.': Unknown table "'.$tableName.'" given.', 'mksearch', array('tableName' => $tableName,'sourceRecord' => $sourceRecord));
+                tx_rnbase_util_Logger::warn(__METHOD__.': Unknown table "'.$tableName.'" given.', 'mksearch', array('tableName' => $tableName, 'sourceRecord' => $sourceRecord));
             }
 
             return null;
@@ -66,7 +65,7 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
 
         //include, exclude etc. prüfen
         if (!$this->isIndexableRecord($rawData, $options)) {
-            return null;//no need to index
+            return null; //no need to index
         }
 
         $abort = false;
@@ -95,7 +94,7 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
         );
 
         // Abbrechen, wenn im Hook gesetzt.
-        if ($abort !== false) {
+        if (false !== $abort) {
             return $abort;
         }
 
@@ -137,7 +136,6 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
         $sContent = $this->getContentFromFields($rawData, $options['content.']);
         $indexDoc->setContent($sContent);
 
-
         $sContent = $this->getContentFromFields($rawData, $options['abstract.']);
         $indexDoc->setAbstract('', 1);
 
@@ -156,12 +154,11 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
         return $indexDoc;
     }
 
-
     /**
+     * @param array $sourceRecord
+     * @param array $options
      *
-     * @param   array       $sourceRecord
-     * @param   array       $options
-     * @return  bool
+     * @return bool
      */
     protected function isIndexableRecord($sourceRecord, $options)
     {
@@ -172,10 +169,12 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
     }
 
     /**
-     * Sets the index doc to deleted if neccessary
-     * @param   array       $sourceRecord
-     * @param   array       $options
-     * @return  bool
+     * Sets the index doc to deleted if neccessary.
+     *
+     * @param array $sourceRecord
+     * @param array $options
+     *
+     * @return bool
      */
     protected function hasDocToBeDeleted($sourceRecord, $options)
     {
@@ -193,10 +192,12 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
     }
 
     /**
-     * erzeugt Inhalt aus den feldern anhand der Konfiguration
-     * @param   array   $sourceRecord
-     * @param   array   $options
-     * @return  string
+     * erzeugt Inhalt aus den feldern anhand der Konfiguration.
+     *
+     * @param array $sourceRecord
+     * @param array $options
+     *
+     * @return string
      */
     protected function getContentFromFields($sourceRecord, $options)
     {
@@ -208,9 +209,9 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
                 $aContent[] = trim($sourceRecord[$field]);
             }
         }
-        $wrap =  tx_rnbase_util_Strings::trimExplode('|', $options['wrap'], true);
-        if (count($wrap) != 2) {
-            $wrap = array('','');
+        $wrap = tx_rnbase_util_Strings::trimExplode('|', $options['wrap'], true);
+        if (2 != count($wrap)) {
+            $wrap = array('', '');
         }
         $sContent = $wrap[0].implode($wrap[1].$wrap[0], $aContent).$wrap[1];
 
@@ -290,5 +291,5 @@ CONF;
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/indexer/class.tx_mksearch_indexer_TtAddressAddress.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/indexer/class.tx_mksearch_indexer_TtAddressAddress.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/indexer/class.tx_mksearch_indexer_TtAddressAddress.php'];
 }

@@ -1,8 +1,8 @@
 <?php
+
 if (!defined('TYPO3_MODE')) {
     die('Access denied.');
 }
-
 
 // Activate indexer services
 
@@ -27,7 +27,7 @@ tx_mksearch_util_Config::registerIndexer(
     array(
         'pages',
         //@todo handle page overlay
-        'pages_language_overlay'
+        'pages_language_overlay',
     )
 );
 
@@ -39,10 +39,9 @@ tx_mksearch_util_Config::registerIndexer(
         //Main Table
         'tt_content',
         //related tables
-        'pages'
+        'pages',
     )
 );
-
 
 if (tx_rnbase_util_Extensions::isLoaded('tt_news')) {
     tx_mksearch_util_Config::registerIndexer('tt_news', 'news', 'tx_mksearch_indexer_TtNewsNews', array('tt_news', 'tt_news_cat'));
@@ -140,9 +139,8 @@ if (tx_rnbase_util_Extensions::isLoaded('a21glossary')) {
     );
 }
 
-
 // Configure core page indexer service
-$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['indexer']['config']['core']['page']['indexedFields'] = array('subtitle', 'url', 'keywords', 'description', 'author', /*'author_email',*/ 'nav_title', 'alias', );
+$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['indexer']['config']['core']['page']['indexedFields'] = array('subtitle', 'url', 'keywords', 'description', 'author', /*'author_email',*/ 'nav_title', 'alias');
 
 // Configure templavoila page indexer service. Simply re-use core page indexer service options
 $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['indexer']['config']['templavoila']['page'] =

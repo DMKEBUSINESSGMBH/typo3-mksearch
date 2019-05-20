@@ -1,4 +1,5 @@
 <?php
+
 if (!defined('TYPO3_MODE')) {
     die('Access denied.');
 }
@@ -13,24 +14,24 @@ tx_rnbase_util_Extensions::addTCAcolumns(
             'exclude' => 1,
             'label' => 'LLL:EXT:mksearch/locallang_db.xml:tt_content.tx_mksearch_is_indexable',
             'config' => array(
-                'type'    => 'select',
+                'type' => 'select',
                 'renderType' => 'selectSingle',
                 'items' => array(
                     array(
                         'LLL:EXT:mksearch/locallang_db.xml:tt_content.tx_mksearch_is_indexable.use_indexer_config',
-                        tx_mksearch_indexer_ttcontent_Normal::USE_INDEXER_CONFIGURATION
+                        tx_mksearch_indexer_ttcontent_Normal::USE_INDEXER_CONFIGURATION,
                     ),
                     array(
                         'LLL:EXT:mksearch/locallang_db.xml:tt_content.tx_mksearch_is_indexable.yes',
-                        tx_mksearch_indexer_ttcontent_Normal::IS_INDEXABLE
+                        tx_mksearch_indexer_ttcontent_Normal::IS_INDEXABLE,
                     ),
                     array(
                         'LLL:EXT:mksearch/locallang_db.xml:tt_content.tx_mksearch_is_indexable.no',
-                        tx_mksearch_indexer_ttcontent_Normal::IS_NOT_INDEXABLE
+                        tx_mksearch_indexer_ttcontent_Normal::IS_NOT_INDEXABLE,
                     ),
                 ),
-                'default' => tx_mksearch_indexer_ttcontent_Normal::USE_INDEXER_CONFIGURATION
-            )
+                'default' => tx_mksearch_indexer_ttcontent_Normal::USE_INDEXER_CONFIGURATION,
+            ),
         ),
     ),
     !tx_rnbase_util_TYPO3::isTYPO62OrHigher()

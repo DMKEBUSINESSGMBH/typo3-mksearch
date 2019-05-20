@@ -1,7 +1,5 @@
 <?php
 /**
- * @package TYPO3
- * @subpackage tx_mksearch
  * @author Hannes Bochmann <dev@dmk-ebusiness.de>
  *
  *  Copyright notice
@@ -28,17 +26,14 @@
 tx_rnbase::load('tx_mksearch_tests_Testcase');
 
 /**
- * tx_mksearch_tests_search_irfaq_Expert_testcase
+ * tx_mksearch_tests_search_irfaq_Expert_testcase.
  *
- * @package         TYPO3
- * @subpackage      mksearch
  * @author          Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
  * @license         http://www.gnu.org/licenses/lgpl.html
  *                  GNU Lesser General Public License, version 3 or later
  */
 class tx_mksearch_tests_search_irfaq_Expert_testcase extends tx_mksearch_tests_Testcase
 {
-
     /**
      * @group unit
      */

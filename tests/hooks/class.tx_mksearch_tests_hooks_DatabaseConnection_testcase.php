@@ -25,24 +25,22 @@ tx_rnbase::load('tx_mksearch_tests_Testcase');
 tx_rnbase::load('tx_mksearch_hooks_DatabaseConnection');
 
 /**
- * tx_mksearch_tests_hooks_DatabaseConnection_testcase
+ * tx_mksearch_tests_hooks_DatabaseConnection_testcase.
  *
- * @package         TYPO3
- * @subpackage      mksearch
  * @author          Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
  * @license         http://www.gnu.org/licenses/lgpl.html
  *                  GNU Lesser General Public License, version 3 or later
  */
 class tx_mksearch_tests_hooks_DatabaseConnection_testcase extends tx_mksearch_tests_Testcase
 {
-
     /**
-     * @var integer
+     * @var int
      */
     private static $loadHiddenObjectsConfigurationBackup;
 
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
+     *
      * @see tx_mksearch_tests_Testcase::setUp()
      */
     protected function setUp()
@@ -51,7 +49,8 @@ class tx_mksearch_tests_hooks_DatabaseConnection_testcase extends tx_mksearch_te
     }
 
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
+     *
      * @see tx_mksearch_tests_Testcase::tearDown()
      */
     protected function tearDown()
@@ -214,8 +213,7 @@ class tx_mksearch_tests_hooks_DatabaseConnection_testcase extends tx_mksearch_te
     }
 
     /**
-     * @param boolean $indexingInProgress
-     * @return void
+     * @param bool $indexingInProgress
      */
     protected function setIsIndexingInProgress($indexingInProgress = true)
     {

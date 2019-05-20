@@ -24,7 +24,7 @@
 tx_rnbase::load('tx_rnbase_util_Files');
 
 /**
- * Tika controller class
+ * Tika controller class.
  */
 class tx_mksearch_util_Tika
 {
@@ -38,15 +38,15 @@ class tx_mksearch_util_Tika
      */
     public static function getInstance()
     {
-        if (self::$instance === null) {
+        if (null === self::$instance) {
             $tikaJar = tx_rnbase_configurations::getExtensionCfgValue(
                 'mksearch',
                 'tikaJar'
             );
             // check relative path to webroot.
-            if (is_file(PATH_site . $tikaJar)) {
+            if (is_file(PATH_site.$tikaJar)) {
                 // Here are paths outside of the webroot allowed.
-                $tikaJar = PATH_site . $tikaJar;
+                $tikaJar = PATH_site.$tikaJar;
             } else {
                 // Here only paths within the webroot and EXT:myext paths allowed.
                 $tikaJar = tx_rnbase_util_Files::getFileAbsFileName($tikaJar, false);
@@ -68,12 +68,13 @@ class tx_mksearch_util_Tika
 
     /**
      * Whether or not Tika is available on server.
+     *
      * @return bool
      */
     public function isAvailable()
     {
-        if ($this->tikaAvailable != -1) {
-            return $this->tikaAvailable == 1 ? true : false;
+        if (-1 != $this->tikaAvailable) {
+            return 1 == $this->tikaAvailable ? true : false;
         }
         if (!is_file($this->tikaJar)) {
             tx_rnbase_util_Logger::warn('Tika Jar not found!', 'mksearch', array('Jar' => $this->tikaJar));
@@ -93,6 +94,7 @@ class tx_mksearch_util_Tika
 
         return $this->tikaAvailable;
     }
+
     private function setTikaJar($tikaJar)
     {
         $this->tikaJar = $tikaJar;
@@ -101,11 +103,9 @@ class tx_mksearch_util_Tika
     /**
      * Umlaute in Dateinamen werden durch escapeshellarg entfernt
      * außer es ist der korrekte LC_CTYPE gesetzt. Sollte auf de_DE.UTF-8
-     * stehen
+     * stehen.
      *
      * @see http://www.php.net/manual/de/function.escapeshellarg.php#99213
-     *
-     * @return void
      */
     private function setLocaleTypeForNonWindowsSystems()
     {
@@ -114,21 +114,20 @@ class tx_mksearch_util_Tika
         }
     }
 
-    /**
-     * @return void
-     */
     private function resetLocaleType()
     {
         setlocale(LC_CTYPE, '');
     }
 
     /**
-     * Extracs text from a file using Apache Tika
+     * Extracs text from a file using Apache Tika.
      *
-     * @param   string      Content which should be processed.
+     * @param   string      content which should be processed
      * @param   string      Content type
      * @param   array       Configuration array
+     *
      * @return string
+     *
      * @throws Exception
      */
     public function extractContent($file, &$tikaCommand = null)
@@ -141,12 +140,14 @@ class tx_mksearch_util_Tika
     }
 
     /**
-     * Extracs text from a file using Apache Tika
+     * Extracs text from a file using Apache Tika.
      *
-     * @param   string      Content which should be processed.
+     * @param   string      content which should be processed
      * @param   string      Content type
      * @param   array       Configuration array
+     *
      * @return string
+     *
      * @throws Exception
      */
     public function extractLanguage($file)
@@ -159,10 +160,12 @@ class tx_mksearch_util_Tika
     }
 
     /**
-     * Extracs meta data from a file using Apache Tika
+     * Extracs meta data from a file using Apache Tika.
      *
-     * @param   string file path.
+     * @param   string file path
+     *
      * @return array
+     *
      * @throws Exception
      */
     public function extractMetaData($file)
@@ -177,10 +180,10 @@ class tx_mksearch_util_Tika
 
         $commandUtilityClass = tx_rnbase_util_Typo3Classes::getCommandUtilityClass();
         $tikaCommand = $commandUtilityClass::getCommand('java')
-            . ' -Dfile.encoding=UTF8' // forces UTF8 output
-            . ' -jar ' . escapeshellarg($this->tikaJar)
-            . ' -m ' . escapeshellarg($absFile)
-            . ' ' . tx_rnbase_configurations::getExtensionCfgValue(
+            .' -Dfile.encoding=UTF8' // forces UTF8 output
+            .' -jar '.escapeshellarg($this->tikaJar)
+            .' -m '.escapeshellarg($absFile)
+            .' '.tx_rnbase_configurations::getExtensionCfgValue(
                 'mksearch',
                 'postTikaCommandParameters'
             );
@@ -215,10 +218,10 @@ class tx_mksearch_util_Tika
 
         $commandUtilityClass = tx_rnbase_util_Typo3Classes::getCommandUtilityClass();
         $tikaCommand = $commandUtilityClass::getCommand('java')
-            . ' -Dfile.encoding=UTF-8' // forces UTF8 output
-            . ' -jar ' . escapeshellarg($this->tikaJar)
-            . ' -' . $tikaCmdType . ' ' . escapeshellarg($absFile)
-            . ' ' . tx_rnbase_configurations::getExtensionCfgValue(
+            .' -Dfile.encoding=UTF-8' // forces UTF8 output
+            .' -jar '.escapeshellarg($this->tikaJar)
+            .' -'.$tikaCmdType.' '.escapeshellarg($absFile)
+            .' '.tx_rnbase_configurations::getExtensionCfgValue(
                 'mksearch',
                 'postTikaCommandParameters'
             );
@@ -240,7 +243,7 @@ class tx_mksearch_util_Tika
     private function getTikaCommandWithLocaleTypePrefixForNonWindowsSystems($tikaCommand)
     {
         if (TYPO3_OS != 'WIN' && $this->tikaLocaleType) {
-            $tikaCommand = 'LANG=' . $this->tikaLocaleType . ' ' . $tikaCommand;
+            $tikaCommand = 'LANG='.$this->tikaLocaleType.' '.$tikaCommand;
         }
 
         return $tikaCommand;
@@ -248,8 +251,11 @@ class tx_mksearch_util_Tika
 
     /**
      * Check if a file exists and is readable within TYPO3.
+     *
      * @param   string File name
-     * @return string File name with absolute path or FALSE.
+     *
+     * @return string file name with absolute path or FALSE
+     *
      * @throws Exception
      */
     private static function checkFile($fName)
@@ -283,5 +289,5 @@ class tx_mksearch_util_Tika
     }
 }
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_Tika.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_Tika.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_Tika.php'];
 }

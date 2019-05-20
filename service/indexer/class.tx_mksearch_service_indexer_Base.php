@@ -29,38 +29,34 @@ tx_rnbase::load('Tx_Rnbase_Service_Base');
 /**
  * Base indexer class. It uses DataProviders to lookup data to be indexed.
  *
- * @package     TYPO3
- * @subpackage  tx_mksearch
- * @deprecated Entfällt komplett.
+ * @deprecated entfällt komplett
  */
 abstract class tx_mksearch_service_indexer_Base extends Tx_Rnbase_Service_Base implements tx_mksearch_interface_Indexer
 {
-
     /**
-     * Options used for indexing
+     * Options used for indexing.
      *
      * @var array
      */
     protected $options;
 
     /**
-     * List of records to be deleted
+     * List of records to be deleted.
      *
      * @var array
      */
     private $deleteList = array();
 
     /**
-     * Prepare indexer
+     * Prepare indexer.
      *
      * This method prepares things for indexing,
      * i. e. evaluate options, prepare db query etc.
      * It must be called between instatiating the class
      * and calling nextItem() for the first time.
      *
-     * @param array $options    Indexer options
-     * @param array $data       Tablename <-> uids matrix of records to be indexed (array('tab1' => array(2,5,6), 'tab2' => array(4,5,8))
-     * @return void
+     * @param array $options Indexer options
+     * @param array $data    Tablename <-> uids matrix of records to be indexed (array('tab1' => array(2,5,6), 'tab2' => array(4,5,8))
      */
     public function prepare(array $options = array(), array $data = array())
     {
@@ -75,14 +71,14 @@ abstract class tx_mksearch_service_indexer_Base extends Tx_Rnbase_Service_Base i
     }
 
     /**
-     * Return next item which is to be indexed
+     * Return next item which is to be indexed.
      *
-     * @param tx_mksearch_interface_IndexerDocument     $indexDoc   Indexer document to be "filled", instantiated based on self::getContentType()
-     * @return null|tx_mksearch_interface_IndexerDocument
+     * @param tx_mksearch_interface_IndexerDocument $indexDoc Indexer document to be "filled", instantiated based on self::getContentType()
+     *
+     * @return tx_mksearch_interface_IndexerDocument|null
      */
     public function nextItem(tx_mksearch_interface_IndexerDocument $indexDoc)
     {
-
         // Iterate until valid data is found or all records are consumed ;-)
         do {
             $record = $this->getDataProvider()->getNextItem();
@@ -96,7 +92,7 @@ abstract class tx_mksearch_service_indexer_Base extends Tx_Rnbase_Service_Base i
     }
 
     /**
-     * Quasi-destructor
+     * Quasi-destructor.
      *
      * Clean up things, e.g. free db resources,
      * and return a list of uids of records which are
@@ -109,7 +105,7 @@ abstract class tx_mksearch_service_indexer_Base extends Tx_Rnbase_Service_Base i
      * (@see tx_rnbase::makeInstanceService() -> persistence of service),
      * take care to restore the instance to a clean, initial state!
      *
-     * @return array    Matrix of records to be deleted
+     * @return array Matrix of records to be deleted
      */
     public function cleanup()
     {
@@ -133,13 +129,14 @@ abstract class tx_mksearch_service_indexer_Base extends Tx_Rnbase_Service_Base i
     }
 
     /**
-     * Returns the DataProvider used to lookup data
+     * Returns the DataProvider used to lookup data.
+     *
      * @return tx_mksearch_interface_DataProvider
      */
     abstract protected function getDataProvider();
 
     /**
-     * Get sql data for an optional follow-up data base query
+     * Get sql data for an optional follow-up data base query.
      *
      * By re-implementing this method one (or even more) follow-up db queries
      * can be initiated which is e.g. useful if additional records are discovered
@@ -148,7 +145,7 @@ abstract class tx_mksearch_service_indexer_Base extends Tx_Rnbase_Service_Base i
      * It is called repeatedly as long as its return value is not null.
      *
      * @param array $options from service configuration
-     * @return null | array
+     *
      * @see self::getSqlData()
      */
     protected function getFollowUpSqlData(array $options)
@@ -157,16 +154,17 @@ abstract class tx_mksearch_service_indexer_Base extends Tx_Rnbase_Service_Base i
     }
 
     /**
-     * Transform database record into tx_mksearch_model_IndexerDocument
+     * Transform database record into tx_mksearch_model_IndexerDocument.
      *
      * @param array                                 $rawData
-     * @param array                                 $options from service configuration
+     * @param array                                 $options  from service configuration
      * @param tx_mksearch_interface_IndexerDocument $indexDoc Model to be filled
+     *
      * @return tx_mksearch_interface_IndexerDocument or null, if record is not to be indexed
      */
     abstract protected function prepareData(array $rawData, array $options, tx_mksearch_interface_IndexerDocument $indexDoc);
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/indexer/class.tx_mksearch_service_indexer_Base.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/indexer/class.tx_mksearch_service_indexer_Base.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/indexer/class.tx_mksearch_service_indexer_Base.php'];
 }

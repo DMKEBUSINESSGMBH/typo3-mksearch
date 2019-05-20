@@ -1,48 +1,18 @@
 <?php
-/**
- *
- * @package tx_mksearch
- * @subpackage tx_mksearch_mod1
- *
- *  Copyright notice
- *
- *  (c) 2011 DMK E-Business GmbH <dev@dmk-ebusiness.de>
- *  All rights reserved
- *
- *  This script is part of the TYPO3 project. The TYPO3 project is
- *  free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  The GNU General Public License can be found at
- *  http://www.gnu.org/copyleft/gpl.html.
- *
- *  This script is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  This copyright notice MUST APPEAR in all copies of the script!
- */
-
 
 /**
- * Die Klasse stellt Auswahlmenus zur Verfügung
+ * Die Klasse stellt Auswahlmenus zur Verfügung.
  *
- * @package tx_mksearch
- * @subpackage tx_mksearch_mod1
  * @author Michael Wagner <dev@dmk-ebusiness.de>
  */
 class tx_mksearch_mod1_util_Selector
 {
-
     /**
-     * @var     tx_rnbase_mod_IModule
+     * @var tx_rnbase_mod_IModule
      */
     private $mod;
     /**
-     * @var     tx_rnbase_util_FormTool
+     * @var tx_rnbase_util_FormTool
      */
     private $formTool;
 
@@ -59,21 +29,22 @@ class tx_mksearch_mod1_util_Selector
      * Method to display a form with an input array, a description and a submit button.
      * Keys are 'field' and 'button'.
      *
-     * @param   string  $out                HTML string
-     * @param   string  $key                mod key
-     * @param   array   $options
-     *              string  buttonName      name of the submit button. default is key.
-     *              string  buttonValue     value of the sumbit button. default is LLL:label_button_search.
-     *              string  label           label of the sumbit button. default is LLL:label_search.
-     * @return  string                      search term
+     * @param string $out     HTML string
+     * @param string $key     mod key
+     * @param array  $options
+     *                        string  buttonName      name of the submit button. default is key.
+     *                        string  buttonValue     value of the sumbit button. default is LLL:label_button_search.
+     *                        string  label           label of the sumbit button. default is LLL:label_search.
+     *
+     * @return string search term
      */
     public function showFreeTextSearchForm(&$out, $key, array $options = array())
     {
         $searchstring = $this->getValueFromModuleData($key);
 
         // Erst das Suchfeld, danach der Button.
-        $out['field']    = $this->formTool->createTxtInput('SET['.$key.']', $searchstring, 10);
-        $out['button']    = empty($options['submit']) ? '' : $this->formTool->createSubmit(
+        $out['field'] = $this->formTool->createTxtInput('SET['.$key.']', $searchstring, 10);
+        $out['button'] = empty($options['submit']) ? '' : $this->formTool->createSubmit(
             $options['buttonName'] ? $options['buttonName'] : $key,
             $options['buttonValue'] ? $options['buttonValue'] : $GLOBALS['LANG']->getLL('label_button_search')
         );
@@ -84,9 +55,11 @@ class tx_mksearch_mod1_util_Selector
 
     /**
      * Returns a delete select box. All data is stored in array $data.
-     * @param   array   $data
-     * @param   array   $options
-     * @return  bool
+     *
+     * @param array $data
+     * @param array $options
+     *
+     * @return bool
      */
     public function showHiddenSelector(&$data, $options = array())
     {
@@ -99,12 +72,15 @@ class tx_mksearch_mod1_util_Selector
 
         return $this->showSelectorByArray($items, 'showhidden', $data, $options);
     }
+
     /**
      * Zeigt eine Datumsauswahl mit einzelnen Selects für Tag, Monat und Jahr.
-     * @param array $aItems Array mit den werten der Auswahlbox
-     * @param string $sDefId ID-String des Elements
-     * @param array $aData enthält die Formularelement für die Ausgabe im Screen. Keys: selector, label
-     * @param array $aOptions zusätzliche Optionen: yearfrom, yearto,
+     *
+     * @param array  $aItems   Array mit den werten der Auswahlbox
+     * @param string $sDefId   ID-String des Elements
+     * @param array  $aData    enthält die Formularelement für die Ausgabe im Screen. Keys: selector, label
+     * @param array  $aOptions zusätzliche Optionen: yearfrom, yearto,
+     *
      * @return DateTime selected day
      */
     public function showDateSelector($sDefId, &$aData, $aOptions = array())
@@ -124,7 +100,7 @@ class tx_mksearch_mod1_util_Selector
         // Monate
         $tmpDataMonth = array();
         $items = array();
-        for ($i = 1; $i < 13; $i++) {
+        for ($i = 1; $i < 13; ++$i) {
             $date = new DateTime();
             $items[$i] = $date->setDate(2000, $i, 1)->format('F');
         }
@@ -145,7 +121,7 @@ class tx_mksearch_mod1_util_Selector
 
         $tmpDataYear = array();
         $items = array();
-        for ($i = $from; $i < $to; $i++) {
+        for ($i = $from; $i < $to; ++$i) {
             $items[$i] = $i;
         }
         $selectedYear = $this->getValueFromModuleData($yearId);
@@ -155,7 +131,7 @@ class tx_mksearch_mod1_util_Selector
         $tmpDataDay = array();
         $items = array();
         $totalDays = date('t', mktime(0, 0, 0, $selectedMonth, 1, $selectedYear));
-        for ($i = 1; $i < $totalDays + 1; $i++) {
+        for ($i = 1; $i < $totalDays + 1; ++$i) {
             $items[$i] = $i;
         }
         $selectedDay = $this->getValueFromModuleData($dayId);
@@ -174,11 +150,13 @@ class tx_mksearch_mod1_util_Selector
     }
 
     /**
-     * Gibt einen selector mit den elementen im gegebenen array zurück
-     * @param array $aItems Array mit den werten der Auswahlbox
-     * @param string $sDefId ID-String des Elements
-     * @param array $aData enthält die Formularelement für die Ausgabe im Screen. Keys: selector, label
-     * @param array $aOptions zusätzliche Optionen: label, id
+     * Gibt einen selector mit den elementen im gegebenen array zurück.
+     *
+     * @param array  $aItems   Array mit den werten der Auswahlbox
+     * @param string $sDefId   ID-String des Elements
+     * @param array  $aData    enthält die Formularelement für die Ausgabe im Screen. Keys: selector, label
+     * @param array  $aOptions zusätzliche Optionen: label, id
+     *
      * @return string selected item
      */
     protected function showSelectorByArray($aItems, $sDefId, &$aData, $aOptions = array())
@@ -202,8 +180,10 @@ class tx_mksearch_mod1_util_Selector
         //@todo wozu die alte abfrage? return $defId==$id ? false : $selectedItem;
         return $selectedItem;
     }
+
     /**
-     * Gibt einen selector mit den elementen im gegebenen array zurück
+     * Gibt einen selector mit den elementen im gegebenen array zurück.
+     *
      * @return string selected item
      */
     protected function showSelectorByTCA($sDefId, $table, $column, &$aData, $aOptions = array())
@@ -222,16 +202,16 @@ class tx_mksearch_mod1_util_Selector
     }
 
     /**
-     * Returns an instance of tx_rnbase_mod_IModule
+     * Returns an instance of tx_rnbase_mod_IModule.
      *
-     * @return  tx_rnbase_mod_IModule
+     * @return tx_rnbase_mod_IModule
      */
     protected function getModule()
     {
         return $this->mod;
     }
+
     /**
-     *
      * @return tx_rnbase_util_FormTool
      */
     protected function getFormTool()
@@ -240,10 +220,11 @@ class tx_mksearch_mod1_util_Selector
     }
 
     /**
-     * Return requested value from module data
+     * Return requested value from module data.
      *
-     * @param   string $key
-     * @return  mixed
+     * @param string $key
+     *
+     * @return mixed
      */
     public function getValueFromModuleData($key)
     {
@@ -258,10 +239,9 @@ class tx_mksearch_mod1_util_Selector
 
     /**
      * Setzt einen Wert in den Modul Daten. Dabei werden die bestehenden
-     * ergänzt oder ggf. überschrieben
+     * ergänzt oder ggf. überschrieben.
      *
-     * @param   array $aModuleData
-     * @return  void
+     * @param array $aModuleData
      */
     public function setValueToModuleData($sModuleName, $aModuleData = array())
     {
@@ -274,11 +254,10 @@ class tx_mksearch_mod1_util_Selector
         $GLOBALS['BE_USER']->pushModuleData($sModuleName, $aExistingModuleData);
     }
 
-
     /**
+     * @param array $data
      *
-     * @param   array   $data
-     * @return  string
+     * @return string
      */
     public function buildFilterTable(array $data)
     {
@@ -287,9 +266,9 @@ class tx_mksearch_mod1_util_Selector
             $out .= '<table class="filters">';
             foreach ($data as $label => $filter) {
                 $out .= '<tr>';
-                $out .= '<td>'. (isset($filter['label']) ? $filter['label'] : $label).'</td>';
+                $out .= '<td>'.(isset($filter['label']) ? $filter['label'] : $label).'</td>';
                 unset($filter['label']);
-                $out .= '<td>'. implode(' ', $filter) .'</td>';
+                $out .= '<td>'.implode(' ', $filter).'</td>';
 
                 $out .= '</tr>';
             }
@@ -301,5 +280,5 @@ class tx_mksearch_mod1_util_Selector
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/util/class.tx_mksearch_mod1_util_Selector.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/util/class.tx_mksearch_mod1_util_Selector.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/util/class.tx_mksearch_mod1_util_Selector.php'];
 }

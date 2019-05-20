@@ -29,10 +29,8 @@ tx_rnbase::load('tx_rnbase_util_Spyc');
 tx_rnbase::load('tx_mksearch_tests_Util');
 
 /**
- * Base test class for tests hitting Solr
+ * Base test class for tests hitting Solr.
  *
- * @package tx_mksearch
- * @subpackage tx_mksearch_tests
  * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
  * @author Michael Wagner <michael.wagner@dmk-ebusiness.de>
  * @license http://www.gnu.org/licenses/lgpl.html
@@ -45,7 +43,6 @@ tx_rnbase::load('tx_mksearch_tests_Util');
  */
 abstract class tx_mksearch_tests_SolrTestcase extends tx_mksearch_tests_Testcase
 {
-
     /**
      * @var unknown_type
      */
@@ -61,7 +58,7 @@ abstract class tx_mksearch_tests_SolrTestcase extends tx_mksearch_tests_Testcase
 
     /**
      * Can be a TYPO3 path like EXT:mksearch/tests.....
-     * used for all solr version below 4.0
+     * used for all solr version below 4.0.
      *
      * @var string
      */
@@ -69,7 +66,7 @@ abstract class tx_mksearch_tests_SolrTestcase extends tx_mksearch_tests_Testcase
 
     /**
      * Can be a TYPO3 path like EXT:mksearch/tests.....
-     * Is used when the solr index model is set to solr version 4.0
+     * Is used when the solr index model is set to solr version 4.0.
      *
      * @var string
      */
@@ -77,6 +74,7 @@ abstract class tx_mksearch_tests_SolrTestcase extends tx_mksearch_tests_Testcase
 
     /**
      * Can be a TYPO3 path like EXT:mksearch/tests.....
+     *
      * @var string
      */
     protected $schemaFile = '';
@@ -97,7 +95,8 @@ abstract class tx_mksearch_tests_SolrTestcase extends tx_mksearch_tests_Testcase
     private $defaultIndexModel;
 
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
+     *
      * @see PHPUnit_Framework_TestCase::setUp()
      */
     protected function setUp()
@@ -111,7 +110,8 @@ abstract class tx_mksearch_tests_SolrTestcase extends tx_mksearch_tests_Testcase
     }
 
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
+     *
      * @see PHPUnit_Framework_TestCase::tearDown()
      */
     protected function tearDown()
@@ -121,9 +121,6 @@ abstract class tx_mksearch_tests_SolrTestcase extends tx_mksearch_tests_Testcase
         tx_rnbase_util_Files::rmdir($this->instanceDir, true);
     }
 
-    /**
-     * @return void
-     */
     protected function initAbsolutePathsForConfigs()
     {
         $this->setConfigFileDependendOnSolrVersion();
@@ -132,10 +129,6 @@ abstract class tx_mksearch_tests_SolrTestcase extends tx_mksearch_tests_Testcase
         $this->schemaFile = tx_rnbase_util_Files::getFileAbsFileName($this->schemaFile);
     }
 
-    /**
-     *
-     * @return void
-     */
     private function setConfigFileDependendOnSolrVersion()
     {
         $defaultIndexModel = $this->getDefaultIndexModel();
@@ -145,9 +138,6 @@ abstract class tx_mksearch_tests_SolrTestcase extends tx_mksearch_tests_Testcase
         }
     }
 
-    /**
-     * @return void
-     */
     protected function createCore()
     {
         if (!$this->isSolrOkay()) {
@@ -159,13 +149,13 @@ abstract class tx_mksearch_tests_SolrTestcase extends tx_mksearch_tests_Testcase
         $solr = $this->getSolr();
 
         $httpTransport = $solr->getHttpTransport();
-        $url = $this->getAdminCoresPath() . '?action=CREATE&name=' . $this->getCoreName() .
-            '&instanceDir=' . $this->instanceDir . '&config=' . $this->configFile . '&schema=' .
+        $url = $this->getAdminCoresPath().'?action=CREATE&name='.$this->getCoreName().
+            '&instanceDir='.$this->instanceDir.'&config='.$this->configFile.'&schema='.
             $this->schemaFile;
         $httpResponse = $httpTransport->performGetRequest($url);
 
-        if ($httpResponse->getStatusCode() != 200) {
-            $this->fail('Der Core (' . $this->getCoreName() . ') konnte nicht erstellt werden. URL: ' . $url . '. Bitte in die Solr Konsole schauen bzgl. der Fehler!');
+        if (200 != $httpResponse->getStatusCode()) {
+            $this->fail('Der Core ('.$this->getCoreName().') konnte nicht erstellt werden. URL: '.$url.'. Bitte in die Solr Konsole schauen bzgl. der Fehler!');
         }
 
         $this->setSolrCredentialsForNewCore();
@@ -183,8 +173,8 @@ abstract class tx_mksearch_tests_SolrTestcase extends tx_mksearch_tests_Testcase
         $solrPathParts = tx_rnbase_util_Strings::trimExplode('/', $credentialsStringParts[2]);
 
         //build new credential string
-        $newCredentialsString = $credentialsStringParts[0] . ',' . $credentialsStringParts[1] .
-            ',/' . $solrPathParts[1] . '/' . $this->getCoreName();
+        $newCredentialsString = $credentialsStringParts[0].','.$credentialsStringParts[1].
+            ',/'.$solrPathParts[1].'/'.$this->getCoreName();
 
         $newCredentials = $this->getSolrEngine()->getCredentialsFromString($newCredentialsString);
         $this->getSolrEngine()->setConnection(
@@ -213,7 +203,6 @@ abstract class tx_mksearch_tests_SolrTestcase extends tx_mksearch_tests_Testcase
         return $this->defaultIndexModel;
     }
 
-
     /**
      * @return string
      */
@@ -221,15 +210,14 @@ abstract class tx_mksearch_tests_SolrTestcase extends tx_mksearch_tests_Testcase
     {
         $additionalMessage = '';
         if (!is_null($this->solr)) {
-            $additionalMessage .= ' auf: Host: ' . $this->getSolr()->getHost() . ', Port: ' .
-                $this->getSolr()->getPort() . ', Path: ' . $this->getSolr()->getPath();
+            $additionalMessage .= ' auf: Host: '.$this->getSolr()->getHost().', Port: '.
+                $this->getSolr()->getPort().', Path: '.$this->getSolr()->getPath();
         }
 
-        return 'Solr ist nicht erreichbar' . $additionalMessage;
+        return 'Solr ist nicht erreichbar'.$additionalMessage;
     }
 
     /**
-     *
      * @return Apache_Solr_Service
      */
     protected function getSolr()
@@ -256,7 +244,7 @@ abstract class tx_mksearch_tests_SolrTestcase extends tx_mksearch_tests_Testcase
             //muss mit einem buchstaben beginnen da der name
             //in setSolrCredentialsForNewCore in preg_replace
             //nicht korrekt ersetzt wird
-            $this->coreName = 'a'. md5(microtime());
+            $this->coreName = 'a'.md5(microtime());
         }
 
         return $this->coreName;
@@ -265,6 +253,7 @@ abstract class tx_mksearch_tests_SolrTestcase extends tx_mksearch_tests_Testcase
     /**
      * per default den ersten konfiguriereten index.
      * sollte so passen.
+     *
      * @return tx_mksearch_service_engine_Solr
      */
     protected function getSolrEngine()
@@ -284,7 +273,6 @@ abstract class tx_mksearch_tests_SolrTestcase extends tx_mksearch_tests_Testcase
 
     /**
      * @param string $path
-     * @return void
      */
     protected function createInstanceDir($path)
     {
@@ -296,8 +284,8 @@ abstract class tx_mksearch_tests_SolrTestcase extends tx_mksearch_tests_Testcase
         $umaskBackup = $GLOBALS['TYPO3_CONF_VARS']['BE']['folderCreateMask'];
         $GLOBALS['TYPO3_CONF_VARS']['BE']['folderCreateMask'] = '0775';
 
-        tx_rnbase_util_Files::mkdir_deep($path . '/conf');
-        tx_rnbase_util_Files::mkdir_deep($path . '/lib');
+        tx_rnbase_util_Files::mkdir_deep($path.'/conf');
+        tx_rnbase_util_Files::mkdir_deep($path.'/lib');
 
         $GLOBALS['TYPO3_CONF_VARS']['BE']['folderCreateMask'] = $umaskBackup;
     }
@@ -307,7 +295,7 @@ abstract class tx_mksearch_tests_SolrTestcase extends tx_mksearch_tests_Testcase
      */
     protected function getAdminCoresPath()
     {
-        return $this->getBaseUrl() . '/' . 'admin/cores';
+        return $this->getBaseUrl().'/'.'admin/cores';
     }
 
     /**
@@ -318,28 +306,24 @@ abstract class tx_mksearch_tests_SolrTestcase extends tx_mksearch_tests_Testcase
         $solr = $this->getSolr();
         $baseSolrPath = explode('/', $solr->getPath());
 
-        return 'http://' . $solr->getHost() . ':' . $solr->getPort() . '/' . $baseSolrPath[1];
+        return 'http://'.$solr->getHost().':'.$solr->getPort().'/'.$baseSolrPath[1];
     }
 
-    /**
-     * @return void
-     */
     protected function unloadCore()
     {
         if (!$this->isSolrOkay()) {
             $this->fail($this->getSolrNotRespondingMessage());
         }
 
-        $url = $this->getAdminCoresPath() . '?action=UNLOAD&core=' . $this->getCoreName() . '&deleteIndex=true';
-        $httpResponse =  $this->getSolr()->getHttpTransport()->performGetRequest($url);
+        $url = $this->getAdminCoresPath().'?action=UNLOAD&core='.$this->getCoreName().'&deleteIndex=true';
+        $httpResponse = $this->getSolr()->getHttpTransport()->performGetRequest($url);
 
-        if ($httpResponse->getStatusCode() != 200) {
-            $this->fail('Der Core (' . $this->getCoreName() . ') konnte nicht gelöscht werden. URL: ' . $url . '. Bitte in die Solr Konsolte schauen bzgl. der Fehler!');
+        if (200 != $httpResponse->getStatusCode()) {
+            $this->fail('Der Core ('.$this->getCoreName().') konnte nicht gelöscht werden. URL: '.$url.'. Bitte in die Solr Konsolte schauen bzgl. der Fehler!');
         }
     }
 
     /**
-     *
      * @param string $yamlPath
      */
     protected function indexDocsFromYaml($yamlPath)
@@ -376,6 +360,7 @@ abstract class tx_mksearch_tests_SolrTestcase extends tx_mksearch_tests_Testcase
     /**
      * @param unknown_type $extKey
      * @param unknown_type $cntType
+     *
      * @return tx_mksearch_interface_IndexerDocument
      */
     private function createDoc($extKey, $cntType)
@@ -386,12 +371,12 @@ abstract class tx_mksearch_tests_SolrTestcase extends tx_mksearch_tests_Testcase
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     protected function isSolrOkay()
     {
         try {
-            $ret = $this->getSolr()->ping() !== false;
+            $ret = false !== $this->getSolr()->ping();
         } catch (Exception $e) {
             $ret = false;
         }
@@ -401,10 +386,11 @@ abstract class tx_mksearch_tests_SolrTestcase extends tx_mksearch_tests_Testcase
 
     /**
      * es wird default nach *:* und einem limit von 10
-     * gesucht
+     * gesucht.
      *
      * @param array $options
      * @param array $fields
+     *
      * @return array
      */
     protected function search(array $options = array(), array $fields = array())
@@ -428,5 +414,5 @@ abstract class tx_mksearch_tests_SolrTestcase extends tx_mksearch_tests_Testcase
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/class.tx_mksearch_tests_SolrTestcase.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/class.tx_mksearch_tests_SolrTestcase.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/class.tx_mksearch_tests_SolrTestcase.php'];
 }

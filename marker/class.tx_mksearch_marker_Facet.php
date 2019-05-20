@@ -1,7 +1,5 @@
 <?php
 /**
- * @package tx_mksearch
- * @subpackage tx_mksearch_marker
  * @author Hannes Bochmann
  *
  *  Copyright notice
@@ -27,36 +25,31 @@
  */
 
 /**
- * benötigte Klassen einbinden
+ * benötigte Klassen einbinden.
  */
-
 tx_rnbase::load('tx_mksearch_marker_SearchResultSimple');
 
 /**
- * Marker class for base facets
+ * Marker class for base facets.
  *
  * @author Hannes Bochmann
- * @package tx_mksearch
- * @subpackage tx_mksearch_marker
  */
 class tx_mksearch_marker_Facet extends tx_mksearch_marker_SearchResultSimple
 {
-
-
-
     /**
-     * @param string $template HTML template
-     * @param tx_mksearch_model_Facet $item search hit
+     * @param string                    $template  HTML template
+     * @param tx_mksearch_model_Facet   $item      search hit
      * @param tx_rnbase_util_FormatUtil $formatter
-     * @param string $confId path of typoscript configuration
-     * @param string $marker name of marker
+     * @param string                    $confId    path of typoscript configuration
+     * @param string                    $marker    name of marker
+     *
      * @return string readily parsed template
      */
     public function parseTemplate($template, &$item, &$formatter, $confId, $marker = 'ITEM')
     {
         $out = parent::parseTemplate($template, $item, $formatter, $confId, $marker);
 
-        if (self::containsMarker($out, $marker . '_CHILDS')) {
+        if (self::containsMarker($out, $marker.'_CHILDS')) {
             $childs = array();
             if ($item instanceof tx_mksearch_model_Facet
                 && $item->hasChilds()
@@ -71,8 +64,8 @@ class tx_mksearch_marker_Facet extends tx_mksearch_marker_SearchResultSimple
                 false,
                 $out,
                 'tx_mksearch_marker_Facet',
-                $confId . 'child.',
-                $marker . '_CHILD',
+                $confId.'child.',
+                $marker.'_CHILD',
                 $formatter
             );
         }
@@ -83,10 +76,9 @@ class tx_mksearch_marker_Facet extends tx_mksearch_marker_SearchResultSimple
     /**
      * Führt vor dem parsen Änderungen am Model durch.
      *
-     * @param tx_rnbase_model_base &$item
+     * @param tx_rnbase_model_base     &$item
      * @param tx_rnbase_configurations &$configurations
-     * @param string &$confId
-     * @return void
+     * @param string                   &$confId
      */
     protected function prepareItem(
         Tx_Rnbase_Domain_Model_DataInterface $item,
@@ -102,33 +94,33 @@ class tx_mksearch_marker_Facet extends tx_mksearch_marker_SearchResultSimple
             $value = $item->getId();
 
             // #4 fixed field name for query facets
-            if ($item->getFacetType() == tx_mksearch_model_Facet::TYPE_QUERY) {
+            if (tx_mksearch_model_Facet::TYPE_QUERY == $item->getFacetType()) {
                 $field = tx_mksearch_model_Facet::TYPE_QUERY;
             }
 
             // check fieldmapping:
-            $fieldMap = $configurations->get($confId . 'mapping.field.' . $field);
+            $fieldMap = $configurations->get($confId.'mapping.field.'.$field);
             $field = empty($fieldMap) ? $field : $fieldMap;
 
             // den Formularnamen setzen
             if (!isset($item->record['form_name'])) {
-                $formName  = $configurations->getQualifier();
+                $formName = $configurations->getQualifier();
                 $formName .= '[fq]';
-                $formName .= '[' . $field . ']';
-                $formName .= '[' . $value . ']';
+                $formName .= '['.$field.']';
+                $formName .= '['.$value.']';
                 $item->record['form_name'] = $formName;
             }
 
             // wir setzen den wert direkt fertig für den filter zusammen
             if (!isset($item->record['form_value'])) {
-                $item->record['form_value'] = $field . ':' . $value;
+                $item->record['form_value'] = $field.':'.$value;
             }
 
             // wir setzen den wert direkt fertig für den filter zusammen
             if (!isset($item->record['form_id'])) {
-                $formId  = $configurations->getQualifier();
-                $formId .= '-' . $field;
-                $formId .= '-' . $value;
+                $formId = $configurations->getQualifier();
+                $formId .= '-'.$field;
+                $formId .= '-'.$value;
                 $formId = preg_replace('/[^\da-z-]/i', '', strtolower($formId));
                 $item->record['form_id'] = $formId;
             }
@@ -148,7 +140,7 @@ class tx_mksearch_marker_Facet extends tx_mksearch_marker_SearchResultSimple
                     $params = $configurations->getParameters()->get('addfq');
                     if ($field == substr($params, 0, strpos($params, ':'))) {
                         $params = array(
-                            substr($params, strpos($params, ':') + 1) => $params
+                            substr($params, strpos($params, ':') + 1) => $params,
                         );
                     } else {
                         $params = array();
@@ -160,15 +152,15 @@ class tx_mksearch_marker_Facet extends tx_mksearch_marker_SearchResultSimple
     }
 
     /**
-     * Links vorbereiten
+     * Links vorbereiten.
      *
-     * @param tx_mksearch_model_Facet $item
-     * @param string $marker
-     * @param array $markerArray
-     * @param array $wrappedSubpartArray
-     * @param string $confId
+     * @param tx_mksearch_model_Facet   $item
+     * @param string                    $marker
+     * @param array                     $markerArray
+     * @param array                     $wrappedSubpartArray
+     * @param string                    $confId
      * @param tx_rnbase_util_FormatUtil $formatter
-     * @param string $template
+     * @param string                    $template
      */
     public function prepareLinks($item, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, $formatter, $template)
     {
@@ -202,5 +194,5 @@ class tx_mksearch_marker_Facet extends tx_mksearch_marker_SearchResultSimple
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/marker/class.tx_mksearch_marker_CorePage.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/marker/class.tx_mksearch_marker_CorePage.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/marker/class.tx_mksearch_marker_CorePage.php'];
 }

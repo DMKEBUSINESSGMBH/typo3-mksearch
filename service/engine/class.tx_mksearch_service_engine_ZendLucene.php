@@ -22,7 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-
 tx_rnbase::load('tx_mksearch_interface_SearchEngine');
 tx_rnbase::load('tx_rnbase_configurations');
 tx_rnbase::load('tx_rnbase_util_Logger');
@@ -33,29 +32,28 @@ tx_rnbase::load('Tx_Rnbase_Service_Base');
  * Service "ZendLucene search engine" for the "mksearch" extension.
  *
  * @author  Lars Heber <dev@dmk-ebusiness.de>
- * @package     TYPO3
- * @subpackage  tx_mksearch
  */
 class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base implements tx_mksearch_interface_SearchEngine
 {
     const FE_GROUP_FIELD = 'fe_group_mi';
 
     /**
-     * Index used for searching and indexing
+     * Index used for searching and indexing.
      *
      * @var Zend_Search_Lucene_Interface
      */
     private $index;
 
     /**
-     * Name of the currently open index
+     * Name of the currently open index.
      *
      * @var string
      */
     private $indexName;
 
     /**
-     * Reference to index configuration
+     * Reference to index configuration.
+     *
      * @var tx_mksearch_model_internal_Index
      */
     private $indexModel;
@@ -64,9 +62,7 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
     private $dataTypeMapper;
 
     /**
-     * Constructor
-     *
-     * @return void
+     * Constructor.
      */
     public function __construct()
     {
@@ -75,15 +71,15 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
         $zendPath = tx_rnbase_util_Files::getFileAbsFileName($zendPath);
 
         $iniPath = get_include_path();
-        if (strpos($zendPath, $iniPath) === false) {
-            set_include_path($iniPath . PATH_SEPARATOR . $zendPath);
+        if (false === strpos($zendPath, $iniPath)) {
+            set_include_path($iniPath.PATH_SEPARATOR.$zendPath);
         }
         if (!is_readable($zendPath)) {
             tx_rnbase_util_Logger::fatal('Current path to Zend root does not exist!', 'mksearch', array('Path' => $zendPath));
             throw new Exception('Current path to Zend root does not exist!');
         }
 
-        $autoLoaderPath = rtrim($zendPath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'Zend'.DIRECTORY_SEPARATOR.'Loader'.DIRECTORY_SEPARATOR.'Autoloader.php';
+        $autoLoaderPath = rtrim($zendPath, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.'Zend'.DIRECTORY_SEPARATOR.'Loader'.DIRECTORY_SEPARATOR.'Autoloader.php';
         if (!is_readable($autoLoaderPath)) {
             tx_rnbase_util_Logger::fatal('Zend auto loader class not found. Check extension settings!', 'mksearch', array('Path' => $autoLoaderPath));
             throw new Exception('Zend auto loader class not found. Check extension settings! More info in devlog.');
@@ -100,6 +96,7 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
             tx_rnbase::makeInstance('Zend_Search_Lucene_Analysis_Analyzer_Common_Utf8Num_CaseInsensitive')
         );
     }
+
     /**
      * @return tx_mksearch_service_engine_lucene_DataTypeMapper
      */
@@ -116,6 +113,7 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
 
         return $this->dataTypeMapper;
     }
+
     public function getFieldNames($indexed = false)
     {
         $ret = array();
@@ -127,10 +125,12 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
 
         return $fieldNames;
     }
+
     /**
-     * Check if an index was opened
+     * Check if an index was opened.
      *
-     * @param bool $throwException  throw exception in case of error
+     * @param bool $throwException throw exception in case of error
+     *
      * @return bool
      */
     private function checkForOpenIndex($throwException = true)
@@ -145,31 +145,34 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
     }
 
     /**
-     * Return index directory path
-     * @param string    $name   Name of index
+     * Return index directory path.
+     *
+     * @param string $name Name of index
+     *
      * @return string
      */
     private function getIndexDirectory($name)
     {
-        $path = tx_rnbase_configurations::getExtensionCfgValue('mksearch', 'luceneIndexDir') . DIRECTORY_SEPARATOR . $name;
+        $path = tx_rnbase_configurations::getExtensionCfgValue('mksearch', 'luceneIndexDir').DIRECTORY_SEPARATOR.$name;
         tx_rnbase::load('tx_rnbase_util_Files');
         if (!tx_rnbase_util_Files::isAbsPath($path)) {
-            $path = PATH_site . $path;
+            $path = PATH_site.$path;
         }
 
         return $path;
     }
 
     /**
-     * Build query recursively from query array
+     * Build query recursively from query array.
      *
      * @param $fields
+     *
      * @return Zend_Search_Lucene_Search_Query_Boolean
      */
     private function buildQuery(array $fields)
     {
-        $query = new Zend_Search_Lucene_Search_Query_Boolean;
-        $mtquery = new Zend_Search_Lucene_Search_Query_MultiTerm;
+        $query = new Zend_Search_Lucene_Search_Query_Boolean();
+        $mtquery = new Zend_Search_Lucene_Search_Query_MultiTerm();
 
         // Loop through all items of the field
         foreach ($fields as $key => $f) {
@@ -187,7 +190,7 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
 
                         // The term is really just a simple string
                         $mtquery->addTerm(
-                            new Zend_Search_Lucene_Index_Term($ff['term'], $key == '__default__' ? null : $key),
+                            new Zend_Search_Lucene_Index_Term($ff['term'], '__default__' == $key ? null : $key),
                             isset($ff['sign']) ? $ff['sign'] : null
                         );
                     } else {
@@ -205,7 +208,7 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
                                 $pq->addTerm(
                                     new Zend_Search_Lucene_Index_Term(
                                         $t,
-                                        $key == '__default__' ? null : $key
+                                        '__default__' == $key ? null : $key
                                     )
                                 );
                             }
@@ -230,7 +233,7 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
     }
 
     /**
-     * Search indexed data via Zend Lucene
+     * Search indexed data via Zend Lucene.
      *
      * Search term must be charset-encoded identically like data was indexed (utf-8 by default)!
      * NOTE: Search results are always utf8-encoded!
@@ -307,12 +310,13 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
      *                          ),
      *  );
      *
-     * @param array     $fields     Structure of fields - see example above
-     * @param array     $options    Options for search:
-     *                              * [bool] rawFormat:     Pass through $fields['term'] as raw search
-     *                              * [array] fe_groups:    Allowed FE groups
-     *                              * [string] sort:        Sort Field and Sort Order e.g. name desc
-     *                              * [boolean] sortRandom: random sorting no matter what sorting was set
+     * @param array $fields  Structure of fields - see example above
+     * @param array $options Options for search:
+     *                       * [bool] rawFormat:     Pass through $fields['term'] as raw search
+     *                       * [array] fe_groups:    Allowed FE groups
+     *                       * [string] sort:        Sort Field and Sort Order e.g. name desc
+     *                       * [boolean] sortRandom: random sorting no matter what sorting was set
+     *
      * @return array[tx_mksearch_model_SearchHit] or array[Zend_Search_Lucene_Search_QueryHit]  search results - format according to $options['rawOutput'] (usually not for public use as raw output depends on used search engine!)
      */
     public function search(array $fields = array(), array $options = array())
@@ -329,7 +333,7 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
                 foreach ($options['fe_groups'] as &$f) {
                     $f = self::FE_GROUP_FIELD.':'.$f;
                 }
-                $queryString = '(' . implode(' OR ', $options['fe_groups']) . ') AND (' . $fields['term'] . ')';
+                $queryString = '('.implode(' OR ', $options['fe_groups']).') AND ('.$fields['term'].')';
             } else {
                 $queryString = $fields['term'];
             }
@@ -352,17 +356,16 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
                 }
 
                 // Re-Build new $fields by "AND"ing fe_groups
-                $fields = array('fe_groups_aware' =>
-                    array(
+                $fields = array('fe_groups_aware' => array(
                         array(
                             'term' => array(self::FE_GROUP_FIELD => $fe_groups),
-                            'sign' => true
+                            'sign' => true,
                         ),
                         array(
                             'term' => $fields,    // Original fields
                             'sign' => true,
-                        )
-                    )
+                        ),
+                    ),
                 );
             }
             $queryString = $this->buildQuery($fields);
@@ -375,7 +378,7 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
         if ($options['sort']) {
             $sortParts = explode(' ', $options['sort']);
             list($sortField, $sortOrder) = explode(' ', $options['sort']);
-            $sortOrder = (strtolower($sortOrder) == 'asc') ? SORT_ASC : SORT_DESC;
+            $sortOrder = ('asc' == strtolower($sortOrder)) ? SORT_ASC : SORT_DESC;
             $hits = $this->index->find($queryString, $sortField, SORT_REGULAR, $sortOrder);
         } else {
             $hits = $this->index->find($queryString);
@@ -389,8 +392,8 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
             tx_rnbase::load('tx_rnbase_util_Debug');
             tx_rnbase_util_Debug::debug(
                 array(
-                    'Fields' => $fields, 'Options' => $options ,
-                    'Query' => $queryString, 'Hits' => count($hits)
+                    'Fields' => $fields, 'Options' => $options,
+                    'Query' => $queryString, 'Hits' => count($hits),
                 ),
                 'class.tx_mksearch_service_engine_ZendLucene.php'
             );
@@ -414,7 +417,7 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
         // else
         tx_rnbase::load('tx_mksearch_model_SearchHit');
         $results = array();
-        for ($i = $offset; $i < $limit + $offset; $i++) {
+        for ($i = $offset; $i < $limit + $offset; ++$i) {
             if (array_key_exists($i, $hits)) {
                 $searchHit = $this->buildSearchHit($hits[$i]);
                 if ($searchHit) {
@@ -427,6 +430,7 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
 
         return $results;
     }
+
     private function buildSearchHit($hit)
     {
         $doc = $hit->getDocument();
@@ -445,7 +449,8 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
     }
 
     /**
-     * Return the index opened at the moment
+     * Return the index opened at the moment.
+     *
      * @return string
      */
     public function getOpenIndexName()
@@ -454,11 +459,10 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
     }
 
     /**
-     * Open an index
+     * Open an index.
      *
-     * @param tx_mksearch_model_internal_Index  $name           Name of the index to open
-     * @param bool      $forceCreation  Force creation of index if it doesn't exist
-     * @return void
+     * @param tx_mksearch_model_internal_Index $name          Name of the index to open
+     * @param bool                             $forceCreation Force creation of index if it doesn't exist
      */
     public function openIndex(tx_mksearch_model_internal_Index $index, $forceCreation = false)
     {
@@ -501,8 +505,10 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
     }
 
     /**
-     * Check if the specified index exists
-     * @param string    $name   Name of index
+     * Check if the specified index exists.
+     *
+     * @param string $name Name of index
+     *
      * @return bool
      */
     public function indexExists($name)
@@ -511,7 +517,7 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
     }
 
     /**
-     * Commit index
+     * Commit index.
      *
      * Explicite commits are not needed for Zend_Lucene, as commit commit happens implicitely on
      * close of index and prior to all other operations which depend on a clean data state.
@@ -524,8 +530,7 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
     }
 
     /**
-     * Close index
-     * @return void
+     * Close index.
      */
     public function closeIndex()
     {
@@ -534,10 +539,9 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
     }
 
     /**
-     * Delete an entire index
+     * Delete an entire index.
      *
      * @param optional string $name Name of index to delete, if not the open index is meant to be deleted
-     * @return void
      */
     public function deleteIndex($name = null)
     {
@@ -563,9 +567,7 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
     }
 
     /**
-     * Optimize index
-     *
-     * @return void
+     * Optimize index.
      */
     public function optimizeIndex()
     {
@@ -580,9 +582,8 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
      * The index to be replaced will be deleted.
      * This actually means that the old's index's directory will be deleted recursively!
      *
-     * @param string    $which  Name of index to be replaced i. e. deleted
-     * @param string    $by     Name of index which replaces the index named $which
-     * @return void
+     * @param string $which Name of index to be replaced i. e. deleted
+     * @param string $by    Name of index which replaces the index named $which
      */
     public function replaceIndex($which, $by)
     {
@@ -597,10 +598,12 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
     }
 
     /**
-     * Get a document from index
+     * Get a document from index.
+     *
      * @param $uid
      * @param $extKey
      * @param $contentType
+     *
      * @return unknown_type
      */
     private function getIndexDocumentByContentUid($uid, $extKey, $contentType)
@@ -611,10 +614,12 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
     }
 
     /**
-     * Get a document from index
+     * Get a document from index.
+     *
      * @param string $uid
      * @param string $extKey
      * @param string $contentType
+     *
      * @return tx_mksearch_model_SearchHit
      */
     public function getByContentUid($uid, $extKey, $contentType)
@@ -633,15 +638,15 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
             );
         }
 
-        return empty($results) ?  null : reset($results);
+        return empty($results) ? null : reset($results);
     }
 
     /**
-     * Add a field to the given index document
+     * Add a field to the given index document.
      *
-     * @param string $key
-     * @param tx_mksearch_interface_IndexerField    &$field
-     * @param Zend_Search_Lucene_Document       &$doc
+     * @param string                             $key
+     * @param tx_mksearch_interface_IndexerField &$field
+     * @param Zend_Search_Lucene_Document        &$doc
      */
     private function addFieldToIndexDoc($key, tx_mksearch_interface_IndexerField $field, Zend_Search_Lucene_Document $doc)
     {
@@ -652,7 +657,7 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
         }
         // Den Type über den DataTypeMapper ermitteln. Dieser ersetzt die schema.xml von Solr...
         $storageType = $this->getDataTypeMapper()->getDataType($key);
-        $encoding = $field->getEncoding() != '' ? $field->getEncoding() : 'utf8'; // Lucene unterstützt nur UTF-8.
+        $encoding = '' != $field->getEncoding() ? $field->getEncoding() : 'utf8'; // Lucene unterstützt nur UTF-8.
         // switch ($field->getStorageType()) {
         switch ($storageType) {
             case 'text':
@@ -677,10 +682,9 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
     }
 
     /**
-     * Put a new record into index
+     * Put a new record into index.
      *
-     * @param tx_mksearch_model_IndexerDocument $doc    "Document" to index
-     * @return void
+     * @param tx_mksearch_model_IndexerDocument $doc "Document" to index
      */
     public function indexNew(tx_mksearch_interface_IndexerDocument $doc)
     {
@@ -731,10 +735,9 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
     }
 
     /**
-     * Update or create an index record
+     * Update or create an index record.
      *
-     * @param tx_mksearch_model_IndexerDocument $doc    "Document" to index
-     * @return void
+     * @param tx_mksearch_model_IndexerDocument $doc "Document" to index
      */
     public function indexUpdate(tx_mksearch_interface_IndexerDocument $doc)
     {
@@ -752,11 +755,12 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
     }
 
     /**
-     * Delete index document specified by content uid
+     * Delete index document specified by content uid.
      *
-     * @param int       $uid            Unique identifier of data record - unique within the scope of $extKey and $content_type
-     * @param string    $extKey         Key of extension the data record belongs to
-     * @param string    $contentType    Name of semantic content type
+     * @param int    $uid         Unique identifier of data record - unique within the scope of $extKey and $content_type
+     * @param string $extKey      Key of extension the data record belongs to
+     * @param string $contentType Name of semantic content type
+     *
      * @return bool success
      */
     public function indexDeleteByContentUid($uid, $extKey, $contentType)
@@ -775,17 +779,18 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
     }
 
     /**
-     * Delete index document specified by index id
+     * Delete index document specified by index id.
      *
      * @param int $id
-     * @return void
      */
     public function indexDeleteByIndexId($id)
     {
         $this->index->delete($id);
     }
+
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
+     *
      * @see tx_mksearch_interface_SearchEngine::indexDeleteByQuery()
      */
     public function indexDeleteByQuery($query, $options = array())
@@ -793,11 +798,13 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
         // Not implemented!
         return false;
     }
+
     /**
-     * Return an indexer document instance for the given content type
+     * Return an indexer document instance for the given content type.
      *
-     * @param string    $extKey         Extension key of records to be indexed
-     * @param string    $contentType    Content type of records to be indexed
+     * @param string $extKey      Extension key of records to be indexed
+     * @param string $contentType Content type of records to be indexed
+     *
      * @return tx_mksearch_interface_IndexerDocument
      */
     public function makeIndexDocInstance($extKey, $contentType)
@@ -808,6 +815,7 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
             $contentType
         );
     }
+
     /**
      * @return tx_mksearch_util_Status
      */
@@ -824,8 +832,8 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
         $id = 1;
         $this->openIndex($this->indexModel, true);
 
-        $msg = 'Up and running on directory ' . $this->getIndexDirectory($this->indexModel->getCredentialString());
-        $msg .= '<br/> Number of indexed documents: ' .    $this->index->numDocs();
+        $msg = 'Up and running on directory '.$this->getIndexDirectory($this->indexModel->getCredentialString());
+        $msg .= '<br/> Number of indexed documents: '.$this->index->numDocs();
         $status->setStatus($id, $msg);
         $this->closeIndex();
 
@@ -833,7 +841,7 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
     }
 
     /**
-     * Nothing to do
+     * Nothing to do.
      *
      * @see tx_mksearch_interface_SearchEngine::postProcessIndexing()
      */
@@ -843,5 +851,5 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/engine/class.tx_mksearch_service_engine_ZendLucene.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/engine/class.tx_mksearch_service_engine_ZendLucene.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/engine/class.tx_mksearch_service_engine_ZendLucene.php'];
 }

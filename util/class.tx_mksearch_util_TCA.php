@@ -22,22 +22,21 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-
 tx_rnbase::load('tx_mksearch_util_Config');
 /**
- * Tools for use in TCA
+ * Tools for use in TCA.
  */
 class tx_mksearch_util_TCA
 {
-
     /**
-     * Convert HTML to plain text
+     * Convert HTML to plain text.
      *
      * Removes HTML tags and HTML comments and converts HTML entities
      * to their applicable characters.
      *
-     * @param string    $t
-     * @return string   Converted string (utf8-encoded)
+     * @param string $t
+     *
+     * @return string Converted string (utf8-encoded)
      */
     public static function html2plain($t)
     {
@@ -53,9 +52,10 @@ class tx_mksearch_util_TCA
     }
 
     /**
-     * Get extension keys of all registered indexers
+     * Get extension keys of all registered indexers.
      *
      * @param array &$params
+     *
      * @return array
      */
     public static function getIndexerExtKeys(array &$params)
@@ -65,14 +65,15 @@ class tx_mksearch_util_TCA
         $keys = array_keys($config);
         sort($keys);
         foreach ($keys as $k) {
-            $params['items'][] = array($k,$k);
+            $params['items'][] = array($k, $k);
         }
     }
 
     /**
-     * Get content types keys of the given indexer extension
+     * Get content types keys of the given indexer extension.
      *
      * @param array &$params
+     *
      * @return array
      */
     public static function getIndexerContentTypes(array &$params)
@@ -85,7 +86,7 @@ class tx_mksearch_util_TCA
             $piFlexformField = is_array($params['flexParentDatabaseRow']) ?
                 $params['flexParentDatabaseRow']['pi_flexform'] : $params['row']['pi_flexform'];
 
-            if ($params['table'] == 'tt_content' && !empty($piFlexformField)) {
+            if ('tt_content' == $params['table'] && !empty($piFlexformField)) {
                 $flexform = is_string($piFlexformField) ?
                     tx_rnbase_util_Arrays::xml2array($piFlexformField) :
                     $piFlexformField;
@@ -93,7 +94,7 @@ class tx_mksearch_util_TCA
 
             if (!empty($flexform)) {
                 $section = $params['config']['extKeySection'];
-                $field  = $params['config']['extKeyField'];
+                $field = $params['config']['extKeyField'];
                 if (!empty($flexform['data'][$section])
                     && !empty($flexform['data'][$section]['lDEF'][$field])) {
                     $extKey = $flexform['data'][$section]['lDEF'][$field]['vDEF'];
@@ -109,12 +110,12 @@ class tx_mksearch_util_TCA
         // wir sortieren vorher, damit bestehende items nicht mit sortiert werden!
         sort($config);
         foreach ($config as $k) {
-            $params['items'][] = array($k,$k);
+            $params['items'][] = array($k, $k);
         }
     }
 
     /**
-     * Insert default TS configuration of the given indexer
+     * Insert default TS configuration of the given indexer.
      *
      * @param array $params
      */
@@ -142,25 +143,25 @@ class tx_mksearch_util_TCA
         }
 
         $lpos = strpos($params['item'], $params['params']['insertBetween'][0]);
-        if ($lpos === false) {
+        if (false === $lpos) {
             return;
         }
 
         $lpos += strlen($params['params']['insertBetween'][0]);
         $rpos = strrpos($params['item'], $params['params']['insertBetween'][1]);
 
-        if ($rpos === false or $lpos > $rpos) {
+        if (false === $rpos or $lpos > $rpos) {
             return;
         }
 
         $between = substr($params['item'], $lpos, $rpos - $lpos);
         if (!isset($params['params']['onMatchOnly']) || preg_match($params['params']['onMatchOnly'], $between)) {
-            $params['item'] = substr($params['item'], 0, $lpos) . $ts . substr($params['item'], $rpos, strlen($params['item']) - $rpos);
+            $params['item'] = substr($params['item'], 0, $lpos).$ts.substr($params['item'], $rpos, strlen($params['item']) - $rpos);
         }
     }
 
     /**
-     * Insert solr indexes fot the current rootpage/domain
+     * Insert solr indexes fot the current rootpage/domain.
      *
      * @param array $params
      */
@@ -194,9 +195,10 @@ class tx_mksearch_util_TCA
     }
 
     /**
-     * Liefert den Spaltennamen für das Parent der aktuellen lokalisierung
+     * Liefert den Spaltennamen für das Parent der aktuellen lokalisierung.
      *
      * @param string $tableName
+     *
      * @return string
      */
     public static function getTransOrigPointerFieldForTable($tableName)
@@ -208,10 +210,12 @@ class tx_mksearch_util_TCA
 
         return $TCA[$tableName]['ctrl']['transOrigPointerField'];
     }
+
     /**
-     * Liefert den Spaltennamen für das Parent der aktuellen lokalisierung
+     * Liefert den Spaltennamen für das Parent der aktuellen lokalisierung.
      *
      * @param string $tableName
+     *
      * @return string
      */
     public static function getLanguageFieldForTable($tableName)
@@ -225,5 +229,5 @@ class tx_mksearch_util_TCA
     }
 }
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_TCA.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_TCA.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_TCA.php'];
 }

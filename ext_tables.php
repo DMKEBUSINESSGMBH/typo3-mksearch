@@ -1,4 +1,5 @@
 <?php
+
 if (!defined('TYPO3_MODE')) {
     die('Access denied.');
 }
@@ -21,7 +22,7 @@ $TCA['tt_content']['columns']['header_layout']['config']['items'] = $aTempConfig
 // Add flexform and plugin
 tx_rnbase_util_Extensions::addPiFlexFormValue('tx_mksearch', 'FILE:EXT:'.$_EXTKEY.'/flexform_main.xml');
 tx_rnbase_util_Extensions::addPlugin(
-    ['LLL:EXT:'.$_EXTKEY.'/locallang_db.xml:plugin.mksearch.label','tx_mksearch'],
+    ['LLL:EXT:'.$_EXTKEY.'/locallang_db.xml:plugin.mksearch.label', 'tx_mksearch'],
     'list_type',
     'mksearch'
 );
@@ -32,7 +33,7 @@ tx_rnbase_util_Extensions::addStaticFile($_EXTKEY, 'static/static_extension_temp
 require_once $_EXT_PATH.'res/help/ext_csh.php';
 
 if (TYPO3_MODE == 'BE') {
-    require_once($_EXT_PATH.'mod1/ext_tables.php');
+    require_once $_EXT_PATH.'mod1/ext_tables.php';
 
     // Add plugin wizards
     tx_rnbase::load('tx_rnbase_util_TYPO3');
@@ -65,7 +66,7 @@ if (TYPO3_MODE == 'BE') {
         $GLOBALS['TCA']['pages']['columns']['module']['config']['items'][] = array(
             'MK Search',
             'mksearch',
-            'apps-pagetree-folder-contains-mksearch'
+            'apps-pagetree-folder-contains-mksearch',
         );
         Tx_Rnbase_Backend_Utility_Icons::getIconRegistry()->registerIcon(
             'apps-pagetree-folder-contains-mksearch',
@@ -76,7 +77,7 @@ if (TYPO3_MODE == 'BE') {
         $GLOBALS['TCA']['pages']['columns']['module']['config']['items'][] = array(
             'MK Search',
             'mksearch',
-            'EXT:mksearch/icons/icon_folder.gif'
+            'EXT:mksearch/icons/icon_folder.gif',
         );
 
         $spriteManager = tx_rnbase_util_Typo3Classes::getSpriteManagerClass();
@@ -85,4 +86,4 @@ if (TYPO3_MODE == 'BE') {
 }
 
 //TCA registrieren
-require(tx_rnbase_util_Extensions::extPath($_EXTKEY).'tca/ext_tables.php');
+require tx_rnbase_util_Extensions::extPath($_EXTKEY).'tca/ext_tables.php';

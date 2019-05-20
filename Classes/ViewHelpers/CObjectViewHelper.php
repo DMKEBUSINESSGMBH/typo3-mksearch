@@ -1,4 +1,5 @@
 <?php
+
 namespace DMK\Mksearch\ViewHelpers;
 
 /*                                                                        *
@@ -14,19 +15,16 @@ namespace DMK\Mksearch\ViewHelpers;
  * Public License for more details.                                       *
  *                                                                        */
 /**
- * DMK\Mksearch\ViewHelpers\Format$HtmlViewHelper
+ * DMK\Mksearch\ViewHelpers\Format$HtmlViewHelper.
  *
  * nähere Infos in Configuration/XClasses.php
  *
- * @package         TYPO3
- * @subpackage      mksearch
  * @author          Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
  * @license         http://www.gnu.org/licenses/lgpl.html
  *                  GNU Lesser General Public License, version 3 or later
  */
 class CObjectViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\CObjectViewHelper
 {
-
     /**
      * @param \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface $configurationManager
      */
@@ -47,9 +45,7 @@ class CObjectViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\CObjectViewHelper
     }
 
     /**
-     * nähere Infos in Configuration/XClasses.php
-     *
-     * @return void
+     * nähere Infos in Configuration/XClasses.php.
      */
     protected function simulateFrontendEnvironment()
     {
@@ -59,7 +55,6 @@ class CObjectViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\CObjectViewHelper
     }
 
     /**
-     * @return void
      * @see simulateFrontendEnvironment()
      */
     protected function resetFrontendEnvironment()

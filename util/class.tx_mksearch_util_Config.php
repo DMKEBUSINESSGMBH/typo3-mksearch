@@ -22,7 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-
 tx_rnbase::load('tx_rnbase_configurations');
 tx_rnbase::load('tx_mksearch_util_ServiceRegistry');
 
@@ -31,53 +30,53 @@ tx_rnbase::load('tx_mksearch_util_ServiceRegistry');
  */
 class tx_mksearch_util_Config
 {
-
     /**
-     * Registered indexers
+     * Registered indexers.
      *
      * @var array
      */
     private static $indexerTableMappings = array();
 
     /**
-     * Container for table 2 indexer mappings
+     * Container for table 2 indexer mappings.
      *
      * @var array
      */
     private static $tableIndexerMappings = array();
 
     /**
-     * Container table - indexers
+     * Container table - indexers.
      *
      * @var array
      */
     private static $tableIndexer = array();
 
     /**
-     * Container extkey - contenttype - indexer
+     * Container extkey - contenttype - indexer.
      *
      * @var array
      */
     private static $indexerMap = array();
     /**
-     * Container table - resolvers
+     * Container table - resolvers.
      *
      * @var array
      */
     private static $resolverMap = array();
 
     /**
-     * Return indexer configuration option
+     * Return indexer configuration option.
      *
-     * @param string    $name           Name of the option
-     * @param array     $contentType    Content type: array('extKey' => [extension the content type belongs to], 'name' => [name of content type])
+     * @param string $name        Name of the option
+     * @param array  $contentType Content type: array('extKey' => [extension the content type belongs to], 'name' => [name of content type])
+     *
      * @return mixed
+     *
      * @deprecated
      */
     public static function getIndexerOption($name, $contentType)
     {
         throw new Exception('tx_mksearch_util_Config::getIndexerOption is deprecated! Use config file instead.');
-
         $l = tx_rnbase_configurations::getExtensionCfgValue(
             $contentType['extKey'],
             'mksearch_'.$name.'_'.$contentType['name']
@@ -98,9 +97,10 @@ class tx_mksearch_util_Config
     }
 
     /**
-     * Return indexers
+     * Return indexers.
      *
      * @param string $extKey (optional)
+     *
      * @return array[tx_mksearch_interface_Indexer]
      */
     public static function getIndexers($extKey = null)
@@ -118,10 +118,12 @@ class tx_mksearch_util_Config
 
         return array_values($ret);
     }
+
     /**
-     * Return indexer config array
+     * Return indexer config array.
      *
      * @param string $extKey (optional)
+     *
      * @return array
      */
     public static function getIndexerConfigs($extKey = null)
@@ -136,10 +138,11 @@ class tx_mksearch_util_Config
     }
 
     /**
-     * Get the given indexer's Typoscript configuration
+     * Get the given indexer's Typoscript configuration.
      *
      * @param string $extKey
      * @param string $contentType
+     *
      * @return string
      */
     public static function getIndexerDefaultTSConfig($extKey, $contentType)
@@ -156,8 +159,7 @@ class tx_mksearch_util_Config
      *          wird dieser Überschrieben.
      *
      * @param string $resolver
-     * @param array $tables
-     * @return void
+     * @param array  $tables
      */
     public static function registerResolver($resolver, array $tables)
     {
@@ -179,8 +181,7 @@ class tx_mksearch_util_Config
      * @param string $extKey
      * @param string $contentType
      * @param string $indexerClass class name of indexer implementation
-     * @param array $tables
-     * @return void
+     * @param array  $tables
      */
     public static function registerIndexer($extKey, $contentType, $indexerClass, array $tables, $resolver = false)
     {
@@ -216,27 +217,33 @@ class tx_mksearch_util_Config
      * Achtung, hier wird nur das Config-Array geliefert, nicht die wirkliche Instanz des Indexers!
      *
      * @param string $table
+     *
      * @return array
      */
     public static function getIndexersForDatabaseTable($table)
     {
         return array_key_exists($table, self::$tableIndexerMappings) ?
-                self::$tableIndexerMappings[$table] :    array();
+                self::$tableIndexerMappings[$table] : array();
     }
+
     /**
-     * Liefert eine Resolver Klasse für eine Tabelle
+     * Liefert eine Resolver Klasse für eine Tabelle.
      *
      * @param string $table
+     *
      * @return array
      */
     public static function getResolverForDatabaseTable($table)
     {
         return array_key_exists($table, self::$resolverMap) ?
-                self::$resolverMap[$table] :    array();
+                self::$resolverMap[$table] : array();
     }
+
     /**
-     * Returns indexer instances for a given DB tablename
+     * Returns indexer instances for a given DB tablename.
+     *
      * @param string $table
+     *
      * @return array
      */
     public static function getIndexersForTable($table)
@@ -251,10 +258,13 @@ class tx_mksearch_util_Config
 
         return self::$tableIndexer['table'];
     }
+
     /**
-     * Returns the indexer instance by type
+     * Returns the indexer instance by type.
+     *
      * @param string $extKey
      * @param string $contentType
+     *
      * @return tx_mksearch_interface_Indexer
      */
     public static function getIndexerByType($extKey, $contentType)
@@ -265,9 +275,10 @@ class tx_mksearch_util_Config
     }
 
     /**
-     * Return all indexers the given tables are indexed by
+     * Return all indexers the given tables are indexed by.
      *
      * @param array $tables
+     *
      * @return array
      */
     public static function getIndexersForDatabaseTables(array $tables)
@@ -285,10 +296,11 @@ class tx_mksearch_util_Config
     }
 
     /**
-     * Return all tables a given indexer is responsible for
+     * Return all tables a given indexer is responsible for.
      *
      * @param string $extKey
      * @param string $contentType
+     *
      * @return array
      */
     public static function getDatabaseTablesForIndexer($extKey, $contentType)
@@ -300,5 +312,5 @@ class tx_mksearch_util_Config
     }
 }
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_Config.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_Config.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_Config.php'];
 }

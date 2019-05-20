@@ -1,8 +1,9 @@
 <?php
+
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\Session;
 
-/**
+/*
  * @package tx_mksearch
  * @subpackage tx_mksearch_indexer
  * @author Hannes Bochmann
@@ -29,7 +30,7 @@ use TYPO3\CMS\Extbase\Persistence\Generic\Session;
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
 
-/**
+/*
  * benötigte Klassen einbinden
  */
 
@@ -43,16 +44,12 @@ tx_rnbase::load('tx_mksearch_util_Indexer');
 /**
  * Base indexer class offering some common methods
  * to make the object orientated indexing ("indexing by models")
- * more comfortable
+ * more comfortable.
  *
  * @TODO: no_search in der pages tabelle beachten!
- *
- * @package tx_mksearch
- * @subpackage tx_mksearch_indexer
  */
 abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 {
-
     /**
      * @var tx_rnbase_IModel
      */
@@ -62,7 +59,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
      * Set this to true in your indexer if you want the frontend
      * to be loaded. This comes in handy if you index extbase models
      * and need proper localization. This is only loaded if you index
-     * an non default language (>0)
+     * an non default language (>0).
      *
      * @var bool
      */
@@ -71,14 +68,15 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
     /**
      * Prepare a searchable document from a source record.
      *
-     * @param string $tableName
-     * @param array $rawData
+     * @param string                                $tableName
+     * @param array                                 $rawData
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     *        Indexer document to be "filled",
-     *        instantiated based on self::getContentType()
-     * @param array $options | enthält die indexer konfig aber auch den queueRecord
+     *                                                         Indexer document to be "filled",
+     *                                                         instantiated based on self::getContentType()
+     * @param array                                 $options   | enthält die indexer konfig aber auch den queueRecord
+     *
      * @return tx_mksearch_interface_IndexerDocument|null
-     *         return null if nothing should be indexed!
+     *                                                    return null if nothing should be indexed!
      */
     public function prepareSearchData($tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options)
     {
@@ -196,11 +194,12 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
     }
 
     /**
-     * Liefert die UID des Datensatzes
+     * Liefert die UID des Datensatzes.
      *
      * @param string $tableName
-     * @param array $rawData
-     * @param array $options
+     * @param array  $rawData
+     * @param array  $options
+     *
      * @return int
      *
      * @deprecated use tx_mksearch_util_Indexer::getInstance()->getRecordsUid
@@ -221,10 +220,11 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
      * do something different like putting a record into the queue
      * if it's not the table that should be indexed
      *
-     * @param string $tableName
-     * @param array $sourceRecord
+     * @param string                                $tableName
+     * @param array                                 $sourceRecord
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @param array $options
+     * @param array                                 $options
+     *
      * @return bool
      */
     protected function stopIndexing(
@@ -250,15 +250,14 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
     }
 
     /**
-     * Indexes all fields of the model according to the given mapping
+     * Indexes all fields of the model according to the given mapping.
      *
-     * @param tx_rnbase_IModel $model
-     * @param array $recordIndexMapping
+     * @param tx_rnbase_IModel                      $model
+     * @param array                                 $recordIndexMapping
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @param string $prefix
-     * @param array $options
-     * @param bool $dontIndexHidden
-     * @return void
+     * @param string                                $prefix
+     * @param array                                 $options
+     * @param bool                                  $dontIndexHidden
      */
     protected function indexModelByMapping(
         tx_rnbase_IModel $model,
@@ -279,18 +278,16 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
             );
     }
 
-
     /**
      * Collects the values of all models inside the given array
-     * and adds them as multivalue (array)
+     * and adds them as multivalue (array).
      *
-     * @param array $models array of tx_rnbase_IModel
-     * @param array $recordIndexMapping
+     * @param array                                 $models             array of tx_rnbase_IModel
+     * @param array                                 $recordIndexMapping
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @param string $prefix
-     * @param array $options
-     * @param bool $dontIndexHidden
-     * @return void
+     * @param string                                $prefix
+     * @param array                                 $options
+     * @param bool                                  $dontIndexHidden
      */
     protected function indexArrayOfModelsByMapping(
         array $models,
@@ -312,11 +309,12 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
     }
 
     /**
-     * Sets the index doc to deleted if neccessary
+     * Sets the index doc to deleted if neccessary.
      *
-     * @param tx_rnbase_model_base $model
+     * @param tx_rnbase_model_base                  $model
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @param array $options
+     * @param array                                 $options
+     *
      * @return bool
      */
     protected function hasDocToBeDeleted(
@@ -349,7 +347,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
         foreach ($rootline as $page) {
             if ($page['hidden'] ||
                 ($page['doktype'] == $sysPage::DOKTYPE_BE_USER_SECTION) ||
-                ($this->getConfigValue('respectNoSearchFlagInRootline', $options) && $page['no_search'] == 1)
+                ($this->getConfigValue('respectNoSearchFlagInRootline', $options) && 1 == $page['no_search'])
             ) {
                 return true;
             }
@@ -374,6 +372,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
      *
      * @param array $sourceRecord
      * @param array $options
+     *
      * @return bool
      */
     protected function isIndexableRecord(array $sourceRecord, array $options)
@@ -384,10 +383,11 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
     /**
      * Indiziert alle eneblecolumns.
      *
-     * @param tx_rnbase_IModel $model
-     * @param string $tableName
+     * @param tx_rnbase_IModel                      $model
+     * @param string                                $tableName
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @param string $indexDocFieldsPrefix
+     * @param string                                $indexDocFieldsPrefix
+     *
      * @return tx_mksearch_interface_IndexerDocument
      */
     protected function indexEnableColumns(
@@ -424,12 +424,13 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
     }
 
     /**
-     * Indexes the Rootpage of the current models page
+     * Indexes the Rootpage of the current models page.
      *
-     * @param tx_rnbase_IModel $model
-     * @param string $tableName
+     * @param tx_rnbase_IModel                      $model
+     * @param string                                $tableName
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @param array $options
+     * @param array                                 $options
+     *
      * @return tx_mksearch_interface_IndexerDocument
      */
     protected function indexSiteRootPage(
@@ -439,7 +440,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
         $options = array()
     ) {
         if ($this->shouldIndexSiteRootPage($options)) {
-            $pageId = ($tableName == 'pages' ? $model->getUid() : $model->record['pid']);
+            $pageId = ('pages' == $tableName ? $model->getUid() : $model->record['pid']);
             // wir rufen die Methode mit call_user_func_array auf, da sie
             // statisch ist, womit wir diese nicht mocken könnten
             $siteRootPage = call_user_func_array(
@@ -455,24 +456,24 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
     }
 
     /**
-     *
      * @param array $options
+     *
      * @return bool
      */
     protected function shouldIndexSiteRootPage($options)
     {
         $config = $this->getConfigValue('indexSiteRootPage', $options);
 
-        return ((is_array($config) && !empty($config) && reset($config) == 1));
+        return is_array($config) && !empty($config) && 1 == reset($config);
     }
 
     /**
-     * Indexes the language of the current model
+     * Indexes the language of the current model.
      *
-     * @param tx_rnbase_IModel $model
-     * @param string $tableName
+     * @param tx_rnbase_IModel                      $model
+     * @param string                                $tableName
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @param array $options
+     * @param array                                 $options
      *
      * @return tx_mksearch_interface_IndexerDocument
      */
@@ -486,20 +487,22 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
             $sysLanguageUid = $model->getProperty(
                 tx_mksearch_util_TCA::getLanguageFieldForTable($tableName)
             );
-            if ($sysLanguageUid !== null) {
+            if (null !== $sysLanguageUid) {
                 $indexDoc->addField('language_uid_i', $sysLanguageUid);
             }
         }
+
         return $indexDoc;
     }
 
     /**
      * Erweitert den record um die enable columns.
      *
-     * @param array $recordIndexMapping
+     * @param array  $recordIndexMapping
      * @param string $typo3InternalName
      * @param string $enableColumnName
      * @param string $indexDocFieldsPrefix
+     *
      * @return array
      */
     protected function enhanceRecordIndexMappingForEnableColumn(
@@ -515,19 +518,20 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
         );
         if (array_key_exists($typo3InternalName, $fieldTypeMapping)) {
             $recordIndexMapping[$enableColumnName] =
-                $indexDocFieldsPrefix . $typo3InternalName .
-                '_' . $fieldTypeMapping[$typo3InternalName];
+                $indexDocFieldsPrefix.$typo3InternalName.
+                '_'.$fieldTypeMapping[$typo3InternalName];
         }
 
         return $recordIndexMapping;
     }
 
     /**
-     * phpdoc
+     * phpdoc.
      *
      * @param tx_rnbase_IModel $model
-     * @param string $typo3InternalName
-     * @param string $enableColumnName
+     * @param string           $typo3InternalName
+     * @param string           $enableColumnName
+     *
      * @return tx_rnbase_IModel
      */
     protected function convertEnableColumnValue(
@@ -559,6 +563,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
      * Wandelt einen tstam in Y-m-d\TH:i:s\Z um.
      *
      * @param int $timestamp
+     *
      * @return string
      */
     protected function convertTimestampToDateTime($timestamp)
@@ -566,17 +571,18 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
         $dateTime = 0;
         if (!empty($timestamp)) {
             $util = tx_mksearch_util_Indexer::getInstance();
-            $dateTime = $util->getDateTime('@' . $timestamp);
+            $dateTime = $util->getDateTime('@'.$timestamp);
         }
 
         return $dateTime;
     }
 
     /**
-     * Return a content element's FE groups
+     * Return a content element's FE groups.
      *
      * @param array $fegroups
-     * @param int $pid
+     * @param int   $pid
+     *
      * @return array
      */
     protected function getEffectiveFeGroups($fegroups, $pid)
@@ -660,11 +666,10 @@ CONFIG;
     }
 
     /**
-     * Adds a element to the queue
+     * Adds a element to the queue.
      *
      * @param tx_rnbase_IModel $model
-     * @param string $tableName
-     * @return void
+     * @param string           $tableName
      */
     protected function addModelToIndex(tx_rnbase_IModel $model, $tableName)
     {
@@ -673,15 +678,14 @@ CONFIG;
     }
 
     /**
-     * just a wrapper for addModelToIndex and an array of models
+     * just a wrapper for addModelToIndex and an array of models.
      *
-     * @param array $models
+     * @param array  $models
      * @param string $tableName
-     * @param   bool     $prefer
-     * @param   string      $resolver class name of record resolver
-     * @param   array       $data
-     * @param   array       $options
-     * @return void
+     * @param bool   $prefer
+     * @param string $resolver  class name of record resolver
+     * @param array  $data
+     * @param array  $options
      */
     protected function addModelsToIndex(
         $models,
@@ -695,12 +699,13 @@ CONFIG;
     }
 
     /**
-     * Checks if a include or exclude option was set for a given option key
+     * Checks if a include or exclude option was set for a given option key.
      *
-     * @param array $models array of tx_rnbase_IModel
-     * @param array $options
-     * @param int $mode 0 stands for "include" and 1 "exclude"
+     * @param array  $models    array of tx_rnbase_IModel
+     * @param array  $options
+     * @param int    $mode      0 stands for "include" and 1 "exclude"
      * @param string $optionKey
+     *
      * @return bool
      */
     protected function checkInOrExcludeOptions(
@@ -726,6 +731,7 @@ CONFIG;
      *
      * @param array $sourceRecord
      * @param array $options
+     *
      * @return bool
      */
     protected function isOnIndexablePage($sourceRecord, $options)
@@ -738,17 +744,18 @@ CONFIG;
     }
 
     /**
-     * get a pidlist, also deleted pages will be included
+     * get a pidlist, also deleted pages will be included.
      *
      * @param string $pidList
-     * @param int $recursive
+     * @param int    $recursive
+     *
      * @return array list of pids
      */
     protected function _getPidList($pidList, $recursive = 0)
     {
         /**
- * @var Tx_Rnbase_Database_TreeQueryBuilder $treeQueryBuilder
-*/
+         * @var Tx_Rnbase_Database_TreeQueryBuilder
+         */
         $treeQueryBuilder = tx_rnbase::makeInstance('Tx_Rnbase_Database_TreeQueryBuilder');
 
         return $treeQueryBuilder->getPageTreeUidList($pidList, array('enablefieldsoff' => true));
@@ -758,10 +765,11 @@ CONFIG;
      * Liefert einen Wert aus der Konfig
      * Beispiel: $key = test
      * Dann wird geprüft ob test eine kommaseparierte Liste liegt
-     * Ist das nicht der Fall wird noch geprüft ob test. ein array ist
+     * Ist das nicht der Fall wird noch geprüft ob test. ein array ist.
      *
      * @param string $key
-     * @param array $options
+     * @param array  $options
+     *
      * @return array
      */
     protected function getConfigValue($key, $options)
@@ -771,9 +779,10 @@ CONFIG;
     }
 
     /**
-     * Get's the page of the content element if it's not hidden/deleted
+     * Get's the page of the content element if it's not hidden/deleted.
      *
      * @param int $pid
+     *
      * @return array
      */
     protected function getPageContent($pid)
@@ -784,11 +793,12 @@ CONFIG;
 
     /**
      * Returns the model to be indexed,
-     * The indexer should override this method to return a specific model
+     * The indexer should override this method to return a specific model.
      *
-     * @param array $rawData
+     * @param array  $rawData
      * @param string $tableName
-     * @param array $options
+     * @param array  $options
+     *
      * @return tx_rnbase_IModel
      */
     protected function createModel(array $rawData, $tableName = null, $options = array())
@@ -807,11 +817,12 @@ CONFIG;
 
     /**
      * Returns the model to be indexed,
-     * The indexer should override this method to return a specific model
+     * The indexer should override this method to return a specific model.
      *
-     * @param array $rawData
+     * @param array  $rawData
      * @param string $tableName
      * @param string $repositoryClass
+     *
      * @return \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected function createLocalizedExtbaseDomainModel(array $rawData, $tableName, $repositoryClass)
@@ -857,13 +868,14 @@ CONFIG;
     }
 
     /**
-     * Do the actual indexing for the given model
+     * Do the actual indexing for the given model.
      *
-     * @param tx_rnbase_IModel $model
-     * @param string $tableName
-     * @param array $rawData
+     * @param tx_rnbase_IModel                      $model
+     * @param string                                $tableName
+     * @param array                                 $rawData
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @param array $options
+     * @param array                                 $options
+     *
      * @return tx_mksearch_interface_IndexerDocument|null
      */
     abstract protected function indexData(
@@ -900,6 +912,7 @@ CONFIG;
      * @TODO if needed make the value configurable through the indexer options
      *
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
+     *
      * @return string
      */
     protected function getGroupFieldValue(tx_mksearch_interface_IndexerDocument $indexDoc)
@@ -936,5 +949,5 @@ CONFIG;
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_Base.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_Base.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_Base.php'];
 }

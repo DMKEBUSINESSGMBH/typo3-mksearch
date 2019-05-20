@@ -27,10 +27,8 @@ tx_rnbase::load('tx_rnbase_model_base');
 tx_rnbase::load('tx_mksearch_indexer_TxNewsNews');
 
 /**
- * Indexer for News from tx_news
+ * Indexer for News from tx_news.
  *
- * @package tx_mksearch
- * @subpackage tx_mksearch_tests
  * @author Michael Wagner
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
@@ -38,9 +36,7 @@ tx_rnbase::load('tx_mksearch_indexer_TxNewsNews');
 class tx_mksearch_tests_indexer_TxNewsNews_testcase extends tx_mksearch_tests_Testcase
 {
     /**
-     * Set up testcase
-     *
-     * @return void
+     * Set up testcase.
      */
     protected function setUp()
     {
@@ -53,7 +49,6 @@ class tx_mksearch_tests_indexer_TxNewsNews_testcase extends tx_mksearch_tests_Te
     /**
      * Testet die indexData Methode.
      *
-     * @return void
      *
      * @group unit
      * @test
@@ -74,7 +69,6 @@ class tx_mksearch_tests_indexer_TxNewsNews_testcase extends tx_mksearch_tests_Te
     /**
      * Testet die indexData Methode.
      *
-     * @return void
      *
      * @group unit
      * @test
@@ -93,7 +87,7 @@ class tx_mksearch_tests_indexer_TxNewsNews_testcase extends tx_mksearch_tests_Te
                 $this->equalTo('NEWS.uid AS uid'),
                 $this->equalTo(
                     array(
-                        'tx_news_domain_model_news AS NEWS' .
+                        'tx_news_domain_model_news AS NEWS'.
                         ' JOIN sys_category_record_mm AS CATMM ON NEWS.uid = CATMM.uid_foreign',
                         'tx_news_domain_model_news',
                         'NEWS',
@@ -152,7 +146,7 @@ class tx_mksearch_tests_indexer_TxNewsNews_testcase extends tx_mksearch_tests_Te
                 'sys_category',
                 array('uid' => '5'),
                 $this->getIndexDocMock($indexer),
-                array()
+                array(),
             )
         );
 
@@ -162,7 +156,6 @@ class tx_mksearch_tests_indexer_TxNewsNews_testcase extends tx_mksearch_tests_Te
     /**
      * Testet die indexData Methode.
      *
-     * @return void
      *
      * @group unit
      * @test
@@ -182,7 +175,7 @@ class tx_mksearch_tests_indexer_TxNewsNews_testcase extends tx_mksearch_tests_Te
                 'tx_news_domain_model_news',
                 $model->getRecord(),
                 $this->getIndexDocMock($indexer),
-                array()
+                array(),
             )
         );
 
@@ -201,7 +194,7 @@ class tx_mksearch_tests_indexer_TxNewsNews_testcase extends tx_mksearch_tests_Te
                 'news_text_t' => 'html in body text',
                 // dates
                 'datetime_dt' => tx_mksearch_util_Misc::getIsoDate(
-                    new \DateTime('@' . $GLOBALS['EXEC_TIME'])
+                    new \DateTime('@'.$GLOBALS['EXEC_TIME'])
                 ),
                 // tags
                 'keywords_ms' => array('Tag1', 'Tag2'),
@@ -220,7 +213,7 @@ class tx_mksearch_tests_indexer_TxNewsNews_testcase extends tx_mksearch_tests_Te
     }
 
     /**
-     * A model Mock containing news data
+     * A model Mock containing news data.
      *
      * @return tx_rnbase_model_base|PHPUnit_Framework_MockObject_MockObject
      */
@@ -231,7 +224,7 @@ class tx_mksearch_tests_indexer_TxNewsNews_testcase extends tx_mksearch_tests_Te
                 'uid' => '5',
                 'pid' => '7',
                 'tstamp' => $GLOBALS['EXEC_TIME'],
-                'datetime' => new \DateTime('@' . $GLOBALS['EXEC_TIME']),
+                'datetime' => new \DateTime('@'.$GLOBALS['EXEC_TIME']),
                 'title' => 'first news',
                 'teaser' => 'the first news',
                 'bodytext' => '<span>html in body text</span>',
@@ -294,7 +287,7 @@ class tx_mksearch_tests_indexer_TxNewsNews_testcase extends tx_mksearch_tests_Te
     }
 
     /**
-     * Creates a Mock of the indexer object
+     * Creates a Mock of the indexer object.
      *
      * @return PHPUnit_Framework_MockObject_MockObject
      */
@@ -324,9 +317,7 @@ class tx_mksearch_tests_indexer_TxNewsNews_testcase extends tx_mksearch_tests_Te
 
 if ((
     defined('TYPO3_MODE') &&
-    $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']
-    ['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TxNewsNews_testcase.php']
+    $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TxNewsNews_testcase.php']
 )) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']
-    ['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TxNewsNews_testcase.php'];
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TxNewsNews_testcase.php'];
 }

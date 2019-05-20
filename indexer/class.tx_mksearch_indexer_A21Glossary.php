@@ -25,16 +25,12 @@
 tx_rnbase::load('tx_mksearch_indexer_Base');
 
 /**
- *
- * @package TYPO3
- * @subpackage tx_mksearch
  * @author Michael Wagner <michael.wagner@dmk-ebusiness.de>
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
 class tx_mksearch_indexer_A21Glossary extends tx_mksearch_indexer_Base
 {
-
     /**
      * Return content type identification.
      * This identification is part of the indexed data
@@ -51,16 +47,15 @@ class tx_mksearch_indexer_A21Glossary extends tx_mksearch_indexer_Base
         return array('a21glossary', 'main');
     }
 
-
-
     /**
-     * Do the actual indexing for the given model
+     * Do the actual indexing for the given model.
      *
-     * @param tx_rnbase_IModel $model
-     * @param string $tableName
-     * @param array $rawData
+     * @param tx_rnbase_IModel                      $model
+     * @param string                                $tableName
+     * @param array                                 $rawData
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @param array $options
+     * @param array                                 $options
+     *
      * @return tx_mksearch_interface_IndexerDocument|null
      */
     protected function indexData(
@@ -147,5 +142,5 @@ CONFIG;
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/seminars/class.tx_mksearch_indexer_seminars_Seminar.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/seminars/class.tx_mksearch_indexer_seminars_Seminar.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/seminars/class.tx_mksearch_indexer_seminars_Seminar.php'];
 }

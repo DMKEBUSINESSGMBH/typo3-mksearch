@@ -26,19 +26,15 @@ tx_rnbase::load('tx_mksearch_tests_Testcase');
 tx_rnbase::load('tx_mksearch_indexer_A21Glossary');
 
 /**
- * tx_mksearch_tests_indexer_A21Glossary
+ * tx_mksearch_tests_indexer_A21Glossary.
  *
- * @package TYPO3
- * @subpackage tx_mksearch
  * @author Michael Wagner <michael.wagner@dmk-ebusiness.de>
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
 class tx_mksearch_tests_indexer_A21Glossary_testcase extends tx_mksearch_tests_Testcase
 {
-
     /**
-     *
      * @return tx_mksearch_indexer_A21Glossary|PHPUnit_Framework_MockObject_MockObject
      */
     protected function getIndexerMock()
@@ -77,6 +73,7 @@ class tx_mksearch_tests_indexer_A21Glossary_testcase extends tx_mksearch_tests_T
         self::assertSame($extKey, 'a21glossary');
         self::assertSame($contentType, 'main');
     }
+
     /**
      * Testet die getContentType Methode.
      *

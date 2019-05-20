@@ -22,18 +22,14 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-
 tx_rnbase::load('tx_rnbase_configurations');
 tx_rnbase::load('tx_mksearch_util_ServiceRegistry');
 
 /**
  * @author Hannes Bochmann <dev@dmk-ebusiness.de>
- * @package TYPO3
- * @subpackage tx_mksearch
  */
 class tx_mksearch_util_SolrAutocomplete
 {
-
     /**
      * @var string
      */
@@ -41,7 +37,7 @@ class tx_mksearch_util_SolrAutocomplete
 
     /**
      * @param tx_rnbase_configurations $configurations
-     * @param string $confId
+     * @param string                   $confId
      *
      * example TS config:
      * myConfId {
@@ -64,14 +60,14 @@ class tx_mksearch_util_SolrAutocomplete
     ) {
         $linkParameters = array('ajax' => 1);
         $usedIndex = $configurations->get($confId.'usedIndex');
-        if ($usedIndex === 0 || $usedIndex > 0) {
+        if (0 === $usedIndex || $usedIndex > 0) {
             $linkParameters['usedIndex'] = intval($usedIndex);
         }
 
         $link = $configurations->createLink();
         $link->initByTS(
             $configurations,
-            $confId . self::$autocompleteConfId . 'actionLink.',
+            $confId.self::$autocompleteConfId.'actionLink.',
             $linkParameters
         );
 
@@ -90,14 +86,13 @@ class tx_mksearch_util_SolrAutocomplete
     }
 
     /**
-     * @param array $configArray example:
-     * array (
-     *  minLength = 2
-     *  elementSelector = "#mksearch_term"
-     * )
-     *
+     * @param array               $configArray      example:
+     *                                              array (
+     *                                              minLength = 2
+     *                                              elementSelector = "#mksearch_term"
+     *                                              )
      * @param tx_rnbase_util_Link $link
-     * @param bool $wrapInScriptTags
+     * @param bool                $wrapInScriptTags
      *
      * @return string
      */
@@ -106,35 +101,35 @@ class tx_mksearch_util_SolrAutocomplete
         tx_rnbase_util_Link $link,
         $wrapInScriptTags = true
     ) {
-        $javaScript = 'jQuery(document).ready(function(){' .
-			'jQuery('.$configArray['elementSelector'].').autocomplete({' .
-				'source: function( request, response ) {' .
-					'jQuery.ajax({' .
-						'url: "' . $link->makeUrl(false) . '&mksearch[term]="+encodeURIComponent(request.term),' .
-						'dataType: "json",' .
-						'success: function( data ) {' .
-							'var suggestions = [];' .
-							'jQuery.each(data.suggestions, function(key, value) {' .
-								'jQuery.each(value, function(key, suggestion) {' .
-									'suggestions.push(suggestion.record.value);' .
-								'});' .
-							'});' .
-							'response( jQuery.map( suggestions, function( item ) {' .
-								'return {' .
-									'label: item,' .
-									'value: item' .
-								'};' .
-							'}));' .
-						'}' .
-					'});' .
-				'},' .
-				'minLength: ' . $configArray['minLength'] .
-			'});' .
-		'});' .
-		'jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();';
+        $javaScript = 'jQuery(document).ready(function(){'.
+            'jQuery('.$configArray['elementSelector'].').autocomplete({'.
+                'source: function( request, response ) {'.
+                    'jQuery.ajax({'.
+                        'url: "'.$link->makeUrl(false).'&mksearch[term]="+encodeURIComponent(request.term),'.
+                        'dataType: "json",'.
+                        'success: function( data ) {'.
+                            'var suggestions = [];'.
+                            'jQuery.each(data.suggestions, function(key, value) {'.
+                                'jQuery.each(value, function(key, suggestion) {'.
+                                    'suggestions.push(suggestion.record.value);'.
+                                '});'.
+                            '});'.
+                            'response( jQuery.map( suggestions, function( item ) {'.
+                                'return {'.
+                                    'label: item,'.
+                                    'value: item'.
+                                '};'.
+                            '}));'.
+                        '}'.
+                    '});'.
+                '},'.
+                'minLength: '.$configArray['minLength'].
+            '});'.
+        '});'.
+        'jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();';
 
         if ($wrapInScriptTags) {
-            $javaScript = '<script type="text/javascript">' . $javaScript . '</script>';
+            $javaScript = '<script type="text/javascript">'.$javaScript.'</script>';
         }
 
         return $javaScript;

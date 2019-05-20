@@ -26,12 +26,9 @@ tx_rnbase::load('tx_rnbase_mod_BaseModule');
 tx_rnbase::load('tx_mksearch_mod1_util_Misc');
 tx_rnbase::load('Tx_Rnbase_Backend_Utility');
 
-
 /**
- * Mksearch backend module
+ * Mksearch backend module.
  *
- * @package TYPO3
- * @subpackage tx_mksearch
  * @author René Nitzsche
  * @author Michael Wagner
  */
@@ -39,8 +36,6 @@ class tx_mksearch_mod1_Module extends tx_rnbase_mod_BaseModule
 {
     /**
      * Initializes the backend module by setting internal variables, initializing the menu.
-     *
-     * @return void
      */
     public function init()
     {
@@ -65,7 +60,7 @@ class tx_mksearch_mod1_Module extends tx_rnbase_mod_BaseModule
     }
 
     /**
-     * Method to get the extension key
+     * Method to get the extension key.
      *
      * @return string Extension key
      */
@@ -76,7 +71,7 @@ class tx_mksearch_mod1_Module extends tx_rnbase_mod_BaseModule
 
     /**
      * Method to set the tabs for the mainmenu
-     * Umstellung von SelectBox auf Menu
+     * Umstellung von SelectBox auf Menu.
      */
     protected function getFuncMenu()
     {
@@ -95,12 +90,12 @@ class tx_mksearch_mod1_Module extends tx_rnbase_mod_BaseModule
         $modUrl = Tx_Rnbase_Backend_Utility::getModuleUrl(
             'web_MksearchM1',
             array(
-                'id' => $this->getPid()
+                'id' => $this->getPid(),
             ),
             ''
         );
 
-        return '<form action="' . $modUrl . '" method="POST" name="editform" id="editform">';
+        return '<form action="'.$modUrl.'" method="POST" name="editform" id="editform">';
     }
 
     public function moduleContent()
@@ -115,5 +110,5 @@ class tx_mksearch_mod1_Module extends tx_rnbase_mod_BaseModule
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/class.tx_mksearch_mod1_Module.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/class.tx_mksearch_mod1_Module.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/class.tx_mksearch_mod1_Module.php'];
 }

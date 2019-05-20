@@ -22,19 +22,14 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-
 require_once tx_rnbase_util_Extensions::extPath('mksearch', 'lib/Apache/Solr/Document.php');
 tx_rnbase::load('tx_mksearch_tests_DbTestcase');
 tx_rnbase::load('tx_mksearch_tests_Util');
 
-
-
 /**
  * Wir müssen in diesem Fall mit der DB testen da wir die pages
- * Tabelle benötigen
+ * Tabelle benötigen.
  *
- * @package tx_mksearch
- * @subpackage tx_mksearch_tests
  * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
  * @author Michael Wagner <michael.wagner@dmk-ebusiness.de>
  * @license http://www.gnu.org/licenses/lgpl.html
@@ -42,12 +37,11 @@ tx_rnbase::load('tx_mksearch_tests_Util');
  */
 class tx_mksearch_tests_indexer_TtNewsNews_DB_testcase extends tx_mksearch_tests_DbTestcase
 {
-
     /**
      * Constructs a test case with the given name.
      *
-     * @param string $name the name of a testcase
-     * @param array $data ?
+     * @param string $name     the name of a testcase
+     * @param array  $data     ?
      * @param string $dataName ?
      */
     public function __construct($name = null, array $data = array(), $dataName = '')
@@ -60,7 +54,7 @@ class tx_mksearch_tests_indexer_TtNewsNews_DB_testcase extends tx_mksearch_tests
 
     /**
      * Prüft ob nur die Elemente indiziert werden, die im
-     * angegebenen Seitenbaum liegen
+     * angegebenen Seitenbaum liegen.
      */
     public function testPrepareSearchDataWithIncludeCategoriesOption()
     {
@@ -69,9 +63,9 @@ class tx_mksearch_tests_indexer_TtNewsNews_DB_testcase extends tx_mksearch_tests
         $options = array(
             'include.' => array(
                 'categories.' => array(
-                    0 => 1
-                )
-            )
+                    0 => 1,
+                ),
+            ),
         );
 
         $result = array('uid' => 1);
@@ -95,7 +89,7 @@ class tx_mksearch_tests_indexer_TtNewsNews_DB_testcase extends tx_mksearch_tests
 
     /**
      * Prüft ob nur die Elemente indiziert werden, die im
-     * angegebenen Seitenbaum liegen
+     * angegebenen Seitenbaum liegen.
      */
     public function testPrepareSearchDataWithExcludeCategoriesOption()
     {
@@ -103,9 +97,9 @@ class tx_mksearch_tests_indexer_TtNewsNews_DB_testcase extends tx_mksearch_tests
         $options = array(
             'exclude.' => array(
                 'categories.' => array(
-                    0 => 1
-                )
-            )
+                    0 => 1,
+                ),
+            ),
         );
 
         $result = array('uid' => 1);
@@ -143,7 +137,7 @@ class tx_mksearch_tests_indexer_TtNewsNews_DB_testcase extends tx_mksearch_tests
         $aIndexData = $indexDoc->getData();
         self::assertArrayHasKey('categorySinglePid_i', $aIndexData, 'categorySinglePid_i ist nicht gesetzt!');
         self::assertEquals('334', $aIndexData['categorySinglePid_i']->getValue(), 'categorySinglePid_i ist falsch gesetzt!');
-        self::assertEquals(array(2,3,1,4), $aIndexData['categories_mi']->getValue(), 'categories_mi hat die falsche Reihenfolge!');
+        self::assertEquals(array(2, 3, 1, 4), $aIndexData['categories_mi']->getValue(), 'categories_mi hat die falsche Reihenfolge!');
     }
 
     public function testPrepareSearchDataWithDefaultSinglePid()
@@ -173,7 +167,7 @@ class tx_mksearch_tests_indexer_TtNewsNews_DB_testcase extends tx_mksearch_tests
         $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtNewsNews');
         $options = array(
             'include.' => array(
-                'somethingelse' => '1'
+                'somethingelse' => '1',
             ),
         );
 
@@ -188,5 +182,5 @@ class tx_mksearch_tests_indexer_TtNewsNews_DB_testcase extends tx_mksearch_tests
     }
 }
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php'];
 }

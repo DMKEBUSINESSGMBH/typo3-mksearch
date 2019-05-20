@@ -22,7 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-
 tx_rnbase::load('tx_mksearch_interface_Indexer');
 tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
 tx_rnbase::load('tx_mksearch_util_Misc');
@@ -62,7 +61,6 @@ tx_rnbase::load('tx_mksearch_util_Misc');
  */
 class tx_mksearch_service_indexer_core_Page implements tx_mksearch_interface_Indexer
 {
-
     /**
      * Array of processed uids.
      * Used to avoid multiple indexing of the same page
@@ -74,7 +72,7 @@ class tx_mksearch_service_indexer_core_Page implements tx_mksearch_interface_Ind
 
     /**
      * Array of page uids which are to be processed
-     * in a follow-up db-query
+     * in a follow-up db-query.
      *
      * @see parent::getFollowUpSqlData()
      *
@@ -83,7 +81,7 @@ class tx_mksearch_service_indexer_core_Page implements tx_mksearch_interface_Ind
     protected $additionalUids = array();
 
     /**
-     * Mandatory data base fields
+     * Mandatory data base fields.
      *
      * @var array
      */
@@ -107,11 +105,13 @@ class tx_mksearch_service_indexer_core_Page implements tx_mksearch_interface_Ind
 
     /**
      * Get sql data necessary to grab data to be indexed from data base
-     * TODO: Check if parameter data is necessary for this indexer
+     * TODO: Check if parameter data is necessary for this indexer.
      *
      * @param array $options from service configuration
-     * @param array $data       Tablename <-> uids matrix of records to be indexed (array('tab1' => array(2,5,6), 'tab2' => array(4,5,8))
+     * @param array $data    Tablename <-> uids matrix of records to be indexed (array('tab1' => array(2,5,6), 'tab2' => array(4,5,8))
+     *
      * @return array
+     *
      * @see tx_mksearch_service_indexer_BaseDataBase::getSqlData()
      */
     protected function getSqlData(array $options, array $data = array())
@@ -123,7 +123,7 @@ class tx_mksearch_service_indexer_core_Page implements tx_mksearch_interface_Ind
         $fields = array_unique(array_merge($this->baseFields, $options['indexedFields']));
 
         $where =    // restrict page types to FE relevant ones
-                    'doktype <= 5' .
+                    'doktype <= 5'.
                     // Include / exclude restrictions
                     tx_mksearch_service_indexer_core_Config::getIncludeExcludeWhere(
                         isset($options['include']) ? $options['include'] : array(),
@@ -139,10 +139,10 @@ class tx_mksearch_service_indexer_core_Page implements tx_mksearch_interface_Ind
     }
 
     /**
-     * Get sql data for an optional follow-up data base query
+     * Get sql data for an optional follow-up data base query.
      *
      * @param array $options from service configuration
-     * @return null | array
+     *
      * @see self::getSqlData()
      */
     protected function getFollowUpSqlData(array $options)
@@ -166,7 +166,8 @@ class tx_mksearch_service_indexer_core_Page implements tx_mksearch_interface_Ind
     }
 
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
+     *
      * @see tx_mksearch_interface_Indexer::prepareSearchData()
      */
     public function prepareSearchData($tableName, $sourceRecord, tx_mksearch_interface_IndexerDocument $indexDoc, $options)
@@ -175,11 +176,12 @@ class tx_mksearch_service_indexer_core_Page implements tx_mksearch_interface_Ind
     }
 
     /**
-     * Prepare / transform data from database for indexing
+     * Prepare / transform data from database for indexing.
      *
-     * @param array                             $rawData
-     * @param array                             $options from service configuration
+     * @param array                                 $rawData
+     * @param array                                 $options  from service configuration
      * @param tx_mksearch_interface_IndexerDocument $indexDoc Model to be filled
+     *
      * @return tx_mksearch_interface_IndexerDocument or null, if record is not to be indexed
      */
     protected function prepareData(array $rawData, array $options, tx_mksearch_interface_IndexerDocument $indexDoc)
@@ -193,7 +195,7 @@ class tx_mksearch_service_indexer_core_Page implements tx_mksearch_interface_Ind
         $this->processedUids[] = $rawData['uid'];
 
         // Current page is a short cut? Follow up short-cutted page
-        if ($rawData['doktype'] == 4) {
+        if (4 == $rawData['doktype']) {
             $this->additionalUids[] = $rawData['shortcut'];
         }
 
@@ -218,7 +220,7 @@ class tx_mksearch_service_indexer_core_Page implements tx_mksearch_interface_Ind
         if (!empty($options['indexedFields'])) {
             foreach ($options['indexedFields'] as $field) {
                 if (!empty($rawData[$field])) {
-                    $content .= $rawData[$field] . ' ';
+                    $content .= $rawData[$field].' ';
                 }
             }
         }
@@ -243,6 +245,7 @@ class tx_mksearch_service_indexer_core_Page implements tx_mksearch_interface_Ind
 
         return $indexDoc;
     }
+
     public function getDefaultTSConfig()
     {
         return 'testPAGE';
@@ -250,5 +253,5 @@ class tx_mksearch_service_indexer_core_Page implements tx_mksearch_interface_Ind
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/indexer/core/class.tx_mksearch_service_indexer_core_Page.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/indexer/core/class.tx_mksearch_service_indexer_core_Page.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/indexer/core/class.tx_mksearch_service_indexer_core_Page.php'];
 }
