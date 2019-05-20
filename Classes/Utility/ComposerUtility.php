@@ -1,7 +1,9 @@
 <?php
+
 namespace DMK\Mksearch\Utility;
+
 /**
- * Copyright notice
+ * Copyright notice.
  *
  * (c) 2018 DMK E-Business GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
@@ -23,12 +25,9 @@ namespace DMK\Mksearch\Utility;
  * This copyright notice MUST APPEAR in all copies of the script!
  */
 
-
 /**
- * extension configs
+ * extension configs.
  *
- * @package TYPO3
- * @subpackage Tx_Mksearch
  * @author Michael Wagner
  */
 final class ComposerUtility
@@ -36,13 +35,11 @@ final class ComposerUtility
     public static $autoloadedElastica = false;
 
     /**
-     * preloads the
-     *
-     * @return void
+     * preloads the.
      */
     public static function autoloadElastica()
     {
-        if (self::$autoloadedElastica === true) {
+        if (true === self::$autoloadedElastica) {
             return;
         }
 

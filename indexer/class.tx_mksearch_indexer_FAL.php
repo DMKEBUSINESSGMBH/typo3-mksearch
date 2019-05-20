@@ -22,19 +22,16 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-
 tx_rnbase::load('tx_mksearch_indexer_BaseMedia');
 tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
 tx_rnbase::load('tx_mksearch_util_Misc');
 tx_rnbase::load('tx_rnbase_util_Logger');
-
 
 /**
  * Indexer service for dam.media called by the "mksearch" extension.
  */
 class tx_mksearch_indexer_FAL extends tx_mksearch_indexer_BaseMedia
 {
-
     /**
      * Return content type identification.
      * This identification is part of the indexed data
@@ -52,7 +49,7 @@ class tx_mksearch_indexer_FAL extends tx_mksearch_indexer_BaseMedia
     }
 
     /**
-     * Liefert den namen zur Basistabelle
+     * Liefert den namen zur Basistabelle.
      *
      * @return string
      */
@@ -62,11 +59,12 @@ class tx_mksearch_indexer_FAL extends tx_mksearch_indexer_BaseMedia
     }
 
     /**
-     * @param string $tableName
-     * @param array $sourceRecord
+     * @param string                                $tableName
+     * @param array                                 $sourceRecord
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @param array $options
-     * @return bool|null|tx_mksearch_interface_IndexerDocument
+     * @param array                                 $options
+     *
+     * @return bool|tx_mksearch_interface_IndexerDocument|null
      */
     public function prepareSearchData(
         $tableName,
@@ -82,12 +80,12 @@ class tx_mksearch_indexer_FAL extends tx_mksearch_indexer_BaseMedia
         return parent::prepareSearchData($tableName, $sourceRecord, $indexDoc, $options);
     }
 
-
     /**
      * Den Relativen Server-Pfad zur Datei.
      *
      * @param string $tableName
-     * @param array $sourceRecord
+     * @param array  $sourceRecord
+     *
      * @return string
      */
     protected function getRelFileName($tableName, $sourceRecord)
@@ -105,11 +103,12 @@ class tx_mksearch_indexer_FAL extends tx_mksearch_indexer_BaseMedia
             }
         }
         // wenn wir keine ressource haben, bauen die url selbst zusammen.
-        return $GLOBALS['TYPO3_CONF_VARS']['BE']['fileadminDir'] . $sourceRecord['identifier'];
+        return $GLOBALS['TYPO3_CONF_VARS']['BE']['fileadminDir'].$sourceRecord['identifier'];
     }
 
     /**
      * @param $sourceRecord
+     *
      * @return bool|\TYPO3\CMS\Core\Resource\File
      */
     protected function getFileFromRecord($sourceRecord)
@@ -134,8 +133,8 @@ class tx_mksearch_indexer_FAL extends tx_mksearch_indexer_BaseMedia
     {
         if (\TYPO3\CMS\Core\Utility\MathUtility::canBeInterpretedAsInteger($storageUid)) {
             /**
- * @var $fileFactory ResourceFactory
-*/
+             * @var ResourceFactory
+             */
             $fileFactory = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\ResourceFactory');
 
             return $fileFactory->getStorageObject($storageUid);
@@ -148,7 +147,8 @@ class tx_mksearch_indexer_FAL extends tx_mksearch_indexer_BaseMedia
      * Liefert die Dateiendung.
      *
      * @param string $tableName
-     * @param array $sourceRecord
+     * @param array  $sourceRecord
+     *
      * @return string
      */
     protected function getFileExtension($tableName, $sourceRecord)
@@ -160,18 +160,20 @@ class tx_mksearch_indexer_FAL extends tx_mksearch_indexer_BaseMedia
      * Liefert den Pfad zur Datei (ohne Dateinamen).
      *
      * @param string $tableName
-     * @param array $sourceRecord
+     * @param array  $sourceRecord
+     *
      * @return string
      */
     protected function getFilePath($tableName, $sourceRecord)
     {
         $path = $this->getRelFileName($tableName, $sourceRecord);
 
-        return dirname($path) . '/';
+        return dirname($path).'/';
     }
 
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
+     *
      * @see tx_mksearch_indexer_BaseMedia::stopIndexing()
      */
     protected function stopIndexing(
@@ -180,7 +182,7 @@ class tx_mksearch_indexer_FAL extends tx_mksearch_indexer_BaseMedia
         tx_mksearch_interface_IndexerDocument $indexDoc,
         $options
     ) {
-        if ($tableName == 'sys_file_metadata') {
+        if ('sys_file_metadata' == $tableName) {
             $this->getInternalIndexService()->addRecordToIndex(
                 'sys_file',
                 $sourceRecord['file']
@@ -192,9 +194,9 @@ class tx_mksearch_indexer_FAL extends tx_mksearch_indexer_BaseMedia
         return parent::stopIndexing($tableName, $sourceRecord, $indexDoc, $options);
     }
 
-
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
+     *
      * @see tx_mksearch_indexer_BaseMedia::hasDocToBeDeleted()
      */
     protected function hasDocToBeDeleted(
@@ -205,7 +207,7 @@ class tx_mksearch_indexer_FAL extends tx_mksearch_indexer_BaseMedia
     ) {
         $filePath = $this->getFilePath($tableName, $sourceRecord);
         if (!\TYPO3\CMS\Core\Utility\PathUtility::isAbsolutePath($filePath)) {
-            $filePath = PATH_site . $filePath;
+            $filePath = PATH_site.$filePath;
         }
         if (// In FALs sys_file table there are no cloumns for hidden and deleted
             // items. Nevertheless we check the deleted flag, because in
@@ -218,7 +220,7 @@ class tx_mksearch_indexer_FAL extends tx_mksearch_indexer_BaseMedia
             $sourceRecord['missing'] ||
 
             // file does not exist anymore
-            !file_exists($filePath . $sourceRecord['name'])
+            !file_exists($filePath.$sourceRecord['name'])
         ) {
             return true;
         }
@@ -227,7 +229,6 @@ class tx_mksearch_indexer_FAL extends tx_mksearch_indexer_BaseMedia
     }
 
     /**
-     *
      * @return tx_mksearch_service_internal_Base
      */
     protected function getInternalIndexService()
@@ -237,5 +238,5 @@ class tx_mksearch_indexer_FAL extends tx_mksearch_indexer_BaseMedia
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_FAL.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_FAL.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_FAL.php'];
 }

@@ -22,7 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-
 tx_rnbase::load('tx_mksearch_tests_Testcase');
 tx_rnbase::load('tx_mksearch_hooks_IndexerAutoUpdate');
 tx_rnbase::load('tx_mksearch_service_internal_Index');
@@ -31,19 +30,17 @@ tx_rnbase::load('tx_mksearch_tests_Util');
 
 /**
  * Wir müssen in diesem Fall mit der DB testen da wir die pages
- * Tabelle benötigen
+ * Tabelle benötigen.
  *
- * @package tx_mksearch
- * @subpackage tx_mksearch_tests
  * @author Michael Wagner <michael.wagner@dmk-ebusiness.de>
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
 class tx_mksearch_tests_hooks_IndexerAutoUpdate_testcase extends tx_mksearch_tests_Testcase
 {
-
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
+     *
      * @see tx_mksearch_tests_Testcase::setUp()
      */
     protected function setUp()
@@ -53,7 +50,8 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdate_testcase extends tx_mksearch_tes
     }
 
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
+     *
      * @see tx_mksearch_tests_Testcase::tearDown()
      */
     protected function tearDown()
@@ -131,7 +129,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdate_testcase extends tx_mksearch_tes
                 'tx_mksearch_model_internal_Index',
                 null,
                 array(
-                    array('uid' => 1)
+                    array('uid' => 1),
                 )
             ),
         );
@@ -168,6 +166,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdate_testcase extends tx_mksearch_tes
             array('tt_content' => array_keys($tce->datamap['tt_content']))
         );
     }
+
     /**
      * @unit
      */
@@ -193,7 +192,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdate_testcase extends tx_mksearch_tes
                 'tx_mksearch_model_internal_Index',
                 null,
                 array(
-                    array('uid' => 1)
+                    array('uid' => 1),
                 )
             ),
         );
@@ -216,6 +215,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdate_testcase extends tx_mksearch_tes
 
         $hook->rnBaseDoInsertPost($hookParams);
     }
+
     /**
      * @unit
      */
@@ -255,7 +255,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdate_testcase extends tx_mksearch_tes
                 'tx_mksearch_model_internal_Index',
                 null,
                 array(
-                    array('uid' => 1)
+                    array('uid' => 1),
                 )
             ),
         );
@@ -319,6 +319,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdate_testcase extends tx_mksearch_tes
 
         $hook->rnBaseDoInsertPost($hookParams);
     }
+
     /**
      * @unit
      */
@@ -376,7 +377,6 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdate_testcase extends tx_mksearch_tes
         );
         $hook->expects($this->never())->method('getRnbaseDatabaseUtility');
 
-
         self::assertEquals(
             array(123),
             $this->callInaccessibleMethod($hook, 'getUidsToIndex', '', 123)
@@ -394,7 +394,6 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdate_testcase extends tx_mksearch_tes
         );
         $hook->expects($this->never())->method('getRnbaseDatabaseUtility');
 
-
         self::assertEquals(
             array(),
             $this->callInaccessibleMethod($hook, 'getUidsToIndex', '', 'testString')
@@ -411,7 +410,6 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdate_testcase extends tx_mksearch_tes
             array('getRnbaseDatabaseUtility')
         );
         $hook->expects($this->never())->method('getRnbaseDatabaseUtility');
-
 
         self::assertEquals(
             array(),
@@ -491,7 +489,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdate_testcase extends tx_mksearch_tes
                 'another_test_table',
                 array('enablefieldsoff' => true, 'where' => ''),
                 array(123 => array('uid' => 123)),
-                array(123)
+                array(123),
             ),
             // from aus übergebener tabelle
             array(
@@ -499,7 +497,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdate_testcase extends tx_mksearch_tes
                 'test_table',
                 array('enablefieldsoff' => true, 'where' => ''),
                 array(123 => array('uid' => 123)),
-                array(123)
+                array(123),
             ),
             // options aus übergebenem data array
             array(
@@ -507,7 +505,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdate_testcase extends tx_mksearch_tes
                 'test_table',
                 array('enablefieldsoff' => true, 'where' => '', 'debug' => true),
                 array(123 => array('uid' => 123)),
-                array(123)
+                array(123),
             ),
             // where aus options hat vorrang
             array(
@@ -515,7 +513,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdate_testcase extends tx_mksearch_tes
                 'test_table',
                 array('enablefieldsoff' => true, 'where' => 'where clause'),
                 array(123 => array('uid' => 123)),
-                array(123)
+                array(123),
             ),
             // where aus data
             array(
@@ -523,7 +521,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdate_testcase extends tx_mksearch_tes
                 'test_table',
                 array('enablefieldsoff' => true, 'where' => 'clause'),
                 array(123 => array('uid' => 123)),
-                array(123)
+                array(123),
             ),
             // doSelect liefert kein Ergebnis
             array(
@@ -531,7 +529,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdate_testcase extends tx_mksearch_tes
                 'test_table',
                 array('enablefieldsoff' => true, 'where' => ''),
                 array(),
-                array()
+                array(),
             ),
             // kein uid key im select array result
             array(
@@ -539,7 +537,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdate_testcase extends tx_mksearch_tes
                 'test_table',
                 array('enablefieldsoff' => true, 'where' => ''),
                 array(123 => array('pid' => 123)),
-                array()
+                array(),
             ),
             // mehr als ein ergebnis
             array(
@@ -547,8 +545,8 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdate_testcase extends tx_mksearch_tes
                 'test_table',
                 array('enablefieldsoff' => true, 'where' => ''),
                 array(123 => array('uid' => 123), 456 => array('uid' => 456)),
-                array(123, 456)
-            )
+                array(123, 456),
+            ),
         );
     }
 
@@ -603,5 +601,5 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdate_testcase extends tx_mksearch_tes
     }
 }
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/hooks/class.tx_mksearch_tests_hooks_IndexerAutoUpdate_testcase.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/hooks/class.tx_mksearch_tests_hooks_IndexerAutoUpdate_testcase.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/hooks/class.tx_mksearch_tests_hooks_IndexerAutoUpdate_testcase.php'];
 }

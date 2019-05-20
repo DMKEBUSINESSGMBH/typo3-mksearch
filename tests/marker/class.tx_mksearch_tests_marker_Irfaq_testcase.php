@@ -1,7 +1,5 @@
 <?php
 /**
- * @package tx_mksearch
- * @subpackage tx_mksearch_tests
  * @author Hannes Bochmann
  *
  *  Copyright notice
@@ -27,17 +25,13 @@
  */
 
 /**
- * benötigte Klassen einbinden
+ * benötigte Klassen einbinden.
  */
-
 tx_rnbase::load('tx_mksearch_marker_Irfaq');
-require_once(tx_rnbase_util_Extensions::extPath('mksearch') . 'lib/Apache/Solr/Document.php');
+require_once tx_rnbase_util_Extensions::extPath('mksearch').'lib/Apache/Solr/Document.php';
 tx_rnbase::load('tx_mksearch_tests_Testcase');
 
 /**
- *
- * @package tx_mksearch
- * @subpackage tx_mksearch_tests
  * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
  * @author Michael Wagner <michael.wagner@dmk-ebusiness.de>
  * @license http://www.gnu.org/licenses/lgpl.html
@@ -45,7 +39,6 @@ tx_rnbase::load('tx_mksearch_tests_Testcase');
  */
 class tx_mksearch_tests_marker_Irfaq_testcase extends tx_mksearch_tests_Testcase
 {
-
     /**
      * @var tx_mksearch_marker_Irfaq
      */

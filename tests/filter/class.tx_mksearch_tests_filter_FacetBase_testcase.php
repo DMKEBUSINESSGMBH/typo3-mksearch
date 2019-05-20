@@ -1,7 +1,5 @@
 <?php
 /**
- * @package tx_mksearch
- * @subpackage tx_mksearch_tests_filter
  * @author Hannes Bochmann
  *
  *  Copyright notice
@@ -27,17 +25,14 @@
  */
 
 /**
- * benötigte Klassen einbinden
+ * benötigte Klassen einbinden.
  */
-
 tx_rnbase::load('tx_mksearch_tests_Testcase');
 tx_rnbase::load('tx_mksearch_filter_FacetBase');
 
 /**
- * Testfälle für tx_mksearch_filter_FacetBase
+ * Testfälle für tx_mksearch_filter_FacetBase.
  *
- * @package tx_mksearch
- * @subpackage tx_mksearch_tests
  * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
@@ -48,7 +43,8 @@ class tx_mksearch_tests_filter_FacetBase_testcase extends tx_mksearch_tests_Test
     protected $groupDataBackup;
 
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
+     *
      * @see tx_mksearch_tests_Testcase::setUp()
      */
     protected function setUp()
@@ -59,7 +55,8 @@ class tx_mksearch_tests_filter_FacetBase_testcase extends tx_mksearch_tests_Test
     }
 
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
+     *
      * @see tx_mksearch_tests_Testcase::tearDown()
      */
     protected function tearDown()
@@ -104,7 +101,7 @@ class tx_mksearch_tests_filter_FacetBase_testcase extends tx_mksearch_tests_Test
     public function testSettingOfFeGroupsToFilterQuery()
     {
         $tsFeBackup = $GLOBALS['TSFE']->fe_user->groupData['uid'];
-        $GLOBALS['TSFE']->fe_user->groupData['uid'] = array(1,2);
+        $GLOBALS['TSFE']->fe_user->groupData['uid'] = array(1, 2);
 
         $config = $this->getDefaultConfig();
 
@@ -167,6 +164,7 @@ class tx_mksearch_tests_filter_FacetBase_testcase extends tx_mksearch_tests_Test
 
     /**
      * @param array $config
+     *
      * @return tx_mksearch_filter_FacetBase
      */
     private function getFilter($config = array())

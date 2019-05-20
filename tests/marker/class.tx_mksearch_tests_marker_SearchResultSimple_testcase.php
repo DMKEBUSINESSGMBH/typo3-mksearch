@@ -1,7 +1,5 @@
 <?php
 /**
- * @package tx_mksearch
- * @subpackage tx_mksearch_tests
  * @author Hannes Bochmann
  *
  *  Copyright notice
@@ -27,17 +25,13 @@
  */
 
 /**
- * benötigte Klassen einbinden
+ * benötigte Klassen einbinden.
  */
-
 require_once tx_rnbase_util_Extensions::extPath('mksearch', 'lib/Apache/Solr/Document.php');
 tx_rnbase::load('tx_mksearch_tests_Testcase');
 tx_rnbase::load('tx_mksearch_marker_SearchResultSimple');
 
 /**
- *
- * @package tx_mksearch
- * @subpackage tx_mksearch_tests
  * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
  * @author Michael Wagner <michael.wagner@dmk-ebusiness.de>
  * @license http://www.gnu.org/licenses/lgpl.html
@@ -45,9 +39,9 @@ tx_rnbase::load('tx_mksearch_marker_SearchResultSimple');
  */
 class tx_mksearch_tests_marker_SearchResultSimple_testcase extends tx_mksearch_tests_Testcase
 {
-
     /**
      * Enter description here ...
+     *
      * @var tx_mksearch_marker_Facet
      */
     protected $oMarker;
@@ -65,7 +59,7 @@ class tx_mksearch_tests_marker_SearchResultSimple_testcase extends tx_mksearch_t
     }
 
     /**
-     * prüfen ob die richtigen fields und options zurück gegeben werden
+     * prüfen ob die richtigen fields und options zurück gegeben werden.
      */
     public function testParseTemplateDoesntReturnUnparsedMarkersForRequiredFields()
     {

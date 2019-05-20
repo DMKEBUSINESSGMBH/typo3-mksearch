@@ -22,43 +22,41 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-
 tx_rnbase::load('tx_mksearch_service_indexer_BaseDataBase');
 tx_rnbase::load('tx_mksearch_util_Tree');
 
 /**
- * Helper class for configuring core contents
+ * Helper class for configuring core contents.
  */
 class tx_mksearch_service_indexer_core_Config
 {
-
     /**
-     * Page instance
+     * Page instance.
      *
      * @var \TYPO3\CMS\Frontend\Page\PageRepository
      */
     private static $page;
 
     /**
-     * Cache for storing actually resulting fe groups of pages
+     * Cache for storing actually resulting fe groups of pages.
      *
      * Note that this cache is used for both pages and tt_contents!
      *
      * @var array('groups' => [array], 'local' => [array])
-     * * 'groups':  all groups of a page relevant when page is seen as parent of another page
-     * * 'local':   all groups of a page in its local context (i.e. including local fe groups which aren't relevant for children because access rights are not marked as "extend to subpages")
+     *                     * 'groups':  all groups of a page relevant when page is seen as parent of another page
+     *                     * 'local':   all groups of a page in its local context (i.e. including local fe groups which aren't relevant for children because access rights are not marked as "extend to subpages")
      */
     private static $resultingAccessCache = array();
 
     /**
-     * Cache for storing subgroups
+     * Cache for storing subgroups.
      *
      * @var array
      */
     private static $groupCache = array();
 
     /**
-     * Return page instance
+     * Return page instance.
      *
      * @return \TYPO3\CMS\Frontend\Page\PageRepository
      */
@@ -74,6 +72,7 @@ class tx_mksearch_service_indexer_core_Config
     /**
      * clears the page instance so it is renewed
      * upon the next call.
+     *
      * @deprecated this function is only used in tests as long as a phpunit
      * bug (http://forge.typo3.org/issues/36232) exists
      */
@@ -84,17 +83,22 @@ class tx_mksearch_service_indexer_core_Config
 
     /**
      * Returns the rootline of the given page id.
-     * @param   int     $uid
-     * @return  array
+     *
+     * @param int $uid
+     *
+     * @return array
      */
     public static function getRootLine($uid)
     {
         return self::page()->getRootLine($uid);
     }
+
     /**
      * Returns the siteroot page of the given page.
-     * @param   int     $uid
-     * @return  array
+     *
+     * @param int $uid
+     *
+     * @return array
      */
     public static function getSiteRootPage($uid)
     {
@@ -106,10 +110,13 @@ class tx_mksearch_service_indexer_core_Config
 
         return array();
     }
+
     /**
      * Returns al list of page ids from the siteroot page of the given page.
-     * @param   int     $uid
-     * @return  string
+     *
+     * @param int $uid
+     *
+     * @return string
      */
     public static function getPidListFromSiteRootPage($uid, $recursive = 0)
     {
@@ -123,10 +130,11 @@ class tx_mksearch_service_indexer_core_Config
     }
 
     /**
-     * Fetch all subgroups for the given group
+     * Fetch all subgroups for the given group.
      *
-     * @param int $groupId
-     * @param array $callStackGroups    For internal use only! As groups and subgroups may define an endless recursion, all groups of the current call stack are stored here to make it possible to break through the endless loop!
+     * @param int   $groupId
+     * @param array $callStackGroups For internal use only! As groups and subgroups may define an endless recursion, all groups of the current call stack are stored here to make it possible to break through the endless loop!
+     *
      * @return array
      */
     private static function getSubGroups($groupId, array $callStackGroups = array())
@@ -142,9 +150,9 @@ class tx_mksearch_service_indexer_core_Config
         $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
             'ref_uid',
             'fe_groups JOIN sys_refindex AS ref ON fe_groups.uid = ref.ref_uid',
-            '1=1' . self::page()->enableFields('fe_groups') .
-                                    ' AND ref.ref_table = \'fe_groups\' AND ref.field = \'subgroup\'' .
-                                    ' AND ref.recuid = ' . intval($groupId)
+            '1=1'.self::page()->enableFields('fe_groups').
+                                    ' AND ref.ref_table = \'fe_groups\' AND ref.field = \'subgroup\''.
+                                    ' AND ref.recuid = '.intval($groupId)
         );
         // Initialize suber group array with ourselves!
         $sub = array($groupId);
@@ -168,7 +176,7 @@ class tx_mksearch_service_indexer_core_Config
     }
 
     /**
-     * Actually calculate fe_groups
+     * Actually calculate fe_groups.
      *
      * Calculation means to respect the fe_groups of
      * hierarchically superordinated pages, and also
@@ -176,8 +184,11 @@ class tx_mksearch_service_indexer_core_Config
      * which are finally returned explicitely.
      *
      * @param int $pid
+     *
      * @return array('groups' => [array], 'extendToSubPages' => [bool])
+     *
      * @see self::getEffectiveFeGroups()
+     *
      * @todo Move to tx_mksearch_service_indexer_BaseDataBase
      */
     private static function calculateEffectiveFeGroups($pid)
@@ -213,14 +224,14 @@ class tx_mksearch_service_indexer_core_Config
         self::$resultingAccessCache[$pid] = array();
 
         // We're root! We're god! Our access rules are valid without any further checks!
-        if (sizeof($rootline) == 1) {
+        if (1 == sizeof($rootline)) {
             self::$resultingAccessCache[$pid]['groups'] = $self;
         } // We really have to calculate...
         else {
             // Get parent page's access rights
             $parent = self::calculateEffectiveFeGroups($rootline[$selfIndex]['pid']);
 
-            if ($parent === false) { // MW: keine parrent uid found
+            if (false === $parent) { // MW: keine parrent uid found
                 //@todo MW: mir fehlt hier momentan das verständniss, ist das so korrekt?
                 self::$resultingAccessCache[$pid]['groups'] = $self;
             } else {
@@ -255,9 +266,10 @@ class tx_mksearch_service_indexer_core_Config
     }
 
     /**
-     * Return calculated FE groups of the given page
+     * Return calculated FE groups of the given page.
      *
-     * @param int $pid  ID of page, for which FE groups are searched
+     * @param int $pid ID of page, for which FE groups are searched
+     *
      * @return array
      */
     public static function getEffectivePageFeGroups($pid)
@@ -271,17 +283,18 @@ class tx_mksearch_service_indexer_core_Config
     }
 
     /**
-     * Return a content element's FE groups
+     * Return a content element's FE groups.
      *
-     * @param int   $pid        ID of the content element's page
-     * @param array $ceGroups   FE groups of content element
+     * @param int   $pid      ID of the content element's page
+     * @param array $ceGroups FE groups of content element
+     *
      * @return array
      */
     public static function getEffectiveContentElementFeGroups($pid, $ceGroups)
     {
         // Page's effective groups:
         $groupsArr = self::calculateEffectiveFeGroups($pid);
-        $groupsArr = (isset($groupsArr['local'])) ?    $groupsArr['local'] : $groupsArr['groups'];
+        $groupsArr = (isset($groupsArr['local'])) ? $groupsArr['local'] : $groupsArr['groups'];
         $groupsArr = !empty($groupsArr) ? $groupsArr : array(0);
 
         // Explicite groups for content element?
@@ -297,11 +310,13 @@ class tx_mksearch_service_indexer_core_Config
     }
 
     /**
-     * Return SQL where clause containing include and exclude pages
+     * Return SQL where clause containing include and exclude pages.
      *
-     * @param array     $include        Include options as returned by self::getIncludeExclude()
-     * @param array     $exclude        Exclude options as returned by self::getExcludeExclude()
+     * @param array $include Include options as returned by self::getIncludeExclude()
+     * @param array $exclude Exclude options as returned by self::getExcludeExclude()
+     *
      * @return string
+     *
      * @todo Move to tx_mksearch_service_indexer_BaseDataBase, making it generic
      */
     public static function getIncludeExcludeWhere(array $include, array $exclude)
@@ -309,35 +324,36 @@ class tx_mksearch_service_indexer_core_Config
         $whereAll = array();
         $foo = array();
         foreach ($include as $param => $uids) {
-            $foo[] = $param . ' IN (' . implode(',', $uids) . ')';
+            $foo[] = $param.' IN ('.implode(',', $uids).')';
         }
         if (count($foo)) {
-            $whereAll[] = '(' . implode(' OR ', $foo) . ')';
+            $whereAll[] = '('.implode(' OR ', $foo).')';
         }
 
         $foo = array();
         foreach ($exclude as $param => $uids) {
-            $foo[] = $param . ' IN (' . implode(',', $uids) . ')';
+            $foo[] = $param.' IN ('.implode(',', $uids).')';
         }
         if (count($foo)) {
-            $whereAll[] = '(' . implode(' OR ', $foo) . ')';
+            $whereAll[] = '('.implode(' OR ', $foo).')';
         }
 
         if (count($whereAll)) {
-            return ' AND ' . implode(' AND ', $whereAll);
+            return ' AND '.implode(' AND ', $whereAll);
         } else {
             return '';
         }
     }
 
-
     /**
-     * Return arrays of include and exclude uids
+     * Return arrays of include and exclude uids.
      *
-     * @param array     $include        Include options as defined in tx_mksearch_service_indexer_core_Page config options
-     * @param array     $exclude        Exclude options as defined in tx_mksearch_service_indexer_core_Page config options
-     * @param array     $parame=array   Array of parameter suffixes to be processed, with the array key being the name of the column used for restriction in SQL statement
+     * @param array $include      Include options as defined in tx_mksearch_service_indexer_core_Page config options
+     * @param array $exclude      Exclude options as defined in tx_mksearch_service_indexer_core_Page config options
+     * @param array $parame=array Array of parameter suffixes to be processed, with the array key being the name of the column used for restriction in SQL statement
+     *
      * @return array['include' => array[param1 => array[uids], param2 => array[uids]], 'exclude' => ...]
+     *
      * @todo Move to tx_mksearch_service_indexer_BaseDataBase, making it generic
      */
     public static function getIncludeExclude(array $include, array $exclude, array $params = array('uid' => 'page'))
@@ -345,7 +361,7 @@ class tx_mksearch_service_indexer_core_Config
         $res = array('include' => array(), 'exclude' => array());
         foreach ($params as $column => $s) {
             if ($include) {
-                if ($s == 'page' and isset($include[$s.'Trees.'])) {
+                if ('page' == $s and isset($include[$s.'Trees.'])) {
                     $res['include'][$column] = tx_mksearch_util_Tree::getTreeUids($include[$s.'Trees.'], 'pages');
                 }
                 if (isset($include[$s.'s.'])) {
@@ -360,7 +376,7 @@ class tx_mksearch_service_indexer_core_Config
             }
 
             if ($exclude) {
-                if ($s == 'page' and isset($exclude[$s.'Trees.'])) {
+                if ('page' == $s and isset($exclude[$s.'Trees.'])) {
                     $res['exclude'][$column] = tx_mksearch_util_Tree::getTreeUids($exclude[$s.'Trees.'], 'pages');
                 }
                 if (isset($exclude[$s.'s'])) {
@@ -380,5 +396,5 @@ class tx_mksearch_service_indexer_core_Config
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/indexer/core/class.tx_mksearch_service_indexer_core_Config.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/indexer/core/class.tx_mksearch_service_indexer_core_Config.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/indexer/core/class.tx_mksearch_service_indexer_core_Config.php'];
 }

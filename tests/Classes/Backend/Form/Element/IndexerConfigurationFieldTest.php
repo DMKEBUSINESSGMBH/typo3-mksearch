@@ -1,8 +1,9 @@
 <?php
+
 namespace DMK\Mksearch\Backend\Form\Element;
 
 /**
- *  Copyright notice
+ *  Copyright notice.
  *
  *  (c) Hannes Bochmann <dev@dmk-ebusiness.de>
  *  All rights reserved
@@ -25,17 +26,14 @@ namespace DMK\Mksearch\Backend\Form\Element;
  */
 
 /**
- * DMK\Mksearch\Backend\Form\Element$IndexerConfigurationFieldTest
+ * DMK\Mksearch\Backend\Form\Element$IndexerConfigurationFieldTest.
  *
- * @package         TYPO3
- * @subpackage      mksearch
  * @author          Hannes Bochmann
  * @license         http://www.gnu.org/licenses/lgpl.html
  *                  GNU Lesser General Public License, version 3 or later
  */
 class IndexerConfigurationFieldTest extends \tx_rnbase_tests_BaseTestCase
 {
-
     protected function setUp()
     {
         if (!\tx_rnbase_util_TYPO3::isTYPO76OrHigher()) {
@@ -77,7 +75,7 @@ class IndexerConfigurationFieldTest extends \tx_rnbase_tests_BaseTestCase
             array(array('configuration' => 'someInfo', 'extkey' => array(0 => 'core'), 'contenttype' => array(0 => 'page'))),
             array(array('extkey' => array(0 => 'core'))),
             array(array('contenttype' => array(0 => 'page'))),
-            array(array())
+            array(array()),
         );
     }
 
@@ -92,7 +90,7 @@ class IndexerConfigurationFieldTest extends \tx_rnbase_tests_BaseTestCase
         );
 
         $field->_set('data', array('databaseRow' => array(
-            'configuration' => '', 'extkey' => array(0 => 'core'), 'contenttype' => array(0 => 'page')
+            'configuration' => '', 'extkey' => array(0 => 'core'), 'contenttype' => array(0 => 'page'),
         )));
 
         $field
@@ -120,7 +118,7 @@ class IndexerConfigurationFieldTest extends \tx_rnbase_tests_BaseTestCase
         );
 
         $field->_set('data', array('databaseRow' => array(
-            'configuration' => '', 'extkey' => array(0 => 'unknown'), 'contenttype' => array(0 => 'page')
+            'configuration' => '', 'extkey' => array(0 => 'unknown'), 'contenttype' => array(0 => 'page'),
         )));
 
         $field

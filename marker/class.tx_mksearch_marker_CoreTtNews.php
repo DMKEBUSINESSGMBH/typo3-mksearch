@@ -22,21 +22,20 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-
 tx_rnbase::load('tx_mksearch_marker_SearchResultSimple');
 
 /**
- * Marker class for core tt_content search results
+ * Marker class for core tt_content search results.
  */
 class tx_mksearch_marker_CoreTtNews extends tx_mksearch_marker_SearchResultSimple
 {
-
     /**
-     * @param string $template HTML template
-     * @param tx_mksearch_model_SearchHit $item search hit
-     * @param tx_rnbase_util_FormatUtil $formatter
-     * @param string $confId path of typoscript configuration
-     * @param string $marker name of marker
+     * @param string                      $template  HTML template
+     * @param tx_mksearch_model_SearchHit $item      search hit
+     * @param tx_rnbase_util_FormatUtil   $formatter
+     * @param string                      $confId    path of typoscript configuration
+     * @param string                      $marker    name of marker
+     *
      * @return string readily parsed template
      */
     public function parseTemplate($template, &$item, &$formatter, $confId, $marker = 'ITEM')
@@ -50,5 +49,5 @@ class tx_mksearch_marker_CoreTtNews extends tx_mksearch_marker_SearchResultSimpl
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/marker/class.tx_mksearch_marker_CoreTtContent.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/marker/class.tx_mksearch_marker_CoreTtContent.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/marker/class.tx_mksearch_marker_CoreTtContent.php'];
 }

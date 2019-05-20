@@ -28,7 +28,7 @@ tx_rnbase::load('tx_mksearch_interface_SearchHit');
 tx_rnbase::load('tx_rnbase_model_base');
 
 /**
- * Model for search hits from solt
+ * Model for search hits from solt.
  *
  * As the base data doesn't come from a real table but gets filled
  * by the search engine some things are different from an usual
@@ -38,11 +38,11 @@ tx_rnbase::load('tx_rnbase_model_base');
 class tx_mksearch_model_SolrHit extends tx_rnbase_model_base implements tx_mksearch_interface_SearchHit
 {
     private $solrDoc;
+
     /**
-     * Initialiaze model and fill it with data if provided
+     * Initialiaze model and fill it with data if provided.
      *
      * @param $rowOrUid
-     * @return void
      */
     public function init($rowOrUid = null)
     {
@@ -50,7 +50,7 @@ class tx_mksearch_model_SolrHit extends tx_rnbase_model_base implements tx_mksea
         if (!$solrDoc instanceof Apache_Solr_Document) {
             throw new InvalidArgumentException(
                 'The solr doc has to be an object instance of "Apache_Solr_Document",'
-                . '"' . (is_object($solrDoc) ? get_class($solrDoc) : gettype($solrDoc)) . '" given.',
+                .'"'.(is_object($solrDoc) ? get_class($solrDoc) : gettype($solrDoc)).'" given.',
                 1370252783
             );
         }
@@ -63,7 +63,8 @@ class tx_mksearch_model_SolrHit extends tx_rnbase_model_base implements tx_mksea
     }
 
     /**
-     * Returns the unique key for Solr
+     * Returns the unique key for Solr.
+     *
      * @return string
      */
     public function getSolrId()
@@ -85,7 +86,6 @@ class tx_mksearch_model_SolrHit extends tx_rnbase_model_base implements tx_mksea
     {
         return '';
     }
-
 
     /**
      * Return $TCA defined table column names.
@@ -109,5 +109,5 @@ class tx_mksearch_model_SolrHit extends tx_rnbase_model_base implements tx_mksea
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/class.tx_mksearch_model_SolrHit.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/class.tx_mksearch_model_SolrHit.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/class.tx_mksearch_model_SolrHit.php'];
 }

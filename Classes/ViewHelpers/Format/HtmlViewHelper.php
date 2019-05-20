@@ -1,4 +1,5 @@
 <?php
+
 namespace DMK\Mksearch\ViewHelpers\Format;
 
 /*                                                                        *
@@ -13,7 +14,7 @@ namespace DMK\Mksearch\ViewHelpers\Format;
  * TABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General      *
  * Public License for more details.                                       *
  *                                                                        */
-/**
+/*
  * DMK\Mksearch\ViewHelpers\Format$HtmlViewHelper
  *
  * nähere Infos in Configuration/XClasses.php
@@ -32,19 +33,18 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 \tx_rnbase::load('tx_mksearch_service_internal_Index');
 
 if (\tx_rnbase_util_TYPO3::isTYPO86OrHigher()) {
-
     class HtmlViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Format\HtmlViewHelper
     {
-
         ////////
         // We have to overwrite the whole renderStatic() method, because it uses self for the method call
         ////////
+
         /**
-         * @param array $arguments
-         * @param \Closure $renderChildrenClosure
+         * @param array                     $arguments
+         * @param \Closure                  $renderChildrenClosure
          * @param RenderingContextInterface $renderingContext
          *
-         * @return string the parsed string.
+         * @return string the parsed string
          */
         public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, \TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface $renderingContext)
         {
@@ -55,17 +55,16 @@ if (\tx_rnbase_util_TYPO3::isTYPO86OrHigher()) {
             $value = $renderChildrenClosure();
             $contentObject = GeneralUtility::makeInstance(ContentObjectRenderer::class);
             $contentObject->start([]);
-            $content = $contentObject->parseFunc($value, [], '< ' . $parseFuncTSPath);
+            $content = $contentObject->parseFunc($value, [], '< '.$parseFuncTSPath);
             if (TYPO3_MODE === 'BE') {
                 static::resetFrontendEnvironment();
             }
+
             return $content;
         }
 
         /**
-         * nähere Infos in Configuration/XClasses.php
-         *
-         * @return void
+         * nähere Infos in Configuration/XClasses.php.
          */
         protected static function simulateFrontendEnvironment()
         {
@@ -75,7 +74,6 @@ if (\tx_rnbase_util_TYPO3::isTYPO86OrHigher()) {
         }
 
         /**
-         * @return void
          * @see simulateFrontendEnvironment()
          */
         protected static function resetFrontendEnvironment()
@@ -86,15 +84,14 @@ if (\tx_rnbase_util_TYPO3::isTYPO86OrHigher()) {
         }
     }
 } elseif (\tx_rnbase_util_TYPO3::isTYPO70OrHigher()) {
-
     class HtmlViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Format\HtmlViewHelper
     {
         /**
-         * @param array $arguments
-         * @param \Closure $renderChildrenClosure
+         * @param array                                                     $arguments
+         * @param \Closure                                                  $renderChildrenClosure
          * @param \TYPO3\CMS\Fluid\Core\Rendering\RenderingContextInterface $renderingContext
          *
-         * @return string the parsed string.
+         * @return string the parsed string
          */
         public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, \TYPO3\CMS\Fluid\Core\Rendering\RenderingContextInterface $renderingContext)
         {
@@ -105,17 +102,16 @@ if (\tx_rnbase_util_TYPO3::isTYPO86OrHigher()) {
             $value = $renderChildrenClosure();
             $contentObject = GeneralUtility::makeInstance(ContentObjectRenderer::class);
             $contentObject->start([]);
-            $content = $contentObject->parseFunc($value, [], '< ' . $parseFuncTSPath);
+            $content = $contentObject->parseFunc($value, [], '< '.$parseFuncTSPath);
             if (TYPO3_MODE === 'BE') {
                 static::resetFrontendEnvironment();
             }
+
             return $content;
         }
 
         /**
-         * nähere Infos in Configuration/XClasses.php
-         *
-         * @return void
+         * nähere Infos in Configuration/XClasses.php.
          */
         protected static function simulateFrontendEnvironment()
         {
@@ -125,7 +121,6 @@ if (\tx_rnbase_util_TYPO3::isTYPO86OrHigher()) {
         }
 
         /**
-         * @return void
          * @see simulateFrontendEnvironment()
          */
         protected static function resetFrontendEnvironment()
@@ -135,15 +130,11 @@ if (\tx_rnbase_util_TYPO3::isTYPO86OrHigher()) {
             }
         }
     }
-
 } else {
     class HtmlViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Format\HtmlViewHelper
     {
-
         /**
-         * nähere Infos in Configuration/XClasses.php
-         *
-         * @return void
+         * nähere Infos in Configuration/XClasses.php.
          */
         protected function simulateFrontendEnvironment()
         {
@@ -153,7 +144,6 @@ if (\tx_rnbase_util_TYPO3::isTYPO86OrHigher()) {
         }
 
         /**
-         * @return void
          * @see simulateFrontendEnvironment()
          */
         protected function resetFrontendEnvironment()

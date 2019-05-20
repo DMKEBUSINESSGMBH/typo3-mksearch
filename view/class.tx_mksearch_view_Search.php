@@ -22,22 +22,18 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-
-
-
 tx_rnbase::load('tx_rnbase_view_Base');
 tx_rnbase::load('tx_rnbase_util_BaseMarker');
 
-
 /**
- * View class for displaying a list of modular products
+ * View class for displaying a list of modular products.
  */
 class tx_mksearch_view_Search extends tx_rnbase_view_Base
 {
     public function createOutput($template, &$viewData, &$configurations, &$formatter)
     {
         // Get data from action
-        $items =& $viewData->offsetGet('search');
+        $items = &$viewData->offsetGet('search');
 
         $listBuilder = tx_rnbase::makeInstance(
             'tx_rnbase_util_ListBuilder',
@@ -58,7 +54,6 @@ class tx_mksearch_view_Search extends tx_rnbase_view_Base
             $markerParams
         );
 
-
         return $out;
     }
 
@@ -74,5 +69,5 @@ class tx_mksearch_view_Search extends tx_rnbase_view_Base
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/view/class.tx_mksearch_view_Search.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/view/class.tx_mksearch_view_Search.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/view/class.tx_mksearch_view_Search.php'];
 }

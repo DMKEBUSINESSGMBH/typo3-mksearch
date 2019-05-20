@@ -40,16 +40,11 @@ tx_rnbase::load('Tx_Rnbase_Service_Base');
 
 /**
  * Service "ElasticSearch search engine" for the "mksearch" extension.
- *
- * @package     TYPO3
- * @subpackage  tx_mksearch
  */
-class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base
-    implements tx_mksearch_interface_SearchEngine
+class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base implements tx_mksearch_interface_SearchEngine
 {
-
     /**
-     * Index used for searching and indexing
+     * Index used for searching and indexing.
      *
      * @var Index
      */
@@ -66,16 +61,14 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base
     private $credentialsString = '';
 
     /**
-     * Name of the currently open index
+     * Name of the currently open index.
      *
      * @var string
      */
     private $indexName;
 
     /**
-     * Constructor
-     *
-     * @return void
+     * Constructor.
      */
     public function __construct()
     {
@@ -84,7 +77,7 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base
             'useInternalElasticaLib'
         );
         // if no config is set, enable the internal lib by default!
-        $useInternalElasticaLib = $useInternalElasticaLib === false ? true : (int) $useInternalElasticaLib > 0;
+        $useInternalElasticaLib = false === $useInternalElasticaLib ? true : (int) $useInternalElasticaLib > 0;
         if ($useInternalElasticaLib > 0) {
             \DMK\Mksearch\Utility\ComposerUtility::autoloadElastica();
         }
@@ -111,7 +104,7 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base
                 array(
                     'ElasticSearch service not responding.',
                     'mksearch',
-                    array($credentials)
+                    array($credentials),
                 )
             );
             throw new ClientException('ElasticSearch service not responding.');
@@ -131,14 +124,13 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base
     }
 
     /**
-     *
      * @return bool
      */
     protected function isServerAvailable()
     {
         $response = $this->getIndex()->getClient()->getStatus()->getResponse();
 
-        return $response->getStatus() == 200;
+        return 200 == $response->getStatus();
     }
 
     /**
@@ -150,14 +142,15 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base
     }
 
     /**
-     * Search indexed data
+     * Search indexed data.
      *
      * @param array $fields
      * @param array $options
      *
-     * @return array[tx_mksearch_model_SearchResult]    search results
+     * @return array[tx_mksearch_model_SearchResult] search results
      *
      * @todo support für alle optionen von elasticsearch
+     *
      * @see  http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html
      */
     public function search(array $fields = array(), array $options = array())
@@ -179,8 +172,8 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base
             $result['searchUrl'] = $lastRequest->getPath();
             $result['searchQuery'] = $lastRequest->getQuery();
             $result['searchData'] = $lastRequest->getData();
-            $result['searchTime'] = (microtime(true) - $startTime) . ' ms';
-            $result['queryTime'] = $searchResult->getTotalTime() . ' ms';
+            $result['searchTime'] = (microtime(true) - $startTime).' ms';
+            $result['queryTime'] = $searchResult->getTotalTime().' ms';
             $result['numFound'] = $searchResult->getTotalHits();
             $result['error'] = $searchResult->getResponse()->getError();
             $result['items'] = $items;
@@ -188,11 +181,11 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base
             if ($options['debug']) {
                 tx_rnbase_util_Debug::debug(
                     array('options' => $options, 'result' => $result),
-                    __METHOD__ . ' Line: ' . __LINE__
+                    __METHOD__.' Line: '.__LINE__
                 );
             }
         } catch (Exception $e) {
-            $message = 'Exception caught from ElasticSearch: ' . $e->getMessage();
+            $message = 'Exception caught from ElasticSearch: '.$e->getMessage();
             throw new RuntimeException($message);
         }
 
@@ -215,7 +208,6 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base
     }
 
     /**
-     *
      * @param Query $elasticaQuery
      * @param array $options
      *
@@ -230,7 +222,7 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base
                 array(
                     $field => array(
                         'order' => $order,
-                    )
+                    ),
                 )
             );
         }
@@ -239,21 +231,19 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base
     }
 
     /**
-     *
      * @param ResultSet $searchResult
      *
-     * @return void
      * @throws RuntimeException
      */
     protected function checkResponseOfSearchResult(ResultSet $searchResult)
     {
         $httpStatus = $searchResult->getResponse()->getStatus();
-        if ($httpStatus != 200) {
+        if (200 != $httpStatus) {
             $lastRequest = $this->getIndex()->getClient()->getLastRequest();
-            $message = 'Error requesting ElasticSearch. HTTP status: ' . $httpStatus .
-                '; Path: ' . $lastRequest->getPath() .
-                '; Query: ' . $lastRequest->getQuery().
-                '; Data: ' . $lastRequest->getData();
+            $message = 'Error requesting ElasticSearch. HTTP status: '.$httpStatus.
+                '; Path: '.$lastRequest->getPath().
+                '; Query: '.$lastRequest->getQuery().
+                '; Data: '.$lastRequest->getData();
             throw new RuntimeException($message);
         }
     }
@@ -285,7 +275,6 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base
     }
 
     /**
-     *
      * @param array $options
      *
      * @return array
@@ -318,7 +307,6 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base
     }
 
     /**
-     *
      * @param string $optionKey
      *
      * @return string
@@ -338,7 +326,7 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base
     }
 
     /**
-     * Get a document from index
+     * Get a document from index.
      *
      * @param string $uid
      * @param string $extKey
@@ -350,9 +338,8 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base
     {
     }
 
-
     /**
-     * Return name of the index currently opened
+     * Return name of the index currently opened.
      *
      * @return string
      */
@@ -362,13 +349,11 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base
     }
 
     /**
-     * Open an index
+     * Open an index.
      *
      * @param tx_mksearch_model_internal_Index $index         Instance of the index to open
      * @param bool                             $forceCreation Force creation of index if it doesn't
      *                                                        exist
-     *
-     * @return void
      */
     public function openIndex(
         tx_mksearch_model_internal_Index $index,
@@ -383,7 +368,7 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base
     /**
      * Der String ist semikolon separiert. der erste Teil ist der Index,
      * alle weiteren sind die Server. Die Credentials für die Server
-     * werden kommasepariert erwartet wobei erst host, dann port dann url pfad
+     * werden kommasepariert erwartet wobei erst host, dann port dann url pfad.
      *
      * @param string $credentialString
      *
@@ -421,12 +406,12 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base
         return array(
             'host' => $serverCredential[0],
             'port' => $serverCredential[1],
-            'path' => $serverCredential[2]
+            'path' => $serverCredential[2],
         );
     }
 
     /**
-     * Liefert den Index
+     * Liefert den Index.
      *
      * @return Index
      */
@@ -440,7 +425,7 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base
     }
 
     /**
-     * Check if the specified index exists
+     * Check if the specified index exists.
      *
      * @param string $name Name of index
      *
@@ -452,7 +437,7 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base
     }
 
     /**
-     * Commit index
+     * Commit index.
      *
      * @return bool success
      */
@@ -462,9 +447,7 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base
     }
 
     /**
-     * Close index
-     *
-     * @return void
+     * Close index.
      */
     public function closeIndex()
     {
@@ -473,12 +456,10 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base
     }
 
     /**
-     * Delete an entire index
+     * Delete an entire index.
      *
      * @param optional              string $name Name of index to delete, if not the open index is
-     *                                     meant to be deleted
-     *
-     * @return void
+     *                                           meant to be deleted
      */
     public function deleteIndex($name = null)
     {
@@ -490,9 +471,7 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base
     }
 
     /**
-     * Optimize index
-     *
-     * @return void
+     * Optimize index.
      */
     public function optimizeIndex()
     {
@@ -507,8 +486,6 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base
      *
      * @param string $which Name of index to be replaced i. e. deleted
      * @param string $by    Name of index which replaces the index named $which
-     *
-     * @return void
      */
     public function replaceIndex($which, $by)
     {
@@ -516,7 +493,7 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base
     }
 
     /**
-     * Put a new record into index
+     * Put a new record into index.
      *
      * @param tx_mksearch_interface_IndexerDocument $doc Document to index
      *
@@ -542,7 +519,7 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base
         $primaryKey = $doc->getPrimaryKey();
         $elasticaDocument = new Document($primaryKey['uid']->getValue(), $data);
         $elasticaDocument->setType(
-            $primaryKey['extKey']->getValue() . ':' .
+            $primaryKey['extKey']->getValue().':'.
             $primaryKey['contentType']->getValue()
         );
 
@@ -550,7 +527,7 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base
     }
 
     /**
-     * Update or create an index record
+     * Update or create an index record.
      *
      * @param tx_mksearch_interface_IndexerDocument $doc Document to index
      *
@@ -563,7 +540,7 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base
     }
 
     /**
-     * Delete index document specified by content uid
+     * Delete index document specified by content uid.
      *
      * @param int    $uid         Unique identifier of data record - unique within the
      *                            scope of $extKey and $content_type
@@ -574,7 +551,7 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base
      */
     public function indexDeleteByContentUid($uid, $extKey, $contentType)
     {
-        $type = $extKey . ':' . $contentType;
+        $type = $extKey.':'.$contentType;
         $elasticaDocument = new Document($uid);
         $elasticaDocument->setType($type);
 
@@ -582,18 +559,16 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base
     }
 
     /**
-     * Delete index document specified by index id
+     * Delete index document specified by index id.
      *
      * @param string $id
-     *
-     * @return void
      */
     public function indexDeleteByIndexId($id)
     {
     }
 
     /**
-     * Delete documents specified by raw query
+     * Delete documents specified by raw query.
      *
      * @param string $query
      */
@@ -602,7 +577,7 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base
     }
 
     /**
-     * Return an indexer document instance for the given content type
+     * Return an indexer document instance for the given content type.
      *
      * @param string $extKey      Extension key of records to be indexed
      * @param string $contentType Content type of records to be indexed
@@ -634,13 +609,13 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base
         try {
             if ($this->isServerAvailable()) {
                 $id = 1;
-                $msg = 'Up and running (Ping time: ' .
-                    $this->getIndex()->getClient()->getStatus()->getResponse()->getQueryTime() .
+                $msg = 'Up and running (Ping time: '.
+                    $this->getIndex()->getClient()->getStatus()->getResponse()->getQueryTime().
                     ' ms)';
             }
         } catch (Exception $e) {
-            $msg = 'Error connecting ElasticSearch: ' . $e->getMessage() . '.';
-            $msg .= ' Credentials: ' . $this->credentialsString;
+            $msg = 'Error connecting ElasticSearch: '.$e->getMessage().'.';
+            $msg .= ' Credentials: '.$this->credentialsString;
         }
 
         $status->setStatus($id, $msg);
@@ -649,11 +624,9 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base
     }
 
     /**
-     * Set index model with credential data
+     * Set index model with credential data.
      *
      * @param tx_mksearch_model_internal_Index $index Instance of the index to open
-     *
-     * @return void
      */
     public function setIndexModel(tx_mksearch_model_internal_Index $index)
     {
@@ -665,8 +638,6 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base
      * is done.
      *
      * @param tx_mksearch_model_internal_Index $index
-     *
-     * @return void
      */
     public function postProcessIndexing(tx_mksearch_model_internal_Index $index)
     {
@@ -674,5 +645,5 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/engine/class.tx_mksearch_service_engine_ElasticSearch.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/engine/class.tx_mksearch_service_engine_ElasticSearch.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/engine/class.tx_mksearch_service_engine_ElasticSearch.php'];
 }

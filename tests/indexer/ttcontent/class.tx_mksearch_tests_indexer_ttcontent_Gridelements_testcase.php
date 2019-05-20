@@ -26,10 +26,8 @@ tx_rnbase::load('tx_mksearch_tests_Testcase');
 tx_rnbase::load('tx_mksearch_indexer_ttcontent_Gridelements');
 
 /**
- * Gridelements indexer testcase
+ * Gridelements indexer testcase.
  *
- * @package TYPO3
- * @subpackage mksearch
  * @author Michael Wagner
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
@@ -49,9 +47,8 @@ class tx_mksearch_tests_indexer_ttcontent_Gridelements_testcase extends tx_mksea
     }
 
     /**
-     * Test the isGridelement method
+     * Test the isGridelement method.
      *
-     * @return void
      *
      * @group unit
      * @test
@@ -77,9 +74,8 @@ class tx_mksearch_tests_indexer_ttcontent_Gridelements_testcase extends tx_mksea
     }
 
     /**
-     * Test the hasDocToBeDeleted method
+     * Test the hasDocToBeDeleted method.
      *
-     * @return void
      *
      * @group unit
      * @test
@@ -107,9 +103,8 @@ class tx_mksearch_tests_indexer_ttcontent_Gridelements_testcase extends tx_mksea
     }
 
     /**
-     * Test the hasDocToBeDeleted method
+     * Test the hasDocToBeDeleted method.
      *
-     * @return void
      *
      * @group unit
      * @test
@@ -143,9 +138,8 @@ class tx_mksearch_tests_indexer_ttcontent_Gridelements_testcase extends tx_mksea
     }
 
     /**
-     * Test the hasDocToBeDeleted method
+     * Test the hasDocToBeDeleted method.
      *
-     * @return void
      *
      * @group unit
      * @test
@@ -179,9 +173,8 @@ class tx_mksearch_tests_indexer_ttcontent_Gridelements_testcase extends tx_mksea
     }
 
     /**
-     * Test the hasDocToBeDeleted method
+     * Test the hasDocToBeDeleted method.
      *
-     * @return void
      *
      * @group unit
      * @test
@@ -215,9 +208,8 @@ class tx_mksearch_tests_indexer_ttcontent_Gridelements_testcase extends tx_mksea
     }
 
     /**
-     * Test the hasDocToBeDeleted method
+     * Test the hasDocToBeDeleted method.
      *
-     * @return void
      *
      * @group unit
      * @test
@@ -251,9 +243,8 @@ class tx_mksearch_tests_indexer_ttcontent_Gridelements_testcase extends tx_mksea
     }
 
     /**
-     * Test the getContentByContentType method
+     * Test the getContentByContentType method.
      *
-     * @return void
      *
      * @group unit
      * @test
@@ -275,9 +266,8 @@ class tx_mksearch_tests_indexer_ttcontent_Gridelements_testcase extends tx_mksea
     }
 
     /**
-     * Test the getContentByContentType method
+     * Test the getContentByContentType method.
      *
-     * @return void
      *
      * @group unit
      * @test
@@ -299,9 +289,8 @@ class tx_mksearch_tests_indexer_ttcontent_Gridelements_testcase extends tx_mksea
     }
 
     /**
-     * Test the getAllowedCTypes method
+     * Test the getAllowedCTypes method.
      *
-     * @return void
      *
      * @group unit
      * @test
@@ -313,15 +302,14 @@ class tx_mksearch_tests_indexer_ttcontent_Gridelements_testcase extends tx_mksea
             array('getGridelementElementContent')
         );
         $expected = array(
-            'text','textpic', 'gridelements_pi1',
-            'text.','textpic.', 'gridelements_pi1.'
+            'text', 'textpic', 'gridelements_pi1',
+            'text.', 'textpic.', 'gridelements_pi1.',
         );
 
         $cTypes = $this->callInaccessibleMethod(
             array($indexer, 'getAllowedCTypes'),
             array(array(
-                'includeCTypesInGridelementRendering' =>
-                    'text,textpic,gridelements_pi1'
+                'includeCTypesInGridelementRendering' => 'text,textpic,gridelements_pi1',
             ))
         );
         self::assertEquals($cTypes, $expected);

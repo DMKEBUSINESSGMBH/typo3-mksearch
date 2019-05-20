@@ -30,13 +30,9 @@ tx_rnbase::load('tx_mksearch_indexer_Base');
  * Ich denke diese Optionen sind überflüssig!
  *
  * Expected option for indexer configuration:
- *
- * @package tx_mksearch
- * @subpackage tx_mksearch_indexer
  */
 class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base
 {
-
     /**
      * Return content type identification.
      * This identification is part of the indexed data
@@ -54,9 +50,10 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base
     }
 
     /**
-     * Get all categories of the news record
+     * Get all categories of the news record.
      *
      * @param tx_rnbase_IModel $model
+     *
      * @return array
      *
      * @todo support parent categories
@@ -64,13 +61,13 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base
     private function getCategories(tx_rnbase_IModel $model)
     {
         $options = array(
-            'where' => 'tt_news_cat_mm.uid_local=' . $model->getUid(),
+            'where' => 'tt_news_cat_mm.uid_local='.$model->getUid(),
             // as there is no tca for tt_news_cat_mm
             'wrapperclass' => 'tx_rnbase_model_Base',
-            'orderby' => 'tt_news_cat_mm.sorting ASC'
+            'orderby' => 'tt_news_cat_mm.sorting ASC',
         );
         $join = ' JOIN tt_news_cat_mm ON tt_news_cat_mm.uid_foreign=tt_news_cat.uid AND tt_news_cat.deleted=0 ';
-        $from = array('tt_news_cat' . $join, 'tt_news_cat');
+        $from = array('tt_news_cat'.$join, 'tt_news_cat');
         $rows = tx_rnbase_util_DB::doSelect(
             'tt_news_cat_mm.uid_foreign, tt_news_cat.uid, tt_news_cat.title, tt_news_cat.single_pid',
             $from,
@@ -81,14 +78,16 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base
     }
 
     /**
-     * Do the actual indexing for the given model
+     * Do the actual indexing for the given model.
      *
-     * @param tx_rnbase_IModel $oModel
-     * @param string $tableName
-     * @param array $rawData
+     * @param tx_rnbase_IModel                      $oModel
+     * @param string                                $tableName
+     * @param array                                 $rawData
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @param array $options
+     * @param array                                 $options
+     *
      * @return tx_mksearch_interface_IndexerDocument|null
+     *
      * @todo index FE Group of category
      * @todo index target page of category for single view
      */
@@ -125,7 +124,7 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base
         if ($abort) {
             tx_rnbase::load('tx_rnbase_util_Logger');
             tx_rnbase_util_Logger::info(
-                'News wurde nicht indiziert, weil Kategorie (Include/Exclude) nicht gesetzt ist' .
+                'News wurde nicht indiziert, weil Kategorie (Include/Exclude) nicht gesetzt ist'.
                 ' oder das Signal von einem Hook gegeben wurde.',
                 'mksearch'
             );
@@ -176,7 +175,7 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base
             foreach ($aIndexedFields as $sDocKey => $sRecordKey) {
                 // makes only sense if we have content
                 if (!empty($rawData[$sRecordKey])) {
-                    $content .= $rawData[$sRecordKey] . ' ';
+                    $content .= $rawData[$sRecordKey].' ';
                     // we add those fields also as own field and not just put it into content
                     // do we have a mapping?
                     if ($bAddFields) {
@@ -259,12 +258,13 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base
     }
 
     /**
-     * check if related data has changed
+     * check if related data has changed.
      *
-     * @param string $tableName
-     * @param array $rawData
+     * @param string                                $tableName
+     * @param array                                 $rawData
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @param array $options
+     * @param array                                 $options
+     *
      * @return bool
      */
     protected function stopIndexing(
@@ -273,7 +273,7 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base
         tx_mksearch_interface_IndexerDocument $indexDoc,
         $options
     ) {
-        if ($tableName == 'tt_news_cat') {
+        if ('tt_news_cat' == $tableName) {
             // Eine Kategorie wurde verändert
             // Alle News müssen neu indiziert werden.
             $this->handleCategoryChanged($rawData);
@@ -285,17 +285,16 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base
     }
 
     /**
-     * Handle data change for category. All connected news should be updated
+     * Handle data change for category. All connected news should be updated.
      *
      * @param array $catRecord
-     * @return void
      */
     private function handleCategoryChanged($catRecord)
     {
         $catUid = $catRecord['uid'];
         // Die UIDs aller betroffenen News holen
         $options = array();
-        $options['where'] = 'tt_news_cat_mm.uid_foreign=' . $catUid;
+        $options['where'] = 'tt_news_cat_mm.uid_foreign='.$catUid;
         $options['enablefieldsoff'] = true;
         $from = array('tt_news_cat_mm JOIN tt_news ON tt_news.uid=tt_news_cat_mm.uid_local AND tt_news.deleted=0', 'tt_news_cat_mm');
         $rows = $this->doSelect('tt_news.uid AS uid', $from, $options);
@@ -307,19 +306,22 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base
     }
 
     /**
-     * DB-Zugriff kapseln, damit er testbar wird
+     * DB-Zugriff kapseln, damit er testbar wird.
+     *
      * @param string $what
-     * @param array $from
-     * @param array $options
+     * @param array  $from
+     * @param array  $options
      */
     protected function doSelect($what, $from, $options)
     {
         return tx_rnbase_util_DB::doSelect($what, $from, $options);
     }
+
     /**
      * wird hier nicht mehr verwendet. Die tx_rnbase_util_DB bitte direkt verwenden.
      *
      * @return string
+     *
      * @deprecated
      */
     protected function getDbUtil()
@@ -338,21 +340,21 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
+     *
      * @see tx_mksearch_indexer_Base::createModel()
      */
-    protected function createModel(array $rawData, $tableName = NULL, $options = array())
+    protected function createModel(array $rawData, $tableName = null, $options = array())
     {
         return tx_rnbase::makeInstance('tx_rnbase_model_Base', $rawData);
     }
 
     /**
-     * Adds Categories
+     * Adds Categories.
      *
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @param array $categories
-     * @param array $options
-     * @return void
+     * @param array                                 $categories
+     * @param array                                 $options
      */
     private function addCategoryData(
         tx_mksearch_interface_IndexerDocument $indexDoc,
@@ -486,5 +488,5 @@ CONF;
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_TtNewsNews.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_TtNewsNews.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_TtNewsNews.php'];
 }

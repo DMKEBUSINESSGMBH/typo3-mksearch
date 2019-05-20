@@ -22,14 +22,10 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-
-
 /**
  * The datamapper will find a lucene field type for a given fieldname.
  *
  * @author  René Nitzsche <rene.nitzsche@dmk-ebusiness.de>
- * @package     TYPO3
- * @subpackage  tx_mksearch
  */
 class tx_mksearch_service_engine_lucene_DataTypeMapper
 {
@@ -40,10 +36,12 @@ class tx_mksearch_service_engine_lucene_DataTypeMapper
     {
         $this->cfg = $cfg;
     }
+
     /**
      * Find a good datatype for this fieldname.
      *
      * @param string $fieldName
+     *
      * @return string one of 'text', 'keyword', 'unindexed', 'unstored', 'binary'
      */
     public function getDataType($fieldName)
@@ -65,7 +63,9 @@ class tx_mksearch_service_engine_lucene_DataTypeMapper
 
     /**
      * Try to find a specific type set by index config in lucene.schema.
+     *
      * @param string $fieldName
+     *
      * @return string or null
      */
     protected function findFromCfg($fieldName)
@@ -76,17 +76,19 @@ class tx_mksearch_service_engine_lucene_DataTypeMapper
 
         return null;
     }
+
     /**
-     * test last part of a string
+     * test last part of a string.
+     *
      * @param string $haystack
      * @param string $needle
      */
     private static function endsWith($haystack, $needle)
     {
-        return $needle === '' || substr($haystack, -strlen($needle)) === $needle;
+        return '' === $needle || substr($haystack, -strlen($needle)) === $needle;
     }
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/engine/class.tx_mksearch_service_engine_lucene_DataTypeMapper.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/engine/class.tx_mksearch_service_engine_lucene_DataTypeMapper.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/engine/class.tx_mksearch_service_engine_lucene_DataTypeMapper.php'];
 }

@@ -22,8 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-
-
 /**
  * Bei Facetten von Lucene oder Solr ist es nicht Möglich,
  * sich Key Value paare liefern zu lassen.
@@ -36,29 +34,23 @@
  *
  * Das zusammenführen und auseinandernehmen, erledigt diese Klasse für uns!
  *
- * @package tx_mksearch
- * @subpackage tx_mksearch_util
  * @author Michael Wagner <michael.wagner@dmk-ebusiness.de>
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
 class tx_mksearch_util_KeyValueFacet
 {
-
     /**
-     *
-     * @var tx_mksearch_util_KeyValueFacet|NULL
+     * @var tx_mksearch_util_KeyValueFacet|null
      */
     private static $defaultInstance = null;
 
     /**
-     *
      * @var string
      */
     private $facetDelimiter = '<[DFS]>';
 
     /**
-     *
      * @param string $delimiter
      */
     public function __construct($delimiter = null)
@@ -73,15 +65,16 @@ class tx_mksearch_util_KeyValueFacet
      * Bei defaulteinstellungen bleibt es ein sigelton.
      *
      * @param string $delimiter
+     *
      * @return tx_mksearch_util_KeyValueFacet
      */
     public static function getInstance($delimiter = null)
     {
-        $instance = self::$defaultInstance && $delimiter === null ? self::$defaultInstance : tx_rnbase::makeInstance(
+        $instance = self::$defaultInstance && null === $delimiter ? self::$defaultInstance : tx_rnbase::makeInstance(
             'tx_mksearch_util_KeyValueFacet',
             $delimiter
         );
-        if ($delimiter === null) {
+        if (null === $delimiter) {
             self::$defaultInstance = $instance;
         }
 
@@ -89,27 +82,27 @@ class tx_mksearch_util_KeyValueFacet
     }
 
     /**
-     *
      * @param string $key
      * @param string $value
      * @param string $sorting
+     *
      * @return string
      */
     public function buildFacetValue($key, $value, $sorting = null)
     {
-        $builded = $key . $this->facetDelimiter . $value;
-        if ($sorting !== null) {
-            $builded .= $this->facetDelimiter . $sorting;
+        $builded = $key.$this->facetDelimiter.$value;
+        if (null !== $sorting) {
+            $builded .= $this->facetDelimiter.$sorting;
         }
 
         return $builded;
     }
 
     /**
-     *
      * @param array $keys
      * @param array $value
      * @param array $sorting
+     *
      * @return string
      */
     public function buildFacetValues($keys, $values, $sortings = null)
@@ -127,18 +120,18 @@ class tx_mksearch_util_KeyValueFacet
     }
 
     /**
-     * Prüft, ob es sich bei dem Wert um einen zusammengebauten handelt
+     * Prüft, ob es sich bei dem Wert um einen zusammengebauten handelt.
      *
      * @param string$value
      */
     public function checkValue($value)
     {
-        return strpos($value, $this->facetDelimiter) !== false;
+        return false !== strpos($value, $this->facetDelimiter);
     }
 
     /**
-     *
      * @param string $value
+     *
      * @return array ($sorting | $value | $sorting[optional] )
      */
     public function explodeFacetValue($value)
@@ -153,8 +146,8 @@ class tx_mksearch_util_KeyValueFacet
     }
 
     /**
-     *
      * @param array $values
+     *
      * @return array
      */
     public function explodeFacetValues(array $values)
@@ -169,8 +162,8 @@ class tx_mksearch_util_KeyValueFacet
     }
 
     /**
-     *
      * @param string $value
+     *
      * @return string
      */
     public function extractFacetValue($value)
@@ -181,8 +174,8 @@ class tx_mksearch_util_KeyValueFacet
     }
 
     /**
-     *
      * @param array $values
+     *
      * @return array
      */
     public function extractFacetValues(array $values)
@@ -197,10 +190,10 @@ class tx_mksearch_util_KeyValueFacet
     }
 
     /**
-     *
      * @TODO: implement sorting on the sorting key
      *
      * @param array $exploded
+     *
      * @return array
      */
     protected function sortExplodedFacetValues(array $exploded)
@@ -213,5 +206,5 @@ class tx_mksearch_util_KeyValueFacet
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_KeyValueFacet.php']) {
-    include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_KeyValueFacet.php']);
+    include_once $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_KeyValueFacet.php'];
 }

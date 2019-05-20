@@ -1,7 +1,5 @@
 <?php
 /**
- * @package tx_mksearch
- * @subpackage tx_mksearch_indexer
  * @author Hannes Bochmann <dev@dmk-ebusiness.de>
  *
  *  Copyright notice
@@ -27,9 +25,8 @@
  */
 
 /**
- * benötigte Klassen einbinden
+ * benötigte Klassen einbinden.
  */
-
 tx_rnbase::load('tx_mksearch_indexer_ttcontent_Normal');
 tx_rnbase::load('tx_mksearch_util_Indexer');
 
@@ -39,13 +36,15 @@ tx_rnbase::load('tx_mksearch_util_Indexer');
  * @todo wenn templavoila installiert ist, sollten allen elemente, die in einem tv
  * container liegen in die queue gelegt werden. beim indizieren muss dann noch geprüft
  * werden ob das element parents hat und diese nicht hidden sind.
+ *
  * @author Hannes Bochmann <dev@dmk-ebusiness.de>
  */
 class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttcontent_Normal
 {
     /**
      * The references (pids) of this element. if templavoila is
-     * not installed it contains only the pid of the element it self
+     * not installed it contains only the pid of the element it self.
+     *
      * @var array
      */
     protected $aReferences = array();
@@ -53,16 +52,18 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
     /**
      * The indexable references (pids) of this element. These references
      * are taken to check if the element has to be deleted.
+     *
      * @var array
      */
     protected $aIndexableReferences = array();
 
     /**
-     * Sets the index doc to deleted if neccessary
+     * Sets the index doc to deleted if neccessary.
      *
-     * @param tx_rnbase_IModel $oModel
+     * @param tx_rnbase_IModel                      $oModel
      * @param tx_mksearch_interface_IndexerDocument $oIndexDoc
-     * @param array $aOptions
+     * @param array                                 $aOptions
+     *
      * @return bool
      */
     protected function hasDocToBeDeleted(
@@ -70,7 +71,6 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
         tx_mksearch_interface_IndexerDocument $oIndexDoc,
         $aOptions = array()
     ) {
-
         // if we got not a single reference,
         // even not the element itself, it should be deleted
         if (empty($this->aIndexableReferences)) {
@@ -90,13 +90,13 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
             }
         }
 
-            // any valid references left?
+        // any valid references left?
         if (empty($aStillIndexableReferences)) {
             return true;
         } // finally set the pid of the first reference to our element
-            // as we can not know which array index is the first we simply use
-            // array_shift which returns the first off shifted element,
-            // our desired first one
+        // as we can not know which array index is the first we simply use
+        // array_shift which returns the first off shifted element,
+        // our desired first one
         else {
             $oModel->record['pid'] = array_shift($aStillIndexableReferences);
         }
@@ -106,36 +106,37 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
 
     /**
      * Returns all references (pids)  this element has. if templavoila is
-     * not installed we simply return the pid of the element
+     * not installed we simply return the pid of the element.
      *
      * @param tx_rnbase_IModel $oModel
+     *
      * @return array
      */
     protected function getReferences(tx_rnbase_IModel $oModel)
     {
         // so we have to fetch all references
-            // we just need to check this table for entries for this element
+        // we just need to check this table for entries for this element
         $aSqlOptions = array(
-            'where' => 'ref_table=' . $GLOBALS['TYPO3_DB']->fullQuoteStr('tt_content', 'sys_refindex') .
-                    ' AND ref_uid=' . (int) $oModel->getUid() .
+            'where' => 'ref_table='.$GLOBALS['TYPO3_DB']->fullQuoteStr('tt_content', 'sys_refindex').
+                    ' AND ref_uid='.(int) $oModel->getUid().
                     ' AND deleted=0',
             'enablefieldsoff' => true,
         );
         $aFrom = array('sys_refindex', 'sys_refindex');
         $aRows = tx_rnbase_util_DB::doSelect('tablename, recuid', $aFrom, $aSqlOptions);
 
-            // now we need to collect the pids of all references. either a
-            // reference is a page than we simply use it's pid or the
-            // reference is another tt_content.
-            // in the last case we take the pid of this element
+        // now we need to collect the pids of all references. either a
+        // reference is a page than we simply use it's pid or the
+        // reference is another tt_content.
+        // in the last case we take the pid of this element
         $aReferences = array();
         if (!empty($aRows)) {
             foreach ($aRows as $aRow) {
-                if ($aRow['tablename'] == 'pages') {
+                if ('pages' == $aRow['tablename']) {
                     $aReferences[] = $aRow['recuid'];
-                } elseif ($aRow['tablename'] == 'tt_content') {
+                } elseif ('tt_content' == $aRow['tablename']) {
                     $aSqlOptions = array(
-                        'where' => 'tt_content.uid=' . $aRow['recuid'],
+                        'where' => 'tt_content.uid='.$aRow['recuid'],
                             // checks for being hidden/deleted are made later
                         'enablefieldsoff' => true,
                     );
@@ -149,7 +150,6 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
         return $aReferences;
     }
 
-
     /**
      * Prüft ob das Element speziell in einem Seitenbaum oder auf einer Seite liegt,
      * der/die inkludiert oder ausgeschlossen werden soll.
@@ -158,13 +158,14 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
      *
      * @param array $sourceRecord
      * @param array $options
+     *
      * @return bool
      */
     protected function isIndexableRecord(array $sourceRecord, array $options)
     {
         $this->aIndexableReferences = array();
 
-            // we have to do the checks for all references and collect the indexable ones
+        // we have to do the checks for all references and collect the indexable ones
         $return = false;
         if (!empty($this->aReferences)) {
             foreach ($this->aReferences as $iPid) {
@@ -174,13 +175,13 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
                 if (parent::isIndexableRecord($sourceRecord, $options)) {
                     // as soon as we have a indexable reference we are fine
                     $return = true;
-                        // collect this pid as indexable
+                    // collect this pid as indexable
                     $this->aIndexableReferences[$iPid] = $iPid;
                 }
             }
         } else {
             // without any references this element is indexable but will be
-                // deleted later
+            // deleted later
             $return = true;
         }
 
@@ -188,25 +189,26 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
     }
 
     /**
-     * Returns the model to be indexed
+     * Returns the model to be indexed.
      *
-     * @param array $rawData
+     * @param array  $rawData
      * @param string $tableName
-     * @param array $options
+     * @param array  $options
+     *
      * @return tx_mksearch_model_irfaq_Question
      */
     protected function createModel(array $rawData, $tableName = null, $options = array())
     {
         $model = parent::createModel($rawData, $tableName, $options);
 
-            // we need all references this element has for later checks
+        // we need all references this element has for later checks
         $this->aReferences = $this->getReferences($model);
 
         return $model;
     }
 
     /**
-     * fetches the content of an tv element
+     * fetches the content of an tv element.
      *
      * @return string
      */
@@ -220,7 +222,7 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
         $templavoilaPlugin = tx_rnbase::makeInstance('tx_templavoila_pi1');
         $templavoilaPlugin->cObj = tx_rnbase::makeInstance(tx_rnbase_util_Typo3Classes::getContentObjectRendererClass());
         $templavoilaPlugin->cObj->data = $record;
-        $templavoilaPlugin->cObj->currentRecord = 'tt_content:' . $ttContentModel->getUid();
+        $templavoilaPlugin->cObj->currentRecord = 'tt_content:'.$ttContentModel->getUid();
 
         return $templavoilaPlugin->renderElement($record, 'tt_content');
     }
@@ -233,8 +235,6 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
      * Wir haben aber nicht den immer gleichen Pfad beim
      * TV rendering im BE und daher müssen wir die relativen includeLibs Pfade
      * um einen Prefix ergänzen damit das inkludieren fkt.
-     *
-     * @return void
      */
     private function adjustIncludeLibsPathForBe()
     {
@@ -243,20 +243,20 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
             if (!is_array($pluginConfig) ||
                 !isset($pluginConfig['includeLibs']) ||
                 // solche pfade werden später von TYPO3 korrekt aufgelöst
-                strpos($pluginConfig['includeLibs'], 'EXT:') !== false
+                false !== strpos($pluginConfig['includeLibs'], 'EXT:')
             ) {
                 continue;
             }
 
-                // vom fileCache werden Dateien zu erst abgerufen
+            // vom fileCache werden Dateien zu erst abgerufen
             $filehash = md5($pluginConfig['includeLibs']);
             $GLOBALS['TSFE']->tmpl->fileCache[$filehash] =
-                $this->getRelativePathPrefixFromCurrentExecutionDirToWebroot() . $pluginConfig['includeLibs'];
+                $this->getRelativePathPrefixFromCurrentExecutionDirToWebroot().$pluginConfig['includeLibs'];
         }
     }
 
     /**
-     * get the relative path prefix from current execution dir to webroot
+     * get the relative path prefix from current execution dir to webroot.
      *
      * @return string
      */
@@ -280,7 +280,7 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
             }
         } // indexing via Scheduler in BE
         // script executed in /typo3
-        elseif (strpos(PATH_thisScript, 'typo3/mod.php') !== false) {
+        elseif (false !== strpos(PATH_thisScript, 'typo3/mod.php')) {
             $relativePathPrefixFromExecutionDir = '../';
         } // indexing via mksearch BE module
         // script executed in /typo3/sysext/cms/tslib
@@ -293,5 +293,5 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/ttcontent/class.tx_mksearch_indexer_ttcontent_Templavoila.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/ttcontent/class.tx_mksearch_indexer_ttcontent_Templavoila.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/ttcontent/class.tx_mksearch_indexer_ttcontent_Templavoila.php'];
 }

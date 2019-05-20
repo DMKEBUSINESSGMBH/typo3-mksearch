@@ -27,19 +27,19 @@ tx_rnbase::load('tx_rnbase_util_BaseMarker');
 
 /**
  * Generic class for rendering contents
- * Renders just anything you pass in ;-)
+ * Renders just anything you pass in ;-).
  */
 class tx_mksearch_marker_General extends tx_rnbase_util_BaseMarker
 {
-
     /**
-     * @param string $template das HTML-Template
-     * @param array $data Daten, die ersetzt werden sollen
+     * @param string                    $template  das HTML-Template
+     * @param array                     $data      Daten, die ersetzt werden sollen
      * @param tx_rnbase_util_FormatUtil $formatter der zu verwendente Formatter
-     * @param string $confId Pfad der TS-Config des Vereins, z.B. 'listView.club.'
-     * @param string $marker name of marker, z.B. CLUB
-     *        Von diesem String hängen die entsprechenden weiteren Marker ab: ###CLUB_NAME###, ###COACH_ADDRESS_WEBSITE###
-     * @return String das geparste Template
+     * @param string                    $confId    Pfad der TS-Config des Vereins, z.B. 'listView.club.'
+     * @param string                    $marker    name of marker, z.B. CLUB
+     *                                             Von diesem String hängen die entsprechenden weiteren Marker ab: ###CLUB_NAME###, ###COACH_ADDRESS_WEBSITE###
+     *
+     * @return string das geparste Template
      */
     public function parseTemplate($template, &$data, &$formatter, $confId, $marker)
     {
@@ -52,5 +52,5 @@ class tx_mksearch_marker_General extends tx_rnbase_util_BaseMarker
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/marker/class.tx_mksearch_marker_General.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/marker/class.tx_mksearch_marker_General.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/marker/class.tx_mksearch_marker_General.php'];
 }

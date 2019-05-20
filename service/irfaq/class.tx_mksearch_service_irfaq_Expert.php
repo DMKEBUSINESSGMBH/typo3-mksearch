@@ -22,17 +22,15 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-
 tx_rnbase::load('tx_mksearch_service_Base');
 
 /**
- * Service for accessing models from database
+ * Service for accessing models from database.
  */
 class tx_mksearch_service_irfaq_Expert extends tx_mksearch_service_Base
 {
-
     /**
-     * Liefert die zugehörige Search-Klasse zurück
+     * Liefert die zugehörige Search-Klasse zurück.
      *
      * @return string
      */
@@ -43,5 +41,5 @@ class tx_mksearch_service_irfaq_Expert extends tx_mksearch_service_Base
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/internal/class.tx_mksearch_service_internal_Base.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/internal/class.tx_mksearch_service_internal_Base.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/internal/class.tx_mksearch_service_internal_Base.php'];
 }

@@ -31,10 +31,8 @@ tx_rnbase::load('tx_mksearch_tests_Util');
  * Tabelle benötigen. in diesen tests haben die elemente mehrere
  * referenzen. die grundlegenden Funktionalitäten werden in
  * tx_mksearch_tests_indexer_TtContent_testcase und
- * tx_mksearch_tests_indexer_TtContent_DB_testcase geprüft
+ * tx_mksearch_tests_indexer_TtContent_DB_testcase geprüft.
  *
- * @package tx_mksearch
- * @subpackage tx_mksearch_tests
  * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
  * @author Michael Wagner <michael.wagner@dmk-ebusiness.de>
  * @license http://www.gnu.org/licenses/lgpl.html
@@ -42,22 +40,21 @@ tx_rnbase::load('tx_mksearch_tests_Util');
  */
 class tx_mksearch_tests_indexer_TtContentTv_DB_testcase extends tx_mksearch_tests_DbTestcase
 {
-
     /**
-     * @var boolean
+     * @var bool
      */
     protected $unloadTemplavoila = false;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $gridelementsWasLoaded = false;
 
     /**
      * Constructs a test case with the given name.
      *
-     * @param string $name the name of a testcase
-     * @param array $data ?
+     * @param string $name     the name of a testcase
+     * @param array  $data     ?
      * @param string $dataName ?
      */
     public function __construct($name = null, array $data = array(), $dataName = '')
@@ -86,7 +83,8 @@ class tx_mksearch_tests_indexer_TtContentTv_DB_testcase extends tx_mksearch_test
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
+     *
      * @see tx_mksearch_tests_DbTestcase::tearDown()
      */
     protected function tearDown()
@@ -185,7 +183,7 @@ class tx_mksearch_tests_indexer_TtContentTv_DB_testcase extends tx_mksearch_test
         list($extKey, $cType) = $indexer->getContentType();
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $record = array('uid' => 3, 'pid' => 0, 'CType' => 'list', 'bodytext' => 'Test 1');
-        $options['exclude.']['pageTrees.'] = array(4);//als array
+        $options['exclude.']['pageTrees.'] = array(4); //als array
         $indexDoc = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
         self::assertNull($indexDoc, 'Index Doc not null for uid '.$record['uid']);
 
@@ -194,7 +192,7 @@ class tx_mksearch_tests_indexer_TtContentTv_DB_testcase extends tx_mksearch_test
         list($extKey, $cType) = $indexer->getContentType();
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $record = array('uid' => 6, 'pid' => 0, 'CType' => 'list', 'bodytext' => 'Test 1');
-        $options['exclude.']['pageTrees.'] = array(4);//als array
+        $options['exclude.']['pageTrees.'] = array(4); //als array
         $indexDoc = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
         self::assertNull($indexDoc, 'Wrong deleted state for uid '.$record['uid']);
     }
@@ -206,11 +204,11 @@ class tx_mksearch_tests_indexer_TtContentTv_DB_testcase extends tx_mksearch_test
     {
         $options = array();
         $options['includeCTypes.'] = array('list');
-        $options['CType.']['_default_.']['indexedFields.'] = array('bodytext', 'imagecaption' , 'altText', 'titleText');
+        $options['CType.']['_default_.']['indexedFields.'] = array('bodytext', 'imagecaption', 'altText', 'titleText');
 
         return $options;
     }
 }
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContent_testcase.php'];
 }

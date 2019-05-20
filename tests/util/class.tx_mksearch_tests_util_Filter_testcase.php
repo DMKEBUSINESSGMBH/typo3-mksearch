@@ -26,21 +26,15 @@ tx_rnbase::load('tx_mksearch_tests_Testcase');
 tx_rnbase::load('tx_mksearch_util_Filter');
 tx_rnbase::load('tx_rnbase_util_TS');
 
-
-
 /**
- *
- * @package tx_mksearch
- * @subpackage tx_mksearch_tests
  * @author René Nitzsche <rene.nitzsche@dmk-ebusiness.de>
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
 class tx_mksearch_tests_util_Filter_testcase extends tx_mksearch_tests_Testcase
 {
-
     /**
-     * @var $filterUtil tx_mksearch_util_Filter
+     * @var tx_mksearch_util_Filter
      */
     private $filterUtil;
 
@@ -92,7 +86,7 @@ searchsolr.filter.default.formfields {
         $this->assertEquals(1, substr_count($result, 'selected="selected'), 'Aktives Feld nicht markiert');
         $this->assertEquals(1, substr_count($result, '<option value="tstamp asc" selected="selected">'), 'Mehr als 1 Feld als aktiv markiert.');
 
-// <html> <label class="sort"> Sortierung <select name="mksearch[sort]"> <option value="score desc" >Score</option>
+        // <html> <label class="sort"> Sortierung <select name="mksearch[sort]"> <option value="score desc" >Score</option>
 // <option value="tstamp asc" selected="selected">Aktualität aufsteigend</option> <option value="tstamp desc" >Aktualität absteigend</option>
 // </select> </label> </html>
     }
@@ -111,6 +105,7 @@ searchsolr.filter.default.formfields {
         $result = $this->filterUtil->parseCustomFilters($template, $conf, 'searchsolr.filter.default.', 'FILTER');
         $this->assertSame($template, $result);
     }
+
     /**
      * @group integration
      */
@@ -152,6 +147,7 @@ searchsolr.filter.default.formfields.pagelimit {
         $result = $this->filterUtil->getPageLimit($params, $conf, 'searchsolr.filter.default.', 5);
         $this->assertEquals(5, $result, 'Anzahl nicht auf default gesetzt');
     }
+
     /**
      * @group integration
      */
@@ -184,8 +180,10 @@ searchsolr.filter.default.formfields.pagelimit {
         $result = $this->filterUtil->getPageLimit($params, $conf, 'searchsolr.filter.default.', 5);
         $this->assertEquals(0, $result, 'Anzahl Treffer nicht auf 0 gesetzt');
     }
+
     /**
-     * Hier muss immer der Fallback-Wert aus dem Flexform genutzt werden
+     * Hier muss immer der Fallback-Wert aus dem Flexform genutzt werden.
+     *
      * @group integration
      */
     public function test_getPageLimitWithoutTsConfiguration()
@@ -267,13 +265,9 @@ searchsolr.filter.default.sort {
         $this->assertTrue(array_key_exists('###SORT_TSTAMP_LINK###', $wrappedSubpartArray));
     }
 
-
-
-
     /**
-     * Tests tx_mksearch_util_Filter::parseFqFieldAndValue
+     * Tests tx_mksearch_util_Filter::parseFqFieldAndValue.
      *
-     * @return void
      *
      * @group unit
      * @test
@@ -291,7 +285,6 @@ searchsolr.filter.default.sort {
         $actual = $util->parseFqFieldAndValue($fq, $allowedFqParams);
         self::assertSame($expected, $actual);
     }
-
 
     /**
      * The test data for testParseFqFieldAndValue testcase.
@@ -341,5 +334,5 @@ searchsolr.filter.default.sort {
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/util/class.tx_mksearch_tests_util_Filter_testcase.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/util/class.tx_mksearch_tests_util_Filter_testcase.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/util/class.tx_mksearch_tests_util_Filter_testcase.php'];
 }

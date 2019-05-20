@@ -22,12 +22,11 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-
 tx_rnbase::load('tx_mksearch_interface_SearchHit');
 tx_rnbase::load('tx_rnbase_model_base');
 
 /**
- * Model for search hits
+ * Model for search hits.
  *
  * As the base data doesn't come from a real table but gets filled
  * by the search engine some things are different from an usual
@@ -36,12 +35,10 @@ tx_rnbase::load('tx_rnbase_model_base');
  */
 class tx_mksearch_model_SearchHit extends tx_rnbase_model_base implements tx_mksearch_interface_SearchHit
 {
-
     /**
-     * Initialiaze model and fill it with data if provided
+     * Initialiaze model and fill it with data if provided.
      *
      * @param $rowOrUid
-     * @return void
      */
     public function init($rowOrUid = null)
     {
@@ -54,11 +51,10 @@ class tx_mksearch_model_SearchHit extends tx_rnbase_model_base implements tx_mks
     }
 
     /**
-     * Fill model with data
+     * Fill model with data.
      *
-     * @param array $data
-     * @param bool optional $merge  Merge existing data with new data with precedence to the new data
-     * @return void
+     * @param array         $data
+     * @param bool optional $merge Merge existing data with new data with precedence to the new data
      */
     public function fillData(array $data, $merge = true)
     {
@@ -78,7 +74,6 @@ class tx_mksearch_model_SearchHit extends tx_rnbase_model_base implements tx_mks
     {
         return '';
     }
-
 
     /**
      * Return $TCA defined table column names.
@@ -102,5 +97,5 @@ class tx_mksearch_model_SearchHit extends tx_rnbase_model_base implements tx_mks
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/class.tx_mksearch_model_SearchHit.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/class.tx_mksearch_model_SearchHit.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/class.tx_mksearch_model_SearchHit.php'];
 }

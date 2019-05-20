@@ -1,4 +1,5 @@
 <?php
+
 if (!defined('TYPO3_MODE')) {
     die('Access denied.');
 }
@@ -13,7 +14,7 @@ call_user_func(
         foreach (array(
             'tt_content',
         ) as $table) {
-            require $extPath . 'Configuration/TCA/Overrides/' . $table . '.php';
+            require $extPath.'Configuration/TCA/Overrides/'.$table.'.php';
         }
 
         foreach (array(
@@ -22,7 +23,7 @@ call_user_func(
             'tx_mksearch_indexerconfigs',
             'tx_mksearch_keywords',
         ) as $table) {
-            $GLOBALS['TCA'][$table] = require $extPath . 'Configuration/TCA/' . $table . '.php';
+            $GLOBALS['TCA'][$table] = require $extPath.'Configuration/TCA/'.$table.'.php';
         }
     },
     tx_rnbase_util_Extensions::extPath('mksearch')

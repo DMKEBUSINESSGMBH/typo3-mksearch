@@ -25,9 +25,6 @@
 tx_rnbase::load('tx_mksearch_tests_Testcase');
 
 /**
- *
- * @package tx_mksearch
- * @subpackage tx_mksearch_tests
  * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
  * @author Michael Wagner <michael.wagner@dmk-ebusiness.de>
  * @license http://www.gnu.org/licenses/lgpl.html
@@ -35,14 +32,9 @@ tx_rnbase::load('tx_mksearch_tests_Testcase');
  */
 class tx_mksearch_tests_service_engine_lucene_DataTypeMapper_testcase extends tx_mksearch_tests_Testcase
 {
-
-
     /* @var $mapper tx_mksearch_service_engine_lucene_DataTypeMapper */
     private $mapper;
 
-    /**
-     *
-     */
     protected function setUp()
     {
         parent::setUp();
@@ -51,7 +43,6 @@ class tx_mksearch_tests_service_engine_lucene_DataTypeMapper_testcase extends tx
 
     public function testFieldWithSpecialConfig()
     {
-
         // Zuerst den Default testen
         self::assertEquals('keyword', $this->mapper->getDataType('tstamp'), 'Wrong data type found');
 
@@ -85,5 +76,5 @@ class tx_mksearch_tests_service_engine_lucene_DataTypeMapper_testcase extends tx
     }
 }
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/service/engine/lucene/class.tx_mksearch_tests_service_engine_lucene_DataTypeMapper_testcase.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/service/engine/lucene/class.tx_mksearch_tests_service_engine_lucene_DataTypeMapper_testcase.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/service/engine/lucene/class.tx_mksearch_tests_service_engine_lucene_DataTypeMapper_testcase.php'];
 }

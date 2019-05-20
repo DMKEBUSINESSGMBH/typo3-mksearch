@@ -1,4 +1,5 @@
 <?php
+
 namespace DMK\Mksearch\Tests;
 
 /***************************************************************
@@ -27,10 +28,8 @@ namespace DMK\Mksearch\Tests;
 \tx_rnbase::load('tx_mksearch_tests_Testcase');
 
 /**
- * DMK\Mksearch\Tests\ViewHelpers$CObjectViewHelperTest
+ * DMK\Mksearch\Tests\ViewHelpers$CObjectViewHelperTest.
  *
- * @package         TYPO3
- * @subpackage      mksearch
  * @author          Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
  * @license         http://www.gnu.org/licenses/lgpl.html
  *                  GNU Lesser General Public License, version 3 or later

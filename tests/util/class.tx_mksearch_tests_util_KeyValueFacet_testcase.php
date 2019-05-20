@@ -22,15 +22,10 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-
 tx_rnbase::load('tx_mksearch_tests_Testcase');
 tx_rnbase::load('tx_mksearch_util_KeyValueFacet');
 
 /**
- *
- *
- * @package tx_mksearch
- * @subpackage tx_mksearch_tests
  * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
  * @author Michael Wagner <michael.wagner@dmk-ebusiness.de>
  * @license http://www.gnu.org/licenses/lgpl.html
@@ -38,10 +33,9 @@ tx_rnbase::load('tx_mksearch_util_KeyValueFacet');
  */
 class tx_mksearch_tests_util_KeyValueFacet_testcase extends tx_mksearch_tests_Testcase
 {
-
     /**
-     *
      * @param string $delimiter
+     *
      * @return tx_mksearch_util_KeyValueFacet
      */
     protected function getKeyValueFacetInstance($delimiter = null)
@@ -50,8 +44,8 @@ class tx_mksearch_tests_util_KeyValueFacet_testcase extends tx_mksearch_tests_Te
     }
 
     /**
-     *
      * @dataProvider providerBuildFacetValue
+     *
      * @param string $key
      * @param string $value
      * @param string $expected
@@ -62,8 +56,9 @@ class tx_mksearch_tests_util_KeyValueFacet_testcase extends tx_mksearch_tests_Te
         $actual = $builder->buildFacetValue($key, $value, $sorting);
         self::assertEquals($expected, $actual);
     }
+
     /**
-     * Dataprovider for testBuildFacetValue
+     * Dataprovider for testBuildFacetValue.
      */
     public function providerBuildFacetValue()
     {
@@ -78,9 +73,10 @@ class tx_mksearch_tests_util_KeyValueFacet_testcase extends tx_mksearch_tests_Te
             ),
         );
     }
+
     /**
-     *
      * @dataProvider providerCheckValue
+     *
      * @param string $value
      * @param string $expected
      */
@@ -90,8 +86,9 @@ class tx_mksearch_tests_util_KeyValueFacet_testcase extends tx_mksearch_tests_Te
         $actual = $builder->checkValue($value);
         self::assertEquals($expected, $actual);
     }
+
     /**
-     * Dataprovider for testCheckValue
+     * Dataprovider for testCheckValue.
      */
     public function providerCheckValue()
     {
@@ -106,11 +103,12 @@ class tx_mksearch_tests_util_KeyValueFacet_testcase extends tx_mksearch_tests_Te
             ),
         );
     }
+
     /**
-     *
      * @dataProvider providerExplodeFacetValue
+     *
      * @param string $builded
-     * @param array $expected
+     * @param array  $expected
      */
     public function testExplodeFacetValue($builded, $expected)
     {
@@ -118,8 +116,9 @@ class tx_mksearch_tests_util_KeyValueFacet_testcase extends tx_mksearch_tests_Te
         $actual = $builder->explodeFacetValue($builded);
         self::assertEquals($expected, $actual);
     }
+
     /**
-     * Dataprovider for testExplodeFacetValue
+     * Dataprovider for testExplodeFacetValue.
      */
     public function providerExplodeFacetValue()
     {
@@ -134,11 +133,12 @@ class tx_mksearch_tests_util_KeyValueFacet_testcase extends tx_mksearch_tests_Te
             ),
         );
     }
+
     /**
-     *
      * @dataProvider providerExtractFacetValue
+     *
      * @param string $builded
-     * @param array $expected
+     * @param array  $expected
      */
     public function testExtractFacetValue($builded, $expected)
     {
@@ -146,8 +146,9 @@ class tx_mksearch_tests_util_KeyValueFacet_testcase extends tx_mksearch_tests_Te
         $actual = $builder->extractFacetValue($builded);
         self::assertEquals($expected, $actual);
     }
+
     /**
-     * Dataprovider for testExtractFacetValue
+     * Dataprovider for testExtractFacetValue.
      */
     public function providerExtractFacetValue()
     {
@@ -162,9 +163,7 @@ class tx_mksearch_tests_util_KeyValueFacet_testcase extends tx_mksearch_tests_Te
             ),
         );
     }
-    /**
-     *
-     */
+
     public function testExplodeFacetValues()
     {
         $builder = $this->getKeyValueFacetInstance();
@@ -179,9 +178,7 @@ class tx_mksearch_tests_util_KeyValueFacet_testcase extends tx_mksearch_tests_Te
         );
         self::assertEquals($expected, $actual);
     }
-    /**
-     *
-     */
+
     public function testExtractFacetValues()
     {
         $builder = $this->getKeyValueFacetInstance();
@@ -199,5 +196,5 @@ class tx_mksearch_tests_util_KeyValueFacet_testcase extends tx_mksearch_tests_Te
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/tests/util/class.tx_mksearch_tests_util_KeyValueFacet_testcase.php']) {
-    include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/tests/util/class.tx_mksearch_tests_util_KeyValueFacet_testcase.php']);
+    include_once $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/tests/util/class.tx_mksearch_tests_util_KeyValueFacet_testcase.php'];
 }

@@ -1,7 +1,5 @@
 <?php
 /**
- * @package tx_mksearch
- * @subpackage tx_mksearch_model
  * @author Hannes Bochmann
  *
  *  Copyright notice
@@ -27,20 +25,17 @@
  */
 
 /**
- * benötigte Klassen einbinden
+ * benötigte Klassen einbinden.
  */
-
 tx_rnbase::load('tx_rnbase_model_base');
 
 /**
- * Model für eine Suggestion
- * @package tx_mksearch
- * @subpackage tx_mksearch_model
+ * Model für eine Suggestion.
  */
 class tx_mksearch_model_Suggestion extends tx_rnbase_model_base
 {
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/class.tx_mksearch_model_Suggestion.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/class.tx_mksearch_model_Suggestion.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/class.tx_mksearch_model_Suggestion.php'];
 }

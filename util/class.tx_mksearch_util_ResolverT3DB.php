@@ -22,8 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-
-
 tx_rnbase::load('tx_rnbase_util_Logger');
 
 /**
@@ -32,7 +30,8 @@ tx_rnbase::load('tx_rnbase_util_Logger');
 class tx_mksearch_util_ResolverT3DB
 {
     /**
-     * Der Resolver lädt den zu indizierenden Datensatz auf der Datenbank. D
+     * Der Resolver lädt den zu indizierenden Datensatz auf der Datenbank. D.
+     *
      * @param array $queueData
      */
     public function getRecords($queueData)
@@ -56,5 +55,5 @@ class tx_mksearch_util_ResolverT3DB
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_ResolverT3DB.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_ResolverT3DB.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_ResolverT3DB.php'];
 }

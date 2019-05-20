@@ -27,15 +27,12 @@ tx_rnbase::load('tx_mksearch_indexer_Base');
 /**
  * Indexer service for tx_news.news called by the "mksearch" extension.
  *
- * @package tx_mksearch
- * @subpackage tx_mksearch_indexer
  * @author Michael Wagner
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
 class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
 {
-
     /**
      * @var bool
      */
@@ -59,12 +56,13 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
     }
 
     /**
-     * check if related data has changed
+     * check if related data has changed.
      *
-     * @param string $tableName
-     * @param array $rawData
+     * @param string                                $tableName
+     * @param array                                 $rawData
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @param array $options
+     * @param array                                 $options
+     *
      * @return bool
      */
     protected function stopIndexing(
@@ -73,11 +71,11 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
         tx_mksearch_interface_IndexerDocument $indexDoc,
         $options
     ) {
-        if ($tableName == 'sys_category') {
+        if ('sys_category' == $tableName) {
             $this->handleCategoryChanged($rawData);
 
             return true;
-        } elseif ($tableName == 'tx_news_domain_model_tag') {
+        } elseif ('tx_news_domain_model_tag' == $tableName) {
             $this->handleTagChanged($rawData);
 
             return true;
@@ -87,24 +85,22 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
     }
 
     /**
-     * Handle data change for category. All connected news should be updated
+     * Handle data change for category. All connected news should be updated.
      *
      * @param array $catRecord
-     *
-     * @return void
      */
     private function handleCategoryChanged($catRecord)
     {
         $rows = $this->getDatabaseConnection()->doSelect(
             'NEWS.uid AS uid',
             array(
-                'tx_news_domain_model_news AS NEWS' .
+                'tx_news_domain_model_news AS NEWS'.
                     ' JOIN sys_category_record_mm AS CATMM ON NEWS.uid = CATMM.uid_foreign',
                 'tx_news_domain_model_news',
                 'NEWS',
             ),
             array(
-                'where' => 'CATMM.uid_local = ' . (int) $catRecord['uid'],
+                'where' => 'CATMM.uid_local = '.(int) $catRecord['uid'],
                 'orderby' => 'sorting_foreign DESC',
             )
         );
@@ -117,11 +113,9 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
     }
 
     /**
-     * Handle data change for category. All connected news should be updated
+     * Handle data change for category. All connected news should be updated.
      *
      * @param array $catRecord
-     *
-     * @return void
      */
     private function handleTagChanged($catRecord)
     {
@@ -129,13 +123,13 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
     }
 
     /**
-     * Do the actual indexing for the given model
+     * Do the actual indexing for the given model.
      *
-     * @param tx_rnbase_IModel $oModel
-     * @param string $tableName
-     * @param array $rawData
+     * @param tx_rnbase_IModel                      $oModel
+     * @param string                                $tableName
+     * @param array                                 $rawData
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @param array $options
+     * @param array                                 $options
      *
      * @return tx_mksearch_interface_IndexerDocument|null
      */
@@ -170,7 +164,7 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
             $this
         );
 
-        if (!$news){
+        if (!$news) {
             $abort = true;
         }
 
@@ -212,14 +206,12 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
     }
 
     /**
-     * Add data of the News to the index
+     * Add data of the News to the index.
      *
-     * @param array $rawData
-     * @param \GeorgRinger\News\Domain\Model\News $news
+     * @param array                                 $rawData
+     * @param \GeorgRinger\News\Domain\Model\News   $news
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @param array $options
-     *
-     * @return void
+     * @param array                                 $options
      */
     // @codingStandardsIgnoreStart (interface/abstract/unittest mistake)
     protected function indexNews(
@@ -237,7 +229,7 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
 
         $content = trim(
             implode(
-                CRLF . CRLF,
+                CRLF.CRLF,
                 array(
                     $news->getTeaser(),
                     $news->getBodytext(),
@@ -300,12 +292,12 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
     }
 
     /**
-     * Add tag data of the News to the index
+     * Add tag data of the News to the index.
      *
-     * @param array $rawData
-     * @param unknown $news
+     * @param array                                 $rawData
+     * @param unknown                               $news
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @param array $options
+     * @param array                                 $options
      */
     // @codingStandardsIgnoreStart (interface/abstract/unittest mistake)
     protected function indexNewsTags(
@@ -323,12 +315,12 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
     }
 
     /**
-     * Add category data of the News to the index
+     * Add category data of the News to the index.
      *
-     * @param array $rawData
-     * @param unknown $news
+     * @param array                                 $rawData
+     * @param unknown                               $news
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @param array $options
+     * @param array                                 $options
      */
     // @codingStandardsIgnoreStart (interface/abstract/unittest mistake)
     protected function indexNewsCategories(
@@ -364,14 +356,14 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
     }
 
     /**
-     * Add tag data of the News to the index
+     * Add tag data of the News to the index.
      *
-     * @param \GeorgRinger\News\Domain\Model\News $news
+     * @param \GeorgRinger\News\Domain\Model\News   $news
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @return void
      */
     // @codingStandardsIgnoreStart (interface/abstract/unittest mistake)
-    protected function indexRelatedLinks($news, tx_mksearch_interface_IndexerDocument $indexDoc) {
+    protected function indexRelatedLinks($news, tx_mksearch_interface_IndexerDocument $indexDoc)
+    {
         // @codingStandardsIgnoreEnd
         if ($relatedLinks = $news->getRelatedLinks()) {
             $linksData = [];
@@ -394,11 +386,11 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
     }
 
     /**
-     * Add category data of the News to the index
+     * Add category data of the News to the index.
      *
-     * @param \GeorgRinger\News\Domain\Model\News $news
+     * @param \GeorgRinger\News\Domain\Model\News   $news
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @param array $options
+     * @param array                                 $options
      */
     protected function indexNewsContentElements(
         /* \GeorgRinger\News\Domain\Model\News */ $news,
@@ -421,13 +413,13 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
             $ce[] = trim($ce[$contentElement->getUid()]);
         }
 
-        return implode(CRLF . CRLF, $ce);
+        return implode(CRLF.CRLF, $ce);
     }
 
     /**
-     * Index media data
+     * Index media data.
      *
-     * @param \GeorgRinger\News\Domain\Model\News $news
+     * @param \GeorgRinger\News\Domain\Model\News   $news
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
      */
     public function indexNewsMedia(
@@ -464,7 +456,8 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
     }
 
     /**
-     * The index Service
+     * The index Service.
+     *
      * @return tx_mksearch_service_internal_Index
      */
     protected function getIntIndexService()
@@ -524,9 +517,7 @@ CONF;
 
 if ((
     defined('TYPO3_MODE') &&
-    $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']
-        ['ext/mksearch/indexer/class.tx_mksearch_indexer_TxNewsNews.php']
+    $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_TxNewsNews.php']
 )) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']
-        ['ext/mksearch/indexer/class.tx_mksearch_indexer_TxNewsNews.php'];
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_TxNewsNews.php'];
 }

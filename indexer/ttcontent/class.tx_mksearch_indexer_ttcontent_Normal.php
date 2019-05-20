@@ -1,7 +1,5 @@
 <?php
 /**
- * @package tx_mksearch
- * @subpackage tx_mksearch_indexer
  * @author Hannes Bochmann <dev@dmk-ebusiness.de>
  *
  *  Copyright notice
@@ -27,7 +25,7 @@
  */
 
 /**
- * benötigte Klassen einbinden
+ * benötigte Klassen einbinden.
  */
 tx_rnbase::load('tx_mksearch_indexer_Base');
 tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
@@ -41,7 +39,6 @@ tx_rnbase::load('tx_mksearch_util_Misc');
  */
 class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
 {
-
     /**
      * @var int
      */
@@ -57,15 +54,15 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
      */
     const IS_NOT_INDEXABLE = -1;
 
-
     /**
-     * Do the actual indexing for the given model
+     * Do the actual indexing for the given model.
      *
-     * @param tx_rnbase_IModel $model
-     * @param string $tableName
-     * @param array $rawData
+     * @param tx_rnbase_IModel                      $model
+     * @param string                                $tableName
+     * @param array                                 $rawData
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @param array $options
+     * @param array                                 $options
+     *
      * @return tx_mksearch_interface_IndexerDocument|null
      */
     public function indexData(
@@ -113,7 +110,7 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
         // Try to call hook for the current CType.
         // A hook MUST call both $indexDoc->setContent and
         // $indexDoc->setAbstract (respect $indexDoc->getMaxAbstractLength())!
-        $hookKey = 'indexer_core_TtContent_prepareData_CType_' . $rawData['CType'];
+        $hookKey = 'indexer_core_TtContent_prepareData_CType_'.$rawData['CType'];
         if (isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch'][$hookKey])
             && is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch'][$hookKey])
         ) {
@@ -122,19 +119,19 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
                 $hookKey,
                 array(
                     'rawData' => &$rawData,
-                    'options' => isset($options['CType.'][$rawData['CType'] . '.']) ? $options['CType'][$rawData['CType'] . '.'] : array(),
+                    'options' => isset($options['CType.'][$rawData['CType'].'.']) ? $options['CType'][$rawData['CType'].'.'] : array(),
                     'indexDoc' => &$indexDoc,
                 )
             );
         } else {
             // No hook found - we have to take care for content and abstract by ourselves...
-            $fields = isset($options['CType.'][$rawData['CType'] . '.']['indexedFields.']) ? $options['CType.'][$rawData['CType'] . '.']['indexedFields.'] : $options['CType.']['_default_.']['indexedFields.'];
+            $fields = isset($options['CType.'][$rawData['CType'].'.']['indexedFields.']) ? $options['CType.'][$rawData['CType'].'.']['indexedFields.'] : $options['CType.']['_default_.']['indexedFields.'];
 
             $content = $this->getContentByContentType($rawData, $options);
             // Dieser Content-String ist deprecated!
             if (is_array($fields)) {
                 foreach ($fields as $sDocKey => $sRecordKey) {
-                    $content .= $this->getContentByFieldAndCType($sRecordKey, $rawData) . ' ';
+                    $content .= $this->getContentByFieldAndCType($sRecordKey, $rawData).' ';
                 }
             }
 
@@ -160,7 +157,6 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
                 }
             }
 
-
             // kein inhalt zum indizieren
             if (empty($title) && empty($content)) {
                 $indexDoc->setDeleted(true);
@@ -169,7 +165,7 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
             }
 
             // Include $title into indexed content
-            $indexDoc->setContent($title . ' ' . $content);
+            $indexDoc->setContent($title.' '.$content);
             $indexDoc->setAbstract(empty($content) ? $title : $content, $indexDoc->getMaxAbstractLength());
         }
 
@@ -180,6 +176,7 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
      * returns the title for the element to index.
      *
      * @param array $options
+     *
      * @return string
      */
     protected function getTitle($options)
@@ -191,7 +188,7 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
         // but indexed for Solr. so use header_layout == 100 if the title
         // should neither be indexed nor displayed in ther FE. use header_layout == 101
         // if the title shouldn't be displayed in the FE but indexed
-        if ($model->getHeaderLayout() != 100) {
+        if (100 != $model->getHeaderLayout()) {
             // Decode HTML
             $title = trim(tx_mksearch_util_Misc::html2plain($model->getHeader()));
         }
@@ -207,7 +204,7 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
 
     /**
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @param array $options
+     * @param array                                 $options
      */
     protected function indexPageData(tx_mksearch_interface_IndexerDocument $indexDoc, array $options)
     {
@@ -242,10 +239,11 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
     }
 
     /**
-     * get the content by field and CType
+     * get the content by field and CType.
      *
      * @param mixed $field
      * @param array $rawData
+     *
      * @return string
      */
     protected function getContentByFieldAndCType($field, array $rawData)
@@ -255,7 +253,7 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
                 $tempContent = $rawData[$field];
                 // explode bodytext containing table cells separated
                 // by the character defined in flexform
-                if ($field == 'bodytext') {
+                if ('bodytext' == $field) {
                     // Get table parsing options from flexform
                     $flex = tx_rnbase_util_Arrays::xml2array($rawData['pi_flexform']);
                     if (is_array($flex)) {
@@ -301,15 +299,16 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
      * do something different like putting a record into the queue
      * if it's not the table that should be indexed
      *
-     * @param string $tableName
-     * @param array $rawData
+     * @param string                                $tableName
+     * @param array                                 $rawData
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @param array $options
+     * @param array                                 $options
+     *
      * @return bool
      */
     protected function stopIndexing($tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options)
     {
-        if ($tableName == 'pages') {
+        if ('pages' == $tableName) {
             $this->handlePagesChanged($rawData);
 
             return true;
@@ -318,12 +317,10 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
         return parent::stopIndexing($tableName, $rawData, $indexDoc, $options);
     }
 
-
     /**
-     * Adds all given models to the queue
+     * Adds all given models to the queue.
      *
      * @param array $aRawData
-     * @return void
      */
     protected function handlePagesChanged(array $aRawData)
     {
@@ -342,8 +339,8 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
                     // hidden/deleted datasets can be excluded as they are not indexed
                     // see isIndexableRecord()
                     $aOptions = array(
-                        'where' => 'tt_content.pid=' . $iPid,
-                        'enablefieldsoff' => true
+                        'where' => 'tt_content.pid='.$iPid,
+                        'enablefieldsoff' => true,
                     );
                     // as the pid list can be very long, we don't risk to create a sql
                     // statement that is too long. we are fine with a database access
@@ -360,10 +357,11 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
     }
 
     /**
-     * Prüft ob das Element anhand des CType inkludiert oder ignoriert werden soll
+     * Prüft ob das Element anhand des CType inkludiert oder ignoriert werden soll.
      *
      * @param array $sourceRecord
      * @param array $options
+     *
      * @return bool
      */
     protected function checkCTypes($sourceRecord, $options)
@@ -391,11 +389,12 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
     }
 
     /**
-     * Sets the index doc to deleted if neccessary
+     * Sets the index doc to deleted if neccessary.
      *
-     * @param tx_rnbase_IModel $model
+     * @param tx_rnbase_IModel                      $model
      * @param tx_mksearch_interface_IndexerDocument $oIndexDoc
-     * @param array $aOptions
+     * @param array                                 $aOptions
+     *
      * @return bool
      */
     protected function hasDocToBeDeleted(
@@ -408,15 +407,17 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
         // and parent::hasDocToBeDeleted() takes
         // care of all possible hidden parent pages
         $sysPage = tx_rnbase_util_TYPO3::getSysPage();
-        return (
+
+        return
             !($pageData = $this->getPageContent($model->record['pid']))
             || !in_array($pageData['doktype'], $this->getSupportedDokTypes($aOptions))
             || $this->isPageSetIncludeInSearchDisable($model, $aOptions)
-            || parent::hasDocToBeDeleted($model, $oIndexDoc, $aOptions));
+            || parent::hasDocToBeDeleted($model, $oIndexDoc, $aOptions);
     }
 
     /**
      * @param array $options
+     *
      * @return array
      */
     protected function getSupportedDokTypes(array $options)
@@ -432,33 +433,37 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
 
     /**
      *  Checks if the field "Include in Search" of current models page
-     *  is set to "Disable"
+     *  is set to "Disable".
      *
      * @param tx_rnbase_IModel $model
-     * @param array $options
-     * @return boolean
+     * @param array            $options
+     *
+     * @return bool
      */
     protected function isPageSetIncludeInSearchDisable($model, $options)
     {
         if ($this->shouldRespectIncludeInSearchDisable($options)) {
             $page = $this->getPageContent($model->record['pid']);
-            if (array_key_exists('no_search', $page) && $page['no_search'] == 1) {
+            if (array_key_exists('no_search', $page) && 1 == $page['no_search']) {
                 return true;
             }
         }
+
         return false;
     }
 
     /**
-     *  Checks if the indexer configuration "respectIncludeInSearchDisable" is set
+     *  Checks if the indexer configuration "respectIncludeInSearchDisable" is set.
      *
      * @param array $options
-     * @return boolean
+     *
+     * @return bool
      */
     protected function shouldRespectIncludeInSearchDisable($options)
     {
         $config = $this->getConfigValue('respectIncludeInSearchDisable', $options);
-        return ((is_array($config) && !empty($config) && reset($config) == 1));
+
+        return is_array($config) && !empty($config) && 1 == reset($config);
     }
 
     /**
@@ -469,29 +474,31 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
      *
      * @param array $sourceRecord
      * @param array $options
+     *
      * @return bool
      */
     protected function isIndexableRecord(array $sourceRecord, array $options)
     {
         if (!isset($sourceRecord['tx_mksearch_is_indexable']) ||
-            ($sourceRecord['tx_mksearch_is_indexable'] == self::USE_INDEXER_CONFIGURATION)
+            (self::USE_INDEXER_CONFIGURATION == $sourceRecord['tx_mksearch_is_indexable'])
         ) {
             $isIndexablePage =
                 $this->isOnIndexablePage($sourceRecord, $options) &&
                 $this->checkCTypes($sourceRecord, $options) &&
                 $this->isIndexableColumn($sourceRecord, $options);
         } else {
-            $isIndexablePage = ($sourceRecord['tx_mksearch_is_indexable'] == self::IS_INDEXABLE);
+            $isIndexablePage = (self::IS_INDEXABLE == $sourceRecord['tx_mksearch_is_indexable']);
         }
 
         return $isIndexablePage;
     }
 
     /**
-     * Prüft ob das Element anhand der Spalte inkludiert oder ausgeschlossen werden soll
+     * Prüft ob das Element anhand der Spalte inkludiert oder ausgeschlossen werden soll.
      *
      * @param array $sourceRecord
      * @param array $options
+     *
      * @return bool
      */
     protected function isIndexableColumn($sourceRecord, $options)
@@ -502,15 +509,17 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
         if (is_array($columns) && count($columns)) {
             $isIndexableColumn = in_array($sourceRecord['colPos'], $columns);
         }
+
         return $isIndexableColumn;
     }
 
     /**
-     * wir brauchen auch noch die enable columns der page
+     * wir brauchen auch noch die enable columns der page.
      *
-     * @param tx_rnbase_IModel $model
-     * @param string $tableName
+     * @param tx_rnbase_IModel                      $model
+     * @param string                                $tableName
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
+     *
      * @return tx_mksearch_interface_IndexerDocument
      */
     protected function indexEnableColumns(
@@ -529,7 +538,7 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
     }
 
     /**
-     * Return content type identification
+     * Return content type identification.
      *
      * @return array
      */
@@ -539,7 +548,7 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
     }
 
     /**
-     * Return the default Typoscript configuration for this indexer
+     * Return the default Typoscript configuration for this indexer.
      *
      * @return string
      */
@@ -549,7 +558,8 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
+     *
      * @see tx_mksearch_indexer_Base::getGroupFieldValue()
      */
     protected function getGroupFieldValue(
@@ -563,5 +573,5 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/ttcontent/class.tx_mksearch_indexer_ttcontent_Normal.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/ttcontent/class.tx_mksearch_indexer_ttcontent_Normal.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/ttcontent/class.tx_mksearch_indexer_ttcontent_Normal.php'];
 }

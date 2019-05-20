@@ -22,15 +22,14 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-
-
 /**
- * Show status of search cores
+ * Show status of search cores.
  */
 class tx_mksearch_mod1_util_IndexStatusHandler
 {
     /**
-     * Returns an instance
+     * Returns an instance.
+     *
      * @return tx_mksearch_mod1_util_IndexStatusHandler
      */
     public static function getInstance()
@@ -40,8 +39,10 @@ class tx_mksearch_mod1_util_IndexStatusHandler
 
     /**
      * Enter description here ...
-     * @param   tx_mksearch_model_internal_Index    $index
-     * @return  string
+     *
+     * @param tx_mksearch_model_internal_Index $index
+     *
+     * @return string
      */
     public function handleRequest4Index(tx_mksearch_model_internal_Index $index)
     {
@@ -54,17 +55,18 @@ class tx_mksearch_mod1_util_IndexStatusHandler
             $color = 'red';
             $msg = 'Exception occured: '.$e->getMessage();
         }
-        $ret  = '';
+        $ret = '';
         $ret .= '<a href="#hint" class="mktooltip">';
         $ret .= '<span style="width:20px; background-color:'.$color.'">&nbsp;&nbsp;&nbsp;</span>&nbsp;';
-        $ret .= '<strong>'. $index->getTitle() . '</strong> - '. $index->getCredentialString().'<br />';
+        $ret .= '<strong>'.$index->getTitle().'</strong> - '.$index->getCredentialString().'<br />';
         $ret .= '<span class="info">'.$msg.'</span>';
         $ret .= '</a>';
 
         return $ret;
     }
+
     /**
-     * Handle request
+     * Handle request.
      */
     public function handleRequest(array $options = array())
     {
@@ -88,5 +90,5 @@ class tx_mksearch_mod1_util_IndexStatusHandler
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/util/class.tx_mksearch_mod1_util_IndexStatusHandler.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/util/class.tx_mksearch_mod1_util_IndexStatusHandler.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/util/class.tx_mksearch_mod1_util_IndexStatusHandler.php'];
 }

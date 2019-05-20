@@ -1,4 +1,5 @@
 <?php
+
 namespace DMK\Mksearch\ViewHelpers\Format;
 
 /*                                                                        *
@@ -13,7 +14,7 @@ namespace DMK\Mksearch\ViewHelpers\Format;
  * TABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General      *
  * Public License for more details.                                       *
  *                                                                        */
-/**
+/*
  * DMK\Mksearch\ViewHelpers\Format$CropViewHelper
  *
  * nähere Infos in Configuration/XClasses.php
@@ -28,11 +29,8 @@ namespace DMK\Mksearch\ViewHelpers\Format;
 if (\tx_rnbase_util_TYPO3::isTYPO70OrHigher()) {
     class CropViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Format\CropViewHelper
     {
-
         /**
-         * nähere Infos in Configuration/XClasses.php
-         *
-         * @return void
+         * nähere Infos in Configuration/XClasses.php.
          */
         protected static function simulateFrontendEnvironment()
         {
@@ -42,7 +40,6 @@ if (\tx_rnbase_util_TYPO3::isTYPO70OrHigher()) {
         }
 
         /**
-         * @return void
          * @see simulateFrontendEnvironment()
          */
         protected static function resetFrontendEnvironment()
@@ -57,11 +54,8 @@ if (\tx_rnbase_util_TYPO3::isTYPO70OrHigher()) {
     \tx_rnbase::load('tx_mksearch_service_internal_Index');
     class CropViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Format\CropViewHelper
     {
-
         /**
-         * nähere Infos in Configuration/XClasses.php
-         *
-         * @return void
+         * nähere Infos in Configuration/XClasses.php.
          */
         protected function simulateFrontendEnvironment()
         {
@@ -71,7 +65,6 @@ if (\tx_rnbase_util_TYPO3::isTYPO70OrHigher()) {
         }
 
         /**
-         * @return void
          * @see simulateFrontendEnvironment()
          */
         protected function resetFrontendEnvironment()

@@ -25,10 +25,8 @@
 tx_rnbase::load('tx_rnbase_action_BaseIOC');
 
 /**
- * Abstract search action
+ * Abstract search action.
  *
- * @package TYPO3
- * @subpackage tx_mksearch
  * @author Michael Wagner
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
@@ -36,28 +34,29 @@ tx_rnbase::load('tx_rnbase_action_BaseIOC');
 abstract class tx_mksearch_action_AbstractSearch extends tx_rnbase_action_BaseIOC
 {
     /**
-     * The current search index to use
+     * The current search index to use.
      *
      * @var tx_mksearch_service_internal_Index
      */
     private $searchIndex = null;
 
     /**
-     * Returns the model for the current used index
+     * Returns the model for the current used index.
      *
      * @param tx_rnbase_configurations $configurations
-     * @param string $confId
+     * @param string                   $confId
+     *
      * @throws Exception
      *
      * @return tx_mksearch_model_internal_Index
      */
     protected function getSearchIndex()
     {
-        if ($this->searchIndex == null) {
+        if (null == $this->searchIndex) {
             $configurations = $this->getConfigurations();
             $confId = $this->getConfId();
 
-            $indexUid = $configurations->get($confId. 'usedIndex');
+            $indexUid = $configurations->get($confId.'usedIndex');
             //let's see if we got a index to use via parameters
             if (empty($indexUid)) {
                 $indexUid = $configurations->getParameters()->get('usedIndex');
@@ -93,20 +92,20 @@ abstract class tx_mksearch_action_AbstractSearch extends tx_rnbase_action_BaseIO
         $value = $value ? substr($value, 0, 150) : '';
         $options = array();
         tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, 'softlink.options.');
-        $options['where'] = 'keyword=' . $GLOBALS['TYPO3_DB']->fullQuoteStr($value, 'tx_mksearch_keywords');
+        $options['where'] = 'keyword='.$GLOBALS['TYPO3_DB']->fullQuoteStr($value, 'tx_mksearch_keywords');
         $rows = tx_rnbase_util_DB::doSelect('link', 'tx_mksearch_keywords', $options);
 
-        if (count($rows) == 1) {
+        if (1 == count($rows)) {
             $link = $configurations->createLink(false);
             $link->destination($rows[0]['link']);
 
             // an own header name for the redirect can be useful if the redirect is done
             // during an ajax request. otherwise it's not possible to handle the redirect with
             // javascript as normal Location header is followed by the browser automatically.
-            if ($redirectHeaderName = $configurations->get($confId . 'softlink.redirectHeaderName')) {
+            if ($redirectHeaderName = $configurations->get($confId.'softlink.redirectHeaderName')) {
                 $utility = tx_rnbase_util_Typo3Classes::getHttpUtilityClass();
                 header($utility::HTTP_STATUS_303);
-                header($redirectHeaderName . ': ' . tx_rnbase_util_Network::locationHeaderUrl($link->makeUrl(false)));
+                header($redirectHeaderName.': '.tx_rnbase_util_Network::locationHeaderUrl($link->makeUrl(false)));
             } else {
                 $link->redirect();
             }
@@ -114,7 +113,7 @@ abstract class tx_mksearch_action_AbstractSearch extends tx_rnbase_action_BaseIO
     }
 
     /**
-     * Creates a new Filter
+     * Creates a new Filter.
      *
      * @param string $confId
      *
@@ -122,7 +121,7 @@ abstract class tx_mksearch_action_AbstractSearch extends tx_rnbase_action_BaseIO
      */
     protected function createFilter($confId = null)
     {
-        $confId = $confId ?: $this->getConfId() . 'filter.';
+        $confId = $confId ?: $this->getConfId().'filter.';
 
         $filter = tx_rnbase_filter_BaseFilter::createFilter(
             $this->getParameters(),
@@ -137,5 +136,4 @@ abstract class tx_mksearch_action_AbstractSearch extends tx_rnbase_action_BaseIO
 
         return $filter;
     }
-
 }

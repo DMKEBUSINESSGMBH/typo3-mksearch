@@ -26,9 +26,8 @@ tx_rnbase::load('tx_rnbase_util_ListBuilderInfo');
 
 class tx_mksearch_filter_SearchByReferer extends tx_rnbase_filter_BaseFilter implements ListBuilderInfo
 {
-
     /**
-     * Initialize filter
+     * Initialize filter.
      *
      * @param array $fields
      * @param array $options
@@ -43,13 +42,14 @@ class tx_mksearch_filter_SearchByReferer extends tx_rnbase_filter_BaseFilter imp
     }
 
     /**
-     * Filter for search form
+     * Filter for search form.
      *
-     * @param array $fields
-     * @param array $options
-     * @param tx_rnbase_parameters $parameters
+     * @param array                    $fields
+     * @param array                    $options
+     * @param tx_rnbase_parameters     $parameters
      * @param tx_rnbase_configurations $configurations
-     * @param string $confId
+     * @param string                   $confId
+     *
      * @return bool Should subsequent query be executed at all?
      */
     protected function initFilter(&$fields, &$options, &$parameters, &$configurations, $confId)
@@ -79,7 +79,7 @@ class tx_mksearch_filter_SearchByReferer extends tx_rnbase_filter_BaseFilter imp
                                 $v['searchTermDelimiterRegEx'] = '/\++/';
                             }
                             $terms = preg_split($v['searchTermDelimiterRegEx'], $matches[1]);
-                            $sign = (isset($v['searchTermOperator']) and $v['searchTermOperator'] == 'and') ? true : null;
+                            $sign = (isset($v['searchTermOperator']) and 'and' == $v['searchTermOperator']) ? true : null;
                             // Push search terms into search configuration
                             foreach ($terms as $t) {
                                 $fields['__default__'][] = array('term' => $t, 'sign' => $sign);
@@ -97,10 +97,11 @@ class tx_mksearch_filter_SearchByReferer extends tx_rnbase_filter_BaseFilter imp
 
     /**
      * Get a message string for empty list. This is an language string. The key is
-     * taken from ts-config: [item].listinfo.llkeyEmpty
+     * taken from ts-config: [item].listinfo.llkeyEmpty.
      *
-     * @param array_object $viewData
+     * @param array_object             $viewData
      * @param tx_rnbase_configurations $configurations
+     *
      * @return string
      */
     public function getEmptyListMessage($confId, &$viewData, &$configurations)
@@ -118,5 +119,5 @@ class tx_mksearch_filter_SearchByReferer extends tx_rnbase_filter_BaseFilter imp
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/filter/class.tx_mksearch_filter_SearchByReferer.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/filter/class.tx_mksearch_filter_SearchByReferer.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/filter/class.tx_mksearch_filter_SearchByReferer.php'];
 }

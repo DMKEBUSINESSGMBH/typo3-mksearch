@@ -22,23 +22,22 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-
 tx_rnbase::load('tx_rnbase_util_SimpleMarker');
 
 /**
- * Renders a search result
+ * Renders a search result.
  */
 class tx_mksearch_marker_Search extends tx_rnbase_util_SimpleMarker
 {
-
     /**
-     * @param string $template HTML template
+     * @param string                      $template  HTML template
      * @param tx_mksearch_model_SearchHit $item
-     * @param tx_rnbase_util_FormatUtil $formatter Formatter to use
-     * @param string $confId Path in TS config of the item, e. g. 'search.hit.'
-     * @param string $marker name of marker, z.B. CLUB
-     *        Von diesem String hängen die entsprechenden weiteren Marker ab: ###CLUB_NAME###, ###COACH_ADDRESS_WEBSITE###
-     * @return String das geparste Template
+     * @param tx_rnbase_util_FormatUtil   $formatter Formatter to use
+     * @param string                      $confId    Path in TS config of the item, e. g. 'search.hit.'
+     * @param string                      $marker    name of marker, z.B. CLUB
+     *                                               Von diesem String hängen die entsprechenden weiteren Marker ab: ###CLUB_NAME###, ###COACH_ADDRESS_WEBSITE###
+     *
+     * @return string das geparste Template
      */
     public function parseTemplate($template, &$item, &$formatter, $confId, $marker = 'SEARCHRESULT')
     {
@@ -62,16 +61,16 @@ class tx_mksearch_marker_Search extends tx_rnbase_util_SimpleMarker
         $this->prepareSubparts($wrappedSubpartArray, $subpartArray, $template, $item, $formatter, $confId, $marker);
 
         $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
+
         return $out;
     }
 
     /**
-     * @param string $template HTML template
+     * @param string                      $template  HTML template
      * @param tx_mksearch_model_SearchHit $item
-     * @param tx_rnbase_util_FormatUtil $formatter Formatter to use
-     * @param string $confId Path in TS config of the item, e. g. 'search.hit.'
-     * @param string $marker name of marker
-     * @return void
+     * @param tx_rnbase_util_FormatUtil   $formatter Formatter to use
+     * @param string                      $confId    Path in TS config of the item, e. g. 'search.hit.'
+     * @param string                      $marker    name of marker
      */
     protected function prepareHit($template, $item, $formatter, $confId, $marker)
     {
@@ -100,7 +99,7 @@ class tx_mksearch_marker_Search extends tx_rnbase_util_SimpleMarker
                 if ($removeEmptyValues) {
                     $value = tx_mksearch_util_Misc::removeEmptyValues($value);
                 }
-                if ($configurations->getBool($confId . 'multiValuedGlue.sort')) {
+                if ($configurations->getBool($confId.'multiValuedGlue.sort')) {
                     sort($value);
                 }
                 $item->setProperty($field, implode($glue, $value));
@@ -108,20 +107,19 @@ class tx_mksearch_marker_Search extends tx_rnbase_util_SimpleMarker
         }
     }
 
-
     /**
      * Diese Methode ersetzt im HTML-Template der Marker ###..._EXTRAINFO###. Es wird dafür nach einem konfigurierten
      * Marker für den Typ des Logeintrages gesucht. Diesem wird dann ein passendes HTML-Template übergeben.
      *
-     * @param string $template
+     * @param string                    $template
      * @param tx_mksearch_model_SolrHit $item
      * @param tx_rnbase_util_FormatUtil $formatter
-     * @param string $confId
-     * @param string $markerPrefix
+     * @param string                    $confId
+     * @param string                    $markerPrefix
      */
     protected function addInfo($template, $item, $formatter, $confId, $markerPrefix)
     {
-        $typeConfId = $confId . $item->getProperty('extKey').'.'.$item->getProperty('contentType').'.';
+        $typeConfId = $confId.$item->getProperty('extKey').'.'.$item->getProperty('contentType').'.';
         $markerClass = $formatter->getConfigurations()->get($typeConfId.'markerClass');
         if ($markerClass) {
             // Jetzt das Template laden
@@ -138,11 +136,9 @@ class tx_mksearch_marker_Search extends tx_rnbase_util_SimpleMarker
                 // Marker verwendet, fällt man dadurch immer auf den Default zurück. Bei Wechsel des Markers
                 // muss also das Template angepasst werden...
                 $extraInfo = $marker->parseTemplate($typeTemplate, $item, $formatter, $typeConfId.'hit.');
-            }
-            catch (\Exception $e) {
+            } catch (\Exception $e) {
                 $extraInfo = sprintf('<!-- NO FILE OR SUBPART FOUND: %s -->', $e->getMessage());
             }
-
         } else {
             $extraInfo = '<!-- NO MARKER-CLASS FOUND: '.$typeConfId.'markerClass'.' -->';
         }
@@ -157,11 +153,12 @@ class tx_mksearch_marker_Search extends tx_rnbase_util_SimpleMarker
     /**
      * Liefert alle Felder, welche im Template zwingend erforderlich sind.
      *
-     * @param string $template HTML template
-     * @param tx_mksearch_model_SearchHit $item search hit
-     * @param tx_rnbase_util_FormatUtil $formatter
-     * @param string $confId path of typoscript configuration
-     * @param string $marker name of marker
+     * @param string                      $template  HTML template
+     * @param tx_mksearch_model_SearchHit $item      search hit
+     * @param tx_rnbase_util_FormatUtil   $formatter
+     * @param string                      $confId    path of typoscript configuration
+     * @param string                      $marker    name of marker
+     *
      * @return array
      */
     protected function getInitFields($template, $item, $formatter, $confId, $marker)

@@ -1,7 +1,5 @@
 <?php
 /**
- * @package tx_mksearch
- * @subpackage tx_mksearch_filter
  * @author Hannes Bochmann
  *
  *  Copyright notice
@@ -27,39 +25,34 @@
  */
 
 /**
- * benötigte Klassen einbinden
+ * benötigte Klassen einbinden.
  */
-
-
 tx_rnbase::load('tx_mksearch_filter_SolrBase');
 tx_rnbase::load('tx_mksearch_util_Misc');
 
 /**
- * Filter für autocomplete Anfragen
+ * Filter für autocomplete Anfragen.
  *
  * @author hbochmann
- * @package tx_mksearch
- * @subpackage tx_mksearch_filter
  * @TODO Unit Test ob das hinzufügen der FE Gruppen funktioniert.
  */
 class tx_mksearch_filter_SolrAutocomplete extends tx_mksearch_filter_SolrBase
 {
-
     /**
      * Fügt den Suchstring zu dem Filter hinzu.
      *
-     * @param   array                       $fields
-     * @param   array                       $options
-     * @param   tx_rnbase_IParameters       $parameters
-     * @param   tx_rnbase_configurations    $configurations
-     * @param   string                      $confId
+     * @param array                    $fields
+     * @param array                    $options
+     * @param tx_rnbase_IParameters    $parameters
+     * @param tx_rnbase_configurations $configurations
+     * @param string                   $confId
      */
     protected function handleTerm(&$fields, &$parameters, &$configurations, $confId)
     {
         $term = $parameters->get('term');
         // lowercase term? default is true!
-        if ($configurations->get($confId . 'autocomplete.termToLower') === null
-            || $configurations->getBool($confId . 'autocomplete.termToLower')
+        if (null === $configurations->get($confId.'autocomplete.termToLower')
+            || $configurations->getBool($confId.'autocomplete.termToLower')
         ) {
             $term = mb_strtolower($term, 'UTF-8');
         }
@@ -69,5 +62,5 @@ class tx_mksearch_filter_SolrAutocomplete extends tx_mksearch_filter_SolrBase
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/filter/class.tx_mksearch_filter_SolrAutocomplete.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/filter/class.tx_mksearch_filter_SolrAutocomplete.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/filter/class.tx_mksearch_filter_SolrAutocomplete.php'];
 }

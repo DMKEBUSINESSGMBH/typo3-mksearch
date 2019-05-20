@@ -26,34 +26,31 @@
  * Interface for DataProvider. A data provider is responsible to lookup data to be indexed.
  *
  * @author  René Nitzsche <dev@dmk-ebusiness.de>
- * @package     TYPO3
- * @subpackage  tx_mksearch
  */
 interface tx_mksearch_interface_DataProvider
 {
     /**
-     * Prepare indexer
+     * Prepare indexer.
      *
      * This method prepares things for indexing,
      * i. e. evaluate options, prepare db query etc.
      * It must be called between instatiating the class
      * and calling nextItem() for the first time.
      *
-     * @param array $options    Indexer options
-     * @param array $data       Tablename <-> uids matrix of records to be indexed (array('tab1' => array(2,5,6), 'tab2' => array(4,5,8))
-     * @return void
+     * @param array $options Indexer options
+     * @param array $data    Tablename <-> uids matrix of records to be indexed (array('tab1' => array(2,5,6), 'tab2' => array(4,5,8))
      */
     public function prepareData(array $options = array(), array $data = array());
-    
+
     /**
-     * Return next record which is to be indexed
+     * Return next record which is to be indexed.
      *
      * @return array
      */
     public function getNextItem();
-    
+
     /**
-     * Quasi-destructor
+     * Quasi-destructor.
      *
      * Clean up things, e.g. free db resources,
      * and return a list of uids of records which are
@@ -72,5 +69,5 @@ interface tx_mksearch_interface_DataProvider
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/interface/class.tx_mksearch_interface_Indexer.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/interface/class.tx_mksearch_interface_Indexer.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/interface/class.tx_mksearch_interface_Indexer.php'];
 }

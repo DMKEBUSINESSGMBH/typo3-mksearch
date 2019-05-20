@@ -22,30 +22,26 @@
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-
 /**
  * XCLASS des RelationHandlers,
  * um diesen für noch verwendeten die DB-Tests zu deaktivieren.
  *
- * @package tx_mksearch
- * @subpackage tx_mksearch_tests
  * @author Michael Wagner <michael.wagner@dmk-ebusiness.de>
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
 class tx_mksearch_tests_fixtures_typo3_CoreDbRelationHandler extends TYPO3\CMS\Core\Database\RelationHandler
 {
-
     /**
      * Initialization of the class.
      *
-     * @param string $itemlist List of group/select items
-     * @param string $tablelist Comma list of tables, first table takes priority if no table is set for an entry in the list.
-     * @param string $MMtable Name of a MM table.
-     * @param int $MMuid Local UID for MM lookup
+     * @param string $itemlist     List of group/select items
+     * @param string $tablelist    comma list of tables, first table takes priority if no table is set for an entry in the list
+     * @param string $MMtable      name of a MM table
+     * @param int    $MMuid        Local UID for MM lookup
      * @param string $currentTable Current table name
-     * @param int $conf TCA configuration for current field
-     * @return void
+     * @param int    $conf         TCA configuration for current field
+     *
      * @todo Define visibility
      */
     public function start($itemlist, $tablelist, $MMtable = '', $MMuid = 0, $currentTable = '', $conf = array())
@@ -55,5 +51,5 @@ class tx_mksearch_tests_fixtures_typo3_CoreDbRelationHandler extends TYPO3\CMS\C
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/fixtures/typo3/class.tx_mksearch_tests_fixtures_typo3_CoreDbRelationHandler.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/fixtures/typo3/class.tx_mksearch_tests_fixtures_typo3_CoreDbRelationHandler.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/fixtures/typo3/class.tx_mksearch_tests_fixtures_typo3_CoreDbRelationHandler.php'];
 }

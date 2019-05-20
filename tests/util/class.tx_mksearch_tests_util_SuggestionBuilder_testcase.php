@@ -26,9 +26,6 @@ tx_rnbase::load('tx_mksearch_tests_Testcase');
 tx_rnbase::load('tx_mksearch_util_SuggestionBuilder');
 
 /**
- *
- * @package tx_mksearch
- * @subpackage tx_mksearch_tests
  * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
  * @author Michael Wagner <michael.wagner@dmk-ebusiness.de>
  * @license http://www.gnu.org/licenses/lgpl.html
@@ -53,7 +50,7 @@ class tx_mksearch_tests_util_SuggestionBuilder_testcase extends tx_mksearch_test
         $suggestionData->searchWord->endOffset = 3;
         $suggestionData->searchWord->suggestion = array(
             0 => searchWordFoundOnce,
-            1 => searchWordFoundTwice
+            1 => searchWordFoundTwice,
         );
         $suggestionData->collation = 'test collation should be ignored.';
 
@@ -71,5 +68,5 @@ class tx_mksearch_tests_util_SuggestionBuilder_testcase extends tx_mksearch_test
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/util/class.tx_mksearch_tests_util_Misc_testcase.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/util/class.tx_mksearch_tests_util_Misc_testcase.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/util/class.tx_mksearch_tests_util_Misc_testcase.php'];
 }

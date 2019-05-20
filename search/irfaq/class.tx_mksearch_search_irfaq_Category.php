@@ -1,47 +1,17 @@
 <?php
-/**
- * @package tx_mksearch
- * @subpackage tx_mksearch_search_irfaq
- *
- *  Copyright notice
- *
- *  (c) 2011 DMK E-Business GmbH <dev@dmk-ebusiness.de>
- *  All rights reserved
- *
- *  This script is part of the TYPO3 project. The TYPO3 project is
- *  free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  The GNU General Public License can be found at
- *  http://www.gnu.org/copyleft/gpl.html.
- *
- *  This script is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  This copyright notice MUST APPEAR in all copies of the script!
- */
 
 /**
- * benötigte Klassen einbinden
+ * benötigte Klassen einbinden.
  */
-
 tx_rnbase::load('tx_rnbase_util_SearchBase');
 
 /**
- *
- * @package tx_mksearch
- * @subpackage tx_mksearch_search_irfaq
  * @author Hannes Bochmann
  */
 class tx_mksearch_search_irfaq_Category extends tx_rnbase_util_SearchBase
 {
-
     /**
-     * getTableMappings()
+     * getTableMappings().
      */
     protected function getTableMappings()
     {
@@ -61,7 +31,7 @@ class tx_mksearch_search_irfaq_Category extends tx_rnbase_util_SearchBase
     }
 
     /**
-     * useAlias()
+     * useAlias().
      */
     protected function useAlias()
     {
@@ -69,7 +39,7 @@ class tx_mksearch_search_irfaq_Category extends tx_rnbase_util_SearchBase
     }
 
     /**
-     * getBaseTableAlias()
+     * getBaseTableAlias().
      */
     protected function getBaseTableAlias()
     {
@@ -77,7 +47,7 @@ class tx_mksearch_search_irfaq_Category extends tx_rnbase_util_SearchBase
     }
 
     /**
-     * getBaseTable()
+     * getBaseTable().
      */
     protected function getBaseTable()
     {
@@ -85,7 +55,7 @@ class tx_mksearch_search_irfaq_Category extends tx_rnbase_util_SearchBase
     }
 
     /**
-     * getWrapperClass()
+     * getWrapperClass().
      */
     public function getWrapperClass()
     {
@@ -93,9 +63,10 @@ class tx_mksearch_search_irfaq_Category extends tx_rnbase_util_SearchBase
     }
 
     /**
-     * Liefert alle JOINS zurück
+     * Liefert alle JOINS zurück.
      *
      * @param array $tableAliases
+     *
      * @return string
      */
     protected function getJoins($tableAliases)
@@ -119,7 +90,6 @@ class tx_mksearch_search_irfaq_Category extends tx_rnbase_util_SearchBase
     }
 }
 
-
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/search/irfaq/class.tx_mksearch_search_irfaq_Expert.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/search/irfaq/class.tx_mksearch_search_irfaq_Expert.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/search/irfaq/class.tx_mksearch_search_irfaq_Expert.php'];
 }

@@ -22,15 +22,13 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-
 tx_rnbase::load('tx_mksearch_util_SearchBuilder');
 
 /**
- * userFunc Methoden
+ * userFunc Methoden.
  */
 class tx_mksearch_util_UserFunc
 {
-
     /**
      * @see     tx_mksearch_util_SearchBuilder::searchSolrOptions
      */
@@ -48,7 +46,7 @@ class tx_mksearch_util_UserFunc
             $combination = $conf['combination'];
         }
         // Bei free kann die volle Dismax-Syntax durch den User verwendet werden
-        if ($combination == MKSEARCH_OP_FREE) {
+        if (MKSEARCH_OP_FREE == $combination) {
             return $term;
         }
 
@@ -60,7 +58,8 @@ class tx_mksearch_util_UserFunc
     }
 
     /**
-     * vorerst machen wir nichts anders als bei SOLR
+     * vorerst machen wir nichts anders als bei SOLR.
+     *
      * @see     tx_mksearch_util_SearchBuilder::searchSolrOptions
      */
     public static function searchLuceneOptions($term = '', $conf = array())
@@ -70,5 +69,5 @@ class tx_mksearch_util_UserFunc
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_UserFunc.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_UserFunc.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_UserFunc.php'];
 }

@@ -1,7 +1,5 @@
 <?php
 /**
- * @package tx_mksearch
- * @subpackage tx_mksearch_tests
  * @author Hannes Bochmann
  *
  *  Copyright notice
@@ -25,14 +23,10 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
-
 tx_rnbase::load('tx_mksearch_tests_Testcase');
 tx_rnbase::load('tx_mksearch_marker_Facet');
 
 /**
- *
- * @package tx_mksearch
- * @subpackage tx_mksearch_tests
  * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
  * @author Michael Wagner <michael.wagner@dmk-ebusiness.de>
  * @license http://www.gnu.org/licenses/lgpl.html
@@ -40,9 +34,9 @@ tx_rnbase::load('tx_mksearch_marker_Facet');
  */
 class tx_mksearch_tests_marker_Facet_testcase extends tx_mksearch_tests_Testcase
 {
-
     /**
      * Enter description here ...
+     *
      * @var tx_mksearch_marker_Facet
      */
     protected $oMarker;
@@ -60,7 +54,7 @@ class tx_mksearch_tests_marker_Facet_testcase extends tx_mksearch_tests_Testcase
     }
 
     /**
-     * prüfen ob die richtigen fields und options zurück gegeben werden
+     * prüfen ob die richtigen fields und options zurück gegeben werden.
      */
     public function testPrepareLinks()
     {
@@ -88,7 +82,7 @@ class tx_mksearch_tests_marker_Facet_testcase extends tx_mksearch_tests_Testcase
     }
 
     /**
-     * prüfen ob die richtigen fields und options zurück gegeben werden
+     * prüfen ob die richtigen fields und options zurück gegeben werden.
      */
     public function testPrepareLinksWithExcludeFieldName()
     {
@@ -116,7 +110,7 @@ class tx_mksearch_tests_marker_Facet_testcase extends tx_mksearch_tests_Testcase
     }
 
     /**
-     * prüfen ob die paramater url enkodiert werden
+     * prüfen ob die paramater url enkodiert werden.
      */
     public function testPrepareLinksWithFacetIdContainingSeveralWordsAndUmlauts()
     {
@@ -145,5 +139,5 @@ class tx_mksearch_tests_marker_Facet_testcase extends tx_mksearch_tests_Testcase
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/class.tx_mksearch_tests_model_SolrHit_testcase.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/class.tx_mksearch_tests_model_SolrHit_testcase.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/class.tx_mksearch_tests_model_SolrHit_testcase.php'];
 }

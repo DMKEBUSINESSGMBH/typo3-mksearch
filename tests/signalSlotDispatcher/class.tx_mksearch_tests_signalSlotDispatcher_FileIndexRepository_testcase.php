@@ -22,23 +22,18 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-
 tx_rnbase::load('tx_mksearch_tests_Testcase');
 
 /**
- *
- * @package TYPO3
- * @subpackage mksearch
  * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
 class tx_mksearch_tests_signalSlotDispatcher_FileIndexRepository_testcase extends tx_mksearch_tests_Testcase
 {
-
-
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
+     *
      * @see tx_mksearch_tests_Testcase::setUp()
      */
     protected function setUp()
@@ -122,9 +117,9 @@ class tx_mksearch_tests_signalSlotDispatcher_FileIndexRepository_testcase extend
         $slotsArray = $slots->getValue($signalSlotDispatcher);
 
         $singalSlotDispatcherCorrectConfigured = false;
-        foreach ($slotsArray['TYPO3\CMS\Core\Resource\Index\FileIndexRepository']['recordCreated'] as $signalSlotDispatcherConfiguration) {;
-            if (($signalSlotDispatcherConfiguration['class'] == 'tx_mksearch_signalSlotDispatcher_FileIndexRepsitory') &&
-                ($signalSlotDispatcherConfiguration['method'] == 'putFileIntoQueue')
+        foreach ($slotsArray['TYPO3\CMS\Core\Resource\Index\FileIndexRepository']['recordCreated'] as $signalSlotDispatcherConfiguration) {
+            if (('tx_mksearch_signalSlotDispatcher_FileIndexRepsitory' == $signalSlotDispatcherConfiguration['class']) &&
+                ('putFileIntoQueue' == $signalSlotDispatcherConfiguration['method'])
             ) {
                 $singalSlotDispatcherCorrectConfigured = true;
             }
@@ -151,9 +146,9 @@ class tx_mksearch_tests_signalSlotDispatcher_FileIndexRepository_testcase extend
         $slotsArray = $slots->getValue($signalSlotDispatcher);
 
         $singalSlotDispatcherCorrectConfigured = false;
-        foreach ($slotsArray['TYPO3\CMS\Core\Resource\Index\FileIndexRepository']['recordUpdated'] as $signalSlotDispatcherConfiguration) {;
-            if (($signalSlotDispatcherConfiguration['class'] == 'tx_mksearch_signalSlotDispatcher_FileIndexRepsitory') &&
-                ($signalSlotDispatcherConfiguration['method'] == 'putFileIntoQueue')
+        foreach ($slotsArray['TYPO3\CMS\Core\Resource\Index\FileIndexRepository']['recordUpdated'] as $signalSlotDispatcherConfiguration) {
+            if (('tx_mksearch_signalSlotDispatcher_FileIndexRepsitory' == $signalSlotDispatcherConfiguration['class']) &&
+                ('putFileIntoQueue' == $signalSlotDispatcherConfiguration['method'])
             ) {
                 $singalSlotDispatcherCorrectConfigured = true;
             }
@@ -180,9 +175,9 @@ class tx_mksearch_tests_signalSlotDispatcher_FileIndexRepository_testcase extend
         $slotsArray = $slots->getValue($signalSlotDispatcher);
 
         $singalSlotDispatcherCorrectConfigured = false;
-        foreach ($slotsArray['TYPO3\CMS\Core\Resource\Index\FileIndexRepository']['recordDeleted'] as $signalSlotDispatcherConfiguration) {;
-            if (($signalSlotDispatcherConfiguration['class'] == 'tx_mksearch_signalSlotDispatcher_FileIndexRepsitory') &&
-                ($signalSlotDispatcherConfiguration['method'] == 'putFileIntoQueue')
+        foreach ($slotsArray['TYPO3\CMS\Core\Resource\Index\FileIndexRepository']['recordDeleted'] as $signalSlotDispatcherConfiguration) {
+            if (('tx_mksearch_signalSlotDispatcher_FileIndexRepsitory' == $signalSlotDispatcherConfiguration['class']) &&
+                ('putFileIntoQueue' == $signalSlotDispatcherConfiguration['method'])
             ) {
                 $singalSlotDispatcherCorrectConfigured = true;
             }
@@ -193,6 +188,7 @@ class tx_mksearch_tests_signalSlotDispatcher_FileIndexRepository_testcase extend
 
     /**
      * @param tx_mksearch_service_internal_Index $internalIndexService
+     *
      * @return Ambigous <PHPUnit_Framework_MockObject_MockObject, tx_mksearch_signalSlotDispatcher_FileIndexRepsitory>
      */
     private function getDispatcherMock(

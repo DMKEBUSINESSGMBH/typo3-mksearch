@@ -1,7 +1,5 @@
 <?php
 /**
- * @package TYPO3
- * @subpackage tx_mksearch
  * @author Hannes Bochmann <dev@dmk-ebusiness.de>
  *
  *  Copyright notice
@@ -27,9 +25,8 @@
  */
 
 /**
- * benötigte Klassen einbinden
+ * benötigte Klassen einbinden.
  */
-
 tx_rnbase::load('tx_mksearch_filter_LuceneBase');
 tx_rnbase::load('tx_mksearch_tests_Testcase');
 
@@ -40,21 +37,18 @@ tx_rnbase::load('tx_mksearch_tests_Testcase');
 tx_rnbase::load('tx_mksearch_util_UserFunc');
 
 /**
- * @package TYPO3
- * @subpackage tx_mksearch
  * @author Hannes Bochmann <dev@dmk-ebusiness.de>
  */
 class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Testcase
 {
-
     /**
-     *
      * @var unknown
      */
     private $feGroupsBackup;
 
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
+     *
      * @see PHPUnit_Framework_TestCase::setUp()
      */
     protected function setUp()
@@ -72,7 +66,8 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
     }
 
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
+     *
      * @see PHPUnit_Framework_TestCase::tearDown()
      */
     protected function tearDown()
@@ -81,7 +76,6 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
         $GLOBALS['TSFE']->fe_user->groupData['uid'] = $this->feGroupsBackup;
 
         unset($_GET['mksearch']);
-
 
         if (isset($GLOBALS['TSFE']->id)) {
             unset($GLOBALS['TSFE']->id);
@@ -145,12 +139,12 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
     public function testGetModeValuesAvailable()
     {
         $configArray = array($this->confId => array(
-            'filter.' => array('availableModes' => 'newCheckedMode,newNotCheckedMode'))
+            'filter.' => array('availableModes' => 'newCheckedMode,newNotCheckedMode'), ),
         );
         $filter = $this->getFilter($configArray);
 
         self::assertEquals(
-            array('newCheckedMode','newNotCheckedMode'),
+            array('newCheckedMode', 'newNotCheckedMode'),
             $this->callInaccessibleMethod($filter, 'getModeValuesAvailable'),
             'return falsch'
         );
@@ -166,7 +160,7 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
         $parameters->init('mksearch');
         $formData = array();
         $configArray = array($this->confId => array(
-            'filter.' => array('availableModes' => 'newCheckedMode,newNotCheckedMode'))
+            'filter.' => array('availableModes' => 'newCheckedMode,newNotCheckedMode'), ),
         );
         $filter = $this->getFilter($configArray);
         $reflectionObject = new ReflectionObject($filter);
@@ -497,9 +491,9 @@ class tx_mksearch_tests_filter_LuceneBase_testcase extends tx_mksearch_tests_Tes
         $config = array($this->confId => array('filter.' => array(
             'sort.' => array(
                 'fields' => 'uid, title',
-                'link.' => array('noHash' => true)
+                'link.' => array('noHash' => true),
             ),
-            'config.' => array('template' => '')
+            'config.' => array('template' => ''),
         )));
 
         $filter = $this->getFilter($config);

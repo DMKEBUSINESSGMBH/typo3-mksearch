@@ -1,7 +1,5 @@
 <?php
 /**
- * @package tx_mksearch
- * @subpackage tx_mksearch_indexer
  * @author Hannes Bochmann
  *
  *  Copyright notice
@@ -27,9 +25,8 @@
  */
 
 /**
- * benötigte Klassen einbinden
+ * benötigte Klassen einbinden.
  */
-
 tx_rnbase::load('tx_mksearch_indexer_Base');
 tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
 tx_rnbase::load('tx_mksearch_util_Misc');
@@ -39,7 +36,6 @@ tx_rnbase::load('tx_mksearch_util_Misc');
  */
 class tx_mksearch_indexer_Page extends tx_mksearch_indexer_Base
 {
-
     /**
      * Return content type identification.
      * This identification is part of the indexed data
@@ -56,22 +52,24 @@ class tx_mksearch_indexer_Page extends tx_mksearch_indexer_Base
         return array('core', 'page');
     }
 
-/**
- * (non-PHPdoc)
- * @see tx_mksearch_interface_Indexer::prepareSearchData()
- */
+    /**
+     * (non-PHPdoc).
+     *
+     * @see tx_mksearch_interface_Indexer::prepareSearchData()
+     */
     public function prepareSearchData($tableName, $sourceRecord, tx_mksearch_interface_IndexerDocument $indexDoc, $options)
     {
         return parent::prepareSearchData($tableName, $sourceRecord, $indexDoc, $options);
     }
 
     /**
-     * check if we have a shortcut and index the target instead
+     * check if we have a shortcut and index the target instead.
+     *
      * @see tx_mksearch_indexer_Base::stopIndexing()
      */
     protected function stopIndexing($tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options)
     {
-        if ($tableName == 'pages') {
+        if ('pages' == $tableName) {
             // this our first entry point. so we fetch all subpages and put them into
             // the queue in case changes on this page have effects on subpages.
             $aPidList = $this->_getPidList($rawData['uid'], 999);
@@ -85,7 +83,7 @@ class tx_mksearch_indexer_Page extends tx_mksearch_indexer_Base
             }
 
             // Current page is a short cut? Follow up short-cutted page
-            if ($rawData['doktype'] == 4) {
+            if (4 == $rawData['doktype']) {
                 $oIndexSrv->addRecordToIndex('pages', $rawData['shortcut']);
 
                 return true;
@@ -139,6 +137,7 @@ class tx_mksearch_indexer_Page extends tx_mksearch_indexer_Base
 
     /**
      * @see tx_mksearch_indexer_Base::isIndexableRecord()
+     *
      * @todo Backendbenutzerbereiche nicht indizieren
      */
     protected function isIndexableRecord(array $sourceRecord, array $options)
@@ -151,11 +150,11 @@ class tx_mksearch_indexer_Page extends tx_mksearch_indexer_Base
     }
 
     /**
-     * Returns the model to be indexed
+     * Returns the model to be indexed.
      *
-     * @param array $rawData
+     * @param array  $rawData
      * @param string $tableName
-     * @param array $options
+     * @param array  $options
      *
      * @return tx_mksearch_model_irfaq_Question
      */
@@ -169,11 +168,13 @@ class tx_mksearch_indexer_Page extends tx_mksearch_indexer_Base
 
     /**
      * Get sql data necessary to grab data to be indexed from data base
-     * TODO: Check if parameter data is necessary for this indexer
+     * TODO: Check if parameter data is necessary for this indexer.
      *
      * @param array $options from service configuration
-     * @param array $data       Tablename <-> uids matrix of records to be indexed (array('tab1' => array(2,5,6), 'tab2' => array(4,5,8))
+     * @param array $data    Tablename <-> uids matrix of records to be indexed (array('tab1' => array(2,5,6), 'tab2' => array(4,5,8))
+     *
      * @return array
+     *
      * @see tx_mksearch_service_indexer_BaseDataBase::getSqlData()
      */
     protected function getSqlData(array $options, array $data = array())
@@ -185,7 +186,7 @@ class tx_mksearch_indexer_Page extends tx_mksearch_indexer_Base
         $fields = array_unique(array_merge($this->baseFields, $options['indexedFields']));
 
         $where =    // restrict page types to FE relevant ones
-                    'doktype <= 5' .
+                    'doktype <= 5'.
                     // Include / exclude restrictions
                     tx_mksearch_service_indexer_core_Config::getIncludeExcludeWhere(
                         isset($options['include']) ? $options['include'] : array(),
@@ -201,10 +202,10 @@ class tx_mksearch_indexer_Page extends tx_mksearch_indexer_Base
     }
 
     /**
-     * Get sql data for an optional follow-up data base query
+     * Get sql data for an optional follow-up data base query.
      *
      * @param array $options from service configuration
-     * @return null | array
+     *
      * @see self::getSqlData()
      */
     protected function getFollowUpSqlData(array $options)
@@ -237,6 +238,7 @@ class tx_mksearch_indexer_Page extends tx_mksearch_indexer_Base
      *
      * @return string
      */
+
     /**
      * Return the default Typoscript configuration for this indexer.
      *
@@ -308,5 +310,5 @@ CONF;
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_TtContent.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_TtContent.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_TtContent.php'];
 }

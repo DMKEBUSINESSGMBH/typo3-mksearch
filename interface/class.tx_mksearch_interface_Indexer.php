@@ -26,23 +26,21 @@
  * Interface for indexer in the "mksearch" extension.
  *
  * @author  René Nitzsche <dev@dmk-ebusiness.de>, Lars Heber
- * @package     TYPO3
- * @subpackage  tx_mksearch
  */
 interface tx_mksearch_interface_Indexer
 {
-
     /**
      * Prepare a searchable document from a source record.
      *
-     * @param string $tableName
-     * @param array $sourceRecord
+     * @param string                                $tableName
+     * @param array                                 $sourceRecord
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     *        Indexer document to be "filled",
-     *        instantiated based on self::getContentType()
-     * @param array $options
+     *                                                            Indexer document to be "filled",
+     *                                                            instantiated based on self::getContentType()
+     * @param array                                 $options
+     *
      * @return tx_mksearch_interface_IndexerDocument|null
-     *         return null if nothing should be indexed!
+     *                                                    return null if nothing should be indexed!
      */
     public function prepareSearchData(
         $tableName,
@@ -51,9 +49,8 @@ interface tx_mksearch_interface_Indexer
         $options
     );
 
-
     /**
-     * Return content type identification
+     * Return content type identification.
      *
      * This identification is part of the indexed data
      * and is used on later searches to identify the search results.
@@ -67,7 +64,7 @@ interface tx_mksearch_interface_Indexer
     public static function getContentType();
 
     /**
-     * Return the default Typoscript configuration for this indexer
+     * Return the default Typoscript configuration for this indexer.
      *
      * This config is not used for actual indexing but serves only as assistance
      * when actually configuring an indexer via Typo3 backend by creating
@@ -82,5 +79,5 @@ interface tx_mksearch_interface_Indexer
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/interface/class.tx_mksearch_interface_Indexer.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/interface/class.tx_mksearch_interface_Indexer.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/interface/class.tx_mksearch_interface_Indexer.php'];
 }

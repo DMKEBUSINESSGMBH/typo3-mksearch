@@ -1,7 +1,5 @@
 <?php
 /**
- * @package TYPO3
- * @subpackage tx_mksearch
  * @author Hannes Bochmann
  *
  *  Copyright notice
@@ -27,22 +25,18 @@
  */
 
 /**
- * benötigte Klassen einbinden
+ * benötigte Klassen einbinden.
  */
-
 tx_rnbase::load('tx_mksearch_indexer_Base');
 tx_rnbase::load('tx_mksearch_util_Misc');
 
 /**
- * @package TYPO3
- * @subpackage tx_mksearch
  * @author Hannes Bochmann
  *
  * @todo Bilder indizieren; alles übrige wie Organisator indizieren
  */
 class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base
 {
-
     /**
      * Return content type identification.
      * This identification is part of the indexed data
@@ -60,7 +54,8 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base
     }
 
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
+     *
      * @see tx_mksearch_indexer_Base::createModel()
      */
     protected function createModel(array $rawData, $tableName = null, $options = array())
@@ -69,7 +64,8 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base
     }
 
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
+     *
      * @see tx_mksearch_indexer_Base::stopIndexing()
      */
     protected function stopIndexing(
@@ -78,9 +74,9 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base
         tx_mksearch_interface_IndexerDocument $indexDoc,
         $options
     ) {
-        if ($tableName == 'tx_cal_category') {
+        if ('tx_cal_category' == $tableName) {
             $events = $this->getEventsByCategoryUid($rawData['uid']);
-        } elseif ($tableName == 'tx_cal_calendar') {
+        } elseif ('tx_cal_calendar' == $tableName) {
             $events = $this->getEventsByCalendarUid($rawData['uid']);
         }
 
@@ -106,7 +102,7 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base
             array(
                 //da MM keine TCA hat
                 'enablefieldsoff' => true,
-                'where'    => 'uid_foreign = ' . intval($categoryUid)
+                'where' => 'uid_foreign = '.intval($categoryUid),
             )
         );
     }
@@ -121,7 +117,7 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base
             'tx_cal_event',
             array(
                 'enablefieldsfe' => true,
-                'where'    => 'calendar_id = ' . intval($calendarUid)
+                'where' => 'calendar_id = '.intval($calendarUid),
             )
         );
     }
@@ -137,7 +133,8 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base
     }
 
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
+     *
      * @see tx_mksearch_interface_Indexer::prepareSearchData()
      */
     protected function indexData(
@@ -156,10 +153,8 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base
     }
 
     /**
-     * @param tx_mksearch_model_cal_Event $calEvent
+     * @param tx_mksearch_model_cal_Event            $calEvent
      * @param tx_mksearch_interface_IndexerDocument- $indexDoc
-     *
-     * @return void
      */
     private function indexEvent(
         tx_mksearch_model_cal_Event $calEvent,
@@ -192,10 +187,8 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base
     /**
      * Indexes the location of the event.
      *
-     * @param tx_mksearch_model_cal_Event $calEvent
+     * @param tx_mksearch_model_cal_Event            $calEvent
      * @param tx_mksearch_interface_IndexerDocument- $indexDoc
-     *
-     * @return void
      */
     private function indexLocation(
         tx_mksearch_model_cal_Event $calEvent,
@@ -216,9 +209,8 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base
         if (is_array($options['loactionDataFieldMapping.'])) {
             foreach ($options['loactionDataFieldMapping.'] as $dbField => $solrField) {
                 $indexDoc->addField($solrField, $location->getProperty($dbField));
-            };
+            }
         }
-
     }
 
     /**
@@ -230,23 +222,23 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base
     {
         $datePrefixes = array('start', 'end');
         foreach ($datePrefixes as $datePrefix) {
-            $calEvent->record[$datePrefix . '_date_timestamp'] =
+            $calEvent->record[$datePrefix.'_date_timestamp'] =
                 $this->getTimestampFromCalDateString(
-                    $calEvent->record[$datePrefix . '_date'],
+                    $calEvent->record[$datePrefix.'_date'],
                     $calEvent->record['timezone']
                 )
-                + $calEvent->record[$datePrefix . '_time'];
-            $calEvent->record[$datePrefix . '_date_datetime'] = $this->convertTimestampToDateTime(
-                $calEvent->record[$datePrefix . '_date_timestamp']
+                + $calEvent->record[$datePrefix.'_time'];
+            $calEvent->record[$datePrefix.'_date_datetime'] = $this->convertTimestampToDateTime(
+                $calEvent->record[$datePrefix.'_date_timestamp']
             );
 
             $calDate = tx_rnbase::makeInstance(
                 $this->getCalDateClass(),
-                $calEvent->record[$datePrefix . '_date']
+                $calEvent->record[$datePrefix.'_date']
             );
-            $calEvent->record[$datePrefix . '_date_year'] = $calDate->getYear();
-            $calEvent->record[$datePrefix . '_date_month'] = $calDate->getMonth();
-            $calEvent->record[$datePrefix . '_date_day'] = $calDate->getDay();
+            $calEvent->record[$datePrefix.'_date_year'] = $calDate->getYear();
+            $calEvent->record[$datePrefix.'_date_month'] = $calDate->getMonth();
+            $calEvent->record[$datePrefix.'_date_day'] = $calDate->getDay();
         }
 
         return $calEvent;
@@ -260,7 +252,7 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base
         if ($this->isCalInstalledInVersion190OrHigher()) {
             $calDateClass = 'TYPO3\\CMS\\Cal\\Model\\CalDate';
         } else {
-            require_once(tx_rnbase_util_Extensions::extPath('cal') . 'model/class.tx_cal_date.php');
+            require_once tx_rnbase_util_Extensions::extPath('cal').'model/class.tx_cal_date.php';
             $calDateClass = 'tx_cal_date';
         }
 
@@ -269,6 +261,7 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base
 
     /**
      * Ist cal mind. in Version 1.9.0 installiert?
+     *
      * @return bool
      */
     protected function isCalInstalledInVersion190OrHigher()
@@ -280,7 +273,7 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base
 
     /**
      * @param string $calDateString YYYYMMDD
-     * @param string $timezone e.g. UTC
+     * @param string $timezone      e.g. UTC
      *
      * @return string
      */
@@ -302,7 +295,7 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base
 
     /**
      * @param string $calDateString YYYYMMDD
-     * @param string $timezone e.g. UTC
+     * @param string $timezone      e.g. UTC
      *
      * @return int
      */
@@ -315,7 +308,7 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base
         }
 
         $calDateStringWithPossibleTimeZone = $timezone ?
-            $calDateString . ' ' . $timezone : $calDateString;
+            $calDateString.' '.$timezone : $calDateString;
 
         return strtotime($calDateStringWithPossibleTimeZone);
     }
@@ -327,38 +320,36 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base
     {
         return array_merge(
             array(
-                'start_time'            => 'start_time_i',
-                'end_time'                => 'end_time_i',
-                'allday'                => 'allday_b',
-                'timezone'                => 'timezone_s',
-                'title'                => 'title',
-                'organizer'            => 'organizer_s',
-                'organizer_link'        => 'organizer_link_s',
-                'location'                => 'location_s',
-                'type'                    => 'type_i',
-                'start_date'            => 'start_date_s',
-                'end_date'                => 'end_date_s',
-                'start_date_datetime'    => 'start_date_dt',
-                'end_date_datetime'        => 'end_date_dt',
-                'start_date_timestamp'    => 'start_date_i',
-                'end_date_timestamp'    => 'end_date_i',
-                'start_date_year'        => 'start_date_year_i',
-                'start_date_month'        => 'start_date_month_i',
-                'start_date_day'        => 'start_date_day_i',
-                'end_date_year'            => 'end_date_year_i',
-                'end_date_month'        => 'end_date_month_i',
-                'end_date_day'            => 'end_date_day_i',
-                'description'            => 'description_s'
+                'start_time' => 'start_time_i',
+                'end_time' => 'end_time_i',
+                'allday' => 'allday_b',
+                'timezone' => 'timezone_s',
+                'title' => 'title',
+                'organizer' => 'organizer_s',
+                'organizer_link' => 'organizer_link_s',
+                'location' => 'location_s',
+                'type' => 'type_i',
+                'start_date' => 'start_date_s',
+                'end_date' => 'end_date_s',
+                'start_date_datetime' => 'start_date_dt',
+                'end_date_datetime' => 'end_date_dt',
+                'start_date_timestamp' => 'start_date_i',
+                'end_date_timestamp' => 'end_date_i',
+                'start_date_year' => 'start_date_year_i',
+                'start_date_month' => 'start_date_month_i',
+                'start_date_day' => 'start_date_day_i',
+                'end_date_year' => 'end_date_year_i',
+                'end_date_month' => 'end_date_month_i',
+                'end_date_day' => 'end_date_day_i',
+                'description' => 'description_s',
             ),
             is_array($options['eventDataFieldMapping.']) ? $options['eventDataFieldMapping.'] : []
         );
     }
 
     /**
-     * @param tx_mksearch_model_cal_Event $calEvent
+     * @param tx_mksearch_model_cal_Event            $calEvent
      * @param tx_mksearch_interface_IndexerDocument- $indexDoc
-     *
-     * @return void
      */
     private function indexCalendar(
         tx_mksearch_model_cal_Event $calEvent,
@@ -378,15 +369,13 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base
     private function getCalendarMapping()
     {
         return array(
-            'title' => 'title_s'
+            'title' => 'title_s',
         );
     }
 
     /**
-     * @param tx_mksearch_model_cal_Event $calEvent
+     * @param tx_mksearch_model_cal_Event            $calEvent
      * @param tx_mksearch_interface_IndexerDocument- $indexDoc
-     *
-     * @return void
      */
     private function indexCategories(
         tx_mksearch_model_cal_Event $calEvent,
@@ -400,20 +389,20 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base
         );
     }
 
-
     /**
      * @return array
      */
     private function getCategoryMapping()
     {
         return array(
-            'title'    => 'title_ms',
-            'uid'    => 'uid_mi'
+            'title' => 'title_ms',
+            'uid' => 'uid_mi',
         );
     }
 
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
+     *
      * @see tx_mksearch_indexer_Base::getDefaultTSConfig()
      */
     public function getDefaultTSConfig()
@@ -453,5 +442,5 @@ CONFIG;
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_Cal.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_Cal.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_Cal.php'];
 }
