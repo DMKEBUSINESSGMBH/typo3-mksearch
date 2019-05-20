@@ -128,7 +128,7 @@ class tx_mksearch_util_UserGroups
             return $this->resultingAccessCache[$pid];
         }
         // else: Begin calculating...
-        $rootline = tx_mksearch_util_Indexer::getRootlineByPid($pid);
+        $rootline = tx_mksearch_util_Indexer::getInstance()->getRootlineByPid($pid);
 
         if (!sizeof($rootline)) {
             // MW: Keine Rootline gefunden, Seite gelöscht!?
