@@ -206,7 +206,7 @@ class tx_mksearch_indexer_FAL extends tx_mksearch_indexer_BaseMedia
     ) {
         $filePath = $this->getFilePath($tableName, $sourceRecord);
         if (!\TYPO3\CMS\Core\Utility\PathUtility::isAbsolutePath($filePath)) {
-            $filePath = PATH_site.$filePath;
+            $filePath = \Sys25\RnBase\Utility\Environment::getPublicPath().$filePath;
         }
         if (// In FALs sys_file table there are no cloumns for hidden and deleted
             // items. Nevertheless we check the deleted flag, because in

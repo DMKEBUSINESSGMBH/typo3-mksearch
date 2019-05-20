@@ -156,7 +156,7 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
         $path = tx_rnbase_configurations::getExtensionCfgValue('mksearch', 'luceneIndexDir').DIRECTORY_SEPARATOR.$name;
         tx_rnbase::load('tx_rnbase_util_Files');
         if (!tx_rnbase_util_Files::isAbsPath($path)) {
-            $path = PATH_site.$path;
+            $path = \Sys25\RnBase\Utility\Environment::getPublicPath().$path;
         }
 
         return $path;
