@@ -44,9 +44,9 @@ class tx_mksearch_util_Tika
                 'tikaJar'
             );
             // check relative path to webroot.
-            if (is_file(PATH_site.$tikaJar)) {
+            if (is_file(\Sys25\RnBase\Utility\Environment::getPublicPath().$tikaJar)) {
                 // Here are paths outside of the webroot allowed.
-                $tikaJar = PATH_site.$tikaJar;
+                $tikaJar = \Sys25\RnBase\Utility\Environment::getPublicPath().$tikaJar;
             } else {
                 // Here only paths within the webroot and EXT:myext paths allowed.
                 $tikaJar = tx_rnbase_util_Files::getFileAbsFileName($tikaJar, false);

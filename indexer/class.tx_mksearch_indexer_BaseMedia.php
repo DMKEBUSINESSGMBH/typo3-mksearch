@@ -265,7 +265,7 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
      */
     protected function getAbsFileName($tableName, $sourceRecord)
     {
-        return PATH_site.$this->getRelFileName($tableName, $sourceRecord);
+        return \Sys25\RnBase\Utility\Environment::getPublicPath().$this->getRelFileName($tableName, $sourceRecord);
     }
 
     /**
