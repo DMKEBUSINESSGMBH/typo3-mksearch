@@ -114,16 +114,17 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
      */
     protected function getReferences(tx_rnbase_IModel $oModel)
     {
+        $database = Tx_Rnbase_Database_Connection::getInstance();
         // so we have to fetch all references
         // we just need to check this table for entries for this element
         $aSqlOptions = array(
-            'where' => 'ref_table='.$GLOBALS['TYPO3_DB']->fullQuoteStr('tt_content', 'sys_refindex').
+            'where' => 'ref_table='.$database->fullQuoteStr('tt_content', 'sys_refindex').
                     ' AND ref_uid='.(int) $oModel->getUid().
                     ' AND deleted=0',
             'enablefieldsoff' => true,
         );
         $aFrom = array('sys_refindex', 'sys_refindex');
-        $aRows = tx_rnbase_util_DB::doSelect('tablename, recuid', $aFrom, $aSqlOptions);
+        $aRows = $database->doSelect('tablename, recuid', $aFrom, $aSqlOptions);
 
         // now we need to collect the pids of all references. either a
         // reference is a page than we simply use it's pid or the
@@ -141,7 +142,7 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
                         'enablefieldsoff' => true,
                     );
                     $aFrom = array('tt_content', 'tt_content');
-                    $aNewRows = tx_rnbase_util_DB::doSelect('tt_content.pid', $aFrom, $aSqlOptions);
+                    $aNewRows = $database->doSelect('tt_content.pid', $aFrom, $aSqlOptions);
                     $aReferences[] = $aNewRows[0]['pid'];
                 }
             }

@@ -125,8 +125,6 @@ abstract class tx_mksearch_tests_DbTestcase extends Tx_Phpunit_Database_TestCase
         $this->workspaceBackup = $GLOBALS['BE_USER']->workspace;
         $GLOBALS['BE_USER']->setWorkspace(0);
 
-        // set up database
-        $GLOBALS['TYPO3_DB']->debugOutput = true;
         try {
             $this->createDatabase();
         } catch (RuntimeException $e) {
