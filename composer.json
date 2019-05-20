@@ -44,6 +44,9 @@
         "typo3/cms-core": "~6.2 || ~7.6 || ~8.7 || ^9.5",
         "digedag/rn-base": "dev-migration_to_95"
     },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "2.14.*"
+    },
     "autoload": {
         "classmap": [
             "action/",
