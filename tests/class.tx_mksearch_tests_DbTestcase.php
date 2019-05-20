@@ -125,15 +125,6 @@ abstract class tx_mksearch_tests_DbTestcase extends Tx_Phpunit_Database_TestCase
         $this->workspaceBackup = $GLOBALS['BE_USER']->workspace;
         $GLOBALS['BE_USER']->setWorkspace(0);
 
-        // WORKAROUND: phpunit seems to backup static attributes (in phpunit.xml)
-        // from version 3.6.10 not before. I'm not completely
-        // sure about that but from version 3.6.10 clearPageInstance is no
-        // more neccessary to have the complete test suite succeed.
-        // But this version is buggy. (http://forge.typo3.org/issues/36232)
-        // as soon as this bug is fixed, we can use the new phpunit version
-        // and dont need this anymore
-        tx_mksearch_service_indexer_core_Config::clearPageInstance();
-
         // set up database
         $GLOBALS['TYPO3_DB']->debugOutput = true;
         try {

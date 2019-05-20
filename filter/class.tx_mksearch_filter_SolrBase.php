@@ -26,7 +26,6 @@ tx_rnbase::load('tx_mksearch_util_Misc');
 tx_rnbase::load('tx_rnbase_filter_BaseFilter');
 tx_rnbase::load('tx_rnbase_util_ListBuilderInfo');
 tx_rnbase::load('tx_mksearch_util_Filter');
-tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
 tx_rnbase::load('tx_mksearch_model_Facet');
 
 /**
@@ -451,7 +450,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
         $confId
     ) {
         if ($configurations->getBool($confId.'respectSiteRootPage')) {
-            $siteRootPage = tx_mksearch_service_indexer_core_Config::getSiteRootPage(
+            $siteRootPage = tx_mksearch_util_Indexer::getInstance()->getSiteRootPage(
                 $GLOBALS['TSFE']->id
             );
             if ($options['siteRootPage'] || !is_array($siteRootPage)) {
