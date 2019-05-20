@@ -69,22 +69,6 @@ class tx_mksearch_mod1_Module extends tx_rnbase_mod_BaseModule
         return 'mksearch';
     }
 
-    /**
-     * Method to set the tabs for the mainmenu
-     * Umstellung von SelectBox auf Menu.
-     */
-    protected function getFuncMenu()
-    {
-        $mainmenu = $this->getFormTool()->showTabMenu(
-            $this->getPid(),
-            'function',
-            $this->getName(),
-            $this->getFuncMenuItems($this->MOD_MENU['function'])
-        );
-
-        return $mainmenu['menu'];
-    }
-
     protected function getFormTag()
     {
         $modUrl = Tx_Rnbase_Backend_Utility::getModuleUrl(
