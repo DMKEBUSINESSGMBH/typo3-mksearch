@@ -14,7 +14,7 @@ namespace DMK\Mksearch\ViewHelpers;
  * TABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General      *
  * Public License for more details.                                       *
  *                                                                        */
-/**
+/*
  * DMK\Mksearch\ViewHelpers\Format$HtmlViewHelper.
  *
  * nähere Infos in Configuration/XClasses.php
@@ -23,44 +23,89 @@ namespace DMK\Mksearch\ViewHelpers;
  * @license         http://www.gnu.org/licenses/lgpl.html
  *                  GNU Lesser General Public License, version 3 or later
  */
-class CObjectViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\CObjectViewHelper
-{
-    /**
-     * @param \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface $configurationManager
-     */
-    public function injectConfigurationManager(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface $configurationManager)
+\tx_rnbase::load('tx_rnbase_util_TYPO3');
+if (\tx_rnbase_util_TYPO3::isTYPO90OrHigher()) {
+    class CObjectViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\CObjectViewHelper
     {
-        parent::injectConfigurationManager($configurationManager);
+        /**
+         * @param \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface $configurationManager
+         */
+        public function injectConfigurationManager(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface $configurationManager)
+        {
+            parent::injectConfigurationManager($configurationManager);
 
-        \tx_rnbase::load('tx_mksearch_service_internal_Index');
+            \tx_rnbase::load('tx_mksearch_service_internal_Index');
 
-        if (
-            \tx_mksearch_service_internal_Index::isIndexingInProgress()
-            && !empty($GLOBALS['TSFE'])
-            && is_object($GLOBALS['TSFE'])
-            && is_object($GLOBALS['TSFE']->tmpl)
-        ) {
-            $this->typoScriptSetup = $GLOBALS['TSFE']->tmpl->setup;
+            if (
+                \tx_mksearch_service_internal_Index::isIndexingInProgress()
+                && !empty($GLOBALS['TSFE'])
+                && is_object($GLOBALS['TSFE'])
+                && is_object($GLOBALS['TSFE']->tmpl)
+            ) {
+                $this->typoScriptSetup = $GLOBALS['TSFE']->tmpl->setup;
+            }
+        }
+
+        /**
+         * nähere Infos in Configuration/XClasses.php.
+         */
+        protected static function simulateFrontendEnvironment()
+        {
+            if (!\tx_mksearch_service_internal_Index::isIndexingInProgress()) {
+                parent::simulateFrontendEnvironment();
+            }
+        }
+
+        /**
+         * @see simulateFrontendEnvironment()
+         */
+        protected static function resetFrontendEnvironment()
+        {
+            if (!\tx_mksearch_service_internal_Index::isIndexingInProgress()) {
+                parent::resetFrontendEnvironment();
+            }
         }
     }
-
-    /**
-     * nähere Infos in Configuration/XClasses.php.
-     */
-    protected function simulateFrontendEnvironment()
+} else {
+    class CObjectViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\CObjectViewHelper
     {
-        if (!\tx_mksearch_service_internal_Index::isIndexingInProgress()) {
-            parent::simulateFrontendEnvironment();
+        /**
+         * @param \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface $configurationManager
+         */
+        public function injectConfigurationManager(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface $configurationManager)
+        {
+            parent::injectConfigurationManager($configurationManager);
+
+            \tx_rnbase::load('tx_mksearch_service_internal_Index');
+
+            if (
+                \tx_mksearch_service_internal_Index::isIndexingInProgress()
+                && !empty($GLOBALS['TSFE'])
+                && is_object($GLOBALS['TSFE'])
+                && is_object($GLOBALS['TSFE']->tmpl)
+            ) {
+                $this->typoScriptSetup = $GLOBALS['TSFE']->tmpl->setup;
+            }
         }
-    }
 
-    /**
-     * @see simulateFrontendEnvironment()
-     */
-    protected function resetFrontendEnvironment()
-    {
-        if (!\tx_mksearch_service_internal_Index::isIndexingInProgress()) {
-            parent::resetFrontendEnvironment();
+        /**
+         * nähere Infos in Configuration/XClasses.php.
+         */
+        protected function simulateFrontendEnvironment()
+        {
+            if (!\tx_mksearch_service_internal_Index::isIndexingInProgress()) {
+                parent::simulateFrontendEnvironment();
+            }
+        }
+
+        /**
+         * @see simulateFrontendEnvironment()
+         */
+        protected function resetFrontendEnvironment()
+        {
+            if (!\tx_mksearch_service_internal_Index::isIndexingInProgress()) {
+                parent::resetFrontendEnvironment();
+            }
         }
     }
 }
