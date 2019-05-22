@@ -95,3 +95,9 @@ if (tx_rnbase_util_TYPO3::isTYPO76OrHigher()) {
 // no_search needs to be in the rootline fields so respectNoSearchFlagInRootline
 // in indexers works correct
 $GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'] .= ',no_search';
+
+// realurl
+if (tx_rnbase_util_Extensions::isLoaded('realurl')) {
+    $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['realurl']['ConfigurationReader_postProc']['mksearch'] =
+        \DMK\Mksearch\Hooks\RealUrlConfigurationReader::class.'->addMksearchToBannedUrlsRegExp';
+}
