@@ -460,7 +460,11 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
             if (is_array($siteRootPage) && !empty($siteRootPage)) {
                 self::addFilterQuery(
                     $options,
-                    'siteRootPage:'.$siteRootPage['uid']
+                    // Alle Dokumente mit der passenden siteRootPage oder ohne dieses Feld.
+                    // Wenigstens ein Teil der query muss matchen beim prüfen auf
+                    // nicht vorhandensein eines Feldes. Also noch auf ein Feld prüfen,
+                    // das garantiert existiert und damit ein match generiert.
+                    '(-siteRootPage:[* TO *] AND id:[* TO *]) OR siteRootPage:'.$siteRootPage['uid']
                 );
             }
         }
