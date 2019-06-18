@@ -282,20 +282,22 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
         $indexDoc->addField('news_text_s', $bodyText, 'keyword');
         $indexDoc->addField('news_text_t', $bodyText, 'keyword');
 
-        $indexDoc->addField(
-            'datetime_dt',
-            tx_mksearch_util_Misc::getIsoDate($news->getDatetime()),
-            'keyword',
-            1.0,
-            'date'
-        );
+        if ($news->getDatetime()) {
+            $indexDoc->addField(
+                'datetime_dt',
+                tx_mksearch_util_Misc::getIsoDate($news->getDatetime()),
+                'keyword',
+                1.0,
+                'date'
+            );
+        }
     }
 
     /**
      * Add tag data of the News to the index.
      *
      * @param array                                 $rawData
-     * @param unknown                               $news
+     * @param \GeorgRinger\News\Domain\Model\News   $news
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
      * @param array                                 $options
      */
@@ -318,7 +320,7 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
      * Add category data of the News to the index.
      *
      * @param array                                 $rawData
-     * @param unknown                               $news
+     * @param \GeorgRinger\News\Domain\Model\News   $news
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
      * @param array                                 $options
      */
