@@ -151,18 +151,20 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
         );
 
         // Hook to append indexer data
-        tx_rnbase_util_Misc::callHook(
-            'mksearch',
-            'indexer_TxNews_prepareDataBeforeAddFields',
-            array(
-                'news' => &$news,
-                'rawData' => &$rawData,
-                'options' => $options,
-                'indexDoc' => &$indexDoc,
-                'abort' => &$abort,
-            ),
-            $this
-        );
+        if (!$news) {
+            tx_rnbase_util_Misc::callHook(
+                'mksearch',
+                'indexer_TxNews_prepareDataBeforeAddFields',
+                [
+                    'news' => $news,
+                    'rawData' => &$rawData,
+                    'options' => $options,
+                    'indexDoc' => $indexDoc,
+                    'abort' => &$abort,
+                ],
+                $this
+            );
+        }
 
         if (!$news) {
             $abort = true;
@@ -173,7 +175,10 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
             tx_rnbase::load('tx_rnbase_util_Logger');
             tx_rnbase_util_Logger::info(
                 'News wurde nicht indiziert, weil das Signal von einem Hook gegeben wurde.',
-                'mksearch'
+                'mksearch',
+                [
+                    'uid' => $rawData['uid'],
+                ]
             );
             if ($options['deleteOnAbort']) {
                 $indexDoc->setDeleted(true);
