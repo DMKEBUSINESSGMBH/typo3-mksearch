@@ -170,6 +170,10 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
             $options
         );
 
+        if($indexDoc === null) {
+            return null;
+        }
+
         // check carbrowserletter
         if ($indexDoc instanceof tx_mksearch_interface_IndexerDocument) {
             $this->handleCharBrowserFields($indexDoc);
