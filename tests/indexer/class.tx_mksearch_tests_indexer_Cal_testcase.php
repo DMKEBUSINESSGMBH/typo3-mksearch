@@ -22,8 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-tx_rnbase::load('tx_mksearch_tests_Testcase');
-
 /**
  * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
  * @author Michael Wagner <michael.wagner@dmk-ebusiness.de>
@@ -43,9 +41,6 @@ class tx_mksearch_tests_indexer_Cal_testcase extends tx_mksearch_tests_Testcase
             $this->markTestSkipped('cal nicht geladen.');
         }
         parent::setUp();
-
-        tx_rnbase::load('tx_mksearch_indexer_Cal');
-        tx_rnbase::load('tx_mksearch_model_cal_Event');
     }
 
     /**

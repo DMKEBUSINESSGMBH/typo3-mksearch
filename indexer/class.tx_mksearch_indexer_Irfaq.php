@@ -27,7 +27,6 @@
 /**
  * benötigte Klassen einbinden.
  */
-tx_rnbase::load('tx_mksearch_indexer_Base');
 
 /**
  * Indexer service for irfaq.question called by the "mksearch" extension.
@@ -211,7 +210,6 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base
         $indexDoc->addField('categoriesTitle_ms', array_values($categoryNames));
 
         // add field with the combined tags uids and names
-        tx_rnbase::load('tx_mksearch_util_KeyValueFacet');
         $dfs = tx_mksearch_util_KeyValueFacet::getInstance();
         $tagDfs = $dfs->buildFacetValues(array_keys($categoryNames), array_values($categoryNames));
         $indexDoc->addField('faq_categories_dfs_ms', $tagDfs, 'keyword');

@@ -1,8 +1,5 @@
 <?php
 
-tx_rnbase::load('tx_mksearch_mod1_handler_Base');
-tx_rnbase::load('tx_rnbase_mod_IModHandler');
-
 /**
  * Backend Modul Index.
  *

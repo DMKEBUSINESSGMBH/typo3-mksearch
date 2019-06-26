@@ -3,7 +3,6 @@
 defined('TYPO3_MODE') or die('Access denied.');
 
 if (TYPO3_MODE == 'BE') {
-    tx_rnbase::load('tx_mksearch_mod1_Module');
     tx_rnbase_util_Extensions::registerModule(
         'mksearch',
         'web',
@@ -42,6 +41,4 @@ if (TYPO3_MODE == 'BE') {
         tx_rnbase_util_Extensions::extPath('mksearch', 'mod1/class.tx_mksearch_mod1_SolrAdmin.php'),
         'LLL:EXT:mksearch/mod1/locallang.xml:func_solradmin'
     );
-
-    tx_rnbase::load('Tx_Rnbase_Backend_Utility');
 }

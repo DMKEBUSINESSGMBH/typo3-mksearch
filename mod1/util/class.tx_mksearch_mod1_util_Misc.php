@@ -1,9 +1,5 @@
 <?php
 
-tx_rnbase::load('tx_rnbase_util_Templates');
-tx_rnbase::load('tx_rnbase_util_DB');
-tx_rnbase::load('Tx_Rnbase_Backend_Utility_Icons');
-
 /**
  * @author Michael Wagner <dev@dmk-ebusiness.de>
  */

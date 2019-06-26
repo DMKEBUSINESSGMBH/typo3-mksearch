@@ -22,9 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-tx_rnbase::load('tx_rnbase_configurations');
-tx_rnbase::load('tx_mksearch_util_ServiceRegistry');
-
 /**
  * Methods for accessing configuration options etc.
  */
@@ -166,7 +163,6 @@ class tx_mksearch_util_Config
         foreach ($tables as $table) {
             if (array_key_exists($table, self::$tableIndexerMappings)) {
                 // Es wurde bereits ein Resolver für diese tabelle registriert
-                tx_rnbase::load('tx_rnbase_util_Logger');
                 if (tx_rnbase_util_Logger::isWarningEnabled()) {
                     tx_rnbase_util_Logger::warn('[registerResolver] Für die Tabelle '.$table.' wurde bereits ein Resolver registriert', 'mksearch');
                 }

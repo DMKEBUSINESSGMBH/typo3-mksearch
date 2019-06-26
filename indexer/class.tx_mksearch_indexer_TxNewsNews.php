@@ -22,8 +22,6 @@
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-tx_rnbase::load('tx_mksearch_indexer_Base');
-
 /**
  * Indexer service for tx_news.news called by the "mksearch" extension.
  *
@@ -170,7 +168,6 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
 
         // At least one of the news' categories was found on black list
         if ($abort) {
-            tx_rnbase::load('tx_rnbase_util_Logger');
             tx_rnbase_util_Logger::info(
                 'News wurde nicht indiziert, weil das Signal von einem Hook gegeben wurde.',
                 'mksearch'
@@ -349,7 +346,6 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
         $indexDoc->addField('categoriesTitle_ms', array_values($categories));
 
         // add field with the combined tags uids and names
-        tx_rnbase::load('tx_mksearch_util_KeyValueFacet');
         $dfs = tx_mksearch_util_KeyValueFacet::getInstance();
         $tagDfs = $dfs->buildFacetValues(array_keys($categories), array_values($categories));
         $indexDoc->addField('categories_dfs_ms', $tagDfs, 'keyword');

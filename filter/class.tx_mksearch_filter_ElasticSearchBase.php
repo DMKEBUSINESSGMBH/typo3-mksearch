@@ -21,12 +21,6 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  ***************************************************************/
 
-tx_rnbase::load('tx_rnbase_util_SearchBase');
-tx_rnbase::load('tx_mksearch_util_Misc');
-tx_rnbase::load('tx_rnbase_filter_BaseFilter');
-tx_rnbase::load('tx_rnbase_util_ListBuilderInfo');
-tx_rnbase::load('tx_mksearch_util_Filter');
-
 /**
  * @author Hannes Bochmann <hannes.bochmann@dmk-business.de>
  */
@@ -205,7 +199,6 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter
         $confId = $this->getConfId();
 
         $configurations = $formatter->getConfigurations();
-        tx_rnbase::load('tx_rnbase_util_Templates');
         $formTemplate = $configurations->get($confId.'template.file');
 
         $subpart = $configurations->get($confId.'template.subpart');
@@ -222,7 +215,6 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter
             $formData = $this->getParameters()->get('submit') ? $paramArray : $this->getFormData();
             $formData['action'] = $link->makeUrl(false);
             $formData['searchterm'] = htmlspecialchars($this->getParameters()->get('term'), ENT_QUOTES);
-            tx_rnbase::load('tx_rnbase_util_FormUtil');
             $formData['hiddenfields'] = tx_rnbase_util_FormUtil::getHiddenFieldsForUrlParams($formData['action']);
             $this->prepareFormFields($formData, $this->getParameters());
 

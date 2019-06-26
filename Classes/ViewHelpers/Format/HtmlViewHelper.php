@@ -29,9 +29,6 @@ namespace DMK\Mksearch\ViewHelpers\Format;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
-\tx_rnbase::load('tx_rnbase_util_TYPO3');
-\tx_rnbase::load('tx_mksearch_service_internal_Index');
-
 class HtmlViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Format\HtmlViewHelper
 {
     ////////

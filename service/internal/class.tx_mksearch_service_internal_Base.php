@@ -21,7 +21,6 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
-tx_rnbase::load('Tx_Rnbase_Service_Base');
 
 /**
  * Service for accessing models from database.
@@ -40,8 +39,6 @@ class tx_mksearch_service_internal_Base extends Tx_Rnbase_Service_Base
      */
     public function getSearcher()
     {
-        tx_rnbase::load('tx_rnbase_util_SearchBase');
-
         return tx_rnbase_util_SearchBase::getInstance($this->searchClass);
     }
 

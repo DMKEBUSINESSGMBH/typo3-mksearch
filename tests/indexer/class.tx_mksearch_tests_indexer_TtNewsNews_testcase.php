@@ -23,8 +23,6 @@
 ***************************************************************/
 
 require_once tx_rnbase_util_Extensions::extPath('mksearch', 'lib/Apache/Solr/Document.php');
-tx_rnbase::load('tx_mksearch_tests_Testcase');
-tx_rnbase::load('tx_rnbase_util_Dates');
 
 /**
  * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
@@ -249,7 +247,6 @@ class tx_mksearch_tests_indexer_TtNewsNews_testcase extends tx_mksearch_tests_Te
             ->with('tt_news', 789);
 
         // Vor dem Mocking aufrufen, da sonst die static Methode weg ist...
-        tx_rnbase::load('tx_mksearch_indexer_TtNewsNews');
         list($extKey, $cType) = tx_mksearch_indexer_TtNewsNews::getContentType();
 
         $indexer = $this->getMock(

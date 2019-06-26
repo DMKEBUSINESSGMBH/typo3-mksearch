@@ -26,8 +26,6 @@
 // deprecated, will be removed, when TYPO3 4.x support drops! //
 // ////////////////////////////////////////////////////////// //
 
-tx_rnbase::load('tx_mksearch_mod1_Module');
-
 /**
  * Backend Modul für mksearch.
  *

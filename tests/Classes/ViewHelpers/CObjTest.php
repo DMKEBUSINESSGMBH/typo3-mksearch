@@ -25,9 +25,6 @@ namespace DMK\Mksearch\Tests\ViewHelpers;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-\tx_rnbase::load('tx_rnbase_util_TYPO3');
-\tx_rnbase::load('tx_mksearch_tests_Testcase');
-
 /**
  * DMK\Mksearch\Tests\ViewHelpers$CObjectViewHelperTest.
  *

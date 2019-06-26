@@ -36,7 +36,6 @@ if (TYPO3_MODE == 'BE') {
     require_once $_EXT_PATH.'mod1/ext_tables.php';
 
     // Add plugin wizards
-    tx_rnbase::load('tx_rnbase_util_TYPO3');
     // register icon
     Tx_Rnbase_Backend_Utility_Icons::getIconRegistry()->registerIcon(
         'ext-mksearch-wizard-icon',
@@ -49,7 +48,6 @@ if (TYPO3_MODE == 'BE') {
     );
 
     // icon für sysfolder registrieren
-    tx_rnbase::load('tx_rnbase_util_TYPO3');
     $GLOBALS['TCA']['pages']['columns']['module']['config']['items'][] = array(
         'MK Search',
         'mksearch',

@@ -226,7 +226,6 @@ abstract class tx_mksearch_mod1_searcher_abstractBase
 
         //die fields nun mit dem Suchbegriff und den Spalten,
         //in denen gesucht werden soll, füllen
-        tx_rnbase::load('tx_mksearch_mod1_util_SearchBuilder');
         tx_mksearch_mod1_util_SearchBuilder::buildFreeText($fields, $this->currentSearchWord, $this->getSearchColumns());
     }
 
@@ -256,7 +255,6 @@ abstract class tx_mksearch_mod1_searcher_abstractBase
             return; //stop
         }
         // else
-        tx_rnbase::load('tx_mksearch_mod1_util_Template');
         $aColumns = $this->getColumns($this->getDecorator($this->getModule()));
 
         /* @var $tables Tx_Rnbase_Backend_Utility_Tables */

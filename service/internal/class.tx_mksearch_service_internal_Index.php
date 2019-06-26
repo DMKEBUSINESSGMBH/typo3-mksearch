@@ -22,10 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-tx_rnbase::load('tx_mksearch_service_internal_Base');
-tx_rnbase::load('tx_rnbase_util_Logger');
-tx_rnbase::load('tx_mksearch_model_internal_Composite');
-
 /**
  * Service for accessing index models from database.
  */
@@ -113,7 +109,6 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
             $resolver = count($resolver) ? $resolver['className'] : '';
         }
         if ($checkExisting) {
-            tx_rnbase::load('tx_rnbase_util_DB');
             $options = array();
             $options['where'] = 'recid=\''.$uid.'\' AND tablename=\''.$tableName.'\' AND deleted=0';
             $options['enablefieldsoff'] = 1;
@@ -123,7 +118,6 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
             } // Item schon in queue
         }
 
-        tx_rnbase::load('tx_rnbase_util_Dates');
         // achtung: die reihenfolge ist wichtig für addRecordsToIndex
         $record = array(
             'cr_date' => tx_rnbase_util_Dates::datetime_tstamp2mysql($GLOBALS['EXEC_TIME']),
@@ -152,8 +146,6 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
     public function addRecordToIndex($tableName, $uid, $prefer = false, $resolver = false, $data = false, array $options = array())
     {
         if (empty($uid) || empty($tableName)) {
-            tx_rnbase::load('tx_rnbase_util_Logger');
-            tx_rnbase::load('tx_rnbase_util_Debug');
             tx_rnbase_util_Logger::warn(
                 'Could not add record to index. No table or uid given.',
                 'mksearch',
@@ -674,7 +666,6 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
             ', CONCAT(\''.$resolver.'\') FROM '.$from.$where;
 
         if ($options['debug']) {
-            tx_rnbase::load('tx_rnbase_util_Debug');
             tx_rnbase_util_Debug::debug(
                 $query,
                 'class.tx_mksearch_srv_Search.php : '.__LINE__

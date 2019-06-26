@@ -22,9 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-tx_rnbase::load('tx_rnbase_model_base');
-tx_rnbase::load('tx_mksearch_util_ServiceRegistry');
-
 /**
  * Model for indices.
  */
@@ -150,8 +147,6 @@ class tx_mksearch_model_internal_Index extends tx_rnbase_model_base
      */
     public function getIndexConfig()
     {
-        tx_rnbase::load('tx_mksearch_util_Misc');
-
         return tx_mksearch_util_Misc::parseTsConfig("{\n".$this->record['configuration']."\n}");
     }
 

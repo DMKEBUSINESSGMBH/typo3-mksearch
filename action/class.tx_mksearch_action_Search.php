@@ -22,11 +22,6 @@
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-tx_rnbase::load('tx_mksearch_action_AbstractSearch');
-tx_rnbase::load('tx_rnbase_filter_BaseFilter');
-tx_rnbase::load('tx_mksearch_util_ServiceRegistry');
-tx_rnbase::load('tx_mksearch_action_SearchSolr');
-
 /**
  * Base search action.
  *

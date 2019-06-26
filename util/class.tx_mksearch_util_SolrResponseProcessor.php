@@ -153,9 +153,6 @@ class tx_mksearch_util_SolrResponseProcessor
         $highlightedValue,
         array $options = array()
     ) {
-        tx_rnbase::load('tx_rnbase_util_Strings');
-        tx_rnbase::load('tx_mksearch_util_Misc');
-
         // cleanup the source and the highlightd
         $cleanOriginalValue = tx_mksearch_util_Misc::html2plain(
             $originalValue,
@@ -218,7 +215,6 @@ class tx_mksearch_util_SolrResponseProcessor
         $builderClass = $configurations->get($confId.'builderClass');
         $builderClass = $builderClass ? $builderClass : 'tx_mksearch_util_FacetBuilder';
 
-        tx_rnbase::load('tx_mksearch_util_FacetBuilder');
         $facetBuilder = tx_mksearch_util_FacetBuilder::getInstance(
             $builderClass,
             $configurations->get($confId)
@@ -245,7 +241,6 @@ class tx_mksearch_util_SolrResponseProcessor
         if ($response->spellcheck->suggestions) {
             $builderClass = $this->getConfigurations()->get($confId.'builderClass');
             $builderClass = $builderClass ? $builderClass : 'tx_mksearch_util_SuggestionBuilder';
-            tx_rnbase::load('tx_mksearch_util_SuggestionBuilder');
             $builder = tx_mksearch_util_SuggestionBuilder::getInstance($builderClass);
             $suggestions = $builder->buildSuggestions($response->spellcheck->suggestions);
         } else {

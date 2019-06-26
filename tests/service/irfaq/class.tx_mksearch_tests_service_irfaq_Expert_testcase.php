@@ -23,8 +23,6 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
-tx_rnbase::load('tx_mksearch_service_irfaq_Expert');
-tx_rnbase::load('tx_mksearch_tests_Testcase');
 
 /**
  * tx_mksearch_tests_service_irfaq_Expert_testcase.

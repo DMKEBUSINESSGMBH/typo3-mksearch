@@ -1,8 +1,5 @@
 <?php
 
-tx_rnbase::load('tx_rnbase_action_BaseIOC');
-tx_rnbase::load('tx_mksearch_util_ServiceRegistry');
-
 /**
  * Detailseite eines beliebigen Datensatzes aus Momentan Lucene oder Solr.
  *
@@ -127,7 +124,6 @@ class tx_mksearch_action_ShowHit extends tx_rnbase_action_BaseIOC
             if ($addr = tx_rnbase_configurations::getExtensionCfgValue('rn_base', 'sendEmailOnException')) {
                 tx_rnbase_util_Misc::sendErrorMail($addr, 'tx_mksearch_action_SearchSolr_searchSolr', $e);
             }
-            tx_rnbase::load('tx_rnbase_util_Logger');
             tx_rnbase_util_Logger::fatal(
                 'Solr search failed with Exception!',
                 'mksearch',

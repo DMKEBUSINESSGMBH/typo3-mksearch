@@ -34,12 +34,6 @@ use TYPO3\CMS\Extbase\Persistence\Generic\Session;
  * benötigte Klassen einbinden
  */
 
-tx_rnbase::load('tx_mksearch_interface_Indexer');
-tx_rnbase::load('tx_mksearch_interface_IndexerDocument');
-tx_rnbase::load('tx_mksearch_util_Misc');
-tx_rnbase::load('tx_mksearch_util_TCA');
-tx_rnbase::load('tx_mksearch_util_Indexer');
-
 /**
  * Base indexer class offering some common methods
  * to make the object orientated indexing ("indexing by models")

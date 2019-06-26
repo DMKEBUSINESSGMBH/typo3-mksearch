@@ -22,10 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-tx_rnbase::load('tx_mksearch_tests_DbTestcase');
-tx_rnbase::load('tx_mksearch_tests_fixtures_indexer_Dummy');
-tx_rnbase::load('tx_mksearch_tests_Util');
-
 /**
  * Wir müssen in diesem Fall mit der DB testen da wir definitiv
  * mindestens bis hasDocToBeDeleted() laufen. Dort wird die rootline geprüft

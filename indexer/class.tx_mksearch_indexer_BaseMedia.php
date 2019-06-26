@@ -22,10 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-tx_rnbase::load('tx_mksearch_interface_Indexer');
-tx_rnbase::load('tx_mksearch_util_Misc');
-tx_rnbase::load('tx_rnbase_util_Logger');
-
 /**
  * Indexer service for dam.media called by the "mksearch" extension.
  */
@@ -211,7 +207,6 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
     private function indexTika($tableName, $sourceRecord, tx_mksearch_interface_IndexerDocument $indexDoc, $options)
     {
         $file = $this->getAbsFileName($tableName, $sourceRecord);
-        tx_rnbase::load('tx_mksearch_util_Tika');
         if (!tx_mksearch_util_Tika::getInstance()->isAvailable()) {
             tx_rnbase_util_Logger::warn('Apache Tika not available!', 'mksearch');
 

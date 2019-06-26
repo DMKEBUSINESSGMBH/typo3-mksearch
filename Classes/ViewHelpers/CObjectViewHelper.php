@@ -23,7 +23,6 @@ namespace DMK\Mksearch\ViewHelpers;
  * @license         http://www.gnu.org/licenses/lgpl.html
  *                  GNU Lesser General Public License, version 3 or later
  */
-\tx_rnbase::load('tx_rnbase_util_TYPO3');
 if (\tx_rnbase_util_TYPO3::isTYPO90OrHigher()) {
     class CObjectViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\CObjectViewHelper
     {
@@ -33,8 +32,6 @@ if (\tx_rnbase_util_TYPO3::isTYPO90OrHigher()) {
         public function injectConfigurationManager(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface $configurationManager)
         {
             parent::injectConfigurationManager($configurationManager);
-
-            \tx_rnbase::load('tx_mksearch_service_internal_Index');
 
             if (
                 \tx_mksearch_service_internal_Index::isIndexingInProgress()
@@ -75,8 +72,6 @@ if (\tx_rnbase_util_TYPO3::isTYPO90OrHigher()) {
         public function injectConfigurationManager(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface $configurationManager)
         {
             parent::injectConfigurationManager($configurationManager);
-
-            \tx_rnbase::load('tx_mksearch_service_internal_Index');
 
             if (
                 \tx_mksearch_service_internal_Index::isIndexingInProgress()

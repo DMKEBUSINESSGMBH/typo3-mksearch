@@ -23,8 +23,6 @@
 ***************************************************************/
 
 require_once tx_rnbase_util_Extensions::extPath('mksearch', 'lib/Apache/Solr/Document.php');
-tx_rnbase::load('tx_mksearch_tests_DbTestcase');
-tx_rnbase::load('tx_mksearch_tests_Util');
 
 /**
  * Wir müssen in diesem Fall mit der DB testen da wir die pages

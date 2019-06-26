@@ -27,8 +27,6 @@
 /**
  * benötigte Klassen einbinden.
  */
-tx_rnbase::load('tx_mksearch_interface_Indexer');
-tx_rnbase::load('tx_mksearch_util_Misc');
 
 /**
  * Indexer service for irfaq.question called by the "mksearch" extension.

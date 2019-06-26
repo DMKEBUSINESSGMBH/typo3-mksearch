@@ -1,8 +1,5 @@
 <?php
 
-tx_rnbase::load('tx_mksearch_mod1_handler_Base');
-tx_rnbase::load('tx_rnbase_mod_IModHandler');
-
 /**
  * Backend Modul Index.
  *
@@ -61,7 +58,6 @@ class tx_mksearch_mod1_handler_admin_Solr implements tx_rnbase_mod_IModHandler
             $searchEngine->commitIndex();
             $mod->addMessage('###LABEL_SOLR_DELETE_SUCCESSFUL###', '###LABEL_COMMON_INFO###');
         } catch (Exception $e) {
-            tx_rnbase::load('tx_rnbase_util_Logger');
             $mod->addMessage(htmlspecialchars($e->getMessage()), '###LABEL_COMMON_ERROR###', 2);
             tx_rnbase_util_Logger::warn('[SolrAdmin] Exception for delete query.', 'mksearch', array('Exception' => $e->getMessage()));
         }
@@ -99,8 +95,6 @@ class tx_mksearch_mod1_handler_admin_Solr implements tx_rnbase_mod_IModHandler
      */
     protected function showAdminPanel($template, $cores, tx_rnbase_mod_IModule $mod, &$markerArray)
     {
-        tx_rnbase::load('tx_mksearch_mod1_util_Template');
-
         $formTool = $mod->getFormTool();
 
         $markerArray['###SEL_CORES###'] = $this->getCoreSelector($cores, $mod);
@@ -114,8 +108,6 @@ class tx_mksearch_mod1_handler_admin_Solr implements tx_rnbase_mod_IModHandler
 
     protected function findSolrCores(tx_rnbase_mod_IModule $mod)
     {
-        tx_rnbase::load('tx_rnbase_util_SearchBase');
-
         $fields = $options = array();
         $options['enablefieldsfe'] = 1;
         // Solr-Core auf der aktuellen Seite suchen
