@@ -32,20 +32,6 @@ tx_rnbase::load('tx_mksearch_tests_Testcase');
 class tx_mksearch_tests_signalSlotDispatcher_FileIndexRepository_testcase extends tx_mksearch_tests_Testcase
 {
     /**
-     * (non-PHPdoc).
-     *
-     * @see tx_mksearch_tests_Testcase::setUp()
-     */
-    protected function setUp()
-    {
-        if (!tx_rnbase_util_TYPO3::isTYPO60OrHigher()) {
-            $this->markTestSkipped('Erst ab TYPO3 6.x relevant');
-        }
-
-        parent::setUp();
-    }
-
-    /**
      * @group unit
      */
     public function testGetInternalIndexService()

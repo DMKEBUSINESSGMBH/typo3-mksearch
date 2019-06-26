@@ -269,7 +269,7 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
     }
 
     /**
-     * Prüft anhand der Konfiguration, ob der übergebene DAM-Datensatz indiziert werden soll.
+     * Prüft anhand der Konfiguration, ob der übergebene FAL-Datensatz indiziert werden soll.
      * Aktuell kann dies über die Dateiendung und/oder das Verzeichnis festgelegt werden.
      *
      * @param string $tableName
@@ -449,7 +449,7 @@ indexMode = solr
 ### delete from or abort indexing for the record if isIndexableRecord or no record?
 deleteIfNotIndexable = 1
 
-# define filters for DAM records. All filters must match to index a record.
+# define filters for FAL records. All filters must match to index a record.
 filter.$table {
   # a regular expression
   byDirectory = /^fileadmin\/.*\//
@@ -471,7 +471,7 @@ filter.$table {
 
 # Define which fields to index and to which fields
 fields {
-  ### name field for DAM
+  ### name field for FAL
   #file_name = file_name_s
   ### name field for FAL
   #name = file_name_s

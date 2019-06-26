@@ -81,14 +81,12 @@ Tx_Rnbase_Utility_Cache::addExcludedParametersForCacheHash(array(
     'mksearch[term]',
 ));
 
-if (tx_rnbase_util_TYPO3::isTYPO76OrHigher()) {
-    // eigenes Feld für Vorbelegung je nach Indexer
-    $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry']['mksearch_indexerConfigurationField'] = array(
-        'nodeName' => 'indexerConfigurationField',
-        'priority' => '70',
-        'class' => 'DMK\\Mksearch\\Backend\\Form\\Element\\IndexerConfigurationField',
-    );
-}
+// eigenes Feld für Vorbelegung je nach Indexer
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry']['mksearch_indexerConfigurationField'] = array(
+    'nodeName' => 'indexerConfigurationField',
+    'priority' => '70',
+    'class' => 'DMK\\Mksearch\\Backend\\Form\\Element\\IndexerConfigurationField',
+);
 
 // no_search needs to be in the rootline fields so respectNoSearchFlagInRootline
 // in indexers works correct

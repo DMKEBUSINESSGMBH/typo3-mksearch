@@ -61,7 +61,7 @@ abstract class tx_mksearch_tests_DbTestcase extends Tx_Phpunit_Database_TestCase
      *
      * @var array
      */
-    protected $importExtensions = array('cms' => 'cms', 'mksearch');
+    protected $importExtensions = array('core', 'frontend', 'mksearch');
 
     /**
      * Liste der daten, welche in die test DB importiert werden müssen.
@@ -80,15 +80,6 @@ abstract class tx_mksearch_tests_DbTestcase extends Tx_Phpunit_Database_TestCase
     public function __construct($name = null, array $data = array(), $dataName = '')
     {
         parent::__construct($name, $data, $dataName);
-
-        if (tx_rnbase_util_TYPO3::isTYPO62OrHigher()) {
-            $this->importExtensions[] = 'core';
-            $this->importExtensions[] = 'frontend';
-        }
-
-        if (tx_rnbase_util_TYPO3::isTYPO76OrHigher()) {
-            unset($this->importExtensions['cms']);
-        }
 
         // templavoila und realurl brauchen wir da es im BE sonst Warnungen hagelt
         // und man die Testergebnisse nicht sieht
@@ -135,9 +126,7 @@ abstract class tx_mksearch_tests_DbTestcase extends Tx_Phpunit_Database_TestCase
         // assuming that test-database can be created otherwise PHPUnit will skip the test
         $this->db = $this->useTestDatabase();
 
-        if (tx_rnbase_util_TYPO3::isTYPO87OrHigher()) {
-            $this->setUpTestDatabaseForConnectionPool();
-        }
+        $this->setUpTestDatabaseForConnectionPool();
 
         $this->importStdDB();
         $this->importExtensions($this->importExtensions);
@@ -185,10 +174,8 @@ abstract class tx_mksearch_tests_DbTestcase extends Tx_Phpunit_Database_TestCase
             $GLOBALS['TYPO3_LOADED_EXT']['templavoila'] = $this->templaVoilaConfigBackup;
             $this->templaVoilaConfigBackup = null;
 
-            if (tx_rnbase_util_TYPO3::isTYPO62OrHigher()) {
-                $extensionManagementUtility = new TYPO3\CMS\Core\Utility\ExtensionManagementUtility();
-                $extensionManagementUtility->loadExtension('templavoila');
-            }
+            $extensionManagementUtility = new TYPO3\CMS\Core\Utility\ExtensionManagementUtility();
+            $extensionManagementUtility->loadExtension('templavoila');
         }
 
         tx_mksearch_tests_Util::resetAddRootlineFields();
@@ -198,9 +185,7 @@ abstract class tx_mksearch_tests_DbTestcase extends Tx_Phpunit_Database_TestCase
 
     protected function purgeRootlineCaches()
     {
-        if (tx_rnbase_util_TYPO3::isTYPO62OrHigher()) {
-            \TYPO3\CMS\Core\Utility\RootlineUtility::purgeCaches();
-        }
+        \TYPO3\CMS\Core\Utility\RootlineUtility::purgeCaches();
     }
 
     /**
@@ -223,7 +208,7 @@ abstract class tx_mksearch_tests_DbTestcase extends Tx_Phpunit_Database_TestCase
 
     protected function tearDownDatabase()
     {
-        if (tx_rnbase_util_TYPO3::isTYPO87OrHigher() && $this->originalDatabaseName) {
+        if ($this->originalDatabaseName) {
             // $GLOBALS['TYPO3_CONF_VARS']['DB']['Connections']['Default']['dbname'] is used
             // inside phpunit to get the original database so we need to reset that
             // before anything is done
@@ -232,13 +217,10 @@ abstract class tx_mksearch_tests_DbTestcase extends Tx_Phpunit_Database_TestCase
         $this->cleanDatabase();
         $this->dropDatabase();
 
-        // we need to reset the database for the connection pool connections aswell
-        if (tx_rnbase_util_TYPO3::isTYPO87OrHigher()) {
-            // truncate connections so they can be reinitialized with the real configuration
-            $connections = new ReflectionProperty(ConnectionPool::class, 'connections');
-            $connections->setAccessible(true);
-            $connections->setValue(null, array());
-        }
+        // truncate connections so they can be reinitialized with the real configuration
+        $connections = new ReflectionProperty(ConnectionPool::class, 'connections');
+        $connections->setAccessible(true);
+        $connections->setValue(null, array());
 
         $this->switchToTypo3Database();
     }

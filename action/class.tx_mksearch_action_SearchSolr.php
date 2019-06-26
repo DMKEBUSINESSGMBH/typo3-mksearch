@@ -409,11 +409,9 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
             // so we has to disable the debug.
             $GLOBALS['TYPO3_CONF_VARS']['FE']['debug'] = 0;
             tx_rnbase::load('tx_rnbase_util_TYPO3');
-            if (tx_rnbase_util_TYPO3::isTYPO60OrHigher()) {
-                $tsfe = tx_rnbase_util_TYPO3::getTSFE();
-                $tsfe->config['config']['debug'] = 0;
-                $tsfe->TYPO3_CONF_VARS['FE']['debug'] = 0;
-            }
+            $tsfe = tx_rnbase_util_TYPO3::getTSFE();
+            $tsfe->config['config']['debug'] = 0;
+            $tsfe->TYPO3_CONF_VARS['FE']['debug'] = 0;
 
             $result = $this->getViewData()->offsetGet('result');
             $forbiddenResultItems = array('searchUrl' => null, 'searchTime' => null, 'response' => null);

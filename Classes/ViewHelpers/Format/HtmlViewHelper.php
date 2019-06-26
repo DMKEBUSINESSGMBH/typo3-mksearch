@@ -32,125 +32,53 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 \tx_rnbase::load('tx_rnbase_util_TYPO3');
 \tx_rnbase::load('tx_mksearch_service_internal_Index');
 
-if (\tx_rnbase_util_TYPO3::isTYPO86OrHigher()) {
-    class HtmlViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Format\HtmlViewHelper
+class HtmlViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Format\HtmlViewHelper
+{
+    ////////
+    // We have to overwrite the whole renderStatic() method, because it uses self for the method call
+    ////////
+
+    /**
+     * @param array                     $arguments
+     * @param \Closure                  $renderChildrenClosure
+     * @param RenderingContextInterface $renderingContext
+     *
+     * @return string the parsed string
+     */
+    public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, \TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface $renderingContext)
     {
-        ////////
-        // We have to overwrite the whole renderStatic() method, because it uses self for the method call
-        ////////
-
-        /**
-         * @param array                     $arguments
-         * @param \Closure                  $renderChildrenClosure
-         * @param RenderingContextInterface $renderingContext
-         *
-         * @return string the parsed string
-         */
-        public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, \TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface $renderingContext)
-        {
-            $parseFuncTSPath = $arguments['parseFuncTSPath'];
-            if (TYPO3_MODE === 'BE') {
-                static::simulateFrontendEnvironment();
-            }
-            $value = $renderChildrenClosure();
-            $contentObject = GeneralUtility::makeInstance(ContentObjectRenderer::class);
-            $contentObject->start([]);
-            $content = $contentObject->parseFunc($value, [], '< '.$parseFuncTSPath);
-            if (TYPO3_MODE === 'BE') {
-                static::resetFrontendEnvironment();
-            }
-
-            return $content;
+        $parseFuncTSPath = $arguments['parseFuncTSPath'];
+        if (TYPO3_MODE === 'BE') {
+            static::simulateFrontendEnvironment();
+        }
+        $value = $renderChildrenClosure();
+        $contentObject = GeneralUtility::makeInstance(ContentObjectRenderer::class);
+        $contentObject->start([]);
+        $content = $contentObject->parseFunc($value, [], '< '.$parseFuncTSPath);
+        if (TYPO3_MODE === 'BE') {
+            static::resetFrontendEnvironment();
         }
 
-        /**
-         * nähere Infos in Configuration/XClasses.php.
-         */
-        protected static function simulateFrontendEnvironment()
-        {
-            if (!\tx_mksearch_service_internal_Index::isIndexingInProgress()) {
-                parent::simulateFrontendEnvironment();
-            }
-        }
+        return $content;
+    }
 
-        /**
-         * @see simulateFrontendEnvironment()
-         */
-        protected static function resetFrontendEnvironment()
-        {
-            if (!\tx_mksearch_service_internal_Index::isIndexingInProgress()) {
-                parent::resetFrontendEnvironment();
-            }
+    /**
+     * nähere Infos in Configuration/XClasses.php.
+     */
+    protected static function simulateFrontendEnvironment()
+    {
+        if (!\tx_mksearch_service_internal_Index::isIndexingInProgress()) {
+            parent::simulateFrontendEnvironment();
         }
     }
-} elseif (\tx_rnbase_util_TYPO3::isTYPO70OrHigher()) {
-    class HtmlViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Format\HtmlViewHelper
+
+    /**
+     * @see simulateFrontendEnvironment()
+     */
+    protected static function resetFrontendEnvironment()
     {
-        /**
-         * @param array                                                     $arguments
-         * @param \Closure                                                  $renderChildrenClosure
-         * @param \TYPO3\CMS\Fluid\Core\Rendering\RenderingContextInterface $renderingContext
-         *
-         * @return string the parsed string
-         */
-        public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, \TYPO3\CMS\Fluid\Core\Rendering\RenderingContextInterface $renderingContext)
-        {
-            $parseFuncTSPath = $arguments['parseFuncTSPath'];
-            if (TYPO3_MODE === 'BE') {
-                static::simulateFrontendEnvironment();
-            }
-            $value = $renderChildrenClosure();
-            $contentObject = GeneralUtility::makeInstance(ContentObjectRenderer::class);
-            $contentObject->start([]);
-            $content = $contentObject->parseFunc($value, [], '< '.$parseFuncTSPath);
-            if (TYPO3_MODE === 'BE') {
-                static::resetFrontendEnvironment();
-            }
-
-            return $content;
-        }
-
-        /**
-         * nähere Infos in Configuration/XClasses.php.
-         */
-        protected static function simulateFrontendEnvironment()
-        {
-            if (!\tx_mksearch_service_internal_Index::isIndexingInProgress()) {
-                parent::simulateFrontendEnvironment();
-            }
-        }
-
-        /**
-         * @see simulateFrontendEnvironment()
-         */
-        protected static function resetFrontendEnvironment()
-        {
-            if (!\tx_mksearch_service_internal_Index::isIndexingInProgress()) {
-                parent::resetFrontendEnvironment();
-            }
-        }
-    }
-} else {
-    class HtmlViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Format\HtmlViewHelper
-    {
-        /**
-         * nähere Infos in Configuration/XClasses.php.
-         */
-        protected function simulateFrontendEnvironment()
-        {
-            if (!\tx_mksearch_service_internal_Index::isIndexingInProgress()) {
-                parent::simulateFrontendEnvironment();
-            }
-        }
-
-        /**
-         * @see simulateFrontendEnvironment()
-         */
-        protected function resetFrontendEnvironment()
-        {
-            if (!\tx_mksearch_service_internal_Index::isIndexingInProgress()) {
-                parent::resetFrontendEnvironment();
-            }
+        if (!\tx_mksearch_service_internal_Index::isIndexingInProgress()) {
+            parent::resetFrontendEnvironment();
         }
     }
 }
