@@ -3,33 +3,20 @@
 defined('TYPO3_MODE') or die('Access denied.');
 
 if (TYPO3_MODE == 'BE') {
-    if (tx_rnbase_util_TYPO3::isTYPO60OrHigher()) {
-        tx_rnbase::load('tx_mksearch_mod1_Module');
-        tx_rnbase_util_Extensions::registerModule(
-            'mksearch',
-            'web',
-            'M1',
-            'bottom',
-            array(),
-            array(
-                'access' => 'user,group',
-                'routeTarget' => 'tx_mksearch_mod1_Module',
-                'icon' => 'EXT:mksearch/mod1/moduleicon.gif',
-                'labels' => 'LLL:EXT:mksearch/mod1/locallang_mod.xml',
-            )
-        );
-    } else {
-        tx_rnbase_util_Extensions::addModulePath(
-            'web_MksearchM1',
-            tx_rnbase_util_Extensions::extPath('mksearch', 'mod1/')
-        );
-        tx_rnbase_util_Extensions::addModule(
-            'web',
-            'MksearchM1',
-            'bottom',
-            tx_rnbase_util_Extensions::extPath('mksearch', 'mod1/')
-        );
-    }
+    tx_rnbase::load('tx_mksearch_mod1_Module');
+    tx_rnbase_util_Extensions::registerModule(
+        'mksearch',
+        'web',
+        'M1',
+        'bottom',
+        array(),
+        array(
+            'access' => 'user,group',
+            'routeTarget' => 'tx_mksearch_mod1_Module',
+            'icon' => 'EXT:mksearch/mod1/moduleicon.gif',
+            'labels' => 'LLL:EXT:mksearch/mod1/locallang_mod.xml',
+        )
+    );
 
     tx_rnbase_util_Extensions::insertModuleFunction(
         'web_MksearchM1',

@@ -14,8 +14,3 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Fluid\\ViewHelpers\\C
     array('className' => 'DMK\\Mksearch\\ViewHelpers\\CObjectViewHelper');
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Fluid\\ViewHelpers\\Format\\HtmlViewHelper'] =
     array('className' => 'DMK\\Mksearch\\ViewHelpers\\Format\\HtmlViewHelper');
-// im crop view helper ist es nur bis TYPO3 8 nötig.
-if (!\tx_rnbase_util_TYPO3::isTYPO80OrHigher()) {
-    $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Fluid\\ViewHelpers\\Format\\CropViewHelper'] =
-        array('className' => 'DMK\\Mksearch\\ViewHelpers\\Format\\CropViewHelper');
-}

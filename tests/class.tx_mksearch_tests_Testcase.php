@@ -80,10 +80,8 @@ abstract class tx_mksearch_tests_Testcase extends tx_rnbase_tests_BaseTestCase
             $GLOBALS['TYPO3_LOADED_EXT']['templavoila'] = $this->backups['templaVoilaConfigBackup'];
             $this->backups['templaVoilaConfigBackup'] = null;
 
-            if (tx_rnbase_util_TYPO3::isTYPO62OrHigher()) {
-                $extensionManagementUtility = new TYPO3\CMS\Core\Utility\ExtensionManagementUtility();
-                $extensionManagementUtility->loadExtension('templavoila');
-            }
+            $extensionManagementUtility = new TYPO3\CMS\Core\Utility\ExtensionManagementUtility();
+            $extensionManagementUtility->loadExtension('templavoila');
         }
 
         tx_mksearch_tests_Util::resetAddRootlineFields();

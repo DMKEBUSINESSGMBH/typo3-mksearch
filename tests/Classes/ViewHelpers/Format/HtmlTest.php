@@ -117,10 +117,6 @@ class HtmlViewHelperTest extends \tx_mksearch_tests_Testcase
     protected function getViewHelper()
     {
         $viewHelper = \tx_rnbase::makeInstance('TYPO3\\CMS\\Fluid\\ViewHelpers\\Format\\HtmlViewHelper');
-        if (!\tx_rnbase_util_TYPO3::isTYPO70OrHigher()) {
-            $configurationManager = $this->getMock('TYPO3\\CMS\\Extbase\\Configuration\\ConfigurationManager');
-            $viewHelper->injectConfigurationManager($configurationManager);
-        }
 
         return $viewHelper;
     }

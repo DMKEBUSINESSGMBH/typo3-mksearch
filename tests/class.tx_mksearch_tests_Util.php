@@ -107,23 +107,20 @@ class tx_mksearch_tests_Util
      */
     public static function tcaSetUp(array $extensions = array())
     {
-        self::$TCA = null;
-        if (tx_rnbase_util_TYPO3::isTYPO60OrHigher()) {
-            self::$TCA = $GLOBALS['TCA'];
-            $GLOBALS['TCA'] = array();
-            // otherwise we may get warnings like ...no category registered for table..Key was already registered
-            $categoryRegistryClass = 'TYPO3\\CMS\\Core\\Category\\CategoryRegistry';
-            $registry = new ReflectionProperty($categoryRegistryClass, 'registry');
-            $registry->setAccessible(true);
-            $categoryRegistry = $categoryRegistryClass::getInstance();
-            self::$categoryRegistry = $registry->getValue($categoryRegistry);
-            $registry->setValue($categoryRegistry, array());
+        self::$TCA = $GLOBALS['TCA'];
+        $GLOBALS['TCA'] = array();
+        // otherwise we may get warnings like ...no category registered for table..Key was already registered
+        $categoryRegistryClass = 'TYPO3\\CMS\\Core\\Category\\CategoryRegistry';
+        $registry = new ReflectionProperty($categoryRegistryClass, 'registry');
+        $registry->setAccessible(true);
+        $categoryRegistry = $categoryRegistryClass::getInstance();
+        self::$categoryRegistry = $registry->getValue($categoryRegistry);
+        $registry->setValue($categoryRegistry, array());
 
-            // \TYPO3\CMS\Core\Core\Bootstrap::getInstance()->loadExtensionTables(FALSE);
-            \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::loadBaseTca(false);
-            // spezielle Extension TCA's laden!?
-            self::loadSingleExtTablesFiles($extensions);
-        }
+        // \TYPO3\CMS\Core\Core\Bootstrap::getInstance()->loadExtensionTables(FALSE);
+        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::loadBaseTca(false);
+        // spezielle Extension TCA's laden!?
+        self::loadSingleExtTablesFiles($extensions);
     }
 
     /**
@@ -309,9 +306,6 @@ class tx_mksearch_tests_Util
      */
     public static function disableRelationManager()
     {
-        if (!tx_rnbase_util_TYPO3::isTYPO60OrHigher()) {
-            return;
-        }
         tx_rnbase::load('tx_mksearch_tests_fixtures_typo3_CoreDbRelationHandler');
         $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Core\\Database\\RelationHandler'] = array(
             'className' => 'tx_mksearch_tests_fixtures_typo3_CoreDbRelationHandler',
@@ -339,10 +333,6 @@ class tx_mksearch_tests_Util
      */
     public static function unloadExtensionForTypo362OrHigher($extensionKey)
     {
-        if (!tx_rnbase_util_TYPO3::isTYPO62OrHigher()) {
-            return;
-        }
-
         // wir kommen an den Pfad zur Package Datei nur über Reflection
         $packageManager = tx_rnbase::makeInstance('TYPO3\\CMS\\Core\\Package\\PackageManager');
         $packageStatesPathAndFilename = new ReflectionProperty('TYPO3\\CMS\\Core\\Package\\PackageManager', 'packageStatesPathAndFilename');
@@ -446,24 +436,20 @@ class tx_mksearch_tests_Util
     {
         self::$addRootLineFieldsBackup = $GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'];
         $GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'] = '';
-        if (tx_rnbase_util_TYPO3::isTYPO62OrHigher()) {
-            $property = new ReflectionProperty('TYPO3\\CMS\\Core\\Utility\\RootlineUtility', 'rootlineFields');
-            $property->setAccessible(true);
-            $rootLineFields = Tx_Rnbase_Utility_Strings::trimExplode(',', self::$addRootLineFieldsBackup, true);
-            $property->setValue(null, array_diff($property->getValue(null), $rootLineFields));
-        }
+        $property = new ReflectionProperty('TYPO3\\CMS\\Core\\Utility\\RootlineUtility', 'rootlineFields');
+        $property->setAccessible(true);
+        $rootLineFields = Tx_Rnbase_Utility_Strings::trimExplode(',', self::$addRootLineFieldsBackup, true);
+        $property->setValue(null, array_diff($property->getValue(null), $rootLineFields));
     }
 
     public static function resetAddRootlineFields()
     {
         if (null != self::$addRootLineFieldsBackup) {
             $GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'] = self::$addRootLineFieldsBackup;
-            if (tx_rnbase_util_TYPO3::isTYPO62OrHigher()) {
-                $property = new ReflectionProperty('TYPO3\\CMS\\Core\\Utility\\RootlineUtility', 'rootlineFields');
-                $property->setAccessible(true);
-                $rootLineFields = Tx_Rnbase_Utility_Strings::trimExplode(',', self::$addRootLineFieldsBackup, true);
-                $property->setValue(null, array_unique(array_merge($property->getValue(null), $rootLineFields)));
-            }
+            $property = new ReflectionProperty('TYPO3\\CMS\\Core\\Utility\\RootlineUtility', 'rootlineFields');
+            $property->setAccessible(true);
+            $rootLineFields = Tx_Rnbase_Utility_Strings::trimExplode(',', self::$addRootLineFieldsBackup, true);
+            $property->setValue(null, array_unique(array_merge($property->getValue(null), $rootLineFields)));
             self::$addRootLineFieldsBackup = null;
         }
     }

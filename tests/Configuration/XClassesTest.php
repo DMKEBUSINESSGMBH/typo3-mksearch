@@ -50,21 +50,6 @@ class XClassesTest extends \tx_mksearch_tests_Testcase
     /**
      * @group unit
      */
-    public function testFluidCropViewHelperIsXClassed()
-    {
-        if (\tx_rnbase_util_TYPO3::isTYPO80OrHigher()) {
-            $this->markTestSkipped('Not required for TYPO3 8 or higher');
-        }
-
-        self::assertInstanceOf(
-            'DMK\\Mksearch\\ViewHelpers\\Format\\CropViewHelper',
-            \tx_rnbase::makeInstance('TYPO3\\CMS\\Fluid\\ViewHelpers\\Format\\CropViewHelper')
-        );
-    }
-
-    /**
-     * @group unit
-     */
     public function testFluidHtmlViewHelperIsXClassed()
     {
         self::assertInstanceOf(
