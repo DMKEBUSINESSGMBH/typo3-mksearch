@@ -27,7 +27,6 @@
 /**
  * benötigte Klassen einbinden.
  */
-tx_rnbase::load('tx_mksearch_indexer_Base');
 
 /**
  * Dummy Indexer for testing the base class as it is abstract.

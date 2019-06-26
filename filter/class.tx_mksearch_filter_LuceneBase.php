@@ -21,11 +21,6 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  ***************************************************************/
 
-tx_rnbase::load('tx_rnbase_util_SearchBase');
-tx_rnbase::load('tx_rnbase_util_ListBuilderInfo');
-tx_rnbase::load('tx_rnbase_filter_BaseFilter');
-tx_rnbase::load('tx_mksearch_util_Filter');
-
 /**
  * Dieser Filter verarbeitet Anfragen für Lucene.
  *
@@ -223,7 +218,6 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
                     $formData = $parameters->get('submit') ? $paramArray : self::$formData;
                     $formData['action'] = $link->makeUrl(false);
                     $formData['searchcount'] = $configurations->getViewData()->offsetGet('searchcount');
-                    tx_rnbase::load('tx_rnbase_util_FormUtil');
                     $formData['hiddenfields'] = tx_rnbase_util_FormUtil::getHiddenFieldsForUrlParams($formData['action']);
                     $this->prepareFormFields($formData, $parameters);
 

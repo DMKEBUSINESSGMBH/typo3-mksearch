@@ -23,7 +23,6 @@
 ***************************************************************/
 
 require_once tx_rnbase_util_Extensions::extPath('mksearch', 'lib/Apache/Solr/Service.php');
-tx_rnbase::load('tx_mksearch_tests_Testcase');
 
 /**
  * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>

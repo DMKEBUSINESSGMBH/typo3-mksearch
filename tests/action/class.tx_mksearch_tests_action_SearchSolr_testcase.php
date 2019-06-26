@@ -23,9 +23,6 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
-tx_rnbase::load('tx_mksearch_tests_Testcase');
-tx_rnbase::load('tx_mksearch_action_SearchSolr');
-tx_rnbase::load('Tx_Phpunit_Framework');
 
 /**
  * Testfälle.

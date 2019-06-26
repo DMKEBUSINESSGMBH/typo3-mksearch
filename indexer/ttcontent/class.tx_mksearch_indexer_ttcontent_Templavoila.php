@@ -27,8 +27,6 @@
 /**
  * benötigte Klassen einbinden.
  */
-tx_rnbase::load('tx_mksearch_indexer_ttcontent_Normal');
-tx_rnbase::load('tx_mksearch_util_Indexer');
 
 /**
  * takes care of tt_content with templavoila support.

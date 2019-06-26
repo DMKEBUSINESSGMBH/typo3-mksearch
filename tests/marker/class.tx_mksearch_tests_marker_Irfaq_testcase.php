@@ -27,9 +27,7 @@
 /**
  * benötigte Klassen einbinden.
  */
-tx_rnbase::load('tx_mksearch_marker_Irfaq');
 require_once tx_rnbase_util_Extensions::extPath('mksearch').'lib/Apache/Solr/Document.php';
-tx_rnbase::load('tx_mksearch_tests_Testcase');
 
 /**
  * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>

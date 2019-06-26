@@ -1,7 +1,5 @@
 <?php
 
-tx_rnbase::load('tx_rnbase_view_Single');
-
 /**
  * Detailseite eines beliebigen Datensatzes aus Momentan Lucene oder Solr.
  *

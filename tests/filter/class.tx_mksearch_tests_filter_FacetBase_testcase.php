@@ -27,8 +27,6 @@
 /**
  * benötigte Klassen einbinden.
  */
-tx_rnbase::load('tx_mksearch_tests_Testcase');
-tx_rnbase::load('tx_mksearch_filter_FacetBase');
 
 /**
  * Testfälle für tx_mksearch_filter_FacetBase.

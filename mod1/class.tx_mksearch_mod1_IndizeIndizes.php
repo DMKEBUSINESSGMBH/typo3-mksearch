@@ -1,11 +1,5 @@
 <?php
 
-tx_rnbase::load('tx_rnbase_mod_BaseModFunc');
-tx_rnbase::load('tx_mksearch_mod1_util_Template');
-tx_rnbase::load('tx_rnbase_util_Templates');
-tx_rnbase::load('tx_mksearch_util_ServiceRegistry');
-tx_rnbase::load('tx_mksearch_mod1_util_IndexStatusHandler');
-
 /**
  * Mksearch backend module.
  *
@@ -92,7 +86,6 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc
      */
     protected function showTables($template, $configurations, $formTool, &$markerArray, $oIntIndexSrv)
     {
-        tx_rnbase::load('tx_mksearch_util_Config');
         $aIndexers = tx_mksearch_util_Config::getIndexers();
         $aIndices = $oIntIndexSrv->getByPageId($this->getPid());
 

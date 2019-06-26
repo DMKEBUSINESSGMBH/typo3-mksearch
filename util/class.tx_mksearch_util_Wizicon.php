@@ -29,9 +29,6 @@
  * @license        http://www.gnu.org/licenses/lgpl.html
  *                 GNU Lesser General Public License, version 3 or later
  */
-tx_rnbase::load('tx_rnbase_util_Extensions');
-tx_rnbase::load('tx_rnbase_util_Wizicon');
-
 class tx_mksearch_util_Wizicon extends tx_rnbase_util_Wizicon
 {
     /**

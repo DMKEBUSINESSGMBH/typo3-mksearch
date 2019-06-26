@@ -31,13 +31,6 @@ use Elastica\Result;
 use Elastica\ResultSet;
 use Elastica\Search;
 
-tx_rnbase::load('tx_mksearch_interface_SearchEngine');
-tx_rnbase::load('tx_rnbase_configurations');
-tx_rnbase::load('tx_mksearch_util_Misc');
-tx_rnbase::load('tx_mksearch_service_engine_SolrException');
-tx_rnbase::load('tx_rnbase_util_Logger');
-tx_rnbase::load('Tx_Rnbase_Service_Base');
-
 /**
  * Service "ElasticSearch search engine" for the "mksearch" extension.
  */

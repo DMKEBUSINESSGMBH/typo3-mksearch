@@ -21,7 +21,6 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
-tx_rnbase::load('Tx_Rnbase_Scheduler_Task');
 
 class tx_mksearch_scheduler_IndexTask extends Tx_Rnbase_Scheduler_Task
 {

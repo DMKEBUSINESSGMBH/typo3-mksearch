@@ -1,7 +1,5 @@
 <?php
 
-tx_rnbase::load('tx_rnbase_util_Templates');
-
 /**
  * Die Klasse stellt Auswahlmenus zur Verfügung.
  *

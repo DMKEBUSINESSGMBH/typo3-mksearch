@@ -22,12 +22,6 @@
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-tx_rnbase::load('tx_mksearch_action_AbstractSearch');
-tx_rnbase::load('tx_rnbase_filter_BaseFilter');
-tx_rnbase::load('tx_mksearch_util_ServiceRegistry');
-tx_rnbase::load('tx_mksearch_util_Misc');
-tx_rnbase::load('tx_mksearch_util_SolrAutocomplete');
-
 /**
  * Solr search action.
  *
@@ -73,7 +67,6 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
         $options = array();
 
         if ($parameters->get('debug')) {
-            tx_rnbase::load('tx_mksearch_util_Misc');
             if (tx_mksearch_util_Misc::isDevIpMask()) {
                 $options['debug'] = 1;
                 $options['debugQuery'] = 'true';
@@ -102,7 +95,6 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
             }
         } // auch einen debug ausgeben, wenn nichts gesucht wird
         elseif ($options['debug']) {
-            tx_rnbase::load('tx_rnbase_util_Debug');
             tx_rnbase_util_Debug::debug(
                 array(
                     'Filter returns false, no search done.',
@@ -155,7 +147,6 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
         // erstmal den cache fragen. Das ist vor allem interessant wenn
         // das plugin mehrfach auf einer Seite eingebunden wird. Dadurch
         // muss die Solr Suche nur einmal ausgeführt werden
-        tx_rnbase::load('tx_rnbase_cache_Manager');
         $oCache = tx_rnbase_cache_Manager::getCache('mksearch');
         $sCacheKey = $this->generateCacheKey($fields, $options);
         if ($result = $oCache->get($sCacheKey)) {
@@ -173,7 +164,6 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
 
             //der solr responce processor bearbeidet die results
             // es werden hits, facets, uws. erzeugt.
-            tx_rnbase::load('tx_mksearch_util_SolrResponseProcessor');
             tx_mksearch_util_SolrResponseProcessor::processSolrResult(
                 $result,
                 $options,
@@ -188,7 +178,6 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
             if ($addr = tx_rnbase_configurations::getExtensionCfgValue('rn_base', 'sendEmailOnException')) {
                 tx_rnbase_util_Misc::sendErrorMail($addr, 'tx_mksearch_action_SearchSolr_searchSolr', $e);
             }
-            tx_rnbase::load('tx_rnbase_util_Logger');
             if (tx_rnbase_util_Logger::isFatalEnabled()) {
                 tx_rnbase_util_Logger::fatal(
                     'Solr search failed with Exception!',
@@ -197,7 +186,6 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
                 );
             }
             if ($options['debug']) {
-                tx_rnbase::load('tx_rnbase_util_Debug');
                 tx_rnbase_util_Debug::debug(
                     array(
                         'Exception' => $e->getMessage(),
@@ -408,7 +396,6 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
             // if the frontend debug is enabled, so the json will be invalid.
             // so we has to disable the debug.
             $GLOBALS['TYPO3_CONF_VARS']['FE']['debug'] = 0;
-            tx_rnbase::load('tx_rnbase_util_TYPO3');
             $tsfe = tx_rnbase_util_TYPO3::getTSFE();
             $tsfe->config['config']['debug'] = 0;
             $tsfe->TYPO3_CONF_VARS['FE']['debug'] = 0;

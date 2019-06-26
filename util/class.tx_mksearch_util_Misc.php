@@ -22,7 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 require_once tx_rnbase_util_Extensions::extPath('mksearch').'lib/Apache/Solr/Service.php';
-tx_rnbase::load('tx_rnbase_util_Strings');
 
 /**
  * Miscellaneous methods.
@@ -114,7 +113,6 @@ class tx_mksearch_util_Misc
             return $mixed;
         }
         // String prüfen und ggf. encodieren
-        tx_rnbase::load('tx_rnbase_util_Strings');
 
         return tx_rnbase_util_Strings::isUtf8String($mixed) ? $mixed : utf8_encode($mixed);
     }
@@ -228,7 +226,6 @@ class tx_mksearch_util_Misc
      */
     public static function isDevIpMask($remoteAddress = '', $devIPmask = '')
     {
-        tx_rnbase::load('tx_rnbase_util_Network');
         $devIPmask = trim(strcmp($devIPmask, '') ? $devIPmask : $GLOBALS['TYPO3_CONF_VARS']['SYS']['devIPmask']);
         $remoteAddress = trim(strcmp($remoteAddress, '') ? $remoteAddress : tx_rnbase_util_Misc::getIndpEnv('REMOTE_ADDR'));
 
@@ -242,8 +239,6 @@ class tx_mksearch_util_Misc
      */
     public static function parseTsConfig($sTs)
     {
-        tx_rnbase::load('tx_rnbase_util_TS');
-
         return tx_rnbase_util_TS::parseTsConfig($sTs);
     }
 

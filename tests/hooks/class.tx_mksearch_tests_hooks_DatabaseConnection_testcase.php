@@ -21,8 +21,6 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
-tx_rnbase::load('tx_mksearch_tests_Testcase');
-tx_rnbase::load('tx_mksearch_hooks_DatabaseConnection');
 
 /**
  * tx_mksearch_tests_hooks_DatabaseConnection_testcase.

@@ -28,9 +28,6 @@
 /**
  * benötigte Klassen einbinden.
  */
-tx_rnbase::load('tx_rnbase_cache_Manager');
-tx_rnbase::load('tx_rnbase_util_TYPO3');
-tx_rnbase::load('tx_rnbase_util_Spyc');
 
 /**
  * Statische Hilfsmethoden für Tests.
@@ -228,7 +225,6 @@ class tx_mksearch_tests_Util
         // die rootline korrekt geholt wird und nichts aus dem Cache. Sonst werden
         // die gerade hinzugefügten TS Dateien nicht beachtet
         $rootLine = 1;
-        tx_rnbase::load('Tx_Rnbase_Backend_Utility');
 
         return Tx_Rnbase_Backend_Utility::getPagesTSconfig($pageId, $rootLine);
     }
@@ -242,8 +238,6 @@ class tx_mksearch_tests_Util
      */
     public static function loadConfig4BE($pageTSconfig)
     {
-        tx_rnbase::load('tx_rnbase_configurations');
-
         tx_rnbase_util_Misc::prepareTSFE(); // Ist bei Aufruf aus BE notwendig!
         $GLOBALS['TSFE']->config = array();
         $cObj = tx_rnbase::makeInstance(tx_rnbase_util_Typo3Classes::getContentObjectRendererClass());
@@ -306,7 +300,6 @@ class tx_mksearch_tests_Util
      */
     public static function disableRelationManager()
     {
-        tx_rnbase::load('tx_mksearch_tests_fixtures_typo3_CoreDbRelationHandler');
         $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Core\\Database\\RelationHandler'] = array(
             'className' => 'tx_mksearch_tests_fixtures_typo3_CoreDbRelationHandler',
         );

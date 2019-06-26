@@ -22,8 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-tx_rnbase::load('tx_mksearch_model_IndexerFieldBase');
-
 /**
  * Model for indexer fields.
  *
@@ -93,7 +91,6 @@ class tx_mksearch_model_engineSpecific_lucene_IndexerField extends tx_mksearch_m
         $this->_encoding = $encoding;
 
         if (33 == $value) {
-            tx_rnbase::load('tx_rnbase_util_Debug');
             tx_rnbase_util_Debug::debug(
                 $encoding,
                 'class.tx_mksearch_model_engineSpecific_lucene_IndexerField.php'

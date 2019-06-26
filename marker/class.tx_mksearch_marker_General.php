@@ -22,9 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-tx_rnbase::load('tx_rnbase_util_Templates');
-tx_rnbase::load('tx_rnbase_util_BaseMarker');
-
 /**
  * Generic class for rendering contents
  * Renders just anything you pass in ;-).

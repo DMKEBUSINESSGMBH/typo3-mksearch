@@ -22,10 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-tx_rnbase::load('tx_mksearch_indexer_BaseMedia');
-tx_rnbase::load('tx_mksearch_util_Misc');
-tx_rnbase::load('tx_rnbase_util_Logger');
-
 /**
  * Indexer service for dam.media called by the "mksearch" extension.
  */

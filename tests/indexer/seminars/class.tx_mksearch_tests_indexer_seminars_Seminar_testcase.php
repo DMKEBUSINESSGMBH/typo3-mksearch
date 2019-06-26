@@ -23,8 +23,6 @@
 ***************************************************************/
 
 require_once tx_rnbase_util_Extensions::extPath('mksearch', 'lib/Apache/Solr/Document.php');
-tx_rnbase::load('tx_mksearch_tests_DbTestcase');
-tx_rnbase::load('tx_mksearch_tests_Util');
 
 /**
  * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
@@ -75,7 +73,6 @@ class tx_mksearch_tests_indexer_seminars_Seminar_testcase extends tx_mksearch_te
 
         //if we got here all extensions got successfully imported
         //so now we can load the appropriate classes
-        tx_rnbase::load('tx_seminars_objectfromdb');
     }
 
     /**

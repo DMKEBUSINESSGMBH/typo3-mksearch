@@ -22,12 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-tx_rnbase::load('tx_mksearch_interface_SearchEngine');
-tx_rnbase::load('tx_rnbase_configurations');
-tx_rnbase::load('tx_rnbase_util_Logger');
-tx_rnbase::load('tx_mksearch_service_engine_lucene_DataTypeMapper');
-tx_rnbase::load('Tx_Rnbase_Service_Base');
-
 /**
  * Service "ZendLucene search engine" for the "mksearch" extension.
  *
@@ -154,7 +148,6 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
     private function getIndexDirectory($name)
     {
         $path = tx_rnbase_configurations::getExtensionCfgValue('mksearch', 'luceneIndexDir').DIRECTORY_SEPARATOR.$name;
-        tx_rnbase::load('tx_rnbase_util_Files');
         if (!tx_rnbase_util_Files::isAbsPath($path)) {
             $path = \Sys25\RnBase\Utility\Environment::getPublicPath().$path;
         }
@@ -389,7 +382,6 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
         }
 
         if ($options['debug']) {
-            tx_rnbase::load('tx_rnbase_util_Debug');
             tx_rnbase_util_Debug::debug(
                 array(
                     'Fields' => $fields, 'Options' => $options,
@@ -415,7 +407,6 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
         }
 
         // else
-        tx_rnbase::load('tx_mksearch_model_SearchHit');
         $results = array();
         for ($i = $offset; $i < $limit + $offset; ++$i) {
             if (array_key_exists($i, $hits)) {

@@ -8,7 +8,6 @@ if (!defined('TYPO3_MODE')) {
 $_EXTCONF = empty($_EXTCONF) ? array() : (is_array($_EXTCONF) ? $_EXTCONF : unserialize($_EXTCONF));
 
 // Include service configuration
-tx_rnbase::load('tx_mksearch_util_ServiceRegistry');
 require_once tx_rnbase_util_Extensions::extPath('mksearch').'service/ext_localconf.php';
 
 // Include indexer registrations
@@ -49,10 +48,6 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['proc
 // Include PageTSConfig for backend module
 tx_rnbase_util_Extensions::addPageTSConfig('<INCLUDE_TYPOSCRIPT: source="FILE:EXT:mksearch/mod1/pageTSconfig.txt">');
 
-//
-//tx_rnbase::load('tx_mksearch_scheduler_IndexTask');
-//tx_rnbase::load('tx_mksearch_scheduler_IndexTaskAddFieldProvider');
-
 // Register information for the test and sleep tasks
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['tx_mksearch_scheduler_IndexTask'] = array(
     'extension' => $_EXTKEY,
@@ -68,13 +63,6 @@ if (tx_rnbase_util_Extensions::isLoaded('mksanitizedparameters')) {
 require_once tx_rnbase_util_Extensions::extPath($_EXTKEY, 'Configuration/SignalSlotDispatcher.php');
 require_once tx_rnbase_util_Extensions::extPath($_EXTKEY, 'Configuration/XClasses.php');
 
-tx_rnbase::load('tx_rnbase_util_Misc');
-tx_rnbase::load('tx_rnbase_util_Strings');
-tx_rnbase::load('tx_rnbase_util_Arrays');
-tx_rnbase::load('tx_rnbase_util_Files');
-tx_rnbase::load('tx_rnbase_util_Typo3Classes');
-
-tx_rnbase::load('Tx_Rnbase_Utility_Cache');
 Tx_Rnbase_Utility_Cache::addExcludedParametersForCacheHash(array(
     'mksearch[pb-search-pointer]',
     'mksearch[submit]',
