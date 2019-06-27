@@ -22,12 +22,6 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-// mögliche operatoren für das verbinden von wörtern
-define('MKSEARCH_OP_OR', 'or');
-define('MKSEARCH_OP_AND', 'and');
-define('MKSEARCH_OP_EXACT', 'exact');
-define('MKSEARCH_OP_FREE', 'free');
-define('MKSEARCH_OP_NONE', 'none');
 
 /**
  * Methods for accessing configuration options etc.
