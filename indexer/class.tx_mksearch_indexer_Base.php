@@ -331,9 +331,6 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
         // as soon as one of the parent pages is hidden we return true.
         // @todo support when a parent page is deleted! shouldn't be possible
         // without further configuration for a BE user but it's still possible!
-
-        // wir rufen die Methode mit call_user_func_array auf, da sie
-        // statisch ist, womit wir diese nicht mocken könnten
         $rootline = $this->getIndexerUtility()->getRootlineByPid($model->record['pid']);
 
         // @todo sollten nicht auch Shortcuts etc. invalide sein?

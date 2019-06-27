@@ -667,24 +667,24 @@ class tx_mksearch_tests_indexer_Base_testcase extends tx_mksearch_tests_Testcase
     /**
      * @group unit
      */
-    public function testHasDocToBeDeletedCallsGetRootlineCorrect()
+    public function testHasDocToBeDeletedCallsgetRootlineByPidCorrect()
     {
-        $coreConfigUtility = $this->getMock(
+        $indexerUtility = $this->getMock(
             'stdClass',
-            array('getRootline')
+            array('getRootlineByPid')
         );
-        $coreConfigUtility->expects($this->once())
-            ->method('getRootline')
+        $indexerUtility->expects($this->once())
+            ->method('getRootlineByPid')
             ->with(123)
             ->will($this->returnValue(array()));
 
         $indexer = $this->getMock(
             'tx_mksearch_tests_fixtures_indexer_Dummy',
-            array('getCoreConfigUtility')
+            array('getIndexerUtility')
         );
         $indexer->expects($this->once())
-            ->method('getCoreConfigUtility')
-            ->will($this->returnValue($coreConfigUtility));
+            ->method('getIndexerUtility')
+            ->will($this->returnValue($indexerUtility));
 
         $indexDoc = tx_rnbase::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
@@ -703,12 +703,12 @@ class tx_mksearch_tests_indexer_Base_testcase extends tx_mksearch_tests_Testcase
      */
     public function testHasDocToBeDeletedReturnsTrueIfOnePageInRootlineIsHidden()
     {
-        $coreConfigUtility = $this->getMock(
+        $indexerUtility = $this->getMock(
             'stdClass',
-            array('getRootline')
+            array('getRootlineByPid')
         );
-        $coreConfigUtility->expects($this->once())
-            ->method('getRootline')
+        $indexerUtility->expects($this->once())
+            ->method('getRootlineByPid')
             ->will($this->returnValue(array(
                 0 => array('uid' => 1, 'hidden' => 1),
                 1 => array('uid' => 2, 'hidden' => 0),
@@ -716,11 +716,11 @@ class tx_mksearch_tests_indexer_Base_testcase extends tx_mksearch_tests_Testcase
 
         $indexer = $this->getMock(
             'tx_mksearch_tests_fixtures_indexer_Dummy',
-            array('getCoreConfigUtility')
+            array('getIndexerUtility')
         );
         $indexer->expects($this->once())
-            ->method('getCoreConfigUtility')
-            ->will($this->returnValue($coreConfigUtility));
+            ->method('getIndexerUtility')
+            ->will($this->returnValue($indexerUtility));
 
         $indexDoc = tx_rnbase::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
@@ -742,12 +742,12 @@ class tx_mksearch_tests_indexer_Base_testcase extends tx_mksearch_tests_Testcase
      */
     public function testHasDocToBeDeletedReturnsTrueIfOnePageInRootlineIsBackendUserSection()
     {
-        $coreConfigUtility = $this->getMock(
+        $indexerUtility = $this->getMock(
             'stdClass',
-            array('getRootline')
+            array('getRootlineByPid')
         );
-        $coreConfigUtility->expects($this->once())
-            ->method('getRootline')
+        $indexerUtility->expects($this->once())
+            ->method('getRootlineByPid')
             ->will($this->returnValue(array(
                 0 => array('uid' => 1, 'doktype' => 6),
                 1 => array('uid' => 2, 'doktype' => 1),
@@ -755,11 +755,11 @@ class tx_mksearch_tests_indexer_Base_testcase extends tx_mksearch_tests_Testcase
 
         $indexer = $this->getMock(
             'tx_mksearch_tests_fixtures_indexer_Dummy',
-            array('getCoreConfigUtility')
+            array('getIndexerUtility')
         );
         $indexer->expects($this->once())
-            ->method('getCoreConfigUtility')
-            ->will($this->returnValue($coreConfigUtility));
+            ->method('getIndexerUtility')
+            ->will($this->returnValue($indexerUtility));
 
         $indexDoc = tx_rnbase::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
@@ -781,12 +781,12 @@ class tx_mksearch_tests_indexer_Base_testcase extends tx_mksearch_tests_Testcase
      */
     public function testHasDocToBeDeletedReturnsTrueIfOnePageInRootlineHasNoSearchFlag()
     {
-        $coreConfigUtility = $this->getMock(
+        $indexerUtility = $this->getMock(
             'stdClass',
-            array('getRootline')
+            array('getRootlineByPid')
         );
-        $coreConfigUtility->expects($this->once())
-            ->method('getRootline')
+        $indexerUtility->expects($this->once())
+            ->method('getRootlineByPid')
             ->will($this->returnValue(array(
                 0 => array('uid' => 1, 'no_search' => 1),
                 1 => array('uid' => 2, 'no_search' => 0),
@@ -794,11 +794,11 @@ class tx_mksearch_tests_indexer_Base_testcase extends tx_mksearch_tests_Testcase
 
         $indexer = $this->getMock(
             'tx_mksearch_tests_fixtures_indexer_Dummy',
-            array('getCoreConfigUtility')
+            array('getIndexerUtility')
         );
         $indexer->expects($this->once())
-            ->method('getCoreConfigUtility')
-            ->will($this->returnValue($coreConfigUtility));
+            ->method('getIndexerUtility')
+            ->will($this->returnValue($indexerUtility));
 
         $indexDoc = tx_rnbase::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
@@ -826,12 +826,12 @@ class tx_mksearch_tests_indexer_Base_testcase extends tx_mksearch_tests_Testcase
      */
     public function testHasDocToBeDeletedReturnsTrueIfOnePageInRootlineHasNoSearchFlagButFlagShoudNotBeRespected()
     {
-        $coreConfigUtility = $this->getMock(
+        $indexerUtility = $this->getMock(
             'stdClass',
-            array('getRootline')
+            array('getRootlineByPid')
         );
-        $coreConfigUtility->expects($this->once())
-            ->method('getRootline')
+        $indexerUtility->expects($this->once())
+            ->method('getRootlineByPid')
             ->will($this->returnValue(array(
                 0 => array('uid' => 1, 'no_search' => 1),
                 1 => array('uid' => 2, 'no_search' => 0),
@@ -839,11 +839,11 @@ class tx_mksearch_tests_indexer_Base_testcase extends tx_mksearch_tests_Testcase
 
         $indexer = $this->getMock(
             'tx_mksearch_tests_fixtures_indexer_Dummy',
-            array('getCoreConfigUtility')
+            array('getIndexerUtility')
         );
         $indexer->expects($this->once())
-            ->method('getCoreConfigUtility')
-            ->will($this->returnValue($coreConfigUtility));
+            ->method('getIndexerUtility')
+            ->will($this->returnValue($indexerUtility));
 
         $indexDoc = tx_rnbase::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
@@ -870,12 +870,12 @@ class tx_mksearch_tests_indexer_Base_testcase extends tx_mksearch_tests_Testcase
      */
     public function testHasDocToBeDeletedReturnsFalseIfAllPagesInRootlineAreOkay()
     {
-        $coreConfigUtility = $this->getMock(
+        $indexerUtility = $this->getMock(
             'stdClass',
-            array('getRootline')
+            array('getRootlineByPid')
         );
-        $coreConfigUtility->expects($this->once())
-            ->method('getRootline')
+        $indexerUtility->expects($this->once())
+            ->method('getRootlineByPid')
             ->will($this->returnValue(array(
                 0 => array('uid' => 1, 'doktype' => 2),
                 1 => array('uid' => 2, 'doktype' => 1),
@@ -883,11 +883,11 @@ class tx_mksearch_tests_indexer_Base_testcase extends tx_mksearch_tests_Testcase
 
         $indexer = $this->getMock(
             'tx_mksearch_tests_fixtures_indexer_Dummy',
-            array('getCoreConfigUtility')
+            array('getIndexerUtility')
         );
         $indexer->expects($this->once())
-            ->method('getCoreConfigUtility')
-            ->will($this->returnValue($coreConfigUtility));
+            ->method('getIndexerUtility')
+            ->will($this->returnValue($indexerUtility));
 
         $indexDoc = tx_rnbase::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
@@ -911,7 +911,7 @@ class tx_mksearch_tests_indexer_Base_testcase extends tx_mksearch_tests_Testcase
     {
         $indexer = $this->getMock(
             'tx_mksearch_tests_fixtures_indexer_Dummy',
-            array('getCoreConfigUtility')
+            array('dummy')
         );
 
         self::assertInstanceOf(
@@ -979,11 +979,11 @@ class tx_mksearch_tests_indexer_Base_testcase extends tx_mksearch_tests_Testcase
      */
     public function testIndexSiteRootPageIndexesRootPageCorrectly()
     {
-        $coreConfigUtility = $this->getMock(
+        $indexerUtility = $this->getMock(
             'stdClass',
             array('getSiteRootPage')
         );
-        $coreConfigUtility->expects($this->once())
+        $indexerUtility->expects($this->once())
             ->method('getSiteRootPage')
             ->with(123)
             ->will($this->returnValue(array('uid' => 3)));
@@ -991,11 +991,11 @@ class tx_mksearch_tests_indexer_Base_testcase extends tx_mksearch_tests_Testcase
         $options = array('indexSiteRootPage' => 1);
         $indexer = $this->getMock(
             'tx_mksearch_tests_fixtures_indexer_Dummy',
-            array('getCoreConfigUtility', 'shouldIndexSiteRootPage')
+            array('getIndexerUtility', 'shouldIndexSiteRootPage')
         );
         $indexer->expects($this->once())
-            ->method('getCoreConfigUtility')
-            ->will($this->returnValue($coreConfigUtility));
+            ->method('getIndexerUtility')
+            ->will($this->returnValue($indexerUtility));
 
         $indexer->expects($this->once())
             ->method('shouldIndexSiteRootPage')
@@ -1026,10 +1026,10 @@ class tx_mksearch_tests_indexer_Base_testcase extends tx_mksearch_tests_Testcase
         $options = array('indexSiteRootPage' => 0);
         $indexer = $this->getMock(
             'tx_mksearch_tests_fixtures_indexer_Dummy',
-            array('getCoreConfigUtility', 'shouldIndexSiteRootPage')
+            array('getIndexerUtility', 'shouldIndexSiteRootPage')
         );
         $indexer->expects($this->never())
-            ->method('getCoreConfigUtility');
+            ->method('getIndexerUtility');
 
         $indexer->expects($this->once())
             ->method('shouldIndexSiteRootPage')
