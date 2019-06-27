@@ -27,8 +27,6 @@
 /**
  * benötigte Klassen einbinden.
  */
-tx_rnbase::load('tx_mksearch_indexer_seminars_Seminar');
-tx_rnbase::load('tx_mksearch_util_Misc');
 
 /**
  * Indexes seminars with the object_type = 0.

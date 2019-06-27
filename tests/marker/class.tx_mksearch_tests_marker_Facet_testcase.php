@@ -23,8 +23,6 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
-tx_rnbase::load('tx_mksearch_tests_Testcase');
-tx_rnbase::load('tx_mksearch_marker_Facet');
 
 /**
  * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
@@ -70,10 +68,7 @@ class tx_mksearch_tests_marker_Facet_testcase extends tx_mksearch_tests_Testcase
         $sParsedTemplate = $this->oMarker->parseTemplate($sTemplate, $oItem, $this->oFormatter, 'searchsolr.facet.', 'FACET');
         //Feld noch im Link drin?
         $expectedParsedTemplate = '/(\<a href="\?id=)([a-z0-9]+)(&amp;mksearch%5Bfq%5D=contentType%3Amedia" \>media \(2\)\<\/a\>)/';
-        // leerzeichen ab 6.2.3 nicht mehr vorhanden
-        if (tx_rnbase_util_TYPO3::isTYPO62OrHigher()) {
-            $expectedParsedTemplate = str_replace('" \>', '"\>', $expectedParsedTemplate);
-        }
+        $expectedParsedTemplate = str_replace('" \>', '"\>', $expectedParsedTemplate);
         self::assertRegExp(
             $expectedParsedTemplate,
             $sParsedTemplate,
@@ -98,10 +93,7 @@ class tx_mksearch_tests_marker_Facet_testcase extends tx_mksearch_tests_Testcase
         $sParsedTemplate = $this->oMarker->parseTemplate($sTemplate, $oItem, $this->oFormatter, 'searchsolr.facet.', 'FACET');
         //Feld noch im Link drin?
         $expectedParsedTemplate = '/(\<a href="\?id=)([a-z0-9]+)(&amp;mksearch%5Bfq%5D=media" \>media \(2\)\<\/a\>)/';
-        // leerzeichen ab 6.2.3 nicht mehr vorhanden
-        if (tx_rnbase_util_TYPO3::isTYPO62OrHigher()) {
-            $expectedParsedTemplate = str_replace('" \>', '"\>', $expectedParsedTemplate);
-        }
+        $expectedParsedTemplate = str_replace('" \>', '"\>', $expectedParsedTemplate);
         self::assertRegExp(
             $expectedParsedTemplate,
             $sParsedTemplate,
@@ -126,10 +118,7 @@ class tx_mksearch_tests_marker_Facet_testcase extends tx_mksearch_tests_Testcase
         $sParsedTemplate = $this->oMarker->parseTemplate($sTemplate, $oItem, $this->oFormatter, 'searchsolr.facet.', 'FACET');
         //Feld noch im Link drin?
         $expectedParsedTemplate = '/(\<a href="\?id=)([a-z0-9]+)(&amp;mksearch%5Bfq%5D=%C3%9Cber%20uns" \>Über uns \(2\)\<\/a\>)/';
-        // leerzeichen ab 6.2.3 nicht mehr vorhanden
-        if (tx_rnbase_util_TYPO3::isTYPO62OrHigher()) {
-            $expectedParsedTemplate = str_replace('" \>', '"\>', $expectedParsedTemplate);
-        }
+        $expectedParsedTemplate = str_replace('" \>', '"\>', $expectedParsedTemplate);
         self::assertRegExp(
             $expectedParsedTemplate,
             $sParsedTemplate,

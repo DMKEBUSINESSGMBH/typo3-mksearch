@@ -21,14 +21,6 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  ***************************************************************/
 
-tx_rnbase::load('tx_rnbase_util_SearchBase');
-tx_rnbase::load('tx_mksearch_util_Misc');
-tx_rnbase::load('tx_rnbase_filter_BaseFilter');
-tx_rnbase::load('tx_rnbase_util_ListBuilderInfo');
-tx_rnbase::load('tx_mksearch_util_Filter');
-tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
-tx_rnbase::load('tx_mksearch_model_Facet');
-
 /**
  * Der Filter liest seine Konfiguration passend zum Typ des Solr RequestHandlers. Der Typ
  * ist entweder "default" oder "dismax". Entsprechend baut sich auch die Typoscript-Konfiguration
@@ -282,7 +274,6 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
     {
         // wenn der DisMaxRequestHandler genutzt wird, müssen wir ggf. den term und die options ändern.
         if ($configurations->get($confId.'useDisMax')) {
-            tx_rnbase::load('tx_mksearch_util_SearchBuilder');
             tx_mksearch_util_SearchBuilder::handleMinShouldMatch($fields, $options, $parameters, $configurations, $confId);
             tx_mksearch_util_SearchBuilder::handleDismaxFuzzySearch($fields, $options, $parameters, $configurations, $confId);
         }
@@ -451,7 +442,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
         $confId
     ) {
         if ($configurations->getBool($confId.'respectSiteRootPage')) {
-            $siteRootPage = tx_mksearch_service_indexer_core_Config::getSiteRootPage(
+            $siteRootPage = tx_mksearch_util_Indexer::getInstance()->getSiteRootPage(
                 $GLOBALS['TSFE']->id
             );
             if ($options['siteRootPage'] || !is_array($siteRootPage)) {
@@ -708,7 +699,6 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
             $formData['action'] = $link->makeUrl(false);
             $formData['searchterm'] = htmlspecialchars($this->getParameters()->get('term'), ENT_QUOTES);
             $formData['listsize'] = $viewData->offsetExists('pagebrowser') ? $viewData->offsetGet('pagebrowser')->getListSize() : 0;
-            tx_rnbase::load('tx_rnbase_util_FormUtil');
             $formData['hiddenfields'] = tx_rnbase_util_FormUtil::getHiddenFieldsForUrlParams($formData['action']);
 
             $combinations = array('none', 'free', 'or', 'and', 'exact');
@@ -771,7 +761,6 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
         $confId = $this->getConfId();
 
         $configurations = $formatter->getConfigurations();
-        tx_rnbase::load('tx_rnbase_util_Templates');
         $formTemplate = $this->getConfValue($configurations, 'template.file');
         $subpart = $this->getConfValue($configurations, 'template.subpart');
         $formTemplate = tx_rnbase_util_Templates::getSubpartFromFile($formTemplate, $subpart);

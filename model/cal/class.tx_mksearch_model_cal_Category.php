@@ -27,8 +27,6 @@
 /**
  * benötigte Klassen einbinden.
  */
-tx_rnbase::load('tx_rnbase_model_base');
-
 class tx_mksearch_model_cal_Category extends tx_rnbase_model_base
 {
     /**

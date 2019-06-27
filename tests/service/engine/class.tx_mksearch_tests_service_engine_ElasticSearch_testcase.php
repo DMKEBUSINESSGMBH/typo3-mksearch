@@ -23,9 +23,6 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
-tx_rnbase::load('tx_mksearch_tests_Testcase');
-tx_rnbase::load('tx_mksearch_service_engine_ElasticSearch');
-tx_rnbase::load('tx_mksearch_model_internal_Index');
 
 /**
  * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>

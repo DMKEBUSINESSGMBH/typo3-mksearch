@@ -23,7 +23,6 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
-tx_rnbase::load('tx_mksearch_tests_Testcase');
 
 /**
  * tx_mksearch_tests_search_irfaq_Category_testcase.
@@ -42,6 +41,5 @@ class tx_mksearch_tests_search_irfaq_Category_testcase extends tx_mksearch_tests
         $wrapperClass = tx_rnbase::makeInstance('tx_mksearch_search_irfaq_Category')->getWrapperClass();
         self::assertSame('tx_mksearch_model_irfaq_Category', $wrapperClass);
         // wenn es die Klasse nicht gibt, wirft rn_base einen Fehler
-        tx_rnbase::load($wrapperClass);
     }
 }

@@ -27,8 +27,6 @@
 /**
  * benötigte Klassen einbinden.
  */
-tx_rnbase::load('tx_mksearch_indexer_Base');
-tx_rnbase::load('tx_mksearch_util_Misc');
 
 /**
  * @author Hannes Bochmann

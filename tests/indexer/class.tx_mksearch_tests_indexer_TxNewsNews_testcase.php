@@ -22,10 +22,6 @@
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-tx_rnbase::load('tx_mksearch_tests_Testcase');
-tx_rnbase::load('tx_rnbase_model_base');
-tx_rnbase::load('tx_mksearch_indexer_TxNewsNews');
-
 /**
  * Indexer for News from tx_news.
  *
@@ -75,7 +71,6 @@ class tx_mksearch_tests_indexer_TxNewsNews_testcase extends tx_mksearch_tests_Te
      */
     public function testHandleCategoryChanged()
     {
-        tx_rnbase::load('Tx_Rnbase_Database_Connection');
         $connection = $this->getMock(
             'Tx_Rnbase_Database_Connection',
             array('doSelect')
@@ -111,7 +106,6 @@ class tx_mksearch_tests_indexer_TxNewsNews_testcase extends tx_mksearch_tests_Te
             )
         );
 
-        tx_rnbase::load('tx_mksearch_service_internal_Index');
         $indexSrv = $this->getMock(
             'tx_mksearch_service_internal_Index',
             array('addRecordToIndex')

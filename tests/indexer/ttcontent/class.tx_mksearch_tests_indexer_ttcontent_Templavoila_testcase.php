@@ -23,8 +23,6 @@
 ***************************************************************/
 
 require_once tx_rnbase_util_Extensions::extPath('mksearch', 'lib/Apache/Solr/Document.php');
-tx_rnbase::load('tx_mksearch_tests_Testcase');
-tx_rnbase::load('tx_mksearch_indexer_ttcontent_Templavoila');
 
 /**
  * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>

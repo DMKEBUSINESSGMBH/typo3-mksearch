@@ -27,9 +27,6 @@
 /**
  * benötigte Klassen einbinden.
  */
-tx_rnbase::load('tx_mksearch_indexer_Base');
-tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
-tx_rnbase::load('tx_mksearch_util_Misc');
 
 /**
  * Indexer service for core.tt_content called by the "mksearch" extension.
@@ -164,68 +161,6 @@ class tx_mksearch_indexer_Page extends tx_mksearch_indexer_Base
         $options = array()
     ) {
         return tx_rnbase::makeInstance('tx_rnbase_model_Base', $rawData);
-    }
-
-    /**
-     * Get sql data necessary to grab data to be indexed from data base
-     * TODO: Check if parameter data is necessary for this indexer.
-     *
-     * @param array $options from service configuration
-     * @param array $data    Tablename <-> uids matrix of records to be indexed (array('tab1' => array(2,5,6), 'tab2' => array(4,5,8))
-     *
-     * @return array
-     *
-     * @see tx_mksearch_service_indexer_BaseDataBase::getSqlData()
-     */
-    protected function getSqlData(array $options, array $data = array())
-    {
-        if (!isset($options['indexedFields'])) {
-            throw new Exception('tx_mksearch_service_indexer_core_Page->getSqlData(): mandatory option "indexedFields" not set!');
-        }
-
-        $fields = array_unique(array_merge($this->baseFields, $options['indexedFields']));
-
-        $where =    // restrict page types to FE relevant ones
-                    'doktype <= 5'.
-                    // Include / exclude restrictions
-                    tx_mksearch_service_indexer_core_Config::getIncludeExcludeWhere(
-                        isset($options['include']) ? $options['include'] : array(),
-                        isset($options['exclude']) ? $options['exclude'] : array()
-                    );
-
-        return array(
-                    'fields' => implode(',', $fields),
-                    'table' => 'pages',
-                    'where' => $where,
-                    'skipEnableFields' => array('fe_group'),
-                );
-    }
-
-    /**
-     * Get sql data for an optional follow-up data base query.
-     *
-     * @param array $options from service configuration
-     *
-     * @see self::getSqlData()
-     */
-    protected function getFollowUpSqlData(array $options)
-    {
-        // Remove all pages from $this->additionalUids which have still been processed earlier.
-        $this->additionalUids = array_diff($this->additionalUids, $this->processedUids);
-
-        // No additionalUids?
-        if (!$this->additionalUids) {
-            return null;
-        }
-        // else:
-
-        // Retain options, but update include option
-        $options['include'] = array('pages' => $this->additionalUids);
-
-        // Finally, delete $this->additionalUids
-        $this->additionalUids = array();
-
-        return $this->getSqlData($options);
     }
 
     /**

@@ -26,11 +26,6 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
-tx_rnbase::load('tx_mksearch_tests_Testcase');
-tx_rnbase::load('tx_mksearch_service_engine_Solr');
-tx_rnbase::load('Apache_Solr_Service');
-tx_rnbase::load('Apache_Solr_Document');
-tx_rnbase::load('Apache_Solr_Response');
 
 /**
  * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>

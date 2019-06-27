@@ -22,10 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-tx_rnbase::load('tx_mksearch_tests_Testcase');
-tx_rnbase::load('tx_mksearch_tests_fixtures_indexer_Dummy');
-tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
-
 /**
  * Wir müssen in diesem Fall mit der DB testen da wir die pages
  * Tabelle benötigen.
@@ -665,20 +661,6 @@ class tx_mksearch_tests_indexer_Base_testcase extends tx_mksearch_tests_Testcase
             'starttime' => 'startdate',
             'endtime' => 'enddate',
             'fe_group' => 'fe_groups',
-        );
-    }
-
-    /**
-     * @group unit
-     */
-    public function testGetCoreConfigUtility()
-    {
-        self::assertEquals(
-            'tx_mksearch_service_indexer_core_Config',
-            $this->callInaccessibleMethod(
-                tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy'),
-                'getCoreConfigUtility'
-            )
         );
     }
 

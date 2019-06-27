@@ -22,8 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-tx_rnbase::load('tx_mksearch_tests_Testcase');
-
 /**
  * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
  * @license http://www.gnu.org/licenses/lgpl.html
@@ -31,20 +29,6 @@ tx_rnbase::load('tx_mksearch_tests_Testcase');
  */
 class tx_mksearch_tests_signalSlotDispatcher_FileIndexRepository_testcase extends tx_mksearch_tests_Testcase
 {
-    /**
-     * (non-PHPdoc).
-     *
-     * @see tx_mksearch_tests_Testcase::setUp()
-     */
-    protected function setUp()
-    {
-        if (!tx_rnbase_util_TYPO3::isTYPO60OrHigher()) {
-            $this->markTestSkipped('Erst ab TYPO3 6.x relevant');
-        }
-
-        parent::setUp();
-    }
-
     /**
      * @group unit
      */

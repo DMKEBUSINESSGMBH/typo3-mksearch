@@ -1,11 +1,5 @@
 <?php
 
-tx_rnbase::load('tx_rnbase_mod_BaseModFunc');
-tx_rnbase::load('tx_mksearch_mod1_util_Template');
-tx_rnbase::load('tx_rnbase_util_Templates');
-tx_rnbase::load('tx_mksearch_util_ServiceRegistry');
-tx_rnbase::load('tx_mksearch_mod1_util_IndexStatusHandler');
-
 /**
  * Mksearch backend module.
  *
@@ -92,7 +86,6 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc
      */
     protected function showTables($template, $configurations, $formTool, &$markerArray, $oIntIndexSrv)
     {
-        tx_rnbase::load('tx_mksearch_util_Config');
         $aIndexers = tx_mksearch_util_Config::getIndexers();
         $aIndices = $oIntIndexSrv->getByPageId($this->getPid());
 
@@ -147,8 +140,7 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc
     {
         // wir holen uns eine liste von page ids
         // nur elemente dieser page id dürfen in der Queue landen
-        tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
-        $pidList = tx_mksearch_service_indexer_core_Config::getPidListFromSiteRootPage($this->getPid(), 999);
+        $pidList = tx_mksearch_util_Indexer::getInstance()->getPidListFromSiteRootPage($this->getPid(), 999);
 
         if (empty($pidList)) {
             return $pidList;

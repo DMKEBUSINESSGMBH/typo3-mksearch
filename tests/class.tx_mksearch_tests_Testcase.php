@@ -22,9 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-tx_rnbase::load('tx_mksearch_tests_Util');
-tx_rnbase::load('tx_rnbase_tests_BaseTestCase');
-
 /**
  * Base Testcase.
  *
@@ -45,15 +42,6 @@ abstract class tx_mksearch_tests_Testcase extends tx_rnbase_tests_BaseTestCase
 
         // set up hooks
         tx_mksearch_tests_Util::hooksSetUp();
-
-        // WORKAROUND: phpunit seems to backup static attributes (in phpunit.xml)
-        // from version 3.6.10 not before. I'm not completely
-        // sure about that but from version 3.6.10 clearPageInstance is no
-        // more neccessary to have the complete test suite succeed.
-        // But this version is buggy. (http://forge.typo3.org/issues/36232)
-        // as soon as this bug is fixed, we can use the new phpunit version
-        // and dont need this anymore
-        tx_mksearch_service_indexer_core_Config::clearPageInstance();
 
         // das devlog stört nur bei der Testausführung im BE und ist da auch
         // vollkommen unnötig
@@ -89,10 +77,8 @@ abstract class tx_mksearch_tests_Testcase extends tx_rnbase_tests_BaseTestCase
             $GLOBALS['TYPO3_LOADED_EXT']['templavoila'] = $this->backups['templaVoilaConfigBackup'];
             $this->backups['templaVoilaConfigBackup'] = null;
 
-            if (tx_rnbase_util_TYPO3::isTYPO62OrHigher()) {
-                $extensionManagementUtility = new TYPO3\CMS\Core\Utility\ExtensionManagementUtility();
-                $extensionManagementUtility->loadExtension('templavoila');
-            }
+            $extensionManagementUtility = new TYPO3\CMS\Core\Utility\ExtensionManagementUtility();
+            $extensionManagementUtility->loadExtension('templavoila');
         }
 
         tx_mksearch_tests_Util::resetAddRootlineFields();
@@ -133,7 +119,6 @@ abstract class tx_mksearch_tests_Testcase extends tx_rnbase_tests_BaseTestCase
      */
     protected function getIndexDocMock($extKey, $contentType = null)
     {
-        tx_rnbase::load('tx_mksearch_model_IndexerDocumentBase');
         if ($extKey instanceof tx_mksearch_interface_Indexer) {
             list($extKey, $contentType) = $extKey->getContentType();
         }

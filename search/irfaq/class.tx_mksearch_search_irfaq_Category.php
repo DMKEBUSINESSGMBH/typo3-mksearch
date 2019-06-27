@@ -3,7 +3,6 @@
 /**
  * benötigte Klassen einbinden.
  */
-tx_rnbase::load('tx_rnbase_util_SearchBase');
 
 /**
  * @author Hannes Bochmann

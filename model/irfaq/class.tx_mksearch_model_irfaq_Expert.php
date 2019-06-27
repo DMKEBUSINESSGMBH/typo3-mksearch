@@ -27,7 +27,6 @@
 /**
  * benötigte Klassen einbinden.
  */
-tx_rnbase::load('tx_rnbase_model_base');
 
 /**
  * Model for a tx_irfaq Expert.

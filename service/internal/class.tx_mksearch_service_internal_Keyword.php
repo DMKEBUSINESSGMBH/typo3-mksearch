@@ -1,7 +1,5 @@
 <?php
 
-tx_rnbase::load('tx_mksearch_service_Base');
-
 /**
  * Keyword service class.
  *

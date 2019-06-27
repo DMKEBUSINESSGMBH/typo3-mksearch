@@ -17,9 +17,6 @@ $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['indexer']['active'][] = 'tt_
 
 // Define table to content type mappings
 
-tx_rnbase::load('tx_rnbase_util_TYPO3');
-tx_rnbase::load('tx_mksearch_util_Config');
-
 tx_mksearch_util_Config::registerIndexer(
     'core',
     'page',
@@ -65,13 +62,7 @@ if (tx_rnbase_util_Extensions::isLoaded('tt_address')) {
     tx_mksearch_util_Config::registerIndexer('tt_address', 'address', 'tx_mksearch_indexer_TtAddressAddress', array('tt_address'));
 }
 
-if (tx_rnbase_util_Extensions::isLoaded('dam')) {
-    tx_mksearch_util_Config::registerIndexer('dam', 'media', 'tx_mksearch_indexer_DamMedia', array('tx_dam'));
-}
-
-if (tx_rnbase_util_TYPO3::isTYPO60OrHigher()) {
-    tx_mksearch_util_Config::registerIndexer('core', 'file', 'tx_mksearch_indexer_FAL', array('sys_file', 'sys_file_metadata'));
-}
+tx_mksearch_util_Config::registerIndexer('core', 'file', 'tx_mksearch_indexer_FAL', array('sys_file', 'sys_file_metadata'));
 
 // seminars Extension
 if (tx_rnbase_util_Extensions::isLoaded('seminars')) {

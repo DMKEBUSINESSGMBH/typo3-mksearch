@@ -22,9 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-tx_rnbase::load('tx_mksearch_tests_Testcase');
-tx_rnbase::load('tx_mksearch_indexer_FAL');
-
 /**
  * Kindklasse des Indexers, um auf private Methoden zuzugreifen.
  *
@@ -63,22 +60,6 @@ class tx_mksearch_tests_indexer_FAL_testcase extends tx_mksearch_tests_Testcase
     {
         parent::__construct($name, $data, $dataName);
         self::$oFALTest = new tx_mksearch_indexer_FALTest();
-    }
-
-    /**
-     * (non-PHPdoc).
-     *
-     * @see PHPUnit_Framework_TestCase::setUp()
-     */
-    protected function setUp()
-    {
-        // der indexer greift beispielsweise auf \TYPO3\CMS\Core\Resource\File zu
-        // das gibts nur bei typo3 6 oder höher
-        if (!tx_rnbase_util_TYPO3::isTYPO60OrHigher()) {
-            $this->markTestSkipped('Only relevant for Typo3 6 or higher.');
-        }
-
-        parent::setUp();
     }
 
     /**

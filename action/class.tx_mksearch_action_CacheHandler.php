@@ -1,8 +1,5 @@
 <?php
 
-tx_rnbase::load('tx_rnbase_action_CacheHandlerDefault');
-tx_rnbase::load('tx_rnbase_util_Strings');
-
 /**
  * Detailseite eines beliebigen Datensatzes aus Momentan Lucene oder Solr.
  *

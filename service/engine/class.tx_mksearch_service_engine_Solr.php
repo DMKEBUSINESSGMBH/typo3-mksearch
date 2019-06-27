@@ -22,13 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-tx_rnbase::load('tx_mksearch_interface_SearchEngine');
-tx_rnbase::load('tx_rnbase_configurations');
-tx_rnbase::load('tx_mksearch_util_Misc');
-tx_rnbase::load('tx_mksearch_service_engine_SolrException');
-tx_rnbase::load('tx_rnbase_util_Logger');
-tx_rnbase::load('Tx_Rnbase_Service_Base');
-
 require_once tx_rnbase_util_Extensions::extPath('mksearch').'lib/Apache/Solr/Service.php';
 
 /**

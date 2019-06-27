@@ -1,7 +1,5 @@
 <?php
 
-tx_rnbase::load('tx_rnbase_util_Templates');
-
 /**
  * Die Klasse stellt Auswahlmenus zur Verfügung.
  *
@@ -38,12 +36,11 @@ class tx_mksearch_mod1_util_Template
         }
 
         // Marker für Rootpage integrieren
-        tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
-        $rootPage = tx_mksearch_service_indexer_core_Config::getSiteRootPage($module->getPid());
+        $rootPage = tx_mksearch_util_Indexer::getInstance()->getSiteRootPage($module->getPid());
 
         // keine rootpage, dann die erste seite im baum
         if (empty($rootPage)) {
-            $rootPage = array_pop(tx_mksearch_service_indexer_core_Config::getRootLine($module->getPid() ? $module->getPid() : 0));
+            $rootPage = array_pop(tx_mksearch_util_Indexer::getInstance()->getRootlineByPid($module->getPid() ? $module->getPid() : 0));
         }
 
         $rootPage = is_array($rootPage) ? Tx_Rnbase_Backend_Utility::readPageAccess($rootPage['uid'], $GLOBALS['BE_USER']->getPagePermsClause(1)) : false;

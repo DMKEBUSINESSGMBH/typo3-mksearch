@@ -27,13 +27,10 @@
 /**
  * benötigte Klassen einbinden.
  */
-tx_rnbase::load('tx_mksearch_tests_Testcase');
-tx_rnbase::load('tx_mksearch_filter_SolrBase');
 //damit die User func ausgeführt werden kann, muss sie geladen werden, was auf dem
 //CLI und TYPO3 < 4.5 nicht der Fall ist
 //im FE geschieht dies durch includeLibs im TS bzw. ab TYPO3 4.5 auch automatisch
 //auf dem CLI
-tx_rnbase::load('tx_mksearch_util_UserFunc');
 
 /**
  * Testfälle für tx_mksearch_filter_SolrBase.

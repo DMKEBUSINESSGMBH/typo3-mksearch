@@ -22,11 +22,6 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-tx_rnbase::load('tx_mksearch_interface_Indexer');
-tx_rnbase::load('tx_mksearch_util_Misc');
-tx_rnbase::load('tx_mksearch_util_Indexer');
-tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
-
 /**
  * Indexer service for core.tt_address called by the "mksearch" extension.
  */

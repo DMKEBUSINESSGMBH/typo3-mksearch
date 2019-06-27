@@ -5,8 +5,6 @@ if (!defined('TYPO3_MODE')) {
 }
 
 // Extend table tt_news
-tx_rnbase::load('tx_mksearch_indexer_ttcontent_Normal');
-tx_rnbase::load('tx_rnbase_util_TYPO3');
 tx_rnbase_util_Extensions::addTCAcolumns(
     'tt_content',
     array(
@@ -34,7 +32,7 @@ tx_rnbase_util_Extensions::addTCAcolumns(
             ),
         ),
     ),
-    !tx_rnbase_util_TYPO3::isTYPO62OrHigher()
+    false
 );
 
 tx_rnbase_util_Extensions::addToAllTCAtypes('tt_content', 'tx_mksearch_is_indexable');

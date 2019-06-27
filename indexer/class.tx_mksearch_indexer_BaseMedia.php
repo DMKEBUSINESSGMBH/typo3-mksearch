@@ -22,11 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-tx_rnbase::load('tx_mksearch_interface_Indexer');
-tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
-tx_rnbase::load('tx_mksearch_util_Misc');
-tx_rnbase::load('tx_rnbase_util_Logger');
-
 /**
  * Indexer service for dam.media called by the "mksearch" extension.
  */
@@ -212,7 +207,6 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
     private function indexTika($tableName, $sourceRecord, tx_mksearch_interface_IndexerDocument $indexDoc, $options)
     {
         $file = $this->getAbsFileName($tableName, $sourceRecord);
-        tx_rnbase::load('tx_mksearch_util_Tika');
         if (!tx_mksearch_util_Tika::getInstance()->isAvailable()) {
             tx_rnbase_util_Logger::warn('Apache Tika not available!', 'mksearch');
 
@@ -266,11 +260,11 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
      */
     protected function getAbsFileName($tableName, $sourceRecord)
     {
-        return PATH_site.$this->getRelFileName($tableName, $sourceRecord);
+        return \Sys25\RnBase\Utility\Environment::getPublicPath().$this->getRelFileName($tableName, $sourceRecord);
     }
 
     /**
-     * Prüft anhand der Konfiguration, ob der übergebene DAM-Datensatz indiziert werden soll.
+     * Prüft anhand der Konfiguration, ob der übergebene FAL-Datensatz indiziert werden soll.
      * Aktuell kann dies über die Dateiendung und/oder das Verzeichnis festgelegt werden.
      *
      * @param string $tableName
@@ -450,7 +444,7 @@ indexMode = solr
 ### delete from or abort indexing for the record if isIndexableRecord or no record?
 deleteIfNotIndexable = 1
 
-# define filters for DAM records. All filters must match to index a record.
+# define filters for FAL records. All filters must match to index a record.
 filter.$table {
   # a regular expression
   byDirectory = /^fileadmin\/.*\//
@@ -472,7 +466,7 @@ filter.$table {
 
 # Define which fields to index and to which fields
 fields {
-  ### name field for DAM
+  ### name field for FAL
   #file_name = file_name_s
   ### name field for FAL
   #name = file_name_s
