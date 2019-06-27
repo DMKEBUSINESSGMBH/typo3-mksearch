@@ -85,3 +85,9 @@ if (tx_rnbase_util_Extensions::isLoaded('realurl')) {
     $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['realurl']['ConfigurationReader_postProc']['mksearch'] =
         \DMK\Mksearch\Hooks\RealUrlConfigurationReader::class.'->addMksearchToBannedUrlsRegExp';
 }
+
+define('MKSEARCH_OP_OR', 'or');
+define('MKSEARCH_OP_AND', 'and');
+define('MKSEARCH_OP_EXACT', 'exact');
+define('MKSEARCH_OP_FREE', 'free');
+define('MKSEARCH_OP_NONE', 'none');
