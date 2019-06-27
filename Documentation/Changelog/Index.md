@@ -1,6 +1,101 @@
 Changelog
 =========
 
+9.5.0
+-----
+
+-   added TYPO3 9.5 support
+-   dropped TYPO3 6.2 and 7.6 support
+
+3.2.16
+-----
+
+-   bugfixes and cleanup
+
+3.2.15
+-----
+
+-   ban any url with mksearch parameters from realurl caching
+
+3.2.14
+-----
+
+-   bugfixes and cleanup
+-   added postTikaCommandParameters option
+
+3.2.13
+-----
+
+-   bugfixes and cleanup
+-   index the complete FAL properties including metadata
+
+3.2.12
+-----
+
+-   bugfixes and cleanup
+
+3.2.11
+-----
+
+-   added possibility to sort multivalued fields marker values
+
+3.2.10
+-----
+
+-   bugfixes and cleanup
+
+3.2.9
+-----
+
+-   bugfixes
+
+
+3.2.8
+-----
+
+-   add support for new domain model in index util for index model by mapping
+-   bugfixes and cleanup
+-   added stronger defaults
+-   supported dok types can be configured for tt_content indexers
+
+3.2.7
+-----
+
+-   an own location header can be used for softlink redirects
+-   bugfixes
+-   translated labels of backend module into german
+
+3.2.6
+-----
+
+-   bugfixes
+
+3.2.5
+-----
+
+-   bugfixes
+
+3.2.4
+-----
+
+-   index related links of tx_news
+
+3.2.3
+-----
+
+-   updated solr example config
+
+3.2.2
+-----
+
+-   add no_search field to rootline fields
+-   bugfixes
+
+3.2.1
+-----
+
+-   bugfixes
+
 3.2.0
 -----
 
