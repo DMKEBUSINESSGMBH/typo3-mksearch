@@ -38,7 +38,7 @@ class tx_mksearch_scheduler_IndexTaskAddFieldProvider extends Tx_Rnbase_Schedule
      *
      * @param array                                                     $taskInfo:     reference to the array containing the info used in the add/edit form
      * @param Tx_Rnbase_Scheduler_Task                                  $task:         when editing, reference to the current task object. Null when adding.
-     * @param \TYPO3\CMS\Scheduler\Controller\SchedulerModuleController $parentObject: reference to the calling object (Scheduler's BE module)
+     * @param \TYPO3\CMS\Scheduler\Controller\SchedulerModuleController $schedulerModule: reference to the calling object (Scheduler's BE module)
      *
      * @return array Array containg all the information pertaining to the additional fields
      *               The array is multidimensional, keyed to the task class name and each field's id
@@ -48,14 +48,16 @@ class tx_mksearch_scheduler_IndexTaskAddFieldProvider extends Tx_Rnbase_Schedule
      *               ['cshKey']      => The CSH key for the field
      *               ['cshLabel']    => The code of the CSH label
      */
-    protected function _getAdditionalFields(array &$taskInfo, $task, $parentObject)
+    protected function _getAdditionalFields(array &$taskInfo, $task, $schedulerModule)
     {
+        $action = \tx_rnbase_util_TYPO3::isTYPO90OrHigher() ?
+            $schedulerModule->getCurrentAction() : $schedulerModule->CMD;
         // Initialize extra field value
         if (!array_key_exists(FIELD_ITEMS, $taskInfo) || empty($taskInfo[FIELD_ITEMS])) {
-            if ('add' == $parentObject->CMD) {
+            if ('add' == $action) {
                 // New task
                 $taskInfo[FIELD_ITEMS] = '';
-            } elseif ('edit' == $parentObject->CMD) {
+            } elseif ('edit' == $action) {
                 // Editing a task, set to internal value if data was not submitted already
                 $taskInfo[FIELD_ITEMS] = $task->getAmountOfItems();
             } else {
@@ -77,31 +79,6 @@ class tx_mksearch_scheduler_IndexTaskAddFieldProvider extends Tx_Rnbase_Schedule
         );
 
         return $additionalFields;
-
-        // Initialize extra field value
-        if (empty($taskInfo[ADDFIELD_TYPE])) {
-            if ('add' == $parentObject->CMD) {
-                // In case of new task
-                $taskInfo[ADDFIELD_TYPE] = '';
-            } elseif ('edit' == $parentObject->CMD) {
-                // In case of edit, and editing a test task, set to internal value if not data was submitted already
-                $taskInfo[ADDFIELD_TYPE] = $task->email;
-            } else {
-                // Otherwise set an empty value, as it will not be used anyway
-                $taskInfo[ADDFIELD_TYPE] = '';
-            }
-        }
-
-        // Write the code for the field
-        $fieldID = 'task_items';
-        $fieldCode = '<input type="text" name="tx_scheduler['.ADDFIELD_TYPE.']" id="'.$fieldID.'" value="'.$taskInfo[ADDFIELD_TYPE].'" size="30" />';
-        $additionalFields = array();
-        $additionalFields[$fieldID] = array(
-            'code' => $fieldCode,
-            'label' => 'LLL:EXT:mksearch/locallang_db.xml:indexTask.fieldType',
-        );
-
-        return $additionalFields;
     }
 
     /**
@@ -109,25 +86,12 @@ class tx_mksearch_scheduler_IndexTaskAddFieldProvider extends Tx_Rnbase_Schedule
      * If the task class is not relevant, the method is expected to return true.
      *
      * @param array                                                     $submittedData: reference to the array containing the data submitted by the user
-     * @param \TYPO3\CMS\Scheduler\Controller\SchedulerModuleController $parentObject:  reference to the calling object (Scheduler's BE module)
+     * @param \TYPO3\CMS\Scheduler\Controller\SchedulerModuleController $schedulerModule:  reference to the calling object (Scheduler's BE module)
      *
      * @return bool True if validation was ok (or selected class is not relevant), false otherwise
      */
-    protected function _validateAdditionalFields(array &$submittedData, $parentObject)
+    protected function _validateAdditionalFields(array &$submittedData, $schedulerModule)
     {
-        return true;
-
-        $submittedData[FIELD_ITEMS] = trim($submittedData[FIELD_ITEMS]);
-        if (empty($submittedData[FIELD_ITEMS])) {
-            $flashMessageClass = tx_rnbase_util_Typo3Classes::getFlashMessageClass();
-            $parentObject->addMessage(
-                $GLOBALS['LANG']->sL('LLL:EXT:scheduler/mod1/locallang.xml:msg.noEmail'),
-                $flashMessageClass::ERROR
-            );
-
-            return false;
-        }
-
         return true;
     }
 
