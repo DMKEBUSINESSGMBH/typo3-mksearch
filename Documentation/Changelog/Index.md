@@ -1,7 +1,7 @@
 Changelog
 =========
 
-9.5.1
+9.5.2
 -----
 
 -   fixed compatibility issues for TYPO3 9.5

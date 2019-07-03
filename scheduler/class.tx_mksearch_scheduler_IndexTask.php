@@ -39,7 +39,7 @@ class tx_mksearch_scheduler_IndexTask extends Tx_Rnbase_Scheduler_Task
      *
      * @var int
      */
-    private $amountOfItemsToIndexPerRun;
+    protected $amountOfItemsToIndexPerRun;
 
     /**
      * After the update to TYPO3 9 the private $options variable can't be serialized and therefore not saved in the
