@@ -45,7 +45,8 @@
         "digedag/rn-base": ">=1.10.0"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "2.14.*"
+        "friendsofphp/php-cs-fixer": "2.14.*",
+        "nimut/testing-framework": "^4.0"
     },
     "autoload": {
         "classmap": [
