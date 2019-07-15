@@ -86,8 +86,4 @@ if (tx_rnbase_util_Extensions::isLoaded('realurl')) {
         \DMK\Mksearch\Hooks\RealUrlConfigurationReader::class.'->addMksearchToBannedUrlsRegExp';
 }
 
-define('MKSEARCH_OP_OR', 'or');
-define('MKSEARCH_OP_AND', 'and');
-define('MKSEARCH_OP_EXACT', 'exact');
-define('MKSEARCH_OP_FREE', 'free');
-define('MKSEARCH_OP_NONE', 'none');
+require_once tx_rnbase_util_Extensions::extPath($_EXTKEY, 'Classes/Constants.php');
