@@ -68,7 +68,10 @@
         "exclude-from-classmap": ["lib/Elastica/"],
         "psr-4": {
             "DMK\\Mksearch\\" : "Classes"
-        }
+        },
+        "files": [
+            "Classes/Constants.php"
+        ]
     },
     "config": {
         "vendor-dir": ".Build/vendor",
