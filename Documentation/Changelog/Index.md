@@ -1,6 +1,15 @@
 Changelog
 =========
 
+9.5.3
+-----
+
+-   offline records (pid = -1) are not longer treated as indexable 
+except this pid is explicitly included in include.pages configuration of indexer.
+It might be a good idea to reindex all data if you use workspaces. You also might
+want to set deleteIfNotIndexable = 1 in the indexer configuration to have already
+indexed records deleted.
+
 9.5.2
 -----
 
