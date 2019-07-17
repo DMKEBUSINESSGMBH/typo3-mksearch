@@ -274,7 +274,7 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc
             $status .= '###LABEL_QUEUE_INDEXED###';
             // Komplette Anzahl ausgeben.
             $countAll = count(call_user_func_array('array_merge', array_values($rows)));
-            $status .= sprintf(' %d ###LABEL_QUEUE_RUNTIME###: %01.2fs (%01.2f/sec)', $countAll, $runTime, $countAll/$runTime);
+            $status .= sprintf(' %d ###LABEL_QUEUE_RUNTIME###: %01.2fs (%01.2f/sec)', $countAll, $runTime, $countAll / $runTime);
             // Anzahl einzelner Tabellen ausgeben
             foreach ($rows as $table => $row) {
                 $rows[$table] = $table.': '.count($row);

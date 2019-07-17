@@ -32,7 +32,7 @@ class tx_mksearch_tests_util_TikaTest extends tx_mksearch_tests_Testcase
 {
     protected function setUp()
     {
-        self::markTestIncomplete("Uncaught require(typo3-mksearch/.Build/Web/typo3conf/LocalConfiguration.php)");
+        self::markTestIncomplete('Uncaught require(typo3-mksearch/.Build/Web/typo3conf/LocalConfiguration.php)');
 
         if (!tx_mksearch_util_Tika::getInstance()->isAvailable()) {
             $this->markTestSkipped('Tika is not available!');

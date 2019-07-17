@@ -870,7 +870,7 @@ class tx_mksearch_tests_indexer_ttcontent_NormalTest extends tx_mksearch_tests_T
      */
     public function dataProviderDokTypes()
     {
-        self::markTestIncomplete("The requested database connection named \"Default\" has not been configured.");
+        self::markTestIncomplete('The requested database connection named "Default" has not been configured.');
 
         $sysPage = tx_rnbase_util_TYPO3::getSysPage();
 

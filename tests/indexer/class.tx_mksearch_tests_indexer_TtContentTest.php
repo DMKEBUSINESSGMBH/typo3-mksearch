@@ -39,7 +39,7 @@ class tx_mksearch_tests_indexer_TtContentTest extends tx_mksearch_tests_Testcase
      */
     protected function setUp()
     {
-        self::markTestIncomplete("Error: Call to a member function isConnected() on null");
+        self::markTestIncomplete('Error: Call to a member function isConnected() on null');
         // @TODO: ther are db operations. where? fix it!
         $this->prepareLegacyTypo3DbGlobal();
     }

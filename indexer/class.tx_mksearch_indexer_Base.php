@@ -164,7 +164,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
             $options
         );
 
-        if($indexDoc === null) {
+        if (null === $indexDoc) {
             return null;
         }
 

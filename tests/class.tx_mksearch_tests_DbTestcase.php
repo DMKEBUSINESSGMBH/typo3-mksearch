@@ -98,7 +98,7 @@ abstract class tx_mksearch_tests_DbTestcase extends tx_mksearch_tests_Testcase
      */
     protected function setUp()
     {
-        self::markTestIncomplete("Database tests are no longer supported. Please switch to functional tests");
+        self::markTestIncomplete('Database tests are no longer supported. Please switch to functional tests');
 
         tx_mksearch_tests_Util::emptyAddRootlineFields();
 

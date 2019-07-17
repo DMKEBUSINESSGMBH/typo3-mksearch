@@ -271,7 +271,7 @@ class tx_mksearch_tests_service_engine_ElasticSearchTest extends tx_mksearch_tes
 
     /**
      * @group unit
-     * @expectedException Elastica\Exception\ClientException
+     * @expectedException \Elastica\Exception\ClientException
      * @expectedExceptionMessage ElasticSearch service not responding.
      */
     public function testInitElasticSearchConnectionThrowsExceptionAndLogsErrorIfServerNotAvailable()
@@ -995,7 +995,7 @@ class tx_mksearch_tests_service_engine_ElasticSearchTest extends tx_mksearch_tes
 
     /**
      * @group unit
-     * @expectedException RuntimeException
+     * @expectedException \RuntimeException
      * @expectedExceptionMessage ohoh
      */
     public function testSearchThrowsRuntimeExceptionIfElasticaThrowsException()
@@ -1015,7 +1015,7 @@ class tx_mksearch_tests_service_engine_ElasticSearchTest extends tx_mksearch_tes
 
     /**
      * @group unit
-     * @expectedException RuntimeException
+     * @expectedException \RuntimeException
      * @expectedExceptionMessage Exception caught from ElasticSearch: Error requesting ElasticSearch. HTTP status: 201; Path: pfad; Query: query
      */
     public function testSearchThrowsRuntimeExceptionIfResponseHttpStatusIsNot200()
