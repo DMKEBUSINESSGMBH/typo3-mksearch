@@ -372,10 +372,16 @@ class tx_mksearch_util_Indexer
         $includePages = $this->getConfigValue('pages', $options['include.']);
 
         if (in_array($pid, $includePages)) {
-            return true;
+            $isOnIndexablePage = true;
         } else {
-            return $this->pageIsNotInIncludePages($pid, $options);
+            if ($isOfflineVersion = (-1 == $pid)) {
+                $isOnIndexablePage = false;
+            } else {
+                $isOnIndexablePage = $this->pageIsNotInIncludePages($pid, $options);
+            }
         }
+
+        return $isOnIndexablePage;
     }
 
     /**

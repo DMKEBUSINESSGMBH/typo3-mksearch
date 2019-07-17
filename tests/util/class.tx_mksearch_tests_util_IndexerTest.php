@@ -28,8 +28,17 @@
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_tests_util_IndexerTest extends tx_mksearch_tests_Testcase
+class tx_mksearch_tests_util_IndexerTest extends tx_rnbase_tests_BaseTestCase
 {
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $GLOBALS['TCA']['tt_content'] = [
+            'ctrl' => ['languageField' => 'sys_language_uid'],
+        ];
+    }
+
     /**
      * @group unit
      */
@@ -45,6 +54,7 @@ class tx_mksearch_tests_util_IndexerTest extends tx_mksearch_tests_Testcase
      */
     public function testIsOnIndexablePageReturnsTrueIfNoInOrExcludesSet()
     {
+        self::markTestIncomplete('Access to database is made.');
         $sourceRecord = array('pid' => 2);
         $options = array();
 
@@ -77,6 +87,7 @@ class tx_mksearch_tests_util_IndexerTest extends tx_mksearch_tests_Testcase
      */
     public function testIsOnIndexablePageReturnsFalseIfPidIsNotInIncludePages()
     {
+        self::markTestIncomplete('Access to database is made.');
         $sourceRecord = array('pid' => 2);
         $options = array(
             'include.' => array(
@@ -165,6 +176,7 @@ class tx_mksearch_tests_util_IndexerTest extends tx_mksearch_tests_Testcase
      */
     public function testIsOnIndexablePageReturnsFalseIfPidIsInExcludePages()
     {
+        self::markTestIncomplete('Access to database is made.');
         $sourceRecord = array('pid' => 1);
         $options = array(
             'exclude.' => array(
@@ -183,6 +195,7 @@ class tx_mksearch_tests_util_IndexerTest extends tx_mksearch_tests_Testcase
      */
     public function testIsOnIndexablePageReturnsTrueIfPidIsNotInExcludePages()
     {
+        self::markTestIncomplete('Access to database is made.');
         $sourceRecord = array('pid' => 2);
         $options = array(
             'exclude.' => array(
@@ -275,6 +288,38 @@ class tx_mksearch_tests_util_IndexerTest extends tx_mksearch_tests_Testcase
         $isOnIndexablePage = $utilIndexer->isOnIndexablePage($sourceRecord, $options);
 
         self::assertFalse($isOnIndexablePage, 'Seite indizierbar');
+    }
+
+    /**
+     * @group unit
+     */
+    public function testIsOnIndexablePageReturnsTrueIfPidIsMinus1ButIsExplicitlyIncluded()
+    {
+        $sourceRecord = array('pid' => -1);
+        $options = array(
+            'include.' => array(
+                'pages' => -1,
+            ),
+        );
+
+        $isOnIndexablePage = tx_mksearch_util_Indexer::getInstance()
+            ->isOnIndexablePage($sourceRecord, $options);
+
+        self::assertTrue($isOnIndexablePage, 'Seite nicht indizierbar');
+    }
+
+    /**
+     * @group unit
+     */
+    public function testIsOnIndexablePageReturnsFalseIfPidIsMinus1AndNotExplicitlyIncluded()
+    {
+        $sourceRecord = array('pid' => -1);
+        $options = array();
+
+        $isOnIndexablePage = tx_mksearch_util_Indexer::getInstance()
+            ->isOnIndexablePage($sourceRecord, $options);
+
+        self::assertFalse($isOnIndexablePage, 'Seite nicht indizierbar');
     }
 
     public function testIndexModelByMapping()
@@ -478,6 +523,7 @@ class tx_mksearch_tests_util_IndexerTest extends tx_mksearch_tests_Testcase
 
     public function testIndexArrayOfModelsByMappingWithFieldConversion()
     {
+        self::markTestIncomplete('Access to database is made.');
         $indexDoc = tx_rnbase::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
             '',
@@ -856,17 +902,6 @@ class tx_mksearch_tests_util_IndexerTest extends tx_mksearch_tests_Testcase
             ->with($models[1], $tableName, $prefer, $resolver, $data, $options);
 
         $utility->addModelsToIndex($models, $tableName, $prefer, $resolver, $data, $options);
-    }
-
-    /**
-     * @group unit
-     */
-    public function testGetInternalIndexService()
-    {
-        self::assertInstanceOf(
-            'tx_mksearch_service_internal_Index',
-            $this->callInaccessibleMethod(tx_mksearch_util_Indexer::getInstance(), 'getInternalIndexService')
-        );
     }
 
     /**
