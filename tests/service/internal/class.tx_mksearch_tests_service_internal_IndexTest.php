@@ -37,7 +37,7 @@ class tx_mksearch_tests_service_internal_IndexTest extends tx_mksearch_tests_Tes
     protected function setUp()
     {
         tx_mksearch_tests_Util::storeExtConf();
-        self::markTestIncomplete("Error: Call to a member function isConnected() on null");
+        self::markTestIncomplete('Error: Call to a member function isConnected() on null');
         // @TODO: ther are TYPO3_DB operations. where? mock it!
         $this->prepareLegacyTypo3DbGlobal();
     }

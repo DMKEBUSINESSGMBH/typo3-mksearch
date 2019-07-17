@@ -36,8 +36,8 @@ class tx_mksearch_scheduler_IndexTaskAddFieldProvider extends Tx_Rnbase_Schedule
      * This method is used to define new fields for adding or editing a task
      * In this case, it adds an email field.
      *
-     * @param array                                                     $taskInfo:     reference to the array containing the info used in the add/edit form
-     * @param Tx_Rnbase_Scheduler_Task                                  $task:         when editing, reference to the current task object. Null when adding.
+     * @param array                                                     $taskInfo:        reference to the array containing the info used in the add/edit form
+     * @param Tx_Rnbase_Scheduler_Task                                  $task:            when editing, reference to the current task object. Null when adding.
      * @param \TYPO3\CMS\Scheduler\Controller\SchedulerModuleController $schedulerModule: reference to the calling object (Scheduler's BE module)
      *
      * @return array Array containg all the information pertaining to the additional fields
@@ -85,8 +85,8 @@ class tx_mksearch_scheduler_IndexTaskAddFieldProvider extends Tx_Rnbase_Schedule
      * This method checks any additional data that is relevant to the specific task
      * If the task class is not relevant, the method is expected to return true.
      *
-     * @param array                                                     $submittedData: reference to the array containing the data submitted by the user
-     * @param \TYPO3\CMS\Scheduler\Controller\SchedulerModuleController $schedulerModule:  reference to the calling object (Scheduler's BE module)
+     * @param array                                                     $submittedData:   reference to the array containing the data submitted by the user
+     * @param \TYPO3\CMS\Scheduler\Controller\SchedulerModuleController $schedulerModule: reference to the calling object (Scheduler's BE module)
      *
      * @return bool True if validation was ok (or selected class is not relevant), false otherwise
      */

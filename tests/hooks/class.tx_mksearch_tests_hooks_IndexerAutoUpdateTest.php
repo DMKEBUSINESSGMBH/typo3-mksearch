@@ -58,7 +58,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
      */
     public function testProcessDatamapAfterAllOperationsWithWorkspace()
     {
-        self::markTestIncomplete("A cache with identifier cache_runtime does not exist.");
+        self::markTestIncomplete('A cache with identifier cache_runtime does not exist.');
 
         $hook = $this->getHookMock(
             $service = $this->getMock('tx_mksearch_service_internal_Index')
@@ -79,7 +79,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
      */
     public function testProcessDatamapAfterAllOperationsWithEmptyDatamap()
     {
-        self::markTestIncomplete("A cache with identifier cache_runtime does not exist.");
+        self::markTestIncomplete('A cache with identifier cache_runtime does not exist.');
 
         $hook = $this->getHookMock(
             $service = $this->getMock('tx_mksearch_service_internal_Index')
@@ -99,7 +99,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
      */
     public function testProcessDatamapAfterAllOperationsWithDataFromHistoryUndo()
     {
-        self::markTestIncomplete("A cache with identifier cache_runtime does not exist.");
+        self::markTestIncomplete('A cache with identifier cache_runtime does not exist.');
 
         $hook = $this->getMock('tx_mksearch_hooks_IndexerAutoUpdate', array('processAutoUpdate'));
 
@@ -119,7 +119,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
      */
     public function testProcessAutoUpdate()
     {
-        self::markTestIncomplete("A cache with identifier cache_runtime does not exist.");
+        self::markTestIncomplete('A cache with identifier cache_runtime does not exist.');
 
         $hook = $this->getHookMock(
             $service = $this->getMock('tx_mksearch_service_internal_Index')
@@ -174,7 +174,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
      */
     public function testRnBaseDoInsertPost()
     {
-        self::markTestIncomplete("Uncaught require(typo3-mksearch/.Build/Web/typo3conf/LocalConfiguration.php)");
+        self::markTestIncomplete('Uncaught require(typo3-mksearch/.Build/Web/typo3conf/LocalConfiguration.php)');
 
         $hook = $this->getHookMock(
             $service = $this->getMock('tx_mksearch_service_internal_Index')
@@ -225,7 +225,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
      */
     public function testRnBaseDoUpdatePost()
     {
-        self::markTestIncomplete("Uncaught require(typo3-mksearch/.Build/Web/typo3conf/LocalConfiguration.php)");
+        self::markTestIncomplete('Uncaught require(typo3-mksearch/.Build/Web/typo3conf/LocalConfiguration.php)');
 
         $hook = $this->getHookMock(
             $service = $this->getMock('tx_mksearch_service_internal_Index')
@@ -299,7 +299,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
      */
     public function testRnBaseDoInsertPostIfHookDeactivated()
     {
-        self::markTestIncomplete("Uncaught require(typo3-mksearch/.Build/Web/typo3conf/LocalConfiguration.php)");
+        self::markTestIncomplete('Uncaught require(typo3-mksearch/.Build/Web/typo3conf/LocalConfiguration.php)');
 
         tx_mksearch_tests_Util::setExtConfVar('enableRnBaseUtilDbHook', 0);
 
@@ -333,7 +333,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
      */
     public function testRnBaseDoUpdatePostIfHookDeactivated()
     {
-        self::markTestIncomplete("Uncaught require(typo3-mksearch/.Build/Web/typo3conf/LocalConfiguration.php)");
+        self::markTestIncomplete('Uncaught require(typo3-mksearch/.Build/Web/typo3conf/LocalConfiguration.php)');
 
         tx_mksearch_tests_Util::setExtConfVar('enableRnBaseUtilDbHook', 0);
 

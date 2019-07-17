@@ -37,7 +37,7 @@ use DmitryDulepov\Realurl\Configuration\ConfigurationReader;
 class RealUrlConfigurationReader
 {
     /**
-     * @param array $parameters
+     * @param array               $parameters
      * @param ConfigurationReader $configurationReader
      */
     public function addMksearchToBannedUrlsRegExp(array &$parameters, ConfigurationReader $configurationReader)

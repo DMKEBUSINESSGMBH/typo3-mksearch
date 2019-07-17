@@ -50,7 +50,7 @@ class tx_mksearch_tests_filter_LuceneBaseTest extends tx_mksearch_tests_Testcase
      */
     protected function setUp()
     {
-        self::markTestIncomplete("Uncaught require(typo3-mksearch/.Build/Web/typo3conf/LocalConfiguration.php)");
+        self::markTestIncomplete('Uncaught require(typo3-mksearch/.Build/Web/typo3conf/LocalConfiguration.php)');
 
         $zendPath = tx_rnbase_configurations::getExtensionCfgValue('mksearch', 'zendPath');
         if (empty($zendPath)) {
