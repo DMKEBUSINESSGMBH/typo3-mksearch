@@ -36,7 +36,6 @@ cache:
         - $HOME/.composer/cache
 
 before_install:
-    - phpenv config-rm xdebug.ini
     - composer self-update
     - composer --version
 
@@ -50,7 +49,7 @@ script:
     - >
         echo;
         echo "Running unit tests";
-        .Build/bin/phpunit -c .Build/vendor/nimut/testing-framework/res/Configuration/UnitTests.xml tests
+        .Build/bin/phpunit -c phpunit.xml.dist --coverage-text --coverage-clover=.Build/coverage.clover
     - >
         echo;
         echo "Running php lint";
