@@ -12,7 +12,7 @@ if (TYPO3_MODE == 'BE') {
         array(
             'access' => 'user,group',
             'routeTarget' => 'tx_mksearch_mod1_Module',
-            'icon' => 'EXT:mksearch/mod1/moduleicon.gif',
+            'icon' => 'EXT:mksearch/mod1/moduleicon.png',
             'labels' => 'LLL:EXT:mksearch/mod1/locallang_mod.xml',
         )
     );
