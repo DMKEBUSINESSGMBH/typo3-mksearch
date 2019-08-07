@@ -63,6 +63,11 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
             return null; //no need to index
         }
 
+        //TODO: basicly this indexer could inherit from tx_mksearch_indexer_Base
+        if ($this->stopIndexing($tableName, $rawData, $indexDoc, $options)) {
+            return null;
+        }
+
         $abort = false;
         $boost = 1.0;
 
@@ -184,6 +189,44 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
         }
         //else
         return false;
+    }
+
+    /**
+     * Shall we break the indexing for the current data?
+     *
+     * when an indexer is configured for more than one table
+     * the index process may be different for the tables.
+     * overwrite this method in your child class to stop processing and
+     * do something different like putting a record into the queue
+     * if it's not the table that should be indexed
+     *
+     * @param string                                $tableName
+     * @param array                                 $sourceRecord
+     * @param tx_mksearch_interface_IndexerDocument $indexDoc
+     * @param array                                 $options
+     *
+     * @return bool
+     */
+    protected function stopIndexing(
+        $tableName,
+        $sourceRecord,
+        tx_mksearch_interface_IndexerDocument $indexDoc,
+        $options
+    ) {
+        return $this->getIndexerUtility()->stopIndexing(
+            $tableName,
+            $sourceRecord,
+            $indexDoc,
+            $options
+        );
+    }
+
+    /**
+     * @return tx_mksearch_util_Indexer
+     */
+    protected function getIndexerUtility()
+    {
+        return tx_mksearch_util_Indexer::getInstance();
     }
 
     /**
