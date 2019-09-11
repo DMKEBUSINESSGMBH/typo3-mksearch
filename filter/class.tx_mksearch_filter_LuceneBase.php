@@ -82,6 +82,7 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
         $options = $this->setFeGroupsToOptions($options);
         $this->handleTerm($fields, $options);
         $this->handleSorting($options);
+        $this->handleLimit($options);
 
         return true;
     }
@@ -119,6 +120,21 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
     {
         if ($sortString = $this->getFilterUtility()->getSortString($options, $this->getParameters())) {
             $options['sort'] = $sortString;
+        }
+    }
+
+    /**
+     * Schränkt das Ergebnis ein, wenn ein limit gesetzt ist.
+     *
+     * @param array $options
+     *
+     * @return void
+     */
+    protected function handleLimit(array $options)
+    {
+        if (isset($options['limit'])) {
+            $limit = (int)$options['limit'];
+            Zend_Search_Lucene::setResultSetLimit($limit);
         }
     }
 
