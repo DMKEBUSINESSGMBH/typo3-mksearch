@@ -98,7 +98,7 @@ class tx_mksearch_action_ElasticSearch extends tx_mksearch_action_AbstractSearch
      */
     protected function getServiceRegistry()
     {
-        return tx_mksearch_util_ServiceRegistry;
+        return 'tx_mksearch_util_ServiceRegistry';
     }
 
     /**
