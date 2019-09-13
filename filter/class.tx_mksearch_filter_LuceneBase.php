@@ -127,13 +127,11 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
      * Schränkt das Ergebnis ein, wenn ein limit gesetzt ist.
      *
      * @param array $options
-     *
-     * @return void
      */
     protected function handleLimit(array $options)
     {
         if (isset($options['limit'])) {
-            $limit = (int)$options['limit'];
+            $limit = (int) $options['limit'];
             Zend_Search_Lucene::setResultSetLimit($limit);
         }
     }
