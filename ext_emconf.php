@@ -35,7 +35,9 @@ $EM_CONF[$_EXTKEY] = array(
             'typo3' => '8.7.0-9.5.99',
         ),
         'conflicts' => array(),
-        'suggests' => array(),
+        'suggests' => array(
+            'mksanitizedparameters' => '3.0.0-',
+        ),
     ),
     'suggests' => array(),
     'autoload' => array(

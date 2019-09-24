@@ -74,6 +74,9 @@
             "Classes/Constants.php"
         ]
     },
+    "suggest": {
+        "dmk/mksanitizedparameters": "keeps your parameters clean and safe"
+    },
     "config": {
         "vendor-dir": ".Build/vendor",
         "bin-dir": ".Build/bin",
