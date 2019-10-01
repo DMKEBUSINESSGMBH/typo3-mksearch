@@ -1,1 +1,0 @@
-This folder's contents should not end up on production systems or in TER.
