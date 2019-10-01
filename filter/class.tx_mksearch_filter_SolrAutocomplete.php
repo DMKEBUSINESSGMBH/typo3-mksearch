@@ -27,8 +27,6 @@
 /**
  * benötigte Klassen einbinden.
  */
-tx_rnbase::load('tx_mksearch_filter_SolrBase');
-tx_rnbase::load('tx_mksearch_util_Misc');
 
 /**
  * Filter für autocomplete Anfragen.

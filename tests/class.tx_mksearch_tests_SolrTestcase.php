@@ -22,12 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-tx_rnbase::load('tx_rnbase_util_Files');
-tx_rnbase::load('tx_mksearch_tests_Testcase');
-tx_rnbase::load('tx_mksearch_util_ServiceRegistry');
-tx_rnbase::load('tx_rnbase_util_Spyc');
-tx_rnbase::load('tx_mksearch_tests_Util');
-
 /**
  * Base test class for tests hitting Solr.
  *
@@ -335,7 +329,6 @@ abstract class tx_mksearch_tests_SolrTestcase extends tx_mksearch_tests_Testcase
         // Erstmal komplett leer räumen
         $this->getSolr()->deleteByQuery('*:*');
 
-        tx_rnbase::load('tx_rnbase_util_Spyc');
         $data = tx_rnbase_util_Spyc::YAMLLoad($yamlPath);
 
         foreach ($data['docs'] as $docArr) {

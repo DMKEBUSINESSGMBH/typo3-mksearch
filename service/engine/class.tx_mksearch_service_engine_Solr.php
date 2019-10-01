@@ -22,13 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-tx_rnbase::load('tx_mksearch_interface_SearchEngine');
-tx_rnbase::load('tx_rnbase_configurations');
-tx_rnbase::load('tx_mksearch_util_Misc');
-tx_rnbase::load('tx_mksearch_service_engine_SolrException');
-tx_rnbase::load('tx_rnbase_util_Logger');
-tx_rnbase::load('Tx_Rnbase_Service_Base');
-
 require_once tx_rnbase_util_Extensions::extPath('mksearch').'lib/Apache/Solr/Service.php';
 
 /**
@@ -73,12 +66,16 @@ class tx_mksearch_service_engine_Solr extends Tx_Rnbase_Service_Base implements 
      */
     public function setConnection($host, $port, $path, $force = true)
     {
-        $this->index = new Apache_Solr_Service($host, $port, $path);
+        $this->index = new Apache_Solr_Service(
+            $host,
+            $port,
+            $path,
+            false,
+            $this->indexModel->isSolr4() ? new Apache_Solr_Compatibility_Solr4CompatibilityLayer() : false
+        );
 
         // multivalue fields should always be an array
         $this->index->setCollapseSingleValueArrays(false);
-
-        $this->index->setSolrVersion($this->indexModel->getSolrVersion());
 
         //per default werden alle HTTP Aufrufe per file_get_contents erledigt.
         //siehe Apache_Solr_Service::getHttpTransport()

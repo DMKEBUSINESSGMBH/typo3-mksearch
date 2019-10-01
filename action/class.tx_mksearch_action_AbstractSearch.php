@@ -22,8 +22,6 @@
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-tx_rnbase::load('tx_rnbase_action_BaseIOC');
-
 /**
  * Abstract search action.
  *
@@ -92,8 +90,10 @@ abstract class tx_mksearch_action_AbstractSearch extends tx_rnbase_action_BaseIO
         $value = $value ? substr($value, 0, 150) : '';
         $options = array();
         tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, 'softlink.options.');
-        $options['where'] = 'keyword='.$GLOBALS['TYPO3_DB']->fullQuoteStr($value, 'tx_mksearch_keywords');
-        $rows = tx_rnbase_util_DB::doSelect('link', 'tx_mksearch_keywords', $options);
+
+        $database = Tx_Rnbase_Database_Connection::getInstance();
+        $options['where'] = 'keyword='.$database->fullQuoteStr($value, 'tx_mksearch_keywords');
+        $rows = $database->doSelect('link', 'tx_mksearch_keywords', $options);
 
         if (1 == count($rows)) {
             $link = $configurations->createLink(false);

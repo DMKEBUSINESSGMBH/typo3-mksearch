@@ -22,11 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-tx_rnbase::load('tx_mksearch_indexer_BaseMedia');
-tx_rnbase::load('tx_mksearch_service_indexer_core_Config');
-tx_rnbase::load('tx_mksearch_util_Misc');
-tx_rnbase::load('tx_rnbase_util_Logger');
-
 /**
  * Indexer service for dam.media called by the "mksearch" extension.
  */
@@ -207,7 +202,7 @@ class tx_mksearch_indexer_FAL extends tx_mksearch_indexer_BaseMedia
     ) {
         $filePath = $this->getFilePath($tableName, $sourceRecord);
         if (!\TYPO3\CMS\Core\Utility\PathUtility::isAbsolutePath($filePath)) {
-            $filePath = PATH_site.$filePath;
+            $filePath = \Sys25\RnBase\Utility\Environment::getPublicPath().$filePath;
         }
         if (// In FALs sys_file table there are no cloumns for hidden and deleted
             // items. Nevertheless we check the deleted flag, because in

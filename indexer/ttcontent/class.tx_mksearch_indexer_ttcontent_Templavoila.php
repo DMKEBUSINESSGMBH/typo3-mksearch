@@ -27,8 +27,6 @@
 /**
  * benötigte Klassen einbinden.
  */
-tx_rnbase::load('tx_mksearch_indexer_ttcontent_Normal');
-tx_rnbase::load('tx_mksearch_util_Indexer');
 
 /**
  * takes care of tt_content with templavoila support.
@@ -114,16 +112,17 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
      */
     protected function getReferences(tx_rnbase_IModel $oModel)
     {
+        $database = Tx_Rnbase_Database_Connection::getInstance();
         // so we have to fetch all references
         // we just need to check this table for entries for this element
         $aSqlOptions = array(
-            'where' => 'ref_table='.$GLOBALS['TYPO3_DB']->fullQuoteStr('tt_content', 'sys_refindex').
+            'where' => 'ref_table='.$database->fullQuoteStr('tt_content', 'sys_refindex').
                     ' AND ref_uid='.(int) $oModel->getUid().
                     ' AND deleted=0',
             'enablefieldsoff' => true,
         );
         $aFrom = array('sys_refindex', 'sys_refindex');
-        $aRows = tx_rnbase_util_DB::doSelect('tablename, recuid', $aFrom, $aSqlOptions);
+        $aRows = $database->doSelect('tablename, recuid', $aFrom, $aSqlOptions);
 
         // now we need to collect the pids of all references. either a
         // reference is a page than we simply use it's pid or the
@@ -141,7 +140,7 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
                         'enablefieldsoff' => true,
                     );
                     $aFrom = array('tt_content', 'tt_content');
-                    $aNewRows = tx_rnbase_util_DB::doSelect('tt_content.pid', $aFrom, $aSqlOptions);
+                    $aNewRows = $database->doSelect('tt_content.pid', $aFrom, $aSqlOptions);
                     $aReferences[] = $aNewRows[0]['pid'];
                 }
             }
@@ -265,22 +264,22 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
         // indexing via Scheduler in CLI
         if (tx_rnbase_util_TYPO3::isCliMode()) {
             // somewhere inside typo3 but not in webroot
-            if (strlen(getcwd()) > strlen(PATH_site)) {
-                $relativePathInsideTypo3 = str_replace(PATH_site, '', getcwd());
+            if (strlen(getcwd()) > strlen(\Sys25\RnBase\Utility\Environment::getPublicPath())) {
+                $relativePathInsideTypo3 = str_replace(\Sys25\RnBase\Utility\Environment::getPublicPath(), '', getcwd());
                 // we need to find out how many levels we need to go up from here
                 // to the webroot
                 $pathParts = explode('/', $relativePathInsideTypo3);
                 $relativePathPrefixFromExecutionDir = str_repeat('../', count($pathParts));
             } // somewhere outside typo3
-            elseif (strlen(getcwd()) < strlen(PATH_site)) {
-                $relativePathPrefixFromExecutionDir = str_replace(getcwd(), '', PATH_site);
+            elseif (strlen(getcwd()) < strlen(\Sys25\RnBase\Utility\Environment::getPublicPath())) {
+                $relativePathPrefixFromExecutionDir = str_replace(getcwd(), '', \Sys25\RnBase\Utility\Environment::getPublicPath());
             } // inside typo3 webroot
             else {
                 $relativePathPrefixFromExecutionDir = '';
             }
         } // indexing via Scheduler in BE
         // script executed in /typo3
-        elseif (false !== strpos(PATH_thisScript, 'typo3/mod.php')) {
+        elseif (false !== strpos(\Sys25\RnBase\Utility\Environment::getCurrentScript(), 'typo3/mod.php')) {
             $relativePathPrefixFromExecutionDir = '../';
         } // indexing via mksearch BE module
         // script executed in /typo3/sysext/cms/tslib

@@ -1,6 +1,5 @@
 <?php
 
-tx_rnbase::load('tx_mksearch_mod1_searcher_abstractBase');
 /**
  * Searcher for keywords.
  *

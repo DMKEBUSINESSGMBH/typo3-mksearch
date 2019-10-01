@@ -1,0 +1,43 @@
+<phpunit
+        backupGlobals="true"
+        backupStaticAttributes="false"
+        bootstrap=".Build/vendor/nimut/testing-framework/res/Configuration/UnitTestsBootstrap.php"
+        colors="true"
+        convertErrorsToExceptions="true"
+        convertWarningsToExceptions="true"
+        forceCoversAnnotation="false"
+        processIsolation="false"
+        stopOnError="false"
+        stopOnFailure="false"
+        stopOnIncomplete="false"
+        stopOnSkipped="false"
+        verbose="false"
+>
+
+    <php>
+        <env name="TYPO3_PATH_WEB" value=".Build/Web" />
+    </php>
+
+    <testsuites>
+        <testsuite name="Unit Tests">
+            <directory>tests/</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./actions</directory>
+            <directory suffix=".php">./controllers</directory>
+            <directory suffix=".php">./exceptions</directory>
+            <directory suffix=".php">./hooks</directory>
+            <directory suffix=".php">./models</directory>
+            <directory suffix=".php">./search</directory>
+            <directory suffix=".php">./util</directory>
+            <directory suffix=".php">./Classes</directory>
+            <directory suffix=".php">./marker</directory>
+            <directory suffix=".php">./view</directory>
+            <directory suffix=".php">./interface</directory>
+            <directory suffix=".php">./indexer</directory>
+        </whitelist>
+    </filter>
+</phpunit>

@@ -22,8 +22,6 @@
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-tx_rnbase::load('tx_mksearch_indexer_Base');
-
 /**
  * Indexer service for tx_news.news called by the "mksearch" extension.
  *
@@ -151,18 +149,20 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
         );
 
         // Hook to append indexer data
-        tx_rnbase_util_Misc::callHook(
-            'mksearch',
-            'indexer_TxNews_prepareDataBeforeAddFields',
-            array(
-                'news' => &$news,
-                'rawData' => &$rawData,
-                'options' => $options,
-                'indexDoc' => &$indexDoc,
-                'abort' => &$abort,
-            ),
-            $this
-        );
+        if (!$news) {
+            tx_rnbase_util_Misc::callHook(
+                'mksearch',
+                'indexer_TxNews_prepareDataBeforeAddFields',
+                [
+                    'news' => $news,
+                    'rawData' => &$rawData,
+                    'options' => $options,
+                    'indexDoc' => $indexDoc,
+                    'abort' => &$abort,
+                ],
+                $this
+            );
+        }
 
         if (!$news) {
             $abort = true;
@@ -170,10 +170,12 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
 
         // At least one of the news' categories was found on black list
         if ($abort) {
-            tx_rnbase::load('tx_rnbase_util_Logger');
             tx_rnbase_util_Logger::info(
                 'News wurde nicht indiziert, weil das Signal von einem Hook gegeben wurde.',
-                'mksearch'
+                'mksearch',
+                [
+                    'uid' => $rawData['uid'],
+                ]
             );
             if ($options['deleteOnAbort']) {
                 $indexDoc->setDeleted(true);
@@ -282,20 +284,22 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
         $indexDoc->addField('news_text_s', $bodyText, 'keyword');
         $indexDoc->addField('news_text_t', $bodyText, 'keyword');
 
-        $indexDoc->addField(
-            'datetime_dt',
-            tx_mksearch_util_Misc::getIsoDate($news->getDatetime()),
-            'keyword',
-            1.0,
-            'date'
-        );
+        if ($news->getDatetime()) {
+            $indexDoc->addField(
+                'datetime_dt',
+                tx_mksearch_util_Misc::getIsoDate($news->getDatetime()),
+                'keyword',
+                1.0,
+                'date'
+            );
+        }
     }
 
     /**
      * Add tag data of the News to the index.
      *
      * @param array                                 $rawData
-     * @param unknown                               $news
+     * @param \GeorgRinger\News\Domain\Model\News   $news
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
      * @param array                                 $options
      */
@@ -318,7 +322,7 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
      * Add category data of the News to the index.
      *
      * @param array                                 $rawData
-     * @param unknown                               $news
+     * @param \GeorgRinger\News\Domain\Model\News   $news
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
      * @param array                                 $options
      */
@@ -349,7 +353,6 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
         $indexDoc->addField('categoriesTitle_ms', array_values($categories));
 
         // add field with the combined tags uids and names
-        tx_rnbase::load('tx_mksearch_util_KeyValueFacet');
         $dfs = tx_mksearch_util_KeyValueFacet::getInstance();
         $tagDfs = $dfs->buildFacetValues(array_keys($categories), array_values($categories));
         $indexDoc->addField('categories_dfs_ms', $tagDfs, 'keyword');

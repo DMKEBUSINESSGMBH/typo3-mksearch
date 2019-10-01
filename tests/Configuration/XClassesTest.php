@@ -25,8 +25,6 @@ namespace DMK\Mksearch\Tests;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-\tx_rnbase::load('tx_mksearch_tests_Testcase');
-
 /**
  * DMK\Mksearch\Tests\ViewHelpers$CObjectViewHelperTest.
  *
@@ -44,21 +42,6 @@ class XClassesTest extends \tx_mksearch_tests_Testcase
         self::assertInstanceOf(
             'DMK\\Mksearch\\ViewHelpers\\CObjectViewHelper',
             \tx_rnbase::makeInstance('TYPO3\\CMS\\Fluid\\ViewHelpers\\CObjectViewHelper')
-        );
-    }
-
-    /**
-     * @group unit
-     */
-    public function testFluidCropViewHelperIsXClassed()
-    {
-        if (\tx_rnbase_util_TYPO3::isTYPO80OrHigher()) {
-            $this->markTestSkipped('Not required for TYPO3 8 or higher');
-        }
-
-        self::assertInstanceOf(
-            'DMK\\Mksearch\\ViewHelpers\\Format\\CropViewHelper',
-            \tx_rnbase::makeInstance('TYPO3\\CMS\\Fluid\\ViewHelpers\\Format\\CropViewHelper')
         );
     }
 

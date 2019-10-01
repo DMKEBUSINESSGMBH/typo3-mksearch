@@ -25,9 +25,6 @@ use TYPO3\CMS\Core\Database\ConnectionPool;
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-tx_rnbase::load('tx_mksearch_tests_Util');
-tx_rnbase::load('tx_rnbase_util_TYPO3');
-
 /**
  * Base Testcase for DB Tests.
  *
@@ -35,7 +32,7 @@ tx_rnbase::load('tx_rnbase_util_TYPO3');
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-abstract class tx_mksearch_tests_DbTestcase extends Tx_Phpunit_Database_TestCase
+abstract class tx_mksearch_tests_DbTestcase extends tx_mksearch_tests_Testcase
 {
     protected $workspaceBackup;
     protected $templaVoilaConfigBackup = null;
@@ -61,7 +58,7 @@ abstract class tx_mksearch_tests_DbTestcase extends Tx_Phpunit_Database_TestCase
      *
      * @var array
      */
-    protected $importExtensions = array('cms' => 'cms', 'mksearch');
+    protected $importExtensions = array('core', 'frontend', 'mksearch');
 
     /**
      * Liste der daten, welche in die test DB importiert werden müssen.
@@ -80,15 +77,6 @@ abstract class tx_mksearch_tests_DbTestcase extends Tx_Phpunit_Database_TestCase
     public function __construct($name = null, array $data = array(), $dataName = '')
     {
         parent::__construct($name, $data, $dataName);
-
-        if (tx_rnbase_util_TYPO3::isTYPO62OrHigher()) {
-            $this->importExtensions[] = 'core';
-            $this->importExtensions[] = 'frontend';
-        }
-
-        if (tx_rnbase_util_TYPO3::isTYPO76OrHigher()) {
-            unset($this->importExtensions['cms']);
-        }
 
         // templavoila und realurl brauchen wir da es im BE sonst Warnungen hagelt
         // und man die Testergebnisse nicht sieht
@@ -110,6 +98,8 @@ abstract class tx_mksearch_tests_DbTestcase extends Tx_Phpunit_Database_TestCase
      */
     protected function setUp()
     {
+        self::markTestIncomplete('Database tests are no longer supported. Please switch to functional tests');
+
         tx_mksearch_tests_Util::emptyAddRootlineFields();
 
         // set up the TCA
@@ -125,17 +115,6 @@ abstract class tx_mksearch_tests_DbTestcase extends Tx_Phpunit_Database_TestCase
         $this->workspaceBackup = $GLOBALS['BE_USER']->workspace;
         $GLOBALS['BE_USER']->setWorkspace(0);
 
-        // WORKAROUND: phpunit seems to backup static attributes (in phpunit.xml)
-        // from version 3.6.10 not before. I'm not completely
-        // sure about that but from version 3.6.10 clearPageInstance is no
-        // more neccessary to have the complete test suite succeed.
-        // But this version is buggy. (http://forge.typo3.org/issues/36232)
-        // as soon as this bug is fixed, we can use the new phpunit version
-        // and dont need this anymore
-        tx_mksearch_service_indexer_core_Config::clearPageInstance();
-
-        // set up database
-        $GLOBALS['TYPO3_DB']->debugOutput = true;
         try {
             $this->createDatabase();
         } catch (RuntimeException $e) {
@@ -146,9 +125,7 @@ abstract class tx_mksearch_tests_DbTestcase extends Tx_Phpunit_Database_TestCase
         // assuming that test-database can be created otherwise PHPUnit will skip the test
         $this->db = $this->useTestDatabase();
 
-        if (tx_rnbase_util_TYPO3::isTYPO87OrHigher()) {
-            $this->setUpTestDatabaseForConnectionPool();
-        }
+        $this->setUpTestDatabaseForConnectionPool();
 
         $this->importStdDB();
         $this->importExtensions($this->importExtensions);
@@ -196,10 +173,8 @@ abstract class tx_mksearch_tests_DbTestcase extends Tx_Phpunit_Database_TestCase
             $GLOBALS['TYPO3_LOADED_EXT']['templavoila'] = $this->templaVoilaConfigBackup;
             $this->templaVoilaConfigBackup = null;
 
-            if (tx_rnbase_util_TYPO3::isTYPO62OrHigher()) {
-                $extensionManagementUtility = new TYPO3\CMS\Core\Utility\ExtensionManagementUtility();
-                $extensionManagementUtility->loadExtension('templavoila');
-            }
+            $extensionManagementUtility = new TYPO3\CMS\Core\Utility\ExtensionManagementUtility();
+            $extensionManagementUtility->loadExtension('templavoila');
         }
 
         tx_mksearch_tests_Util::resetAddRootlineFields();
@@ -209,9 +184,7 @@ abstract class tx_mksearch_tests_DbTestcase extends Tx_Phpunit_Database_TestCase
 
     protected function purgeRootlineCaches()
     {
-        if (tx_rnbase_util_TYPO3::isTYPO62OrHigher()) {
-            \TYPO3\CMS\Core\Utility\RootlineUtility::purgeCaches();
-        }
+        \TYPO3\CMS\Core\Utility\RootlineUtility::purgeCaches();
     }
 
     /**
@@ -234,7 +207,7 @@ abstract class tx_mksearch_tests_DbTestcase extends Tx_Phpunit_Database_TestCase
 
     protected function tearDownDatabase()
     {
-        if (tx_rnbase_util_TYPO3::isTYPO87OrHigher() && $this->originalDatabaseName) {
+        if ($this->originalDatabaseName) {
             // $GLOBALS['TYPO3_CONF_VARS']['DB']['Connections']['Default']['dbname'] is used
             // inside phpunit to get the original database so we need to reset that
             // before anything is done
@@ -243,13 +216,10 @@ abstract class tx_mksearch_tests_DbTestcase extends Tx_Phpunit_Database_TestCase
         $this->cleanDatabase();
         $this->dropDatabase();
 
-        // we need to reset the database for the connection pool connections aswell
-        if (tx_rnbase_util_TYPO3::isTYPO87OrHigher()) {
-            // truncate connections so they can be reinitialized with the real configuration
-            $connections = new ReflectionProperty(ConnectionPool::class, 'connections');
-            $connections->setAccessible(true);
-            $connections->setValue(null, array());
-        }
+        // truncate connections so they can be reinitialized with the real configuration
+        $connections = new ReflectionProperty(ConnectionPool::class, 'connections');
+        $connections->setAccessible(true);
+        $connections->setValue(null, array());
 
         $this->switchToTypo3Database();
     }

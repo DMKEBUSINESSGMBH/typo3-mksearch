@@ -104,8 +104,8 @@ CREATE TABLE tx_mksearch_configcomposites_indexerconfigs_mm (
 --
 CREATE TABLE tx_mksearch_queue (
     uid int(11) NOT NULL auto_increment,
-    cr_date datetime default '0000-00-00 00:00:00',
-    lastupdate datetime default '0000-00-00 00:00:00',
+    cr_date datetime default '1970-01-01 00:00:01',
+    lastupdate datetime default '1970-01-01 00:00:01',
     deleted tinyint(4) DEFAULT '0' NOT NULL,
 
     prefer tinyint(4) DEFAULT '0' NOT NULL,

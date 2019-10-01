@@ -22,10 +22,6 @@
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-tx_rnbase::load('tx_rnbase_mod_BaseModule');
-tx_rnbase::load('tx_mksearch_mod1_util_Misc');
-tx_rnbase::load('Tx_Rnbase_Backend_Utility');
-
 /**
  * Mksearch backend module.
  *
@@ -67,22 +63,6 @@ class tx_mksearch_mod1_Module extends tx_rnbase_mod_BaseModule
     public function getExtensionKey()
     {
         return 'mksearch';
-    }
-
-    /**
-     * Method to set the tabs for the mainmenu
-     * Umstellung von SelectBox auf Menu.
-     */
-    protected function getFuncMenu()
-    {
-        $mainmenu = $this->getFormTool()->showTabMenu(
-            $this->getPid(),
-            'function',
-            $this->getName(),
-            $this->getFuncMenuItems($this->MOD_MENU['function'])
-        );
-
-        return $mainmenu['menu'];
     }
 
     protected function getFormTag()

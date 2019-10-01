@@ -24,9 +24,6 @@
 
 require_once tx_rnbase_util_Extensions::extPath('mksearch', 'lib/Apache/Solr/Document.php');
 
-tx_rnbase::load('tx_mksearch_interface_SearchHit');
-tx_rnbase::load('tx_rnbase_model_base');
-
 /**
  * Model for search hits from solt.
  *

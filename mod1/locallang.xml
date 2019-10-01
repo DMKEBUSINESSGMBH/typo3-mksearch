@@ -33,6 +33,7 @@
             <label index="label_queue_cleared">The elements of the following tables are removed from the index queue: </label>
             <label index="label_queue_reseted">The elements of the following tables are put into the indexing queue: </label>
             <label index="label_queue_indexed">Indexing queue was triggered! Records processed: </label>
+            <label index="label_queue_runtime">Runtime</label>
             <label index="label_queue_indexed_empty">Nothing to do at the moment - indexing queue is empty.</label>
             <label index="label_queue_state_head">Status</label>
             <label index="label_queue_size">global size:</label>
@@ -115,6 +116,7 @@
             <label index="label_queue_cleared">Die Elemente der folgenden Tabellen wurden aus der Warteschlange entfernt: </label>
             <label index="label_queue_reseted">Alle Elemente der folgenden Tabellen wurden in die Warteschlange gelegt: </label>
             <label index="label_queue_indexed">Indizierung wurde ausgeführt! Datensätze verarbeitet: </label>
+            <label index="label_queue_runtime">Laufzeit</label>
             <label index="label_queue_indexed_empty">Nichts zu tun - die Warteschlange ist leer</label>
             <label index="label_queue_size">globale Größe:</label>
             <label index="label_table_count">Tabelle gefunden.</label>

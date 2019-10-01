@@ -70,8 +70,6 @@ class tx_mksearch_mod1_util_IndexStatusHandler
      */
     public function handleRequest(array $options = array())
     {
-        tx_rnbase::load('tx_rnbase_util_SearchBase');
-
         $fields = $states = array();
         if (!empty($options['pid'])) {
             $fields['INDX.PID'][OP_EQ_INT] = $options['pid'];

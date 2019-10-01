@@ -27,7 +27,6 @@
 /**
  * benötigte Klassen einbinden.
  */
-tx_rnbase::load('tx_mksearch_marker_SearchResultSimple');
 
 /**
  * Marker class for base facets.

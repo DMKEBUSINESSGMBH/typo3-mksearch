@@ -1,8 +1,5 @@
 <?php
 
-tx_rnbase::load('tx_rnbase_mod_ExtendedModFunc');
-tx_rnbase::load('tx_mksearch_mod1_util_Template');
-
 /**
  * Mksearch backend module.
  *

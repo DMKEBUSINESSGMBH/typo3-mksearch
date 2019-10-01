@@ -18,8 +18,6 @@ abstract class tx_mksearch_mod1_handler_Base
      */
     public function showScreen($template, tx_rnbase_mod_IModule $mod, $options)
     {
-        tx_rnbase::load('tx_mksearch_mod1_util_Template');
-
         return tx_mksearch_mod1_util_Template::parseList(
             $template,
             $mod,

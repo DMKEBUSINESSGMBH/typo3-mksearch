@@ -1,6 +1,115 @@
 Changelog
 =========
 
+9.5.3
+-----
+
+-   offline records (pid = -1) are not longer treated as indexable 
+except this pid is explicitly included in include.pages configuration of indexer.
+It might be a good idea to reindex all data if you use workspaces. You also might
+want to set deleteIfNotIndexable = 1 in the indexer configuration to have already
+indexed records deleted.
+
+9.5.2
+-----
+
+-   fixed compatibility issues for TYPO3 9.5
+
+9.5.0
+-----
+
+-   added TYPO3 9.5 support
+-   dropped TYPO3 6.2 and 7.6 support
+
+3.2.16
+-----
+
+-   bugfixes and cleanup
+
+3.2.15
+-----
+
+-   ban any url with mksearch parameters from realurl caching
+
+3.2.14
+-----
+
+-   bugfixes and cleanup
+-   added postTikaCommandParameters option
+
+3.2.13
+-----
+
+-   bugfixes and cleanup
+-   index the complete FAL properties including metadata
+
+3.2.12
+-----
+
+-   bugfixes and cleanup
+
+3.2.11
+-----
+
+-   added possibility to sort multivalued fields marker values
+
+3.2.10
+-----
+
+-   bugfixes and cleanup
+
+3.2.9
+-----
+
+-   bugfixes
+
+
+3.2.8
+-----
+
+-   add support for new domain model in index util for index model by mapping
+-   bugfixes and cleanup
+-   added stronger defaults
+-   supported dok types can be configured for tt_content indexers
+
+3.2.7
+-----
+
+-   an own location header can be used for softlink redirects
+-   bugfixes
+-   translated labels of backend module into german
+
+3.2.6
+-----
+
+-   bugfixes
+
+3.2.5
+-----
+
+-   bugfixes
+
+3.2.4
+-----
+
+-   index related links of tx_news
+
+3.2.3
+-----
+
+-   updated solr example config
+
+3.2.2
+-----
+
+-   add no_search field to rootline fields
+-   bugfixes
+
+3.2.1
+-----
+
+-   bugfixes
+
 3.2.0
 -----
 

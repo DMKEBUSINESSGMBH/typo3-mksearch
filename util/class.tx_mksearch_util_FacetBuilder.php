@@ -22,9 +22,6 @@
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-tx_rnbase::load('tx_mksearch_model_Facet');
-tx_rnbase::load('Tx_Rnbase_Domain_Model_Data');
-
 /**
  * Der FacetBuilder erstellt aus den Rohdaten
  * der Facets passende Objekte für das Rendering.

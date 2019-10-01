@@ -21,11 +21,6 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  ***************************************************************/
 
-tx_rnbase::load('tx_rnbase_util_SearchBase');
-tx_rnbase::load('tx_rnbase_util_ListBuilderInfo');
-tx_rnbase::load('tx_rnbase_filter_BaseFilter');
-tx_rnbase::load('tx_mksearch_util_Filter');
-
 /**
  * Dieser Filter verarbeitet Anfragen für Lucene.
  *
@@ -87,6 +82,7 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
         $options = $this->setFeGroupsToOptions($options);
         $this->handleTerm($fields, $options);
         $this->handleSorting($options);
+        $this->handleLimit($options);
 
         return true;
     }
@@ -124,6 +120,19 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
     {
         if ($sortString = $this->getFilterUtility()->getSortString($options, $this->getParameters())) {
             $options['sort'] = $sortString;
+        }
+    }
+
+    /**
+     * Schränkt das Ergebnis ein, wenn ein limit gesetzt ist.
+     *
+     * @param array $options
+     */
+    protected function handleLimit(array $options)
+    {
+        if (isset($options['limit'])) {
+            $limit = (int) $options['limit'];
+            Zend_Search_Lucene::setResultSetLimit($limit);
         }
     }
 
@@ -208,11 +217,11 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
         // Form template required?
         if (tx_rnbase_util_BaseMarker::containsMarker($template, $conf['config']['marker'])) {
             // Get template from TS
-            $templateCode = $configurations->getCObj()->fileResource($conf['config.']['template']);
+            $templateCode = tx_rnbase_util_Files::getFileResource($conf['config.']['template']);
             if ($templateCode) {
                 // Get subpart from TS
                 $subpartName = $conf['config.']['subpart'];
-                $typeTemplate = $configurations->getCObj()->getSubpart($templateCode, '###'.$subpartName.'###');
+                $typeTemplate = tx_rnbase_util_Templates::getSubpart($templateCode, '###'.$subpartName.'###');
                 if ($typeTemplate) {
                     $parameters = $this->getParameters();
                     $paramArray = $parameters->getArrayCopy();
@@ -223,7 +232,6 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
                     $formData = $parameters->get('submit') ? $paramArray : self::$formData;
                     $formData['action'] = $link->makeUrl(false);
                     $formData['searchcount'] = $configurations->getViewData()->offsetGet('searchcount');
-                    tx_rnbase::load('tx_rnbase_util_FormUtil');
                     $formData['hiddenfields'] = tx_rnbase_util_FormUtil::getHiddenFieldsForUrlParams($formData['action']);
                     $this->prepareFormFields($formData, $parameters);
 

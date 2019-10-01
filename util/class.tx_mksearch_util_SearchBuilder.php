@@ -22,16 +22,6 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-tx_rnbase::load('tx_rnbase_configurations');
-tx_rnbase::load('tx_mksearch_util_ServiceRegistry');
-
-// mögliche operatoren für das verbinden von wörtern
-define('MKSEARCH_OP_OR', 'or');
-define('MKSEARCH_OP_AND', 'and');
-define('MKSEARCH_OP_EXACT', 'exact');
-define('MKSEARCH_OP_FREE', 'free');
-define('MKSEARCH_OP_NONE', 'none');
-
 /**
  * Methods for accessing configuration options etc.
  */
@@ -92,8 +82,6 @@ class tx_mksearch_util_SearchBuilder
         if (self::emptyTerm($terms)) {
             return $terms;
         }
-
-        tx_rnbase::load('tx_mksearch_util_Misc');
 
         foreach ($terms as $key => &$term) {
             //remove empty strings. can happen when the term contains only control chars

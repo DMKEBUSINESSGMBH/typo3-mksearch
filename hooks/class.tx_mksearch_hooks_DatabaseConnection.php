@@ -21,7 +21,6 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-tx_rnbase::load('tx_mksearch_service_internal_Index');
 
 /**
  * tx_mksearch_hooks_DatabaseConnection.

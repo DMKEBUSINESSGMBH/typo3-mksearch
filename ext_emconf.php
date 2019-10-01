@@ -17,7 +17,7 @@ $EM_CONF[$_EXTKEY] = array(
     'author_email' => 'dev@dmk-ebusiness.de',
     'shy' => '',
     'dependencies' => 'rn_base',
-    'version' => '3.2.14',
+    'version' => '9.5.3',
     'conflicts' => '',
     'priority' => '',
     'module' => '',
@@ -31,12 +31,13 @@ $EM_CONF[$_EXTKEY] = array(
     'author_company' => 'DMK E-Business GmbH',
     'constraints' => array(
         'depends' => array(
-            'rn_base' => '1.6.3-',
-            'typo3' => '4.5.0-8.7.99',
-            'scheduler' => '1.0.0-8.7.99',
+            'rn_base' => '1.10.0-',
+            'typo3' => '8.7.0-9.5.99',
         ),
         'conflicts' => array(),
-        'suggests' => array(),
+        'suggests' => array(
+            'mksanitizedparameters' => '3.0.0-',
+        ),
     ),
     'suggests' => array(),
     'autoload' => array(

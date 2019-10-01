@@ -22,8 +22,6 @@
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-tx_rnbase::load('tx_mksearch_indexer_Base');
-
 /**
  * @author Michael Wagner <michael.wagner@dmk-ebusiness.de>
  * @license http://www.gnu.org/licenses/lgpl.html
@@ -90,7 +88,9 @@ class tx_mksearch_indexer_A21Glossary extends tx_mksearch_indexer_Base
                 'shorttype' => 'shorttype_s',
                 'description' => 'description_t',
             ),
-            $indexDoc
+            $indexDoc,
+            '',
+            $options
         );
 
         //done
@@ -132,6 +132,7 @@ respectNoSearchFlagInRootline = 1
 #   0 = \$pid-of-domain
 # }
 
+# keepHtml = 1
 
 # should a special workspace be indexed?
 # default is the live workspace (ID = 0)
