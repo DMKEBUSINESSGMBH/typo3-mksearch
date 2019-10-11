@@ -66,6 +66,11 @@ class tx_mksearch_scheduler_IndexTask extends Tx_Rnbase_Scheduler_Task
     {
         $success = true;
 
+        if (!$this->areMultipleExecutionsAllowed()) {
+            $this->getExecution()->setMultiple(true);
+            $this->save();
+        }
+
         try {
             $rows = tx_mksearch_util_ServiceRegistry::getIntIndexService()->triggerQueueIndexing($this->getAmountOfItems());
             if (!empty($rows)) {//sonst gibts ne PHP Warning bei array_merge
