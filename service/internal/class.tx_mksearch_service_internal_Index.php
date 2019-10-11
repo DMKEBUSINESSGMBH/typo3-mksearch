@@ -354,15 +354,6 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
             array('being_indexed' => 1)
         );
 
-        tx_rnbase_util_Logger::warn(
-            'debug hbochmann',
-            'mksearch',
-            array(
-                'first' => $data[0],
-                'last' => end($data),
-            )
-        );
-
         // Trigger update for the found items
         if (!$this->executeQueueData($data, $config)) {
             return array();
