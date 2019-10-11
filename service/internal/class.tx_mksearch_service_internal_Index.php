@@ -112,7 +112,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
             $options = array();
             $options['where'] = 'recid=\''.$uid.'\' AND tablename=\''.$tableName.'\' AND deleted=0';
             $options['enablefieldsoff'] = 1;
-            $ret = tx_rnbase_util_DB::doSelect('uid', self::$queueTable, $options);
+            $ret = Tx_Rnbase_Database_Connection::getInstance()->doSelect('uid', self::$queueTable, $options);
             if (count($ret)) {
                 return false;
             } // Item schon in queue
@@ -178,7 +178,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
      */
     protected function getDatabaseConnection()
     {
-        return Tx_Rnbase_Database_Connection::getInstance();
+        return Tx_Rnbase_Database_Connection::getInstance()->getInstance();
     }
 
     /**
@@ -213,7 +213,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
             // ready to insert
             if (is_array($record)) {
                 // quote and escape values
-                $record = Tx_Rnbase_Database_Connection::getInstance()->fullQuoteArray($record, self::$queueTable);
+                $record = Tx_Rnbase_Database_Connection::getInstance()->getInstance()->fullQuoteArray($record, self::$queueTable);
                 // build the query part
                 $sqlValues[] = '('.implode(',', $record).')';
                 // insert max. 500 items
@@ -298,7 +298,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 
     public function countItemsInQueue($tablename = '')
     {
-        $database = Tx_Rnbase_Database_Connection::getInstance();
+        $database = Tx_Rnbase_Database_Connection::getInstance()->getInstance();
         $options = array();
         $options['count'] = 1;
         $options['where'] = 'deleted=0';
@@ -330,19 +330,14 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
         $options = array();
         $options['orderby'] = 'prefer desc, cr_date asc, uid asc';
         $options['limit'] = isset($config['limit']) ? (int) $config['limit'] : 100;
-        $options['where'] = 'deleted=0';
+        $options['where'] = 'deleted=0 AND being_indexed = 0';
         $options['enablefieldsoff'] = 1;
 
-        $data = tx_rnbase_util_DB::doSelect('*', self::$queueTable, $options);
+        $data = Tx_Rnbase_Database_Connection::getInstance()->doSelect('*', self::$queueTable, $options);
 
         // Nothing found in queue? Stop
         if (empty($data)) {
             return 0;
-        }
-
-        // Trigger update for the found items
-        if (!$this->executeQueueData($data, $config)) {
-            return array();
         }
 
         $uids = array();
@@ -352,8 +347,33 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
             // daten sammeln
             $rows[$queue['tablename']][] = $queue['recid'];
         }
+
+        Tx_Rnbase_Database_Connection::getInstance()->doUpdate(
+            self::$queueTable,
+            'uid IN ('.implode(',', $uids).')',
+            array('being_indexed' => 1)
+        );
+
+        tx_rnbase_util_Logger::warn(
+            'debug hbochmann',
+            'mksearch',
+            array(
+                'first' => $data[0],
+                'last' => end($data),
+            )
+        );
+
+        // Trigger update for the found items
+        if (!$this->executeQueueData($data, $config)) {
+            return array();
+        }
+
         if (1 != $GLOBALS['TYPO3_CONF_VARS']['MKSEARCH_testmode']) {
-            $ret = tx_rnbase_util_DB::doUpdate(self::$queueTable, 'uid IN ('.implode(',', $uids).')', array('deleted' => 1));
+            $ret = Tx_Rnbase_Database_Connection::getInstance()->doUpdate(
+                self::$queueTable,
+                'uid IN ('.implode(',', $uids).')',
+                array('deleted' => 1, 'being_indexed' => 0)
+            );
             $this->deleteOldQueueEntries();
             tx_rnbase_util_Logger::info(
                 'Indexing run finished with '.$ret.' items executed.',
@@ -632,7 +652,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
      */
     public static function clearIndexingQueueForTable($table)
     {
-        $database = Tx_Rnbase_Database_Connection::getInstance();
+        $database = Tx_Rnbase_Database_Connection::getInstance()->getInstance();
         $fullQuoted = $database->fullQuoteStr($table, self::$queueTable);
 
         return $database->doDelete(self::$queueTable, 'tablename='.$fullQuoted);
@@ -651,7 +671,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
     {
         self::clearIndexingQueueForTable($table);
 
-        $database = Tx_Rnbase_Database_Connection::getInstance();
+        $database = Tx_Rnbase_Database_Connection::getInstance()->getInstance();
 
         $resolver = tx_mksearch_util_Config::getResolverForDatabaseTable($table);
         $resolver = count($resolver) ? $resolver['className'] : '';
