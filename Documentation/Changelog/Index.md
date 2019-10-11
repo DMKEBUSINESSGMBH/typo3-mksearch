@@ -1,6 +1,17 @@
 Changelog
 =========
 
+9.5.4
+-----
+
+-   add limit for max results for lucene search
+-   updated Apache Solr library
+-   added missing options on A21Glossary indexer
+-   fix default date in queue table to work with strict mode in MySQL
+-   don't optimize Solr after each commit
+-   make indexing scheduler run always in parallel (DB update needed)
+
+
 9.5.3
 -----
 
