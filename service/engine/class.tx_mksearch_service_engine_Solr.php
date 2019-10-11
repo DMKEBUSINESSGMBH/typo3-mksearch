@@ -342,7 +342,6 @@ class tx_mksearch_service_engine_Solr extends Tx_Rnbase_Service_Base implements 
     public function commitIndex()
     {
         $this->getSolr()->commit();
-        $this->optimizeIndex();
 
         return true;
     }
