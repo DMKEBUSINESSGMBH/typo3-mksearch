@@ -353,7 +353,6 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
             array('being_indexed' => 1)
         );
 
-
         // Trigger update for the found items
         if (!$this->executeQueueData($data, $config)) {
             return array();
