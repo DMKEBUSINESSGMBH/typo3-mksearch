@@ -108,52 +108,46 @@
             tint/tfloat/tlong/tdouble types. These fields support doc values, but they
             require the field to be single-valued and either be required or have a default
             value. -->
-        <fieldType name="int" class="solr.TrieIntField" docValues="true"
-            precisionStep="0" positionIncrementGap="0" />
-        <fieldType name="float" class="solr.TrieFloatField"
-            docValues="true" precisionStep="0" positionIncrementGap="0" />
-        <fieldType name="long" class="solr.TrieLongField" docValues="true"
-            precisionStep="0" positionIncrementGap="0" />
-        <fieldType name="double" class="solr.TrieDoubleField"
-            docValues="true" precisionStep="0" positionIncrementGap="0" />
+        <fieldType name="int" class="solr.IntPointField" docValues="true"
+                   positionIncrementGap="0" />
+        <fieldType name="float" class="solr.FloatPointField"
+                   docValues="true" positionIncrementGap="0" />
+        <fieldType name="long" class="solr.LongPointField" docValues="true"
+                   positionIncrementGap="0" />
+        <fieldType name="double" class="solr.DoublePointField"
+                   docValues="true" positionIncrementGap="0" />
 
-        <fieldType name="ints" class="solr.TrieIntField" docValues="true"
-            precisionStep="0" positionIncrementGap="0" multiValued="true" />
-        <fieldType name="floats" class="solr.TrieFloatField"
-            docValues="true" precisionStep="0" positionIncrementGap="0"
-            multiValued="true" />
-        <fieldType name="longs" class="solr.TrieLongField" docValues="true"
-            precisionStep="0" positionIncrementGap="0" multiValued="true" />
-        <fieldType name="doubles" class="solr.TrieDoubleField"
-            docValues="true" precisionStep="0" positionIncrementGap="0"
-            multiValued="true" />
+        <fieldType name="ints" class="solr.IntPointField" docValues="true"
+                   positionIncrementGap="0" multiValued="true" />
+        <fieldType name="floats" class="solr.FloatPointField"
+                   docValues="true" positionIncrementGap="0"
+                   multiValued="true" />
+        <fieldType name="longs" class="solr.LongPointField" docValues="true"
+                   positionIncrementGap="0" multiValued="true" />
+        <fieldType name="doubles" class="solr.DoublePointField"
+                   docValues="true" positionIncrementGap="0"
+                   multiValued="true" />
 
-        <!-- Numeric field types that index each value at various levels of precision
-            to accelerate range queries when the number of values between the range endpoints
-            is large. See the javadoc for NumericRangeQuery for internal implementation
-            details. Smaller precisionStep values (specified in bits) will lead to more
-            tokens indexed per value, slightly larger index size, and faster range queries.
-            A precisionStep of 0 disables indexing at different precision levels. -->
-        <fieldType name="tint" class="solr.TrieIntField" docValues="true"
-            precisionStep="8" positionIncrementGap="0" />
-        <fieldType name="tfloat" class="solr.TrieFloatField"
-            docValues="true" precisionStep="8" positionIncrementGap="0" />
-        <fieldType name="tlong" class="solr.TrieLongField" docValues="true"
-            precisionStep="8" positionIncrementGap="0" />
-        <fieldType name="tdouble" class="solr.TrieDoubleField"
-            docValues="true" precisionStep="8" positionIncrementGap="0" />
+        <fieldType name="tint" class="solr.IntPointField" docValues="true"
+                   positionIncrementGap="0" />
+        <fieldType name="tfloat" class="solr.FloatPointField"
+                   docValues="true" positionIncrementGap="0" />
+        <fieldType name="tlong" class="solr.LongPointField" docValues="true"
+                   positionIncrementGap="0" />
+        <fieldType name="tdouble" class="solr.DoublePointField"
+                   docValues="true" positionIncrementGap="0" />
 
-        <fieldType name="tints" class="solr.TrieIntField" docValues="true"
-            precisionStep="8" positionIncrementGap="0" multiValued="true" />
-        <fieldType name="tfloats" class="solr.TrieFloatField"
-            docValues="true" precisionStep="8" positionIncrementGap="0"
-            multiValued="true" />
-        <fieldType name="tlongs" class="solr.TrieLongField"
-            docValues="true" precisionStep="8" positionIncrementGap="0"
-            multiValued="true" />
-        <fieldType name="tdoubles" class="solr.TrieDoubleField"
-            docValues="true" precisionStep="8" positionIncrementGap="0"
-            multiValued="true" />
+        <fieldType name="tints" class="solr.IntPointField" docValues="true"
+                   positionIncrementGap="0" multiValued="true" />
+        <fieldType name="tfloats" class="solr.FloatPointField"
+                   docValues="true" positionIncrementGap="0"
+                   multiValued="true" />
+        <fieldType name="tlongs" class="solr.LongPointField"
+                   docValues="true" positionIncrementGap="0"
+                   multiValued="true" />
+        <fieldType name="tdoubles" class="solr.DoublePointField"
+                   docValues="true" positionIncrementGap="0"
+                   multiValued="true" />
 
         <!-- The format for this date field is of the form 1995-12-31T23:59:59Z,
             and is a more restricted form of the canonical representation of dateTime
@@ -163,21 +157,21 @@
             calculations that should be performed relative to "NOW" to determine the
             value, ie... NOW/HOUR ... Round to the start of the current hour NOW-1DAY
             ... Exactly 1 day prior to now NOW/DAY+6MONTHS+3DAYS ... 6 months and 3 days
-            in the future from the start of the current day Consult the TrieDateField
+            in the future from the start of the current day Consult the DatePointField
             javadocs for more information. Note: For faster range queries, consider the
             tdate type -->
-        <fieldType name="date" class="solr.TrieDateField" docValues="true"
-            precisionStep="0" positionIncrementGap="0" />
-        <fieldType name="dates" class="solr.TrieDateField" docValues="true"
-            precisionStep="0" positionIncrementGap="0" multiValued="true" />
+        <fieldType name="date" class="solr.DatePointField" docValues="true"
+                   positionIncrementGap="0" />
+        <fieldType name="dates" class="solr.DatePointField" docValues="true"
+                   positionIncrementGap="0" multiValued="true" />
 
         <!-- A Trie based date field for faster date range queries and date faceting. -->
-        <fieldType name="tdate" class="solr.TrieDateField" docValues="true"
-            precisionStep="6" positionIncrementGap="0" />
+        <fieldType name="tdate" class="solr.DatePointField" docValues="true"
+                   positionIncrementGap="0" />
 
-        <fieldType name="tdates" class="solr.TrieDateField"
-            docValues="true" precisionStep="6" positionIncrementGap="0"
-            multiValued="true" />
+        <fieldType name="tdates" class="solr.DatePointField"
+                   docValues="true" positionIncrementGap="0"
+                   multiValued="true" />
 
 
         <!--Binary data type. The data should be sent/retrieved in as Base64 encoded
@@ -197,7 +191,7 @@
         <!--
             For Geospatial search
         -->
-        <fieldType name="location" class="solr.LatLonType" subFieldSuffix="_coord" />
+        <fieldType name="location" class="solr.LatLonPointSpatialField" />
 
         <!-- solr.TextField allows the specification of custom text analyzers specified
             as a tokenizer and a list of token filters. Different analyzers may be specified
@@ -228,7 +222,7 @@
             positionIncrementGap="100">
             <analyzer type="index">
                 <tokenizer class="solr.WhitespaceTokenizerFactory"/>
-                <filter class="solr.WordDelimiterFilterFactory"
+                <filter class="solr.WordDelimiterGraphFilterFactory"
                     generateWordParts="1"
                     generateNumberParts="1"
                     catenateWords="1"
@@ -243,7 +237,7 @@
             </analyzer>
             <analyzer type="query">
                 <tokenizer class="solr.WhitespaceTokenizerFactory"/>
-                <filter class="solr.WordDelimiterFilterFactory"
+                <filter class="solr.WordDelimiterGraphFilterFactory"
                     generateWordParts="1"
                     generateNumberParts="1"
                     catenateWords="0"
@@ -263,7 +257,7 @@
             <analyzer type="index">
                 <tokenizer class="solr.WhitespaceTokenizerFactory"/>
 
-                <filter class="solr.WordDelimiterFilterFactory"
+                <filter class="solr.WordDelimiterGraphFilterFactory"
                     generateWordParts="1"
                     generateNumberParts="1"
                     catenateWords="1"
@@ -300,7 +294,7 @@
             <analyzer type="query">
                 <tokenizer class="solr.WhitespaceTokenizerFactory"/>
 
-                <filter class="solr.WordDelimiterFilterFactory"
+                <filter class="solr.WordDelimiterGraphFilterFactory"
                     generateWordParts="1"
                     generateNumberParts="1"
                     catenateWords="0"
@@ -321,7 +315,7 @@
             positionIncrementGap="100">
             <analyzer type="index">
                 <tokenizer class="solr.WhitespaceTokenizerFactory"/>
-                <filter class="solr.WordDelimiterFilterFactory"
+                <filter class="solr.WordDelimiterGraphFilterFactory"
                     generateWordParts="1"
                     generateNumberParts="1"
                     catenateWords="1"
@@ -356,7 +350,7 @@
             </analyzer>
             <analyzer type="query">
                 <tokenizer class="solr.WhitespaceTokenizerFactory"/>
-                <filter class="solr.WordDelimiterFilterFactory"
+                <filter class="solr.WordDelimiterGraphFilterFactory"
                     generateWordParts="1"
                     generateNumberParts="1"
                     catenateWords="0"
@@ -384,7 +378,7 @@
             <analyzer type="index">
                 <tokenizer class="solr.WhitespaceTokenizerFactory"/>
 
-                <filter class="solr.WordDelimiterFilterFactory"
+                <filter class="solr.WordDelimiterGraphFilterFactory"
                     generateWordParts="1"
                     generateNumberParts="1"
                     catenateWords="1"
@@ -402,7 +396,7 @@
                     so synonyms with whitespaces are treated as phrase
                 -->
                 <filter
-                    class="solr.SynonymFilterFactory"
+                    class="solr.SynonymGraphFilterFactory"
                     synonyms="lang/synonyms_de.txt"
                     ignoreCase="true"
                     expand="true"
@@ -438,7 +432,7 @@
             <analyzer type="query">
                 <tokenizer class="solr.WhitespaceTokenizerFactory"/>
 
-                <filter class="solr.WordDelimiterFilterFactory"
+                <filter class="solr.WordDelimiterGraphFilterFactory"
                     generateWordParts="1"
                     generateNumberParts="1"
                     catenateWords="0"
@@ -457,7 +451,7 @@
         <fieldType name="full_text_english" class="solr.TextField" positionIncrementGap="100">
             <analyzer type="index">
                 <tokenizer class="solr.WhitespaceTokenizerFactory"/>
-                <filter class="solr.WordDelimiterFilterFactory"
+                <filter class="solr.WordDelimiterGraphFilterFactory"
                     generateWordParts="1"
                     generateNumberParts="1"
                     catenateWords="1"
@@ -468,7 +462,7 @@
                 />
                 <filter class="solr.LowerCaseFilterFactory"/>
                 <filter
-                    class="solr.SynonymFilterFactory"
+                    class="solr.SynonymGraphFilterFactory"
                     synonyms="lang/synonyms_en.txt"
                     ignoreCase="true"
                     expand="true"
@@ -488,7 +482,7 @@
             </analyzer>
             <analyzer type="query">
                 <tokenizer class="solr.WhitespaceTokenizerFactory"/>
-                <filter class="solr.WordDelimiterFilterFactory"
+                <filter class="solr.WordDelimiterGraphFilterFactory"
                     generateWordParts="1"
                     generateNumberParts="1"
                     catenateWords="0"
@@ -518,14 +512,14 @@
                     so synonyms with whitespaces are treated as phrase
                 -->
                 <filter
-                    class="solr.SynonymFilterFactory"
+                    class="solr.SynonymGraphFilterFactory"
                     synonyms="lang/synonyms_de.txt"
                     ignoreCase="true"
                     expand="false"
                     tokenizerFactory="solr.KeywordTokenizerFactory"
                 />
                 <filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_de.txt" format="snowball" />
-                <filter class="solr.WordDelimiterFilterFactory"
+                <filter class="solr.WordDelimiterGraphFilterFactory"
                     generateWordParts="0" generateNumberParts="0" catenateWords="1"
                     catenateNumbers="1" catenateAll="0" />
                 <filter class="solr.LowerCaseFilterFactory" />
@@ -545,7 +539,7 @@
             <analyzer type="index">
                 <tokenizer class="solr.WhitespaceTokenizerFactory" />
                 <filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_de.txt" format="snowball" />
-                <filter class="solr.WordDelimiterFilterFactory"
+                <filter class="solr.WordDelimiterGraphFilterFactory"
                     generateWordParts="1" generateNumberParts="1" catenateWords="1"
                     catenateNumbers="1" catenateAll="0" splitOnCaseChange="0" />
                 <filter class="solr.LowerCaseFilterFactory" />
@@ -558,14 +552,14 @@
                     so synonyms with whitespaces are treated as phrase
                 -->
                 <filter
-                    class="solr.SynonymFilterFactory"
+                    class="solr.SynonymGraphFilterFactory"
                     synonyms="lang/synonyms_de.txt"
                     ignoreCase="true"
                     expand="true"
                     tokenizerFactory="solr.KeywordTokenizerFactory"
                 />
                 <filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_de.txt" format="snowball" />
-                <filter class="solr.WordDelimiterFilterFactory"
+                <filter class="solr.WordDelimiterGraphFilterFactory"
                     generateWordParts="1" generateNumberParts="1" catenateWords="0"
                     catenateNumbers="0" catenateAll="0" splitOnCaseChange="0" />
                 <filter class="solr.LowerCaseFilterFactory" />
@@ -581,7 +575,7 @@
             <analyzer type="index">
                 <tokenizer class="solr.WhitespaceTokenizerFactory" />
                 <filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_de.txt" format="snowball" />
-                <filter class="solr.WordDelimiterFilterFactory"
+                <filter class="solr.WordDelimiterGraphFilterFactory"
                     generateWordParts="1" generateNumberParts="1" catenateWords="1"
                     catenateNumbers="1" catenateAll="0" splitOnCaseChange="0" />
                 <filter class="solr.LowerCaseFilterFactory" />
@@ -597,14 +591,14 @@
                     so synonyms with whitespaces are treated as phrase
                 -->
                 <filter
-                    class="solr.SynonymFilterFactory"
+                    class="solr.SynonymGraphFilterFactory"
                     synonyms="lang/synonyms_de.txt"
                     ignoreCase="true"
                     expand="true"
                     tokenizerFactory="solr.KeywordTokenizerFactory"
                 />
                 <filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_de.txt" format="snowball" />
-                <filter class="solr.WordDelimiterFilterFactory"
+                <filter class="solr.WordDelimiterGraphFilterFactory"
                     generateWordParts="1" generateNumberParts="1" catenateWords="0"
                     catenateNumbers="0" catenateAll="0" splitOnCaseChange="0" />
                 <filter class="solr.LowerCaseFilterFactory" />
