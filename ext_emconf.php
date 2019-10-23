@@ -48,6 +48,7 @@ $EM_CONF[$_EXTKEY] = array(
             'hooks/',
             'indexer/',
             'interface/',
+            'lib/',
             'marker/',
             'mod1/',
             'model/',
