@@ -69,17 +69,32 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
         tx_mksearch_interface_IndexerDocument $indexDoc,
         $options
     ) {
+        $stopIndexing = parent::stopIndexing($tableName, $rawData, $indexDoc, $options);
+
         if ('sys_category' == $tableName) {
             $this->handleCategoryChanged($rawData);
 
-            return true;
+            $stopIndexing = true;
         } elseif ('tx_news_domain_model_tag' == $tableName) {
             $this->handleTagChanged($rawData);
 
-            return true;
+            $stopIndexing = true;
         }
 
-        return parent::stopIndexing($tableName, $rawData, $indexDoc, $options);
+        tx_rnbase_util_Misc::callHook(
+            'mksearch',
+            'indexer_TxNews_afterStopIndexing',
+            array(
+                'tableName' => &$tableName,
+                'rawData' => &$rawData,
+                'indexDoc' => $indexDoc,
+                'options' => &$options,
+                'stopIndexing' => &$stopIndexing
+            ),
+            $this
+        );
+
+        return $stopIndexing;
     }
 
     /**
