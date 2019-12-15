@@ -1,4 +1,7 @@
 <?php
+use Sys25\RnBase\Frontend\Request\ParametersInterface;
+use Sys25\RnBase\Configuration\ConfigurationInterface;
+
 /***************************************************************
 *  Copyright notice
 *
@@ -103,7 +106,7 @@ class tx_mksearch_util_Filter
      *
      * @return string
      */
-    public function parseCustomFilters($template, tx_rnbase_configurations $configurations, $confId, $markerName = 'SEARCH_FILTER')
+    public function parseCustomFilters($template, ConfigurationInterface $configurations, $confId, $markerName = 'SEARCH_FILTER')
     {
         if (!tx_rnbase_util_BaseMarker::containsMarker($template, $markerName)) {
             return $template;
@@ -182,12 +185,12 @@ class tx_mksearch_util_Filter
     }
 
     /**
-     * @param tx_rnbase_IParameters    $parameters
-     * @param tx_rnbase_configurations $configurations
+     * @param ParametersInterface    $parameters
+     * @param \Sys25\RnBase\Configuration\ConfigurationInterface $configurations
      * @param string                   $confId
      * @param int                      $defaultValue
      */
-    public function getPageLimit(tx_rnbase_IParameters $parameters, $configurations, $confId, $defaultValue)
+    public function getPageLimit(ParametersInterface $parameters, $configurations, $confId, $defaultValue)
     {
         $pageLimit = $parameters->getInt('pagelimit');
         // Die möglichen Wert suchen
@@ -228,7 +231,7 @@ class tx_mksearch_util_Filter
      *
      * @return string
      */
-    public function getSortString(array &$options, tx_rnbase_IParameters &$parameters)
+    public function getSortString(array &$options, ParametersInterface &$parameters)
     {
         $sortString = '';
         // die parameter nach einer sortierung fragen
