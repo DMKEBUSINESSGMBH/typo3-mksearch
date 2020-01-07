@@ -22,6 +22,8 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+use Sys25\RnBase\Frontend\Request\Parameters;
+
 /**
  * @author Hannes Bochmann <hannes.bochmann@dmk-business.de>
  */
@@ -182,12 +184,12 @@ class tx_mksearch_util_Filter
     }
 
     /**
-     * @param tx_rnbase_IParameters    $parameters
+     * @param Parameters    $parameters
      * @param tx_rnbase_configurations $configurations
      * @param string                   $confId
      * @param int                      $defaultValue
      */
-    public function getPageLimit(tx_rnbase_IParameters $parameters, $configurations, $confId, $defaultValue)
+    public function getPageLimit(Parameters $parameters, $configurations, $confId, $defaultValue)
     {
         $pageLimit = $parameters->getInt('pagelimit');
         // Die möglichen Wert suchen
@@ -224,11 +226,11 @@ class tx_mksearch_util_Filter
      * @TODO: das klappt zurzeit nur bei einfacher sortierung!
      *
      * @param array                 $options
-     * @param tx_rnbase_IParameters $parameters
+     * @param Parameters $parameters
      *
      * @return string
      */
-    public function getSortString(array &$options, tx_rnbase_IParameters &$parameters)
+    public function getSortString(array &$options, Parameters &$parameters)
     {
         $sortString = '';
         // die parameter nach einer sortierung fragen
