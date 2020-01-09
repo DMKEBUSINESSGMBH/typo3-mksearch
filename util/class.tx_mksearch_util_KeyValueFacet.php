@@ -107,7 +107,7 @@ class tx_mksearch_util_KeyValueFacet
      */
     public function buildFacetValues($keys, $values, $sortings = null)
     {
-        $builded = array();
+        $builded = [];
         foreach (array_keys($keys) as $index) {
             $builded[$index] = $this->buildFacetValue(
                 $keys[$index],
@@ -138,11 +138,11 @@ class tx_mksearch_util_KeyValueFacet
     {
         $exploded = tx_rnbase_util_Strings::trimExplode($this->facetDelimiter, $value);
 
-        return array(
+        return [
             'key' => array_shift($exploded),
             'value' => array_shift($exploded),
             'sorting' => array_shift($exploded),
-        );
+        ];
     }
 
     /**
@@ -152,7 +152,7 @@ class tx_mksearch_util_KeyValueFacet
      */
     public function explodeFacetValues(array $values)
     {
-        $extracted = array();
+        $extracted = [];
         foreach ($values as $key => $value) {
             $exploded = $this->explodeFacetValue($value);
             $extracted[] = $exploded;
@@ -180,7 +180,7 @@ class tx_mksearch_util_KeyValueFacet
      */
     public function extractFacetValues(array $values)
     {
-        $extracted = array();
+        $extracted = [];
         $exploded = $this->explodeFacetValues($values);
         foreach ($exploded as $value) {
             $extracted[$value['key']] = $value['value'];

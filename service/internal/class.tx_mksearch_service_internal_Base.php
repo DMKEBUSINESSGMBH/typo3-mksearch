@@ -69,7 +69,7 @@ class tx_mksearch_service_internal_Base extends Tx_Rnbase_Service_Base
         $cfg = $core->getIndexerOptions();
         $indexerType = $indexer->getContentType();
         list($extKey, $contentType) = $indexer->getContentType();
-        $indexerData = array('extKey' => $extKey, 'contentType' => $contentType);
+        $indexerData = ['extKey' => $extKey, 'contentType' => $contentType];
 
         if (array_key_exists($indexerData['extKey'].'.', $cfg)) {
             if (array_key_exists($indexerData['contentType'].'.', $cfg[$indexerData['extKey'].'.'])) {
@@ -90,7 +90,7 @@ class tx_mksearch_service_internal_Base extends Tx_Rnbase_Service_Base
      */
     public function findAll()
     {
-        $fields = $options = array();
+        $fields = $options = [];
         //$options['debug'] = 1;
         $options['enablefieldsfe'] = 1;
 

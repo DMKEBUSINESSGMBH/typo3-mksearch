@@ -42,7 +42,7 @@ class tx_mksearch_tests_indexer_Page_DBTest extends tx_mksearch_tests_DbTestcase
      * @param array  $data     ?
      * @param string $dataName ?
      */
-    public function __construct($name = null, array $data = array(), $dataName = '')
+    public function __construct($name = null, array $data = [], $dataName = '')
     {
         parent::__construct($name, $data, $dataName);
 
@@ -54,7 +54,7 @@ class tx_mksearch_tests_indexer_Page_DBTest extends tx_mksearch_tests_DbTestcase
         $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_Page');
         list($extKey, $cType) = $indexer->getContentType();
 
-        $record = array('uid' => 1, 'doktype' => 4, 'shortcut' => 2);
+        $record = ['uid' => 1, 'doktype' => 4, 'shortcut' => 2];
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
 
         $result = $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
@@ -62,9 +62,9 @@ class tx_mksearch_tests_indexer_Page_DBTest extends tx_mksearch_tests_DbTestcase
         //nichtzs direkt indiziert?
         self::assertNull($result, 'Es wurde nicht null zurück gegeben!');
 
-        $aOptions = array(
+        $aOptions = [
             'enablefieldsoff' => true,
-        );
+        ];
         $aResult = tx_rnbase_util_DB::doSelect('*', 'tx_mksearch_queue', $aOptions);
 
         self::assertEquals(3, count($aResult), 'Es wurde nicht der richtige Anzahl in die queue gelegt!');
@@ -85,16 +85,16 @@ class tx_mksearch_tests_indexer_Page_DBTest extends tx_mksearch_tests_DbTestcase
         $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_Page');
         list($extKey, $cType) = $indexer->getContentType();
 
-        $record = array('uid' => 2, 'doktype' => 1);
+        $record = ['uid' => 2, 'doktype' => 1];
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
 
-        $oIndexDoc = $indexer->prepareSearchData('pages', $record, $indexDoc, array());
+        $oIndexDoc = $indexer->prepareSearchData('pages', $record, $indexDoc, []);
 
         self::assertEquals('core:page:2', $oIndexDoc->getPrimaryKey(true), 'falsch indiziert!');
 
-        $aOptions = array(
+        $aOptions = [
             'enablefieldsoff' => true,
-        );
+        ];
         $aResult = tx_rnbase_util_DB::doSelect('*', 'tx_mksearch_queue', $aOptions);
 
         self::assertEmpty($aResult, 'Es wurden doch Elemente in die queue gelegt!');
@@ -103,34 +103,34 @@ class tx_mksearch_tests_indexer_Page_DBTest extends tx_mksearch_tests_DbTestcase
     public function testPrepareSearchDataSetsDocToDeleted()
     {
         $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_Page');
-        $options = array();
+        $options = [];
 
         list($extKey, $cType) = $indexer->getContentType();
 
         //is hidden
         $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_Page');
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
-        $record = array('uid' => 124, 'pid' => 0, 'deleted' => 0, 'hidden' => 1, 'title' => 'list');
+        $record = ['uid' => 124, 'pid' => 0, 'deleted' => 0, 'hidden' => 1, 'title' => 'list'];
         $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
         self::assertEquals(true, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 
         //everything alright
         $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_Page');
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
-        $record = array('uid' => 125, 'pid' => 1, 'deleted' => 0, 'hidden' => 0, 'title' => 'test');
+        $record = ['uid' => 125, 'pid' => 1, 'deleted' => 0, 'hidden' => 0, 'title' => 'test'];
         $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
         self::assertEquals(false, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 
         //parent is hidden
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
-        $record = array('uid' => 10, 'pid' => 7, 'deleted' => 0, 'hidden' => 0, 'title' => 'test');
+        $record = ['uid' => 10, 'pid' => 7, 'deleted' => 0, 'hidden' => 0, 'title' => 'test'];
         $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
         self::assertEquals(true, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 
         //everything alright with parents
         $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_Page');
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
-        $record = array('uid' => 126, 'pid' => 3, 'deleted' => 0, 'hidden' => 0, 'title' => 'test');
+        $record = ['uid' => 126, 'pid' => 3, 'deleted' => 0, 'hidden' => 0, 'title' => 'test'];
         $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
         self::assertEquals(false, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
     }
@@ -147,23 +147,23 @@ class tx_mksearch_tests_indexer_Page_DBTest extends tx_mksearch_tests_DbTestcase
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
 
         //testbeginn
-        $record = array('uid' => 1, 'title' => 'testPage');
-        $options['exclude.']['pageTrees.'] = array(1); //als array
+        $record = ['uid' => 1, 'title' => 'testPage'];
+        $options['exclude.']['pageTrees.'] = [1]; //als array
         $result = $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
         self::assertNull($result, 'Element sollte gelöscht werden, da nicht im richtigen Seitenbaum. 1');
 
-        $options['exclude.']['pageTrees.'] = array(4); //als array
+        $options['exclude.']['pageTrees.'] = [4]; //als array
         $result = $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
         self::assertNotNull($result, 'Element sollte nicht gelöscht werden, da im richtigen Seitenbaum. 1');
 
-        $record = array('uid' => 3, 'title' => 'testPage');
-        $options['exclude.']['pageTrees.'] = array(1); //als array
+        $record = ['uid' => 3, 'title' => 'testPage'];
+        $options['exclude.']['pageTrees.'] = [1]; //als array
         $result = $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
         self::assertNull($result, 'Element sollte gelöscht werden, da nicht im richtigen Seitenbaum. 2');
 
-        $record2 = array('uid' => 5, 'title' => 'testPage');
+        $record2 = ['uid' => 5, 'title' => 'testPage'];
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
-        $options['exclude.']['pageTrees.'] = array(1, 4); //als array
+        $options['exclude.']['pageTrees.'] = [1, 4]; //als array
         $result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options, 1);
         self::assertNull($result, 'Element sollte gelöscht werden, da im richtigen Seitenbaum. 3');
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
@@ -192,28 +192,28 @@ class tx_mksearch_tests_indexer_Page_DBTest extends tx_mksearch_tests_DbTestcase
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
 
         //testbeginn
-        $record = array('uid' => 1, 'title' => 'testPage');
-        $options['include.']['pageTrees.'] = array(1); //als array
+        $record = ['uid' => 1, 'title' => 'testPage'];
+        $options['include.']['pageTrees.'] = [1]; //als array
         $result = $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
         self::assertNotNull($result, 'Element sollte nicht gelöscht werden, da im richtigen Seitenbaum. 1');
 
-        $options['include.']['pageTrees.'] = array(4); //als array
+        $options['include.']['pageTrees.'] = [4]; //als array
         $result = $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
         self::assertNull($result, 'Element sollte gelöscht werden, da nicht im richtigen Seitenbaum. 1');
 
-        $record = array('uid' => 4, 'title' => 'testPage');
-        $options['include.']['pageTrees.'] = array(1); //als array
+        $record = ['uid' => 4, 'title' => 'testPage'];
+        $options['include.']['pageTrees.'] = [1]; //als array
         $result = $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
         self::assertNull($result, 'Element sollte gelöscht werden, da nicht im richtigen Seitenbaum. 2');
 
-        $record = array('uid' => 3, 'title' => 'testPage');
-        $options['include.']['pageTrees.'] = array(1); //als array
+        $record = ['uid' => 3, 'title' => 'testPage'];
+        $options['include.']['pageTrees.'] = [1]; //als array
         $result = $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
         self::assertNotNull($result, 'Element sollte nicht gelöscht werden, da im richtigen Seitenbaum. 2');
 
-        $record2 = array('uid' => 5, 'title' => 'testPage');
+        $record2 = ['uid' => 5, 'title' => 'testPage'];
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
-        $options['include.']['pageTrees.'] = array(1, 4); //als array
+        $options['include.']['pageTrees.'] = [1, 4]; //als array
         $result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options, 1);
         self::assertNotNull($result, 'Element sollte nicht gelöscht werden, da im richtigen Seitenbaum. 3');
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
@@ -234,16 +234,16 @@ class tx_mksearch_tests_indexer_Page_DBTest extends tx_mksearch_tests_DbTestcase
     {
         $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_Page');
         list($extKey, $cType) = $indexer->getContentType();
-        $options = array(
-            'exclude.' => array('pages.' => array(2)),
-        );
+        $options = [
+            'exclude.' => ['pages.' => [2]],
+        ];
 
-        $aRawData = array('uid' => 1, 'title' => 'test');
+        $aRawData = ['uid' => 1, 'title' => 'test'];
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
         self::assertNotNull($aIndexDoc, 'Das Element wurde nicht indiziert!');
 
-        $aRawData = array('uid' => 2, 'title' => 'test');
+        $aRawData = ['uid' => 2, 'title' => 'test'];
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
         self::assertNull($aIndexDoc, 'Das Element wurde doch indiziert!');
@@ -253,16 +253,16 @@ class tx_mksearch_tests_indexer_Page_DBTest extends tx_mksearch_tests_DbTestcase
     {
         $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_Page');
         list($extKey, $cType) = $indexer->getContentType();
-        $options = array(
-            'include.' => array('pages.' => array(2)),
-        );
+        $options = [
+            'include.' => ['pages.' => [2]],
+        ];
 
-        $aRawData = array('uid' => 1, 'title' => 'test');
+        $aRawData = ['uid' => 1, 'title' => 'test'];
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
         self::assertNull($aIndexDoc, 'Das Element wurde doch indiziert!');
 
-        $aRawData = array('uid' => 2, 'title' => 'test');
+        $aRawData = ['uid' => 2, 'title' => 'test'];
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
         self::assertNotNull($aIndexDoc, 'Das Element wurde nicht indiziert!');
@@ -273,15 +273,15 @@ class tx_mksearch_tests_indexer_Page_DBTest extends tx_mksearch_tests_DbTestcase
         $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_Page');
         list($extKey, $cType) = $indexer->getContentType();
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
-        $options = array('mapping.' => array(
+        $options = ['mapping.' => [
                 'title' => 'title_s',
                 'abstract' => 'abstract_s',
                 'doktype' => 'doktype_i',
                 'emptyDummyField' => 'emptyDummyField_s',
-            ),
-        );
+            ],
+        ];
 
-        $aRawData = array('uid' => 1, 'title' => 'testPage', 'abstract' => '<a href="http://www.test.de">test</a> test page for tests :-D', 'doktype' => 2);
+        $aRawData = ['uid' => 1, 'title' => 'testPage', 'abstract' => '<a href="http://www.test.de">test</a> test page for tests :-D', 'doktype' => 2];
 
         $aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options)->getData();
 
@@ -300,17 +300,17 @@ class tx_mksearch_tests_indexer_Page_DBTest extends tx_mksearch_tests_DbTestcase
         $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_Page');
         list($extKey, $cType) = $indexer->getContentType();
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
-        $options = array(
-            'mapping.' => array(
+        $options = [
+            'mapping.' => [
                 'title' => 'title_s',
                 'abstract' => 'abstract_s',
                 'doktype' => 'doktype_i',
                 'emptyDummyField' => 'emptyDummyField_s',
-            ),
+            ],
             'keepHtml' => 1,
-        );
+        ];
 
-        $aRawData = array('uid' => 1, 'title' => 'testPage', 'abstract' => '<a href="http://www.test.de">test</a> test page for tests :-D', 'doktype' => 2);
+        $aRawData = ['uid' => 1, 'title' => 'testPage', 'abstract' => '<a href="http://www.test.de">test</a> test page for tests :-D', 'doktype' => 2];
 
         $aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options)->getData();
 
@@ -328,9 +328,9 @@ class tx_mksearch_tests_indexer_Page_DBTest extends tx_mksearch_tests_DbTestcase
         $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_Page');
         list($extKey, $cType) = $indexer->getContentType();
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
-        $options = array();
+        $options = [];
 
-        $aRawData = array('uid' => 1, 'title' => 'testPage', 'abstract' => 'test page for tests :-D', 'doktype' => 2);
+        $aRawData = ['uid' => 1, 'title' => 'testPage', 'abstract' => 'test page for tests :-D', 'doktype' => 2];
 
         $aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options)->getData();
 

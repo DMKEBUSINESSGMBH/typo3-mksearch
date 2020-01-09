@@ -66,7 +66,7 @@ class Apache_Solr_HttpTransport_Curl extends Apache_Solr_HttpTransport_Abstract
         $this->_curl = curl_init();
 
         // set common options that will not be changed during the session
-        curl_setopt_array($this->_curl, array(
+        curl_setopt_array($this->_curl, [
             // return the response body from curl_exec
             CURLOPT_RETURNTRANSFER => true,
 
@@ -75,7 +75,7 @@ class Apache_Solr_HttpTransport_Curl extends Apache_Solr_HttpTransport_Abstract
 
             // we do not need the headers in the output, we get everything we need from curl_getinfo
             CURLOPT_HEADER => false,
-        ));
+        ]);
     }
 
     /**
@@ -90,10 +90,10 @@ class Apache_Solr_HttpTransport_Curl extends Apache_Solr_HttpTransport_Abstract
     public function setAuthenticationCredentials($username, $password)
     {
         // add the options to our curl handle
-        curl_setopt_array($this->_curl, array(
+        curl_setopt_array($this->_curl, [
             CURLOPT_USERPWD => $username.':'.$password,
             CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
-        ));
+        ]);
     }
 
     public function performGetRequest($url, $timeout = false)
@@ -105,7 +105,7 @@ class Apache_Solr_HttpTransport_Curl extends Apache_Solr_HttpTransport_Abstract
         }
 
         // set curl GET options
-        curl_setopt_array($this->_curl, array(
+        curl_setopt_array($this->_curl, [
             // make sure we're returning the body
             CURLOPT_NOBODY => false,
 
@@ -119,8 +119,8 @@ class Apache_Solr_HttpTransport_Curl extends Apache_Solr_HttpTransport_Abstract
             CURLOPT_TIMEOUT => $timeout,
 
             // set the HTTP Header. Since Solr 5.x necessary
-            CURLOPT_HTTPHEADER => array('Content-Type: application/x-www-form-urlencoded; charset=utf-8'),
-        ));
+            CURLOPT_HTTPHEADER => ['Content-Type: application/x-www-form-urlencoded; charset=utf-8'],
+        ]);
 
         // make the request
         $responseBody = curl_exec($this->_curl);
@@ -141,7 +141,7 @@ class Apache_Solr_HttpTransport_Curl extends Apache_Solr_HttpTransport_Abstract
         }
 
         // set curl HEAD options
-        curl_setopt_array($this->_curl, array(
+        curl_setopt_array($this->_curl, [
             // this both sets the method to HEAD and says not to return a body
             CURLOPT_NOBODY => true,
 
@@ -150,7 +150,7 @@ class Apache_Solr_HttpTransport_Curl extends Apache_Solr_HttpTransport_Abstract
 
             // set the timeout
             CURLOPT_TIMEOUT => $timeout,
-        ));
+        ]);
 
         // make the request
         $responseBody = curl_exec($this->_curl);
@@ -171,7 +171,7 @@ class Apache_Solr_HttpTransport_Curl extends Apache_Solr_HttpTransport_Abstract
         }
 
         // set curl POST options
-        curl_setopt_array($this->_curl, array(
+        curl_setopt_array($this->_curl, [
             // make sure we're returning the body
             CURLOPT_NOBODY => false,
 
@@ -185,11 +185,11 @@ class Apache_Solr_HttpTransport_Curl extends Apache_Solr_HttpTransport_Abstract
             CURLOPT_POSTFIELDS => $postData,
 
             // set the content type
-            CURLOPT_HTTPHEADER => array("Content-Type: {$contentType}"),
+            CURLOPT_HTTPHEADER => ["Content-Type: {$contentType}"],
 
             // set the timeout
             CURLOPT_TIMEOUT => $timeout,
-        ));
+        ]);
 
         // make the request
         $responseBody = curl_exec($this->_curl);

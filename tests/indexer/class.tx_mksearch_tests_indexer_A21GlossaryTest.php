@@ -38,7 +38,7 @@ class tx_mksearch_tests_indexer_A21GlossaryTest extends tx_mksearch_tests_Testca
     {
         $mock = $this->getMock(
             'tx_mksearch_indexer_A21Glossary',
-            array('stopIndexing', 'isIndexableRecord', 'hasDocToBeDeleted')
+            ['stopIndexing', 'isIndexableRecord', 'hasDocToBeDeleted']
         );
         $mock
             ->expects($this->any())
@@ -81,13 +81,13 @@ class tx_mksearch_tests_indexer_A21GlossaryTest extends tx_mksearch_tests_Testca
     {
         $indexer = $this->getIndexerMock();
         $model = $this->getModel(
-            array(
+            [
                     'uid' => 57,
                     'short' => 'Titel',
                     'shortcut' => 'Alternative',
                     'longversion' => 'Long',
                     'description' => 'Beschreibung',
-                )
+                ]
         )
             ->setTableName('tx_a21glossary_main');
         /* @var $indexDoc tx_mksearch_model_IndexerDocumentBase */
@@ -100,7 +100,7 @@ class tx_mksearch_tests_indexer_A21GlossaryTest extends tx_mksearch_tests_Testca
             'tx_a21glossary_main',
             $model->getRecord(),
             $indexDoc,
-            array()
+            []
         );
 
         self::assertInstanceOf(get_class($indexDoc), $return);

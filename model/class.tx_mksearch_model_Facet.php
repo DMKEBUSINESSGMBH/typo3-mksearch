@@ -39,7 +39,7 @@ class tx_mksearch_model_Facet extends tx_rnbase_model_base
     const TYPE_RANGE = 'type_range';
     const TYPE_DATE = 'type_date';
 
-    private $childs = array();
+    private $childs = [];
 
     /**
      * Gibt ein Facet Model zurück.
@@ -114,7 +114,7 @@ class tx_mksearch_model_Facet extends tx_rnbase_model_base
      */
     public function setChilds(array $childs)
     {
-        $this->childs = array();
+        $this->childs = [];
         $this->addChild($childs);
 
         return $this;

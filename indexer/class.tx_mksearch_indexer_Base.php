@@ -85,12 +85,12 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
         tx_rnbase_util_Misc::callHook(
             'mksearch',
             'indexerBase_preProcessSearchData',
-            array(
+            [
                 'table' => $tableName,
                 'rawData' => &$rawData,
                 'indexDoc' => &$indexDoc,
                 'options' => $options,
-            ),
+            ],
             $this
         );
         // check, if the doc was skiped or has to deleted
@@ -177,13 +177,13 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
         tx_rnbase_util_Misc::callHook(
             'mksearch',
             'indexerBase_postProcessSearchData',
-            array(
+            [
                 'table' => $tableName,
                 'rawData' => &$rawData,
                 'indexDoc' => &$indexDoc,
                 'options' => $options,
                 'model' => &$this->modelToIndex,
-            ),
+            ],
             $this
         );
 
@@ -203,7 +203,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
      */
     protected function getUid($tableName, $rawData, $options)
     {
-        $options = is_array($options) ? $options : array();
+        $options = is_array($options) ? $options : [];
 
         return tx_mksearch_util_Indexer::getInstance()->getRecordsUid($tableName, $rawData, $options);
     }
@@ -261,7 +261,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
         array $recordIndexMapping,
         tx_mksearch_interface_IndexerDocument $indexDoc,
         $prefix = '',
-        array $options = array(),
+        array $options = [],
         $dontIndexHidden = true
     ) {
         $indexDoc =
@@ -291,7 +291,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
         array $recordIndexMapping,
         tx_mksearch_interface_IndexerDocument $indexDoc,
         $prefix = '',
-        array $options = array(),
+        array $options = [],
         $dontIndexHidden = true
     ) {
         $indexDoc =
@@ -317,7 +317,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
     protected function hasDocToBeDeleted(
         tx_rnbase_IModel $model,
         tx_mksearch_interface_IndexerDocument $indexDoc,
-        $options = array()
+        $options = []
     ) {
         if (!$model ||
             !$model->isValid() ||
@@ -385,7 +385,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
             return $indexDoc;
         }
 
-        $recordIndexMapping = array();
+        $recordIndexMapping = [];
         $tempModel = clone $model;
         foreach ($enableColumns as $typo3InternalName => $enableColumnName) {
             $recordIndexMapping = $this->enhanceRecordIndexMappingForEnableColumn(
@@ -420,7 +420,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
         tx_rnbase_IModel $model,
         $tableName,
         tx_mksearch_interface_IndexerDocument $indexDoc,
-        $options = array()
+        $options = []
     ) {
         if ($this->shouldIndexSiteRootPage($options)) {
             $pageId = ('pages' == $tableName ? $model->getUid() : $model->record['pid']);
@@ -462,7 +462,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
         tx_rnbase_IModel $model,
         $tableName,
         tx_mksearch_interface_IndexerDocument $indexDoc,
-        $options = array()
+        $options = []
     ) {
         if ($model instanceof Tx_Rnbase_Domain_Model_DataInterface) {
             $sysLanguageUid = $model->getProperty(
@@ -492,11 +492,11 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
         $enableColumnName,
         $indexDocFieldsPrefix
     ) {
-        $fieldTypeMapping = array(
+        $fieldTypeMapping = [
             'starttime' => 'dt',
             'endtime' => 'dt',
             'fe_group' => 'mi',
-        );
+        ];
         if (array_key_exists($typo3InternalName, $fieldTypeMapping)) {
             $recordIndexMapping[$enableColumnName] =
                 $indexDocFieldsPrefix.$typo3InternalName.
@@ -674,7 +674,7 @@ CONFIG;
         $prefer = false,
         $resolver = false,
         $data = false,
-        array $options = array()
+        array $options = []
     ) {
         $this->getIndexerUtility()->addModelsToIndex($models, $tableName, $prefer, $resolver, $data, $options);
     }
@@ -739,7 +739,7 @@ CONFIG;
          */
         $treeQueryBuilder = tx_rnbase::makeInstance('Tx_Rnbase_Database_TreeQueryBuilder');
 
-        return $treeQueryBuilder->getPageTreeUidList($pidList, array('enablefieldsoff' => true));
+        return $treeQueryBuilder->getPageTreeUidList($pidList, ['enablefieldsoff' => true]);
     }
 
     /**
@@ -782,7 +782,7 @@ CONFIG;
      *
      * @return tx_rnbase_IModel
      */
-    protected function createModel(array $rawData, $tableName = null, $options = array())
+    protected function createModel(array $rawData, $tableName = null, $options = [])
     {
         /* @var $model tx_rnbase_model_base */
         $model = tx_rnbase::makeInstance(

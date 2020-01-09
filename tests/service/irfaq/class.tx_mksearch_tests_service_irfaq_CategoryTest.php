@@ -52,11 +52,11 @@ class tx_mksearch_tests_service_irfaq_CategoryTest extends tx_mksearch_tests_Tes
      */
     public function testGetByQuestion()
     {
-        $question = tx_rnbase::makeInstance('tx_mksearch_model_irfaq_Question', array('uid' => 123));
-        $service = $this->getMock('tx_mksearch_service_irfaq_Category', array('search'));
+        $question = tx_rnbase::makeInstance('tx_mksearch_model_irfaq_Question', ['uid' => 123]);
+        $service = $this->getMock('tx_mksearch_service_irfaq_Category', ['search']);
         $service->expects(self::once())
             ->method('search')
-            ->with(array('IRFAQ_QUESTION_CATEGORY_MM.uid_local' => array(OP_EQ_INT => 123)), array());
+            ->with(['IRFAQ_QUESTION_CATEGORY_MM.uid_local' => [OP_EQ_INT => 123]], []);
 
         $service->getByQuestion($question);
     }
@@ -69,7 +69,7 @@ class tx_mksearch_tests_service_irfaq_CategoryTest extends tx_mksearch_tests_Tes
     public function testGetByQuestionThrowsNoErrors()
     {
         tx_mksearch_util_ServiceRegistry::getIrfaqCategoryService()->getByQuestion(
-            tx_rnbase::makeInstance('tx_mksearch_model_irfaq_Question', array('uid' => 123))
+            tx_rnbase::makeInstance('tx_mksearch_model_irfaq_Question', ['uid' => 123])
         );
     }
 

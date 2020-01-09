@@ -79,14 +79,14 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
             $resolver = count($resolver) ? $resolver['className'] : '';
         }
         // dummy record bauen!
-        $record = array(
+        $record = [
                 'recid' => $uid,
                 'tablename' => $tableName,
                 'resolver' => $resolver,
                 'data' => is_array($data) ? serialize($data) : $data,
-            );
+            ];
         // Indizierung starten
-        $this->executeQueueData(array($record));
+        $this->executeQueueData([$record]);
     }
 
     /**
@@ -101,7 +101,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
      *
      * @return mixed array: (cr_date,prefer,recid,tablename,data,resolver) | false: if allredy exists
      */
-    private function buildRecordForIndex($tableName, $uid, $prefer = false, $resolver = false, $data = false, array $options = array())
+    private function buildRecordForIndex($tableName, $uid, $prefer = false, $resolver = false, $data = false, array $options = [])
     {
         $checkExisting = isset($options['checkExisting']) ? $options['checkExisting'] : true;
         if (false === $resolver) {
@@ -109,7 +109,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
             $resolver = count($resolver) ? $resolver['className'] : '';
         }
         if ($checkExisting) {
-            $options = array();
+            $options = [];
             $options['where'] = 'recid=\''.$uid.'\' AND tablename=\''.$tableName.'\' AND deleted=0';
             $options['enablefieldsoff'] = 1;
             $ret = $this->getDatabaseConnection()->doSelect('uid', self::$queueTable, $options);
@@ -119,14 +119,14 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
         }
 
         // achtung: die reihenfolge ist wichtig für addRecordsToIndex
-        $record = array(
+        $record = [
             'cr_date' => tx_rnbase_util_Dates::datetime_tstamp2mysql($GLOBALS['EXEC_TIME']),
             'prefer' => (int) $prefer,
             'recid' => $uid,
             'tablename' => $tableName,
             'data' => false !== $data ? (is_array($data) ? serialize($data) : $data) : '',
             'resolver' => !empty($resolver) ? $resolver : '',
-        );
+        ];
 
         return $record;
     }
@@ -143,17 +143,17 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
      *
      * @return bool true if record was successfully spooled
      */
-    public function addRecordToIndex($tableName, $uid, $prefer = false, $resolver = false, $data = false, array $options = array())
+    public function addRecordToIndex($tableName, $uid, $prefer = false, $resolver = false, $data = false, array $options = [])
     {
         if (empty($uid) || empty($tableName)) {
             tx_rnbase_util_Logger::warn(
                 'Could not add record to index. No table or uid given.',
                 'mksearch',
-                array(
+                [
                     'tablename' => '['.gettype($tableName).'] '.$tableName,
                     'uid' => '['.gettype($uid).'] '.$uid,
                     'trace' => tx_rnbase_util_Debug::getDebugTrail(),
-                )
+                ]
             );
 
             return false;
@@ -167,7 +167,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 
         $qid = $this->getDatabaseConnection()->doInsert(self::$queueTable, $record);
         if (tx_rnbase_util_Logger::isDebugEnabled()) {
-            tx_rnbase_util_Logger::debug('New record to be indexed added to queue.', 'mksearch', array('queue-id' => $qid, 'tablename' => $tableName, 'recid' => $uid));
+            tx_rnbase_util_Logger::debug('New record to be indexed added to queue.', 'mksearch', ['queue-id' => $qid, 'tablename' => $tableName, 'recid' => $uid]);
         }
 
         return $qid > 0;
@@ -189,12 +189,12 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
      *
      * @return bool true if record was successfully spooled
      */
-    public function addRecordsToIndex(array $records, array $options = array())
+    public function addRecordsToIndex(array $records, array $options = [])
     {
         if (empty($records)) {
             return true;
         }
-        $sqlValues = array();
+        $sqlValues = [];
         $count = 0;
         // build records
         foreach ($records as &$record) {
@@ -223,7 +223,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
                     $this->doInsertRecords($sqlValues);
                     // reset
                     $count = 0;
-                    $sqlValues = array();
+                    $sqlValues = [];
                 }
             }
         }
@@ -239,12 +239,10 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
      */
     public function addModelsToIndex(
         $models,
-        array $options = array()
+        array $options = []
     ) {
         if (!(is_array($models) || $models instanceof Traversable)) {
-            throw new Exception(
-                'Argument 1 passed to'.__METHOD__.'() must be of the type array or Traversable.'
-            );
+            throw new Exception('Argument 1 passed to'.__METHOD__.'() must be of the type array or Traversable.');
         }
 
         $prefer = isset($options['preferer']) ? $options['preferer'] : false;
@@ -290,7 +288,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
         $sqlQuery = $insert." VALUES \r\n".implode(", \r\n", $sqlValues).';';
         $this->getDatabaseConnection()->doQuery($sqlQuery);
         if (tx_rnbase_util_Logger::isDebugEnabled()) {
-            tx_rnbase_util_Logger::debug('New records to be indexed added to queue.', 'mksearch', array('sqlQuery' => $sqlQuery));
+            tx_rnbase_util_Logger::debug('New records to be indexed added to queue.', 'mksearch', ['sqlQuery' => $sqlQuery]);
         }
 
         return true;
@@ -298,7 +296,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 
     public function countItemsInQueue($tablename = '')
     {
-        $options = array();
+        $options = [];
         $options['count'] = 1;
         $options['where'] = 'deleted=0';
         if (strcmp($tablename, '')) {
@@ -321,12 +319,12 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
      *
      * @return array
      */
-    public function triggerQueueIndexing($config = array())
+    public function triggerQueueIndexing($config = [])
     {
         if (!is_array($config)) {
-            $config = array('limit' => $config);
+            $config = ['limit' => $config];
         }
-        $options = array();
+        $options = [];
         $options['orderby'] = 'prefer desc, cr_date asc, uid asc';
         $options['limit'] = isset($config['limit']) ? (int) $config['limit'] : 100;
         $options['where'] = 'deleted=0 AND being_indexed = 0';
@@ -339,8 +337,8 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
             return 0;
         }
 
-        $uids = array();
-        $rows = array();
+        $uids = [];
+        $rows = [];
         foreach ($data as $queue) {
             $uids[] = $queue['uid'];
             // daten sammeln
@@ -350,31 +348,31 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
         $this->getDatabaseConnection()->doUpdate(
             self::$queueTable,
             'uid IN ('.implode(',', $uids).')',
-            array('being_indexed' => 1)
+            ['being_indexed' => 1]
         );
 
         // Trigger update for the found items
         if (!$this->executeQueueData($data, $config)) {
-            return array();
+            return [];
         }
 
         if (1 != $GLOBALS['TYPO3_CONF_VARS']['MKSEARCH_testmode']) {
             $ret = Tx_Rnbase_Database_Connection::getInstance()->doUpdate(
                 self::$queueTable,
                 'uid IN ('.implode(',', $uids).')',
-                array('deleted' => 1, 'being_indexed' => 0)
+                ['deleted' => 1, 'being_indexed' => 0]
             );
             $this->deleteOldQueueEntries();
             tx_rnbase_util_Logger::info(
                 'Indexing run finished with '.$ret.' items executed.',
                 'mksearch',
-                array('data' => $data)
+                ['data' => $data]
             );
         } else {
             tx_rnbase_util_Logger::info(
                 'Indexing run finished in test mode. Queue not deleted!',
                 'mksearch',
-                array('data' => $data)
+                ['data' => $data]
             );
         }
 
@@ -388,7 +386,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
      * @param array $config
      *                      pid:    trigger only records for this pageid
      */
-    private function executeQueueData($data, array $config = array())
+    private function executeQueueData($data, array $config = [])
     {
         self::setSignalThatIndexingIsInProgress();
 
@@ -407,7 +405,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
                 /* @var $index tx_mksearch_model_internal_Index */
                 tx_rnbase_util_Logger::debug('[INDEXQUEUE] Next index is '.$index->getTitle(), 'mksearch');
                 // Container for all documents to be indexed / deleted
-                $indexDocs = array();
+                $indexDocs = [];
                 $searchEngine = tx_mksearch_util_ServiceRegistry::getSearchEngine($index);
 
                 $indexConfig = $index->getIndexerOptions();
@@ -416,13 +414,13 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
                     tx_rnbase_util_Logger::notice(
                         '[INDEXQUEUE] No indexer config found! Re-check your settings in mksearch BE-Module!',
                         'mksearch',
-                        array('Index' => $index->getTitle().' ('.$index->getUid().')', 'indexerClass' => get_class($index), 'indexdata' => $data)
+                        ['Index' => $index->getTitle().' ('.$index->getUid().')', 'indexerClass' => get_class($index), 'indexdata' => $data]
                     );
                     continue; // Continue with next index
                 }
 
                 if (tx_rnbase_util_Logger::isDebugEnabled()) {
-                    tx_rnbase_util_Logger::debug('[INDEXQUEUE] Config for index '.$index->getTitle().' found.', 'mksearch', array($indexConfig));
+                    tx_rnbase_util_Logger::debug('[INDEXQUEUE] Config for index '.$index->getTitle().' found.', 'mksearch', [$indexConfig]);
                 }
 
                 // Jetzt die Datensätze durchlaufen (Könnte vielleicht auch als äußere Schleife erfolgen...)
@@ -480,7 +478,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
                                         try {
                                             $indexDocs[$doc->getPrimaryKey(true)] = $doc;
                                         } catch (Exception $e) {
-                                            tx_rnbase_util_Logger::warn('[INDEXQUEUE] Invalid document returned from indexer.', 'mksearch', array('Indexer class' => get_class($indexer), 'record' => $record));
+                                            tx_rnbase_util_Logger::warn('[INDEXQUEUE] Invalid document returned from indexer.', 'mksearch', ['Indexer class' => get_class($indexer), 'record' => $record]);
                                         }
                                     }
                                 }
@@ -490,12 +488,12 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
                         tx_rnbase_util_Logger::warn(
                             '[INDEXQUEUE] Error processing queue item '.$queueRecord['uid'],
                             'mksearch',
-                            array(
+                            [
                                 'Exception' => $e->getMessage(),
                                 'On' => $e->getFile().'#'.$e->getLine(),
                                 'Queue-Item' => $queueRecord,
                                 'Trace' => $e->getTraceAsString(),
-                            )
+                            ]
                         );
                     }
                 }
@@ -514,14 +512,14 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
                             tx_rnbase_util_Logger::fatal(
                                 '[INDEXQUEUE] Fatal error processing search document!',
                                 'mksearch',
-                                array(
+                                [
                                     'Exception' => $e->getMessage(),
                                     'document' => $doc->__toString(),
                                     // getData liefert die IndexerField Objekte.
                                     // Diese wandeln wir in Strings um, da sonst die Objekte
                                     // nicht wiederhergesetllt werden können und Serialisiert auch zu viel Speicher rauben!
                                     'data' => array_map('strval', $doc->getData()),
-                                )
+                                ]
                             );
                         }
                     }
@@ -536,10 +534,10 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
             tx_rnbase_util_Logger::fatal(
                 '[INDEXQUEUE] Fatal error processing queue occured! The queue is left as it is so the indexing can be tried again.',
                 'mksearch',
-                array(
+                [
                     'Exception' => $e->getMessage(),
                     'Queue-Items' => $data,
-                )
+                ]
             );
             self::removeSignalThatIndexingIsInProgress();
 
@@ -563,7 +561,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
     ) {
         $workspacesToIndex = $configurationByContentType['workspaceIds'] ?
             Tx_Rnbase_Utility_Strings::trimExplode(',', $configurationByContentType['workspaceIds']) :
-            array(0);
+            [0];
 
         $isInIndexableWorkspace = false;
         foreach ($workspacesToIndex as $workspaceId) {
@@ -623,7 +621,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
      */
     private function getIndexersForTable($index, $tablename)
     {
-        $ret = array();
+        $ret = [];
         $indexers = tx_mksearch_util_Config::getIndexersForTable($tablename);
         foreach ($indexers as $indexer) {
             if ($this->isIndexerDefined($index, $indexer)) {

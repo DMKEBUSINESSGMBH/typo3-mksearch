@@ -85,7 +85,7 @@ class tx_mksearch_util_Indexer
         array $recordIndexMapping,
         tx_mksearch_interface_IndexerDocument $indexDoc,
         $prefix = '',
-        array $options = array(),
+        array $options = [],
         $dontIndexHidden = true
     ) {
         // get the record from the model, so the new rnbase models are supportet, who do not have access to ->record!
@@ -124,7 +124,7 @@ class tx_mksearch_util_Indexer
         array $recordIndexMapping,
         tx_mksearch_interface_IndexerDocument $indexDoc,
         $prefix = '',
-        array $options = array(),
+        array $options = [],
         $dontIndexHidden = true
     ) {
         //collect values
@@ -224,7 +224,7 @@ class tx_mksearch_util_Indexer
         $prefer = false,
         $resolver = false,
         $data = false,
-        array $options = array()
+        array $options = []
     ) {
         static $indexSrv;
         if (!empty($model) && $model->isValid()) {
@@ -268,7 +268,7 @@ class tx_mksearch_util_Indexer
         $prefer = false,
         $resolver = false,
         $data = false,
-        array $options = array()
+        array $options = []
     ) {
         if (!empty($models)) {
             foreach ($models as $model) {
@@ -560,7 +560,7 @@ class tx_mksearch_util_Indexer
             }
         }
 
-        return array();
+        return [];
     }
 
     /**
@@ -593,7 +593,7 @@ class tx_mksearch_util_Indexer
      */
     public function getConfigValue($key, $options)
     {
-        $config = array();
+        $config = [];
         if (is_array($options)) {
             if (isset($options[$key]) && strlen(trim($options[$key]))) {
                 $config = tx_rnbase_util_Strings::trimExplode(',', $options[$key]);
@@ -616,18 +616,18 @@ class tx_mksearch_util_Indexer
     {
         $pid = (int) $pid;
         if (!$pid) {
-            return array();
+            return [];
         }
         //first of all we have to check if the page is not hidden/deleted
-        $sqlOptions = array(
+        $sqlOptions = [
             'where' => 'pages.uid='.$pid.' AND hidden=0 AND deleted=0',
             'enablefieldsoff' => true, //ignore fe_group and so on
             'limit' => 1,
-        );
-        $from = array('pages', 'pages');
+        ];
+        $from = ['pages', 'pages'];
         $page = tx_rnbase_util_DB::doSelect('*', $from, $sqlOptions);
 
-        return !empty($page[0]) ? $page[0] : array();
+        return !empty($page[0]) ? $page[0] : [];
     }
 
     /**
@@ -656,7 +656,7 @@ class tx_mksearch_util_Indexer
         $sysLanguageUidField = tx_mksearch_util_TCA::getLanguageFieldForTable($tableName);
         if (isset($sourceRecord[$sysLanguageUidField])) {
             // @TODO: getTransOrigPointerFieldForTable abprüfen, wenn $lang!=0 !
-            $languages = array(0);
+            $languages = [0];
             if (isset($options['lang'])) {
                 $languages = Tx_Rnbase_Utility_Strings::intExplode(',', $options['lang'], true);
             }
@@ -682,13 +682,13 @@ class tx_mksearch_util_Indexer
     public static function prepareTSFE($pid, $sysLanguage = 0)
     {
         $tsfe = tx_rnbase_util_Misc::prepareTSFE(
-            array(
+            [
                 'force' => true,
                 'pid' => $pid,
                 // usually 0 is the normal page type
                 // @todo make configurable
                 'type' => 0,
-            )
+            ]
         );
 
         // add cobject for some plugins like tt_news

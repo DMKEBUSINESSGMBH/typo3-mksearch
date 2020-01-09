@@ -205,7 +205,7 @@ class Apache_Solr_Response
         //if we're configured to collapse single valued arrays or to convert them to Apache_Solr_Document objects
         //and we have response documents, then try to collapse the values and / or convert them now
         if (($this->_createDocuments || $this->_collapseSingleValueArrays) && isset($data->response) && is_array($data->response->docs)) {
-            $documents = array();
+            $documents = [];
 
             foreach ($data->response->docs as $originalDocument) {
                 if ($this->_createDocuments) {

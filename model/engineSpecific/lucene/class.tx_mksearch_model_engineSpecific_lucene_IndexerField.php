@@ -72,7 +72,7 @@ class tx_mksearch_model_engineSpecific_lucene_IndexerField extends tx_mksearch_m
      *
      * @var array
      */
-    private static $_possibleStorageTypes = array('text', 'keyword', 'unindexed', 'unstored', 'binary');
+    private static $_possibleStorageTypes = ['text', 'keyword', 'unindexed', 'unstored', 'binary'];
 
     /**
      * Constructor.

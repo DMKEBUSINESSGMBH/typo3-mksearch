@@ -82,8 +82,8 @@ class tx_mksearch_tests_filter_FacetBaseTest extends tx_mksearch_tests_Testcase
         $this->parameters->offsetSet('fq', 'facet_field:"facet value"');
         $filter = $this->getFilter($config);
 
-        $fields = array('term' => 'contentType:* ###PARAM_MKSEARCH_TERM###');
-        $options = array();
+        $fields = ['term' => 'contentType:* ###PARAM_MKSEARCH_TERM###'];
+        $options = [];
         $filter->init($fields, $options);
 
         self::assertEquals(
@@ -99,14 +99,14 @@ class tx_mksearch_tests_filter_FacetBaseTest extends tx_mksearch_tests_Testcase
     public function testSettingOfFeGroupsToFilterQuery()
     {
         $tsFeBackup = $GLOBALS['TSFE']->fe_user->groupData['uid'];
-        $GLOBALS['TSFE']->fe_user->groupData['uid'] = array(1, 2);
+        $GLOBALS['TSFE']->fe_user->groupData['uid'] = [1, 2];
 
         $config = $this->getDefaultConfig();
 
         $filter = $this->getFilter($config);
 
-        $fields = array('term' => 'contentType:* ###PARAM_MKSEARCH_TERM###');
-        $options = array();
+        $fields = ['term' => 'contentType:* ###PARAM_MKSEARCH_TERM###'];
+        $options = [];
         $filter->init($fields, $options);
 
         self::assertEquals('(-fe_group_mi:[* TO *] AND id:[* TO *]) OR fe_group_mi:0 OR fe_group_mi:1 OR fe_group_mi:2', $options['fq'], 'fq wuede gesetzt!');
@@ -124,8 +124,8 @@ class tx_mksearch_tests_filter_FacetBaseTest extends tx_mksearch_tests_Testcase
 
         $filter = $this->getFilter($config);
 
-        $fields = array();
-        $options = array();
+        $fields = [];
+        $options = [];
         $filter->init($fields, $options);
         self::assertEquals(0, $options['limit'], 'limit nicht 0');
     }
@@ -140,8 +140,8 @@ class tx_mksearch_tests_filter_FacetBaseTest extends tx_mksearch_tests_Testcase
 
         $filter = $this->getFilter($config);
 
-        $fields = array();
-        $options = array();
+        $fields = [];
+        $options = [];
         $filter->init($fields, $options);
         self::assertEquals('true', $options['facet'], 'facet nicht true');
     }
@@ -165,7 +165,7 @@ class tx_mksearch_tests_filter_FacetBaseTest extends tx_mksearch_tests_Testcase
      *
      * @return tx_mksearch_filter_FacetBase
      */
-    private function getFilter($config = array())
+    private function getFilter($config = [])
     {
         $filter = tx_rnbase::makeInstance(
             'tx_mksearch_filter_FacetBase',

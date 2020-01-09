@@ -78,7 +78,7 @@ class tx_mksearch_mod1_decorator_Composite
                 // hide undhide link
                 $ret .= $formtool->createHideLink($item->getTableName(), $item->getUid(), $item->record['hidden']);
                 // remove link
-                $ret .= $formtool->createDeleteLink($item->getTableName(), $item->getUid(), '', array('confirm' => $GLOBALS['LANG']->getLL('confirmation_deletion')));
+                $ret .= $formtool->createDeleteLink($item->getTableName(), $item->getUid(), '', ['confirm' => $GLOBALS['LANG']->getLL('confirmation_deletion')]);
                 break;
             default:
                 $ret = $value;
@@ -93,7 +93,7 @@ class tx_mksearch_mod1_decorator_Composite
      *
      * @return string
      */
-    public function getCompositeInfos($items, $options = array())
+    public function getCompositeInfos($items, $options = [])
     {
         foreach ($items as $item) {
             $ret[] = $this->getCompositeInfo($item, $options);
@@ -109,7 +109,7 @@ class tx_mksearch_mod1_decorator_Composite
      *
      * @return string
      */
-    public function getCompositeInfo(tx_mksearch_model_internal_Composite $item, $options = array())
+    public function getCompositeInfo(tx_mksearch_model_internal_Composite $item, $options = [])
     {
         $formtool = $this->getModule()->getFormTool();
 

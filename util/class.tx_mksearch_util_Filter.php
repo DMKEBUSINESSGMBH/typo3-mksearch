@@ -60,7 +60,6 @@ class tx_mksearch_util_Filter
             # Die Marker haben das Format ###PARAM_EXTQUALIFIER_PARAMNAME###
             ### beim DisMaxRequestHandler darf hier nur ###PARAM_MKSEARCH_TERM### stehen!
             term = contentType:* ###PARAM_MKSEARCH_TERM###
-        }
      *
      * @param string                   $termTemplate
      * @param array                    $options
@@ -118,7 +117,7 @@ class tx_mksearch_util_Filter
             return $template;
         }
 
-        $markArray = array();
+        $markArray = [];
         /* @var $listBuilder tx_rnbase_util_ListBuilder */
         $listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder');
         foreach ($formfields as $field) {
@@ -132,7 +131,7 @@ class tx_mksearch_util_Filter
             $fieldActive = $parameters->getCleaned($field);
             $markArray['###'.$fieldMarker.'_FORM_NAME###'] = $configurations->getQualifier().'['.$field.']';
             $markArray['###'.$fieldMarker.'_FORM_VALUE###'] = $fieldActive;
-            $fieldItems = array();
+            $fieldItems = [];
             $fieldValues = $configurations->get($fieldConfId.'values.');
             if (is_array($fieldValues)) {
                 foreach ($fieldValues as $value => $config) {
@@ -140,11 +139,11 @@ class tx_mksearch_util_Filter
                     $fieldId = is_array($config) ? $config['value'] : $value;
                     $fieldItems[] = tx_rnbase::makeInstance(
                         'tx_rnbase_model_base',
-                        array(
+                        [
                             'uid' => $fieldId,
                             'caption' => is_array($config) ? $config['caption'] : $config,
                             'selected' => $fieldId == $fieldActive ? $activeMark : '',
-                        )
+                        ]
                     );
                 }
 
@@ -160,7 +159,7 @@ class tx_mksearch_util_Filter
             }
         }
 
-        $formValues = array('term', 'place');
+        $formValues = ['term', 'place'];
         foreach ($formValues as $formField) {
             $formMarker = $markerName.'_'.strtoupper($formField);
             if (!tx_rnbase_util_BaseMarker::containsMarker($template, $formMarker)) {
@@ -193,7 +192,7 @@ class tx_mksearch_util_Filter
     {
         $pageLimit = $parameters->getInt('pagelimit');
         // Die möglichen Wert suchen
-        $limitValues = array();
+        $limitValues = [];
         $limits = $configurations->get($confId.'formfields.pagelimit.values.');
         if (is_array($limits) && count($limits) > 0) {
             foreach ($limits as $cfg) {
@@ -258,14 +257,6 @@ class tx_mksearch_util_Filter
     /**
      * Sortierungslinks bereitstellen.
      *
-         Folgende Marker werden im Template anhand der Beispiel TS Konfiguration bereitgestellt:
-        ###SORT_UID_ORDER### = asc
-        ###SORT_UID_LINKURL### = index.php?mksearch[sort]=uid&mksearch[sortorder]=asc
-        ###SORT_UID_LINK### = wrappedArray mit dem A-Tag
-        ###SORT_TITLE_ORDER### = asc
-        ###SORT_TITLE_LINKURL### = index.php?mksearch[sort]=title&mksearch[sortorder]=asc
-        ###SORT_TITLE_LINK### = wrappedArray mit dem A-Tag
-     *
      * @param string                    $template            HTML template
      * @param array                     $markArray
      * @param array                     $subpartArray
@@ -290,11 +281,11 @@ class tx_mksearch_util_Filter
         // die felder für die sortierung stehen kommasepariert im ts
         $sortFields = $configurations->get($confId.'fields');
 
-        $sortFields = $sortFields ? tx_rnbase_util_Strings::trimExplode(',', $sortFields, true) : array();
+        $sortFields = $sortFields ? tx_rnbase_util_Strings::trimExplode(',', $sortFields, true) : [];
 
         if (!empty($sortFields)) {
             $token = md5(microtime());
-            $markOrders = array();
+            $markOrders = [];
             foreach ($sortFields as $field) {
                 $isField = ($field == $this->sortField);
                 // sortOrder ausgeben
@@ -306,10 +297,10 @@ class tx_mksearch_util_Filter
                 // link generieren
                 if ($makeLink || $makeUrl) {
                     // sortierungslinks ausgeben
-                    $params = array(
+                    $params = [
                         'sort' => $field,
                         'sortorder' => $isField && 'asc' == $this->sortOrder ? 'desc' : 'asc',
-                    );
+                    ];
                     $link = $configurations->createLink();
                     $link->label($token);
                     $link->initByTS($configurations, $confId.'link.', $params);
@@ -350,7 +341,7 @@ class tx_mksearch_util_Filter
             return '';
         }
 
-        $filterQueryPartKeys = array('field', 'value');
+        $filterQueryPartKeys = ['field', 'value'];
         $filterQueryParts = Tx_Rnbase_Utility_Strings::trimExplode(':', $sFq);
 
         // die initiale fq muss aus $feldName:$feldWert bestehen. Das ist der alte Weg. Der neue Weg
@@ -358,7 +349,7 @@ class tx_mksearch_util_Filter
         if (2 == count($filterQueryParts)) {
             $matches = array_combine($filterQueryPartKeys, Tx_Rnbase_Utility_Strings::trimExplode(':', $sFq));
         } else {
-            $matches = array();
+            $matches = [];
         }
 
         if (// wurde das feld gefunden?

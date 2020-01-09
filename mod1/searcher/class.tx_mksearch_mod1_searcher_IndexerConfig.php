@@ -56,28 +56,28 @@ class tx_mksearch_mod1_searcher_IndexerConfig extends tx_mksearch_mod1_searcher_
      */
     protected function getColumns(&$oDecorator)
     {
-        return array(
-            'uid' => array(
+        return [
+            'uid' => [
                 'title' => 'label_uid',
                 'decorator' => $oDecorator,
-            ),
-            'actions' => array(
+            ],
+            'actions' => [
                 'title' => 'label_tableheader_actions',
                 'decorator' => $oDecorator,
-            ),
-            'title' => array(
+            ],
+            'title' => [
                 'title' => 'label_tableheader_title',
                 'decorator' => $oDecorator,
-            ),
-            'contenttype' => array(
+            ],
+            'contenttype' => [
                 'title' => 'label_tableheader_contenttype',
                 'decorator' => $oDecorator,
-            ),
-            'composites' => array(
+            ],
+            'composites' => [
                 'title' => 'label_tableheader_composites',
                 'decorator' => $oDecorator,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -87,11 +87,11 @@ class tx_mksearch_mod1_searcher_IndexerConfig extends tx_mksearch_mod1_searcher_
      */
     protected function getSearchColumns()
     {
-        return array(
+        return [
             'CFG.uid', 'CFG.title', 'CFG.extkey', 'CFG.contenttype', 'CFG.configuration',
             'CMP.uid', 'CMP.title', 'CMP.description',
             'INDX.uid', 'INDX.title', 'INDX.name', 'INDX.description', 'INDX.engine', 'INDX.configuration',
-        );
+        ];
     }
 }
 

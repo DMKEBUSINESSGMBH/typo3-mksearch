@@ -30,7 +30,7 @@ abstract class tx_mksearch_mod1_searcher_abstractBase
      *
      * @var array
      */
-    protected $options = array();
+    protected $options = [];
 
     /**
      * Current search term.
@@ -52,7 +52,7 @@ abstract class tx_mksearch_mod1_searcher_abstractBase
      * @param tx_rnbase_mod_IModule $mod
      * @param array                 $options
      */
-    public function __construct(tx_rnbase_mod_IModule $mod, array $options = array())
+    public function __construct(tx_rnbase_mod_IModule $mod, array $options = [])
     {
         $this->init($mod, $options);
     }
@@ -119,8 +119,8 @@ abstract class tx_mksearch_mod1_searcher_abstractBase
      */
     protected function getFilterTableDataForSearchForm()
     {
-        $data = array();
-        $options = array();
+        $data = [];
+        $options = [];
         if (isset($this->options['pid'])) {
             $options['pid'] = $this->options['pid'];
         }
@@ -138,10 +138,10 @@ abstract class tx_mksearch_mod1_searcher_abstractBase
         );
 
         if ($updateButton = $this->getSearchButton()) {
-            $data['updatebutton'] = array(
+            $data['updatebutton'] = [
                 'label' => '',
                 'button' => $updateButton,
-            );
+            ];
         }
 
         return $data;
@@ -178,7 +178,7 @@ abstract class tx_mksearch_mod1_searcher_abstractBase
             (isset($this->options['pid'])) ? $this->options['pid'] : 0
         );
 
-        $fields = $options = array();
+        $fields = $options = [];
         $this->prepareFieldsAndOptions($fields, $options);
 
         // Get counted data
@@ -201,11 +201,11 @@ abstract class tx_mksearch_mod1_searcher_abstractBase
             $sPagerData = $pagerData['limits'].' - '.$pagerData['pages'];
         }
 
-        return array(
+        return [
                 'table' => $content,
                 'totalsize' => $cnt,
                 'pager' => '<div class="pager">'.$sPagerData.'</div>',
-            );
+            ];
     }
 
     /**
@@ -236,7 +236,7 @@ abstract class tx_mksearch_mod1_searcher_abstractBase
      */
     protected function getSearchColumns()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -295,16 +295,16 @@ abstract class tx_mksearch_mod1_searcher_abstractBase
      */
     protected function getDecoratorColumns(&$oDecorator)
     {
-        return array(
-            'uid' => array(
+        return [
+            'uid' => [
                 'title' => 'label_tableheader_uid',
                 'decorator' => &$oDecorator,
-            ),
-            'actions' => array(
+            ],
+            'actions' => [
                 'title' => 'label_tableheader_actions',
                 'decorator' => &$oDecorator,
-            ),
-        );
+            ],
+        ];
     }
 
     /**

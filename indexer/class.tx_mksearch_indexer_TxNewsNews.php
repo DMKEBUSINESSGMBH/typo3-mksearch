@@ -50,7 +50,7 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
      */
     public static function getContentType()
     {
-        return array('tx_news', 'news');
+        return ['tx_news', 'news'];
     }
 
     /**
@@ -84,13 +84,13 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
         tx_rnbase_util_Misc::callHook(
             'mksearch',
             'indexer_TxNews_afterStopIndexing',
-            array(
+            [
                 'tableName' => &$tableName,
                 'rawData' => &$rawData,
                 'indexDoc' => $indexDoc,
                 'options' => &$options,
-                'stopIndexing' => &$stopIndexing
-            ),
+                'stopIndexing' => &$stopIndexing,
+            ],
             $this
         );
 
@@ -106,16 +106,16 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
     {
         $rows = $this->getDatabaseConnection()->doSelect(
             'NEWS.uid AS uid',
-            array(
+            [
                 'tx_news_domain_model_news AS NEWS'.
                     ' JOIN sys_category_record_mm AS CATMM ON NEWS.uid = CATMM.uid_foreign',
                 'tx_news_domain_model_news',
                 'NEWS',
-            ),
-            array(
+            ],
+            [
                 'where' => 'CATMM.uid_local = '.(int) $catRecord['uid'],
                 'orderby' => 'sorting_foreign DESC',
-            )
+            ]
         );
 
         // Alle gefundenen News für die Neuindizierung anmelden.
@@ -210,12 +210,12 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
         tx_rnbase_util_Misc::callHook(
             'mksearch',
             'indexer_TxNews_prepareDataAfterAddFields',
-            array(
+            [
                 'news' => &$news,
                 'rawData' => &$rawData,
                 'options' => $options,
                 'indexDoc' => &$indexDoc,
-            ),
+            ],
             $this
         );
 
@@ -235,7 +235,7 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
         array $rawData,
         /* \GeorgRinger\News\Domain\Model\News */ $news,
         tx_mksearch_interface_IndexerDocument $indexDoc,
-        array $options = array()
+        array $options = []
     ) {
         // @codingStandardsIgnoreEnd
         /* @var $news \GeorgRinger\News\Domain\Model\News */
@@ -247,13 +247,13 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
         $content = trim(
             implode(
                 CRLF.CRLF,
-                array(
+                [
                     $news->getTeaser(),
                     $news->getBodytext(),
                     $news->getDescription(),
                     // Add contentelements to indexer content
                     $this->indexNewsContentElements($news, $indexDoc, $options),
-                )
+                ]
             )
         );
 
@@ -265,13 +265,13 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
         }
 
         $bodyText = '';
-        foreach (array(
+        foreach ([
                 $news->getBodytext(),
                 $news->getTeaser(),
                 $news->getTitle(),
                 $content,
                 $abstract,
-            ) as $html) {
+            ] as $html) {
             if (empty($html)) {
                 continue;
             }
@@ -281,7 +281,7 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
 
         // html entfernen
         if (empty($options['keepHtml'])) {
-            foreach (array(&$content, &$abstract, &$bodyText) as &$html) {
+            foreach ([&$content, &$abstract, &$bodyText] as &$html) {
                 $html = tx_mksearch_util_Misc::html2plain($html);
             }
         }
@@ -323,10 +323,10 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
         array $rawData,
         /* \GeorgRinger\News\Domain\Model\News */ $news,
         tx_mksearch_interface_IndexerDocument $indexDoc,
-        array $options = array()
+        array $options = []
     ) {
         // @codingStandardsIgnoreEnd
-        $tags = array();
+        $tags = [];
         foreach ($news->getTags() as $tag) {
             $tags[$tag->getUid()] = $tag->getTitle();
         }
@@ -346,10 +346,10 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
         array $rawData,
         /* \GeorgRinger\News\Domain\Model\News */ $news,
         tx_mksearch_interface_IndexerDocument $indexDoc,
-        array $options = array()
+        array $options = []
     ) {
         /* @var $category \GeorgRinger\News\Domain\Model\Category */
-        $categories = array();
+        $categories = [];
         $singlePid = 0;
 
         foreach ($news->getCategories() as $category) {
@@ -413,21 +413,21 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
     protected function indexNewsContentElements(
         /* \GeorgRinger\News\Domain\Model\News */ $news,
         tx_mksearch_interface_IndexerDocument $indexDoc,
-        array $options = array()
+        array $options = []
     ) {
         if (empty($options['indexInlineContentElements'])) {
             return '';
         }
         tx_mksearch_util_Indexer::prepareTSFE($options['defaultSinglePid'], $options['lang']);
 
-        $ce = array();
+        $ce = [];
         $contentElements = $news->getContentElements();
         foreach ($contentElements as $contentElement) {
             $cObj = tx_mktools_util_T3Loader::getContentObject($contentElement->getUid());
 
             // jetzt das contentelement parsen
             $cObj->start($contentElement->_getProperties(), 'tt_content');
-            $ce[$contentElement->getUid()] = $cObj->cObjGetSingle('<tt_content', array());
+            $ce[$contentElement->getUid()] = $cObj->cObjGetSingle('<tt_content', []);
             $ce[] = trim($ce[$contentElement->getUid()]);
         }
 
@@ -448,7 +448,7 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
             return;
         }
 
-        $titles = $descriptions = array();
+        $titles = $descriptions = [];
         foreach ($news->getMedia() as $media) {
             $titles[] = $media->getTitle();
             $descriptions[] = $media->getDescription();

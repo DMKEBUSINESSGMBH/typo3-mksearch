@@ -51,11 +51,11 @@ class tx_mksearch_action_ShowHit extends tx_rnbase_action_BaseIOC
         tx_rnbase_util_Misc::callHook(
             'mksearch',
             'action_showhit_finditem_pre',
-            array(
+            [
                 'ext_key' => &$extKey,
                 'content_type' => &$contentType,
                 'uid' => &$uid,
-            ),
+            ],
             $this
         );
 
@@ -64,27 +64,20 @@ class tx_mksearch_action_ShowHit extends tx_rnbase_action_BaseIOC
         tx_rnbase_util_Misc::callHook(
             'mksearch',
             'action_showhit_finditem_post',
-            array(
+            [
                 'ext_key' => &$extKey,
                 'content_type' => &$contentType,
                 'uid' => &$uid,
                 'item' => &$item,
-            ),
+            ],
             $this
         );
 
         if (is_null($item)) {
-            throw new LogicException(
-                'No hit found for "'.$extKey.':'.$contentType.':'.$uid.'" in index "'.$this->getIndex()->getUid().'".',
-                1377774172
-            );
+            throw new LogicException('No hit found for "'.$extKey.':'.$contentType.':'.$uid.'" in index "'.$this->getIndex()->getUid().'".', 1377774172);
         }
         if (!$item instanceof tx_mksearch_interface_SearchHit) {
-            throw new LogicException(
-                'The hit has to be an object instance of "tx_mksearch_interface_SearchHit",'
-                .'"'.(is_object($item) ? get_class($item) : gettype($item)).'" given.',
-                1377774178
-            );
+            throw new LogicException('The hit has to be an object instance of "tx_mksearch_interface_SearchHit",'.'"'.(is_object($item) ? get_class($item) : gettype($item)).'" given.', 1377774178);
         }
 
         return $item;
@@ -104,10 +97,7 @@ class tx_mksearch_action_ShowHit extends tx_rnbase_action_BaseIOC
         $item = null;
 
         if (!($extKey && $contentType && $uid)) {
-            throw new InvalidArgumentException(
-                'Missing Parameters. extkey, contenttype and item are required.',
-                1370429706
-            );
+            throw new InvalidArgumentException('Missing Parameters. extkey, contenttype and item are required.', 1370429706);
         }
 
         try {
@@ -127,10 +117,10 @@ class tx_mksearch_action_ShowHit extends tx_rnbase_action_BaseIOC
             tx_rnbase_util_Logger::fatal(
                 'Solr search failed with Exception!',
                 'mksearch',
-                array(
+                [
                     'Exception' => $e->getMessage(),
                     'URL' => $lastUrl,
-                )
+                ]
             );
             $configurations = $this->getConfigurations();
             if ($configurations->getBool($this->getConfId().'throwSolrSearchException')) {

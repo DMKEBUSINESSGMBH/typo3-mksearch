@@ -41,7 +41,7 @@ class tx_mksearch_hooks_IndexerAutoUpdate
         }
 
         // daten sammeln
-        $records = array();
+        $records = [];
         foreach ($dataHandler->datamap as $table => $uids) {
             // beim rückgängig machen eines einzelnen records über die history funktion
             // ist nicht jeder datensatz in der datamap wie sonst. Es gibt den üblichen:
@@ -61,7 +61,7 @@ class tx_mksearch_hooks_IndexerAutoUpdate
                 continue;
             }
 
-            $records[$table] = array();
+            $records[$table] = [];
             foreach (array_keys($uids) as $uid) {
                 // New element?
                 if (!is_numeric($uid)) {
@@ -119,11 +119,11 @@ class tx_mksearch_hooks_IndexerAutoUpdate
         }
 
         return $this->processAutoUpdate(
-            array(
-                $params['tablename'] => array(
+            [
+                $params['tablename'] => [
                     $params['uid'],
-                ),
-            )
+                ],
+            ]
         );
     }
 
@@ -142,18 +142,18 @@ class tx_mksearch_hooks_IndexerAutoUpdate
         $table = $params['tablename'];
         // wür müssen einen select machen, um die uid zu erfahren
         if (empty($params['values']['uid'])) {
-            $data = array(
+            $data = [
                 'type' => 'select',
                 'from' => $table,
                 'where' => $params['where'],
                 'options' => $params['options'],
-            );
+            ];
         } // wir haben eine uid, die übergeben wir!
         else {
             $data = $params['values']['uid'];
         }
 
-        return $this->processAutoUpdate(array($table => array($data)));
+        return $this->processAutoUpdate([$table => [$data]]);
     }
 
     /**
@@ -280,13 +280,13 @@ class tx_mksearch_hooks_IndexerAutoUpdate
     protected function getUidsToIndex($table, $data)
     {
         if (is_numeric($data)) {
-            return array((int) $data);
+            return [(int) $data];
         }
 
         if (is_array($data) && isset($data['type'])) {
             if ('select' === $data['type']) {
                 $from = empty($data['from']) ? $table : $data['from'];
-                $options = empty($data['options']) || !is_array($data['options']) ? array() : $data['options'];
+                $options = empty($data['options']) || !is_array($data['options']) ? [] : $data['options'];
                 $options['where'] = empty($options['where']) ? $data['where'] : $options['where'];
                 $options['enablefieldsoff'] = true;
                 $databaseUtility = $this->getRnbaseDatabaseUtility();
@@ -294,14 +294,14 @@ class tx_mksearch_hooks_IndexerAutoUpdate
                     $rows = call_user_func_array('array_merge_recursive', $rows);
                 }
                 if (empty($rows['uid'])) {
-                    return array();
+                    return [];
                 }
 
-                return is_array($rows['uid']) ? $rows['uid'] : array($rows['uid']);
+                return is_array($rows['uid']) ? $rows['uid'] : [$rows['uid']];
             }
         }
 
-        return array();
+        return [];
     }
 
     /**

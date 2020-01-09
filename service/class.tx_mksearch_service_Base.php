@@ -93,7 +93,7 @@ abstract class tx_mksearch_service_Base extends Tx_Rnbase_Service_Base
      */
     public function findAll()
     {
-        return $this->search(array(), array());
+        return $this->search([], []);
     }
 }
 

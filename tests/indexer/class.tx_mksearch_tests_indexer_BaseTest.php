@@ -71,9 +71,9 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
         $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
         list($extKey, $cType) = $indexer->getContentType();
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
-        $options = array();
+        $options = [];
 
-        $aRawData = array('uid' => 1, 'test_field_1' => 'test value 1');
+        $aRawData = ['uid' => 1, 'test_field_1' => 'test value 1'];
 
         $oIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
 
@@ -89,14 +89,14 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
     {
         $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
         list($extKey, $cType) = $indexer->getContentType();
-        $options = array(
-            'include.' => array('categories.' => array(3)),
-        );
-        $options2 = array(
-            'include.' => array('categories' => 3),
-        );
+        $options = [
+            'include.' => ['categories.' => [3]],
+        ];
+        $options2 = [
+            'include.' => ['categories' => 3],
+        ];
 
-        $aRawData = array('uid' => 1, 'pid' => 1);
+        $aRawData = ['uid' => 1, 'pid' => 1];
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
         self::assertNull($aIndexDoc, 'Das Element wurde indiziert! Option 1');
@@ -110,13 +110,13 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
     {
         $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
         list($extKey, $cType) = $indexer->getContentType();
-        $options = array(
-            'include.' => array('categories.' => array(2)),
-        );
-        $options2 = array(
-            'include.' => array('categories' => 2),
-        );
-        $aRawData = array('uid' => 1, 'pid' => 2);
+        $options = [
+            'include.' => ['categories.' => [2]],
+        ];
+        $options2 = [
+            'include.' => ['categories' => 2],
+        ];
+        $aRawData = ['uid' => 1, 'pid' => 2];
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
         self::assertNotNull($aIndexDoc, 'Das Element wurde nicht indiziert! Option 1');
@@ -130,14 +130,14 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
     {
         $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
         list($extKey, $cType) = $indexer->getContentType();
-        $options = array(
-            'exclude.' => array('categories.' => array(3)),
-        );
-        $options2 = array(
-            'exclude.' => array('categories' => 3),
-        );
+        $options = [
+            'exclude.' => ['categories.' => [3]],
+        ];
+        $options2 = [
+            'exclude.' => ['categories' => 3],
+        ];
 
-        $aRawData = array('uid' => 1, 'pid' => 1);
+        $aRawData = ['uid' => 1, 'pid' => 1];
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
         self::assertNotNull($aIndexDoc, 'Das Element wurde nicht indiziert! Element 1 Option 1');
@@ -151,13 +151,13 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
     {
         $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
         list($extKey, $cType) = $indexer->getContentType();
-        $options = array(
-            'exclude.' => array('categories.' => array(2)),
-        );
-        $options2 = array(
-            'exclude.' => array('categories' => 2),
-        );
-        $aRawData = array('uid' => 1, 'pid' => 2);
+        $options = [
+            'exclude.' => ['categories.' => [2]],
+        ];
+        $options2 = [
+            'exclude.' => ['categories' => 2],
+        ];
+        $aRawData = ['uid' => 1, 'pid' => 2];
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
         self::assertNull($aIndexDoc, 'Das Element wurde doch indiziert! Element 2 Option 1');
@@ -169,18 +169,18 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
 
     public function testCheckOptionsIncludeReturnsCorrectDefaultValueWithEmptyCategory()
     {
-        $indexer = $this->getMock('tx_mksearch_tests_fixtures_indexer_Dummy', array('getTestCategories'));
+        $indexer = $this->getMock('tx_mksearch_tests_fixtures_indexer_Dummy', ['getTestCategories']);
 
         $indexer->expects($this->once())
             ->method('getTestCategories')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         list($extKey, $cType) = $indexer->getContentType();
-        $options = array(
-                'include.' => array('categories.' => array(3)),
-        );
+        $options = [
+                'include.' => ['categories.' => [3]],
+        ];
 
-        $aRawData = array('uid' => 1, 'pid' => 1);
+        $aRawData = ['uid' => 1, 'pid' => 1];
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
         self::assertNull($aIndexDoc, 'Das Element wurde indiziert! Option 1');
@@ -188,18 +188,18 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
 
     public function testCheckOptionsExcludeReturnsCorrectDefaultValueWithEmptyCategory()
     {
-        $indexer = $this->getMock('tx_mksearch_tests_fixtures_indexer_Dummy', array('getTestCategories'));
+        $indexer = $this->getMock('tx_mksearch_tests_fixtures_indexer_Dummy', ['getTestCategories']);
 
         $indexer->expects($this->once())
             ->method('getTestCategories')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         list($extKey, $cType) = $indexer->getContentType();
-        $options = array(
-                'exclude.' => array('categories.' => array(3)),
-        );
+        $options = [
+                'exclude.' => ['categories.' => [3]],
+        ];
 
-        $aRawData = array('uid' => 1, 'pid' => 1);
+        $aRawData = ['uid' => 1, 'pid' => 1];
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
         self::assertNotNull($aIndexDoc, 'Das Element wurde nicht indiziert! Option 1');
@@ -212,14 +212,14 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
         $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
         list($extKey, $cType) = $indexer->getContentType();
 
-        $aRawData = array('uid' => 1, 'hidden' => 0, 'startdate' => 2, 'enddate' => 3, 'fe_groups' => 4);
+        $aRawData = ['uid' => 1, 'hidden' => 0, 'startdate' => 2, 'enddate' => 3, 'fe_groups' => 4];
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
-        $indexDocData = $indexer->prepareSearchData('mytesttable_1', $aRawData, $indexDoc, array())->getData();
+        $indexDocData = $indexer->prepareSearchData('mytesttable_1', $aRawData, $indexDoc, [])->getData();
 
         //empty values are ignored
         self::assertEquals('1970-01-01T00:00:02Z', $indexDocData['starttime_dt']->getValue());
         self::assertEquals('1970-01-01T00:00:03Z', $indexDocData['endtime_dt']->getValue());
-        self::assertEquals(array(0 => 4), $indexDocData['fe_group_mi']->getValue());
+        self::assertEquals([0 => 4], $indexDocData['fe_group_mi']->getValue());
     }
 
     public function testIndexEnableColumnsIfTableHasNoEnableColumns()
@@ -227,9 +227,9 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
         $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
         list($extKey, $cType) = $indexer->getContentType();
 
-        $aRawData = array('uid' => 1);
+        $aRawData = ['uid' => 1];
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
-        $indexDocData = $indexer->prepareSearchData('doesn_t_matter', $aRawData, $indexDoc, array())->getData();
+        $indexDocData = $indexer->prepareSearchData('doesn_t_matter', $aRawData, $indexDoc, [])->getData();
 
         self::assertEquals(
             2,
@@ -255,14 +255,14 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
         $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
         list($extKey, $cType) = $indexer->getContentType();
 
-        $aRawData = array('uid' => 1, 'hidden' => 0, 'startdate' => 0, 'enddate' => 3, 'fe_groups' => 4);
+        $aRawData = ['uid' => 1, 'hidden' => 0, 'startdate' => 0, 'enddate' => 3, 'fe_groups' => 4];
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
-        $indexDocData = $indexer->prepareSearchData('mytesttable_1', $aRawData, $indexDoc, array())->getData();
+        $indexDocData = $indexer->prepareSearchData('mytesttable_1', $aRawData, $indexDoc, [])->getData();
 
         //empty values are ignored
         self::assertFalse(isset($indexDocData['starttime_dt']));
         self::assertEquals('1970-01-01T00:00:03Z', $indexDocData['endtime_dt']->getValue());
-        self::assertEquals(array(0 => 4), $indexDocData['fe_group_mi']->getValue());
+        self::assertEquals([0 => 4], $indexDocData['fe_group_mi']->getValue());
     }
 
     public function testIndexEnableColumnsWithSeveralFeGroups()
@@ -272,14 +272,14 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
         $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
         list($extKey, $cType) = $indexer->getContentType();
 
-        $aRawData = array('uid' => 1, 'hidden' => 0, 'startdate' => 0, 'enddate' => 3, 'fe_groups' => '4,5');
+        $aRawData = ['uid' => 1, 'hidden' => 0, 'startdate' => 0, 'enddate' => 3, 'fe_groups' => '4,5'];
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
-        $indexDocData = $indexer->prepareSearchData('mytesttable_1', $aRawData, $indexDoc, array())->getData();
+        $indexDocData = $indexer->prepareSearchData('mytesttable_1', $aRawData, $indexDoc, [])->getData();
 
         //empty values are ignored
         self::assertFalse(isset($indexDocData['starttime_dt']));
         self::assertEquals('1970-01-01T00:00:03Z', $indexDocData['endtime_dt']->getValue());
-        self::assertEquals(array(0 => 4, 1 => 5), $indexDocData['fe_group_mi']->getValue());
+        self::assertEquals([0 => 4, 1 => 5], $indexDocData['fe_group_mi']->getValue());
     }
 
     public function testIndexEnableColumnsDoesNotChangeRecordInPassedModel()
@@ -289,7 +289,7 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
         $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
         list($extKey, $cType) = $indexer->getContentType();
 
-        $record = array('uid' => 1, 'startdate' => 2);
+        $record = ['uid' => 1, 'startdate' => 2];
         $model = tx_rnbase::makeInstance('tx_rnbase_model_base', $record);
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
 
@@ -308,14 +308,14 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
         $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
         $model = tx_rnbase::makeInstance(
             'tx_rnbase_model_base',
-            array('recordField' => 123)
+            ['recordField' => 123]
         );
 
         $this->callInaccessibleMethod(
             $indexer,
             'indexModelByMapping',
             $model,
-            array('recordField' => 'documentField'),
+            ['recordField' => 'documentField'],
             $indexDoc
         );
         $docData = $indexDoc->getData();
@@ -337,14 +337,14 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
         $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
         $model = tx_rnbase::makeInstance(
             'tx_rnbase_model_base',
-            array('recordField' => 123, 'hidden' => 1)
+            ['recordField' => 123, 'hidden' => 1]
         );
 
         $this->callInaccessibleMethod(
             $indexer,
             'indexModelByMapping',
             $model,
-            array('recordField' => 'documentField'),
+            ['recordField' => 'documentField'],
             $indexDoc
         );
         $docData = $indexDoc->getData();
@@ -365,17 +365,17 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
         $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
         $model = tx_rnbase::makeInstance(
             'tx_rnbase_model_base',
-            array('recordField' => 123, 'hidden' => 1)
+            ['recordField' => 123, 'hidden' => 1]
         );
 
         $this->callInaccessibleMethod(
             $indexer,
             'indexModelByMapping',
             $model,
-            array('recordField' => 'documentField'),
+            ['recordField' => 'documentField'],
             $indexDoc,
             '',
-            array(),
+            [],
             false
         );
         $docData = $indexDoc->getData();
@@ -397,14 +397,14 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
         $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
         $model = tx_rnbase::makeInstance(
             'tx_rnbase_model_base',
-            array('recordField' => 123)
+            ['recordField' => 123]
         );
 
         $this->callInaccessibleMethod(
             $indexer,
             'indexModelByMapping',
             $model,
-            array('recordField' => 'documentField'),
+            ['recordField' => 'documentField'],
             $indexDoc,
             'test_'
         );
@@ -427,14 +427,14 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
         $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
         $model = tx_rnbase::makeInstance(
             'tx_rnbase_model_base',
-            array('recordField' => '')
+            ['recordField' => '']
         );
 
         $this->callInaccessibleMethod(
             $indexer,
             'indexModelByMapping',
             $model,
-            array('recordField' => 'documentField'),
+            ['recordField' => 'documentField'],
             $indexDoc
         );
         $docData = $indexDoc->getData();
@@ -455,17 +455,17 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
         $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
         $model = tx_rnbase::makeInstance(
             'tx_rnbase_model_base',
-            array('recordField' => '')
+            ['recordField' => '']
         );
 
         $this->callInaccessibleMethod(
             $indexer,
             'indexModelByMapping',
             $model,
-            array('recordField' => 'documentField'),
+            ['recordField' => 'documentField'],
             $indexDoc,
             '',
-            array('keepEmpty' => 1)
+            ['keepEmpty' => 1]
         );
         $docData = $indexDoc->getData();
 
@@ -484,28 +484,28 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
             ''
         );
         $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
-        $models = array(
+        $models = [
             tx_rnbase::makeInstance(
                 'tx_rnbase_model_base',
-                array('recordField' => 123)
+                ['recordField' => 123]
             ),
             tx_rnbase::makeInstance(
                 'tx_rnbase_model_base',
-                array('recordField' => 456)
+                ['recordField' => 456]
             ),
-        );
+        ];
 
         $this->callInaccessibleMethod(
             $indexer,
             'indexArrayOfModelsByMapping',
             $models,
-            array('recordField' => 'documentField'),
+            ['recordField' => 'documentField'],
             $indexDoc
         );
         $docData = $indexDoc->getData();
 
         self::assertEquals(
-            array(123, 456),
+            [123, 456],
             $docData['documentField']->getValue(),
             'models falsch indiziert'
         );
@@ -519,28 +519,28 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
             ''
         );
         $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
-        $models = array(
+        $models = [
             tx_rnbase::makeInstance(
                 'tx_rnbase_model_base',
-                array('recordField' => 123)
+                ['recordField' => 123]
             ),
             tx_rnbase::makeInstance(
                 'tx_rnbase_model_base',
-                array('recordField' => 456, 'hidden' => 1)
+                ['recordField' => 456, 'hidden' => 1]
             ),
-        );
+        ];
 
         $this->callInaccessibleMethod(
             $indexer,
             'indexArrayOfModelsByMapping',
             $models,
-            array('recordField' => 'documentField'),
+            ['recordField' => 'documentField'],
             $indexDoc
         );
         $docData = $indexDoc->getData();
 
         self::assertEquals(
-            array(123),
+            [123],
             $docData['documentField']->getValue(),
             'models falsch indiziert'
         );
@@ -554,31 +554,31 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
             ''
         );
         $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
-        $models = array(
+        $models = [
             tx_rnbase::makeInstance(
                 'tx_rnbase_model_base',
-                array('recordField' => 123)
+                ['recordField' => 123]
             ),
             tx_rnbase::makeInstance(
                 'tx_rnbase_model_base',
-                array('recordField' => 456, 'hidden' => 1)
+                ['recordField' => 456, 'hidden' => 1]
             ),
-        );
+        ];
 
         $this->callInaccessibleMethod(
             $indexer,
             'indexArrayOfModelsByMapping',
             $models,
-            array('recordField' => 'documentField'),
+            ['recordField' => 'documentField'],
             $indexDoc,
             '',
-            array(),
+            [],
             false
         );
         $docData = $indexDoc->getData();
 
         self::assertEquals(
-            array(123, 456),
+            [123, 456],
             $docData['documentField']->getValue(),
             'models falsch indiziert'
         );
@@ -592,29 +592,29 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
             ''
         );
         $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
-        $models = array(
+        $models = [
             tx_rnbase::makeInstance(
                 'tx_rnbase_model_base',
-                array('recordField' => 123)
+                ['recordField' => 123]
             ),
             tx_rnbase::makeInstance(
                 'tx_rnbase_model_base',
-                array('recordField' => 456)
+                ['recordField' => 456]
             ),
-        );
+        ];
 
         $this->callInaccessibleMethod(
             $indexer,
             'indexArrayOfModelsByMapping',
             $models,
-            array('recordField' => 'documentField'),
+            ['recordField' => 'documentField'],
             $indexDoc,
             'test_'
         );
         $docData = $indexDoc->getData();
 
         self::assertEquals(
-            array(123, 456),
+            [123, 456],
             $docData['test_documentField']->getValue(),
             'model falsch indiziert'
         );
@@ -628,22 +628,22 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
             ''
         );
         $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
-        $models = array(
+        $models = [
             tx_rnbase::makeInstance(
                 'tx_rnbase_model_base',
-                array('recordField' => '')
+                ['recordField' => '']
             ),
             tx_rnbase::makeInstance(
                 'tx_rnbase_model_base',
-                array('recordField' => '')
+                ['recordField' => '']
             ),
-        );
+        ];
 
         $this->callInaccessibleMethod(
             $indexer,
             'indexArrayOfModelsByMapping',
             $models,
-            array('recordField' => 'documentField'),
+            ['recordField' => 'documentField'],
             $indexDoc
         );
         $docData = $indexDoc->getData();
@@ -657,11 +657,11 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
     private function setTcaEnableColumnsForMyTestTable1()
     {
         global $TCA;
-        $TCA['mytesttable_1']['ctrl']['enablecolumns'] = array(
+        $TCA['mytesttable_1']['ctrl']['enablecolumns'] = [
             'starttime' => 'startdate',
             'endtime' => 'enddate',
             'fe_group' => 'fe_groups',
-        );
+        ];
     }
 
     /**
@@ -671,16 +671,16 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
     {
         $indexerUtility = $this->getMock(
             'stdClass',
-            array('getRootlineByPid')
+            ['getRootlineByPid']
         );
         $indexerUtility->expects($this->once())
             ->method('getRootlineByPid')
             ->with(123)
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $indexer = $this->getMock(
             'tx_mksearch_tests_fixtures_indexer_Dummy',
-            array('getIndexerUtility')
+            ['getIndexerUtility']
         );
         $indexer->expects($this->once())
             ->method('getIndexerUtility')
@@ -693,7 +693,7 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
         );
         $model = tx_rnbase::makeInstance(
             'tx_rnbase_model_base',
-            array('pid' => 123)
+            ['pid' => 123]
         );
         $this->callInaccessibleMethod($indexer, 'hasDocToBeDeleted', $model, $indexDoc);
     }
@@ -705,18 +705,18 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
     {
         $indexerUtility = $this->getMock(
             'stdClass',
-            array('getRootlineByPid')
+            ['getRootlineByPid']
         );
         $indexerUtility->expects($this->once())
             ->method('getRootlineByPid')
-            ->will($this->returnValue(array(
-                0 => array('uid' => 1, 'hidden' => 1),
-                1 => array('uid' => 2, 'hidden' => 0),
-            )));
+            ->will($this->returnValue([
+                0 => ['uid' => 1, 'hidden' => 1],
+                1 => ['uid' => 2, 'hidden' => 0],
+            ]));
 
         $indexer = $this->getMock(
             'tx_mksearch_tests_fixtures_indexer_Dummy',
-            array('getIndexerUtility')
+            ['getIndexerUtility']
         );
         $indexer->expects($this->once())
             ->method('getIndexerUtility')
@@ -729,7 +729,7 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
         );
         $model = tx_rnbase::makeInstance(
             'tx_rnbase_model_base',
-            array('pid' => 123)
+            ['pid' => 123]
         );
 
         self::assertTrue(
@@ -744,18 +744,18 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
     {
         $indexerUtility = $this->getMock(
             'stdClass',
-            array('getRootlineByPid')
+            ['getRootlineByPid']
         );
         $indexerUtility->expects($this->once())
             ->method('getRootlineByPid')
-            ->will($this->returnValue(array(
-                0 => array('uid' => 1, 'doktype' => 6),
-                1 => array('uid' => 2, 'doktype' => 1),
-            )));
+            ->will($this->returnValue([
+                0 => ['uid' => 1, 'doktype' => 6],
+                1 => ['uid' => 2, 'doktype' => 1],
+            ]));
 
         $indexer = $this->getMock(
             'tx_mksearch_tests_fixtures_indexer_Dummy',
-            array('getIndexerUtility')
+            ['getIndexerUtility']
         );
         $indexer->expects($this->once())
             ->method('getIndexerUtility')
@@ -768,7 +768,7 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
         );
         $model = tx_rnbase::makeInstance(
             'tx_rnbase_model_base',
-            array('pid' => 123)
+            ['pid' => 123]
         );
 
         self::assertTrue(
@@ -783,18 +783,18 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
     {
         $indexerUtility = $this->getMock(
             'stdClass',
-            array('getRootlineByPid')
+            ['getRootlineByPid']
         );
         $indexerUtility->expects($this->once())
             ->method('getRootlineByPid')
-            ->will($this->returnValue(array(
-                0 => array('uid' => 1, 'no_search' => 1),
-                1 => array('uid' => 2, 'no_search' => 0),
-            )));
+            ->will($this->returnValue([
+                0 => ['uid' => 1, 'no_search' => 1],
+                1 => ['uid' => 2, 'no_search' => 0],
+            ]));
 
         $indexer = $this->getMock(
             'tx_mksearch_tests_fixtures_indexer_Dummy',
-            array('getIndexerUtility')
+            ['getIndexerUtility']
         );
         $indexer->expects($this->once())
             ->method('getIndexerUtility')
@@ -807,7 +807,7 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
         );
         $model = tx_rnbase::makeInstance(
             'tx_rnbase_model_base',
-            array('pid' => 123)
+            ['pid' => 123]
         );
 
         self::assertTrue(
@@ -828,18 +828,18 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
     {
         $indexerUtility = $this->getMock(
             'stdClass',
-            array('getRootlineByPid')
+            ['getRootlineByPid']
         );
         $indexerUtility->expects($this->once())
             ->method('getRootlineByPid')
-            ->will($this->returnValue(array(
-                0 => array('uid' => 1, 'no_search' => 1),
-                1 => array('uid' => 2, 'no_search' => 0),
-            )));
+            ->will($this->returnValue([
+                0 => ['uid' => 1, 'no_search' => 1],
+                1 => ['uid' => 2, 'no_search' => 0],
+            ]));
 
         $indexer = $this->getMock(
             'tx_mksearch_tests_fixtures_indexer_Dummy',
-            array('getIndexerUtility')
+            ['getIndexerUtility']
         );
         $indexer->expects($this->once())
             ->method('getIndexerUtility')
@@ -852,7 +852,7 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
         );
         $model = tx_rnbase::makeInstance(
             'tx_rnbase_model_base',
-            array('pid' => 123)
+            ['pid' => 123]
         );
 
         self::assertFalse(
@@ -872,18 +872,18 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
     {
         $indexerUtility = $this->getMock(
             'stdClass',
-            array('getRootlineByPid')
+            ['getRootlineByPid']
         );
         $indexerUtility->expects($this->once())
             ->method('getRootlineByPid')
-            ->will($this->returnValue(array(
-                0 => array('uid' => 1, 'doktype' => 2),
-                1 => array('uid' => 2, 'doktype' => 1),
-            )));
+            ->will($this->returnValue([
+                0 => ['uid' => 1, 'doktype' => 2],
+                1 => ['uid' => 2, 'doktype' => 1],
+            ]));
 
         $indexer = $this->getMock(
             'tx_mksearch_tests_fixtures_indexer_Dummy',
-            array('getIndexerUtility')
+            ['getIndexerUtility']
         );
         $indexer->expects($this->once())
             ->method('getIndexerUtility')
@@ -896,7 +896,7 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
         );
         $model = tx_rnbase::makeInstance(
             'tx_rnbase_model_base',
-            array('pid' => 123)
+            ['pid' => 123]
         );
 
         self::assertFalse(
@@ -911,7 +911,7 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
     {
         $indexer = $this->getMock(
             'tx_mksearch_tests_fixtures_indexer_Dummy',
-            array('dummy')
+            ['dummy']
         );
 
         self::assertInstanceOf(
@@ -930,23 +930,23 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
     {
         $indexer = $this->getMockForAbstractClass(
             'tx_mksearch_indexer_Base',
-            array(),
+            [],
             '',
             false,
             false,
             false,
-            array(
+            [
                 'indexData', 'getIndexerUtility',
-            )
+            ]
         );
         $indexerUtility = $this->getMock(
             'tx_mksearch_util_Indexer',
-            array('stopIndexing')
+            ['stopIndexing']
         );
 
         $tableName = 'some_table';
-        $sourceRecord = array('some_record');
-        $options = array('some_options');
+        $sourceRecord = ['some_record'];
+        $options = ['some_options'];
         $indexDoc = tx_rnbase::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
             '',
@@ -981,17 +981,17 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
     {
         $indexerUtility = $this->getMock(
             'stdClass',
-            array('getSiteRootPage')
+            ['getSiteRootPage']
         );
         $indexerUtility->expects($this->once())
             ->method('getSiteRootPage')
             ->with(123)
-            ->will($this->returnValue(array('uid' => 3)));
+            ->will($this->returnValue(['uid' => 3]));
 
-        $options = array('indexSiteRootPage' => 1);
+        $options = ['indexSiteRootPage' => 1];
         $indexer = $this->getMock(
             'tx_mksearch_tests_fixtures_indexer_Dummy',
-            array('getIndexerUtility', 'shouldIndexSiteRootPage')
+            ['getIndexerUtility', 'shouldIndexSiteRootPage']
         );
         $indexer->expects($this->once())
             ->method('getIndexerUtility')
@@ -1004,12 +1004,12 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
 
         $indexDoc = $this->getMock(
             'tx_mksearch_model_IndexerDocumentBase',
-            array('addField'),
-            array('', '')
+            ['addField'],
+            ['', '']
         );
         $model = tx_rnbase::makeInstance(
             'tx_rnbase_model_base',
-            array('pid' => 123)
+            ['pid' => 123]
         );
         $indexDoc->expects($this->once())
             ->method('addField')
@@ -1023,10 +1023,10 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
      */
     public function testIndexSiteRootPageDoesntIndexSiteRootPageWhenConfigMissing()
     {
-        $options = array('indexSiteRootPage' => 0);
+        $options = ['indexSiteRootPage' => 0];
         $indexer = $this->getMock(
             'tx_mksearch_tests_fixtures_indexer_Dummy',
-            array('getIndexerUtility', 'shouldIndexSiteRootPage')
+            ['getIndexerUtility', 'shouldIndexSiteRootPage']
         );
         $indexer->expects($this->never())
             ->method('getIndexerUtility');
@@ -1038,12 +1038,12 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
 
         $indexDoc = $this->getMock(
             'tx_mksearch_model_IndexerDocumentBase',
-            array('addField'),
-            array('', '')
+            ['addField'],
+            ['', '']
         );
         $model = tx_rnbase::makeInstance(
             'tx_rnbase_model_base',
-            array('pid' => 123)
+            ['pid' => 123]
         );
         $indexDoc->expects($this->never())
             ->method('addField');
@@ -1059,7 +1059,7 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
     {
         $indexer = $this->getMock(
             'tx_mksearch_tests_fixtures_indexer_Dummy',
-            array()
+            []
         );
 
         self::assertEquals(
@@ -1074,20 +1074,20 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
 
     public function getTestDataForShouldIndexSiteRootPageTest()
     {
-        return array(
-            __LINE__ => array(
-                'options' => array('indexSiteRootPage' => 1),
+        return [
+            __LINE__ => [
+                'options' => ['indexSiteRootPage' => 1],
                 'expected' => true,
-            ),
-            __LINE__ => array(
-                'options' => array('indexSiteRootPage' => 0),
+            ],
+            __LINE__ => [
+                'options' => ['indexSiteRootPage' => 0],
                 'expected' => false,
-            ),
-            __LINE__ => array(
-                'options' => array(),
+            ],
+            __LINE__ => [
+                'options' => [],
                 'expected' => false,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -1095,19 +1095,19 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
      */
     public function testAddModelsToIndex()
     {
-        $models = array('some models');
+        $models = ['some models'];
         $tableName = 'test_table';
         $prefer = 'prefer_me';
         $resolver = 'test_resolver';
-        $data = array('test data');
-        $options = array('test options');
+        $data = ['test data'];
+        $options = ['test options'];
 
-        $indexerUtility = $this->getMock('tx_mksearch_util_Indexer', array('addModelsToIndex'));
+        $indexerUtility = $this->getMock('tx_mksearch_util_Indexer', ['addModelsToIndex']);
         $indexerUtility->expects(self::once())
             ->method('addModelsToIndex')
             ->with($models, $tableName, $prefer, $resolver, $data, $options);
 
-        $indexer = $this->getMock('tx_mksearch_tests_fixtures_indexer_Dummy', array('getIndexerUtility'));
+        $indexer = $this->getMock('tx_mksearch_tests_fixtures_indexer_Dummy', ['getIndexerUtility']);
         $indexer->expects(self::once())
             ->method('getIndexerUtility')
             ->will(self::returnValue($indexerUtility));
@@ -1124,9 +1124,9 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
         list($extKey, $contentType) = $indexer->getContentType();
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $contentType);
 
-        $rawData = array('uid' => 123);
+        $rawData = ['uid' => 123];
 
-        $indexDoc = $indexer->prepareSearchData('doesnt_matter', $rawData, $indexDoc, array());
+        $indexDoc = $indexer->prepareSearchData('doesnt_matter', $rawData, $indexDoc, []);
 
         $indexedData = $indexDoc->getData();
         self::assertEquals('mksearch:dummy:123', $indexedData['group_s']->getValue());
@@ -1146,8 +1146,8 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
         $indexDoc->setTitle($title);
 
         $this->callInaccessibleMethod(
-            array($indexer, 'handleCharBrowserFields'),
-            array($indexDoc)
+            [$indexer, 'handleCharBrowserFields'],
+            [$indexDoc]
         );
 
         $this->assertIndexDocHasField($indexDoc, 'first_letter_s', $firstChar);
@@ -1158,13 +1158,13 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
      */
     public function getHandleCharBrowserFieldsData()
     {
-        return array(
-            __LINE__ => array('title' => 'Titel', 'first_char' => 'T'),
-            __LINE__ => array('title' => 'lower', 'first_char' => 'L'),
-            __LINE__ => array('title' => 'Ölpreis', 'first_char' => 'O'),
-            __LINE__ => array('title' => 'über', 'first_char' => 'U'),
-            __LINE__ => array('title' => '0815', 'first_char' => '0-9'),
-        );
+        return [
+            __LINE__ => ['title' => 'Titel', 'first_char' => 'T'],
+            __LINE__ => ['title' => 'lower', 'first_char' => 'L'],
+            __LINE__ => ['title' => 'Ölpreis', 'first_char' => 'O'],
+            __LINE__ => ['title' => 'über', 'first_char' => 'U'],
+            __LINE__ => ['title' => '0815', 'first_char' => '0-9'],
+        ];
     }
 
     /**

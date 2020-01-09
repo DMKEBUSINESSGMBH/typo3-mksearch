@@ -46,7 +46,7 @@ class tx_mksearch_indexer_Efaq implements tx_mksearch_interface_Indexer
      */
     public static function getContentType()
     {
-        return array('efaq', 'faq');
+        return ['efaq', 'faq'];
     }
 
     /**
@@ -96,14 +96,14 @@ class tx_mksearch_indexer_Efaq implements tx_mksearch_interface_Indexer
     {
         static $mapping = false;
         if (!is_array($mapping)) {
-            $mapping = array(
+            $mapping = [
                 'question' => 'question_s',
                 'answer' => 'answer_s',
                 'author' => 'author_s',
                 'url' => 'url_s',
                 'kat' => 'kat_s',
                 'subkat' => 'subkat_s',
-            );
+            ];
         }
 
         return $mapping;

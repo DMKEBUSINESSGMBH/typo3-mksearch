@@ -305,15 +305,15 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
         // parameter der filterquery prüfen
         // @see tx_mksearch_marker_Facet::prepareItem
         $fqParams = $parameters->get('fq');
-        $fqParams = is_array($fqParams) ? $fqParams : (trim($fqParams) ? array(trim($fqParams)) : array());
+        $fqParams = is_array($fqParams) ? $fqParams : (trim($fqParams) ? [trim($fqParams)] : []);
         //@todo die if blöcke in eigene funktionen auslagern
         if (!empty($fqParams)) {
             // FQ field, for single queries
             // Das ist deprecated! Dadurch wäre nur ein festes Facet-Field möglich
             $sFqField = $configurations->get($confId.'fqField');
             foreach ($fqParams as $fqField => $fqValues) {
-                $fieldOptions = array();
-                $fqValues = is_array($fqValues) ? $fqValues : (trim($fqValues) ? array(trim($fqValues)) : array());
+                $fieldOptions = [];
+                $fqValues = is_array($fqValues) ? $fqValues : (trim($fqValues) ? [trim($fqValues)] : []);
                 if (empty($fqValues)) {
                     continue;
                 }
@@ -356,7 +356,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
             self::addFilterQuery($options, $this->handleFqTags($sAddFq));
         }
         if ($sRemoveFq = trim($parameters->get('remfq'))) {
-            $aFQ = isset($options['fq']) ? (is_array($options['fq']) ? $options['fq'] : array($options['fq'])) : array();
+            $aFQ = isset($options['fq']) ? (is_array($options['fq']) ? $options['fq'] : [$options['fq']]) : [];
             // hier steckt nur der feldname drin
             foreach ($aFQ as $iKey => $sFq) {
                 list($sfield) = explode(':', $sFq);
@@ -416,7 +416,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
         $filterQuery = '(-fe_group_mi:[* TO *] AND id:[* TO *]) OR fe_group_mi:0';
 
         if (is_array($GLOBALS['TSFE']->fe_user->groupData['uid'])) {
-            $filterQueriesByFeGroup = array();
+            $filterQueriesByFeGroup = [];
             foreach ($GLOBALS['TSFE']->fe_user->groupData['uid'] as $feGroup) {
                 $filterQueriesByFeGroup[] = 'fe_group_mi:'.$feGroup.'';
             }
@@ -519,7 +519,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
                 $options['fq'][] = $sFQ;
             } // aus fq ein array machen und den neuen wert anhängen
             else {
-                $options['fq'] = array($options['fq'], $sFQ);
+                $options['fq'] = [$options['fq'], $sFQ];
             }
         } // fq schreiben
         else {
@@ -620,7 +620,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
         if (empty($fields['term'])) {
             $fields['term'] = $func;
         } else {
-            $fields['term'] = array($fields['term'], $func);
+            $fields['term'] = [$fields['term'], $func];
         }
     }
 
@@ -649,7 +649,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
      */
     public function parseTemplate($template, &$formatter, $confId, $marker = 'FILTER')
     {
-        $markArray = $subpartArray = $wrappedSubpartArray = array();
+        $markArray = $subpartArray = $wrappedSubpartArray = [];
 
         $this->parseSearchForm(
             $template,
@@ -692,7 +692,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
         $viewData = $configurations->getViewData();
         if ($formTemplate) {
             $link = $configurations->createLink();
-            $link->initByTS($configurations, $confId.'template.links.action.', array());
+            $link->initByTS($configurations, $confId.'template.links.action.', []);
             // Prepare some form data
             $paramArray = $this->getParameters()->getArrayCopy();
             $formData = $this->getParameters()->get('submit') ? $paramArray : $this->getFormData();
@@ -701,7 +701,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
             $formData['listsize'] = $viewData->offsetExists('pagebrowser') ? $viewData->offsetGet('pagebrowser')->getListSize() : 0;
             $formData['hiddenfields'] = tx_rnbase_util_FormUtil::getHiddenFieldsForUrlParams($formData['action']);
 
-            $combinations = array('none', 'free', 'or', 'and', 'exact');
+            $combinations = ['none', 'free', 'or', 'and', 'exact'];
             $currentCombination = $this->getParameters()->get('combination');
             $currentCombination = $currentCombination ? $currentCombination : 'none';
             foreach ($combinations as $combination) {
@@ -709,7 +709,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
                 $formData['combination_'.$combination] = ($combination == $currentCombination) ? ' checked="checked"' : '';
             }
 
-            $options = array('fuzzy');
+            $options = ['fuzzy'];
             $currentOptions = $this->getParameters()->get('options');
             foreach ($options as $option) {
                 // wenn anders benötigt, via ts ändern werden
@@ -831,7 +831,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
      */
     protected function getFormData()
     {
-        return array();
+        return [];
     }
 
     /**

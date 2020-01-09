@@ -31,7 +31,7 @@
  */
 abstract class tx_mksearch_tests_Testcase extends tx_rnbase_tests_BaseTestCase
 {
-    protected $backups = array();
+    protected $backups = [];
 
     /**
      * setUp() = init DB etc.
@@ -95,17 +95,17 @@ abstract class tx_mksearch_tests_Testcase extends tx_rnbase_tests_BaseTestCase
      *
      * @return \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController or tslib_fe
      */
-    protected function prepareTSFE(array $options = array('force' => true, 'pid' => 1))
+    protected function prepareTSFE(array $options = ['force' => true, 'pid' => 1])
     {
         tx_rnbase_util_Misc::prepareTSFE($options);
 
         if (!empty($options['pid'])) {
             $GLOBALS['TSFE']->id = $options['pid'];
             if (!is_array($GLOBALS['TSFE']->rootLine)) {
-                $GLOBALS['TSFE']->rootLine = array();
+                $GLOBALS['TSFE']->rootLine = [];
             }
             if (!is_array($GLOBALS['TSFE']->rootLine[0])) {
-                $GLOBALS['TSFE']->rootLine[0] = array();
+                $GLOBALS['TSFE']->rootLine[0] = [];
             }
             //wenn tq_seo kommt sonst ein error
             $GLOBALS['TSFE']->rootLine[0]['uid'] = $options['pid'];

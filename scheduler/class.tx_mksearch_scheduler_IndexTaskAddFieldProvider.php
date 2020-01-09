@@ -71,12 +71,12 @@ class tx_mksearch_scheduler_IndexTaskAddFieldProvider extends Tx_Rnbase_Schedule
         // Note: Name qualifier MUST be "tx_scheduler" as the tx_scheduler's BE module is used!
         $fieldCode = '<input type="text" name="tx_scheduler['.FIELD_ITEMS.']" id="'.$fieldID.
                         '" value="'.$taskInfo[FIELD_ITEMS].'" size="10" />';
-        $additionalFields = array();
-        $additionalFields[$fieldID] = array(
+        $additionalFields = [];
+        $additionalFields[$fieldID] = [
             'code' => $fieldCode,
             'label' => 'LLL:EXT:mksearch/locallang_db.xml:scheduler_indexTask_field_'.FIELD_ITEMS,
             'cshKey' => '_MOD_web_txschedulerM1',
-        );
+        ];
 
         return $additionalFields;
     }

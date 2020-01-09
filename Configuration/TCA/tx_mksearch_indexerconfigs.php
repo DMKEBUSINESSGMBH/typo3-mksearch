@@ -1,7 +1,7 @@
 <?php
 
-return array(
-    'ctrl' => array(
+return [
+    'ctrl' => [
         'title' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indexerconfigs',
         'label' => 'title',
         'tstamp' => 'tstamp',
@@ -9,85 +9,85 @@ return array(
         'cruser_id' => 'cruser_id',
         'default_sortby' => 'ORDER BY title',
         'delete' => 'deleted',
-        'enablecolumns' => array(
+        'enablecolumns' => [
             'disabled' => 'hidden',
-        ),
+        ],
         'requestUpdate' => 'extkey,contenttype',
         'iconfile' => 'EXT:mksearch/icons/icon_tx_mksearch_indexconfigs.gif',
-    ),
-    'interface' => array(
+    ],
+    'interface' => [
         'showRecordFieldList' => 'hidden,title,description,extkey,contenttype,config,composites',
-    ),
-    'columns' => array(
-        'hidden' => array(
+    ],
+    'columns' => [
+        'hidden' => [
             'exclude' => 1,
             'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indexerconfigs.hidden',
-                'config' => array(
+                'config' => [
                 'type' => 'check',
                 'default' => '0',
-            ),
-        ),
-        'title' => array(
+            ],
+        ],
+        'title' => [
             'exclude' => 0,
             'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indexerconfigs.title',
-            'config' => array(
+            'config' => [
                 'type' => 'input',
                 'size' => '30',
                 'max' => '100',
                 'eval' => 'required,trim',
-            ),
-        ),
-        'description' => array(
+            ],
+        ],
+        'description' => [
             'exclude' => 0,
             'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indexerconfigs.description',
-            'config' => array(
+            'config' => [
                 'type' => 'text',
                 'cols' => '30',
                 'rows' => '5',
-            ),
-        ),
-        'extkey' => array(
+            ],
+        ],
+        'extkey' => [
             'exclude' => 0,
             'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indexerconfigs.extkey',
-            'config' => array(
+            'config' => [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
-                'items' => array(array('', '')),
+                'items' => [['', '']],
                 'itemsProcFunc' => 'tx_mksearch_util_TCA->getIndexerExtKeys',
                 'size' => '1',
                 'maxitems' => '1',
-            ),
+            ],
             'onChange' => 'reload',
-        ),
-        'contenttype' => array(
+        ],
+        'contenttype' => [
             'exclude' => 0,
             'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indexerconfigs.contenttype',
-            'config' => array(
+            'config' => [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
-                'items' => array(array('', '')),
+                'items' => [['', '']],
                 'itemsProcFunc' => 'tx_mksearch_util_TCA->getIndexerContentTypes',
                 'size' => '1',
                 'maxitems' => '1',
                 'eval' => 'required,trim',
-            ),
+            ],
             'onChange' => 'reload',
-        ),
-        'configuration' => array(
+        ],
+        'configuration' => [
             'exclude' => 0,
             'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indexerconfigs.configuration',
-            'config' => array(
+            'config' => [
                 'type' => 'text',
                 'cols' => '200',
                 'rows' => '50',
                 // @see \DMK\Mksearch\Backend\Form\Element\IndexerConfigurationField
                 'renderType' => 'indexerConfigurationField',
-            ),
-        ),
-        'composites' => array(
+            ],
+        ],
+        'composites' => [
             'exclude' => 0,
             'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indexerconfigs.composites',
-            'config' => array(
+            'config' => [
                 'type' => 'select',
                 'renderType' => 'selectMultipleSideBySide',
                 'foreign_table' => 'tx_mksearch_configcomposites',
@@ -97,18 +97,18 @@ return array(
                 'size' => 20,
                 'minitems' => 0,
                 'maxitems' => 100,
-                'fieldControl' => array('editPopup' => true, 'addRecord' => true),
+                'fieldControl' => ['editPopup' => true, 'addRecord' => true],
                 'wizards' => Tx_Rnbase_Utility_TcaTool::getWizards(
                     'tx_mksearch_configcomposites',
-                    array('add' => true, 'edit' => true, 'list' => true)
+                    ['add' => true, 'edit' => true, 'list' => true]
                 ),
-            ),
-        ),
-    ),
-    'types' => array(
-        '0' => array('showitem' => 'hidden, title, description, extkey, contenttype, configuration, composites'),
-    ),
-    'palettes' => array(
-        '1' => array('showitem' => ''),
-    ),
-);
+            ],
+        ],
+    ],
+    'types' => [
+        '0' => ['showitem' => 'hidden, title, description, extkey, contenttype, configuration, composites'],
+    ],
+    'palettes' => [
+        '1' => ['showitem' => ''],
+    ],
+];

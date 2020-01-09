@@ -45,7 +45,6 @@ class tx_mksearch_tests_indexer_TxNewsNewsTest extends tx_mksearch_tests_Testcas
     /**
      * Testet die indexData Methode.
      *
-     *
      * @group unit
      * @test
      */
@@ -53,18 +52,17 @@ class tx_mksearch_tests_indexer_TxNewsNewsTest extends tx_mksearch_tests_Testcas
     {
         $indexer = $this->getMock(
             'tx_mksearch_indexer_TxNewsNews',
-            array('getDefaultTSConfig')
+            ['getDefaultTSConfig']
         );
 
         $this->assertEquals(
-            array('tx_news', 'news'),
+            ['tx_news', 'news'],
             $indexer->getContentType()
         );
     }
 
     /**
      * Testet die indexData Methode.
-     *
      *
      * @group unit
      * @test
@@ -73,7 +71,7 @@ class tx_mksearch_tests_indexer_TxNewsNewsTest extends tx_mksearch_tests_Testcas
     {
         $connection = $this->getMock(
             'Tx_Rnbase_Database_Connection',
-            array('doSelect')
+            ['doSelect']
         );
         ($connection
             ->expects(self::once())
@@ -81,34 +79,34 @@ class tx_mksearch_tests_indexer_TxNewsNewsTest extends tx_mksearch_tests_Testcas
             ->with(
                 $this->equalTo('NEWS.uid AS uid'),
                 $this->equalTo(
-                    array(
+                    [
                         'tx_news_domain_model_news AS NEWS'.
                         ' JOIN sys_category_record_mm AS CATMM ON NEWS.uid = CATMM.uid_foreign',
                         'tx_news_domain_model_news',
                         'NEWS',
-                    )
+                    ]
                 ),
                 $this->equalTo(
-                    array(
+                    [
                         'where' => 'CATMM.uid_local = 5',
                         'orderby' => 'sorting_foreign DESC',
-                    )
+                    ]
                 )
             )
             ->will(
                 self::returnValue(
-                    array(
-                        array('uid' => '6'),
-                        array('uid' => '8'),
-                        array('uid' => '10'),
-                    )
+                    [
+                        ['uid' => '6'],
+                        ['uid' => '8'],
+                        ['uid' => '10'],
+                    ]
                 )
             )
         );
 
         $indexSrv = $this->getMock(
             'tx_mksearch_service_internal_Index',
-            array('addRecordToIndex')
+            ['addRecordToIndex']
         );
         ($indexSrv
             ->expects(self::exactly(3))
@@ -121,7 +119,7 @@ class tx_mksearch_tests_indexer_TxNewsNewsTest extends tx_mksearch_tests_Testcas
 
         $indexer = $this->getMock(
             'tx_mksearch_indexer_TxNewsNews',
-            array('getDatabaseConnection', 'getIntIndexService')
+            ['getDatabaseConnection', 'getIntIndexService']
         );
         ($indexer
             ->expects(self::once())
@@ -135,13 +133,13 @@ class tx_mksearch_tests_indexer_TxNewsNewsTest extends tx_mksearch_tests_Testcas
         );
 
         $stopIndexing = $this->callInaccessibleMethod(
-            array($indexer, 'stopIndexing'),
-            array(
+            [$indexer, 'stopIndexing'],
+            [
                 'sys_category',
-                array('uid' => '5'),
+                ['uid' => '5'],
                 $this->getIndexDocMock($indexer),
-                array(),
-            )
+                [],
+            ]
         );
 
         $this->assertTrue($stopIndexing);
@@ -149,7 +147,6 @@ class tx_mksearch_tests_indexer_TxNewsNewsTest extends tx_mksearch_tests_Testcas
 
     /**
      * Testet die indexData Methode.
-     *
      *
      * @group unit
      * @test
@@ -163,19 +160,19 @@ class tx_mksearch_tests_indexer_TxNewsNewsTest extends tx_mksearch_tests_Testcas
         );
 
         $indexDoc = $this->callInaccessibleMethod(
-            array($indexer, 'indexData'),
-            array(
+            [$indexer, 'indexData'],
+            [
                 $model,
                 'tx_news_domain_model_news',
                 $model->getRecord(),
                 $this->getIndexDocMock($indexer),
-                array(),
-            )
+                [],
+            ]
         );
 
         $this->assertIndexDocHasFields(
             $indexDoc,
-            array(
+            [
                 // base indexer data
                 'content_ident_s' => 'tx_news.news',
                 'pid' => '7',
@@ -191,18 +188,18 @@ class tx_mksearch_tests_indexer_TxNewsNewsTest extends tx_mksearch_tests_Testcas
                     new \DateTime('@'.$GLOBALS['EXEC_TIME'])
                 ),
                 // tags
-                'keywords_ms' => array('Tag1', 'Tag2'),
+                'keywords_ms' => ['Tag1', 'Tag2'],
                 // category data
                 'categorySinglePid_i' => '14',
-                'categories_mi' => array('71', '72', '73'),
-                'categoriesTitle_ms' => array('Cat1', 'Cat2', 'Cat3'),
-                'categories_dfs_ms' => array('71<[DFS]>Cat1', '72<[DFS]>Cat2', '73<[DFS]>Cat3'),
-                'related_links_title_ms' => array('first link', 'second link'),
-                'related_links_title_mt' => array('first link', 'second link'),
-                'related_links_description_ms' => array('first link description', 'second link description'),
-                'related_links_description_mt' => array('first link description', 'second link description'),
-                'related_links_uri_ms' => array('www.example.com', 'example.com'),
-            )
+                'categories_mi' => ['71', '72', '73'],
+                'categoriesTitle_ms' => ['Cat1', 'Cat2', 'Cat3'],
+                'categories_dfs_ms' => ['71<[DFS]>Cat1', '72<[DFS]>Cat2', '73<[DFS]>Cat3'],
+                'related_links_title_ms' => ['first link', 'second link'],
+                'related_links_title_mt' => ['first link', 'second link'],
+                'related_links_description_ms' => ['first link description', 'second link description'],
+                'related_links_description_mt' => ['first link description', 'second link description'],
+                'related_links_uri_ms' => ['www.example.com', 'example.com'],
+            ]
         );
     }
 
@@ -214,7 +211,7 @@ class tx_mksearch_tests_indexer_TxNewsNewsTest extends tx_mksearch_tests_Testcas
     protected function getNewsModel()
     {
         return $this->getModel(
-            array(
+            [
                 'uid' => '5',
                 'pid' => '7',
                 'tstamp' => $GLOBALS['EXEC_TIME'],
@@ -223,60 +220,60 @@ class tx_mksearch_tests_indexer_TxNewsNewsTest extends tx_mksearch_tests_Testcas
                 'teaser' => 'the first news',
                 'bodytext' => '<span>html in body text</span>',
                 'description' => 'description',
-                'tags' => array(
+                'tags' => [
                     $this->getModel(
-                        array(
+                        [
                             'uid' => '51',
                             'title' => 'Tag1',
-                        )
+                        ]
                     ),
                     $this->getModel(
-                        array(
+                        [
                             'uid' => '52',
                             'title' => 'Tag2',
-                        )
+                        ]
                     ),
-                ),
-                'categories' => array(
+                ],
+                'categories' => [
                     $this->getModel(
-                        array(
+                        [
                             'uid' => '71',
                             'title' => 'Cat1',
                             'single_pid' => '0',
-                        )
+                        ]
                     ),
                     $this->getModel(
-                        array(
+                        [
                             'uid' => '72',
                             'title' => 'Cat2',
                             'single_pid' => '14',
-                        )
+                        ]
                     ),
                     $this->getModel(
-                        array(
+                        [
                             'uid' => '73',
                             'title' => 'Cat3',
                             'single_pid' => '0',
-                        )
+                        ]
                     ),
-                ),
-                'related_links' => array(
+                ],
+                'related_links' => [
                     $this->getModel(
-                        array(
+                        [
                             'uri' => 'www.example.com',
                             'title' => 'first link',
                             'description' => 'first link description',
-                        )
+                        ]
                     ),
                     $this->getModel(
-                        array(
+                        [
                             'uri' => 'example.com',
                             'title' => 'second link',
                             'description' => 'second link description',
-                        )
+                        ]
                     ),
-                ),
-            )
+                ],
+            ]
         );
     }
 
@@ -291,7 +288,7 @@ class tx_mksearch_tests_indexer_TxNewsNewsTest extends tx_mksearch_tests_Testcas
 
         $indexer = $this->getMock(
             'tx_mksearch_indexer_TxNewsNews',
-            array('createLocalizedExtbaseDomainModel')
+            ['createLocalizedExtbaseDomainModel']
         );
 
         ($indexer

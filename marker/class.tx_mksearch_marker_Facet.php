@@ -49,7 +49,7 @@ class tx_mksearch_marker_Facet extends tx_mksearch_marker_SearchResultSimple
         $out = parent::parseTemplate($template, $item, $formatter, $confId, $marker);
 
         if (self::containsMarker($out, $marker.'_CHILDS')) {
-            $childs = array();
+            $childs = [];
             if ($item instanceof tx_mksearch_model_Facet
                 && $item->hasChilds()
             ) {
@@ -138,11 +138,11 @@ class tx_mksearch_marker_Facet extends tx_mksearch_marker_SearchResultSimple
                     // check addfq parameter for active state
                     $params = $configurations->getParameters()->get('addfq');
                     if ($field == substr($params, 0, strpos($params, ':'))) {
-                        $params = array(
+                        $params = [
                             substr($params, strpos($params, ':') + 1) => $params,
-                        );
+                        ];
                     } else {
-                        $params = array();
+                        $params = [];
                     }
                 }
                 $item->record['active'] = empty($params[$value]) ? 0 : 1;
@@ -187,8 +187,8 @@ class tx_mksearch_marker_Facet extends tx_mksearch_marker_SearchResultSimple
         // der parameter wird im format "mksearch[addfw]=title:home" übergeben.
         // der filter muss sich dann darum kümmern, die parameter (field:value) auseinanderzu nehmen
         // und in die query einzubauen
-        $this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'add', $marker, array('NK_addfq' => $item->record['field'].':'.$item->record['id']), $template);
-        $this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'remove', $marker, array('NK_remfq' => $item->record['field']), $template);
+        $this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'add', $marker, ['NK_addfq' => $item->record['field'].':'.$item->record['id']], $template);
+        $this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'remove', $marker, ['NK_remfq' => $item->record['field']], $template);
     }
 }
 

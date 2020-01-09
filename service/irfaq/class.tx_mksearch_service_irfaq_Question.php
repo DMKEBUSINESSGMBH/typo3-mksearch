@@ -36,8 +36,8 @@ class tx_mksearch_service_irfaq_Question extends tx_mksearch_service_Base
      */
     public function getByExpert($iExpert)
     {
-        $fields = array();
-        $options = array();
+        $fields = [];
+        $options = [];
         $fields['IRFAQ_QUESTION.expert'][OP_EQ_INT] = $iExpert;
 
         return $this->search($fields, $options);
@@ -52,8 +52,8 @@ class tx_mksearch_service_irfaq_Question extends tx_mksearch_service_Base
      */
     public function getByCategory($iCategory)
     {
-        $fields = array();
-        $options = array();
+        $fields = [];
+        $options = [];
         $fields['IRFAQ_QUESTION_CATEGORY_MM.uid_foreign'][OP_EQ_INT] = $iCategory;
 
         return $this->search($fields, $options);

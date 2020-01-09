@@ -128,7 +128,7 @@ class tx_mksearch_util_Misc
      *
      * @return string Converted string (utf8-encoded)
      */
-    public static function html2plain($text, array $options = array())
+    public static function html2plain($text, array $options = [])
     {
         if (!is_string($text)) {
             return $text;
@@ -138,14 +138,14 @@ class tx_mksearch_util_Misc
         $whitespaces = isset($options['lineendings']) && $options['lineendings'] ? true : false;
         $whitespaces = $whitespaces ? '[ \t\f]' : '\s';
 
-        $replaces = array(
+        $replaces = [
             // whitespaces durch leerzeichen ersetzen
             '/('.$whitespaces.'+)/' => ' ',
             // alle HTML Tags entfernen
             '/((<.*?>)+)/' => ' ',
             // html kommentare entfernen
             '/<!--.*?-->/' => ' ',
-        );
+        ];
 
         // replace double spaces
         if (!empty($options['removedoublespaces'])) {

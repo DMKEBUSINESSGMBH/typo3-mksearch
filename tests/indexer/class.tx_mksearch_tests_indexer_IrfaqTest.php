@@ -55,7 +55,7 @@ class tx_mksearch_tests_indexer_IrfaqTest extends tx_mksearch_tests_Testcase
         $irfaqModel = $this->callInaccessibleMethod(
             tx_rnbase::makeInstance('tx_mksearch_indexer_Irfaq'),
             'createModel',
-            array('uid' => 123)
+            ['uid' => 123]
         );
         self::assertInstanceOf('tx_mksearch_model_irfaq_Question', $irfaqModel);
         self::assertEquals(123, $irfaqModel->getUid());
@@ -88,7 +88,7 @@ class tx_mksearch_tests_indexer_IrfaqTest extends tx_mksearch_tests_Testcase
      */
     public function testPrepareSearchDataIndexesQuestionDataWhenTableQuestionsWithExpert()
     {
-        $record = array(
+        $record = [
             'uid' => 1,
             'sorting' => 87,
             'q' => '1. FAQ',
@@ -99,19 +99,19 @@ class tx_mksearch_tests_indexer_IrfaqTest extends tx_mksearch_tests_Testcase
             'related_links' => 'some related links',
             'faq_files' => 'some files',
             'tstamp' => 123,
-        );
+        ];
 
-        $irfaqExpertService = $this->getMock('tx_mksearch_service_irfaq_Expert', array('get'));
+        $irfaqExpertService = $this->getMock('tx_mksearch_service_irfaq_Expert', ['get']);
         $irfaqExpertService->expects(self::once())
             ->method('get')
-            ->will(self::returnValue(tx_rnbase::makeInstance('tx_mksearch_model_irfaq_Expert', array())));
+            ->will(self::returnValue(tx_rnbase::makeInstance('tx_mksearch_model_irfaq_Expert', [])));
 
-        $irfaqCategoryService = $this->getMock('tx_mksearch_service_irfaq_Category', array('getByQuestion'));
+        $irfaqCategoryService = $this->getMock('tx_mksearch_service_irfaq_Category', ['getByQuestion']);
         $irfaqCategoryService->expects(self::exactly(2))
             ->method('getByQuestion')
-            ->will(self::returnValue(array()));
+            ->will(self::returnValue([]));
 
-        $indexer = $this->getMock('tx_mksearch_indexer_Irfaq', array('getIrfaqCategoryService', 'getIrfaqExpertService'));
+        $indexer = $this->getMock('tx_mksearch_indexer_Irfaq', ['getIrfaqCategoryService', 'getIrfaqExpertService']);
         $indexer->expects(self::exactly(2))
             ->method('getIrfaqCategoryService')
             ->will(self::returnValue($irfaqCategoryService));
@@ -168,31 +168,31 @@ class tx_mksearch_tests_indexer_IrfaqTest extends tx_mksearch_tests_Testcase
      */
     public function testPrepareSearchDataIndexesExpertDataWhenTableQuestionsWithExpert()
     {
-        $record = array(
+        $record = [
             'uid' => 1,
             'expert' => 456,
-        );
+        ];
 
-        $irfaqExpertService = $this->getMock('tx_mksearch_service_irfaq_Expert', array('get'));
+        $irfaqExpertService = $this->getMock('tx_mksearch_service_irfaq_Expert', ['get']);
         $irfaqExpertService->expects(self::once())
             ->method('get')
             ->with(456)
             ->will(self::returnValue(tx_rnbase::makeInstance(
                 'tx_mksearch_model_irfaq_Expert',
-                array(
+                [
                     'uid' => 456,
                     'name' => '1. Expert',
                     'email' => 'mail@expert.de',
                     'url' => 'some url',
-                )
+                ]
             )));
 
-        $irfaqCategoryService = $this->getMock('tx_mksearch_service_irfaq_Category', array('getByQuestion'));
+        $irfaqCategoryService = $this->getMock('tx_mksearch_service_irfaq_Category', ['getByQuestion']);
         $irfaqCategoryService->expects(self::exactly(2))
             ->method('getByQuestion')
-            ->will(self::returnValue(array()));
+            ->will(self::returnValue([]));
 
-        $indexer = $this->getMock('tx_mksearch_indexer_Irfaq', array('getIrfaqCategoryService', 'getIrfaqExpertService'));
+        $indexer = $this->getMock('tx_mksearch_indexer_Irfaq', ['getIrfaqCategoryService', 'getIrfaqExpertService']);
         $indexer->expects(self::exactly(2))
             ->method('getIrfaqCategoryService')
             ->will(self::returnValue($irfaqCategoryService));
@@ -229,41 +229,41 @@ class tx_mksearch_tests_indexer_IrfaqTest extends tx_mksearch_tests_Testcase
      */
     public function testPrepareSearchDataIndexesCategoryDataWhenTableQuestionsWithExpert()
     {
-        $record = array(
+        $record = [
             'uid' => 1,
-        );
+        ];
 
-        $irfaqExpertService = $this->getMock('tx_mksearch_service_irfaq_Expert', array('get'));
+        $irfaqExpertService = $this->getMock('tx_mksearch_service_irfaq_Expert', ['get']);
         $irfaqExpertService->expects(self::once())
             ->method('get')
-            ->will(self::returnValue(tx_rnbase::makeInstance('tx_mksearch_model_irfaq_Expert', array())));
+            ->will(self::returnValue(tx_rnbase::makeInstance('tx_mksearch_model_irfaq_Expert', [])));
 
-        $irfaqCategoryService = $this->getMock('tx_mksearch_service_irfaq_Category', array('getByQuestion'));
+        $irfaqCategoryService = $this->getMock('tx_mksearch_service_irfaq_Category', ['getByQuestion']);
         $irfaqCategoryService->expects(self::exactly(2))
             ->method('getByQuestion')
             ->with(tx_rnbase::makeInstance('tx_mksearch_model_irfaq_Question', $record))
-            ->will(self::returnValue(array(
+            ->will(self::returnValue([
                 0 => tx_rnbase::makeInstance(
                     'tx_mksearch_model_irfaq_Category',
-                    array(
+                    [
                         'uid' => 1,
                         'sorting' => 47,
                         'title' => '1. FAQ Category',
                         'shortcut' => '1. Shortcut',
-                    )
+                    ]
                 ),
                 1 => tx_rnbase::makeInstance(
                     'tx_mksearch_model_irfaq_Category',
-                    array(
+                    [
                         'uid' => 2,
                         'sorting' => 48,
                         'title' => '2. FAQ Category',
                         'shortcut' => '2. Shortcut',
-                    )
+                    ]
                 ),
-            )));
+            ]));
 
-        $indexer = $this->getMock('tx_mksearch_indexer_Irfaq', array('getIrfaqCategoryService', 'getIrfaqExpertService'));
+        $indexer = $this->getMock('tx_mksearch_indexer_Irfaq', ['getIrfaqCategoryService', 'getIrfaqExpertService']);
         $indexer->expects(self::exactly(2))
             ->method('getIrfaqCategoryService')
             ->will(self::returnValue($irfaqCategoryService));
@@ -274,22 +274,22 @@ class tx_mksearch_tests_indexer_IrfaqTest extends tx_mksearch_tests_Testcase
         $indexDocData = $this->prepareSearchData($indexer, $record)->getData();
 
         self::assertEquals(
-            array(0 => '1', 1 => '2'),
+            [0 => '1', 1 => '2'],
             $indexDocData['category_mi']->getValue(),
             'Es wurden nicht die richtigen Kategorie-Uids indiziert!'
         );
         self::assertEquals(
-            array(0 => '47', 1 => '48'),
+            [0 => '47', 1 => '48'],
             $indexDocData['category_sorting_mi']->getValue(),
             'Es wurden nicht die richtigen Kategorie-Sortierungen indiziert!'
         );
         self::assertEquals(
-            array(0 => '1. FAQ Category', 1 => '2. FAQ Category'),
+            [0 => '1. FAQ Category', 1 => '2. FAQ Category'],
             $indexDocData['category_title_ms']->getValue(),
             'Es wurden nicht die richtigen Kategorie-Titel indiziert!'
         );
         self::assertEquals(
-            array(0 => '1. Shortcut', 1 => '2. Shortcut'),
+            [0 => '1. Shortcut', 1 => '2. Shortcut'],
             $indexDocData['category_shortcut_ms']->getValue(),
             'Es wurden nicht die richtigen Kategorie-Shortcuts indiziert!'
         );
@@ -305,9 +305,9 @@ class tx_mksearch_tests_indexer_IrfaqTest extends tx_mksearch_tests_Testcase
      */
     public function testPrepareSearchDataWhenTableExpertsStopsIndexing()
     {
-        $record = array('uid' => 123, 'some_field' => 456);
+        $record = ['uid' => 123, 'some_field' => 456];
 
-        $indexer = $this->getMock('tx_mksearch_indexer_Irfaq', array('handleRelatedTableChanged'));
+        $indexer = $this->getMock('tx_mksearch_indexer_Irfaq', ['handleRelatedTableChanged']);
         $indexer->expects(self::once())
             ->method('handleRelatedTableChanged')
             ->with($record, 'Expert');
@@ -320,9 +320,9 @@ class tx_mksearch_tests_indexer_IrfaqTest extends tx_mksearch_tests_Testcase
      */
     public function testPrepareSearchDataWhenTableCategoryStopsIndexing()
     {
-        $record = array('uid' => 123, 'some_field' => 456);
+        $record = ['uid' => 123, 'some_field' => 456];
 
-        $indexer = $this->getMock('tx_mksearch_indexer_Irfaq', array('handleRelatedTableChanged'));
+        $indexer = $this->getMock('tx_mksearch_indexer_Irfaq', ['handleRelatedTableChanged']);
         $indexer->expects(self::once())
             ->method('handleRelatedTableChanged')
             ->with($record, 'Category');
@@ -346,21 +346,21 @@ class tx_mksearch_tests_indexer_IrfaqTest extends tx_mksearch_tests_Testcase
      */
     public function testHandleRelatedTableChanged()
     {
-        $questionService = $this->getMock('tx_mksearch_service_irfaq_Question', array('getByMyTestMethod'));
+        $questionService = $this->getMock('tx_mksearch_service_irfaq_Question', ['getByMyTestMethod']);
         $questionService->expects(self::once())
             ->method('getByMyTestMethod')
-            ->will(self::returnValue(array(1, 2, 3)));
+            ->will(self::returnValue([1, 2, 3]));
 
-        $indexer = $this->getMock('tx_mksearch_indexer_Irfaq', array('getIrfaqQuestionService', 'addModelsToIndex'));
+        $indexer = $this->getMock('tx_mksearch_indexer_Irfaq', ['getIrfaqQuestionService', 'addModelsToIndex']);
         $indexer->expects(self::once())
             ->method('getIrfaqQuestionService')
             ->will(self::returnValue($questionService));
 
         $indexer->expects(self::once())
             ->method('addModelsToIndex')
-            ->with(array(1, 2, 3), 'tx_irfaq_q');
+            ->with([1, 2, 3], 'tx_irfaq_q');
 
-        $this->callInaccessibleMethod($indexer, 'handleRelatedTableChanged', array('uid' => 123), 'MyTestMethod');
+        $this->callInaccessibleMethod($indexer, 'handleRelatedTableChanged', ['uid' => 123], 'MyTestMethod');
     }
 
     /**
@@ -372,32 +372,32 @@ class tx_mksearch_tests_indexer_IrfaqTest extends tx_mksearch_tests_Testcase
      */
     public function testPrepareSearchDataSetsDocDeletedDependingOnIncludeOptions(array $options, $isDeleted, $noCategories = false)
     {
-        $record = array('uid' => 1, 'pid' => 2);
+        $record = ['uid' => 1, 'pid' => 2];
 
-        $irfaqExpertService = $this->getMock('tx_mksearch_service_irfaq_Expert', array('get'));
+        $irfaqExpertService = $this->getMock('tx_mksearch_service_irfaq_Expert', ['get']);
         $irfaqExpertService->expects(self::any())
             ->method('get')
-            ->will(self::returnValue(tx_rnbase::makeInstance('tx_mksearch_model_irfaq_Expert', array())));
+            ->will(self::returnValue(tx_rnbase::makeInstance('tx_mksearch_model_irfaq_Expert', [])));
 
-        $irfaqCategoryService = $this->getMock('tx_mksearch_service_irfaq_Category', array('getByQuestion'));
+        $irfaqCategoryService = $this->getMock('tx_mksearch_service_irfaq_Category', ['getByQuestion']);
 
         if ($noCategories) {
-            $categories = array();
+            $categories = [];
         } else {
-            $categories = array(
+            $categories = [
                 0 => tx_rnbase::makeInstance(
                     'tx_mksearch_model_irfaq_Category',
-                    array(
+                    [
                         'uid' => 1,
-                    )
+                    ]
                 ),
                 1 => tx_rnbase::makeInstance(
                     'tx_mksearch_model_irfaq_Category',
-                    array(
+                    [
                         'uid' => 2,
-                    )
+                    ]
                 ),
-            );
+            ];
         }
 
         $irfaqCategoryService->expects(self::any())
@@ -405,7 +405,7 @@ class tx_mksearch_tests_indexer_IrfaqTest extends tx_mksearch_tests_Testcase
             ->with(tx_rnbase::makeInstance('tx_mksearch_model_irfaq_Question', $record))
             ->will(self::returnValue($categories));
 
-        $indexer = $this->getMock('tx_mksearch_indexer_Irfaq', array('getIrfaqCategoryService', 'getIrfaqExpertService'));
+        $indexer = $this->getMock('tx_mksearch_indexer_Irfaq', ['getIrfaqCategoryService', 'getIrfaqExpertService']);
         $indexer->expects(self::any())
             ->method('getIrfaqCategoryService')
             ->will(self::returnValue($irfaqCategoryService));
@@ -421,16 +421,16 @@ class tx_mksearch_tests_indexer_IrfaqTest extends tx_mksearch_tests_Testcase
      */
     public function getIncludeOptions()
     {
-        return array(
-            array(array('include.' => array('categories.' => array(0 => 1, 1 => 2))), false),
-            array(array('include.' => array('categories' => '1,3')), false),
-            array(array('include.' => array('categories.' => array(0 => 3))), true),
-            array(array('include.' => array('categories' => '3')), true),
-            array(array('include.' => array('pageTrees' => '2'), 'deleteIfNotIndexable' => 1), false, true),
-            array(array('include.' => array('pageTrees' => '3'), 'deleteIfNotIndexable' => 1), true, true),
-            array(array('include.' => array('pageTrees' => '2'), 'deleteIfNotIndexable' => 1), false),
-            array(array('include.' => array('pageTrees' => '3'), 'deleteIfNotIndexable' => 1), true),
-        );
+        return [
+            [['include.' => ['categories.' => [0 => 1, 1 => 2]]], false],
+            [['include.' => ['categories' => '1,3']], false],
+            [['include.' => ['categories.' => [0 => 3]]], true],
+            [['include.' => ['categories' => '3']], true],
+            [['include.' => ['pageTrees' => '2'], 'deleteIfNotIndexable' => 1], false, true],
+            [['include.' => ['pageTrees' => '3'], 'deleteIfNotIndexable' => 1], true, true],
+            [['include.' => ['pageTrees' => '2'], 'deleteIfNotIndexable' => 1], false],
+            [['include.' => ['pageTrees' => '3'], 'deleteIfNotIndexable' => 1], true],
+        ];
     }
 
     /**
@@ -445,7 +445,7 @@ class tx_mksearch_tests_indexer_IrfaqTest extends tx_mksearch_tests_Testcase
         tx_mksearch_indexer_Irfaq $indexer,
         array $record,
         $table = 'tx_irfaq_q',
-        array $options = array()
+        array $options = []
     ) {
         list($extKey, $cType) = $indexer->getContentType();
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);

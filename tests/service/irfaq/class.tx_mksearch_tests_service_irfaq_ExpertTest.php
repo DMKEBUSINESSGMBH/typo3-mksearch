@@ -62,6 +62,6 @@ class tx_mksearch_tests_service_irfaq_ExpertTest extends tx_mksearch_tests_Testc
      */
     public function testSearch()
     {
-        tx_mksearch_util_ServiceRegistry::getIrfaqExpertService()->search(array(), array());
+        tx_mksearch_util_ServiceRegistry::getIrfaqExpertService()->search([], []);
     }
 }

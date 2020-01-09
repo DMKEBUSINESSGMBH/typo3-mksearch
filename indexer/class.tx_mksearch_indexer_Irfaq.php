@@ -46,7 +46,7 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base
      */
     public static function getContentType()
     {
-        return array('irfaq', 'question');
+        return ['irfaq', 'question'];
     }
 
     /**
@@ -59,7 +59,7 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base
     protected function hasDocToBeDeleted(
         tx_rnbase_IModel $model,
         tx_mksearch_interface_IndexerDocument $indexDoc,
-        $options = array()
+        $options = []
     ) {
         return    parent::hasDocToBeDeleted($model, $indexDoc, $options) ||
                 !$this->checkInOrExcludeOptions($this->getIrfaqCategoryService()->getByQuestion($model), $options);
@@ -105,13 +105,13 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base
         $indexDoc->setContent(
             tx_mksearch_util_Misc::html2plain(
                 $model->getA(),
-                array('lineendings' => true)
+                ['lineendings' => true]
             )
         );
         $indexDoc->setAbstract(
             tx_mksearch_util_Misc::html2plain(
                 $model->getA(),
-                array('lineendings' => true)
+                ['lineendings' => true]
             ),
             $indexDoc->getMaxAbstractLength()
         );
@@ -201,7 +201,7 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base
             return;
         }
 
-        $categoryNames = array();
+        $categoryNames = [];
         foreach ($categories as $category) {
             $categoryNames[$category->record['uid']] = $category->record['title'];
         }
@@ -271,7 +271,7 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base
      */
     protected function getQuestionMapping()
     {
-        return array(
+        return [
             'sorting' => 'sorting_i',
             'q' => 'q_s',
             'a' => 'a_s',
@@ -279,7 +279,7 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base
             'related_links' => 'related_links_s',
             'faq_files' => 'faq_files_s',
             'tstamp' => 'tstamp',
-        );
+        ];
     }
 
     /**
@@ -290,12 +290,12 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base
      */
     protected function getExpertMapping()
     {
-        return array(
+        return [
             'uid' => 'i',
             'name' => 'name_s',
             'email' => 'email_s',
             'url' => 'url_s',
-        );
+        ];
     }
 
     /**
@@ -306,12 +306,12 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base
      */
     protected function getCategoryMapping()
     {
-        return array(
+        return [
             'uid' => 'mi',
             'sorting' => 'sorting_mi',
             'title' => 'title_ms',
             'shortcut' => 'shortcut_ms',
-        );
+        ];
     }
 
     /**
@@ -323,7 +323,7 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base
      *
      * @return tx_mksearch_model_irfaq_Question
      */
-    protected function createModel(array $rawData, $tableName = null, $options = array())
+    protected function createModel(array $rawData, $tableName = null, $options = [])
     {
         return tx_rnbase::makeInstance('tx_mksearch_model_irfaq_Question', $rawData);
     }

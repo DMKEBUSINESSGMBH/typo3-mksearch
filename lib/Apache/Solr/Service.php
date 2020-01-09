@@ -275,11 +275,11 @@ class Apache_Solr_Service
      *
      * @return string
      */
-    protected function _constructUrl($servlet, $params = array())
+    protected function _constructUrl($servlet, $params = [])
     {
         if (count($params)) {
             //escape all parameters appropriately for inclusion in the query string
-            $escapedParams = array();
+            $escapedParams = [];
 
             foreach ($params as $key => $value) {
                 $escapedParams[] = urlencode($key).'='.urlencode($value);
@@ -304,9 +304,9 @@ class Apache_Solr_Service
         $this->_extractUrl = $this->_constructUrl(self::EXTRACT_SERVLET);
         $this->_pingUrl = $this->_constructUrl(self::PING_SERVLET);
         $this->_searchUrl = $this->_constructUrl(self::SEARCH_SERVLET);
-        $this->_systemUrl = $this->_constructUrl(self::SYSTEM_SERVLET, array('wt' => self::SOLR_WRITER));
-        $this->_threadsUrl = $this->_constructUrl(self::THREADS_SERVLET, array('wt' => self::SOLR_WRITER));
-        $this->_updateUrl = $this->_constructUrl(self::UPDATE_SERVLET, array('wt' => self::SOLR_WRITER));
+        $this->_systemUrl = $this->_constructUrl(self::SYSTEM_SERVLET, ['wt' => self::SOLR_WRITER]);
+        $this->_threadsUrl = $this->_constructUrl(self::THREADS_SERVLET, ['wt' => self::SOLR_WRITER]);
+        $this->_updateUrl = $this->_constructUrl(self::UPDATE_SERVLET, ['wt' => self::SOLR_WRITER]);
 
         $this->_urlsInited = true;
     }
@@ -1045,7 +1045,7 @@ class Apache_Solr_Service
      *
      * @throws Apache_Solr_InvalidArgumentException if $file, $params, or $document are invalid
      */
-    public function extract($file, $params = array(), $document = null, $mimetype = 'application/octet-stream')
+    public function extract($file, $params = [], $document = null, $mimetype = 'application/octet-stream')
     {
         // check if $params is an array (allow null for default empty array)
         if (!is_null($params)) {
@@ -1053,7 +1053,7 @@ class Apache_Solr_Service
                 throw new Apache_Solr_InvalidArgumentException('$params must be a valid array or null');
             }
         } else {
-            $params = array();
+            $params = [];
         }
 
         // if $file is an http request, defer to extractFromUrl instead
@@ -1097,7 +1097,7 @@ class Apache_Solr_Service
      *
      * @todo Should be using multipart/form-data to post parameter values, but I could not get my implementation to work. Needs revisisted.
      */
-    public function extractFromString($data, $params = array(), $document = null, $mimetype = 'application/octet-stream')
+    public function extractFromString($data, $params = [], $document = null, $mimetype = 'application/octet-stream')
     {
         // check if $params is an array (allow null for default empty array)
         if (!is_null($params)) {
@@ -1105,7 +1105,7 @@ class Apache_Solr_Service
                 throw new Apache_Solr_InvalidArgumentException('$params must be a valid array or null');
             }
         } else {
-            $params = array();
+            $params = [];
         }
 
         // make sure we receive our response in JSON and have proper name list treatment
@@ -1153,7 +1153,7 @@ class Apache_Solr_Service
      *
      * @throws Apache_Solr_InvalidArgumentException if $url, $params, or $document are invalid
      */
-    public function extractFromUrl($url, $params = array(), $document = null, $mimetype = 'application/octet-stream')
+    public function extractFromUrl($url, $params = [], $document = null, $mimetype = 'application/octet-stream')
     {
         // check if $params is an array (allow null for default empty array)
         if (!is_null($params)) {
@@ -1161,7 +1161,7 @@ class Apache_Solr_Service
                 throw new Apache_Solr_InvalidArgumentException('$params must be a valid array or null');
             }
         } else {
-            $params = array();
+            $params = [];
         }
 
         $httpTransport = $this->getHttpTransport();
@@ -1220,7 +1220,7 @@ class Apache_Solr_Service
      * @throws Apache_Solr_HttpTransportException   If an error occurs during the service call
      * @throws Apache_Solr_InvalidArgumentException If an invalid HTTP method is used
      */
-    public function search($query, $offset = 0, $limit = 10, $params = array(), $method = self::METHOD_GET)
+    public function search($query, $offset = 0, $limit = 10, $params = [], $method = self::METHOD_GET)
     {
         // ensure params is an array
         if (!is_null($params)) {
@@ -1229,7 +1229,7 @@ class Apache_Solr_Service
                 throw new Apache_Solr_InvalidArgumentException('$params must be a valid array or null');
             }
         } else {
-            $params = array();
+            $params = [];
         }
 
         // construct our full parameters

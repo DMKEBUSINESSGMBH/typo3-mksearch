@@ -58,14 +58,14 @@ abstract class tx_mksearch_tests_DbTestcase extends tx_mksearch_tests_Testcase
      *
      * @var array
      */
-    protected $importExtensions = array('core', 'frontend', 'mksearch');
+    protected $importExtensions = ['core', 'frontend', 'mksearch'];
 
     /**
      * Liste der daten, welche in die test DB importiert werden müssen.
      *
      * @var array
      */
-    protected $importDataSets = array();
+    protected $importDataSets = [];
 
     /**
      * Constructs a test case with the given name.
@@ -74,7 +74,7 @@ abstract class tx_mksearch_tests_DbTestcase extends tx_mksearch_tests_Testcase
      * @param array  $data     ?
      * @param string $dataName ?
      */
-    public function __construct($name = null, array $data = array(), $dataName = '')
+    public function __construct($name = null, array $data = [], $dataName = '')
     {
         parent::__construct($name, $data, $dataName);
 
@@ -199,7 +199,7 @@ abstract class tx_mksearch_tests_DbTestcase extends tx_mksearch_tests_Testcase
         // when needed
         $connections = new ReflectionProperty(ConnectionPool::class, 'connections');
         $connections->setAccessible(true);
-        $connections->setValue(null, array());
+        $connections->setValue(null, []);
 
         $this->originalDatabaseName = $GLOBALS['TYPO3_CONF_VARS']['DB']['Connections']['Default']['dbname'];
         $GLOBALS['TYPO3_CONF_VARS']['DB']['Connections']['Default']['dbname'] = $this->testDatabase;
@@ -219,7 +219,7 @@ abstract class tx_mksearch_tests_DbTestcase extends tx_mksearch_tests_Testcase
         // truncate connections so they can be reinitialized with the real configuration
         $connections = new ReflectionProperty(ConnectionPool::class, 'connections');
         $connections->setAccessible(true);
-        $connections->setValue(null, array());
+        $connections->setValue(null, []);
 
         $this->switchToTypo3Database();
     }

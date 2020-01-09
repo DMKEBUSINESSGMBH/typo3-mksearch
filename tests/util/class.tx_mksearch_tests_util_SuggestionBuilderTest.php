@@ -32,7 +32,7 @@ class tx_mksearch_tests_util_SuggestionBuilderTest extends tx_mksearch_tests_Tes
 {
     public function testBuildSuggestionsWithEmptyFacetData()
     {
-        $suggestionData = array();
+        $suggestionData = [];
         $suggestionData = tx_mksearch_util_SuggestionBuilder::getInstance()->buildSuggestions($suggestionData);
         self::assertTrue(is_array($suggestionData), 'es wurde kein array zurück gegeben!');
         self::assertTrue(empty($suggestionData), 'es wurde kein leeres array zurück gegeben!');
@@ -45,10 +45,10 @@ class tx_mksearch_tests_util_SuggestionBuilderTest extends tx_mksearch_tests_Tes
         $suggestionData->searchWord->numFound = 2;
         $suggestionData->searchWord->startOffset = 0;
         $suggestionData->searchWord->endOffset = 3;
-        $suggestionData->searchWord->suggestion = array(
+        $suggestionData->searchWord->suggestion = [
             0 => searchWordFoundOnce,
             1 => searchWordFoundTwice,
-        );
+        ];
         $suggestionData->collation = 'test collation should be ignored.';
 
         $suggestionData = tx_mksearch_util_SuggestionBuilder::getInstance()->buildSuggestions($suggestionData);

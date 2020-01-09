@@ -37,11 +37,11 @@ class tx_mksearch_mod1_ConfigIndizes extends tx_rnbase_mod_ExtendedModFunc
      */
     protected function getSubMenuItems()
     {
-        return array(
+        return [
                 tx_rnbase::makeInstance('tx_mksearch_mod1_handler_Index'),
                 tx_rnbase::makeInstance('tx_mksearch_mod1_handler_Composite'),
                 tx_rnbase::makeInstance('tx_mksearch_mod1_handler_IndexerConfig'),
-            );
+            ];
     }
 
     protected function makeSubSelectors(&$selStr)

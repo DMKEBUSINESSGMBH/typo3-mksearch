@@ -8,13 +8,13 @@ if (TYPO3_MODE == 'BE') {
         'web',
         'M1',
         'bottom',
-        array(),
-        array(
+        [],
+        [
             'access' => 'user,group',
             'routeTarget' => 'tx_mksearch_mod1_Module',
             'icon' => 'EXT:mksearch/mod1/moduleicon.png',
             'labels' => 'LLL:EXT:mksearch/mod1/locallang_mod.xml',
-        )
+        ]
     );
 
     tx_rnbase_util_Extensions::insertModuleFunction(

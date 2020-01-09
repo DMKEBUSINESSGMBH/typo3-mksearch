@@ -67,7 +67,7 @@ class tx_mksearch_model_IndexerDocumentBase implements tx_mksearch_interface_Ind
      *
      * @var array[tx_mksearch_interface_IndexerField]
      */
-    private $data = array();
+    private $data = [];
 
     /**
      * Factory for getting a new field object instance.
@@ -157,7 +157,7 @@ class tx_mksearch_model_IndexerDocumentBase implements tx_mksearch_interface_Ind
             throw new Exception('tx_mksearch_model_IndexerDocumentBase->getPrimaryKey(): uid not yet set!');
         }
 
-        return !$flat ? array('extKey' => $this->extKey, 'contentType' => $this->contentType, 'uid' => $this->uid) :
+        return !$flat ? ['extKey' => $this->extKey, 'contentType' => $this->contentType, 'uid' => $this->uid] :
              $this->extKey->getValue().':'.$this->contentType->getValue().':'.$this->uid->getValue();
     }
 
@@ -196,7 +196,7 @@ class tx_mksearch_model_IndexerDocumentBase implements tx_mksearch_interface_Ind
     public function addSECommand($command, $options)
     {
         if (!is_array($this->secommands)) {
-            $this->secommands = array();
+            $this->secommands = [];
         }
         $this->secommands[$command] = $options;
     }

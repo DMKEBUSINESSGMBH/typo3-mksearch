@@ -386,7 +386,7 @@ abstract class tx_mksearch_tests_SolrTestcase extends tx_mksearch_tests_Testcase
      *
      * @return array
      */
-    protected function search(array $options = array(), array $fields = array())
+    protected function search(array $options = [], array $fields = [])
     {
         if (empty($fields['term'])) {
             $fields['term'] = '*:*';

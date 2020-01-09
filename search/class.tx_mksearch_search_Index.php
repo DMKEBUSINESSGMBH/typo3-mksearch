@@ -32,7 +32,7 @@ class tx_mksearch_search_Index extends tx_rnbase_util_SearchBase
      */
     public function getTableMappings()
     {
-        $tableMapping = array();
+        $tableMapping = [];
         $tableMapping['INDX'] = self::getBaseTable();
         $tableMapping['CMP'] = 'tx_mksearch_configcomposites';
         $tableMapping['INDXCMPMM'] = 'tx_mksearch_indices_configcomposites_mm';

@@ -45,7 +45,7 @@ class tx_mksearch_tests_service_engine_lucene_DataTypeMapperTest extends tx_mkse
         self::assertEquals('keyword', $this->mapper->getDataType('tstamp'), 'Wrong data type found');
 
         // Und jetzt per Config überschreiben
-        $cfg = array();
+        $cfg = [];
         $cfg['fields.']['tstamp.']['type'] = 'unindexed';
         $mapper = tx_rnbase::makeInstance('tx_mksearch_service_engine_lucene_DataTypeMapper', $cfg);
         self::assertEquals('unindexed', $mapper->getDataType('tstamp'), 'Wrong data type found');
@@ -64,13 +64,13 @@ class tx_mksearch_tests_service_engine_lucene_DataTypeMapperTest extends tx_mkse
 
     public function getSolrLikeFieldNames()
     {
-        return array(
-                array('test_s', 'text'),
-                array('test_i', 'keyword'),
-                array('pid', 'keyword'),
-                array('someotherfield', 'text'),
-                array('someotherfield_mi', 'text'),
-        );
+        return [
+                ['test_s', 'text'],
+                ['test_i', 'keyword'],
+                ['pid', 'keyword'],
+                ['someotherfield', 'text'],
+                ['someotherfield_mi', 'text'],
+        ];
     }
 }
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/service/engine/lucene/class.tx_mksearch_tests_service_engine_lucene_DataTypeMapperTest.php']) {

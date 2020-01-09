@@ -41,50 +41,50 @@ class tx_mksearch_tests_util_MiscTest extends tx_mksearch_tests_Testcase
 
     public function providerHtml2Plain()
     {
-        $return = array();
-        foreach (array(
+        $return = [];
+        foreach ([
                     // array($before, $after),
-                __LINE__ => array(
+                __LINE__ => [
                     'Kapstadt Messetrailer <object width="5" height="5"><param name="movie" value="hier muss eigentlich die url rein ^^" /><param name="allowFullScreen" value="true" /><param name="allowscriptaccess" value="always" /><embed src="hier gehts zum player" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="5" height="5"></embed></object> Eternit Schönes Beschützen',
-                    array(), // emty option
+                    [], // emty option
                     'Kapstadt Messetrailer   Eternit Schönes Beschützen',
-                ),
-                __LINE__ => array(
+                ],
+                __LINE__ => [
                     'Hallo Welt',
-                    array(), // emty option
+                    [], // emty option
                     'Hallo Welt',
-                ),
-                __LINE__ => array(
+                ],
+                __LINE__ => [
                     'Hallo <!-- Kommentar --> Welt',
-                    array(), // emty option
+                    [], // emty option
                     'Hallo   Welt',
-                ),
-                __LINE__ => array(
+                ],
+                __LINE__ => [
                     '<br>Hallo</br> <i>Welt</i>',
-                    array(), // emty option
+                    [], // emty option
                     'Hallo   Welt',
-                ),
-                __LINE__ => array(
+                ],
+                __LINE__ => [
                     'Umlaute encoded F&ouml;rderm&ouml;glichkeiten',
-                    array(), // emty option
+                    [], // emty option
                     'Umlaute encoded Fördermöglichkeiten',
-                ),
-                __LINE__ => array(
+                ],
+                __LINE__ => [
                     'Zeile1'.PHP_EOL.'Zeile2',
-                    array(), // emty option
+                    [], // emty option
                     'Zeile1 Zeile2',
-                ),
-                __LINE__ => array(
+                ],
+                __LINE__ => [
                     'Zeile1'.PHP_EOL.'Zeile2',
-                    array('lineendings' => true),
+                    ['lineendings' => true],
                     'Zeile1'.PHP_EOL.'Zeile2',
-                ),
-                __LINE__ => array(
+                ],
+                __LINE__ => [
                         'one two  three   one five     zero',
-                    array('removedoublespaces' => true),
+                    ['removedoublespaces' => true],
                     'one two three one five zero',
-                ),
-                __LINE__ => array(
+                ],
+                __LINE__ => [
                     '<a class="collapsed"
                 aria-controls="collapse3379"
                 aria-expanded="false"
@@ -95,10 +95,10 @@ class tx_mksearch_tests_util_MiscTest extends tx_mksearch_tests_Testcase
             >
                 HTML tags with line breaks
             </a>',
-                    array(),
+                    [],
                     'HTML tags with line breaks',
-                ),
-            ) as $key => $row) {
+                ],
+            ] as $key => $row) {
             $key = 'Line:'.$key;
             $return[$key] = $row;
         }
@@ -108,64 +108,64 @@ class tx_mksearch_tests_util_MiscTest extends tx_mksearch_tests_Testcase
 
     public function test_isIndexable_NoConfig()
     {
-        $record = array('uid' => 123, 'pid' => '1');
-        $options = array();
+        $record = ['uid' => 123, 'pid' => '1'];
+        $options = [];
         self::assertEquals(true, tx_mksearch_util_Misc::isOnValidPage($record, $options));
     }
 
     public function test_isIndexable_IncludeWrongSinglePid()
     {
-        $record = array('uid' => 123, 'pid' => '1');
-        $options = array();
+        $record = ['uid' => 123, 'pid' => '1'];
+        $options = [];
         $options['include.']['pages.']['0'] = 2;
         self::assertEquals(false, tx_mksearch_util_Misc::isOnValidPage($record, $options));
 
-        $options = array();
+        $options = [];
         $options['include.']['pages'] = '2,10,145';
         self::assertEquals(false, tx_mksearch_util_Misc::isOnValidPage($record, $options));
     }
 
     public function test_isIndexable_IncludeRightSinglePid()
     {
-        $record = array('uid' => 123, 'pid' => '1');
-        $options = array();
-        $options['include.']['pages.'] = array(2, 10, 1, 1145);
+        $record = ['uid' => 123, 'pid' => '1'];
+        $options = [];
+        $options['include.']['pages.'] = [2, 10, 1, 1145];
         self::assertEquals(true, tx_mksearch_util_Misc::isOnValidPage($record, $options));
 
-        $options = array();
+        $options = [];
         $options['include.']['pages'] = '2,10,1,145';
         self::assertEquals(true, tx_mksearch_util_Misc::isOnValidPage($record, $options));
     }
 
     public function test_isIndexable_ExcludeWrongSinglePid()
     {
-        $record = array('uid' => 123, 'pid' => '1');
-        $options = array();
+        $record = ['uid' => 123, 'pid' => '1'];
+        $options = [];
         $options['exclude.']['pages.']['0'] = 2;
         self::assertEquals(true, tx_mksearch_util_Misc::isOnValidPage($record, $options));
 
-        $options = array();
+        $options = [];
         $options['exclude.']['pages'] = '2,10,145';
         self::assertEquals(true, tx_mksearch_util_Misc::isOnValidPage($record, $options));
     }
 
     public function test_isIndexable_ExcludeRightSinglePid()
     {
-        $record = array('uid' => 123, 'pid' => '11');
-        $options = array();
-        $options['exclude.']['pages.'] = array(2, 10, 11, 1145);
+        $record = ['uid' => 123, 'pid' => '11'];
+        $options = [];
+        $options['exclude.']['pages.'] = [2, 10, 11, 1145];
         self::assertEquals(false, tx_mksearch_util_Misc::isOnValidPage($record, $options));
 
-        $options = array();
+        $options = [];
         $options['exclude.']['pages'] = '2,10,11,145';
         self::assertEquals(false, tx_mksearch_util_Misc::isOnValidPage($record, $options));
     }
 
     public function test_isIndexable_CheckMismachingConfig()
     {
-        $record = array('uid' => 123, 'pid' => '11');
+        $record = ['uid' => 123, 'pid' => '11'];
 
-        $options = array();
+        $options = [];
         $options['include.']['pages'] = '';
         $options['exclude.']['pages'] = '2,10,145';
         self::assertEquals(true, tx_mksearch_util_Misc::isOnValidPage($record, $options));
@@ -181,10 +181,10 @@ class tx_mksearch_tests_util_MiscTest extends tx_mksearch_tests_Testcase
 
     public function termProvider()
     {
-        return array(
-            array('test', 'test'),
-            array('\'test\'+-&|!(){}\[]^"~+*?<>:', 'test'),
-        );
+        return [
+            ['test', 'test'],
+            ['\'test\'+-&|!(){}\[]^"~+*?<>:', 'test'],
+        ];
     }
 
     /**
@@ -197,10 +197,10 @@ class tx_mksearch_tests_util_MiscTest extends tx_mksearch_tests_Testcase
 
     public function sanitizeFqProvider()
     {
-        return array(
-            __LINE__ => array('test', 'test'),
-            __LINE__ => array('core.pages', 'core.pages'),
-        );
+        return [
+            __LINE__ => ['test', 'test'],
+            __LINE__ => ['core.pages', 'core.pages'],
+        ];
     }
 }
 

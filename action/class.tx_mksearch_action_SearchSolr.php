@@ -63,8 +63,8 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
             return null;
         }
 
-        $fields = array();
-        $options = array();
+        $fields = [];
+        $options = [];
 
         if ($parameters->get('debug')) {
             if (tx_mksearch_util_Misc::isDevIpMask()) {
@@ -91,15 +91,15 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
                     $pageBrowser->setState($parameters, $listSize, $pageBrowser->getPageSize());
                 }
             } else {
-                $result = array('items' => array());
+                $result = ['items' => []];
             }
         } // auch einen debug ausgeben, wenn nichts gesucht wird
         elseif ($options['debug']) {
             tx_rnbase_util_Debug::debug(
-                array(
+                [
                     'Filter returns false, no search done.',
                     $fields, $options,
-                ),
+                ],
                 'class.tx_mksearch_action_SearchSolr.php Line: '.__LINE__
             );
         }
@@ -118,7 +118,7 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
      */
     private function generateCacheKey(
         array $fields,
-        array $options = array()
+        array $options = []
     ) {
         $data = array_merge($fields, $options);
         ksort($data);
@@ -182,17 +182,17 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
                 tx_rnbase_util_Logger::fatal(
                     'Solr search failed with Exception!',
                     'mksearch',
-                    array('Exception' => $e->getMessage(), 'fields' => $fields, 'options' => $options, 'URL' => $lastUrl)
+                    ['Exception' => $e->getMessage(), 'fields' => $fields, 'options' => $options, 'URL' => $lastUrl]
                 );
             }
             if ($options['debug']) {
                 tx_rnbase_util_Debug::debug(
-                    array(
+                    [
                         'Exception' => $e->getMessage(),
                         'fields' => $fields,
                         'options' => $options,
                         'URL' => $lastUrl,
-                    ),
+                    ],
                     'class.tx_mksearch_action_SearchSolr.php Line: '.__LINE__
                 );
             }
@@ -250,8 +250,8 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
                 //anderen Plugins überschrieben
                 if (!$parameters->getInt($limitParam, $limitQualifier)) {
                     $params = tx_rnbase_parameters::getPostOrGetParameter($limitQualifier);
-                    $params = $params ? $params : array();
-                    $params = array_merge(array($limitParam => $pageSize), $params);
+                    $params = $params ? $params : [];
+                    $params = array_merge([$limitParam => $pageSize], $params);
                     tx_rnbase_parameters::setGetParameter($params, $limitQualifier);
                     if ($limitQualifier == $parameters->getQualifier()) {
                         $parameters->offsetSet($limitParam, $pageSize);
@@ -315,17 +315,17 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
         $viewData = $configurations->getViewData();
         $pointername = $configurations->get($confId.'cbid') ?: 'solr-cb';
 
-        $list = array();
+        $list = [];
         // now build the pagerdate based on the faccets
         foreach ($facet->getItems() as $item) {
             $list[$item->getLabel()] = $item->getCount();
         }
 
-        $pagerData = array(
+        $pagerData = [
             'list' => $list,
             'default' => empty($list) ? 0 : key($list),
             'pointername' => $pointername,
-        );
+        ];
 
         $firstChar = $viewData->offsetGet('charpointer');
         $firstChar = $firstChar ?: $configurations->getParameters()->offsetGet($pointername);
@@ -349,7 +349,7 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
         $configurationArray = $configurations->get($autocompleteTsPath);
 
         $javascriptsPath = tx_rnbase_util_Extensions::siteRelPath('mksearch').'res/js/';
-        $jsScripts = array();
+        $jsScripts = [];
 
         if ($configurationArray['includeJquery']) {
             $jsScripts[] = 'jquery-1.6.2.min.js';
@@ -401,7 +401,7 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
             $tsfe->TYPO3_CONF_VARS['FE']['debug'] = 0;
 
             $result = $this->getViewData()->offsetGet('result');
-            $forbiddenResultItems = array('searchUrl' => null, 'searchTime' => null, 'response' => null);
+            $forbiddenResultItems = ['searchUrl' => null, 'searchTime' => null, 'response' => null];
 
             return json_encode(array_diff_key($result, $forbiddenResultItems));
         }

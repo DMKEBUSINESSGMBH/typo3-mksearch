@@ -114,11 +114,11 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
             tx_rnbase_util_Misc::callHook(
                 'mksearch',
                 $hookKey,
-                array(
+                [
                     'rawData' => &$rawData,
-                    'options' => isset($options['CType.'][$rawData['CType'].'.']) ? $options['CType'][$rawData['CType'].'.'] : array(),
+                    'options' => isset($options['CType.'][$rawData['CType'].'.']) ? $options['CType'][$rawData['CType'].'.'] : [],
                     'indexDoc' => &$indexDoc,
-                )
+                ]
             );
         } else {
             // No hook found - we have to take care for content and abstract by ourselves...
@@ -328,17 +328,17 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
 
         if (!empty($aPidList)) {
             $oIndexSrv = tx_mksearch_util_ServiceRegistry::getIntIndexService();
-            $aFrom = array('tt_content', 'tt_content');
+            $aFrom = ['tt_content', 'tt_content'];
 
             foreach ($aPidList as $iPid) {
                 // if the site is not existent we have one empty entry.
                 if (!empty($iPid)) {
                     // hidden/deleted datasets can be excluded as they are not indexed
                     // see isIndexableRecord()
-                    $aOptions = array(
+                    $aOptions = [
                         'where' => 'tt_content.pid='.$iPid,
                         'enablefieldsoff' => true,
-                    );
+                    ];
                     // as the pid list can be very long, we don't risk to create a sql
                     // statement that is too long. we are fine with a database access
                     // for each pid in the list as we are in the BE and performance shouldn't
@@ -397,7 +397,7 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
     protected function hasDocToBeDeleted(
         tx_rnbase_IModel $model,
         tx_mksearch_interface_IndexerDocument $oIndexDoc,
-        $aOptions = array()
+        $aOptions = []
     ) {
         // checkPageRights() considers deleted,
         // isPageSetIncludeInSearchDisable() checks the no_search field of page
@@ -541,7 +541,7 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
      */
     public static function getContentType()
     {
-        return array('core', 'tt_content');
+        return ['core', 'tt_content'];
     }
 
     /**

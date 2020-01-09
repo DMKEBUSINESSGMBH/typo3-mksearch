@@ -62,7 +62,7 @@ class tx_mksearch_filter_SearchByReferer extends tx_rnbase_filter_BaseFilter imp
                 foreach ($config as $k => $v) {
                     // Config found for current referrer?
                     if (isset($v['urlRegEx']) and preg_match($v['urlRegEx'], $referrer)) {
-                        $matches = array();
+                        $matches = [];
                         // Search term found in referrer?
                         if (isset($v['searchTermRegEx']) and
                          preg_match($v['searchTermRegEx'], $referrer, $matches) and
@@ -79,7 +79,7 @@ class tx_mksearch_filter_SearchByReferer extends tx_rnbase_filter_BaseFilter imp
                             $sign = (isset($v['searchTermOperator']) and 'and' == $v['searchTermOperator']) ? true : null;
                             // Push search terms into search configuration
                             foreach ($terms as $t) {
-                                $fields['__default__'][] = array('term' => $t, 'sign' => $sign);
+                                $fields['__default__'][] = ['term' => $t, 'sign' => $sign];
                             }
 
                             return true;

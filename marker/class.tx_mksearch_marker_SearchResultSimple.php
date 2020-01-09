@@ -55,7 +55,7 @@ class tx_mksearch_marker_SearchResultSimple extends tx_mksearch_marker_Search
         $markerArray = $formatter->getItemMarkerArrayWrapped($item->record, $confId, $ignore, $marker.'_', $initFields);
 
         // subparts erzeugen
-        $wrappedSubpartArray = $subpartArray = array();
+        $wrappedSubpartArray = $subpartArray = [];
         $this->prepareSubparts($wrappedSubpartArray, $subpartArray, $template, $item, $formatter, $confId, $marker);
 
         // Links erzeugen
@@ -133,7 +133,7 @@ class tx_mksearch_marker_SearchResultSimple extends tx_mksearch_marker_Search
                  */
                 $addParams = $config->get($linkConfId.'additionalParams.', true);
                 if (!is_array($addParams)) {
-                    $addParams = array();
+                    $addParams = [];
                 }
                 $addParams[$paramName] = $item->record[$paramField];
 

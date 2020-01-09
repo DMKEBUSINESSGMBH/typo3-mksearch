@@ -93,10 +93,10 @@ class tx_mksearch_model_engineSpecific_solr_IndexerField extends tx_mksearch_mod
         $val = $this->getValue();
         $boost = $this->getBoost();
         if (!$this->getStorageOption('multiValued')) {
-            return array('value' => $val, 'boost' => $boost);
+            return ['value' => $val, 'boost' => $boost];
         }
         // else
-        $res = array();
+        $res = [];
 //         $boostSize = count($boost);
 //         for ($i=0; $i<count($val); $i++) {
 //                                                        // Flat fallback to first boost value
@@ -107,7 +107,7 @@ class tx_mksearch_model_engineSpecific_solr_IndexerField extends tx_mksearch_mod
         //kein Wert vorhanden ist, sondern erst wieder bei array[3]
         foreach ($val as $key => $value) {
             // Flat fallback to first boost value
-            $res[] = array('value' => $val[$key], 'boost' => $boost[(empty($boost[$key]) ? 0 : $i)]);
+            $res[] = ['value' => $val[$key], 'boost' => $boost[(empty($boost[$key]) ? 0 : $i)]];
         }
 
         return $res;

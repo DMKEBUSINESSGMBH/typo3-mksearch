@@ -40,9 +40,9 @@ class tx_mksearch_mod1_SolrAdmin extends tx_rnbase_mod_ExtendedModFunc
      */
     protected function getSubMenuItems()
     {
-        return array(
+        return [
             tx_rnbase::makeInstance('tx_mksearch_mod1_handler_admin_Solr'),
-        );
+        ];
     }
 
     protected function makeSubSelectors(&$selStr)

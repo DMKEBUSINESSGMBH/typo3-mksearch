@@ -95,13 +95,13 @@ class tx_mksearch_tests_filter_LuceneBaseTest extends tx_mksearch_tests_Testcase
     public function testPrepareFormFieldsSetsDefaultFieldsIfNotInParameters()
     {
         $parameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
-        $formData = array();
+        $formData = [];
         $reflectionObject = new ReflectionObject($this->getFilter());
         $reflectionMethod = $reflectionObject->getMethod('prepareFormFields');
         $reflectionMethod->setAccessible(true);
         $reflectionMethod->invokeArgs(
             $this->getFilter(),
-            array(&$formData, $parameters)
+            [&$formData, $parameters]
         );
 
         self::assertArrayHasKey('zip', $formData, 'zip nicht vorhanden in formdata');
@@ -118,13 +118,13 @@ class tx_mksearch_tests_filter_LuceneBaseTest extends tx_mksearch_tests_Testcase
     public function testPrepareFormFieldsSetsDefaultFieldsNotIfAlreadyInFormData()
     {
         $parameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
-        $formData = array('zip' => 1, 'city' => 2, 'company' => 3);
+        $formData = ['zip' => 1, 'city' => 2, 'company' => 3];
         $reflectionObject = new ReflectionObject($this->getFilter());
         $reflectionMethod = $reflectionObject->getMethod('prepareFormFields');
         $reflectionMethod->setAccessible(true);
         $reflectionMethod->invokeArgs(
             $this->getFilter(),
-            array(&$formData, $parameters)
+            [&$formData, $parameters]
         );
 
         self::assertEquals(1, $formData['zip'], 'zip leer in formdata');
@@ -137,13 +137,13 @@ class tx_mksearch_tests_filter_LuceneBaseTest extends tx_mksearch_tests_Testcase
      */
     public function testGetModeValuesAvailable()
     {
-        $configArray = array($this->confId => array(
-            'filter.' => array('availableModes' => 'newCheckedMode,newNotCheckedMode'), ),
-        );
+        $configArray = [$this->confId => [
+            'filter.' => ['availableModes' => 'newCheckedMode,newNotCheckedMode'], ],
+        ];
         $filter = $this->getFilter($configArray);
 
         self::assertEquals(
-            array('newCheckedMode', 'newNotCheckedMode'),
+            ['newCheckedMode', 'newNotCheckedMode'],
             $this->callInaccessibleMethod($filter, 'getModeValuesAvailable'),
             'return falsch'
         );
@@ -157,15 +157,15 @@ class tx_mksearch_tests_filter_LuceneBaseTest extends tx_mksearch_tests_Testcase
         $_GET['mksearch']['options']['mode'] = 'newCheckedMode';
         $parameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
         $parameters->init('mksearch');
-        $formData = array();
-        $configArray = array($this->confId => array(
-            'filter.' => array('availableModes' => 'newCheckedMode,newNotCheckedMode'), ),
-        );
+        $formData = [];
+        $configArray = [$this->confId => [
+            'filter.' => ['availableModes' => 'newCheckedMode,newNotCheckedMode'], ],
+        ];
         $filter = $this->getFilter($configArray);
         $reflectionObject = new ReflectionObject($filter);
         $reflectionMethod = $reflectionObject->getMethod('prepareFormFields');
         $reflectionMethod->setAccessible(true);
-        $reflectionMethod->invokeArgs($filter, array(&$formData, $parameters));
+        $reflectionMethod->invokeArgs($filter, [&$formData, $parameters]);
 
         self::assertEquals(
             'checked=checked',
@@ -185,13 +185,13 @@ class tx_mksearch_tests_filter_LuceneBaseTest extends tx_mksearch_tests_Testcase
     public function testPrepareFormFieldsSetsStandardModeCheckedAsDefault()
     {
         $parameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
-        $formData = array();
-        $configArray = array($this->confId => array('filter.' => array('availableModes' => 'standard,advanced')));
+        $formData = [];
+        $configArray = [$this->confId => ['filter.' => ['availableModes' => 'standard,advanced']]];
         $filter = $this->getFilter($configArray);
         $reflectionObject = new ReflectionObject($filter);
         $reflectionMethod = $reflectionObject->getMethod('prepareFormFields');
         $reflectionMethod->setAccessible(true);
-        $reflectionMethod->invokeArgs($filter, array(&$formData, $parameters));
+        $reflectionMethod->invokeArgs($filter, [&$formData, $parameters]);
 
         self::assertEquals(
             'checked=checked',
@@ -210,10 +210,10 @@ class tx_mksearch_tests_filter_LuceneBaseTest extends tx_mksearch_tests_Testcase
      */
     public function testInitReturnsFalseIfFormOnly()
     {
-        $configArray = array($this->confId => array('filter.' => array('formOnly' => true)));
+        $configArray = [$this->confId => ['filter.' => ['formOnly' => true]]];
 
         $filter = $this->getFilter($configArray);
-        $fields = $options = array();
+        $fields = $options = [];
         self::assertFalse($filter->init($fields, $options), 'filter liefert nicht false');
     }
 
@@ -222,10 +222,10 @@ class tx_mksearch_tests_filter_LuceneBaseTest extends tx_mksearch_tests_Testcase
      */
     public function testInitReturnsFalseIfNoSubmit()
     {
-        $configArray = array($this->confId => array('filter.' => array('forceSearch' => false)));
+        $configArray = [$this->confId => ['filter.' => ['forceSearch' => false]]];
 
         $filter = $this->getFilter($configArray);
-        $fields = $options = array();
+        $fields = $options = [];
         self::assertFalse($filter->init($fields, $options), 'filter liefert nicht false');
     }
 
@@ -234,10 +234,10 @@ class tx_mksearch_tests_filter_LuceneBaseTest extends tx_mksearch_tests_Testcase
      */
     public function testInitReturnsTrueIfNoSubmitButForceSearch()
     {
-        $configArray = array($this->confId => array('filter.' => array('forceSearch' => true)));
+        $configArray = [$this->confId => ['filter.' => ['forceSearch' => true]]];
 
         $filter = $this->getFilter($configArray);
-        $fields = $options = array();
+        $fields = $options = [];
         self::assertTrue($filter->init($fields, $options), 'filter liefert nicht true');
     }
 
@@ -246,10 +246,10 @@ class tx_mksearch_tests_filter_LuceneBaseTest extends tx_mksearch_tests_Testcase
      */
     public function testInitReturnsTrueIfSubmit()
     {
-        $configArray = array($this->confId => array('filter.' => array('forceSearch' => false)));
+        $configArray = [$this->confId => ['filter.' => ['forceSearch' => false]]];
 
-        $filter = $this->getFilter($configArray, array('submit' => true));
-        $fields = $options = array();
+        $filter = $this->getFilter($configArray, ['submit' => true]);
+        $fields = $options = [];
         self::assertTrue($filter->init($fields, $options), 'filter liefert nicht true');
     }
 
@@ -260,7 +260,7 @@ class tx_mksearch_tests_filter_LuceneBaseTest extends tx_mksearch_tests_Testcase
     {
         $GLOBALS['TSFE']->fe_user->groupData['uid'] = 'someUids';
         $filter = $this->getFilter();
-        $fields = $options = array();
+        $fields = $options = [];
         $filter->init($fields, $options);
 
         self::assertEquals('someUids', $options['fe_groups'], 'fe gruppen nicht in options');
@@ -272,7 +272,7 @@ class tx_mksearch_tests_filter_LuceneBaseTest extends tx_mksearch_tests_Testcase
     public function testInitSetsRawFormatToOptionsIfTermTemplate()
     {
         $filter = $this->getFilter();
-        $fields = $options = array();
+        $fields = $options = [];
         $filter->init($fields, $options);
 
         self::assertEquals(
@@ -288,7 +288,7 @@ class tx_mksearch_tests_filter_LuceneBaseTest extends tx_mksearch_tests_Testcase
     public function testInitSetsMinimalPrefixLengthToZero()
     {
         $filter = $this->getFilter();
-        $fields = $options = array();
+        $fields = $options = [];
         $filter->init($fields, $options);
 
         $lengthProperty = new ReflectionProperty(
@@ -310,8 +310,8 @@ class tx_mksearch_tests_filter_LuceneBaseTest extends tx_mksearch_tests_Testcase
     {
         $_GET['mksearch']['term'] = 'test term';
 
-        $fields = array('term' => 'contentType:* ###PARAM_MKSEARCH_TERM###');
-        $options = array();
+        $fields = ['term' => 'contentType:* ###PARAM_MKSEARCH_TERM###'];
+        $options = [];
         $filter = $this->getFilter();
         $filter->init($fields, $options);
         self::assertEquals(
@@ -328,8 +328,8 @@ class tx_mksearch_tests_filter_LuceneBaseTest extends tx_mksearch_tests_Testcase
     {
         $_GET['mksearch']['term'] = '';
 
-        $fields = array('term' => 'contentType:* ###PARAM_MKSEARCH_TERM###');
-        $options = array();
+        $fields = ['term' => 'contentType:* ###PARAM_MKSEARCH_TERM###'];
+        $options = [];
         $filter = $this->getFilter();
         $filter->init($fields, $options);
         self::assertEquals('+contentType:*', $fields['term'], 'term template falsch geparsed!');
@@ -340,8 +340,8 @@ class tx_mksearch_tests_filter_LuceneBaseTest extends tx_mksearch_tests_Testcase
      */
     public function testInitSetsCorrectTermIfNoTermParamSet()
     {
-        $fields = array('term' => 'contentType:* ###PARAM_MKSEARCH_TERM###');
-        $options = array();
+        $fields = ['term' => 'contentType:* ###PARAM_MKSEARCH_TERM###'];
+        $options = [];
         $filter = $this->getFilter();
         $filter->init($fields, $options);
         self::assertEquals('+contentType:*', $fields['term'], 'term template falsch geparsed!');
@@ -354,8 +354,8 @@ class tx_mksearch_tests_filter_LuceneBaseTest extends tx_mksearch_tests_Testcase
     {
         $_GET['mksearch']['term'] = '*';
 
-        $fields = array('term' => 'contentType:* ###PARAM_MKSEARCH_TERM###');
-        $options = array();
+        $fields = ['term' => 'contentType:* ###PARAM_MKSEARCH_TERM###'];
+        $options = [];
         $filter = $this->getFilter();
         $filter->init($fields, $options);
         self::assertEquals('+contentType:*', $fields['term'], 'term template falsch geparsed!');
@@ -382,9 +382,9 @@ class tx_mksearch_tests_filter_LuceneBaseTest extends tx_mksearch_tests_Testcase
      */
     public function testInitSetsSortingToOptionsCorrectFromParameter()
     {
-        $filter = $this->getFilter(array(), array('sort' => 'uid desc'));
+        $filter = $this->getFilter([], ['sort' => 'uid desc']);
 
-        $fields = $options = array();
+        $fields = $options = [];
         $filter->init($fields, $options);
 
         self::assertEquals('uid desc', $options['sort'], 'sort falsch in options');
@@ -395,9 +395,9 @@ class tx_mksearch_tests_filter_LuceneBaseTest extends tx_mksearch_tests_Testcase
      */
     public function testInitSetsSortingToOptionsCorrectIfSortOrderAsc()
     {
-        $filter = $this->getFilter(array(), array('sort' => 'uid asc'));
+        $filter = $this->getFilter([], ['sort' => 'uid asc']);
 
-        $fields = $options = array();
+        $fields = $options = [];
         $filter->init($fields, $options);
 
         self::assertEquals('uid asc', $options['sort'], 'sort falsch in options');
@@ -408,9 +408,9 @@ class tx_mksearch_tests_filter_LuceneBaseTest extends tx_mksearch_tests_Testcase
      */
     public function testInitSetsSortingToOptionsCorrectWithUnknownSortOrder()
     {
-        $filter = $this->getFilter(array(), array('sort' => 'uid unknown'));
+        $filter = $this->getFilter([], ['sort' => 'uid unknown']);
 
-        $fields = $options = array();
+        $fields = $options = [];
         $filter->init($fields, $options);
 
         self::assertEquals('uid desc', $options['sort'], 'sort falsch in options');
@@ -421,9 +421,9 @@ class tx_mksearch_tests_filter_LuceneBaseTest extends tx_mksearch_tests_Testcase
      */
     public function testInitSetsSortingToOptionsCorrectIfSortOrderInSortOrderParameter()
     {
-        $filter = $this->getFilter(array(), array('sort' => 'uid', 'sortorder' => 'asc'));
+        $filter = $this->getFilter([], ['sort' => 'uid', 'sortorder' => 'asc']);
 
-        $fields = $options = array();
+        $fields = $options = [];
         $filter->init($fields, $options);
 
         self::assertEquals('uid asc', $options['sort'], 'sort falsch in options');
@@ -434,9 +434,9 @@ class tx_mksearch_tests_filter_LuceneBaseTest extends tx_mksearch_tests_Testcase
      */
     public function testInitSetsSortingToOptionsCorrectIfNoSortOrderUsesClassPropertyForSortOrder()
     {
-        $filter = $this->getFilter(array(), array('sort' => 'uid'));
+        $filter = $this->getFilter([], ['sort' => 'uid']);
 
-        $filterUtil = $this->getMock('tx_mksearch_util_Filter', array('parseTermTemplate'));
+        $filterUtil = $this->getMock('tx_mksearch_util_Filter', ['parseTermTemplate']);
 
         $order = new ReflectionProperty('tx_mksearch_util_Filter', 'sortOrder');
         $order->setAccessible(true);
@@ -449,7 +449,7 @@ class tx_mksearch_tests_filter_LuceneBaseTest extends tx_mksearch_tests_Testcase
         $filterUtilProperty->setAccessible(true);
         $filterUtilProperty->setValue($filter, $filterUtil);
 
-        $fields = $options = array();
+        $fields = $options = [];
         $filter->init($fields, $options);
 
         self::assertEquals('uid asc', $options['sort'], 'sort falsch in options');
@@ -461,7 +461,7 @@ class tx_mksearch_tests_filter_LuceneBaseTest extends tx_mksearch_tests_Testcase
     public function testInitSetsSortingToOptionsCorrectIfNoSortFieldUsesClassPropertyForSortField()
     {
         $filter = $this->getFilter();
-        $filterUtil = $this->getMock('tx_mksearch_util_Filter', array('parseTermTemplate'));
+        $filterUtil = $this->getMock('tx_mksearch_util_Filter', ['parseTermTemplate']);
 
         $field = new ReflectionProperty('tx_mksearch_util_Filter', 'sortField');
         $field->setAccessible(true);
@@ -474,7 +474,7 @@ class tx_mksearch_tests_filter_LuceneBaseTest extends tx_mksearch_tests_Testcase
         $filterUtilProperty->setAccessible(true);
         $filterUtilProperty->setValue($filter, $filterUtil);
 
-        $fields = $options = array();
+        $fields = $options = [];
         $filter->init($fields, $options);
 
         self::assertEquals('uid desc', $options['sort'], 'sort falsch in options');
@@ -487,17 +487,17 @@ class tx_mksearch_tests_filter_LuceneBaseTest extends tx_mksearch_tests_Testcase
     {
         $this->prepareTSFE();
 
-        $config = array($this->confId => array('filter.' => array(
-            'sort.' => array(
+        $config = [$this->confId => ['filter.' => [
+            'sort.' => [
                 'fields' => 'uid, title',
-                'link.' => array('noHash' => true),
-            ),
-            'config.' => array('template' => ''),
-        )));
+                'link.' => ['noHash' => true],
+            ],
+            'config.' => ['template' => ''],
+        ]]];
 
         $filter = $this->getFilter($config);
 
-        $filterUtil = $this->getMock('tx_mksearch_util_Filter', array('getSortString'));
+        $filterUtil = $this->getMock('tx_mksearch_util_Filter', ['getSortString']);
 
         $field = new ReflectionProperty('tx_mksearch_util_Filter', 'sortField');
         $field->setAccessible(true);
@@ -514,7 +514,7 @@ class tx_mksearch_tests_filter_LuceneBaseTest extends tx_mksearch_tests_Testcase
         $filterUtilProperty->setAccessible(true);
         $filterUtilProperty->setValue($filter, $filterUtil);
 
-        $fields = $options = array();
+        $fields = $options = [];
         $filter->init($fields, $options);
 
         $method = new ReflectionMethod('tx_mksearch_filter_LuceneBase', 'getConfigurations');
@@ -542,7 +542,7 @@ class tx_mksearch_tests_filter_LuceneBaseTest extends tx_mksearch_tests_Testcase
      *
      * @return tx_mksearch_filter_LuceneBase
      */
-    private function getFilter(array $configArray = array(), $parametersArray = array())
+    private function getFilter(array $configArray = [], $parametersArray = [])
     {
         if (!isset($configArray[$this->confId]['filter.']['forceSearch'])) {
             $configArray[$this->confId]['filter.']['forceSearch'] = true;

@@ -28,7 +28,7 @@
  */
 class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implements ListBuilderInfo
 {
-    private static $formData = array();
+    private static $formData = [];
 
     /**
      * @var tx_mksearch_util_Filter
@@ -175,7 +175,7 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
 
         $template = $this->parseSearchForm($template, $formatter, $confId, $marker);
 
-        $markArray = $subpartArray = $wrappedSubpartArray = array();
+        $markArray = $subpartArray = $wrappedSubpartArray = [];
 
         $this->getFilterUtility()->parseSortFields(
             $template,
@@ -227,7 +227,7 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
                     $paramArray = $parameters->getArrayCopy();
 
                     $link = $configurations->createLink();
-                    $link->initByTS($configurations, $confId.'config.links.action.', array());
+                    $link->initByTS($configurations, $confId.'config.links.action.', []);
                     // Prepare some form data
                     $formData = $parameters->get('submit') ? $paramArray : self::$formData;
                     $formData['action'] = $link->makeUrl(false);
@@ -259,7 +259,7 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
     protected function prepareFormFields(&$formData, $parameters)
     {
         $formData['searchterm'] = htmlspecialchars($parameters->get('term'), ENT_QUOTES);
-        $values = array('or', 'and', 'exact');
+        $values = ['or', 'and', 'exact'];
         $options = $parameters->get('options');
         if ($options['combination']) {
             foreach ($values as $value) {

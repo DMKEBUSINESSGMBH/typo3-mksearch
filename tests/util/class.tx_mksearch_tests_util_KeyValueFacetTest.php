@@ -59,16 +59,16 @@ class tx_mksearch_tests_util_KeyValueFacetTest extends tx_mksearch_tests_Testcas
      */
     public function providerBuildFacetValue()
     {
-        return array(
-            __LINE__ => array(
+        return [
+            __LINE__ => [
                 'key' => 'key', 'value' => 'value', 'sorting' => null,
                 'expected' => 'key<[DFS]>value',
-            ),
-            __LINE__ => array(
+            ],
+            __LINE__ => [
                 'key' => '50', 'value' => 'Test', 'sorting' => '2',
                 'expected' => '50<[DFS]>Test<[DFS]>2',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -89,16 +89,16 @@ class tx_mksearch_tests_util_KeyValueFacetTest extends tx_mksearch_tests_Testcas
      */
     public function providerCheckValue()
     {
-        return array(
-            __LINE__ => array(
+        return [
+            __LINE__ => [
                 'value' => 'key<[DFS]>value',
                 'expected' => true,
-            ),
-            __LINE__ => array(
+            ],
+            __LINE__ => [
                 'value' => 'Test',
                 'expected' => false,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -119,16 +119,16 @@ class tx_mksearch_tests_util_KeyValueFacetTest extends tx_mksearch_tests_Testcas
      */
     public function providerExplodeFacetValue()
     {
-        return array(
-            __LINE__ => array(
+        return [
+            __LINE__ => [
                 'builded' => 'key<[DFS]>value',
-                'expected' => array('key' => 'key', 'value' => 'value', 'sorting' => null),
-            ),
-            __LINE__ => array(
+                'expected' => ['key' => 'key', 'value' => 'value', 'sorting' => null],
+            ],
+            __LINE__ => [
                 'builded' => '50<[DFS]>Test<[DFS]>2',
-                'expected' => array('key' => '50', 'value' => 'Test', 'sorting' => '2'),
-            ),
-        );
+                'expected' => ['key' => '50', 'value' => 'Test', 'sorting' => '2'],
+            ],
+        ];
     }
 
     /**
@@ -149,45 +149,45 @@ class tx_mksearch_tests_util_KeyValueFacetTest extends tx_mksearch_tests_Testcas
      */
     public function providerExtractFacetValue()
     {
-        return array(
-            __LINE__ => array(
+        return [
+            __LINE__ => [
                 'builded' => 'key<[DFS]>value',
                 'expected' => 'value',
-            ),
-            __LINE__ => array(
+            ],
+            __LINE__ => [
                 'builded' => '50<[DFS]>Test',
                 'expected' => 'Test',
-            ),
-        );
+            ],
+        ];
     }
 
     public function testExplodeFacetValues()
     {
         $builder = $this->getKeyValueFacetInstance();
-        $data = array(
+        $data = [
             'key<[DFS]>value',
             '50<[DFS]>Test<[DFS]>2',
-        );
+        ];
         $actual = $builder->explodeFacetValues($data);
-        $expected = array(
-            array('key' => 'key', 'value' => 'value', 'sorting' => null),
-            array('key' => '50', 'value' => 'Test', 'sorting' => '2'),
-        );
+        $expected = [
+            ['key' => 'key', 'value' => 'value', 'sorting' => null],
+            ['key' => '50', 'value' => 'Test', 'sorting' => '2'],
+        ];
         self::assertEquals($expected, $actual);
     }
 
     public function testExtractFacetValues()
     {
         $builder = $this->getKeyValueFacetInstance();
-        $data = array(
+        $data = [
             'key<[DFS]>value',
             '50<[DFS]>Test',
-        );
+        ];
         $actual = $builder->extractFacetValues($data);
-        $expected = array(
+        $expected = [
             'key' => 'value',
             '50' => 'Test',
-        );
+        ];
         self::assertEquals($expected, $actual);
     }
 }

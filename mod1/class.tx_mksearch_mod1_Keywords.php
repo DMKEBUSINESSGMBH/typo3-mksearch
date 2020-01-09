@@ -42,7 +42,7 @@ class tx_mksearch_mod1_Keywords extends tx_rnbase_mod_BaseModFunc
      */
     protected function getContent($template, &$configurations, &$formatter, $formTool)
     {
-        $markerArray = array();
+        $markerArray = [];
 
         $markerArray['###COMMON_START###'] = $markerArray['###COMMON_END###'] = '';
         if ($GLOBALS['BE_USER']->isAdmin()) {
@@ -71,7 +71,7 @@ class tx_mksearch_mod1_Keywords extends tx_rnbase_mod_BaseModFunc
             $template,
             $this->getModule(),
             $markerArray,
-            $this->getSearcher($options = array()),
+            $this->getSearcher($options = []),
             'KEYWORD'
         );
     }

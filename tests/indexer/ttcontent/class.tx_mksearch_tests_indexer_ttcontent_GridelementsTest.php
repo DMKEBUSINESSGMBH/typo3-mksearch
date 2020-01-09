@@ -46,7 +46,6 @@ class tx_mksearch_tests_indexer_ttcontent_GridelementsTest extends tx_mksearch_t
     /**
      * Test the isGridelement method.
      *
-     *
      * @group unit
      * @test
      */
@@ -58,14 +57,14 @@ class tx_mksearch_tests_indexer_ttcontent_GridelementsTest extends tx_mksearch_t
 
         $this->assertTrue(
             $this->callInaccessibleMethod(
-                array($indexer, 'isGridelement'),
-                array(array('CType' => 'gridelements_pi1'))
+                [$indexer, 'isGridelement'],
+                [['CType' => 'gridelements_pi1']]
             )
         );
         $this->assertFalse(
             $this->callInaccessibleMethod(
-                array($indexer, 'isGridelement'),
-                array(array('CType' => 'list'))
+                [$indexer, 'isGridelement'],
+                [['CType' => 'list']]
             )
         );
     }
@@ -73,18 +72,17 @@ class tx_mksearch_tests_indexer_ttcontent_GridelementsTest extends tx_mksearch_t
     /**
      * Test the hasDocToBeDeleted method.
      *
-     *
      * @group unit
      * @test
      */
     public function testHasDocToBeDeletedForNonGridElement()
     {
         $indexDoc = $this->getIndexDocMock('core', 'tt_content');
-        $ttContentModel = $this->getModel(array('CType' => 'list'));
+        $ttContentModel = $this->getModel(['CType' => 'list']);
 
         $indexer = $this->getMock(
             'tx_mksearch_indexer_ttcontent_Gridelements',
-            array('hasNonGridelementDocToBeDeleted', 'addGridelementsContainerToIndex')
+            ['hasNonGridelementDocToBeDeleted', 'addGridelementsContainerToIndex']
         );
         $indexer
             ->expects($this->once())
@@ -94,14 +92,13 @@ class tx_mksearch_tests_indexer_ttcontent_GridelementsTest extends tx_mksearch_t
             ->method('addGridelementsContainerToIndex');
 
         $this->callInaccessibleMethod(
-            array($indexer, 'hasDocToBeDeleted'),
-            array($ttContentModel, $indexDoc)
+            [$indexer, 'hasDocToBeDeleted'],
+            [$ttContentModel, $indexDoc]
         );
     }
 
     /**
      * Test the hasDocToBeDeleted method.
-     *
      *
      * @group unit
      * @test
@@ -110,16 +107,16 @@ class tx_mksearch_tests_indexer_ttcontent_GridelementsTest extends tx_mksearch_t
     {
         $indexDoc = $this->getIndexDocMock('core', 'tt_content');
         $ttContentModel = $this->getModel(
-            array(
+            [
                 'CType' => 'gridelements_pi1',
                 'tx_gridelements_container' => 5,
                 'tx_mksearch_is_indexable' => 1,
-            )
+            ]
         );
 
         $indexer = $this->getMock(
             'tx_mksearch_indexer_ttcontent_Gridelements',
-            array('hasNonGridelementDocToBeDeleted', 'addGridelementsContainerToIndex')
+            ['hasNonGridelementDocToBeDeleted', 'addGridelementsContainerToIndex']
         );
         $indexer
             ->expects($this->once())
@@ -129,14 +126,13 @@ class tx_mksearch_tests_indexer_ttcontent_GridelementsTest extends tx_mksearch_t
             ->method('addGridelementsContainerToIndex');
 
         $this->callInaccessibleMethod(
-            array($indexer, 'hasDocToBeDeleted'),
-            array($ttContentModel, $indexDoc)
+            [$indexer, 'hasDocToBeDeleted'],
+            [$ttContentModel, $indexDoc]
         );
     }
 
     /**
      * Test the hasDocToBeDeleted method.
-     *
      *
      * @group unit
      * @test
@@ -145,16 +141,16 @@ class tx_mksearch_tests_indexer_ttcontent_GridelementsTest extends tx_mksearch_t
     {
         $indexDoc = $this->getIndexDocMock('core', 'tt_content');
         $ttContentModel = $this->getModel(
-            array(
+            [
                 'CType' => 'gridelements_pi1',
                 'tx_gridelements_container' => 5,
                 'tx_mksearch_is_indexable' => -1,
-            )
+            ]
         );
 
         $indexer = $this->getMock(
             'tx_mksearch_indexer_ttcontent_Gridelements',
-            array('hasNonGridelementDocToBeDeleted', 'addGridelementsContainerToIndex')
+            ['hasNonGridelementDocToBeDeleted', 'addGridelementsContainerToIndex']
         );
         $indexer
             ->expects($this->once())
@@ -164,14 +160,13 @@ class tx_mksearch_tests_indexer_ttcontent_GridelementsTest extends tx_mksearch_t
             ->method('addGridelementsContainerToIndex');
 
         $this->callInaccessibleMethod(
-            array($indexer, 'hasDocToBeDeleted'),
-            array($ttContentModel, $indexDoc)
+            [$indexer, 'hasDocToBeDeleted'],
+            [$ttContentModel, $indexDoc]
         );
     }
 
     /**
      * Test the hasDocToBeDeleted method.
-     *
      *
      * @group unit
      * @test
@@ -180,16 +175,16 @@ class tx_mksearch_tests_indexer_ttcontent_GridelementsTest extends tx_mksearch_t
     {
         $indexDoc = $this->getIndexDocMock('core', 'tt_content');
         $ttContentModel = $this->getModel(
-            array(
+            [
                 'CType' => 'gridelements_pi1',
                 'tx_gridelements_container' => 5,
                 'tx_mksearch_is_indexable' => 0,
-            )
+            ]
         );
 
         $indexer = $this->getMock(
             'tx_mksearch_indexer_ttcontent_Gridelements',
-            array('hasNonGridelementDocToBeDeleted', 'addGridelementsContainerToIndex')
+            ['hasNonGridelementDocToBeDeleted', 'addGridelementsContainerToIndex']
         );
         $indexer
             ->expects($this->never())
@@ -199,14 +194,13 @@ class tx_mksearch_tests_indexer_ttcontent_GridelementsTest extends tx_mksearch_t
             ->method('addGridelementsContainerToIndex');
 
         $this->callInaccessibleMethod(
-            array($indexer, 'hasDocToBeDeleted'),
-            array($ttContentModel, $indexDoc)
+            [$indexer, 'hasDocToBeDeleted'],
+            [$ttContentModel, $indexDoc]
         );
     }
 
     /**
      * Test the hasDocToBeDeleted method.
-     *
      *
      * @group unit
      * @test
@@ -215,16 +209,16 @@ class tx_mksearch_tests_indexer_ttcontent_GridelementsTest extends tx_mksearch_t
     {
         $indexDoc = $this->getIndexDocMock('core', 'tt_content');
         $ttContentModel = $this->getModel(
-            array(
+            [
                 'CType' => 'gridelements_pi1',
                 'tx_gridelements_container' => 0,
                 'tx_mksearch_is_indexable' => 0,
-            )
+            ]
         );
 
         $indexer = $this->getMock(
             'tx_mksearch_indexer_ttcontent_Gridelements',
-            array('hasNonGridelementDocToBeDeleted', 'addGridelementsContainerToIndex')
+            ['hasNonGridelementDocToBeDeleted', 'addGridelementsContainerToIndex']
         );
         $indexer
             ->expects($this->once())
@@ -234,14 +228,13 @@ class tx_mksearch_tests_indexer_ttcontent_GridelementsTest extends tx_mksearch_t
             ->method('addGridelementsContainerToIndex');
 
         $this->callInaccessibleMethod(
-            array($indexer, 'hasDocToBeDeleted'),
-            array($ttContentModel, $indexDoc)
+            [$indexer, 'hasDocToBeDeleted'],
+            [$ttContentModel, $indexDoc]
         );
     }
 
     /**
      * Test the getContentByContentType method.
-     *
      *
      * @group unit
      * @test
@@ -250,21 +243,20 @@ class tx_mksearch_tests_indexer_ttcontent_GridelementsTest extends tx_mksearch_t
     {
         $indexer = $this->getMock(
             'tx_mksearch_indexer_ttcontent_Gridelements',
-            array('getGridelementElementContent')
+            ['getGridelementElementContent']
         );
         $indexer
             ->expects($this->once())
             ->method('getGridelementElementContent');
 
         $this->callInaccessibleMethod(
-            array($indexer, 'getContentByContentType'),
-            array(array('CType' => 'gridelements_pi1'), array())
+            [$indexer, 'getContentByContentType'],
+            [['CType' => 'gridelements_pi1'], []]
         );
     }
 
     /**
      * Test the getContentByContentType method.
-     *
      *
      * @group unit
      * @test
@@ -273,21 +265,20 @@ class tx_mksearch_tests_indexer_ttcontent_GridelementsTest extends tx_mksearch_t
     {
         $indexer = $this->getMock(
             'tx_mksearch_indexer_ttcontent_Gridelements',
-            array('getGridelementElementContent')
+            ['getGridelementElementContent']
         );
         $indexer
             ->expects($this->never())
             ->method('getGridelementElementContent');
 
         $this->callInaccessibleMethod(
-            array($indexer, 'getContentByContentType'),
-            array(array('CType' => 'list'), array())
+            [$indexer, 'getContentByContentType'],
+            [['CType' => 'list'], []]
         );
     }
 
     /**
      * Test the getAllowedCTypes method.
-     *
      *
      * @group unit
      * @test
@@ -296,18 +287,18 @@ class tx_mksearch_tests_indexer_ttcontent_GridelementsTest extends tx_mksearch_t
     {
         $indexer = $this->getMock(
             'tx_mksearch_indexer_ttcontent_Gridelements',
-            array('getGridelementElementContent')
+            ['getGridelementElementContent']
         );
-        $expected = array(
+        $expected = [
             'text', 'textpic', 'gridelements_pi1',
             'text.', 'textpic.', 'gridelements_pi1.',
-        );
+        ];
 
         $cTypes = $this->callInaccessibleMethod(
-            array($indexer, 'getAllowedCTypes'),
-            array(array(
+            [$indexer, 'getAllowedCTypes'],
+            [[
                 'includeCTypesInGridelementRendering' => 'text,textpic,gridelements_pi1',
-            ))
+            ]]
         );
         self::assertEquals($cTypes, $expected);
     }

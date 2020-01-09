@@ -71,7 +71,7 @@ class tx_mksearch_mod1_util_Template
             $useCurlAsHttpTransport =
                 tx_rnbase_configurations::getExtensionCfgValue('mksearch', 'useCurlAsHttpTransport');
 
-            $markerArray = array();
+            $markerArray = [];
             if (!$allowUrlFopen && !$useCurlAsHttpTransport) {
                 $markerArray['###ALLOW_URL_FOPEN_DEACTIVATED_HINT###'] = $GLOBALS['LANG']->getLL('allow_url_fopen_deactivated_hint');
             } else {
@@ -129,18 +129,18 @@ class tx_mksearch_mod1_util_Template
      */
     public static function getTableLayout(array $columns, tx_rnbase_mod_IModule $mod)
     {
-        $aAllowed = array('width');
+        $aAllowed = ['width'];
         // default tablelayout of doc
         $aTableLayout = $mod->getDoc()->tableLayout; // typo3/template.php
         $iCol = 0;
         foreach ($columns as $column) {
-            $aAddParams = array();
+            $aAddParams = [];
             foreach ($aAllowed as $sAllowed) {
                 if (isset($column[$sAllowed])) {
                     $aAddParams[] = $sAllowed.'="'.intval($column[$sAllowed]).'%"';
                 }
             }
-            $aTableLayout[0][$iCol] = array('<td '.implode(' ', $aAddParams).'>', '</td>');
+            $aTableLayout[0][$iCol] = ['<td '.implode(' ', $aAddParams).'>', '</td>'];
             ++$iCol;
         }
 

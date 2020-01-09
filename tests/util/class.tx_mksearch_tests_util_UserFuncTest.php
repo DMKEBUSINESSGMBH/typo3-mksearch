@@ -54,13 +54,13 @@ class tx_mksearch_tests_util_UserFuncTest extends tx_mksearch_tests_Testcase
      */
     public function providerSearchOptions()
     {
-        $return = array();
-        foreach (array(
+        $return = [];
+        foreach ([
                          // array($term, $combination, $options, $result),
-                __LINE__ => array('Hallo  Welt', MKSEARCH_OP_AND, array('quote' => 1, 'dismax' => 0, 'fuzzy' => 0), '(+"Hallo" +"Welt")'),
-                __LINE__ => array(0, null, array('quote' => 1, 'dismax' => 0, 'fuzzy' => 0, 'sanitize' => 1, 'wildcard' => 1), '("*0*")'),
-                __LINE__ => array('', null, array('quote' => 1, 'dismax' => 0, 'fuzzy' => 0, 'sanitize' => 1, 'wildcard' => 1), ''),
-            ) as $key => $row) {
+                __LINE__ => ['Hallo  Welt', MKSEARCH_OP_AND, ['quote' => 1, 'dismax' => 0, 'fuzzy' => 0], '(+"Hallo" +"Welt")'],
+                __LINE__ => [0, null, ['quote' => 1, 'dismax' => 0, 'fuzzy' => 0, 'sanitize' => 1, 'wildcard' => 1], '("*0*")'],
+                __LINE__ => ['', null, ['quote' => 1, 'dismax' => 0, 'fuzzy' => 0, 'sanitize' => 1, 'wildcard' => 1], ''],
+            ] as $key => $row) {
             $key = 'Line:'.$key.' Term:'.$row[0].' OP:'.$row[1].' Quote:'.$row[2]['quote'].' DisMax:'.$row[2]['dismax'].' Fuzzy:'.$row[2]['fuzzy'].' Result:'.$row[3];
             $return[$key] = $row;
         }

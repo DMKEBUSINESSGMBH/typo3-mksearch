@@ -1,7 +1,7 @@
 <?php
 
-return array(
-    'ctrl' => array(
+return [
+    'ctrl' => [
         'title' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices',
         'label' => 'title',
         'tstamp' => 'tstamp',
@@ -9,57 +9,57 @@ return array(
         'cruser_id' => 'cruser_id',
         'default_sortby' => 'ORDER BY title',
         'delete' => 'deleted',
-        'enablecolumns' => array(
+        'enablecolumns' => [
             'disabled' => 'hidden',
-        ),
+        ],
         'iconfile' => 'EXT:mksearch/icons/icon_tx_mksearch_indices.gif',
         'requestUpdate' => 'engine',
-    ),
-    'interface' => array(
+    ],
+    'interface' => [
         'showRecordFieldList' => 'hidden,title,description,name,composites,configuration',
-    ),
-    'columns' => array(
-        'hidden' => array(
+    ],
+    'columns' => [
+        'hidden' => [
             'exclude' => 1,
             'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices.hidden',
-            'config' => array(
+            'config' => [
                 'type' => 'check',
                 'default' => '0',
-            ),
-        ),
-        'title' => array(
+            ],
+        ],
+        'title' => [
             'exclude' => 0,
             'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices.title',
-            'config' => array(
+            'config' => [
                 'type' => 'input',
                 'size' => '30',
                 'max' => '100',
                 'eval' => 'required,trim',
-            ),
-        ),
-        'description' => array(
+            ],
+        ],
+        'description' => [
             'exclude' => 1,
             'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices.description',
-            'config' => array(
+            'config' => [
                 'type' => 'text',
                 'cols' => '30',
                 'rows' => '3',
-            ),
-        ),
-        'name' => array(
+            ],
+        ],
+        'name' => [
             'exclude' => 0,
             'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices.name',
-            'config' => array(
+            'config' => [
                 'type' => 'input',
                 'size' => '30',
                 'max' => '100',
                 'eval' => 'required,trim',
-            ),
-        ),
-        'composites' => array(
+            ],
+        ],
+        'composites' => [
             'exclude' => 0,
             'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices.composites',
-            'config' => array(
+            'config' => [
                 'type' => 'select',
                 'renderType' => 'selectMultipleSideBySide',
                 'foreign_table' => 'tx_mksearch_configcomposites',
@@ -68,56 +68,56 @@ return array(
                 'size' => 20,
                 'minitems' => 0,
                 'maxitems' => 100,
-                'fieldControl' => array('editPopup' => true, 'addRecord' => true),
+                'fieldControl' => ['editPopup' => true, 'addRecord' => true],
                 'wizards' => Tx_Rnbase_Utility_TcaTool::getWizards(
                     'tx_mksearch_configcomposites',
-                    array('add' => true, 'edit' => true, 'list' => true)
+                    ['add' => true, 'edit' => true, 'list' => true]
                 ),
-            ),
-        ),
-        'engine' => array(
+            ],
+        ],
+        'engine' => [
             'exclude' => 1,
             'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices_engine',
-            'config' => array(
+            'config' => [
                 'type' => 'radio',
-                'items' => array(
-                    array('LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices_engine_zendlucene', 'zend_lucene'),
-                    array('LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices_engine_solr', 'solr'),
-                    array('LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices_engine_elasticsearch', 'elasticsearch'),
-                ),
+                'items' => [
+                    ['LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices_engine_zendlucene', 'zend_lucene'],
+                    ['LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices_engine_solr', 'solr'],
+                    ['LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices_engine_elasticsearch', 'elasticsearch'],
+                ],
                 'eval' => 'required',
                 'default' => 'zend_lucene',
-            ),
+            ],
             'onChange' => 'reload',
-        ),
-        'solrversion' => array(
+        ],
+        'solrversion' => [
             'exclude' => 1,
             'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices_solrversion',
-            'config' => array(
+            'config' => [
                 'type' => 'radio',
-                'items' => array(
-                    array('LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices_solrversion_35', 35),
-                    array('LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices_solrversion_40', 40),
-                ),
+                'items' => [
+                    ['LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices_solrversion_35', 35],
+                    ['LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices_solrversion_40', 40],
+                ],
                 'default' => 35,
-            ),
+            ],
             'displayCond' => 'FIELD:engine:=:solr',
-        ),
-        'configuration' => array(
+        ],
+        'configuration' => [
             'exclude' => 0,
             'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indexerconfigs.configuration',
-            'config' => array(
+            'config' => [
                 'type' => 'text',
                 'cols' => '200',
                 'rows' => '50',
                 'default' => '# Insert the default config for this index.'.PHP_EOL.PHP_EOL.'default {'.PHP_EOL.'	# insert default configuration for indexers here.'.PHP_EOL.'	# core.tt_content.lang = 1'.PHP_EOL.'}',
-            ),
-        ),
-    ),
-    'types' => array(
-        '0' => array('showitem' => 'hidden, title, description, engine, solrversion, configuration, name, composites'),
-    ),
-    'palettes' => array(
-        '1' => array('showitem' => ''),
-    ),
-);
+            ],
+        ],
+    ],
+    'types' => [
+        '0' => ['showitem' => 'hidden, title, description, engine, solrversion, configuration, name, composites'],
+    ],
+    'palettes' => [
+        '1' => ['showitem' => ''],
+    ],
+];

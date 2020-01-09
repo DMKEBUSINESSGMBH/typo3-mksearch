@@ -53,9 +53,9 @@ class tx_mksearch_action_Search extends tx_mksearch_action_AbstractSearch
             return null;
         }
 
-        $fields = array();
-        $options = array();
-        $items = array();
+        $fields = [];
+        $options = [];
+        $items = [];
         if ($filter->init($fields, $options)) {
             // Adjust Pagebrowser
             $this->handlePageBrowser($parameters, $configurations, $viewData, $fields, $options);

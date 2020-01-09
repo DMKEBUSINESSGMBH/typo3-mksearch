@@ -52,10 +52,10 @@ class tx_mksearch_tests_service_irfaq_QuestionTest extends tx_mksearch_tests_Tes
      */
     public function testGetByExpert()
     {
-        $service = $this->getMock('tx_mksearch_service_irfaq_Question', array('search'));
+        $service = $this->getMock('tx_mksearch_service_irfaq_Question', ['search']);
         $service->expects(self::once())
             ->method('search')
-            ->with(array('IRFAQ_QUESTION.expert' => array(OP_EQ_INT => 123)), array());
+            ->with(['IRFAQ_QUESTION.expert' => [OP_EQ_INT => 123]], []);
 
         $service->getByExpert(123);
     }
@@ -75,10 +75,10 @@ class tx_mksearch_tests_service_irfaq_QuestionTest extends tx_mksearch_tests_Tes
      */
     public function testGetByCategory()
     {
-        $service = $this->getMock('tx_mksearch_service_irfaq_Question', array('search'));
+        $service = $this->getMock('tx_mksearch_service_irfaq_Question', ['search']);
         $service->expects(self::once())
             ->method('search')
-            ->with(array('IRFAQ_QUESTION_CATEGORY_MM.uid_foreign' => array(OP_EQ_INT => 123)), array());
+            ->with(['IRFAQ_QUESTION_CATEGORY_MM.uid_foreign' => [OP_EQ_INT => 123]], []);
 
         $service->getByCategory(123);
     }

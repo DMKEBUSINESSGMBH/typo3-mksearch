@@ -76,7 +76,7 @@ class tx_mksearch_util_Tika
             return 1 == $this->tikaAvailable ? true : false;
         }
         if (!is_file($this->tikaJar)) {
-            tx_rnbase_util_Logger::warn('Tika Jar not found!', 'mksearch', array('Jar' => $this->tikaJar));
+            tx_rnbase_util_Logger::warn('Tika Jar not found!', 'mksearch', ['Jar' => $this->tikaJar]);
             $this->tikaAvailable = 0;
 
             return $this->tikaAvailable;
@@ -189,12 +189,12 @@ class tx_mksearch_util_Tika
 
         $this->resetLocaleType();
 
-        $shellOutput = array();
+        $shellOutput = [];
         $tikaCommand = $this->getTikaCommandWithLocaleTypePrefixForNonWindowsSystems($tikaCommand);
         // we use exec instead of shell_exec at this point to get all lines as array and not as simple string
         exec($tikaCommand, $shellOutput);
 
-        $ret = array();
+        $ret = [];
         foreach ($shellOutput as $line) {
             list($meta, $value) = explode(':', $line, 2);
             $ret[$meta] = trim($value);

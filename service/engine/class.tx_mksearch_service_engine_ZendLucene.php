@@ -69,13 +69,13 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
             set_include_path($iniPath.PATH_SEPARATOR.$zendPath);
         }
         if (!is_readable($zendPath)) {
-            tx_rnbase_util_Logger::fatal('Current path to Zend root does not exist!', 'mksearch', array('Path' => $zendPath));
+            tx_rnbase_util_Logger::fatal('Current path to Zend root does not exist!', 'mksearch', ['Path' => $zendPath]);
             throw new Exception('Current path to Zend root does not exist!');
         }
 
         $autoLoaderPath = rtrim($zendPath, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.'Zend'.DIRECTORY_SEPARATOR.'Loader'.DIRECTORY_SEPARATOR.'Autoloader.php';
         if (!is_readable($autoLoaderPath)) {
-            tx_rnbase_util_Logger::fatal('Zend auto loader class not found. Check extension settings!', 'mksearch', array('Path' => $autoLoaderPath));
+            tx_rnbase_util_Logger::fatal('Zend auto loader class not found. Check extension settings!', 'mksearch', ['Path' => $autoLoaderPath]);
             throw new Exception('Zend auto loader class not found. Check extension settings! More info in devlog.');
         }
 
@@ -101,7 +101,7 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
             // weitere Informationen zu den gewünschten Typen gesetzt bekommt. Das wäre
             // dann eine Art schema.xml für Lucene...
             $data = $this->indexModel->getIndexConfig();
-            $mapperCfg = isset($data['lucene.']['schema.']) ? $data['lucene.']['schema.'] : array();
+            $mapperCfg = isset($data['lucene.']['schema.']) ? $data['lucene.']['schema.'] : [];
             $this->dataTypeMapper = tx_rnbase::makeInstance('tx_mksearch_service_engine_lucene_DataTypeMapper', $mapperCfg);
         }
 
@@ -110,7 +110,7 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
 
     public function getFieldNames($indexed = false)
     {
-        $ret = array();
+        $ret = [];
         if (!$this->checkForOpenIndex(false)) {
             return $ret;
         }
@@ -177,7 +177,7 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
                         tx_rnbase_util_Misc::callHook(
                             'mksearch',
                             'engine_ZendLucene_buildQuery_manipulateSingleTerm',
-                            array('term' => &$ff['term']),
+                            ['term' => &$ff['term']],
                             $this
                         );
 
@@ -194,7 +194,7 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
                             tx_rnbase_util_Misc::callHook(
                                 'mksearch',
                                 'engine_ZendLucene_buildQuery_manipulateSingleTerm',
-                                array('term' => &$t),
+                                ['term' => &$t],
                                 $this
                             );
                             if ($t) {
@@ -312,7 +312,7 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
      *
      * @return array[tx_mksearch_model_SearchHit] or array[Zend_Search_Lucene_Search_QueryHit]  search results - format according to $options['rawOutput'] (usually not for public use as raw output depends on used search engine!)
      */
-    public function search(array $fields = array(), array $options = array())
+    public function search(array $fields = [], array $options = [])
     {
         $this->checkForOpenIndex();
         // Advanced search, i. e. search term follows lucene query syntax?
@@ -342,24 +342,24 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
                     $options['fe_groups'][] = 0;
                 }
 
-                $fe_groups = array();
+                $fe_groups = [];
                 // Combine the given fe_groups by "OR"
                 foreach ($options['fe_groups'] as $f) {
-                    $fe_groups[] = array('term' => $f, 'sign' => null);
+                    $fe_groups[] = ['term' => $f, 'sign' => null];
                 }
 
                 // Re-Build new $fields by "AND"ing fe_groups
-                $fields = array('fe_groups_aware' => array(
-                        array(
-                            'term' => array(self::FE_GROUP_FIELD => $fe_groups),
+                $fields = ['fe_groups_aware' => [
+                        [
+                            'term' => [self::FE_GROUP_FIELD => $fe_groups],
                             'sign' => true,
-                        ),
-                        array(
+                        ],
+                        [
                             'term' => $fields,    // Original fields
                             'sign' => true,
-                        ),
-                    ),
-                );
+                        ],
+                    ],
+                ];
             }
             $queryString = $this->buildQuery($fields);
         }
@@ -383,10 +383,10 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
 
         if ($options['debug']) {
             tx_rnbase_util_Debug::debug(
-                array(
+                [
                     'Fields' => $fields, 'Options' => $options,
                     'Query' => $queryString, 'Hits' => count($hits),
-                ),
+                ],
                 'class.tx_mksearch_service_engine_ZendLucene.php'
             );
         }
@@ -407,7 +407,7 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
         }
 
         // else
-        $results = array();
+        $results = [];
         for ($i = $offset; $i < $limit + $offset; ++$i) {
             if (array_key_exists($i, $hits)) {
                 $searchHit = $this->buildSearchHit($hits[$i]);
@@ -425,7 +425,7 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
     private function buildSearchHit($hit)
     {
         $doc = $hit->getDocument();
-        $data = array();
+        $data = [];
         foreach ($doc->getFieldNames() as $fn) {
             $field = $doc->getField($fn);
             // Get all fields except binary ones utf8-encoded
@@ -469,10 +469,10 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
         } catch (Zend_Search_Lucene_Exception $e) {
             // Didn't work? That's because it doesn't exist.
             // Are we instructed to create the index if necessary? Then do so:
-            tx_rnbase_util_Logger::warn('Lucene index open failed!', 'mksearch', array('indexDir' => $indexDir, 'Exception' => $e->getMessage()));
+            tx_rnbase_util_Logger::warn('Lucene index open failed!', 'mksearch', ['indexDir' => $indexDir, 'Exception' => $e->getMessage()]);
             if ($forceCreation) {
                 $this->index = Zend_Search_Lucene::create($indexDir);
-                tx_rnbase_util_Logger::warn('New Lucene index created!', 'mksearch', array('indexDir' => $indexDir));
+                tx_rnbase_util_Logger::warn('New Lucene index created!', 'mksearch', ['indexDir' => $indexDir]);
             } // No? Then re-throw the Exception:
             else {
                 throw $e;
@@ -601,7 +601,7 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
     {
         $searchTerm = "+uid:$uid +extKey:$extKey +contentType:$contentType";
 
-        return $this->search(array('term' => $searchTerm), array('rawFormat' => 1, 'rawOutput' => 1));
+        return $this->search(['term' => $searchTerm], ['rawFormat' => 1, 'rawOutput' => 1]);
     }
 
     /**
@@ -620,12 +620,12 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
             tx_rnbase_util_Logger::warn(
                 'getByContentUid has returned more than one element.',
                 'mksearch',
-                array(
+                [
                     'service' => get_class($this),
                     'uid' => $uid,
                     'extKey' => $extKey,
                     'contentType' => $contentType,
-                )
+                ]
             );
         }
 
@@ -693,7 +693,7 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
         tx_rnbase_util_Misc::callHook(
             'mksearch',
             'engine_ZendLucene_indexNew_beforeAddingCoreDataToDocument',
-            array('data' => &$data),
+            ['data' => &$data],
             $this
         );
 
@@ -706,7 +706,7 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
         tx_rnbase_util_Misc::callHook(
             'mksearch',
             'engine_ZendLucene_indexNew_beforeAddingAdditionalDataToDocument',
-            array('data' => &$data),
+            ['data' => &$data],
             $this
         );
 
@@ -784,7 +784,7 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
      *
      * @see tx_mksearch_interface_SearchEngine::indexDeleteByQuery()
      */
-    public function indexDeleteByQuery($query, $options = array())
+    public function indexDeleteByQuery($query, $options = [])
     {
         // Not implemented!
         return false;

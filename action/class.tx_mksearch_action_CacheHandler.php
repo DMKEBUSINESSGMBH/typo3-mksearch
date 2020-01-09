@@ -30,7 +30,7 @@ class tx_mksearch_action_CacheHandler extends tx_rnbase_action_CacheHandlerDefau
     private function getAllowedParameters()
     {
         $parameters = $this->getConfigurations()->getParameters();
-        $params = array();
+        $params = [];
         $allowed = tx_rnbase_util_Strings::trimExplode(
             ',',
             $this->getConfigValue('params.allowed', ''),

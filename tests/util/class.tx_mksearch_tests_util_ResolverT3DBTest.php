@@ -40,10 +40,10 @@ class tx_mksearch_tests_util_ResolverT3DBTest extends tx_mksearch_tests_Testcase
 
         $resolverT3Db = tx_rnbase::makeInstance('tx_mksearch_util_ResolverT3DB');
 
-        $queueData = array(
+        $queueData = [
             'tablename' => 'tt_content',
             'recid' => 1215752191,
-        );
+        ];
         $records = $resolverT3Db->getRecords($queueData);
 
         self::assertEquals(1, count($records), 'es wurde nicht genau 1 record gefunden');

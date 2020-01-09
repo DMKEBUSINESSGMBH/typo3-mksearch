@@ -56,12 +56,12 @@ class tx_mksearch_model_IndexerFieldBase implements tx_mksearch_interface_Indexe
      *
      * @var array
      */
-    private $defaultStorageOptions = array(
+    private $defaultStorageOptions = [
         'stored' => true,
         'indexed' => true,
         'tokenized' => true,
         'binary' => false,
-    );
+    ];
 
     /**
      * Storage options.
@@ -70,7 +70,7 @@ class tx_mksearch_model_IndexerFieldBase implements tx_mksearch_interface_Indexe
      *
      * @see self::$defaultStorageOptions
      */
-    private $_storageOptions = array();
+    private $_storageOptions = [];
 
     /**
      * Define a storage type which as a shortcut replaces a fixed set of storage options and data type.
@@ -146,7 +146,7 @@ class tx_mksearch_model_IndexerFieldBase implements tx_mksearch_interface_Indexe
         if (!is_array($storageOptionsOrType)) {
             $this->_storageType = $storageOptionsOrType;
             // Reset storage options to default
-            $this->updateStorageOptions(array());
+            $this->updateStorageOptions([]);
             switch ($this->_storageType) {
                 // Nothing to do for text & tinytext - default options are just right.
                 case 'text':
@@ -278,7 +278,7 @@ class tx_mksearch_model_IndexerFieldBase implements tx_mksearch_interface_Indexe
         // else
         // value is array, but boost is scalar
         if (is_array($val) && !is_array($this->_boost)) {
-            $foo = array();
+            $foo = [];
             for ($i = 0; $i < count($val); ++$i) {
                 $foo[] = $this->_boost;
             }

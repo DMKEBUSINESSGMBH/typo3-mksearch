@@ -65,7 +65,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
         );
         $tce = $this->getTceMock();
         $tce->BE_USER->workspace = 1;
-        $tce->datamap = array('123' => array());
+        $tce->datamap = ['123' => []];
 
         $service
             ->expects($this->once())
@@ -85,7 +85,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
             $service = $this->getMock('tx_mksearch_service_internal_Index')
         );
         $tce = $this->getTceMock();
-        $tce->datamap = array();
+        $tce->datamap = [];
 
         $service
             ->expects($this->never())
@@ -101,15 +101,15 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
     {
         self::markTestIncomplete('A cache with identifier cache_runtime does not exist.');
 
-        $hook = $this->getMock('tx_mksearch_hooks_IndexerAutoUpdate', array('processAutoUpdate'));
+        $hook = $this->getMock('tx_mksearch_hooks_IndexerAutoUpdate', ['processAutoUpdate']);
 
         $hook
             ->expects(self::once())
             ->method('processAutoUpdate')
-            ->with(array('tt_content' => array(123)));
+            ->with(['tt_content' => [123]]);
 
         $tce = $this->getTceMock();
-        $tce->datamap = array('tt_content:123' => -1, 'tt_content' => array(123 => array()));
+        $tce->datamap = ['tt_content:123' => -1, 'tt_content' => [123 => []]];
 
         $hook->processDatamap_afterAllOperations($tce);
     }
@@ -126,28 +126,28 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
         );
         $tce = $this->getTceMock();
 
-        $indices = array(
+        $indices = [
             $this->getMock(
                 'tx_mksearch_model_internal_Index',
                 null,
-                array(
-                    array('uid' => 1),
-                )
+                [
+                    ['uid' => 1],
+                ]
             ),
-        );
+        ];
 
         $hook
             ->expects($this->exactly(count($tce->datamap['tt_content'])))
             ->method('getUidsToIndex')
             ->will($this->returnValueMap(
-                array(
-                    array('tt_content', 1, array(1)),
-                    array('tt_content', 2, array(2)),
-                    array('tt_content', 3, array(3)),
-                    array('tt_content', 5, array(5)),
-                    array('tt_content', 8, array(8)),
-                    array('tt_content', 13, array(13)),
-                )
+                [
+                    ['tt_content', 1, [1]],
+                    ['tt_content', 2, [2]],
+                    ['tt_content', 3, [3]],
+                    ['tt_content', 5, [5]],
+                    ['tt_content', 8, [8]],
+                    ['tt_content', 13, [13]],
+                ]
             ));
 
         $service
@@ -165,7 +165,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
         $this->callInaccessibleMethod(
             $hook,
             'processAutoUpdate',
-            array('tt_content' => array_keys($tce->datamap['tt_content']))
+            ['tt_content' => array_keys($tce->datamap['tt_content'])]
         );
     }
 
@@ -180,26 +180,26 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
             $service = $this->getMock('tx_mksearch_service_internal_Index')
         );
 
-        $hookParams = array('tablename' => 'tt_content', 'uid' => 1);
+        $hookParams = ['tablename' => 'tt_content', 'uid' => 1];
 
         $hook
             ->expects($this->once())
             ->method('getUidsToIndex')
             ->will($this->returnValueMap(
-                array(
-                    array('tt_content', 1, array(1)),
-                )
+                [
+                    ['tt_content', 1, [1]],
+                ]
             ));
 
-        $indices = array(
+        $indices = [
             $this->getMock(
                 'tx_mksearch_model_internal_Index',
                 null,
-                array(
-                    array('uid' => 1),
-                )
+                [
+                    ['uid' => 1],
+                ]
             ),
-        );
+        ];
 
         $service
             ->expects($this->once())
@@ -231,12 +231,12 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
             $service = $this->getMock('tx_mksearch_service_internal_Index')
         );
 
-        $hookParams = array(
+        $hookParams = [
             'tablename' => 'tt_content',
             'where' => 'deleted = 0',
-            'values' => array('hidden' => '1'),
-            'options' => array(),
-        );
+            'values' => ['hidden' => '1'],
+            'options' => [],
+        ];
 
         $hook
             ->expects($this->once())
@@ -246,25 +246,25 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
                     $hookParams['tablename']
                 ),
                 $this->equalTo(
-                    array(
+                    [
                         'type' => 'select',
                         'from' => $hookParams['tablename'],
                         'where' => $hookParams['where'],
                         'options' => $hookParams['options'],
-                    )
+                    ]
                 )
             )
-            ->will($this->returnValue(array('1', '2')));
+            ->will($this->returnValue(['1', '2']));
 
-        $indices = array(
+        $indices = [
             $this->getMock(
                 'tx_mksearch_model_internal_Index',
                 null,
-                array(
-                    array('uid' => 1),
-                )
+                [
+                    ['uid' => 1],
+                ]
             ),
-        );
+        ];
 
         $service
             ->expects($this->once())
@@ -307,7 +307,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
             $service = $this->getMock('tx_mksearch_service_internal_Index')
         );
 
-        $hookParams = array('tablename' => 'tt_content', 'uid' => 1);
+        $hookParams = ['tablename' => 'tt_content', 'uid' => 1];
 
         $hook
             ->expects($this->never())
@@ -341,12 +341,12 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
             $service = $this->getMock('tx_mksearch_service_internal_Index')
         );
 
-        $hookParams = array(
+        $hookParams = [
             'tablename' => 'tt_content',
             'where' => 'deleted = 0',
-            'values' => array('hidden' => '1'),
-            'options' => array(),
-        );
+            'values' => ['hidden' => '1'],
+            'options' => [],
+        ];
 
         $hook
             ->expects($this->never())
@@ -383,12 +383,12 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
     {
         $hook = $this->getMock(
             'tx_mksearch_hooks_IndexerAutoUpdate',
-            array('getRnbaseDatabaseUtility')
+            ['getRnbaseDatabaseUtility']
         );
         $hook->expects($this->never())->method('getRnbaseDatabaseUtility');
 
         self::assertEquals(
-            array(123),
+            [123],
             $this->callInaccessibleMethod($hook, 'getUidsToIndex', '', 123)
         );
     }
@@ -400,12 +400,12 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
     {
         $hook = $this->getMock(
             'tx_mksearch_hooks_IndexerAutoUpdate',
-            array('getRnbaseDatabaseUtility')
+            ['getRnbaseDatabaseUtility']
         );
         $hook->expects($this->never())->method('getRnbaseDatabaseUtility');
 
         self::assertEquals(
-            array(),
+            [],
             $this->callInaccessibleMethod($hook, 'getUidsToIndex', '', 'testString')
         );
     }
@@ -417,13 +417,13 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
     {
         $hook = $this->getMock(
             'tx_mksearch_hooks_IndexerAutoUpdate',
-            array('getRnbaseDatabaseUtility')
+            ['getRnbaseDatabaseUtility']
         );
         $hook->expects($this->never())->method('getRnbaseDatabaseUtility');
 
         self::assertEquals(
-            array(),
-            $this->callInaccessibleMethod($hook, 'getUidsToIndex', '', array())
+            [],
+            $this->callInaccessibleMethod($hook, 'getUidsToIndex', '', [])
         );
     }
 
@@ -434,17 +434,17 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
     {
         $hook = $this->getMock(
             'tx_mksearch_hooks_IndexerAutoUpdate',
-            array('getRnbaseDatabaseUtility')
+            ['getRnbaseDatabaseUtility']
         );
         $hook->expects($this->never())->method('getRnbaseDatabaseUtility');
 
         self::assertEquals(
-            array(),
+            [],
             $this->callInaccessibleMethod(
                 $hook,
                 'getUidsToIndex',
                 '',
-                array('type' => 'noSelect')
+                ['type' => 'noSelect']
             )
         );
     }
@@ -462,11 +462,11 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
     ) {
         $hook = $this->getMock(
             'tx_mksearch_hooks_IndexerAutoUpdate',
-            array('getRnbaseDatabaseUtility')
+            ['getRnbaseDatabaseUtility']
         );
         $databaseUtility = $this->getMock(
             'Tx_Rnbase_Database_Connection',
-            array('doSelect')
+            ['doSelect']
         );
         $databaseUtility->expects($this->once())
             ->method('doSelect')
@@ -492,72 +492,72 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
      */
     public function dataProviderGetUidsToIndex()
     {
-        return array(
+        return [
             // from aus übergebenem data array
-            array(
-                array('type' => 'select', 'from' => 'another_test_table'),
+            [
+                ['type' => 'select', 'from' => 'another_test_table'],
                 'another_test_table',
-                array('enablefieldsoff' => true, 'where' => ''),
-                array(123 => array('uid' => 123)),
-                array(123),
-            ),
+                ['enablefieldsoff' => true, 'where' => ''],
+                [123 => ['uid' => 123]],
+                [123],
+            ],
             // from aus übergebener tabelle
-            array(
-                array('type' => 'select'),
+            [
+                ['type' => 'select'],
                 'test_table',
-                array('enablefieldsoff' => true, 'where' => ''),
-                array(123 => array('uid' => 123)),
-                array(123),
-            ),
+                ['enablefieldsoff' => true, 'where' => ''],
+                [123 => ['uid' => 123]],
+                [123],
+            ],
             // options aus übergebenem data array
-            array(
-                array('type' => 'select', 'options' => array('debug' => true)),
+            [
+                ['type' => 'select', 'options' => ['debug' => true]],
                 'test_table',
-                array('enablefieldsoff' => true, 'where' => '', 'debug' => true),
-                array(123 => array('uid' => 123)),
-                array(123),
-            ),
+                ['enablefieldsoff' => true, 'where' => '', 'debug' => true],
+                [123 => ['uid' => 123]],
+                [123],
+            ],
             // where aus options hat vorrang
-            array(
-                array('type' => 'select', 'options' => array('where' => 'where clause'), 'where' => 'clause'),
+            [
+                ['type' => 'select', 'options' => ['where' => 'where clause'], 'where' => 'clause'],
                 'test_table',
-                array('enablefieldsoff' => true, 'where' => 'where clause'),
-                array(123 => array('uid' => 123)),
-                array(123),
-            ),
+                ['enablefieldsoff' => true, 'where' => 'where clause'],
+                [123 => ['uid' => 123]],
+                [123],
+            ],
             // where aus data
-            array(
-                array('type' => 'select', 'where' => 'clause'),
+            [
+                ['type' => 'select', 'where' => 'clause'],
                 'test_table',
-                array('enablefieldsoff' => true, 'where' => 'clause'),
-                array(123 => array('uid' => 123)),
-                array(123),
-            ),
+                ['enablefieldsoff' => true, 'where' => 'clause'],
+                [123 => ['uid' => 123]],
+                [123],
+            ],
             // doSelect liefert kein Ergebnis
-            array(
-                array('type' => 'select'),
+            [
+                ['type' => 'select'],
                 'test_table',
-                array('enablefieldsoff' => true, 'where' => ''),
-                array(),
-                array(),
-            ),
+                ['enablefieldsoff' => true, 'where' => ''],
+                [],
+                [],
+            ],
             // kein uid key im select array result
-            array(
-                array('type' => 'select'),
+            [
+                ['type' => 'select'],
                 'test_table',
-                array('enablefieldsoff' => true, 'where' => ''),
-                array(123 => array('pid' => 123)),
-                array(),
-            ),
+                ['enablefieldsoff' => true, 'where' => ''],
+                [123 => ['pid' => 123]],
+                [],
+            ],
             // mehr als ein ergebnis
-            array(
-                array('type' => 'select'),
+            [
+                ['type' => 'select'],
                 'test_table',
-                array('enablefieldsoff' => true, 'where' => ''),
-                array(123 => array('uid' => 123), 456 => array('uid' => 456)),
-                array(123, 456),
-            ),
-        );
+                ['enablefieldsoff' => true, 'where' => ''],
+                [123 => ['uid' => 123], 456 => ['uid' => 456]],
+                [123, 456],
+            ],
+        ];
     }
 
     /**
@@ -569,7 +569,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
 
         $hook = $this->getMock(
             'tx_mksearch_hooks_IndexerAutoUpdate',
-            array('getIntIndexService', 'getIndexersForTable', 'getUidsToIndex')
+            ['getIntIndexService', 'getIndexersForTable', 'getUidsToIndex']
         );
 
         $hook
@@ -593,16 +593,16 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
     {
         $tce = tx_rnbase::makeInstance(tx_rnbase_util_Typo3Classes::getDataHandlerClass());
         // default datamap
-        $tce->datamap = array(
-            'tt_content' => array(
-                '1' => array('uid' => '1'),
-                '2' => array('uid' => '2'),
-                '3' => array('uid' => '3'),
-                '5' => array('uid' => '5'),
-                '8' => array('uid' => '8'),
-                '13' => array('uid' => '13'),
-            ),
-        );
+        $tce->datamap = [
+            'tt_content' => [
+                '1' => ['uid' => '1'],
+                '2' => ['uid' => '2'],
+                '3' => ['uid' => '3'],
+                '5' => ['uid' => '5'],
+                '8' => ['uid' => '8'],
+                '13' => ['uid' => '13'],
+            ],
+        ];
         // default workspace
         $tce->BE_USER = new stdClass();
         $tce->BE_USER->workspace = 0;

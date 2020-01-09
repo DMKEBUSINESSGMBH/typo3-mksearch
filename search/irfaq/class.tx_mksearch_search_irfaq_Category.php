@@ -14,7 +14,7 @@ class tx_mksearch_search_irfaq_Category extends tx_rnbase_util_SearchBase
      */
     protected function getTableMappings()
     {
-        $tableMapping = array();
+        $tableMapping = [];
         $tableMapping['IRFAQ_CATEGORY'] = 'tx_irfaq_cat';
         $tableMapping['IRFAQ_QUESTION_CATEGORY_MM'] = 'tx_irfaq_q_cat_mm';
 
@@ -22,7 +22,7 @@ class tx_mksearch_search_irfaq_Category extends tx_rnbase_util_SearchBase
         tx_rnbase_util_Misc::callHook(
             'mksearch',
             'search_irfaq_Category_getTableMapping_hook',
-            array('tableMapping' => &$tableMapping),
+            ['tableMapping' => &$tableMapping],
             $this
         );
 
@@ -81,7 +81,7 @@ class tx_mksearch_search_irfaq_Category extends tx_rnbase_util_SearchBase
         tx_rnbase_util_Misc::callHook(
             'mksearch',
             'search_irfaq_Category_getJoins_hook',
-            array('join' => &$join, 'tableAliases' => $tableAliases),
+            ['join' => &$join, 'tableAliases' => $tableAliases],
             $this
         );
 

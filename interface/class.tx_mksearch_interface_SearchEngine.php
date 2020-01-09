@@ -37,7 +37,7 @@ interface tx_mksearch_interface_SearchEngine
      *
      * @return array[tx_mksearch_model_SearchResult] search results
      */
-    public function search(array $fields = array(), array $options = array());
+    public function search(array $fields = [], array $options = []);
 
     /**
      * Get a document from index.
@@ -150,7 +150,7 @@ interface tx_mksearch_interface_SearchEngine
      *
      * @param string $query
      */
-    public function indexDeleteByQuery($query, $options = array());
+    public function indexDeleteByQuery($query, $options = []);
 
     /**
      * Return an indexer document instance for the given content type.

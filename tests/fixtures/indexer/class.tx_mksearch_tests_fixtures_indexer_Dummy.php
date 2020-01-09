@@ -46,7 +46,7 @@ class tx_mksearch_tests_fixtures_indexer_Dummy extends tx_mksearch_indexer_Base
      */
     public static function getContentType()
     {
-        return array('mksearch', 'dummy');
+        return ['mksearch', 'dummy'];
     }
 
     /**
@@ -72,10 +72,10 @@ class tx_mksearch_tests_fixtures_indexer_Dummy extends tx_mksearch_indexer_Base
     {
         $this->indexModelByMapping($oModel, $this->getTestMapping(), $oIndexDoc);
         //with keep html
-        $this->indexModelByMapping($oModel, $this->getTestMapping(), $oIndexDoc, 'keepHtml_', array('keepHtml' => 1));
+        $this->indexModelByMapping($oModel, $this->getTestMapping(), $oIndexDoc, 'keepHtml_', ['keepHtml' => 1]);
 
         if ($oModel->record['multiValue']) {
-            $aModels = array($oModel, $oModel);
+            $aModels = [$oModel, $oModel];
             $this->indexArrayOfModelsByMapping(
                 $aModels,
                 $this->getTestMapping(),
@@ -99,10 +99,10 @@ class tx_mksearch_tests_fixtures_indexer_Dummy extends tx_mksearch_indexer_Base
 
     protected function getTestCategories()
     {
-        return array(
-            0 => $this->createModel(array('uid' => 1)),
-            1 => $this->createModel(array('uid' => 2)),
-        );
+        return [
+            0 => $this->createModel(['uid' => 1]),
+            1 => $this->createModel(['uid' => 2]),
+        ];
     }
 
     /**
@@ -113,10 +113,10 @@ class tx_mksearch_tests_fixtures_indexer_Dummy extends tx_mksearch_indexer_Base
      */
     protected function getTestMapping()
     {
-        return array(
+        return [
             'test_field_1' => 'test_field_1_s',
             'test_field_2' => 'test_field_2_s',
-        );
+        ];
     }
 
     /**
@@ -126,7 +126,7 @@ class tx_mksearch_tests_fixtures_indexer_Dummy extends tx_mksearch_indexer_Base
      *
      * @return tx_rnbase_IModel
      */
-    protected function createModel(array $rawData, $tableName = null, $options = array())
+    protected function createModel(array $rawData, $tableName = null, $options = [])
     {
         return tx_rnbase::makeInstance('tx_rnbase_model_base', $rawData);
     }

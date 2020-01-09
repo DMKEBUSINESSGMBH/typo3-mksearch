@@ -41,25 +41,25 @@ class tx_mksearch_tests_indexer_PageTest extends tx_mksearch_tests_Testcase
         $this->prepareLegacyTypo3DbGlobal();
 
         $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_Page');
-        $options = array();
+        $options = [];
 
         list($extKey, $cType) = $indexer->getContentType();
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
 
         //is deleted
-        $record = array('uid' => 123, 'pid' => 0, 'deleted' => 1);
+        $record = ['uid' => 123, 'pid' => 0, 'deleted' => 1];
         $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
         self::assertEquals(true, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 
         //is hidden
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
-        $record = array('uid' => 124, 'pid' => 0, 'deleted' => 0, 'hidden' => 1);
+        $record = ['uid' => 124, 'pid' => 0, 'deleted' => 0, 'hidden' => 1];
         $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
         self::assertEquals(true, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 
         //everything alright
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
-        $record = array('uid' => 125, 'pid' => 0, 'deleted' => 0, 'hidden' => 0);
+        $record = ['uid' => 125, 'pid' => 0, 'deleted' => 0, 'hidden' => 0];
         $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
         self::assertEquals(false, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
     }

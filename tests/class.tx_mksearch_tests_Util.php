@@ -39,7 +39,7 @@ class tx_mksearch_tests_Util
      *
      * @var array
      */
-    private static $hooks = array();
+    private static $hooks = [];
 
     /**
      * Sicherung der TCA.
@@ -51,7 +51,7 @@ class tx_mksearch_tests_Util
     /**
      * @var array
      */
-    private static $extConf = array();
+    private static $extConf = [];
 
     /**
      * @var string
@@ -77,7 +77,7 @@ class tx_mksearch_tests_Util
             if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch'][$hook])) {
                 self::$hooks[$hook] = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch'][$hook];
             }
-            $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch'][$hook] = array();
+            $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch'][$hook] = [];
         }
     }
 
@@ -89,7 +89,7 @@ class tx_mksearch_tests_Util
         foreach (self::$hooks as $hookName => $hookConfig) {
             $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch'][$hookName] = $hookConfig;
         }
-        self::$hooks = array();
+        self::$hooks = [];
     }
 
     /**
@@ -102,17 +102,17 @@ class tx_mksearch_tests_Util
      *
      * @param array $extensions
      */
-    public static function tcaSetUp(array $extensions = array())
+    public static function tcaSetUp(array $extensions = [])
     {
         self::$TCA = $GLOBALS['TCA'];
-        $GLOBALS['TCA'] = array();
+        $GLOBALS['TCA'] = [];
         // otherwise we may get warnings like ...no category registered for table..Key was already registered
         $categoryRegistryClass = 'TYPO3\\CMS\\Core\\Category\\CategoryRegistry';
         $registry = new ReflectionProperty($categoryRegistryClass, 'registry');
         $registry->setAccessible(true);
         $categoryRegistry = $categoryRegistryClass::getInstance();
         self::$categoryRegistry = $registry->getValue($categoryRegistry);
-        $registry->setValue($categoryRegistry, array());
+        $registry->setValue($categoryRegistry, []);
 
         // \TYPO3\CMS\Core\Core\Bootstrap::getInstance()->loadExtensionTables(FALSE);
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::loadBaseTca(false);
@@ -239,7 +239,7 @@ class tx_mksearch_tests_Util
     public static function loadConfig4BE($pageTSconfig)
     {
         tx_rnbase_util_Misc::prepareTSFE(); // Ist bei Aufruf aus BE notwendig!
-        $GLOBALS['TSFE']->config = array();
+        $GLOBALS['TSFE']->config = [];
         $cObj = tx_rnbase::makeInstance(tx_rnbase_util_Typo3Classes::getContentObjectRendererClass());
 
         $configurations = new tx_rnbase_configurations();
@@ -272,12 +272,7 @@ class tx_mksearch_tests_Util
             $extKey = $extKeyOrIndexer;
         } // falscher datentyp
         else {
-            throw new Exception(
-                'First argument of getIndexerDocument has to be an "string"'
-                .' or instance of "tx_mksearch_interface_Indexer", '
-                .(is_object($extKeyOrIndexer) ? get_class($extKeyOrIndexer) : gettype($extKeyOrIndexer))
-                .' given.'
-            );
+            throw new Exception('First argument of getIndexerDocument has to be an "string"'.' or instance of "tx_mksearch_interface_Indexer", '.(is_object($extKeyOrIndexer) ? get_class($extKeyOrIndexer) : gettype($extKeyOrIndexer)).' given.');
         }
 
         return tx_rnbase::makeInstance($documentClass, $extKey, $cType);
@@ -300,9 +295,9 @@ class tx_mksearch_tests_Util
      */
     public static function disableRelationManager()
     {
-        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Core\\Database\\RelationHandler'] = array(
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Core\\Database\\RelationHandler'] = [
             'className' => 'tx_mksearch_tests_fixtures_typo3_CoreDbRelationHandler',
-        );
+        ];
     }
 
     /**
@@ -344,7 +339,7 @@ class tx_mksearch_tests_Util
         // falls eine extension von templavoila abhängt, müssen wir diese auch deinstallieren
         foreach ($packageManager->getActivePackages() as $package) {
             $packageKey = $package->getPackageMetaData()->getPackageKey();
-            $dependencies = $method->invokeArgs($packageManager, array($packageKey));
+            $dependencies = $method->invokeArgs($packageManager, [$packageKey]);
 
             if (false !== array_search($extensionKey, $dependencies)) {
                 $extensionManagementUtility->unloadExtension($packageKey);
@@ -412,7 +407,7 @@ class tx_mksearch_tests_Util
         $extConfig = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$extKey]);
         // wenn keine Konfiguration existiert, legen wir eine an.
         if (!is_array($extConfig)) {
-            $extConfig = array();
+            $extConfig = [];
         }
         // neuen Wert setzen
         $extConfig[$cfgKey] = $cfgValue;

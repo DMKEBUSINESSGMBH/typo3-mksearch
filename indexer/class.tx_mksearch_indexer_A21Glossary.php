@@ -42,7 +42,7 @@ class tx_mksearch_indexer_A21Glossary extends tx_mksearch_indexer_Base
      */
     public static function getContentType()
     {
-        return array('a21glossary', 'main');
+        return ['a21glossary', 'main'];
     }
 
     /**
@@ -70,7 +70,7 @@ class tx_mksearch_indexer_A21Glossary extends tx_mksearch_indexer_Base
         );
         $content = tx_mksearch_util_Misc::html2plain(
             $model->getDescription(),
-            array('lineendings' => true)
+            ['lineendings' => true]
         );
         $indexDoc->setContent($content);
         $indexDoc->setAbstract(
@@ -81,13 +81,13 @@ class tx_mksearch_indexer_A21Glossary extends tx_mksearch_indexer_Base
         // index everything about the question
         $this->indexModelByMapping(
             $model,
-            array(
+            [
                 'short' => 'short_s',
                 'shortcut' => 'shortcut_s',
                 'longversion' => 'longversion_s',
                 'shorttype' => 'shorttype_s',
                 'description' => 'description_t',
-            ),
+            ],
             $indexDoc,
             '',
             $options

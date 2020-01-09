@@ -32,34 +32,34 @@ class tx_mksearch_util_Config
      *
      * @var array
      */
-    private static $indexerTableMappings = array();
+    private static $indexerTableMappings = [];
 
     /**
      * Container for table 2 indexer mappings.
      *
      * @var array
      */
-    private static $tableIndexerMappings = array();
+    private static $tableIndexerMappings = [];
 
     /**
      * Container table - indexers.
      *
      * @var array
      */
-    private static $tableIndexer = array();
+    private static $tableIndexer = [];
 
     /**
      * Container extkey - contenttype - indexer.
      *
      * @var array
      */
-    private static $indexerMap = array();
+    private static $indexerMap = [];
     /**
      * Container table - resolvers.
      *
      * @var array
      */
-    private static $resolverMap = array();
+    private static $resolverMap = [];
 
     /**
      * Return indexer configuration option.
@@ -102,9 +102,9 @@ class tx_mksearch_util_Config
      */
     public static function getIndexers($extKey = null)
     {
-        $ret = array();
+        $ret = [];
         if ($extKey) {
-            $cfgData = array(self::$indexerMap[$extKey]);
+            $cfgData = [self::$indexerMap[$extKey]];
         }
         $cfgData = array_values(self::$indexerMap);
         foreach ($cfgData as $cfg) {
@@ -131,7 +131,7 @@ class tx_mksearch_util_Config
         }
         // Indexers with given $extKey
         return isset(self::$indexerTableMappings[$extKey]) ?
-                array_keys(self::$indexerTableMappings[$extKey]) : array();
+                array_keys(self::$indexerTableMappings[$extKey]) : [];
     }
 
     /**
@@ -167,7 +167,7 @@ class tx_mksearch_util_Config
                     tx_rnbase_util_Logger::warn('[registerResolver] Für die Tabelle '.$table.' wurde bereits ein Resolver registriert', 'mksearch');
                 }
             }
-            self::$resolverMap[$table] = array('className' => $resolver);
+            self::$resolverMap[$table] = ['className' => $resolver];
         }
     }
 
@@ -182,20 +182,20 @@ class tx_mksearch_util_Config
     public static function registerIndexer($extKey, $contentType, $indexerClass, array $tables, $resolver = false)
     {
         if (!isset(self::$indexerTableMappings[$extKey])) {
-            self::$indexerTableMappings[$extKey] = array();
+            self::$indexerTableMappings[$extKey] = [];
         }
         if (!isset(self::$indexerTableMappings[$extKey][$contentType])) {
-            self::$indexerTableMappings[$extKey][$contentType] = array();
+            self::$indexerTableMappings[$extKey][$contentType] = [];
         }
 
         self::$indexerTableMappings[$extKey][$contentType] =
             array_merge(self::$indexerTableMappings[$extKey][$contentType], $tables);
 
-        $ec = array('extKey' => $extKey, 'contentType' => $contentType, 'className' => $indexerClass);
+        $ec = ['extKey' => $extKey, 'contentType' => $contentType, 'className' => $indexerClass];
 
         foreach ($tables as $table) {
             if (!isset(self::$tableIndexerMappings[$table])) {
-                self::$tableIndexerMappings[$table] = array();
+                self::$tableIndexerMappings[$table] = [];
             }
 
             if (!in_array($ec, self::$tableIndexerMappings[$table])) {
@@ -205,7 +205,7 @@ class tx_mksearch_util_Config
         if ($resolver) {
             self::registerResolver($resolver, $tables);
         }
-        self::$indexerMap[$extKey][$contentType] = array('className' => $indexerClass);
+        self::$indexerMap[$extKey][$contentType] = ['className' => $indexerClass];
     }
 
     /**
@@ -219,7 +219,7 @@ class tx_mksearch_util_Config
     public static function getIndexersForDatabaseTable($table)
     {
         return array_key_exists($table, self::$tableIndexerMappings) ?
-                self::$tableIndexerMappings[$table] : array();
+                self::$tableIndexerMappings[$table] : [];
     }
 
     /**
@@ -232,7 +232,7 @@ class tx_mksearch_util_Config
     public static function getResolverForDatabaseTable($table)
     {
         return array_key_exists($table, self::$resolverMap) ?
-                self::$resolverMap[$table] : array();
+                self::$resolverMap[$table] : [];
     }
 
     /**
@@ -245,7 +245,7 @@ class tx_mksearch_util_Config
     public static function getIndexersForTable($table)
     {
         if (!array_key_exists($table, self::$tableIndexer)) {
-            $instances = array();
+            $instances = [];
             foreach (self::getIndexersForDatabaseTable($table) as $indexerArr) {
                 $instances[] = tx_rnbase::makeInstance($indexerArr['className']);
             }
@@ -279,7 +279,7 @@ class tx_mksearch_util_Config
      */
     public static function getIndexersForDatabaseTables(array $tables)
     {
-        $res = array();
+        $res = [];
         foreach (array_unique($tables) as $table) {
             foreach (self::getIndexersForDatabaseTable($table) as $i) {
                 if (!in_array($i, $res)) {
@@ -304,7 +304,7 @@ class tx_mksearch_util_Config
         return
             isset(self::$indexerTableMappings[$extKey][$contentType]) ?
                 self::$indexerTableMappings[$extKey][$contentType] :
-                array();
+                [];
     }
 }
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_Config.php']) {

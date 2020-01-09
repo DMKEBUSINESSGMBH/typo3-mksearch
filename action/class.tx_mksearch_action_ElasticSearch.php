@@ -50,9 +50,9 @@ class tx_mksearch_action_ElasticSearch extends tx_mksearch_action_AbstractSearch
             return null;
         }
 
-        $fields = array();
-        $options = array();
-        $items = array();
+        $fields = [];
+        $options = [];
+        $items = [];
 
         if ($filter->init($fields, $options)) {
             $index = $this->getSearchIndex();
@@ -60,8 +60,8 @@ class tx_mksearch_action_ElasticSearch extends tx_mksearch_action_AbstractSearch
             // wir rufen die Methode mit call_user_func_array auf, da sie
             // statisch ist, womit wir diese nicht mocken könnten
             $searchEngine = call_user_func_array(
-                array($this->getServiceRegistry(), 'getSearchEngine'),
-                array($index)
+                [$this->getServiceRegistry(), 'getSearchEngine'],
+                [$index]
             );
             $searchEngine->openIndex($index);
 

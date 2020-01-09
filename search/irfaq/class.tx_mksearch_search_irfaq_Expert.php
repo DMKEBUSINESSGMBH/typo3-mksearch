@@ -14,13 +14,13 @@ class tx_mksearch_search_irfaq_Expert extends tx_rnbase_util_SearchBase
      */
     protected function getTableMappings()
     {
-        $tableMapping = array();
+        $tableMapping = [];
 
         // Hook to append other tables
         tx_rnbase_util_Misc::callHook(
             'mksearch',
             'search_irfaq_Expert_getTableMapping_hook',
-            array('tableMapping' => &$tableMapping),
+            ['tableMapping' => &$tableMapping],
             $this
         );
 
@@ -74,7 +74,7 @@ class tx_mksearch_search_irfaq_Expert extends tx_rnbase_util_SearchBase
         tx_rnbase_util_Misc::callHook(
             'mksearch',
             'search_irfaq_Expert_getJoins_hook',
-            array('join' => &$join, 'tableAliases' => $tableAliases),
+            ['join' => &$join, 'tableAliases' => $tableAliases],
             $this
         );
 

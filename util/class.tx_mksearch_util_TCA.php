@@ -41,8 +41,8 @@ class tx_mksearch_util_TCA
     {
         return html_entity_decode(
             preg_replace(
-                array('/(\s+|(<.*?>)+)/', '/<!--.*?-->/'),
-                array(' ', ''),
+                ['/(\s+|(<.*?>)+)/', '/<!--.*?-->/'],
+                [' ', ''],
                 $t
             ),
             ENT_QUOTES,
@@ -64,7 +64,7 @@ class tx_mksearch_util_TCA
         $keys = array_keys($config);
         sort($keys);
         foreach ($keys as $k) {
-            $params['items'][] = array($k, $k);
+            $params['items'][] = [$k, $k];
         }
     }
 
@@ -109,7 +109,7 @@ class tx_mksearch_util_TCA
         // wir sortieren vorher, damit bestehende items nicht mit sortiert werden!
         sort($config);
         foreach ($config as $k) {
-            $params['items'][] = array($k, $k);
+            $params['items'][] = [$k, $k];
         }
     }
 
@@ -174,9 +174,9 @@ class tx_mksearch_util_TCA
 
         // Wir suchen alle Indexes, da die aktuelle PageId oder die RootPageId
         // nicht die der PageId des Indexes entsprechen muss.
-        $fields = array();
+        $fields = [];
         $fields['INDX.ENGINE'][OP_EQ] = 'solr';
-        $options = array();
+        $options = [];
         //$options['debug'] = 1;
         $options['enablefieldsfe'] = 1;
         $indexer = tx_mksearch_util_ServiceRegistry::getIntIndexService()->search($fields, $options);
@@ -187,7 +187,7 @@ class tx_mksearch_util_TCA
             // Sind die RootPages identisch oder ist der Index global,
             // kann der Index verwendet werden.
             if (empty($rootOfIndex['uid']) || $rootOfIndex['uid'] == $rootOfPlugin['uid']) {
-                $params['items'][] = array($index->getTitle(), $index->getUid());
+                $params['items'][] = [$index->getTitle(), $index->getUid()];
             }
         }
     }

@@ -44,7 +44,7 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
     protected function hasDocToBeDeleted(
         tx_rnbase_IModel $oModel,
         tx_mksearch_interface_IndexerDocument $oIndexDoc,
-        $aOptions = array()
+        $aOptions = []
     ) {
         // @codingStandardsIgnoreEnd
         // should the element be removed from the index?
@@ -78,7 +78,7 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
     protected function hasNonGridelementDocToBeDeleted(
         tx_rnbase_IModel $oModel,
         tx_mksearch_interface_IndexerDocument $oIndexDoc,
-        $aOptions = array()
+        $aOptions = []
     ) {
         // @codingStandardsIgnoreEnd
         return parent::hasDocToBeDeleted($oModel, $oIndexDoc, $aOptions);
@@ -148,7 +148,7 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
         array $options
     ) {
         tx_mksearch_util_Indexer::prepareTSFE($record['pid'], $options['lang']);
-        $uid = $this->getUid('tt_content', $record, array());
+        $uid = $this->getUid('tt_content', $record, []);
 
         $allowedCTypes = $this->getAllowedCTypes($options);
 
@@ -171,7 +171,7 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
 
         $content = $cObj->callUserFunction(
             'GridElementsTeam\\Gridelements\\Plugin\\Gridelements->main',
-            array(),
+            [],
             ''
         );
 

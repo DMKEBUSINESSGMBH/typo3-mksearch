@@ -81,12 +81,12 @@ class tx_mksearch_scheduler_IndexTask extends Tx_Rnbase_Scheduler_Task
                 tx_rnbase_util_Logger::info($msg, 'mksearch');
             }
         } catch (Exception $e) {
-            tx_rnbase_util_Logger::fatal('Indexing failed!', 'mksearch', array('Exception' => $e->getMessage()));
+            tx_rnbase_util_Logger::fatal('Indexing failed!', 'mksearch', ['Exception' => $e->getMessage()]);
             //Da die Exception gefangen wird, würden die Entwickler keine Mail bekommen
             //also machen wir das manuell
             if ($addr = tx_rnbase_configurations::getExtensionCfgValue('rn_base', 'sendEmailOnException')) {
                 //die Mail soll immer geschickt werden
-                $aOptions = array('ignoremaillock' => true);
+                $aOptions = ['ignoremaillock' => true];
                 tx_rnbase_util_Misc::sendErrorMail($addr, 'tx_mksearch_scheduler_IndexTask', $e, $aOptions);
             }
             $success = false;

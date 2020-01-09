@@ -40,7 +40,7 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
      */
     public static function getContentType()
     {
-        return array('tt_address', 'address');
+        return ['tt_address', 'address'];
     }
 
     /**
@@ -52,7 +52,7 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
     {
         if ('tt_address' != $tableName) {
             if (tx_rnbase_util_Logger::isWarningEnabled()) {
-                tx_rnbase_util_Logger::warn(__METHOD__.': Unknown table "'.$tableName.'" given.', 'mksearch', array('tableName' => $tableName, 'sourceRecord' => $sourceRecord));
+                tx_rnbase_util_Logger::warn(__METHOD__.': Unknown table "'.$tableName.'" given.', 'mksearch', ['tableName' => $tableName, 'sourceRecord' => $sourceRecord]);
             }
 
             return null;
@@ -83,13 +83,13 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
         tx_rnbase_util_Misc::callHook(
             'mksearch',
             'indexer_TtAddress_prepareData_beforeAddFields',
-            array(
+            [
                                     'rawData' => &$rawData,
                                     'options' => $options,
                                     'indexDoc' => &$indexDoc,
                                     'boost' => &$boost,
                                     'abort' => &$abort,
-            ),
+            ],
             $this
         );
 
@@ -143,11 +143,11 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
         tx_rnbase_util_Misc::callHook(
             'mksearch',
             'indexer_TtAddress_prepareData_afterAddFields',
-            array(
+            [
                                     'rawData' => &$rawData,
                                     'options' => $options,
                                     'indexDoc' => &$indexDoc,
-            ),
+            ],
             $this
         );
 
@@ -239,7 +239,7 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
      */
     protected function getContentFromFields($sourceRecord, $options)
     {
-        $aContent = array();
+        $aContent = [];
         $aContentFields = tx_rnbase_util_Strings::trimExplode(',', $options['fields'], true);
 
         foreach ($aContentFields as $field) {
@@ -249,7 +249,7 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
         }
         $wrap = tx_rnbase_util_Strings::trimExplode('|', $options['wrap'], true);
         if (2 != count($wrap)) {
-            $wrap = array('', '');
+            $wrap = ['', ''];
         }
         $sContent = $wrap[0].implode($wrap[1].$wrap[0], $aContent).$wrap[1];
 

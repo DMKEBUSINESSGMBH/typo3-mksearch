@@ -75,9 +75,9 @@ class tx_mksearch_util_SolrResponseProcessor
      * @param Apache_Solr_Response $response
      * @param unknown_type         $result
      */
-    public function processSolrResponse(Apache_Solr_Response &$response, $options, $result = array())
+    public function processSolrResponse(Apache_Solr_Response &$response, $options, $result = [])
     {
-        $result['items'] = $this->processHits($response, $options, empty($result['items']) ? array() : $result['items']);
+        $result['items'] = $this->processHits($response, $options, empty($result['items']) ? [] : $result['items']);
         $result['facets'] = $this->processFacets($response);
         $result['suggestions'] = $this->processSuggestions($response);
 
@@ -91,7 +91,7 @@ class tx_mksearch_util_SolrResponseProcessor
      *
      * @return array
      */
-    public function processHits(Apache_Solr_Response &$response, array $options, array $hits = array())
+    public function processHits(Apache_Solr_Response &$response, array $options, array $hits = [])
     {
         $confId = $this->getConfId().'hit.';
 
@@ -151,22 +151,22 @@ class tx_mksearch_util_SolrResponseProcessor
     protected function handleHellip(
         $originalValue,
         $highlightedValue,
-        array $options = array()
+        array $options = []
     ) {
         // cleanup the source and the highlightd
         $cleanOriginalValue = tx_mksearch_util_Misc::html2plain(
             $originalValue,
-            array('removedoublespaces' => true)
+            ['removedoublespaces' => true]
         );
         $cleanHighlighted = tx_mksearch_util_Misc::html2plain(
             $highlightedValue,
-            array('removedoublespaces' => true)
+            ['removedoublespaces' => true]
         );
 
         // check only, if the values not the same!
         if ($cleanOriginalValue !== $cleanHighlighted) {
             // create the WRAP!
-            $wrap = array('', '');
+            $wrap = ['', ''];
             if (!empty($options['stdWrap.'])) {
                 $token = uniqid();
                 $wrap = $this->getConfigurations()->getCObj()->stdWrap(
@@ -205,7 +205,7 @@ class tx_mksearch_util_SolrResponseProcessor
     public function processFacets(Apache_Solr_Response &$response)
     {
         if (!$response->facet_counts) {
-            return array();
+            return [];
         }
 
         // usually "searchsolr.responseProcessor.facet."
@@ -244,7 +244,7 @@ class tx_mksearch_util_SolrResponseProcessor
             $builder = tx_mksearch_util_SuggestionBuilder::getInstance($builderClass);
             $suggestions = $builder->buildSuggestions($response->spellcheck->suggestions);
         } else {
-            $suggestions = array();
+            $suggestions = [];
         }
 
         return $suggestions;
@@ -259,7 +259,7 @@ class tx_mksearch_util_SolrResponseProcessor
      */
     protected function getHighlighting(Apache_Solr_Response $response)
     {
-        $aHighlights = array();
+        $aHighlights = [];
         //Highlighting für jedes gefundene Dokument
         if (!empty($response->highlighting)) {
             foreach ($response->highlighting as $iHighlightId => $aHighlighting) {

@@ -34,8 +34,8 @@ class tx_mksearch_service_irfaq_Category extends tx_mksearch_service_Base
      */
     public function getByQuestion(tx_mksearch_model_irfaq_Question $question)
     {
-        $fields = array();
-        $options = array();
+        $fields = [];
+        $options = [];
         $fields['IRFAQ_QUESTION_CATEGORY_MM.uid_local'][OP_EQ_INT] = $question->getUid();
 
         return $this->search($fields, $options);

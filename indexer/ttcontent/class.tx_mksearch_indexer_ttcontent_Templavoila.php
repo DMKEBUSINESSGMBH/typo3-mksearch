@@ -45,7 +45,7 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
      *
      * @var array
      */
-    protected $aReferences = array();
+    protected $aReferences = [];
 
     /**
      * The indexable references (pids) of this element. These references
@@ -53,7 +53,7 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
      *
      * @var array
      */
-    protected $aIndexableReferences = array();
+    protected $aIndexableReferences = [];
 
     /**
      * Sets the index doc to deleted if neccessary.
@@ -67,7 +67,7 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
     protected function hasDocToBeDeleted(
         tx_rnbase_IModel $oModel,
         tx_mksearch_interface_IndexerDocument $oIndexDoc,
-        $aOptions = array()
+        $aOptions = []
     ) {
         // if we got not a single reference,
         // even not the element itself, it should be deleted
@@ -77,7 +77,7 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
 
         // now we have to check if at least one reference
         // remains that has not to be deleted.
-        $aStillIndexableReferences = array();
+        $aStillIndexableReferences = [];
         foreach ($this->aIndexableReferences as $iPid) {
             // set the pid
             $oModel->record['pid'] = $iPid;
@@ -115,31 +115,31 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
         $database = Tx_Rnbase_Database_Connection::getInstance();
         // so we have to fetch all references
         // we just need to check this table for entries for this element
-        $aSqlOptions = array(
+        $aSqlOptions = [
             'where' => 'ref_table='.$database->fullQuoteStr('tt_content', 'sys_refindex').
                     ' AND ref_uid='.(int) $oModel->getUid().
                     ' AND deleted=0',
             'enablefieldsoff' => true,
-        );
-        $aFrom = array('sys_refindex', 'sys_refindex');
+        ];
+        $aFrom = ['sys_refindex', 'sys_refindex'];
         $aRows = $database->doSelect('tablename, recuid', $aFrom, $aSqlOptions);
 
         // now we need to collect the pids of all references. either a
         // reference is a page than we simply use it's pid or the
         // reference is another tt_content.
         // in the last case we take the pid of this element
-        $aReferences = array();
+        $aReferences = [];
         if (!empty($aRows)) {
             foreach ($aRows as $aRow) {
                 if ('pages' == $aRow['tablename']) {
                     $aReferences[] = $aRow['recuid'];
                 } elseif ('tt_content' == $aRow['tablename']) {
-                    $aSqlOptions = array(
+                    $aSqlOptions = [
                         'where' => 'tt_content.uid='.$aRow['recuid'],
                             // checks for being hidden/deleted are made later
                         'enablefieldsoff' => true,
-                    );
-                    $aFrom = array('tt_content', 'tt_content');
+                    ];
+                    $aFrom = ['tt_content', 'tt_content'];
                     $aNewRows = $database->doSelect('tt_content.pid', $aFrom, $aSqlOptions);
                     $aReferences[] = $aNewRows[0]['pid'];
                 }
@@ -162,7 +162,7 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
      */
     protected function isIndexableRecord(array $sourceRecord, array $options)
     {
-        $this->aIndexableReferences = array();
+        $this->aIndexableReferences = [];
 
         // we have to do the checks for all references and collect the indexable ones
         $return = false;
@@ -196,7 +196,7 @@ class tx_mksearch_indexer_ttcontent_Templavoila extends tx_mksearch_indexer_ttco
      *
      * @return tx_mksearch_model_irfaq_Question
      */
-    protected function createModel(array $rawData, $tableName = null, $options = array())
+    protected function createModel(array $rawData, $tableName = null, $options = [])
     {
         $model = parent::createModel($rawData, $tableName, $options);
 

@@ -63,7 +63,7 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
      */
     public static function getContentType()
     {
-        return array('seminars', 'seminar');
+        return ['seminars', 'seminar'];
     }
 
     /**
@@ -169,7 +169,7 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
     protected function indexSeminar(tx_mksearch_interface_IndexerDocument $indexDoc)
     {
         //Mapping which function fills which field
-        $aFunctionFieldMapping = array(
+        $aFunctionFieldMapping = [
             'title_s' => $this->oSeminar->getTitle(),
             'subtitle_s' => $this->oSeminar->getSubtitle(),
             'realtitle_s' => $this->oSeminar->getRealTitle(),
@@ -183,9 +183,9 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
             //as this field will be multi value for object_type = 1
             //we set it to multi value eventhough it will
             //never happen for object_type = 0
-            'begin_date_ms' => array(0 => $this->oSeminar->getBeginDateAsTimestamp()),
-            'end_date_ms' => array(0 => $this->oSeminar->getEndDateAsTimestamp()),
-        );
+            'begin_date_ms' => [0 => $this->oSeminar->getBeginDateAsTimestamp()],
+            'end_date_ms' => [0 => $this->oSeminar->getEndDateAsTimestamp()],
+        ];
         foreach ($aFunctionFieldMapping as $sKey => $mValue) {
             if (!empty($mValue)) {
                 $indexDoc->addField($sKey, $mValue);
@@ -246,7 +246,7 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
      */
     protected function getMultiValueFieldsByListObject($aValues, array $aMapping)
     {
-        $aTempIndexDoc = array();
+        $aTempIndexDoc = [];
         //as this is a multivalue field we collect all
         //information from the given categories
         foreach ($aValues as $oValue) {
@@ -275,7 +275,7 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
      */
     protected function getMultiValueFieldsByArray($aValues, array $aMapping)
     {
-        $aTempIndexDoc = array();
+        $aTempIndexDoc = [];
         //as this is a multivalue field we collect all
         //information from the given arrays
         foreach ($aValues as $aValue) {
@@ -390,9 +390,9 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
      */
     protected function getCategoriesMapping()
     {
-        return array(
+        return [
             'title' => 'categories_title_ms',
-        );
+        ];
     }
 
     /**
@@ -404,12 +404,12 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
      */
     protected function getOrganizersMapping()
     {
-        return array(
+        return [
             'getTitle' => 'organizers_title_ms',
             'getHomepage' => 'organizers_homepage_ms',
             'getEMailAddress' => 'organizers_email_ms',
             'getDescription' => 'organizers_description_ms',
-        );
+        ];
     }
 
     /**
@@ -421,17 +421,17 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
      */
     protected function getPlacesMapping()
     {
-        return array(
+        return [
             'getAddress' => 'place_adress_ms',
             'getCity' => 'place_city_ms',
             // Das Land wird ggf. als Tx_Oelib_Model_Country geliefert
-            'getCountry' => array('indexfield' => 'place_country_ms', 'getter' => 'getLocalShortName'),
+            'getCountry' => ['indexfield' => 'place_country_ms', 'getter' => 'getLocalShortName'],
             'getDirections' => 'place_directions_ms',
             'getHomepage' => 'place_homepage_ms',
             'getNotes' => 'place_notes_ms',
             'getOwner' => 'place_owner_ms',
             'getTitle' => 'place_title_ms',
-        );
+        ];
     }
 
     /**
@@ -443,7 +443,7 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
      */
     protected function getSpeakersMapping()
     {
-        return array(
+        return [
             'getTitle' => 'speakers_title_ms',
             'getGender' => 'speakers_gender_ms',
             'getOrganization' => 'speakers_organization_ms',
@@ -455,7 +455,7 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
             'getPhoneMobile' => 'speakers_phone_mobile_ms',
             'getFax' => 'speakers_fax_ms',
             'getEmail' => 'speakers_email_ms',
-        );
+        ];
     }
 
     /**
@@ -466,14 +466,14 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
      */
     protected function getTimeslotsMapping()
     {
-        return array(
+        return [
             'title' => 'timeslots_title_ms',
             'time' => 'timeslots_time_ms',
             'entry_date' => 'timeslots_entry_date_ms',
             'room' => 'timeslots_room_ms',
             'place' => 'timeslots_place_ms',
             'speakers' => 'timeslots_speakers_ms',
-        );
+        ];
     }
 
     /**

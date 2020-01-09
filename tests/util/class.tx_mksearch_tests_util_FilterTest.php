@@ -234,7 +234,7 @@ searchsolr.filter.default.sort {
   }
 }';
         $cObjMock = $this->getMockBuilder(tx_rnbase_util_Typo3Classes::getContentObjectRendererClass())
-            ->disableOriginalConstructor()->setMethods(array('typolink'))->getMock();
+            ->disableOriginalConstructor()->setMethods(['typolink'])->getMock();
         // Den Token bekommen wir nicht rein...
         $cObjMock->expects($this->any())->method('typolink')->will(self::returnValue('<a href=""/>'));
         $confArr = tx_rnbase_util_TS::parseTsConfig($typoScript);
@@ -243,7 +243,7 @@ searchsolr.filter.default.sort {
         $template = '<html>
 ###SORT_TSTAMP_ORDER### - ###SORT_TSTAMP_LINKURL###
 </html>';
-        $markerArr = $subpartArray = $wrappedSubpartArray = array();
+        $markerArr = $subpartArray = $wrappedSubpartArray = [];
 
         $this->filterUtil->parseSortFields(
             $template,
@@ -264,7 +264,6 @@ searchsolr.filter.default.sort {
     /**
      * Tests tx_mksearch_util_Filter::parseFqFieldAndValue.
      *
-     *
      * @group unit
      * @test
      * @dataProvider getParseFqFieldAndValueData
@@ -272,7 +271,7 @@ searchsolr.filter.default.sort {
     public function testParseFqFieldAndValue(
         $fq,
         $expected,
-        array $allowedFqParams = array()
+        array $allowedFqParams = []
     ) {
         if (empty($allowedFqParams)) {
             $allowedFqParams[] = 'contentType';
@@ -289,43 +288,43 @@ searchsolr.filter.default.sort {
      */
     public function getParseFqFieldAndValueData()
     {
-        return array(
-            __LINE__ => array(
+        return [
+            __LINE__ => [
                 'fq' => 'contentType:5',
                 'expected' => 'contentType:"5"',
-            ),
-            __LINE__ => array(
+            ],
+            __LINE__ => [
                 'fq' => 'contentType:tt_content',
                 'expected' => 'contentType:"tt_content"',
-            ),
-            __LINE__ => array(
+            ],
+            __LINE__ => [
                 'fq' => 'category_s:Foo Bar',
                 'expected' => 'category_s:"Foo Bar"',
-                'allowedFqParams' => array('category_s'),
-            ),
-            __LINE__ => array(
+                'allowedFqParams' => ['category_s'],
+            ],
+            __LINE__ => [
                 'fq' => 'field1_uid_i:57',
                 'expected' => 'field1_uid_i:"57"',
-                'allowedFqParams' => array('field1_uid_i'),
-            ),
-            __LINE__ => array(
+                'allowedFqParams' => ['field1_uid_i'],
+            ],
+            __LINE__ => [
                 'fq' => 'upperCaseField:7',
                 'expected' => 'upperCaseField:"7"',
-                'allowedFqParams' => array('upperCaseField'),
-            ),
-            __LINE__ => array(
+                'allowedFqParams' => ['upperCaseField'],
+            ],
+            __LINE__ => [
                 'fq' => 'unknowd_ms:5',
                 'expected' => '',
-            ),
-            __LINE__ => array(
+            ],
+            __LINE__ => [
                 'fq' => 'contentType:frühstück',
                 'expected' => 'contentType:"frühstück"',
-        ),
-            __LINE__ => array(
+        ],
+            __LINE__ => [
                 'fq' => 'frühstück',
                 'expected' => '',
-            ),
-        );
+            ],
+        ];
     }
 }
 

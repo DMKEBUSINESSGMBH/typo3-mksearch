@@ -11,6 +11,6 @@ if (!defined('TYPO3_MODE')) {
 // das cObj ein LOAD_REGISTER enthält, dann kommt es zu einer PHP Warnung, die wir nicht wollen.
 // Also verhindern wir das zurücksetzen des TSFE in diesen ViewHelpern während der Indizierungim BE.
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Fluid\\ViewHelpers\\CObjectViewHelper'] =
-    array('className' => 'DMK\\Mksearch\\ViewHelpers\\CObjectViewHelper');
+    ['className' => 'DMK\\Mksearch\\ViewHelpers\\CObjectViewHelper'];
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Fluid\\ViewHelpers\\Format\\HtmlViewHelper'] =
-    array('className' => 'DMK\\Mksearch\\ViewHelpers\\Format\\HtmlViewHelper');
+    ['className' => 'DMK\\Mksearch\\ViewHelpers\\Format\\HtmlViewHelper'];

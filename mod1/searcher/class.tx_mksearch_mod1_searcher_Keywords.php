@@ -56,24 +56,24 @@ class tx_mksearch_mod1_searcher_Keywords extends tx_mksearch_mod1_searcher_abstr
      */
     protected function getColumns(&$oDecorator)
     {
-        return array(
-            'uid' => array(
+        return [
+            'uid' => [
                 'title' => 'label_uid',
                 'decorator' => $oDecorator,
-            ),
-            'actions' => array(
+            ],
+            'actions' => [
                 'title' => 'label_tableheader_actions',
                 'decorator' => $oDecorator,
-            ),
-            'keyword' => array(
+            ],
+            'keyword' => [
                 'title' => 'label_tableheader_keyword',
                 'decorator' => $oDecorator,
-            ),
-            'link' => array(
+            ],
+            'link' => [
                 'title' => 'label_tableheader_link',
                 'decorator' => $oDecorator,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -83,7 +83,7 @@ class tx_mksearch_mod1_searcher_Keywords extends tx_mksearch_mod1_searcher_abstr
      */
     protected function getSearchColumns()
     {
-        return array('KEYWORD.uid', 'KEYWORD.keyword', 'KEYWORD.link');
+        return ['KEYWORD.uid', 'KEYWORD.keyword', 'KEYWORD.link'];
     }
 }
 

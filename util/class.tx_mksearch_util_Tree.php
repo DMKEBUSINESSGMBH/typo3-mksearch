@@ -35,11 +35,10 @@ class tx_mksearch_util_Tree
      *
      * @var array array['table1'=>array[], 'table2'=>...]
      */
-    private static $treeCache = array();
+    private static $treeCache = [];
 
     /**
      * Get a flat list of children of a generic node defined by configuration.
-     *
      *
      * @param array $fields  Fields for the tx_rnbase_util_SearchGeneric search
      * @param array $options Options for the tx_rnbase_util_SearchGeneric search
@@ -76,21 +75,21 @@ class tx_mksearch_util_Tree
             $config['maxLevel'] = 10;
         }
 
-        $result = array();
+        $result = [];
         $searcher = tx_rnbase_util_SearchBase::getInstance('tx_rnbase_util_SearchGeneric');
         $config['parentField'] = $options['searchdef']['basetablealias'].'.'.$config['parentField'];
 
         $parentIds = is_array($config['rootPoints']) ? implode(',', $config['rootPoints']) : $config['rootPoints'];
 
         // Just prepare so we can fill it later...
-        $fields[$config['parentField']] = array(OP_IN_INT => 0);
+        $fields[$config['parentField']] = [OP_IN_INT => 0];
 
         $i = 0;
         do {
             $fields[$config['parentField']][OP_IN_INT] = $parentIds;
             $children = $searcher->search($fields, $options);
             // Reset parents
-            $parentIds = array();
+            $parentIds = [];
             foreach ($children as $child) {
                 $parentIds[] = $child[$config['keyField']];
                 $result[] = $child;
@@ -129,18 +128,18 @@ class tx_mksearch_util_Tree
             throw new Exception('tx_mksearch_util_Tree::getAncestors(): parameter $config[\'startingPoint\'] missing!');
         }
         if (isset($config['endingPoint']) and !is_array($config['endingPoint'])) {
-            $config['endingPoint'] = array($config['endingPoint']);
+            $config['endingPoint'] = [$config['endingPoint']];
         }
         if (!isset($config['maxLevel'])) {
             $config['maxLevel'] = 10;
         }
 
-        $result = array();
+        $result = [];
         $searcher = tx_rnbase_util_SearchBase::getInstance('tx_rnbase_util_SearchGeneric');
         $config['keyField'] = $options['searchdef']['basetablealias'].'.'.$config['keyField'];
 
         // Prepare search
-        $fields[$config['keyField']] = array(OP_EQ_INT => $config['startingPoint']);
+        $fields[$config['keyField']] = [OP_EQ_INT => $config['startingPoint']];
 
         $i = 0;
         while (
@@ -199,33 +198,33 @@ class tx_mksearch_util_Tree
             return self::$treeCache[$table][$cacheKey];
         }
 
-        $ffields = array();
+        $ffields = [];
 
         // Turn off automatic enableFields,
         // as rn_base doesn't support skipping single enableField options (yet?)
         // Thus, WE have to take care of enableFields
         // Not every table supports enable fields...
         if (isset($GLOBALS['TCA'][$table]['ctrl']) && is_array($GLOBALS['TCA'][$table]['ctrl'])) {
-            $enable = self::page()->enableFields($table, null, array('fe_group' => true));
+            $enable = self::page()->enableFields($table, null, ['fe_group' => true]);
             // Cut "AND" in the beginning
             $enable = substr($enable, strpos($enable, 'AND ') + 4);
             $ffields[SEARCH_FIELD_CUSTOM] = $enable;
         }
 
-        $ooptions = array(
+        $ooptions = [
                         'what' => $keyField,
-                        'searchdef' => array(
+                        'searchdef' => [
                                 'basetable' => $table,
                                 'basetablealias' => $table,
                                 'usealias' => 1,
-                                ),
+                                ],
                         'enablefieldsoff' => true,
-                    );
-        $config = array(
+                    ];
+        $config = [
                         'keyField' => $keyField,
                         'parentField' => $parentField,
                         'rootPoints' => $uids,
-                    );
+                    ];
 
         $result = $uids;
 
@@ -235,7 +234,7 @@ class tx_mksearch_util_Tree
 
         // Fill cache
         if (!isset(self::$treeCache[$table])) {
-            self::$treeCache[$table] = array();
+            self::$treeCache[$table] = [];
         }
         self::$treeCache[$table][$cacheKey] = array_unique($result);
 

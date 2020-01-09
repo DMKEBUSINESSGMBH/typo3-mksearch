@@ -92,7 +92,7 @@ class tx_mksearch_service_engine_Solr extends Tx_Rnbase_Service_Base implements 
         //die Methode Ping gibt bei einem 200er die Millisek. zurück,
         //die die Anfrage gedauert hat, dies kann auch 0 sein!
         if (false === $this->index->ping() && $force) {
-            tx_rnbase_util_Logger::fatal('Solr service not responding.', 'mksearch', array($host, $port, $path));
+            tx_rnbase_util_Logger::fatal('Solr service not responding.', 'mksearch', [$host, $port, $path]);
             throw new tx_mksearch_service_engine_SolrException('Solr service not responding.', -1, 'http://'.$host.':'.$port.$path);
         }
     }
@@ -149,7 +149,7 @@ class tx_mksearch_service_engine_Solr extends Tx_Rnbase_Service_Base implements 
                         tx_rnbase_util_Misc::callHook(
                             'mksearch',
                             'engine_ZendLucene_buildQuery_manipulateSingleTerm',
-                            array('term' => &$ff['term']),
+                            ['term' => &$ff['term']],
                             $this
                         );
 
@@ -169,7 +169,7 @@ class tx_mksearch_service_engine_Solr extends Tx_Rnbase_Service_Base implements 
                             tx_rnbase_util_Misc::callHook(
                                 'mksearch',
                                 'engine_ZendLucene_buildQuery_manipulateSingleTerm',
-                                array('term' => &$t),
+                                ['term' => &$t],
                                 $this
                             );
                             if ($t) {
@@ -216,7 +216,7 @@ class tx_mksearch_service_engine_Solr extends Tx_Rnbase_Service_Base implements 
      *
      * @return array[tx_mksearch_model_SearchHit]
      */
-    public function search(array $fields = array(), array $options = array())
+    public function search(array $fields = [], array $options = [])
     {
         return $this->searchSolr($fields, $options);
     }
@@ -232,7 +232,7 @@ class tx_mksearch_service_engine_Solr extends Tx_Rnbase_Service_Base implements 
     private function searchSolr($fields, $options)
     {
         $start = microtime(true);
-        $ret = array();
+        $ret = [];
         $solr = $this->getSolr();
         try {
             $response = $solr->search($fields['term'], intval($options['offset']), intval($options['limit']), $options);
@@ -260,7 +260,7 @@ class tx_mksearch_service_engine_Solr extends Tx_Rnbase_Service_Base implements 
                 if (is_object($response->debug)) {
                     $ret['debug'] = get_object_vars($response->debug);
                 }
-                tx_rnbase_util_Debug::debug(array($options, $ret), 'class.tx_mksearch_service_engine_Solr.php Line: '.__LINE__); // TODO: remove me
+                tx_rnbase_util_Debug::debug([$options, $ret], 'class.tx_mksearch_service_engine_Solr.php Line: '.__LINE__); // TODO: remove me
             }
         } catch (Exception $e) {
             throw new tx_mksearch_service_engine_SolrException('Exception caught from Solr:'.$e->getMessage(), -1, $solr->lastUrl, $e);
@@ -309,7 +309,7 @@ class tx_mksearch_service_engine_Solr extends Tx_Rnbase_Service_Base implements 
         if (3 != count($data)) {
             throw new Exception('Wrong credentials for solr defined.');
         }
-        $ret = array();
+        $ret = [];
         $ret['host'] = $data[0];
         $ret['port'] = $data[1];
         $ret['path'] = $data[2];
@@ -428,11 +428,11 @@ class tx_mksearch_service_engine_Solr extends Tx_Rnbase_Service_Base implements 
         $searchTerm = "+uid:$uid +extKey:$extKey +contentType:$contentType";
 
         return $this->search(
-            array('term' => $searchTerm),
+            ['term' => $searchTerm],
             //we set the defType to "lucene" in case the default request handler
             //is dismax or something else. please note that the default request handler
             //shouldn't set a fq or something else!
-            array('defType' => 'lucene', 'rawFormat' => 1, 'rawOutput' => 1, 'limit' => 100)
+            ['defType' => 'lucene', 'rawFormat' => 1, 'rawOutput' => 1, 'limit' => 100]
         );
     }
 
@@ -455,12 +455,12 @@ class tx_mksearch_service_engine_Solr extends Tx_Rnbase_Service_Base implements 
             tx_rnbase_util_Logger::warn(
                 'getByContentUid has returned more than one element.',
                 'mksearch',
-                array(
+                [
                     'service' => get_class($this),
                     'uid' => $uid,
                     'extKey' => $extKey,
                     'contentType' => $contentType,
-                )
+                ]
             );
         }
 
@@ -532,7 +532,7 @@ class tx_mksearch_service_engine_Solr extends Tx_Rnbase_Service_Base implements 
 
         // Primary key data (fields are all scalar)
         $data = $doc->getPrimaryKey();
-        $id = array();
+        $id = [];
         foreach ($data as $key => $field) {
             if (!empty($field)) {
                 $value = $field->getValuesWithBoost();
@@ -577,11 +577,11 @@ class tx_mksearch_service_engine_Solr extends Tx_Rnbase_Service_Base implements 
             tx_rnbase_util_Logger::fatal(
                 '[SOLR] Adding document to Solr failed.',
                 'mksearch',
-                array(
+                [
                     'Exception' => $e->getMessage(), 'lastUrl' => $this->getSolr()->lastUrl,
                     'doc' => $this->getFields4Doc($solrDoc),
                     'solrResponse' => $e->getResponse()->getRawResponse(),
-                )
+                ]
             );
             throw $e;
         }
@@ -589,7 +589,7 @@ class tx_mksearch_service_engine_Solr extends Tx_Rnbase_Service_Base implements 
 
     public function getFields4Doc(Apache_Solr_Document $solrDoc)
     {
-        $ret = array();
+        $ret = [];
         $fieldNames = $solrDoc->getFieldNames();
         foreach ($fieldNames as $fName) {
             $ret[$fName] = $solrDoc->getField($fName);
@@ -618,7 +618,7 @@ class tx_mksearch_service_engine_Solr extends Tx_Rnbase_Service_Base implements 
         // Zuerst nach Optionen für Filetype suchen
         $params = $options['solr.']['indexOptions.'][$fileType.'.']['params.'];
         $params = is_array($params) ? $params : $options['solr.']['indexOptions.']['params.'];
-        $params = is_array($params) ? $params : array();
+        $params = is_array($params) ? $params : [];
 
         $solrMimeType = ($fileMimeType && $fileMimeSubtype) ? $fileMimeType.'/'.$fileMimeSubtype : 'application/octet-stream';
         $response = $this->getSolr()->extract($file, $params, $solrDoc, $solrMimeType);
@@ -676,12 +676,12 @@ class tx_mksearch_service_engine_Solr extends Tx_Rnbase_Service_Base implements 
      *
      * @see tx_mksearch_interface_SearchEngine::indexDeleteByQuery()
      */
-    public function indexDeleteByQuery($query, $options = array())
+    public function indexDeleteByQuery($query, $options = [])
     {
         $solr = $this->getSolr();
 
         try {
-            $ret = array();
+            $ret = [];
             $response = $solr->deleteByQuery($query);
             if (200 != $response->getHttpStatus()) {
                 throw new tx_mksearch_service_engine_SolrException('Error requesting solr. HTTP status:'.$response->getHttpStatus(), -1, $solr->lastUrl);
@@ -690,7 +690,7 @@ class tx_mksearch_service_engine_Solr extends Tx_Rnbase_Service_Base implements 
 
             if ($options['debug']) {
                 $ret['debug'] = get_object_vars($response->debug);
-                tx_rnbase_util_Debug::debug(array($options, $ret), 'class.tx_mksearch_service_engine_Solr.php Line: '.__LINE__); // TODO: remove me
+                tx_rnbase_util_Debug::debug([$options, $ret], 'class.tx_mksearch_service_engine_Solr.php Line: '.__LINE__); // TODO: remove me
             }
         } catch (Exception $e) {
             throw new tx_mksearch_service_engine_SolrException('Exception caught from Solr:'.$e->getMessage(), -1, $solr->lastUrl, $e);
@@ -794,7 +794,7 @@ class tx_mksearch_service_engine_Solr extends Tx_Rnbase_Service_Base implements 
         $sUrl .= '?spellcheck.build=true';
 
         //and execute the command
-        $oSolr->getHttpTransport()->performHeadRequest($sUrl, array(), 'application/xml; charset=UTF-8');
+        $oSolr->getHttpTransport()->performHeadRequest($sUrl, [], 'application/xml; charset=UTF-8');
     }
 
     /**
@@ -832,7 +832,7 @@ class tx_mksearch_service_engine_Solr extends Tx_Rnbase_Service_Base implements 
             $docs = $response->response->docs;
         }
 
-        $hits = array();
+        $hits = [];
         if ($docs) {
             foreach ($docs as $doc) {
                 $hits[] = tx_rnbase::makeInstance('tx_mksearch_model_SolrHit', $doc);

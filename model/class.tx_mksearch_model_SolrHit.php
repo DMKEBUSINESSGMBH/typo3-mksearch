@@ -45,11 +45,7 @@ class tx_mksearch_model_SolrHit extends tx_rnbase_model_base implements tx_mksea
     {
         $solrDoc = $rowOrUid;
         if (!$solrDoc instanceof Apache_Solr_Document) {
-            throw new InvalidArgumentException(
-                'The solr doc has to be an object instance of "Apache_Solr_Document",'
-                .'"'.(is_object($solrDoc) ? get_class($solrDoc) : gettype($solrDoc)).'" given.',
-                1370252783
-            );
+            throw new InvalidArgumentException('The solr doc has to be an object instance of "Apache_Solr_Document",'.'"'.(is_object($solrDoc) ? get_class($solrDoc) : gettype($solrDoc)).'" given.', 1370252783);
         }
         $this->solrDoc = $solrDoc;
         $uidField = $solrDoc->getField('uid');

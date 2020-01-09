@@ -39,10 +39,10 @@ class tx_mksearch_tests_action_ElasticSearchTest extends tx_mksearch_tests_Testc
         $confId = 'elasticsearch.';
         $parameters = tx_rnbase::makeInstance(
             'tx_rnbase_parameters',
-            array('pb-search456-pointer' => 2)
+            ['pb-search456-pointer' => 2]
         );
         $configurations = $this->createConfigurations(
-            array($confId => array('hit.' => array('pagebrowser.' => array('limit' => 20)))),
+            [$confId => ['hit.' => ['pagebrowser.' => ['limit' => 20]]]],
             'mksearch',
             '',
             $parameters
@@ -54,14 +54,14 @@ class tx_mksearch_tests_action_ElasticSearchTest extends tx_mksearch_tests_Testc
         $pluginUid->setValue($configurations, 456);
 
         $viewData = $configurations->getViewData();
-        $fields = array();
-        $options = array('limit' => 10);
+        $fields = [];
+        $options = ['limit' => 10];
 
         $searchEngine = $this->getMock(
             'tx_mksearch_service_engine_ElasticSearch',
-            array('getIndex')
+            ['getIndex']
         );
-        $index = $this->getMock('stdClass', array('count'));
+        $index = $this->getMock('stdClass', ['count']);
         $index->expects($this->once())
             ->method('count')
             ->will($this->returnValue(123));
@@ -110,12 +110,12 @@ class tx_mksearch_tests_action_ElasticSearchTest extends tx_mksearch_tests_Testc
     public function testHandlePagebrowserWhenPageBrowserIdConfigured()
     {
         $confId = 'elasticsearch.';
-        $parameters = tx_rnbase::makeInstance('tx_rnbase_parameters', array());
+        $parameters = tx_rnbase::makeInstance('tx_rnbase_parameters', []);
         $configurations = $this->createConfigurations(
-            array($confId => array('hit.' => array('pagebrowser.' => array(
+            [$confId => ['hit.' => ['pagebrowser.' => [
                 'limit' => 20,
                 'pbid' => 'pagebrowserId',
-            )))),
+            ]]]],
             'mksearch',
             '',
             $parameters
@@ -123,14 +123,14 @@ class tx_mksearch_tests_action_ElasticSearchTest extends tx_mksearch_tests_Testc
         $configurations->setParameters($parameters);
 
         $viewData = $configurations->getViewData();
-        $fields = array();
-        $options = array('limit' => 10);
+        $fields = [];
+        $options = ['limit' => 10];
 
         $searchEngine = $this->getMock(
             'tx_mksearch_service_engine_ElasticSearch',
-            array('getIndex')
+            ['getIndex']
         );
-        $index = $this->getMock('stdClass', array('count'));
+        $index = $this->getMock('stdClass', ['count']);
         $index->expects($this->once())
             ->method('count')
             ->will($this->returnValue(123));
@@ -193,9 +193,9 @@ class tx_mksearch_tests_action_ElasticSearchTest extends tx_mksearch_tests_Testc
     public function testHandleRequestReturnsNullIfNosearchConfigured()
     {
         $confId = 'elasticsearch.';
-        $parameters = tx_rnbase::makeInstance('tx_rnbase_parameters', array());
+        $parameters = tx_rnbase::makeInstance('tx_rnbase_parameters', []);
         $configurations = $this->createConfigurations(
-            array($confId => array('nosearch' => true)),
+            [$confId => ['nosearch' => true]],
             'mksearch',
             '',
             $parameters
@@ -206,7 +206,7 @@ class tx_mksearch_tests_action_ElasticSearchTest extends tx_mksearch_tests_Testc
 
         $action = $this->getMock(
             'tx_mksearch_action_ElasticSearch',
-            array('getServiceRegistry', 'handlePageBrowser', 'getConfigurations')
+            ['getServiceRegistry', 'handlePageBrowser', 'getConfigurations']
         );
         $action->expects($this->never())
             ->method('getServiceRegistry');
@@ -238,16 +238,16 @@ class tx_mksearch_tests_action_ElasticSearchTest extends tx_mksearch_tests_Testc
     public function testHandleRequest()
     {
         $confId = 'elasticsearch.';
-        $parameters = tx_rnbase::makeInstance('tx_rnbase_parameters', array());
+        $parameters = tx_rnbase::makeInstance('tx_rnbase_parameters', []);
         $configurations = $this->createConfigurations(
-            array($confId => array(
-                'filter.' => array(
+            [$confId => [
+                'filter.' => [
                     'forceSearch' => true,
                     'class' => 'tx_mksearch_filter_ElasticSearchBase',
-                    'fields.' => array('term' => 'testterm'),
-                    'options.' => array('limt' => 123),
-                ),
-            )),
+                    'fields.' => ['term' => 'testterm'],
+                    'options.' => ['limt' => 123],
+                ],
+            ]],
             'mksearch',
             '',
             $parameters
@@ -258,9 +258,9 @@ class tx_mksearch_tests_action_ElasticSearchTest extends tx_mksearch_tests_Testc
 
         $action = $this->getMock(
             'tx_mksearch_action_ElasticSearch',
-            array('getSearchIndex', 'getServiceRegistry', 'handlePageBrowser', 'getConfigurations')
+            ['getSearchIndex', 'getServiceRegistry', 'handlePageBrowser', 'getConfigurations']
         );
-        $index = tx_rnbase::makeInstance('tx_mksearch_model_internal_Index', array());
+        $index = tx_rnbase::makeInstance('tx_mksearch_model_internal_Index', []);
         $action->expects($this->once())
             ->method('getSearchIndex')
             ->will($this->returnValue($index));
@@ -270,20 +270,20 @@ class tx_mksearch_tests_action_ElasticSearchTest extends tx_mksearch_tests_Testc
 
         $serviceRegistry = $this->getMock(
             'stdClass',
-            array('getSearchEngine')
+            ['getSearchEngine']
         );
         $searchEngine = $this->getMock(
             'tx_mksearch_service_engine_ElasticSearch',
-            array('openIndex', 'search')
+            ['openIndex', 'search']
         );
         $searchEngine->expects($this->once())
             ->method('openIndex')
             ->with($index);
         $searchEngine->expects($this->once())
             ->method('search')
-            ->with(array('term' => 'testterm'), array('limt' => 123), $configurations)
+            ->with(['term' => 'testterm'], ['limt' => 123], $configurations)
             ->will($this->returnValue(
-                array('items' => 'search hits', 'numFound' => 987)
+                ['items' => 'search hits', 'numFound' => 987]
             ));
         $serviceRegistry->expects($this->once())
             ->method('getSearchEngine')
@@ -300,8 +300,8 @@ class tx_mksearch_tests_action_ElasticSearchTest extends tx_mksearch_tests_Testc
                 $configurations,
                 $confId,
                 $viewData,
-                array('term' => 'testterm'),
-                array('limt' => 123),
+                ['term' => 'testterm'],
+                ['limt' => 123],
                 $searchEngine
             );
 

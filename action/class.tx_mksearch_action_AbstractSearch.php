@@ -88,7 +88,7 @@ abstract class tx_mksearch_action_AbstractSearch extends tx_rnbase_action_BaseIO
         $paramName = $paramName ? $paramName : 'term';
         $value = $parameters->get($paramName);
         $value = $value ? substr($value, 0, 150) : '';
-        $options = array();
+        $options = [];
         tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, 'softlink.options.');
 
         $database = Tx_Rnbase_Database_Connection::getInstance();

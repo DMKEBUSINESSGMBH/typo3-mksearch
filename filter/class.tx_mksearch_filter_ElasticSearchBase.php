@@ -137,7 +137,7 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter
      */
     public function parseTemplate($template, &$formatter, $confId, $marker = 'FILTER')
     {
-        $markArray = $subpartArray = $wrappedSubpartArray = array();
+        $markArray = $subpartArray = $wrappedSubpartArray = [];
 
         $this->parseSearchForm(
             $template,
@@ -209,7 +209,7 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter
 
         if ($formTemplate) {
             $link = $configurations->createLink();
-            $link->initByTS($configurations, $confId.'template.links.action.', array());
+            $link->initByTS($configurations, $confId.'template.links.action.', []);
             // Prepare some form data
             $paramArray = $this->getParameters()->getArrayCopy();
             $formData = $this->getParameters()->get('submit') ? $paramArray : $this->getFormData();
@@ -218,7 +218,7 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter
             $formData['hiddenfields'] = tx_rnbase_util_FormUtil::getHiddenFieldsForUrlParams($formData['action']);
             $this->prepareFormFields($formData, $this->getParameters());
 
-            $combinations = array('none', 'free', 'or', 'and', 'exact');
+            $combinations = ['none', 'free', 'or', 'and', 'exact'];
             $currentCombination = $this->getParameters()->get('combination');
             $currentCombination = $currentCombination ? $currentCombination : 'none';
             foreach ($combinations as $combination) {
@@ -226,7 +226,7 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter
                 $formData['combination_'.$combination] = ($combination == $currentCombination) ? ' checked="checked"' : '';
             }
 
-            $options = array('fuzzy');
+            $options = ['fuzzy'];
             $currentOptions = $this->getParameters()->get('options');
             foreach ($options as $option) {
                 // wenn anders benötigt, via ts ändern werden
@@ -262,7 +262,7 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter
     protected function prepareFormFields(&$formData, $parameters)
     {
         $formData['searchterm'] = htmlspecialchars($parameters->get('term'), ENT_QUOTES);
-        $values = array('or', 'and', 'exact');
+        $values = ['or', 'and', 'exact'];
         $options = $parameters->get('options');
         if ($options['combination']) {
             foreach ($values as $value) {
@@ -368,7 +368,7 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter
      */
     private function getFormData()
     {
-        return array();
+        return [];
     }
 
     /**

@@ -14,7 +14,7 @@ class tx_mksearch_search_Keyword extends tx_rnbase_util_SearchBase
      */
     public function getTableMappings()
     {
-        $tableMapping = array();
+        $tableMapping = [];
         $tableMapping['KEYWORD'] = 'tx_mksearch_keywords';
 
         return $tableMapping;

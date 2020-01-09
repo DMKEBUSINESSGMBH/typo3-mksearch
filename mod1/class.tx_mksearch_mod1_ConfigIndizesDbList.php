@@ -55,7 +55,7 @@ class tx_mksearch_mod1_ConfigIndizesDbList extends tx_rnbase_mod_BaseModFunc
      */
     protected function getContent($template, &$configurations, &$formatter, $formTool)
     {
-        $data = array();
+        $data = [];
         $storagePid = $this->getModule()->id;
         if ($storagePid) {
             $data['showerror'] = 0;

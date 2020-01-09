@@ -22,7 +22,7 @@ class tx_mksearch_mod1_util_Misc
                 continue;
             }
             $pageinfo = Tx_Rnbase_Backend_Utility::readPageAccess($pid, $mod->perms_clause);
-            $modUrl = Tx_Rnbase_Backend_Utility::getModuleUrl('web_MksearchM1', array('id' => $pid), '');
+            $modUrl = Tx_Rnbase_Backend_Utility::getModuleUrl('web_MksearchM1', ['id' => $pid], '');
             $page = '<a href="'.$modUrl.'">';
             $page .= Tx_Rnbase_Backend_Utility_Icons::getSpriteIconForRecord('pages', $pageRecord);
             $page .= ' '.$pageinfo['title'];
@@ -54,27 +54,27 @@ class tx_mksearch_mod1_util_Misc
         $database = Tx_Rnbase_Database_Connection::getInstance();
         $pages = array_merge(
             // wir holen alle seiten auf denen indexer liegen
-            $database->doSelect('pid as pageid', 'tx_mksearch_indices', array('enablefieldsbe' => 1)),
+            $database->doSelect('pid as pageid', 'tx_mksearch_indices', ['enablefieldsbe' => 1]),
             // wir holen alle seiten auf denen configs liegen
-            $database->doSelect('pid as pageid', 'tx_mksearch_indexerconfigs', array('enablefieldsbe' => 1)),
+            $database->doSelect('pid as pageid', 'tx_mksearch_indexerconfigs', ['enablefieldsbe' => 1]),
             // wir holen alle seiten auf denen composites liegen
-            $database->doSelect('pid as pageid', 'tx_mksearch_configcomposites', array('enablefieldsbe' => 1)),
+            $database->doSelect('pid as pageid', 'tx_mksearch_configcomposites', ['enablefieldsbe' => 1]),
             // wir holen alle seiten auf denen keywords liegen
-            $database->doSelect('pid as pageid', 'tx_mksearch_keywords', array('enablefieldsbe' => 1)),
+            $database->doSelect('pid as pageid', 'tx_mksearch_keywords', ['enablefieldsbe' => 1]),
             // wir holen alle seiten die mksearch beinhalten
-            $database->doSelect('uid as pageid', 'pages', array('enablefieldsbe' => 1, 'where' => 'module=\'mksearch\''))
+            $database->doSelect('uid as pageid', 'pages', ['enablefieldsbe' => 1, 'where' => 'module=\'mksearch\''])
         );
         if (empty($pages)) {
-            return array();
+            return [];
         }
         // wir mergen die seiten zusammen
         $pages = call_user_func_array('array_merge_recursive', array_values($pages));
         if (empty($pages['pageid'])) {
-            return array();
+            return [];
         }
         // Wenn nur ein Eintrag existiert, haben wir hier einen String!
         if (!is_array($pages['pageid'])) {
-            $pages['pageid'] = array($pages['pageid']);
+            $pages['pageid'] = [$pages['pageid']];
         }
         // wir machen aus den pid keys
         $pages = array_flip($pages['pageid']);

@@ -42,11 +42,11 @@ class tx_mksearch_tests_indexer_TtNewsNewsTest extends tx_mksearch_tests_Testcas
 
     public function test_prepareSearchData()
     {
-        $options = array();
-        $options['indexedFields.'] = array(
+        $options = [];
+        $options['indexedFields.'] = [
             'uid_i' => 'uid',
             'bodytext_s' => 'bodytext',
-        );
+        ];
 
         $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtNewsNews');
 
@@ -55,7 +55,7 @@ class tx_mksearch_tests_indexer_TtNewsNewsTest extends tx_mksearch_tests_Testcas
 
         // Datumswerte werden immer in UTC in den Index gelegt
         $tstamp = tx_rnbase_util_Dates::datetime_mysql2tstamp('2010-01-30 15:00:00', 'UTC');
-        $record = array('uid' => 123, 'deleted' => 0, 'datetime' => $tstamp, 'bodytext' => 'some test');
+        $record = ['uid' => 123, 'deleted' => 0, 'datetime' => $tstamp, 'bodytext' => 'some test'];
         $indexer->prepareSearchData('tt_news', $record, $indexDoc, $options);
         $data = $indexDoc->getData();
         self::assertEquals('2010-01-30T15:00:00Z', $data['datetime_dt']->getValue());
@@ -71,11 +71,11 @@ class tx_mksearch_tests_indexer_TtNewsNewsTest extends tx_mksearch_tests_Testcas
 
     public function test_prepareSearchDataWithHtmlMarkupInBodytext()
     {
-        $options = array();
-        $options['indexedFields.'] = array(
+        $options = [];
+        $options['indexedFields.'] = [
             'uid_i' => 'uid',
             'bodytext_s' => 'bodytext',
-        );
+        ];
 
         $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtNewsNews');
 
@@ -84,7 +84,7 @@ class tx_mksearch_tests_indexer_TtNewsNewsTest extends tx_mksearch_tests_Testcas
 
         // Datumswerte werden immer in UTC in den Index gelegt
         $tstamp = tx_rnbase_util_Dates::datetime_mysql2tstamp('2010-01-30 15:00:00', 'UTC');
-        $record = array('uid' => 123, 'deleted' => 0, 'datetime' => $tstamp, 'bodytext' => 'some test <p>with html markup</p>');
+        $record = ['uid' => 123, 'deleted' => 0, 'datetime' => $tstamp, 'bodytext' => 'some test <p>with html markup</p>'];
         $indexer->prepareSearchData('tt_news', $record, $indexDoc, $options);
         $data = $indexDoc->getData();
         self::assertEquals('2010-01-30T15:00:00Z', $data['datetime_dt']->getValue(), 'datetime falsch');
@@ -100,13 +100,13 @@ class tx_mksearch_tests_indexer_TtNewsNewsTest extends tx_mksearch_tests_Testcas
 
     public function test_prepareSearchDataWithHtmlMarkupInBodytextAndkeepHtmlOption()
     {
-        $options = array(
-            'indexedFields.' => array(
+        $options = [
+            'indexedFields.' => [
                 'uid_i' => 'uid',
                 'bodytext_s' => 'bodytext',
-            ),
+            ],
             'keepHtml' => 1,
-        );
+        ];
 
         $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtNewsNews');
 
@@ -115,7 +115,7 @@ class tx_mksearch_tests_indexer_TtNewsNewsTest extends tx_mksearch_tests_Testcas
 
         // Datumswerte werden immer in UTC in den Index gelegt
         $tstamp = tx_rnbase_util_Dates::datetime_mysql2tstamp('2010-01-30 15:00:00', 'UTC');
-        $record = array('uid' => 123, 'deleted' => 0, 'datetime' => $tstamp, 'bodytext' => 'some test <p>with html markup</p>');
+        $record = ['uid' => 123, 'deleted' => 0, 'datetime' => $tstamp, 'bodytext' => 'some test <p>with html markup</p>'];
         $indexer->prepareSearchData('tt_news', $record, $indexDoc, $options);
         $data = $indexDoc->getData();
         self::assertEquals('2010-01-30T15:00:00Z', $data['datetime_dt']->getValue(), 'datetime falsch');
@@ -131,24 +131,24 @@ class tx_mksearch_tests_indexer_TtNewsNewsTest extends tx_mksearch_tests_Testcas
 
     public function test_prepareSearchDataDeleted()
     {
-        $options = array();
+        $options = [];
         $options['indexedFields'] = 'uid,bodytext';
 
         $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtNewsNews');
 
         list($extKey, $cType) = $indexer->getContentType();
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType, 'tx_mksearch_model_IndexerFieldBase');
-        $record = array('uid' => 123, 'deleted' => 1);
+        $record = ['uid' => 123, 'deleted' => 1];
         $indexer->prepareSearchData('tt_news', $record, $indexDoc, $options);
         self::assertEquals(true, $indexDoc->getDeleted());
 
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType, 'tx_mksearch_model_IndexerFieldBase');
-        $record = array('uid' => 123, 'deleted' => 0, 'hidden' => 1);
+        $record = ['uid' => 123, 'deleted' => 0, 'hidden' => 1];
         $indexer->prepareSearchData('tt_news', $record, $indexDoc, $options);
         self::assertEquals(true, $indexDoc->getDeleted());
 
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType, 'tx_mksearch_model_engineSpecific_solr_IndexerField');
-        $record = array('uid' => 123, 'deleted' => 0, 'hidden' => 0, 'bodytext' => 'some test');
+        $record = ['uid' => 123, 'deleted' => 0, 'hidden' => 0, 'bodytext' => 'some test'];
         $indexer->prepareSearchData('tt_news', $record, $indexDoc, $options);
         self::assertEquals(false, $indexDoc->getDeleted());
         $data = $indexDoc->getData();
@@ -163,7 +163,7 @@ class tx_mksearch_tests_indexer_TtNewsNewsTest extends tx_mksearch_tests_Testcas
 
     public function test_prepareSearchDataWithoutIndexedFieldsOption()
     {
-        $options = array();
+        $options = [];
 
         $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtNewsNews');
 
@@ -172,7 +172,7 @@ class tx_mksearch_tests_indexer_TtNewsNewsTest extends tx_mksearch_tests_Testcas
 
         // Datumswerte werden immer in UTC in den Index gelegt
         $tstamp = tx_rnbase_util_Dates::datetime_mysql2tstamp('2010-01-30 15:00:00', 'UTC');
-        $record = array('uid' => 123, 'deleted' => 0, 'datetime' => $tstamp, 'bodytext' => 'some test <p>with html markup</p>');
+        $record = ['uid' => 123, 'deleted' => 0, 'datetime' => $tstamp, 'bodytext' => 'some test <p>with html markup</p>'];
         $indexer->prepareSearchData('tt_news', $record, $indexDoc, $options);
         $data = $indexDoc->getData();
         self::assertEquals('2010-01-30T15:00:00Z', $data['datetime_dt']->getValue(), 'datetime falsch');
@@ -216,14 +216,14 @@ class tx_mksearch_tests_indexer_TtNewsNewsTest extends tx_mksearch_tests_Testcas
      */
     public function testStopIndexingWhenTtNewsCatChangedThrowsNoException()
     {
-        $options = array();
+        $options = [];
 
         $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtNewsNews');
 
         list($extKey, $cType) = $indexer->getContentType();
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType, 'tx_mksearch_model_IndexerFieldBase');
 
-        $record = array('uid' => 123);
+        $record = ['uid' => 123];
         $indexer->prepareSearchData('tt_news_cat', $record, $indexDoc, $options);
         self::assertTrue(true);
     }
@@ -233,11 +233,11 @@ class tx_mksearch_tests_indexer_TtNewsNewsTest extends tx_mksearch_tests_Testcas
      */
     public function testStopIndexingWhenTtNewsCatChangedPutsREcordsCorrectToQueue()
     {
-        $options = array();
+        $options = [];
 
         $indexService = $this->getMock(
             'tx_mksearch_service_internal_Index',
-            array('addRecordToIndex')
+            ['addRecordToIndex']
         );
         $indexService->expects($this->at(0))
             ->method('addRecordToIndex')
@@ -251,23 +251,23 @@ class tx_mksearch_tests_indexer_TtNewsNewsTest extends tx_mksearch_tests_Testcas
 
         $indexer = $this->getMock(
             'tx_mksearch_indexer_TtNewsNews',
-            array('doSelect', 'getIntIndexService')
+            ['doSelect', 'getIntIndexService']
         );
         $indexer->expects($this->once())
             ->method('doSelect')
             ->with(
                 'tt_news.uid AS uid',
-                array('tt_news_cat_mm JOIN tt_news ON tt_news.uid=tt_news_cat_mm.uid_local AND tt_news.deleted=0', 'tt_news_cat_mm'),
-                array('where' => 'tt_news_cat_mm.uid_foreign=123', 'enablefieldsoff' => true)
+                ['tt_news_cat_mm JOIN tt_news ON tt_news.uid=tt_news_cat_mm.uid_local AND tt_news.deleted=0', 'tt_news_cat_mm'],
+                ['where' => 'tt_news_cat_mm.uid_foreign=123', 'enablefieldsoff' => true]
             )
-            ->will($this->returnValue(array(0 => array('uid' => 456), 1 => array('uid' => 789))));
+            ->will($this->returnValue([0 => ['uid' => 456], 1 => ['uid' => 789]]));
         $indexer->expects($this->once())
             ->method('getIntIndexService')
             ->will($this->returnValue($indexService));
 
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType, 'tx_mksearch_model_IndexerFieldBase');
 
-        $record = array('uid' => 123);
+        $record = ['uid' => 123];
         $indexerReturn = $indexer->prepareSearchData('tt_news_cat', $record, $indexDoc, $options);
         self::assertNull($indexerReturn);
     }

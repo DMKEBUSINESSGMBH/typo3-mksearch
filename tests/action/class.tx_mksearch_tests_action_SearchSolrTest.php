@@ -84,17 +84,17 @@ class tx_mksearch_tests_action_SearchSolrTest extends tx_mksearch_tests_Testcase
 
         $property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsInline');
         $property->setAccessible(true);
-        $property->setValue(tx_rnbase_util_TYPO3::getPageRenderer(), array());
+        $property->setValue(tx_rnbase_util_TYPO3::getPageRenderer(), []);
 
         $property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsLibs');
         $property->setAccessible(true);
-        $property->setValue(tx_rnbase_util_TYPO3::getPageRenderer(), array());
+        $property->setValue(tx_rnbase_util_TYPO3::getPageRenderer(), []);
     }
 
     /**
      * @param unknown_type $aParams
      */
-    private function getAction($aMockFunctions = array(), $aConfig = array(), &$out = '', $aParams = array())
+    private function getAction($aMockFunctions = [], $aConfig = [], &$out = '', $aParams = [])
     {
         //build mock
         $action = $this->getMock('tx_mksearch_action_SearchSolr', array_keys($aMockFunctions));
@@ -140,19 +140,19 @@ class tx_mksearch_tests_action_SearchSolrTest extends tx_mksearch_tests_Testcase
     public function testHandleRequestWithDisabledAutocomplete()
     {
         //action initialisieren
-        $aConfig['searchsolr.'] = array(
+        $aConfig['searchsolr.'] = [
             'nosearch' => 1, //keine echte Suche
-            'autocomplete.' => array(
+            'autocomplete.' => [
                 'enable' => 0,
-            ),
-        );
+            ],
+        ];
         //mock getIndex() so its not called for real
-        $aMockFunctions = array(
-            'getIndex' => array(
+        $aMockFunctions = [
+            'getIndex' => [
                 'expects' => $this->never(),
                 'returnValue' => true,
-            ),
-        );
+            ],
+        ];
         $out = true;
         $action = $this->getAction($aMockFunctions, $aConfig, $out);
 
@@ -170,29 +170,29 @@ class tx_mksearch_tests_action_SearchSolrTest extends tx_mksearch_tests_Testcase
     public function testHandleRequestWithEnabledAutocomplete()
     {
         //action initialisieren
-        $aConfig['searchsolr.'] = array(
+        $aConfig['searchsolr.'] = [
             'nosearch' => 1, //keine echte Suche
-            'autocomplete.' => array(
+            'autocomplete.' => [
                 'enable' => 1,
                 'minLength' => 2,
                 'elementSelector' => 'myElementSelector',
-                'actionLink.' => array(
+                'actionLink.' => [
                     'useKeepVars' => 1,
-                    'useKeepVars.' => array(
+                    'useKeepVars.' => [
                         'add' => '::type=540',
-                    ),
+                    ],
                     'noHash' => 1,
-                ),
-            ),
+                ],
+            ],
             'usedIndex' => 1,
-        );
+        ];
         //mock getIndex() so its not called for real
-        $aMockFunctions = array(
-            'getIndex' => array(
+        $aMockFunctions = [
+            'getIndex' => [
                 'expects' => $this->never(),
                 'returnValue' => true,
-            ),
-        );
+            ],
+        ];
         $out = true;
         $action = $this->getAction($aMockFunctions, $aConfig, $out);
 
@@ -238,32 +238,32 @@ class tx_mksearch_tests_action_SearchSolrTest extends tx_mksearch_tests_Testcase
     public function testHandleRequestWithEnabledAutocompleteAndInclusionOfSomeJqueryLibs()
     {
         //action initialisieren
-        $aConfig['searchsolr.'] = array(
+        $aConfig['searchsolr.'] = [
             'nosearch' => 1, //keine echte Suche
-            'autocomplete.' => array(
+            'autocomplete.' => [
                 'enable' => 1,
                 'minLength' => 2,
                 'elementSelector' => 'myElementSelector',
-                'actionLink.' => array(
+                'actionLink.' => [
                     'useKeepVars' => 1,
-                    'useKeepVars.' => array(
+                    'useKeepVars.' => [
                         'add' => '::type=540',
-                    ),
+                    ],
                     'noHash' => 1,
-                ),
+                ],
                 'includeJquery' => 1,
                 'includeJqueryUiCore' => 1,
                 'includeJqueryUiAutocomplete' => 0,
-            ),
+            ],
             'usedIndex' => 1,
-        );
+        ];
         //mock getIndex() so its not called for real
-        $aMockFunctions = array(
-            'getIndex' => array(
+        $aMockFunctions = [
+            'getIndex' => [
                 'expects' => $this->never(),
                 'returnValue' => true,
-            ),
-        );
+            ],
+        ];
         $out = true;
         $action = $this->getAction($aMockFunctions, $aConfig, $out);
 
@@ -323,32 +323,32 @@ class tx_mksearch_tests_action_SearchSolrTest extends tx_mksearch_tests_Testcase
     public function testHandleRequestWithEnabledAutocompleteAndInclusionOfAllJqueryLibs()
     {
         //action initialisieren
-        $aConfig['searchsolr.'] = array(
+        $aConfig['searchsolr.'] = [
             'nosearch' => 1, //keine echte Suche
-            'autocomplete.' => array(
+            'autocomplete.' => [
                 'enable' => 1,
                 'minLength' => 2,
                 'elementSelector' => 'myElementSelector',
-                'actionLink.' => array(
+                'actionLink.' => [
                     'useKeepVars' => 1,
-                    'useKeepVars.' => array(
+                    'useKeepVars.' => [
                         'add' => '::type=540',
-                    ),
+                    ],
                     'noHash' => 1,
-                ),
+                ],
                 'includeJquery' => 1,
                 'includeJqueryUiCore' => 1,
                 'includeJqueryUiAutocomplete' => 1,
-            ),
+            ],
             'usedIndex' => 1,
-        );
+        ];
         //mock getIndex() so its not called for real
-        $aMockFunctions = array(
-            'getIndex' => array(
+        $aMockFunctions = [
+            'getIndex' => [
                 'expects' => $this->never(),
                 'returnValue' => true,
-            ),
-        );
+            ],
+        ];
         $out = true;
         $action = $this->getAction($aMockFunctions, $aConfig, $out);
 
@@ -412,29 +412,29 @@ class tx_mksearch_tests_action_SearchSolrTest extends tx_mksearch_tests_Testcase
     public function testHandleRequestWithEnabledAutocompleteAndConfiguredUsedIndex()
     {
         //action initialisieren
-        $aConfig['searchsolr.'] = array(
+        $aConfig['searchsolr.'] = [
             'nosearch' => 1, //keine echte Suche
-            'autocomplete.' => array(
+            'autocomplete.' => [
                 'enable' => 1,
                 'minLength' => 2,
                 'elementSelector' => 'myElementSelector',
-                'actionLink.' => array(
+                'actionLink.' => [
                     'useKeepVars' => 1,
-                    'useKeepVars.' => array(
+                    'useKeepVars.' => [
                         'add' => '::type=540',
-                    ),
+                    ],
                     'noHash' => 1,
-                ),
-            ),
+                ],
+            ],
             'usedIndex' => 2,
-        );
+        ];
         //mock getIndex() so its not called for real
-        $aMockFunctions = array(
-            'getIndex' => array(
+        $aMockFunctions = [
+            'getIndex' => [
                 'expects' => $this->never(),
                 'returnValue' => true,
-            ),
-        );
+            ],
+        ];
         $out = true;
         $action = $this->getAction($aMockFunctions, $aConfig, $out);
 
@@ -480,30 +480,30 @@ class tx_mksearch_tests_action_SearchSolrTest extends tx_mksearch_tests_Testcase
     public function testHandleRequestWithEnabledAutocompleteAndAutocompleteJavaScriptSuffix()
     {
         //action initialisieren
-        $aConfig['searchsolr.'] = array(
+        $aConfig['searchsolr.'] = [
             'nosearch' => 1, //keine echte Suche
-            'autocomplete.' => array(
+            'autocomplete.' => [
                 'enable' => 1,
                 'minLength' => 2,
                 'elementSelector' => 'myElementSelector',
-                'actionLink.' => array(
+                'actionLink.' => [
                     'useKeepVars' => 1,
-                    'useKeepVars.' => array(
+                    'useKeepVars.' => [
                             'add' => '::type=540',
-                    ),
+                    ],
                     'noHash' => 1,
-                ),
+                ],
                 'javaScriptSnippetSuffix' => 'my_custom_suffix',
-            ),
+            ],
             'usedIndex' => 1,
-        );
+        ];
         //mock getIndex() so its not called for real
-        $aMockFunctions = array(
-            'getIndex' => array(
+        $aMockFunctions = [
+            'getIndex' => [
                 'expects' => $this->never(),
                 'returnValue' => true,
-            ),
-        );
+            ],
+        ];
         $out = true;
         $action = $this->getAction($aMockFunctions, $aConfig, $out);
 

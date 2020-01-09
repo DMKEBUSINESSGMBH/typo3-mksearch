@@ -47,7 +47,7 @@ class tx_mksearch_marker_CorePage extends tx_mksearch_marker_SearchResultSimple
         // within the same page which is to be configured preliminarily.
         $GLOBALS['TSFE']->register['mksearch.core.page'] = $item->uid;
         $linkId = 'show';
-        $this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, $linkId, $marker, array());
+        $this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, $linkId, $marker, []);
     }
 }
 

@@ -78,12 +78,12 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
         tx_rnbase_util_Misc::callHook(
             'mksearch',
             'indexerBaseMedia_preProcessSearchData',
-            array(
+            [
                 'table' => $tableName,
                 'rawData' => &$sourceRecord,
                 'indexDoc' => &$indexDoc,
                 'options' => $options,
-            ),
+            ],
             $this
         );
         // check, if the doc was skiped or has to be deleted
@@ -156,13 +156,13 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
         tx_rnbase_util_Misc::callHook(
             'mksearch',
             'indexerBaseMedia_postProcessSearchData',
-            array(
+            [
                 'table' => $tableName,
                 'rawData' => &$sourceRecord,
                 'indexDoc' => &$indexDoc,
                 'options' => $options,
                 'indexMethod' => $indexMethod,
-            ),
+            ],
             $this
         );
 
@@ -186,7 +186,7 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
      */
     private function indexSolr($tableName, $sourceRecord, tx_mksearch_interface_IndexerDocument $indexDoc, $options)
     {
-        $binaryOptions = array();
+        $binaryOptions = [];
         $binaryOptions['sourcefile'] = $this->getAbsFileName($tableName, $sourceRecord);
         $binaryOptions['file_type'] = $this->getFileExtension($tableName, $sourceRecord);
         if (isset($sourceRecord['file_mime_type'])) {
@@ -213,7 +213,7 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
             return;
         }
         $tikaFields = $options['tikafields.'];
-        $tikaFields = is_array($tikaFields) ? $tikaFields : array();
+        $tikaFields = is_array($tikaFields) ? $tikaFields : [];
         $contentField = $tikaFields['content'];
         if ($contentField) {
             $tikaCommand = '';
@@ -221,10 +221,10 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
                 tx_rnbase_util_Logger::warn(
                     'Apache Tika returned empty content!',
                     'mksearch',
-                    array(
+                    [
                         'file' => $file,
                         'tikaCommand' => $tikaCommand,
-                    )
+                    ]
                 );
             }
 
@@ -275,7 +275,7 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
     {
         $ret = true;
         $filters = $options[$tableName.'.'];
-        $filters = is_array($filters) ? $filters : array();
+        $filters = is_array($filters) ? $filters : [];
 
         $fileExtension = $this->getFileExtension($tableName, $sourceRecord);
         $filePath = $this->getFilePath($tableName, $sourceRecord);
@@ -388,7 +388,7 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
         $tableName,
         $sourceRecord,
         tx_mksearch_interface_IndexerDocument $indexDoc,
-        $options = array()
+        $options = []
     ) {
         if ($sourceRecord['deleted'] || $sourceRecord['hidden']) {
             return true;

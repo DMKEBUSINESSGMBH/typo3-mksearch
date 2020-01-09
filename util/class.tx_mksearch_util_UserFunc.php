@@ -30,7 +30,7 @@ class tx_mksearch_util_UserFunc
     /**
      * @see     tx_mksearch_util_SearchBuilder::searchSolrOptions
      */
-    public static function searchSolrOptions($term = '', $conf = array())
+    public static function searchSolrOptions($term = '', $conf = [])
     {
         if (tx_mksearch_util_SearchBuilder::emptyTerm($term)) {
             return '';
@@ -60,7 +60,7 @@ class tx_mksearch_util_UserFunc
      *
      * @see     tx_mksearch_util_SearchBuilder::searchSolrOptions
      */
-    public static function searchLuceneOptions($term = '', $conf = array())
+    public static function searchLuceneOptions($term = '', $conf = [])
     {
         return self::searchSolrOptions($term, $conf);
     }

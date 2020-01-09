@@ -40,7 +40,7 @@ class tx_mksearch_indexer_FAL extends tx_mksearch_indexer_BaseMedia
      */
     public static function getContentType()
     {
-        return array('core', 'file');
+        return ['core', 'file'];
     }
 
     /**
@@ -198,7 +198,7 @@ class tx_mksearch_indexer_FAL extends tx_mksearch_indexer_BaseMedia
         $tableName,
         $sourceRecord,
         tx_mksearch_interface_IndexerDocument $indexDoc,
-        $options = array()
+        $options = []
     ) {
         $filePath = $this->getFilePath($tableName, $sourceRecord);
         if (!\TYPO3\CMS\Core\Utility\PathUtility::isAbsolutePath($filePath)) {

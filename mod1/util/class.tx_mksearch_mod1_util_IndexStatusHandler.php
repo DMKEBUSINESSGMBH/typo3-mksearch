@@ -68,9 +68,9 @@ class tx_mksearch_mod1_util_IndexStatusHandler
     /**
      * Handle request.
      */
-    public function handleRequest(array $options = array())
+    public function handleRequest(array $options = [])
     {
-        $fields = $states = array();
+        $fields = $states = [];
         if (!empty($options['pid'])) {
             $fields['INDX.PID'][OP_EQ_INT] = $options['pid'];
         }

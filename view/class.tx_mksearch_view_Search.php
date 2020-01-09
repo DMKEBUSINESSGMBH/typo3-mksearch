@@ -38,7 +38,7 @@ class tx_mksearch_view_Search extends tx_rnbase_view_Base
         );
 
         // wurden options für die markerklassen gesetzt?
-        $markerParams = $viewData->offsetExists('markerParams') ? $viewData->offsetGet('markerParams') : array();
+        $markerParams = $viewData->offsetExists('markerParams') ? $viewData->offsetGet('markerParams') : [];
         $confId = $this->getController()->getConfId();
         $out = $listBuilder->render(
             $items,

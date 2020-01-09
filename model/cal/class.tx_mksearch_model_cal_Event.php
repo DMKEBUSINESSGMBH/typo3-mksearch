@@ -51,7 +51,7 @@ class tx_mksearch_model_cal_Event extends tx_rnbase_model_base
      *
      * @var array[tx_mksearch_model_cal_Category]
      */
-    private $categories = array();
+    private $categories = [];
 
     /**
      * Tablename.
@@ -129,12 +129,12 @@ class tx_mksearch_model_cal_Event extends tx_rnbase_model_base
             'uid_foreign',
             'tx_cal_event_category_mm AS MM JOIN tx_cal_category AS CAT ON '.
             'MM.uid_foreign = CAT.uid',
-            array(
+            [
                 //da MM keine TCA hat
                 'enablefieldsoff' => true,
                 //keine versteckten kategorien
                 'where' => 'MM.uid_local = '.intval($this->getUid()).' AND CAT.hidden = 0',
-            )
+            ]
         );
     }
 }

@@ -71,16 +71,16 @@ class tx_mksearch_service_internal_Composite extends tx_mksearch_service_interna
      */
     public function getIndexerOptionsByIndex(tx_mksearch_model_internal_Index $index)
     {
-        $fields = array(
-            'CMP.hidden' => array(OP_EQ_INT => 0),
-            'INDX.hidden' => array(OP_EQ_INT => 0),
-            'INDX.uid' => array(OP_EQ_INT => $index->uid),
-        );
-        $options = array(
-            'orderby' => array(
+        $fields = [
+            'CMP.hidden' => [OP_EQ_INT => 0],
+            'INDX.hidden' => [OP_EQ_INT => 0],
+            'INDX.uid' => [OP_EQ_INT => $index->uid],
+        ];
+        $options = [
+            'orderby' => [
                 'INDXCMPMM.sorting' => 'ASC',
-            ),
-        );
+            ],
+        ];
         $tmpCfg = $this->search($fields, $options);
         foreach ($tmpCfg as $oModel) {
             $sTs .= "{\n".$oModel->record['configuration']."\n}";

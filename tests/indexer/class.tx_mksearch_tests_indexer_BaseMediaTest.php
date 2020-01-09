@@ -42,8 +42,8 @@ class tx_mksearch_tests_indexer_BaseMediaTest extends tx_mksearch_tests_Testcase
             'core',
             'tt_content'
         );
-        $options = array();
-        $sourceRecord = array('uid' => 1, 'test_field_1' => 'test value 1');
+        $options = [];
+        $sourceRecord = ['uid' => 1, 'test_field_1' => 'test value 1'];
 
         $indexer->expects($this->once())
             ->method('stopIndexing')
@@ -69,8 +69,8 @@ class tx_mksearch_tests_indexer_BaseMediaTest extends tx_mksearch_tests_Testcase
             'core',
             'tt_content'
         );
-        $options = array();
-        $sourceRecord = array('uid' => 1, 'test_field_1' => 'test value 1');
+        $options = [];
+        $sourceRecord = ['uid' => 1, 'test_field_1' => 'test value 1'];
 
         $indexer->expects($this->once())
             ->method('stopIndexing')
@@ -96,8 +96,8 @@ class tx_mksearch_tests_indexer_BaseMediaTest extends tx_mksearch_tests_Testcase
             'core',
             'tt_content'
         );
-        $options = array();
-        $sourceRecord = array('uid' => 1, 'test_field_1' => 'test value 1');
+        $options = [];
+        $sourceRecord = ['uid' => 1, 'test_field_1' => 'test value 1'];
 
         $indexer->expects($this->once())
             ->method('stopIndexing')
@@ -133,19 +133,19 @@ class tx_mksearch_tests_indexer_BaseMediaTest extends tx_mksearch_tests_Testcase
     public function testStopIndexingCallsIndexerUtility()
     {
         $indexer = $this->getIndexerMock(
-            array(
+            [
                 'getBaseTableName', 'getFileExtension',
                 'getFilePath', 'getRelFileName', 'getIndexerUtility',
-            )
+            ]
         );
         $indexerUtility = $this->getMock(
             'tx_mksearch_util_Indexer',
-            array('stopIndexing')
+            ['stopIndexing']
         );
 
         $tableName = 'some_table';
-        $sourceRecord = array('some_record');
-        $options = array('some_options');
+        $sourceRecord = ['some_record'];
+        $options = ['some_options'];
         $indexDoc = tx_rnbase::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
             '',
@@ -178,18 +178,18 @@ class tx_mksearch_tests_indexer_BaseMediaTest extends tx_mksearch_tests_Testcase
      */
     public function testPrepareSearchDataCallsIsIndexableRecordNotIfRecordIsDeleted()
     {
-        $indexer = $this->getIndexerMock(array(
+        $indexer = $this->getIndexerMock([
             'getBaseTableName', 'getFileExtension',
             'getFilePath', 'getRelFileName', 'stopIndexing', 'isIndexableRecord',
-        ));
+        ]);
 
         $indexDoc = tx_rnbase::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
             'core',
             'tt_content'
         );
-        $options = array();
-        $sourceRecord = array('uid' => 1, 'deleted' => 1);
+        $options = [];
+        $sourceRecord = ['uid' => 1, 'deleted' => 1];
 
         $indexer->expects($this->never())
             ->method('isIndexableRecord');
@@ -207,18 +207,18 @@ class tx_mksearch_tests_indexer_BaseMediaTest extends tx_mksearch_tests_Testcase
      */
     public function testPrepareSearchDataCallsIsIndexableRecordNotIfRecordIsHidden()
     {
-        $indexer = $this->getIndexerMock(array(
+        $indexer = $this->getIndexerMock([
             'getBaseTableName', 'getFileExtension',
             'getFilePath', 'getRelFileName', 'stopIndexing', 'isIndexableRecord',
-        ));
+        ]);
 
         $indexDoc = tx_rnbase::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
             'core',
             'tt_content'
         );
-        $options = array();
-        $sourceRecord = array('uid' => 1, 'hidden' => 1);
+        $options = [];
+        $sourceRecord = ['uid' => 1, 'hidden' => 1];
 
         $indexer->expects($this->never())
             ->method('isIndexableRecord');
@@ -236,18 +236,18 @@ class tx_mksearch_tests_indexer_BaseMediaTest extends tx_mksearch_tests_Testcase
      */
     public function testPrepareSearchDataSetsDocDeletedIfRecordIsDeleted()
     {
-        $indexer = $this->getIndexerMock(array(
+        $indexer = $this->getIndexerMock([
             'getBaseTableName', 'getFileExtension',
             'getFilePath', 'getRelFileName', 'stopIndexing', 'isIndexableRecord',
-        ));
+        ]);
 
         $indexDoc = tx_rnbase::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
             'core',
             'tt_content'
         );
-        $options = array();
-        $sourceRecord = array('uid' => 1, 'deleted' => 1);
+        $options = [];
+        $sourceRecord = ['uid' => 1, 'deleted' => 1];
 
         $indexDoc = $indexer->prepareSearchData(
             'tt_content',
@@ -264,18 +264,18 @@ class tx_mksearch_tests_indexer_BaseMediaTest extends tx_mksearch_tests_Testcase
      */
     public function testPrepareSearchDataSetsDocDeletedIfRecordIsHidden()
     {
-        $indexer = $this->getIndexerMock(array(
+        $indexer = $this->getIndexerMock([
             'getBaseTableName', 'getFileExtension',
             'getFilePath', 'getRelFileName', 'stopIndexing', 'isIndexableRecord',
-        ));
+        ]);
 
         $indexDoc = tx_rnbase::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
             'core',
             'tt_content'
         );
-        $options = array();
-        $sourceRecord = array('uid' => 1, 'hidden' => 1);
+        $options = [];
+        $sourceRecord = ['uid' => 1, 'hidden' => 1];
 
         $indexDoc = $indexer->prepareSearchData(
             'tt_content',
@@ -313,24 +313,24 @@ class tx_mksearch_tests_indexer_BaseMediaTest extends tx_mksearch_tests_Testcase
 
     public function providerHasDocToBeDeleted()
     {
-        return array(
-            __LINE__ => array(
-                'sourceRecord' => array('uid' => 7),
+        return [
+            __LINE__ => [
+                'sourceRecord' => ['uid' => 7],
                 'expected' => false,
-            ),
-            __LINE__ => array(
-                'sourceRecord' => array('uid' => 7, 'deleted' => 1),
+            ],
+            __LINE__ => [
+                'sourceRecord' => ['uid' => 7, 'deleted' => 1],
                 'expected' => true,
-            ),
-            __LINE__ => array(
-                'sourceRecord' => array('uid' => 7, 'hidden' => 1),
+            ],
+            __LINE__ => [
+                'sourceRecord' => ['uid' => 7, 'hidden' => 1],
                 'expected' => true,
-            ),
-            __LINE__ => array(
-                'sourceRecord' => array('uid' => 7, 'hidden' => 1, 'deleted' => 1),
+            ],
+            __LINE__ => [
+                'sourceRecord' => ['uid' => 7, 'hidden' => 1, 'deleted' => 1],
                 'expected' => true,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -338,19 +338,19 @@ class tx_mksearch_tests_indexer_BaseMediaTest extends tx_mksearch_tests_Testcase
      */
     public function testGroupFieldIsAdded()
     {
-        $indexer = $this->getIndexerMock(array(
+        $indexer = $this->getIndexerMock([
             'getBaseTableName', 'getFileExtension',
             'getFilePath', 'getRelFileName', 'stopIndexing', 'isIndexableRecord',
-        ));
+        ]);
         $indexer->expects(self::once())
             ->method('isIndexableRecord')
             ->will(self::returnValue(true));
 
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', 'core', 'file');
 
-        $rawData = array('uid' => 123);
+        $rawData = ['uid' => 123];
 
-        $indexDoc = $indexer->prepareSearchData('doesnt_matter', $rawData, $indexDoc, array());
+        $indexDoc = $indexer->prepareSearchData('doesnt_matter', $rawData, $indexDoc, []);
 
         $indexedData = $indexDoc->getData();
         self::assertEquals('core:file:123', $indexedData['group_s']->getValue());
@@ -361,10 +361,10 @@ class tx_mksearch_tests_indexer_BaseMediaTest extends tx_mksearch_tests_Testcase
      */
     public function testContentAndAbstractFromSourceRecordAreIndexedCorrect()
     {
-        $indexer = $this->getIndexerMock(array(
+        $indexer = $this->getIndexerMock([
             'getBaseTableName', 'getFileExtension',
             'getFilePath', 'getRelFileName', 'stopIndexing', 'isIndexableRecord',
-        ));
+        ]);
         $indexer->expects(self::any())
             ->method('isIndexableRecord')
             ->will(self::returnValue(true));
@@ -373,9 +373,9 @@ class tx_mksearch_tests_indexer_BaseMediaTest extends tx_mksearch_tests_Testcase
 
         $indexDoc = $indexer->prepareSearchData(
             'doesnt_matter',
-            array('uid' => 123, 'title' => 'title', 'description' => 'content'),
+            ['uid' => 123, 'title' => 'title', 'description' => 'content'],
             $indexDoc,
-            array('indexMode' => 'none')
+            ['indexMode' => 'none']
         );
 
         $indexedData = $indexDoc->getData();
@@ -384,9 +384,9 @@ class tx_mksearch_tests_indexer_BaseMediaTest extends tx_mksearch_tests_Testcase
 
         $indexDoc = $indexer->prepareSearchData(
             'doesnt_matter',
-            array('uid' => 123, 'title' => 'title', 'alternative' => 'content'),
+            ['uid' => 123, 'title' => 'title', 'alternative' => 'content'],
             $indexDoc,
-            array('indexMode' => 'none')
+            ['indexMode' => 'none']
         );
 
         $indexedData = $indexDoc->getData();
@@ -395,9 +395,9 @@ class tx_mksearch_tests_indexer_BaseMediaTest extends tx_mksearch_tests_Testcase
 
         $indexDoc = $indexer->prepareSearchData(
             'doesnt_matter',
-            array('uid' => 123, 'title' => 'title'),
+            ['uid' => 123, 'title' => 'title'],
             $indexDoc,
-            array('indexMode' => 'none')
+            ['indexMode' => 'none']
         );
 
         $indexedData = $indexDoc->getData();
@@ -411,14 +411,14 @@ class tx_mksearch_tests_indexer_BaseMediaTest extends tx_mksearch_tests_Testcase
      * @return Ambigous <PHPUnit_Framework_MockObject_MockObject, tx_mksearch_indexer_BaseMedia>
      */
     private function getIndexerMock(
-        array $mockedMethods = array(
+        array $mockedMethods = [
             'getBaseTableName', 'getFileExtension',
             'getFilePath', 'getRelFileName', 'stopIndexing',
-        )
+        ]
     ) {
         return $this->getMockForAbstractClass(
             'tx_mksearch_indexer_BaseMedia',
-            array(),
+            [],
             '',
             false,
             false,

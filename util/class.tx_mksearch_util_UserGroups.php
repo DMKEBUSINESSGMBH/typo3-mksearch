@@ -33,14 +33,14 @@ class tx_mksearch_util_UserGroups
      *                     * 'groups':  all groups of a page relevant when page is seen as parent of another page
      *                     * 'local':   all groups of a page in its local context (i.e. including local fe groups which aren't relevant for children because access rights are not marked as "extend to subpages")
      */
-    private $resultingAccessCache = array();
+    private $resultingAccessCache = [];
 
     /**
      * Cache for storing subgroups.
      *
      * @var array
      */
-    private static $groupCache = array();
+    private static $groupCache = [];
 
     /**
      * @return tx_mksearch_util_UserGroups
@@ -63,7 +63,7 @@ class tx_mksearch_util_UserGroups
      *
      * @return array
      */
-    private function getSubGroups($groupId, array $callStackGroups = array())
+    private function getSubGroups($groupId, array $callStackGroups = [])
     {
         if (isset($this->groupCache[$groupId])) {
             return $this->groupCache[$groupId];
@@ -82,7 +82,7 @@ class tx_mksearch_util_UserGroups
             ' AND ref.recuid = '.intval($groupId)
         );
         // Initialize suber group array with ourselves!
-        $sub = array($groupId);
+        $sub = [$groupId];
 
         while ($row = $connection->sql_fetch_assoc($res)) {
             // Recursively get sub groups, avoiding endless recursion
@@ -137,7 +137,7 @@ class tx_mksearch_util_UserGroups
 
         // Get fe groups and all their superordinate groups
         // as these are also allowed to view the page!
-        $self = array();
+        $self = [];
 
         $baseGroups = Tx_Rnbase_Utility_Strings::trimExplode(',', $rootline[$selfIndex]['fe_group'], true);
         foreach ($baseGroups as $b) {
@@ -148,7 +148,7 @@ class tx_mksearch_util_UserGroups
         }
         $self = array_unique($self);
 
-        $this->resultingAccessCache[$pid] = array();
+        $this->resultingAccessCache[$pid] = [];
 
         // We're root! We're god! Our access rules are valid without any further checks!
         if (1 == sizeof($rootline)) {
@@ -221,7 +221,7 @@ class tx_mksearch_util_UserGroups
         // Page's effective groups:
         $groupsArr = $this->calculateEffectiveFeGroups($pid);
         $groupsArr = (isset($groupsArr['local'])) ? $groupsArr['local'] : $groupsArr['groups'];
-        $groupsArr = !empty($groupsArr) ? $groupsArr : array(0);
+        $groupsArr = !empty($groupsArr) ? $groupsArr : [0];
 
         // Explicite groups for content element?
         if ($ceGroups) {

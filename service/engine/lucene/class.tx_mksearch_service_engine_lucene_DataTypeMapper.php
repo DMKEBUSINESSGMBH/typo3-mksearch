@@ -29,10 +29,10 @@
  */
 class tx_mksearch_service_engine_lucene_DataTypeMapper
 {
-    private static $defaultKeywordFields = array('uid', 'extKey', 'contentType', 'tstamp', 'pid');
+    private static $defaultKeywordFields = ['uid', 'extKey', 'contentType', 'tstamp', 'pid'];
     private $cfg;
 
-    public function __construct($cfg = array())
+    public function __construct($cfg = [])
     {
         $this->cfg = $cfg;
     }

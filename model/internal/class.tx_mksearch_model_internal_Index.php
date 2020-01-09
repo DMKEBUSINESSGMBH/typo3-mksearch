@@ -123,7 +123,7 @@ class tx_mksearch_model_internal_Index extends tx_rnbase_model_base
                 ->getIndexerOptionsByIndex($this);
 
             if (empty($this->options['default.']) || !is_array($this->options['default.'])) {
-                $this->options['default.'] = array();
+                $this->options['default.'] = [];
             }
 
             // get default configuation from composite

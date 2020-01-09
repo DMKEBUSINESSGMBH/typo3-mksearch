@@ -51,7 +51,7 @@ class tx_mksearch_tests_service_internal_IndexTest extends tx_mksearch_tests_Tes
     {
         tx_mksearch_tests_Util::restoreExtConf();
 
-        tx_mksearch_util_Config::registerResolver(false, array('tx_mktest_table'));
+        tx_mksearch_util_Config::registerResolver(false, ['tx_mktest_table']);
     }
 
     /**
@@ -109,7 +109,7 @@ class tx_mksearch_tests_service_internal_IndexTest extends tx_mksearch_tests_Tes
     {
         $indexService = $this->getAccessibleMock(
             'tx_mksearch_service_internal_Index',
-            array('getDatabaseUtility', 'getSecondsToKeepQueueEntries')
+            ['getDatabaseUtility', 'getSecondsToKeepQueueEntries']
         );
 
         $indexService->expects($this->once())
@@ -118,7 +118,7 @@ class tx_mksearch_tests_service_internal_IndexTest extends tx_mksearch_tests_Tes
 
         $databaseUtility = $this->getMock(
             'Tx_Rnbase_Database_Connection',
-            array('doDelete')
+            ['doDelete']
         );
         $databaseUtility->expects($this->once())
             ->method('doDelete')
@@ -139,13 +139,13 @@ class tx_mksearch_tests_service_internal_IndexTest extends tx_mksearch_tests_Tes
      */
     public function testAddModelsToIndex()
     {
-        $model = $this->getModel(array('uid' => '5'));
-        $options = array();
+        $model = $this->getModel(['uid' => '5']);
+        $options = [];
 
         /* @var $srv tx_mksearch_service_internal_Index */
         $srv = $this->getMock(
             'tx_mksearch_service_internal_Index',
-            array('addRecordToIndex')
+            ['addRecordToIndex']
         );
 
         $srv
@@ -161,7 +161,7 @@ class tx_mksearch_tests_service_internal_IndexTest extends tx_mksearch_tests_Tes
             );
 
         $srv->addModelsToIndex(
-            array($model),
+            [$model],
             $options
         );
     }
@@ -193,12 +193,12 @@ class tx_mksearch_tests_service_internal_IndexTest extends tx_mksearch_tests_Tes
      */
     public function dataProviderDeleteDocumentIfNotCorrectWorkspaceTest()
     {
-        return array(
-            array(array(), array('t3ver_wsid' => 0), false),
-            array(array(), array('t3ver_wsid' => 1), true),
-            array(array('workspaceIds' => '1,2,3'), array('t3ver_wsid' => 3), false),
-            array(array('workspaceIds' => '1,2,3'), array('t3ver_wsid' => 0), true),
-        );
+        return [
+            [[], ['t3ver_wsid' => 0], false],
+            [[], ['t3ver_wsid' => 1], true],
+            [['workspaceIds' => '1,2,3'], ['t3ver_wsid' => 3], false],
+            [['workspaceIds' => '1,2,3'], ['t3ver_wsid' => 0], true],
+        ];
     }
 
     /**
@@ -217,23 +217,23 @@ class tx_mksearch_tests_service_internal_IndexTest extends tx_mksearch_tests_Tes
      */
     public function testAddRecordToIndex()
     {
-        $databaseConnection = $this->getMock('Tx_Rnbase_Database_Connection', array('doInsert'));
+        $databaseConnection = $this->getMock('Tx_Rnbase_Database_Connection', ['doInsert']);
         $databaseConnection->expects(self::once())
             ->method('doInsert')
             ->with(
                 'tx_mksearch_queue',
-                array(
+                [
                     'cr_date' => tx_rnbase_util_Dates::datetime_tstamp2mysql($GLOBALS['EXEC_TIME']),
                     'prefer' => 0,
                     'recid' => 50,
                     'tablename' => 'tx_mktest_table',
                     'data' => '',
                     'resolver' => '',
-                )
+                ]
             )
             ->will(self::returnValue(123));
 
-        $service = $this->getMock('tx_mksearch_service_internal_Index', array('getDatabaseConnection'));
+        $service = $this->getMock('tx_mksearch_service_internal_Index', ['getDatabaseConnection']);
         $service->expects(self::once())
             ->method('getDatabaseConnection')
             ->will(self::returnValue($databaseConnection));
@@ -246,25 +246,25 @@ class tx_mksearch_tests_service_internal_IndexTest extends tx_mksearch_tests_Tes
      */
     public function testAddRecordToIndexWithRegisteredResolver()
     {
-        tx_mksearch_util_Config::registerResolver('tx_mksearch_resolver_Test', array('tx_mktest_table'));
+        tx_mksearch_util_Config::registerResolver('tx_mksearch_resolver_Test', ['tx_mktest_table']);
 
-        $databaseConnection = $this->getMock('Tx_Rnbase_Database_Connection', array('doInsert'));
+        $databaseConnection = $this->getMock('Tx_Rnbase_Database_Connection', ['doInsert']);
         $databaseConnection->expects(self::once())
             ->method('doInsert')
             ->with(
                 'tx_mksearch_queue',
-                array(
+                [
                         'cr_date' => tx_rnbase_util_Dates::datetime_tstamp2mysql($GLOBALS['EXEC_TIME']),
                         'prefer' => 0,
                         'recid' => 50,
                         'tablename' => 'tx_mktest_table',
                         'data' => '',
                         'resolver' => 'tx_mksearch_resolver_Test',
-                )
+                ]
             )
             ->will(self::returnValue(123));
 
-        $service = $this->getMock('tx_mksearch_service_internal_Index', array('getDatabaseConnection'));
+        $service = $this->getMock('tx_mksearch_service_internal_Index', ['getDatabaseConnection']);
         $service->expects(self::once())
             ->method('getDatabaseConnection')
             ->will(self::returnValue($databaseConnection));
@@ -277,19 +277,19 @@ class tx_mksearch_tests_service_internal_IndexTest extends tx_mksearch_tests_Tes
      */
     public function testDoInsertRecords()
     {
-        $databaseConnection = $this->getMock('Tx_Rnbase_Database_Connection', array('doQuery'));
+        $databaseConnection = $this->getMock('Tx_Rnbase_Database_Connection', ['doQuery']);
         $databaseConnection->expects(self::once())
             ->method('doQuery')
             ->with(
                 "INSERT INTO tx_mksearch_queue(cr_date,prefer,recid,tablename,data,resolver) VALUES \r\nvalue1, \r\nvalue2;"
             );
 
-        $service = $this->getMock('tx_mksearch_service_internal_Index', array('getDatabaseConnection'));
+        $service = $this->getMock('tx_mksearch_service_internal_Index', ['getDatabaseConnection']);
         $service->expects(self::once())
             ->method('getDatabaseConnection')
             ->will(self::returnValue($databaseConnection));
 
-        $this->callInaccessibleMethod($service, 'doInsertRecords', array('value1', 'value2'));
+        $this->callInaccessibleMethod($service, 'doInsertRecords', ['value1', 'value2']);
     }
 
     /**
@@ -297,11 +297,11 @@ class tx_mksearch_tests_service_internal_IndexTest extends tx_mksearch_tests_Tes
      */
     public function testDoInsertRecordsWhenNoSqlValuesGiven()
     {
-        $service = $this->getMock('tx_mksearch_service_internal_Index', array('getDatabaseConnection'));
+        $service = $this->getMock('tx_mksearch_service_internal_Index', ['getDatabaseConnection']);
         $service->expects(self::never())
             ->method('getDatabaseConnection');
 
-        self::assertTrue($this->callInaccessibleMethod($service, 'doInsertRecords', array()));
+        self::assertTrue($this->callInaccessibleMethod($service, 'doInsertRecords', []));
     }
 
     /**
@@ -310,23 +310,23 @@ class tx_mksearch_tests_service_internal_IndexTest extends tx_mksearch_tests_Tes
     public function testAddRecordsToIndex()
     {
         $execTimeFormatted = tx_rnbase_util_Dates::datetime_tstamp2mysql($GLOBALS['EXEC_TIME']);
-        $service = $this->getMock('tx_mksearch_service_internal_Index', array('doInsertRecords'));
+        $service = $this->getMock('tx_mksearch_service_internal_Index', ['doInsertRecords']);
         $service->expects(self::once())
             ->method('doInsertRecords')
-            ->with(array(
+            ->with([
                 0 => "('$execTimeFormatted','0','50','tx_mktest_table','','')",
                 1 => "('$execTimeFormatted','1','51','tx_mktest_table','','')",
                 2 => "('$execTimeFormatted','1','52','tx_mktest_table','','tx_mksearch_resolver_Test')",
                 3 => "('$execTimeFormatted','1','53','tx_mktest_table','test index','tx_mksearch_resolver_Test')",
-            ));
+            ]);
 
-        $records = array(
-            array('tablename' => 'tx_mktest_table', 'uid' => '50'),
-            array('tablename' => 'tx_mktest_table', 'uid' => '51', 'preferer' => '1'),
-            array('tablename' => 'tx_mktest_table', 'uid' => '52', 'preferer' => '1', 'resolver' => 'tx_mksearch_resolver_Test'),
-            array('tablename' => 'tx_mktest_table', 'uid' => '53', 'preferer' => '1', 'resolver' => 'tx_mksearch_resolver_Test', 'data' => 'test index'),
-        );
-        $options = array('checkExisting' => false);
+        $records = [
+            ['tablename' => 'tx_mktest_table', 'uid' => '50'],
+            ['tablename' => 'tx_mktest_table', 'uid' => '51', 'preferer' => '1'],
+            ['tablename' => 'tx_mktest_table', 'uid' => '52', 'preferer' => '1', 'resolver' => 'tx_mksearch_resolver_Test'],
+            ['tablename' => 'tx_mktest_table', 'uid' => '53', 'preferer' => '1', 'resolver' => 'tx_mksearch_resolver_Test', 'data' => 'test index'],
+        ];
+        $options = ['checkExisting' => false];
         $service->addRecordsToIndex($records, $options);
     }
 
@@ -337,13 +337,13 @@ class tx_mksearch_tests_service_internal_IndexTest extends tx_mksearch_tests_Tes
     {
         $execTimeFormatted = tx_rnbase_util_Dates::datetime_tstamp2mysql($GLOBALS['EXEC_TIME']);
         for ($i = 1; $i <= 501; ++$i) {
-            $records[] = array('tablename' => 'tx_mktest_table', 'uid' => $i);
+            $records[] = ['tablename' => 'tx_mktest_table', 'uid' => $i];
         }
         foreach ($records as $record) {
             $expectedRecordsToInsert[] = "('$execTimeFormatted','0','".$record['uid']."','".$record['tablename']."','','')";
         }
 
-        $service = $this->getMock('tx_mksearch_service_internal_Index', array('doInsertRecords'));
+        $service = $this->getMock('tx_mksearch_service_internal_Index', ['doInsertRecords']);
         $service->expects(self::at(0))
             ->method('doInsertRecords')
             ->with(array_slice($expectedRecordsToInsert, 0, 500));
@@ -351,7 +351,7 @@ class tx_mksearch_tests_service_internal_IndexTest extends tx_mksearch_tests_Tes
             ->method('doInsertRecords')
             ->with(array_slice($expectedRecordsToInsert, 500));
 
-        $options = array('checkExisting' => false);
+        $options = ['checkExisting' => false];
         $service->addRecordsToIndex($records, $options);
     }
 
@@ -360,10 +360,10 @@ class tx_mksearch_tests_service_internal_IndexTest extends tx_mksearch_tests_Tes
      */
     public function testAddRecordsToIndexWhenNoRecordsGiven()
     {
-        $service = $this->getMock('tx_mksearch_service_internal_Index', array('doInsertRecords'));
+        $service = $this->getMock('tx_mksearch_service_internal_Index', ['doInsertRecords']);
         $service->expects(self::never())
             ->method('doInsertRecords');
 
-        self::assertTrue($service->addRecordsToIndex(array()));
+        self::assertTrue($service->addRecordsToIndex([]));
     }
 }

@@ -93,12 +93,12 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base im
             // wir rufen die Methode mit call_user_func_array auf, da sie
             // statisch ist, womit wir diese nicht mocken könnten
             call_user_func_array(
-                array($this->getLogger(), 'fatal'),
-                array(
+                [$this->getLogger(), 'fatal'],
+                [
                     'ElasticSearch service not responding.',
                     'mksearch',
-                    array($credentials),
-                )
+                    [$credentials],
+                ]
             );
             throw new ClientException('ElasticSearch service not responding.');
         }
@@ -146,10 +146,10 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base im
      *
      * @see  http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html
      */
-    public function search(array $fields = array(), array $options = array())
+    public function search(array $fields = [], array $options = [])
     {
         $startTime = microtime(true);
-        $result = array();
+        $result = [];
 
         try {
             /* @var $searchResult ResultSet */
@@ -173,7 +173,7 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base im
 
             if ($options['debug']) {
                 tx_rnbase_util_Debug::debug(
-                    array('options' => $options, 'result' => $result),
+                    ['options' => $options, 'result' => $result],
                     __METHOD__.' Line: '.__LINE__
                 );
             }
@@ -212,11 +212,11 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base im
             list($field, $order) = Tx_Rnbase_Utility_Strings::trimExplode(' ', $options['sort'],
                 true);
             $elasticaQuery->addSort(
-                array(
-                    $field => array(
+                [
+                    $field => [
                         'order' => $order,
-                    ),
-                )
+                    ],
+                ]
             );
         }
 
@@ -248,7 +248,7 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base im
      */
     protected function getItemsFromSearchResult(ResultSet $searchResult)
     {
-        $items = array();
+        $items = [];
         if ($elasticSearchResult = $searchResult->getResults()) {
             /* @var $item Result */
             foreach ($elasticSearchResult as $item) {
@@ -274,7 +274,7 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base im
      */
     protected function getOptionsForElastica(array $options)
     {
-        $elasticaOptions = array();
+        $elasticaOptions = [];
 
         foreach ($options as $key => $value) {
             $key = $this->remapElasticaOptionKey($key);
@@ -396,11 +396,11 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base im
     ) {
         $serverCredential = tx_rnbase_util_Strings::trimExplode(',', $credentialString);
 
-        return array(
+        return [
             'host' => $serverCredential[0],
             'port' => $serverCredential[1],
             'path' => $serverCredential[2],
-        );
+        ];
     }
 
     /**
@@ -494,7 +494,7 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base im
      */
     public function indexNew(tx_mksearch_interface_IndexerDocument $doc)
     {
-        $data = array();
+        $data = [];
 
         // Primary key data (fields are all scalar)
         $primaryKeyData = $doc->getPrimaryKey();
@@ -516,7 +516,7 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base im
             $primaryKey['contentType']->getValue()
         );
 
-        return $this->getIndex()->addDocuments(array($elasticaDocument))->isOk();
+        return $this->getIndex()->addDocuments([$elasticaDocument])->isOk();
     }
 
     /**
@@ -548,7 +548,7 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base im
         $elasticaDocument = new Document($uid);
         $elasticaDocument->setType($type);
 
-        return $this->getIndex()->deleteDocuments(array($elasticaDocument))->isOk();
+        return $this->getIndex()->deleteDocuments([$elasticaDocument])->isOk();
     }
 
     /**
@@ -565,7 +565,7 @@ class tx_mksearch_service_engine_ElasticSearch extends Tx_Rnbase_Service_Base im
      *
      * @param string $query
      */
-    public function indexDeleteByQuery($query, $options = array())
+    public function indexDeleteByQuery($query, $options = [])
     {
     }
 

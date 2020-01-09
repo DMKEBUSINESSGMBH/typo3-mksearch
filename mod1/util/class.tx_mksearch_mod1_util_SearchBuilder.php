@@ -15,7 +15,7 @@ class tx_mksearch_mod1_util_SearchBuilder
      * @param string $searchword
      * @param array  $cols
      */
-    public static function buildFreeText(&$fields, $searchword, array $cols = array())
+    public static function buildFreeText(&$fields, $searchword, array $cols = [])
     {
         $result = false;
         if (strlen(trim($searchword))) {

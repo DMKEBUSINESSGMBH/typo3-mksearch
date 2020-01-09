@@ -54,7 +54,7 @@ class tx_mksearch_tests_signalSlotDispatcher_FileIndexRepositoryTest extends tx_
     {
         $internalIndexService = $this->getMock(
             'tx_mksearch_service_internal_Index',
-            array('addRecordToIndex')
+            ['addRecordToIndex']
         );
         $internalIndexService->expects($this->once())
             ->method('addRecordToIndex')
@@ -72,7 +72,7 @@ class tx_mksearch_tests_signalSlotDispatcher_FileIndexRepositoryTest extends tx_
     {
         $internalIndexService = $this->getMock(
             'tx_mksearch_service_internal_Index',
-            array('addRecordToIndex')
+            ['addRecordToIndex']
         );
         $internalIndexService->expects($this->once())
             ->method('addRecordToIndex')
@@ -80,7 +80,7 @@ class tx_mksearch_tests_signalSlotDispatcher_FileIndexRepositoryTest extends tx_
 
         $signalSlotDispatcher = $this->getDispatcherMock($internalIndexService);
 
-        $signalSlotDispatcher->putFileIntoQueue(array('uid' => 123));
+        $signalSlotDispatcher->putFileIntoQueue(['uid' => 123]);
     }
 
     /**
@@ -180,7 +180,7 @@ class tx_mksearch_tests_signalSlotDispatcher_FileIndexRepositoryTest extends tx_
     ) {
         $signalSlotDispatcher = $this->getMock(
             'tx_mksearch_signalSlotDispatcher_FileIndexRepsitory',
-            array('getInternalIndexService')
+            ['getInternalIndexService']
         );
 
         $signalSlotDispatcher->expects($this->once())

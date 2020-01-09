@@ -5,7 +5,7 @@ if (!defined('TYPO3_MODE')) {
 }
 
 // prepare extension config
-$_EXTCONF = empty($_EXTCONF) ? array() : (is_array($_EXTCONF) ? $_EXTCONF : unserialize($_EXTCONF));
+$_EXTCONF = empty($_EXTCONF) ? [] : (is_array($_EXTCONF) ? $_EXTCONF : unserialize($_EXTCONF));
 
 // Include service configuration
 require_once tx_rnbase_util_Extensions::extPath('mksearch').'service/ext_localconf.php';
@@ -49,12 +49,12 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['proc
 tx_rnbase_util_Extensions::addPageTSConfig('<INCLUDE_TYPOSCRIPT: source="FILE:EXT:mksearch/mod1/pageTSconfig.txt">');
 
 // Register information for the test and sleep tasks
-$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['tx_mksearch_scheduler_IndexTask'] = array(
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['tx_mksearch_scheduler_IndexTask'] = [
     'extension' => $_EXTKEY,
     'title' => 'LLL:EXT:'.$_EXTKEY.'/locallang_db.xml:scheduler_indexTask_name',
     'description' => 'LLL:EXT:'.$_EXTKEY.'/locallang_db.xml:scheduler_indexTask_description',
     'additionalFields' => 'tx_mksearch_scheduler_IndexTaskAddFieldProvider',
-);
+];
 
 if (tx_rnbase_util_Extensions::isLoaded('mksanitizedparameters')) {
     require_once tx_rnbase_util_Extensions::extPath($_EXTKEY, 'ext_mksanitizedparameter_rules.php');
@@ -63,18 +63,18 @@ if (tx_rnbase_util_Extensions::isLoaded('mksanitizedparameters')) {
 require_once tx_rnbase_util_Extensions::extPath($_EXTKEY, 'Configuration/SignalSlotDispatcher.php');
 require_once tx_rnbase_util_Extensions::extPath($_EXTKEY, 'Configuration/XClasses.php');
 
-Tx_Rnbase_Utility_Cache::addExcludedParametersForCacheHash(array(
+Tx_Rnbase_Utility_Cache::addExcludedParametersForCacheHash([
     'mksearch[pb-search-pointer]',
     'mksearch[submit]',
     'mksearch[term]',
-));
+]);
 
 // eigenes Feld für Vorbelegung je nach Indexer
-$GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry']['mksearch_indexerConfigurationField'] = array(
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry']['mksearch_indexerConfigurationField'] = [
     'nodeName' => 'indexerConfigurationField',
     'priority' => '70',
     'class' => 'DMK\\Mksearch\\Backend\\Form\\Element\\IndexerConfigurationField',
-);
+];
 
 // no_search needs to be in the rootline fields so respectNoSearchFlagInRootline
 // in indexers works correct

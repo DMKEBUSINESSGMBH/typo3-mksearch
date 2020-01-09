@@ -45,7 +45,7 @@ class tx_mksearch_util_ResolverT3DB
         $rows = tx_rnbase_util_DB::doSelect('*', $tableName, $options);
         if (!count($rows)) {
             // Datensatz vermutlich komplett gelöscht. Wir bereiten einen Minimal-Record für die Löschung vor
-            $rows[] = array('uid' => $recId, 'deleted' => 1);
+            $rows[] = ['uid' => $recId, 'deleted' => 1];
         }
 
         return $rows;

@@ -85,7 +85,7 @@ class tx_mksearch_indexer_seminars_SeminarObjectType1 extends tx_mksearch_indexe
         parent::indexSeminar($indexDoc);
         //the begin_date and end_date comes from our dates so we take them from there
         //and overwrite the existing values
-        $aBeginDates = $aEndDates = array();
+        $aBeginDates = $aEndDates = [];
         foreach ($this->aDates as $oDate) {
             $aBeginDates[] = $oDate->getBeginDateAsTimestamp();
             $aEndDates[] = $oDate->getEndDateAsTimestamp();
@@ -151,7 +151,7 @@ class tx_mksearch_indexer_seminars_SeminarObjectType1 extends tx_mksearch_indexe
         //Mapping which function fills which field
         $aFunctionFieldMapping = $this->getSpeakersMapping();
 
-        $aSpeakersByDates = array();
+        $aSpeakersByDates = [];
         foreach ($this->aDates as $oDate) {
             $aSpeakersByDates[] = $this->getSpeakerBag($oDate->getUid());
         }
@@ -182,7 +182,7 @@ class tx_mksearch_indexer_seminars_SeminarObjectType1 extends tx_mksearch_indexe
             return null;
         }//nothing to do
         //else
-        $aMergedTimeslots = array();
+        $aMergedTimeslots = [];
         foreach ($aTimeslotsByDate as $aTimeslots) {
             foreach ($aTimeslots as &$aTimeslot) {
                 $aTimeslot['speakers'] = tx_rnbase_util_Strings::trimExplode(',', $aTimeslot['speakers']);
@@ -211,7 +211,7 @@ class tx_mksearch_indexer_seminars_SeminarObjectType1 extends tx_mksearch_indexe
             return null;
         }//nothing to do
         //else
-        $aTempIndexDoc = array();
+        $aTempIndexDoc = [];
         //collect the index docs for each organizers by date
         foreach ($aValues as $aValue) {
             $aTempIndexDocs[] = $this->getMultiValueFieldsByListObject($aValue, $aMapping);
@@ -223,7 +223,7 @@ class tx_mksearch_indexer_seminars_SeminarObjectType1 extends tx_mksearch_indexe
         }
         //else
         //now merge the data of the several index docs
-        $aNewTempIndexDoc = array();
+        $aNewTempIndexDoc = [];
         foreach ($aTempIndexDocs as $aTempIndexDoc) {
             foreach ($aTempIndexDoc as $sKey => $aValue) {//value will always be a array as its multi value
                 foreach ($aValue as $mValue) {
@@ -245,13 +245,13 @@ class tx_mksearch_indexer_seminars_SeminarObjectType1 extends tx_mksearch_indexe
         //first of all we collect all seminar uids with the topic
         //we have to take an own method as the seminars extension seems not to provide
         //a method to do that
-        $aOptions = array();
+        $aOptions = [];
         $aOptions['where'] = SEMINARS_TABLE_SEMINARS.'.topic='.$this->oSeminar->getUid();
-        $aFrom = array(SEMINARS_TABLE_SEMINARS, SEMINARS_TABLE_SEMINARS);
+        $aFrom = [SEMINARS_TABLE_SEMINARS, SEMINARS_TABLE_SEMINARS];
         $aRows = tx_rnbase_util_DB::doSelect(SEMINARS_TABLE_SEMINARS.'.uid', $aFrom, $aOptions);
 
         //now we get the according objects
-        $aSeminars = array();
+        $aSeminars = [];
         if (!empty($aRows)) {
             foreach ($aRows as $aRow) {
                 $aSeminars[] = $this->getSeminar($aRow);
@@ -271,7 +271,7 @@ class tx_mksearch_indexer_seminars_SeminarObjectType1 extends tx_mksearch_indexe
      */
     private function getRelatedDataByDates($sFunction)
     {
-        $aRelatedDataByDates = array();
+        $aRelatedDataByDates = [];
         foreach ($this->aDates as $oDate) {
             $aRelatedDataByDates[] = $oDate->$sFunction();
         }

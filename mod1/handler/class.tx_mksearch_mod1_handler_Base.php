@@ -21,8 +21,8 @@ abstract class tx_mksearch_mod1_handler_Base
         return tx_mksearch_mod1_util_Template::parseList(
             $template,
             $mod,
-            $markerArray = array(),
-            $this->getSearcher($mod, $options = array()),
+            $markerArray = [],
+            $this->getSearcher($mod, $options = []),
             strtoupper($this->getSubID())
         );
     }

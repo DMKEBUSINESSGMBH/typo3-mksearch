@@ -44,9 +44,9 @@ class tx_mksearch_tests_fixtures_typo3_CoreDbRelationHandler extends TYPO3\CMS\C
      *
      * @todo Define visibility
      */
-    public function start($itemlist, $tablelist, $MMtable = '', $MMuid = 0, $currentTable = '', $conf = array())
+    public function start($itemlist, $tablelist, $MMtable = '', $MMuid = 0, $currentTable = '', $conf = [])
     {
-        $this->tableArray[$tablelist] = array();
+        $this->tableArray[$tablelist] = [];
     }
 }
 

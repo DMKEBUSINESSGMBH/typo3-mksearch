@@ -61,7 +61,7 @@ class tx_mksearch_util_SuggestionBuilder
      */
     public function buildSuggestions($aSuggestionData)
     {
-        $aSuggestions = array();
+        $aSuggestions = [];
         if (!$aSuggestionData) {
             return $aSuggestions;
         }
@@ -71,11 +71,11 @@ class tx_mksearch_util_SuggestionBuilder
                 foreach ($oSearchWord->suggestion as $sSuggestion) {
                     //sorted by search word
                     $aSuggestions[$sSearchWord][] = $this->getSimpleSuggestion(
-                        array(
+                        [
                             'uid' => ++$uid,
                             'value' => $sSuggestion,
                             'searchWord' => $sSearchWord,
-                        )
+                        ]
                     );
                 }
             }

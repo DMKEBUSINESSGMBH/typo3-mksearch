@@ -48,7 +48,7 @@ class tx_mksearch_tests_indexer_CalTest extends tx_mksearch_tests_Testcase
      */
     public function testPrepareSearchDataReturnsCorrectDocWithFieldsThatAreNotPrepared()
     {
-        $calRecord = array(
+        $calRecord = [
             'start_time' => 45660,
             'end_time' => 45720,
             'allday' => 1,
@@ -58,7 +58,7 @@ class tx_mksearch_tests_indexer_CalTest extends tx_mksearch_tests_Testcase
             'organizer_link' => 'john.doe.com',
             'location' => 'Springfield',
             'type' => 1,
-        );
+        ];
 
         $indexDocFieldArray =
             $this->getIndexDocFieldArrayByCalRecord($calRecord);
@@ -115,10 +115,10 @@ class tx_mksearch_tests_indexer_CalTest extends tx_mksearch_tests_Testcase
      */
     public function testPrepareSearchDataReturnsCorrectDocForStartAndEnddateFieldsWithoutTimezone()
     {
-        $calRecord = array(
+        $calRecord = [
             'start_date' => '20130303',
             'end_date' => '20130305',
-        );
+        ];
 
         $indexDocFieldArray =
             $this->getIndexDocFieldArrayByCalRecord($calRecord);
@@ -195,11 +195,11 @@ class tx_mksearch_tests_indexer_CalTest extends tx_mksearch_tests_Testcase
      */
     public function testPrepareSearchDataReturnsCorrectDocForStartAndEnddateFieldsWithTimezone()
     {
-        $calRecord = array(
+        $calRecord = [
             'start_date' => 20130303,
             'end_date' => 20130305,
             'timezone' => 'UTC',
-        );
+        ];
 
         $indexDocFieldArray =
             $this->getIndexDocFieldArrayByCalRecord($calRecord);
@@ -271,9 +271,9 @@ class tx_mksearch_tests_indexer_CalTest extends tx_mksearch_tests_Testcase
      */
     public function testPrepareSearchDataRemovesHtmlFromDescriptionField()
     {
-        $calRecord = array(
+        $calRecord = [
             'description' => '<p>my description</p>',
-        );
+        ];
 
         $indexDocFieldArray =
             $this->getIndexDocFieldArrayByCalRecord($calRecord);
@@ -290,22 +290,22 @@ class tx_mksearch_tests_indexer_CalTest extends tx_mksearch_tests_Testcase
      */
     public function testPrepareSearchDataIndexesCalendarTitleCorrect()
     {
-        $calRecord = array(
+        $calRecord = [
             'title' => 'First Calendar',
-        );
+        ];
 
         $calendarModel = tx_rnbase::makeInstance(
             'tx_mksearch_model_cal_Calendar',
             $calRecord
         );
 
-        $calEventRecord = array(
+        $calEventRecord = [
             'calendar_id' => 1,
-        );
+        ];
         $calendarEventMock = $this->getMock(
             'tx_mksearch_model_cal_Event',
-            array('getCalendar'),
-            array($calEventRecord)
+            ['getCalendar'],
+            [$calEventRecord]
         );
         $calendarEventMock->expects($this->once())
             ->method('getCalendar')
@@ -313,7 +313,7 @@ class tx_mksearch_tests_indexer_CalTest extends tx_mksearch_tests_Testcase
 
         $indexer = $this->getMock(
             'tx_mksearch_indexer_Cal',
-            array('createModel')
+            ['createModel']
         );
         $indexer->expects($this->once())
             ->method('createModel')
@@ -334,24 +334,24 @@ class tx_mksearch_tests_indexer_CalTest extends tx_mksearch_tests_Testcase
      */
     private function getIndexDocFieldArrayForCategoryTests()
     {
-        $categoryModels = array(
+        $categoryModels = [
             0 => tx_rnbase::makeInstance(
                 'tx_mksearch_model_cal_Category',
-                array('uid' => 3, 'title' => 'First Category')
+                ['uid' => 3, 'title' => 'First Category']
             ),
             1 => tx_rnbase::makeInstance(
                 'tx_mksearch_model_cal_Category',
-                array('uid' => 2, 'title' => 'Second Category')
+                ['uid' => 2, 'title' => 'Second Category']
             ),
-        );
+        ];
 
-        $calEventRecord = array(
+        $calEventRecord = [
             'category_id' => 2,
-        );
+        ];
         $calendarEventMock = $this->getMock(
             'tx_mksearch_model_cal_Event',
-            array('getCategories'),
-            array($calEventRecord)
+            ['getCategories'],
+            [$calEventRecord]
         );
         $calendarEventMock->expects($this->once())
             ->method('getCategories')
@@ -359,7 +359,7 @@ class tx_mksearch_tests_indexer_CalTest extends tx_mksearch_tests_Testcase
 
         $indexer = $this->getMock(
             'tx_mksearch_indexer_Cal',
-            array('createModel')
+            ['createModel']
         );
         $indexer->expects($this->once())
             ->method('createModel')
@@ -377,10 +377,10 @@ class tx_mksearch_tests_indexer_CalTest extends tx_mksearch_tests_Testcase
     public function testPrepareSearchDataIndexesCategoryUidsCorrect()
     {
         $indexDocFieldArray = $this->getIndexDocFieldArrayForCategoryTests();
-        $expectedCategoryUids = array(
+        $expectedCategoryUids = [
             0 => 3,
             1 => 2,
-        );
+        ];
         self::assertEquals(
             $expectedCategoryUids,
             $indexDocFieldArray['category_uid_mi']->getValue(),
@@ -395,10 +395,10 @@ class tx_mksearch_tests_indexer_CalTest extends tx_mksearch_tests_Testcase
     {
         $indexDocFieldArray = $this->getIndexDocFieldArrayForCategoryTests();
 
-        $expectedCategoryTitles = array(
+        $expectedCategoryTitles = [
             0 => 'First Category',
             1 => 'Second Category',
-        );
+        ];
         self::assertEquals(
             $expectedCategoryTitles,
             $indexDocFieldArray['category_title_ms']->getValue(),
@@ -413,12 +413,12 @@ class tx_mksearch_tests_indexer_CalTest extends tx_mksearch_tests_Testcase
     {
         $indexer = $this->getMock(
             'tx_mksearch_indexer_Cal',
-            array('getEventsByCalendarUid', 'addEventToIndex')
+            ['getEventsByCalendarUid', 'addEventToIndex']
         );
 
-        $eventsByCalendarUid = array(
-            array('uid' => 1), array('uid' => 2),
-        );
+        $eventsByCalendarUid = [
+            ['uid' => 1], ['uid' => 2],
+        ];
         $indexer->expects($this->once())
             ->method('getEventsByCalendarUid')
             ->will($this->returnValue($eventsByCalendarUid));
@@ -433,7 +433,7 @@ class tx_mksearch_tests_indexer_CalTest extends tx_mksearch_tests_Testcase
 
         self::assertNull(
             $this->getIndexDocFieldArrayByCalRecord(
-                array(),
+                [],
                 $indexer,
                 'tx_cal_calendar'
             ),
@@ -448,12 +448,12 @@ class tx_mksearch_tests_indexer_CalTest extends tx_mksearch_tests_Testcase
     {
         $indexer = $this->getMock(
             'tx_mksearch_indexer_Cal',
-            array('getEventsByCategoryUid', 'addEventToIndex')
+            ['getEventsByCategoryUid', 'addEventToIndex']
         );
 
-        $eventsByCategoryUid = array(
-            array('uid' => 1), array('uid' => 2),
-        );
+        $eventsByCategoryUid = [
+            ['uid' => 1], ['uid' => 2],
+        ];
         $indexer->expects($this->once())
             ->method('getEventsByCategoryUid')
             ->will($this->returnValue($eventsByCategoryUid));
@@ -468,7 +468,7 @@ class tx_mksearch_tests_indexer_CalTest extends tx_mksearch_tests_Testcase
 
         self::assertNull(
             $this->getIndexDocFieldArrayByCalRecord(
-                array(),
+                [],
                 $indexer,
                 'tx_cal_category'
             ),
@@ -499,7 +499,7 @@ class tx_mksearch_tests_indexer_CalTest extends tx_mksearch_tests_Testcase
             $cType
         );
 
-        $options = array();
+        $options = [];
         $indexDoc = $indexer->prepareSearchData(
             $table,
             $calRecord,

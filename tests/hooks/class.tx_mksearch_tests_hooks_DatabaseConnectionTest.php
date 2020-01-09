@@ -119,7 +119,7 @@ class tx_mksearch_tests_hooks_DatabaseConnectionTest extends tx_mksearch_tests_T
         $this->setIsIndexingInProgress();
         $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects'] = 'test';
 
-        $paramaters = array('options' => array());
+        $paramaters = ['options' => []];
 
         tx_rnbase::makeInstance('tx_mksearch_hooks_DatabaseConnection')->doSelectPre($paramaters);
 
@@ -143,7 +143,7 @@ class tx_mksearch_tests_hooks_DatabaseConnectionTest extends tx_mksearch_tests_T
         $this->setIsIndexingInProgress();
         $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects'] = 'test';
 
-        $paramaters = array('options' => array('enablefieldsbe' => 1));
+        $paramaters = ['options' => ['enablefieldsbe' => 1]];
 
         tx_rnbase::makeInstance('tx_mksearch_hooks_DatabaseConnection')->doSelectPre($paramaters);
 
@@ -168,7 +168,7 @@ class tx_mksearch_tests_hooks_DatabaseConnectionTest extends tx_mksearch_tests_T
         $this->setIsIndexingInProgress();
         $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects'] = 'test';
 
-        $paramaters = array('options' => array('enablefieldsoff' => true));
+        $paramaters = ['options' => ['enablefieldsoff' => true]];
 
         tx_rnbase::makeInstance('tx_mksearch_hooks_DatabaseConnection')->doSelectPre($paramaters);
 
@@ -193,7 +193,7 @@ class tx_mksearch_tests_hooks_DatabaseConnectionTest extends tx_mksearch_tests_T
         $this->setIsIndexingInProgress(false);
         $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects'] = 'test';
 
-        $paramaters = array('options' => array('enablefieldsoff' => true));
+        $paramaters = ['options' => ['enablefieldsoff' => true]];
 
         tx_rnbase::makeInstance('tx_mksearch_hooks_DatabaseConnection')->doSelectPre($paramaters);
 

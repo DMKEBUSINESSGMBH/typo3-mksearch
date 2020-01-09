@@ -42,7 +42,7 @@ class tx_mksearch_tests_indexer_TtContent_DBTest extends tx_mksearch_tests_Testc
      * @param array  $data     ?
      * @param string $dataName ?
      */
-    public function __construct($name = null, array $data = array(), $dataName = '')
+    public function __construct($name = null, array $data = [], $dataName = '')
     {
         parent::__construct($name, $data, $dataName);
 
@@ -58,25 +58,25 @@ class tx_mksearch_tests_indexer_TtContent_DBTest extends tx_mksearch_tests_Testc
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
 
         //is deleted
-        $record = array('uid' => 123, 'pid' => 1, 'deleted' => 1, 'CType' => 'list');
+        $record = ['uid' => 123, 'pid' => 1, 'deleted' => 1, 'CType' => 'list'];
         $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
         self::assertEquals(true, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 
         //is hidden
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
-        $record = array('uid' => 124, 'pid' => 1, 'deleted' => 0, 'hidden' => 1, 'CType' => 'list');
+        $record = ['uid' => 124, 'pid' => 1, 'deleted' => 0, 'hidden' => 1, 'CType' => 'list'];
         $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
         self::assertEquals(true, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 
         //everything alright
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
-        $record = array('uid' => 125, 'pid' => 1, 'deleted' => 0, 'hidden' => 0, 'header' => 'test', 'CType' => 'list');
+        $record = ['uid' => 125, 'pid' => 1, 'deleted' => 0, 'hidden' => 0, 'header' => 'test', 'CType' => 'list'];
         $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
         self::assertEquals(false, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 
         //everything alright
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
-        $record = array('uid' => 126, 'pid' => 1, 'deleted' => 0, 'hidden' => 0, 'sectionIndex' => 1, 'header' => 'test', 'CType' => 'list');
+        $record = ['uid' => 126, 'pid' => 1, 'deleted' => 0, 'hidden' => 0, 'sectionIndex' => 1, 'header' => 'test', 'CType' => 'list'];
         $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
         self::assertEquals(false, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
         //data correct indexed?
@@ -87,8 +87,8 @@ class tx_mksearch_tests_indexer_TtContent_DBTest extends tx_mksearch_tests_Testc
 
         //no content
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
-        $record = array('uid' => 128, 'pid' => 1, 'deleted' => 0, 'hidden' => 0, 'CType' => 'list');
-        $indexer->prepareSearchData('tt_content', $record, $indexDoc, array_merge($options, array('leaveHeaderEmpty' => true)));
+        $record = ['uid' => 128, 'pid' => 1, 'deleted' => 0, 'hidden' => 0, 'CType' => 'list'];
+        $indexer->prepareSearchData('tt_content', $record, $indexDoc, array_merge($options, ['leaveHeaderEmpty' => true]));
         self::assertEquals(true, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
     }
 
@@ -101,13 +101,13 @@ class tx_mksearch_tests_indexer_TtContent_DBTest extends tx_mksearch_tests_Testc
         $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtContent');
         list($extKey, $cType) = $indexer->getContentType();
 
-        $record = array('uid' => 123, 'deleted' => 0, 'hidden' => 0, 'pid' => 3, 'CType' => 'list', 'bodytext' => 'test');
+        $record = ['uid' => 123, 'deleted' => 0, 'hidden' => 0, 'pid' => 3, 'CType' => 'list', 'bodytext' => 'test'];
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         //damit es nicht an der Konfig scheitert
         $options = $this->getDefaultConfig();
 
         //testbeginn
-        $options['include.']['pageTrees.'] = array(1); //als array
+        $options['include.']['pageTrees.'] = [1]; //als array
         $result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
         self::assertNotNull($result, 'Element sollte nicht gelöscht werden, da im richtigen Seitenbaum. 1');
 
@@ -117,13 +117,13 @@ class tx_mksearch_tests_indexer_TtContent_DBTest extends tx_mksearch_tests_Testc
         self::assertNull($result, 'Element sollte gelöscht werden, da nicht im richtigen Seitenbaum.');
 
         unset($options['include.']['pageTrees']); //zurücksetzen
-        $options['include.']['pageTrees.'] = array(4); //als array
+        $options['include.']['pageTrees.'] = [4]; //als array
         $result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
         self::assertNull($result, 'Element sollte gelöscht werden, da nicht im richtigen Seitenbaum.');
 
-        $record2 = array('uid' => 123, 'deleted' => 0, 'hidden' => 0, 'pid' => 5, 'CType' => 'list', 'bodytext' => 'test');
+        $record2 = ['uid' => 123, 'deleted' => 0, 'hidden' => 0, 'pid' => 5, 'CType' => 'list', 'bodytext' => 'test'];
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
-        $options['include.']['pageTrees.'] = array(1, 4); //als array
+        $options['include.']['pageTrees.'] = [1, 4]; //als array
         $result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options, 1);
         self::assertNotNull($result, 'Element sollte nicht gelöscht werden, da im richtigen Seitenbaum. 2');
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
@@ -132,7 +132,7 @@ class tx_mksearch_tests_indexer_TtContent_DBTest extends tx_mksearch_tests_Testc
 
         //nichts explizit inkluded also alles rein
         unset($options['include.']['pageTrees.']); //zurücksetzen
-        $record2 = array('uid' => 123, 'deleted' => 0, 'hidden' => 0, 'pid' => 5, 'CType' => 'list', 'bodytext' => 'test');
+        $record2 = ['uid' => 123, 'deleted' => 0, 'hidden' => 0, 'pid' => 5, 'CType' => 'list', 'bodytext' => 'test'];
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options, 1);
         self::assertNotNull($result, 'Element sollte nicht gelöscht werden, da im richtigen Seitenbaum und nichts explizit included. 1');
@@ -144,13 +144,13 @@ class tx_mksearch_tests_indexer_TtContent_DBTest extends tx_mksearch_tests_Testc
         $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtContent');
         list($extKey, $cType) = $indexer->getContentType();
 
-        $record = array('uid' => 123, 'deleted' => 0, 'hidden' => 0, 'pid' => 1, 'CType' => 'list', 'bodytext' => 'test');
+        $record = ['uid' => 123, 'deleted' => 0, 'hidden' => 0, 'pid' => 1, 'CType' => 'list', 'bodytext' => 'test'];
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         //damit es nicht an der Konfig scheitert
         $options = $this->getDefaultConfig();
 
         //testbeginn
-        $options['include.']['pageTrees.'] = array(1); //als array
+        $options['include.']['pageTrees.'] = [1]; //als array
         $result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
         self::assertNotNull($result, 'Element sollte nicht gelöscht werden, da im richtigen Seitenbaum. 1');
     }
@@ -164,13 +164,13 @@ class tx_mksearch_tests_indexer_TtContent_DBTest extends tx_mksearch_tests_Testc
         $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtContent');
         list($extKey, $cType) = $indexer->getContentType();
 
-        $record = array('uid' => 123, 'deleted' => 0, 'hidden' => 0, 'pid' => 3, 'CType' => 'list', 'bodytext' => 'test');
+        $record = ['uid' => 123, 'deleted' => 0, 'hidden' => 0, 'pid' => 3, 'CType' => 'list', 'bodytext' => 'test'];
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         //damit es nicht an der Konfig scheitert
         $options = $this->getDefaultConfig();
 
         //testbeginn
-        $options['exclude.']['pageTrees.'] = array(4); //als array
+        $options['exclude.']['pageTrees.'] = [4]; //als array
         $result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
         self::assertNotNull($result, 'Element sollte nicht gelöscht werden, da im richtigen Seitenbaum.');
 
@@ -180,13 +180,13 @@ class tx_mksearch_tests_indexer_TtContent_DBTest extends tx_mksearch_tests_Testc
         self::assertNull($result, 'Element sollte gelöscht werden, da nicht im richtigen Seitenbaum. 1');
 
         unset($options['exclude.']['pageTrees']); //zurücksetzen
-        $options['exclude.']['pageTrees.'] = array(1); //als array
+        $options['exclude.']['pageTrees.'] = [1]; //als array
         $result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
         self::assertNull($result, 'Element sollte gelöscht werden, da nicht im richtigen Seitenbaum. 2');
 
-        $record2 = array('uid' => 123, 'deleted' => 0, 'hidden' => 0, 'pid' => 5, 'CType' => 'list', 'bodytext' => 'test');
+        $record2 = ['uid' => 123, 'deleted' => 0, 'hidden' => 0, 'pid' => 5, 'CType' => 'list', 'bodytext' => 'test'];
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
-        $options['exclude.']['pageTrees.'] = array(1, 4); //als array
+        $options['exclude.']['pageTrees.'] = [1, 4]; //als array
         $result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options, 1);
         self::assertNull($result, 'Element sollte gelöscht werden, da im richtigen Seitenbaum. 3');
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
@@ -195,7 +195,7 @@ class tx_mksearch_tests_indexer_TtContent_DBTest extends tx_mksearch_tests_Testc
 
         //nichts explizit excluded also alles rein
         unset($options['exclude.']['pageTrees.']); //zurücksetzen
-        $record2 = array('uid' => 123, 'deleted' => 0, 'hidden' => 0, 'pid' => 5, 'CType' => 'list', 'bodytext' => 'test');
+        $record2 = ['uid' => 123, 'deleted' => 0, 'hidden' => 0, 'pid' => 5, 'CType' => 'list', 'bodytext' => 'test'];
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options, 1);
         self::assertNotNull($result, 'Element sollte nicht gelöscht werden, da nichts excluded. 1');
@@ -207,7 +207,7 @@ class tx_mksearch_tests_indexer_TtContent_DBTest extends tx_mksearch_tests_Testc
         $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtContent');
         list($extKey, $cType) = $indexer->getContentType();
 
-        $record = array('uid' => 123, 'deleted' => 0, 'hidden' => 0, 'pid' => 1, 'CType' => 'list', 'bodytext' => 'test');
+        $record = ['uid' => 123, 'deleted' => 0, 'hidden' => 0, 'pid' => 1, 'CType' => 'list', 'bodytext' => 'test'];
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         //damit es nicht an der Konfig scheitert
         $options = $this->getDefaultConfig();
@@ -227,7 +227,7 @@ class tx_mksearch_tests_indexer_TtContent_DBTest extends tx_mksearch_tests_Testc
         $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtContent');
         list($extKey, $cType) = $indexer->getContentType();
 
-        $record = array('uid' => 1);
+        $record = ['uid' => 1];
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
 
         $result = $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
@@ -235,9 +235,9 @@ class tx_mksearch_tests_indexer_TtContent_DBTest extends tx_mksearch_tests_Testc
         //nichtzs direkt indiziert?
         self::assertNull($result, 'Es wurde nicht null zurück gegeben!');
 
-        $aOptions = array(
+        $aOptions = [
             'enablefieldsoff' => true,
-        );
+        ];
         $aResult = tx_rnbase_util_DB::doSelect('*', 'tx_mksearch_queue', $aOptions);
 
         self::assertEquals(4, count($aResult), 'Es wurde nicht der richtige Anzahl in die queue gelegt!');
@@ -263,7 +263,7 @@ class tx_mksearch_tests_indexer_TtContent_DBTest extends tx_mksearch_tests_Testc
         $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtContent');
         list($extKey, $cType) = $indexer->getContentType();
 
-        $record = array('uid' => 99);
+        $record = ['uid' => 99];
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
 
         $result = $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
@@ -271,9 +271,9 @@ class tx_mksearch_tests_indexer_TtContent_DBTest extends tx_mksearch_tests_Testc
         //nichtzs direkt indiziert?
         self::assertNull($result, 'Es wurde nicht null zurück gegeben!');
 
-        $aOptions = array(
+        $aOptions = [
             'enablefieldsoff' => true,
-        );
+        ];
         $aResult = tx_rnbase_util_DB::doSelect('*', 'tx_mksearch_queue', $aOptions);
 
         self::assertEmpty($aResult, 'Es wurde doch etwas in die queue gelegt!');
@@ -288,7 +288,7 @@ class tx_mksearch_tests_indexer_TtContent_DBTest extends tx_mksearch_tests_Testc
         $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtContent');
         list($extKey, $cType) = $indexer->getContentType();
 
-        $record = array('uid' => 5);
+        $record = ['uid' => 5];
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
 
         $result = $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
@@ -296,9 +296,9 @@ class tx_mksearch_tests_indexer_TtContent_DBTest extends tx_mksearch_tests_Testc
         //nichtzs direkt indiziert?
         self::assertNull($result, 'Es wurde nicht null zurück gegeben!');
 
-        $aOptions = array(
+        $aOptions = [
             'enablefieldsoff' => true,
-        );
+        ];
         $aResult = tx_rnbase_util_DB::doSelect('*', 'tx_mksearch_queue', $aOptions);
 
         self::assertEmpty($aResult, 'Es wurde doch etwas in die queue gelegt!');
@@ -313,7 +313,7 @@ class tx_mksearch_tests_indexer_TtContent_DBTest extends tx_mksearch_tests_Testc
         $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtContent');
         list($extKey, $cType) = $indexer->getContentType();
 
-        $record = array('uid' => 7);
+        $record = ['uid' => 7];
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
 
         $result = $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
@@ -321,9 +321,9 @@ class tx_mksearch_tests_indexer_TtContent_DBTest extends tx_mksearch_tests_Testc
         //nichtzs direkt indiziert?
         self::assertNull($result, 'Es wurde nicht null zurück gegeben!');
 
-        $aOptions = array(
+        $aOptions = [
             'enablefieldsoff' => true,
-        );
+        ];
         $aResult = tx_rnbase_util_DB::doSelect('*', 'tx_mksearch_queue', $aOptions);
 
         self::assertEquals(2, count($aResult), 'Es wurde nicht der richtige Anzahl in die queue gelegt!');
@@ -342,7 +342,7 @@ class tx_mksearch_tests_indexer_TtContent_DBTest extends tx_mksearch_tests_Testc
         $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtContent');
         list($extKey, $cType) = $indexer->getContentType();
 
-        $record = array('uid' => 2);
+        $record = ['uid' => 2];
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
 
         $result = $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
@@ -350,9 +350,9 @@ class tx_mksearch_tests_indexer_TtContent_DBTest extends tx_mksearch_tests_Testc
         //nichtzs direkt indiziert?
         self::assertNull($result, 'Es wurde nicht null zurück gegeben!');
 
-        $aOptions = array(
+        $aOptions = [
             'enablefieldsoff' => true,
-        );
+        ];
         $aResult = tx_rnbase_util_DB::doSelect('*', 'tx_mksearch_queue', $aOptions);
 
         self::assertEquals(1, count($aResult), 'Es wurde nicht der richtige Anzahl in die queue gelegt!');
@@ -371,31 +371,31 @@ class tx_mksearch_tests_indexer_TtContent_DBTest extends tx_mksearch_tests_Testc
         list($extKey, $cType) = $indexer->getContentType();
 
         //seite ist versteckt
-        $record = array('uid' => 123, 'pid' => 7, 'deleted' => 0, 'hidden' => 0, 'CType' => 'list', 'bodytext' => 'test');
+        $record = ['uid' => 123, 'pid' => 7, 'deleted' => 0, 'hidden' => 0, 'CType' => 'list', 'bodytext' => 'test'];
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
         self::assertTrue($result->getDeleted(), 'Das Element wurde nicht auf gelöscht gesetzt! Pid: 7');
 
         //seite ist gelöscht
-        $record = array('uid' => 123, 'pid' => 8, 'deleted' => 0, 'hidden' => 0, 'CType' => 'list', 'bodytext' => 'test');
+        $record = ['uid' => 123, 'pid' => 8, 'deleted' => 0, 'hidden' => 0, 'CType' => 'list', 'bodytext' => 'test'];
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
         self::assertTrue($result->getDeleted(), 'Das Element wurde nicht auf gelöscht gesetzt! Pid: 8');
 
         //alles okay
-        $record = array('uid' => 123, 'pid' => 6, 'deleted' => 0, 'hidden' => 0, 'CType' => 'list', 'bodytext' => 'test');
+        $record = ['uid' => 123, 'pid' => 6, 'deleted' => 0, 'hidden' => 0, 'CType' => 'list', 'bodytext' => 'test'];
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
         self::assertFalse($result->getDeleted(), 'Das Element wurde auf gelöscht gesetzt! Pid: 6');
 
         //seite ist hart gelöscht bzw. nicht vorhanden
-        $record = array('uid' => 123, 'pid' => 99, 'deleted' => 0, 'hidden' => 0, 'CType' => 'list', 'bodytext' => 'test');
+        $record = ['uid' => 123, 'pid' => 99, 'deleted' => 0, 'hidden' => 0, 'CType' => 'list', 'bodytext' => 'test'];
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
         self::assertTrue($result->getDeleted(), 'Das Element wurde nicht auf gelöscht gesetzt! Pid: 8');
 
         //seite ist nicht gelöscht aber der parent ist versteckt
-        $record = array('uid' => 123, 'pid' => 10, 'deleted' => 0, 'hidden' => 0, 'CType' => 'list', 'bodytext' => 'test');
+        $record = ['uid' => 123, 'pid' => 10, 'deleted' => 0, 'hidden' => 0, 'CType' => 'list', 'bodytext' => 'test'];
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
         self::assertTrue($result->getDeleted(), 'Das Element wurde nicht auf gelöscht gesetzt! Pid: 10');
@@ -414,11 +414,11 @@ class tx_mksearch_tests_indexer_TtContent_DBTest extends tx_mksearch_tests_Testc
 
         // nicht im richtigen Seitenbaum und
         //tx_mksearch_is_indexable = tx_mksearch_indexer_ttcontent_Normal::USE_INDEXER_CONFIGURATION
-        $record = array(
+        $record = [
             'uid' => 123, 'deleted' => 0, 'hidden' => 0,
             'pid' => 3, 'CType' => 'list', 'bodytext' => 'test',
             'tx_mksearch_is_indexable' => tx_mksearch_indexer_ttcontent_Normal::USE_INDEXER_CONFIGURATION,
-        );
+        ];
         $options['exclude.']['pageTrees'] = '1'; //als string
         $result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
         self::assertNull($result, 'Element sollte gelöscht werden, da nicht im richtigen Seitenbaum. 1');
@@ -434,7 +434,7 @@ class tx_mksearch_tests_indexer_TtContent_DBTest extends tx_mksearch_tests_Testc
         //tx_mksearch_is_indexable = tx_mksearch_indexer_ttcontent_Normal::IS_NOT_INDEXABLE
         $record['tx_mksearch_is_indexable'] = tx_mksearch_indexer_ttcontent_Normal::IS_NOT_INDEXABLE;
         unset($options['exclude.']['pageTrees.']); //zurücksetzen
-        $options['exclude.']['pageTrees.'] = array(4); //als array
+        $options['exclude.']['pageTrees.'] = [4]; //als array
         $result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
         self::assertNull($result, 'Element ist zwar im richtigen Seitenbaum aber soll nicht indiziert werden.');
     }
@@ -448,13 +448,13 @@ class tx_mksearch_tests_indexer_TtContent_DBTest extends tx_mksearch_tests_Testc
         $options = $this->getDefaultConfig();
 
         //header should be indexed
-        $record = array('uid' => 123, 'pid' => 6, 'CType' => 'list', 'header' => 'test', 'header_layout' => 101);
+        $record = ['uid' => 123, 'pid' => 6, 'CType' => 'list', 'header' => 'test', 'header_layout' => 101];
         $result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options)->getData();
         self::assertEquals('test', $result['title']->getValue(), 'Titel nicht indiziert!');
 
         //header shouldn't be indexed
-        $record = array('uid' => 123, 'pid' => 6, 'CType' => 'list', 'header' => 'test', 'header_layout' => 100);
-        $result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, array_merge($options, array('leaveHeaderEmpty' => true)))->getData();
+        $record = ['uid' => 123, 'pid' => 6, 'CType' => 'list', 'header' => 'test', 'header_layout' => 100];
+        $result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, array_merge($options, ['leaveHeaderEmpty' => true]))->getData();
         self::assertEquals('', $result['title']->getValue(), 'Titel doch indiziert!');
     }
 
@@ -468,7 +468,7 @@ class tx_mksearch_tests_indexer_TtContent_DBTest extends tx_mksearch_tests_Testc
 
         //everything alright
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
-        $record = array(
+        $record = [
             'uid' => 125,
             'pid' => 1,
             'deleted' => 0,
@@ -478,18 +478,18 @@ class tx_mksearch_tests_indexer_TtContent_DBTest extends tx_mksearch_tests_Testc
             'starttime' => 5,
             'endtime' => 6,
             'fe_group' => 7,
-        );
+        ];
 
         $indexDoc = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
         $indexedData = $indexDoc->getData();
 
         self::assertEquals('1970-01-01T00:00:05Z', $indexedData['starttime_dt']->getValue());
         self::assertEquals('1970-01-01T00:00:06Z', $indexedData['endtime_dt']->getValue());
-        self::assertEquals(array(0 => 7), $indexedData['fe_group_mi']->getValue());
+        self::assertEquals([0 => 7], $indexedData['fe_group_mi']->getValue());
 
         self::assertEquals('1970-01-01T00:00:02Z', $indexedData['page_starttime_dt']->getValue());
         self::assertEquals('2030-07-06T09:13:43Z', $indexedData['page_endtime_dt']->getValue());
-        self::assertEquals(array(0 => 4), $indexedData['page_fe_group_mi']->getValue());
+        self::assertEquals([0 => 4], $indexedData['page_fe_group_mi']->getValue());
     }
 
     /**
@@ -497,9 +497,9 @@ class tx_mksearch_tests_indexer_TtContent_DBTest extends tx_mksearch_tests_Testc
      */
     protected function getDefaultConfig()
     {
-        $options = array();
-        $options['includeCTypes.'] = array('list');
-        $options['CType.']['_default_.']['indexedFields.'] = array('bodytext', 'imagecaption', 'altText', 'titleText');
+        $options = [];
+        $options['includeCTypes.'] = ['list'];
+        $options['CType.']['_default_.']['indexedFields.'] = ['bodytext', 'imagecaption', 'altText', 'titleText'];
 
         return $options;
     }

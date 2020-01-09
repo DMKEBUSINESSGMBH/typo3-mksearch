@@ -32,7 +32,7 @@ class tx_mksearch_tests_util_FacetBuilderTest extends tx_mksearch_tests_Testcase
 {
     public function testBuildFacetsWithEmptyFacetData()
     {
-        $facetData = array();
+        $facetData = [];
         $facetData = tx_mksearch_util_FacetBuilder::getInstance()->buildFacets($facetData);
         self::assertTrue(is_array($facetData), 'es wurde kein array zurück gegeben!');
         self::assertTrue(empty($facetData), 'es wurde kein leeres array zurück gegeben!');
@@ -173,48 +173,48 @@ class tx_mksearch_tests_util_FacetBuilderTest extends tx_mksearch_tests_Testcase
 
     public function testSortFacets()
     {
-        $facets = array(
+        $facets = [
             // field facets
             $this->getModel(
-                array(
+                [
                     'uid' => ++$uid,
                     'field' => $field,
-                    'items' => array(
+                    'items' => [
                         tx_rnbase::makeInstance(
                             'tx_mksearch_model_Facet',
                             'category_dfs_ms',
                             1,
-                            array(
+                            [
                                 'label' => 'A',
                                 'sorting' => 5,
-                            ),
+                            ],
                             50
                         ),
                         tx_rnbase::makeInstance(
                             'tx_mksearch_model_Facet',
                             'category_dfs_ms',
                             1,
-                            array(
+                            [
                                 'label' => 'B',
                                 'sorting' => 3,
-                            ),
+                            ],
                             30
                         ),
                         tx_rnbase::makeInstance(
                             'tx_mksearch_model_Facet',
                             'category_dfs_ms',
                             1,
-                            array(
+                            [
                                 'label' => 'C',
                                 'sorting' => 1,
-                            ),
+                            ],
                             10
                         ),
-                    ),
-                )
+                    ],
+                ]
             ),
             // @TODO: write sorting tests for the other facet types!
-        );
+        ];
 
         $sorted = $this->callInaccessibleMethod(
             tx_mksearch_util_FacetBuilder::getInstance(),
@@ -285,48 +285,48 @@ class tx_mksearch_tests_util_FacetBuilderTest extends tx_mksearch_tests_Testcase
 
     private function buildPivotFacets()
     {
-        $facetData = (object) array(
-            'fiel_one,fiel_two,fiel_three' => array(
-                (object) array(
+        $facetData = (object) [
+            'fiel_one,fiel_two,fiel_three' => [
+                (object) [
                     'field' => 'fiel_one',
                     'value' => 'One',
                     'count' => 1,
-                    'pivot' => array(
-                        (object) array(
+                    'pivot' => [
+                        (object) [
                             'field' => 'fiel_two',
                             'value' => 'Two 1',
                             'count' => 5,
-                            'pivot' => array(
-                                (object) array(
+                            'pivot' => [
+                                (object) [
                                     'field' => 'fiel_three',
                                     'value' => 'Three',
                                     'count' => 7,
-                                ),
-                            ),
-                        ),
-                        (object) array(
+                                ],
+                            ],
+                        ],
+                        (object) [
                             'field' => 'fiel_two',
                             'value' => 'Two 2',
                             'count' => 2,
-                        ),
-                    ),
-                ),
-            ),
-            'field_main,fiel_sub' => array(
-                (object) array(
+                        ],
+                    ],
+                ],
+            ],
+            'field_main,fiel_sub' => [
+                (object) [
                     'field' => 'field_main',
                     'value' => 'Main',
                     'count' => 7,
-                    'pivot' => array(
-                        (object) array(
+                    'pivot' => [
+                        (object) [
                             'field' => 'fiel_sub',
                             'value' => 'Sub',
                             'count' => 5,
-                        ),
-                    ),
-                ),
-            ),
-        );
+                        ],
+                    ],
+                ],
+            ],
+        ];
 
         return $facetData;
     }

@@ -7,7 +7,7 @@
  */
 class tx_mksearch_mod1_handler_admin_Solr implements tx_rnbase_mod_IModHandler
 {
-    private $data = array();
+    private $data = [];
 
     /**
      * Returns a unique ID for this handler. This is used to created the subpart in template.
@@ -59,7 +59,7 @@ class tx_mksearch_mod1_handler_admin_Solr implements tx_rnbase_mod_IModHandler
             $mod->addMessage('###LABEL_SOLR_DELETE_SUCCESSFUL###', '###LABEL_COMMON_INFO###');
         } catch (Exception $e) {
             $mod->addMessage(htmlspecialchars($e->getMessage()), '###LABEL_COMMON_ERROR###', 2);
-            tx_rnbase_util_Logger::warn('[SolrAdmin] Exception for delete query.', 'mksearch', array('Exception' => $e->getMessage()));
+            tx_rnbase_util_Logger::warn('[SolrAdmin] Exception for delete query.', 'mksearch', ['Exception' => $e->getMessage()]);
         }
     }
 
@@ -72,7 +72,7 @@ class tx_mksearch_mod1_handler_admin_Solr implements tx_rnbase_mod_IModHandler
      */
     public function showScreen($template, tx_rnbase_mod_IModule $mod, $options)
     {
-        $markerArray = array();
+        $markerArray = [];
 
         $cores = $this->findSolrCores($mod);
         if (empty($cores)) {
@@ -108,7 +108,7 @@ class tx_mksearch_mod1_handler_admin_Solr implements tx_rnbase_mod_IModHandler
 
     protected function findSolrCores(tx_rnbase_mod_IModule $mod)
     {
-        $fields = $options = array();
+        $fields = $options = [];
         $options['enablefieldsfe'] = 1;
         // Solr-Core auf der aktuellen Seite suchen
         $fields['INDX.PID'][OP_EQ_INT] = $mod->getPid();
@@ -123,7 +123,7 @@ class tx_mksearch_mod1_handler_admin_Solr implements tx_rnbase_mod_IModHandler
      */
     protected function getCoreSelector($cores, tx_rnbase_mod_IModule $mod)
     {
-        $entries = array();
+        $entries = [];
         foreach ($cores as $core) {
             $entries[$core->getUid()] = $core->getTitle().' ('.$core->getName().') '.$this->countDocs($core);
         }

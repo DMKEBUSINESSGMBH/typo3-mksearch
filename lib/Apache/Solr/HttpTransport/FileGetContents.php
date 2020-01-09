@@ -117,15 +117,15 @@ class Apache_Solr_HttpTransport_FileGetContents extends Apache_Solr_HttpTranspor
 
     public function performHeadRequest($url, $timeout = false)
     {
-        stream_context_set_option($this->_headContext, array(
-                'http' => array(
+        stream_context_set_option($this->_headContext, [
+                'http' => [
                     // set HTTP method
                     'method' => 'HEAD',
 
                     // default timeout
                     'timeout' => $this->getDefaultTimeout(),
-                ),
-            )
+                ],
+            ]
         );
 
         // set the timeout if specified
@@ -148,8 +148,8 @@ class Apache_Solr_HttpTransport_FileGetContents extends Apache_Solr_HttpTranspor
 
     public function performPostRequest($url, $rawPost, $contentType, $timeout = false)
     {
-        stream_context_set_option($this->_postContext, array(
-                'http' => array(
+        stream_context_set_option($this->_postContext, [
+                'http' => [
                     // set HTTP method
                     'method' => 'POST',
 
@@ -161,8 +161,8 @@ class Apache_Solr_HttpTransport_FileGetContents extends Apache_Solr_HttpTranspor
 
                     // default timeout
                     'timeout' => $this->getDefaultTimeout(),
-                ),
-            )
+                ],
+            ]
         );
 
         // set the timeout if specified

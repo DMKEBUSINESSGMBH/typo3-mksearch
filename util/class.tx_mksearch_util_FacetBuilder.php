@@ -49,7 +49,7 @@ class tx_mksearch_util_FacetBuilder
      *
      * @return tx_mksearch_util_FacetBuilder
      */
-    public static function getInstance($class = '', array $options = array())
+    public static function getInstance($class = '', array $options = [])
     {
         static $instance;
         $class = empty($class) ? 'tx_mksearch_util_FacetBuilder' : $class;
@@ -66,7 +66,7 @@ class tx_mksearch_util_FacetBuilder
      * @param array $options
      */
     public function __construct(
-        array $options = array()
+        array $options = []
     ) {
         $this->options = Tx_Rnbase_Domain_Model_Data::getInstance($options);
     }
@@ -129,7 +129,7 @@ class tx_mksearch_util_FacetBuilder
      */
     protected function buildQueryFacets($facetData)
     {
-        $facetGroups = array();
+        $facetGroups = [];
         if (!$facetData) {
             return $facetGroups;
         }
@@ -140,11 +140,11 @@ class tx_mksearch_util_FacetBuilder
             if (!array_key_exists($groupName, $facetGroups)) {
                 $facetGroups[$groupName] = tx_rnbase::makeInstance(
                     'tx_rnbase_model_base',
-                    array(
+                    [
                                 'uid' => ++$uid,
                                 'field' => $groupName,
-                                'items' => array(),
-                        )
+                                'items' => [],
+                        ]
                 );
             }
             $facetGroups[$groupName]->record['items'][] = $this->getSimpleFacet(
@@ -173,7 +173,7 @@ class tx_mksearch_util_FacetBuilder
      */
     protected function buildPivotFacets($facetData)
     {
-        $facetGroups = array();
+        $facetGroups = [];
         if (!$facetData) {
             return $facetGroups;
         }
@@ -181,11 +181,11 @@ class tx_mksearch_util_FacetBuilder
         foreach ($facetData as $fields => $pivots) {
             $facetGroups[] = tx_rnbase::makeInstance(
                 'tx_rnbase_model_base',
-                array(
+                [
                     'uid' => ++$uid,
                     'field' => implode('-', explode(',', $fields)),
                     'items' => $this->buildPivotChildFacets($pivots),
-                )
+                ]
             );
         }
 
@@ -201,7 +201,7 @@ class tx_mksearch_util_FacetBuilder
      */
     protected function buildPivotChildFacets($pivots)
     {
-        $fields = array();
+        $fields = [];
         if (empty($pivots) || !is_array($pivots)) {
             return $fields;
         }
@@ -228,7 +228,7 @@ class tx_mksearch_util_FacetBuilder
      */
     protected function buildFieldFacets($facetData)
     {
-        $facetGroups = array();
+        $facetGroups = [];
         if (!$facetData) {
             return $facetGroups;
         }
@@ -237,11 +237,11 @@ class tx_mksearch_util_FacetBuilder
             if (empty($facetGroups[$field])) {
                 $facetGroups[$field] = tx_rnbase::makeInstance(
                     'tx_rnbase_model_base',
-                    array(
+                    [
                         'uid' => ++$uid,
                         'field' => $field,
-                        'items' => array(),
-                    )
+                        'items' => [],
+                    ]
                 );
             }
             foreach ($facetGroup as $id => $count) {
@@ -322,7 +322,7 @@ class tx_mksearch_util_FacetBuilder
         if ($facet && $facet->hasSorting()) {
             $s = usort(
                 $facets,
-                array(self, 'cbSortFacets')
+                [self, 'cbSortFacets']
             );
         }
 
@@ -361,7 +361,7 @@ class tx_mksearch_util_FacetBuilder
             }
         } elseif ($var instanceof tx_rnbase_model_base) {
             $childs = $var instanceof tx_mksearch_model_Facet ? $var->getChilds() : $var->getItems();
-            $childs = is_array($childs) ? $childs : array();
+            $childs = is_array($childs) ? $childs : [];
             $var = array_map('strval', $var->getProperty());
             $var['childs'] = $levels-- <= 0 ? 'length: '.count($childs) : self::debugFacets($childs, $levels);
         }

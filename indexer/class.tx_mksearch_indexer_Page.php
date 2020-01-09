@@ -46,7 +46,7 @@ class tx_mksearch_indexer_Page extends tx_mksearch_indexer_Base
      */
     public static function getContentType()
     {
-        return array('core', 'page');
+        return ['core', 'page'];
     }
 
     /**
@@ -158,7 +158,7 @@ class tx_mksearch_indexer_Page extends tx_mksearch_indexer_Base
     protected function createModel(
         array $rawData,
         $tableName = null,
-        $options = array()
+        $options = []
     ) {
         return tx_rnbase::makeInstance('tx_rnbase_model_Base', $rawData);
     }

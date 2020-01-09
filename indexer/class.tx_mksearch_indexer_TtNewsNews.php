@@ -44,7 +44,7 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base
      */
     public static function getContentType()
     {
-        return array('tt_news', 'news');
+        return ['tt_news', 'news'];
     }
 
     /**
@@ -58,14 +58,14 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base
      */
     private function getCategories(tx_rnbase_IModel $model)
     {
-        $options = array(
+        $options = [
             'where' => 'tt_news_cat_mm.uid_local='.$model->getUid(),
             // as there is no tca for tt_news_cat_mm
             'wrapperclass' => 'tx_rnbase_model_Base',
             'orderby' => 'tt_news_cat_mm.sorting ASC',
-        );
+        ];
         $join = ' JOIN tt_news_cat_mm ON tt_news_cat_mm.uid_foreign=tt_news_cat.uid AND tt_news_cat.deleted=0 ';
-        $from = array('tt_news_cat'.$join, 'tt_news_cat');
+        $from = ['tt_news_cat'.$join, 'tt_news_cat'];
         $rows = tx_rnbase_util_DB::doSelect(
             'tt_news_cat_mm.uid_foreign, tt_news_cat.uid, tt_news_cat.title, tt_news_cat.single_pid',
             $from,
@@ -108,13 +108,13 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base
         tx_rnbase_util_Misc::callHook(
             'mksearch',
             'indexer_TtNews_prepareDataBeforeAddFields',
-            array(
+            [
                 'rawData' => &$rawData,
                 'options' => $options,
                 'indexDoc' => &$indexDoc,
                 'boost' => &$boost,
                 'abort' => &$abort,
-            ),
+            ],
             $this
         );
 
@@ -290,10 +290,10 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base
     {
         $catUid = $catRecord['uid'];
         // Die UIDs aller betroffenen News holen
-        $options = array();
+        $options = [];
         $options['where'] = 'tt_news_cat_mm.uid_foreign='.$catUid;
         $options['enablefieldsoff'] = true;
-        $from = array('tt_news_cat_mm JOIN tt_news ON tt_news.uid=tt_news_cat_mm.uid_local AND tt_news.deleted=0', 'tt_news_cat_mm');
+        $from = ['tt_news_cat_mm JOIN tt_news ON tt_news.uid=tt_news_cat_mm.uid_local AND tt_news.deleted=0', 'tt_news_cat_mm'];
         $rows = $this->doSelect('tt_news.uid AS uid', $from, $options);
         // Alle gefundenen News für die Neuindizierung anmelden.
         $srv = $this->getIntIndexService();
@@ -339,7 +339,7 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base
      *
      * @see tx_mksearch_indexer_Base::createModel()
      */
-    protected function createModel(array $rawData, $tableName = null, $options = array())
+    protected function createModel(array $rawData, $tableName = null, $options = [])
     {
         return tx_rnbase::makeInstance('tx_rnbase_model_Base', $rawData);
     }
@@ -361,7 +361,7 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base
             return;
         }
 
-        $categoryNames = array();
+        $categoryNames = [];
         foreach ($categories as $category) {
             $categoryNames[$category->record['uid_foreign']] = $category->record['title'];
             // Die erste Kategorie mit einer Single-PID wird gewinnen

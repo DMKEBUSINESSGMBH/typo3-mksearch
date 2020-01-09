@@ -47,7 +47,7 @@ class tx_mksearch_view_SearchSolr extends tx_rnbase_view_Base
         // Get data from action
         $result = &$viewData->offsetGet('result');
 
-        $items = $result ? $result['items'] : array();
+        $items = $result ? $result['items'] : [];
         /* @var $listBuilder tx_rnbase_util_ListBuilder */
         $listBuilder = tx_rnbase::makeInstance(
             'tx_rnbase_util_ListBuilder',
@@ -55,7 +55,7 @@ class tx_mksearch_view_SearchSolr extends tx_rnbase_view_Base
         );
 
         // wurden options für die markerklassen gesetzt?
-        $markerParams = $viewData->offsetExists('markerParams') ? $viewData->offsetGet('markerParams') : array();
+        $markerParams = $viewData->offsetExists('markerParams') ? $viewData->offsetGet('markerParams') : [];
 
         $markerClass = $configurations->get($this->confId.'mainmarkerclass');
         $markerClass = $markerClass ? $markerClass : 'tx_mksearch_marker_Search';
@@ -92,7 +92,7 @@ class tx_mksearch_view_SearchSolr extends tx_rnbase_view_Base
      */
     protected function handleSuggestions($template, $viewData, $configurations, $formatter, $listBuilder, $result)
     {
-        $suggestions = $result ? $result['suggestions'] : array();
+        $suggestions = $result ? $result['suggestions'] : [];
 
         if (!empty($suggestions)) {
             $suggestions = reset($suggestions);
@@ -133,7 +133,7 @@ class tx_mksearch_view_SearchSolr extends tx_rnbase_view_Base
         $out = $template;
 
         // dann Liste parsen
-        $facets = $result ? (array) $result['facets'] : array();
+        $facets = $result ? (array) $result['facets'] : [];
 
         // the old way!
         if (tx_rnbase_util_BaseMarker::containsMarker($out, 'FACETS')) {
@@ -143,7 +143,7 @@ class tx_mksearch_view_SearchSolr extends tx_rnbase_view_Base
 
             // früher wurden alle facetten in einer liste nacheinander herausgerendert!
             // dies muss aus kompatibilitätsgründen beibehalten werden.
-            $mergedFacets = array();
+            $mergedFacets = [];
             foreach ($facets as $group) {
                 $mergedFacets = array_merge($mergedFacets, $group->getItems());
             }
@@ -160,7 +160,7 @@ class tx_mksearch_view_SearchSolr extends tx_rnbase_view_Base
             // den alten zurücklink
             /* @var $baseMarker tx_rnbase_util_BaseMarker */
             $baseMarker = tx_rnbase::makeInstance('tx_rnbase_util_BaseMarker');
-            $wrappedSubpartArray = $subpartArray = $markerArray = array();
+            $wrappedSubpartArray = $subpartArray = $markerArray = [];
             $baseMarker->initLink(
                 $markerArray,
                 $subpartArray,
@@ -169,7 +169,7 @@ class tx_mksearch_view_SearchSolr extends tx_rnbase_view_Base
                 $this->confId.'facet.',
                 'reset',
                 'FACET',
-                array(),
+                [],
                 $out
             );
             $out = tx_rnbase_util_Templates::substituteMarkerArrayCached(

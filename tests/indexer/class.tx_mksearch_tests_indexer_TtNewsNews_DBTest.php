@@ -42,7 +42,7 @@ class tx_mksearch_tests_indexer_TtNewsNews_DBTest extends tx_mksearch_tests_DbTe
      * @param array  $data     ?
      * @param string $dataName ?
      */
-    public function __construct($name = null, array $data = array(), $dataName = '')
+    public function __construct($name = null, array $data = [], $dataName = '')
     {
         parent::__construct($name, $data, $dataName);
         $this->importExtensions[] = 'tt_news';
@@ -58,15 +58,15 @@ class tx_mksearch_tests_indexer_TtNewsNews_DBTest extends tx_mksearch_tests_DbTe
     {
         /* @var $indexer tx_mksearch_indexer_TtNewsNews */
         $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtNewsNews');
-        $options = array(
-            'include.' => array(
-                'categories.' => array(
+        $options = [
+            'include.' => [
+                'categories.' => [
                     0 => 1,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
-        $result = array('uid' => 1);
+        $result = ['uid' => 1];
         $indexDoc = $indexer->prepareSearchData(
             'tt_news',
             $result,
@@ -75,7 +75,7 @@ class tx_mksearch_tests_indexer_TtNewsNews_DBTest extends tx_mksearch_tests_DbTe
         );
         self::assertNotNull($indexDoc, 'Das Element wurde nicht indziert!');
 
-        $result = array('uid' => 2);
+        $result = ['uid' => 2];
         $indexDoc = $indexer->prepareSearchData(
             'tt_news',
             $result,
@@ -92,15 +92,15 @@ class tx_mksearch_tests_indexer_TtNewsNews_DBTest extends tx_mksearch_tests_DbTe
     public function testPrepareSearchDataWithExcludeCategoriesOption()
     {
         $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtNewsNews');
-        $options = array(
-            'exclude.' => array(
-                'categories.' => array(
+        $options = [
+            'exclude.' => [
+                'categories.' => [
                     0 => 1,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
-        $result = array('uid' => 1);
+        $result = ['uid' => 1];
         $indexDoc = $indexer->prepareSearchData(
             'tt_news',
             $result,
@@ -109,7 +109,7 @@ class tx_mksearch_tests_indexer_TtNewsNews_DBTest extends tx_mksearch_tests_DbTe
         );
         self::assertNull($indexDoc, 'Das Element wurde doch indziert!');
 
-        $result = array('uid' => 2);
+        $result = ['uid' => 2];
         $indexDoc = $indexer->prepareSearchData(
             'tt_news',
             $result,
@@ -123,31 +123,31 @@ class tx_mksearch_tests_indexer_TtNewsNews_DBTest extends tx_mksearch_tests_DbTe
     {
         $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtNewsNews');
         $indexDoc = tx_mksearch_tests_Util::getIndexerDocument($indexer);
-        $options = array(
+        $options = [
             'addCategoryData' => 1,
             'defaultSinglePid' => 0,
-        );
+        ];
 
-        $aResult = array('uid' => 3, 'title' => 'Testnews');
+        $aResult = ['uid' => 3, 'title' => 'Testnews'];
         $indexDoc = $indexer->prepareSearchData('tt_news', $aResult, $indexDoc, $options);
         self::assertTrue(is_object($indexDoc), 'Das Element wurde nicht indziert!');
 
         $aIndexData = $indexDoc->getData();
         self::assertArrayHasKey('categorySinglePid_i', $aIndexData, 'categorySinglePid_i ist nicht gesetzt!');
         self::assertEquals('334', $aIndexData['categorySinglePid_i']->getValue(), 'categorySinglePid_i ist falsch gesetzt!');
-        self::assertEquals(array(2, 3, 1, 4), $aIndexData['categories_mi']->getValue(), 'categories_mi hat die falsche Reihenfolge!');
+        self::assertEquals([2, 3, 1, 4], $aIndexData['categories_mi']->getValue(), 'categories_mi hat die falsche Reihenfolge!');
     }
 
     public function testPrepareSearchDataWithDefaultSinglePid()
     {
         $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtNewsNews');
         $indexDoc = tx_mksearch_tests_Util::getIndexerDocument($indexer);
-        $options = array(
+        $options = [
             'addCategoryData' => 1,
             'defaultSinglePid' => 50,
-        );
+        ];
 
-        $aResult = array('uid' => 4, 'title' => 'Testnews');
+        $aResult = ['uid' => 4, 'title' => 'Testnews'];
         $indexDoc = $indexer->prepareSearchData('tt_news', $aResult, $indexDoc, $options);
         self::assertTrue(is_object($indexDoc), 'Das Element wurde nicht indziert!');
 
@@ -163,13 +163,13 @@ class tx_mksearch_tests_indexer_TtNewsNews_DBTest extends tx_mksearch_tests_DbTe
     {
         /* @var $indexer tx_mksearch_indexer_TtNewsNews */
         $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtNewsNews');
-        $options = array(
-            'include.' => array(
+        $options = [
+            'include.' => [
                 'somethingelse' => '1',
-            ),
-        );
+            ],
+        ];
 
-        $result = array('uid' => 5);
+        $result = ['uid' => 5];
         $indexDoc = $indexer->prepareSearchData(
             'tt_news',
             $result,

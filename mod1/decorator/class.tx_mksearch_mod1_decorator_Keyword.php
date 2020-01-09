@@ -67,7 +67,7 @@ class tx_mksearch_mod1_decorator_Keyword
                 // hide undhide link
                 $ret .= $formtool->createHideLink($item->getTableName(), $item->getUid(), $item->record['hidden']);
                 // remove link
-                $ret .= $formtool->createDeleteLink($item->getTableName(), $item->getUid(), '', array('confirm' => $GLOBALS['LANG']->getLL('confirmation_deletion')));
+                $ret .= $formtool->createDeleteLink($item->getTableName(), $item->getUid(), '', ['confirm' => $GLOBALS['LANG']->getLL('confirmation_deletion')]);
                 break;
             default:
                 $ret = $value;

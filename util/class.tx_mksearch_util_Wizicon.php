@@ -36,13 +36,13 @@ class tx_mksearch_util_Wizicon extends tx_rnbase_util_Wizicon
      */
     protected function getPluginData()
     {
-        return array(
-            'tx_mksearch' => array(
+        return [
+            'tx_mksearch' => [
                 'icon' => /*tx_rnbase_util_Extensions::extRelPath('mksearch') .*/ 'EXT:mksearch/ext_icon.gif',
                 'title' => 'plugin.mksearch.label',
                 'description' => 'plugin.mksearch.description',
-            ),
-        );
+            ],
+        ];
     }
 
     /**

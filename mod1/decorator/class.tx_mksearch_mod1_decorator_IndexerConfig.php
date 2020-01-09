@@ -65,7 +65,7 @@ class tx_mksearch_mod1_decorator_IndexerConfig
                 $composites = tx_mksearch_util_ServiceRegistry::getIntCompositeService()->getByConfiguration($item);
                 /* @var $compositeDecorator tx_mksearch_mod1_decorator_Composite */
                 $compositeDecorator = tx_rnbase::makeInstance('tx_mksearch_mod1_decorator_Composite', $this->getModule());
-                $ret = $compositeDecorator->getCompositeInfos($composites, array('includeIndex' => 1));
+                $ret = $compositeDecorator->getCompositeInfos($composites, ['includeIndex' => 1]);
                 break;
             case 'actions':
                 $formtool = $this->getModule()->getFormTool();
@@ -75,7 +75,7 @@ class tx_mksearch_mod1_decorator_IndexerConfig
                 // hide undhide link
                 $ret .= $formtool->createHideLink($item->getTableName(), $item->getUid(), $item->record['hidden']);
                 // remove link
-                $ret .= $formtool->createDeleteLink($item->getTableName(), $item->getUid(), '', array('confirm' => $GLOBALS['LANG']->getLL('confirmation_deletion')));
+                $ret .= $formtool->createDeleteLink($item->getTableName(), $item->getUid(), '', ['confirm' => $GLOBALS['LANG']->getLL('confirmation_deletion')]);
                 break;
             default:
                 $ret = $value;
@@ -90,7 +90,7 @@ class tx_mksearch_mod1_decorator_IndexerConfig
      *
      * @return string
      */
-    public function getConfigInfos($items, $options = array())
+    public function getConfigInfos($items, $options = [])
     {
         foreach ($items as $item) {
             $ret[] = $this->getConfigInfo($item, $options);
@@ -106,7 +106,7 @@ class tx_mksearch_mod1_decorator_IndexerConfig
      *
      * @return string
      */
-    public function getConfigInfo(tx_mksearch_model_internal_Config $item, $options = array())
+    public function getConfigInfo(tx_mksearch_model_internal_Config $item, $options = [])
     {
         $formtool = $this->getModule()->getFormTool();
 

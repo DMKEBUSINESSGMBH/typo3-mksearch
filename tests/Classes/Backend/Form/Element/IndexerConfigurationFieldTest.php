@@ -42,10 +42,10 @@ class IndexerConfigurationFieldTest extends \tx_rnbase_tests_BaseTestCase
     {
         $field = $this->getAccessibleMock(
             'DMK\\Mksearch\\Backend\\Form\\Element\\IndexerConfigurationField',
-            array('callRenderOnParent'), array(), '', false
+            ['callRenderOnParent'], [], '', false
         );
 
-        $field->_set('data', array('databaseRow' => $databaseRow));
+        $field->_set('data', ['databaseRow' => $databaseRow]);
 
         $field
             ->expects(self::once())
@@ -61,15 +61,15 @@ class IndexerConfigurationFieldTest extends \tx_rnbase_tests_BaseTestCase
      */
     public function dataProviderRenderWhenDefaultValueShouldNotBeSet()
     {
-        return array(
-            array(array('configuration' => 'someInfo')),
-            array(array('configuration' => 'someInfo', 'extkey' => array(0 => 'core'))),
-            array(array('configuration' => 'someInfo', 'contenttype' => array(0 => 'page'))),
-            array(array('configuration' => 'someInfo', 'extkey' => array(0 => 'core'), 'contenttype' => array(0 => 'page'))),
-            array(array('extkey' => array(0 => 'core'))),
-            array(array('contenttype' => array(0 => 'page'))),
-            array(array()),
-        );
+        return [
+            [['configuration' => 'someInfo']],
+            [['configuration' => 'someInfo', 'extkey' => [0 => 'core']]],
+            [['configuration' => 'someInfo', 'contenttype' => [0 => 'page']]],
+            [['configuration' => 'someInfo', 'extkey' => [0 => 'core'], 'contenttype' => [0 => 'page']]],
+            [['extkey' => [0 => 'core']]],
+            [['contenttype' => [0 => 'page']]],
+            [[]],
+        ];
     }
 
     /**
@@ -81,12 +81,12 @@ class IndexerConfigurationFieldTest extends \tx_rnbase_tests_BaseTestCase
 
         $field = $this->getAccessibleMock(
             'DMK\\Mksearch\\Backend\\Form\\Element\\IndexerConfigurationField',
-            array('callRenderOnParent'), array(), '', false
+            ['callRenderOnParent'], [], '', false
         );
 
-        $field->_set('data', array('databaseRow' => array(
-            'configuration' => '', 'extkey' => array(0 => 'core'), 'contenttype' => array(0 => 'page'),
-        )));
+        $field->_set('data', ['databaseRow' => [
+            'configuration' => '', 'extkey' => [0 => 'core'], 'contenttype' => [0 => 'page'],
+        ]]);
 
         $field
             ->expects(self::once())
@@ -109,12 +109,12 @@ class IndexerConfigurationFieldTest extends \tx_rnbase_tests_BaseTestCase
     {
         $field = $this->getAccessibleMock(
             'DMK\\Mksearch\\Backend\\Form\\Element\\IndexerConfigurationField',
-            array('callRenderOnParent'), array(), '', false
+            ['callRenderOnParent'], [], '', false
         );
 
-        $field->_set('data', array('databaseRow' => array(
-            'configuration' => '', 'extkey' => array(0 => 'unknown'), 'contenttype' => array(0 => 'page'),
-        )));
+        $field->_set('data', ['databaseRow' => [
+            'configuration' => '', 'extkey' => [0 => 'unknown'], 'contenttype' => [0 => 'page'],
+        ]]);
 
         $field
             ->expects(self::once())

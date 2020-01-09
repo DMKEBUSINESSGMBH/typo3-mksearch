@@ -55,7 +55,7 @@ class tx_mksearch_marker_Search extends tx_rnbase_util_SimpleMarker
         $markerArray = $formatter->getItemMarkerArrayWrapped($item->getProperty(), $confId, $unused, $marker.'_', $initFields);
 
         // subparts erzeugen
-        $subpartArray = $wrappedSubpartArray = array();
+        $subpartArray = $wrappedSubpartArray = [];
         $this->prepareSubparts($wrappedSubpartArray, $subpartArray, $template, $item, $formatter, $confId, $marker);
 
         $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
@@ -141,7 +141,7 @@ class tx_mksearch_marker_Search extends tx_rnbase_util_SimpleMarker
             $extraInfo = '<!-- NO MARKER-CLASS FOUND: '.$typeConfId.'markerClass'.' -->';
         }
 
-        $markerArray = array('###'.$markerPrefix.'###' => $extraInfo);
+        $markerArray = ['###'.$markerPrefix.'###' => $extraInfo];
 
         $template = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray);
 
@@ -165,7 +165,7 @@ class tx_mksearch_marker_Search extends tx_rnbase_util_SimpleMarker
 
         return array_merge(
             $formatter->getConfigurations()->getExploded($confId.'initFields'),
-            is_array($fields) ? $fields : array()
+            is_array($fields) ? $fields : []
         );
     }
 }

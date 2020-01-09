@@ -63,7 +63,7 @@ class tx_mksearch_tests_marker_SearchResultSimpleTest extends tx_mksearch_tests_
     {
         //set noHash as we don't need it in tests
         $aConfig = tx_mksearch_tests_Util::loadPageTS4BE();
-        $aConfig['searchsolr.']['hit.']['extrainfo.']['default.']['hit.']['initFields.'] = array('secondField');
+        $aConfig['searchsolr.']['hit.']['extrainfo.']['default.']['hit.']['initFields.'] = ['secondField'];
         $this->oConfig = tx_mksearch_tests_Util::loadConfig4BE($aConfig);
         $this->oFormatter = $this->oConfig->getFormatter();
 

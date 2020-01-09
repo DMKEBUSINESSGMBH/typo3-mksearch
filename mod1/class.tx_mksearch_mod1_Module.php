@@ -39,14 +39,14 @@ class tx_mksearch_mod1_Module extends tx_rnbase_mod_BaseModule
         if (!$this->MCONF['name']) {
             $this->MCONF = array_merge(
                 (array) $GLOBALS['MCONF'],
-                array(
+                [
                     'name' => 'web_MksearchM1',
                     'access' => 'user,group',
-                    'default' => array(
-                        'tabs_images' => array('tab' => 'moduleicon.gif'),
+                    'default' => [
+                        'tabs_images' => ['tab' => 'moduleicon.gif'],
                         'll_ref' => 'LLL:EXT:mksearch/mod1/locallang_mod.xml',
-                    ),
-                )
+                    ],
+                ]
             );
         }
 
@@ -69,9 +69,9 @@ class tx_mksearch_mod1_Module extends tx_rnbase_mod_BaseModule
     {
         $modUrl = Tx_Rnbase_Backend_Utility::getModuleUrl(
             'web_MksearchM1',
-            array(
+            [
                 'id' => $this->getPid(),
-            ),
+            ],
             ''
         );
 

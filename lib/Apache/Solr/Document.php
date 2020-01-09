@@ -78,14 +78,14 @@ class Apache_Solr_Document implements IteratorAggregate
      *
      * @var array
      */
-    protected $_fields = array();
+    protected $_fields = [];
 
     /**
      * Document field boost values, indexed by name.
      *
      * @var array array of floats
      */
-    protected $_fieldBoosts = array();
+    protected $_fieldBoosts = [];
 
     /**
      * Clear all boosts and fields from this document.
@@ -94,8 +94,8 @@ class Apache_Solr_Document implements IteratorAggregate
     {
         $this->_documentBoost = false;
 
-        $this->_fields = array();
-        $this->_fieldBoosts = array();
+        $this->_fields = [];
+        $this->_fieldBoosts = [];
     }
 
     /**
@@ -151,10 +151,10 @@ class Apache_Solr_Document implements IteratorAggregate
     {
         if (!isset($this->_fields[$key])) {
             // create holding array if this is the first value
-            $this->_fields[$key] = array();
+            $this->_fields[$key] = [];
         } elseif (!is_array($this->_fields[$key])) {
             // move existing value into array if it is not already an array
-            $this->_fields[$key] = array($this->_fields[$key]);
+            $this->_fields[$key] = [$this->_fields[$key]];
         }
 
         if (false === $this->getFieldBoost($key)) {
@@ -193,11 +193,11 @@ class Apache_Solr_Document implements IteratorAggregate
     public function getField($key)
     {
         if (isset($this->_fields[$key])) {
-            return array(
+            return [
                 'name' => $key,
                 'value' => $this->_fields[$key],
                 'boost' => $this->getFieldBoost($key),
-            );
+            ];
         }
 
         return false;

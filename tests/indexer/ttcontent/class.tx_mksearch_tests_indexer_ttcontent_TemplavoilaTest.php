@@ -54,7 +54,7 @@ class tx_mksearch_tests_indexer_ttcontent_TemplavoilaTest extends tx_mksearch_te
     {
         $indexer = $this->getMock(
             'tx_mksearch_indexer_ttcontent_Templavoila',
-            array('getPageContent', 'isIndexableRecord', 'hasDocToBeDeleted')
+            ['getPageContent', 'isIndexableRecord', 'hasDocToBeDeleted']
         );
         $indexer->expects($this->once())
             ->method('isIndexableRecord')
@@ -65,20 +65,20 @@ class tx_mksearch_tests_indexer_ttcontent_TemplavoilaTest extends tx_mksearch_te
         $indexer->expects($this->any())
             ->method('getPageContent')
             ->with(456)
-            ->will($this->returnValue(array('keywords' => 'first,second')));
+            ->will($this->returnValue(['keywords' => 'first,second']));
 
         list($extKey, $cType) = $indexer->getContentType();
 
-        $record = array('uid' => 123, 'pid' => 456, 'CType' => 'list', 'bodytext' => 'lorem');
+        $record = ['uid' => 123, 'pid' => 456, 'CType' => 'list', 'bodytext' => 'lorem'];
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $options = self::getDefaultOptions();
         $options['addPageMetaData'] = 1;
         $options['addPageMetaData.']['separator'] = ',';
-        $options['includeCTypes.'] = array('search', 'mailform', 'list');
+        $options['includeCTypes.'] = ['search', 'mailform', 'list'];
         $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
         $indexDocData = $indexDoc->getData();
 
-        self::assertEquals(array('first', 'second'), $indexDocData['keywords_ms']->getValue());
+        self::assertEquals(['first', 'second'], $indexDocData['keywords_ms']->getValue());
     }
 
     /**
@@ -88,12 +88,12 @@ class tx_mksearch_tests_indexer_ttcontent_TemplavoilaTest extends tx_mksearch_te
     {
         $indexer = $this->getAccessibleMock(
             'tx_mksearch_indexer_ttcontent_Templavoila',
-            array('indexPageData')
+            ['indexPageData']
         );
 
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', 'mksearch', 'test');
 
-        $record = array('uid' => 123);
+        $record = ['uid' => 123];
         $model = tx_rnbase::makeInstance('tx_rnbase_model_Base', $record);
         $model->setTableName('tt_Content');
         $indexer->_set('modelToIndex', $model);
@@ -114,12 +114,12 @@ class tx_mksearch_tests_indexer_ttcontent_TemplavoilaTest extends tx_mksearch_te
     {
         $indexer = $this->getAccessibleMock(
             'tx_mksearch_indexer_ttcontent_Templavoila',
-            array('indexPageData')
+            ['indexPageData']
         );
 
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', 'mksearch', 'test');
 
-        $record = array('uid' => 123);
+        $record = ['uid' => 123];
         $model = tx_rnbase::makeInstance('tx_rnbase_model_Base', $record);
         $model->setTableName('tt_Content');
         $indexer->_set('modelToIndex', $model);
@@ -139,29 +139,29 @@ class tx_mksearch_tests_indexer_ttcontent_TemplavoilaTest extends tx_mksearch_te
     {
         $indexer = $this->getAccessibleMock(
             'tx_mksearch_indexer_ttcontent_Templavoila',
-            array('getPageContent')
+            ['getPageContent']
         );
 
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', 'mksearch', 'test');
 
-        $model = tx_rnbase::makeInstance('tx_rnbase_model_Base', array('uid' => 123));
+        $model = tx_rnbase::makeInstance('tx_rnbase_model_Base', ['uid' => 123]);
         $model->setTableName('tt_Content');
         $indexer->_set('modelToIndex', $model);
 
-        $options = array(
-            'pageDataFieldMapping.' => array(
+        $options = [
+            'pageDataFieldMapping.' => [
                 'title' => 'title_t',
                 'description' => 'description_t',
-            ),
-        );
+            ],
+        ];
 
         $indexer->expects($this->once())
             ->method('getPageContent')
-            ->will($this->returnValue(array(
+            ->will($this->returnValue([
                 'title' => 'Homepage',
                 'description' => 'Starting point',
                 'subtitle' => 'not to be indexed',
-            )));
+            ]));
 
         $this->callInaccessibleMethod($indexer, 'indexPageData', $indexDoc, $options);
 
@@ -190,10 +190,10 @@ class tx_mksearch_tests_indexer_ttcontent_TemplavoilaTest extends tx_mksearch_te
      */
     private static function getDefaultOptions()
     {
-        $options = array();
-        $options['CType.']['_default_.']['indexedFields.'] = array(
+        $options = [];
+        $options['CType.']['_default_.']['indexedFields.'] = [
             'bodytext', 'imagecaption', 'altText', 'titleText',
-        );
+        ];
 
         return $options;
     }

@@ -55,7 +55,7 @@ class tx_mksearch_tests_model_cal_EventTest extends tx_mksearch_tests_Testcase
      */
     public function testGetCategoriesByEvent()
     {
-        $event = tx_rnbase::makeInstance('tx_mksearch_model_cal_Event', array('uid' => 1));
+        $event = tx_rnbase::makeInstance('tx_mksearch_model_cal_Event', ['uid' => 1]);
 
         self::assertTrue(is_array($this->callInaccessibleMethod($event, 'getCategoriesByEvent')));
     }
@@ -65,13 +65,13 @@ class tx_mksearch_tests_model_cal_EventTest extends tx_mksearch_tests_Testcase
      */
     public function testGetCategories()
     {
-        $event = $this->loadYaml(array(
+        $event = $this->loadYaml([
             '_model' => 'tx_mksearch_model_cal_Event',
-            'getCategoriesByEvent' => array(
-                0 => array('uid_foreign' => array('title' => 'First Category')),
-                1 => array('uid_foreign' => array('title' => 'Second Category')),
-            ),
-        ));
+            'getCategoriesByEvent' => [
+                0 => ['uid_foreign' => ['title' => 'First Category']],
+                1 => ['uid_foreign' => ['title' => 'Second Category']],
+            ],
+        ]);
 
         $categories = $event->getCategories();
 

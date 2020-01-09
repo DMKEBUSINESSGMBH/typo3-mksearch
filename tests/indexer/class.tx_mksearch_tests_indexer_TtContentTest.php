@@ -46,10 +46,10 @@ class tx_mksearch_tests_indexer_TtContentTest extends tx_mksearch_tests_Testcase
 
     private static function getDefaultOptions()
     {
-        $options = array();
-        $options['CType.']['_default_.']['indexedFields.'] = array(
+        $options = [];
+        $options['CType.']['_default_.']['indexedFields.'] = [
             'bodytext', 'imagecaption', 'altText', 'titleText',
-        );
+        ];
 
         return $options;
     }
@@ -58,7 +58,6 @@ class tx_mksearch_tests_indexer_TtContentTest extends tx_mksearch_tests_Testcase
      * @param array  $record
      * @param array  $options
      * @param string $expectedTitle
-     *
      *
      * @group unit
      * @test
@@ -71,7 +70,7 @@ class tx_mksearch_tests_indexer_TtContentTest extends tx_mksearch_tests_Testcase
     ) {
         $indexer = $this->getMock(
             'tx_mksearch_indexer_ttcontent_Normal',
-            array('getModelToIndex', 'getPageContent')
+            ['getModelToIndex', 'getPageContent']
         );
 
         $record['pid'] = '57';
@@ -82,7 +81,7 @@ class tx_mksearch_tests_indexer_TtContentTest extends tx_mksearch_tests_Testcase
             ->with($this->equalTo('57'))
             ->will(
                 $this->returnValue(
-                    array('title' => 'PageTitle')
+                    ['title' => 'PageTitle']
                 )
             );
         $indexer
@@ -106,32 +105,32 @@ class tx_mksearch_tests_indexer_TtContentTest extends tx_mksearch_tests_Testcase
      */
     public function getGetTitleData()
     {
-        return array(
+        return [
             // header 100 is hidden, so the title has to be empty with leaveHeaderEmpty option.
-            __LINE__ => array(
-                'record' => array('header_layout' => 100, 'header' => 'Test'),
-                'options' => array('leaveHeaderEmpty' => true),
+            __LINE__ => [
+                'record' => ['header_layout' => 100, 'header' => 'Test'],
+                'options' => ['leaveHeaderEmpty' => true],
                 'expected_title' => '',
-            ),
+            ],
             // header 100 is hidden, so the title has to be used from the page.
-            __LINE__ => array(
-                'record' => array('header_layout' => 100, 'header' => 'Test'),
-                'options' => array('leaveHeaderEmpty' => false),
+            __LINE__ => [
+                'record' => ['header_layout' => 100, 'header' => 'Test'],
+                'options' => ['leaveHeaderEmpty' => false],
                 'expected_title' => 'PageTitle',
-            ),
+            ],
             // the title of the content element should be used.
-            __LINE__ => array(
-                'record' => array('header' => 'Test'),
-                'options' => array('leaveHeaderEmpty' => false),
+            __LINE__ => [
+                'record' => ['header' => 'Test'],
+                'options' => ['leaveHeaderEmpty' => false],
                 'expected_title' => 'Test',
-            ),
+            ],
             // the title of the content element is empty, the pagetitle should be used.
-            __LINE__ => array(
-                'record' => array('header' => ''),
-                'options' => array('leaveHeaderEmpty' => false),
+            __LINE__ => [
+                'record' => ['header' => ''],
+                'options' => ['leaveHeaderEmpty' => false],
                 'expected_title' => 'PageTitle',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -140,11 +139,11 @@ class tx_mksearch_tests_indexer_TtContentTest extends tx_mksearch_tests_Testcase
     public function testPrepareSearchDataCallsPrepareSearchDataOnActualIndexer()
     {
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', 'mksearch', 'test');
-        $options = array('options');
-        $record = array('record');
+        $options = ['options'];
+        $record = ['record'];
 
         $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtContent');
-        $actualIndexer = $this->getMock('tx_mksearch_indexer_ttcontent_Normal', array('prepareSearchData'));
+        $actualIndexer = $this->getMock('tx_mksearch_indexer_ttcontent_Normal', ['prepareSearchData']);
 
         $actualIndexer->expects($this->once())
             ->method('prepareSearchData')
@@ -173,15 +172,15 @@ class tx_mksearch_tests_indexer_TtContentTest extends tx_mksearch_tests_Testcase
         self::assertEquals('tt_content', $cType, 'wrong cType');
 
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
-        $record = array('uid' => 123, 'pid' => 1, 'deleted' => 0, 'hidden' => 0, 'sectionIndex' => 1, 'CType' => 'list', 'header' => 'test');
+        $record = ['uid' => 123, 'pid' => 1, 'deleted' => 0, 'hidden' => 0, 'sectionIndex' => 1, 'CType' => 'list', 'header' => 'test'];
         $options = self::getDefaultOptions();
-        $options['ignoreCTypes.'] = array('search', 'mailform', 'login');
+        $options['ignoreCTypes.'] = ['search', 'mailform', 'login'];
         $result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
         self::assertNotNull($result, 'Null returned for uid '.$record['uid']);
 
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $options = self::getDefaultOptions();
-        $options['ignoreCTypes.'] = array('search', 'mailform', 'list');
+        $options['ignoreCTypes.'] = ['search', 'mailform', 'list'];
         $result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
         self::assertNull($result, 'Not Null returned for uid '.$record['uid']);
 
@@ -206,16 +205,16 @@ class tx_mksearch_tests_indexer_TtContentTest extends tx_mksearch_tests_Testcase
         $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtContent');
         list($extKey, $cType) = $indexer->getContentType();
 
-        $record = array('uid' => 123, 'pid' => 1, 'deleted' => 0, 'hidden' => 0, 'sectionIndex' => 1, 'CType' => 'list', 'header' => 'test');
+        $record = ['uid' => 123, 'pid' => 1, 'deleted' => 0, 'hidden' => 0, 'sectionIndex' => 1, 'CType' => 'list', 'header' => 'test'];
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $options = self::getDefaultOptions();
-        $options['includeCTypes.'] = array('search', 'mailform', 'login');
+        $options['includeCTypes.'] = ['search', 'mailform', 'login'];
         $result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
         self::assertNull($result, 'Not Null returned for uid '.$record['uid'].' when CType not in includeCTypes');
 
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $options = self::getDefaultOptions();
-        $options['includeCTypes.'] = array('search', 'mailform', 'list');
+        $options['includeCTypes.'] = ['search', 'mailform', 'list'];
         $result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
         self::assertNotNull($result, 'Null returned for uid '.$record['uid'].' when CType in includeCTypes');
     }
@@ -225,12 +224,12 @@ class tx_mksearch_tests_indexer_TtContentTest extends tx_mksearch_tests_Testcase
      */
     public function testGroupFieldIsAddedWithPid()
     {
-        $record = array('uid' => 123, 'pid' => 456);
+        $record = ['uid' => 123, 'pid' => 456];
 
         $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', 'mksearch', 'test');
 
         $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtContent');
-        $actualIndexer = $this->getMock('tx_mksearch_indexer_ttcontent_Normal', array('hasDocToBeDeleted'));
+        $actualIndexer = $this->getMock('tx_mksearch_indexer_ttcontent_Normal', ['hasDocToBeDeleted']);
 
         $actualIndexerProperty = new ReflectionProperty('tx_mksearch_indexer_TtContent', 'actualIndexer');
         $actualIndexerProperty->setAccessible(true);

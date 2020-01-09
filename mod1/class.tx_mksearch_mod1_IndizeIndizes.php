@@ -45,7 +45,7 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc
      */
     protected function getContent($template, &$configurations, &$formatter, $formTool)
     {
-        $status = array();
+        $status = [];
         if (!$GLOBALS['BE_USER']->isAdmin()) {
             return '';
         }
@@ -66,7 +66,7 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc
         $indexItems = intval(\Tx_Rnbase_Utility_T3General::_GP('triggerIndexingQueueCount'));
         $markerArray['###INDEXITEMS###'] = $indexItems > 0 ? $indexItems : 100;
 
-        $markerArray['###CORE_STATUS###'] = tx_mksearch_mod1_util_IndexStatusHandler::getInstance()->handleRequest(array('pid' => $this->getPid()));
+        $markerArray['###CORE_STATUS###'] = tx_mksearch_mod1_util_IndexStatusHandler::getInstance()->handleRequest(['pid' => $this->getPid()]);
 
         $this->showTables($template, $configurations, $formTool, $markerArray, $oIntIndexSrv);
 
@@ -110,11 +110,11 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc
 
         $decor = tx_rnbase::makeInstance('tx_mksearch_mod1_decorator_Indizes', $this->getModule());
         $columns = [
-            'name' => array('title' => 'label_table_name', 'decorator' => $decor),
-            'queuecount' => array('title' => 'label_table_queuecount', 'decorator' => $decor),
-            'clear' => array('title' => 'label_table_clear', 'decorator' => $decor),
-            'resetG' => array('title' => 'label_table_resetG', 'decorator' => $decor),
-            'reset' => array('title' => 'label_table_reset', 'decorator' => $decor),
+            'name' => ['title' => 'label_table_name', 'decorator' => $decor],
+            'queuecount' => ['title' => 'label_table_queuecount', 'decorator' => $decor],
+            'clear' => ['title' => 'label_table_clear', 'decorator' => $decor],
+            'resetG' => ['title' => 'label_table_resetG', 'decorator' => $decor],
+            'reset' => ['title' => 'label_table_reset', 'decorator' => $decor],
         ];
 
         if (!empty($aDefinedTables)) {
@@ -124,7 +124,7 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc
                 $aDefinedTables,
                 $columns,
                 $this->getModule()->getFormTool(),
-                array()
+                []
             );
 
             $content = $tables->buildTable($tableData, $tableLayout);

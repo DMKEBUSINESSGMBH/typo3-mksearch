@@ -55,7 +55,7 @@ class tx_mksearch_util_SolrAutocomplete
         tx_rnbase_configurations $configurations,
         $confId
     ) {
-        $linkParameters = array('ajax' => 1);
+        $linkParameters = ['ajax' => 1];
         $usedIndex = $configurations->get($confId.'usedIndex');
         if (0 === $usedIndex || $usedIndex > 0) {
             $linkParameters['usedIndex'] = intval($usedIndex);
