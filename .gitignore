@@ -1,8 +1,15 @@
-/.buildpath
-/.project
-.settings
-.idea
-.*md.html
-/.php_cs.cache
+### build files
 /.Build
 /composer.lock
+
+### ide files
+/.idea
+/.buildpath
+/.project
+/.settings
+
+###ignore backups and caches
+*.bak
+.*md.html
+.php_cs.cache
+.scannerwork
