@@ -73,7 +73,8 @@ class tx_mksearch_util_SolrResponseProcessor
      * Enter description here ...
      *
      * @param Apache_Solr_Response $response
-     * @param unknown_type         $result
+     * @param array $options
+     * @param array $result
      */
     public function processSolrResponse(Apache_Solr_Response &$response, $options, $result = [])
     {
