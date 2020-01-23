@@ -299,6 +299,8 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
         $indexDoc->addField('news_text_s', $bodyText, 'keyword');
         $indexDoc->addField('news_text_t', $bodyText, 'keyword');
 
+        $this->addExternalUrlToIndex($news, $indexDoc);
+
         if ($news->getDatetime()) {
             $indexDoc->addField(
                 'datetime_dt',
@@ -307,6 +309,23 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
                 1.0,
                 'date'
             );
+        }
+    }
+
+    /**
+     * Adds the external URL if news type is external.
+     *
+     * @param \GeorgRinger\News\Domain\Model\News   $news
+     * @param tx_mksearch_interface_IndexerDocument $indexDoc
+     *
+     * @return void
+     */
+    protected function addExternalUrlToIndex(
+        /* \GeorgRinger\News\Domain\Model\News */ $news,
+        tx_mksearch_interface_IndexerDocument $indexDoc
+    ) {
+        if (2 == $news->getType()) {
+            $indexDoc->addField('news_external_url_s', $news->getExternalurl());
         }
     }
 
