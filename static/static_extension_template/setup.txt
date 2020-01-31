@@ -1040,6 +1040,7 @@ lib.mksearch.extrainfo {
     tx_news.news < lib.mksearch.extrainfo.tt_news.news
     tx_news.news {
         hit {
+            ### @todo add support for external and internal urls
             links.show {
                 # PID of single news page
                 pid = 0

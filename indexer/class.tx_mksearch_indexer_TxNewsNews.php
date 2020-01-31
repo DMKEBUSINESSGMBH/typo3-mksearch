@@ -286,8 +286,10 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
 
         $indexDoc->addField('news_text_s', $bodyText, 'keyword');
         $indexDoc->addField('news_text_t', $bodyText, 'keyword');
+        $indexDoc->addField('news_type_i', $news->getType(), 'keyword');
 
         $this->addExternalUrlToIndex($news, $indexDoc);
+        $this->addInternalUrlToIndex($news, $indexDoc);
 
         if ($news->getDatetime()) {
             $indexDoc->addField(
@@ -314,6 +316,21 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
     ) {
         if (2 == $news->getType()) {
             $indexDoc->addField('news_external_url_s', $news->getExternalurl());
+        }
+    }
+
+    /**
+     * @param \GeorgRinger\News\Domain\Model\News   $news
+     * @param tx_mksearch_interface_IndexerDocument $indexDoc
+     *
+     * @return void
+     */
+    protected function addInternalUrlToIndex(
+        /* \GeorgRinger\News\Domain\Model\News */ $news,
+        tx_mksearch_interface_IndexerDocument $indexDoc
+    ) {
+        if (1 == $news->getType()) {
+            $indexDoc->addField('news_internal_url_s', $news->getInternalurl());
         }
     }
 
