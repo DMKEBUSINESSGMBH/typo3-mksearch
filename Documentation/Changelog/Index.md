@@ -1,6 +1,35 @@
 Changelog
 =========
 
+9.5.9
+-----
+
+-   index internal url and news type for tx_news records
+
+9.5.8
+-----
+
+-   add url to index if news type is external for tx_news records
+
+9.5.7
+-----
+
+-   Using new Parameters interface for compatibility for new rn_base
+-   add some caches and build files to gitignore
+-   Update php cs fixer and improve rules
+-   fix typo3 cms core dependency for typo3 8
+
+9.5.6
+-----
+
+-   added hook for after stop indexing of tx_news records
+-   Fix extension key in composer json
+
+9.5.5
+-----
+
+-   add lib directory to autoloading
+
 9.5.4
 -----
 
