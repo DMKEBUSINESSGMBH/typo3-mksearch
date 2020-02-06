@@ -126,13 +126,29 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
     }
 
     /**
-     * Handle data change for category. All connected news should be updated.
+     * Handle data change for tags. All related news for that tag should be updated.
      *
-     * @param array $catRecord
+     * @param array $tagRecord
      */
-    private function handleTagChanged($catRecord)
+    private function handleTagChanged($tagRecord)
     {
-        // @TODO: find all news for the tag and add to index.
+        $rows = $this->getDatabaseConnection()->doSelect(
+            'NEWS.uid AS uid',
+            array(
+                'tx_news_domain_model_news AS NEWS'.
+                ' JOIN tx_news_domain_model_news_tag_mm AS TAGMM ON NEWS.uid = TAGMM.uid_local',
+                'tx_news_domain_model_news',
+                'NEWS',
+            ),
+            array(
+                'where' => 'TAGMM.uid_foreign = '.(int) $tagRecord['uid'],
+            )
+        );
+        // Alle gefundenen News für die Neuindizierung anmelden.
+        $srv = $this->getIntIndexService();
+        foreach ($rows as $row) {
+            $srv->addRecordToIndex('tx_news_domain_model_news', (int) $row['uid']);
+        }
     }
 
     /**
