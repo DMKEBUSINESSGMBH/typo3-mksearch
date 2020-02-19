@@ -30,11 +30,10 @@
  * @copyright Copyright 2007-2011 Servigistics, Inc. (http://servigistics.com)
  * @license http://solr-php-client.googlecode.com/svn/trunk/COPYING New BSD
  *
- * @version $Id: Response.php 54 2011-02-04 16:29:18Z donovan.jimenez $
+ * @version $Id$
  *
  * @author Donovan Jimenez <djimenez@conduit-it.com>
  */
-require_once dirname(__FILE__).'/ParserException.php';
 
 /**
  * Represents a Solr response.  Parses the raw response into a set of stdClass objects
@@ -48,12 +47,12 @@ class Apache_Solr_Response
     /**
      * SVN Revision meta data for this class.
      */
-    const SVN_REVISION = '$Revision: 54 $';
+    const SVN_REVISION = '$Revision$';
 
     /**
      * SVN ID meta data for this class.
      */
-    const SVN_ID = '$Id: Response.php 54 2011-02-04 16:29:18Z donovan.jimenez $';
+    const SVN_ID = '$Id$';
 
     /**
      * Holds the raw response used in construction.
@@ -206,7 +205,7 @@ class Apache_Solr_Response
         //if we're configured to collapse single valued arrays or to convert them to Apache_Solr_Document objects
         //and we have response documents, then try to collapse the values and / or convert them now
         if (($this->_createDocuments || $this->_collapseSingleValueArrays) && isset($data->response) && is_array($data->response->docs)) {
-            $documents = array();
+            $documents = [];
 
             foreach ($data->response->docs as $originalDocument) {
                 if ($this->_createDocuments) {

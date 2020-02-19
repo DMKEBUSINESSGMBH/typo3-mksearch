@@ -35,9 +35,6 @@
  * @author Donovan Jimenez <djimenez@conduit-it.com>
  */
 
-// Require Apache_Solr_HttpTransport_Abstract
-require_once dirname(__FILE__).'/Abstract.php';
-
 /**
  * HTTP Transport implemenation that uses the builtin http URL wrappers and file_get_contents.
  */
@@ -63,6 +60,15 @@ class Apache_Solr_HttpTransport_FileGetContents extends Apache_Solr_HttpTranspor
     private $_postContext;
 
     /**
+     * For POST operations, we're already using the Header context value for
+     * specifying the content type too, so we have to keep our computed
+     * authorization header around.
+     *
+     * @var string
+     */
+    private $_authHeader = '';
+
+    /**
      * Initializes our reuseable get and post stream contexts.
      */
     public function __construct()
@@ -70,6 +76,20 @@ class Apache_Solr_HttpTransport_FileGetContents extends Apache_Solr_HttpTranspor
         $this->_getContext = stream_context_create();
         $this->_headContext = stream_context_create();
         $this->_postContext = stream_context_create();
+    }
+
+    public function setAuthenticationCredentials($username, $password)
+    {
+        // compute the Authorization header
+        $this->_authHeader = 'Authorization: Basic '.base64_encode($username.':'.$password);
+
+        // set it now for get and head contexts
+        stream_context_set_option($this->_getContext, 'http', 'header', $this->_authHeader);
+        stream_context_set_option($this->_headContext, 'http', 'header', $this->_authHeader);
+
+        // for post, it'll be set each time, so add an \r\n so it can be concatenated
+        // with the Content-Type
+        $this->_authHeader .= "\r\n";
     }
 
     public function performGetRequest($url, $timeout = false)
@@ -97,15 +117,15 @@ class Apache_Solr_HttpTransport_FileGetContents extends Apache_Solr_HttpTranspor
 
     public function performHeadRequest($url, $timeout = false)
     {
-        stream_context_set_option($this->_headContext, array(
-                'http' => array(
+        stream_context_set_option($this->_headContext, [
+                'http' => [
                     // set HTTP method
                     'method' => 'HEAD',
 
                     // default timeout
                     'timeout' => $this->getDefaultTimeout(),
-                ),
-            )
+                ],
+            ]
         );
 
         // set the timeout if specified
@@ -128,21 +148,21 @@ class Apache_Solr_HttpTransport_FileGetContents extends Apache_Solr_HttpTranspor
 
     public function performPostRequest($url, $rawPost, $contentType, $timeout = false)
     {
-        stream_context_set_option($this->_postContext, array(
-                'http' => array(
+        stream_context_set_option($this->_postContext, [
+                'http' => [
                     // set HTTP method
                     'method' => 'POST',
 
-                    // Add our posted content type
-                    'header' => "Content-Type: $contentType",
+                    // Add our posted content type (and auth header - see setAuthentication)
+                    'header' => "{$this->_authHeader}Content-Type: {$contentType}",
 
                     // the posted content
                     'content' => $rawPost,
 
                     // default timeout
                     'timeout' => $this->getDefaultTimeout(),
-                ),
-            )
+                ],
+            ]
         );
 
         // set the timeout if specified
@@ -159,8 +179,6 @@ class Apache_Solr_HttpTransport_FileGetContents extends Apache_Solr_HttpTranspor
         // Unfortunately, it will still create a notice in analyzers if we don't set it here
         $http_response_header = null;
         $responseBody = @file_get_contents($url, false, $this->_postContext);
-        // TODO: SOLR liefert z.T. einen leeren Response, obwohl der Zugriff erfolgreich war.
-        // Exception: '0' Status: Communication Error
 
         // reset content of post context to reclaim memory
         stream_context_set_option($this->_postContext, 'http', 'content', '');

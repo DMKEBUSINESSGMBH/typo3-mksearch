@@ -35,9 +35,6 @@
  * @author Timo Schmidt <timo.schmidt@aoemedia.de>, Donovan Jimenez <djimenez@conduit-it.com>
  */
 
-// Require Apache_Solr_HttpTransport_Abstract
-require_once dirname(__FILE__).'/Abstract.php';
-
 /**
  * An alternative Curl HTTP transport that opens and closes a curl session for
  * every request. This isn't the recommended way to use curl, but some version of
@@ -55,6 +52,14 @@ class Apache_Solr_HttpTransport_CurlNoReuse extends Apache_Solr_HttpTransport_Ab
      */
     const SVN_ID = '$Id:$';
 
+    private $_authString = false;
+
+    public function setAuthenticationCredentials($username, $password)
+    {
+        // this is how curl wants it for the CURLOPT_USERPWD
+        $this->_authString = $username.':'.$password;
+    }
+
     public function performGetRequest($url, $timeout = false)
     {
         // check the timeout value
@@ -66,7 +71,7 @@ class Apache_Solr_HttpTransport_CurlNoReuse extends Apache_Solr_HttpTransport_Ab
         $curl = curl_init();
 
         // set curl GET options
-        curl_setopt_array($curl, array(
+        curl_setopt_array($curl, [
             // return the response body from curl_exec
             CURLOPT_RETURNTRANSFER => true,
 
@@ -81,7 +86,15 @@ class Apache_Solr_HttpTransport_CurlNoReuse extends Apache_Solr_HttpTransport_Ab
 
             // set the timeout
             CURLOPT_TIMEOUT => $timeout,
-        ));
+        ]);
+
+        // set auth if appropriate
+        if (false !== $this->_authString) {
+            curl_setopt_array($curl, [
+                CURLOPT_USERPWD => $this->_authString,
+                CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
+            ]);
+        }
 
         // make the request
         $responseBody = curl_exec($curl);
@@ -107,7 +120,7 @@ class Apache_Solr_HttpTransport_CurlNoReuse extends Apache_Solr_HttpTransport_Ab
         $curl = curl_init();
 
         // set curl HEAD options
-        curl_setopt_array($curl, array(
+        curl_setopt_array($curl, [
             // return the response body from curl_exec
             CURLOPT_RETURNTRANSFER => true,
 
@@ -125,7 +138,15 @@ class Apache_Solr_HttpTransport_CurlNoReuse extends Apache_Solr_HttpTransport_Ab
 
             // set the timeout
             CURLOPT_TIMEOUT => $timeout,
-        ));
+        ]);
+
+        // set auth if appropriate
+        if (false !== $this->_authString) {
+            curl_setopt_array($curl, [
+                CURLOPT_USERPWD => $this->_authString,
+                CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
+            ]);
+        }
 
         // make the request
         $responseBody = curl_exec($curl);
@@ -151,7 +172,7 @@ class Apache_Solr_HttpTransport_CurlNoReuse extends Apache_Solr_HttpTransport_Ab
         $curl = curl_init();
 
         // set curl POST options
-        curl_setopt_array($curl, array(
+        curl_setopt_array($curl, [
             // return the response body from curl_exec
             CURLOPT_RETURNTRANSFER => true,
 
@@ -171,11 +192,19 @@ class Apache_Solr_HttpTransport_CurlNoReuse extends Apache_Solr_HttpTransport_Ab
             CURLOPT_POSTFIELDS => $postData,
 
             // set the content type
-            CURLOPT_HTTPHEADER => array("Content-Type: {$contentType}"),
+            CURLOPT_HTTPHEADER => ["Content-Type: {$contentType}"],
 
             // set the timeout
             CURLOPT_TIMEOUT => $timeout,
-        ));
+        ]);
+
+        // set auth if appropriate
+        if (false !== $this->_authString) {
+            curl_setopt_array($curl, [
+                CURLOPT_USERPWD => $this->_authString,
+                CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
+            ]);
+        }
 
         // make the request
         $responseBody = curl_exec($curl);

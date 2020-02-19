@@ -52,6 +52,7 @@
             "hooks/",
             "indexer/",
             "interface/",
+            "lib/",
             "marker/",
             "mod1/",
             "model/",

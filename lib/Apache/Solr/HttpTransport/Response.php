@@ -48,7 +48,7 @@ class Apache_Solr_HttpTransport_Response
      *
      * @var array
      */
-    private static $_defaultStatusMessages = array(
+    private static $_defaultStatusMessages = [
         // Specific to PHP Solr Client
         0 => 'Communication Error',
 
@@ -101,7 +101,7 @@ class Apache_Solr_HttpTransport_Response
         503 => 'Service Unavailable',
         504 => 'Gateway Timeout',
         505 => 'HTTP Version Not Supported',
-    );
+    ];
 
     /**
      * Get the HTTP status message based on status code.

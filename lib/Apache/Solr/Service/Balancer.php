@@ -30,16 +30,10 @@
  * @copyright Copyright 2007-2011 Servigistics, Inc. (http://servigistics.com)
  * @license http://solr-php-client.googlecode.com/svn/trunk/COPYING New BSD
  *
- * @version $Id: Balancer.php 54 2011-02-04 16:29:18Z donovan.jimenez $
+ * @version $Id$
  *
  * @author Donovan Jimenez <djimenez@conduit-it.com>, Dan Wolfe
  */
-
-// See Issue #1 (http://code.google.com/p/solr-php-client/issues/detail?id=1)
-// Doesn't follow typical include path conventions, but is more convenient for users
-require_once dirname(dirname(__FILE__)).'/Service.php';
-
-require_once dirname(dirname(__FILE__)).'/NoServiceAvailableException.php';
 
 /**
  * Reference Implementation for using multiple Solr services in a distribution. Functionality
@@ -52,17 +46,17 @@ class Apache_Solr_Service_Balancer
     /**
      * SVN Revision meta data for this class.
      */
-    const SVN_REVISION = '$Revision: 54 $';
+    const SVN_REVISION = '$Revision$';
 
     /**
      * SVN ID meta data for this class.
      */
-    const SVN_ID = '$Id: Balancer.php 54 2011-02-04 16:29:18Z donovan.jimenez $';
+    const SVN_ID = '$Id$';
 
     protected $_createDocuments = true;
 
-    protected $_readableServices = array();
-    protected $_writeableServices = array();
+    protected $_readableServices = [];
+    protected $_writeableServices = [];
 
     protected $_currentReadService = null;
     protected $_currentWriteService = null;
@@ -120,7 +114,7 @@ class Apache_Solr_Service_Balancer
      * @param array $readableServices
      * @param array $writeableServices
      */
-    public function __construct($readableServices = array(), $writeableServices = array())
+    public function __construct($readableServices = [], $writeableServices = [])
     {
         //setup readable services
         foreach ($readableServices as $service) {
@@ -688,7 +682,7 @@ class Apache_Solr_Service_Balancer
      *
      * @throws Apache_Solr_InvalidArgumentException if $file, $params, or $document are invalid
      */
-    public function extract($file, $params = array(), $document = null, $mimetype = 'application/octet-stream')
+    public function extract($file, $params = [], $document = null, $mimetype = 'application/octet-stream')
     {
         $service = $this->_selectWriteService();
 
@@ -727,7 +721,7 @@ class Apache_Solr_Service_Balancer
      *
      * @todo Should be using multipart/form-data to post parameter values, but I could not get my implementation to work. Needs revisisted.
      */
-    public function extractFromString($data, $params = array(), $document = null, $mimetype = 'application/octet-stream')
+    public function extractFromString($data, $params = [], $document = null, $mimetype = 'application/octet-stream')
     {
         $service = $this->_selectWriteService();
 
@@ -790,7 +784,7 @@ class Apache_Solr_Service_Balancer
      *
      * @throws Apache_Solr_HttpTransportException If an error occurs during the service call
      */
-    public function search($query, $offset = 0, $limit = 10, $params = array(), $method = Apache_Solr_Service::METHOD_GET)
+    public function search($query, $offset = 0, $limit = 10, $params = [], $method = Apache_Solr_Service::METHOD_GET)
     {
         $service = $this->_selectReadService();
 
