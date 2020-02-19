@@ -73,12 +73,16 @@ class tx_mksearch_service_engine_Solr extends Tx_Rnbase_Service_Base implements 
      */
     public function setConnection($host, $port, $path, $force = true)
     {
-        $this->index = new Apache_Solr_Service($host, $port, $path);
+        $this->index = new Apache_Solr_Service(
+            $host,
+            $port,
+            $path,
+            false,
+            $this->indexModel->isSolr4() ? new Apache_Solr_Compatibility_Solr4CompatibilityLayer() : false
+        );
 
         // multivalue fields should always be an array
         $this->index->setCollapseSingleValueArrays(false);
-
-        $this->index->setSolrVersion($this->indexModel->getSolrVersion());
 
         //per default werden alle HTTP Aufrufe per file_get_contents erledigt.
         //siehe Apache_Solr_Service::getHttpTransport()
