@@ -22,7 +22,6 @@
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-tx_rnbase::load('tx_mksearch_indexer_Base');
 
 /**
  * Indexer service for tx_news.news called by the "mksearch" extension.
@@ -52,7 +51,7 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
      */
     public static function getContentType()
     {
-        return array('tx_news', 'news');
+        return ['tx_news', 'news'];
     }
 
     /**
@@ -71,17 +70,32 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
         tx_mksearch_interface_IndexerDocument $indexDoc,
         $options
     ) {
+        $stopIndexing = parent::stopIndexing($tableName, $rawData, $indexDoc, $options);
+
         if ('sys_category' == $tableName) {
             $this->handleCategoryChanged($rawData);
 
-            return true;
+            $stopIndexing = true;
         } elseif ('tx_news_domain_model_tag' == $tableName) {
             $this->handleTagChanged($rawData);
 
-            return true;
+            $stopIndexing = true;
         }
 
-        return parent::stopIndexing($tableName, $rawData, $indexDoc, $options);
+        tx_rnbase_util_Misc::callHook(
+            'mksearch',
+            'indexer_TxNews_afterStopIndexing',
+            [
+                'tableName' => &$tableName,
+                'rawData' => &$rawData,
+                'indexDoc' => $indexDoc,
+                'options' => &$options,
+                'stopIndexing' => &$stopIndexing,
+            ],
+            $this
+        );
+
+        return $stopIndexing;
     }
 
     /**
@@ -93,16 +107,16 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
     {
         $rows = $this->getDatabaseConnection()->doSelect(
             'NEWS.uid AS uid',
-            array(
+            [
                 'tx_news_domain_model_news AS NEWS'.
                     ' JOIN sys_category_record_mm AS CATMM ON NEWS.uid = CATMM.uid_foreign',
                 'tx_news_domain_model_news',
                 'NEWS',
-            ),
-            array(
+            ],
+            [
                 'where' => 'CATMM.uid_local = '.(int) $catRecord['uid'],
                 'orderby' => 'sorting_foreign DESC',
-            )
+            ]
         );
 
         // Alle gefundenen News für die Neuindizierung anmelden.
@@ -113,13 +127,29 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
     }
 
     /**
-     * Handle data change for category. All connected news should be updated.
+     * Handle data change for tags. All related news for that tag should be updated.
      *
-     * @param array $catRecord
+     * @param array $tagRecord
      */
-    private function handleTagChanged($catRecord)
+    private function handleTagChanged($tagRecord)
     {
-        // @TODO: find all news for the tag and add to index.
+        $rows = $this->getDatabaseConnection()->doSelect(
+            'NEWS.uid AS uid',
+            array(
+                'tx_news_domain_model_news AS NEWS'.
+                ' JOIN tx_news_domain_model_news_tag_mm AS TAGMM ON NEWS.uid = TAGMM.uid_local',
+                'tx_news_domain_model_news',
+                'NEWS',
+            ),
+            array(
+                'where' => 'TAGMM.uid_foreign = '.(int) $tagRecord['uid'],
+            )
+        );
+        // Alle gefundenen News für die Neuindizierung anmelden.
+        $srv = $this->getIntIndexService();
+        foreach ($rows as $row) {
+            $srv->addRecordToIndex('tx_news_domain_model_news', (int) $row['uid']);
+        }
     }
 
     /**
@@ -172,7 +202,6 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
 
         // At least one of the news' categories was found on black list
         if ($abort) {
-            tx_rnbase::load('tx_rnbase_util_Logger');
             tx_rnbase_util_Logger::info(
                 'News wurde nicht indiziert, weil das Signal von einem Hook gegeben wurde.',
                 'mksearch',
@@ -198,12 +227,12 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
         tx_rnbase_util_Misc::callHook(
             'mksearch',
             'indexer_TxNews_prepareDataAfterAddFields',
-            array(
+            [
                 'news' => &$news,
                 'rawData' => &$rawData,
                 'options' => $options,
                 'indexDoc' => &$indexDoc,
-            ),
+            ],
             $this
         );
 
@@ -223,7 +252,7 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
         array $rawData,
         /* \GeorgRinger\News\Domain\Model\News */ $news,
         tx_mksearch_interface_IndexerDocument $indexDoc,
-        array $options = array()
+        array $options = []
     ) {
         // @codingStandardsIgnoreEnd
         /* @var $news \GeorgRinger\News\Domain\Model\News */
@@ -235,13 +264,13 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
         $content = trim(
             implode(
                 CRLF.CRLF,
-                array(
+                [
                     $news->getTeaser(),
                     $news->getBodytext(),
                     $news->getDescription(),
                     // Add contentelements to indexer content
                     $this->indexNewsContentElements($news, $indexDoc, $options),
-                )
+                ]
             )
         );
 
@@ -253,13 +282,13 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
         }
 
         $bodyText = '';
-        foreach (array(
+        foreach ([
                 $news->getBodytext(),
                 $news->getTeaser(),
                 $news->getTitle(),
                 $content,
                 $abstract,
-            ) as $html) {
+            ] as $html) {
             if (empty($html)) {
                 continue;
             }
@@ -269,7 +298,7 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
 
         // html entfernen
         if (empty($options['keepHtml'])) {
-            foreach (array(&$content, &$abstract, &$bodyText) as &$html) {
+            foreach ([&$content, &$abstract, &$bodyText] as &$html) {
                 $html = tx_mksearch_util_Misc::html2plain($html);
             }
         }
@@ -347,10 +376,10 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
         array $rawData,
         /* \GeorgRinger\News\Domain\Model\News */ $news,
         tx_mksearch_interface_IndexerDocument $indexDoc,
-        array $options = array()
+        array $options = []
     ) {
         // @codingStandardsIgnoreEnd
-        $tags = array();
+        $tags = [];
         foreach ($news->getTags() as $tag) {
             $tags[$tag->getUid()] = $tag->getTitle();
         }
@@ -370,10 +399,10 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
         array $rawData,
         /* \GeorgRinger\News\Domain\Model\News */ $news,
         tx_mksearch_interface_IndexerDocument $indexDoc,
-        array $options = array()
+        array $options = []
     ) {
         /* @var $category \GeorgRinger\News\Domain\Model\Category */
-        $categories = array();
+        $categories = [];
         $singlePid = 0;
 
         foreach ($news->getCategories() as $category) {
@@ -392,7 +421,6 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
         $indexDoc->addField('categoriesTitle_ms', array_values($categories));
 
         // add field with the combined tags uids and names
-        tx_rnbase::load('tx_mksearch_util_KeyValueFacet');
         $dfs = tx_mksearch_util_KeyValueFacet::getInstance();
         $tagDfs = $dfs->buildFacetValues(array_keys($categories), array_values($categories));
         $indexDoc->addField('categories_dfs_ms', $tagDfs, 'keyword');
@@ -438,25 +466,75 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
     protected function indexNewsContentElements(
         /* \GeorgRinger\News\Domain\Model\News */ $news,
         tx_mksearch_interface_IndexerDocument $indexDoc,
-        array $options = array()
+        array $options = []
     ) {
         if (empty($options['indexInlineContentElements'])) {
             return '';
         }
         tx_mksearch_util_Indexer::prepareTSFE($options['defaultSinglePid'], $options['lang']);
 
-        $ce = array();
+        $ce = [];
         $contentElements = $news->getContentElements();
-        foreach ($contentElements as $contentElement) {
-            $cObj = tx_mktools_util_T3Loader::getContentObject($contentElement->getUid());
 
-            // jetzt das contentelement parsen
-            $cObj->start($contentElement->_getProperties(), 'tt_content');
-            $ce[$contentElement->getUid()] = $cObj->cObjGetSingle('<tt_content', array());
-            $ce[] = trim($ce[$contentElement->getUid()]);
+        /** @var \GeorgRinger\News\Domain\Model\TtContent $contentElement */
+        foreach ($contentElements as $contentElement) {
+            $contentUid = $contentElement->getUid();
+            $cObj = tx_mktools_util_T3Loader::getContentObject($contentUid);
+
+            // render gridelment or default content element
+            $ce[$contentUid] = 'gridelements_pi1' === $contentElement->getCType()
+                ? trim($this->renderGridelement($cObj, $contentElement))
+                : trim($this->renderContentElement($cObj, $contentElement));
         }
 
         return implode(CRLF.CRLF, $ce);
+    }
+
+    /**
+     * Render Default tt_content element.
+     *
+     * @param \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer $cObj
+     * @param \GeorgRinger\News\Domain\Model\TtContent                $contentElement
+     *
+     * @return string
+     */
+    protected function renderContentElement(
+        $cObj,
+        /** \GeorgRinger\News\Domain\Model\TtContent */ $contentElement
+    ) {
+        $cObj->start($contentElement->_getProperties(), 'tt_content');
+
+        return $cObj->cObjGetSingle('<tt_content', []);
+    }
+
+    /**
+     * Render gridelement.
+     *
+     * @param \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer $cObj
+     * @param \GeorgRinger\News\Domain\Model\TtContent                $contentElement
+     *
+     * @return string
+     */
+    protected function renderGridelement(
+        $cObj,
+        /** \GeorgRinger\News\Domain\Model\TtContent */ $contentElement
+    ) {
+        //we need to complete record to render the gridelement correctly
+        $rawData = $this->getDatabaseConnection()->doSelect(
+            '*',
+            'tt_content',
+            [
+                'where' => 'uid=' . $contentElement->getUid(),
+            ]
+        );
+        if (isset($rawData[0])) {
+            $cObj->start($rawData[0], 'tt_content');
+        }
+
+        return $cObj->cObjGetSingle(
+            $GLOBALS['TSFE']->tmpl->setup['tt_content.']['gridelements_pi1'],
+            $GLOBALS['TSFE']->tmpl->setup['tt_content.']['gridelements_pi1.']
+        );
     }
 
     /**
@@ -473,7 +551,7 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
             return;
         }
 
-        $titles = $descriptions = array();
+        $titles = $descriptions = [];
         foreach ($news->getMedia() as $media) {
             $titles[] = $media->getTitle();
             $descriptions[] = $media->getDescription();
