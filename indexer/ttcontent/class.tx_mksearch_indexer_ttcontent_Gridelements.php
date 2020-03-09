@@ -22,9 +22,6 @@
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-tx_rnbase::load('tx_mksearch_indexer_ttcontent_Normal');
-tx_rnbase::load('tx_mksearch_util_Indexer');
-
 /**
  * Gridelements indexer.
  *
@@ -47,7 +44,7 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
     protected function hasDocToBeDeleted(
         tx_rnbase_IModel $oModel,
         tx_mksearch_interface_IndexerDocument $oIndexDoc,
-        $aOptions = array()
+        $aOptions = []
     ) {
         // @codingStandardsIgnoreEnd
         // should the element be removed from the index?
@@ -81,7 +78,7 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
     protected function hasNonGridelementDocToBeDeleted(
         tx_rnbase_IModel $oModel,
         tx_mksearch_interface_IndexerDocument $oIndexDoc,
-        $aOptions = array()
+        $aOptions = []
     ) {
         // @codingStandardsIgnoreEnd
         return parent::hasDocToBeDeleted($oModel, $oIndexDoc, $aOptions);
@@ -151,7 +148,7 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
         array $options
     ) {
         tx_mksearch_util_Indexer::prepareTSFE($record['pid'], $options['lang']);
-        $uid = $this->getUid('tt_content', $record, array());
+        $uid = $this->getUid('tt_content', $record, []);
 
         $allowedCTypes = $this->getAllowedCTypes($options);
 
@@ -168,14 +165,12 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
                 }
             }
         }
+        /** @var \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer $cObj */
         $cObj = $GLOBALS['TSFE']->cObj;
-        $cObj->data = $record;
-        $cObj->currentRecord = 'tt_content:'.$uid;
-
-        $content = $cObj->callUserFunction(
-            'GridElementsTeam\\Gridelements\\Plugin\\Gridelements->main',
-            array(),
-            ''
+        $cObj->start($record, 'tt_content');
+        $content = $cObj->cObjGetSingle(
+            $GLOBALS['TSFE']->tmpl->setup['tt_content.']['gridelements_pi1'],
+            $GLOBALS['TSFE']->tmpl->setup['tt_content.']['gridelements_pi1.']
         );
 
         return $content;
