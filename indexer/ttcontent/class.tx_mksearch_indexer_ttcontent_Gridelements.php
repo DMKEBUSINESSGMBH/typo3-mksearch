@@ -165,14 +165,12 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
                 }
             }
         }
+        /** @var \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer $cObj */
         $cObj = $GLOBALS['TSFE']->cObj;
-        $cObj->data = $record;
-        $cObj->currentRecord = 'tt_content:'.$uid;
-
-        $content = $cObj->callUserFunction(
-            'GridElementsTeam\\Gridelements\\Plugin\\Gridelements->main',
-            [],
-            ''
+        $cObj->start($record, 'tt_content');
+        $content = $cObj->cObjGetSingle(
+            $GLOBALS['TSFE']->tmpl->setup['tt_content.']['gridelements_pi1'],
+            $GLOBALS['TSFE']->tmpl->setup['tt_content.']['gridelements_pi1.']
         );
 
         return $content;
