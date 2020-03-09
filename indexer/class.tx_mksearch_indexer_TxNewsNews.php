@@ -474,16 +474,66 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
 
         $ce = [];
         $contentElements = $news->getContentElements();
-        foreach ($contentElements as $contentElement) {
-            $cObj = tx_mktools_util_T3Loader::getContentObject($contentElement->getUid());
 
-            // jetzt das contentelement parsen
-            $cObj->start($contentElement->_getProperties(), 'tt_content');
-            $ce[$contentElement->getUid()] = $cObj->cObjGetSingle('<tt_content', []);
-            $ce[] = trim($ce[$contentElement->getUid()]);
+        /** @var \GeorgRinger\News\Domain\Model\TtContent $contentElement */
+        foreach ($contentElements as $contentElement) {
+            $contentUid = $contentElement->getUid();
+            $cObj = tx_mktools_util_T3Loader::getContentObject($contentUid);
+
+            // render gridelment or default content element
+            $ce[$contentUid] = 'gridelements_pi1' === $contentElement->getCType()
+                ? trim($this->renderGridelement($cObj, $contentElement))
+                : trim($this->renderContentElement($cObj, $contentElement));
         }
 
-        return implode(CRLF.CRLF, $ce);
+        return implode(CRLF . CRLF, $ce);
+    }
+
+    /**
+     * Render Default tt_content element.
+     *
+     * @param \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer $cObj
+     * @param \GeorgRinger\News\Domain\Model\TtContent                $contentElement
+     *
+     * @return string
+     */
+    protected function renderContentElement(
+        $cObj,
+        /** \GeorgRinger\News\Domain\Model\TtContent */ $contentElement
+    ) {
+        $cObj->start($contentElement->_getProperties(), 'tt_content');
+
+        return $cObj->cObjGetSingle('<tt_content', []);
+    }
+
+    /**
+     * Render gridelement.
+     *
+     * @param \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer $cObj
+     * @param \GeorgRinger\News\Domain\Model\TtContent                $contentElement
+     *
+     * @return string
+     */
+    protected function renderGridelement(
+        $cObj,
+        /** \GeorgRinger\News\Domain\Model\TtContent */ $contentElement
+    ) {
+        //we need to complete record to render the gridelement correctly
+        $rawData = $this->getDatabaseConnection()->doSelect(
+            '*',
+            'tt_content',
+            [
+                'where' => 'uid=' . $contentElement->getUid(),
+            ]
+        );
+        if (isset($rawData[0])) {
+            $cObj->start($rawData[0], 'tt_content');
+        }
+
+        return $cObj->cObjGetSingle(
+            $GLOBALS['TSFE']->tmpl->setup['tt_content.']['gridelements_pi1'],
+            $GLOBALS['TSFE']->tmpl->setup['tt_content.']['gridelements_pi1.']
+        );
     }
 
     /**
