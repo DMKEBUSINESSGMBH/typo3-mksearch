@@ -1,5 +1,7 @@
 <?php
 
+use Sys25\RnBase\Frontend\Request\ParametersInterface;
+
 /**
  * Detailseite eines beliebigen Datensatzes aus Momentan Lucene oder Solr.
  *
@@ -13,7 +15,7 @@ class tx_mksearch_action_ShowHit extends tx_rnbase_action_BaseIOC
     private $index = false;
 
     /**
-     * @param tx_rnbase_IParameters    $parameters
+     * @param ParametersInterface      $parameters
      * @param tx_rnbase_configurations $configurations
      * @param ArrayObject              $viewdata
      *

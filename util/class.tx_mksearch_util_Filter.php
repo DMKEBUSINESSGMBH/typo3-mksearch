@@ -23,6 +23,7 @@
 ***************************************************************/
 
 use Sys25\RnBase\Frontend\Request\Parameters;
+use Sys25\RnBase\Frontend\Request\ParametersInterface;
 
 /**
  * @author Hannes Bochmann <hannes.bochmann@dmk-business.de>
@@ -62,8 +63,7 @@ class tx_mksearch_util_Filter
             term = contentType:* ###PARAM_MKSEARCH_TERM###
      *
      * @param string                   $termTemplate
-     * @param array                    $options
-     * @param tx_rnbase_IParameters    $parameters
+     * @param ParametersInterface      $parameters
      * @param tx_rnbase_configurations $configurations
      * @param string                   $confId
      *

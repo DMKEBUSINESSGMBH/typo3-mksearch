@@ -22,6 +22,8 @@
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Sys25\RnBase\Frontend\Request\ParametersInterface;
+
 /**
  * Solr search action.
  *
@@ -215,7 +217,7 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
      * Solr liefert bei einer Suchanfrage immer die Gesamtzahl der Treffer mit.
      * Somit ist eine spezielle Suche für die Trefferzahl nicht notwendig.
      *
-     * @param tx_rnbase_IParameters    $parameters
+     * @param ParametersInterface      $parameters
      * @param tx_rnbase_configurations $configurations
      *
      * @return tx_rnbase_util_PageBrowser

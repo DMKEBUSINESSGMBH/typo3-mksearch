@@ -21,6 +21,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  ***************************************************************/
 
+use Sys25\RnBase\Frontend\Request\ParametersInterface;
+
 /**
  * Dieser Filter verarbeitet Anfragen für Lucene.
  *
@@ -113,8 +115,7 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
      *
      * @TODO: das klappt zurzeit nur bei einfacher sortierung!
      *
-     * @param array                 $options
-     * @param tx_rnbase_IParameters $parameters
+     * @param array $options
      */
     protected function handleSorting(&$options)
     {
@@ -253,8 +254,8 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
     /**
      * Werte für Formularfelder aufbereiten. Daten aus dem Request übernehmen und wieder füllen.
      *
-     * @param array                $formData
-     * @param tx_rnbase_parameters $parameters
+     * @param array               $formData
+     * @param ParametersInterface $parameters
      */
     protected function prepareFormFields(&$formData, $parameters)
     {
@@ -306,14 +307,14 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
      * enthalten ungeparsed rauskommen, falls das Formular noch
      * nicht abgeschickt wurde.
      *
-     * @param array                $formData
-     * @param tx_rnbase_parameters $parameters
+     * @param array               $formData
+     * @param ParametersInterface $parameters
      *
      * @return array
      */
     private function fillFormDataWithRequiredFormFieldsIfNoSet(
         array $formData,
-        tx_rnbase_parameters $parameters
+        ParametersInterface $parameters
     ) {
         $formFields = tx_rnbase_util_Strings::trimExplode(
             ',',

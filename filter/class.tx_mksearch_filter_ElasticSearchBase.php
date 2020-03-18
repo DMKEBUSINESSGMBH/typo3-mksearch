@@ -21,6 +21,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  ***************************************************************/
 
+use Sys25\RnBase\Frontend\Request\ParametersInterface;
+
 /**
  * @author Hannes Bochmann <hannes.bochmann@dmk-business.de>
  */
@@ -91,8 +93,7 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter
      * Fügt den Suchstring zu dem Filter hinzu.
      *
      * @param array                    $fields
-     * @param array                    $options
-     * @param tx_rnbase_IParameters    $parameters
+     * @param ParametersInterface      $parameters
      * @param tx_rnbase_configurations $configurations
      * @param string                   $confId
      */
@@ -114,8 +115,7 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter
      *
      * @TODO: das klappt zurzeit nur bei einfacher sortierung!
      *
-     * @param array                 $options
-     * @param tx_rnbase_IParameters $parameters
+     * @param array               $options
      */
     protected function handleSorting(&$options)
     {

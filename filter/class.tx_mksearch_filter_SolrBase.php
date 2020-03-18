@@ -21,6 +21,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  ***************************************************************/
 
+use Sys25\RnBase\Frontend\Request\ParametersInterface;
+
 /**
  * Der Filter liest seine Konfiguration passend zum Typ des Solr RequestHandlers. Der Typ
  * ist entweder "default" oder "dismax". Entsprechend baut sich auch die Typoscript-Konfiguration
@@ -177,10 +179,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
     /**
      * Setzt die Anzahl der Treffer pro Seite.
      *
-     * @param array                    $options
-     * @param tx_rnbase_IParameters    $parameters
-     * @param tx_rnbase_configurations $configurations
-     * @param string                   $confId
+     * @param array $options
      */
     protected function handleLimit(&$options)
     {
@@ -196,8 +195,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
      * Fügt den Suchstring zu dem Filter hinzu.
      *
      * @param array                    $fields
-     * @param array                    $options
-     * @param tx_rnbase_IParameters    $parameters
+     * @param ParametersInterface      $parameters
      * @param tx_rnbase_configurations $configurations
      * @param string                   $confId
      */
@@ -219,7 +217,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
 
     /**
      * @param array                    $options
-     * @param tx_rnbase_IParameters    $parameters
+     * @param ParametersInterface      $parameters
      * @param tx_rnbase_configurations $configurations
      * @param string                   $confId
      */
@@ -266,7 +264,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
      *
      * @param array                    $fields
      * @param array                    $options
-     * @param tx_rnbase_IParameters    $parameters
+     * @param ParametersInterface      $parameters
      * @param tx_rnbase_configurations $configurations
      * @param string                   $confId
      */
@@ -283,7 +281,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
      * Fügt eine Filter Query (Einschränkung) zu dem Filter hinzu.
      *
      * @param array                    $options
-     * @param tx_rnbase_IParameters    $parameters
+     * @param ParametersInterface      $parameters
      * @param tx_rnbase_configurations $configurations
      * @param string                   $confId
      */
@@ -629,8 +627,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
      *
      * @TODO: das klappt zurzeit nur bei einfacher sortierung!
      *
-     * @param array                 $options
-     * @param tx_rnbase_IParameters $parameters
+     * @param array $options
      */
     protected function handleSorting(&$options)
     {

@@ -24,6 +24,8 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
 
+use Sys25\RnBase\Frontend\Request\ParametersInterface;
+
 /**
  * benötigte Klassen einbinden.
  */
@@ -40,8 +42,7 @@ class tx_mksearch_filter_SolrAutocomplete extends tx_mksearch_filter_SolrBase
      * Fügt den Suchstring zu dem Filter hinzu.
      *
      * @param array                    $fields
-     * @param array                    $options
-     * @param tx_rnbase_IParameters    $parameters
+     * @param ParametersInterface      $parameters
      * @param tx_rnbase_configurations $configurations
      * @param string                   $confId
      */

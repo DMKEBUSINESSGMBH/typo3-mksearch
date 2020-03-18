@@ -22,6 +22,8 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Sys25\RnBase\Frontend\Request\ParametersInterface;
+
 /**
  * Methods for accessing configuration options etc.
  */
@@ -122,7 +124,7 @@ class tx_mksearch_util_SearchBuilder
      *
      * @param array                    $fields
      * @param array                    $options
-     * @param tx_rnbase_IParameters    $parameters
+     * @param ParametersInterface      $parameters
      * @param tx_rnbase_configurations $configurations
      * @param string                   $confId
      */
@@ -157,7 +159,7 @@ class tx_mksearch_util_SearchBuilder
      *
      * @param array                    $fields
      * @param array                    $options
-     * @param tx_rnbase_IParameters    $parameters
+     * @param ParametersInterface      $parameters
      * @param tx_rnbase_configurations $configurations
      * @param string                   $confId
      */
