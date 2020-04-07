@@ -1,36 +1,43 @@
 <?php
-/**
- * @author Hannes Bochmann
+/***************************************************************
+ * Copyright notice
  *
- *  Copyright notice
+ * (c) 2010-2020 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
  *
- *  (c) 2010 Hannes Bochmann <dev@dmk-ebusiness.de>
- *  All rights reserved
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
  *
- *  This script is part of the TYPO3 project. The TYPO3 project is
- *  free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ * The GNU General Public License can be found at
+ * http://www.gnu.org/copyleft/gpl.html.
  *
- *  The GNU General Public License can be found at
- *  http://www.gnu.org/copyleft/gpl.html.
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *  This script is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  This copyright notice MUST APPEAR in all copies of the script!
- */
+ * This copyright notice MUST APPEAR in all copies of the script!
+ ***************************************************************/
 
 /**
- * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
+ * @author Hannes Bochmann
+ * @author Michael Wagner
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
 class tx_mksearch_tests_action_ElasticSearchTest extends tx_mksearch_tests_Testcase
 {
+    protected function setUp()
+    {
+    }
+
+    protected function tearDown()
+    {
+    }
+
     /**
      * @group unit
      */
@@ -38,7 +45,7 @@ class tx_mksearch_tests_action_ElasticSearchTest extends tx_mksearch_tests_Testc
     {
         $confId = 'elasticsearch.';
         $parameters = tx_rnbase::makeInstance(
-            'tx_rnbase_parameters',
+            \Sys25\RnBase\Frontend\Request\Parameters::class,
             ['pb-search456-pointer' => 2]
         );
         $configurations = $this->createConfigurations(
@@ -49,7 +56,7 @@ class tx_mksearch_tests_action_ElasticSearchTest extends tx_mksearch_tests_Testc
         );
         $configurations->setParameters($parameters);
 
-        $pluginUid = new ReflectionProperty('tx_rnbase_configurations', 'pluginUid');
+        $pluginUid = new ReflectionProperty(Sys25\RnBase\Configuration\Processor::class, 'pluginUid');
         $pluginUid->setAccessible(true);
         $pluginUid->setValue($configurations, 456);
 
@@ -110,7 +117,7 @@ class tx_mksearch_tests_action_ElasticSearchTest extends tx_mksearch_tests_Testc
     public function testHandlePagebrowserWhenPageBrowserIdConfigured()
     {
         $confId = 'elasticsearch.';
-        $parameters = tx_rnbase::makeInstance('tx_rnbase_parameters', []);
+        $parameters = tx_rnbase::makeInstance(\Sys25\RnBase\Frontend\Request\Parameters::class, []);
         $configurations = $this->createConfigurations(
             [$confId => ['hit.' => ['pagebrowser.' => [
                 'limit' => 20,
@@ -193,7 +200,7 @@ class tx_mksearch_tests_action_ElasticSearchTest extends tx_mksearch_tests_Testc
     public function testHandleRequestReturnsNullIfNosearchConfigured()
     {
         $confId = 'elasticsearch.';
-        $parameters = tx_rnbase::makeInstance('tx_rnbase_parameters', []);
+        $parameters = tx_rnbase::makeInstance(\Sys25\RnBase\Frontend\Request\Parameters::class, []);
         $configurations = $this->createConfigurations(
             [$confId => ['nosearch' => true]],
             'mksearch',
@@ -238,7 +245,7 @@ class tx_mksearch_tests_action_ElasticSearchTest extends tx_mksearch_tests_Testc
     public function testHandleRequest()
     {
         $confId = 'elasticsearch.';
-        $parameters = tx_rnbase::makeInstance('tx_rnbase_parameters', []);
+        $parameters = tx_rnbase::makeInstance(\Sys25\RnBase\Frontend\Request\Parameters::class, []);
         $configurations = $this->createConfigurations(
             [$confId => [
                 'filter.' => [
