@@ -1,30 +1,32 @@
 <?php
-
 /***************************************************************
- *  Copyright notice
+ * Copyright notice
  *
- *  (c) 2009 das Medienkombinat
- *  All rights reserved
+ * (c) 2009-2020 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful,
+ * The GNU General Public License can be found at
+ * http://www.gnu.org/copyleft/gpl.html.
+ *
+ * This script is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use Sys25\RnBase\Frontend\Request\ParametersInterface;
-
 /**
- * @author Hannes Bochmann <hannes.bochmann@dmk-business.de>
+ * @author Hannes Bochmann
+ * @author Michael Wagner
+ * @license http://www.gnu.org/licenses/lgpl.html
+ *          GNU Lesser General Public License, version 3 or later
  */
 class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter
 {
@@ -61,11 +63,11 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter
     /**
      * Filter for search form.
      *
-     * @param array                    $fields
-     * @param array                    $options
-     * @param tx_rnbase_parameters     $parameters
+     * @param array $fields
+     * @param array $options
+     * @param \Sys25\RnBase\Frontend\Request\ParametersInterface $parameters
      * @param tx_rnbase_configurations $configurations
-     * @param string                   $confId
+     * @param string $confId
      *
      * @return bool Should subsequent query be executed at all?
      */
@@ -92,10 +94,10 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter
     /**
      * Fügt den Suchstring zu dem Filter hinzu.
      *
-     * @param array                    $fields
-     * @param ParametersInterface      $parameters
+     * @param array $fields
+     * @param \Sys25\RnBase\Frontend\Request\ParametersInterface $parameters
      * @param tx_rnbase_configurations $configurations
-     * @param string                   $confId
+     * @param string $confId
      */
     protected function handleTerm(&$fields, &$parameters, &$configurations, $confId)
     {
@@ -256,8 +258,8 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter
     /**
      * Werte für Formularfelder aufbereiten. Daten aus dem Request übernehmen und wieder füllen.
      *
-     * @param array                $formData
-     * @param tx_rnbase_parameters $parameters
+     * @param array $formData
+     * @param \Sys25\RnBase\Frontend\Request\ParametersInterface $parameters
      */
     protected function prepareFormFields(&$formData, $parameters)
     {
@@ -309,14 +311,14 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter
      * enthalten ungeparsed rauskommen, falls das Formular noch
      * nicht abgeschickt wurde.
      *
-     * @param array                $formData
-     * @param tx_rnbase_parameters $parameters
+     * @param array $formData
+     * @param \Sys25\RnBase\Frontend\Request\ParametersInterface $parameters
      *
      * @return array
      */
     private function fillFormDataWithRequiredFormFieldsIfNoSet(
         array $formData,
-        tx_rnbase_parameters $parameters
+        \Sys25\RnBase\Frontend\Request\ParametersInterface $parameters
     ) {
         $formFields = tx_rnbase_util_Strings::trimExplode(
             ',',

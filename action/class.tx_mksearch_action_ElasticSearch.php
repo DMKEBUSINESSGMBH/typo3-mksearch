@@ -2,7 +2,7 @@
 /***************************************************************
  * Copyright notice
  *
- * (c) 2009-2018 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * (c) 2009-2020 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
  *
  * This script is part of the TYPO3 project. The TYPO3 project is
@@ -33,9 +33,9 @@
 class tx_mksearch_action_ElasticSearch extends tx_mksearch_action_AbstractSearch
 {
     /**
-     * @param array_object             $parameters
+     * @param \Sys25\RnBase\Frontend\Request\ParametersInterface $parameters
      * @param tx_rnbase_configurations $configurations
-     * @param array_object             $viewData
+     * @param ArrayObject $viewData
      *
      * @return string error msg or null
      */
@@ -102,17 +102,17 @@ class tx_mksearch_action_ElasticSearch extends tx_mksearch_action_AbstractSearch
     }
 
     /**
-     * @param tx_rnbase_parameters                     $parameters
-     * @param tx_rnbase_configurations                 $configurations
-     * @param unknown                                  $confId
-     * @param ArrayObject                              $viewdata
-     * @param array                                    $fields
-     * @param array                                    $options
+     * @param \Sys25\RnBase\Frontend\Request\ParametersInterface $parameters
+     * @param \Sys25\RnBase\Configuration\ConfigurationInterface $configurations
+     * @param string $confId
+     * @param ArrayObject $viewdata
+     * @param array $fields
+     * @param array $options
      * @param tx_mksearch_service_engine_ElasticSearch $index
      */
     public function handlePageBrowser(
-        tx_rnbase_parameters $parameters,
-        tx_rnbase_configurations $configurations,
+        \Sys25\RnBase\Frontend\Request\ParametersInterface $parameters,
+        \Sys25\RnBase\Configuration\ConfigurationInterface $configurations,
         $confId,
         ArrayObject $viewdata,
         array &$fields,

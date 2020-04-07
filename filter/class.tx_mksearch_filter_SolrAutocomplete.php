@@ -23,7 +23,6 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
-
 use Sys25\RnBase\Frontend\Request\ParametersInterface;
 
 /**

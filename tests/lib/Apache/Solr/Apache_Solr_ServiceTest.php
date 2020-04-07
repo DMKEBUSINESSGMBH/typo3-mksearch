@@ -39,7 +39,7 @@ class Apache_Solr_ServiceTest extends tx_mksearch_tests_Testcase
     {
         $service = $this->getMock(
             'Apache_Solr_Service',
-            array('_sendRawPost')
+            ['_sendRawPost']
         );
         $service->setSolrVersion(30);
 
@@ -62,7 +62,7 @@ class Apache_Solr_ServiceTest extends tx_mksearch_tests_Testcase
     {
         $service = $this->getMock(
             'Apache_Solr_Service',
-            array('_sendRawPost')
+            ['_sendRawPost']
         );
         $service->setSolrVersion(40);
 
@@ -85,7 +85,7 @@ class Apache_Solr_ServiceTest extends tx_mksearch_tests_Testcase
     {
         $service = $this->getMock(
             'Apache_Solr_Service',
-            array('_sendRawPost')
+            ['_sendRawPost']
         );
         $service->setSolrVersion(30);
 
@@ -108,7 +108,7 @@ class Apache_Solr_ServiceTest extends tx_mksearch_tests_Testcase
     {
         $service = $this->getMock(
             'Apache_Solr_Service',
-            array('_sendRawPost')
+            ['_sendRawPost']
         );
         $service->setSolrVersion(40);
 

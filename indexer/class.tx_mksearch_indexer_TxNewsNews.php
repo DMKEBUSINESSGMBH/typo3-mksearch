@@ -134,15 +134,15 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
     {
         $rows = $this->getDatabaseConnection()->doSelect(
             'NEWS.uid AS uid',
-            array(
+            [
                 'tx_news_domain_model_news AS NEWS'.
                 ' JOIN tx_news_domain_model_news_tag_mm AS TAGMM ON NEWS.uid = TAGMM.uid_local',
                 'tx_news_domain_model_news',
                 'NEWS',
-            ),
-            array(
+            ],
+            [
                 'where' => 'TAGMM.uid_foreign = '.(int) $tagRecord['uid'],
-            )
+            ]
         );
         // Alle gefundenen News für die Neuindizierung anmelden.
         $srv = $this->getIntIndexService();
@@ -486,7 +486,7 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
                 : trim($this->renderContentElement($cObj, $contentElement));
         }
 
-        return implode(CRLF . CRLF, $ce);
+        return implode(CRLF.CRLF, $ce);
     }
 
     /**
@@ -499,7 +499,7 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
      */
     protected function renderContentElement(
         $cObj,
-        /** \GeorgRinger\News\Domain\Model\TtContent */ $contentElement
+        /* \GeorgRinger\News\Domain\Model\TtContent */ $contentElement
     ) {
         $cObj->start($contentElement->_getProperties(), 'tt_content');
 
@@ -516,14 +516,14 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
      */
     protected function renderGridelement(
         $cObj,
-        /** \GeorgRinger\News\Domain\Model\TtContent */ $contentElement
+        /* \GeorgRinger\News\Domain\Model\TtContent */ $contentElement
     ) {
         //we need to complete record to render the gridelement correctly
         $rawData = $this->getDatabaseConnection()->doSelect(
             '*',
             'tt_content',
             [
-                'where' => 'uid=' . $contentElement->getUid(),
+                'where' => 'uid='.$contentElement->getUid(),
             ]
         );
         if (isset($rawData[0])) {
