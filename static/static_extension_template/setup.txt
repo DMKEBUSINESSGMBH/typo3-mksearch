@@ -4,12 +4,13 @@ includeLibs.tx_mksearch_util_UserFunc = EXT:mksearch/util/class.tx_mksearch_util
 plugin.tx_mksearch = USER
 
 plugin.tx_mksearch {
-    # flexform            = flexform_main.xml
-    userFunc            = tx_rnbase_controller->main
-    defaultAction        = tx_mksearch_action_Search
-    qualifier            = mksearch
-    templatePath        = EXT:mksearch/templates
-    locallangFilename    = EXT:mksearch/locallang.xml
+    extensionKey = mksearch
+    # flexform = flexform_main.xml
+    userFunc = tx_rnbase_controller->main
+    defaultAction = tx_mksearch_action_Search
+    qualifier = mksearch
+    templatePath = EXT:mksearch/templates
+    locallangFilename = EXT:mksearch/locallang.xml
 }
 
 tt_content.list.20.tx_mksearch =< plugin.tx_mksearch
