@@ -53,6 +53,7 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc
         $oIntIndexSrv = tx_mksearch_util_ServiceRegistry::getIntIndexService();
 
         if (\Tx_Rnbase_Utility_T3General::_GP('updateIndex')) {
+            $status[] = $this->handleResetBeingIndexed($oIntIndexSrv, $configurations);
             $status[] = $this->handleReset($oIntIndexSrv, $configurations);
             $status[] = $this->handleClear($oIntIndexSrv, $configurations);
             $status[] = $this->handleTrigger($oIntIndexSrv, $configurations);
@@ -63,6 +64,9 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc
         $markerArray['###ISSTATUS###'] = $bIsStatus ? 'block' : 'none';
         $markerArray['###STATUS###'] = $bIsStatus ? implode('<br />', $status) : '';
         $markerArray['###QUEUESIZE###'] = $oIntIndexSrv->countItemsInQueue();
+        $markerArray['###QUEUE_SIZE_BEING_INDEXED###'] = $oIntIndexSrv->countItemsInQueueBeingIndexed();
+        $beingIndexedOlderThan = intval(\Tx_Rnbase_Utility_T3General::_GP('beingIndexedOlderThan'));
+        $markerArray['###BEINGINDEXEDOLDERTHAN###'] = $beingIndexedOlderThan > 0 ? $beingIndexedOlderThan : 120;
         $indexItems = intval(\Tx_Rnbase_Utility_T3General::_GP('triggerIndexingQueueCount'));
         $markerArray['###INDEXITEMS###'] = $indexItems > 0 ? $indexItems : 100;
 
@@ -282,6 +286,41 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc
             $status .= '<ul><li>'.implode('</li><li/>', array_values($rows)).'</li></ul>';
         } else {
             $status .= '###LABEL_QUEUE_INDEXED_EMPTY###';
+        }
+
+        return $status;
+    }
+
+    /**
+     * Handle reset being indexed command from request.
+     * Reset entries older then time given in parameter "beingIndexedOlderThan" in minutes.
+     *
+     * @param tx_mksearch_service_internal_Index $oIntIndexSrv
+     * @param tx_rnbase_configurations           $configurations
+     *
+     * @return string
+     */
+    private function handleResetBeingIndexed($oIntIndexSrv, &$configurations)
+    {
+        $triggerResetBeingIndexed = \Tx_Rnbase_Utility_T3General::_GP('triggerResetBeingIndexed');
+        if (!$triggerResetBeingIndexed) {
+            return '';
+        }
+
+        $status = '';
+        $beingIndexedOlderThan = intval(\Tx_Rnbase_Utility_T3General::_GP('beingIndexedOlderThan'));
+        $options = [
+            'where' => sprintf(
+                'being_indexed < UNIX_TIMESTAMP() - 60 * %d',
+                $beingIndexedOlderThan
+            ),
+        ];
+        $rows = $oIntIndexSrv->resetItemsBeingIndexed($options);
+
+        if ($rows) {
+            $status .= '<ul><li>###LABEL_ITEMS_BEING_INDEXED_RESETTED###: '.$rows.'</li></ul>';
+        } else {
+            $status .= '###LABEL_QUEUE_BEING_INDEXED_EMPTY###';
         }
 
         return $status;

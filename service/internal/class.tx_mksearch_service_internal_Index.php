@@ -294,11 +294,33 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
         return true;
     }
 
-    public function countItemsInQueue($tablename = '')
+    /**
+     * Count all items in queue with state "being_indexed" (where timestamp is > 0)
+     *
+     * @param string $tablename
+     *
+     * @return mixed
+     */
+    public function countItemsInQueueBeingIndexed($tablename = '')
+    {
+        $whereCondition = 'deleted=0 AND being_indexed > 0';
+
+        return $this->countItemsInQueue($tablename, $whereCondition);
+    }
+
+    /**
+     * Count all items in queue.
+     *
+     * @param string $tablename
+     * @param string $condition
+     *
+     * @return mixed
+     */
+    public function countItemsInQueue($tablename = '', $condition = 'deleted=0')
     {
         $options = [];
         $options['count'] = 1;
-        $options['where'] = 'deleted=0';
+        $options['where'] = $condition;
         if (strcmp($tablename, '')) {
             $fullQuoted = $this->getDatabaseConnection()->fullQuoteStr($tablename, self::$queueTable);
             $options['where'] .= ($tablename ? ' AND tablename='.$fullQuoted : '');
@@ -348,7 +370,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
         $this->getDatabaseConnection()->doUpdate(
             self::$queueTable,
             'uid IN ('.implode(',', $uids).')',
-            ['being_indexed' => 1]
+            ['being_indexed' => time()]
         );
 
         // Trigger update for the found items
@@ -438,7 +460,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
                                     continue;
                                 } // Invalid indexer
                                 // Collect all index documents
-                                list($extKey, $contentType) = $indexer->getContentType();
+                                [$extKey, $contentType] = $indexer->getContentType();
                                 //there can be more than one config for the current indexer
                                 //so we execute the indexer with each config that was found.
                                 //when one element (tt_content) is indexed by let's say tow indexer configs which
@@ -680,6 +702,26 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
             );
         }
         $database->doQuery($query);
+    }
+
+    /**
+     * Reset items with state "being_indexed"
+     *
+     * @param array $options
+     *
+     * @return int
+     */
+    public function resetItemsBeingIndexed($options)
+    {
+        $options['where'] = $options['where'] ?: 'being_indexed > 0';
+
+        $ret = Tx_Rnbase_Database_Connection::getInstance()->doUpdate(
+            self::$queueTable,
+            $options['where'],
+            ['being_indexed' => 0]
+        );
+
+        return $ret;
     }
 
     public function getRandomSolrIndex()
