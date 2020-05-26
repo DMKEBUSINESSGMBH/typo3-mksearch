@@ -53,7 +53,7 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc
         $oIntIndexSrv = tx_mksearch_util_ServiceRegistry::getIntIndexService();
 
         if (\Tx_Rnbase_Utility_T3General::_GP('updateIndex')) {
-            $status[] = $this->handleResetBeingIndexed($oIntIndexSrv, $configurations);
+            $status[] = $this->handleResetBeingIndexed($oIntIndexSrv);
             $status[] = $this->handleReset($oIntIndexSrv, $configurations);
             $status[] = $this->handleClear($oIntIndexSrv, $configurations);
             $status[] = $this->handleTrigger($oIntIndexSrv, $configurations);
@@ -295,12 +295,11 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc
      * Handle reset being indexed command from request.
      * Reset entries older then time given in parameter "beingIndexedOlderThan" in minutes.
      *
-     * @param tx_mksearch_service_internal_Index $oIntIndexSrv
-     * @param tx_rnbase_configurations           $configurations
+     * @param tx_mksearch_service_internal_Index $indexSrv
      *
      * @return string
      */
-    private function handleResetBeingIndexed($oIntIndexSrv, &$configurations)
+    private function handleResetBeingIndexed($indexSrv)
     {
         $triggerResetBeingIndexed = \Tx_Rnbase_Utility_T3General::_GP('triggerResetBeingIndexed');
         if (!$triggerResetBeingIndexed) {
@@ -308,7 +307,7 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc
         }
 
         $status = '';
-        $rows = $oIntIndexSrv->resetItemsBeingIndexed();
+        $rows = $indexSrv->resetItemsBeingIndexed();
 
         if ($rows) {
             $status .= '<ul><li>###LABEL_ITEMS_BEING_INDEXED_RESETTED###: '.$rows.'</li></ul>';

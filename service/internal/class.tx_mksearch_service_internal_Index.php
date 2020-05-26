@@ -814,7 +814,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
             'minutesToKeepBeingIndexedEntries'
         );
 
-        return $minutesToKeepBeingIndexedEntries ? $minutesToKeepBeingIndexedEntries : 60;
+        return $minutesToKeepBeingIndexedEntries ?: 60;
     }
 
 
