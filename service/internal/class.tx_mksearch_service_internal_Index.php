@@ -295,7 +295,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
     }
 
     /**
-     * Count all items in queue with state "being_indexed" (where timestamp is > 0)
+     * Count all items in queue with state "being_indexed"
      *
      * @param string $tablename
      *
@@ -763,6 +763,24 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 
         return $secondsToKeepQueueEntries ? $secondsToKeepQueueEntries : $thirtyDaysInSeconds;
     }
+
+    /**
+     * Returns the amount of minutes to keep being indexed entries in queue
+     * before resetting them.
+     *
+     * @return int
+     */
+    protected function getMinutesToKeepBeingIndexedEntries()
+    {
+        $minutesToKeepBeingIndexedEntries = tx_rnbase_configurations::getExtensionCfgValue(
+            'mksearch',
+            'minutesToKeepBeingIndexedEntries'
+        );
+
+        return $minutesToKeepBeingIndexedEntries ? $minutesToKeepBeingIndexedEntries : 60;
+    }
+
+
 
     private static function setSignalThatIndexingIsInProgress()
     {

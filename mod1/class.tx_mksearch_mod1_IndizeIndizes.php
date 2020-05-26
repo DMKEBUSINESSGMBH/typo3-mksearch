@@ -308,14 +308,7 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc
         }
 
         $status = '';
-        $beingIndexedOlderThan = intval(\Tx_Rnbase_Utility_T3General::_GP('beingIndexedOlderThan'));
-        $options = [
-            'where' => sprintf(
-                'being_indexed < UNIX_TIMESTAMP() - 60 * %d',
-                $beingIndexedOlderThan
-            ),
-        ];
-        $rows = $oIntIndexSrv->resetItemsBeingIndexed($options);
+        $rows = $oIntIndexSrv->resetItemsBeingIndexed();
 
         if ($rows) {
             $status .= '<ul><li>###LABEL_ITEMS_BEING_INDEXED_RESETTED###: '.$rows.'</li></ul>';
