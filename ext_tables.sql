@@ -113,7 +113,7 @@ CREATE TABLE tx_mksearch_queue (
     tablename varchar(255) DEFAULT '' NOT NULL,
     data text,
     resolver varchar(255) NOT NULL default '',
-    being_indexed int(11) unsigned DEFAULT '0' NOT NULL,
+    being_indexed tinyint(4) DEFAULT '0' NOT NULL,
 
     PRIMARY KEY (uid)
 );
