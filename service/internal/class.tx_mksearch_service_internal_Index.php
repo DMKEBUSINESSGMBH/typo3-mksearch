@@ -469,7 +469,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
                                     continue;
                                 } // Invalid indexer
                                 // Collect all index documents
-                                [$extKey, $contentType] = $indexer->getContentType();
+                                list($extKey, $contentType) = $indexer->getContentType();
                                 //there can be more than one config for the current indexer
                                 //so we execute the indexer with each config that was found.
                                 //when one element (tt_content) is indexed by let's say tow indexer configs which
