@@ -675,5 +675,7 @@ class tx_mksearch_util_Indexer
 
         // handle language
         $tsfe->sys_language_content = intval($sysLanguage);
+
+        $tsfe->initFEuser();
     }
 }
