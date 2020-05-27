@@ -30,3 +30,8 @@ Sekunden bis Queue Einträge gelöscht werden (secondsToKeepQueueEntries)
 -----------------------------------------------------------------------
 
 Es kann konfiguriert werden, ab welchem Alter gelöschte Queue Einträge vollständig entfernt werden. Auf diese Weise bleibt die Queue Tabelle relativ klein.
+
+Zeit, nach der Einträge mit dem Status "being_indexed" zurückgesetzt werden (minutesToKeepBeingIndexedEntries)
+---------------------------------------------------------------------------------------------------------------
+Nach der konfigurierten Zeit (in Minuten) werden die Datensätze, die gerade im Indexierungprozess sind (being_indexed=1), wieder zurückgesetzt, um eine erneute Abarbeitung zu ermöglichen.
+Dies kann auftreten, wenn z.B. eine externe API nicht erreichbar war oder bei der Indexierung der PHP-Prozess plötzlich unterbrochen wurde oder ein Fehler aufgetreten ist.

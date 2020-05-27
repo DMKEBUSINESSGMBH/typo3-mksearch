@@ -121,6 +121,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
         // achtung: die reihenfolge ist wichtig für addRecordsToIndex
         $record = [
             'cr_date' => tx_rnbase_util_Dates::datetime_tstamp2mysql($GLOBALS['EXEC_TIME']),
+            'lastupdate' => tx_rnbase_util_Dates::datetime_tstamp2mysql($GLOBALS['EXEC_TIME']),
             'prefer' => (int) $prefer,
             'recid' => $uid,
             'tablename' => $tableName,
@@ -277,7 +278,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
      */
     protected function doInsertRecords(array $sqlValues)
     {
-        $insert = 'INSERT INTO '.self::$queueTable.'(cr_date,prefer,recid,tablename,data,resolver)';
+        $insert = 'INSERT INTO '.self::$queueTable.'(cr_date,lastupdate,prefer,recid,tablename,data,resolver)';
 
         // no inserts found
         if (empty($sqlValues)) {
@@ -294,11 +295,33 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
         return true;
     }
 
-    public function countItemsInQueue($tablename = '')
+    /**
+     * Count all items in queue with state "being_indexed"
+     *
+     * @param string $tablename
+     *
+     * @return mixed
+     */
+    public function countItemsInQueueBeingIndexed($tablename = '')
+    {
+        $whereCondition = 'deleted=0 AND being_indexed=1';
+
+        return $this->countItemsInQueue($tablename, $whereCondition);
+    }
+
+    /**
+     * Count all items in queue.
+     *
+     * @param string $tablename
+     * @param string $condition
+     *
+     * @return mixed
+     */
+    public function countItemsInQueue($tablename = '', $condition = 'deleted=0')
     {
         $options = [];
         $options['count'] = 1;
-        $options['where'] = 'deleted=0';
+        $options['where'] = $condition;
         if (strcmp($tablename, '')) {
             $fullQuoted = $this->getDatabaseConnection()->fullQuoteStr($tablename, self::$queueTable);
             $options['where'] .= ($tablename ? ' AND tablename='.$fullQuoted : '');
@@ -321,13 +344,18 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
      */
     public function triggerQueueIndexing($config = [])
     {
+        //checks whether items with state "being_indexed" got stuck in queue
+        if ($this->countItemsInQueueBeingIndexed() > 0) {
+            $this->resetOldBeingIndexedEntries();
+        }
+
         if (!is_array($config)) {
             $config = ['limit' => $config];
         }
         $options = [];
-        $options['orderby'] = 'prefer desc, cr_date asc, uid asc';
+        $options['orderby'] = 'prefer desc, lastupdate asc';
         $options['limit'] = isset($config['limit']) ? (int) $config['limit'] : 100;
-        $options['where'] = 'deleted=0 AND being_indexed = 0';
+        $options['where'] = 'deleted=0 AND being_indexed=0';
         $options['enablefieldsoff'] = 1;
 
         $data = $this->getDatabaseConnection()->doSelect('*', self::$queueTable, $options);
@@ -348,7 +376,10 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
         $this->getDatabaseConnection()->doUpdate(
             self::$queueTable,
             'uid IN ('.implode(',', $uids).')',
-            ['being_indexed' => 1]
+            [
+                'being_indexed' => 1,
+                'lastupdate' => date("Y-m-d H:i:s")
+            ]
         );
 
         // Trigger update for the found items
@@ -360,7 +391,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
             $ret = Tx_Rnbase_Database_Connection::getInstance()->doUpdate(
                 self::$queueTable,
                 'uid IN ('.implode(',', $uids).')',
-                ['deleted' => 1, 'being_indexed' => 0]
+                ['deleted' => 1, 'being_indexed' => 0, 'lastupdate' => date("Y-m-d H:i:s")]
             );
             $this->deleteOldQueueEntries();
             tx_rnbase_util_Logger::info(
@@ -682,6 +713,54 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
         $database->doQuery($query);
     }
 
+    /**
+     * Check and reset items in state "being_indexed".
+     *
+     * @return int
+     */
+    protected function resetOldBeingIndexedEntries()
+    {
+        $timeLimit = $this->getMinutesToKeepBeingIndexedEntries();
+        $resetCount = $this->resetItemsBeingIndexed($timeLimit);
+        if ($resetCount > 0) {
+            tx_rnbase_util_Logger::warn(
+                'Items in queue are resetted because they are in state "being_indexed" ' .
+                'longer than the configured amount of time. Check that, if it occurs multiple times.',
+                'mksearch',
+                [
+                    'itemResetCount' => $resetCount,
+                    'configuredTimeLimitInMin' => $timeLimit,
+                ]
+            );
+        }
+
+        return $resetCount;
+    }
+
+    /**
+     * Reset items with state "being_indexed" older than given time period in minutes.
+     *
+     * @param int $olderThanMinutes
+     *
+     * @return int
+     */
+    public function resetItemsBeingIndexed($olderThanMinutes = 0)
+    {
+        $where = sprintf(
+            'being_indexed = 1 AND lastupdate < NOW() - INTERVAL %d MINUTE',
+            $olderThanMinutes
+        );
+
+        return Tx_Rnbase_Database_Connection::getInstance()->doUpdate(
+            self::$queueTable,
+            $where,
+            [
+                'being_indexed' => 0,
+                'lastupdate' => date("Y-m-d H:i:s")
+            ]
+        );
+    }
+
     public function getRandomSolrIndex()
     {
         $fields['INDX.engine'][OP_EQ] = self::TYPE_SOLR;
@@ -721,6 +800,24 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 
         return $secondsToKeepQueueEntries ? $secondsToKeepQueueEntries : $thirtyDaysInSeconds;
     }
+
+    /**
+     * Returns the amount of minutes to keep being indexed entries in queue
+     * before resetting them.
+     *
+     * @return int
+     */
+    protected function getMinutesToKeepBeingIndexedEntries()
+    {
+        $minutesToKeepBeingIndexedEntries = tx_rnbase_configurations::getExtensionCfgValue(
+            'mksearch',
+            'minutesToKeepBeingIndexedEntries'
+        );
+
+        return $minutesToKeepBeingIndexedEntries ?: 60;
+    }
+
+
 
     private static function setSignalThatIndexingIsInProgress()
     {

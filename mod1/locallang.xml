@@ -27,6 +27,11 @@
             <label index="label_triger_queue_head">Trigger indexing queue</label>
             <label index="label_triger_queue_input">Trigger indexing queue</label>
             <label index="label_triger_queue_items">Items</label>
+            <label index="label_queue_size_being_indexed">Items currently being indexed</label>
+            <label index="label_trigger_being_indexed_items">Reset items currently being indexed. Items will be available in queue again for further indexing.</label>
+            <label index="label_trigger_reset_being_indexed_items">Reset all items with status "being_indexed"</label>
+            <label index="label_queue_being_indexed_empty">no entries found being indexed in this time period</label>
+            <label index="label_items_being_indexed_resetted">items with status "being_indexed" resetted</label>
             <label index="label_reset_options">Reset options</label>
             <label index="label_reset_deleted">Add deleted records to queue</label>
             <label index="label_reset_hidden">Add hidden records to queue</label>
@@ -110,6 +115,11 @@
             <label index="label_triger_queue_head">Indizierung ausführen</label>
             <label index="label_triger_queue_input">Indizierung ausführen</label>
             <label index="label_triger_queue_items">Elemente</label>
+            <label index="label_queue_size_being_indexed">Elemente die aktuell indexiert werden</label>
+            <label index="label_trigger_being_indexed_items">Elemente die aktuell indexiert werden zurücksetzen. Diese Elemente werden wieder in die Warteschlange eingereiht und in der folgenden Indexierung abgearbeitet.</label>
+            <label index="label_trigger_reset_being_indexed_items">Alle Elemente mit dem Status "being_indexed" zurücksetzen</label>
+            <label index="label_queue_being_indexed_empty">Keine Einträge gefunden, die in diesem Zeitraum auf "being_indexed" stehen</label>
+            <label index="label_items_being_indexed_resetted">Einträge mit dem Status "being_indexed" zurückgesetzt</label>
             <label index="label_reset_options">Reset-Optionen</label>
             <label index="label_reset_deleted">Gelöschte Datensätze zur Warteschlange hinzufügen</label>
             <label index="label_reset_hidden">Versteckte Datensätze zur Warteschlange hinzufügen</label>
