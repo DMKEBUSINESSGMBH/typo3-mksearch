@@ -751,7 +751,7 @@
 				http://svn.apache.org/repos/asf/lucene/dev/trunk/solr/core/src/test-files/solr/collection1/conf/solrconfig-phrasesuggest.xml
 				<str name="name">suggest_fst</str> <str name="classname">org.apache.solr.spelling.suggest.Suggester</str>
 				<str name="lookupImpl">org.apache.solr.spelling.suggest.fst.AnalyzingLookupFactory</str>
-				<str name="storeDir">suggest_fst</str> <str name="buildOnOptimize">true</str>
+				<str name="storeDir">suggest_fst</str> <str name="buildOnCommit">true</str>
 				<bool name="exactMatchFirst">true</bool> <int name="weightBuckets">100</int>
 				<str name="suggestAnalyzerFieldType">text_autocomplete_phrases</str> -->
 			<str name="name">suggest_fst</str>
@@ -764,7 +764,7 @@
 			<str name="lookupImpl">org.apache.solr.spelling.suggest.fst.FSTLookup</str>
 			<!-- the directory we store our index data for suggestions. -->
 			<str name="storeDir">suggest_fst</str>
-			<str name="buildOnOptimize">true</str>
+			<str name="buildOnCommit">true</str>
 			<!-- Suggester properties -->
 			<bool name="exactMatchFirst">true</bool>
 			<!-- what does this exactly mean? taken from Solr Book "Apache Solr 3
