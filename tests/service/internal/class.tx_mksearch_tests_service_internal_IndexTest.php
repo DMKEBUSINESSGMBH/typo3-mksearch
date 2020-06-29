@@ -82,7 +82,7 @@ class tx_mksearch_tests_service_internal_IndexTest extends tx_mksearch_tests_Tes
         );
 
         self::assertEquals(
-            2592000,
+            604800,
             $this->callInaccessibleMethod(
                 $indexService,
                 'getSecondsToKeepQueueEntries'

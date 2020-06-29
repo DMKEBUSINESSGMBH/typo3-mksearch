@@ -796,9 +796,9 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
             'mksearch',
             'secondsToKeepQueueEntries'
         );
-        $thirtyDaysInSeconds = 2592000;
+        $sevenDaysInSeconds = 604800;
 
-        return $secondsToKeepQueueEntries ? $secondsToKeepQueueEntries : $thirtyDaysInSeconds;
+        return $secondsToKeepQueueEntries ? $secondsToKeepQueueEntries : $sevenDaysInSeconds;
     }
 
     /**

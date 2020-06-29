@@ -29,7 +29,7 @@ useCurlAsHttpTransport = 1
 enableRnBaseUtilDbHook = 0
 
 # cat=mksearch/basic; type=int; label= Queue entries older than this seconds are deleted automatically (default 30 days) so the queue table stays small.
-secondsToKeepQueueEntries = 2592000
+secondsToKeepQueueEntries = 604800
 
 # cat=mksearch/basic; type=int; label= Amount of minutes to keep "being_indexed" entries in queue before resetting them (default 60 minutes).
 minutesToKeepBeingIndexedEntries = 60
