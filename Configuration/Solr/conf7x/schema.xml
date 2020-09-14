@@ -712,7 +712,7 @@
         <!-- suggesting single words and phrases up to 4 words in german language -->
         <fieldType class="solr.TextField" name="text_autocomplete" positionIncrementGap="100">
             <analyzer type="index">
-                <tokenizer class="solr.WhitespaceTokenizerFactory" />
+                <tokenizer class="solr.StandardTokenizerFactory" />
                 <filter class="solr.LowerCaseFilterFactory" />
                 <!-- only alpha num and whitespaces -->
                 <filter class="solr.PatternReplaceFilterFactory" pattern="([^a-zäöüÄÖÜß0-9 ])"
@@ -731,7 +731,7 @@
                 <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
             </analyzer>
             <analyzer type="query">
-                <tokenizer class="solr.WhitespaceTokenizerFactory" />
+                <tokenizer class="solr.StandardTokenizerFactory" />
                 <filter class="solr.LowerCaseFilterFactory"/>
                 <filter class="solr.TrimFilterFactory" />
                 <!-- only alpha num and whitespaces -->
