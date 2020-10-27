@@ -296,7 +296,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
     }
 
     /**
-     * Count all items in queue with state "being_indexed"
+     * Count all items in queue with state "being_indexed".
      *
      * @param string $tablename
      *
@@ -378,7 +378,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
             'uid IN ('.implode(',', $uids).')',
             [
                 'being_indexed' => 1,
-                'lastupdate' => date("Y-m-d H:i:s")
+                'lastupdate' => date('Y-m-d H:i:s'),
             ]
         );
 
@@ -391,7 +391,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
             $ret = Tx_Rnbase_Database_Connection::getInstance()->doUpdate(
                 self::$queueTable,
                 'uid IN ('.implode(',', $uids).')',
-                ['deleted' => 1, 'being_indexed' => 0, 'lastupdate' => date("Y-m-d H:i:s")]
+                ['deleted' => 1, 'being_indexed' => 0, 'lastupdate' => date('Y-m-d H:i:s')]
             );
             $this->deleteOldQueueEntries();
             tx_rnbase_util_Logger::info(
@@ -724,7 +724,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
         $resetCount = $this->resetItemsBeingIndexed($timeLimit);
         if ($resetCount > 0) {
             tx_rnbase_util_Logger::warn(
-                'Items in queue are resetted because they are in state "being_indexed" ' .
+                'Items in queue are resetted because they are in state "being_indexed" '.
                 'longer than the configured amount of time. Check that, if it occurs multiple times.',
                 'mksearch',
                 [
@@ -756,7 +756,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
             $where,
             [
                 'being_indexed' => 0,
-                'lastupdate' => date("Y-m-d H:i:s")
+                'lastupdate' => date('Y-m-d H:i:s'),
             ]
         );
     }
@@ -816,8 +816,6 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 
         return $minutesToKeepBeingIndexedEntries ?: 60;
     }
-
-
 
     private static function setSignalThatIndexingIsInProgress()
     {
