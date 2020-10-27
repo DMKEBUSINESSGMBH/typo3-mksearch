@@ -542,7 +542,21 @@ class tx_mksearch_util_Indexer
      */
     public function getRootlineByPid($pid)
     {
-        return tx_rnbase_util_TYPO3::getSysPage()->getRootLine($pid);
+        try {
+            $rootlineUtility = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                \TYPO3\CMS\Core\Utility\RootlineUtility::class,
+                $pid
+            );
+
+            return $rootlineUtility->get();
+        } catch (\RuntimeException $ex) {
+            if (1343589451 === $ex->getCode()) {
+                /* @see \TYPO3\CMS\Core\Utility\RootlineUtility::getRecordArray */
+                return [];
+            }
+
+            throw $ex;
+        }
     }
 
     /**
