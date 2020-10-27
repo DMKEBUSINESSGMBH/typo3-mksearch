@@ -36,7 +36,7 @@ cache:
         - $HOME/.composer/cache
 
 before_install:
-    - composer self-update
+    - composer self-update --1
     - composer --version
 
 before_script:
