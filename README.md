@@ -1,9 +1,10 @@
 # mksearch
 
-[![Latest Stable Version](https://img.shields.io/packagist/v/dmk/mksearch.svg?maxAge=3600&style=flat-square)](https://packagist.org/packages/dmk/mksearch)
+![TYPO3 compatibility](https://img.shields.io/badge/TYPO3-8.7%20%7C%209.5-orange?maxAge=3600&style=flat-square&logo=typo3)
+[![Latest Stable Version](https://img.shields.io/packagist/v/dmk/mksearch.svg?maxAge=3600&style=flat-square&logo=composer)](https://packagist.org/packages/dmk/mksearch)
 [![Total Downloads](https://img.shields.io/packagist/dt/dmk/mksearch.svg?maxAge=3600&style=flat-square)](https://packagist.org/packages/dmk/mksearch)
-[![Build Status](https://img.shields.io/travis/DMKEBUSINESSGMBH/typo3-mksearch.svg?maxAge=3600&style=flat-square)](https://travis-ci.org/DMKEBUSINESSGMBH/typo3-mksearch)
-[![License](https://img.shields.io/packagist/l/dmk/mksearch.svg?maxAge=3600&style=flat-square)](https://packagist.org/packages/dmk/mksearch)
+[![Build Status](https://img.shields.io/travis/DMKEBUSINESSGMBH/typo3-mksearch.svg?maxAge=3600&style=flat-square&logo=travis)](https://travis-ci.com/DMKEBUSINESSGMBH/typo3-mksearch)
+[![License](https://img.shields.io/packagist/l/dmk/mksearch.svg?maxAge=3600&style=flat-square&logo=gnu)](https://packagist.org/packages/dmk/mksearch)
 
 MK Search ist eine mächtige Such-Extension für TYPO3. Sie ist leicht erweiterbar und vielfältig konfigurierbar. Dabei stellt MK Search keine eigene Suchmaschine bereit, sondern agiert nur als Wrapper. Theoretisch können Anbindungen an beliebige Suchmaschinen implementiert werden. Derzeit gibt es für MK Search Anbindungen an Zend Lucene, ElasticSearch und Apache Solr. Somit ist sowohl eine reine PHP-Variante für den Einstieg verfügbar, als auch eine professionelle Client-Server Lösung für High-End-Anwendungen.
 
