@@ -329,8 +329,6 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 
         // are our parent pages valid?
         // as soon as one of the parent pages is hidden we return true.
-        // @todo support when a parent page is deleted! shouldn't be possible
-        // without further configuration for a BE user but it's still possible!
         $rootline = $this->getIndexerUtility()->getRootlineByPid($model->record['pid']);
 
         // @todo sollten nicht auch Shortcuts etc. invalide sein?
@@ -343,8 +341,9 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
                 return true;
             }
         }
-        // else
-        return false;
+        // The rootline can be empty when the rootline is broken. This might happen if a page in the rootline
+        // is deleted.
+        return empty($rootline);
     }
 
     /**
