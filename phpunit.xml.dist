@@ -16,6 +16,7 @@
 
     <php>
         <env name="TYPO3_PATH_WEB" value=".Build/Web" />
+        <env name="XDEBUG_MODE" value="coverage"/>
     </php>
 
     <testsuites>
