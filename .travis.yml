@@ -50,7 +50,7 @@ script:
     - >
         echo;
         echo "Running unit tests";
-        .Build/bin/phpunit -c phpunit.xml.dist --coverage-text --coverage-clover=.Build/coverage.clover
+        .Build/bin/phpunit -c phpunit.xml.dist
     - >
         echo;
         echo "Running php lint";
