@@ -80,7 +80,7 @@ class tx_mksearch_indexer_Page extends tx_mksearch_indexer_Base
             }
 
             // Current page is a short cut? Follow up short-cutted page
-            if (4 == $rawData['doktype']) {
+            if (4 == $rawData['doktype'] && $rawData['shortcut']) {
                 $oIndexSrv->addRecordToIndex('pages', $rawData['shortcut']);
 
                 return true;
