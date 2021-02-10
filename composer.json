@@ -1,7 +1,6 @@
 {
     "name": "dmk/mksearch",
     "description": "Generic highly adjustable and extendable search engine framework, using Zend Lucene, Apache Solr or ElasticSearch. But support for other search engines can be provided easily.",
-    "version": "9.5.16",
     "type": "typo3-cms-extension",
     "keywords": [
         "TYPO3 CMS",
@@ -41,11 +40,12 @@
     },
     "require": {
         "typo3/cms-core": "^8.7 || ^9.5",
-        "digedag/rn-base": ">=1.11.0"
+        "digedag/rn-base": "^1.11.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.15",
-        "nimut/testing-framework": "^4.0"
+        "nimut/testing-framework": "^4.0",
+        "php-parallel-lint/php-parallel-lint": "^1.2"
     },
     "autoload": {
         "classmap": [
@@ -86,7 +86,34 @@
     "scripts": {
         "post-autoload-dump": [
             "mkdir -p .Build/Web/typo3conf/ext/",
-            "[ -L .Build/Web/typo3conf/ext/mksearch ] || ln -snvf ../../../../. .Build/Web/typo3conf/ext/mksearch"
+            "[ -L .Build/Web/typo3conf/ext/mksearch ] || ln -snvf ../../../../. .Build/Web/typo3conf/ext/mksearch",
+            "[ -f .Build/Web/typo3conf/LocalConfiguration.php ] || cp tests/fixtures/LocalConfiguration.php .Build/Web/typo3conf/LocalConfiguration.php"
+        ],
+        "lint:php": [
+            "[ -e .Build/bin/parallel-lint ] || composer update",
+            ".Build/bin/parallel-lint ./Classes ./action ./filter ./hooks ./indexer ./interface ./marker ./mod1 ./model ./scheduler ./search ./service ./signalSlotDispatcher ./tests ./util ./view"
+        ],
+        "lint": [
+            "@lint:php"
+        ],
+        "test:phpcs": [
+            "[ -e .Build/bin/php-cs-fixer ] || composer update --ansi",
+            ".Build/bin/php-cs-fixer fix -v --dry-run --diff  --ansi"
+        ],
+        "test:phpunit": [
+            "[ -e .Build/bin/phpunit ] || composer update --ansi",
+            "export TYPO3_PATH_WEB=$PWD/.Build/Web && .Build/bin/phpunit --colors=always"
+        ],
+        "test": [
+            "@test:phpcs",
+            "@test:phpunit"
+        ],
+        "fix:phpcs": [
+            "[ -e .Build/bin/php-cs-fixer ] || composer update --ansi",
+            ".Build/bin/php-cs-fixer fix -v"
+        ],
+        "fix": [
+            "@fix:phpcs"
         ]
     },
     "extra": {
