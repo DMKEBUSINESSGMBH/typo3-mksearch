@@ -1210,7 +1210,7 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
     }
 
     /**
-     * @return number[][]|boolean[][]
+     * @return number[][]|bool[][]
      */
     public function dataProviderPrepareSearchDataLoadsFrontendIfDesiredAndNeeded()
     {

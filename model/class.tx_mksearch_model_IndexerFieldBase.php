@@ -151,7 +151,6 @@ class tx_mksearch_model_IndexerFieldBase implements tx_mksearch_interface_Indexe
                 // Nothing to do for text & tinytext - default options are just right.
                 case 'text':
                 case 'tinytext': break;
-
                 case 'keyword':
                 case 'uid':
                     $this->updateStorageOption('tokenized', false);

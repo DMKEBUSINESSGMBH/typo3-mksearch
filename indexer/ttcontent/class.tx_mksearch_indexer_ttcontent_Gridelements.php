@@ -153,8 +153,7 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
         $allowedCTypes = $this->getAllowedCTypes($options);
 
         if (is_array($allowedCTypes)) {
-            foreach ($GLOBALS['TSFE']->tmpl->setup['tt_content.'] as
-                $currentCType => $conf) {
+            foreach ($GLOBALS['TSFE']->tmpl->setup['tt_content.'] as $currentCType => $conf) {
                 if ('key.' == $currentCType) {
                     continue;
                 }

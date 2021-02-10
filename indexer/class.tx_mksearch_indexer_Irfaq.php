@@ -61,7 +61,7 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base
         tx_mksearch_interface_IndexerDocument $indexDoc,
         $options = []
     ) {
-        return    parent::hasDocToBeDeleted($model, $indexDoc, $options) ||
+        return parent::hasDocToBeDeleted($model, $indexDoc, $options) ||
                 !$this->checkInOrExcludeOptions($this->getIrfaqCategoryService()->getByQuestion($model), $options);
     }
 

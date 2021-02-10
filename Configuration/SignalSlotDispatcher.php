@@ -1,7 +1,7 @@
 <?php
 
 if (!defined('TYPO3_MODE')) {
-    die('Access denied.');
+    exit('Access denied.');
 }
 
 $signalSlotDispatcher = tx_rnbase::makeInstance('TYPO3\CMS\Extbase\SignalSlot\Dispatcher');

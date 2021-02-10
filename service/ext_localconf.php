@@ -1,13 +1,13 @@
 <?php
 
 if (!defined('TYPO3_MODE')) {
-    die('Access denied.');
+    exit('Access denied.');
 }
 // Search engine and indexer services
 tx_rnbase_util_Extensions::addService(
     $_EXTKEY,
-    'mksearch_engine' /* sv type */,
-    'tx_mksearch_service_engine_ZendLucene' /* sv key */,
+    'mksearch_engine' /* sv type */ ,
+    'tx_mksearch_service_engine_ZendLucene' /* sv key */ ,
     [
         'title' => 'Search engine Zend Lucene',
         'description' => 'Service which provides access to ZEND Lucene search engine',
@@ -24,8 +24,8 @@ tx_rnbase_util_Extensions::addService(
 
 tx_rnbase_util_Extensions::addService(
     $_EXTKEY,
-    'mksearch_engine' /* sv type */,
-    'tx_mksearch_service_engine_Solr' /* sv key */,
+    'mksearch_engine' /* sv type */ ,
+    'tx_mksearch_service_engine_Solr' /* sv key */ ,
     [
         'title' => 'Search engine Solr',
         'description' => 'Service which provides access to Apache SOLR search engine',
@@ -42,8 +42,8 @@ tx_rnbase_util_Extensions::addService(
 
 tx_rnbase_util_Extensions::addService(
     $_EXTKEY,
-    'mksearch_engine' /* sv type */,
-    'tx_mksearch_service_engine_ElasticSearch' /* sv key */,
+    'mksearch_engine' /* sv type */ ,
+    'tx_mksearch_service_engine_ElasticSearch' /* sv key */ ,
     [
         'title' => 'Search engine ElasticSearch',
         'description' => 'Service which provides access to ElasticSearch search engine',

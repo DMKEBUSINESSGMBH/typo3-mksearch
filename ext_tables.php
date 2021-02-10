@@ -1,7 +1,7 @@
 <?php
 
 if (!defined('TYPO3_MODE')) {
-    die('Access denied.');
+    exit('Access denied.');
 }
 
 $_EXT_PATH = tx_rnbase_util_Extensions::extPath($_EXTKEY);

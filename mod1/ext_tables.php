@@ -1,6 +1,6 @@
 <?php
 
-defined('TYPO3_MODE') or die('Access denied.');
+defined('TYPO3_MODE') or exit('Access denied.');
 
 if (TYPO3_MODE == 'BE') {
     tx_rnbase_util_Extensions::registerModule(

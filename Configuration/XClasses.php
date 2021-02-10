@@ -1,7 +1,7 @@
 <?php
 
 if (!defined('TYPO3_MODE')) {
-    die('Access denied.');
+    exit('Access denied.');
 }
 
 // folgendes Problem: in diesen ViewHelpern wird beim rendern im BE das TSFE zurückgesetzt
