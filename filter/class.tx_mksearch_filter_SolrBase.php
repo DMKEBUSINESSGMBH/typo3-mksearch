@@ -411,17 +411,18 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
         //wenigstens ein teil der query muss matchen. bei prüfen auf
         //nicht vorhandensein muss also noch auf ein feld geprüft werden
         //das garantiert existiert und damit ein match generiert.
-        $filterQuery = '(-fe_group_mi:[* TO *] AND id:[* TO *]) OR fe_group_mi:0';
-
-        if (is_array($GLOBALS['TSFE']->fe_user->groupData['uid'])) {
-            $filterQueriesByFeGroup = [];
-            foreach ($GLOBALS['TSFE']->fe_user->groupData['uid'] as $feGroup) {
-                $filterQueriesByFeGroup[] = 'fe_group_mi:'.$feGroup.'';
+        $filterQuery = '(-fe_group_mi:[* TO *] AND id:[* TO *])';
+        if (\Sys25\RnBase\Utility\TYPO3::getFEUserUID()) {
+            $filterQueriesByFeGroup = ['fe_group_mi:0', 'fe_group_mi:"-2"'];
+            $feUser = \Sys25\RnBase\Utility\TYPO3::getFEUser();
+            if (is_array($feUser->groupData['uid'])) {
+                foreach ($feUser->groupData['uid'] as $feGroup) {
+                    $filterQueriesByFeGroup[] = 'fe_group_mi:'.$feGroup;
+                }
             }
-
-            if (!empty($filterQueriesByFeGroup)) {
-                $filterQuery .= ' OR '.join(' OR ', $filterQueriesByFeGroup);
-            }
+            $filterQuery .= ' OR (('.join(' OR ', $filterQueriesByFeGroup).') AND -fe_group_mi:"-1")';
+        } else {
+            $filterQuery .= ' OR fe_group_mi:0 OR fe_group_mi:"-1"';
         }
 
         return $filterQuery;
