@@ -37,21 +37,19 @@
 class tx_mksearch_indexer_TtContent implements tx_mksearch_interface_Indexer
 {
     /**
-     * the appropriate indexer depending on templavoila.
+     * the appropriate indexer depending on gridelements.
      *
      * @var tx_mksearch_indexer_Base
      */
     protected $actualIndexer;
 
     /**
-     * load the appropriate indexer depending on templavoila or gridelements.
+     * load the appropriate indexer depending on gridelements.
      */
     public function __construct()
     {
         if (tx_rnbase_util_Extensions::isLoaded('gridelements')) {
             $this->actualIndexer = tx_rnbase::makeInstance('tx_mksearch_indexer_ttcontent_Gridelements');
-        } elseif (tx_rnbase_util_Extensions::isLoaded('templavoila')) {
-            $this->actualIndexer = tx_rnbase::makeInstance('tx_mksearch_indexer_ttcontent_Templavoila');
         } else {
             $this->actualIndexer = tx_rnbase::makeInstance('tx_mksearch_indexer_ttcontent_Normal');
         }
@@ -147,16 +145,11 @@ CType {
   }
   gridelements_pi1.indexedFields {
   }
-  templavoila_pi1.indexedFields {
-    0 = tx_templavoila_flex
-  }
 }
 
 # cTypes of content elements to be in-/excluded from indexing.
 # Obviously, the respective "indexedFields" option is ignored in this case.
-# templavoila_pi1 should in most cases be too, indexed, but requires some more configuration
-
-includeCTypes = text,textpic,textmedia,bullets,image,table,gridelements_pi1,templavoila_pi1
+includeCTypes = text,textpic,textmedia,bullets,image,table,gridelements_pi1
 
 #ignoreCTypes {
 #  0 = search
@@ -164,8 +157,7 @@ includeCTypes = text,textpic,textmedia,bullets,image,table,gridelements_pi1,temp
 #  2 = login
 #  3 = list
 #  4 = powermail_pi1
-#  5 = templavoila_pi1
-#  6 = html
+#  5 = html
 #}
 
 # \$sys_language_uid of the desired language

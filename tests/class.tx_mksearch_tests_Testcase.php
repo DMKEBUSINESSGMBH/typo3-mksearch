@@ -48,14 +48,6 @@ abstract class tx_mksearch_tests_Testcase extends tx_rnbase_tests_BaseTestCase
         // vollkommen unnötig
         tx_mksearch_tests_Util::disableDevlog();
 
-        // set up tv
-        if (tx_rnbase_util_Extensions::isLoaded('templavoila')) {
-            $this->backups['templaVoilaConfigBackup'] = $GLOBALS['TYPO3_LOADED_EXT']['templavoila'];
-            $GLOBALS['TYPO3_LOADED_EXT']['templavoila'] = null;
-
-            tx_mksearch_tests_Util::unloadExtensionForTypo362OrHigher('templavoila');
-        }
-
         // das TS Parsing frisst in manchen Umgebung mehr als 128MB Speicher. Es gibt aber im Moment keine Zeit
         // die Tests zu refactoren. Also setzen wir das Limit hoch
         ini_set('memory_limit', '1024M');
@@ -72,15 +64,6 @@ abstract class tx_mksearch_tests_Testcase extends tx_rnbase_tests_BaseTestCase
     {
         // tear down hooks
         tx_mksearch_tests_Util::hooksTearDown();
-
-        // tear down tv
-        if (null !== $this->backups['templaVoilaConfigBackup']) {
-            $GLOBALS['TYPO3_LOADED_EXT']['templavoila'] = $this->backups['templaVoilaConfigBackup'];
-            $this->backups['templaVoilaConfigBackup'] = null;
-
-            $extensionManagementUtility = new TYPO3\CMS\Core\Utility\ExtensionManagementUtility();
-            $extensionManagementUtility->loadExtension('templavoila');
-        }
 
         tx_mksearch_tests_Util::resetAddRootlineFields();
 

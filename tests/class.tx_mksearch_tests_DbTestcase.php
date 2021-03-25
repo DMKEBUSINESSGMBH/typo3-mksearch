@@ -35,18 +35,12 @@ use TYPO3\CMS\Core\Database\ConnectionPool;
 abstract class tx_mksearch_tests_DbTestcase extends tx_mksearch_tests_Testcase
 {
     protected $workspaceBackup;
-    protected $templaVoilaConfigBackup = null;
     protected $db;
 
     /**
      * @var array
      */
     private $originalDatabaseName;
-
-    /**
-     * @var bool
-     */
-    protected $unloadTemplavoila = true;
 
     /**
      * @var array
@@ -66,29 +60,6 @@ abstract class tx_mksearch_tests_DbTestcase extends tx_mksearch_tests_Testcase
      * @var array
      */
     protected $importDataSets = [];
-
-    /**
-     * Constructs a test case with the given name.
-     *
-     * @param string $name     the name of a testcase
-     * @param array  $data     ?
-     * @param string $dataName ?
-     */
-    public function __construct($name = null, array $data = [], $dataName = '')
-    {
-        parent::__construct($name, $data, $dataName);
-
-        // templavoila und realurl brauchen wir da es im BE sonst Warnungen hagelt
-        // und man die Testergebnisse nicht sieht
-        if (tx_rnbase_util_Extensions::isLoaded('templavoila')) {
-            $this->importExtensions[] = 'templavoila';
-        }
-        // fügt felder bei datenbank abfragen hinzu in $TYPO3_CONF_VARS['FE']['pageOverlayFields']
-        // und $TYPO3_CONF_VARS['FE']['addRootLineFields']
-        if (tx_rnbase_util_Extensions::isLoaded('tq_seo')) {
-            $this->importExtensions[] = 'tq_seo';
-        }
-    }
 
     /**
      * setUp() = init DB etc.
@@ -135,14 +106,6 @@ abstract class tx_mksearch_tests_DbTestcase extends tx_mksearch_tests_Testcase
         // vollkommen unnötig
         tx_mksearch_tests_Util::disableDevlog();
 
-        // set up tv
-        if (tx_rnbase_util_Extensions::isLoaded('templavoila') && $this->unloadTemplavoila) {
-            $this->templaVoilaConfigBackup = $GLOBALS['TYPO3_LOADED_EXT']['templavoila'];
-            $GLOBALS['TYPO3_LOADED_EXT']['templavoila'] = null;
-
-            tx_mksearch_tests_Util::unloadExtensionForTypo362OrHigher('templavoila');
-        }
-
         $this->purgeRootlineCaches();
     }
 
@@ -164,15 +127,6 @@ abstract class tx_mksearch_tests_DbTestcase extends tx_mksearch_tests_Testcase
 
         // tear down Workspace
         $GLOBALS['BE_USER']->setWorkspace($this->workspaceBackup);
-
-        // tear down tv
-        if (null !== $this->templaVoilaConfigBackup) {
-            $GLOBALS['TYPO3_LOADED_EXT']['templavoila'] = $this->templaVoilaConfigBackup;
-            $this->templaVoilaConfigBackup = null;
-
-            $extensionManagementUtility = new TYPO3\CMS\Core\Utility\ExtensionManagementUtility();
-            $extensionManagementUtility->loadExtension('templavoila');
-        }
 
         tx_mksearch_tests_Util::resetAddRootlineFields();
 

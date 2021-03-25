@@ -5,14 +5,8 @@ if (!defined('TYPO3_MODE')) {
 }
 
 // Activate indexer services
-
-// Activate at most ONE of 'core.page' OR 'templavoila.page' indexer services!
 $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['indexer']['active'][] = 'core.page';
-//$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['indexer']['active'][] = 'templavoila.page';
-// Activate at most ONE of 'core.tt_content' OR 'templavoila.tt_content' indexer services!
 $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['indexer']['active'][] = 'core.tt_content';
-//$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['indexer']['active'][] = 'templavoila.tt_content';
-
 $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['indexer']['active'][] = 'tt_news.news';
 
 // Define table to content type mappings
@@ -132,14 +126,6 @@ if (tx_rnbase_util_Extensions::isLoaded('a21glossary')) {
 
 // Configure core page indexer service
 $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['indexer']['config']['core']['page']['indexedFields'] = ['subtitle', 'url', 'keywords', 'description', 'author', /*'author_email',*/ 'nav_title', 'alias'];
-
-// Configure templavoila page indexer service. Simply re-use core page indexer service options
-$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['indexer']['config']['templavoila']['page'] =
-    &$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['indexer']['config']['core']['page'];
-
-// Configure templavoila tt_content indexer service. Simply re-use core tt_content indexer service options
-$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['indexer']['config']['templavoila']['tt_content'] =
-    &$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['indexer']['config']['core']['tt_content'];
 
 // Configure tt_news indexer service
 $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['indexer']['config']['tt_news']['news']['indexedFields'] = ['imagealttext', 'imagetitletext', 'short', 'bodytext', 'keywords'];

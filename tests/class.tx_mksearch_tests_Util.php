@@ -308,10 +308,10 @@ class tx_mksearch_tests_Util
     }
 
     /**
-     * wir wollen zwar templavoila deaktivieren, wir wollen aber nicht
+     * wir wollen zwar gridelements deaktivieren, wir wollen aber nicht
      * das die PackageStates Datei angepasst wird, was TYPO3 aber zwangsläufig
      * macht. Das hat zur Folge das requests an die Seite während der Tests
-     * eine Exception verursachen da templavoila nicht geladen ist.
+     * eine Exception verursachen da gridelements nicht geladen ist.
      *
      * Also kopieren wir die PackageStates Datei damit wir die tatsächliche Datei
      * nach dem deaktiveren wieder einfügen können
@@ -335,7 +335,7 @@ class tx_mksearch_tests_Util
         $method = new ReflectionMethod('TYPO3\\CMS\\Core\\Package\\PackageManager', 'getDependencyArrayForPackage');
         $method->setAccessible(true);
 
-        // falls eine extension von templavoila abhängt, müssen wir diese auch deinstallieren
+        // falls eine extension von gridelements abhängt, müssen wir diese auch deinstallieren
         foreach ($packageManager->getActivePackages() as $package) {
             $packageKey = $package->getPackageMetaData()->getPackageKey();
             $dependencies = $method->invokeArgs($packageManager, [$packageKey]);

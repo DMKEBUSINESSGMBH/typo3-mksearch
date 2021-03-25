@@ -1,6 +1,12 @@
 Changelog
 =========
 
+10.0.0
+-----
+
+-   dropped support for TYPO3 8.7, realurl and templavoila. 
+-   added support for TYPO3 10.4
+
 9.5.9
 -----
 

@@ -30,7 +30,7 @@
 
 /**
  * Indexer service for core.tt_content called by the "mksearch" extension.
- * takes care of normal tt_content without templavoila support.
+ * takes care of normal tt_content without gridelements support.
  *
  * @author Hannes Bochmann <dev@dmk-ebusiness.de>
  */
@@ -223,7 +223,7 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
     /**
      * Get the content by CType.
      *
-     * This can be overridden by special types like templavoila or gridelements.
+     * This can be overridden by special types like gridelements.
      *
      * @param array $rawData
      * @param array $options
@@ -271,13 +271,6 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
                             );
                         }
                     }
-                }
-                break;
-            case 'templavoila_pi1':
-                if (method_exists($this, 'getTemplavoilaElementContent')) {
-                    $tempContent = $this->getTemplavoilaElementContent();
-                } else {
-                    $tempContent = $rawData[$field];
                 }
                 break;
             default:

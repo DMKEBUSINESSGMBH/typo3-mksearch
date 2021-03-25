@@ -14,7 +14,7 @@ Besonderheiten bei tt\_content Elementen
 
 Es kann für tt\_content eine allgemeine Konfiguration angegeben werden, in der festgelegt wird welche tt\_content Elemente indiziert werden. (abhängig von der Seite, dem Ctype etc.) Allerdings kann in jedem tt\_content Element nochmal explizit angegeben werden, ob es indizierbar ist oder ob für diese Entscheidung die Indexer Konfiguration verwendet wird. Die default Einstellung ist die Indexer Konfiguration zu verwenden. Diese Auswahl wird im Tab “Erweitert” von tt\_content Elementen getroffen.
 
-Dies wird z.B. verwendet um nur gewisse Templavoila-Elemente (FCEs) zu indizieren. In diesem Fall würde man in der Indexer Konfiguration den Ctype templavoila\_pi1 ignorieren aber in den gewünschten FCEs wählen diese zu indizieren.
+Dies wird z.B. verwendet um nur gewisse Container-Elemente zu indizieren. In diesem Fall würde man in der Indexer Konfiguration den Ctype des Container-Elementes ignorieren aber in den gewünschten Elementen wählen diese zu indizieren.
 
 Manchmal kann es sein dass ein Inhaltselement eine versteckte Überschrift hat. Diese wird von mksearch nicht indiziert. Die Überschrift soll zwar auf der eigentlichen Seite nicht angezeigt werden, aber in den Suchergebnissen. Hierfür gibt es einen weiteren Überschriftentyp (Verborgen (aber via mksearch indiziert)). Wenn dieser gewählt wird, dann erscheint keine Überschrift auf der eigentlichen Seite, aber mksearch indiziert die Überschrift womit diese in den Suchergebnissen ausgegeben werden könnte.
 
