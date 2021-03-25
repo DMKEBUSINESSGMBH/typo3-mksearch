@@ -47,12 +47,6 @@ if (TYPO3_MODE == 'BE') {
         '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:mksearch/Configuration/TSconfig/ContentElementWizard.txt">'
     );
 
-    // icon für sysfolder registrieren
-    $GLOBALS['TCA']['pages']['columns']['module']['config']['items'][] = [
-        'MK Search',
-        'mksearch',
-        'apps-pagetree-folder-contains-mksearch',
-    ];
     Tx_Rnbase_Backend_Utility_Icons::getIconRegistry()->registerIcon(
         'apps-pagetree-folder-contains-mksearch',
         'TYPO3\\CMS\Core\\Imaging\\IconProvider\\BitmapIconProvider',
