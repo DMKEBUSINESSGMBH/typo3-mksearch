@@ -50,8 +50,7 @@ class tx_mksearch_scheduler_IndexTaskAddFieldProvider extends Tx_Rnbase_Schedule
      */
     protected function _getAdditionalFields(array &$taskInfo, $task, $schedulerModule)
     {
-        $action = \tx_rnbase_util_TYPO3::isTYPO90OrHigher() ?
-            $schedulerModule->getCurrentAction() : $schedulerModule->CMD;
+        $action = $schedulerModule->getCurrentAction();
         // Initialize extra field value
         if (!array_key_exists(FIELD_ITEMS, $taskInfo) || empty($taskInfo[FIELD_ITEMS])) {
             if ('add' == $action) {

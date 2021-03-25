@@ -23,84 +23,42 @@ namespace DMK\Mksearch\ViewHelpers;
  * @license         http://www.gnu.org/licenses/lgpl.html
  *                  GNU Lesser General Public License, version 3 or later
  */
-if (\tx_rnbase_util_TYPO3::isTYPO90OrHigher()) {
-    class CObjectViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\CObjectViewHelper
+class CObjectViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\CObjectViewHelper
+{
+    /**
+     * @param \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface $configurationManager
+     */
+    public function injectConfigurationManager(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface $configurationManager)
     {
-        /**
-         * @param \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface $configurationManager
-         */
-        public function injectConfigurationManager(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface $configurationManager)
-        {
-            parent::injectConfigurationManager($configurationManager);
+        parent::injectConfigurationManager($configurationManager);
 
-            if (
-                \tx_mksearch_service_internal_Index::isIndexingInProgress()
-                && !empty($GLOBALS['TSFE'])
-                && is_object($GLOBALS['TSFE'])
-                && is_object($GLOBALS['TSFE']->tmpl)
-            ) {
-                $this->typoScriptSetup = $GLOBALS['TSFE']->tmpl->setup;
-            }
-        }
-
-        /**
-         * nähere Infos in Configuration/XClasses.php.
-         */
-        protected static function simulateFrontendEnvironment()
-        {
-            if (!\tx_mksearch_service_internal_Index::isIndexingInProgress()) {
-                parent::simulateFrontendEnvironment();
-            }
-        }
-
-        /**
-         * @see simulateFrontendEnvironment()
-         */
-        protected static function resetFrontendEnvironment()
-        {
-            if (!\tx_mksearch_service_internal_Index::isIndexingInProgress()) {
-                parent::resetFrontendEnvironment();
-            }
+        if (
+            \tx_mksearch_service_internal_Index::isIndexingInProgress()
+            && !empty($GLOBALS['TSFE'])
+            && is_object($GLOBALS['TSFE'])
+            && is_object($GLOBALS['TSFE']->tmpl)
+        ) {
+            $this->typoScriptSetup = $GLOBALS['TSFE']->tmpl->setup;
         }
     }
-} else {
-    class CObjectViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\CObjectViewHelper
+
+    /**
+     * nähere Infos in Configuration/XClasses.php.
+     */
+    protected static function simulateFrontendEnvironment()
     {
-        /**
-         * @param \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface $configurationManager
-         */
-        public function injectConfigurationManager(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface $configurationManager)
-        {
-            parent::injectConfigurationManager($configurationManager);
-
-            if (
-                \tx_mksearch_service_internal_Index::isIndexingInProgress()
-                && !empty($GLOBALS['TSFE'])
-                && is_object($GLOBALS['TSFE'])
-                && is_object($GLOBALS['TSFE']->tmpl)
-            ) {
-                $this->typoScriptSetup = $GLOBALS['TSFE']->tmpl->setup;
-            }
+        if (!\tx_mksearch_service_internal_Index::isIndexingInProgress()) {
+            parent::simulateFrontendEnvironment();
         }
+    }
 
-        /**
-         * nähere Infos in Configuration/XClasses.php.
-         */
-        protected function simulateFrontendEnvironment()
-        {
-            if (!\tx_mksearch_service_internal_Index::isIndexingInProgress()) {
-                parent::simulateFrontendEnvironment();
-            }
-        }
-
-        /**
-         * @see simulateFrontendEnvironment()
-         */
-        protected function resetFrontendEnvironment()
-        {
-            if (!\tx_mksearch_service_internal_Index::isIndexingInProgress()) {
-                parent::resetFrontendEnvironment();
-            }
+    /**
+     * @see simulateFrontendEnvironment()
+     */
+    protected static function resetFrontendEnvironment()
+    {
+        if (!\tx_mksearch_service_internal_Index::isIndexingInProgress()) {
+            parent::resetFrontendEnvironment();
         }
     }
 }
