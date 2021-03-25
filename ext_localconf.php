@@ -16,9 +16,9 @@ require_once tx_rnbase_util_Extensions::extPath('mksearch').'indexer/ext_localco
 // Register hooks
 // Hooks for converting Zend_Lucene index data
 //$GLOBALS ['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['engine_ZendLucene_indexNew_beforeAddingCoreDataToDocument'][] =
-//  'EXT:' . $_EXTKEY . '/hooks/class.tx_mksearch_hooks_EngineZendLucene.php:tx_mksearch_hooks_EngineZendLucene->convertFields';
+//  'EXT:' . 'mksearch' . '/hooks/class.tx_mksearch_hooks_EngineZendLucene.php:tx_mksearch_hooks_EngineZendLucene->convertFields';
 //$GLOBALS ['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['engine_ZendLucene_indexNew_beforeAddingAdditionalDataToDocument'][] =
-//  'EXT:' . $_EXTKEY . '/hooks/class.tx_mksearch_hooks_EngineZendLucene.php:tx_mksearch_hooks_EngineZendLucene->convertFields';
+//  'EXT:' . 'mksearch' . '/hooks/class.tx_mksearch_hooks_EngineZendLucene.php:tx_mksearch_hooks_EngineZendLucene->convertFields';
 
 // rnbase insert and update hooks (requires rn_base 0.14.6)
 if (isset($_EXTCONF['enableRnBaseUtilDbHook']) && (int) $_EXTCONF['enableRnBaseUtilDbHook'] > 0) {
@@ -50,18 +50,18 @@ tx_rnbase_util_Extensions::addPageTSConfig('<INCLUDE_TYPOSCRIPT: source="FILE:EX
 
 // Register information for the test and sleep tasks
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['tx_mksearch_scheduler_IndexTask'] = [
-    'extension' => $_EXTKEY,
-    'title' => 'LLL:EXT:'.$_EXTKEY.'/locallang_db.xml:scheduler_indexTask_name',
-    'description' => 'LLL:EXT:'.$_EXTKEY.'/locallang_db.xml:scheduler_indexTask_description',
+    'extension' => 'mksearch',
+    'title' => 'LLL:EXT:'.'mksearch'.'/locallang_db.xml:scheduler_indexTask_name',
+    'description' => 'LLL:EXT:'.'mksearch'.'/locallang_db.xml:scheduler_indexTask_description',
     'additionalFields' => 'tx_mksearch_scheduler_IndexTaskAddFieldProvider',
 ];
 
 if (tx_rnbase_util_Extensions::isLoaded('mksanitizedparameters')) {
-    require_once tx_rnbase_util_Extensions::extPath($_EXTKEY, 'ext_mksanitizedparameter_rules.php');
+    require_once tx_rnbase_util_Extensions::extPath('mksearch', 'ext_mksanitizedparameter_rules.php');
 }
 
-require_once tx_rnbase_util_Extensions::extPath($_EXTKEY, 'Configuration/SignalSlotDispatcher.php');
-require_once tx_rnbase_util_Extensions::extPath($_EXTKEY, 'Configuration/XClasses.php');
+require_once tx_rnbase_util_Extensions::extPath('mksearch', 'Configuration/SignalSlotDispatcher.php');
+require_once tx_rnbase_util_Extensions::extPath('mksearch', 'Configuration/XClasses.php');
 
 Tx_Rnbase_Utility_Cache::addExcludedParametersForCacheHash([
     'mksearch[pb-search-pointer]',
@@ -86,4 +86,4 @@ if (tx_rnbase_util_Extensions::isLoaded('realurl')) {
         \DMK\Mksearch\Hooks\RealUrlConfigurationReader::class.'->addMksearchToBannedUrlsRegExp';
 }
 
-require_once tx_rnbase_util_Extensions::extPath($_EXTKEY, 'Classes/Constants.php');
+require_once tx_rnbase_util_Extensions::extPath('mksearch', 'Classes/Constants.php');

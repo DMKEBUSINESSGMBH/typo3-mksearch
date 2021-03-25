@@ -153,17 +153,16 @@ class tx_mksearch_tests_Util
         global $T3_SERVICES, $T3_VAR, $TYPO3_CONF_VARS;
         global $TBE_MODULES, $TBE_MODULES_EXT, $TCA;
         global $PAGES_TYPES, $TBE_STYLES, $FILEICONS;
-        global $_EXTKEY;
         // Load each ext_tables.php file of loaded extensions
-        foreach ($extensions as $_EXTKEY) {
-            if (empty($GLOBALS['TYPO3_LOADED_EXT'][$_EXTKEY])) {
+        foreach ($extensions as 'mksearch') {
+            if (empty($GLOBALS['TYPO3_LOADED_EXT']['mksearch'])) {
                 continue;
             }
-            $extensionInformation = $GLOBALS['TYPO3_LOADED_EXT'][$_EXTKEY];
+            $extensionInformation = $GLOBALS['TYPO3_LOADED_EXT']['mksearch'];
             if (is_array($extensionInformation) && $extensionInformation['ext_tables.php']) {
-                // $_EXTKEY and $_EXTCONF are available in ext_tables.php
+                // 'mksearch' and $_EXTCONF are available in ext_tables.php
                 // and are explicitly set in cached file as well
-                $_EXTCONF = $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$_EXTKEY];
+                $_EXTCONF = $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['mksearch'];
                 require $extensionInformation['ext_tables.php'];
                 // loads the dynamicConfigFile
                 // @TODO: implement, if needet!

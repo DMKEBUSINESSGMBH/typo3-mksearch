@@ -4,7 +4,7 @@ if (!defined('TYPO3_MODE')) {
     exit('Access denied.');
 }
 
-$_EXT_PATH = tx_rnbase_util_Extensions::extPath($_EXTKEY);
+$_EXT_PATH = tx_rnbase_util_Extensions::extPath('mksearch');
 
 // Show tt_content-field pi_flexform
 $TCA['tt_content']['types']['list']['subtypes_addlist']['tx_mksearch'] = 'pi_flexform';
@@ -16,18 +16,18 @@ $TCA['tt_content']['types']['list']['subtypes_excludelist']['tx_mksearch'] = 'se
 //so this type is just like the 100 type in the FE but this type is indexed instead
 //of the standard type (100)
 $aTempConfig = $TCA['tt_content']['columns']['header_layout']['config']['items'];
-$aTempConfig[] = ['LLL:EXT:'.$_EXTKEY.'/locallang_db.xml:plugin.mksearch.tt_content.header_layout', '101'];
+$aTempConfig[] = ['LLL:EXT:'.'mksearch'.'/locallang_db.xml:plugin.mksearch.tt_content.header_layout', '101'];
 $TCA['tt_content']['columns']['header_layout']['config']['items'] = $aTempConfig;
 
 // Add flexform and plugin
-tx_rnbase_util_Extensions::addPiFlexFormValue('tx_mksearch', 'FILE:EXT:'.$_EXTKEY.'/flexform_main.xml');
+tx_rnbase_util_Extensions::addPiFlexFormValue('tx_mksearch', 'FILE:EXT:'.'mksearch'.'/flexform_main.xml');
 tx_rnbase_util_Extensions::addPlugin(
-    ['LLL:EXT:'.$_EXTKEY.'/locallang_db.xml:plugin.mksearch.label', 'tx_mksearch'],
+    ['LLL:EXT:'.'mksearch'.'/locallang_db.xml:plugin.mksearch.label', 'tx_mksearch'],
     'list_type',
     'mksearch'
 );
 
-tx_rnbase_util_Extensions::addStaticFile($_EXTKEY, 'static/static_extension_template/', 'MK Search');
+tx_rnbase_util_Extensions::addStaticFile('mksearch', 'static/static_extension_template/', 'MK Search');
 
 // initalize 'context sensitive help' (csh)
 require_once $_EXT_PATH.'res/help/ext_csh.php';

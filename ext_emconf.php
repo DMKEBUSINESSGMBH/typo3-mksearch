@@ -9,7 +9,7 @@
  * Only the data in the array - everything else is removed by next
  * writing. "version" and "dependencies" must not be touched!
  ***************************************************************/
-$EM_CONF[$_EXTKEY] = [
+$EM_CONF['mksearch'] = [
     'title' => 'MK Search',
     'description' => 'Generic highly adjustable and extendable search engine framework, using Zend Lucene, Apache Solr or ElasticSearch. But support for other search engines can be provided easily.',
     'category' => 'plugin',
