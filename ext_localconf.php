@@ -80,10 +80,4 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry']['mksearch_index
 // in indexers works correct
 $GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'] .= ',no_search';
 
-// realurl
-if (tx_rnbase_util_Extensions::isLoaded('realurl')) {
-    $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['realurl']['ConfigurationReader_postProc']['mksearch'] =
-        \DMK\Mksearch\Hooks\RealUrlConfigurationReader::class.'->addMksearchToBannedUrlsRegExp';
-}
-
 require_once tx_rnbase_util_Extensions::extPath('mksearch', 'Classes/Constants.php');

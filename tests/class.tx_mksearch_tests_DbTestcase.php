@@ -80,9 +80,6 @@ abstract class tx_mksearch_tests_DbTestcase extends tx_mksearch_tests_Testcase
 
         // templavoila und realurl brauchen wir da es im BE sonst Warnungen hagelt
         // und man die Testergebnisse nicht sieht
-        if (tx_rnbase_util_Extensions::isLoaded('realurl')) {
-            $this->importExtensions[] = 'realurl';
-        }
         if (tx_rnbase_util_Extensions::isLoaded('templavoila')) {
             $this->importExtensions[] = 'templavoila';
         }
