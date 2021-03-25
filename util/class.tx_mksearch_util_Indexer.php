@@ -715,7 +715,7 @@ class tx_mksearch_util_Indexer
         $tsfe->no_cache = true;
 
         // load TypoScript templates
-        $context =  \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Context\Context::class);
+        $context = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Context\Context::class);
         if ($pid) {
             $rootlineByPid = self::getInstance()->getRootlineByPid($pid);
 
