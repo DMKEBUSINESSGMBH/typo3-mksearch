@@ -108,7 +108,7 @@ class tx_mksearch_util_Tika
      */
     private function setLocaleTypeForNonWindowsSystems()
     {
-        if (TYPO3_OS != 'WIN' && $this->tikaLocaleType) {
+        if (!\TYPO3\CMS\Core\Core\Environment::isWindows() && $this->tikaLocaleType) {
             setlocale(LC_CTYPE, $this->tikaLocaleType);
         }
     }
@@ -241,7 +241,7 @@ class tx_mksearch_util_Tika
      */
     private function getTikaCommandWithLocaleTypePrefixForNonWindowsSystems($tikaCommand)
     {
-        if (TYPO3_OS != 'WIN' && $this->tikaLocaleType) {
+        if (!\TYPO3\CMS\Core\Core\Environment::isWindows() && $this->tikaLocaleType) {
             $tikaCommand = 'LANG='.$this->tikaLocaleType.' '.$tikaCommand;
         }
 
@@ -280,7 +280,7 @@ class tx_mksearch_util_Tika
      */
     private static function fixFilenameWithPossibleUmlautsForWindows($fileName)
     {
-        if (TYPO3_OS == 'WIN') {
+        if (\TYPO3\CMS\Core\Core\Environment::isWindows()) {
             $fileName = utf8_decode($fileName);
         }
 

@@ -187,6 +187,7 @@ class tx_mksearch_util_Indexer
         }
         // stdWrap ausführen
         tx_rnbase_util_TYPO3::getTSFE(); // TSFE wird für cObj benötigt
+        /* @var $cObj TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer */
         $cObj = tx_rnbase::makeInstance(tx_rnbase_util_Typo3Classes::getContentObjectRendererClass());
         $cObj->data = $rawData;
 
@@ -714,15 +715,31 @@ class tx_mksearch_util_Indexer
         $tsfe->no_cache = true;
 
         // load TypoScript templates
+        $context =  \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Context\Context::class);
         if ($pid) {
             $rootlineByPid = self::getInstance()->getRootlineByPid($pid);
 
             $tsfe->rootLine = $rootlineByPid;
-            $tsfe->forceTemplateParsing = true;
+            $context->setAspect(
+                'typoscript',
+                \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                    \TYPO3\CMS\Core\Context\TypoScriptAspect::class,
+                    true
+                )
+            );
             $GLOBALS['TSFE']->getConfigArray();
         }
 
         // handle language
-        $tsfe->sys_language_content = intval($sysLanguage);
+        $context->setAspect(
+            'language',
+            \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                \TYPO3\CMS\Core\Context\LanguageAspect::class,
+                $context->getAspect('language')->getId(),
+                intval($sysLanguage),
+                $context->getAspect('language')->getOverlayType(),
+                $context->getAspect('language')->getFallbackChain()
+            )
+        );
     }
 }

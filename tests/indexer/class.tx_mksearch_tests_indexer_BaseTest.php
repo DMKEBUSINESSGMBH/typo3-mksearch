@@ -1205,7 +1205,7 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
             self::assertFalse($frontendLoaded, is_object($GLOBALS['TSFE']));
         } else {
             self::assertTrue(is_object($GLOBALS['TSFE']));
-            self::assertEquals($languageUid, $GLOBALS['TSFE']->sys_language_content);
+            self::assertEquals($languageUid, \Sys25\RnBase\Utility\FrontendControllerUtility::getLanguageContentId());
         }
     }
 
