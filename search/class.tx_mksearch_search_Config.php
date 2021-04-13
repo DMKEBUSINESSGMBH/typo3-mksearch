@@ -64,6 +64,14 @@ class tx_mksearch_search_Config extends tx_rnbase_util_SearchBase
         return 'CFG';
     }
 
+    /**
+     * @return bool
+     */
+    protected function useAlias()
+    {
+        return false;
+    }
+
     public function getWrapperClass()
     {
         return 'tx_mksearch_model_internal_Config';
