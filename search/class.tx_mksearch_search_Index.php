@@ -62,6 +62,14 @@ class tx_mksearch_search_Index extends tx_rnbase_util_SearchBase
         return 'INDX';
     }
 
+    /**
+     * @return bool
+     */
+    protected function useAlias()
+    {
+        return false;
+    }
+
     public function getWrapperClass()
     {
         return 'tx_mksearch_model_internal_Index';

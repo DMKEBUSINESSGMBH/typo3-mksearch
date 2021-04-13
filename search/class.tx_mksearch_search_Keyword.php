@@ -42,6 +42,14 @@ class tx_mksearch_search_Keyword extends tx_rnbase_util_SearchBase
         return 'KEYWORD';
     }
 
+    /**
+     * @return bool
+     */
+    protected function useAlias()
+    {
+        return false;
+    }
+
     public function getWrapperClass()
     {
         return 'tx_mksearch_model_internal_Keyword';
