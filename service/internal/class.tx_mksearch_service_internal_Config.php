@@ -45,7 +45,7 @@ class tx_mksearch_service_internal_Config extends tx_mksearch_service_internal_B
     {
         $fields['CMPCFGMM.uid_local'][OP_EQ_INT] = $composite->getUid();
 
-        return $this->search($fields, $options);
+        return $this->search($fields, []);
     }
 
     /**
