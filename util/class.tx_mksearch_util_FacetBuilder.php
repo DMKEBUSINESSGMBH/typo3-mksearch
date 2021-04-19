@@ -322,7 +322,7 @@ class tx_mksearch_util_FacetBuilder
         if ($facet && $facet->hasSorting()) {
             $s = usort(
                 $facets,
-                [self, 'cbSortFacets']
+                [__CLASS__, 'cbSortFacets']
             );
         }
 
