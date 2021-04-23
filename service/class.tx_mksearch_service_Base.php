@@ -52,7 +52,7 @@ abstract class tx_mksearch_service_Base extends Tx_Rnbase_Service_Base
      *
      * @return array[tx_rnbase_model_base]
      */
-    public function search($fields, $options)
+    public function search(array $fields, array $options)
     {
         $searcher = $this->getSearcher();
 

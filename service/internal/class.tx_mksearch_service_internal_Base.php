@@ -50,7 +50,7 @@ class tx_mksearch_service_internal_Base extends Tx_Rnbase_Service_Base
      *
      * @return array[tx_mksearch_model_internal_Index]
      */
-    public function search($fields, $options)
+    public function search(array $fields, array $options)
     {
         return $this->getSearcher()->search($fields, $options);
     }
