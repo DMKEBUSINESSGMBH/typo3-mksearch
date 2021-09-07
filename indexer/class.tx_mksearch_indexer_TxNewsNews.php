@@ -113,7 +113,7 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
                 'NEWS',
             ],
             [
-                'where' => 'CATMM.uid_local = '.(int) $catRecord['uid'],
+                'where' => 'CATMM.tablenames = "tx_news_domain_model_news" AND CATMM.uid_local = '.(int) $catRecord['uid'],
                 'orderby' => 'sorting_foreign DESC',
             ]
         );
