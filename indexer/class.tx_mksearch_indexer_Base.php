@@ -108,13 +108,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 
         // get a model from the source array
         $this->modelToIndex = $this->createModel($rawData, $tableName, $options);
-
-        // the old way
-        $record = $this->modelToIndex->record;
-        // the new property way
-        if ($this->modelToIndex instanceof Tx_Rnbase_Domain_Model_Data) {
-            $record = $this->modelToIndex->getProperty();
-        }
+        $record = $this->getRecordFromModel($this->modelToIndex);
 
         // Is the model valid and data indexable?
         if (!$record
@@ -329,7 +323,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 
         // are our parent pages valid?
         // as soon as one of the parent pages is hidden we return true.
-        $rootline = $this->getIndexerUtility()->getRootlineByPid($model->record['pid']);
+        $rootline = $this->getIndexerUtility()->getRootlineByPid($this->getRecordFromModel($model)['pid']);
 
         // @todo sollten nicht auch Shortcuts etc. invalide sein?
         $sysPage = tx_rnbase_util_TYPO3::getSysPage();
@@ -344,6 +338,37 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
         // The rootline can be empty when the rootline is broken. This might happen if a page in the rootline
         // is deleted.
         return empty($rootline);
+    }
+
+    /**
+     * @param \Tx_Rnbase_Domain_Model_DataInterface|tx_rnbase_IModel $model
+     *
+     * @return array
+     */
+    protected function getRecordFromModel($model): array
+    {
+        // the old way
+        $record = $model->record;
+        // the new property way
+        if ($model instanceof Tx_Rnbase_Domain_Model_Data) {
+            $record = $this->modelToIndex->getProperty();
+        }
+
+        return $record;
+    }
+
+    /**
+     * @param Tx_Rnbase_Domain_Model_DataInterface|tx_rnbase_IModel $model
+     * @param string $property
+     * @param mixed $value
+     */
+    protected function setRecordValue($model, string $property, $value): void
+    {
+        if ($model instanceof Tx_Rnbase_Domain_Model_DataInterface) {
+            $model->setProperty($property, $value);
+        } else {
+            $model->record[$property] = $value;
+        }
     }
 
     /**
@@ -422,7 +447,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
         $options = []
     ) {
         if ($this->shouldIndexSiteRootPage($options)) {
-            $pageId = ('pages' == $tableName ? $model->getUid() : $model->record['pid']);
+            $pageId = ('pages' == $tableName ? $model->getUid() : $this->getRecordFromModel($model)['pid']);
             // wir rufen die Methode mit call_user_func_array auf, da sie
             // statisch ist, womit wir diese nicht mocken könnten
             $siteRootPage = $this->getIndexerUtility()->getSiteRootPage($pageId);
@@ -523,13 +548,20 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
             case 'starttime':
                 // starttime is treated the same as endtime
             case 'endtime':
-                $model->record[$enableColumnName] =
-                    $this->convertTimestampToDateTime($model->record[$enableColumnName]);
+                $this->setRecordValue(
+                    $model,
+                    $enableColumnName,
+                    $this->convertTimestampToDateTime($this->getRecordFromModel($model)[$enableColumnName])
+                );
                 break;
             case 'fe_group':
-                $model->record[$enableColumnName] = $this->getEffectiveFeGroups(
-                    $model->record[$enableColumnName],
-                    $model->record['pid']
+                $this->setRecordValue(
+                    $model,
+                    $enableColumnName,
+                    $this->getEffectiveFeGroups(
+                        $this->getRecordFromModel($model)[$enableColumnName],
+                        $this->getRecordFromModel($model)['pid']
+                    )
                 );
                 break;
             default:
