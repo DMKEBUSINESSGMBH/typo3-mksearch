@@ -728,6 +728,7 @@ class tx_mksearch_util_Indexer
                 )
             );
             $GLOBALS['TSFE']->getConfigArray();
+            $tsfe->id = $pid;
         }
 
         // handle language
