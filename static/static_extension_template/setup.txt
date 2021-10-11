@@ -1219,7 +1219,6 @@ mksearchAjaxPage {
     config.xhtml_cleaning = 0
     config.admPanel = 0
     config.sendNoCacheHeaders = 1
-    config.no_cache = 1
 
     10 =< lib.mksearchAjaxPage
 }
