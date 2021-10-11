@@ -4,9 +4,6 @@ if (!defined('TYPO3_MODE')) {
     exit('Access denied.');
 }
 
-// prepare extension config
-$_EXTCONF = empty($_EXTCONF) ? [] : (is_array($_EXTCONF) ? $_EXTCONF : unserialize($_EXTCONF));
-
 // Include service configuration
 require_once tx_rnbase_util_Extensions::extPath('mksearch').'service/ext_localconf.php';
 
@@ -21,7 +18,9 @@ require_once tx_rnbase_util_Extensions::extPath('mksearch').'indexer/ext_localco
 //  'EXT:' . 'mksearch' . '/hooks/class.tx_mksearch_hooks_EngineZendLucene.php:tx_mksearch_hooks_EngineZendLucene->convertFields';
 
 // rnbase insert and update hooks (requires rn_base 0.14.6)
-if (isset($_EXTCONF['enableRnBaseUtilDbHook']) && (int) $_EXTCONF['enableRnBaseUtilDbHook'] > 0) {
+if (isset($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['mksearch']['enableRnBaseUtilDbHook'])
+    && (int) $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['mksearch']['enableRnBaseUtilDbHook'] > 0
+) {
     $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['util_db_do_insert_post'][] =
         'tx_mksearch_hooks_IndexerAutoUpdate->rnBaseDoInsertPost';
     $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['util_db_do_update_post'][] =
