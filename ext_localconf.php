@@ -66,6 +66,12 @@ Tx_Rnbase_Utility_Cache::addExcludedParametersForCacheHash([
     'mksearch[pb-search-pointer]',
     'mksearch[submit]',
     'mksearch[term]',
+    'mksearch[sort]',
+    'mksearch[sortorder]',
+    'mksearch[fq]',
+    'mksearch[combination]',
+    'mksearch[NK_addfq]',
+    'mksearch[NK_remfq]',
 ]);
 
 // eigenes Feld für Vorbelegung je nach Indexer
