@@ -845,6 +845,11 @@ CONFIG;
             return null;
         }
 
+        // That's the only way to let extbase ignore the workspace restrictions. Otherwise workspace versions could
+        // never be indexed.
+        $versioningConfiguration = $GLOBALS['TCA'][$tableName]['ctrl']['versioningWS'];
+        $GLOBALS['TCA'][$tableName]['ctrl']['versioningWS'] = false;
+
         /* @var $objectManager \TYPO3\CMS\Extbase\Object\ObjectManager */
         $objectManager = tx_rnbase::makeInstance(ObjectManager::class);
         $repository = $objectManager->get($repositoryClass);
@@ -875,6 +880,7 @@ CONFIG;
 
         // clear the current persistent session
         $persistenceSession->destroy();
+        $GLOBALS['TCA'][$tableName]['ctrl']['versioningWS'] = $versioningConfiguration;
 
         return $model;
     }
