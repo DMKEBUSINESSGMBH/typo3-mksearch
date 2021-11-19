@@ -2,6 +2,7 @@
 
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\Session;
+use Sys25\RnBase\Domain\Model\RecordInterface;
 
 /*
  * @package tx_mksearch
@@ -44,7 +45,7 @@ use TYPO3\CMS\Extbase\Persistence\Generic\Session;
 abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 {
     /**
-     * @var tx_rnbase_IModel
+     * @var RecordInterface
      */
     protected $modelToIndex;
 
@@ -243,7 +244,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
     /**
      * Indexes all fields of the model according to the given mapping.
      *
-     * @param tx_rnbase_IModel                      $model
+     * @param RecordInterface                      $model
      * @param array                                 $recordIndexMapping
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
      * @param string                                $prefix
@@ -251,7 +252,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
      * @param bool                                  $dontIndexHidden
      */
     protected function indexModelByMapping(
-        tx_rnbase_IModel $model,
+        RecordInterface $model,
         array $recordIndexMapping,
         tx_mksearch_interface_IndexerDocument $indexDoc,
         $prefix = '',
@@ -273,7 +274,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
      * Collects the values of all models inside the given array
      * and adds them as multivalue (array).
      *
-     * @param array                                 $models             array of tx_rnbase_IModel
+     * @param array                                 $models             array of RecordInterface
      * @param array                                 $recordIndexMapping
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
      * @param string                                $prefix
@@ -309,7 +310,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
      * @return bool
      */
     protected function hasDocToBeDeleted(
-        tx_rnbase_IModel $model,
+        RecordInterface $model,
         tx_mksearch_interface_IndexerDocument $indexDoc,
         $options = []
     ) {
@@ -341,7 +342,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
     }
 
     /**
-     * @param \Tx_Rnbase_Domain_Model_DataInterface|tx_rnbase_IModel $model
+     * @param \Tx_Rnbase_Domain_Model_DataInterface|RecordInterface $model
      *
      * @return array
      */
@@ -358,7 +359,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
     }
 
     /**
-     * @param Tx_Rnbase_Domain_Model_DataInterface|tx_rnbase_IModel $model
+     * @param Tx_Rnbase_Domain_Model_DataInterface|RecordInterface $model
      * @param string $property
      * @param mixed $value
      */
@@ -390,7 +391,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
     /**
      * Indiziert alle eneblecolumns.
      *
-     * @param tx_rnbase_IModel                      $model
+     * @param RecordInterface                      $model
      * @param string                                $tableName
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
      * @param string                                $indexDocFieldsPrefix
@@ -398,7 +399,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
      * @return tx_mksearch_interface_IndexerDocument
      */
     protected function indexEnableColumns(
-        tx_rnbase_IModel $model,
+        RecordInterface $model,
         $tableName,
         tx_mksearch_interface_IndexerDocument $indexDoc,
         $indexDocFieldsPrefix = ''
@@ -433,7 +434,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
     /**
      * Indexes the Rootpage of the current models page.
      *
-     * @param tx_rnbase_IModel                      $model
+     * @param RecordInterface                      $model
      * @param string                                $tableName
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
      * @param array                                 $options
@@ -441,7 +442,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
      * @return tx_mksearch_interface_IndexerDocument
      */
     protected function indexSiteRootPage(
-        tx_rnbase_IModel $model,
+        RecordInterface $model,
         $tableName,
         tx_mksearch_interface_IndexerDocument $indexDoc,
         $options = []
@@ -475,7 +476,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
     /**
      * Indexes the language of the current model.
      *
-     * @param tx_rnbase_IModel                      $model
+     * @param RecordInterface                      $model
      * @param string                                $tableName
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
      * @param array                                 $options
@@ -483,7 +484,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
      * @return tx_mksearch_interface_IndexerDocument
      */
     protected function indexLanguageFields(
-        tx_rnbase_IModel $model,
+        RecordInterface $model,
         $tableName,
         tx_mksearch_interface_IndexerDocument $indexDoc,
         $options = []
@@ -533,11 +534,11 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
     /**
      * phpdoc.
      *
-     * @param tx_rnbase_IModel $model
+     * @param RecordInterface $model
      * @param string           $typo3InternalName
      * @param string           $enableColumnName
      *
-     * @return tx_rnbase_IModel
+     * @return RecordInterface
      */
     protected function convertEnableColumnValue(
         $model,
@@ -680,10 +681,10 @@ CONFIG;
     /**
      * Adds a element to the queue.
      *
-     * @param tx_rnbase_IModel $model
+     * @param RecordInterface $model
      * @param string           $tableName
      */
-    protected function addModelToIndex(tx_rnbase_IModel $model, $tableName)
+    protected function addModelToIndex(RecordInterface $model, $tableName)
     {
         tx_mksearch_util_Indexer::getInstance()
             ->addModelToIndex($model, $tableName);
@@ -713,7 +714,7 @@ CONFIG;
     /**
      * Checks if a include or exclude option was set for a given option key.
      *
-     * @param array  $models    array of tx_rnbase_IModel
+     * @param array  $models    array of RecordInterface
      * @param array  $options
      * @param int    $mode      0 stands for "include" and 1 "exclude"
      * @param string $optionKey
@@ -811,7 +812,7 @@ CONFIG;
      * @param string $tableName
      * @param array  $options
      *
-     * @return tx_rnbase_IModel
+     * @return RecordInterface
      */
     protected function createModel(array $rawData, $tableName = null, $options = [])
     {
@@ -882,7 +883,7 @@ CONFIG;
     /**
      * Do the actual indexing for the given model.
      *
-     * @param tx_rnbase_IModel                      $model
+     * @param RecordInterface                      $model
      * @param string                                $tableName
      * @param array                                 $rawData
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
@@ -891,7 +892,7 @@ CONFIG;
      * @return tx_mksearch_interface_IndexerDocument|null
      */
     abstract protected function indexData(
-        tx_rnbase_IModel $model,
+        RecordInterface $model,
         $tableName,
         $rawData,
         tx_mksearch_interface_IndexerDocument $indexDoc,
@@ -901,7 +902,7 @@ CONFIG;
     /**
      * Liefert das Model welches aktuell indiziert wird.
      *
-     * @return tx_rnbase_IModel
+     * @return RecordInterface
      */
     protected function getModelToIndex()
     {

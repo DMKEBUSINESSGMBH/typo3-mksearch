@@ -1,4 +1,6 @@
 <?php
+use Sys25\RnBase\Domain\Model\RecordInterface;
+
 /**
  * @author Hannes Bochmann
  *
@@ -136,7 +138,7 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base
      * @see tx_mksearch_interface_Indexer::prepareSearchData()
      */
     protected function indexData(
-        tx_rnbase_IModel $model,
+        RecordInterface $model,
         $tableName,
         $rawData,
         tx_mksearch_interface_IndexerDocument $indexDoc,

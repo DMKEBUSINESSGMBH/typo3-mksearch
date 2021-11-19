@@ -1,4 +1,6 @@
 <?php
+use Sys25\RnBase\Domain\Model\RecordInterface;
+
 /**
  * @author Hannes Bochmann
  *
@@ -93,7 +95,7 @@ class tx_mksearch_indexer_Page extends tx_mksearch_indexer_Base
     /**
      * @see tx_mksearch_indexer_Base::indexData()
      */
-    public function indexData(tx_rnbase_IModel $oModel, $tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options)
+    public function indexData(RecordInterface $oModel, $tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options)
     {
         $lang = isset($this->options['lang']) ? $this->options['lang'] : 0;
 

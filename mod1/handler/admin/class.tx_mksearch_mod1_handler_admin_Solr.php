@@ -125,7 +125,13 @@ class tx_mksearch_mod1_handler_admin_Solr implements tx_rnbase_mod_IModHandler
     {
         $entries = [];
         foreach ($cores as $core) {
-            $entries[$core->getUid()] = $core->getTitle().' ('.$core->getName().') '.$this->countDocs($core);
+            try {
+                $entries[$core->getUid()] = $core->getTitle().' ('.$core->getName().') '.$this->countDocs($core);
+            }
+            catch(Exception $e) {
+                $entries[$core->getUid()] = $core->getTitle().' ('.$core->getName().') '. $e->getMessage();
+
+            }
         }
         $menu = $mod->getFormTool()->showMenu($mod->getPid(), 'solr_core', $mod->getName(), $entries);
 

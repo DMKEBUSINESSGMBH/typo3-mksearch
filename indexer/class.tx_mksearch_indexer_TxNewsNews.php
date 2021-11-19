@@ -1,4 +1,6 @@
 <?php
+use Sys25\RnBase\Domain\Model\RecordInterface;
+
 /***************************************************************
  * Copyright notice
  *
@@ -154,7 +156,7 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
     /**
      * Do the actual indexing for the given model.
      *
-     * @param tx_rnbase_IModel                      $oModel
+     * @param RecordInterface                      $oModel
      * @param string                                $tableName
      * @param array                                 $rawData
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
@@ -164,7 +166,7 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
      */
     // @codingStandardsIgnoreStart (interface/abstract mistake)
     public function indexData(
-        tx_rnbase_IModel $model,
+        RecordInterface $model,
         $tableName,
         $rawData,
         tx_mksearch_interface_IndexerDocument $indexDoc,

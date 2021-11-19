@@ -1,4 +1,6 @@
 <?php
+use Sys25\RnBase\Domain\Model\RecordInterface;
+
 /***************************************************************
  * Copyright notice
  *
@@ -34,7 +36,7 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
     /**
      * Sets the index doc to deleted if neccessary.
      *
-     * @param tx_rnbase_IModel                      $oModel
+     * @param RecordInterface                      $oModel
      * @param tx_mksearch_interface_IndexerDocument $oIndexDoc
      * @param array                                 $aOptions
      *
@@ -42,7 +44,7 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
      */
     // @codingStandardsIgnoreStart (interface/abstract mistake)
     protected function hasDocToBeDeleted(
-        tx_rnbase_IModel $oModel,
+        RecordInterface $oModel,
         tx_mksearch_interface_IndexerDocument $oIndexDoc,
         $aOptions = []
     ) {
@@ -68,7 +70,7 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
     /**
      * Sets the index doc to deleted if neccessary.
      *
-     * @param tx_rnbase_IModel                      $oModel
+     * @param RecordInterface                      $oModel
      * @param tx_mksearch_interface_IndexerDocument $oIndexDoc
      * @param array                                 $aOptions
      *
@@ -76,7 +78,7 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
      */
     // @codingStandardsIgnoreStart (interface/abstract mistake)
     protected function hasNonGridelementDocToBeDeleted(
-        tx_rnbase_IModel $oModel,
+        RecordInterface $oModel,
         tx_mksearch_interface_IndexerDocument $oIndexDoc,
         $aOptions = []
     ) {
@@ -87,10 +89,10 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
     /**
      * Adds the parent to index.
      *
-     * @param tx_rnbase_IModel $oModel
+     * @param RecordInterface $oModel
      */
     protected function addGridelementsContainerToIndex(
-        tx_rnbase_IModel $oModel
+        RecordInterface $oModel
     ) {
         // add the parent do index, so the changes are writen to index
         $indexSrv = tx_mksearch_util_ServiceRegistry::getIntIndexService();

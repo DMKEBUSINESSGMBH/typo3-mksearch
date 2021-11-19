@@ -1,4 +1,6 @@
 <?php
+use Sys25\RnBase\Domain\Model\RecordInterface;
+
 /**
  * @author Hannes Bochmann <dev@dmk-ebusiness.de>
  *
@@ -54,7 +56,7 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
     /**
      * Do the actual indexing for the given model.
      *
-     * @param tx_rnbase_IModel                      $model
+     * @param RecordInterface                      $model
      * @param string                                $tableName
      * @param array                                 $rawData
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
@@ -63,7 +65,7 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
      * @return tx_mksearch_interface_IndexerDocument|null
      */
     public function indexData(
-        tx_rnbase_IModel $model,
+        RecordInterface $model,
         $tableName,
         $rawData,
         tx_mksearch_interface_IndexerDocument $indexDoc,
@@ -381,14 +383,14 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
     /**
      * Sets the index doc to deleted if neccessary.
      *
-     * @param tx_rnbase_IModel                      $model
+     * @param RecordInterface                      $model
      * @param tx_mksearch_interface_IndexerDocument $oIndexDoc
      * @param array                                 $aOptions
      *
      * @return bool
      */
     protected function hasDocToBeDeleted(
-        tx_rnbase_IModel $model,
+        RecordInterface $model,
         tx_mksearch_interface_IndexerDocument $oIndexDoc,
         $aOptions = []
     ) {
@@ -425,7 +427,7 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
      *  Checks if the field "Include in Search" of current models page
      *  is set to "Disable".
      *
-     * @param tx_rnbase_IModel $model
+     * @param RecordInterface $model
      * @param array            $options
      *
      * @return bool
@@ -506,14 +508,14 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
     /**
      * wir brauchen auch noch die enable columns der page.
      *
-     * @param tx_rnbase_IModel                      $model
+     * @param RecordInterface                      $model
      * @param string                                $tableName
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
      *
      * @return tx_mksearch_interface_IndexerDocument
      */
     protected function indexEnableColumns(
-        tx_rnbase_IModel $model,
+        RecordInterface $model,
         $tableName,
         tx_mksearch_interface_IndexerDocument $indexDoc,
         $indexDocFieldsPrefix = ''
