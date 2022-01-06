@@ -631,6 +631,10 @@ deleteOnAbort = 0
 # default is the live workspace (ID = 0)
 # comma separated list of workspace IDs
 #workspaceIds = 1,2,3
+
+# When the news records are not inside a page tree with a site configuration and translations are used we need
+# to configure a pid for which the FE is loaded.
+#localizationPid = 123
 CONF;
     }
 }

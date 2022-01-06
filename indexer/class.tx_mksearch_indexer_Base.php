@@ -74,7 +74,10 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
     public function prepareSearchData($tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options)
     {
         if ($this->loadFrontendForLocalization && $options['lang'] > 0) {
-            tx_mksearch_util_Indexer::prepareTSFE(0, $options['lang']);
+            tx_mksearch_util_Indexer::prepareTSFE(
+                ($options['localizationPid'] ?: ('pages' == $tableName ? $rawData['uid'] : $rawData['pid'])),
+                $options['lang']
+            );
         }
 
         // Set base id for specific indexer.

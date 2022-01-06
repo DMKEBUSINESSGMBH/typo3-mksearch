@@ -33,7 +33,7 @@ Dabei wird der Indexer aber nicht bei jeder Änderung sofort neue Daten indizier
 # Extbase
 Wenn ein Extbase Model indiziert werden sollen, dann müssen einige Dinge beachtet werden:
 
-1.  Wenn das Model bzw. daran hängende Models Mehrsprachigkeit unterstützen, dann sollte in der Indexerklasse für das Model die Klassenvariable $loadFrontendForLocalization auf true gesetzt werden. Ansonsten werden die Overlays bei Übersetzungen nicht korrekt geladen.
+1.  Wenn das Model bzw. daran hängende Models Mehrsprachigkeit unterstützen, dann sollte in der Indexerklasse für das Model die Klassenvariable $loadFrontendForLocalization auf true gesetzt werden. Ansonsten werden die Overlays bei Übersetzungen nicht korrekt geladen. Wenn die Datensätze außerdem nicht in einem Seitenbaum liegen, der keine Seitenkonfiguration hat, muss in der Indexerkonfiguration noch ``localizationPid`` gesetzt werden. Einfach die Seiten UID einer Seite, die eine Seitenkonfiguration hat.
 2.  Wenn bei Änderungen in anderen Tabellen daran hängende Models in die Queue gelegt werden sollen, muss sich der Indexer darum kümmern. Unterstützt das Model dabei Mehrsprachigkeit, können nicht ohne weiteres die eigentlichen Extbase Repositories genutzt werden, um Models zu holen, die zu Datensätzen in anderen Tabellen gehören. Auf Grund des Handling der Mehrsprachigkeit von Extbase, wäre es nie möglich an die tatsächliche UID eines übersetzten Models zu kommen. Sprich, Übersetzungen würden in diesem Fall nie in der Queue landen.
 
 Ein Beispiel für so einen Indexer ist der tx_news Indexer (tx_mksearch_indexer_TxNewsNews).
