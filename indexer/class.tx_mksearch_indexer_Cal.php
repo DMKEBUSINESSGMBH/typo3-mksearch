@@ -58,7 +58,7 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base
      */
     protected function createModel(array $rawData, $tableName = null, $options = [])
     {
-        return tx_rnbase::makeInstance('tx_mksearch_model_cal_Event', $rawData);
+        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_cal_Event', $rawData);
     }
 
     /**
@@ -94,7 +94,7 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base
      */
     protected function getEventsByCategoryUid($categoryUid)
     {
-        return tx_rnbase_util_DB::doSelect(
+        return \Sys25\RnBase\Database\Connection::getInstance()->doSelect(
             'uid_local as uid',
             'tx_cal_event_category_mm',
             [
@@ -110,7 +110,7 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base
      */
     protected function getEventsByCalendarUid($calendarUid)
     {
-        return tx_rnbase_util_DB::doSelect(
+        return \Sys25\RnBase\Database\Connection::getInstance()->doSelect(
             'uid',
             'tx_cal_event',
             [
@@ -136,7 +136,7 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base
      * @see tx_mksearch_interface_Indexer::prepareSearchData()
      */
     protected function indexData(
-        tx_rnbase_IModel $model,
+        \Sys25\RnBase\Domain\Model\DataInterface $model,
         $tableName,
         $rawData,
         tx_mksearch_interface_IndexerDocument $indexDoc,
@@ -161,9 +161,9 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base
     ) {
         $calEvent = $this->prepareDates($calEvent);
 
-        $calEvent->record['description'] = tx_mksearch_util_Misc::html2plain(
-            $calEvent->record['description']
-        );
+        $calEvent->setProperty('description', tx_mksearch_util_Misc::html2plain(
+            $calEvent->getProperty('description')
+        ));
 
         // add some base doc fields
         $indexDoc->setTitle($calEvent->getTitle());
@@ -179,7 +179,7 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base
             $indexDoc
         );
 
-        $indexDoc->setTimestamp($calEvent->record['start_date_timestamp']);
+        $indexDoc->setTimestamp($calEvent->getProperty('start_date_timestamp'));
     }
 
     /**
@@ -220,23 +220,26 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base
     {
         $datePrefixes = ['start', 'end'];
         foreach ($datePrefixes as $datePrefix) {
-            $calEvent->record[$datePrefix.'_date_timestamp'] =
+            $calEvent->setProperty(
+                $datePrefix.'_date_timestamp',
                 $this->getTimestampFromCalDateString(
-                    $calEvent->record[$datePrefix.'_date'],
-                    $calEvent->record['timezone']
+                    $calEvent->getProperty($datePrefix.'_date'),
+                    $calEvent->getProperty('timezone')
                 )
-                + $calEvent->record[$datePrefix.'_time'];
-            $calEvent->record[$datePrefix.'_date_datetime'] = $this->convertTimestampToDateTime(
-                $calEvent->record[$datePrefix.'_date_timestamp']
+                + $calEvent->getProperty($datePrefix.'_time')
+            );
+            $calEvent->setProperty(
+                $datePrefix.'_date_datetime',
+                $this->convertTimestampToDateTime($calEvent->getProperty($datePrefix.'_date_timestamp'))
             );
 
-            $calDate = tx_rnbase::makeInstance(
+            $calDate = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
                 $this->getCalDateClass(),
-                $calEvent->record[$datePrefix.'_date']
+                $calEvent->getProperty($datePrefix.'_date')
             );
-            $calEvent->record[$datePrefix.'_date_year'] = $calDate->getYear();
-            $calEvent->record[$datePrefix.'_date_month'] = $calDate->getMonth();
-            $calEvent->record[$datePrefix.'_date_day'] = $calDate->getDay();
+            $calEvent->setProperty($datePrefix.'_date_year', $calDate->getYear());
+            $calEvent->setProperty($datePrefix.'_date_month', $calDate->getMonth());
+            $calEvent->setProperty($datePrefix.'_date_day', $calDate->getDay());
         }
 
         return $calEvent;
@@ -250,7 +253,7 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base
         if ($this->isCalInstalledInVersion190OrHigher()) {
             $calDateClass = 'TYPO3\\CMS\\Cal\\Model\\CalDate';
         } else {
-            require_once tx_rnbase_util_Extensions::extPath('cal').'model/class.tx_cal_date.php';
+            require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('cal').'model/class.tx_cal_date.php';
             $calDateClass = 'tx_cal_date';
         }
 
@@ -264,9 +267,9 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base
      */
     protected function isCalInstalledInVersion190OrHigher()
     {
-        $calVersionNumber = tx_rnbase_util_Extensions::getExtensionVersion('cal');
+        $calVersionNumber = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getExtensionVersion('cal');
 
-        return tx_rnbase_util_TYPO3::convertVersionNumberToInteger($calVersionNumber) >= 1009000;
+        return \Sys25\RnBase\Utility\TYPO3::convertVersionNumberToInteger($calVersionNumber) >= 1009000;
     }
 
     /**

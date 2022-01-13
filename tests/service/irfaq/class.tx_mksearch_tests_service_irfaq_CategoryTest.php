@@ -40,7 +40,7 @@ class tx_mksearch_tests_service_irfaq_CategoryTest extends tx_mksearch_tests_Tes
      */
     protected function setUp()
     {
-        if (!tx_rnbase_util_Extensions::isLoaded('irfaq')) {
+        if (!\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('irfaq')) {
             self::markTestSkipped('irfaq nicht installiert');
         }
 
@@ -52,7 +52,7 @@ class tx_mksearch_tests_service_irfaq_CategoryTest extends tx_mksearch_tests_Tes
      */
     public function testGetByQuestion()
     {
-        $question = tx_rnbase::makeInstance('tx_mksearch_model_irfaq_Question', ['uid' => 123]);
+        $question = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_irfaq_Question', ['uid' => 123]);
         $service = $this->getMock('tx_mksearch_service_irfaq_Category', ['search']);
         $service->expects(self::once())
             ->method('search')
@@ -69,7 +69,7 @@ class tx_mksearch_tests_service_irfaq_CategoryTest extends tx_mksearch_tests_Tes
     public function testGetByQuestionThrowsNoErrors()
     {
         tx_mksearch_util_ServiceRegistry::getIrfaqCategoryService()->getByQuestion(
-            tx_rnbase::makeInstance('tx_mksearch_model_irfaq_Question', ['uid' => 123])
+            \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_irfaq_Question', ['uid' => 123])
         );
     }
 

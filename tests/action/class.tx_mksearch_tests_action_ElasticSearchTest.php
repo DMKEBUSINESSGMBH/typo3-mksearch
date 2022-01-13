@@ -44,11 +44,11 @@ class tx_mksearch_tests_action_ElasticSearchTest extends tx_mksearch_tests_Testc
     public function testHandlePagebrowser()
     {
         $confId = 'elasticsearch.';
-        $parameters = tx_rnbase::makeInstance(
+        $parameters = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             \Sys25\RnBase\Frontend\Request\Parameters::class,
             ['pb-search456-pointer' => 2]
         );
-        $configurations = $this->createConfigurations(
+        $configurations = \Sys25\RnBase\Testing\TestUtility::createConfigurations(
             [$confId => ['hit.' => ['pagebrowser.' => ['limit' => 20]]]],
             'mksearch',
             '',
@@ -76,7 +76,7 @@ class tx_mksearch_tests_action_ElasticSearchTest extends tx_mksearch_tests_Testc
             ->method('getIndex')
             ->will($this->returnValue($index));
 
-        $action = tx_rnbase::makeInstance('tx_mksearch_action_ElasticSearch');
+        $action = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_action_ElasticSearch');
         $action->handlePageBrowser(
             $parameters,
             $configurations,
@@ -99,8 +99,8 @@ class tx_mksearch_tests_action_ElasticSearchTest extends tx_mksearch_tests_Testc
         );
 
         $pageBrowser = $viewData->offsetGet('pagebrowser');
-        $expectedPagebrowser = tx_rnbase::makeInstance(
-            'tx_rnbase_util_PageBrowser',
+        $expectedPagebrowser = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+            \Sys25\RnBase\Utility\PageBrowser::class,
             'search456'
         );
         $expectedPagebrowser->setState($parameters, 123, 10);
@@ -117,8 +117,8 @@ class tx_mksearch_tests_action_ElasticSearchTest extends tx_mksearch_tests_Testc
     public function testHandlePagebrowserWhenPageBrowserIdConfigured()
     {
         $confId = 'elasticsearch.';
-        $parameters = tx_rnbase::makeInstance(\Sys25\RnBase\Frontend\Request\Parameters::class, []);
-        $configurations = $this->createConfigurations(
+        $parameters = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Frontend\Request\Parameters::class, []);
+        $configurations = \Sys25\RnBase\Testing\TestUtility::createConfigurations(
             [$confId => ['hit.' => ['pagebrowser.' => [
                 'limit' => 20,
                 'pbid' => 'pagebrowserId',
@@ -145,7 +145,7 @@ class tx_mksearch_tests_action_ElasticSearchTest extends tx_mksearch_tests_Testc
             ->method('getIndex')
             ->will($this->returnValue($index));
 
-        $action = tx_rnbase::makeInstance('tx_mksearch_action_ElasticSearch');
+        $action = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_action_ElasticSearch');
         $action->handlePageBrowser(
             $parameters,
             $configurations,
@@ -168,8 +168,8 @@ class tx_mksearch_tests_action_ElasticSearchTest extends tx_mksearch_tests_Testc
         );
 
         $pageBrowser = $viewData->offsetGet('pagebrowser');
-        $expectedPagebrowser = tx_rnbase::makeInstance(
-            'tx_rnbase_util_PageBrowser',
+        $expectedPagebrowser = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+            \Sys25\RnBase\Utility\PageBrowser::class,
             'pagebrowserId'
         );
         $expectedPagebrowser->setState($parameters, 123, 10);
@@ -188,7 +188,7 @@ class tx_mksearch_tests_action_ElasticSearchTest extends tx_mksearch_tests_Testc
         self::assertEquals(
             'tx_mksearch_util_ServiceRegistry',
             $this->callInaccessibleMethod(
-                tx_rnbase::makeInstance('tx_mksearch_action_ElasticSearch'),
+                \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_action_ElasticSearch'),
                 'getServiceRegistry'
             )
         );
@@ -200,8 +200,8 @@ class tx_mksearch_tests_action_ElasticSearchTest extends tx_mksearch_tests_Testc
     public function testHandleRequestReturnsNullIfNosearchConfigured()
     {
         $confId = 'elasticsearch.';
-        $parameters = tx_rnbase::makeInstance(\Sys25\RnBase\Frontend\Request\Parameters::class, []);
-        $configurations = $this->createConfigurations(
+        $parameters = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Frontend\Request\Parameters::class, []);
+        $configurations = \Sys25\RnBase\Testing\TestUtility::createConfigurations(
             [$confId => ['nosearch' => true]],
             'mksearch',
             '',
@@ -223,7 +223,8 @@ class tx_mksearch_tests_action_ElasticSearchTest extends tx_mksearch_tests_Testc
             ->method('getConfigurations')
             ->will($this->returnValue($configurations));
 
-        $actionReturn = $action->handleRequest($parameters, $configurations, $viewData);
+        $request = new \Sys25\RnBase\Frontend\Request\Request($parameters, $configurations, '');
+        $actionReturn = $action->handleRequest($request);
 
         self::assertFalse(
             $viewData->offsetExists('searchcount'),
@@ -245,8 +246,8 @@ class tx_mksearch_tests_action_ElasticSearchTest extends tx_mksearch_tests_Testc
     public function testHandleRequest()
     {
         $confId = 'elasticsearch.';
-        $parameters = tx_rnbase::makeInstance(\Sys25\RnBase\Frontend\Request\Parameters::class, []);
-        $configurations = $this->createConfigurations(
+        $parameters = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Frontend\Request\Parameters::class, []);
+        $configurations = \Sys25\RnBase\Testing\TestUtility::createConfigurations(
             [$confId => [
                 'filter.' => [
                     'forceSearch' => true,
@@ -261,13 +262,11 @@ class tx_mksearch_tests_action_ElasticSearchTest extends tx_mksearch_tests_Testc
         );
         $configurations->setParameters($parameters);
 
-        $viewData = $configurations->getViewData();
-
         $action = $this->getMock(
             'tx_mksearch_action_ElasticSearch',
             ['getSearchIndex', 'getServiceRegistry', 'handlePageBrowser', 'getConfigurations']
         );
-        $index = tx_rnbase::makeInstance('tx_mksearch_model_internal_Index', []);
+        $index = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_internal_Index', []);
         $action->expects($this->once())
             ->method('getSearchIndex')
             ->will($this->returnValue($index));
@@ -300,6 +299,8 @@ class tx_mksearch_tests_action_ElasticSearchTest extends tx_mksearch_tests_Testc
             ->method('getServiceRegistry')
             ->will($this->returnValue($serviceRegistry));
 
+        $request = new \Sys25\RnBase\Frontend\Request\Request($parameters, $configurations, $confId);
+        $viewData = $request->getViewContext();
         $action->expects($this->once())
             ->method('handlePageBrowser')
             ->with(
@@ -312,7 +313,7 @@ class tx_mksearch_tests_action_ElasticSearchTest extends tx_mksearch_tests_Testc
                 $searchEngine
             );
 
-        $actionReturn = $action->handleRequest($parameters, $configurations, $viewData);
+        $actionReturn = $action->handleRequest($request);
 
         self::assertEquals(
             '987',

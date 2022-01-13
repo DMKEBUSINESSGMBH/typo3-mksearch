@@ -34,7 +34,7 @@ class tx_mksearch_tests_signalSlotDispatcher_FileIndexRepositoryTest extends tx_
      */
     public function testGetInternalIndexService()
     {
-        $signalSlotDispatcher = tx_rnbase::makeInstance(
+        $signalSlotDispatcher = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_signalSlotDispatcher_FileIndexRepsitory'
         );
 
@@ -88,7 +88,7 @@ class tx_mksearch_tests_signalSlotDispatcher_FileIndexRepositoryTest extends tx_
      */
     public function testDispatcherRegisteredForRecordCreatedSignalSlot()
     {
-        $signalSlotDispatcher = tx_rnbase::makeInstance(
+        $signalSlotDispatcher = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'TYPO3\CMS\Extbase\SignalSlot\Dispatcher'
         );
 
@@ -117,7 +117,7 @@ class tx_mksearch_tests_signalSlotDispatcher_FileIndexRepositoryTest extends tx_
      */
     public function testDispatcherRegisteredForRecordUpdatedSignalSlot()
     {
-        $signalSlotDispatcher = tx_rnbase::makeInstance(
+        $signalSlotDispatcher = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'TYPO3\CMS\Extbase\SignalSlot\Dispatcher'
         );
 
@@ -146,7 +146,7 @@ class tx_mksearch_tests_signalSlotDispatcher_FileIndexRepositoryTest extends tx_
      */
     public function testDispatcherRegisteredForRecordDeletedSignalSlot()
     {
-        $signalSlotDispatcher = tx_rnbase::makeInstance(
+        $signalSlotDispatcher = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'TYPO3\CMS\Extbase\SignalSlot\Dispatcher'
         );
 

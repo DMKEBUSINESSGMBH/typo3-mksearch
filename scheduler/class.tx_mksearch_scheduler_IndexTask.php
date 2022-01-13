@@ -22,7 +22,7 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-class tx_mksearch_scheduler_IndexTask extends Tx_Rnbase_Scheduler_Task
+class tx_mksearch_scheduler_IndexTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
 {
     /**
      * Was used as the scheduler options before making the extension compatible with TYPO3 9. But as private
@@ -78,16 +78,16 @@ class tx_mksearch_scheduler_IndexTask extends Tx_Rnbase_Scheduler_Task
             }
             $msg = sprintf($rows ? '%d item(s) indexed' : 'No items in indexing queue.', $rows);
             if ($rows) { // TODO: Schalter im Task anlegen.
-                tx_rnbase_util_Logger::info($msg, 'mksearch');
+                \Sys25\RnBase\Utility\Logger::info($msg, 'mksearch');
             }
         } catch (Exception $e) {
-            tx_rnbase_util_Logger::fatal('Indexing failed!', 'mksearch', ['Exception' => $e->getMessage()]);
+            \Sys25\RnBase\Utility\Logger::fatal('Indexing failed!', 'mksearch', ['Exception' => $e->getMessage()]);
             //Da die Exception gefangen wird, würden die Entwickler keine Mail bekommen
             //also machen wir das manuell
-            if ($addr = tx_rnbase_configurations::getExtensionCfgValue('rn_base', 'sendEmailOnException')) {
+            if ($addr = \Sys25\RnBase\Configuration\Processor::getExtensionCfgValue('rn_base', 'sendEmailOnException')) {
                 //die Mail soll immer geschickt werden
                 $aOptions = ['ignoremaillock' => true];
-                tx_rnbase_util_Misc::sendErrorMail($addr, 'tx_mksearch_scheduler_IndexTask', $e, $aOptions);
+                \Sys25\RnBase\Utility\Misc::sendErrorMail($addr, 'tx_mksearch_scheduler_IndexTask', $e, $aOptions);
             }
             $success = false;
         }

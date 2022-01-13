@@ -5,23 +5,23 @@
  *
  * @author Michael Wagner <dev@dmk-ebusiness.de>
  */
-class tx_mksearch_mod1_handler_IndexerConfig extends tx_mksearch_mod1_handler_Base implements tx_rnbase_mod_IModHandler
+class tx_mksearch_mod1_handler_IndexerConfig extends tx_mksearch_mod1_handler_Base implements \Sys25\RnBase\Backend\Module\IModHandler
 {
     /**
      * Method to get a company searcher.
      *
-     * @param tx_rnbase_mod_IModule $mod
+     * @param \Sys25\RnBase\Backend\Module\IModule $mod
      * @param array                 $options
      *
      * @return tx_mksearch_mod1_searcher_abstractBase
      */
-    protected function getSearcher(tx_rnbase_mod_IModule $mod, &$options)
+    protected function getSearcher(\Sys25\RnBase\Backend\Module\IModule $mod, &$options)
     {
         if (!isset($options['pid'])) {
             $options['pid'] = $mod->id;
         }
 
-        return tx_rnbase::makeInstance('tx_mksearch_mod1_searcher_IndexerConfig', $mod, $options);
+        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_mod1_searcher_IndexerConfig', $mod, $options);
     }
 
     /**

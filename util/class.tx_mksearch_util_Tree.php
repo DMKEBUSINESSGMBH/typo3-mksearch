@@ -76,7 +76,7 @@ class tx_mksearch_util_Tree
         }
 
         $result = [];
-        $searcher = tx_rnbase_util_SearchBase::getInstance('tx_rnbase_util_SearchGeneric');
+        $searcher = \Sys25\RnBase\Search\SearchBase::getInstance(\Sys25\RnBase\Search\SearchGeneric::class);
         $config['parentField'] = $options['searchdef']['basetablealias'].'.'.$config['parentField'];
 
         $parentIds = is_array($config['rootPoints']) ? implode(',', $config['rootPoints']) : $config['rootPoints'];
@@ -135,7 +135,7 @@ class tx_mksearch_util_Tree
         }
 
         $result = [];
-        $searcher = tx_rnbase_util_SearchBase::getInstance('tx_rnbase_util_SearchGeneric');
+        $searcher = \Sys25\RnBase\Search\SearchBase::getInstance(\Sys25\RnBase\Search\SearchGeneric::class);
         $config['keyField'] = $options['searchdef']['basetablealias'].'.'.$config['keyField'];
 
         // Prepare search
@@ -174,7 +174,7 @@ class tx_mksearch_util_Tree
     private static function page()
     {
         if (!isset(self::$page)) {
-            self::$page = tx_rnbase_util_TYPO3::getSysPage();
+            self::$page = \Sys25\RnBase\Utility\TYPO3::getSysPage();
         }
 
         return self::$page;

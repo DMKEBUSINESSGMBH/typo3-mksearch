@@ -32,19 +32,15 @@
  */
 class tx_mksearch_action_ElasticSearch extends tx_mksearch_action_AbstractSearch
 {
-    /**
-     * @param \Sys25\RnBase\Frontend\Request\ParametersInterface $parameters
-     * @param tx_rnbase_configurations $configurations
-     * @param ArrayObject $viewData
-     *
-     * @return string error msg or null
-     */
-    public function handleRequest(&$parameters, &$configurations, &$viewData)
+    public function handleRequest(\Sys25\RnBase\Frontend\Request\RequestInterface $request)
     {
+        $configurations = $request->getConfigurations();
+        $parameters = $request->getParameters();
+        $viewData = $request->getViewContext();
         $confId = $this->getConfId();
-        $this->handleSoftLink();
+        $this->handleSoftLink($request);
 
-        $filter = $this->createFilter();
+        $filter = $this->createFilter($request);
 
         if ($configurations->get($confId.'nosearch')) {
             return null;
@@ -55,7 +51,7 @@ class tx_mksearch_action_ElasticSearch extends tx_mksearch_action_AbstractSearch
         $items = [];
 
         if ($filter->init($fields, $options)) {
-            $index = $this->getSearchIndex();
+            $index = $this->getSearchIndex($request);
 
             // wir rufen die Methode mit call_user_func_array auf, da sie
             // statisch ist, womit wir diese nicht mocken könnten
@@ -90,7 +86,7 @@ class tx_mksearch_action_ElasticSearch extends tx_mksearch_action_AbstractSearch
      */
     protected function getSearchSolrAction()
     {
-        return tx_rnbase::makeInstance('tx_mksearch_action_SearchSolr');
+        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_action_SearchSolr');
     }
 
     /**
@@ -126,9 +122,9 @@ class tx_mksearch_action_ElasticSearch extends tx_mksearch_action_AbstractSearch
             // PageBrowser initialisieren
             $pageBrowserId = $conf['pbid'] ? $conf['pbid'] :
                             'search'.$configurations->getPluginId();
-            /* @var $pageBrowser tx_rnbase_util_PageBrowser */
-            $pageBrowser = tx_rnbase::makeInstance(
-                'tx_rnbase_util_PageBrowser',
+            /* @var $pageBrowser \Sys25\RnBase\Utility\PageBrowser */
+            $pageBrowser = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                \Sys25\RnBase\Utility\PageBrowser::class,
                 $pageBrowserId
             );
 
@@ -150,7 +146,7 @@ class tx_mksearch_action_ElasticSearch extends tx_mksearch_action_AbstractSearch
     /**
      * (non-PHPdoc).
      *
-     * @see tx_rnbase_action_BaseIOC::getTemplateName()
+     * @see \Sys25\RnBase\Frontend\Controller\AbstractAction::getTemplateName()
      */
     public function getTemplateName()
     {
@@ -160,7 +156,7 @@ class tx_mksearch_action_ElasticSearch extends tx_mksearch_action_AbstractSearch
     /**
      * (non-PHPdoc).
      *
-     * @see tx_rnbase_action_BaseIOC::getViewClassName()
+     * @see \Sys25\RnBase\Frontend\Controller\AbstractAction::getViewClassName()
      */
     public function getViewClassName()
     {

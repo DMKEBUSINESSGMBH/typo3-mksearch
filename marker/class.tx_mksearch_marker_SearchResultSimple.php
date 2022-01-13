@@ -31,7 +31,7 @@ class tx_mksearch_marker_SearchResultSimple extends tx_mksearch_marker_Search
     /**
      * @param string                      $template  HTML template
      * @param tx_mksearch_model_SearchHit $item      search hit
-     * @param tx_rnbase_util_FormatUtil   $formatter
+     * @param \Sys25\RnBase\Frontend\Marker\FormatUtil   $formatter
      * @param string                      $confId    path of typoscript configuration
      * @param string                      $marker    name of marker
      *
@@ -47,12 +47,13 @@ class tx_mksearch_marker_SearchResultSimple extends tx_mksearch_marker_Search
         $this->prepareItem($item, $formatter->getConfigurations(), $confId);
 
         // Fill MarkerArray
-        $ignore = self::findUnusedCols($item->record, $template, $marker);
-
+        $record = $item->getProperty();
+        $ignore = self::findUnusedCols($record, $template, $marker);
+        $item->setProperty($record);
         //diese felder werden auch bei nicht vorhanden sein gesetzt damit die market nicht ausgegeben werden
         $initFields = $this->getInitFields($template, $item, $formatter, $confId, $marker);
 
-        $markerArray = $formatter->getItemMarkerArrayWrapped($item->record, $confId, $ignore, $marker.'_', $initFields);
+        $markerArray = $formatter->getItemMarkerArrayWrapped($item->getProperty(), $confId, $ignore, $marker.'_', $initFields);
 
         // subparts erzeugen
         $wrappedSubpartArray = $subpartArray = [];
@@ -62,7 +63,7 @@ class tx_mksearch_marker_SearchResultSimple extends tx_mksearch_marker_Search
         $this->prepareLinks($item, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter, $template);
 
         // das Template rendern
-        return tx_rnbase_util_Templates::substituteMarkerArrayCached(
+        return \Sys25\RnBase\Frontend\Marker\Templates::substituteMarkerArrayCached(
             $template,
             $markerArray,
             $subpartArray,
@@ -78,7 +79,7 @@ class tx_mksearch_marker_SearchResultSimple extends tx_mksearch_marker_Search
      * @param array                       $markerArray
      * @param array                       $wrappedSubpartArray
      * @param string                      $confId
-     * @param tx_rnbase_util_FormatUtil   $formatter
+     * @param \Sys25\RnBase\Frontend\Marker\FormatUtil   $formatter
      * @param string                      $template
      */
     public function prepareLinks($item, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, $formatter, $template)
@@ -105,7 +106,7 @@ class tx_mksearch_marker_SearchResultSimple extends tx_mksearch_marker_Search
             $linkConfId = $confId.'links.'.$linkId.'.';
             //cObject Daten sichern und durch unseren solr record ersetzen
             $sCObjTempData = $config->getCObj()->data;
-            $config->getCObj()->data = $item->record;
+            $config->getCObj()->data = $item->getProperties();
 
             $pid = $config->getCObj()->stdWrap($config->get($linkConfId.'pid'), $config->get($linkConfId.'pid.'));
 
@@ -118,7 +119,7 @@ class tx_mksearch_marker_SearchResultSimple extends tx_mksearch_marker_Search
                 // Try to get parameter name from TS
                 $paramName = $config->get($linkConfId.'paramName');
                 if (!$paramName) {
-                    $paramName = $item->record['contentType'];
+                    $paramName = $item->getProperty('contentType');
                 }
                 // Try to get value field name from TS
                 $paramField = $config->get($linkConfId.'paramField');
@@ -135,7 +136,7 @@ class tx_mksearch_marker_SearchResultSimple extends tx_mksearch_marker_Search
                 if (!is_array($addParams)) {
                     $addParams = [];
                 }
-                $addParams[$paramName] = $item->record[$paramField];
+                $addParams[$paramName] = $item->getProperty($paramField);
 
                 $this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, $linkId, $marker, $addParams, $template);
             }

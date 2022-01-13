@@ -5,7 +5,7 @@
  *
  * @author Michael Wagner <dev@dmk-ebusiness.de>
  */
-class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc
+class tx_mksearch_mod1_IndizeIndizes extends \Sys25\RnBase\Backend\Module\BaseModFunc
 {
     /**
      * Return function id (used in page typoscript etc.).
@@ -37,9 +37,9 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc
      * is displayed within an iframe.
      *
      * @param string                    $template
-     * @param tx_rnbase_configurations  $configurations
-     * @param tx_rnbase_util_FormatUtil $formatter
-     * @param tx_rnbase_util_FormTool   $formTool
+     * @param \Sys25\RnBase\Configuration\Processor  $configurations
+     * @param \Sys25\RnBase\Frontend\Marker\FormatUtil $formatter
+     * @param \Sys25\RnBase\Backend\Form\ToolBox   $formTool
      *
      * @return string
      */
@@ -52,7 +52,7 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc
 
         $oIntIndexSrv = tx_mksearch_util_ServiceRegistry::getIntIndexService();
 
-        if (\Tx_Rnbase_Utility_T3General::_GP('updateIndex')) {
+        if (\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('updateIndex')) {
             $status[] = $this->handleResetBeingIndexed($oIntIndexSrv);
             $status[] = $this->handleReset($oIntIndexSrv, $configurations);
             $status[] = $this->handleClear($oIntIndexSrv, $configurations);
@@ -65,16 +65,16 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc
         $markerArray['###STATUS###'] = $bIsStatus ? implode('<br />', $status) : '';
         $markerArray['###QUEUESIZE###'] = $oIntIndexSrv->countItemsInQueue();
         $markerArray['###QUEUE_SIZE_BEING_INDEXED###'] = $oIntIndexSrv->countItemsInQueueBeingIndexed();
-        $beingIndexedOlderThan = intval(\Tx_Rnbase_Utility_T3General::_GP('beingIndexedOlderThan'));
+        $beingIndexedOlderThan = intval(\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('beingIndexedOlderThan'));
         $markerArray['###BEINGINDEXEDOLDERTHAN###'] = $beingIndexedOlderThan > 0 ? $beingIndexedOlderThan : 120;
-        $indexItems = intval(\Tx_Rnbase_Utility_T3General::_GP('triggerIndexingQueueCount'));
+        $indexItems = intval(\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('triggerIndexingQueueCount'));
         $markerArray['###INDEXITEMS###'] = $indexItems > 0 ? $indexItems : 100;
 
         $markerArray['###CORE_STATUS###'] = tx_mksearch_mod1_util_IndexStatusHandler::getInstance()->handleRequest(['pid' => $this->getPid()]);
 
         $this->showTables($template, $configurations, $formTool, $markerArray, $oIntIndexSrv);
 
-        $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray);
+        $out = \Sys25\RnBase\Frontend\Marker\Templates::substituteMarkerArrayCached($template, $markerArray);
 
         return $out;
     }
@@ -83,8 +83,8 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc
      * Returns search form.
      *
      * @param string                             $template
-     * @param tx_rnbase_configurations           $configurations
-     * @param tx_rnbase_util_FormTool            $formTool
+     * @param \Sys25\RnBase\Configuration\Processor           $configurations
+     * @param \Sys25\RnBase\Backend\Form\ToolBox            $formTool
      * @param array                              $markerArray
      * @param tx_mksearch_service_internal_Index $oIntIndexSrv
      */
@@ -112,7 +112,7 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc
             }
         }
 
-        $decor = tx_rnbase::makeInstance('tx_mksearch_mod1_decorator_Indizes', $this->getModule());
+        $decor = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_mod1_decorator_Indizes', $this->getModule());
         $columns = [
             'name' => ['title' => 'label_table_name', 'decorator' => $decor],
             'queuecount' => ['title' => 'label_table_queuecount', 'decorator' => $decor],
@@ -122,8 +122,8 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc
         ];
 
         if (!empty($aDefinedTables)) {
-            /* @var $tables Tx_Rnbase_Backend_Utility_Tables */
-            $tables = tx_rnbase::makeInstance('Tx_Rnbase_Backend_Utility_Tables');
+            /* @var $tables \Sys25\RnBase\Backend\Utility\Tables */
+            $tables = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Backend\Utility\Tables::class);
             list($tableData, $tableLayout) = $tables->prepareTable(
                 $aDefinedTables,
                 $columns,
@@ -158,13 +158,13 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc
      * indexing queue.
      *
      * @param tx_mksearch_service_internal_Index $oIntIndexSrv
-     * @param tx_rnbase_configurations           $configurations
+     * @param \Sys25\RnBase\Configuration\Processor           $configurations
      *
      * @return string
      */
     private function handleClear($oIntIndexSrv, &$configurations)
     {
-        $aTables = \Tx_Rnbase_Utility_T3General::_GP('clearTables');
+        $aTables = \TYPO3\CMS\Core\Utility\GeneralUtility::_GP('clearTables');
         if (!(is_array($aTables) && (!empty($aTables)))) {
             return '';
         }
@@ -183,7 +183,7 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc
      * Handle reset command from request.
      *
      * @param tx_mksearch_service_internal_Index $oIntIndexSrv
-     * @param tx_rnbase_configurations           $configurations
+     * @param \Sys25\RnBase\Configuration\Processor           $configurations
      *
      * @return string
      */
@@ -191,9 +191,9 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc
     {
         $aTables = [];
         // reset aller elemente im siteroot
-        $aTables['pid'] = \Tx_Rnbase_Utility_T3General::_GP('resetTables');
+        $aTables['pid'] = \TYPO3\CMS\Core\Utility\GeneralUtility::_GP('resetTables');
         // global, alle elemente
-        $aTables['global'] = \Tx_Rnbase_Utility_T3General::_GP('resetTablesG');
+        $aTables['global'] = \TYPO3\CMS\Core\Utility\GeneralUtility::_GP('resetTablesG');
         if ((!is_array($aTables['pid']) && empty($aTables['pid']))
             && (!is_array($aTables['global']) && empty($aTables['global']))
         ) {
@@ -202,11 +202,11 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc
 
         $where = $options = [];
         // deleted aussschließen, wenn nicht gesetzt
-        if (!\Tx_Rnbase_Utility_T3General::_GP('resetDeleted')) {
+        if (!\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('resetDeleted')) {
             $where[] = 'deleted = 0';
         }
         // hidden aussschließen, wenn nicht gesetzt
-        if (!\Tx_Rnbase_Utility_T3General::_GP('resetHidden')) {
+        if (!\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('resetHidden')) {
             $where[] = 'hidden = 0';
         }
         if (!empty($where)) {
@@ -250,13 +250,13 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc
      * Handle trigger command from request.
      *
      * @param tx_mksearch_service_internal_Index $oIntIndexSrv
-     * @param tx_rnbase_configurations           $configurations
+     * @param \Sys25\RnBase\Configuration\Processor           $configurations
      *
      * @return string
      */
     private function handleTrigger($oIntIndexSrv, &$configurations)
     {
-        $triggerIndexingQueue = \Tx_Rnbase_Utility_T3General::_GP('triggerIndexingQueue');
+        $triggerIndexingQueue = \TYPO3\CMS\Core\Utility\GeneralUtility::_GP('triggerIndexingQueue');
         if (!$triggerIndexingQueue) {
             return '';
         }
@@ -265,7 +265,7 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc
         set_time_limit(0);
 
         $status = '';
-        $indexItems = intval(\Tx_Rnbase_Utility_T3General::_GP('triggerIndexingQueueCount'));
+        $indexItems = intval(\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('triggerIndexingQueueCount'));
 
         $options = [
             'limit' => $indexItems > 0 ? $indexItems : 100,
@@ -301,7 +301,7 @@ class tx_mksearch_mod1_IndizeIndizes extends tx_rnbase_mod_BaseModFunc
      */
     private function handleResetBeingIndexed($indexSrv)
     {
-        $triggerResetBeingIndexed = \Tx_Rnbase_Utility_T3General::_GP('triggerResetBeingIndexed');
+        $triggerResetBeingIndexed = \TYPO3\CMS\Core\Utility\GeneralUtility::_GP('triggerResetBeingIndexed');
         if (!$triggerResetBeingIndexed) {
             return '';
         }

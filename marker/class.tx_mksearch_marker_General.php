@@ -26,12 +26,12 @@
  * Generic class for rendering contents
  * Renders just anything you pass in ;-).
  */
-class tx_mksearch_marker_General extends tx_rnbase_util_BaseMarker
+class tx_mksearch_marker_General extends \Sys25\RnBase\Frontend\Marker\BaseMarker
 {
     /**
      * @param string                    $template  das HTML-Template
      * @param array                     $data      Daten, die ersetzt werden sollen
-     * @param tx_rnbase_util_FormatUtil $formatter der zu verwendente Formatter
+     * @param \Sys25\RnBase\Frontend\Marker\FormatUtil $formatter der zu verwendente Formatter
      * @param string                    $confId    Pfad der TS-Config des Vereins, z.B. 'listView.club.'
      * @param string                    $marker    name of marker, z.B. CLUB
      *                                             Von diesem String hängen die entsprechenden weiteren Marker ab: ###CLUB_NAME###, ###COACH_ADDRESS_WEBSITE###
@@ -44,7 +44,7 @@ class tx_mksearch_marker_General extends tx_rnbase_util_BaseMarker
         // Es wird das MarkerArray gefüllt.
         $markerArray = $formatter->getItemMarkerArrayWrapped($data, $confId, 0, $marker, array_keys($data));
 
-        return tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
+        return \Sys25\RnBase\Frontend\Marker\Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
     }
 }
 

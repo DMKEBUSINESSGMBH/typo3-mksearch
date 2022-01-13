@@ -29,7 +29,7 @@
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-abstract class tx_mksearch_action_AbstractSearch extends tx_rnbase_action_BaseIOC
+abstract class tx_mksearch_action_AbstractSearch extends \Sys25\RnBase\Frontend\Controller\AbstractAction
 {
     /**
      * The current search index to use.
@@ -41,17 +41,16 @@ abstract class tx_mksearch_action_AbstractSearch extends tx_rnbase_action_BaseIO
     /**
      * Returns the model for the current used index.
      *
-     * @param tx_rnbase_configurations $configurations
-     * @param string                   $confId
+     * @param \Sys25\RnBase\Frontend\Request\RequestInterface $request
      *
      * @throws Exception
      *
      * @return tx_mksearch_model_internal_Index
      */
-    protected function getSearchIndex()
+    protected function getSearchIndex(\Sys25\RnBase\Frontend\Request\RequestInterface $request)
     {
         if (null == $this->searchIndex) {
-            $configurations = $this->getConfigurations();
+            $configurations = $request->getConfigurations();
             $confId = $this->getConfId();
 
             $indexUid = $configurations->get($confId.'usedIndex');
@@ -73,11 +72,11 @@ abstract class tx_mksearch_action_AbstractSearch extends tx_rnbase_action_BaseIO
     /**
      * Special links for configured keywords.
      */
-    protected function handleSoftLink()
+    protected function handleSoftLink(\Sys25\RnBase\Frontend\Request\RequestInterface $request)
     {
-        $parameters = $this->getParameters();
-        $configurations = $this->getConfigurations();
-        $confId = $this->getConfId();
+        $parameters = $request->getParameters();
+        $configurations = $request->getConfigurations();
+        $confId = $request->getConfId();
 
         // Softlink Config beginnt direkt im Root, damit sie auch für andere
         // Suchen genutzt werden kann
@@ -89,9 +88,9 @@ abstract class tx_mksearch_action_AbstractSearch extends tx_rnbase_action_BaseIO
         $value = $parameters->get($paramName);
         $value = $value ? substr($value, 0, 150) : '';
         $options = [];
-        tx_rnbase_util_SearchBase::setConfigOptions($options, $configurations, 'softlink.options.');
+        \Sys25\RnBase\Search\SearchBase::setConfigOptions($options, $configurations, 'softlink.options.');
 
-        $database = Tx_Rnbase_Database_Connection::getInstance();
+        $database = \Sys25\RnBase\Database\Connection::getInstance();
         $options['where'] = 'keyword='.$database->fullQuoteStr($value, 'tx_mksearch_keywords');
         $rows = $database->doSelect('link', 'tx_mksearch_keywords', $options);
 
@@ -103,9 +102,9 @@ abstract class tx_mksearch_action_AbstractSearch extends tx_rnbase_action_BaseIO
             // during an ajax request. otherwise it's not possible to handle the redirect with
             // javascript as normal Location header is followed by the browser automatically.
             if ($redirectHeaderName = $configurations->get($confId.'softlink.redirectHeaderName')) {
-                $utility = tx_rnbase_util_Typo3Classes::getHttpUtilityClass();
+                $utility = \TYPO3\CMS\Core\Utility\HttpUtility::class;
                 header($utility::HTTP_STATUS_303);
-                header($redirectHeaderName.': '.tx_rnbase_util_Network::locationHeaderUrl($link->makeUrl(false)));
+                header($redirectHeaderName.': '.\Sys25\RnBase\Utility\Network::locationHeaderUrl($link->makeUrl(false)));
             } else {
                 $link->redirect();
             }
@@ -116,22 +115,18 @@ abstract class tx_mksearch_action_AbstractSearch extends tx_rnbase_action_BaseIO
      * Creates a new Filter.
      *
      * @param string $confId
+     * @param \Sys25\RnBase\Frontend\Request\RequestInterface $request
      *
-     * @return tx_rnbase_IFilter
+     * @return \Sys25\RnBase\Frontend\Filter\FilterInterface
      */
-    protected function createFilter($confId = null)
+    protected function createFilter(\Sys25\RnBase\Frontend\Request\RequestInterface $request, $confId = null)
     {
         $confId = $confId ?: $this->getConfId().'filter.';
 
-        $filter = tx_rnbase_filter_BaseFilter::createFilter(
-            $this->getParameters(),
-            $this->getConfigurations(),
-            $this->getViewData(),
-            $confId
-        );
+        $filter = \Sys25\RnBase\Frontend\Filter\BaseFilter::createFilter($request, $confId);
 
         if ($filter instanceof tx_mksearch_filter_IStoreIndex) {
-            $filter->setSearchIndex($this->getSearchIndex());
+            $filter->setSearchIndex($this->getSearchIndex($request));
         }
 
         return $filter;

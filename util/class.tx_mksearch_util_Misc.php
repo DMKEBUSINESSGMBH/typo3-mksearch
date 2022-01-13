@@ -21,7 +21,7 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
-require_once tx_rnbase_util_Extensions::extPath('mksearch').'lib/Apache/Solr/Service.php';
+require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch').'lib/Apache/Solr/Service.php';
 
 /**
  * Miscellaneous methods.
@@ -72,7 +72,7 @@ class tx_mksearch_util_Misc
             return true;
         }
         if (array_key_exists('include.', $options) && is_array($options['include.'])) {
-            $aPages = (array_key_exists('pages', $options['include.']) && strlen(trim($options['include.']['pages']))) ? tx_rnbase_util_Strings::intExplode(',', $options['include.']['pages']) : false;
+            $aPages = (array_key_exists('pages', $options['include.']) && strlen(trim($options['include.']['pages']))) ? \Sys25\RnBase\Utility\Strings::intExplode(',', $options['include.']['pages']) : false;
             if (!is_array($aPages)) {
                 $aPages = $options['include.']['pages.'];
             }
@@ -83,7 +83,7 @@ class tx_mksearch_util_Misc
             }
         }
         if (array_key_exists('exclude.', $options) && is_array($options['exclude.'])) {
-            $aPages = (array_key_exists('pages', $options['exclude.']) && strlen(trim($options['exclude.']['pages']))) ? tx_rnbase_util_Strings::intExplode(',', $options['exclude.']['pages']) : false;
+            $aPages = (array_key_exists('pages', $options['exclude.']) && strlen(trim($options['exclude.']['pages']))) ? \Sys25\RnBase\Utility\Strings::intExplode(',', $options['exclude.']['pages']) : false;
             if (!is_array($aPages)) {
                 $aPages = $options['exclude.']['pages.'];
             }
@@ -100,7 +100,7 @@ class tx_mksearch_util_Misc
     /**
      * Liefert einen UTF8 codierten String.
      *
-     * @TODO: wäre in der tx_rnbase_util_Strings besser aufgehoben?
+     * @TODO: wäre in der \Sys25\RnBase\Utility\Strings besser aufgehoben?
      *
      * @param mixed $t
      *
@@ -114,7 +114,7 @@ class tx_mksearch_util_Misc
         }
         // String prüfen und ggf. encodieren
 
-        return tx_rnbase_util_Strings::isUtf8String($mixed) ? $mixed : utf8_encode($mixed);
+        return \Sys25\RnBase\Utility\Strings::isUtf8String($mixed) ? $mixed : utf8_encode($mixed);
     }
 
     /**
@@ -227,9 +227,9 @@ class tx_mksearch_util_Misc
     public static function isDevIpMask($remoteAddress = '', $devIPmask = '')
     {
         $devIPmask = trim(strcmp($devIPmask, '') ? $devIPmask : $GLOBALS['TYPO3_CONF_VARS']['SYS']['devIPmask']);
-        $remoteAddress = trim(strcmp($remoteAddress, '') ? $remoteAddress : tx_rnbase_util_Misc::getIndpEnv('REMOTE_ADDR'));
+        $remoteAddress = trim(strcmp($remoteAddress, '') ? $remoteAddress : \Sys25\RnBase\Utility\Misc::getIndpEnv('REMOTE_ADDR'));
 
-        return tx_rnbase_util_Network::cmpIP($remoteAddress, $devIPmask);
+        return \Sys25\RnBase\Utility\Network::cmpIP($remoteAddress, $devIPmask);
     }
 
     /**
@@ -239,7 +239,7 @@ class tx_mksearch_util_Misc
      */
     public static function parseTsConfig($sTs)
     {
-        return tx_rnbase_util_TS::parseTsConfig($sTs);
+        return \Sys25\RnBase\Utility\TypoScript::parseTsConfig($sTs);
     }
 
     /**

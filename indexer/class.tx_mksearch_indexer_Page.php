@@ -93,13 +93,13 @@ class tx_mksearch_indexer_Page extends tx_mksearch_indexer_Base
     /**
      * @see tx_mksearch_indexer_Base::indexData()
      */
-    public function indexData(tx_rnbase_IModel $oModel, $tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options)
+    public function indexData(\Sys25\RnBase\Domain\Model\DataInterface $oModel, $tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options)
     {
         $lang = isset($this->options['lang']) ? $this->options['lang'] : 0;
 
         // Localize record, if necessary
         if ($lang) {
-            $page = tx_rnbase_util_TYPO3::getSysPage();
+            $page = \Sys25\RnBase\Utility\TYPO3::getSysPage();
             $rawData = $page->getPageOverlay($rawData, $lang);
             // No success in record translation?
             if (!isset($rawData['_PAGES_OVERLAY'])) {
@@ -117,9 +117,9 @@ class tx_mksearch_indexer_Page extends tx_mksearch_indexer_Base
         // and last but not least about the index size!
         // You may define the limit for your content type centrally with the key
         // "abstractMaxLength_[your extkey]_[your content type]" as defined at $indexDoc constructor
-        if (!empty($oModel->record['abstract'])) {
+        if (!empty($oModel->getProperty('abstract'))) {
             $indexDoc->setAbstract(
-                $options['keepHtml'] ? $oModel->record['abstract'] : tx_mksearch_util_Misc::html2plain($oModel->record['abstract']),
+                $options['keepHtml'] ? $oModel->getProperty('abstract') : tx_mksearch_util_Misc::html2plain($oModel->getProperty('abstract')),
                 $indexDoc->getMaxAbstractLength()
             );
         }
@@ -160,7 +160,7 @@ class tx_mksearch_indexer_Page extends tx_mksearch_indexer_Base
         $tableName = null,
         $options = []
     ) {
-        return tx_rnbase::makeInstance('tx_rnbase_model_Base', $rawData);
+        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Domain\Model\BaseModel::class, $rawData);
     }
 
     /**

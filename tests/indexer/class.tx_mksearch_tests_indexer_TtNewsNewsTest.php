@@ -22,7 +22,7 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once tx_rnbase_util_Extensions::extPath('mksearch', 'lib/Apache/Solr/Document.php');
+require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch', 'lib/Apache/Solr/Document.php');
 
 /**
  * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
@@ -34,7 +34,7 @@ class tx_mksearch_tests_indexer_TtNewsNewsTest extends tx_mksearch_tests_Testcas
 {
     protected function setUp()
     {
-        if (!tx_rnbase_util_Extensions::isLoaded('tt_news')) {
+        if (!\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('tt_news')) {
             $this->markTestSkipped('tt_news is not installed!');
         }
         parent::setUp();
@@ -48,13 +48,13 @@ class tx_mksearch_tests_indexer_TtNewsNewsTest extends tx_mksearch_tests_Testcas
             'bodytext_s' => 'bodytext',
         ];
 
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtNewsNews');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_TtNewsNews');
 
         list($extKey, $cType) = $indexer->getContentType();
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType, 'tx_mksearch_model_IndexerFieldBase');
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType, 'tx_mksearch_model_IndexerFieldBase');
 
         // Datumswerte werden immer in UTC in den Index gelegt
-        $tstamp = tx_rnbase_util_Dates::datetime_mysql2tstamp('2010-01-30 15:00:00', 'UTC');
+        $tstamp = \Sys25\RnBase\Utility\Dates::datetime_mysql2tstamp('2010-01-30 15:00:00', 'UTC');
         $record = ['uid' => 123, 'deleted' => 0, 'datetime' => $tstamp, 'bodytext' => 'some test'];
         $indexer->prepareSearchData('tt_news', $record, $indexDoc, $options);
         $data = $indexDoc->getData();
@@ -77,13 +77,13 @@ class tx_mksearch_tests_indexer_TtNewsNewsTest extends tx_mksearch_tests_Testcas
             'bodytext_s' => 'bodytext',
         ];
 
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtNewsNews');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_TtNewsNews');
 
         list($extKey, $cType) = $indexer->getContentType();
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType, 'tx_mksearch_model_IndexerFieldBase');
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType, 'tx_mksearch_model_IndexerFieldBase');
 
         // Datumswerte werden immer in UTC in den Index gelegt
-        $tstamp = tx_rnbase_util_Dates::datetime_mysql2tstamp('2010-01-30 15:00:00', 'UTC');
+        $tstamp = \Sys25\RnBase\Utility\Dates::datetime_mysql2tstamp('2010-01-30 15:00:00', 'UTC');
         $record = ['uid' => 123, 'deleted' => 0, 'datetime' => $tstamp, 'bodytext' => 'some test <p>with html markup</p>'];
         $indexer->prepareSearchData('tt_news', $record, $indexDoc, $options);
         $data = $indexDoc->getData();
@@ -108,13 +108,13 @@ class tx_mksearch_tests_indexer_TtNewsNewsTest extends tx_mksearch_tests_Testcas
             'keepHtml' => 1,
         ];
 
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtNewsNews');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_TtNewsNews');
 
         list($extKey, $cType) = $indexer->getContentType();
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType, 'tx_mksearch_model_IndexerFieldBase');
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType, 'tx_mksearch_model_IndexerFieldBase');
 
         // Datumswerte werden immer in UTC in den Index gelegt
-        $tstamp = tx_rnbase_util_Dates::datetime_mysql2tstamp('2010-01-30 15:00:00', 'UTC');
+        $tstamp = \Sys25\RnBase\Utility\Dates::datetime_mysql2tstamp('2010-01-30 15:00:00', 'UTC');
         $record = ['uid' => 123, 'deleted' => 0, 'datetime' => $tstamp, 'bodytext' => 'some test <p>with html markup</p>'];
         $indexer->prepareSearchData('tt_news', $record, $indexDoc, $options);
         $data = $indexDoc->getData();
@@ -134,20 +134,20 @@ class tx_mksearch_tests_indexer_TtNewsNewsTest extends tx_mksearch_tests_Testcas
         $options = [];
         $options['indexedFields'] = 'uid,bodytext';
 
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtNewsNews');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_TtNewsNews');
 
         list($extKey, $cType) = $indexer->getContentType();
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType, 'tx_mksearch_model_IndexerFieldBase');
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType, 'tx_mksearch_model_IndexerFieldBase');
         $record = ['uid' => 123, 'deleted' => 1];
         $indexer->prepareSearchData('tt_news', $record, $indexDoc, $options);
         self::assertEquals(true, $indexDoc->getDeleted());
 
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType, 'tx_mksearch_model_IndexerFieldBase');
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType, 'tx_mksearch_model_IndexerFieldBase');
         $record = ['uid' => 123, 'deleted' => 0, 'hidden' => 1];
         $indexer->prepareSearchData('tt_news', $record, $indexDoc, $options);
         self::assertEquals(true, $indexDoc->getDeleted());
 
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType, 'tx_mksearch_model_engineSpecific_solr_IndexerField');
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType, 'tx_mksearch_model_engineSpecific_solr_IndexerField');
         $record = ['uid' => 123, 'deleted' => 0, 'hidden' => 0, 'bodytext' => 'some test'];
         $indexer->prepareSearchData('tt_news', $record, $indexDoc, $options);
         self::assertEquals(false, $indexDoc->getDeleted());
@@ -165,13 +165,13 @@ class tx_mksearch_tests_indexer_TtNewsNewsTest extends tx_mksearch_tests_Testcas
     {
         $options = [];
 
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtNewsNews');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_TtNewsNews');
 
         list($extKey, $cType) = $indexer->getContentType();
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType, 'tx_mksearch_model_IndexerFieldBase');
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType, 'tx_mksearch_model_IndexerFieldBase');
 
         // Datumswerte werden immer in UTC in den Index gelegt
-        $tstamp = tx_rnbase_util_Dates::datetime_mysql2tstamp('2010-01-30 15:00:00', 'UTC');
+        $tstamp = \Sys25\RnBase\Utility\Dates::datetime_mysql2tstamp('2010-01-30 15:00:00', 'UTC');
         $record = ['uid' => 123, 'deleted' => 0, 'datetime' => $tstamp, 'bodytext' => 'some test <p>with html markup</p>'];
         $indexer->prepareSearchData('tt_news', $record, $indexDoc, $options);
         $data = $indexDoc->getData();
@@ -189,9 +189,9 @@ class tx_mksearch_tests_indexer_TtNewsNewsTest extends tx_mksearch_tests_Testcas
     public function testGetDbUtil()
     {
         self::assertEquals(
-            'tx_rnbase_util_DB',
+            \Sys25\RnBase\Database\Connection::class,
             $this->callInaccessibleMethod(
-                tx_rnbase::makeInstance('tx_mksearch_indexer_TtNewsNews'),
+                \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_TtNewsNews'),
                 'getDbUtil'
             )
         );
@@ -205,7 +205,7 @@ class tx_mksearch_tests_indexer_TtNewsNewsTest extends tx_mksearch_tests_Testcas
         self::assertInstanceOf(
             'tx_mksearch_service_internal_Index',
             $this->callInaccessibleMethod(
-                tx_rnbase::makeInstance('tx_mksearch_indexer_TtNewsNews'),
+                \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_TtNewsNews'),
                 'getIntIndexService'
             )
         );
@@ -218,10 +218,10 @@ class tx_mksearch_tests_indexer_TtNewsNewsTest extends tx_mksearch_tests_Testcas
     {
         $options = [];
 
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtNewsNews');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_TtNewsNews');
 
         list($extKey, $cType) = $indexer->getContentType();
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType, 'tx_mksearch_model_IndexerFieldBase');
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType, 'tx_mksearch_model_IndexerFieldBase');
 
         $record = ['uid' => 123];
         $indexer->prepareSearchData('tt_news_cat', $record, $indexDoc, $options);
@@ -265,7 +265,7 @@ class tx_mksearch_tests_indexer_TtNewsNewsTest extends tx_mksearch_tests_Testcas
             ->method('getIntIndexService')
             ->will($this->returnValue($indexService));
 
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType, 'tx_mksearch_model_IndexerFieldBase');
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType, 'tx_mksearch_model_IndexerFieldBase');
 
         $record = ['uid' => 123];
         $indexerReturn = $indexer->prepareSearchData('tt_news_cat', $record, $indexDoc, $options);

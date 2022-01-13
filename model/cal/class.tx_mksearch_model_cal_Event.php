@@ -30,7 +30,7 @@
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_model_cal_Event extends tx_rnbase_model_base
+class tx_mksearch_model_cal_Event extends \Sys25\RnBase\Domain\Model\BaseModel
 {
     /**
      * Calender model for this event.
@@ -71,9 +71,9 @@ class tx_mksearch_model_cal_Event extends tx_rnbase_model_base
     public function getCalendar()
     {
         if (null === $this->calendar) {
-            $this->calendar = tx_rnbase::makeInstance(
+            $this->calendar = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
                 'tx_mksearch_model_cal_Calendar',
-                $this->record['calendar_id']
+                $this->getProperty('calendar_id')
             );
         }
 
@@ -88,9 +88,9 @@ class tx_mksearch_model_cal_Event extends tx_rnbase_model_base
     public function getLocation()
     {
         if (null === $this->location) {
-            $this->location = tx_rnbase::makeInstance(
+            $this->location = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
                 'tx_mksearch_model_cal_Location',
-                $this->record['location_id']
+                $this->getProperty('location_id')
             );
         }
 
@@ -108,7 +108,7 @@ class tx_mksearch_model_cal_Event extends tx_rnbase_model_base
             $categoriesByEvent = $this->getCategoriesByEvent();
 
             foreach ($categoriesByEvent as $categoryByEvent) {
-                $this->categories[] = tx_rnbase::makeInstance(
+                $this->categories[] = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
                     'tx_mksearch_model_cal_Category',
                     $categoryByEvent['uid_foreign']
                 );
@@ -125,7 +125,7 @@ class tx_mksearch_model_cal_Event extends tx_rnbase_model_base
      */
     protected function getCategoriesByEvent()
     {
-        return Tx_Rnbase_Database_Connection::getInstance()->doSelect(
+        return \Sys25\RnBase\Database\Connection::getInstance()->doSelect(
             'uid_foreign',
             'tx_cal_event_category_mm AS MM JOIN tx_cal_category AS CAT ON '.
             'MM.uid_foreign = CAT.uid',

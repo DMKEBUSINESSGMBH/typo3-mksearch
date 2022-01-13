@@ -50,23 +50,23 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base
     /**
      * Get all categories of the news record.
      *
-     * @param tx_rnbase_IModel $model
+     * @param \Sys25\RnBase\Domain\Model\DataInterface $model
      *
      * @return array
      *
      * @todo support parent categories
      */
-    private function getCategories(tx_rnbase_IModel $model)
+    private function getCategories(\Sys25\RnBase\Domain\Model\DataInterface $model)
     {
         $options = [
             'where' => 'tt_news_cat_mm.uid_local='.$model->getUid(),
             // as there is no tca for tt_news_cat_mm
-            'wrapperclass' => 'tx_rnbase_model_Base',
+            'wrapperclass' => \Sys25\RnBase\Domain\Model\BaseModel::class,
             'orderby' => 'tt_news_cat_mm.sorting ASC',
         ];
         $join = ' JOIN tt_news_cat_mm ON tt_news_cat_mm.uid_foreign=tt_news_cat.uid AND tt_news_cat.deleted=0 ';
         $from = ['tt_news_cat'.$join, 'tt_news_cat'];
-        $rows = tx_rnbase_util_DB::doSelect(
+        $rows = \Sys25\RnBase\Database\Connection::getInstance()->doSelect(
             'tt_news_cat_mm.uid_foreign, tt_news_cat.uid, tt_news_cat.title, tt_news_cat.single_pid',
             $from,
             $options
@@ -78,7 +78,7 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base
     /**
      * Do the actual indexing for the given model.
      *
-     * @param tx_rnbase_IModel                      $oModel
+     * @param \Sys25\RnBase\Domain\Model\DataInterface                      $oModel
      * @param string                                $tableName
      * @param array                                 $rawData
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
@@ -90,7 +90,7 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base
      * @todo index target page of category for single view
      */
     public function indexData(
-        tx_rnbase_IModel $oModel,
+        \Sys25\RnBase\Domain\Model\DataInterface $oModel,
         $tableName,
         $rawData,
         tx_mksearch_interface_IndexerDocument $indexDoc,
@@ -105,7 +105,7 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base
         }
 
         // Hook to append indexer
-        tx_rnbase_util_Misc::callHook(
+        \Sys25\RnBase\Utility\Misc::callHook(
             'mksearch',
             'indexer_TtNews_prepareDataBeforeAddFields',
             [
@@ -120,7 +120,7 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base
 
         // At least one of the news' categories was found on black list
         if ($abort) {
-            tx_rnbase_util_Logger::info(
+            \Sys25\RnBase\Utility\Logger::info(
                 'News wurde nicht indiziert, weil Kategorie (Include/Exclude) nicht gesetzt ist'.
                 ' oder das Signal von einem Hook gegeben wurde.',
                 'mksearch'
@@ -311,11 +311,11 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base
      */
     protected function doSelect($what, $from, $options)
     {
-        return tx_rnbase_util_DB::doSelect($what, $from, $options);
+        return \Sys25\RnBase\Database\Connection::getInstance()->doSelect($what, $from, $options);
     }
 
     /**
-     * wird hier nicht mehr verwendet. Die tx_rnbase_util_DB bitte direkt verwenden.
+     * wird hier nicht mehr verwendet. Die \Sys25\RnBase\Database\Connection bitte direkt verwenden.
      *
      * @return string
      *
@@ -323,7 +323,7 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base
      */
     protected function getDbUtil()
     {
-        return tx_rnbase_util_DB;
+        return \Sys25\RnBase\Database\Connection::getInstance();
     }
 
     /**
@@ -341,7 +341,7 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base
      */
     protected function createModel(array $rawData, $tableName = null, $options = [])
     {
-        return tx_rnbase::makeInstance('tx_rnbase_model_Base', $rawData);
+        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Domain\Model\BaseModel::class, $rawData);
     }
 
     /**
@@ -363,10 +363,10 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base
 
         $categoryNames = [];
         foreach ($categories as $category) {
-            $categoryNames[$category->record['uid_foreign']] = $category->record['title'];
+            $categoryNames[$category->getProperty('uid_foreign')] = $category->getProperty('title');
             // Die erste Kategorie mit einer Single-PID wird gewinnen
             if (!$iCategorySinglePid) {
-                $iCategorySinglePid = (int) $category->record['single_pid'];
+                $iCategorySinglePid = (int) $category->getProperty('single_pid');
             }
         }
         if (!$iCategorySinglePid) {

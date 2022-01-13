@@ -28,7 +28,7 @@
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter
+class tx_mksearch_filter_ElasticSearchBase extends \Sys25\RnBase\Frontend\Filter\BaseFilter
 {
     /**
      * @var tx_mksearch_util_Filter
@@ -45,7 +45,7 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter
     {
         $confId = $this->getConfId();
         $fields = $this->getConfigurations()->get($confId.'fields.');
-        tx_rnbase_util_SearchBase::setConfigOptions(
+        \Sys25\RnBase\Search\SearchBase::setConfigOptions(
             $options,
             $this->getConfigurations(),
             $confId.'options.'
@@ -54,9 +54,7 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter
         return $this->initFilter(
             $fields,
             $options,
-            $this->getParameters(),
-            $this->getConfigurations(),
-            $confId
+            $this->request
         );
     }
 
@@ -65,19 +63,19 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter
      *
      * @param array $fields
      * @param array $options
-     * @param \Sys25\RnBase\Frontend\Request\ParametersInterface $parameters
-     * @param tx_rnbase_configurations $configurations
-     * @param string $confId
+     * \Sys25\RnBase\Frontend\Request\RequestInterface $request
      *
      * @return bool Should subsequent query be executed at all?
      */
     protected function initFilter(
         &$fields,
         &$options,
-        &$parameters,
-        &$configurations,
-        $confId
+        \Sys25\RnBase\Frontend\Request\RequestInterface $request
     ) {
+        $configurations = $request->getConfigurations();
+        $parameters = $request->getParameters();
+        $confId = $this->getConfId();
+
         // Es muss ein Submit-Parameter im request liegen, damit der Filter greift
         if (!($parameters->offsetExists('submit') ||
             $configurations->get($confId.'forceSearch'))
@@ -96,7 +94,7 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter
      *
      * @param array $fields
      * @param \Sys25\RnBase\Frontend\Request\ParametersInterface $parameters
-     * @param tx_rnbase_configurations $configurations
+     * @param \Sys25\RnBase\Configuration\Processor $configurations
      * @param string $confId
      */
     protected function handleTerm(&$fields, &$parameters, &$configurations, $confId)
@@ -131,7 +129,7 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter
 
     /**
      * @param string                    $template  HTML template
-     * @param tx_rnbase_util_FormatUtil $formatter
+     * @param \Sys25\RnBase\Frontend\Marker\FormatUtil $formatter
      * @param string                    $confId
      * @param string                    $marker
      *
@@ -161,7 +159,7 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter
             $marker
         );
 
-        return tx_rnbase_util_Templates::substituteMarkerArrayCached(
+        return \Sys25\RnBase\Frontend\Marker\Templates::substituteMarkerArrayCached(
             $template,
             $markArray,
             $subpartArray,
@@ -176,7 +174,7 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter
      * @param array                     $markArray
      * @param array                     $subpartArray
      * @param array                     $wrappedSubpartArray
-     * @param tx_rnbase_util_FormatUtil $formatter
+     * @param \Sys25\RnBase\Frontend\Marker\FormatUtil $formatter
      * @param string                    $confId
      * @param string                    $marker
      *
@@ -194,7 +192,7 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter
         $marker = 'FILTER'
     ) {
         $markerName = 'SEARCH_FORM';
-        if (!tx_rnbase_util_BaseMarker::containsMarker($template, $markerName)) {
+        if (!\Sys25\RnBase\Frontend\Marker\BaseMarker::containsMarker($template, $markerName)) {
             return $template;
         }
 
@@ -204,7 +202,7 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter
         $formTemplate = $configurations->get($confId.'template.file');
 
         $subpart = $configurations->get($confId.'template.subpart');
-        $formTemplate = tx_rnbase_util_Templates::getSubpartFromFile(
+        $formTemplate = \Sys25\RnBase\Frontend\Marker\Templates::getSubpartFromFile(
             $formTemplate,
             $subpart
         );
@@ -217,7 +215,7 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter
             $formData = $this->getParameters()->get('submit') ? $paramArray : $this->getFormData();
             $formData['action'] = $link->makeUrl(false);
             $formData['searchterm'] = htmlspecialchars($this->getParameters()->get('term'), ENT_QUOTES);
-            $formData['hiddenfields'] = tx_rnbase_util_FormUtil::getHiddenFieldsForUrlParams($formData['action']);
+            $formData['hiddenfields'] = \Sys25\RnBase\Backend\Form\FormUtil::getHiddenFieldsForUrlParams($formData['action']);
             $this->prepareFormFields($formData, $this->getParameters());
 
             $combinations = ['none', 'free', 'or', 'and', 'exact'];
@@ -246,7 +244,7 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter
                 $formData['mode_standard_selected'] = 'checked=checked';
             }
 
-            $templateMarker = tx_rnbase::makeInstance('tx_mksearch_marker_General');
+            $templateMarker = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_marker_General');
             $formTemplate = $templateMarker->parseTemplate($formTemplate, $formData, $formatter, $confId.'form.', 'FORM');
         }
 
@@ -298,7 +296,7 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter
      */
     protected function getModeValuesAvailable()
     {
-        $availableModes = tx_rnbase_util_Strings::trimExplode(
+        $availableModes = \Sys25\RnBase\Utility\Strings::trimExplode(
             ',',
             $this->getConfigurations()->get($this->getConfId().'availableModes')
         );
@@ -320,7 +318,7 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter
         array $formData,
         \Sys25\RnBase\Frontend\Request\ParametersInterface $parameters
     ) {
-        $formFields = tx_rnbase_util_Strings::trimExplode(
+        $formFields = \Sys25\RnBase\Utility\Strings::trimExplode(
             ',',
             $this->getConfigurations()->get($this->getConfId().'requiredFormFields')
         );
@@ -341,7 +339,7 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter
      * @param array                     $markArray
      * @param array                     $subpartArray
      * @param array                     $wrappedSubpartArray
-     * @param tx_rnbase_util_FormatUtil $formatter
+     * @param \Sys25\RnBase\Frontend\Marker\FormatUtil $formatter
      * @param string                    $confId
      * @param string                    $marker
      */
@@ -379,7 +377,7 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_rnbase_filter_BaseFilter
     protected function getFilterUtility()
     {
         if (!$this->filterUtility) {
-            $this->filterUtility = tx_rnbase::makeInstance('tx_mksearch_util_Filter');
+            $this->filterUtility = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_util_Filter');
         }
 
         return $this->filterUtility;

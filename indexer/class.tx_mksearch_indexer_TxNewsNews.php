@@ -81,7 +81,7 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
             $stopIndexing = true;
         }
 
-        tx_rnbase_util_Misc::callHook(
+        \Sys25\RnBase\Utility\Misc::callHook(
             'mksearch',
             'indexer_TxNews_afterStopIndexing',
             [
@@ -154,7 +154,7 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
     /**
      * Do the actual indexing for the given model.
      *
-     * @param tx_rnbase_IModel                      $oModel
+     * @param \Sys25\RnBase\Domain\Model\DataInterface                      $oModel
      * @param string                                $tableName
      * @param array                                 $rawData
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
@@ -164,7 +164,7 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
      */
     // @codingStandardsIgnoreStart (interface/abstract mistake)
     public function indexData(
-        tx_rnbase_IModel $model,
+        \Sys25\RnBase\Domain\Model\DataInterface $model,
         $tableName,
         $rawData,
         tx_mksearch_interface_IndexerDocument $indexDoc,
@@ -181,7 +181,7 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
 
         // Hook to append indexer data
         if (!$news) {
-            tx_rnbase_util_Misc::callHook(
+            \Sys25\RnBase\Utility\Misc::callHook(
                 'mksearch',
                 'indexer_TxNews_prepareDataBeforeAddFields',
                 [
@@ -201,7 +201,7 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
 
         // At least one of the news' categories was found on black list
         if ($abort) {
-            tx_rnbase_util_Logger::info(
+            \Sys25\RnBase\Utility\Logger::info(
                 'News wurde nicht indiziert, weil das Signal von einem Hook gegeben wurde.',
                 'mksearch',
                 [
@@ -223,7 +223,7 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
         $this->indexNewsCategories($rawData, $news, $indexDoc);
 
         // Hook to extend indexer
-        tx_rnbase_util_Misc::callHook(
+        \Sys25\RnBase\Utility\Misc::callHook(
             'mksearch',
             'indexer_TxNews_prepareDataAfterAddFields',
             [
@@ -568,11 +568,11 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
     /**
      * The conection to the db.
      *
-     * @return Tx_Rnbase_Database_Connection
+     * @return \Sys25\RnBase\Database\Connection
      */
     protected function getDatabaseConnection()
     {
-        return Tx_Rnbase_Database_Connection::getInstance();
+        return \Sys25\RnBase\Database\Connection::getInstance();
     }
 
     /**

@@ -35,7 +35,7 @@ class tx_mksearch_mod1_decorator_Index
     /**
      * Returns the module.
      *
-     * @return tx_rnbase_mod_IModule
+     * @return \Sys25\RnBase\Backend\Module\IModule
      */
     private function getModule()
     {
@@ -55,8 +55,8 @@ class tx_mksearch_mod1_decorator_Index
             case 'core':
                 $ret = '';
                 $ret .= tx_mksearch_mod1_util_IndexStatusHandler::getInstance()->handleRequest4Index($item);
-                if (!empty($record->record['description'])) {
-                    $ret .= '<br /><pre>'.$record->record['description'].'</pre>';
+                if (!empty($record->getProperty('description'))) {
+                    $ret .= '<br /><pre>'.$record->getProperty('description').'</pre>';
                 }
                 break;
             case 'engine':
@@ -77,7 +77,7 @@ class tx_mksearch_mod1_decorator_Index
             case 'composites':
                 $composites = tx_mksearch_util_ServiceRegistry::getIntCompositeService()->getByIndex($item);
                 /* @var $compositeDecorator tx_mksearch_mod1_decorator_Composite */
-                $compositeDecorator = tx_rnbase::makeInstance('tx_mksearch_mod1_decorator_Composite', $this->getModule());
+                $compositeDecorator = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_mod1_decorator_Composite', $this->getModule());
                 $ret = $compositeDecorator->getCompositeInfos($composites, ['includeConfig' => 1]);
                 break;
             case 'actions':
@@ -85,7 +85,7 @@ class tx_mksearch_mod1_decorator_Index
                 // bearbeiten link
                 $ret .= $formtool->createEditLink($item->getTableName(), $item->getUid(), '');
                 // hide undhide link
-                $ret .= $formtool->createHideLink($item->getTableName(), $item->getUid(), $item->record['hidden']);
+                $ret .= $formtool->createHideLink($item->getTableName(), $item->getUid(), $item->getProperty('hidden'));
                 // remove link
                 $ret .= $formtool->createDeleteLink($item->getTableName(), $item->getUid(), '', ['confirm' => $GLOBALS['LANG']->getLL('confirmation_deletion')]);
                 break;

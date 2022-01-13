@@ -25,12 +25,12 @@
 /**
  * Renders a search result.
  */
-class tx_mksearch_marker_Search extends tx_rnbase_util_SimpleMarker
+class tx_mksearch_marker_Search extends \Sys25\RnBase\Frontend\Marker\SimpleMarker
 {
     /**
      * @param string                      $template  HTML template
      * @param tx_mksearch_model_SearchHit $item
-     * @param tx_rnbase_util_FormatUtil   $formatter Formatter to use
+     * @param \Sys25\RnBase\Frontend\Marker\FormatUtil   $formatter Formatter to use
      * @param string                      $confId    Path in TS config of the item, e. g. 'search.hit.'
      * @param string                      $marker    name of marker, z.B. CLUB
      *                                               Von diesem String hängen die entsprechenden weiteren Marker ab: ###CLUB_NAME###, ###COACH_ADDRESS_WEBSITE###
@@ -58,7 +58,7 @@ class tx_mksearch_marker_Search extends tx_rnbase_util_SimpleMarker
         $subpartArray = $wrappedSubpartArray = [];
         $this->prepareSubparts($wrappedSubpartArray, $subpartArray, $template, $item, $formatter, $confId, $marker);
 
-        $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
+        $out = \Sys25\RnBase\Frontend\Marker\Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
 
         return $out;
     }
@@ -66,7 +66,7 @@ class tx_mksearch_marker_Search extends tx_rnbase_util_SimpleMarker
     /**
      * @param string                      $template  HTML template
      * @param tx_mksearch_model_SearchHit $item
-     * @param tx_rnbase_util_FormatUtil   $formatter Formatter to use
+     * @param \Sys25\RnBase\Frontend\Marker\FormatUtil   $formatter Formatter to use
      * @param string                      $confId    Path in TS config of the item, e. g. 'search.hit.'
      * @param string                      $marker    name of marker
      */
@@ -111,7 +111,7 @@ class tx_mksearch_marker_Search extends tx_rnbase_util_SimpleMarker
      *
      * @param string                    $template
      * @param tx_mksearch_model_SolrHit $item
-     * @param tx_rnbase_util_FormatUtil $formatter
+     * @param \Sys25\RnBase\Frontend\Marker\FormatUtil $formatter
      * @param string                    $confId
      * @param string                    $markerPrefix
      */
@@ -128,8 +128,8 @@ class tx_mksearch_marker_Search extends tx_rnbase_util_SimpleMarker
                 $subpartName = strtoupper($item->getProperty('extKey').'_'.$item->getProperty('contentType'));
             }
             try {
-                $typeTemplate = tx_rnbase_util_Templates::getSubpartFromFile($file, '###'.$subpartName.'###');
-                $marker = tx_rnbase::makeInstance($markerClass);
+                $typeTemplate = \Sys25\RnBase\Frontend\Marker\Templates::getSubpartFromFile($file, '###'.$subpartName.'###');
+                $marker = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($markerClass);
                 // Ist es sinnvoll hier den Marker-Prefix nicht zu übergeben? Wenn man einen eigenen
                 // Marker verwendet, fällt man dadurch immer auf den Default zurück. Bei Wechsel des Markers
                 // muss also das Template angepasst werden...
@@ -143,7 +143,7 @@ class tx_mksearch_marker_Search extends tx_rnbase_util_SimpleMarker
 
         $markerArray = ['###'.$markerPrefix.'###' => $extraInfo];
 
-        $template = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray);
+        $template = \Sys25\RnBase\Frontend\Marker\Templates::substituteMarkerArrayCached($template, $markerArray);
 
         return $template;
     }
@@ -153,7 +153,7 @@ class tx_mksearch_marker_Search extends tx_rnbase_util_SimpleMarker
      *
      * @param string                      $template  HTML template
      * @param tx_mksearch_model_SearchHit $item      search hit
-     * @param tx_rnbase_util_FormatUtil   $formatter
+     * @param \Sys25\RnBase\Frontend\Marker\FormatUtil   $formatter
      * @param string                      $confId    path of typoscript configuration
      * @param string                      $marker    name of marker
      *

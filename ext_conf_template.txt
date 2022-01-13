@@ -25,7 +25,7 @@ abstractMaxLength_fallback = 200
 # cat=mksearch/basic; type=boolean; label= Curl usage: Shall Curl be used for saver Http Transport? Default is file_get_contents which needs allow_url_fopen to be active which in turn is unsafe!
 useCurlAsHttpTransport = 1
 
-# cat=mksearch/basic; type=boolean; label= Enable rn_base util DB Hook: Activates the auto indexing progress for insert, update and delete statements for tx_rnbase_util_DB calls. So the queue can be filled automaticaly for frontendediting, imports or special be-module operations. Requires rn_base 0.14.6 or later!
+# cat=mksearch/basic; type=boolean; label= Enable rn_base util DB Hook: Activates the auto indexing progress for insert, update and delete statements for \Sys25\RnBase\Database\Connection calls. So the queue can be filled automaticaly for frontendediting, imports or special be-module operations. Requires rn_base 0.14.6 or later!
 enableRnBaseUtilDbHook = 0
 
 # cat=mksearch/basic; type=int; label= Queue entries older than this seconds are deleted automatically (default 30 days) so the queue table stays small.

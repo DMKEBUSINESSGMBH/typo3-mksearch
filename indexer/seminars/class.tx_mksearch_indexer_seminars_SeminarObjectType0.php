@@ -133,7 +133,7 @@ class tx_mksearch_indexer_seminars_SeminarObjectType0 extends tx_mksearch_indexe
         //as the speakers will be a comma separated list we have to make
         //an array out of it
         foreach ($aTimeslots as &$aTimeslot) {
-            $aTimeslot['speakers'] = tx_rnbase_util_Strings::trimExplode(',', $aTimeslot['speakers']);
+            $aTimeslot['speakers'] = \Sys25\RnBase\Utility\Strings::trimExplode(',', $aTimeslot['speakers']);
         }
         $aTempIndexDoc = $this->getMultiValueFieldsByArray($aTimeslots, $aRecordFieldMapping);
 

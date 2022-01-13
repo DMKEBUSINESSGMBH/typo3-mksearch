@@ -35,7 +35,7 @@ class tx_mksearch_mod1_decorator_Composite
     /**
      * Returns the module.
      *
-     * @return tx_rnbase_mod_IModule
+     * @return \Sys25\RnBase\Backend\Module\IModule
      */
     private function getModule()
     {
@@ -54,20 +54,20 @@ class tx_mksearch_mod1_decorator_Composite
             case 'title':
                 $ret = '';
                 $ret .= $value;
-                if (!empty($record->record['description'])) {
-                    $ret .= '<br /><pre>'.$record->record['description'].'</pre>';
+                if (!empty($record->getProperty('description'))) {
+                    $ret .= '<br /><pre>'.$record->getProperty('description').'</pre>';
                 }
                 break;
             case 'indices':
                 $indizes = tx_mksearch_util_ServiceRegistry::getIntIndexService()->getByComposite($item);
                 /* @var $compositeDecorator tx_mksearch_mod1_decorator_Index */
-                $indizesDecorator = tx_rnbase::makeInstance('tx_mksearch_mod1_decorator_Index', $this->getModule());
+                $indizesDecorator = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_mod1_decorator_Index', $this->getModule());
                 $ret = $indizesDecorator->getIndexInfos($indizes);
                 break;
             case 'configs':
                 $configs = tx_mksearch_util_ServiceRegistry::getIntConfigService()->getByComposite($item);
                 /* @var $compositeDecorator tx_mksearch_mod1_decorator_IndexerConfig */
-                $configsDecorator = tx_rnbase::makeInstance('tx_mksearch_mod1_decorator_IndexerConfig', $this->getModule());
+                $configsDecorator = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_mod1_decorator_IndexerConfig', $this->getModule());
                 $ret = $configsDecorator->getConfigInfos($configs);
                 break;
             case 'actions':
@@ -76,7 +76,7 @@ class tx_mksearch_mod1_decorator_Composite
                 // bearbeiten link
                 $ret .= $formtool->createEditLink($item->getTableName(), $item->getUid(), '');
                 // hide undhide link
-                $ret .= $formtool->createHideLink($item->getTableName(), $item->getUid(), $item->record['hidden']);
+                $ret .= $formtool->createHideLink($item->getTableName(), $item->getUid(), $item->getProperty('hidden'));
                 // remove link
                 $ret .= $formtool->createDeleteLink($item->getTableName(), $item->getUid(), '', ['confirm' => $GLOBALS['LANG']->getLL('confirmation_deletion')]);
                 break;
@@ -119,7 +119,7 @@ class tx_mksearch_mod1_decorator_Composite
         if ($options['includeIndex']) {
             $indizes = tx_mksearch_util_ServiceRegistry::getIntIndexService()->getByComposite($item);
             /* @var $compositeDecorator tx_mksearch_mod1_decorator_Index */
-            $indizesDecorator = tx_rnbase::makeInstance('tx_mksearch_mod1_decorator_Index', $this->getModule());
+            $indizesDecorator = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_mod1_decorator_Index', $this->getModule());
             $out .= '<div><strong>###LABEL_TABLEHEADER_INDICES###:</strong></div>';
             $out .= '<div class="mkindent">';
             $out .= $indizesDecorator->getIndexInfos($indizes);
@@ -128,7 +128,7 @@ class tx_mksearch_mod1_decorator_Composite
         if ($options['includeConfig']) {
             $configs = tx_mksearch_util_ServiceRegistry::getIntConfigService()->getByComposite($item);
             /* @var $compositeDecorator tx_mksearch_mod1_decorator_IndexerConfig */
-            $configDecorator = tx_rnbase::makeInstance('tx_mksearch_mod1_decorator_IndexerConfig', $this->getModule());
+            $configDecorator = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_mod1_decorator_IndexerConfig', $this->getModule());
             $out .= '<div ><strong>###LABEL_TABLEHEADER_CONFIGS###:</strong></div>';
             $out .= '<div class="mkindent">';
             $out .= $configDecorator->getConfigInfos($configs);

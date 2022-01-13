@@ -25,33 +25,28 @@
 /**
  * View class for displaying a list of solr search results.
  */
-class tx_mksearch_view_SearchSolr extends tx_rnbase_view_Base
+class tx_mksearch_view_SearchSolr extends \Sys25\RnBase\Frontend\View\Marker\BaseView
 {
     /**
      * @var string
      */
     private $confId = '';
     /**
-     * @var tx_rnbase_configurations
+     * @var \Sys25\RnBase\Configuration\Processor
      */
     private $configurations = null;
 
-    /**
-     * @param string                    $template
-     * @param ArrayObject               $viewData
-     * @param tx_rnbase_configurations  $configurations
-     * @param tx_rnbase_util_FormatUtil $formatter
-     */
-    public function createOutput($template, &$viewData, &$configurations, &$formatter)
+    protected function createOutput($template, \Sys25\RnBase\Frontend\Request\RequestInterface $request, $formatter)
     {
-        // Get data from action
+        $viewData = $request->getViewContext();
+        $configurations = $request->getConfigurations();
         $result = &$viewData->offsetGet('result');
 
         $items = $result ? $result['items'] : [];
-        /* @var $listBuilder tx_rnbase_util_ListBuilder */
-        $listBuilder = tx_rnbase::makeInstance(
-            'tx_rnbase_util_ListBuilder',
-            $viewData->offsetGet('filter') instanceof ListBuilderInfo ? $viewData->offsetGet('filter') : null
+        /* @var $listBuilder \Sys25\RnBase\Frontend\Marker\ListBuilder */
+        $listBuilder = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+            \Sys25\RnBase\Frontend\Marker\ListBuilder::class,
+            $viewData->offsetGet('filter') instanceof \Sys25\RnBase\Frontend\Marker\IListBuilderInfo ? $viewData->offsetGet('filter') : null
         );
 
         // wurden options für die markerklassen gesetzt?
@@ -83,9 +78,9 @@ class tx_mksearch_view_SearchSolr extends tx_rnbase_view_Base
      *
      * @param string                     $template
      * @param array_object               $viewData
-     * @param tx_rnbase_configurations   $configurations
-     * @param tx_rnbase_util_FormatUtil  $formatter
-     * @param tx_rnbase_util_ListBuilder $listBuilder
+     * @param \Sys25\RnBase\Configuration\Processor   $configurations
+     * @param \Sys25\RnBase\Frontend\Marker\FormatUtil  $formatter
+     * @param \Sys25\RnBase\Frontend\Marker\ListBuilder $listBuilder
      * @param array                      $result
      *
      * @return string
@@ -98,9 +93,9 @@ class tx_mksearch_view_SearchSolr extends tx_rnbase_view_Base
             $suggestions = reset($suggestions);
         }
 
-        if (tx_rnbase_util_BaseMarker::containsMarker($template, 'SUGGESTIONS')) {
+        if (\Sys25\RnBase\Frontend\Marker\BaseMarker::containsMarker($template, 'SUGGESTIONS')) {
             $markerClass = $configurations->get($this->confId.'suggestions.markerClass');
-            $markerClass = $markerClass ? $markerClass : 'tx_rnbase_util_SimpleMarker';
+            $markerClass = $markerClass ? $markerClass : \Sys25\RnBase\Frontend\Marker\SimpleMarker::class;
 
             $template = $listBuilder->render(
                 $suggestions,
@@ -121,9 +116,9 @@ class tx_mksearch_view_SearchSolr extends tx_rnbase_view_Base
      *
      * @param string                     $template
      * @param array_object               $viewData
-     * @param tx_rnbase_configurations   $configurations
-     * @param tx_rnbase_util_FormatUtil  $formatter
-     * @param tx_rnbase_util_ListBuilder $listBuilder
+     * @param \Sys25\RnBase\Configuration\Processor   $configurations
+     * @param \Sys25\RnBase\Frontend\Marker\FormatUtil  $formatter
+     * @param \Sys25\RnBase\Frontend\Marker\ListBuilder $listBuilder
      * @param array                      $result
      *
      * @return string
@@ -136,7 +131,7 @@ class tx_mksearch_view_SearchSolr extends tx_rnbase_view_Base
         $facets = $result ? (array) $result['facets'] : [];
 
         // the old way!
-        if (tx_rnbase_util_BaseMarker::containsMarker($out, 'FACETS')) {
+        if (\Sys25\RnBase\Frontend\Marker\BaseMarker::containsMarker($out, 'FACETS')) {
             //erstmal die Markerklasse holen
             $facetMarkerClass = $configurations->get($this->confId.'facet.markerClass');
             $facetMarkerClass = $facetMarkerClass ? $facetMarkerClass : 'tx_mksearch_marker_Facet';
@@ -158,8 +153,8 @@ class tx_mksearch_view_SearchSolr extends tx_rnbase_view_Base
             );
 
             // den alten zurücklink
-            /* @var $baseMarker tx_rnbase_util_BaseMarker */
-            $baseMarker = tx_rnbase::makeInstance('tx_rnbase_util_BaseMarker');
+            /* @var $baseMarker \Sys25\RnBase\Frontend\Marker\BaseMarker */
+            $baseMarker = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Frontend\Marker\BaseMarker::class);
             $wrappedSubpartArray = $subpartArray = $markerArray = [];
             $baseMarker->initLink(
                 $markerArray,
@@ -172,7 +167,7 @@ class tx_mksearch_view_SearchSolr extends tx_rnbase_view_Base
                 [],
                 $out
             );
-            $out = tx_rnbase_util_Templates::substituteMarkerArrayCached(
+            $out = \Sys25\RnBase\Frontend\Marker\Templates::substituteMarkerArrayCached(
                 $out,
                 $markerArray,
                 $subpartArray,
@@ -181,7 +176,7 @@ class tx_mksearch_view_SearchSolr extends tx_rnbase_view_Base
         }
 
         // wir geben die facetten grupiert aus.
-        if (tx_rnbase_util_BaseMarker::containsMarker($out, 'GROUPEDFACETS')) {
+        if (\Sys25\RnBase\Frontend\Marker\BaseMarker::containsMarker($out, 'GROUPEDFACETS')) {
             //erstmal die Markerklasse holen
             $groupedMarkerClass = $configurations->get($this->confId.'groupedfacet.markerClass');
             $groupedMarkerClass = $groupedMarkerClass ? $groupedMarkerClass : 'tx_mksearch_marker_GroupedFacet';
@@ -203,7 +198,7 @@ class tx_mksearch_view_SearchSolr extends tx_rnbase_view_Base
     /**
      * This method is called first.
      *
-     * @param tx_rnbase_configurations $configurations
+     * @param \Sys25\RnBase\Configuration\Processor $configurations
      */
     public function _init(&$configurations)
     {

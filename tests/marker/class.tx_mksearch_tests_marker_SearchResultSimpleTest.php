@@ -27,7 +27,7 @@
 /**
  * benötigte Klassen einbinden.
  */
-require_once tx_rnbase_util_Extensions::extPath('mksearch', 'lib/Apache/Solr/Document.php');
+require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch', 'lib/Apache/Solr/Document.php');
 
 /**
  * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
@@ -52,8 +52,8 @@ class tx_mksearch_tests_marker_SearchResultSimpleTest extends tx_mksearch_tests_
         parent::setUp();
         $this->prepareTSFE();
 
-        $this->oParameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
-        $this->oMarker = tx_rnbase::makeInstance('tx_mksearch_marker_SearchResultSimple');
+        $this->oParameters = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Frontend\Request\Parameters::class);
+        $this->oMarker = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_marker_SearchResultSimple');
     }
 
     /**
@@ -71,7 +71,7 @@ class tx_mksearch_tests_marker_SearchResultSimpleTest extends tx_mksearch_tests_
         $doc = new Apache_Solr_Document();
         $doc->firstField = 'firstValue';
 
-        $oItem = tx_rnbase::makeInstance('tx_mksearch_model_SolrHit', $doc);
+        $oItem = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_SolrHit', $doc);
 
         $sTemplate = '###ITEM_FIRSTFIELD### ###ITEM_SECONDFIELD### ###ITEM_THIRDFIELD###';
         $sParsedTemplate = $this->oMarker->parseTemplate($sTemplate, $oItem, $this->oFormatter, 'searchsolr.hit.extrainfo.default.hit.', 'ITEM');

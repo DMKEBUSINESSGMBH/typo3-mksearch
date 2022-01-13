@@ -32,7 +32,7 @@ namespace DMK\Mksearch\Backend\Form\Element;
  * @license         http://www.gnu.org/licenses/lgpl.html
  *                  GNU Lesser General Public License, version 3 or later
  */
-class IndexerConfigurationFieldTest extends \tx_rnbase_tests_BaseTestCase
+class IndexerConfigurationFieldTest extends \Sys25\RnBase\Testing\BaseTestCase
 {
     /**
      * @group unit
@@ -97,7 +97,7 @@ class IndexerConfigurationFieldTest extends \tx_rnbase_tests_BaseTestCase
         self::assertNotEmpty($field->_get('data')['parameterArray']['itemFormElValue']);
         self::assertGreaterThan(1, strlen($field->_get('data')['parameterArray']['itemFormElValue']));
         self::assertEquals(
-            \tx_rnbase::makeInstance('tx_mksearch_indexer_Page')->getDefaultTSConfig(),
+            \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_Page')->getDefaultTSConfig(),
             $field->_get('data')['parameterArray']['itemFormElValue']
         );
     }

@@ -37,7 +37,7 @@ class tx_mksearch_tests_indexer_BaseMediaTest extends tx_mksearch_tests_Testcase
     {
         $indexer = $this->getIndexerMock();
 
-        $indexDoc = tx_rnbase::makeInstance(
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
             'core',
             'tt_content'
@@ -64,7 +64,7 @@ class tx_mksearch_tests_indexer_BaseMediaTest extends tx_mksearch_tests_Testcase
     {
         $indexer = $this->getIndexerMock();
 
-        $indexDoc = tx_rnbase::makeInstance(
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
             'core',
             'tt_content'
@@ -91,7 +91,7 @@ class tx_mksearch_tests_indexer_BaseMediaTest extends tx_mksearch_tests_Testcase
     {
         $indexer = $this->getIndexerMock();
 
-        $indexDoc = tx_rnbase::makeInstance(
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
             'core',
             'tt_content'
@@ -146,7 +146,7 @@ class tx_mksearch_tests_indexer_BaseMediaTest extends tx_mksearch_tests_Testcase
         $tableName = 'some_table';
         $sourceRecord = ['some_record'];
         $options = ['some_options'];
-        $indexDoc = tx_rnbase::makeInstance(
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
             '',
             ''
@@ -183,7 +183,7 @@ class tx_mksearch_tests_indexer_BaseMediaTest extends tx_mksearch_tests_Testcase
             'getFilePath', 'getRelFileName', 'stopIndexing', 'isIndexableRecord',
         ]);
 
-        $indexDoc = tx_rnbase::makeInstance(
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
             'core',
             'tt_content'
@@ -212,7 +212,7 @@ class tx_mksearch_tests_indexer_BaseMediaTest extends tx_mksearch_tests_Testcase
             'getFilePath', 'getRelFileName', 'stopIndexing', 'isIndexableRecord',
         ]);
 
-        $indexDoc = tx_rnbase::makeInstance(
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
             'core',
             'tt_content'
@@ -241,7 +241,7 @@ class tx_mksearch_tests_indexer_BaseMediaTest extends tx_mksearch_tests_Testcase
             'getFilePath', 'getRelFileName', 'stopIndexing', 'isIndexableRecord',
         ]);
 
-        $indexDoc = tx_rnbase::makeInstance(
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
             'core',
             'tt_content'
@@ -269,7 +269,7 @@ class tx_mksearch_tests_indexer_BaseMediaTest extends tx_mksearch_tests_Testcase
             'getFilePath', 'getRelFileName', 'stopIndexing', 'isIndexableRecord',
         ]);
 
-        $indexDoc = tx_rnbase::makeInstance(
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
             'core',
             'tt_content'
@@ -294,7 +294,7 @@ class tx_mksearch_tests_indexer_BaseMediaTest extends tx_mksearch_tests_Testcase
     public function testHasDocToBeDeleted($sourceRecord, $expected)
     {
         $indexer = $this->getIndexerMock();
-        $indexDoc = tx_rnbase::makeInstance(
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
             'core',
             'tt_content'
@@ -346,7 +346,7 @@ class tx_mksearch_tests_indexer_BaseMediaTest extends tx_mksearch_tests_Testcase
             ->method('isIndexableRecord')
             ->will(self::returnValue(true));
 
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', 'core', 'file');
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', 'core', 'file');
 
         $rawData = ['uid' => 123];
 
@@ -369,7 +369,7 @@ class tx_mksearch_tests_indexer_BaseMediaTest extends tx_mksearch_tests_Testcase
             ->method('isIndexableRecord')
             ->will(self::returnValue(true));
 
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', 'core', 'file');
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', 'core', 'file');
 
         $indexDoc = $indexer->prepareSearchData(
             'doesnt_matter',

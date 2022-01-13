@@ -21,7 +21,7 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
-require_once tx_rnbase_util_Extensions::extPath('mksearch', 'lib/Apache/Solr/Document.php');
+require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch', 'lib/Apache/Solr/Document.php');
 
 /**
  * tx_mksearch_tests_indexer_IrfaqTest.
@@ -40,7 +40,7 @@ class tx_mksearch_tests_indexer_IrfaqTest extends tx_mksearch_tests_Testcase
      */
     protected function setUp()
     {
-        if (!tx_rnbase_util_Extensions::isLoaded('irfaq')) {
+        if (!\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('irfaq')) {
             self::markTestSkipped('irfaq nicht installiert');
         }
 
@@ -53,7 +53,7 @@ class tx_mksearch_tests_indexer_IrfaqTest extends tx_mksearch_tests_Testcase
     public function testCreateModel()
     {
         $irfaqModel = $this->callInaccessibleMethod(
-            tx_rnbase::makeInstance('tx_mksearch_indexer_Irfaq'),
+            \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_Irfaq'),
             'createModel',
             ['uid' => 123]
         );
@@ -68,7 +68,7 @@ class tx_mksearch_tests_indexer_IrfaqTest extends tx_mksearch_tests_Testcase
     {
         self::assertInstanceOf(
             'tx_mksearch_service_irfaq_Expert',
-            $this->callInaccessibleMethod(tx_rnbase::makeInstance('tx_mksearch_indexer_Irfaq'), 'getIrfaqExpertService')
+            $this->callInaccessibleMethod(\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_Irfaq'), 'getIrfaqExpertService')
         );
     }
 
@@ -79,7 +79,7 @@ class tx_mksearch_tests_indexer_IrfaqTest extends tx_mksearch_tests_Testcase
     {
         self::assertInstanceOf(
             'tx_mksearch_service_irfaq_Category',
-            $this->callInaccessibleMethod(tx_rnbase::makeInstance('tx_mksearch_indexer_Irfaq'), 'getIrfaqCategoryService')
+            $this->callInaccessibleMethod(\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_Irfaq'), 'getIrfaqCategoryService')
         );
     }
 
@@ -104,7 +104,7 @@ class tx_mksearch_tests_indexer_IrfaqTest extends tx_mksearch_tests_Testcase
         $irfaqExpertService = $this->getMock('tx_mksearch_service_irfaq_Expert', ['get']);
         $irfaqExpertService->expects(self::once())
             ->method('get')
-            ->will(self::returnValue(tx_rnbase::makeInstance('tx_mksearch_model_irfaq_Expert', [])));
+            ->will(self::returnValue(\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_irfaq_Expert', [])));
 
         $irfaqCategoryService = $this->getMock('tx_mksearch_service_irfaq_Category', ['getByQuestion']);
         $irfaqCategoryService->expects(self::exactly(2))
@@ -177,7 +177,7 @@ class tx_mksearch_tests_indexer_IrfaqTest extends tx_mksearch_tests_Testcase
         $irfaqExpertService->expects(self::once())
             ->method('get')
             ->with(456)
-            ->will(self::returnValue(tx_rnbase::makeInstance(
+            ->will(self::returnValue(\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
                 'tx_mksearch_model_irfaq_Expert',
                 [
                     'uid' => 456,
@@ -236,14 +236,14 @@ class tx_mksearch_tests_indexer_IrfaqTest extends tx_mksearch_tests_Testcase
         $irfaqExpertService = $this->getMock('tx_mksearch_service_irfaq_Expert', ['get']);
         $irfaqExpertService->expects(self::once())
             ->method('get')
-            ->will(self::returnValue(tx_rnbase::makeInstance('tx_mksearch_model_irfaq_Expert', [])));
+            ->will(self::returnValue(\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_irfaq_Expert', [])));
 
         $irfaqCategoryService = $this->getMock('tx_mksearch_service_irfaq_Category', ['getByQuestion']);
         $irfaqCategoryService->expects(self::exactly(2))
             ->method('getByQuestion')
-            ->with(tx_rnbase::makeInstance('tx_mksearch_model_irfaq_Question', $record))
+            ->with(\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_irfaq_Question', $record))
             ->will(self::returnValue([
-                0 => tx_rnbase::makeInstance(
+                0 => \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
                     'tx_mksearch_model_irfaq_Category',
                     [
                         'uid' => 1,
@@ -252,7 +252,7 @@ class tx_mksearch_tests_indexer_IrfaqTest extends tx_mksearch_tests_Testcase
                         'shortcut' => '1. Shortcut',
                     ]
                 ),
-                1 => tx_rnbase::makeInstance(
+                1 => \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
                     'tx_mksearch_model_irfaq_Category',
                     [
                         'uid' => 2,
@@ -337,7 +337,7 @@ class tx_mksearch_tests_indexer_IrfaqTest extends tx_mksearch_tests_Testcase
     {
         self::assertInstanceOf(
             'tx_mksearch_service_irfaq_Question',
-            $this->callInaccessibleMethod(tx_rnbase::makeInstance('tx_mksearch_indexer_Irfaq'), 'getIrfaqQuestionService')
+            $this->callInaccessibleMethod(\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_Irfaq'), 'getIrfaqQuestionService')
         );
     }
 
@@ -377,7 +377,7 @@ class tx_mksearch_tests_indexer_IrfaqTest extends tx_mksearch_tests_Testcase
         $irfaqExpertService = $this->getMock('tx_mksearch_service_irfaq_Expert', ['get']);
         $irfaqExpertService->expects(self::any())
             ->method('get')
-            ->will(self::returnValue(tx_rnbase::makeInstance('tx_mksearch_model_irfaq_Expert', [])));
+            ->will(self::returnValue(\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_irfaq_Expert', [])));
 
         $irfaqCategoryService = $this->getMock('tx_mksearch_service_irfaq_Category', ['getByQuestion']);
 
@@ -385,13 +385,13 @@ class tx_mksearch_tests_indexer_IrfaqTest extends tx_mksearch_tests_Testcase
             $categories = [];
         } else {
             $categories = [
-                0 => tx_rnbase::makeInstance(
+                0 => \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
                     'tx_mksearch_model_irfaq_Category',
                     [
                         'uid' => 1,
                     ]
                 ),
-                1 => tx_rnbase::makeInstance(
+                1 => \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
                     'tx_mksearch_model_irfaq_Category',
                     [
                         'uid' => 2,
@@ -402,7 +402,7 @@ class tx_mksearch_tests_indexer_IrfaqTest extends tx_mksearch_tests_Testcase
 
         $irfaqCategoryService->expects(self::any())
             ->method('getByQuestion')
-            ->with(tx_rnbase::makeInstance('tx_mksearch_model_irfaq_Question', $record))
+            ->with(\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_irfaq_Question', $record))
             ->will(self::returnValue($categories));
 
         $indexer = $this->getMock('tx_mksearch_indexer_Irfaq', ['getIrfaqCategoryService', 'getIrfaqExpertService']);
@@ -448,7 +448,7 @@ class tx_mksearch_tests_indexer_IrfaqTest extends tx_mksearch_tests_Testcase
         array $options = []
     ) {
         list($extKey, $cType) = $indexer->getContentType();
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
 
         return $indexer->prepareSearchData($table, $record, $indexDoc, $options);
     }

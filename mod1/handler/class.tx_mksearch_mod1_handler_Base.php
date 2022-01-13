@@ -11,12 +11,12 @@ abstract class tx_mksearch_mod1_handler_Base
      * Enter description here ...
      *
      * @param string                $template
-     * @param tx_rnbase_mod_IModule $mod
+     * @param \Sys25\RnBase\Backend\Module\IModule $mod
      * @param array                 $options
      *
      * @return string
      */
-    public function showScreen($template, tx_rnbase_mod_IModule $mod, $options)
+    public function showScreen($template, \Sys25\RnBase\Backend\Module\IModule $mod, $options)
     {
         return tx_mksearch_mod1_util_Template::parseList(
             $template,
@@ -30,20 +30,20 @@ abstract class tx_mksearch_mod1_handler_Base
     /**
      * Datenverarbeitung.
      *
-     * @param tx_rnbase_mod_IModule $mod
+     * @param \Sys25\RnBase\Backend\Module\IModule $mod
      */
-    public function handleRequest(tx_rnbase_mod_IModule $mod)
+    public function handleRequest(\Sys25\RnBase\Backend\Module\IModule $mod)
     {
         return '';
     }
 
     /**
-     * @param tx_rnbase_mod_IModule $mod
+     * @param \Sys25\RnBase\Backend\Module\IModule $mod
      * @param array                 $options
      *
      * @return tx_mksearch_mod1_searcher_abstractBase
      */
-    abstract protected function getSearcher(tx_rnbase_mod_IModule $mod, &$options);
+    abstract protected function getSearcher(\Sys25\RnBase\Backend\Module\IModule $mod, &$options);
 
     /**
      * Returns the label for Handler in SubMenu. You can use a label-Marker.

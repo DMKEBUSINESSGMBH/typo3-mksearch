@@ -36,7 +36,7 @@ class tx_mksearch_tests_indexer_TxNewsNewsTest extends tx_mksearch_tests_Testcas
      */
     protected function setUp()
     {
-        if (!tx_rnbase_util_Extensions::isLoaded('news')) {
+        if (!\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('news')) {
             $this->markTestSkipped('tx_news is not installed!');
         }
         parent::setUp();
@@ -70,7 +70,7 @@ class tx_mksearch_tests_indexer_TxNewsNewsTest extends tx_mksearch_tests_Testcas
     public function testHandleCategoryChanged()
     {
         $connection = $this->getMock(
-            'Tx_Rnbase_Database_Connection',
+            \Sys25\RnBase\Database\Connection::class,
             ['doSelect']
         );
         ($connection
@@ -206,7 +206,7 @@ class tx_mksearch_tests_indexer_TxNewsNewsTest extends tx_mksearch_tests_Testcas
     /**
      * A model Mock containing news data.
      *
-     * @return tx_rnbase_model_base|PHPUnit_Framework_MockObject_MockObject
+     * @return \Sys25\RnBase\Domain\Model\BaseModel|PHPUnit_Framework_MockObject_MockObject
      */
     protected function getNewsModel()
     {

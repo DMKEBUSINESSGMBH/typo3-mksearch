@@ -25,16 +25,17 @@
 /**
  * View class for displaying a list of modular products.
  */
-class tx_mksearch_view_Search extends tx_rnbase_view_Base
+class tx_mksearch_view_Search extends \Sys25\RnBase\Frontend\View\Marker\BaseView
 {
-    public function createOutput($template, &$viewData, &$configurations, &$formatter)
+    protected function createOutput($template, \Sys25\RnBase\Frontend\Request\RequestInterface $request, $formatter)
     {
-        // Get data from action
+        $viewData = $request->getViewContext();
+        $configurations = $request->getConfigurations();
         $items = &$viewData->offsetGet('search');
 
-        $listBuilder = tx_rnbase::makeInstance(
-            'tx_rnbase_util_ListBuilder',
-            $viewData->offsetGet('filter') instanceof ListBuilderInfo ? $viewData->offsetGet('filter') : null
+        $listBuilder = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+            \Sys25\RnBase\Frontend\Marker\ListBuilder::class,
+            $viewData->offsetGet('filter') instanceof \Sys25\RnBase\Frontend\Marker\IListBuilderInfo ? $viewData->offsetGet('filter') : null
         );
 
         // wurden options für die markerklassen gesetzt?
@@ -59,7 +60,7 @@ class tx_mksearch_view_Search extends tx_rnbase_view_Base
      *
      * @return string
      */
-    public function getMainSubpart(&$viewData)
+    public function getMainSubpart(\Sys25\RnBase\Frontend\View\ContextInterface &$viewData)
     {
         return '###SEARCH###';
     }

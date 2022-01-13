@@ -5,7 +5,7 @@
  *
  * @author Michael Wagner <dev@dmk-ebusiness.de>
  */
-class tx_mksearch_search_Keyword extends tx_rnbase_util_SearchBase
+class tx_mksearch_search_Keyword extends \Sys25\RnBase\Search\SearchBase
 {
     /**
      * Return table mappings.
@@ -24,7 +24,7 @@ class tx_mksearch_search_Keyword extends tx_rnbase_util_SearchBase
      * return name of base table
      * MUST be public as we need these data from external!
      *
-     * @see util/tx_rnbase_util_SearchBase#getBaseTable()
+     * @see util/\Sys25\RnBase\Search\SearchBase#getBaseTable()
      */
     public function getBaseTable()
     {
@@ -35,7 +35,7 @@ class tx_mksearch_search_Keyword extends tx_rnbase_util_SearchBase
      * return name of base table
      * MUST be public as we need these data from external!
      *
-     * @see util/tx_rnbase_util_SearchBase#getBaseTable()
+     * @see util/\Sys25\RnBase\Search\SearchBase#getBaseTable()
      */
     public function getBaseTableAlias()
     {

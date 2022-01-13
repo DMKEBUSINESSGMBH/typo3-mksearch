@@ -68,13 +68,13 @@ class tx_mksearch_tests_fixtures_indexer_Dummy extends tx_mksearch_indexer_Base
      *
      * @see tx_mksearch_interface_Indexer::prepareSearchData()
      */
-    public function indexData(tx_rnbase_IModel $oModel, $sTableName, $aRawData, tx_mksearch_interface_IndexerDocument $oIndexDoc, $aOptions)
+    public function indexData(\Sys25\RnBase\Domain\Model\DataInterface $oModel, $sTableName, $aRawData, tx_mksearch_interface_IndexerDocument $oIndexDoc, $aOptions)
     {
         $this->indexModelByMapping($oModel, $this->getTestMapping(), $oIndexDoc);
         //with keep html
         $this->indexModelByMapping($oModel, $this->getTestMapping(), $oIndexDoc, 'keepHtml_', ['keepHtml' => 1]);
 
-        if ($oModel->record['multiValue']) {
+        if ($oModel->getProperty('multiValue')) {
             $aModels = [$oModel, $oModel];
             $this->indexArrayOfModelsByMapping(
                 $aModels,
@@ -124,11 +124,11 @@ class tx_mksearch_tests_fixtures_indexer_Dummy extends tx_mksearch_indexer_Base
      *
      * @param array $aRawData
      *
-     * @return tx_rnbase_IModel
+     * @return \Sys25\RnBase\Domain\Model\DataInterface
      */
     protected function createModel(array $rawData, $tableName = null, $options = [])
     {
-        return tx_rnbase::makeInstance('tx_rnbase_model_base', $rawData);
+        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Domain\Model\BaseModel::class, $rawData);
     }
 
     /**

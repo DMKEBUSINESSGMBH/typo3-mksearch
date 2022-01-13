@@ -5,7 +5,7 @@
  *
  * @author Michael Wagner <dev@dmk-ebusiness.de>
  */
-class tx_mksearch_model_internal_Keyword extends tx_rnbase_model_base
+class tx_mksearch_model_internal_Keyword extends \Sys25\RnBase\Domain\Model\BaseModel
 {
     /**
      * Return this model's table name.

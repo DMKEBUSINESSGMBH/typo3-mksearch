@@ -40,7 +40,7 @@ use Sys25\RnBase\Frontend\Request\ParametersInterface;
  *
  * @author René Nitzsche
  */
-class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
+class tx_mksearch_filter_SolrBase extends \Sys25\RnBase\Frontend\Filter\BaseFilter
 {
     protected $confIdExtended = '';
 
@@ -89,9 +89,9 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
     {
         $confId = $this->getConfId();
         $fields = $this->getConfigurations()->get($confId.'fields.');
-        tx_rnbase_util_SearchBase::setConfigOptions($options, $this->getConfigurations(), $confId.'options.');
+        \Sys25\RnBase\Search\SearchBase::setConfigOptions($options, $this->getConfigurations(), $confId.'options.');
 
-        return $this->initFilter($fields, $options, $this->getParameters(), $this->getConfigurations(), $confId);
+        return $this->initFilter($fields, $options, $this->request);
     }
 
     /**
@@ -126,14 +126,16 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
      *
      * @param array                    $fields
      * @param array                    $options
-     * @param tx_rnbase_parameters     $parameters
-     * @param tx_rnbase_configurations $configurations
-     * @param string                   $confId
+     * @param \Sys25\RnBase\Frontend\Request\RequestInterface $request
      *
      * @return bool Should subsequent query be executed at all?
      */
-    protected function initFilter(&$fields, &$options, &$parameters, &$configurations, $confId)
+    protected function initFilter(&$fields, &$options, \Sys25\RnBase\Frontend\Request\RequestInterface $request)
     {
+        $configurations = $request->getConfigurations();
+        $parameters = $request->getParameters();
+        $confId = $this->getConfId();
+
         // Es muss ein Submit-Parameter im request liegen, damit der Filter greift
         if (!($parameters->offsetExists('submit') || $this->getConfValue($configurations, 'force'))) {
             return false;
@@ -196,7 +198,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
      *
      * @param array                    $fields
      * @param ParametersInterface      $parameters
-     * @param tx_rnbase_configurations $configurations
+     * @param \Sys25\RnBase\Configuration\Processor $configurations
      * @param string                   $confId
      */
     protected function handleTerm(&$fields, &$parameters, &$configurations, $confId)
@@ -218,13 +220,13 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
     /**
      * @param array                    $options
      * @param ParametersInterface      $parameters
-     * @param tx_rnbase_configurations $configurations
+     * @param \Sys25\RnBase\Configuration\Processor $configurations
      * @param string                   $confId
      */
     protected function handleFacet(&$options, &$parameters, &$configurations, $confId)
     {
         $fields = $this->getConfValue('options.facet.fields');
-        $fields = tx_rnbase_util_Strings::trimExplode(',', $fields, true);
+        $fields = \Sys25\RnBase\Utility\Strings::trimExplode(',', $fields, true);
 
         if (empty($fields)) {
             return;
@@ -265,7 +267,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
      * @param array                    $fields
      * @param array                    $options
      * @param ParametersInterface      $parameters
-     * @param tx_rnbase_configurations $configurations
+     * @param \Sys25\RnBase\Configuration\Processor $configurations
      * @param string                   $confId
      */
     protected function handleOperators(&$fields, &$options, &$parameters, &$configurations, $confId)
@@ -282,7 +284,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
      *
      * @param array                    $options
      * @param ParametersInterface      $parameters
-     * @param tx_rnbase_configurations $configurations
+     * @param \Sys25\RnBase\Configuration\Processor $configurations
      * @param string                   $confId
      */
     protected function handleFq(&$options, &$parameters, &$configurations, $confId)
@@ -396,7 +398,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
      * konfiguriert sein. Sie sollte identisch mit der Anweisung in der solrconfig.xml sein.
      *
      * @param string                   $queryFacetAlias
-     * @param tx_rnbase_configurations $configurations
+     * @param \Sys25\RnBase\Configuration\Processor $configurations
      * @param string                   $confId
      *
      * @return string
@@ -432,7 +434,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
      * Fügt die SiteRootPage zur Filter Query hinzu.
      *
      * @param array                    $options
-     * @param tx_rnbase_configurations $configurations
+     * @param \Sys25\RnBase\Configuration\Processor $configurations
      * @param string                   $confId
      */
     public function handleFqForSiteRootPage(
@@ -639,7 +641,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
 
     /**
      * @param string                    $template  HTML template
-     * @param tx_rnbase_util_FormatUtil $formatter
+     * @param \Sys25\RnBase\Frontend\Marker\FormatUtil $formatter
      * @param string                    $confId
      * @param string                    $marker
      *
@@ -671,7 +673,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
         // Aufpassen: In $confId steht "searchsolr.hit.filter."
         // in $this->getConfId() steht "searchsolr.filter.default." (bzw. dismax)
 
-        return tx_rnbase_util_Templates::substituteMarkerArrayCached(
+        return \Sys25\RnBase\Frontend\Marker\Templates::substituteMarkerArrayCached(
             $template,
             $markArray,
             $subpartArray,
@@ -681,10 +683,10 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
 
     /**
      * @param string                    $formTemplate
-     * @param tx_rnbase_util_FormatUtil $formatter
+     * @param \Sys25\RnBase\Frontend\Marker\FormatUtil $formatter
      * @param string                    $confId
      */
-    protected function renderSearchForm($formTemplate, tx_rnbase_util_FormatUtil $formatter, $confId, $templateConfId)
+    protected function renderSearchForm($formTemplate, \Sys25\RnBase\Frontend\Marker\FormatUtil $formatter, $confId, $templateConfId)
     {
         $configurations = $formatter->getConfigurations();
         $viewData = $configurations->getViewData();
@@ -697,7 +699,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
             $formData['action'] = $link->makeUrl(false);
             $formData['searchterm'] = htmlspecialchars($this->getParameters()->get('term'), ENT_QUOTES);
             $formData['listsize'] = $viewData->offsetExists('pagebrowser') ? $viewData->offsetGet('pagebrowser')->getListSize() : 0;
-            $formData['hiddenfields'] = tx_rnbase_util_FormUtil::getHiddenFieldsForUrlParams($formData['action']);
+            $formData['hiddenfields'] = \Sys25\RnBase\Backend\Form\FormUtil::getHiddenFieldsForUrlParams($formData['action']);
 
             $combinations = ['none', 'free', 'or', 'and', 'exact'];
             $currentCombination = $this->getParameters()->get('combination');
@@ -725,7 +727,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
                 $formData['mode_standard_selected'] = 'checked=checked';
             }
 
-            $templateMarker = tx_rnbase::makeInstance('tx_mksearch_marker_General');
+            $templateMarker = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_marker_General');
             $formTemplate = $templateMarker->parseTemplate($formTemplate, $formData, $formatter, $confId.'form.', 'FORM');
 
             // Formularfelder
@@ -743,7 +745,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
      * @param array                     $markArray
      * @param array                     $subpartArray
      * @param array                     $wrappedSubpartArray
-     * @param tx_rnbase_util_FormatUtil $formatter
+     * @param \Sys25\RnBase\Frontend\Marker\FormatUtil $formatter
      * @param string                    $confId
      * @param string                    $marker
      *
@@ -752,7 +754,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
     public function parseSearchForm($template, &$markArray, &$subpartArray, &$wrappedSubpartArray, &$formatter, $confId, $marker = 'FILTER')
     {
         $markerName = 'SEARCH_FORM';
-        if (!tx_rnbase_util_BaseMarker::containsMarker($template, $markerName)) {
+        if (!\Sys25\RnBase\Frontend\Marker\BaseMarker::containsMarker($template, $markerName)) {
             return $template;
         }
 
@@ -761,7 +763,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
         $configurations = $formatter->getConfigurations();
         $formTemplate = $this->getConfValue($configurations, 'template.file');
         $subpart = $this->getConfValue($configurations, 'template.subpart');
-        $formTemplate = tx_rnbase_util_Templates::getSubpartFromFile($formTemplate, $subpart);
+        $formTemplate = \Sys25\RnBase\Frontend\Marker\Templates::getSubpartFromFile($formTemplate, $subpart);
 
         $formTemplate = $this->renderSearchForm($formTemplate, $formatter, $confId, 'template.');
         $markArray['###'.$markerName.'###'] = $formTemplate;
@@ -771,10 +773,10 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
             foreach ($templateKeys as $templateKey) {
                 $templateConfId = 'templates.'.$templateKey.'.';
                 $markerName = strtoupper($configurations->get($confId.$templateConfId.'name'));
-                if (tx_rnbase_util_BaseMarker::containsMarker($template, $markerName)) {
+                if (\Sys25\RnBase\Frontend\Marker\BaseMarker::containsMarker($template, $markerName)) {
                     $templateFile = $this->getConfValue($configurations, $templateConfId.'file');
                     $subpart = $this->getConfValue($configurations, $templateConfId.'subpart');
-                    $formTemplate = tx_rnbase_util_Templates::getSubpartFromFile($templateFile, $subpart);
+                    $formTemplate = \Sys25\RnBase\Frontend\Marker\Templates::getSubpartFromFile($templateFile, $subpart);
                     $formTemplate = $this->renderSearchForm($formTemplate, $formatter, $confId, $templateConfId);
                     $markArray['###'.$markerName.'###'] = $formTemplate;
                 }
@@ -792,7 +794,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
      */
     protected function getModeValuesAvailable()
     {
-        $availableModes = tx_rnbase_util_Strings::trimExplode(
+        $availableModes = \Sys25\RnBase\Utility\Strings::trimExplode(
             ',',
             $this->getConfValue($this->getConfigurations(), 'availableModes')
         );
@@ -807,7 +809,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
      * @param array                     $markArray
      * @param array                     $subpartArray
      * @param array                     $wrappedSubpartArray
-     * @param tx_rnbase_util_FormatUtil $formatter
+     * @param \Sys25\RnBase\Frontend\Marker\FormatUtil $formatter
      * @param string                    $confId
      * @param string                    $marker
      */
@@ -838,7 +840,7 @@ class tx_mksearch_filter_SolrBase extends tx_rnbase_filter_BaseFilter
     protected function getFilterUtility()
     {
         if (!$this->filterUtility) {
-            $this->filterUtility = tx_rnbase::makeInstance('tx_mksearch_util_Filter');
+            $this->filterUtility = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_util_Filter');
         }
 
         return $this->filterUtility;

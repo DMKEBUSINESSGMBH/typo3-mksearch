@@ -49,7 +49,7 @@ class tx_mksearch_tests_util_FacetBuilderTest extends tx_mksearch_tests_Testcase
         self::assertEquals(2, count($facetGroups), 'Das array hat nicht die richtige Größe!');
 
         $facetGroup = array_shift($facetGroups);
-        self::assertInstanceOf('tx_rnbase_model_base', $facetGroup);
+        self::assertInstanceOf(\Sys25\RnBase\Domain\Model\BaseModel::class, $facetGroup);
         self::assertEquals('date', $facetGroup->getField());
 
         $facetItems = $facetGroup->getItems();
@@ -58,7 +58,7 @@ class tx_mksearch_tests_util_FacetBuilderTest extends tx_mksearch_tests_Testcase
         self::assertEquals(tx_mksearch_model_Facet::TYPE_QUERY, $facetItems[0]->getFacetType());
 
         $facetGroup = array_shift($facetGroups);
-        self::assertInstanceOf('tx_rnbase_model_base', $facetGroup);
+        self::assertInstanceOf(\Sys25\RnBase\Domain\Model\BaseModel::class, $facetGroup);
         self::assertEquals('price', $facetGroup->getField());
 
         $facetItems = $facetGroup->getItems();
@@ -77,7 +77,7 @@ class tx_mksearch_tests_util_FacetBuilderTest extends tx_mksearch_tests_Testcase
         self::assertEquals(2, count($facetGroups));
 
         $facetGroup = array_shift($facetGroups);
-        self::assertInstanceOf('tx_rnbase_model_base', $facetGroup);
+        self::assertInstanceOf(\Sys25\RnBase\Domain\Model\BaseModel::class, $facetGroup);
         // fiel_one,fiel_two,fiel_three has to be converted to fiel_one-fiel_two-fiel_three!
         self::assertEquals('fiel_one-fiel_two-fiel_three', $facetGroup->getField());
 
@@ -115,7 +115,7 @@ class tx_mksearch_tests_util_FacetBuilderTest extends tx_mksearch_tests_Testcase
         self::assertFalse($facetChilds[0]->hasChilds());
 
         $facetGroup = array_shift($facetGroups);
-        self::assertInstanceOf('tx_rnbase_model_base', $facetGroup);
+        self::assertInstanceOf(\Sys25\RnBase\Domain\Model\BaseModel::class, $facetGroup);
         self::assertEquals('field_main-fiel_sub', $facetGroup->getField());
 
         $facetItems = $facetGroup->getItems();
@@ -148,7 +148,7 @@ class tx_mksearch_tests_util_FacetBuilderTest extends tx_mksearch_tests_Testcase
         self::assertEquals(1, count($facetGroups), 'Das array hat nicht die richtige Größe!');
 
         $facetGroup = reset($facetGroups);
-        self::assertInstanceOf('tx_rnbase_model_base', $facetGroup);
+        self::assertInstanceOf(\Sys25\RnBase\Domain\Model\BaseModel::class, $facetGroup);
         self::assertEquals('contentType', $facetGroup->getField());
 
         $this->doFieldFacetAssertations($facetGroup);
@@ -165,7 +165,7 @@ class tx_mksearch_tests_util_FacetBuilderTest extends tx_mksearch_tests_Testcase
         self::assertEquals(1, count($facetGroups), 'Das array hat nicht die richtige Größe!');
 
         $facetGroup = reset($facetGroups);
-        self::assertInstanceOf('tx_rnbase_model_base', $facetGroup);
+        self::assertInstanceOf(\Sys25\RnBase\Domain\Model\BaseModel::class, $facetGroup);
         self::assertEquals('contentType', $facetGroup->getField());
 
         $this->doFieldFacetAssertations($facetGroup);
@@ -180,7 +180,7 @@ class tx_mksearch_tests_util_FacetBuilderTest extends tx_mksearch_tests_Testcase
                     'uid' => ++$uid,
                     'field' => $field,
                     'items' => [
-                        tx_rnbase::makeInstance(
+                        \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
                             'tx_mksearch_model_Facet',
                             'category_dfs_ms',
                             1,
@@ -190,7 +190,7 @@ class tx_mksearch_tests_util_FacetBuilderTest extends tx_mksearch_tests_Testcase
                             ],
                             50
                         ),
-                        tx_rnbase::makeInstance(
+                        \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
                             'tx_mksearch_model_Facet',
                             'category_dfs_ms',
                             1,
@@ -200,7 +200,7 @@ class tx_mksearch_tests_util_FacetBuilderTest extends tx_mksearch_tests_Testcase
                             ],
                             30
                         ),
-                        tx_rnbase::makeInstance(
+                        \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
                             'tx_mksearch_model_Facet',
                             'category_dfs_ms',
                             1,
@@ -223,12 +223,12 @@ class tx_mksearch_tests_util_FacetBuilderTest extends tx_mksearch_tests_Testcase
         );
 
         self::assertTrue(is_array($sorted));
-        self::assertInstanceOf(tx_rnbase_model_base, $sorted[0]);
-        self::assertTrue(is_array($sorted[0]->record['items']));
-        self::assertCount(3, $sorted[0]->record['items']);
-        self::assertSame('C', $sorted[0]->record['items'][0]->record['label']);
-        self::assertSame('B', $sorted[0]->record['items'][1]->record['label']);
-        self::assertSame('A', $sorted[0]->record['items'][2]->record['label']);
+        self::assertInstanceOf(\Sys25\RnBase\Domain\Model\BaseModel, $sorted[0]);
+        self::assertTrue(is_array($sorted[0]->getProperty('items')));
+        self::assertCount(3, $sorted[0]->getProperty('items'));
+        self::assertSame('C', $sorted[0]->getProperty('items')[0]->getProperty('label'));
+        self::assertSame('B', $sorted[0]->getProperty('items')[1]->getProperty('label'));
+        self::assertSame('A', $sorted[0]->getProperty('items')[2]->getProperty('label'));
     }
 
     /**
@@ -243,21 +243,21 @@ class tx_mksearch_tests_util_FacetBuilderTest extends tx_mksearch_tests_Testcase
 
         self::assertTrue(is_array($array), 'es wurde kein array zurück gegeben!');
         self::assertEquals(3, count($array), 'Das array hat nicht die richtige Größe!');
-        self::assertEquals('contentType', $array[0]->record['field'], 'Datensatz 1 - Feld:field hat den falschen Wert!');
-        self::assertEquals('news', $array[0]->record['id'], 'Datensatz 1 - Feld:id hat den falschen Wert!');
-        self::assertEquals('news', $array[0]->record['label'], 'Datensatz 1 - Feld:label hat den falschen Wert!');
+        self::assertEquals('contentType', $array[0]->getProperty('field'), 'Datensatz 1 - Feld:field hat den falschen Wert!');
+        self::assertEquals('news', $array[0]->getProperty('id'), 'Datensatz 1 - Feld:id hat den falschen Wert!');
+        self::assertEquals('news', $array[0]->getProperty('label'), 'Datensatz 1 - Feld:label hat den falschen Wert!');
         self::assertEquals(tx_mksearch_model_Facet::TYPE_FIELD, $array[0]->getFacetType());
-        self::assertEquals(2, $array[0]->record['count'], 'Datensatz 1 - Feld:count hat den falschen Wert!');
-        self::assertEquals('contentType', $array[1]->record['field'], 'Datensatz 2 - Feld:field hat den falschen Wert!');
-        self::assertEquals('offer', $array[1]->record['id'], 'Datensatz 2 - Feld:id hat den falschen Wert!');
-        self::assertEquals('offer', $array[1]->record['label'], 'Datensatz 2 - Feld:label hat den falschen Wert!');
+        self::assertEquals(2, $array[0]->getProperty('count'), 'Datensatz 1 - Feld:count hat den falschen Wert!');
+        self::assertEquals('contentType', $array[1]->getProperty('field'), 'Datensatz 2 - Feld:field hat den falschen Wert!');
+        self::assertEquals('offer', $array[1]->getProperty('id'), 'Datensatz 2 - Feld:id hat den falschen Wert!');
+        self::assertEquals('offer', $array[1]->getProperty('label'), 'Datensatz 2 - Feld:label hat den falschen Wert!');
         self::assertEquals(tx_mksearch_model_Facet::TYPE_FIELD, $array[1]->getFacetType());
-        self::assertEquals(34, $array[1]->record['count'], 'Datensatz 2 - Feld:count hat den falschen Wert!');
-        self::assertEquals('contentType', $array[2]->record['field'], 'Datensatz 3 - Feld:field hat den falschen Wert!');
-        self::assertEquals('product', $array[2]->record['id'], 'Datensatz 3 - Feld:id hat den falschen Wert!');
-        self::assertEquals('product', $array[2]->record['label'], 'Datensatz 3 - Feld:label hat den falschen Wert!');
+        self::assertEquals(34, $array[1]->getProperty('count'), 'Datensatz 2 - Feld:count hat den falschen Wert!');
+        self::assertEquals('contentType', $array[2]->getProperty('field'), 'Datensatz 3 - Feld:field hat den falschen Wert!');
+        self::assertEquals('product', $array[2]->getProperty('id'), 'Datensatz 3 - Feld:id hat den falschen Wert!');
+        self::assertEquals('product', $array[2]->getProperty('label'), 'Datensatz 3 - Feld:label hat den falschen Wert!');
         self::assertEquals(tx_mksearch_model_Facet::TYPE_FIELD, $array[2]->getFacetType());
-        self::assertEquals(6, $array[2]->record['count'], 'Datensatz 3 - Feld:count hat den falschen Wert!');
+        self::assertEquals(6, $array[2]->getProperty('count'), 'Datensatz 3 - Feld:count hat den falschen Wert!');
     }
 
     private function buildFieldFacets()

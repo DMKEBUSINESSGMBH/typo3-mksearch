@@ -163,7 +163,7 @@ class tx_mksearch_hooks_IndexerAutoUpdate
      */
     protected function isRnBaseUtilDbHookActivated()
     {
-        return tx_rnbase_configurations::getExtensionCfgValue('mksearch', 'enableRnBaseUtilDbHook');
+        return \Sys25\RnBase\Configuration\Processor::getExtensionCfgValue('mksearch', 'enableRnBaseUtilDbHook');
     }
 
     /**
@@ -189,17 +189,13 @@ class tx_mksearch_hooks_IndexerAutoUpdate
      *
      * @todo this method needs to be refactored as all indices and indexers
      * are retrieved from database for every action, for example for every insert that is made with
-     * Tx_Rnbase_Database_Connection.
+     * \Sys25\RnBase\Database\Connection.
      */
     public function processAutoUpdate(array $records)
     {
         if (empty($records)) {
             return null;
         }
-
-        // when we are in an eID the finding all indices would fail as the TCA might be missing.
-        // we don't need to check if we are in an eID as this is done internally
-        tx_rnbase_util_TCA::loadTCA('');
 
         // Cores suchen:
         $intIndexSrv = $this->getIntIndexService();
@@ -305,11 +301,11 @@ class tx_mksearch_hooks_IndexerAutoUpdate
     }
 
     /**
-     * @return Tx_Rnbase_Database_Connection
+     * @return \Sys25\RnBase\Database\Connection
      */
     protected function getRnbaseDatabaseUtility()
     {
-        return tx_rnbase::makeInstance('Tx_Rnbase_Database_Connection');
+        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Database\Connection::class);
     }
 
     /**

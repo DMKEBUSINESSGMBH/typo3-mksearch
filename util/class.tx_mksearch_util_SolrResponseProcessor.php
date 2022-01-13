@@ -10,7 +10,7 @@ class tx_mksearch_util_SolrResponseProcessor
     /**
      * Konfigurations Objekt.
      *
-     * @var tx_rnbase_configurations
+     * @var \Sys25\RnBase\Configuration\Processor
      */
     private $configurations = null;
     private $confId = 'responseProcessor.';
@@ -20,7 +20,7 @@ class tx_mksearch_util_SolrResponseProcessor
      *
      * @param array                    $response
      * @param array                    $options
-     * @param tx_rnbase_configurations $configurations
+     * @param \Sys25\RnBase\Configuration\Processor $configurations
      * @param string                   $confId
      *
      * @return bool
@@ -38,7 +38,7 @@ class tx_mksearch_util_SolrResponseProcessor
         if (!$instance) {
             $processorClass = $configurations->get($confId.'class');
             $processorClass = $processorClass ? $processorClass : get_called_class();
-            $instance = tx_rnbase::makeInstance($processorClass, $configurations, $confId);
+            $instance = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($processorClass, $configurations, $confId);
         }
 
         $response = &$result['response'];
@@ -54,7 +54,7 @@ class tx_mksearch_util_SolrResponseProcessor
     }
 
     /**
-     * @return tx_rnbase_configurations
+     * @return \Sys25\RnBase\Configuration\Processor
      */
     protected function getConfigurations()
     {
@@ -107,8 +107,8 @@ class tx_mksearch_util_SolrResponseProcessor
 
         foreach ($hits as &$hit) {
             //highlighting hinzufügen für alle Felder
-            if (!empty($highlights[$hit->record['id']])) {
-                foreach ($highlights[$hit->record['id']] as $docField => $highlightValue) {
+            if (!empty($highlights[$hit->getProperty('id')])) {
+                foreach ($highlights[$hit->getProperty('id')] as $docField => $highlightValue) {
                     //Solr liefert die Highlightings gesondert weshalb wir diese in das
                     //eigentliche Dokument bekommen müssen. Dafür gibts es 2 Möglichkeiten:
                     //1. wenn overrideWithHl auf true gesetzt ist werden die jeweiligen Inhaltsfelder
@@ -124,13 +124,13 @@ class tx_mksearch_util_SolrResponseProcessor
 
                     if ($this->getConfigurations()->getBool($confId.'hellip')) {
                         $highlightValue = $this->handleHellip(
-                            $hit->record[$docField],
+                            $hit->getProperty($docField),
                             $highlightValue,
                             $this->getConfigurations()->get($confId.'hellip.')
                         );
                     }
 
-                    $hit->record[$highlightField] = $highlightValue;
+                    $hit->setProperty($highlightField, $highlightValue);
                 }
             }
         }
@@ -178,7 +178,7 @@ class tx_mksearch_util_SolrResponseProcessor
             }
 
             // add pre, if the first part is not the same!
-            if (!tx_rnbase_util_Strings::isFirstPartOfStr(
+            if (!\Sys25\RnBase\Utility\Strings::isFirstPartOfStr(
                 $cleanOriginalValue,
                 $cleanHighlighted
             )
@@ -186,7 +186,7 @@ class tx_mksearch_util_SolrResponseProcessor
                 $highlightedValue = $wrap[0].$highlightedValue;
             }
             // add post, if the last part is not the same!
-            if (!tx_rnbase_util_Strings::isLastPartOfStr(
+            if (!\Sys25\RnBase\Utility\Strings::isLastPartOfStr(
                 $cleanOriginalValue,
                 $cleanHighlighted
             )

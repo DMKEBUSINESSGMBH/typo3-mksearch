@@ -28,7 +28,7 @@
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_tests_util_IndexerTest extends tx_rnbase_tests_BaseTestCase
+class tx_mksearch_tests_util_IndexerTest extends \Sys25\RnBase\Testing\BaseTestCase
 {
     protected function setUp()
     {
@@ -324,14 +324,14 @@ class tx_mksearch_tests_util_IndexerTest extends tx_rnbase_tests_BaseTestCase
 
     public function testIndexModelByMapping()
     {
-        $indexDoc = tx_rnbase::makeInstance(
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
             '',
             ''
         );
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
-        $model = tx_rnbase::makeInstance(
-            'tx_rnbase_model_base',
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
+        $model = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+            \Sys25\RnBase\Domain\Model\BaseModel::class,
             ['recordField' => 123]
         );
 
@@ -351,14 +351,14 @@ class tx_mksearch_tests_util_IndexerTest extends tx_rnbase_tests_BaseTestCase
 
     public function testIndexModelByMappingDoesNotIndexHiddenModelsByDefault()
     {
-        $indexDoc = tx_rnbase::makeInstance(
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
             '',
             ''
         );
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
-        $model = tx_rnbase::makeInstance(
-            'tx_rnbase_model_base',
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
+        $model = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+            \Sys25\RnBase\Domain\Model\BaseModel::class,
             ['recordField' => 123, 'hidden' => 1]
         );
 
@@ -377,14 +377,14 @@ class tx_mksearch_tests_util_IndexerTest extends tx_rnbase_tests_BaseTestCase
 
     public function testIndexModelByMappingIndexesHiddenModelsIfSet()
     {
-        $indexDoc = tx_rnbase::makeInstance(
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
             '',
             ''
         );
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
-        $model = tx_rnbase::makeInstance(
-            'tx_rnbase_model_base',
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
+        $model = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+            \Sys25\RnBase\Domain\Model\BaseModel::class,
             ['recordField' => 123, 'hidden' => 1]
         );
 
@@ -407,14 +407,14 @@ class tx_mksearch_tests_util_IndexerTest extends tx_rnbase_tests_BaseTestCase
 
     public function testIndexModelByMappingWithPrefix()
     {
-        $indexDoc = tx_rnbase::makeInstance(
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
             '',
             ''
         );
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
-        $model = tx_rnbase::makeInstance(
-            'tx_rnbase_model_base',
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
+        $model = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+            \Sys25\RnBase\Domain\Model\BaseModel::class,
             ['recordField' => 123]
         );
 
@@ -435,14 +435,14 @@ class tx_mksearch_tests_util_IndexerTest extends tx_rnbase_tests_BaseTestCase
 
     public function testIndexModelByMappingMapsNotEmptyFields()
     {
-        $indexDoc = tx_rnbase::makeInstance(
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
             '',
             ''
         );
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
-        $model = tx_rnbase::makeInstance(
-            'tx_rnbase_model_base',
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
+        $model = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+            \Sys25\RnBase\Domain\Model\BaseModel::class,
             ['recordField' => '']
         );
 
@@ -461,14 +461,14 @@ class tx_mksearch_tests_util_IndexerTest extends tx_rnbase_tests_BaseTestCase
 
     public function testIndexModelByMappingMapsEmptyFieldsIfKeepEmptyOption()
     {
-        $indexDoc = tx_rnbase::makeInstance(
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
             '',
             ''
         );
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
-        $model = tx_rnbase::makeInstance(
-            'tx_rnbase_model_base',
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
+        $model = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+            \Sys25\RnBase\Domain\Model\BaseModel::class,
             ['recordField' => '']
         );
 
@@ -490,19 +490,19 @@ class tx_mksearch_tests_util_IndexerTest extends tx_rnbase_tests_BaseTestCase
 
     public function testIndexArrayOfModelsByMapping()
     {
-        $indexDoc = tx_rnbase::makeInstance(
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
             '',
             ''
         );
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
         $models = [
-            tx_rnbase::makeInstance(
-                'tx_rnbase_model_base',
+            \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                \Sys25\RnBase\Domain\Model\BaseModel::class,
                 ['recordField' => 123]
             ),
-            tx_rnbase::makeInstance(
-                'tx_rnbase_model_base',
+            \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                \Sys25\RnBase\Domain\Model\BaseModel::class,
                 ['recordField' => 456]
             ),
         ];
@@ -524,18 +524,18 @@ class tx_mksearch_tests_util_IndexerTest extends tx_rnbase_tests_BaseTestCase
     public function testIndexArrayOfModelsByMappingWithFieldConversion()
     {
         self::markTestIncomplete('Access to database is made.');
-        $indexDoc = tx_rnbase::makeInstance(
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
             '',
             ''
         );
         $models = [
-                tx_rnbase::makeInstance(
-                    'tx_rnbase_model_base',
+                \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                    \Sys25\RnBase\Domain\Model\BaseModel::class,
                     ['recordField' => 1440668593]
                 ),
-                tx_rnbase::makeInstance(
-                    'tx_rnbase_model_base',
+                \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                    \Sys25\RnBase\Domain\Model\BaseModel::class,
                     ['recordField' => 1439034300]
                 ),
         ];
@@ -563,18 +563,18 @@ class tx_mksearch_tests_util_IndexerTest extends tx_rnbase_tests_BaseTestCase
 
     public function testIndexArrayOfModelsByMappingWithMoreFields()
     {
-        $indexDoc = tx_rnbase::makeInstance(
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
             '',
             ''
         );
         $models = [
-                tx_rnbase::makeInstance(
-                    'tx_rnbase_model_base',
+                \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                    \Sys25\RnBase\Domain\Model\BaseModel::class,
                     ['recordField' => 123]
                 ),
-                tx_rnbase::makeInstance(
-                    'tx_rnbase_model_base',
+                \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                    \Sys25\RnBase\Domain\Model\BaseModel::class,
                     ['recordField' => 456]
                 ),
         ];
@@ -600,19 +600,19 @@ class tx_mksearch_tests_util_IndexerTest extends tx_rnbase_tests_BaseTestCase
 
     public function testIndexArrayOfModelsByMappingDoesNotIndexHiddenModelsByDefault()
     {
-        $indexDoc = tx_rnbase::makeInstance(
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
             '',
             ''
         );
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
         $models = [
-            tx_rnbase::makeInstance(
-                'tx_rnbase_model_base',
+            \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                \Sys25\RnBase\Domain\Model\BaseModel::class,
                 ['recordField' => 123]
             ),
-            tx_rnbase::makeInstance(
-                'tx_rnbase_model_base',
+            \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                \Sys25\RnBase\Domain\Model\BaseModel::class,
                 ['recordField' => 456, 'hidden' => 1]
             ),
         ];
@@ -633,19 +633,19 @@ class tx_mksearch_tests_util_IndexerTest extends tx_rnbase_tests_BaseTestCase
 
     public function testIndexArrayOfModelsByMappingIndexesHiddenModelsIfSet()
     {
-        $indexDoc = tx_rnbase::makeInstance(
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
             '',
             ''
         );
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
         $models = [
-            tx_rnbase::makeInstance(
-                'tx_rnbase_model_base',
+            \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                \Sys25\RnBase\Domain\Model\BaseModel::class,
                 ['recordField' => 123]
             ),
-            tx_rnbase::makeInstance(
-                'tx_rnbase_model_base',
+            \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                \Sys25\RnBase\Domain\Model\BaseModel::class,
                 ['recordField' => 456, 'hidden' => 1]
             ),
         ];
@@ -669,19 +669,19 @@ class tx_mksearch_tests_util_IndexerTest extends tx_rnbase_tests_BaseTestCase
 
     public function testIndexArrayOfModelsByMappingWithPrefix()
     {
-        $indexDoc = tx_rnbase::makeInstance(
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
             '',
             ''
         );
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
         $models = [
-            tx_rnbase::makeInstance(
-                'tx_rnbase_model_base',
+            \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                \Sys25\RnBase\Domain\Model\BaseModel::class,
                 ['recordField' => 123]
             ),
-            tx_rnbase::makeInstance(
-                'tx_rnbase_model_base',
+            \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                \Sys25\RnBase\Domain\Model\BaseModel::class,
                 ['recordField' => 456]
             ),
         ];
@@ -703,19 +703,19 @@ class tx_mksearch_tests_util_IndexerTest extends tx_rnbase_tests_BaseTestCase
 
     public function testIndexArrayOfModelsByMappingMapsNotEmptyFields()
     {
-        $indexDoc = tx_rnbase::makeInstance(
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
             '',
             ''
         );
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
         $models = [
-            tx_rnbase::makeInstance(
-                'tx_rnbase_model_base',
+            \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                \Sys25\RnBase\Domain\Model\BaseModel::class,
                 ['recordField' => '']
             ),
-            tx_rnbase::makeInstance(
-                'tx_rnbase_model_base',
+            \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                \Sys25\RnBase\Domain\Model\BaseModel::class,
                 ['recordField' => '']
             ),
         ];
@@ -756,11 +756,11 @@ class tx_mksearch_tests_util_IndexerTest extends tx_rnbase_tests_BaseTestCase
     public function testStopIndexingReturnsFalseIfNoSysLanguageUidField()
     {
         /* @var $utility tx_mksearch_util_Indexer */
-        $utility = tx_rnbase::makeInstance('tx_mksearch_util_Indexer');
+        $utility = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_util_Indexer');
         $tableName = 'tx_mksearch_queue';
         $sourceRecord = ['some_record'];
         $options = ['some_options'];
-        $indexDoc = tx_rnbase::makeInstance(
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
             '',
             ''
@@ -777,11 +777,11 @@ class tx_mksearch_tests_util_IndexerTest extends tx_rnbase_tests_BaseTestCase
     public function testStopIndexingReturnsFalseIfSysLanguageUidFieldMatchesLanguageFromOptions()
     {
         /* @var $utility tx_mksearch_util_Indexer */
-        $utility = tx_rnbase::makeInstance('tx_mksearch_util_Indexer');
+        $utility = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_util_Indexer');
         $tableName = 'tt_content';
         $sourceRecord = ['sys_language_uid' => 123];
         $options = ['lang' => 123];
-        $indexDoc = tx_rnbase::makeInstance(
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
             '',
             ''
@@ -798,11 +798,11 @@ class tx_mksearch_tests_util_IndexerTest extends tx_rnbase_tests_BaseTestCase
     public function testStopIndexingReturnsFalseIfSysLanguageUidFieldMatchesLanguageFromOptionsWithMultipleValues()
     {
         /* @var $utility tx_mksearch_util_Indexer */
-        $utility = tx_rnbase::makeInstance('tx_mksearch_util_Indexer');
+        $utility = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_util_Indexer');
         $tableName = 'tt_content';
         $sourceRecord = ['sys_language_uid' => 222];
         $options = ['lang' => '0,222,666'];
-        $indexDoc = tx_rnbase::makeInstance(
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
             '',
             ''
@@ -819,11 +819,11 @@ class tx_mksearch_tests_util_IndexerTest extends tx_rnbase_tests_BaseTestCase
     public function testStopIndexingReturnsTrueIfSysLanguageUidFieldMatchesNotLanguageFromOptions()
     {
         /* @var $utility tx_mksearch_util_Indexer */
-        $utility = tx_rnbase::makeInstance('tx_mksearch_util_Indexer');
+        $utility = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_util_Indexer');
         $tableName = 'tt_content';
         $sourceRecord = ['sys_language_uid' => 123];
         $options = ['lang' => 456];
-        $indexDoc = tx_rnbase::makeInstance(
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
             '',
             ''
@@ -840,11 +840,11 @@ class tx_mksearch_tests_util_IndexerTest extends tx_rnbase_tests_BaseTestCase
     public function testStopIndexingReturnsTrueIfSysLanguageUidFieldMatchesNotLanguageFromOptionsWithMultipleValues()
     {
         /* @var $utility tx_mksearch_util_Indexer */
-        $utility = tx_rnbase::makeInstance('tx_mksearch_util_Indexer');
+        $utility = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_util_Indexer');
         $tableName = 'tt_content';
         $sourceRecord = ['sys_language_uid' => 123];
         $options = ['lang' => '0,456,789'];
-        $indexDoc = tx_rnbase::makeInstance(
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
             '',
             ''
@@ -861,11 +861,11 @@ class tx_mksearch_tests_util_IndexerTest extends tx_rnbase_tests_BaseTestCase
     public function testStopIndexingReturnsFalseIfSysLanguageUidFieldIsSetToAllLanguages()
     {
         /* @var $utility tx_mksearch_util_Indexer */
-        $utility = tx_rnbase::makeInstance('tx_mksearch_util_Indexer');
+        $utility = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_util_Indexer');
         $tableName = 'tt_content';
         $sourceRecord = ['sys_language_uid' => '-1'];
         $options = ['lang' => '456'];
-        $indexDoc = tx_rnbase::makeInstance(
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
             '',
             ''
@@ -882,8 +882,8 @@ class tx_mksearch_tests_util_IndexerTest extends tx_rnbase_tests_BaseTestCase
     public function testAddModelsToIndex()
     {
         $models = [
-            tx_rnbase::makeInstance('tx_rnbase_model_base', ['uid' => 1]),
-            tx_rnbase::makeInstance('tx_rnbase_model_base', ['uid' => 2]),
+            \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Domain\Model\BaseModel::class, ['uid' => 1]),
+            \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Domain\Model\BaseModel::class, ['uid' => 2]),
         ];
         $tableName = 'test_table';
         $prefer = 'prefer_me';
@@ -913,7 +913,7 @@ class tx_mksearch_tests_util_IndexerTest extends tx_rnbase_tests_BaseTestCase
         $utility->expects(self::never())
             ->method('getInternalIndexService');
 
-        $utility->addModelToIndex(tx_rnbase::makeInstance('tx_rnbase_model_base', []), 'test_table');
+        $utility->addModelToIndex(\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Domain\Model\BaseModel::class, []), 'test_table');
     }
 
     /**
@@ -921,7 +921,9 @@ class tx_mksearch_tests_util_IndexerTest extends tx_rnbase_tests_BaseTestCase
      */
     public function testAddModelToIndexWithValidModel()
     {
-        $model = tx_rnbase::makeInstance('tx_rnbase_model_base', ['uid' => 123]);
+        $model = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+            \Sys25\RnBase\Domain\Model\BaseModel::class, ['uid' => 123, 'dummy' => 'so model is valid']
+        );
         $tableName = 'test_table';
         $prefer = 'prefer_me';
         $resolver = 'test_resolver';

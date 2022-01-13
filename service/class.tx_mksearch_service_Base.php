@@ -27,7 +27,7 @@
 /**
  * Base service class.
  */
-abstract class tx_mksearch_service_Base extends Tx_Rnbase_Service_Base
+abstract class tx_mksearch_service_Base extends \Sys25\RnBase\Typo3Wrapper\Service\AbstractService
 {
     /**
      * Return name of search class.
@@ -37,11 +37,11 @@ abstract class tx_mksearch_service_Base extends Tx_Rnbase_Service_Base
     abstract public function getSearchClass();
 
     /**
-     * @return tx_rnbase_util_SearchBase
+     * @return \Sys25\RnBase\Search\SearchBase
      */
     public function getSearcher()
     {
-        return tx_rnbase_util_SearchBase::getInstance($this->getSearchClass());
+        return \Sys25\RnBase\Search\SearchBase::getInstance($this->getSearchClass());
     }
 
     /**
@@ -50,7 +50,7 @@ abstract class tx_mksearch_service_Base extends Tx_Rnbase_Service_Base
      * @param array $fields
      * @param array $options
      *
-     * @return array[tx_rnbase_model_base]
+     * @return array[\Sys25\RnBase\Domain\Model\BaseModel]
      */
     public function search(array $fields, array $options)
     {
@@ -73,23 +73,23 @@ abstract class tx_mksearch_service_Base extends Tx_Rnbase_Service_Base
      * Search the item for the given uid.
      *
      * @TODO:   Achtung,
-     *          tx_rnbase_util_SearchBase::getWrapperClass() ist eigentlich protected!
+     *          \Sys25\RnBase\Search\SearchBase::getWrapperClass() ist eigentlich protected!
      *
      * @param int $ct
      *
-     * @return tx_rnbase_model_base
+     * @return \Sys25\RnBase\Domain\Model\BaseModel
      */
     public function get($uid)
     {
-        $searcher = tx_rnbase_util_SearchBase::getInstance($this->getSearchClass());
+        $searcher = \Sys25\RnBase\Search\SearchBase::getInstance($this->getSearchClass());
 
-        return tx_rnbase::makeInstance($searcher->getWrapperClass(), $uid);
+        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($searcher->getWrapperClass(), $uid);
     }
 
     /**
      * Find all records.
      *
-     * @return array[tx_rnbase_model_base]
+     * @return array[\Sys25\RnBase\Domain\Model\BaseModel]
      */
     public function findAll()
     {

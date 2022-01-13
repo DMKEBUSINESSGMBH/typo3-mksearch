@@ -182,7 +182,7 @@ class tx_mksearch_tests_Util
      */
     public static function getFixturePath($filename, $dir = 'tests/fixtures/', $extKey = 'mksearch')
     {
-        return tx_rnbase_util_Extensions::extPath($extKey).$dir.$filename;
+        return \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($extKey).$dir.$filename;
     }
 
     /**
@@ -190,13 +190,13 @@ class tx_mksearch_tests_Util
      * Dabei wird alles geholt was in "plugin.tx_$extKey", "lib.$extKey." und
      * "lib.links." liegt.
      *
-     * @return tx_rnbase_configurations
+     * @return \Sys25\RnBase\Configuration\Processor
      */
     public static function loadPageTS4BE()
     {
         $extKeyTS = $extKey = 'mksearch';
 
-        tx_rnbase_util_Extensions::addPageTSConfig('<INCLUDE_TYPOSCRIPT: source="FILE:EXT:mksearch/static/static_extension_template/setup.txt">');
+        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig('<INCLUDE_TYPOSCRIPT: source="FILE:EXT:mksearch/static/static_extension_template/setup.txt">');
 
         $pageTSconfig = self::getPagesTSconfig(0);
         $tempConfig = $pageTSconfig['plugin.']['tx_'.$extKeyTS.'.'];
@@ -225,7 +225,7 @@ class tx_mksearch_tests_Util
         // die gerade hinzugefügten TS Dateien nicht beachtet
         $rootLine = 1;
 
-        return Tx_Rnbase_Backend_Utility::getPagesTSconfig($pageId, $rootLine);
+        return \Sys25\RnBase\Backend\Utility\BackendUtility::getPagesTSconfig($pageId, $rootLine);
     }
 
     /**
@@ -233,18 +233,18 @@ class tx_mksearch_tests_Util
      * Dabei wird alles geholt was in "plugin.tx_$extKey", "lib.$extKey." und
      * "lib.links." liegt.
      *
-     * @return tx_rnbase_configurations
+     * @return \Sys25\RnBase\Configuration\Processor
      */
     public static function loadConfig4BE($pageTSconfig)
     {
-        tx_rnbase_util_Misc::prepareTSFE(); // Ist bei Aufruf aus BE notwendig!
+        \Sys25\RnBase\Utility\Misc::prepareTSFE(); // Ist bei Aufruf aus BE notwendig!
         $GLOBALS['TSFE']->config = [];
-        $cObj = tx_rnbase::makeInstance(tx_rnbase_util_Typo3Classes::getContentObjectRendererClass());
+        $cObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);
 
-        $configurations = new tx_rnbase_configurations();
+        $configurations = new \Sys25\RnBase\Configuration\Processor();
         $pageTSconfig = (array) $pageTSconfig;
         $configurations->init($pageTSconfig, $cObj, 'mksearch', 'mksearch');
-        $configurations->setParameters(tx_rnbase::makeInstance('tx_rnbase_parameters'));
+        $configurations->setParameters(\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Frontend\Request\Parameters::class));
 
         return $configurations;
     }
@@ -274,7 +274,7 @@ class tx_mksearch_tests_Util
             throw new Exception('First argument of getIndexerDocument has to be an "string"'.' or instance of "tx_mksearch_interface_Indexer", '.(is_object($extKeyOrIndexer) ? get_class($extKeyOrIndexer) : gettype($extKeyOrIndexer)).' given.');
         }
 
-        return tx_rnbase::makeInstance($documentClass, $extKey, $cType);
+        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($documentClass, $extKey, $cType);
     }
 
     /**
@@ -321,7 +321,7 @@ class tx_mksearch_tests_Util
     public static function unloadExtensionForTypo362OrHigher($extensionKey)
     {
         // wir kommen an den Pfad zur Package Datei nur über Reflection
-        $packageManager = tx_rnbase::makeInstance('TYPO3\\CMS\\Core\\Package\\PackageManager');
+        $packageManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Package\\PackageManager');
         $packageStatesPathAndFilename = new ReflectionProperty('TYPO3\\CMS\\Core\\Package\\PackageManager', 'packageStatesPathAndFilename');
         $packageStatesPathAndFilename->setAccessible(true);
 
@@ -425,7 +425,7 @@ class tx_mksearch_tests_Util
         $GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'] = '';
         $property = new ReflectionProperty('TYPO3\\CMS\\Core\\Utility\\RootlineUtility', 'rootlineFields');
         $property->setAccessible(true);
-        $rootLineFields = Tx_Rnbase_Utility_Strings::trimExplode(',', self::$addRootLineFieldsBackup, true);
+        $rootLineFields = \Sys25\RnBase\Utility\Strings::trimExplode(',', self::$addRootLineFieldsBackup, true);
         $property->setValue(null, array_diff($property->getValue(null), $rootLineFields));
     }
 
@@ -435,7 +435,7 @@ class tx_mksearch_tests_Util
             $GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'] = self::$addRootLineFieldsBackup;
             $property = new ReflectionProperty('TYPO3\\CMS\\Core\\Utility\\RootlineUtility', 'rootlineFields');
             $property->setAccessible(true);
-            $rootLineFields = Tx_Rnbase_Utility_Strings::trimExplode(',', self::$addRootLineFieldsBackup, true);
+            $rootLineFields = \Sys25\RnBase\Utility\Strings::trimExplode(',', self::$addRootLineFieldsBackup, true);
             $property->setValue(null, array_unique(array_merge($property->getValue(null), $rootLineFields)));
             self::$addRootLineFieldsBackup = null;
         }

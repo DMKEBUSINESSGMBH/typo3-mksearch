@@ -74,7 +74,7 @@ class tx_mksearch_util_Config
     public static function getIndexerOption($name, $contentType)
     {
         throw new Exception('tx_mksearch_util_Config::getIndexerOption is deprecated! Use config file instead.');
-        $l = tx_rnbase_configurations::getExtensionCfgValue(
+        $l = \Sys25\RnBase\Configuration\Processor::getExtensionCfgValue(
             $contentType['extKey'],
             'mksearch_'.$name.'_'.$contentType['name']
         );
@@ -82,7 +82,7 @@ class tx_mksearch_util_Config
             return $l;
         }
         // else
-        $l = tx_rnbase_configurations::getExtensionCfgValue(
+        $l = \Sys25\RnBase\Configuration\Processor::getExtensionCfgValue(
             'mksearch',
             $name.'_'.$contentType['extKey'].'_'.$contentType['name']
         );
@@ -90,7 +90,7 @@ class tx_mksearch_util_Config
             return $l;
         }
         // else
-        return tx_rnbase_configurations::getExtensionCfgValue('mksearch', $name.'_fallback');
+        return \Sys25\RnBase\Configuration\Processor::getExtensionCfgValue('mksearch', $name.'_fallback');
     }
 
     /**
@@ -109,7 +109,7 @@ class tx_mksearch_util_Config
         $cfgData = array_values(self::$indexerMap);
         foreach ($cfgData as $cfg) {
             foreach ($cfg as $contentType => $classArr) {
-                $ret[$classArr['className']] = tx_rnbase::makeInstance($classArr['className']);
+                $ret[$classArr['className']] = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($classArr['className']);
             }
         }
 
@@ -163,8 +163,8 @@ class tx_mksearch_util_Config
         foreach ($tables as $table) {
             if (array_key_exists($table, self::$tableIndexerMappings)) {
                 // Es wurde bereits ein Resolver für diese tabelle registriert
-                if (tx_rnbase_util_Logger::isWarningEnabled()) {
-                    tx_rnbase_util_Logger::warn('[registerResolver] Für die Tabelle '.$table.' wurde bereits ein Resolver registriert', 'mksearch');
+                if (\Sys25\RnBase\Utility\Logger::isWarningEnabled()) {
+                    \Sys25\RnBase\Utility\Logger::warn('[registerResolver] Für die Tabelle '.$table.' wurde bereits ein Resolver registriert', 'mksearch');
                 }
             }
             self::$resolverMap[$table] = ['className' => $resolver];
@@ -247,7 +247,7 @@ class tx_mksearch_util_Config
         if (!array_key_exists($table, self::$tableIndexer)) {
             $instances = [];
             foreach (self::getIndexersForDatabaseTable($table) as $indexerArr) {
-                $instances[] = tx_rnbase::makeInstance($indexerArr['className']);
+                $instances[] = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($indexerArr['className']);
             }
             self::$tableIndexer['table'] = $instances;
         }
@@ -267,7 +267,7 @@ class tx_mksearch_util_Config
     {
         $indexerArr = self::$indexerMap[$extKey][$contentType];
 
-        return is_array($indexerArr) ? tx_rnbase::makeInstance($indexerArr['className']) : false;
+        return is_array($indexerArr) ? \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($indexerArr['className']) : false;
     }
 
     /**

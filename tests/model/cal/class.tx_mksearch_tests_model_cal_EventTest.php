@@ -40,7 +40,7 @@ class tx_mksearch_tests_model_cal_EventTest extends tx_mksearch_tests_Testcase
      */
     protected function setUp()
     {
-        if (!tx_rnbase_util_Extensions::isLoaded('cal')) {
+        if (!\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('cal')) {
             self::markTestSkipped('cal nicht installiert');
         }
 
@@ -55,7 +55,7 @@ class tx_mksearch_tests_model_cal_EventTest extends tx_mksearch_tests_Testcase
      */
     public function testGetCategoriesByEvent()
     {
-        $event = tx_rnbase::makeInstance('tx_mksearch_model_cal_Event', ['uid' => 1]);
+        $event = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_cal_Event', ['uid' => 1]);
 
         self::assertTrue(is_array($this->callInaccessibleMethod($event, 'getCategoriesByEvent')));
     }

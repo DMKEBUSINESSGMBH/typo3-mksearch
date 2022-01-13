@@ -37,7 +37,7 @@ class tx_mksearch_tests_indexer_CalTest extends tx_mksearch_tests_Testcase
      */
     protected function setUp()
     {
-        if (!tx_rnbase_util_Extensions::isLoaded('cal')) {
+        if (!\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('cal')) {
             $this->markTestSkipped('cal nicht geladen.');
         }
         parent::setUp();
@@ -294,7 +294,7 @@ class tx_mksearch_tests_indexer_CalTest extends tx_mksearch_tests_Testcase
             'title' => 'First Calendar',
         ];
 
-        $calendarModel = tx_rnbase::makeInstance(
+        $calendarModel = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_model_cal_Calendar',
             $calRecord
         );
@@ -335,11 +335,11 @@ class tx_mksearch_tests_indexer_CalTest extends tx_mksearch_tests_Testcase
     private function getIndexDocFieldArrayForCategoryTests()
     {
         $categoryModels = [
-            0 => tx_rnbase::makeInstance(
+            0 => \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
                 'tx_mksearch_model_cal_Category',
                 ['uid' => 3, 'title' => 'First Category']
             ),
-            1 => tx_rnbase::makeInstance(
+            1 => \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
                 'tx_mksearch_model_cal_Category',
                 ['uid' => 2, 'title' => 'Second Category']
             ),
@@ -489,11 +489,11 @@ class tx_mksearch_tests_indexer_CalTest extends tx_mksearch_tests_Testcase
         $table = 'tx_cal_event'
     ) {
         if (null === $indexer) {
-            $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_Cal');
+            $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_Cal');
         }
 
         list($extKey, $cType) = $indexer->getContentType();
-        $indexDoc = tx_rnbase::makeInstance(
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
             $extKey,
             $cType

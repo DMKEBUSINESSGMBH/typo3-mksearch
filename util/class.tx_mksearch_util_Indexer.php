@@ -50,7 +50,7 @@ class tx_mksearch_util_Indexer
      */
     public function getRecordsUid($tableName, array $rawData, array $options)
     {
-        return tx_rnbase_util_TCA::getUid($tableName, $rawData);
+        return \Sys25\RnBase\Backend\Utility\TCA::getUid($tableName, $rawData);
     }
 
     /**
@@ -62,8 +62,8 @@ class tx_mksearch_util_Indexer
      */
     public function getDateTime($date)
     {
-        $dateTime = tx_rnbase::makeInstance('DateTime', $date, tx_rnbase::makeInstance('DateTimeZone', 'GMT-0'));
-        $dateTime->setTimeZone(tx_rnbase::makeInstance('DateTimeZone', 'UTC'));
+        $dateTime = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('DateTime', $date, \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('DateTimeZone', 'GMT-0'));
+        $dateTime->setTimeZone(\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('DateTimeZone', 'UTC'));
 
         return $dateTime->format('Y-m-d\TH:i:s\Z');
     }
@@ -71,7 +71,7 @@ class tx_mksearch_util_Indexer
     /**
      * Indexes all fields of the model according to the given mapping.
      *
-     * @param tx_rnbase_IModel                      $model
+     * @param \Sys25\RnBase\Domain\Model\DataInterface                      $model
      * @param array                                 $aMapping
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
      * @param string                                $prefix
@@ -81,7 +81,7 @@ class tx_mksearch_util_Indexer
      * @return tx_mksearch_interface_IndexerDocument
      */
     public function indexModelByMapping(
-        tx_rnbase_IModel $model,
+        \Sys25\RnBase\Domain\Model\DataInterface $model,
         array $recordIndexMapping,
         tx_mksearch_interface_IndexerDocument $indexDoc,
         $prefix = '',
@@ -110,7 +110,7 @@ class tx_mksearch_util_Indexer
      * Collects the values of all models inside the given array
      * and adds them as multivalue (array).
      *
-     * @param array[tx_rnbase_IModel]               $model
+     * @param array[\Sys25\RnBase\Domain\Model\DataInterface]               $model
      * @param array                                 $aMapping
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
      * @param string                                $prefix
@@ -129,7 +129,7 @@ class tx_mksearch_util_Indexer
     ) {
         //collect values
         $tempIndexDoc = [];
-        /* @var $model tx_rnbase_IModel */
+        /* @var $model \Sys25\RnBase\Domain\Model\DataInterface */
         foreach ($models as $model) {
             if (!$model) {
                 continue;
@@ -140,7 +140,7 @@ class tx_mksearch_util_Indexer
                 }
                 if (!empty($model->getProperty($recordKey))) {
                     // Attributes can be commaseparated to index values into different fields
-                    $indexDocKeys = Tx_Rnbase_Utility_Strings::trimExplode(',', $indexDocKey);
+                    $indexDocKeys = \Sys25\RnBase\Utility\Strings::trimExplode(',', $indexDocKey);
                     foreach ($indexDocKeys as $indexDocKey) {
                         $value = $model->getProperty($recordKey);
                         $tempIndexDoc[$prefix.$indexDocKey][] = $this->doValueConversion($value, $indexDocKey, $model->getProperty(), $recordKey, $options);
@@ -186,9 +186,9 @@ class tx_mksearch_util_Indexer
             $value = tx_mksearch_util_Misc::getISODateFromTimestamp($value, $offset);
         }
         // stdWrap ausführen
-        tx_rnbase_util_TYPO3::getTSFE(); // TSFE wird für cObj benötigt
+        \Sys25\RnBase\Utility\TYPO3::getTSFE(); // TSFE wird für cObj benötigt
         /* @var $cObj TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer */
-        $cObj = tx_rnbase::makeInstance(tx_rnbase_util_Typo3Classes::getContentObjectRendererClass());
+        $cObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);
         $cObj->data = $rawData;
 
         if ($options['fieldsConversion.'][$indexDocKey]) {
@@ -212,7 +212,7 @@ class tx_mksearch_util_Indexer
      * @TODO refactor to tx_mksearch_service_internal_Index::addModelsToIndex
      * @TODO remove static indexSrv cache
      *
-     * @param tx_rnbase_IModel $model
+     * @param \Sys25\RnBase\Domain\Model\DataInterface $model
      * @param string           $tableName
      * @param bool             $prefer
      * @param string           $resolver  class name of record resolver
@@ -220,7 +220,7 @@ class tx_mksearch_util_Indexer
      * @param array            $options
      */
     public function addModelToIndex(
-        Tx_Rnbase_Domain_Model_RecordInterface $model,
+        \Sys25\RnBase\Domain\Model\DataInterface $model,
         $tableName,
         $prefer = false,
         $resolver = false,
@@ -592,7 +592,7 @@ class tx_mksearch_util_Indexer
             return '';
         }
 
-        return tx_rnbase_util_Misc::getPidList($rootPage['uid'], $recursive);
+        return \Sys25\RnBase\Utility\Misc::getPidList($rootPage['uid'], $recursive);
     }
 
     /**
@@ -611,7 +611,7 @@ class tx_mksearch_util_Indexer
         $config = [];
         if (is_array($options)) {
             if (isset($options[$key]) && strlen(trim($options[$key]))) {
-                $config = tx_rnbase_util_Strings::trimExplode(',', $options[$key]);
+                $config = \Sys25\RnBase\Utility\Strings::trimExplode(',', $options[$key]);
             } elseif (isset($options[$key.'.']) && is_array($options[$key.'.'])) {
                 $config = $options[$key.'.'];
             }
@@ -640,7 +640,7 @@ class tx_mksearch_util_Indexer
             'limit' => 1,
         ];
         $from = ['pages', 'pages'];
-        $page = tx_rnbase_util_DB::doSelect('*', $from, $sqlOptions);
+        $page = \Sys25\RnBase\Database\Connection::getInstance()->doSelect('*', $from, $sqlOptions);
 
         return !empty($page[0]) ? $page[0] : [];
     }
@@ -673,7 +673,7 @@ class tx_mksearch_util_Indexer
             // @TODO: getTransOrigPointerFieldForTable abprüfen, wenn $lang!=0 !
             $languages = [0];
             if (isset($options['lang'])) {
-                $languages = Tx_Rnbase_Utility_Strings::intExplode(',', $options['lang'], true);
+                $languages = \Sys25\RnBase\Utility\Strings::intExplode(',', $options['lang'], true);
             }
 
             // stop if not set to "All languages" and lang doesn't match
@@ -696,7 +696,7 @@ class tx_mksearch_util_Indexer
      */
     public static function prepareTSFE($pid, $sysLanguage = 0)
     {
-        $tsfe = tx_rnbase_util_Misc::prepareTSFE(
+        $tsfe = \Sys25\RnBase\Utility\Misc::prepareTSFE(
             [
                 'force' => true,
                 'pid' => $pid,
@@ -707,8 +707,8 @@ class tx_mksearch_util_Indexer
         );
 
         // add cobject for some plugins like tt_news
-        $tsfe->cObj = tx_rnbase::makeInstance(
-            tx_rnbase_util_Typo3Classes::getContentObjectRendererClass()
+        $tsfe->cObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+            \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class
         );
 
         // disable cache for be indexing!

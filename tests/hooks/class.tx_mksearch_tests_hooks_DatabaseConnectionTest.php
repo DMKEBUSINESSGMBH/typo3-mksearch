@@ -82,7 +82,7 @@ class tx_mksearch_tests_hooks_DatabaseConnectionTest extends tx_mksearch_tests_T
 
         $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects'] = 'test';
 
-        tx_rnbase::makeInstance('tx_mksearch_hooks_DatabaseConnection')->doSelectPost();
+        \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_hooks_DatabaseConnection')->doSelectPost();
 
         self::assertSame($initialValue, $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects']);
         self::assertFalse($backUpSetProperty->getValue(null));
@@ -101,7 +101,7 @@ class tx_mksearch_tests_hooks_DatabaseConnectionTest extends tx_mksearch_tests_T
 
         $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects'] = 'test';
 
-        tx_rnbase::makeInstance('tx_mksearch_hooks_DatabaseConnection')->doSelectPost();
+        \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_hooks_DatabaseConnection')->doSelectPost();
 
         self::assertSame('test', $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects']);
 
@@ -121,7 +121,7 @@ class tx_mksearch_tests_hooks_DatabaseConnectionTest extends tx_mksearch_tests_T
 
         $paramaters = ['options' => []];
 
-        tx_rnbase::makeInstance('tx_mksearch_hooks_DatabaseConnection')->doSelectPre($paramaters);
+        \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_hooks_DatabaseConnection')->doSelectPre($paramaters);
 
         self::assertSame(1, $paramaters['options']['enablefieldsfe']);
         self::assertSame(0, $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects']);
@@ -145,7 +145,7 @@ class tx_mksearch_tests_hooks_DatabaseConnectionTest extends tx_mksearch_tests_T
 
         $paramaters = ['options' => ['enablefieldsbe' => 1]];
 
-        tx_rnbase::makeInstance('tx_mksearch_hooks_DatabaseConnection')->doSelectPre($paramaters);
+        \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_hooks_DatabaseConnection')->doSelectPre($paramaters);
 
         self::assertSame(1, $paramaters['options']['enablefieldsfe']);
         self::assertArrayNotHasKey('enablefieldsbe', $paramaters['options']);
@@ -170,7 +170,7 @@ class tx_mksearch_tests_hooks_DatabaseConnectionTest extends tx_mksearch_tests_T
 
         $paramaters = ['options' => ['enablefieldsoff' => true]];
 
-        tx_rnbase::makeInstance('tx_mksearch_hooks_DatabaseConnection')->doSelectPre($paramaters);
+        \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_hooks_DatabaseConnection')->doSelectPre($paramaters);
 
         self::assertArrayNotHasKey('enablefieldsfe', $paramaters['options']);
         self::assertTrue($paramaters['options']['enablefieldsoff']);
@@ -195,7 +195,7 @@ class tx_mksearch_tests_hooks_DatabaseConnectionTest extends tx_mksearch_tests_T
 
         $paramaters = ['options' => ['enablefieldsoff' => true]];
 
-        tx_rnbase::makeInstance('tx_mksearch_hooks_DatabaseConnection')->doSelectPre($paramaters);
+        \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_hooks_DatabaseConnection')->doSelectPre($paramaters);
 
         self::assertArrayNotHasKey('enablefieldsfe', $paramaters['options']);
         self::assertTrue($paramaters['options']['enablefieldsoff']);

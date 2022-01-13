@@ -48,7 +48,7 @@ class tx_mksearch_tests_filter_FacetBaseTest extends tx_mksearch_tests_Testcase
     protected function setUp()
     {
         parent::setUp();
-        $this->parameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
+        $this->parameters = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Frontend\Request\Parameters::class);
         $this->parameters->setQualifier('mksearch');
     }
 
@@ -167,7 +167,7 @@ class tx_mksearch_tests_filter_FacetBaseTest extends tx_mksearch_tests_Testcase
      */
     private function getFilter($config = [])
     {
-        $filter = tx_rnbase::makeInstance(
+        $filter = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_filter_FacetBase',
             $this->parameters,
             tx_mksearch_tests_Util::loadConfig4BE($config),

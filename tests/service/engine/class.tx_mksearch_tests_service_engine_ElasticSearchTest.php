@@ -43,7 +43,7 @@ class tx_mksearch_tests_service_engine_ElasticSearchTest extends tx_mksearch_tes
      */
     public function testGetElasticIndex()
     {
-        $service = tx_rnbase::makeInstance('tx_mksearch_service_engine_ElasticSearch');
+        $service = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_service_engine_ElasticSearch');
         $indexName = new ReflectionProperty(
             'tx_mksearch_service_engine_ElasticSearch',
             'indexName'
@@ -69,12 +69,12 @@ class tx_mksearch_tests_service_engine_ElasticSearchTest extends tx_mksearch_tes
     public function testGetLogger()
     {
         $loggerClass = $this->callInaccessibleMethod(
-            tx_rnbase::makeInstance('tx_mksearch_service_engine_ElasticSearch'),
+            \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_service_engine_ElasticSearch'),
             'getLogger'
         );
 
         self::assertEquals(
-            'tx_rnbase_util_Logger',
+            \Sys25\RnBase\Utility\Logger::class,
             $loggerClass,
             'falsche Logger-Klasse'
         );
@@ -316,7 +316,7 @@ class tx_mksearch_tests_service_engine_ElasticSearchTest extends tx_mksearch_tes
      */
     public function testGetElasticaCredentialsFromCredentialsStringSetsInitialCredentialsStringToProperty()
     {
-        $service = tx_rnbase::makeInstance('tx_mksearch_service_engine_ElasticSearch');
+        $service = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_service_engine_ElasticSearch');
         $this->callInaccessibleMethod(
             $service,
             'getElasticaCredentialsFromCredentialsString',
@@ -339,7 +339,7 @@ class tx_mksearch_tests_service_engine_ElasticSearchTest extends tx_mksearch_tes
      */
     public function testGetElasticaCredentialsFromCredentialsStringSetsIndexNameProperty()
     {
-        $service = tx_rnbase::makeInstance('tx_mksearch_service_engine_ElasticSearch');
+        $service = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_service_engine_ElasticSearch');
         $this->callInaccessibleMethod(
             $service,
             'getElasticaCredentialsFromCredentialsString',
@@ -373,7 +373,7 @@ class tx_mksearch_tests_service_engine_ElasticSearchTest extends tx_mksearch_tes
                 ],
             ],
             $this->callInaccessibleMethod(
-                tx_rnbase::makeInstance('tx_mksearch_service_engine_ElasticSearch'),
+                \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_service_engine_ElasticSearch'),
                 'getElasticaCredentialsFromCredentialsString',
                 'index;1,2,3,4'
             ),
@@ -397,7 +397,7 @@ class tx_mksearch_tests_service_engine_ElasticSearchTest extends tx_mksearch_tes
                 ],
             ],
             $this->callInaccessibleMethod(
-                tx_rnbase::makeInstance('tx_mksearch_service_engine_ElasticSearch'),
+                \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_service_engine_ElasticSearch'),
                 'getElasticaCredentialsFromCredentialsString',
                 'index;1,2,3,4;'
             ),
@@ -426,7 +426,7 @@ class tx_mksearch_tests_service_engine_ElasticSearchTest extends tx_mksearch_tes
                 ],
             ],
             $this->callInaccessibleMethod(
-                tx_rnbase::makeInstance('tx_mksearch_service_engine_ElasticSearch'),
+                \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_service_engine_ElasticSearch'),
                 'getElasticaCredentialsFromCredentialsString',
                 'index;1,2,3,4;5,6,7,8'
             ),
@@ -481,7 +481,7 @@ class tx_mksearch_tests_service_engine_ElasticSearchTest extends tx_mksearch_tes
             'mksearchIndexModel'
         );
         $indexModelProperty->setAccessible(true);
-        $indexModel = tx_rnbase::makeInstance('tx_mksearch_model_internal_Index', []);
+        $indexModel = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_internal_Index', []);
         $indexModelProperty->setValue($service, $indexModel);
 
         $service->expects($this->once())
@@ -518,9 +518,9 @@ class tx_mksearch_tests_service_engine_ElasticSearchTest extends tx_mksearch_tes
      */
     public function testSetIndexModel()
     {
-        $service = tx_rnbase::makeInstance('tx_mksearch_service_engine_ElasticSearch');
+        $service = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_service_engine_ElasticSearch');
 
-        $indexModel = tx_rnbase::makeInstance('tx_mksearch_model_internal_Index', []);
+        $indexModel = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_internal_Index', []);
         $service->setIndexModel($indexModel);
 
         $indexModelProperty = new ReflectionProperty(
@@ -630,7 +630,7 @@ class tx_mksearch_tests_service_engine_ElasticSearchTest extends tx_mksearch_tes
         $service->expects($this->once())
             ->method('isServerAvailable')
             ->will($this->throwException(
-                tx_rnbase::makeInstance('Exception', 'Verbindung fehlgeschlagen')
+                \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Exception', 'Verbindung fehlgeschlagen')
             ));
 
         $credentialsStringProperty = new ReflectionProperty(
@@ -781,7 +781,7 @@ class tx_mksearch_tests_service_engine_ElasticSearchTest extends tx_mksearch_tes
      */
     public function testMakeIndexDocInstance()
     {
-        $service = tx_rnbase::makeInstance('tx_mksearch_service_engine_ElasticSearch');
+        $service = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_service_engine_ElasticSearch');
         $docInstance = $service->makeIndexDocInstance('mksearch', 'tt_content');
 
         self::assertInstanceOf(
@@ -833,7 +833,7 @@ class tx_mksearch_tests_service_engine_ElasticSearchTest extends tx_mksearch_tes
             'tx_mksearch_service_engine_ElasticSearch',
             ['indexNew']
         );
-        $doc = tx_rnbase::makeInstance(
+        $doc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
             'mksearch',
             'tt_content',
@@ -852,7 +852,7 @@ class tx_mksearch_tests_service_engine_ElasticSearchTest extends tx_mksearch_tes
      */
     public function testGetOpenIndexName()
     {
-        $service = tx_rnbase::makeInstance('tx_mksearch_service_engine_ElasticSearch');
+        $service = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_service_engine_ElasticSearch');
         $indexName = new ReflectionProperty(
             'tx_mksearch_service_engine_ElasticSearch',
             'indexName'
@@ -904,7 +904,7 @@ class tx_mksearch_tests_service_engine_ElasticSearchTest extends tx_mksearch_tes
     public function testIndexNew()
     {
         /* @var $doc tx_mksearch_model_IndexerDocumentBase */
-        $doc = tx_rnbase::makeInstance(
+        $doc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
             'mksearch',
             'tt_content',
@@ -1088,7 +1088,7 @@ class tx_mksearch_tests_service_engine_ElasticSearchTest extends tx_mksearch_tes
      */
     public function testGetElasticaQuery()
     {
-        $service = tx_rnbase::makeInstance('tx_mksearch_service_engine_ElasticSearch');
+        $service = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_service_engine_ElasticSearch');
 
         $fields['term'] = 'test term';
         $elasticaQuery = $this->callInaccessibleMethod($service, 'getElasticaQuery', $fields, []);
@@ -1102,7 +1102,7 @@ class tx_mksearch_tests_service_engine_ElasticSearchTest extends tx_mksearch_tes
      */
     public function testGetElasticaQueryHandlesSorting()
     {
-        $service = tx_rnbase::makeInstance('tx_mksearch_service_engine_ElasticSearch');
+        $service = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_service_engine_ElasticSearch');
 
         $fields['term'] = 'test term';
         $elasticaQuery = $this->callInaccessibleMethod(
@@ -1123,7 +1123,7 @@ class tx_mksearch_tests_service_engine_ElasticSearchTest extends tx_mksearch_tes
      */
     public function testGetOptionsForElastica($initialOption, $expectedMappedOption)
     {
-        $service = tx_rnbase::makeInstance('tx_mksearch_service_engine_ElasticSearch');
+        $service = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_service_engine_ElasticSearch');
 
         $options = [$initialOption => 'test value'];
         $mappedOptions = $this->callInaccessibleMethod(
@@ -1185,7 +1185,7 @@ class tx_mksearch_tests_service_engine_ElasticSearchTest extends tx_mksearch_tes
         $resultProperty->setAccessible(true);
         $resultProperty->setValue($searchResult, $results);
 
-        $service = tx_rnbase::makeInstance('tx_mksearch_service_engine_ElasticSearch');
+        $service = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_service_engine_ElasticSearch');
 
         $searchHits = $this->callInaccessibleMethod(
             $service,

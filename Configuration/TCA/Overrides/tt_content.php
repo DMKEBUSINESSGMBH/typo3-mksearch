@@ -5,7 +5,7 @@ if (!defined('TYPO3_MODE')) {
 }
 
 // Extend table tt_news
-tx_rnbase_util_Extensions::addTCAcolumns(
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns(
     'tt_content',
     [
         'tx_mksearch_is_indexable' => [
@@ -35,8 +35,7 @@ tx_rnbase_util_Extensions::addTCAcolumns(
     false
 );
 
-tx_rnbase_util_Extensions::addToAllTCAtypes('tt_content', 'tx_mksearch_is_indexable');
-
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes('tt_content', 'tx_mksearch_is_indexable');
 
 // Show tt_content-field pi_flexform
 $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['tx_mksearch'] = 'pi_flexform';
@@ -52,8 +51,8 @@ $aTempConfig[] = ['LLL:EXT:'.'mksearch'.'/locallang_db.xml:plugin.mksearch.tt_co
 $GLOBALS['TCA']['tt_content']['columns']['header_layout']['config']['items'] = $aTempConfig;
 
 // Add flexform and plugin
-tx_rnbase_util_Extensions::addPiFlexFormValue('tx_mksearch', 'FILE:EXT:'.'mksearch'.'/flexform_main.xml');
-tx_rnbase_util_Extensions::addPlugin(
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue('tx_mksearch', 'FILE:EXT:'.'mksearch'.'/flexform_main.xml');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPlugin(
     ['LLL:EXT:'.'mksearch'.'/locallang_db.xml:plugin.mksearch.label', 'tx_mksearch'],
     'list_type',
     'mksearch'

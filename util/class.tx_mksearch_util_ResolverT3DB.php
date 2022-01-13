@@ -37,12 +37,12 @@ class tx_mksearch_util_ResolverT3DB
         $tableName = $queueData['tablename'];
         $recId = intval($queueData['recid']);
         if (!$tableName || !$recId) {
-            tx_rnbase_util_Logger::warn('[ResolverT3DB] Queue item ignored due to missing data.', 'mksearch', $queueData);
+            \Sys25\RnBase\Utility\Logger::warn('[ResolverT3DB] Queue item ignored due to missing data.', 'mksearch', $queueData);
             throw new Exception('Queue item '.$queueData['uid'].' ignored due to missing data.');
         }
         $options['where'] = 'uid='.$recId;
         $options['enablefieldsoff'] = 1;
-        $rows = tx_rnbase_util_DB::doSelect('*', $tableName, $options);
+        $rows = \Sys25\RnBase\Database\Connection::getInstance()->doSelect('*', $tableName, $options);
         if (!count($rows)) {
             // Datensatz vermutlich komplett gelöscht. Wir bereiten einen Minimal-Record für die Löschung vor
             $rows[] = ['uid' => $recId, 'deleted' => 1];

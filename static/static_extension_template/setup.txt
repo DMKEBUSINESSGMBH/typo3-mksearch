@@ -1,8 +1,4 @@
-includeLibs.tx_rnbase_controller = EXT:rn_base/class.tx_rnbase_controller.php
-includeLibs.tx_mksearch_util_UserFunc = EXT:mksearch/util/class.tx_mksearch_util_UserFunc.php
-
 plugin.tx_mksearch = USER
-
 plugin.tx_mksearch {
     extensionKey = mksearch
     # flexform = flexform_main.xml
@@ -163,32 +159,6 @@ lib.mksearch.lucenefilter {
 ###SORT_TITLE_ORDER### = asc
 ###SORT_TITLE_LINKURL### = index.php?mksearch[sort]=title&mksearch[sortorder]=asc
 ###SORT_TITLE_LINK### = wrappedArray mit dem A-Tag
-    }
-
-    # Alternative filter which receives the search term from the
-    # HTTP referer URL. This could be used to search our own site
-    # for the search term the user just entered on Google website.
-    searchByReferer = tx_mksearch_filter_SearchByReferer
-    searchByReferer {
-        referers {
-            google {
-                # Which URL? All URLs ending with "google.xx[x]"
-                urlRegEx = /\.google\.[a-z]{2,3}\//i
-                # How to find the search term within the URL? Here it's the "q" parameter.
-                # The term within the (first and only) brackets () is used.
-                searchTermRegEx = /[?&]q=([^&]*)/
-                # How to separate words within the url encoded search term?
-                searchTermDelimiterRegEx = /\++/
-                # Type of logical conjunction in our own page search: "or" [default] or "and"
-                searchTermOperator = or
-            }
-            yahoo {
-                urlRegEx = /\.yahoo\.[a-z]{2,3}\//i
-                searchTermRegEx = /[?&]p=([^&]*)/
-                searchTermDelimiterRegEx = /\++/
-                searchTermOperator = or
-            }
-        }
     }
 }
 

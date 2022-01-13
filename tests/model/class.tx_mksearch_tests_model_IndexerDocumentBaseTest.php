@@ -92,7 +92,7 @@ class tx_mksearch_tests_model_IndexerDocumentBaseTest extends tx_mksearch_tests_
      */
     private function getIndexerDocument()
     {
-        return tx_rnbase::makeInstance(
+        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
             'mksearch',
             'dummy'

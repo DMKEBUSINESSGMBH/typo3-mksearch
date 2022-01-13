@@ -7,7 +7,7 @@
 /**
  * @author Hannes Bochmann
  */
-class tx_mksearch_search_irfaq_Question extends tx_rnbase_util_SearchBase
+class tx_mksearch_search_irfaq_Question extends \Sys25\RnBase\Search\SearchBase
 {
     /**
      * getTableMappings().
@@ -19,7 +19,7 @@ class tx_mksearch_search_irfaq_Question extends tx_rnbase_util_SearchBase
         $tableMapping['IRFAQ_QUESTION_CATEGORY_MM'] = 'tx_irfaq_q_cat_mm';
 
         // Hook to append other tables
-        tx_rnbase_util_Misc::callHook(
+        \Sys25\RnBase\Utility\Misc::callHook(
             'mksearch',
             'search_irfaq_Question_getTableMapping_hook',
             ['tableMapping' => &$tableMapping],
@@ -78,7 +78,7 @@ class tx_mksearch_search_irfaq_Question extends tx_rnbase_util_SearchBase
         }
 
         // Hook to append other tables
-        tx_rnbase_util_Misc::callHook(
+        \Sys25\RnBase\Utility\Misc::callHook(
             'mksearch',
             'search_irfaq_Question_getJoins_hook',
             ['join' => &$join, 'tableAliases' => $tableAliases],

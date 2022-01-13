@@ -16,7 +16,7 @@ abstract class tx_mksearch_mod1_searcher_abstractBase
     /**
      * Selector Klasse.
      *
-     * @var tx_rnbase_mod_IModule
+     * @var \Sys25\RnBase\Backend\Module\IModule
      */
     private $mod = null;
     /**
@@ -49,10 +49,10 @@ abstract class tx_mksearch_mod1_searcher_abstractBase
     /**
      * Constructor.
      *
-     * @param tx_rnbase_mod_IModule $mod
+     * @param \Sys25\RnBase\Backend\Module\IModule $mod
      * @param array                 $options
      */
-    public function __construct(tx_rnbase_mod_IModule $mod, array $options = [])
+    public function __construct(\Sys25\RnBase\Backend\Module\IModule $mod, array $options = [])
     {
         $this->init($mod, $options);
     }
@@ -60,10 +60,10 @@ abstract class tx_mksearch_mod1_searcher_abstractBase
     /**
      * Init object.
      *
-     * @param tx_rnbase_mod_IModule $mod
+     * @param \Sys25\RnBase\Backend\Module\IModule $mod
      * @param array                 $options
      */
-    protected function init(tx_rnbase_mod_IModule $mod, $options)
+    protected function init(\Sys25\RnBase\Backend\Module\IModule $mod, $options)
     {
         // locallang einlesen
         if (!self::$llLoaded) {
@@ -170,9 +170,9 @@ abstract class tx_mksearch_mod1_searcher_abstractBase
     public function getResultList()
     {
         $srv = $this->getService();
-        /* @var $pager tx_rnbase_util_BEPager */
-        $pager = tx_rnbase::makeInstance(
-            'tx_rnbase_util_BEPager',
+        /* @var $pager \Sys25\RnBase\Backend\Utility\BEPager */
+        $pager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+            \Sys25\RnBase\Backend\Utility\BEPager::class,
             $this->getSearcherId().'Pager',
             $this->getModule()->getName(),
             (isset($this->options['pid'])) ? $this->options['pid'] : 0
@@ -257,8 +257,8 @@ abstract class tx_mksearch_mod1_searcher_abstractBase
         // else
         $aColumns = $this->getColumns($this->getDecorator($this->getModule()));
 
-        /* @var $tables Tx_Rnbase_Backend_Utility_Tables */
-        $tables = tx_rnbase::makeInstance('Tx_Rnbase_Backend_Utility_Tables');
+        /* @var $tables \Sys25\RnBase\Backend\Utility\Tables */
+        $tables = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Backend\Utility\Tables::class);
         list($tableData, $tableLayout) = $tables->prepareTable(
             $items,
             $aColumns,
@@ -274,7 +274,7 @@ abstract class tx_mksearch_mod1_searcher_abstractBase
     }
 
     /**
-     * @return tx_rnbase_mod_IDecorator
+     * @return \Sys25\RnBase\Backend\Decorator\InterfaceDecorator
      */
     abstract protected function getDecorator(&$mod);
 
@@ -289,7 +289,7 @@ abstract class tx_mksearch_mod1_searcher_abstractBase
     /**
      * Liefert die Spalten für den Decorator.
      *
-     * @param tx_rnbase_mod_IDecorator $oDecorator
+     * @param \Sys25\RnBase\Backend\Decorator\InterfaceDecorator $oDecorator
      *
      * @return array
      */
@@ -315,7 +315,7 @@ abstract class tx_mksearch_mod1_searcher_abstractBase
     protected function getSelector()
     {
         if (!$this->selector) {
-            $this->selector = tx_rnbase::makeInstance('tx_mksearch_mod1_util_Selector');
+            $this->selector = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_mod1_util_Selector');
             $this->selector->init($this->getModule());
         }
 
@@ -335,9 +335,9 @@ abstract class tx_mksearch_mod1_searcher_abstractBase
     }
 
     /**
-     * Returns an instance of tx_rnbase_mod_IModule.
+     * Returns an instance of \Sys25\RnBase\Backend\Module\IModule.
      *
-     * @return tx_rnbase_mod_IModule
+     * @return \Sys25\RnBase\Backend\Module\IModule
      */
     protected function getModule()
     {
@@ -345,9 +345,9 @@ abstract class tx_mksearch_mod1_searcher_abstractBase
     }
 
     /**
-     * Returns an instance of tx_rnbase_mod_IModule.
+     * Returns an instance of \Sys25\RnBase\Backend\Module\IModule.
      *
-     * @return tx_rnbase_mod_IModule
+     * @return \Sys25\RnBase\Backend\Module\IModule
      */
     protected function getOptions()
     {
@@ -355,9 +355,9 @@ abstract class tx_mksearch_mod1_searcher_abstractBase
     }
 
     /**
-     * Returns an instance of tx_rnbase_mod_IModule.
+     * Returns an instance of \Sys25\RnBase\Backend\Module\IModule.
      *
-     * @return tx_rnbase_util_FormTool
+     * @return \Sys25\RnBase\Backend\Form\ToolBox
      */
     protected function getFormTool()
     {

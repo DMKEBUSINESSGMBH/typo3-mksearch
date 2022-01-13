@@ -125,7 +125,7 @@ class tx_mksearch_util_SearchBuilder
      * @param array                    $fields
      * @param array                    $options
      * @param ParametersInterface      $parameters
-     * @param tx_rnbase_configurations $configurations
+     * @param \Sys25\RnBase\Configuration\Processor $configurations
      * @param string                   $confId
      */
     public static function handleMinShouldMatch(&$fields, &$options, &$parameters, &$configurations, $confId)
@@ -160,7 +160,7 @@ class tx_mksearch_util_SearchBuilder
      * @param array                    $fields
      * @param array                    $options
      * @param ParametersInterface      $parameters
-     * @param tx_rnbase_configurations $configurations
+     * @param \Sys25\RnBase\Configuration\Processor $configurations
      * @param string                   $confId
      */
     public static function handleDismaxFuzzySearch(&$fields, &$options, &$parameters, &$configurations, $confId)
@@ -199,7 +199,7 @@ class tx_mksearch_util_SearchBuilder
             return '';
         }
         // die wörter aufsplitten
-        $terms = tx_rnbase_util_Strings::trimExplode(' ', $term, 1);
+        $terms = \Sys25\RnBase\Utility\Strings::trimExplode(' ', $term, 1);
         if (self::emptyTerm($terms)) {
             return '';
         }

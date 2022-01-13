@@ -44,7 +44,7 @@ class tx_mksearch_mod1_searcher_IndexerConfig extends tx_mksearch_mod1_searcher_
      */
     protected function getDecorator(&$mod)
     {
-        return tx_rnbase::makeInstance('tx_mksearch_mod1_decorator_IndexerConfig', $mod);
+        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_mod1_decorator_IndexerConfig', $mod);
     }
 
     /**

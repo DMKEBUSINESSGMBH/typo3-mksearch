@@ -5,7 +5,7 @@
  *
  * @author Michael Wagner <dev@dmk-ebusiness.de>
  */
-class tx_mksearch_mod1_Keywords extends tx_rnbase_mod_BaseModFunc
+class tx_mksearch_mod1_Keywords extends \Sys25\RnBase\Backend\Module\BaseModFunc
 {
     /**
      * Return function id (used in page typoscript etc.).
@@ -34,9 +34,9 @@ class tx_mksearch_mod1_Keywords extends tx_rnbase_mod_BaseModFunc
      * Kindklassen implementieren diese Methode um den Modulinhalt zu erzeugen.
      *
      * @param string                    $template
-     * @param tx_rnbase_configurations  $configurations
-     * @param tx_rnbase_util_FormatUtil $formatter
-     * @param tx_rnbase_util_FormTool   $formTool
+     * @param \Sys25\RnBase\Configuration\Processor  $configurations
+     * @param \Sys25\RnBase\Frontend\Marker\FormatUtil $formatter
+     * @param \Sys25\RnBase\Backend\Form\ToolBox   $formTool
      *
      * @return string
      */
@@ -46,11 +46,11 @@ class tx_mksearch_mod1_Keywords extends tx_rnbase_mod_BaseModFunc
 
         $markerArray['###COMMON_START###'] = $markerArray['###COMMON_END###'] = '';
         if ($GLOBALS['BE_USER']->isAdmin()) {
-            $markerArray['###COMMON_START###'] = tx_rnbase_util_Templates::getSubpart($template, '###COMMON_START###');
-            $markerArray['###COMMON_END###'] = tx_rnbase_util_Templates::getSubpart($template, '###COMMON_END###');
+            $markerArray['###COMMON_START###'] = \Sys25\RnBase\Frontend\Marker\Templates::getSubpart($template, '###COMMON_START###');
+            $markerArray['###COMMON_END###'] = \Sys25\RnBase\Frontend\Marker\Templates::getSubpart($template, '###COMMON_END###');
         }
 
-        $templateMod = tx_rnbase_util_Templates::getSubpart($template, '###SEARCHPART###');
+        $templateMod = \Sys25\RnBase\Frontend\Marker\Templates::getSubpart($template, '###SEARCHPART###');
         $out = $this->showSearch($templateMod, $configurations, $formTool, $markerArray);
 
         return $out;
@@ -60,8 +60,8 @@ class tx_mksearch_mod1_Keywords extends tx_rnbase_mod_BaseModFunc
      * Returns search form.
      *
      * @param string                   $template
-     * @param tx_rnbase_configurations $configurations
-     * @param tx_rnbase_util_FormTool  $formTool
+     * @param \Sys25\RnBase\Configuration\Processor $configurations
+     * @param \Sys25\RnBase\Backend\Form\ToolBox  $formTool
      *
      * @return string
      */
@@ -89,7 +89,7 @@ class tx_mksearch_mod1_Keywords extends tx_rnbase_mod_BaseModFunc
             $options['pid'] = $this->getModule()->id;
         }
 
-        return tx_rnbase::makeInstance('tx_mksearch_mod1_searcher_Keywords', $this->getModule(), $options);
+        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_mod1_searcher_Keywords', $this->getModule(), $options);
     }
 }
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/class.tx_mksearch_mod1_Keywords.php']) {

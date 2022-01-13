@@ -34,7 +34,7 @@ class tx_mksearch_mod1_util_IndexStatusHandler
      */
     public static function getInstance()
     {
-        return tx_rnbase::makeInstance('tx_mksearch_mod1_util_IndexStatusHandler');
+        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_mod1_util_IndexStatusHandler');
     }
 
     /**

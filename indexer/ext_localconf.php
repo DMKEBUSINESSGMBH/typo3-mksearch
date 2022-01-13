@@ -34,10 +34,10 @@ tx_mksearch_util_Config::registerIndexer(
     ]
 );
 
-if (tx_rnbase_util_Extensions::isLoaded('tt_news')) {
+if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('tt_news')) {
     tx_mksearch_util_Config::registerIndexer('tt_news', 'news', 'tx_mksearch_indexer_TtNewsNews', ['tt_news', 'tt_news_cat']);
 }
-if (tx_rnbase_util_Extensions::isLoaded('news')) {
+if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('news')) {
     tx_mksearch_util_Config::registerIndexer(
         'tx_news',
         'news',
@@ -52,14 +52,14 @@ if (tx_rnbase_util_Extensions::isLoaded('news')) {
     );
 }
 
-if (tx_rnbase_util_Extensions::isLoaded('tt_address')) {
+if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('tt_address')) {
     tx_mksearch_util_Config::registerIndexer('tt_address', 'address', 'tx_mksearch_indexer_TtAddressAddress', ['tt_address']);
 }
 
 tx_mksearch_util_Config::registerIndexer('core', 'file', 'tx_mksearch_indexer_FAL', ['sys_file', 'sys_file_metadata']);
 
 // seminars Extension
-if (tx_rnbase_util_Extensions::isLoaded('seminars')) {
+if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('seminars')) {
     tx_mksearch_util_Config::registerIndexer(
         'seminars',
         'seminar',
@@ -79,7 +79,7 @@ if (tx_rnbase_util_Extensions::isLoaded('seminars')) {
 }
 
 // irfaq Extension
-if (tx_rnbase_util_Extensions::isLoaded('irfaq')) {
+if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('irfaq')) {
     tx_mksearch_util_Config::registerIndexer(
         'irfaq',
         'question',
@@ -94,12 +94,12 @@ if (tx_rnbase_util_Extensions::isLoaded('irfaq')) {
     );
 }
 
-if (tx_rnbase_util_Extensions::isLoaded('efaq')) {
+if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('efaq')) {
     tx_mksearch_util_Config::registerIndexer('efaq', 'faq', 'tx_mksearch_indexer_Efaq', ['tx_efaq_faqs']);
 }
 
 // cal Extension
-if (tx_rnbase_util_Extensions::isLoaded('cal')) {
+if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('cal')) {
     tx_mksearch_util_Config::registerIndexer(
         'cal',
         'event',
@@ -115,7 +115,7 @@ if (tx_rnbase_util_Extensions::isLoaded('cal')) {
 }
 
 // cal Extension
-if (tx_rnbase_util_Extensions::isLoaded('a21glossary')) {
+if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('a21glossary')) {
     tx_mksearch_util_Config::registerIndexer(
         'a21glossary',
         'main',

@@ -42,7 +42,7 @@ class tx_mksearch_util_UserFunc
         }
 
         /* @var $parameters \Sys25\RnBase\Frontend\Request\Parameters */
-        $parameters = tx_rnbase::makeInstance(\Sys25\RnBase\Frontend\Request\Parameters::class);
+        $parameters = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Frontend\Request\Parameters::class);
         $combination = $parameters->get('combination', $conf['qualifier']);
         //fallback aus TS
         if (empty($combination)) {

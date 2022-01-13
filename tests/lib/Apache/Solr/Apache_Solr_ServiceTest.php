@@ -22,7 +22,7 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once tx_rnbase_util_Extensions::extPath('mksearch', 'lib/Apache/Solr/Service.php');
+require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch', 'lib/Apache/Solr/Service.php');
 
 /**
  * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>

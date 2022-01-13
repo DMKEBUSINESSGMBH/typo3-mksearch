@@ -154,7 +154,7 @@ class Tx_ExtKey_Package_CategorySetter {
       $categories = $this->getNewsCategories($record['uid']);
       $result = array();
       foreach ($categories as $cat) {
-         $this->cObj->data = $cat->record;
+         $this->cObj->data = $cat->getProperties();
          $value = $this->cObj->cObjGetSingle($conf['userFunc.']['category'], $conf['userFunc.']['category.']);
          if($value)
             $result[] = $value;
@@ -170,18 +170,18 @@ class Tx_ExtKey_Package_CategorySetter {
    /**
     * Get all categories of the news record
     *
-    * @param tx_rnbase_IModel $model
-    * @return array[tx_rnbase_model_Base]
+    * @param \Sys25\RnBase\Domain\Model\DataInterface $model
+    * @return array[\Sys25\RnBase\Domain\Model\BaseModel]
     */
    private function getNewsCategories($newsUid) {
       $options = array(
             'where' => 'tt_news_cat_mm.uid_local=' . $newsUid,
-            'wrapperclass' => 'tx_rnbase_model_Base',
+            'wrapperclass' => \Sys25\RnBase\Domain\Model\BaseModel::class,
             'orderby' => 'tt_news_cat_mm.sorting ASC'
       );
       $join = ' JOIN tt_news_cat_mm ON tt_news_cat_mm.uid_foreign=tt_news_cat.uid AND tt_news_cat.deleted=0 ';
       $from = array('tt_news_cat' . $join, 'tt_news_cat');
-      $rows = tx_rnbase_util_DB::doSelect(
+      $rows = \Sys25\RnBase\Database\Connection::getInstance()->doSelect(
             'tt_news_cat_mm.uid_foreign, tt_news_cat.uid, tt_news_cat.title, tt_news_cat.single_pid',
             $from, $options
       );

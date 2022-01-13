@@ -34,7 +34,7 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
     /**
      * Sets the index doc to deleted if neccessary.
      *
-     * @param tx_rnbase_IModel                      $oModel
+     * @param \Sys25\RnBase\Domain\Model\DataInterface                      $oModel
      * @param tx_mksearch_interface_IndexerDocument $oIndexDoc
      * @param array                                 $aOptions
      *
@@ -42,7 +42,7 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
      */
     // @codingStandardsIgnoreStart (interface/abstract mistake)
     protected function hasDocToBeDeleted(
-        tx_rnbase_IModel $oModel,
+        \Sys25\RnBase\Domain\Model\DataInterface $oModel,
         tx_mksearch_interface_IndexerDocument $oIndexDoc,
         $aOptions = []
     ) {
@@ -68,7 +68,7 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
     /**
      * Sets the index doc to deleted if neccessary.
      *
-     * @param tx_rnbase_IModel                      $oModel
+     * @param \Sys25\RnBase\Domain\Model\DataInterface                      $oModel
      * @param tx_mksearch_interface_IndexerDocument $oIndexDoc
      * @param array                                 $aOptions
      *
@@ -76,7 +76,7 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
      */
     // @codingStandardsIgnoreStart (interface/abstract mistake)
     protected function hasNonGridelementDocToBeDeleted(
-        tx_rnbase_IModel $oModel,
+        \Sys25\RnBase\Domain\Model\DataInterface $oModel,
         tx_mksearch_interface_IndexerDocument $oIndexDoc,
         $aOptions = []
     ) {
@@ -87,10 +87,10 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
     /**
      * Adds the parent to index.
      *
-     * @param tx_rnbase_IModel $oModel
+     * @param \Sys25\RnBase\Domain\Model\DataInterface $oModel
      */
     protected function addGridelementsContainerToIndex(
-        tx_rnbase_IModel $oModel
+        \Sys25\RnBase\Domain\Model\DataInterface $oModel
     ) {
         // add the parent do index, so the changes are writen to index
         $indexSrv = tx_mksearch_util_ServiceRegistry::getIntIndexService();
@@ -130,7 +130,7 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
         array $rawData
     ) {
         return
-            tx_rnbase_util_Extensions::isLoaded('gridelements') &&
+            \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('gridelements') &&
             'gridelements_pi1' == $rawData['CType']
         ;
     }

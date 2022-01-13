@@ -82,7 +82,7 @@ class tx_mksearch_model_IndexerDocumentBase implements tx_mksearch_interface_Ind
      */
     protected function getFieldInstance($value, $storageOptionsOrType, $boost = 1.0, $dataType = null, $encoding = null)
     {
-        return tx_rnbase::makeInstance($this->fieldClass, $value, $storageOptionsOrType, $boost, $dataType, $encoding);
+        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($this->fieldClass, $value, $storageOptionsOrType, $boost, $dataType, $encoding);
     }
 
     /***********************************
@@ -252,7 +252,7 @@ class tx_mksearch_model_IndexerDocumentBase implements tx_mksearch_interface_Ind
     public function getMaxAbstractLength()
     {
         return 200;
-//         return tx_rnbase_configurations::getExtensionCfgValue(
+//         return \Sys25\RnBase\Configuration\Processor::getExtensionCfgValue(
 //             'mksearch',
 //             'abstractMaxLength_' . $this->extKey->getValue() . '_' . $this->contentType->getValue()
 //         );

@@ -11,7 +11,7 @@ Die Indexer-Klassen von mksearch finden Sie im Verzeichnis EXT:mksearch/indexer.
 
 Mit folgender Anweisung in der ext\_localconf.php kann ein Indexer registriert werden:
 
-    if (tx_rnbase_util_Extensions::isLoaded('irfaq')) {
+    if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('irfaq')) {
             tx_mksearch_util_Config::registerIndexer(
               'irfaq',
               'question',

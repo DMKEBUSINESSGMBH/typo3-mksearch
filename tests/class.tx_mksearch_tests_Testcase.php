@@ -29,7 +29,7 @@
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-abstract class tx_mksearch_tests_Testcase extends tx_rnbase_tests_BaseTestCase
+abstract class tx_mksearch_tests_Testcase extends \Sys25\RnBase\Testing\BaseTestCase
 {
     protected $backups = [];
 
@@ -80,7 +80,7 @@ abstract class tx_mksearch_tests_Testcase extends tx_rnbase_tests_BaseTestCase
      */
     protected function prepareTSFE(array $options = ['force' => true, 'pid' => 1])
     {
-        tx_rnbase_util_Misc::prepareTSFE($options);
+        \Sys25\RnBase\Utility\Misc::prepareTSFE($options);
 
         if (!empty($options['pid'])) {
             $GLOBALS['TSFE']->id = $options['pid'];
@@ -107,7 +107,7 @@ abstract class tx_mksearch_tests_Testcase extends tx_rnbase_tests_BaseTestCase
             list($extKey, $contentType) = $extKey->getContentType();
         }
 
-        return tx_rnbase::makeInstance(
+        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
             $extKey,
             $contentType

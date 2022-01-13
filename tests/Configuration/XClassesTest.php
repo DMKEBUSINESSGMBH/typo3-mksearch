@@ -41,7 +41,7 @@ class XClassesTest extends \tx_mksearch_tests_Testcase
     {
         self::assertInstanceOf(
             'DMK\\Mksearch\\ViewHelpers\\CObjectViewHelper',
-            \tx_rnbase::makeInstance('TYPO3\\CMS\\Fluid\\ViewHelpers\\CObjectViewHelper')
+            \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Fluid\\ViewHelpers\\CObjectViewHelper')
         );
     }
 
@@ -52,7 +52,7 @@ class XClassesTest extends \tx_mksearch_tests_Testcase
     {
         self::assertInstanceOf(
             'DMK\\Mksearch\\ViewHelpers\\Format\\HtmlViewHelper',
-            \tx_rnbase::makeInstance('TYPO3\\CMS\\Fluid\\ViewHelpers\\Format\\HtmlViewHelper')
+            \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Fluid\\ViewHelpers\\Format\\HtmlViewHelper')
         );
     }
 }

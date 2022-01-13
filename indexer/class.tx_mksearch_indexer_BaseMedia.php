@@ -75,7 +75,7 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
         $indexDoc->setUid($sourceRecord['sys_language_uid'] ? $sourceRecord['l18n_parent'] : $sourceRecord['uid']);
 
         // pre process hoock
-        tx_rnbase_util_Misc::callHook(
+        \Sys25\RnBase\Utility\Misc::callHook(
             'mksearch',
             'indexerBaseMedia_preProcessSearchData',
             [
@@ -145,7 +145,7 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
         // Wie sollen die Binärdaten indiziert werden? Solr Cell oder Tika?
         $indexMethod = $this->getIndexMethod($options);
         if (!method_exists($this, $indexMethod)) {
-            tx_rnbase_util_Logger::warn('Configured index method not supported: '.$indexMethod, 'mksearch');
+            \Sys25\RnBase\Utility\Logger::warn('Configured index method not supported: '.$indexMethod, 'mksearch');
 
             return false;
         }
@@ -153,7 +153,7 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
         $this->$indexMethod($tableName, $sourceRecord, $indexDoc, $options);
 
         // post precess hock
-        tx_rnbase_util_Misc::callHook(
+        \Sys25\RnBase\Utility\Misc::callHook(
             'mksearch',
             'indexerBaseMedia_postProcessSearchData',
             [
@@ -208,7 +208,7 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
     {
         $file = $this->getAbsFileName($tableName, $sourceRecord);
         if (!tx_mksearch_util_Tika::getInstance()->isAvailable()) {
-            tx_rnbase_util_Logger::warn('Apache Tika not available!', 'mksearch');
+            \Sys25\RnBase\Utility\Logger::warn('Apache Tika not available!', 'mksearch');
 
             return;
         }
@@ -218,7 +218,7 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
         if ($contentField) {
             $tikaCommand = '';
             if (!$content = tx_mksearch_util_Tika::getInstance()->extractContent($file, $tikaCommand)) {
-                tx_rnbase_util_Logger::warn(
+                \Sys25\RnBase\Utility\Logger::warn(
                     'Apache Tika returned empty content!',
                     'mksearch',
                     [
@@ -285,7 +285,7 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
                 //  Kommagetrennt mit byFileExtension
                 // Als Array      mit byFileExtension.
                 case 'byFileExtension':
-                    $filterValue = tx_rnbase_util_Strings::trimExplode(',', $filterValue);
+                    $filterValue = \Sys25\RnBase\Utility\Strings::trimExplode(',', $filterValue);
                     $filterValue = is_array($filters['byFileExtension.']) ? array_merge(array_values($filters['byFileExtension.']), $filterValue) : $filterValue;
                     // no break
                 case 'byFileExtension.':
@@ -309,7 +309,7 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
                     elseif ($filterValue['checkSubFolder']) {
                         unset($filterValue['checkSubFolder']); // brauchen wir nicht mehr
                         foreach ($filterValue as $key => $folder) {
-                            if (tx_rnbase_util_Strings::isFirstPartOfStr($filePath, $folder)) {
+                            if (\Sys25\RnBase\Utility\Strings::isFirstPartOfStr($filePath, $folder)) {
                                 $ret = intval($filterValue[$key.'.']['disallow']) ? false : true;
                                 break;
                             }
@@ -402,7 +402,7 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
      */
     protected function getIndexerUtility()
     {
-        return tx_rnbase::makeInstance('tx_mksearch_util_Indexer');
+        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_util_Indexer');
     }
 
     /**

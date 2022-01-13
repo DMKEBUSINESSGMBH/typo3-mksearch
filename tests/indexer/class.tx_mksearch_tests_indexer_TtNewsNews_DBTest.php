@@ -22,7 +22,7 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once tx_rnbase_util_Extensions::extPath('mksearch', 'lib/Apache/Solr/Document.php');
+require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch', 'lib/Apache/Solr/Document.php');
 
 /**
  * Wir müssen in diesem Fall mit der DB testen da wir die pages
@@ -57,7 +57,7 @@ class tx_mksearch_tests_indexer_TtNewsNews_DBTest extends tx_mksearch_tests_DbTe
     public function testPrepareSearchDataWithIncludeCategoriesOption()
     {
         /* @var $indexer tx_mksearch_indexer_TtNewsNews */
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtNewsNews');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_TtNewsNews');
         $options = [
             'include.' => [
                 'categories.' => [
@@ -91,7 +91,7 @@ class tx_mksearch_tests_indexer_TtNewsNews_DBTest extends tx_mksearch_tests_DbTe
      */
     public function testPrepareSearchDataWithExcludeCategoriesOption()
     {
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtNewsNews');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_TtNewsNews');
         $options = [
             'exclude.' => [
                 'categories.' => [
@@ -121,7 +121,7 @@ class tx_mksearch_tests_indexer_TtNewsNews_DBTest extends tx_mksearch_tests_DbTe
 
     public function testPrepareSearchDataWithSinglePid()
     {
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtNewsNews');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_TtNewsNews');
         $indexDoc = tx_mksearch_tests_Util::getIndexerDocument($indexer);
         $options = [
             'addCategoryData' => 1,
@@ -140,7 +140,7 @@ class tx_mksearch_tests_indexer_TtNewsNews_DBTest extends tx_mksearch_tests_DbTe
 
     public function testPrepareSearchDataWithDefaultSinglePid()
     {
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtNewsNews');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_TtNewsNews');
         $indexDoc = tx_mksearch_tests_Util::getIndexerDocument($indexer);
         $options = [
             'addCategoryData' => 1,
@@ -162,7 +162,7 @@ class tx_mksearch_tests_indexer_TtNewsNews_DBTest extends tx_mksearch_tests_DbTe
     public function testPrepareSearchDataWithIncludeOptionsOtherThanCategories()
     {
         /* @var $indexer tx_mksearch_indexer_TtNewsNews */
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtNewsNews');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_TtNewsNews');
         $options = [
             'include.' => [
                 'somethingelse' => '1',

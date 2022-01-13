@@ -114,6 +114,6 @@ class CObjectViewHelperTest extends \tx_mksearch_tests_Testcase
      */
     protected function getViewHelper()
     {
-        return \tx_rnbase::makeInstance('TYPO3\\CMS\\Fluid\\ViewHelpers\\CObjectViewHelper');
+        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Fluid\\ViewHelpers\\CObjectViewHelper');
     }
 }

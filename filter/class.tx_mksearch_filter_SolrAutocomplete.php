@@ -42,7 +42,7 @@ class tx_mksearch_filter_SolrAutocomplete extends tx_mksearch_filter_SolrBase
      *
      * @param array                    $fields
      * @param ParametersInterface      $parameters
-     * @param tx_rnbase_configurations $configurations
+     * @param \Sys25\RnBase\Configuration\Processor $configurations
      * @param string                   $confId
      */
     protected function handleTerm(&$fields, &$parameters, &$configurations, $confId)

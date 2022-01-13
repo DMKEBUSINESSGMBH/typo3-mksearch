@@ -44,7 +44,7 @@ use TYPO3\CMS\Extbase\Persistence\Generic\Session;
 abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
 {
     /**
-     * @var tx_rnbase_IModel
+     * @var \Sys25\RnBase\Domain\Model\DataInterface
      */
     protected $modelToIndex;
 
@@ -85,7 +85,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
         $indexDoc->setUid($this->getUid($tableName, $rawData, $options));
 
         // pre process hoock
-        tx_rnbase_util_Misc::callHook(
+        \Sys25\RnBase\Utility\Misc::callHook(
             'mksearch',
             'indexerBase_preProcessSearchData',
             [
@@ -171,7 +171,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
         }
 
         // post precess hock
-        tx_rnbase_util_Misc::callHook(
+        \Sys25\RnBase\Utility\Misc::callHook(
             'mksearch',
             'indexerBase_postProcessSearchData',
             [
@@ -246,7 +246,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
     /**
      * Indexes all fields of the model according to the given mapping.
      *
-     * @param tx_rnbase_IModel                      $model
+     * @param \Sys25\RnBase\Domain\Model\DataInterface                      $model
      * @param array                                 $recordIndexMapping
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
      * @param string                                $prefix
@@ -254,7 +254,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
      * @param bool                                  $dontIndexHidden
      */
     protected function indexModelByMapping(
-        tx_rnbase_IModel $model,
+        \Sys25\RnBase\Domain\Model\DataInterface $model,
         array $recordIndexMapping,
         tx_mksearch_interface_IndexerDocument $indexDoc,
         $prefix = '',
@@ -276,7 +276,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
      * Collects the values of all models inside the given array
      * and adds them as multivalue (array).
      *
-     * @param array                                 $models             array of tx_rnbase_IModel
+     * @param array                                 $models             array of \Sys25\RnBase\Domain\Model\DataInterface
      * @param array                                 $recordIndexMapping
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
      * @param string                                $prefix
@@ -305,14 +305,14 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
     /**
      * Sets the index doc to deleted if neccessary.
      *
-     * @param tx_rnbase_model_base                  $model
+     * @param \Sys25\RnBase\Domain\Model\BaseModel                  $model
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
      * @param array                                 $options
      *
      * @return bool
      */
     protected function hasDocToBeDeleted(
-        tx_rnbase_IModel $model,
+        \Sys25\RnBase\Domain\Model\DataInterface $model,
         tx_mksearch_interface_IndexerDocument $indexDoc,
         $options = []
     ) {
@@ -329,7 +329,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
         $rootline = $this->getIndexerUtility()->getRootlineByPid($this->getRecordFromModel($model)['pid']);
 
         // @todo sollten nicht auch Shortcuts etc. invalide sein?
-        $sysPage = tx_rnbase_util_TYPO3::getSysPage();
+        $sysPage = \Sys25\RnBase\Utility\TYPO3::getSysPage();
         foreach ($rootline as $page) {
             if ($page['hidden'] ||
                 ($page['doktype'] == $sysPage::DOKTYPE_BE_USER_SECTION) ||
@@ -344,34 +344,23 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
     }
 
     /**
-     * @param \Tx_Rnbase_Domain_Model_DataInterface|tx_rnbase_IModel $model
+     * @param \Sys25\RnBase\Domain\Model\DataInterface $model
      *
      * @return array
      */
     protected function getRecordFromModel($model): array
     {
-        // the old way
-        $record = $model->record;
-        // the new property way
-        if ($model instanceof Tx_Rnbase_Domain_Model_Data) {
-            $record = $this->modelToIndex->getProperty();
-        }
-
-        return $record;
+        return $this->modelToIndex->getProperty();
     }
 
     /**
-     * @param Tx_Rnbase_Domain_Model_DataInterface|tx_rnbase_IModel $model
+     * @param \Sys25\RnBase\Domain\Model\DataInterface $model
      * @param string $property
      * @param mixed $value
      */
     protected function setRecordValue($model, string $property, $value): void
     {
-        if ($model instanceof Tx_Rnbase_Domain_Model_DataInterface) {
-            $model->setProperty($property, $value);
-        } else {
-            $model->record[$property] = $value;
-        }
+        $model->setProperty($property, $value);
     }
 
     /**
@@ -393,7 +382,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
     /**
      * Indiziert alle eneblecolumns.
      *
-     * @param tx_rnbase_IModel                      $model
+     * @param \Sys25\RnBase\Domain\Model\DataInterface                      $model
      * @param string                                $tableName
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
      * @param string                                $indexDocFieldsPrefix
@@ -401,7 +390,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
      * @return tx_mksearch_interface_IndexerDocument
      */
     protected function indexEnableColumns(
-        tx_rnbase_IModel $model,
+        \Sys25\RnBase\Domain\Model\DataInterface $model,
         $tableName,
         tx_mksearch_interface_IndexerDocument $indexDoc,
         $indexDocFieldsPrefix = ''
@@ -436,7 +425,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
     /**
      * Indexes the Rootpage of the current models page.
      *
-     * @param tx_rnbase_IModel                      $model
+     * @param \Sys25\RnBase\Domain\Model\DataInterface                      $model
      * @param string                                $tableName
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
      * @param array                                 $options
@@ -444,7 +433,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
      * @return tx_mksearch_interface_IndexerDocument
      */
     protected function indexSiteRootPage(
-        tx_rnbase_IModel $model,
+        \Sys25\RnBase\Domain\Model\DataInterface $model,
         $tableName,
         tx_mksearch_interface_IndexerDocument $indexDoc,
         $options = []
@@ -478,7 +467,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
     /**
      * Indexes the language of the current model.
      *
-     * @param tx_rnbase_IModel                      $model
+     * @param \Sys25\RnBase\Domain\Model\DataInterface                      $model
      * @param string                                $tableName
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
      * @param array                                 $options
@@ -486,12 +475,12 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
      * @return tx_mksearch_interface_IndexerDocument
      */
     protected function indexLanguageFields(
-        tx_rnbase_IModel $model,
+        \Sys25\RnBase\Domain\Model\DataInterface $model,
         $tableName,
         tx_mksearch_interface_IndexerDocument $indexDoc,
         $options = []
     ) {
-        if ($model instanceof Tx_Rnbase_Domain_Model_DataInterface) {
+        if ($model instanceof \Sys25\RnBase\Domain\Model\DataInterface) {
             $sysLanguageUid = $model->getProperty(
                 tx_mksearch_util_TCA::getLanguageFieldForTable($tableName)
             );
@@ -536,11 +525,11 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
     /**
      * phpdoc.
      *
-     * @param tx_rnbase_IModel $model
+     * @param \Sys25\RnBase\Domain\Model\DataInterface $model
      * @param string           $typo3InternalName
      * @param string           $enableColumnName
      *
-     * @return tx_rnbase_IModel
+     * @return \Sys25\RnBase\Domain\Model\DataInterface
      */
     protected function convertEnableColumnValue(
         $model,
@@ -604,7 +593,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
     {
         return tx_mksearch_util_UserGroups::getInstance()->getEffectiveContentElementFeGroups(
             $pid,
-            Tx_Rnbase_Utility_Strings::trimExplode(',', $fegroups, true)
+            \Sys25\RnBase\Utility\Strings::trimExplode(',', $fegroups, true)
         );
     }
 
@@ -683,10 +672,10 @@ CONFIG;
     /**
      * Adds a element to the queue.
      *
-     * @param tx_rnbase_IModel $model
+     * @param \Sys25\RnBase\Domain\Model\DataInterface $model
      * @param string           $tableName
      */
-    protected function addModelToIndex(tx_rnbase_IModel $model, $tableName)
+    protected function addModelToIndex(\Sys25\RnBase\Domain\Model\DataInterface $model, $tableName)
     {
         tx_mksearch_util_Indexer::getInstance()
             ->addModelToIndex($model, $tableName);
@@ -716,7 +705,7 @@ CONFIG;
     /**
      * Checks if a include or exclude option was set for a given option key.
      *
-     * @param array  $models    array of tx_rnbase_IModel
+     * @param array  $models    array of \Sys25\RnBase\Domain\Model\DataInterface
      * @param array  $options
      * @param int    $mode      0 stands for "include" and 1 "exclude"
      * @param string $optionKey
@@ -769,9 +758,9 @@ CONFIG;
     protected function _getPidList($pidList, $recursive = 0)
     {
         /**
-         * @var Tx_Rnbase_Database_TreeQueryBuilder
+         * @var \Sys25\RnBase\Database\TreeQueryBuilder
          */
-        $treeQueryBuilder = tx_rnbase::makeInstance('Tx_Rnbase_Database_TreeQueryBuilder');
+        $treeQueryBuilder = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Database\TreeQueryBuilder::class);
 
         return $treeQueryBuilder->getPageTreeUidList($pidList, ['enablefieldsoff' => true]);
     }
@@ -814,13 +803,13 @@ CONFIG;
      * @param string $tableName
      * @param array  $options
      *
-     * @return tx_rnbase_IModel
+     * @return \Sys25\RnBase\Domain\Model\DataInterface
      */
     protected function createModel(array $rawData, $tableName = null, $options = [])
     {
-        /* @var $model tx_rnbase_model_base */
-        $model = tx_rnbase::makeInstance(
-            'tx_rnbase_model_base',
+        /* @var $model \Sys25\RnBase\Domain\Model\BaseModel */
+        $model = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+            \Sys25\RnBase\Domain\Model\BaseModel::class,
             $rawData
         );
         if (!empty($tableName)) {
@@ -854,7 +843,7 @@ CONFIG;
         $GLOBALS['TCA'][$tableName]['ctrl']['versioningWS'] = false;
 
         /* @var $objectManager \TYPO3\CMS\Extbase\Object\ObjectManager */
-        $objectManager = tx_rnbase::makeInstance(ObjectManager::class);
+        $objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(ObjectManager::class);
         $repository = $objectManager->get($repositoryClass);
         /* @var $persistenceSession \TYPO3\CMS\Extbase\Persistence\Generic\Session */
         $persistenceSession = $objectManager->get(Session::class);
@@ -891,7 +880,7 @@ CONFIG;
     /**
      * Do the actual indexing for the given model.
      *
-     * @param tx_rnbase_IModel                      $model
+     * @param \Sys25\RnBase\Domain\Model\DataInterface                      $model
      * @param string                                $tableName
      * @param array                                 $rawData
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
@@ -900,7 +889,7 @@ CONFIG;
      * @return tx_mksearch_interface_IndexerDocument|null
      */
     abstract protected function indexData(
-        tx_rnbase_IModel $model,
+        \Sys25\RnBase\Domain\Model\DataInterface $model,
         $tableName,
         $rawData,
         tx_mksearch_interface_IndexerDocument $indexDoc,
@@ -910,7 +899,7 @@ CONFIG;
     /**
      * Liefert das Model welches aktuell indiziert wird.
      *
-     * @return tx_rnbase_IModel
+     * @return \Sys25\RnBase\Domain\Model\DataInterface
      */
     protected function getModelToIndex()
     {
@@ -957,7 +946,7 @@ CONFIG;
         $title = $data['title']->getValue();
         $firstChar = mb_substr(mb_strtoupper($title), 0, 1);
 
-        $specials = tx_rnbase_util_SearchBase::getSpecialChars();
+        $specials = \Sys25\RnBase\Search\SearchBase::getSpecialChars();
         foreach ($specials as $ascii => $variations) {
             if (in_array($firstChar, $variations)) {
                 $firstChar = $ascii;

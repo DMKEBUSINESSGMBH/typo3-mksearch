@@ -44,11 +44,11 @@ class tx_mksearch_tests_util_SolrAutocompleteTest extends tx_mksearch_tests_Test
 
         $property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsInline');
         $property->setAccessible(true);
-        $property->setValue(tx_rnbase_util_TYPO3::getPageRenderer(), []);
+        $property->setValue(\Sys25\RnBase\Utility\TYPO3::getPageRenderer(), []);
 
         $property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsLibs');
         $property->setAccessible(true);
-        $property->setValue(tx_rnbase_util_TYPO3::getPageRenderer(), []);
+        $property->setValue(\Sys25\RnBase\Utility\TYPO3::getPageRenderer(), []);
     }
 
     /**
@@ -57,7 +57,7 @@ class tx_mksearch_tests_util_SolrAutocompleteTest extends tx_mksearch_tests_Test
     public function testGetAutocompleteJsByConfigurationArrayAndLink()
     {
         $configurationArray = ['elementSelector' => 'testSelector', 'minLength' => 123];
-        $link = $this->getMock('tx_rnbase_util_Link', ['makeUrl']);
+        $link = $this->getMock(\Sys25\RnBase\Utility\Link::class, ['makeUrl']);
         $link->expects(self::once())
             ->method('makeUrl')
             ->with(false)
@@ -105,7 +105,7 @@ class tx_mksearch_tests_util_SolrAutocompleteTest extends tx_mksearch_tests_Test
     public function testGetAutocompleteJsByConfigurationArrayAndLinkIfDontWrapInScriptTags()
     {
         $configurationArray = ['elementSelector' => 'testSelector', 'minLength' => 123];
-        $link = $this->getMock('tx_rnbase_util_Link', ['makeUrl']);
+        $link = $this->getMock(\Sys25\RnBase\Utility\Link::class, ['makeUrl']);
         $link->expects(self::once())
             ->method('makeUrl')
             ->with(false)

@@ -31,12 +31,12 @@
 /**
  * Model for a tx_irfaq Expert.
  */
-class tx_mksearch_model_irfaq_Expert extends tx_rnbase_model_base
+class tx_mksearch_model_irfaq_Expert extends \Sys25\RnBase\Domain\Model\BaseModel
 {
     /**
      * (non-PHPdoc).
      *
-     * @see tx_rnbase_model_base::getTableName()
+     * @see \Sys25\RnBase\Domain\Model\BaseModel::getTableName()
      */
     public function getTableName()
     {

@@ -35,7 +35,7 @@ class tx_mksearch_marker_CoreTtContent extends tx_mksearch_marker_SearchResultSi
      * @param array                       $markerArray
      * @param array                       $wrappedSubpartArray
      * @param string                      $confId
-     * @param tx_rnbase_util_FormatUtil   $formatter
+     * @param \Sys25\RnBase\Frontend\Marker\FormatUtil   $formatter
      * @param string                      $template
      */
     public function prepareLinks($item, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, $formatter, $template)
@@ -46,8 +46,8 @@ class tx_mksearch_marker_CoreTtContent extends tx_mksearch_marker_SearchResultSi
         // as all search results of one particular content type will be shown
         // within the same page which is to be configured preliminarily.
 
-        $GLOBALS['TSFE']->register['mksearch.core.tt_content'] = $item->record['pid'];
-        $GLOBALS['TSFE']->register['mksearch.core.tt_content.uid'] = $item->record['uid'];
+        $GLOBALS['TSFE']->register['mksearch.core.tt_content'] = $item->getProperty('pid');
+        $GLOBALS['TSFE']->register['mksearch.core.tt_content.uid'] = $item->getProperty('uid');
         parent::prepareLinks($item, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter, $template);
     }
 }

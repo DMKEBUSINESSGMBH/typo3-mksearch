@@ -197,7 +197,7 @@ class tx_mksearch_tests_indexer_FALTest extends tx_mksearch_tests_Testcase
         ];
 
         $aRawData = ['uid' => 0, 'extension' => 'something_else'];
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $oIndexDoc = $indexer->prepareSearchData('sys_file', $aRawData, $indexDoc, $options);
         self::assertNull($oIndexDoc, 'Es wurde nicht null geliefert!');
     }
@@ -221,7 +221,7 @@ class tx_mksearch_tests_indexer_FALTest extends tx_mksearch_tests_Testcase
         ];
 
         $aRawData = ['uid' => 1, 'extension' => 'something_else'];
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $oIndexDoc = $indexer->prepareSearchData('sys_file', $aRawData, $indexDoc, $options);
         self::assertTrue($oIndexDoc->getDeleted(), 'Das Element wurde nich auf gelöscht gesetzt!');
     }
@@ -243,7 +243,7 @@ class tx_mksearch_tests_indexer_FALTest extends tx_mksearch_tests_Testcase
         $tableName = 'some_table';
         $sourceRecord = ['some_record'];
         $options = ['some_options'];
-        $indexDoc = tx_rnbase::makeInstance(
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
             '',
             ''
@@ -275,7 +275,7 @@ class tx_mksearch_tests_indexer_FALTest extends tx_mksearch_tests_Testcase
      */
     public function testGetInternalIndexService()
     {
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_FAL');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_FAL');
 
         self::assertInstanceOf(
             'tx_mksearch_service_internal_Index',
@@ -303,7 +303,7 @@ class tx_mksearch_tests_indexer_FALTest extends tx_mksearch_tests_Testcase
         $tableName = 'sys_file_metadata';
         $sourceRecord = ['file' => 123];
         $options = ['some_options'];
-        $indexDoc = tx_rnbase::makeInstance(
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
             '',
             ''
@@ -341,7 +341,7 @@ class tx_mksearch_tests_indexer_FALTest extends tx_mksearch_tests_Testcase
         $fileFactory = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\ResourceFactory');
         $driver = $fileFactory->getDriverObject('Local', ['basePath' => 'fileadmin', 'pathType' => 'relative']);
         $driver->processConfiguration();
-        $storage = tx_rnbase::makeInstance(
+        $storage = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'TYPO3\\CMS\\Core\\Resource\\ResourceStorage',
             $driver,
             ['is_public' => 2, 'driver' => 'Local']
@@ -373,7 +373,7 @@ class tx_mksearch_tests_indexer_FALTest extends tx_mksearch_tests_Testcase
             ->method('getFilePath')
             ->will(self::returnValue(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch')));
 
-        $indexDoc = tx_rnbase::makeInstance(
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
             'core',
             'file'

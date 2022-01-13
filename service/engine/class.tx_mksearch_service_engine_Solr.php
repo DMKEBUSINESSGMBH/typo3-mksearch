@@ -22,12 +22,12 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once tx_rnbase_util_Extensions::extPath('mksearch').'lib/Apache/Solr/Service.php';
+require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch').'lib/Apache/Solr/Service.php';
 
 /**
  * Service "Solr search engine" for the "mksearch" extension.
  */
-class tx_mksearch_service_engine_Solr extends Tx_Rnbase_Service_Base implements tx_mksearch_interface_SearchEngine
+class tx_mksearch_service_engine_Solr extends \Sys25\RnBase\Typo3Wrapper\Service\AbstractService implements tx_mksearch_interface_SearchEngine
 {
     /**
      * Index used for searching and indexing.
@@ -83,8 +83,8 @@ class tx_mksearch_service_engine_Solr extends Tx_Rnbase_Service_Base implements 
         //Einstellungen aktiv sein. Das öffnet nun aber eine große
         //Sicherheitslücke. Alternativ bieten wir daher an alle Http Aufrufe
         //per Curl durchzuführen.
-        if (tx_rnbase_configurations::getExtensionCfgValue('mksearch', 'useCurlAsHttpTransport')) {
-            require_once tx_rnbase_util_Extensions::extPath('mksearch').'lib/Apache/Solr/HttpTransport/Curl.php';
+        if (\Sys25\RnBase\Configuration\Processor::getExtensionCfgValue('mksearch', 'useCurlAsHttpTransport')) {
+            require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch').'lib/Apache/Solr/HttpTransport/Curl.php';
             $oHttpTransport = new Apache_Solr_HttpTransport_Curl();
             $this->index->setHttpTransport($oHttpTransport);
         }
@@ -92,7 +92,7 @@ class tx_mksearch_service_engine_Solr extends Tx_Rnbase_Service_Base implements 
         //die Methode Ping gibt bei einem 200er die Millisek. zurück,
         //die die Anfrage gedauert hat, dies kann auch 0 sein!
         if (false === $this->index->ping() && $force) {
-            tx_rnbase_util_Logger::fatal('Solr service not responding.', 'mksearch', [$host, $port, $path]);
+            \Sys25\RnBase\Utility\Logger::fatal('Solr service not responding.', 'mksearch', [$host, $port, $path]);
             throw new tx_mksearch_service_engine_SolrException('Solr service not responding.', -1, 'http://'.$host.':'.$port.$path);
         }
     }
@@ -124,7 +124,7 @@ class tx_mksearch_service_engine_Solr extends Tx_Rnbase_Service_Base implements 
      */
     private function getIndexDirectory($name)
     {
-        return tx_rnbase_configurations::getExtensionCfgValue('mksearch', 'luceneIndexDir').DIRECTORY_SEPARATOR.$name;
+        return \Sys25\RnBase\Configuration\Processor::getExtensionCfgValue('mksearch', 'luceneIndexDir').DIRECTORY_SEPARATOR.$name;
     }
 
     /**
@@ -146,7 +146,7 @@ class tx_mksearch_service_engine_Solr extends Tx_Rnbase_Service_Base implements 
                     // The term is a single token
                     if (!(isset($ff['phrase']) and $ff['phrase'])) {
                         // Call hook to manipulate search term. Term is utf8-encoded!
-                        tx_rnbase_util_Misc::callHook(
+                        \Sys25\RnBase\Utility\Misc::callHook(
                             'mksearch',
                             'engine_ZendLucene_buildQuery_manipulateSingleTerm',
                             ['term' => &$ff['term']],
@@ -166,7 +166,7 @@ class tx_mksearch_service_engine_Solr extends Tx_Rnbase_Service_Base implements 
                         $pq = new Zend_Search_Lucene_Search_Query_Phrase();
                         foreach (explode(' ', $ff['term']) as $t) { // @todo: explode with regex for respecting white spaces in general
                             // Call hook to manipulate search term. Term is utf8-encoded!
-                            tx_rnbase_util_Misc::callHook(
+                            \Sys25\RnBase\Utility\Misc::callHook(
                                 'mksearch',
                                 'engine_ZendLucene_buildQuery_manipulateSingleTerm',
                                 ['term' => &$t],
@@ -260,7 +260,7 @@ class tx_mksearch_service_engine_Solr extends Tx_Rnbase_Service_Base implements 
                 if (is_object($response->debug)) {
                     $ret['debug'] = get_object_vars($response->debug);
                 }
-                tx_rnbase_util_Debug::debug([$options, $ret], 'class.tx_mksearch_service_engine_Solr.php Line: '.__LINE__); // TODO: remove me
+                \Sys25\RnBase\Utility\Debug::debug([$options, $ret], 'class.tx_mksearch_service_engine_Solr.php Line: '.__LINE__); // TODO: remove me
             }
         } catch (Exception $e) {
             throw new tx_mksearch_service_engine_SolrException('Exception caught from Solr:'.$e->getMessage(), -1, $solr->lastUrl, $e);
@@ -305,7 +305,7 @@ class tx_mksearch_service_engine_Solr extends Tx_Rnbase_Service_Base implements 
      */
     public static function getCredentialsFromString($data)
     {
-        $data = tx_rnbase_util_Strings::trimExplode(',', $data);
+        $data = \Sys25\RnBase\Utility\Strings::trimExplode(',', $data);
         if (3 != count($data)) {
             throw new Exception('Wrong credentials for solr defined.');
         }
@@ -452,7 +452,7 @@ class tx_mksearch_service_engine_Solr extends Tx_Rnbase_Service_Base implements 
             return null;
         }
         if (count($response['items']) > 1) {
-            tx_rnbase_util_Logger::warn(
+            \Sys25\RnBase\Utility\Logger::warn(
                 'getByContentUid has returned more than one element.',
                 'mksearch',
                 [
@@ -574,7 +574,7 @@ class tx_mksearch_service_engine_Solr extends Tx_Rnbase_Service_Base implements 
                 $this->getSolr()->addDocument($solrDoc);
             }
         } catch (Apache_Solr_HttpTransportException $e) {
-            tx_rnbase_util_Logger::fatal(
+            \Sys25\RnBase\Utility\Logger::fatal(
                 '[SOLR] Adding document to Solr failed.',
                 'mksearch',
                 [
@@ -690,7 +690,7 @@ class tx_mksearch_service_engine_Solr extends Tx_Rnbase_Service_Base implements 
 
             if ($options['debug']) {
                 $ret['debug'] = get_object_vars($response->debug);
-                tx_rnbase_util_Debug::debug([$options, $ret], 'class.tx_mksearch_service_engine_Solr.php Line: '.__LINE__); // TODO: remove me
+                \Sys25\RnBase\Utility\Debug::debug([$options, $ret], 'class.tx_mksearch_service_engine_Solr.php Line: '.__LINE__); // TODO: remove me
             }
         } catch (Exception $e) {
             throw new tx_mksearch_service_engine_SolrException('Exception caught from Solr:'.$e->getMessage(), -1, $solr->lastUrl, $e);
@@ -710,7 +710,7 @@ class tx_mksearch_service_engine_Solr extends Tx_Rnbase_Service_Base implements 
     public function makeIndexDocInstance($extKey, $contentType)
     {
         // TODO: Die einheitliche Feldklasse verwenden: tx_mksearch_model_IndexerFieldBase
-        return tx_rnbase::makeInstance(
+        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
             $extKey,
             $contentType,
@@ -724,7 +724,7 @@ class tx_mksearch_service_engine_Solr extends Tx_Rnbase_Service_Base implements 
     public function getStatus()
     {
         /* @var $status tx_mksearch_util_Status */
-        $status = tx_rnbase::makeInstance('tx_mksearch_util_Status');
+        $status = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_util_Status');
         $id = 1;
         $msg = 'Up and running';
         try {
@@ -835,7 +835,7 @@ class tx_mksearch_service_engine_Solr extends Tx_Rnbase_Service_Base implements 
         $hits = [];
         if ($docs) {
             foreach ($docs as $doc) {
-                $hits[] = tx_rnbase::makeInstance('tx_mksearch_model_SolrHit', $doc);
+                $hits[] = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_SolrHit', $doc);
             }
         }
 

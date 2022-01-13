@@ -36,7 +36,7 @@ class tx_mksearch_tests_service_engine_lucene_DataTypeMapperTest extends tx_mkse
     protected function setUp()
     {
         parent::setUp();
-        $this->mapper = tx_rnbase::makeInstance('tx_mksearch_service_engine_lucene_DataTypeMapper');
+        $this->mapper = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_service_engine_lucene_DataTypeMapper');
     }
 
     public function testFieldWithSpecialConfig()
@@ -47,7 +47,7 @@ class tx_mksearch_tests_service_engine_lucene_DataTypeMapperTest extends tx_mkse
         // Und jetzt per Config überschreiben
         $cfg = [];
         $cfg['fields.']['tstamp.']['type'] = 'unindexed';
-        $mapper = tx_rnbase::makeInstance('tx_mksearch_service_engine_lucene_DataTypeMapper', $cfg);
+        $mapper = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_service_engine_lucene_DataTypeMapper', $cfg);
         self::assertEquals('unindexed', $mapper->getDataType('tstamp'), 'Wrong data type found');
         // Die anderen sollten weiter normal funktionieren
         self::assertEquals('keyword', $mapper->getDataType('uid'), 'Wrong data type found');

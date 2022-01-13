@@ -70,7 +70,7 @@ class tx_mksearch_util_KeyValueFacet
      */
     public static function getInstance($delimiter = null)
     {
-        $instance = self::$defaultInstance && null === $delimiter ? self::$defaultInstance : tx_rnbase::makeInstance(
+        $instance = self::$defaultInstance && null === $delimiter ? self::$defaultInstance : \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_util_KeyValueFacet',
             $delimiter
         );
@@ -136,7 +136,7 @@ class tx_mksearch_util_KeyValueFacet
      */
     public function explodeFacetValue($value)
     {
-        $exploded = tx_rnbase_util_Strings::trimExplode($this->facetDelimiter, $value);
+        $exploded = \Sys25\RnBase\Utility\Strings::trimExplode($this->facetDelimiter, $value);
 
         return [
             'key' => array_shift($exploded),

@@ -33,7 +33,7 @@ class tx_mksearch_util_SolrAutocomplete
     protected static $autocompleteConfId = 'autocomplete.';
 
     /**
-     * @param tx_rnbase_configurations $configurations
+     * @param \Sys25\RnBase\Configuration\Processor $configurations
      * @param string                   $confId
      *
      * example TS config:
@@ -49,10 +49,10 @@ class tx_mksearch_util_SolrAutocomplete
      *  }
      * }
      *
-     * @return tx_rnbase_util_Link
+     * @return \Sys25\RnBase\Utility\Link
      */
     public static function getAutocompleteActionLinkByConfigurationsAndConfId(
-        tx_rnbase_configurations $configurations,
+        \Sys25\RnBase\Configuration\Processor $configurations,
         $confId
     ) {
         $linkParameters = ['ajax' => 1];
@@ -76,7 +76,7 @@ class tx_mksearch_util_SolrAutocomplete
      */
     public static function getAutocompleteJsByConfigurationsConfIdAndLink(
         $configArray,
-        tx_rnbase_util_Link $link,
+        \Sys25\RnBase\Utility\Link $link,
         $wrapInScriptTags = true
     ) {
         return self::getAutocompleteJavaScriptByConfigurationArrayAndLink($configArray, $link, $wrapInScriptTags);
@@ -88,14 +88,14 @@ class tx_mksearch_util_SolrAutocomplete
      *                                              minLength = 2
      *                                              elementSelector = "#mksearch_term"
      *                                              )
-     * @param tx_rnbase_util_Link $link
+     * @param \Sys25\RnBase\Utility\Link $link
      * @param bool                $wrapInScriptTags
      *
      * @return string
      */
     public static function getAutocompleteJavaScriptByConfigurationArrayAndLink(
         $configArray,
-        tx_rnbase_util_Link $link,
+        \Sys25\RnBase\Utility\Link $link,
         $wrapInScriptTags = true
     ) {
         $javaScript = 'jQuery(document).ready(function(){'.

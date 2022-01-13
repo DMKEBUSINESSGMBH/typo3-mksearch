@@ -52,7 +52,7 @@ class tx_mksearch_tests_filter_LuceneBaseTest extends tx_mksearch_tests_Testcase
     {
         self::markTestIncomplete('Uncaught require(typo3-mksearch/.Build/Web/typo3conf/LocalConfiguration.php)');
 
-        $zendPath = tx_rnbase_configurations::getExtensionCfgValue('mksearch', 'zendPath');
+        $zendPath = \Sys25\RnBase\Configuration\Processor::getExtensionCfgValue('mksearch', 'zendPath');
         if (empty($zendPath)) {
             $this->markTestSkipped('Pfad zu Zend nicht konfiguriert.');
         }
@@ -61,7 +61,7 @@ class tx_mksearch_tests_filter_LuceneBaseTest extends tx_mksearch_tests_Testcase
         $this->feGroupsBackup = $GLOBALS['TSFE']->fe_user->groupData['uid'];
 
         // damit Zend Framework geladen wird
-        tx_rnbase::makeInstance('tx_mksearch_service_engine_ZendLucene');
+        \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_service_engine_ZendLucene');
     }
 
     /**
@@ -94,7 +94,7 @@ class tx_mksearch_tests_filter_LuceneBaseTest extends tx_mksearch_tests_Testcase
      */
     public function testPrepareFormFieldsSetsDefaultFieldsIfNotInParameters()
     {
-        $parameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
+        $parameters = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Frontend\Request\Parameters::class);
         $formData = [];
         $reflectionObject = new ReflectionObject($this->getFilter());
         $reflectionMethod = $reflectionObject->getMethod('prepareFormFields');
@@ -117,7 +117,7 @@ class tx_mksearch_tests_filter_LuceneBaseTest extends tx_mksearch_tests_Testcase
      */
     public function testPrepareFormFieldsSetsDefaultFieldsNotIfAlreadyInFormData()
     {
-        $parameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
+        $parameters = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Frontend\Request\Parameters::class);
         $formData = ['zip' => 1, 'city' => 2, 'company' => 3];
         $reflectionObject = new ReflectionObject($this->getFilter());
         $reflectionMethod = $reflectionObject->getMethod('prepareFormFields');
@@ -155,7 +155,7 @@ class tx_mksearch_tests_filter_LuceneBaseTest extends tx_mksearch_tests_Testcase
     public function testPrepareFormFieldsSetsCorrectModeChecked()
     {
         $_GET['mksearch']['options']['mode'] = 'newCheckedMode';
-        $parameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
+        $parameters = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Frontend\Request\Parameters::class);
         $parameters->init('mksearch');
         $formData = [];
         $configArray = [$this->confId => [
@@ -184,7 +184,7 @@ class tx_mksearch_tests_filter_LuceneBaseTest extends tx_mksearch_tests_Testcase
      */
     public function testPrepareFormFieldsSetsStandardModeCheckedAsDefault()
     {
-        $parameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
+        $parameters = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Frontend\Request\Parameters::class);
         $formData = [];
         $configArray = [$this->confId => ['filter.' => ['availableModes' => 'standard,advanced']]];
         $filter = $this->getFilter($configArray);
@@ -547,7 +547,7 @@ class tx_mksearch_tests_filter_LuceneBaseTest extends tx_mksearch_tests_Testcase
         if (!isset($configArray[$this->confId]['filter.']['forceSearch'])) {
             $configArray[$this->confId]['filter.']['forceSearch'] = true;
         }
-        $configArray = tx_rnbase_util_Arrays::mergeRecursiveWithOverrule(
+        $configArray = \Sys25\RnBase\Utility\Arrays::mergeRecursiveWithOverrule(
             tx_mksearch_tests_Util::loadPageTS4BE(),
             $configArray
         );
@@ -556,16 +556,16 @@ class tx_mksearch_tests_filter_LuceneBaseTest extends tx_mksearch_tests_Testcase
             $configArray
         );
 
-        $parameters = tx_rnbase::makeInstance('tx_rnbase_parameters', $parametersArray);
-        $configurations = $this->createConfigurations(
+        $parameters = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Frontend\Request\Parameters::class, $parametersArray);
+        $configurations = \Sys25\RnBase\Testing\TestUtility::createConfigurations(
             $configurations->getConfigArray(),
             'mksearch',
             'mksearch',
             $parameters,
-            tx_rnbase::makeInstance(tx_rnbase_util_Typo3Classes::getContentObjectRendererClass())
+            \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class)
         );
 
-        return tx_rnbase::makeInstance(
+        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_filter_LuceneBase',
             $parameters,
             $configurations,

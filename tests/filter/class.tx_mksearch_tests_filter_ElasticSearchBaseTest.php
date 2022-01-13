@@ -48,7 +48,7 @@ class tx_mksearch_tests_filter_ElasticSearchBaseTest extends tx_mksearch_tests_T
      */
     public function testPrepareFormFieldsSetsDefaultFieldsIfNotInParameters()
     {
-        $parameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
+        $parameters = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Frontend\Request\Parameters::class);
         $formData = [];
         $reflectionObject = new ReflectionObject($this->getFilter());
         $reflectionMethod = $reflectionObject->getMethod('prepareFormFields');
@@ -71,7 +71,7 @@ class tx_mksearch_tests_filter_ElasticSearchBaseTest extends tx_mksearch_tests_T
      */
     public function testPrepareFormFieldsSetsDefaultFieldsNotIfAlreadyInFormData()
     {
-        $parameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
+        $parameters = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Frontend\Request\Parameters::class);
         $formData = ['zip' => 1, 'city' => 2, 'company' => 3];
         $reflectionObject = new ReflectionObject($this->getFilter());
         $reflectionMethod = $reflectionObject->getMethod('prepareFormFields');
@@ -109,7 +109,7 @@ class tx_mksearch_tests_filter_ElasticSearchBaseTest extends tx_mksearch_tests_T
     public function testPrepareFormFieldsSetsCorrectModeChecked()
     {
         $_GET['mksearch']['options']['mode'] = 'newCheckedMode';
-        $parameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
+        $parameters = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Frontend\Request\Parameters::class);
         $parameters->init('mksearch');
         $formData = [];
         $configArray = [$this->confId => [
@@ -138,7 +138,7 @@ class tx_mksearch_tests_filter_ElasticSearchBaseTest extends tx_mksearch_tests_T
      */
     public function testPrepareFormFieldsSetsStandardModeCheckedAsDefault()
     {
-        $parameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
+        $parameters = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Frontend\Request\Parameters::class);
         $formData = [];
         $configArray = [$this->confId => ['filter.' => ['availableModes' => 'standard,advanced']]];
         $filter = $this->getFilter($configArray);
@@ -453,7 +453,7 @@ class tx_mksearch_tests_filter_ElasticSearchBaseTest extends tx_mksearch_tests_T
             $configArray[$this->confId]['filter.']['forceSearch'] = true;
         }
 
-        $configArray = tx_rnbase_util_Arrays::mergeRecursiveWithOverrule(
+        $configArray = \Sys25\RnBase\Utility\Arrays::mergeRecursiveWithOverrule(
             tx_mksearch_tests_Util::loadPageTS4BE(),
             $configArray
         );
@@ -462,16 +462,16 @@ class tx_mksearch_tests_filter_ElasticSearchBaseTest extends tx_mksearch_tests_T
         $configurations = tx_mksearch_tests_Util::loadConfig4BE(
             $configArray
         );
-        $parameters = tx_rnbase::makeInstance('tx_rnbase_parameters', $parametersArray);
-        $configurations = $this->createConfigurations(
+        $parameters = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Frontend\Request\Parameters::class, $parametersArray);
+        $configurations = \Sys25\RnBase\Testing\TestUtility::createConfigurations(
             $configurations->getConfigArray(),
             'mksearch',
             'mksearch',
             $parameters,
-            tx_rnbase::makeInstance(tx_rnbase_util_Typo3Classes::getContentObjectRendererClass())
+            \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class)
         );
 
-        return tx_rnbase::makeInstance(
+        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_filter_ElasticSearchBase',
             $parameters,
             $configurations,

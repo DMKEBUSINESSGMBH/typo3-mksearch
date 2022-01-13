@@ -22,7 +22,7 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once tx_rnbase_util_Extensions::extPath('mksearch', 'lib/Apache/Solr/Document.php');
+require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch', 'lib/Apache/Solr/Document.php');
 
 /**
  * Wir müssen in diesem Fall mit der DB testen da wir die pages
@@ -40,11 +40,11 @@ class tx_mksearch_tests_indexer_PageTest extends tx_mksearch_tests_Testcase
         // @TODO: ther is a db operation. where? fix it!
         $this->prepareLegacyTypo3DbGlobal();
 
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_Page');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_Page');
         $options = [];
 
         list($extKey, $cType) = $indexer->getContentType();
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
 
         //is deleted
         $record = ['uid' => 123, 'pid' => 0, 'deleted' => 1];
@@ -52,13 +52,13 @@ class tx_mksearch_tests_indexer_PageTest extends tx_mksearch_tests_Testcase
         self::assertEquals(true, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 
         //is hidden
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $record = ['uid' => 124, 'pid' => 0, 'deleted' => 0, 'hidden' => 1];
         $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
         self::assertEquals(true, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 
         //everything alright
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $record = ['uid' => 125, 'pid' => 0, 'deleted' => 0, 'hidden' => 0];
         $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
         self::assertEquals(false, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);

@@ -28,7 +28,7 @@
  * @author René Nitzsche
  * @author Michael Wagner
  */
-class tx_mksearch_mod1_Module extends tx_rnbase_mod_BaseModule
+class tx_mksearch_mod1_Module extends \Sys25\RnBase\Backend\Module\BaseModule
 {
     /**
      * Initializes the backend module by setting internal variables, initializing the menu.
@@ -67,7 +67,7 @@ class tx_mksearch_mod1_Module extends tx_rnbase_mod_BaseModule
 
     protected function getFormTag()
     {
-        $modUrl = Tx_Rnbase_Backend_Utility::getModuleUrl(
+        $modUrl = \Sys25\RnBase\Backend\Utility\BackendUtility::getModuleUrl(
             'web_MksearchM1',
             [
                 'id' => $this->getPid(),

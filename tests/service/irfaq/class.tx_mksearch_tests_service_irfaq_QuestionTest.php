@@ -40,7 +40,7 @@ class tx_mksearch_tests_service_irfaq_QuestionTest extends tx_mksearch_tests_Tes
      */
     protected function setUp()
     {
-        if (!tx_rnbase_util_Extensions::isLoaded('irfaq')) {
+        if (!\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('irfaq')) {
             self::markTestSkipped('irfaq nicht installiert');
         }
 

@@ -5,7 +5,7 @@
  *
  * @author Michael Wagner <dev@dmk-ebusiness.de>
  */
-class tx_mksearch_mod1_handler_admin_Solr implements tx_rnbase_mod_IModHandler
+class tx_mksearch_mod1_handler_admin_Solr implements \Sys25\RnBase\Backend\Module\IModHandler
 {
     private $data = [];
 
@@ -32,18 +32,18 @@ class tx_mksearch_mod1_handler_admin_Solr implements tx_rnbase_mod_IModHandler
     /**
      * This method is called each time the method func is clicked, to handle request data.
      *
-     * @param tx_rnbase_mod_IModule $mod
+     * @param \Sys25\RnBase\Backend\Module\IModule $mod
      */
-    public function handleRequest(tx_rnbase_mod_IModule $mod)
+    public function handleRequest(\Sys25\RnBase\Backend\Module\IModule $mod)
     {
-        $submitted = tx_rnbase_parameters::getPostOrGetParameter('doDelete') || tx_rnbase_parameters::getPostOrGetParameter('doQuery');
+        $submitted = \Sys25\RnBase\Frontend\Request\Parameters::getPostOrGetParameter('doDelete') || \Sys25\RnBase\Frontend\Request\Parameters::getPostOrGetParameter('doQuery');
         if (!$submitted) {
             return '';
         }
 
-        $this->data = tx_rnbase_parameters::getPostOrGetParameter('data');
+        $this->data = \Sys25\RnBase\Frontend\Request\Parameters::getPostOrGetParameter('data');
         $deleteQuery = trim($this->data['deletequery']);
-        $SET = tx_rnbase_parameters::getPostOrGetParameter('SET');
+        $SET = \Sys25\RnBase\Frontend\Request\Parameters::getPostOrGetParameter('SET');
         $core = intval($SET['solr_core']);
         if (!$core) {
             $mod->addMessage('###LABEL_SOLR_NOCORE_FOUND###', '###LABEL_COMMON_WARNING###');
@@ -52,14 +52,14 @@ class tx_mksearch_mod1_handler_admin_Solr implements tx_rnbase_mod_IModHandler
         }
 
         try {
-            $core = tx_rnbase::makeInstance('tx_mksearch_model_internal_Index', $core);
+            $core = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_internal_Index', $core);
             $searchEngine = tx_mksearch_util_ServiceRegistry::getSearchEngine($core);
             $result = $searchEngine->indexDeleteByQuery($deleteQuery);
             $searchEngine->commitIndex();
             $mod->addMessage('###LABEL_SOLR_DELETE_SUCCESSFUL###', '###LABEL_COMMON_INFO###');
         } catch (Exception $e) {
             $mod->addMessage(htmlspecialchars($e->getMessage()), '###LABEL_COMMON_ERROR###', 2);
-            tx_rnbase_util_Logger::warn('[SolrAdmin] Exception for delete query.', 'mksearch', ['Exception' => $e->getMessage()]);
+            \Sys25\RnBase\Utility\Logger::warn('[SolrAdmin] Exception for delete query.', 'mksearch', ['Exception' => $e->getMessage()]);
         }
     }
 
@@ -67,10 +67,10 @@ class tx_mksearch_mod1_handler_admin_Solr implements tx_rnbase_mod_IModHandler
      * Display the user interface for this handler.
      *
      * @param string                $template the subpart for handler in func template
-     * @param tx_rnbase_mod_IModule $mod
+     * @param \Sys25\RnBase\Backend\Module\IModule $mod
      * @param array                 $options
      */
-    public function showScreen($template, tx_rnbase_mod_IModule $mod, $options)
+    public function showScreen($template, \Sys25\RnBase\Backend\Module\IModule $mod, $options)
     {
         $markerArray = [];
 
@@ -89,11 +89,11 @@ class tx_mksearch_mod1_handler_admin_Solr implements tx_rnbase_mod_IModHandler
      *
      * @param string                $template
      * @param array                 $cores
-     * @param tx_rnbase_mod_IModule $mod
+     * @param \Sys25\RnBase\Backend\Module\IModule $mod
      *
      * @return string
      */
-    protected function showAdminPanel($template, $cores, tx_rnbase_mod_IModule $mod, &$markerArray)
+    protected function showAdminPanel($template, $cores, \Sys25\RnBase\Backend\Module\IModule $mod, &$markerArray)
     {
         $formTool = $mod->getFormTool();
 
@@ -101,12 +101,12 @@ class tx_mksearch_mod1_handler_admin_Solr implements tx_rnbase_mod_IModHandler
         $markerArray['###INPUT_DELETEQUERY###'] = $formTool->createTextArea('data[deletequery]', $this->data['deletequery']);
         $markerArray['###BTN_SEND###'] = $formTool->createSubmit('doDelete', '###LABEL_SOLR_SUBMIT_DELETE###', 'Do you really want to submit this DELETE query?');
 
-        $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray);
+        $out = \Sys25\RnBase\Frontend\Marker\Templates::substituteMarkerArrayCached($template, $markerArray);
 
         return $out;
     }
 
-    protected function findSolrCores(tx_rnbase_mod_IModule $mod)
+    protected function findSolrCores(\Sys25\RnBase\Backend\Module\IModule $mod)
     {
         $fields = $options = [];
         $options['enablefieldsfe'] = 1;
@@ -119,9 +119,9 @@ class tx_mksearch_mod1_handler_admin_Solr implements tx_rnbase_mod_IModHandler
     }
 
     /**
-     * @param tx_rnbase_mod_IModule $mod
+     * @param \Sys25\RnBase\Backend\Module\IModule $mod
      */
-    protected function getCoreSelector($cores, tx_rnbase_mod_IModule $mod)
+    protected function getCoreSelector($cores, \Sys25\RnBase\Backend\Module\IModule $mod)
     {
         $entries = [];
         foreach ($cores as $core) {

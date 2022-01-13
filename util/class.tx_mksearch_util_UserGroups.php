@@ -70,14 +70,14 @@ class tx_mksearch_util_UserGroups
         }
 
         // the old obsolete db connection
-        $connection = Tx_Rnbase_Database_Connection::getInstance()->getDatabaseConnection();
+        $connection = \Sys25\RnBase\Database\Connection::getInstance()->getDatabaseConnection();
 
         // Simplify query via table sys_refindex so what
         // we don't need to struggle with those stupid csv fields...
         $res = $connection->exec_SELECTquery(
             'ref_uid',
             'fe_groups JOIN sys_refindex AS ref ON fe_groups.uid = ref.ref_uid',
-            '1=1'.tx_rnbase_util_TYPO3::getSysPage()->enableFields('fe_groups').
+            '1=1'.\Sys25\RnBase\Utility\TYPO3::getSysPage()->enableFields('fe_groups').
             ' AND ref.ref_table = \'fe_groups\' AND ref.field = \'subgroup\''.
             ' AND ref.recuid = '.intval($groupId)
         );
@@ -139,7 +139,7 @@ class tx_mksearch_util_UserGroups
         // as these are also allowed to view the page!
         $self = [];
 
-        $baseGroups = Tx_Rnbase_Utility_Strings::trimExplode(',', $rootline[$selfIndex]['fe_group'], true);
+        $baseGroups = \Sys25\RnBase\Utility\Strings::trimExplode(',', $rootline[$selfIndex]['fe_group'], true);
         foreach ($baseGroups as $b) {
             $sub = self::getSubGroups($b);
             if ($sub) {
@@ -225,7 +225,7 @@ class tx_mksearch_util_UserGroups
 
         // Explicite groups for content element?
         if ($ceGroups) {
-            $groupsArr = tx_rnbase_util_Arrays::mergeRecursiveWithOverrule($groupsArr, $ceGroups);
+            $groupsArr = \Sys25\RnBase\Utility\Arrays::mergeRecursiveWithOverrule($groupsArr, $ceGroups);
         }
 
         if (empty($groupsArr)) {

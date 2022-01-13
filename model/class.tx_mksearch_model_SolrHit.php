@@ -22,7 +22,7 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once tx_rnbase_util_Extensions::extPath('mksearch', 'lib/Apache/Solr/Document.php');
+require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch', 'lib/Apache/Solr/Document.php');
 
 /**
  * Model for search hits from solt.
@@ -32,7 +32,7 @@ require_once tx_rnbase_util_Extensions::extPath('mksearch', 'lib/Apache/Solr/Doc
  * rn_base model. We use it anyway to keep all the remaining nice
  * functions like automatic marker filling etc.
  */
-class tx_mksearch_model_SolrHit extends tx_rnbase_model_base implements tx_mksearch_interface_SearchHit
+class tx_mksearch_model_SolrHit extends \Sys25\RnBase\Domain\Model\BaseModel implements tx_mksearch_interface_SearchHit
 {
     private $solrDoc;
 
@@ -51,7 +51,7 @@ class tx_mksearch_model_SolrHit extends tx_rnbase_model_base implements tx_mksea
         $uidField = $solrDoc->getField('uid');
         $this->uid = is_array($uidField) ? $uidField['value'] : 0;
         foreach ($solrDoc as $key => $value) {
-            $this->record[$key] = $value;
+            $this->setProperty($key, $value);
         }
     }
 

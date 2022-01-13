@@ -44,7 +44,7 @@ class tx_mksearch_mod1_searcher_Keywords extends tx_mksearch_mod1_searcher_abstr
      */
     protected function getDecorator(&$mod)
     {
-        return tx_rnbase::makeInstance('tx_mksearch_mod1_decorator_Keyword', $mod);
+        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_mod1_decorator_Keyword', $mod);
     }
 
     /**

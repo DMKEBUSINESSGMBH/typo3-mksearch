@@ -7,7 +7,7 @@
  */
 class tx_mksearch_mod1_util_Template
 {
-    public static function parseBasics($template, tx_rnbase_mod_IModFunc $module)
+    public static function parseBasics($template, \Sys25\RnBase\Backend\Module\IModFunc $module)
     {
         $content = $template;
         $content = self::parseRootPage($content, $module);
@@ -15,23 +15,23 @@ class tx_mksearch_mod1_util_Template
 
         // render commons
         $out = '';
-        $out .= tx_rnbase_util_Templates::getSubpart($content, '###COMMON_START###');
+        $out .= \Sys25\RnBase\Frontend\Marker\Templates::getSubpart($content, '###COMMON_START###');
         $out .= $content;
-        $out .= tx_rnbase_util_Templates::getSubpart($content, '###COMMON_END###');
+        $out .= \Sys25\RnBase\Frontend\Marker\Templates::getSubpart($content, '###COMMON_END###');
 
         // remove commons
-        $out = tx_rnbase_util_Templates::substituteSubpart($out, '###COMMON_START###', '');
-        $out = tx_rnbase_util_Templates::substituteSubpart($out, '###COMMON_END###', '');
+        $out = \Sys25\RnBase\Frontend\Marker\Templates::substituteSubpart($out, '###COMMON_START###', '');
+        $out = \Sys25\RnBase\Frontend\Marker\Templates::substituteSubpart($out, '###COMMON_END###', '');
 
         return $out;
     }
 
-    private static function parseRootPage($template, tx_rnbase_mod_IModFunc $module)
+    private static function parseRootPage($template, \Sys25\RnBase\Backend\Module\IModFunc $module)
     {
         $out = $template;
 
         // rootpage marker hinzufügen
-        if (!tx_rnbase_util_BaseMarker::containsMarker($out, 'ROOTPAGE_')) {
+        if (!\Sys25\RnBase\Frontend\Marker\BaseMarker::containsMarker($out, 'ROOTPAGE_')) {
             return $out;
         }
 
@@ -43,7 +43,7 @@ class tx_mksearch_mod1_util_Template
             $rootPage = array_pop(tx_mksearch_util_Indexer::getInstance()->getRootlineByPid($module->getPid() ? $module->getPid() : 0));
         }
 
-        $rootPage = is_array($rootPage) ? Tx_Rnbase_Backend_Utility::readPageAccess($rootPage['uid'], $GLOBALS['BE_USER']->getPagePermsClause(1)) : false;
+        $rootPage = is_array($rootPage) ? \Sys25\RnBase\Backend\Utility\BackendUtility::readPageAccess($rootPage['uid'], $GLOBALS['BE_USER']->getPagePermsClause(1)) : false;
 
         if (is_array($rootPage)) {
             // felder erzeugen
@@ -51,9 +51,9 @@ class tx_mksearch_mod1_util_Template
                 $markerArr['###ROOTPAGE_'.strtoupper($field).'###'] = $value;
             }
 
-            $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($out, $markerArr);
+            $out = \Sys25\RnBase\Frontend\Marker\Templates::substituteMarkerArrayCached($out, $markerArr);
         } else {
-            $out = tx_rnbase_util_Templates::substituteSubpart($out, '###ROOTPAGE###', '<pre>No page selected.</pre>');
+            $out = \Sys25\RnBase\Frontend\Marker\Templates::substituteSubpart($out, '###ROOTPAGE###', '<pre>No page selected.</pre>');
         }
 
         return $out;
@@ -66,10 +66,10 @@ class tx_mksearch_mod1_util_Template
      */
     private static function handleAllowUrlFopenDeactivatedHint($template)
     {
-        if (tx_rnbase_util_BaseMarker::containsMarker($template, 'ALLOW_URL_FOPEN_DEACTIVATED_HINT')) {
+        if (\Sys25\RnBase\Frontend\Marker\BaseMarker::containsMarker($template, 'ALLOW_URL_FOPEN_DEACTIVATED_HINT')) {
             $allowUrlFopen = ini_get('allow_url_fopen');
             $useCurlAsHttpTransport =
-                tx_rnbase_configurations::getExtensionCfgValue('mksearch', 'useCurlAsHttpTransport');
+                \Sys25\RnBase\Configuration\Processor::getExtensionCfgValue('mksearch', 'useCurlAsHttpTransport');
 
             $markerArray = [];
             if (!$allowUrlFopen && !$useCurlAsHttpTransport) {
@@ -78,7 +78,7 @@ class tx_mksearch_mod1_util_Template
                 $markerArray['###ALLOW_URL_FOPEN_DEACTIVATED_HINT###'] = '';
             }
 
-            $template = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray);
+            $template = \Sys25\RnBase\Frontend\Marker\Templates::substituteMarkerArrayCached($template, $markerArray);
         }
 
         return $template;
@@ -86,7 +86,7 @@ class tx_mksearch_mod1_util_Template
 
     /**
      * @param string                                 $template
-     * @param tx_rnbase_mod_IModule                  $mod
+     * @param \Sys25\RnBase\Backend\Module\IModule                  $mod
      * @param array                                  $markerArray
      * @param tx_mksearch_mod1_searcher_abstractBase $searcher
      * @param string                                 $marker
@@ -113,7 +113,7 @@ class tx_mksearch_mod1_util_Template
         $markerArray['###'.$marker.'_LIST###'] = $data['table'];
         $markerArray['###'.$marker.'_SIZE###'] = $data['totalsize'];
         $markerArray['###'.$marker.'_PAGER###'] = $data['pager'];
-        $out = tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray);
+        $out = \Sys25\RnBase\Frontend\Marker\Templates::substituteMarkerArrayCached($template, $markerArray);
 
         return $out;
     }
@@ -123,11 +123,11 @@ class tx_mksearch_mod1_util_Template
      * Im moment wird nur width bearbeidet.
      *
      * @param array                 $columns
-     * @param tx_rnbase_mod_IModule $mod
+     * @param \Sys25\RnBase\Backend\Module\IModule $mod
      *
      * @return columns
      */
-    public static function getTableLayout(array $columns, tx_rnbase_mod_IModule $mod)
+    public static function getTableLayout(array $columns, \Sys25\RnBase\Backend\Module\IModule $mod)
     {
         $aAllowed = ['width'];
         // default tablelayout of doc

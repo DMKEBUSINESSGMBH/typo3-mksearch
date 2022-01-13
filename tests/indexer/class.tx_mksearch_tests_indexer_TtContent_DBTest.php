@@ -22,7 +22,7 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once tx_rnbase_util_Extensions::extPath('mksearch', 'lib/Apache/Solr/Document.php');
+require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch', 'lib/Apache/Solr/Document.php');
 
 /**
  * Wir müssen in diesem Fall mit der DB testen da wir die pages
@@ -51,11 +51,11 @@ class tx_mksearch_tests_indexer_TtContent_DBTest extends tx_mksearch_tests_Testc
 
     public function testPrepareSearchDataAndCheckDeleted()
     {
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtContent');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_TtContent');
         $options = $this->getDefaultConfig();
 
         list($extKey, $cType) = $indexer->getContentType();
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
 
         //is deleted
         $record = ['uid' => 123, 'pid' => 1, 'deleted' => 1, 'CType' => 'list'];
@@ -63,19 +63,19 @@ class tx_mksearch_tests_indexer_TtContent_DBTest extends tx_mksearch_tests_Testc
         self::assertEquals(true, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 
         //is hidden
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $record = ['uid' => 124, 'pid' => 1, 'deleted' => 0, 'hidden' => 1, 'CType' => 'list'];
         $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
         self::assertEquals(true, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 
         //everything alright
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $record = ['uid' => 125, 'pid' => 1, 'deleted' => 0, 'hidden' => 0, 'header' => 'test', 'CType' => 'list'];
         $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
         self::assertEquals(false, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 
         //everything alright
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $record = ['uid' => 126, 'pid' => 1, 'deleted' => 0, 'hidden' => 0, 'sectionIndex' => 1, 'header' => 'test', 'CType' => 'list'];
         $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
         self::assertEquals(false, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
@@ -86,7 +86,7 @@ class tx_mksearch_tests_indexer_TtContent_DBTest extends tx_mksearch_tests_Testc
         self::assertEquals('test ', $aData['content']->getValue(), 'Wrong value for title for uid '.$record['uid']);
 
         //no content
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $record = ['uid' => 128, 'pid' => 1, 'deleted' => 0, 'hidden' => 0, 'CType' => 'list'];
         $indexer->prepareSearchData('tt_content', $record, $indexDoc, array_merge($options, ['leaveHeaderEmpty' => true]));
         self::assertEquals(true, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
@@ -98,11 +98,11 @@ class tx_mksearch_tests_indexer_TtContent_DBTest extends tx_mksearch_tests_Testc
      */
     public function testPrepareSearchData_CheckIncludePageTrees()
     {
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtContent');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_TtContent');
         list($extKey, $cType) = $indexer->getContentType();
 
         $record = ['uid' => 123, 'deleted' => 0, 'hidden' => 0, 'pid' => 3, 'CType' => 'list', 'bodytext' => 'test'];
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         //damit es nicht an der Konfig scheitert
         $options = $this->getDefaultConfig();
 
@@ -122,30 +122,30 @@ class tx_mksearch_tests_indexer_TtContent_DBTest extends tx_mksearch_tests_Testc
         self::assertNull($result, 'Element sollte gelöscht werden, da nicht im richtigen Seitenbaum.');
 
         $record2 = ['uid' => 123, 'deleted' => 0, 'hidden' => 0, 'pid' => 5, 'CType' => 'list', 'bodytext' => 'test'];
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $options['include.']['pageTrees.'] = [1, 4]; //als array
         $result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options, 1);
         self::assertNotNull($result, 'Element sollte nicht gelöscht werden, da im richtigen Seitenbaum. 2');
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $result = $indexer->prepareSearchData('tt_content', $record2, $indexDoc, $options, 1);
         self::assertNotNull($result, 'Element sollte nicht gelöscht werden, da im richtigen Seitenbaum. 3');
 
         //nichts explizit inkluded also alles rein
         unset($options['include.']['pageTrees.']); //zurücksetzen
         $record2 = ['uid' => 123, 'deleted' => 0, 'hidden' => 0, 'pid' => 5, 'CType' => 'list', 'bodytext' => 'test'];
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options, 1);
         self::assertNotNull($result, 'Element sollte nicht gelöscht werden, da im richtigen Seitenbaum und nichts explizit included. 1');
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $result = $indexer->prepareSearchData('tt_content', $record2, $indexDoc, $options, 1);
         self::assertNotNull($result, 'Element sollte nicht gelöscht werden, da im richtigen Seitenbaum und nichts explizit included. 2');
 
         //klappt auch alles wenn das Element auf der obersten Ebene liegt?
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtContent');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_TtContent');
         list($extKey, $cType) = $indexer->getContentType();
 
         $record = ['uid' => 123, 'deleted' => 0, 'hidden' => 0, 'pid' => 1, 'CType' => 'list', 'bodytext' => 'test'];
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         //damit es nicht an der Konfig scheitert
         $options = $this->getDefaultConfig();
 
@@ -161,11 +161,11 @@ class tx_mksearch_tests_indexer_TtContent_DBTest extends tx_mksearch_tests_Testc
      */
     public function testPrepareSearchData_CheckExcludePageTrees()
     {
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtContent');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_TtContent');
         list($extKey, $cType) = $indexer->getContentType();
 
         $record = ['uid' => 123, 'deleted' => 0, 'hidden' => 0, 'pid' => 3, 'CType' => 'list', 'bodytext' => 'test'];
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         //damit es nicht an der Konfig scheitert
         $options = $this->getDefaultConfig();
 
@@ -185,30 +185,30 @@ class tx_mksearch_tests_indexer_TtContent_DBTest extends tx_mksearch_tests_Testc
         self::assertNull($result, 'Element sollte gelöscht werden, da nicht im richtigen Seitenbaum. 2');
 
         $record2 = ['uid' => 123, 'deleted' => 0, 'hidden' => 0, 'pid' => 5, 'CType' => 'list', 'bodytext' => 'test'];
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $options['exclude.']['pageTrees.'] = [1, 4]; //als array
         $result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options, 1);
         self::assertNull($result, 'Element sollte gelöscht werden, da im richtigen Seitenbaum. 3');
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $result = $indexer->prepareSearchData('tt_content', $record2, $indexDoc, $options, 1);
         self::assertNull($result, 'Element sollte gelöscht werden, da im richtigen Seitenbaum. 4');
 
         //nichts explizit excluded also alles rein
         unset($options['exclude.']['pageTrees.']); //zurücksetzen
         $record2 = ['uid' => 123, 'deleted' => 0, 'hidden' => 0, 'pid' => 5, 'CType' => 'list', 'bodytext' => 'test'];
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options, 1);
         self::assertNotNull($result, 'Element sollte nicht gelöscht werden, da nichts excluded. 1');
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $result = $indexer->prepareSearchData('tt_content', $record2, $indexDoc, $options, 1);
         self::assertNotNull($result, 'Element sollte nicht gelöscht werden, da nichts excluded. 2');
 
         //klappt esw auch wenn das Element auf der obersten Ebene liegt?
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtContent');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_TtContent');
         list($extKey, $cType) = $indexer->getContentType();
 
         $record = ['uid' => 123, 'deleted' => 0, 'hidden' => 0, 'pid' => 1, 'CType' => 'list', 'bodytext' => 'test'];
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         //damit es nicht an der Konfig scheitert
         $options = $this->getDefaultConfig();
 
@@ -224,11 +224,11 @@ class tx_mksearch_tests_indexer_TtContent_DBTest extends tx_mksearch_tests_Testc
         //damit es nicht an der Konfig scheitert
         $options = $this->getDefaultConfig();
 
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtContent');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_TtContent');
         list($extKey, $cType) = $indexer->getContentType();
 
         $record = ['uid' => 1];
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
 
         $result = $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
 
@@ -238,7 +238,7 @@ class tx_mksearch_tests_indexer_TtContent_DBTest extends tx_mksearch_tests_Testc
         $aOptions = [
             'enablefieldsoff' => true,
         ];
-        $aResult = tx_rnbase_util_DB::doSelect('*', 'tx_mksearch_queue', $aOptions);
+        $aResult = \Sys25\RnBase\Database\Connection::getInstance()->doSelect('*', 'tx_mksearch_queue', $aOptions);
 
         self::assertEquals(4, count($aResult), 'Es wurde nicht der richtige Anzahl in die queue gelegt!');
 
@@ -260,11 +260,11 @@ class tx_mksearch_tests_indexer_TtContent_DBTest extends tx_mksearch_tests_Testc
         //damit es nicht an der Konfig scheitert
         $options = $this->getDefaultConfig();
 
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtContent');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_TtContent');
         list($extKey, $cType) = $indexer->getContentType();
 
         $record = ['uid' => 99];
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
 
         $result = $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
 
@@ -274,7 +274,7 @@ class tx_mksearch_tests_indexer_TtContent_DBTest extends tx_mksearch_tests_Testc
         $aOptions = [
             'enablefieldsoff' => true,
         ];
-        $aResult = tx_rnbase_util_DB::doSelect('*', 'tx_mksearch_queue', $aOptions);
+        $aResult = \Sys25\RnBase\Database\Connection::getInstance()->doSelect('*', 'tx_mksearch_queue', $aOptions);
 
         self::assertEmpty($aResult, 'Es wurde doch etwas in die queue gelegt!');
     }
@@ -285,11 +285,11 @@ class tx_mksearch_tests_indexer_TtContent_DBTest extends tx_mksearch_tests_Testc
         //damit es nicht an der Konfig scheitert
         $options = $this->getDefaultConfig();
 
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtContent');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_TtContent');
         list($extKey, $cType) = $indexer->getContentType();
 
         $record = ['uid' => 5];
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
 
         $result = $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
 
@@ -299,7 +299,7 @@ class tx_mksearch_tests_indexer_TtContent_DBTest extends tx_mksearch_tests_Testc
         $aOptions = [
             'enablefieldsoff' => true,
         ];
-        $aResult = tx_rnbase_util_DB::doSelect('*', 'tx_mksearch_queue', $aOptions);
+        $aResult = \Sys25\RnBase\Database\Connection::getInstance()->doSelect('*', 'tx_mksearch_queue', $aOptions);
 
         self::assertEmpty($aResult, 'Es wurde doch etwas in die queue gelegt!');
     }
@@ -310,11 +310,11 @@ class tx_mksearch_tests_indexer_TtContent_DBTest extends tx_mksearch_tests_Testc
         //damit es nicht an der Konfig scheitert
         $options = $this->getDefaultConfig();
 
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtContent');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_TtContent');
         list($extKey, $cType) = $indexer->getContentType();
 
         $record = ['uid' => 7];
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
 
         $result = $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
 
@@ -324,7 +324,7 @@ class tx_mksearch_tests_indexer_TtContent_DBTest extends tx_mksearch_tests_Testc
         $aOptions = [
             'enablefieldsoff' => true,
         ];
-        $aResult = tx_rnbase_util_DB::doSelect('*', 'tx_mksearch_queue', $aOptions);
+        $aResult = \Sys25\RnBase\Database\Connection::getInstance()->doSelect('*', 'tx_mksearch_queue', $aOptions);
 
         self::assertEquals(2, count($aResult), 'Es wurde nicht der richtige Anzahl in die queue gelegt!');
         self::assertEquals('tt_content', $aResult[0]['tablename'], 'Es wurde nicht das richtige Element (tablename) in die queue gelegt! Element 1');
@@ -339,11 +339,11 @@ class tx_mksearch_tests_indexer_TtContent_DBTest extends tx_mksearch_tests_Testc
         //damit es nicht an der Konfig scheitert
         $options = $this->getDefaultConfig();
 
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtContent');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_TtContent');
         list($extKey, $cType) = $indexer->getContentType();
 
         $record = ['uid' => 2];
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
 
         $result = $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
 
@@ -353,7 +353,7 @@ class tx_mksearch_tests_indexer_TtContent_DBTest extends tx_mksearch_tests_Testc
         $aOptions = [
             'enablefieldsoff' => true,
         ];
-        $aResult = tx_rnbase_util_DB::doSelect('*', 'tx_mksearch_queue', $aOptions);
+        $aResult = \Sys25\RnBase\Database\Connection::getInstance()->doSelect('*', 'tx_mksearch_queue', $aOptions);
 
         self::assertEquals(1, count($aResult), 'Es wurde nicht der richtige Anzahl in die queue gelegt!');
         self::assertEquals('tt_content', $aResult[0]['tablename'], 'Es wurde nicht das richtige Element (tablename) in die queue gelegt! Element 1');
@@ -367,36 +367,36 @@ class tx_mksearch_tests_indexer_TtContent_DBTest extends tx_mksearch_tests_Testc
         //damit es nicht an der Konfig scheitert
         $options = $this->getDefaultConfig();
 
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtContent');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_TtContent');
         list($extKey, $cType) = $indexer->getContentType();
 
         //seite ist versteckt
         $record = ['uid' => 123, 'pid' => 7, 'deleted' => 0, 'hidden' => 0, 'CType' => 'list', 'bodytext' => 'test'];
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
         self::assertTrue($result->getDeleted(), 'Das Element wurde nicht auf gelöscht gesetzt! Pid: 7');
 
         //seite ist gelöscht
         $record = ['uid' => 123, 'pid' => 8, 'deleted' => 0, 'hidden' => 0, 'CType' => 'list', 'bodytext' => 'test'];
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
         self::assertTrue($result->getDeleted(), 'Das Element wurde nicht auf gelöscht gesetzt! Pid: 8');
 
         //alles okay
         $record = ['uid' => 123, 'pid' => 6, 'deleted' => 0, 'hidden' => 0, 'CType' => 'list', 'bodytext' => 'test'];
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
         self::assertFalse($result->getDeleted(), 'Das Element wurde auf gelöscht gesetzt! Pid: 6');
 
         //seite ist hart gelöscht bzw. nicht vorhanden
         $record = ['uid' => 123, 'pid' => 99, 'deleted' => 0, 'hidden' => 0, 'CType' => 'list', 'bodytext' => 'test'];
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
         self::assertTrue($result->getDeleted(), 'Das Element wurde nicht auf gelöscht gesetzt! Pid: 8');
 
         //seite ist nicht gelöscht aber der parent ist versteckt
         $record = ['uid' => 123, 'pid' => 10, 'deleted' => 0, 'hidden' => 0, 'CType' => 'list', 'bodytext' => 'test'];
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
         self::assertTrue($result->getDeleted(), 'Das Element wurde nicht auf gelöscht gesetzt! Pid: 10');
     }
@@ -406,10 +406,10 @@ class tx_mksearch_tests_indexer_TtContent_DBTest extends tx_mksearch_tests_Testc
      */
     public function testPrepareSearchDataSetsDocToIndexableConsideringIsIndexableField()
     {
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtContent');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_TtContent');
         list($extKey, $cType) = $indexer->getContentType();
 
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $options = $this->getDefaultConfig();
 
         // nicht im richtigen Seitenbaum und
@@ -441,10 +441,10 @@ class tx_mksearch_tests_indexer_TtContent_DBTest extends tx_mksearch_tests_Testc
 
     public function testPrepareSearchDataIndexesHeaderLayoutCorrect()
     {
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtContent');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_TtContent');
         list($extKey, $cType) = $indexer->getContentType();
 
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $options = $this->getDefaultConfig();
 
         //header should be indexed
@@ -460,14 +460,14 @@ class tx_mksearch_tests_indexer_TtContent_DBTest extends tx_mksearch_tests_Testc
 
     public function testPrepareSearchDataIndexesEnableColumnsOfThePageToo()
     {
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtContent');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_TtContent');
         $options = $this->getDefaultConfig();
 
         list($extKey, $cType) = $indexer->getContentType();
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
 
         //everything alright
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $record = [
             'uid' => 125,
             'pid' => 1,

@@ -91,7 +91,7 @@ class tx_mksearch_model_engineSpecific_lucene_IndexerField extends tx_mksearch_m
         $this->_encoding = $encoding;
 
         if (33 == $value) {
-            tx_rnbase_util_Debug::debug(
+            \Sys25\RnBase\Utility\Debug::debug(
                 $encoding,
                 'class.tx_mksearch_model_engineSpecific_lucene_IndexerField.php'
             );

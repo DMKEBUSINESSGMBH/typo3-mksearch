@@ -30,7 +30,7 @@
  * rn_base model. We use it anyway to keep all the remaining nice
  * functions like automatic marker filling etc.
  */
-class tx_mksearch_model_SearchHit extends tx_rnbase_model_base implements tx_mksearch_interface_SearchHit
+class tx_mksearch_model_SearchHit extends \Sys25\RnBase\Domain\Model\BaseModel implements tx_mksearch_interface_SearchHit
 {
     /**
      * Initialiaze model and fill it with data if provided.
@@ -41,7 +41,7 @@ class tx_mksearch_model_SearchHit extends tx_rnbase_model_base implements tx_mks
     {
         if (is_array($rowOrUid)) {
             $this->uid = $rowOrUid['uid'];
-            $this->record = $rowOrUid;
+            $this->setProperty($rowOrUid);
         } else {
             $this->uid = $rowOrUid;
         }
@@ -56,9 +56,9 @@ class tx_mksearch_model_SearchHit extends tx_rnbase_model_base implements tx_mks
     public function fillData(array $data, $merge = true)
     {
         if ($merge) {
-            $this->record = array_merge($this->record, $data);
+            $this->setProperty(array_merge($this->getProperty(), $data));
         } else {
-            $this->record = $data;
+            $this->setProperty($data);
         }
     }
 

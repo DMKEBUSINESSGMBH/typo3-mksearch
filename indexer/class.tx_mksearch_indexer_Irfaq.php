@@ -57,7 +57,7 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base
      * @todo support exclude option, too
      */
     protected function hasDocToBeDeleted(
-        tx_rnbase_IModel $model,
+        \Sys25\RnBase\Domain\Model\DataInterface $model,
         tx_mksearch_interface_IndexerDocument $indexDoc,
         $options = []
     ) {
@@ -71,7 +71,7 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base
      * @see tx_mksearch_interface_Indexer::prepareSearchData()
      */
     protected function indexData(
-        tx_rnbase_IModel $model,
+        \Sys25\RnBase\Domain\Model\DataInterface $model,
         $tableName,
         $rawData,
         tx_mksearch_interface_IndexerDocument $indexDoc,
@@ -124,7 +124,7 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base
 
         //index everything about the expert
         $this->indexModelByMapping(
-            $this->getIrfaqExpertService()->get($model->record['expert']),
+            $this->getIrfaqExpertService()->get($model->getProperty('expert')),
             $this->getExpertMapping(),
             $indexDoc,
             'expert_'
@@ -151,16 +151,16 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base
     }
 
     /**
-     * @param tx_rnbase_IModel                      $model
+     * @param \Sys25\RnBase\Domain\Model\DataInterface                      $model
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
      *
      * @return tx_mksearch_interface_IndexerDocument
      */
     private function indexAnswerTextKeepingHtml(
-        tx_rnbase_IModel $model,
+        \Sys25\RnBase\Domain\Model\DataInterface $model,
         tx_mksearch_interface_IndexerDocument $indexDoc
     ) {
-        $indexDoc->addField('a_with_html_s', $model->record['a']);
+        $indexDoc->addField('a_with_html_s', $model->getProperty('a'));
 
         return $indexDoc;
     }
@@ -178,7 +178,7 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base
         if (isset($categories[0]) &&
             $categories[0] instanceof tx_mksearch_model_irfaq_Category
         ) {
-            $indexDoc->addField('category_first_shortcut_s', $categories[0]->record['shortcut']);
+            $indexDoc->addField('category_first_shortcut_s', $categories[0]->getProperty('shortcut'));
         }
 
         return $indexDoc;
@@ -203,7 +203,7 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base
 
         $categoryNames = [];
         foreach ($categories as $category) {
-            $categoryNames[$category->record['uid']] = $category->record['title'];
+            $categoryNames[$category->getProperty('uid')] = $category->getProperty('title');
         }
 
         $indexDoc->addField('categories_mi', array_keys($categoryNames));
@@ -325,7 +325,7 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base
      */
     protected function createModel(array $rawData, $tableName = null, $options = [])
     {
-        return tx_rnbase::makeInstance('tx_mksearch_model_irfaq_Question', $rawData);
+        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_irfaq_Question', $rawData);
     }
 
     /**

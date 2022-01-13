@@ -6,25 +6,25 @@
 class tx_mksearch_mod1_util_Misc
 {
     /**
-     * @param tx_rnbase_mod_IModule $mod
+     * @param \Sys25\RnBase\Backend\Module\IModule $mod
      *
      * @return mixed null or string
      */
-    public static function checkPid(tx_rnbase_mod_IModule $mod)
+    public static function checkPid(\Sys25\RnBase\Backend\Module\IModule $mod)
     {
         $pages = self::getStorageFolders();
         if ($mod->getPid() && (empty($pages) || isset($pages[$mod->getPid()]))) {
             return null;
         }
         foreach ($pages as $pid => &$page) {
-            $pageRecord = Tx_Rnbase_Backend_Utility::getRecord('pages', $pid);
+            $pageRecord = \Sys25\RnBase\Backend\Utility\BackendUtility::getRecord('pages', $pid);
             if (null == $pageRecord) {
                 continue;
             }
-            $pageinfo = Tx_Rnbase_Backend_Utility::readPageAccess($pid, $mod->perms_clause);
-            $modUrl = Tx_Rnbase_Backend_Utility::getModuleUrl('web_MksearchM1', ['id' => $pid], '');
+            $pageinfo = \Sys25\RnBase\Backend\Utility\BackendUtility::readPageAccess($pid, $mod->perms_clause);
+            $modUrl = \Sys25\RnBase\Backend\Utility\BackendUtility::getModuleUrl('web_MksearchM1', ['id' => $pid], '');
             $page = '<a href="'.$modUrl.'">';
-            $page .= Tx_Rnbase_Backend_Utility_Icons::getSpriteIconForRecord('pages', $pageRecord);
+            $page .= \Sys25\RnBase\Backend\Utility\Icons::getSpriteIconForRecord('pages', $pageRecord);
             $page .= ' '.$pageinfo['title'];
             $page .= ' '.htmlspecialchars($pageinfo['_thePath']);
             $page .= '</a>';
@@ -51,7 +51,7 @@ class tx_mksearch_mod1_util_Misc
             return $pids;
         }
 
-        $database = Tx_Rnbase_Database_Connection::getInstance();
+        $database = \Sys25\RnBase\Database\Connection::getInstance();
         $pages = array_merge(
             // wir holen alle seiten auf denen indexer liegen
             $database->doSelect('pid as pageid', 'tx_mksearch_indices', ['enablefieldsbe' => 1]),

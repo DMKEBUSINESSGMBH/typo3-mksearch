@@ -36,7 +36,7 @@ class tx_mksearch_tests_util_FilterTest extends tx_mksearch_tests_Testcase
 
     protected function setUp()
     {
-        $this->filterUtil = tx_rnbase::makeInstance('tx_mksearch_util_Filter');
+        $this->filterUtil = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_util_Filter');
         parent::setUp();
     }
 
@@ -55,10 +55,10 @@ searchsolr.filter.default.formfields {
     values.30.caption = Aktualität absteigend
   }
 }';
-        $params = tx_rnbase::makeInstance('tx_rnbase_parameters');
+        $params = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Frontend\Request\Parameters::class);
         $params->offsetSet('sort', 'tstamp asc');
-        $confArr = tx_rnbase_util_TS::parseTsConfig($typoScript);
-        $conf = $this->createConfigurations($confArr, 'mksearch', 'mksearch', $params);
+        $confArr = \Sys25\RnBase\Utility\TypoScript::parseTsConfig($typoScript);
+        $conf = \Sys25\RnBase\Testing\TestUtility::createConfigurations($confArr, 'mksearch', 'mksearch', $params);
         $template = '<html>
 	<!-- ###SEARCH_FILTER_SORTS### -->
 			<label class="sort">
@@ -92,8 +92,8 @@ searchsolr.filter.default.formfields {
         $typoScript = '
 searchsolr.filter.default.formfields {
 }';
-        $confArr = tx_rnbase_util_TS::parseTsConfig($typoScript);
-        $conf = $this->createConfigurations($confArr, 'mksearch', 'mksearch');
+        $confArr = \Sys25\RnBase\Utility\TypoScript::parseTsConfig($typoScript);
+        $conf = \Sys25\RnBase\Testing\TestUtility::createConfigurations($confArr, 'mksearch', 'mksearch');
         $template = '<html>
 ###FILTER_SORT_TSTAMP_ORDER### - ###FILTER_SORT_TSTAMP_LINKURL###
 </html>';
@@ -117,10 +117,10 @@ searchsolr.filter.default.formfields.pagelimit {
   values.30.value = 50
   values.30.caption = 50 hits
 }';
-        $params = tx_rnbase::makeInstance('tx_rnbase_parameters');
+        $params = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Frontend\Request\Parameters::class);
         $params->offsetSet('pagelimit', '50');
-        $confArr = tx_rnbase_util_TS::parseTsConfig($typoScript);
-        $conf = $this->createConfigurations($confArr, 'mksearch', 'mksearch', $params);
+        $confArr = \Sys25\RnBase\Utility\TypoScript::parseTsConfig($typoScript);
+        $conf = \Sys25\RnBase\Testing\TestUtility::createConfigurations($confArr, 'mksearch', 'mksearch', $params);
 
         $result = $this->filterUtil->getPageLimit($params, $conf, 'searchsolr.filter.default.', 5);
 
@@ -164,10 +164,10 @@ searchsolr.filter.default.formfields.pagelimit {
   values.60.value = -2
   values.60.caption = No results
 }';
-        $params = tx_rnbase::makeInstance('tx_rnbase_parameters');
+        $params = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Frontend\Request\Parameters::class);
         $params->offsetSet('pagelimit', '-1');
-        $confArr = tx_rnbase_util_TS::parseTsConfig($typoScript);
-        $conf = $this->createConfigurations($confArr, 'mksearch', 'mksearch', $params);
+        $confArr = \Sys25\RnBase\Utility\TypoScript::parseTsConfig($typoScript);
+        $conf = \Sys25\RnBase\Testing\TestUtility::createConfigurations($confArr, 'mksearch', 'mksearch', $params);
 
         $result = $this->filterUtil->getPageLimit($params, $conf, 'searchsolr.filter.default.', 5);
         $this->assertEquals(999999, $result, 'Anzahl Treffer nicht auf unendlich gesetzt');
@@ -187,10 +187,10 @@ searchsolr.filter.default.formfields.pagelimit {
         $typoScript = '
 searchsolr.filter.default.formfields.pagelimit {
 }';
-        $params = tx_rnbase::makeInstance('tx_rnbase_parameters');
+        $params = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Frontend\Request\Parameters::class);
         $params->offsetSet('pagelimit', '50');
-        $confArr = tx_rnbase_util_TS::parseTsConfig($typoScript);
-        $conf = $this->createConfigurations($confArr, 'mksearch', 'mksearch', $params);
+        $confArr = \Sys25\RnBase\Utility\TypoScript::parseTsConfig($typoScript);
+        $conf = \Sys25\RnBase\Testing\TestUtility::createConfigurations($confArr, 'mksearch', 'mksearch', $params);
 
         $result = $this->filterUtil->getPageLimit($params, $conf, 'searchsolr.filter.default.', 5);
 
@@ -233,12 +233,12 @@ searchsolr.filter.default.sort {
     useKeepVars = 1
   }
 }';
-        $cObjMock = $this->getMockBuilder(tx_rnbase_util_Typo3Classes::getContentObjectRendererClass())
+        $cObjMock = $this->getMockBuilder(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class)
             ->disableOriginalConstructor()->setMethods(['typolink'])->getMock();
         // Den Token bekommen wir nicht rein...
         $cObjMock->expects($this->any())->method('typolink')->will(self::returnValue('<a href=""/>'));
-        $confArr = tx_rnbase_util_TS::parseTsConfig($typoScript);
-        $conf = $this->createConfigurations($confArr, 'mksearch', 'mksearch', null, $cObjMock);
+        $confArr = \Sys25\RnBase\Utility\TypoScript::parseTsConfig($typoScript);
+        $conf = \Sys25\RnBase\Testing\TestUtility::createConfigurations($confArr, 'mksearch', 'mksearch', null, $cObjMock);
 
         $template = '<html>
 ###SORT_TSTAMP_ORDER### - ###SORT_TSTAMP_LINKURL###
@@ -276,7 +276,7 @@ searchsolr.filter.default.sort {
         if (empty($allowedFqParams)) {
             $allowedFqParams[] = 'contentType';
         }
-        $util = tx_rnbase::makeInstance('tx_mksearch_util_Filter');
+        $util = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_util_Filter');
         $actual = $util->parseFqFieldAndValue($fq, $allowedFqParams);
         self::assertSame($expected, $actual);
     }

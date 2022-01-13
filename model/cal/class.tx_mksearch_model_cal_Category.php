@@ -27,12 +27,12 @@
 /**
  * benötigte Klassen einbinden.
  */
-class tx_mksearch_model_cal_Category extends tx_rnbase_model_base
+class tx_mksearch_model_cal_Category extends \Sys25\RnBase\Domain\Model\BaseModel
 {
     /**
      * (non-PHPdoc).
      *
-     * @see tx_rnbase_model_base::getTableName()
+     * @see \Sys25\RnBase\Domain\Model\BaseModel::getTableName()
      */
     public function getTableName()
     {

@@ -31,7 +31,7 @@
 /**
  * Model für eine Facette.
  */
-class tx_mksearch_model_Facet extends tx_rnbase_model_base
+class tx_mksearch_model_Facet extends \Sys25\RnBase\Domain\Model\BaseModel
 {
     const TYPE_FIELD = 'type_field';
     const TYPE_PIVOT = 'type_pivot';
@@ -52,17 +52,19 @@ class tx_mksearch_model_Facet extends tx_rnbase_model_base
      */
     public function __construct($field, $id, $label, $count, $head = false)
     {
-        $this->record['field'] = $field;
-        $this->record['id'] = $this->record['uid'] = $this->uid = $id;
+        $this->setProperty('field', $field);
+        $this->setProperty('id', $id);
+        $this->setProperty('uid', $id);
+        $this->uid = $id;
         if (is_array($label)) {
             // Bei den gruppierten Facets gibt es nicht nur ein Label, sondern mehrere Datenfelder
-            $this->record = array_merge($this->record, $label);
+            $this->setProperty(array_merge($this->getProperty(), $label));
         } else {
-            $this->record['label'] = $label;
+            $this->setProperty('label', $label);
         }
-        $this->record['count'] = $count;
-        $this->record['head'] = $head;
-        $this->record['type'] = self::TYPE_FIELD; // Als default ein Field-Facet verwenden
+        $this->setProperty('count', $count);
+        $this->setProperty('head', $head);
+        $this->setProperty('type', self::TYPE_FIELD); // Als default ein Field-Facet verwenden
     }
 
     /**
@@ -72,7 +74,7 @@ class tx_mksearch_model_Facet extends tx_rnbase_model_base
      */
     public function getFacetType()
     {
-        return $this->record['type'];
+        return $this->getProperty('type');
     }
 
     /**
@@ -82,7 +84,7 @@ class tx_mksearch_model_Facet extends tx_rnbase_model_base
      */
     public function setFacetType($type)
     {
-        $this->record['type'] = $type;
+        $this->setProperty('type', $type);
     }
 
     /**

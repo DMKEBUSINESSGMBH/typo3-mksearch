@@ -22,7 +22,7 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once tx_rnbase_util_Extensions::extPath('mksearch', 'lib/Apache/Solr/Document.php');
+require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch', 'lib/Apache/Solr/Document.php');
 
 /**
  * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
@@ -138,11 +138,11 @@ class tx_mksearch_tests_indexer_TtContentTest extends tx_mksearch_tests_Testcase
      */
     public function testPrepareSearchDataCallsPrepareSearchDataOnActualIndexer()
     {
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', 'mksearch', 'test');
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', 'mksearch', 'test');
         $options = ['options'];
         $record = ['record'];
 
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtContent');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_TtContent');
         $actualIndexer = $this->getMock('tx_mksearch_indexer_ttcontent_Normal', ['prepareSearchData']);
 
         $actualIndexer->expects($this->once())
@@ -165,32 +165,32 @@ class tx_mksearch_tests_indexer_TtContentTest extends tx_mksearch_tests_Testcase
      */
     public function test_prepareSearchData_CheckIgnoreContentType()
     {
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtContent');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_TtContent');
         list($extKey, $cType) = $indexer->getContentType();
         //content type correct?
         self::assertEquals('core', $extKey, 'wrong ext key');
         self::assertEquals('tt_content', $cType, 'wrong cType');
 
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $record = ['uid' => 123, 'pid' => 1, 'deleted' => 0, 'hidden' => 0, 'sectionIndex' => 1, 'CType' => 'list', 'header' => 'test'];
         $options = self::getDefaultOptions();
         $options['ignoreCTypes.'] = ['search', 'mailform', 'login'];
         $result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
         self::assertNotNull($result, 'Null returned for uid '.$record['uid']);
 
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $options = self::getDefaultOptions();
         $options['ignoreCTypes.'] = ['search', 'mailform', 'list'];
         $result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
         self::assertNull($result, 'Not Null returned for uid '.$record['uid']);
 
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $options = self::getDefaultOptions();
         $options['ignoreCTypes'] = 'search,mailform,login';
         $result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
         self::assertNotNull($result, 'Null returned for uid '.$record['uid']);
 
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $options = self::getDefaultOptions();
         $options['ignoreCTypes'] = 'search,mailform,list';
         $result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
@@ -202,17 +202,17 @@ class tx_mksearch_tests_indexer_TtContentTest extends tx_mksearch_tests_Testcase
      */
     public function test_prepareSearchData_CheckIncludeContentType()
     {
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtContent');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_TtContent');
         list($extKey, $cType) = $indexer->getContentType();
 
         $record = ['uid' => 123, 'pid' => 1, 'deleted' => 0, 'hidden' => 0, 'sectionIndex' => 1, 'CType' => 'list', 'header' => 'test'];
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $options = self::getDefaultOptions();
         $options['includeCTypes.'] = ['search', 'mailform', 'login'];
         $result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
         self::assertNull($result, 'Not Null returned for uid '.$record['uid'].' when CType not in includeCTypes');
 
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $options = self::getDefaultOptions();
         $options['includeCTypes.'] = ['search', 'mailform', 'list'];
         $result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options);
@@ -226,9 +226,9 @@ class tx_mksearch_tests_indexer_TtContentTest extends tx_mksearch_tests_Testcase
     {
         $record = ['uid' => 123, 'pid' => 456];
 
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', 'mksearch', 'test');
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', 'mksearch', 'test');
 
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_TtContent');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_TtContent');
         $actualIndexer = $this->getMock('tx_mksearch_indexer_ttcontent_Normal', ['hasDocToBeDeleted']);
 
         $actualIndexerProperty = new ReflectionProperty('tx_mksearch_indexer_TtContent', 'actualIndexer');

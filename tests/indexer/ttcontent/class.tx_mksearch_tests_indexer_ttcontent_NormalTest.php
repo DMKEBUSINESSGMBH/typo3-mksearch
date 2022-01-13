@@ -22,7 +22,7 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once tx_rnbase_util_Extensions::extPath('mksearch', 'lib/Apache/Solr/Document.php');
+require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch', 'lib/Apache/Solr/Document.php');
 
 /**
  * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
@@ -54,7 +54,7 @@ class tx_mksearch_tests_indexer_ttcontent_NormalTest extends tx_mksearch_tests_T
         list($extKey, $cType) = $indexer->getContentType();
 
         $record = ['uid' => 123, 'pid' => 456, 'CType' => 'list', 'bodytext' => 'lorem'];
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $options = self::getDefaultOptions();
         $options['addPageMetaData'] = 1;
         $options['addPageMetaData.']['separator'] = ',';
@@ -75,10 +75,10 @@ class tx_mksearch_tests_indexer_ttcontent_NormalTest extends tx_mksearch_tests_T
             ['indexPageData', 'getModelToIndex']
         );
 
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', 'mksearch', 'test');
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', 'mksearch', 'test');
 
         $record = ['uid' => 123];
-        $model = tx_rnbase::makeInstance('tx_rnbase_model_Base', $record);
+        $model = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Domain\Model\BaseModel::class, $record);
         $model->setTableName('tt_Content');
         $options = self::getDefaultOptions();
         $options['indexPageData'] = 1;
@@ -108,10 +108,10 @@ class tx_mksearch_tests_indexer_ttcontent_NormalTest extends tx_mksearch_tests_T
             ['indexPageData', 'getModelToIndex']
         );
 
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', 'mksearch', 'test');
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', 'mksearch', 'test');
 
         $record = ['uid' => 123];
-        $model = tx_rnbase::makeInstance('tx_rnbase_model_Base', $record);
+        $model = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Domain\Model\BaseModel::class, $record);
         $model->setTableName('tt_Content');
         $options = self::getDefaultOptions();
         $options['indexPageData'] = 0;
@@ -141,9 +141,9 @@ class tx_mksearch_tests_indexer_ttcontent_NormalTest extends tx_mksearch_tests_T
             ['getPageContent']
         );
 
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', 'mksearch', 'test');
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', 'mksearch', 'test');
 
-        $model = tx_rnbase::makeInstance('tx_rnbase_model_Base', ['uid' => 123]);
+        $model = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Domain\Model\BaseModel::class, ['uid' => 123]);
         $model->setTableName('tt_Content');
         $indexer->_set('modelToIndex', $model);
 
@@ -207,7 +207,7 @@ class tx_mksearch_tests_indexer_ttcontent_NormalTest extends tx_mksearch_tests_T
             ['shouldRespectIncludeInSearchDisable', 'getPageContent']
         );
         $options = [];
-        $model = tx_rnbase::makeInstance('tx_rnbase_model_Base', ['pid' => 123]);
+        $model = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Domain\Model\BaseModel::class, ['pid' => 123]);
 
         $indexer->expects($this->once())
             ->method('shouldRespectIncludeInSearchDisable')
@@ -239,7 +239,7 @@ class tx_mksearch_tests_indexer_ttcontent_NormalTest extends tx_mksearch_tests_T
             ['shouldRespectIncludeInSearchDisable', 'getPageContent']
         );
         $options = [];
-        $model = tx_rnbase::makeInstance('tx_rnbase_model_Base', ['pid' => 123]);
+        $model = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Domain\Model\BaseModel::class, ['pid' => 123]);
 
         $indexer->expects($this->once())
             ->method('shouldRespectIncludeInSearchDisable')
@@ -271,7 +271,7 @@ class tx_mksearch_tests_indexer_ttcontent_NormalTest extends tx_mksearch_tests_T
             ['shouldRespectIncludeInSearchDisable', 'getPageContent']
         );
         $options = [];
-        $model = tx_rnbase::makeInstance('tx_rnbase_model_Base', ['pid' => 123]);
+        $model = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Domain\Model\BaseModel::class, ['pid' => 123]);
 
         $indexer->expects($this->once())
             ->method('shouldRespectIncludeInSearchDisable')
@@ -821,7 +821,7 @@ class tx_mksearch_tests_indexer_ttcontent_NormalTest extends tx_mksearch_tests_T
             'tx_mksearch_indexer_ttcontent_Normal',
             ['getPageContent']
         );
-        $sysPage = tx_rnbase_util_TYPO3::getSysPage();
+        $sysPage = \Sys25\RnBase\Utility\TYPO3::getSysPage();
         $indexer
             ->expects(self::once())
             ->method('getPageContent')
@@ -849,7 +849,7 @@ class tx_mksearch_tests_indexer_ttcontent_NormalTest extends tx_mksearch_tests_T
             'tx_mksearch_indexer_ttcontent_Normal',
             ['getPageContent']
         );
-        $sysPage = tx_rnbase_util_TYPO3::getSysPage();
+        $sysPage = \Sys25\RnBase\Utility\TYPO3::getSysPage();
         $indexer
             ->expects(self::any())
             ->method('getPageContent')
@@ -872,7 +872,7 @@ class tx_mksearch_tests_indexer_ttcontent_NormalTest extends tx_mksearch_tests_T
     {
         self::markTestIncomplete('The requested database connection named "Default" has not been configured.');
 
-        $sysPage = tx_rnbase_util_TYPO3::getSysPage();
+        $sysPage = \Sys25\RnBase\Utility\TYPO3::getSysPage();
 
         return [
             [$sysPage::DOKTYPE_SYSFOLDER],

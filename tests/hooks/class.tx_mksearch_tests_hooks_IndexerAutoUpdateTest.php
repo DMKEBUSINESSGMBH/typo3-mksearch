@@ -371,7 +371,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
     public function testGetRnBaseDatabaseUtility()
     {
         self::assertInstanceOf(
-            'Tx_Rnbase_Database_Connection',
+            \Sys25\RnBase\Database\Connection::class,
             $this->callInaccessibleMethod($this->getHookMock(), 'getRnbaseDatabaseUtility')
         );
     }
@@ -465,7 +465,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
             ['getRnbaseDatabaseUtility']
         );
         $databaseUtility = $this->getMock(
-            'Tx_Rnbase_Database_Connection',
+            \Sys25\RnBase\Database\Connection::class,
             ['doSelect']
         );
         $databaseUtility->expects($this->once())
@@ -577,7 +577,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
             ->method('getIntIndexService')
             ->will($this->returnValue($service));
 
-        $indexers[] = tx_rnbase::makeInstance('tx_mksearch_indexer_TtContent');
+        $indexers[] = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_TtContent');
         $hook
             ->expects($this->any())
             ->method('getIndexersForTable')
@@ -591,7 +591,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
      */
     protected function getTceMock()
     {
-        $tce = tx_rnbase::makeInstance(tx_rnbase_util_Typo3Classes::getDataHandlerClass());
+        $tce = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\DataHandling\DataHandler::class);
         // default datamap
         $tce->datamap = [
             'tt_content' => [

@@ -22,7 +22,7 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once tx_rnbase_util_Extensions::extPath('mksearch', 'lib/Apache/Solr/Document.php');
+require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch', 'lib/Apache/Solr/Document.php');
 
 /**
  * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
@@ -65,7 +65,7 @@ class tx_mksearch_tests_indexer_seminars_SeminarTest extends tx_mksearch_tests_D
      */
     protected function setUp()
     {
-        if (!tx_rnbase_util_Extensions::isLoaded('seminars')) {
+        if (!\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('seminars')) {
             self::markTestSkipped('seminars is not installed');
         }
 
@@ -85,11 +85,11 @@ class tx_mksearch_tests_indexer_seminars_SeminarTest extends tx_mksearch_tests_D
             'where' => 'tx_seminars_seminars.uid=1',
             'enablefieldsoff' => true,
         ];
-        $aResult = tx_rnbase_util_DB::doSelect('*', 'tx_seminars_seminars', $aOptions);
+        $aResult = \Sys25\RnBase\Database\Connection::getInstance()->doSelect('*', 'tx_seminars_seminars', $aOptions);
 
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_seminars_Seminar');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_seminars_Seminar');
         list($extKey, $cType) = $indexer->getContentType();
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $options = [];
 
         $aIndexDoc = $indexer->prepareSearchData('tx_seminars_seminars', $aResult[0], $indexDoc, $options)->getData();
@@ -130,9 +130,9 @@ class tx_mksearch_tests_indexer_seminars_SeminarTest extends tx_mksearch_tests_D
      */
     public function testPrepareSearchDataWithTableSeminarsAndTypeIs0AndIsHiddenOrDeleted()
     {
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_seminars_Seminar');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_seminars_Seminar');
         list($extKey, $cType) = $indexer->getContentType();
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $options = [];
 
         //Testdaten aus DB holen
@@ -140,7 +140,7 @@ class tx_mksearch_tests_indexer_seminars_SeminarTest extends tx_mksearch_tests_D
             'where' => 'tx_seminars_seminars.uid=1',
             'enablefieldsoff' => true,
         ];
-        $aResult = tx_rnbase_util_DB::doSelect('*', 'tx_seminars_seminars', $aOptions);
+        $aResult = \Sys25\RnBase\Database\Connection::getInstance()->doSelect('*', 'tx_seminars_seminars', $aOptions);
 
         //manipulate the seminar and set it to deleted
         $aResult[0]['deleted'] = 1;
@@ -167,11 +167,11 @@ class tx_mksearch_tests_indexer_seminars_SeminarTest extends tx_mksearch_tests_D
             'where' => 'tx_seminars_seminars.uid=2',
             'enablefieldsoff' => true,
         ];
-        $aResult = tx_rnbase_util_DB::doSelect('*', 'tx_seminars_seminars', $aOptions);
+        $aResult = \Sys25\RnBase\Database\Connection::getInstance()->doSelect('*', 'tx_seminars_seminars', $aOptions);
 
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_seminars_Seminar');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_seminars_Seminar');
         list($extKey, $cType) = $indexer->getContentType();
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $options = [];
 
         $aIndexDoc = $indexer->prepareSearchData('tx_seminars_seminars', $aResult[0], $indexDoc, $options)->getData();
@@ -217,11 +217,11 @@ class tx_mksearch_tests_indexer_seminars_SeminarTest extends tx_mksearch_tests_D
             'where' => 'tx_seminars_seminars.uid=5',
             'enablefieldsoff' => true,
         ];
-        $aResult = tx_rnbase_util_DB::doSelect('*', 'tx_seminars_seminars', $aOptions);
+        $aResult = \Sys25\RnBase\Database\Connection::getInstance()->doSelect('*', 'tx_seminars_seminars', $aOptions);
 
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_seminars_Seminar');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_seminars_Seminar');
         list($extKey, $cType) = $indexer->getContentType();
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $options = [];
 
         $aIndexDoc = $indexer->prepareSearchData('tx_seminars_seminars', $aResult[0], $indexDoc, $options);
@@ -234,9 +234,9 @@ class tx_mksearch_tests_indexer_seminars_SeminarTest extends tx_mksearch_tests_D
      */
     public function testPrepareSearchDataWithTableSeminarsAndTypeIs1AndIsHiddenOrDeleted()
     {
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_seminars_Seminar');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_seminars_Seminar');
         list($extKey, $cType) = $indexer->getContentType();
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $options = [];
 
         //Testdaten aus DB holen
@@ -244,7 +244,7 @@ class tx_mksearch_tests_indexer_seminars_SeminarTest extends tx_mksearch_tests_D
             'where' => 'tx_seminars_seminars.uid=1',
             'enablefieldsoff' => true,
         ];
-        $aResult = tx_rnbase_util_DB::doSelect('*', 'tx_seminars_seminars', $aOptions);
+        $aResult = \Sys25\RnBase\Database\Connection::getInstance()->doSelect('*', 'tx_seminars_seminars', $aOptions);
 
         //manipulate the seminar and set it to deleted
         $aResult[0]['deleted'] = 1;
@@ -270,11 +270,11 @@ class tx_mksearch_tests_indexer_seminars_SeminarTest extends tx_mksearch_tests_D
             'where' => 'tx_seminars_seminars.uid=3',
             'enablefieldsoff' => true,
         ];
-        $aResult = tx_rnbase_util_DB::doSelect('*', 'tx_seminars_seminars', $aOptions);
+        $aResult = \Sys25\RnBase\Database\Connection::getInstance()->doSelect('*', 'tx_seminars_seminars', $aOptions);
 
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_seminars_Seminar');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_seminars_Seminar');
         list($extKey, $cType) = $indexer->getContentType();
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $options = [];
 
         $aIndexDoc = $indexer->prepareSearchData('tx_seminars_seminars', $aResult[0], $indexDoc, $options);
@@ -284,7 +284,7 @@ class tx_mksearch_tests_indexer_seminars_SeminarTest extends tx_mksearch_tests_D
         $aOptions = [
             'enablefieldsoff' => true,
         ];
-        $aResult = tx_rnbase_util_DB::doSelect('*', 'tx_mksearch_queue', $aOptions);
+        $aResult = \Sys25\RnBase\Database\Connection::getInstance()->doSelect('*', 'tx_mksearch_queue', $aOptions);
 
         self::assertEquals(1, count($aResult), 'Es wurde nicht der richtige Anzahl in die queue gelegt!');
         self::assertEquals('tx_seminars_seminars', $aResult[0]['tablename'], 'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
@@ -297,9 +297,9 @@ class tx_mksearch_tests_indexer_seminars_SeminarTest extends tx_mksearch_tests_D
     public function testPrepareSearchDataPutsCorrectDocsInQueueWhenTableCategories()
     {
         $aResult = ['uid' => 1];
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_seminars_Seminar');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_seminars_Seminar');
         list($extKey, $cType) = $indexer->getContentType();
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $options = [];
 
         $aIndexDoc = $indexer->prepareSearchData('tx_seminars_categories', $aResult, $indexDoc, $options);
@@ -309,7 +309,7 @@ class tx_mksearch_tests_indexer_seminars_SeminarTest extends tx_mksearch_tests_D
         $aOptions = [
             'enablefieldsoff' => true,
         ];
-        $aResult = tx_rnbase_util_DB::doSelect('*', 'tx_mksearch_queue', $aOptions);
+        $aResult = \Sys25\RnBase\Database\Connection::getInstance()->doSelect('*', 'tx_mksearch_queue', $aOptions);
 
         self::assertEquals(2, count($aResult), 'Es wurde nicht der richtige Anzahl in die queue gelegt!');
         self::assertEquals('tx_seminars_seminars', $aResult[0]['tablename'], 'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
@@ -324,9 +324,9 @@ class tx_mksearch_tests_indexer_seminars_SeminarTest extends tx_mksearch_tests_D
     public function testPrepareSearchDataPutsCorrectDocsInQueueWhenTableOrganizers()
     {
         $aResult = ['uid' => 1];
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_seminars_Seminar');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_seminars_Seminar');
         list($extKey, $cType) = $indexer->getContentType();
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $options = [];
 
         $aIndexDoc = $indexer->prepareSearchData('tx_seminars_organizers', $aResult, $indexDoc, $options);
@@ -336,7 +336,7 @@ class tx_mksearch_tests_indexer_seminars_SeminarTest extends tx_mksearch_tests_D
         $aOptions = [
             'enablefieldsoff' => true,
         ];
-        $aResult = tx_rnbase_util_DB::doSelect('*', 'tx_mksearch_queue', $aOptions);
+        $aResult = \Sys25\RnBase\Database\Connection::getInstance()->doSelect('*', 'tx_mksearch_queue', $aOptions);
 
         self::assertEquals(2, count($aResult), 'Es wurde nicht der richtige Anzahl in die queue gelegt!');
         self::assertEquals('tx_seminars_seminars', $aResult[0]['tablename'], 'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
@@ -351,9 +351,9 @@ class tx_mksearch_tests_indexer_seminars_SeminarTest extends tx_mksearch_tests_D
     public function testPrepareSearchDataPutsCorrectDocsInQueueWhenTableSites()
     {
         $aResult = ['uid' => 2];
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_seminars_Seminar');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_seminars_Seminar');
         list($extKey, $cType) = $indexer->getContentType();
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $options = [];
 
         $aIndexDoc = $indexer->prepareSearchData('tx_seminars_sites', $aResult, $indexDoc, $options);
@@ -363,7 +363,7 @@ class tx_mksearch_tests_indexer_seminars_SeminarTest extends tx_mksearch_tests_D
         $aOptions = [
             'enablefieldsoff' => true,
         ];
-        $aResult = tx_rnbase_util_DB::doSelect('*', 'tx_mksearch_queue', $aOptions);
+        $aResult = \Sys25\RnBase\Database\Connection::getInstance()->doSelect('*', 'tx_mksearch_queue', $aOptions);
 
         self::assertEquals(2, count($aResult), 'Es wurde nicht der richtige Anzahl in die queue gelegt!');
         self::assertEquals('tx_seminars_seminars', $aResult[0]['tablename'], 'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
@@ -378,9 +378,9 @@ class tx_mksearch_tests_indexer_seminars_SeminarTest extends tx_mksearch_tests_D
     public function testPrepareSearchDataPutsCorrectDocsInQueueWhenTableSpeakers()
     {
         $aResult = ['uid' => 2];
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_seminars_Seminar');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_seminars_Seminar');
         list($extKey, $cType) = $indexer->getContentType();
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $options = [];
 
         $aIndexDoc = $indexer->prepareSearchData('tx_seminars_speakers', $aResult, $indexDoc, $options);
@@ -390,7 +390,7 @@ class tx_mksearch_tests_indexer_seminars_SeminarTest extends tx_mksearch_tests_D
         $aOptions = [
             'enablefieldsoff' => true,
         ];
-        $aResult = tx_rnbase_util_DB::doSelect('*', 'tx_mksearch_queue', $aOptions);
+        $aResult = \Sys25\RnBase\Database\Connection::getInstance()->doSelect('*', 'tx_mksearch_queue', $aOptions);
 
         self::assertEquals(2, count($aResult), 'Es wurde nicht der richtige Anzahl in die queue gelegt!');
         self::assertEquals('tx_seminars_seminars', $aResult[0]['tablename'], 'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
@@ -405,9 +405,9 @@ class tx_mksearch_tests_indexer_seminars_SeminarTest extends tx_mksearch_tests_D
     public function testPrepareSearchDataPutsCorrectDocsInQueueWhenTableTargetGroups()
     {
         $aResult = ['uid' => 2];
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_seminars_Seminar');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_seminars_Seminar');
         list($extKey, $cType) = $indexer->getContentType();
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $options = [];
 
         $aIndexDoc = $indexer->prepareSearchData('tx_seminars_target_groups', $aResult, $indexDoc, $options);
@@ -417,7 +417,7 @@ class tx_mksearch_tests_indexer_seminars_SeminarTest extends tx_mksearch_tests_D
         $aOptions = [
             'enablefieldsoff' => true,
         ];
-        $aResult = tx_rnbase_util_DB::doSelect('*', 'tx_mksearch_queue', $aOptions);
+        $aResult = \Sys25\RnBase\Database\Connection::getInstance()->doSelect('*', 'tx_mksearch_queue', $aOptions);
 
         self::assertEquals(2, count($aResult), 'Es wurde nicht der richtige Anzahl in die queue gelegt!');
         self::assertEquals('tx_seminars_seminars', $aResult[0]['tablename'], 'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
@@ -432,9 +432,9 @@ class tx_mksearch_tests_indexer_seminars_SeminarTest extends tx_mksearch_tests_D
     public function testPrepareSearchDataPutsCorrectDocsInQueueWhenTableTimeslots()
     {
         $aResult = ['uid' => 4, 'seminar' => 4];
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_indexer_seminars_Seminar');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_seminars_Seminar');
         list($extKey, $cType) = $indexer->getContentType();
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $options = [];
 
         $aIndexDoc = $indexer->prepareSearchData('tx_seminars_timeslots', $aResult, $indexDoc, $options);
@@ -444,7 +444,7 @@ class tx_mksearch_tests_indexer_seminars_SeminarTest extends tx_mksearch_tests_D
         $aOptions = [
             'enablefieldsoff' => true,
         ];
-        $aResult = tx_rnbase_util_DB::doSelect('*', 'tx_mksearch_queue', $aOptions);
+        $aResult = \Sys25\RnBase\Database\Connection::getInstance()->doSelect('*', 'tx_mksearch_queue', $aOptions);
 
         self::assertEquals(1, count($aResult), 'Es wurde nicht der richtige Anzahl in die queue gelegt!');
         self::assertEquals('tx_seminars_seminars', $aResult[0]['tablename'], 'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');

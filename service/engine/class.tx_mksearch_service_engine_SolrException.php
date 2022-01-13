@@ -24,7 +24,7 @@
 /**
  * Solr exception.
  */
-class tx_mksearch_service_engine_SolrException extends tx_rnbase_util_Exception
+class tx_mksearch_service_engine_SolrException extends \Sys25\RnBase\Exception\AdditionalException
 {
     private $lastUrl = '';
     private $parent = false;

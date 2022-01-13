@@ -122,9 +122,9 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
 
         //redirect the indexing to the responsible class
         if (0 == $rawData['object_type']) {
-            $oIndexer = tx_rnbase::makeInstance('tx_mksearch_indexer_seminars_SeminarObjectType0');
+            $oIndexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_seminars_SeminarObjectType0');
         } elseif (1 == $rawData['object_type']) {
-            $oIndexer = tx_rnbase::makeInstance('tx_mksearch_indexer_seminars_SeminarObjectType1');
+            $oIndexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_seminars_SeminarObjectType1');
         } //we dont need to index a event date as this happens when we index
         //a event topic
         elseif (2 == $rawData['object_type']) {
@@ -374,7 +374,7 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
                 break;
         }
 
-        return tx_rnbase::makeInstance(
+        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_seminars_Bag_Speaker',
             $mmTable.'.uid_local = '.$uid.' AND '.'tx_seminars_speakers.uid = '.$mmTable.'.uid_foreign',
             $mmTable,

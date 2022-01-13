@@ -27,7 +27,7 @@
  *
  * @author  Lars Heber <dev@dmk-ebusiness.de>
  */
-class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base implements tx_mksearch_interface_SearchEngine
+class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\Service\AbstractService implements tx_mksearch_interface_SearchEngine
 {
     const FE_GROUP_FIELD = 'fe_group_mi';
 
@@ -61,21 +61,21 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
     public function __construct()
     {
         // Explicitely include zend path if necessary
-        $zendPath = tx_rnbase_configurations::getExtensionCfgValue('mksearch', 'zendPath');
-        $zendPath = tx_rnbase_util_Files::getFileAbsFileName($zendPath);
+        $zendPath = \Sys25\RnBase\Configuration\Processor::getExtensionCfgValue('mksearch', 'zendPath');
+        $zendPath = \Sys25\RnBase\Utility\Files::getFileAbsFileName($zendPath);
 
         $iniPath = get_include_path();
         if (false === strpos($zendPath, $iniPath)) {
             set_include_path($iniPath.PATH_SEPARATOR.$zendPath);
         }
         if (!is_readable($zendPath)) {
-            tx_rnbase_util_Logger::fatal('Current path to Zend root does not exist!', 'mksearch', ['Path' => $zendPath]);
+            \Sys25\RnBase\Utility\Logger::fatal('Current path to Zend root does not exist!', 'mksearch', ['Path' => $zendPath]);
             throw new Exception('Current path to Zend root does not exist!');
         }
 
         $autoLoaderPath = rtrim($zendPath, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.'Zend'.DIRECTORY_SEPARATOR.'Loader'.DIRECTORY_SEPARATOR.'Autoloader.php';
         if (!is_readable($autoLoaderPath)) {
-            tx_rnbase_util_Logger::fatal('Zend auto loader class not found. Check extension settings!', 'mksearch', ['Path' => $autoLoaderPath]);
+            \Sys25\RnBase\Utility\Logger::fatal('Zend auto loader class not found. Check extension settings!', 'mksearch', ['Path' => $autoLoaderPath]);
             throw new Exception('Zend auto loader class not found. Check extension settings! More info in devlog.');
         }
 
@@ -87,7 +87,7 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
         // Set utf-8-able analyzer
         // @todo: Make configurable
         Zend_Search_Lucene_Analysis_Analyzer::setDefault(
-            tx_rnbase::makeInstance('Zend_Search_Lucene_Analysis_Analyzer_Common_Utf8Num_CaseInsensitive')
+            \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Zend_Search_Lucene_Analysis_Analyzer_Common_Utf8Num_CaseInsensitive')
         );
     }
 
@@ -102,7 +102,7 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
             // dann eine Art schema.xml für Lucene...
             $data = $this->indexModel->getIndexConfig();
             $mapperCfg = isset($data['lucene.']['schema.']) ? $data['lucene.']['schema.'] : [];
-            $this->dataTypeMapper = tx_rnbase::makeInstance('tx_mksearch_service_engine_lucene_DataTypeMapper', $mapperCfg);
+            $this->dataTypeMapper = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_service_engine_lucene_DataTypeMapper', $mapperCfg);
         }
 
         return $this->dataTypeMapper;
@@ -147,8 +147,8 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
      */
     private function getIndexDirectory($name)
     {
-        $path = tx_rnbase_configurations::getExtensionCfgValue('mksearch', 'luceneIndexDir').DIRECTORY_SEPARATOR.$name;
-        if (!tx_rnbase_util_Files::isAbsPath($path)) {
+        $path = \Sys25\RnBase\Configuration\Processor::getExtensionCfgValue('mksearch', 'luceneIndexDir').DIRECTORY_SEPARATOR.$name;
+        if (!\Sys25\RnBase\Utility\Files::isAbsPath($path)) {
             $path = \Sys25\RnBase\Utility\Environment::getPublicPath().$path;
         }
 
@@ -174,7 +174,7 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
                     // The term is a single token
                     if (!(isset($ff['phrase']) and $ff['phrase'])) {
                         // Call hook to manipulate search term. Term is utf8-encoded!
-                        tx_rnbase_util_Misc::callHook(
+                        \Sys25\RnBase\Utility\Misc::callHook(
                             'mksearch',
                             'engine_ZendLucene_buildQuery_manipulateSingleTerm',
                             ['term' => &$ff['term']],
@@ -191,7 +191,7 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
                         $pq = new Zend_Search_Lucene_Search_Query_Phrase();
                         foreach (explode(' ', $ff['term']) as $t) { // @todo: explode with regex for respecting white spaces in general
                             // Call hook to manipulate search term. Term is utf8-encoded!
-                            tx_rnbase_util_Misc::callHook(
+                            \Sys25\RnBase\Utility\Misc::callHook(
                                 'mksearch',
                                 'engine_ZendLucene_buildQuery_manipulateSingleTerm',
                                 ['term' => &$t],
@@ -382,7 +382,7 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
         }
 
         if ($options['debug']) {
-            tx_rnbase_util_Debug::debug(
+            \Sys25\RnBase\Utility\Debug::debug(
                 [
                     'Fields' => $fields, 'Options' => $options,
                     'Query' => $queryString, 'Hits' => count($hits),
@@ -399,7 +399,7 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
         $limit = count($hits);
         // Jetzt den PageBrowser setzen
         if (is_object($pb = $options['pb'])) {
-            /* @var $pb tx_rnbase_util_PageBrowser */
+            /* @var $pb \Sys25\RnBase\Utility\PageBrowser */
             $pb->setListSize($limit);
             $state = $pb->getState();
             $offset = $state['offset'];
@@ -469,10 +469,10 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
         } catch (Zend_Search_Lucene_Exception $e) {
             // Didn't work? That's because it doesn't exist.
             // Are we instructed to create the index if necessary? Then do so:
-            tx_rnbase_util_Logger::warn('Lucene index open failed!', 'mksearch', ['indexDir' => $indexDir, 'Exception' => $e->getMessage()]);
+            \Sys25\RnBase\Utility\Logger::warn('Lucene index open failed!', 'mksearch', ['indexDir' => $indexDir, 'Exception' => $e->getMessage()]);
             if ($forceCreation) {
                 $this->index = Zend_Search_Lucene::create($indexDir);
-                tx_rnbase_util_Logger::warn('New Lucene index created!', 'mksearch', ['indexDir' => $indexDir]);
+                \Sys25\RnBase\Utility\Logger::warn('New Lucene index created!', 'mksearch', ['indexDir' => $indexDir]);
             } // No? Then re-throw the Exception:
             else {
                 throw $e;
@@ -617,7 +617,7 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
     {
         $results = $this->getIndexDocumentByContentUid($uid, $extKey, $contentType);
         if (count($results) > 1) {
-            tx_rnbase_util_Logger::warn(
+            \Sys25\RnBase\Utility\Logger::warn(
                 'getByContentUid has returned more than one element.',
                 'mksearch',
                 [
@@ -690,7 +690,7 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
         // but also the search result data at search time.
         // Keep in mind that e. g. lowercasing fields will result
         // in lowercased output on displaying search results!
-        tx_rnbase_util_Misc::callHook(
+        \Sys25\RnBase\Utility\Misc::callHook(
             'mksearch',
             'engine_ZendLucene_indexNew_beforeAddingCoreDataToDocument',
             ['data' => &$data],
@@ -703,7 +703,7 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
         // Additional data
         $data = $doc->getData();
         // Hook to manipulate data
-        tx_rnbase_util_Misc::callHook(
+        \Sys25\RnBase\Utility\Misc::callHook(
             'mksearch',
             'engine_ZendLucene_indexNew_beforeAddingAdditionalDataToDocument',
             ['data' => &$data],
@@ -800,7 +800,7 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
      */
     public function makeIndexDocInstance($extKey, $contentType)
     {
-        return tx_rnbase::makeInstance(
+        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
             $extKey,
             $contentType
@@ -812,7 +812,7 @@ class tx_mksearch_service_engine_ZendLucene extends Tx_Rnbase_Service_Base imple
      */
     public function getStatus()
     {
-        $status = tx_rnbase::makeInstance('tx_mksearch_util_Status');
+        $status = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_util_Status');
         // TODO: sinnvollen Test einfallen lassen...
         //Läßt sich der Index öffnen?
         if (!$this->indexModel) {

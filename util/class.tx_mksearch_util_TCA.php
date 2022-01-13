@@ -87,7 +87,7 @@ class tx_mksearch_util_TCA
 
             if ('tt_content' == $params['table'] && !empty($piFlexformField)) {
                 $flexform = is_string($piFlexformField) ?
-                    tx_rnbase_util_Arrays::xml2array($piFlexformField) :
+                    \Sys25\RnBase\Utility\Arrays::xml2array($piFlexformField) :
                     $piFlexformField;
             }
 
@@ -183,7 +183,7 @@ class tx_mksearch_util_TCA
         foreach ($indexer as $index) {
             /* @var $index tx_mksearch_model_internal_Index */
             // rootpage des indexes
-            $rootOfIndex = tx_mksearch_util_Indexer::getInstance()->getSiteRootPage($index->record['pid']);
+            $rootOfIndex = tx_mksearch_util_Indexer::getInstance()->getSiteRootPage($index->getProperty('pid'));
             // Sind die RootPages identisch oder ist der Index global,
             // kann der Index verwendet werden.
             if (empty($rootOfIndex['uid']) || $rootOfIndex['uid'] == $rootOfPlugin['uid']) {

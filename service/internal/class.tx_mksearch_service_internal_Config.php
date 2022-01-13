@@ -71,13 +71,13 @@ class tx_mksearch_service_internal_Config extends tx_mksearch_service_internal_B
         ];
         $tmpCfg = $this->search($fields, $options);
 
-        $sTs = $index->record['configuration']."\n";
+        $sTs = $index->getProperty('configuration')."\n";
 
         //use the uid of the index config as key to be able to
         //get different configs for the same contenttype
         foreach ($tmpCfg as $oModel) {
-            $sTs .= $oModel->record['extkey'].'.'.$oModel->record['contenttype'].'.'.$oModel->record['uid']." {\n".
-            $oModel->record['configuration']."\n}\n";
+            $sTs .= $oModel->getProperty('extkey').'.'.$oModel->getProperty('contenttype').'.'.$oModel->getProperty('uid')." {\n".
+            $oModel->getProperty('configuration')."\n}\n";
         }
 
         return tx_mksearch_util_Misc::parseTsConfig($sTs);

@@ -48,7 +48,7 @@ return [
                 'checkbox' => '',
                 'renderType' => 'inputLink',
                 'eval' => 'trim',
-                'wizards' => Tx_Rnbase_Utility_TcaTool::getWizards(
+                'wizards' => \Sys25\RnBase\Backend\Utility\TcaTool::getWizards(
                     '',
                     ['link' => true]
                 ),

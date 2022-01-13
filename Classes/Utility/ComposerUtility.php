@@ -43,7 +43,7 @@ final class ComposerUtility
             return;
         }
 
-        require_once \tx_rnbase_util_Extensions::extPath(
+        require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath(
             'mksearch',
             'Resources/Private/PHP/Elastica/Composer/autoload.php'
         );

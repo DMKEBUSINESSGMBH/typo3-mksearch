@@ -25,7 +25,7 @@
 /**
  * Service for accessing models from database.
  */
-class tx_mksearch_service_internal_Base extends Tx_Rnbase_Service_Base
+class tx_mksearch_service_internal_Base extends \Sys25\RnBase\Typo3Wrapper\Service\AbstractService
 {
     /**
      * Search class - set this to the search class name.
@@ -35,11 +35,11 @@ class tx_mksearch_service_internal_Base extends Tx_Rnbase_Service_Base
     protected $searchClass;
 
     /**
-     * @return tx_rnbase_util_SearchBase
+     * @return \Sys25\RnBase\Search\SearchBase
      */
     public function getSearcher()
     {
-        return tx_rnbase_util_SearchBase::getInstance($this->searchClass);
+        return \Sys25\RnBase\Search\SearchBase::getInstance($this->searchClass);
     }
 
     /**
@@ -127,7 +127,7 @@ class tx_mksearch_service_internal_Base extends Tx_Rnbase_Service_Base
      */
     public function get($uid)
     {
-        return tx_rnbase::makeInstance($this->getSearcher()->getWrapperClass(), $uid);
+        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($this->getSearcher()->getWrapperClass(), $uid);
     }
 }
 

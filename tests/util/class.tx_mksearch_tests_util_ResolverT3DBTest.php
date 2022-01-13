@@ -38,7 +38,7 @@ class tx_mksearch_tests_util_ResolverT3DBTest extends tx_mksearch_tests_Testcase
         // @TODO: ther are TYPO3_DB operations. where? mock it!
         $this->prepareLegacyTypo3DbGlobal();
 
-        $resolverT3Db = tx_rnbase::makeInstance('tx_mksearch_util_ResolverT3DB');
+        $resolverT3Db = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_util_ResolverT3DB');
 
         $queueData = [
             'tablename' => 'tt_content',

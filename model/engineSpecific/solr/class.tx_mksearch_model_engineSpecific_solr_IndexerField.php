@@ -49,7 +49,7 @@ class tx_mksearch_model_engineSpecific_solr_IndexerField extends tx_mksearch_mod
                     throw new Exception('tx_mksearch_model_engineSpecific_solr_IndexerField->getValue(): Data type \'date\' / \'datetime\' / \'time\' given, but value is no DateTime instance!');
 
                 // Normalize datetime
-                $dateTime->setTimeZone(tx_rnbase::makeInstance('DateTimeZone', 'UTC'));
+                $dateTime->setTimeZone(\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('DateTimeZone', 'UTC'));
 
                 switch ($dt) {
                     case 'date':

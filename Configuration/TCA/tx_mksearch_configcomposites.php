@@ -59,7 +59,7 @@ return [
                 'minitems' => 0,
                 'maxitems' => 100,
                 'fieldControl' => ['editPopup' => true, 'addRecord' => true],
-                'wizards' => Tx_Rnbase_Utility_TcaTool::getWizards(
+                'wizards' => \Sys25\RnBase\Backend\Utility\TcaTool::getWizards(
                     'tx_mksearch_indices',
                     ['add' => true, 'edit' => true, 'list' => true]
                 ),
@@ -78,7 +78,7 @@ return [
                 'minitems' => 0,
                 'maxitems' => 100,
                 'fieldControl' => ['editPopup' => true, 'addRecord' => true],
-                'wizards' => Tx_Rnbase_Utility_TcaTool::getWizards(
+                'wizards' => \Sys25\RnBase\Backend\Utility\TcaTool::getWizards(
                     'tx_mksearch_indexerconfigs',
                     ['add' => true, 'edit' => true, 'list' => true]
                 ),

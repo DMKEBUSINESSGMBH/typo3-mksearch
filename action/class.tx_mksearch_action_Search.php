@@ -32,19 +32,15 @@
  */
 class tx_mksearch_action_Search extends tx_mksearch_action_AbstractSearch
 {
-    /**
-     * @param array_object             $parameters
-     * @param tx_rnbase_configurations $configurations
-     * @param array_object             $viewData
-     *
-     * @return string error msg or null
-     */
-    public function handleRequest(&$parameters, &$configurations, &$viewData)
+    public function handleRequest(\Sys25\RnBase\Frontend\Request\RequestInterface $request)
     {
+        $configurations = $request->getConfigurations();
+        $parameters = $request->getParameters();
+        $viewData = $request->getViewContext();
         $confId = $this->getConfId();
-        $this->handleSoftLink();
+        $this->handleSoftLink($request);
 
-        $filter = $this->createFilter($confId);
+        $filter = $this->createFilter($request, $confId);
 
         //manchmal will man nur ein Suchformular auf jeder Seite im Header einbinden
         //dieses soll dann aber nur auf eine Ergebnisseite verweisen ohne
@@ -59,7 +55,7 @@ class tx_mksearch_action_Search extends tx_mksearch_action_AbstractSearch
         if ($filter->init($fields, $options)) {
             // Adjust Pagebrowser
             $this->handlePageBrowser($parameters, $configurations, $viewData, $fields, $options);
-            $index = $this->getSearchIndex();
+            $index = $this->getSearchIndex($request);
 
             $searchEngine = tx_mksearch_util_ServiceRegistry::getSearchEngine($index);
             $searchEngine->openIndex($index);
@@ -96,8 +92,8 @@ class tx_mksearch_action_Search extends tx_mksearch_action_AbstractSearch
         if (is_array($conf = $configurations->get($typoScriptPathPageBrowser))) {
             // PageBrowser initialisieren
             $pageBrowserId = $conf['pbid'] ? $conf['pbid'] : 'search'.$configurations->getPluginId();
-            /* @var $pageBrowser tx_rnbase_util_PageBrowser */
-            $pageBrowser = tx_rnbase::makeInstance('tx_rnbase_util_PageBrowser', $pageBrowserId);
+            /* @var $pageBrowser \Sys25\RnBase\Utility\PageBrowser */
+            $pageBrowser = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Utility\PageBrowser::class, $pageBrowserId);
             $pageSize = intval($conf['limit']);
             // Den PageBrowser mit PageSize und der aktuellen Seite füllen
             $pageBrowser->setPageSize($pageSize);

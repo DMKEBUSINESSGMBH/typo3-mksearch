@@ -1,30 +1,21 @@
 <?php
 
-use Sys25\RnBase\Frontend\Request\ParametersInterface;
-
 /**
  * Detailseite eines beliebigen Datensatzes aus Momentan Lucene oder Solr.
  *
  * @author Michael Wagner <dev@dmk-ebusiness.de>
  */
-class tx_mksearch_action_ShowHit extends tx_rnbase_action_BaseIOC
+class tx_mksearch_action_ShowHit extends \Sys25\RnBase\Frontend\Controller\AbstractAction
 {
     /**
      * @var tx_mksearch_model_internal_Index
      */
     private $index = false;
 
-    /**
-     * @param ParametersInterface      $parameters
-     * @param tx_rnbase_configurations $configurations
-     * @param ArrayObject              $viewdata
-     *
-     * @return string Errorstring or null
-     */
-    protected function handleRequest(&$parameters, &$configurations, &$viewdata)
+    protected function handleRequest(\Sys25\RnBase\Frontend\Request\RequestInterface $request)
     {
         $item = $this->findItem();
-        $viewdata->offsetSet('item', $item);
+        $request->getViewContext()->offsetSet('item', $item);
 
         return null;
     }
@@ -50,7 +41,7 @@ class tx_mksearch_action_ShowHit extends tx_rnbase_action_BaseIOC
             $uid = $configurations->getParameters()->getInt($uidParamName);
         }
 
-        tx_rnbase_util_Misc::callHook(
+        \Sys25\RnBase\Utility\Misc::callHook(
             'mksearch',
             'action_showhit_finditem_pre',
             [
@@ -63,7 +54,7 @@ class tx_mksearch_action_ShowHit extends tx_rnbase_action_BaseIOC
 
         $item = $this->searchByContentUid($uid, $extKey, $contentType);
 
-        tx_rnbase_util_Misc::callHook(
+        \Sys25\RnBase\Utility\Misc::callHook(
             'mksearch',
             'action_showhit_finditem_post',
             [
@@ -113,10 +104,10 @@ class tx_mksearch_action_ShowHit extends tx_rnbase_action_BaseIOC
             $lastUrl = $e instanceof tx_mksearch_service_engine_SolrException ? $e->getLastUrl() : '';
             //Da die Exception gefangen wird, würden die Entwickler keine Mail bekommen
             //also machen wir das manuell
-            if ($addr = tx_rnbase_configurations::getExtensionCfgValue('rn_base', 'sendEmailOnException')) {
-                tx_rnbase_util_Misc::sendErrorMail($addr, 'tx_mksearch_action_SearchSolr_searchSolr', $e);
+            if ($addr = \Sys25\RnBase\Configuration\Processor::getExtensionCfgValue('rn_base', 'sendEmailOnException')) {
+                \Sys25\RnBase\Utility\Misc::sendErrorMail($addr, 'tx_mksearch_action_SearchSolr_searchSolr', $e);
             }
-            tx_rnbase_util_Logger::fatal(
+            \Sys25\RnBase\Utility\Logger::fatal(
                 'Solr search failed with Exception!',
                 'mksearch',
                 [

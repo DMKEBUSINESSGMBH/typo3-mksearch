@@ -5,7 +5,7 @@
  *
  * @author Michael Wagner <dev@dmk-ebusiness.de>
  */
-class tx_mksearch_mod1_ConfigIndizes extends tx_rnbase_mod_ExtendedModFunc
+class tx_mksearch_mod1_ConfigIndizes extends \Sys25\RnBase\Backend\Module\ExtendedModFunc
 {
     /**
      * Return function id (used in page typoscript etc.).
@@ -38,9 +38,9 @@ class tx_mksearch_mod1_ConfigIndizes extends tx_rnbase_mod_ExtendedModFunc
     protected function getSubMenuItems()
     {
         return [
-                tx_rnbase::makeInstance('tx_mksearch_mod1_handler_Index'),
-                tx_rnbase::makeInstance('tx_mksearch_mod1_handler_Composite'),
-                tx_rnbase::makeInstance('tx_mksearch_mod1_handler_IndexerConfig'),
+                \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_mod1_handler_Index'),
+                \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_mod1_handler_Composite'),
+                \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_mod1_handler_IndexerConfig'),
             ];
     }
 

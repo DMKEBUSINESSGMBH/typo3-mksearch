@@ -48,7 +48,7 @@ class tx_mksearch_indexer_A21Glossary extends tx_mksearch_indexer_Base
     /**
      * Do the actual indexing for the given model.
      *
-     * @param tx_rnbase_IModel                      $model
+     * @param \Sys25\RnBase\Domain\Model\DataInterface                      $model
      * @param string                                $tableName
      * @param array                                 $rawData
      * @param tx_mksearch_interface_IndexerDocument $indexDoc
@@ -57,7 +57,7 @@ class tx_mksearch_indexer_A21Glossary extends tx_mksearch_indexer_Base
      * @return tx_mksearch_interface_IndexerDocument|null
      */
     protected function indexData(
-        tx_rnbase_IModel $model,
+        \Sys25\RnBase\Domain\Model\DataInterface $model,
         $tableName,
         $rawData,
         tx_mksearch_interface_IndexerDocument $indexDoc,

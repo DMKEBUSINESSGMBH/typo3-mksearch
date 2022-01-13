@@ -38,7 +38,7 @@ class tx_mksearch_tests_search_irfaq_ExpertTest extends tx_mksearch_tests_Testca
      */
     public function testGetWrapperClass()
     {
-        $wrapperClass = tx_rnbase::makeInstance('tx_mksearch_search_irfaq_Expert')->getWrapperClass();
+        $wrapperClass = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_search_irfaq_Expert')->getWrapperClass();
         self::assertSame('tx_mksearch_model_irfaq_Expert', $wrapperClass);
         // wenn es die Klasse nicht gibt, wirft rn_base einen Fehler
     }

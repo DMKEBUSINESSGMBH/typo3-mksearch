@@ -35,7 +35,7 @@ class tx_mksearch_marker_CorePage extends tx_mksearch_marker_SearchResultSimple
      * @param array                       $markerArray
      * @param array                       $wrappedSubpartArray
      * @param string                      $confId
-     * @param tx_rnbase_util_FormatUtil   $formatter
+     * @param \Sys25\RnBase\Frontend\Marker\FormatUtil   $formatter
      * @param string                      $template
      */
     public function prepareLinks($item, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, $formatter, $template)

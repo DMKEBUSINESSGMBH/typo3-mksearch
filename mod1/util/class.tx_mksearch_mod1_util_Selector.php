@@ -8,18 +8,18 @@
 class tx_mksearch_mod1_util_Selector
 {
     /**
-     * @var tx_rnbase_mod_IModule
+     * @var \Sys25\RnBase\Backend\Module\IModule
      */
     private $mod;
     /**
-     * @var tx_rnbase_util_FormTool
+     * @var \Sys25\RnBase\Backend\Form\ToolBox
      */
     private $formTool;
 
     /**
      * Initialisiert das Objekt mit dem Template und der Modul-Config.
      */
-    public function init(tx_rnbase_mod_IModule $module)
+    public function init(\Sys25\RnBase\Backend\Module\IModule $module)
     {
         $this->mod = $module;
         $this->formTool = $this->mod->getFormTool();
@@ -166,7 +166,7 @@ class tx_mksearch_mod1_util_Selector
         $selectedItem = array_key_exists('forcevalue', $aOptions) ? $aOptions['forcevalue'] : $this->getValueFromModuleData($id);
 
         // Build select box items
-        $aData['selector'] = Tx_Rnbase_Backend_Utility::getFuncMenu(
+        $aData['selector'] = \Sys25\RnBase\Backend\Utility\BackendUtility::getFuncMenu(
             $this->mod->getPid(),
             'SET['.$id.']',
             $selectedItem,
@@ -202,9 +202,9 @@ class tx_mksearch_mod1_util_Selector
     }
 
     /**
-     * Returns an instance of tx_rnbase_mod_IModule.
+     * Returns an instance of \Sys25\RnBase\Backend\Module\IModule.
      *
-     * @return tx_rnbase_mod_IModule
+     * @return \Sys25\RnBase\Backend\Module\IModule
      */
     protected function getModule()
     {
@@ -212,7 +212,7 @@ class tx_mksearch_mod1_util_Selector
     }
 
     /**
-     * @return tx_rnbase_util_FormTool
+     * @return \Sys25\RnBase\Backend\Form\ToolBox
      */
     protected function getFormTool()
     {
@@ -229,7 +229,7 @@ class tx_mksearch_mod1_util_Selector
     public function getValueFromModuleData($key)
     {
         // Fetch selected company trade
-        $modData = Tx_Rnbase_Backend_Utility::getModuleData([$key => ''], tx_rnbase_parameters::getPostOrGetParameter('SET'), $this->getModule()->getName());
+        $modData = \Sys25\RnBase\Backend\Utility\BackendUtility::getModuleData([$key => ''], \Sys25\RnBase\Frontend\Request\Parameters::getPostOrGetParameter('SET'), $this->getModule()->getName());
         if (isset($modData[$key])) {
             return $modData[$key];
         }

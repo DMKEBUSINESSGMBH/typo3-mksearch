@@ -22,7 +22,7 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once tx_rnbase_util_Extensions::extPath('mksearch', 'lib/Apache/Solr/Document.php');
+require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch', 'lib/Apache/Solr/Document.php');
 
 /**
  * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
@@ -36,7 +36,7 @@ class tx_mksearch_tests_model_SolrHitTest extends tx_mksearch_tests_Testcase
     {
         $doc = new Apache_Solr_Document();
         $doc->id = 'myid';
-        $hit = tx_rnbase::makeInstance('tx_mksearch_model_SolrHit', $doc);
+        $hit = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_SolrHit', $doc);
 
         self::assertEquals('myid', $hit->getSolrId());
     }

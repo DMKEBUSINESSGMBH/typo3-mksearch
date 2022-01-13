@@ -30,14 +30,14 @@ define('FIELD_ITEMS', 'amountOfItems');
  * @license         http://www.gnu.org/licenses/lgpl.html
  *                  GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_scheduler_IndexTaskAddFieldProvider extends Tx_Rnbase_Scheduler_FieldProvider
+class tx_mksearch_scheduler_IndexTaskAddFieldProvider implements \TYPO3\CMS\Scheduler\AdditionalFieldProviderInterface
 {
     /**
      * This method is used to define new fields for adding or editing a task
      * In this case, it adds an email field.
      *
      * @param array                                                     $taskInfo:        reference to the array containing the info used in the add/edit form
-     * @param Tx_Rnbase_Scheduler_Task                                  $task:            when editing, reference to the current task object. Null when adding.
+     * @param \TYPO3\CMS\Scheduler\Task\AbstractTask                    $task:            when editing, reference to the current task object. Null when adding.
      * @param \TYPO3\CMS\Scheduler\Controller\SchedulerModuleController $schedulerModule: reference to the calling object (Scheduler's BE module)
      *
      * @return array Array containg all the information pertaining to the additional fields
@@ -48,7 +48,7 @@ class tx_mksearch_scheduler_IndexTaskAddFieldProvider extends Tx_Rnbase_Schedule
      *               ['cshKey']      => The CSH key for the field
      *               ['cshLabel']    => The code of the CSH label
      */
-    protected function _getAdditionalFields(array &$taskInfo, $task, $schedulerModule)
+    public function getAdditionalFields(array &$taskInfo, $task, \TYPO3\CMS\Scheduler\Controller\SchedulerModuleController $schedulerModule)
     {
         $action = $schedulerModule->getCurrentAction();
         // Initialize extra field value
@@ -89,7 +89,7 @@ class tx_mksearch_scheduler_IndexTaskAddFieldProvider extends Tx_Rnbase_Schedule
      *
      * @return bool True if validation was ok (or selected class is not relevant), false otherwise
      */
-    protected function _validateAdditionalFields(array &$submittedData, $schedulerModule)
+    public function validateAdditionalFields(array &$submittedData, \TYPO3\CMS\Scheduler\Controller\SchedulerModuleController $schedulerModule)
     {
         return true;
     }
@@ -101,7 +101,7 @@ class tx_mksearch_scheduler_IndexTaskAddFieldProvider extends Tx_Rnbase_Schedule
      * @param array                           $submittedData: array containing the data submitted by the user
      * @param tx_mksearch_scheduler_IndexTask $task:          reference to the current task object
      */
-    protected function _saveAdditionalFields(array $submittedData, Tx_Rnbase_Scheduler_Task $task)
+    public function saveAdditionalFields(array $submittedData, \TYPO3\CMS\Scheduler\Task\AbstractTask $task)
     {
         $task->setAmountOfItems($submittedData[FIELD_ITEMS]);
     }

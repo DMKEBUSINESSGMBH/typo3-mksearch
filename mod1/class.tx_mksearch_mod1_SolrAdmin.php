@@ -8,7 +8,7 @@
  *
  * @author René Nitzsche <dev@dmk-ebusiness.de>
  */
-class tx_mksearch_mod1_SolrAdmin extends tx_rnbase_mod_ExtendedModFunc
+class tx_mksearch_mod1_SolrAdmin extends \Sys25\RnBase\Backend\Module\ExtendedModFunc
 {
     /**
      * Return function id (used in page typoscript etc.).
@@ -41,7 +41,7 @@ class tx_mksearch_mod1_SolrAdmin extends tx_rnbase_mod_ExtendedModFunc
     protected function getSubMenuItems()
     {
         return [
-            tx_rnbase::makeInstance('tx_mksearch_mod1_handler_admin_Solr'),
+            \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_mod1_handler_admin_Solr'),
         ];
     }
 

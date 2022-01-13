@@ -48,10 +48,10 @@ class tx_mksearch_indexer_TtContent implements tx_mksearch_interface_Indexer
      */
     public function __construct()
     {
-        if (tx_rnbase_util_Extensions::isLoaded('gridelements')) {
-            $this->actualIndexer = tx_rnbase::makeInstance('tx_mksearch_indexer_ttcontent_Gridelements');
+        if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('gridelements')) {
+            $this->actualIndexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_ttcontent_Gridelements');
         } else {
-            $this->actualIndexer = tx_rnbase::makeInstance('tx_mksearch_indexer_ttcontent_Normal');
+            $this->actualIndexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_ttcontent_Normal');
         }
     }
 

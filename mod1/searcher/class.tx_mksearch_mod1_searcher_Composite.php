@@ -44,7 +44,7 @@ class tx_mksearch_mod1_searcher_Composite extends tx_mksearch_mod1_searcher_abst
      */
     protected function getDecorator(&$mod)
     {
-        return tx_rnbase::makeInstance('tx_mksearch_mod1_decorator_Composite', $mod);
+        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_mod1_decorator_Composite', $mod);
     }
 
     /**

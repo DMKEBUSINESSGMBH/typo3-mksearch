@@ -28,7 +28,7 @@ use Sys25\RnBase\Frontend\Request\ParametersInterface;
  *
  * @author rene
  */
-class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implements ListBuilderInfo
+class tx_mksearch_filter_LuceneBase extends \Sys25\RnBase\Frontend\Filter\BaseFilter implements \Sys25\RnBase\Frontend\Marker\IListBuilderInfo
 {
     private static $formData = [];
 
@@ -54,9 +54,9 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
     {
         $confId = $this->getConfId();
         $fields = $this->getConfigurations()->get($confId.'filter.fields.');
-        tx_rnbase_util_SearchBase::setConfigOptions($options, $this->getConfigurations(), $confId.'filter.options.');
+        \Sys25\RnBase\Search\SearchBase::setConfigOptions($options, $this->getConfigurations(), $confId.'filter.options.');
 
-        return $this->initFilter($fields, $options, $this->getParameters(), $this->getConfigurations(), $confId);
+        return $this->initFilter($fields, $options, $this->request);
     }
 
     /**
@@ -64,14 +64,16 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
      *
      * @param array                    $fields
      * @param array                    $options
-     * @param tx_rnbase_parameters     $parameters
-     * @param tx_rnbase_configurations $configurations
-     * @param string                   $confId
+     * @param \Sys25\RnBase\Frontend\Request\RequestInterface $request
      *
      * @return bool Should subsequent query be executed at all?
      */
-    protected function initFilter(&$fields, &$options, &$parameters, &$configurations, $confId)
+    protected function initFilter(&$fields, &$options, \Sys25\RnBase\Frontend\Request\RequestInterface $request)
     {
+        $configurations = $request->getConfigurations();
+        $parameters = $request->getParameters();
+        $confId = $this->getConfId();
+
         if ($configurations->get($confId.'filter.formOnly') ||
             !($parameters->offsetExists('submit') ||
             $configurations->get($confId.'filter.forceSearch'))
@@ -156,7 +158,7 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
      */
     protected function fixMinimalPrefixLengthInZend()
     {
-        tx_rnbase::makeInstance('tx_mksearch_service_engine_ZendLucene');
+        \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_service_engine_ZendLucene');
         Zend_Search_Lucene_Search_Query_Wildcard::setMinPrefixLength(0);
     }
 
@@ -164,7 +166,7 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
      * Treat search form, sorting fields etc.
      *
      * @param string                    $template  HTML template
-     * @param tx_rnbase_util_FormatUtil $formatter
+     * @param \Sys25\RnBase\Frontend\Marker\FormatUtil $formatter
      * @param string                    $confId
      * @param string                    $marker
      *
@@ -188,7 +190,7 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
             $marker
         );
 
-        return tx_rnbase_util_Templates::substituteMarkerArrayCached(
+        return \Sys25\RnBase\Frontend\Marker\Templates::substituteMarkerArrayCached(
             $template,
             $markArray,
             $subpartArray,
@@ -200,7 +202,7 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
      * Treat search form.
      *
      * @param string                    $template  HTML template
-     * @param tx_rnbase_util_FormatUtil $formatter
+     * @param \Sys25\RnBase\Frontend\Marker\FormatUtil $formatter
      * @param string                    $confId
      * @param string                    $marker
      *
@@ -216,13 +218,13 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
         $conf = $configurations->get($confId);
 
         // Form template required?
-        if (tx_rnbase_util_BaseMarker::containsMarker($template, $conf['config']['marker'])) {
+        if (\Sys25\RnBase\Frontend\Marker\BaseMarker::containsMarker($template, $conf['config']['marker'])) {
             // Get template from TS
-            $templateCode = tx_rnbase_util_Files::getFileResource($conf['config.']['template']);
+            $templateCode = \Sys25\RnBase\Utility\Files::getFileResource($conf['config.']['template']);
             if ($templateCode) {
                 // Get subpart from TS
                 $subpartName = $conf['config.']['subpart'];
-                $typeTemplate = tx_rnbase_util_Templates::getSubpart($templateCode, '###'.$subpartName.'###');
+                $typeTemplate = \Sys25\RnBase\Frontend\Marker\Templates::getSubpart($templateCode, '###'.$subpartName.'###');
                 if ($typeTemplate) {
                     $parameters = $this->getParameters();
                     $paramArray = $parameters->getArrayCopy();
@@ -233,10 +235,10 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
                     $formData = $parameters->get('submit') ? $paramArray : self::$formData;
                     $formData['action'] = $link->makeUrl(false);
                     $formData['searchcount'] = $configurations->getViewData()->offsetGet('searchcount');
-                    $formData['hiddenfields'] = tx_rnbase_util_FormUtil::getHiddenFieldsForUrlParams($formData['action']);
+                    $formData['hiddenfields'] = \Sys25\RnBase\Backend\Form\FormUtil::getHiddenFieldsForUrlParams($formData['action']);
                     $this->prepareFormFields($formData, $parameters);
 
-                    $templateMarker = tx_rnbase::makeInstance('tx_mksearch_marker_General');
+                    $templateMarker = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_marker_General');
                     $formTxt = $templateMarker->parseTemplate($typeTemplate, $formData, $formatter, $confId.'form.', 'FORM');
                 } else {
                     $formTxt = '<!-- NO SUBPART '.$subpartName.' FOUND -->';
@@ -294,7 +296,7 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
      */
     protected function getModeValuesAvailable()
     {
-        $availableModes = tx_rnbase_util_Strings::trimExplode(
+        $availableModes = \Sys25\RnBase\Utility\Strings::trimExplode(
             ',',
             $this->getConfigurations()->get($this->getConfId().'filter.availableModes')
         );
@@ -316,7 +318,7 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
         array $formData,
         ParametersInterface $parameters
     ) {
-        $formFields = tx_rnbase_util_Strings::trimExplode(
+        $formFields = \Sys25\RnBase\Utility\Strings::trimExplode(
             ',',
             $this->getConfigurations()->get($this->getConfId().'filter.requiredFormFields')
         );
@@ -335,7 +337,7 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
      * taken from ts-config: [item].listinfo.llkeyEmpty.
      *
      * @param array_object             $viewData
-     * @param tx_rnbase_configurations $configurations
+     * @param \Sys25\RnBase\Configuration\Processor $configurations
      *
      * @return string
      */
@@ -369,7 +371,7 @@ class tx_mksearch_filter_LuceneBase extends tx_rnbase_filter_BaseFilter implemen
     protected function getFilterUtility()
     {
         if (!$this->filterUtility) {
-            $this->filterUtility = tx_rnbase::makeInstance('tx_mksearch_util_Filter');
+            $this->filterUtility = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_util_Filter');
         }
 
         return $this->filterUtility;

@@ -30,7 +30,7 @@ class tx_mksearch_marker_CoreTtNews extends tx_mksearch_marker_SearchResultSimpl
     /**
      * @param string                      $template  HTML template
      * @param tx_mksearch_model_SearchHit $item      search hit
-     * @param tx_rnbase_util_FormatUtil   $formatter
+     * @param \Sys25\RnBase\Frontend\Marker\FormatUtil   $formatter
      * @param string                      $confId    path of typoscript configuration
      * @param string                      $marker    name of marker
      *
@@ -39,8 +39,8 @@ class tx_mksearch_marker_CoreTtNews extends tx_mksearch_marker_SearchResultSimpl
     public function parseTemplate($template, &$item, &$formatter, $confId, $marker = 'ITEM')
     {
         //wir benötigen das datetime_dt feld lediglich zusätzlich als timestamp
-        $oDateTime = new DateTime($item->record['datetime_dt']);
-        $item->record['datetime_i'] = $oDateTime->format('U');
+        $oDateTime = new DateTime($item->getProperty('datetime_dt'));
+        $item->setProperty('datetime_i', $oDateTime->format('U'));
 
         return parent::parseTemplate($template, $item, $formatter, $confId, $marker);
     }

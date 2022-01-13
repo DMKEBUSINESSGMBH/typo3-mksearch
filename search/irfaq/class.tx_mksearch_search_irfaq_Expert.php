@@ -7,7 +7,7 @@
 /**
  * @author Hannes Bochmann
  */
-class tx_mksearch_search_irfaq_Expert extends tx_rnbase_util_SearchBase
+class tx_mksearch_search_irfaq_Expert extends \Sys25\RnBase\Search\SearchBase
 {
     /**
      * getTableMappings().
@@ -17,7 +17,7 @@ class tx_mksearch_search_irfaq_Expert extends tx_rnbase_util_SearchBase
         $tableMapping = [];
 
         // Hook to append other tables
-        tx_rnbase_util_Misc::callHook(
+        \Sys25\RnBase\Utility\Misc::callHook(
             'mksearch',
             'search_irfaq_Expert_getTableMapping_hook',
             ['tableMapping' => &$tableMapping],
@@ -71,7 +71,7 @@ class tx_mksearch_search_irfaq_Expert extends tx_rnbase_util_SearchBase
         $join = '';
 
         // Hook to append other tables
-        tx_rnbase_util_Misc::callHook(
+        \Sys25\RnBase\Utility\Misc::callHook(
             'mksearch',
             'search_irfaq_Expert_getJoins_hook',
             ['join' => &$join, 'tableAliases' => $tableAliases],

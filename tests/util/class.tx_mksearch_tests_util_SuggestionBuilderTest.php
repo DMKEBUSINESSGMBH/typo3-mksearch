@@ -56,11 +56,11 @@ class tx_mksearch_tests_util_SuggestionBuilderTest extends tx_mksearch_tests_Tes
         self::assertTrue(is_array($suggestionData), 'es wurde kein array zurück gegeben!');
         self::assertEquals(1, count($suggestionData), 'Das array hat nicht die richtige Größe!');
         self::assertEquals(1, $suggestionData['searchWord'][0]->getUid(), 'Datensatz 1 - getUid() hat den falschen Wert!');
-        self::assertEquals('searchWordFoundOnce', $suggestionData['searchWord'][0]->record['value'], 'Datensatz 1 - Feld:value hat den falschen Wert!');
-        self::assertEquals('searchWord', $suggestionData['searchWord'][0]->record['searchWord'], 'Datensatz 1 - Feld:searchWord hat den falschen Wert!');
+        self::assertEquals('searchWordFoundOnce', $suggestionData['searchWord'][0]->getProperty('value'), 'Datensatz 1 - Feld:value hat den falschen Wert!');
+        self::assertEquals('searchWord', $suggestionData['searchWord'][0]->getProperty('searchWord'), 'Datensatz 1 - Feld:searchWord hat den falschen Wert!');
         self::assertEquals(2, $suggestionData['searchWord'][1]->getUid(), 'Datensatz 2 - getUid() hat den falschen Wert!');
-        self::assertEquals('searchWordFoundTwice', $suggestionData['searchWord'][1]->record['value'], 'Datensatz 2 - Feld:value hat den falschen Wert!');
-        self::assertEquals('searchWord', $suggestionData['searchWord'][1]->record['searchWord'], 'Datensatz 2 - Feld:searchWord hat den falschen Wert!');
+        self::assertEquals('searchWordFoundTwice', $suggestionData['searchWord'][1]->getProperty('value'), 'Datensatz 2 - Feld:value hat den falschen Wert!');
+        self::assertEquals('searchWord', $suggestionData['searchWord'][1]->getProperty('searchWord'), 'Datensatz 2 - Feld:searchWord hat den falschen Wert!');
     }
 }
 

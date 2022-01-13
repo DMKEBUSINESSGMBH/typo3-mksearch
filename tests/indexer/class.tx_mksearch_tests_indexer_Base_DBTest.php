@@ -39,49 +39,49 @@ class tx_mksearch_tests_indexer_Base_DBTest extends tx_mksearch_tests_DbTestcase
 {
     public function testIsIndexableRecordWithInclude()
     {
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
         list($extKey, $cType) = $indexer->getContentType();
         $options = [
                 'include.' => ['pages.' => [2]],
         ];
 
         $aRawData = ['uid' => 1, 'pid' => 1];
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
         self::assertNull($aIndexDoc, 'Die Indizierung wurde doch indiziert! 1');
 
         $aRawData = ['uid' => 1, 'pid' => 2];
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
         self::assertNotNull($aIndexDoc, 'Die Indizierung wurde doch indiziert! 2');
 
         //noch mit kommaseparierter liste
         unset($options);
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
         list($extKey, $cType) = $indexer->getContentType();
         $options = [
                 'include.' => ['pages' => '2,3'],
         ];
 
         $aRawData = ['uid' => 1, 'pid' => 1];
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
         self::assertNull($aIndexDoc, 'Die Indizierung wurde doch indiziert! 3');
 
         $aRawData = ['uid' => 1, 'pid' => 2];
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
         self::assertNotNull($aIndexDoc, 'Die Indizierung wurde doch indiziert! 4');
 
         $aRawData = ['uid' => 1, 'pid' => 3];
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
         self::assertNotNull($aIndexDoc, 'Die Indizierung wurde doch indiziert! 5');
     }
 
     public function testIsIndexableRecordWithIncludeAndDeleteIfNotIndexableOption()
     {
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
         list($extKey, $cType) = $indexer->getContentType();
         $options = [
                 'include.' => ['pages.' => [2]],
@@ -89,64 +89,64 @@ class tx_mksearch_tests_indexer_Base_DBTest extends tx_mksearch_tests_DbTestcase
         ];
 
         $aRawData = ['uid' => 1, 'pid' => 1];
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $oIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
         self::assertTrue($oIndexDoc->getDeleted(), 'Das Element wurde doch indiziert! pid:1');
         //es sollte auch keine exception durch getPrimaryKey geworfen werden damit das Löschen auch wirklich funktioniert
         self::assertEquals('mksearch:dummy:1', $oIndexDoc->getPrimaryKey(true), 'Das Element hat nicht den richtigen primary key! pid:1');
 
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
         $aRawData = ['uid' => 1, 'pid' => 2];
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $oIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
         self::assertFalse($oIndexDoc->getDeleted(), 'Das Element wurde doch indiziert! pid:2');
     }
 
     public function testIsIndexableRecordWithExclude()
     {
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
         list($extKey, $cType) = $indexer->getContentType();
         $options = [
                 'exclude.' => ['pages.' => [2]],
         ];
 
         $aRawData = ['uid' => 1, 'pid' => 1];
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
         self::assertNotNull($aIndexDoc, 'Das Element wurde nicht indiziert! 1');
 
         $aRawData = ['uid' => 1, 'pid' => 2];
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
         self::assertNull($aIndexDoc, 'Das Element wurde doch indiziert! 2');
 
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
         list($extKey, $cType) = $indexer->getContentType();
         $options = [
                 'exclude.' => ['pages' => '2,3'],
         ];
 
         $aRawData = ['uid' => 1, 'pid' => 1];
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
         self::assertNotNull($aIndexDoc, 'Das Element wurde nicht indiziert! 3');
 
         $aRawData = ['uid' => 1, 'pid' => 2];
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
         self::assertNull($aIndexDoc, 'Das Element wurde doch indiziert! 4');
 
         $aRawData = ['uid' => 1, 'pid' => 3];
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
         self::assertNull($aIndexDoc, 'Das Element wurde doch indiziert! 5');
     }
 
     public function testIndexModelByMapping()
     {
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
         list($extKey, $cType) = $indexer->getContentType();
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $options = [];
 
         $aRawData = ['uid' => 1, 'test_field_1' => '<a href="http://www.test.de">test value 1</a>', 'test_field_2' => 'test value 2'];
@@ -162,9 +162,9 @@ class tx_mksearch_tests_indexer_Base_DBTest extends tx_mksearch_tests_DbTestcase
 
     public function testIndexArrayOfModelsByMapping()
     {
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
         list($extKey, $cType) = $indexer->getContentType();
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $options = [];
 
         $aRawData = ['uid' => 1, 'test_field_1' => 'test value 1', 'test_field_2' => 'test value 2', 'multiValue' => true];
@@ -180,24 +180,24 @@ class tx_mksearch_tests_indexer_Base_DBTest extends tx_mksearch_tests_DbTestcase
      */
     public function testHasDocToBeDeletedConsideringOnlyTheModelItself()
     {
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
         list($extKey, $cType) = $indexer->getContentType();
         $options = [];
 
         //is hidden
-        $oIndexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $oIndexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $aRawData = ['uid' => 1, 'hidden' => 1];
         $oIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $oIndexDoc, $options);
         self::assertTrue($oIndexDoc->getDeleted(), 'Das Index Doc wurde nicht auf gelöscht gesetzt! 1');
 
         //is deleted
-        $oIndexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $oIndexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $aRawData = ['uid' => 1, 'hidden' => 0, 'deleted' => 1];
         $oIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $oIndexDoc, $options);
         self::assertTrue($oIndexDoc->getDeleted(), 'Das Index Doc wurde nicht auf gelöscht gesetzt! 2');
 
         //everything alright
-        $oIndexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $oIndexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $aRawData = ['uid' => 1, 'hidden' => 0, 'deleted' => 0];
         $oIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $oIndexDoc, $options);
         self::assertFalse($oIndexDoc->getDeleted(), 'Das Index Doc wurde doch auf gelöscht gesetzt! 3');
@@ -207,27 +207,27 @@ class tx_mksearch_tests_indexer_Base_DBTest extends tx_mksearch_tests_DbTestcase
     {
         $this->importDataSet(tx_mksearch_tests_Util::getFixturePath('db/pages.xml'));
 
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
         $options = [];
 
         list($extKey, $cType) = $indexer->getContentType();
 
         //parent is hidden
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $record = ['uid' => 10, 'pid' => 7];
         $indexer->prepareSearchData('doesnt_matter', $record, $indexDoc, $options);
         self::assertEquals(true, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 
         //parent of parent is hidden
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $record = ['uid' => 127, 'pid' => 10];
         $indexer->prepareSearchData('doesnt_matter', $record, $indexDoc, $options);
         self::assertEquals(true, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 
         //everything alright with parents
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $record = ['uid' => 125, 'pid' => 3];
         $indexer->prepareSearchData('doesnt_matter', $record, $indexDoc, $options);
         self::assertEquals(false, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
@@ -235,17 +235,17 @@ class tx_mksearch_tests_indexer_Base_DBTest extends tx_mksearch_tests_DbTestcase
 
     public function testStopIndexing()
     {
-        $indexer = tx_rnbase::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
+        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
         list($extKey, $cType) = $indexer->getContentType();
         $options = [];
 
         $aRawData = ['uid' => 1, 'stopIndexing' => true];
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
         self::assertNull($aIndexDoc, 'Die Indizierung wurde nicht gestoppt!');
 
         $aRawData = ['uid' => 1, 'stopIndexing' => false];
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
         self::assertNotNull($aIndexDoc, 'Die Indizierung wurde gestoppt!');
     }

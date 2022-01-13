@@ -25,7 +25,7 @@
 /**
  * Model for indices.
  */
-class tx_mksearch_model_internal_Index extends tx_rnbase_model_base
+class tx_mksearch_model_internal_Index extends \Sys25\RnBase\Domain\Model\BaseModel
 {
     private $options = false;
 
@@ -53,7 +53,7 @@ class tx_mksearch_model_internal_Index extends tx_rnbase_model_base
      */
     public function getCredentialString()
     {
-        return $this->record['name'];
+        return $this->getProperty('name');
     }
 
     /**
@@ -63,7 +63,7 @@ class tx_mksearch_model_internal_Index extends tx_rnbase_model_base
      */
     public function getTitle()
     {
-        return $this->record['title'];
+        return $this->getProperty('title');
     }
 
     /**
@@ -73,7 +73,7 @@ class tx_mksearch_model_internal_Index extends tx_rnbase_model_base
      */
     public function getEngineType()
     {
-        return $this->record['engine'];
+        return $this->getProperty('engine');
     }
 
     /**
@@ -129,7 +129,7 @@ class tx_mksearch_model_internal_Index extends tx_rnbase_model_base
             // get default configuation from composite
             $compositeConfig = tx_mksearch_util_ServiceRegistry::getIntCompositeService()
                 ->getIndexerOptionsByIndex($this);
-            $this->options['default.'] = tx_rnbase_util_Arrays::mergeRecursiveWithOverrule(
+            $this->options['default.'] = \Sys25\RnBase\Utility\Arrays::mergeRecursiveWithOverrule(
                 $this->options['default.'],
                 $compositeConfig
             );
@@ -147,21 +147,19 @@ class tx_mksearch_model_internal_Index extends tx_rnbase_model_base
      */
     public function getIndexConfig()
     {
-        return tx_mksearch_util_Misc::parseTsConfig("{\n".$this->record['configuration']."\n}");
+        return tx_mksearch_util_Misc::parseTsConfig("{\n".$this->getProperty('configuration')."\n}");
     }
 
     public function __toString()
     {
         $out = get_class($this)."\n\nRecord:\n";
-        while (list($key, $val) = each($this->record)) {
-            $out .= $key.' = '.$val."\n";
+        foreach ($this->getProperty() as $key => $value) {
+            $out .= $key.' = '.$value."\n";
         }
         $out = "\n\nIndexer Options:\n";
-        while (list($key, $val) = each($this->getIndexerOptions())) {
-            $out .= $key.' = '.$val."\n";
+        foreach ($this->getIndexerOptions() as $key => $value) {
+            $out .= $key.' = '.$value."\n";
         }
-
-        reset($this->record);
 
         return $out;
     }
@@ -174,7 +172,7 @@ class tx_mksearch_model_internal_Index extends tx_rnbase_model_base
     public function getEngineVersion()
     {
         // FIXME: Das Feld in der db neutral gestalten
-        return $this->record['solrversion'];
+        return $this->getProperty('solrversion');
     }
 
     /**

@@ -5,10 +5,10 @@ if (!defined('TYPO3_MODE')) {
 }
 
 // Include service configuration
-require_once tx_rnbase_util_Extensions::extPath('mksearch').'service/ext_localconf.php';
+require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch').'service/ext_localconf.php';
 
 // Include indexer registrations
-require_once tx_rnbase_util_Extensions::extPath('mksearch').'indexer/ext_localconf.php';
+require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch').'indexer/ext_localconf.php';
 
 // Register hooks
 // Hooks for converting Zend_Lucene index data
@@ -45,7 +45,7 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['proc
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processCmdmapClass'][] =
     'tx_mksearch_hooks_IndexerAutoUpdate';
 // Include PageTSConfig for backend module
-tx_rnbase_util_Extensions::addPageTSConfig('<INCLUDE_TYPOSCRIPT: source="FILE:EXT:mksearch/mod1/pageTSconfig.txt">');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig('<INCLUDE_TYPOSCRIPT: source="FILE:EXT:mksearch/mod1/pageTSconfig.txt">');
 
 // Register information for the test and sleep tasks
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['tx_mksearch_scheduler_IndexTask'] = [
@@ -55,14 +55,14 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['tx_mksearch_sch
     'additionalFields' => 'tx_mksearch_scheduler_IndexTaskAddFieldProvider',
 ];
 
-if (tx_rnbase_util_Extensions::isLoaded('mksanitizedparameters')) {
-    require_once tx_rnbase_util_Extensions::extPath('mksearch', 'ext_mksanitizedparameter_rules.php');
+if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('mksanitizedparameters')) {
+    require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch', 'ext_mksanitizedparameter_rules.php');
 }
 
-require_once tx_rnbase_util_Extensions::extPath('mksearch', 'Configuration/SignalSlotDispatcher.php');
-require_once tx_rnbase_util_Extensions::extPath('mksearch', 'Configuration/XClasses.php');
+require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch', 'Configuration/SignalSlotDispatcher.php');
+require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch', 'Configuration/XClasses.php');
 
-Tx_Rnbase_Utility_Cache::addExcludedParametersForCacheHash([
+\Sys25\RnBase\Utility\CHashUtility::addExcludedParametersForCacheHash([
     'mksearch[pb-search-pointer]',
     'mksearch[submit]',
     'mksearch[term]',
@@ -85,4 +85,4 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry']['mksearch_index
 // in indexers works correct
 $GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'] .= ',no_search';
 
-require_once tx_rnbase_util_Extensions::extPath('mksearch', 'Classes/Constants.php');
+require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch', 'Classes/Constants.php');

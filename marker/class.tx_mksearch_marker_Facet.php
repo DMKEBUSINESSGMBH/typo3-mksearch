@@ -38,7 +38,7 @@ class tx_mksearch_marker_Facet extends tx_mksearch_marker_SearchResultSimple
     /**
      * @param string                    $template  HTML template
      * @param tx_mksearch_model_Facet   $item      search hit
-     * @param tx_rnbase_util_FormatUtil $formatter
+     * @param \Sys25\RnBase\Frontend\Marker\FormatUtil $formatter
      * @param string                    $confId    path of typoscript configuration
      * @param string                    $marker    name of marker
      *
@@ -56,8 +56,8 @@ class tx_mksearch_marker_Facet extends tx_mksearch_marker_SearchResultSimple
                 $childs = $item->getChilds();
             }
 
-            /* @var $listBuilder tx_rnbase_util_ListBuilder */
-            $listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder');
+            /* @var $listBuilder \Sys25\RnBase\Frontend\Marker\ListBuilder */
+            $listBuilder = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Frontend\Marker\ListBuilder::class);
             $out = $listBuilder->render(
                 $childs,
                 false,
@@ -75,13 +75,13 @@ class tx_mksearch_marker_Facet extends tx_mksearch_marker_SearchResultSimple
     /**
      * Führt vor dem parsen Änderungen am Model durch.
      *
-     * @param tx_rnbase_model_base     &$item
-     * @param tx_rnbase_configurations &$configurations
+     * @param \Sys25\RnBase\Domain\Model\BaseModel     &$item
+     * @param \Sys25\RnBase\Configuration\Processor &$configurations
      * @param string                   &$confId
      */
     protected function prepareItem(
-        Tx_Rnbase_Domain_Model_DataInterface $item,
-        Tx_Rnbase_Configuration_ProcessorInterface $configurations,
+        \Sys25\RnBase\Domain\Model\DataInterface $item,
+        \Sys25\RnBase\Configuration\ConfigurationInterface $configurations,
         $confId
     ) {
         parent::prepareItem($item, $configurations, $confId);
@@ -102,35 +102,35 @@ class tx_mksearch_marker_Facet extends tx_mksearch_marker_SearchResultSimple
             $field = empty($fieldMap) ? $field : $fieldMap;
 
             // den Formularnamen setzen
-            if (!isset($item->record['form_name'])) {
+            if (!$item->hasProperty('form_name')) {
                 $formName = $configurations->getQualifier();
                 $formName .= '[fq]';
                 $formName .= '['.$field.']';
                 $formName .= '['.$value.']';
-                $item->record['form_name'] = $formName;
+                $item->setProperty('form_name', $formName);
             }
 
             // wir setzen den wert direkt fertig für den filter zusammen
-            if (!isset($item->record['form_value'])) {
-                $item->record['form_value'] = $field.':'.$value;
+            if (!$item->hasProperty('form_value')) {
+                $item->setProperty('form_value', $field.':'.$value);
             }
 
             // wir setzen den wert direkt fertig für den filter zusammen
-            if (!isset($item->record['form_id'])) {
+            if (!$item->hasProperty('form_id')) {
                 $formId = $configurations->getQualifier();
                 $formId .= '-'.$field;
                 $formId .= '-'.$value;
                 $formId = preg_replace('/[^\da-z-]/i', '', strtolower($formId));
-                $item->record['form_id'] = $formId;
+                $item->setProperty('form_id', $formId);
             }
 
             // deaktiviert?
-            if (!isset($item->record['disabled'])) {
-                $item->record['disabled'] = (int) $item->record['count'] > 0 ? 0 : 1;
+            if (!$item->hasProperty('disabled')) {
+                $item->setProperty('disabled', (int) $item->getProperty('count') > 0 ? 0 : 1);
             }
 
             // den status setzen
-            if (!isset($item->record['active'])) {
+            if (!$item->hasProperty('active')) {
                 $params = $configurations->getParameters()->get('fq');
                 if (!empty($params[$field])) {
                     $params = $params[$field];
@@ -145,7 +145,7 @@ class tx_mksearch_marker_Facet extends tx_mksearch_marker_SearchResultSimple
                         $params = [];
                     }
                 }
-                $item->record['active'] = empty($params[$value]) ? 0 : 1;
+                $item->setProperty('active', empty($params[$value]) ? 0 : 1);
             }
         }
     }
@@ -158,26 +158,26 @@ class tx_mksearch_marker_Facet extends tx_mksearch_marker_SearchResultSimple
      * @param array                     $markerArray
      * @param array                     $wrappedSubpartArray
      * @param string                    $confId
-     * @param tx_rnbase_util_FormatUtil $formatter
+     * @param \Sys25\RnBase\Frontend\Marker\FormatUtil $formatter
      * @param string                    $template
      */
     public function prepareLinks($item, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, $formatter, $template)
     {
         //z.B. wird nach contentType facettiert. Dann sieht der Link bei tt_content
         //so aus: mksearch[fq]=contentType:tt_content
-        $sFq = $item->record['id'];
+        $sFq = $item->getProperty('id');
 
         //ACHTUNG: im Live Einsatz sollte das Feld nicht im Link stehen sondern nur der Wert.
         //Das Feld sollte dann erst im Filter hinzugefügt werden. In der TS Config sollte
         //dazu facet.links.show.excludeFieldName auf 1 stehen!!!
         $configurations = $formatter->getConfigurations();
         if (!$configurations->get($confId.'links.show.excludeFieldName')) {
-            $sFq = $item->record['field'].':'.$sFq;
+            $sFq = $item->getProperty('field').':'.$sFq;
         }
 
         //jetzt noch den fq parameter wert in den record schreiben
         //damit er im TS zur Verfügung steht
-        $item->record[$configurations->get($confId.'links.show.paramField')] = $sFq;
+        $item->getProperty($configurations->get($confId.'links.show.paramField'), $sFq);
 
         parent::prepareLinks($item, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter, $template);
 
@@ -187,8 +187,8 @@ class tx_mksearch_marker_Facet extends tx_mksearch_marker_SearchResultSimple
         // der parameter wird im format "mksearch[addfw]=title:home" übergeben.
         // der filter muss sich dann darum kümmern, die parameter (field:value) auseinanderzu nehmen
         // und in die query einzubauen
-        $this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'add', $marker, ['NK_addfq' => $item->record['field'].':'.$item->record['id']], $template);
-        $this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'remove', $marker, ['NK_remfq' => $item->record['field']], $template);
+        $this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'add', $marker, ['NK_addfq' => $item->getProperty('field').':'.$item->getProperty('id')], $template);
+        $this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'remove', $marker, ['NK_remfq' => $item->getProperty('field')], $template);
     }
 }
 

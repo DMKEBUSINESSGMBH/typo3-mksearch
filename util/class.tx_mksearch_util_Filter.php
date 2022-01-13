@@ -64,14 +64,14 @@ class tx_mksearch_util_Filter
      *
      * @param string                   $termTemplate
      * @param ParametersInterface      $parameters
-     * @param tx_rnbase_configurations $configurations
+     * @param \Sys25\RnBase\Configuration\Processor $configurations
      * @param string                   $confId
      *
      * @return string
      */
     public function parseTermTemplate($termTemplate, $parameters, $configurations, $confId)
     {
-        $templateMarker = tx_rnbase::makeInstance('tx_mksearch_marker_General');
+        $templateMarker = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_marker_General');
         // Welche Extension-Parameter werden verwendet?
         $extQualifiers = $configurations->getKeyNames($confId.'params.');
         foreach ($extQualifiers as $qualifier) {
@@ -104,9 +104,9 @@ class tx_mksearch_util_Filter
      *
      * @return string
      */
-    public function parseCustomFilters($template, tx_rnbase_configurations $configurations, $confId, $markerName = 'SEARCH_FILTER')
+    public function parseCustomFilters($template, \Sys25\RnBase\Configuration\Processor $configurations, $confId, $markerName = 'SEARCH_FILTER')
     {
-        if (!tx_rnbase_util_BaseMarker::containsMarker($template, $markerName)) {
+        if (!\Sys25\RnBase\Frontend\Marker\BaseMarker::containsMarker($template, $markerName)) {
             return $template;
         }
 
@@ -118,12 +118,12 @@ class tx_mksearch_util_Filter
         }
 
         $markArray = [];
-        /* @var $listBuilder tx_rnbase_util_ListBuilder */
-        $listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder');
+        /* @var $listBuilder \Sys25\RnBase\Frontend\Marker\ListBuilder */
+        $listBuilder = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Frontend\Marker\ListBuilder::class);
         foreach ($formfields as $field) {
             $fieldMarker = $markerName.'_'.strtoupper($field);
             $fieldConfId = $confId.'formfields.'.$field.'.';
-            if (!tx_rnbase_util_BaseMarker::containsMarker($template, $fieldMarker)) {
+            if (!\Sys25\RnBase\Frontend\Marker\BaseMarker::containsMarker($template, $fieldMarker)) {
                 continue;
             }
             $activeMark = $configurations->get($fieldConfId.'activeMark', true);
@@ -137,8 +137,8 @@ class tx_mksearch_util_Filter
                 foreach ($fieldValues as $value => $config) {
                     $fieldActive = empty($fieldActive) ? $configurations->get($fieldConfId.'default') : $fieldActive;
                     $fieldId = is_array($config) ? $config['value'] : $value;
-                    $fieldItems[] = tx_rnbase::makeInstance(
-                        'tx_rnbase_model_base',
+                    $fieldItems[] = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                        \Sys25\RnBase\Domain\Model\BaseModel::class,
                         [
                             'uid' => $fieldId,
                             'caption' => is_array($config) ? $config['caption'] : $config,
@@ -151,7 +151,7 @@ class tx_mksearch_util_Filter
                     $fieldItems,
                     false,
                     $template,
-                    'tx_rnbase_util_SimpleMarker',
+                    \Sys25\RnBase\Frontend\Marker\SimpleMarker::class,
                     $confId.'formfields.'.$field.'.',
                     ($fieldMarker),
                     $configurations->getFormatter()
@@ -162,18 +162,18 @@ class tx_mksearch_util_Filter
         $formValues = ['term', 'place'];
         foreach ($formValues as $formField) {
             $formMarker = $markerName.'_'.strtoupper($formField);
-            if (!tx_rnbase_util_BaseMarker::containsMarker($template, $formMarker)) {
+            if (!\Sys25\RnBase\Frontend\Marker\BaseMarker::containsMarker($template, $formMarker)) {
                 continue;
             }
             $markArray['###'.$formMarker.'_FORM_VALUE###'] = $parameters->getCleaned($formField);
         }
 
-        if (tx_rnbase_util_BaseMarker::containsMarker($template, $markerName.'_SPATIAL')) {
+        if (\Sys25\RnBase\Frontend\Marker\BaseMarker::containsMarker($template, $markerName.'_SPATIAL')) {
             $markArray['###'.$markerName.'_SPATIAL_VALUE###'] = $this->getSpatialPoint();
         }
 
         if (!empty($markArray)) {
-            $template = tx_rnbase_util_Templates::substituteMarkerArrayCached(
+            $template = \Sys25\RnBase\Frontend\Marker\Templates::substituteMarkerArrayCached(
                 $template,
                 $markArray
             );
@@ -184,7 +184,7 @@ class tx_mksearch_util_Filter
 
     /**
      * @param Parameters    $parameters
-     * @param tx_rnbase_configurations $configurations
+     * @param \Sys25\RnBase\Configuration\Processor $configurations
      * @param string                   $confId
      * @param int                      $defaultValue
      */
@@ -261,7 +261,7 @@ class tx_mksearch_util_Filter
      * @param array                     $markArray
      * @param array                     $subpartArray
      * @param array                     $wrappedSubpartArray
-     * @param tx_rnbase_util_FormatUtil $formatter
+     * @param \Sys25\RnBase\Frontend\Marker\FormatUtil $formatter
      * @param string                    $confId
      * @param string                    $marker
      */
@@ -281,7 +281,7 @@ class tx_mksearch_util_Filter
         // die felder für die sortierung stehen kommasepariert im ts
         $sortFields = $configurations->get($confId.'fields');
 
-        $sortFields = $sortFields ? tx_rnbase_util_Strings::trimExplode(',', $sortFields, true) : [];
+        $sortFields = $sortFields ? \Sys25\RnBase\Utility\Strings::trimExplode(',', $sortFields, true) : [];
 
         if (!empty($sortFields)) {
             $token = md5(microtime());
@@ -292,8 +292,8 @@ class tx_mksearch_util_Filter
                 $markOrders[$field.'_order'] = $isField ? $this->sortOrder : '';
 
                 $fieldMarker = $marker.'_'.strtoupper($field).'_LINK';
-                $makeLink = tx_rnbase_util_BaseMarker::containsMarker($template, $fieldMarker);
-                $makeUrl = tx_rnbase_util_BaseMarker::containsMarker($template, $fieldMarker.'URL');
+                $makeLink = \Sys25\RnBase\Frontend\Marker\BaseMarker::containsMarker($template, $fieldMarker);
+                $makeUrl = \Sys25\RnBase\Frontend\Marker\BaseMarker::containsMarker($template, $fieldMarker.'URL');
                 // link generieren
                 if ($makeLink || $makeUrl) {
                     // sortierungslinks ausgeben
@@ -342,12 +342,12 @@ class tx_mksearch_util_Filter
         }
 
         $filterQueryPartKeys = ['field', 'value'];
-        $filterQueryParts = Tx_Rnbase_Utility_Strings::trimExplode(':', $sFq);
+        $filterQueryParts = \Sys25\RnBase\Utility\Strings::trimExplode(':', $sFq);
 
         // die initiale fq muss aus $feldName:$feldWert bestehen. Das ist der alte Weg. Der neue Weg
         // der fq soll hier ignoriert werden.
         if (2 == count($filterQueryParts)) {
-            $matches = array_combine($filterQueryPartKeys, Tx_Rnbase_Utility_Strings::trimExplode(':', $sFq));
+            $matches = array_combine($filterQueryPartKeys, \Sys25\RnBase\Utility\Strings::trimExplode(':', $sFq));
         } else {
             $matches = [];
         }

@@ -59,12 +59,12 @@ class tx_mksearch_tests_service_internal_IndexTest extends tx_mksearch_tests_Tes
      */
     public function testGetDatabaseUtility()
     {
-        $indexService = tx_rnbase::makeInstance(
+        $indexService = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_service_internal_Index'
         );
 
         self::assertInstanceOf(
-            'Tx_Rnbase_Database_Connection',
+            \Sys25\RnBase\Database\Connection::class,
             $this->callInaccessibleMethod(
                 $indexService,
                 'getDatabaseUtility'
@@ -77,7 +77,7 @@ class tx_mksearch_tests_service_internal_IndexTest extends tx_mksearch_tests_Tes
      */
     public function testGetSecondsToKeepQueueEntries()
     {
-        $indexService = tx_rnbase::makeInstance(
+        $indexService = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_service_internal_Index'
         );
 
@@ -117,7 +117,7 @@ class tx_mksearch_tests_service_internal_IndexTest extends tx_mksearch_tests_Tes
             ->will($this->returnValue(123));
 
         $databaseUtility = $this->getMock(
-            'Tx_Rnbase_Database_Connection',
+            \Sys25\RnBase\Database\Connection::class,
             ['doDelete']
         );
         $databaseUtility->expects($this->once())
@@ -175,7 +175,7 @@ class tx_mksearch_tests_service_internal_IndexTest extends tx_mksearch_tests_Tes
         array $record,
         $isDeleted
     ) {
-        $indexDoc = tx_rnbase::makeInstance('tx_mksearch_model_IndexerDocumentBase', 'mksearch', 'test');
+        $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', 'mksearch', 'test');
 
         $this->callInaccessibleMethod(
             tx_mksearch_util_ServiceRegistry::getIntIndexService(),
@@ -207,8 +207,8 @@ class tx_mksearch_tests_service_internal_IndexTest extends tx_mksearch_tests_Tes
     public function testGetDatabaseConnection()
     {
         self::assertInstanceOf(
-            'Tx_Rnbase_Database_Connection',
-            $this->callInaccessibleMethod(tx_rnbase::makeInstance('tx_mksearch_service_internal_Index'), 'getDatabaseConnection')
+            \Sys25\RnBase\Database\Connection::class,
+            $this->callInaccessibleMethod(\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_service_internal_Index'), 'getDatabaseConnection')
         );
     }
 
@@ -217,13 +217,13 @@ class tx_mksearch_tests_service_internal_IndexTest extends tx_mksearch_tests_Tes
      */
     public function testAddRecordToIndex()
     {
-        $databaseConnection = $this->getMock('Tx_Rnbase_Database_Connection', ['doInsert']);
+        $databaseConnection = $this->getMock(\Sys25\RnBase\Database\Connection::class, ['doInsert']);
         $databaseConnection->expects(self::once())
             ->method('doInsert')
             ->with(
                 'tx_mksearch_queue',
                 [
-                    'cr_date' => tx_rnbase_util_Dates::datetime_tstamp2mysql($GLOBALS['EXEC_TIME']),
+                    'cr_date' => \Sys25\RnBase\Utility\Dates::datetime_tstamp2mysql($GLOBALS['EXEC_TIME']),
                     'prefer' => 0,
                     'recid' => 50,
                     'tablename' => 'tx_mktest_table',
@@ -248,13 +248,13 @@ class tx_mksearch_tests_service_internal_IndexTest extends tx_mksearch_tests_Tes
     {
         tx_mksearch_util_Config::registerResolver('tx_mksearch_resolver_Test', ['tx_mktest_table']);
 
-        $databaseConnection = $this->getMock('Tx_Rnbase_Database_Connection', ['doInsert']);
+        $databaseConnection = $this->getMock(\Sys25\RnBase\Database\Connection::class, ['doInsert']);
         $databaseConnection->expects(self::once())
             ->method('doInsert')
             ->with(
                 'tx_mksearch_queue',
                 [
-                        'cr_date' => tx_rnbase_util_Dates::datetime_tstamp2mysql($GLOBALS['EXEC_TIME']),
+                        'cr_date' => \Sys25\RnBase\Utility\Dates::datetime_tstamp2mysql($GLOBALS['EXEC_TIME']),
                         'prefer' => 0,
                         'recid' => 50,
                         'tablename' => 'tx_mktest_table',
@@ -277,7 +277,7 @@ class tx_mksearch_tests_service_internal_IndexTest extends tx_mksearch_tests_Tes
      */
     public function testDoInsertRecords()
     {
-        $databaseConnection = $this->getMock('Tx_Rnbase_Database_Connection', ['doQuery']);
+        $databaseConnection = $this->getMock(\Sys25\RnBase\Database\Connection::class, ['doQuery']);
         $databaseConnection->expects(self::once())
             ->method('doQuery')
             ->with(
@@ -309,7 +309,7 @@ class tx_mksearch_tests_service_internal_IndexTest extends tx_mksearch_tests_Tes
      */
     public function testAddRecordsToIndex()
     {
-        $execTimeFormatted = tx_rnbase_util_Dates::datetime_tstamp2mysql($GLOBALS['EXEC_TIME']);
+        $execTimeFormatted = \Sys25\RnBase\Utility\Dates::datetime_tstamp2mysql($GLOBALS['EXEC_TIME']);
         $service = $this->getMock('tx_mksearch_service_internal_Index', ['doInsertRecords']);
         $service->expects(self::once())
             ->method('doInsertRecords')
@@ -335,7 +335,7 @@ class tx_mksearch_tests_service_internal_IndexTest extends tx_mksearch_tests_Tes
      */
     public function testAddRecordsToIndexWithMoreThan500Records()
     {
-        $execTimeFormatted = tx_rnbase_util_Dates::datetime_tstamp2mysql($GLOBALS['EXEC_TIME']);
+        $execTimeFormatted = \Sys25\RnBase\Utility\Dates::datetime_tstamp2mysql($GLOBALS['EXEC_TIME']);
         for ($i = 1; $i <= 501; ++$i) {
             $records[] = ['tablename' => 'tx_mktest_table', 'uid' => $i];
         }

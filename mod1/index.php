@@ -40,5 +40,5 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 }
 
 /* @var $SOBE tx_mksearch_module1 */
-$SOBE = tx_rnbase::makeInstance('tx_mksearch_module1');
+$SOBE = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_module1');
 $SOBE->__invoke();

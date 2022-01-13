@@ -47,8 +47,8 @@ class tx_mksearch_tests_marker_FacetTest extends tx_mksearch_tests_Testcase
         self::markTestIncomplete("Error: Class 'TYPO3\CMS\Core\TimeTracker\NullTimeTracker' not found");
         $this->prepareTSFE();
 
-        $this->oParameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
-        $this->oMarker = tx_rnbase::makeInstance('tx_mksearch_marker_Facet');
+        $this->oParameters = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Frontend\Request\Parameters::class);
+        $this->oMarker = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_marker_Facet');
         parent::setUp();
     }
 
@@ -64,7 +64,7 @@ class tx_mksearch_tests_marker_FacetTest extends tx_mksearch_tests_Testcase
         $this->oFormatter = $this->oConfig->getFormatter();
 
         //now test
-        $oItem = tx_rnbase::makeInstance('tx_mksearch_model_Facet', 'contentType', 'media', 'media', 2);
+        $oItem = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_Facet', 'contentType', 'media', 'media', 2);
         $sTemplate = '###FACET_SHOWLINK######FACET_LABEL### (###FACET_COUNT###)###FACET_SHOWLINK###';
         $sParsedTemplate = $this->oMarker->parseTemplate($sTemplate, $oItem, $this->oFormatter, 'searchsolr.facet.', 'FACET');
         //Feld noch im Link drin?
@@ -89,7 +89,7 @@ class tx_mksearch_tests_marker_FacetTest extends tx_mksearch_tests_Testcase
         $this->oConfig = tx_mksearch_tests_Util::loadConfig4BE($aConfig);
         $this->oFormatter = $this->oConfig->getFormatter();
 
-        $oItem = tx_rnbase::makeInstance('tx_mksearch_model_Facet', 'contentType', 'media', 'media', 2);
+        $oItem = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_Facet', 'contentType', 'media', 'media', 2);
         $sTemplate = '###FACET_SHOWLINK######FACET_LABEL### (###FACET_COUNT###)###FACET_SHOWLINK###';
         $sParsedTemplate = $this->oMarker->parseTemplate($sTemplate, $oItem, $this->oFormatter, 'searchsolr.facet.', 'FACET');
         //Feld noch im Link drin?
@@ -114,7 +114,7 @@ class tx_mksearch_tests_marker_FacetTest extends tx_mksearch_tests_Testcase
         $this->oConfig = tx_mksearch_tests_Util::loadConfig4BE($aConfig);
         $this->oFormatter = $this->oConfig->getFormatter();
 
-        $oItem = tx_rnbase::makeInstance('tx_mksearch_model_Facet', 'contentType', 'Über uns', 'Über uns', 2);
+        $oItem = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_Facet', 'contentType', 'Über uns', 'Über uns', 2);
         $sTemplate = '###FACET_SHOWLINK######FACET_LABEL### (###FACET_COUNT###)###FACET_SHOWLINK###';
         $sParsedTemplate = $this->oMarker->parseTemplate($sTemplate, $oItem, $this->oFormatter, 'searchsolr.facet.', 'FACET');
         //Feld noch im Link drin?

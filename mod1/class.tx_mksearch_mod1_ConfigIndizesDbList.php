@@ -28,7 +28,7 @@
 /**
  * Mksearch backend module.
  */
-class tx_mksearch_mod1_ConfigIndizesDbList extends tx_rnbase_mod_BaseModFunc
+class tx_mksearch_mod1_ConfigIndizesDbList extends \Sys25\RnBase\Backend\Module\BaseModFunc
 {
     /**
      * Return function id (used in page typoscript etc.).
@@ -47,9 +47,9 @@ class tx_mksearch_mod1_ConfigIndizesDbList extends tx_rnbase_mod_BaseModFunc
      * is displayed within an iframe.
      *
      * @param string                    $template
-     * @param tx_rnbase_configurations  $configurations
-     * @param tx_rnbase_util_FormatUtil $formatter
-     * @param tx_rnbase_util_FormTool   $formTool
+     * @param \Sys25\RnBase\Configuration\Processor  $configurations
+     * @param \Sys25\RnBase\Frontend\Marker\FormatUtil $formatter
+     * @param \Sys25\RnBase\Backend\Form\ToolBox   $formTool
      *
      * @return string
      */
@@ -59,7 +59,7 @@ class tx_mksearch_mod1_ConfigIndizesDbList extends tx_rnbase_mod_BaseModFunc
         $storagePid = $this->getModule()->id;
         if ($storagePid) {
             $data['showerror'] = 0;
-            $data['path'] = tx_rnbase_util_Network::locationHeaderUrl('/'.TYPO3_mainDir).'db_list.php?id='.$storagePid;
+            $data['path'] = \Sys25\RnBase\Utility\Network::locationHeaderUrl('/'.TYPO3_mainDir).'db_list.php?id='.$storagePid;
         } else {
             $data['showerror'] = 1;
             $data['path'] = 'about:blank';
@@ -67,7 +67,7 @@ class tx_mksearch_mod1_ConfigIndizesDbList extends tx_rnbase_mod_BaseModFunc
 
         $markerArray = $formatter->getItemMarkerArrayWrapped($data, $this->getConfId(), 0, '');
 
-        return tx_rnbase_util_Templates::substituteMarkerArrayCached($template, $markerArray);
+        return \Sys25\RnBase\Frontend\Marker\Templates::substituteMarkerArrayCached($template, $markerArray);
     }
 }
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/class.tx_mksearch_mod1_ConfigIndizesDbList.php']) {

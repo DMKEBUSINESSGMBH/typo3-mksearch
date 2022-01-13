@@ -75,7 +75,7 @@ class tx_mksearch_tests_action_SearchSolrTest extends tx_mksearch_tests_Testcase
         $GLOBALS['TSFE']->additionalHeaderData = null;
 
         //damit links generiert werden können
-        $GLOBALS['TSFE']->sys_page = tx_rnbase_util_TYPO3::getSysPage();
+        $GLOBALS['TSFE']->sys_page = \Sys25\RnBase\Utility\TYPO3::getSysPage();
 
         //wir brauchen noch die id/alias für den link, der genriert wird
         $this->linkId = $GLOBALS['TSFE']->page['alias'] ?
@@ -84,11 +84,11 @@ class tx_mksearch_tests_action_SearchSolrTest extends tx_mksearch_tests_Testcase
 
         $property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsInline');
         $property->setAccessible(true);
-        $property->setValue(tx_rnbase_util_TYPO3::getPageRenderer(), []);
+        $property->setValue(\Sys25\RnBase\Utility\TYPO3::getPageRenderer(), []);
 
         $property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsLibs');
         $property->setAccessible(true);
-        $property->setValue(tx_rnbase_util_TYPO3::getPageRenderer(), []);
+        $property->setValue(\Sys25\RnBase\Utility\TYPO3::getPageRenderer(), []);
     }
 
     /**
@@ -106,9 +106,9 @@ class tx_mksearch_tests_action_SearchSolrTest extends tx_mksearch_tests_Testcase
         }
 
         //configure action
-        $configurations = tx_rnbase::makeInstance('tx_rnbase_configurations');
+        $configurations = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Configuration\Processor::class);
 
-        $parameters = tx_rnbase::makeInstance('tx_rnbase_parameters');
+        $parameters = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Frontend\Request\Parameters::class);
 
         $configurations->init(
             $aConfig,
@@ -126,7 +126,7 @@ class tx_mksearch_tests_action_SearchSolrTest extends tx_mksearch_tests_Testcase
 
         $configurations->setParameters($parameters);
 
-        $property = new ReflectionProperty('tx_rnbase_configurations', 'pluginUid');
+        $property = new ReflectionProperty(\Sys25\RnBase\Configuration\Processor::class, 'pluginUid');
         $property->setAccessible(true);
         $property->setValue($configurations, 123);
 
@@ -162,7 +162,7 @@ class tx_mksearch_tests_action_SearchSolrTest extends tx_mksearch_tests_Testcase
 
         $property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsInline');
         $property->setAccessible(true);
-        $inlineJavaScripts = $property->getValue(tx_rnbase_util_TYPO3::getPageRenderer());
+        $inlineJavaScripts = $property->getValue(\Sys25\RnBase\Utility\TYPO3::getPageRenderer());
 
         self::assertEmpty($inlineJavaScripts, 'Daten für JS doch gesetzt?');
     }
@@ -229,7 +229,7 @@ class tx_mksearch_tests_action_SearchSolrTest extends tx_mksearch_tests_Testcase
 
         $property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsInline');
         $property->setAccessible(true);
-        $inlineJavaScripts = $property->getValue(tx_rnbase_util_TYPO3::getPageRenderer());
+        $inlineJavaScripts = $property->getValue(\Sys25\RnBase\Utility\TYPO3::getPageRenderer());
 
         self::assertEquals(1, count($inlineJavaScripts), 'mehr header daten als erwartet!');
         self::assertEquals($expectedJavaScript, $inlineJavaScripts['mksearch_autocomplete_123']['code']);
@@ -300,14 +300,14 @@ class tx_mksearch_tests_action_SearchSolrTest extends tx_mksearch_tests_Testcase
 
         $property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsInline');
         $property->setAccessible(true);
-        $inlineJavaScripts = $property->getValue(tx_rnbase_util_TYPO3::getPageRenderer());
+        $inlineJavaScripts = $property->getValue(\Sys25\RnBase\Utility\TYPO3::getPageRenderer());
 
         self::assertEquals(1, count($inlineJavaScripts), 'mehr header daten als erwartet!');
         self::assertEquals($expectedJavaScript, $inlineJavaScripts['mksearch_autocomplete_123']['code']);
 
         $property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsLibs');
         $property->setAccessible(true);
-        $javaScriptLibraries = $property->getValue(tx_rnbase_util_TYPO3::getPageRenderer());
+        $javaScriptLibraries = $property->getValue(\Sys25\RnBase\Utility\TYPO3::getPageRenderer());
 
         self::assertEquals(2, count($javaScriptLibraries), 'mehr header daten als erwartet!');
         self::assertEquals(
@@ -385,14 +385,14 @@ class tx_mksearch_tests_action_SearchSolrTest extends tx_mksearch_tests_Testcase
 
         $property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsInline');
         $property->setAccessible(true);
-        $inlineJavaScripts = $property->getValue(tx_rnbase_util_TYPO3::getPageRenderer());
+        $inlineJavaScripts = $property->getValue(\Sys25\RnBase\Utility\TYPO3::getPageRenderer());
 
         self::assertEquals(1, count($inlineJavaScripts), 'mehr header daten als erwartet!');
         self::assertEquals($expectedJavaScript, $inlineJavaScripts['mksearch_autocomplete_123']['code']);
 
         $property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsLibs');
         $property->setAccessible(true);
-        $javaScriptLibraries = $property->getValue(tx_rnbase_util_TYPO3::getPageRenderer());
+        $javaScriptLibraries = $property->getValue(\Sys25\RnBase\Utility\TYPO3::getPageRenderer());
 
         self::assertEquals(3, count($javaScriptLibraries), 'mehr header daten als erwartet!');
         self::assertEquals(
@@ -471,7 +471,7 @@ class tx_mksearch_tests_action_SearchSolrTest extends tx_mksearch_tests_Testcase
 
         $property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsInline');
         $property->setAccessible(true);
-        $inlineJavaScripts = $property->getValue(tx_rnbase_util_TYPO3::getPageRenderer());
+        $inlineJavaScripts = $property->getValue(\Sys25\RnBase\Utility\TYPO3::getPageRenderer());
 
         self::assertEquals(1, count($inlineJavaScripts), 'mehr header daten als erwartet!');
         self::assertEquals($expectedJavaScript, $inlineJavaScripts['mksearch_autocomplete_123']['code']);
@@ -540,7 +540,7 @@ class tx_mksearch_tests_action_SearchSolrTest extends tx_mksearch_tests_Testcase
 
         $property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsInline');
         $property->setAccessible(true);
-        $inlineJavaScripts = $property->getValue(tx_rnbase_util_TYPO3::getPageRenderer());
+        $inlineJavaScripts = $property->getValue(\Sys25\RnBase\Utility\TYPO3::getPageRenderer());
 
         self::assertEquals(1, count($inlineJavaScripts), 'mehr header daten als erwartet!');
         self::assertEquals($expectedJavaScript, $inlineJavaScripts['mksearch_autocomplete_my_custom_suffix']['code']);

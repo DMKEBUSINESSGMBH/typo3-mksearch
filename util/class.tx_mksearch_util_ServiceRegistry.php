@@ -40,7 +40,7 @@ class tx_mksearch_util_ServiceRegistry
         if (!$type) {
             throw new Exception('No engine type configured in search index. Check your index configuration!', 100);
         }
-        $srv = tx_rnbase::makeInstanceService('mksearch_engine', $type);
+        $srv = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstanceService('mksearch_engine', $type);
         if (!is_object($srv)) {
             throw new Exception('Service mksearch_engine not found for type: '.$type);
         }
@@ -62,7 +62,7 @@ class tx_mksearch_util_ServiceRegistry
      */
     public static function getSearchEngineService()
     {
-        $srv = tx_rnbase::makeInstanceService('mksearch_engine', 'zend_lucene');
+        $srv = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstanceService('mksearch_engine', 'zend_lucene');
         if (!is_object($srv)) {
             throw new Exception('Service mksearch_engine not found!');
         }
@@ -78,7 +78,7 @@ class tx_mksearch_util_ServiceRegistry
     /**
      * Return best search engine service which implements tx_mksearch_interface_Indexer.
      *
-     * This method does NOT use tx_rnbase_util_Misc::getService intentionally,
+     * This method does NOT use \Sys25\RnBase\Utility\Misc::getService intentionally,
      * as we do not want to "mayday" in case of an error!
      *
      * @param string $extKey
@@ -89,7 +89,7 @@ class tx_mksearch_util_ServiceRegistry
     public static function getIndexerService($extKey, $contentType)
     {
         $subType = $extKey.'.'.$contentType;
-        $srv = tx_rnbase::makeInstanceService('mksearch_indexer', $subType);
+        $srv = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstanceService('mksearch_indexer', $subType);
         if (!is_object($srv)) {
             throw new Exception('Service "mksearch_indexer.'.$subType.'" not found!');
         }
@@ -108,7 +108,7 @@ class tx_mksearch_util_ServiceRegistry
      */
     public static function getIntIndexService()
     {
-        return tx_rnbase_util_Misc::getService('mksearch', 'int_index');
+        return \Sys25\RnBase\Utility\Misc::getService('mksearch', 'int_index');
     }
 
     /**
@@ -118,7 +118,7 @@ class tx_mksearch_util_ServiceRegistry
      */
     public static function getIntCompositeService()
     {
-        return tx_rnbase_util_Misc::getService('mksearch', 'int_composite');
+        return \Sys25\RnBase\Utility\Misc::getService('mksearch', 'int_composite');
     }
 
     /**
@@ -128,7 +128,7 @@ class tx_mksearch_util_ServiceRegistry
      */
     public static function getIntConfigService()
     {
-        return tx_rnbase_util_Misc::getService('mksearch', 'int_config');
+        return \Sys25\RnBase\Utility\Misc::getService('mksearch', 'int_config');
     }
 
     /**
@@ -138,7 +138,7 @@ class tx_mksearch_util_ServiceRegistry
      */
     public static function getKeywordService()
     {
-        return tx_rnbase_util_Misc::getService('mksearch', 'keyword');
+        return \Sys25\RnBase\Utility\Misc::getService('mksearch', 'keyword');
     }
 
     /**
@@ -149,7 +149,7 @@ class tx_mksearch_util_ServiceRegistry
      */
     public static function getIrfaqExpertService()
     {
-        return tx_rnbase_util_Misc::getService('mksearch', 'irfaq_expert');
+        return \Sys25\RnBase\Utility\Misc::getService('mksearch', 'irfaq_expert');
     }
 
     /**
@@ -160,7 +160,7 @@ class tx_mksearch_util_ServiceRegistry
      */
     public static function getIrfaqCategoryService()
     {
-        return tx_rnbase_util_Misc::getService('mksearch', 'irfaq_category');
+        return \Sys25\RnBase\Utility\Misc::getService('mksearch', 'irfaq_category');
     }
 
     /**
@@ -171,7 +171,7 @@ class tx_mksearch_util_ServiceRegistry
      */
     public static function getIrfaqQuestionService()
     {
-        return tx_rnbase_util_Misc::getService('mksearch', 'irfaq_question');
+        return \Sys25\RnBase\Utility\Misc::getService('mksearch', 'irfaq_question');
     }
 }
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_ServiceRegistry.php']) {

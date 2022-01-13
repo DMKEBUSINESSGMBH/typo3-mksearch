@@ -27,7 +27,7 @@
 /**
  * benötigte Klassen einbinden.
  */
-require_once tx_rnbase_util_Extensions::extPath('mksearch').'lib/Apache/Solr/Document.php';
+require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch').'lib/Apache/Solr/Document.php';
 
 /**
  * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
@@ -50,7 +50,7 @@ class tx_mksearch_tests_marker_IrfaqTest extends tx_mksearch_tests_Testcase
         self::markTestIncomplete("Error: Class 'TYPO3\CMS\Core\TimeTracker\NullTimeTracker' not found");
         $this->prepareTSFE();
 
-        $this->marker = tx_rnbase::makeInstance('tx_mksearch_marker_Irfaq');
+        $this->marker = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_marker_Irfaq');
 
         parent::setUp();
     }
@@ -68,7 +68,7 @@ class tx_mksearch_tests_marker_IrfaqTest extends tx_mksearch_tests_Testcase
         $doc = new Apache_Solr_Document();
         $doc->category_first_shortcut_s = '';
 
-        $item = tx_rnbase::makeInstance('tx_mksearch_model_SolrHit', $doc);
+        $item = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_SolrHit', $doc);
 
         $template = '###ITEM_SHOWFIRSTCATEGORYLINK###test###ITEM_SHOWFIRSTCATEGORYLINK###';
         $parsedTemplate = $this->marker->parseTemplate(
@@ -95,7 +95,7 @@ class tx_mksearch_tests_marker_IrfaqTest extends tx_mksearch_tests_Testcase
         $doc = new Apache_Solr_Document();
         $doc->category_first_shortcut_s = 'filled';
 
-        $item = tx_rnbase::makeInstance('tx_mksearch_model_SolrHit', $doc);
+        $item = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_SolrHit', $doc);
 
         $template = '###ITEM_SHOWFIRSTCATEGORYLINK###test###ITEM_SHOWFIRSTCATEGORYLINK###';
         $parsedTemplate = $this->marker->parseTemplate(

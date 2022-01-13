@@ -83,7 +83,7 @@ class tx_mksearch_service_internal_Composite extends tx_mksearch_service_interna
         ];
         $tmpCfg = $this->search($fields, $options);
         foreach ($tmpCfg as $oModel) {
-            $sTs .= "{\n".$oModel->record['configuration']."\n}";
+            $sTs .= "{\n".$oModel->getProperty('configuration')."\n}";
         }
 
         return tx_mksearch_util_Misc::parseTsConfig($sTs);

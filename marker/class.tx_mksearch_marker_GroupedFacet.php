@@ -36,7 +36,7 @@ class tx_mksearch_marker_GroupedFacet extends tx_mksearch_marker_Facet
      *
      * @param string                      $template  HTML template
      * @param tx_mksearch_model_SearchHit $item      search hit
-     * @param tx_rnbase_util_FormatUtil   $formatter
+     * @param \Sys25\RnBase\Frontend\Marker\FormatUtil   $formatter
      * @param string                      $confId    path of typoscript configuration
      * @param string                      $marker    name of marker
      *
@@ -56,8 +56,8 @@ class tx_mksearch_marker_GroupedFacet extends tx_mksearch_marker_Facet
         $markerClass = $formatter->getConfigurations()->get($confId.'hit.markerClass');
         $markerClass = $markerClass ? $markerClass : 'tx_mksearch_marker_Facet';
 
-        /* @var $listBuilder tx_rnbase_util_ListBuilder */
-        $listBuilder = tx_rnbase::makeInstance('tx_rnbase_util_ListBuilder');
+        /* @var $listBuilder \Sys25\RnBase\Frontend\Marker\ListBuilder */
+        $listBuilder = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Frontend\Marker\ListBuilder::class);
         $out = $listBuilder->render(
             $items,
             false,

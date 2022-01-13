@@ -46,7 +46,7 @@ class tx_mksearch_util_SuggestionBuilder
         static $instance;
         $class = empty($class) ? 'tx_mksearch_util_SuggestionBuilder' : $class;
         if (!$instance[$class]) {
-            $instance[$class] = tx_rnbase::makeInstance($class);
+            $instance[$class] = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($class);
         }
 
         return $instance[$class];
@@ -93,7 +93,7 @@ class tx_mksearch_util_SuggestionBuilder
      */
     protected function getSimpleSuggestion($aSuggestion)
     {
-        return tx_rnbase::makeInstance('tx_mksearch_model_Suggestion', $aSuggestion);
+        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_Suggestion', $aSuggestion);
     }
 }
 

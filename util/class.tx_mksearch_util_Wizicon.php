@@ -29,7 +29,7 @@
  * @license        http://www.gnu.org/licenses/lgpl.html
  *                 GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_util_Wizicon extends tx_rnbase_util_Wizicon
+class tx_mksearch_util_Wizicon extends \Sys25\RnBase\Utility\WizIcon
 {
     /**
      * @return array
@@ -38,7 +38,7 @@ class tx_mksearch_util_Wizicon extends tx_rnbase_util_Wizicon
     {
         return [
             'tx_mksearch' => [
-                'icon' => /*tx_rnbase_util_Extensions::extRelPath('mksearch') .*/ 'EXT:mksearch/ext_icon.gif',
+                'icon' => /*\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath('mksearch') .*/ 'EXT:mksearch/ext_icon.gif',
                 'title' => 'plugin.mksearch.label',
                 'description' => 'plugin.mksearch.description',
             ],
@@ -50,7 +50,7 @@ class tx_mksearch_util_Wizicon extends tx_rnbase_util_Wizicon
      */
     protected function getLLFile()
     {
-        return tx_rnbase_util_Extensions::extPath('mksearch').'locallang_db.xml';
+        return \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch').'locallang_db.xml';
     }
 }
 

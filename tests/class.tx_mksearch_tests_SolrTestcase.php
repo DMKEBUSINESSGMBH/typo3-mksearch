@@ -99,7 +99,7 @@ abstract class tx_mksearch_tests_SolrTestcase extends tx_mksearch_tests_Testcase
         $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['devlog']['nolog'] = true;
 
         $this->initAbsolutePathsForConfigs();
-        tx_rnbase_util_Files::rmdir($this->instanceDir, true);
+        \Sys25\RnBase\Utility\Files::rmdir($this->instanceDir, true);
         $this->createCore();
     }
 
@@ -112,15 +112,15 @@ abstract class tx_mksearch_tests_SolrTestcase extends tx_mksearch_tests_Testcase
     {
         parent::tearDown();
         $this->unloadCore();
-        tx_rnbase_util_Files::rmdir($this->instanceDir, true);
+        \Sys25\RnBase\Utility\Files::rmdir($this->instanceDir, true);
     }
 
     protected function initAbsolutePathsForConfigs()
     {
         $this->setConfigFileDependendOnSolrVersion();
-        $this->instanceDir = tx_rnbase_util_Files::getFileAbsFileName($this->instanceDir);
-        $this->configFile = tx_rnbase_util_Files::getFileAbsFileName($this->configFile);
-        $this->schemaFile = tx_rnbase_util_Files::getFileAbsFileName($this->schemaFile);
+        $this->instanceDir = \Sys25\RnBase\Utility\Files::getFileAbsFileName($this->instanceDir);
+        $this->configFile = \Sys25\RnBase\Utility\Files::getFileAbsFileName($this->configFile);
+        $this->schemaFile = \Sys25\RnBase\Utility\Files::getFileAbsFileName($this->schemaFile);
     }
 
     private function setConfigFileDependendOnSolrVersion()
@@ -160,11 +160,11 @@ abstract class tx_mksearch_tests_SolrTestcase extends tx_mksearch_tests_Testcase
         //$this->getDefaultIndexModel()->record['name'] ist z.B.
         //"localhost,8081,/solr-3.5.0/mycore"
         $credentialsStringParts =
-            tx_rnbase_util_Strings::trimExplode(',', $this->getDefaultIndexModel()->record['name']);
+            \Sys25\RnBase\Utility\Strings::trimExplode(',', $this->getDefaultIndexModel()->getProperty('name'));
 
         //damit ist also $credentialsStringParts[2] z.B.
         //"/solr-3.5.0/mycore"
-        $solrPathParts = tx_rnbase_util_Strings::trimExplode('/', $credentialsStringParts[2]);
+        $solrPathParts = \Sys25\RnBase\Utility\Strings::trimExplode('/', $credentialsStringParts[2]);
 
         //build new credential string
         $newCredentialsString = $credentialsStringParts[0].','.$credentialsStringParts[1].
@@ -278,8 +278,8 @@ abstract class tx_mksearch_tests_SolrTestcase extends tx_mksearch_tests_Testcase
         $umaskBackup = $GLOBALS['TYPO3_CONF_VARS']['BE']['folderCreateMask'];
         $GLOBALS['TYPO3_CONF_VARS']['BE']['folderCreateMask'] = '0775';
 
-        tx_rnbase_util_Files::mkdir_deep($path.'/conf');
-        tx_rnbase_util_Files::mkdir_deep($path.'/lib');
+        \Sys25\RnBase\Utility\Files::mkdir_deep($path.'/conf');
+        \Sys25\RnBase\Utility\Files::mkdir_deep($path.'/lib');
 
         $GLOBALS['TYPO3_CONF_VARS']['BE']['folderCreateMask'] = $umaskBackup;
     }
@@ -329,7 +329,7 @@ abstract class tx_mksearch_tests_SolrTestcase extends tx_mksearch_tests_Testcase
         // Erstmal komplett leer räumen
         $this->getSolr()->deleteByQuery('*:*');
 
-        $data = tx_rnbase_util_Spyc::YAMLLoad($yamlPath);
+        $data = \Sys25\RnBase\Utility\Spyc::YAMLLoad($yamlPath);
 
         foreach ($data['docs'] as $docArr) {
             $extKey = $docArr['extKey'];

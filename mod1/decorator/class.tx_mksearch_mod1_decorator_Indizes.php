@@ -36,7 +36,7 @@ class tx_mksearch_mod1_decorator_Indizes
     /**
      * Returns the module.
      *
-     * @return tx_rnbase_mod_IModule
+     * @return \Sys25\RnBase\Backend\Module\IModule
      */
     private function getModule()
     {

@@ -29,7 +29,7 @@
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_model_cal_Location extends tx_rnbase_model_base
+class tx_mksearch_model_cal_Location extends \Sys25\RnBase\Domain\Model\BaseModel
 {
     /**
      * Tablename.

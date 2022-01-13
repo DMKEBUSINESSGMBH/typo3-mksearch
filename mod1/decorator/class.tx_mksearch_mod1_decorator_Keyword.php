@@ -35,7 +35,7 @@ class tx_mksearch_mod1_decorator_Keyword
     /**
      * Returns the module.
      *
-     * @return tx_rnbase_mod_IModule
+     * @return \Sys25\RnBase\Backend\Module\IModule
      */
     private function getModule()
     {
@@ -52,11 +52,6 @@ class tx_mksearch_mod1_decorator_Keyword
     {
         switch ($colName) {
             case 'link':
-                // dazu müssten wir erst fe virtualisieren, ist glaub ich nicht nötig!
-                // /* @var $link tx_rnbase_util_Link */
-                // $link = tx_rnbase::makeInstance('tx_rnbase_util_Link');
-                // $link->destination($value);
-                // $ret = $link->makeUrl();
                 $ret = $value;
                 break;
             case 'actions':
@@ -65,7 +60,7 @@ class tx_mksearch_mod1_decorator_Keyword
                 // bearbeiten link
                 $ret .= $formtool->createEditLink($item->getTableName(), $item->getUid(), '');
                 // hide undhide link
-                $ret .= $formtool->createHideLink($item->getTableName(), $item->getUid(), $item->record['hidden']);
+                $ret .= $formtool->createHideLink($item->getTableName(), $item->getUid(), $item->getProperty('hidden'));
                 // remove link
                 $ret .= $formtool->createDeleteLink($item->getTableName(), $item->getUid(), '', ['confirm' => $GLOBALS['LANG']->getLL('confirmation_deletion')]);
                 break;

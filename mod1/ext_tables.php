@@ -3,7 +3,7 @@
 defined('TYPO3_MODE') or exit('Access denied.');
 
 if (TYPO3_MODE == 'BE') {
-    tx_rnbase_util_Extensions::registerModule(
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::registerModule(
         'mksearch',
         'web',
         'M1',
@@ -17,28 +17,28 @@ if (TYPO3_MODE == 'BE') {
         ]
     );
 
-    tx_rnbase_util_Extensions::insertModuleFunction(
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::insertModuleFunction(
         'web_MksearchM1',
         'tx_mksearch_mod1_ConfigIndizes',
-        tx_rnbase_util_Extensions::extPath('mksearch', 'mod1/class.tx_mksearch_mod1_ConfigIndizes.php'),
+        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch', 'mod1/class.tx_mksearch_mod1_ConfigIndizes.php'),
         'LLL:EXT:mksearch/mod1/locallang.xml:func_config_indizes'
     );
-    tx_rnbase_util_Extensions::insertModuleFunction(
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::insertModuleFunction(
         'web_MksearchM1',
         'tx_mksearch_mod1_Keywords',
-        tx_rnbase_util_Extensions::extPath('mksearch', 'mod1/class.tx_mksearch_mod1_Keywords.php'),
+        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch', 'mod1/class.tx_mksearch_mod1_Keywords.php'),
         'LLL:EXT:mksearch/mod1/locallang.xml:func_keywords'
     );
-    tx_rnbase_util_Extensions::insertModuleFunction(
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::insertModuleFunction(
         'web_MksearchM1',
         'tx_mksearch_mod1_IndizeIndizes',
-        tx_rnbase_util_Extensions::extPath('mksearch', 'mod1/class.tx_mksearch_mod1_IndizeIndizes.php'),
+        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch', 'mod1/class.tx_mksearch_mod1_IndizeIndizes.php'),
         'LLL:EXT:mksearch/mod1/locallang.xml:func_indize_indizes'
     );
-    tx_rnbase_util_Extensions::insertModuleFunction(
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::insertModuleFunction(
         'web_MksearchM1',
         'tx_mksearch_mod1_SolrAdmin',
-        tx_rnbase_util_Extensions::extPath('mksearch', 'mod1/class.tx_mksearch_mod1_SolrAdmin.php'),
+        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch', 'mod1/class.tx_mksearch_mod1_SolrAdmin.php'),
         'LLL:EXT:mksearch/mod1/locallang.xml:func_solradmin'
     );
 }

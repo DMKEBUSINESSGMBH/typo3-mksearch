@@ -51,8 +51,8 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
     public function prepareSearchData($tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options)
     {
         if ('tt_address' != $tableName) {
-            if (tx_rnbase_util_Logger::isWarningEnabled()) {
-                tx_rnbase_util_Logger::warn(__METHOD__.': Unknown table "'.$tableName.'" given.', 'mksearch', ['tableName' => $tableName, 'sourceRecord' => $sourceRecord]);
+            if (\Sys25\RnBase\Utility\Logger::isWarningEnabled()) {
+                \Sys25\RnBase\Utility\Logger::warn(__METHOD__.': Unknown table "'.$tableName.'" given.', 'mksearch', ['tableName' => $tableName, 'sourceRecord' => $sourceRecord]);
             }
 
             return null;
@@ -80,7 +80,7 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
         }
 
         // Hook to append indexer
-        tx_rnbase_util_Misc::callHook(
+        \Sys25\RnBase\Utility\Misc::callHook(
             'mksearch',
             'indexer_TtAddress_prepareData_beforeAddFields',
             [
@@ -140,7 +140,7 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
         $indexDoc->setAbstract('', 1);
 
         // Hook to append indexer
-        tx_rnbase_util_Misc::callHook(
+        \Sys25\RnBase\Utility\Misc::callHook(
             'mksearch',
             'indexer_TtAddress_prepareData_afterAddFields',
             [
@@ -240,14 +240,14 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
     protected function getContentFromFields($sourceRecord, $options)
     {
         $aContent = [];
-        $aContentFields = tx_rnbase_util_Strings::trimExplode(',', $options['fields'], true);
+        $aContentFields = \Sys25\RnBase\Utility\Strings::trimExplode(',', $options['fields'], true);
 
         foreach ($aContentFields as $field) {
             if (array_key_exists($field, $sourceRecord) && !empty($sourceRecord[$field])) {
                 $aContent[] = trim($sourceRecord[$field]);
             }
         }
-        $wrap = tx_rnbase_util_Strings::trimExplode('|', $options['wrap'], true);
+        $wrap = \Sys25\RnBase\Utility\Strings::trimExplode('|', $options['wrap'], true);
         if (2 != count($wrap)) {
             $wrap = ['', ''];
         }

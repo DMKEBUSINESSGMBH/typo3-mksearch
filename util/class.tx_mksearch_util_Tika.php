@@ -38,7 +38,7 @@ class tx_mksearch_util_Tika
     public static function getInstance()
     {
         if (null === self::$instance) {
-            $tikaJar = tx_rnbase_configurations::getExtensionCfgValue(
+            $tikaJar = \Sys25\RnBase\Configuration\Processor::getExtensionCfgValue(
                 'mksearch',
                 'tikaJar'
             );
@@ -48,7 +48,7 @@ class tx_mksearch_util_Tika
                 $tikaJar = \Sys25\RnBase\Utility\Environment::getPublicPath().$tikaJar;
             } else {
                 // Here only paths within the webroot and EXT:myext paths allowed.
-                $tikaJar = tx_rnbase_util_Files::getFileAbsFileName($tikaJar, false);
+                $tikaJar = \Sys25\RnBase\Utility\Files::getFileAbsFileName($tikaJar, false);
             }
             self::$instance = new tx_mksearch_util_Tika($tikaJar);
         }
@@ -59,7 +59,7 @@ class tx_mksearch_util_Tika
     private function __construct($tikaJar)
     {
         $this->setTikaJar($tikaJar);
-        $this->tikaLocaleType = tx_rnbase_configurations::getExtensionCfgValue(
+        $this->tikaLocaleType = \Sys25\RnBase\Configuration\Processor::getExtensionCfgValue(
             'mksearch',
             'tikaLocaleType'
         );
@@ -76,15 +76,15 @@ class tx_mksearch_util_Tika
             return 1 == $this->tikaAvailable ? true : false;
         }
         if (!is_file($this->tikaJar)) {
-            tx_rnbase_util_Logger::warn('Tika Jar not found!', 'mksearch', ['Jar' => $this->tikaJar]);
+            \Sys25\RnBase\Utility\Logger::warn('Tika Jar not found!', 'mksearch', ['Jar' => $this->tikaJar]);
             $this->tikaAvailable = 0;
 
             return $this->tikaAvailable;
         }
 
-        $commandUtilityClass = tx_rnbase_util_Typo3Classes::getCommandUtilityClass();
+        $commandUtilityClass = \TYPO3\CMS\Core\Utility\CommandUtility::class;
         if (!$commandUtilityClass::checkCommand('java')) {
-            tx_rnbase_util_Logger::warn('Java not found! Java is required to run Apache Tika.', 'mksearch');
+            \Sys25\RnBase\Utility\Logger::warn('Java not found! Java is required to run Apache Tika.', 'mksearch');
             $this->tikaAvailable = 0;
 
             return $this->tikaAvailable;
@@ -177,12 +177,12 @@ class tx_mksearch_util_Tika
 
         $this->setLocaleTypeForNonWindowsSystems();
 
-        $commandUtilityClass = tx_rnbase_util_Typo3Classes::getCommandUtilityClass();
+        $commandUtilityClass = \TYPO3\CMS\Core\Utility\CommandUtility::class;
         $tikaCommand = $commandUtilityClass::getCommand('java')
             .' -Dfile.encoding=UTF8' // forces UTF8 output
             .' -jar '.escapeshellarg($this->tikaJar)
             .' -m '.escapeshellarg($absFile)
-            .' '.tx_rnbase_configurations::getExtensionCfgValue(
+            .' '.\Sys25\RnBase\Configuration\Processor::getExtensionCfgValue(
                 'mksearch',
                 'postTikaCommandParameters'
             );
@@ -215,12 +215,12 @@ class tx_mksearch_util_Tika
 
         $this->setLocaleTypeForNonWindowsSystems();
 
-        $commandUtilityClass = tx_rnbase_util_Typo3Classes::getCommandUtilityClass();
+        $commandUtilityClass = \TYPO3\CMS\Core\Utility\CommandUtility::class;
         $tikaCommand = $commandUtilityClass::getCommand('java')
             .' -Dfile.encoding=UTF-8' // forces UTF8 output
             .' -jar '.escapeshellarg($this->tikaJar)
             .' -'.$tikaCmdType.' '.escapeshellarg($absFile)
-            .' '.tx_rnbase_configurations::getExtensionCfgValue(
+            .' '.\Sys25\RnBase\Configuration\Processor::getExtensionCfgValue(
                 'mksearch',
                 'postTikaCommandParameters'
             );
@@ -259,9 +259,9 @@ class tx_mksearch_util_Tika
      */
     private static function checkFile($fName)
     {
-        $absFile = tx_rnbase_util_Files::getFileAbsFileName($fName);
+        $absFile = \Sys25\RnBase\Utility\Files::getFileAbsFileName($fName);
         $absFile = self::fixFilenameWithPossibleUmlautsForWindows($absFile);
-        if (!(tx_rnbase_util_Files::isAllowedAbsPath($absFile) && @is_file($absFile))) {
+        if (!(\Sys25\RnBase\Utility\Files::isAllowedAbsPath($absFile) && @is_file($absFile))) {
             throw new Exception('File not found: '.$absFile);
         }
         if (!@is_readable($absFile)) {
