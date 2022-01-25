@@ -3,7 +3,7 @@
 defined('TYPO3_MODE') or exit('Access denied.');
 
 if (TYPO3_MODE == 'BE') {
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::registerModule(
+    \Sys25\RnBase\Utility\Extensions::registerModule(
         'mksearch',
         'web',
         'M1',
