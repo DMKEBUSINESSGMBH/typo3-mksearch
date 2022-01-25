@@ -39,7 +39,7 @@ class tx_mksearch_view_SearchSolr extends \Sys25\RnBase\Frontend\View\Marker\Bas
 
     public function render($view, \Sys25\RnBase\Frontend\Request\RequestInterface $request)
     {
-        $this->confId = $this->request->getConfId();
+        $this->confId = $request->getConfId();
 
         return parent::render($view, $request);
     }
