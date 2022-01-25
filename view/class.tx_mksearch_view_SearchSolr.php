@@ -31,10 +31,18 @@ class tx_mksearch_view_SearchSolr extends \Sys25\RnBase\Frontend\View\Marker\Bas
      * @var string
      */
     private $confId = '';
+
     /**
      * @var \Sys25\RnBase\Configuration\Processor
      */
     private $configurations = null;
+
+    public function render($view, \Sys25\RnBase\Frontend\Request\RequestInterface $request)
+    {
+        $this->confId = $this->request->getConfId();
+
+        return parent::render($view, $request);
+    }
 
     protected function createOutput($template, \Sys25\RnBase\Frontend\Request\RequestInterface $request, $formatter)
     {
@@ -200,9 +208,8 @@ class tx_mksearch_view_SearchSolr extends \Sys25\RnBase\Frontend\View\Marker\Bas
      *
      * @param \Sys25\RnBase\Configuration\Processor $configurations
      */
-    public function _init(&$configurations)
+    public function _init(\Sys25\RnBase\Configuration\ConfigurationInterface $configurations)
     {
-        $this->confId = $this->getController()->getConfId();
         $this->configurations = &$configurations;
     }
 
@@ -214,7 +221,7 @@ class tx_mksearch_view_SearchSolr extends \Sys25\RnBase\Frontend\View\Marker\Bas
      *
      * @return string
      */
-    public function getMainSubpart(&$viewData)
+    public function getMainSubpart(\Sys25\RnBase\Frontend\View\ContextInterface $viewData)
     {
         // Wir versuchen den Mainpart aus der viewdata zu holen.
         // Das kann der Fall sein, wenn der Mainpart im Filter oder einer eigenen Action gesetzt wurde.

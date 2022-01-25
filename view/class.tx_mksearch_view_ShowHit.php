@@ -41,7 +41,7 @@ class tx_mksearch_view_ShowHit extends \Sys25\RnBase\Frontend\View\Marker\ListVi
      *
      * @return string
      */
-    public function getMainSubpart(&$viewData)
+    public function getMainSubpart(\Sys25\RnBase\Frontend\View\ContextInterface $viewData)
     {
         return $this->subpart ? $this->subpart : '###SHOWHIT###';
     }

@@ -40,7 +40,7 @@ class tx_mksearch_view_Search extends \Sys25\RnBase\Frontend\View\Marker\BaseVie
 
         // wurden options für die markerklassen gesetzt?
         $markerParams = $viewData->offsetExists('markerParams') ? $viewData->offsetGet('markerParams') : [];
-        $confId = $this->getController()->getConfId();
+        $confId = $request->getConfId();
         $out = $listBuilder->render(
             $items,
             $viewData,
