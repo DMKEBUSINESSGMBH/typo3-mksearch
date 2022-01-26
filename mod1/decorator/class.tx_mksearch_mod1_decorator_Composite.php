@@ -54,8 +54,8 @@ class tx_mksearch_mod1_decorator_Composite
             case 'title':
                 $ret = '';
                 $ret .= $value;
-                if (!empty($record->getProperty('description'))) {
-                    $ret .= '<br /><pre>'.$record->getProperty('description').'</pre>';
+                if (!empty($item->getProperty('description'))) {
+                    $ret .= '<br /><pre>'.$item->getProperty('description').'</pre>';
                 }
                 break;
             case 'indices':

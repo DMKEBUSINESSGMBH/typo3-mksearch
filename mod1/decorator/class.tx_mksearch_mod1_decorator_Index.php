@@ -55,8 +55,8 @@ class tx_mksearch_mod1_decorator_Index
             case 'core':
                 $ret = '';
                 $ret .= tx_mksearch_mod1_util_IndexStatusHandler::getInstance()->handleRequest4Index($item);
-                if (!empty($record->getProperty('description'))) {
-                    $ret .= '<br /><pre>'.$record->getProperty('description').'</pre>';
+                if (!empty($item->getProperty('description'))) {
+                    $ret .= '<br /><pre>'.$item->getProperty('description').'</pre>';
                 }
                 break;
             case 'engine':
