@@ -316,7 +316,7 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
 
         $confId = $this->getConfId().'charbrowser.';
         $configurations = $request->getConfigurations();
-        $viewData = $configurations->getViewData();
+        $viewData = $request->getViewContext();
         $pointername = $configurations->get($confId.'cbid') ?: 'solr-cb';
 
         $list = [];

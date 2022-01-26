@@ -234,7 +234,7 @@ class tx_mksearch_filter_LuceneBase extends tx_mksearch_filter_BaseFilter implem
                     // Prepare some form data
                     $formData = $parameters->get('submit') ? $paramArray : self::$formData;
                     $formData['action'] = $link->makeUrl(false);
-                    $formData['searchcount'] = $configurations->getViewData()->offsetGet('searchcount');
+                    $formData['searchcount'] = $this->request->getViewContext()->offsetGet('searchcount');
                     $formData['hiddenfields'] = \Sys25\RnBase\Backend\Form\FormUtil::getHiddenFieldsForUrlParams($formData['action']);
                     $this->prepareFormFields($formData, $parameters);
 

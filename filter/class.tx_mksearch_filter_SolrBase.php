@@ -489,7 +489,7 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
         );
 
         // store firstchar
-        $configurations->getViewData()->offsetSet('charpointer', $firstChar);
+        $this->request->getViewContext()->offsetSet('charpointer', $firstChar);
 
         $facetField = $configurations->get($confId.'facetField') ?: 'first_letter_s';
         self::addFilterQuery(
