@@ -21,8 +21,6 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  ***************************************************************/
 
-use Sys25\RnBase\Frontend\Request\ParametersInterface;
-
 /**
  * Der Filter liest seine Konfiguration passend zum Typ des Solr RequestHandlers. Der Typ
  * ist entweder "default" oder "dismax". Entsprechend baut sich auch die Typoscript-Konfiguration
