@@ -28,7 +28,7 @@
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_filter_ElasticSearchBase extends \Sys25\RnBase\Frontend\Filter\BaseFilter
+class tx_mksearch_filter_ElasticSearchBase extends tx_mksearch_filter_BaseFilter
 {
     /**
      * @var tx_mksearch_util_Filter

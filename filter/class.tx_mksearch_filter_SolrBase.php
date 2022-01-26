@@ -40,7 +40,7 @@ use Sys25\RnBase\Frontend\Request\ParametersInterface;
  *
  * @author René Nitzsche
  */
-class tx_mksearch_filter_SolrBase extends \Sys25\RnBase\Frontend\Filter\BaseFilter
+class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
 {
     protected $confIdExtended = '';
 

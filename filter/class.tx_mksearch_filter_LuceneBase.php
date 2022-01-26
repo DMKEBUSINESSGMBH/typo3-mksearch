@@ -28,7 +28,7 @@ use Sys25\RnBase\Frontend\Request\ParametersInterface;
  *
  * @author rene
  */
-class tx_mksearch_filter_LuceneBase extends \Sys25\RnBase\Frontend\Filter\BaseFilter implements \Sys25\RnBase\Frontend\Marker\IListBuilderInfo
+class tx_mksearch_filter_LuceneBase extends tx_mksearch_filter_BaseFilter implements \Sys25\RnBase\Frontend\Marker\IListBuilderInfo
 {
     private static $formData = [];
 
