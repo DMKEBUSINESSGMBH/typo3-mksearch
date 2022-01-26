@@ -689,7 +689,7 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
     protected function renderSearchForm($formTemplate, \Sys25\RnBase\Frontend\Marker\FormatUtil $formatter, $confId, $templateConfId)
     {
         $configurations = $formatter->getConfigurations();
-        $viewData = $configurations->getViewData();
+        $viewData = $this->request->getViewContext();
         if ($formTemplate) {
             $link = $configurations->createLink();
             $link->initByTS($configurations, $confId.'template.links.action.', []);
@@ -731,7 +731,7 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
             $formTemplate = $templateMarker->parseTemplate($formTemplate, $formData, $formatter, $confId.'form.', 'FORM');
 
             // Formularfelder
-            $formTemplate = $this->getFilterUtility()->parseCustomFilters($formTemplate, $formatter->getConfigurations(), $confId);
+            $formTemplate = $this->getFilterUtility()->parseCustomFilters($formTemplate, $configurations, $confId);
         }
 
         return $formTemplate;
