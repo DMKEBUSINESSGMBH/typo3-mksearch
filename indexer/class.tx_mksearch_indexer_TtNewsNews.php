@@ -192,13 +192,13 @@ class tx_mksearch_indexer_TtNewsNews extends tx_mksearch_indexer_Base
         $content = $options['keepHtml'] ? $content : tx_mksearch_util_Misc::html2plain($content);
 
         // content besorgen
-        $bodyText = $rawData['bodytext'];
-        $bodyText = empty($bodyText) ? $rawData['short'] : $bodyText;
-        $bodyText = empty($bodyText) ? $rawData['title'] : $bodyText;
+        foreach (['bodytext', 'short', 'title'] as $bodyTextField) {
+            $bodyText = $options['keepHtml'] ? $rawData[$bodyTextField] : tx_mksearch_util_Misc::html2plain($rawData[$bodyTextField]);
+            if (!empty($bodyText)) {
+                break;
+            }
+        }
         $bodyText = empty($bodyText) ? $content : $bodyText;
-
-        // html entfernen
-        $bodyText = $options['keepHtml'] ? $bodyText : tx_mksearch_util_Misc::html2plain($bodyText);
 
         // wir indizieren nicht, wenn kein content für die news da ist.
         if (empty($bodyText)) {
