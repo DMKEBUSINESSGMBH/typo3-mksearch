@@ -33,6 +33,21 @@
  */
 class tx_mksearch_model_Suggestion extends \Sys25\RnBase\Domain\Model\BaseModel
 {
+    /**
+     * When we migrated from extending tx_rnbase_model_base to extending \Sys25\RnBase\Domain\Model\BaseModel
+     * we lost our public $record property. Problem is that this property is used in JavaScript to create
+     * the suggestions. So to keep backwards compatibility we add $record as public.
+     * @var array
+     */
+    public array $record;
+
+    protected function init($rowOrUid = null)
+    {
+        parent::init($rowOrUid);
+        $this->record = $this->getRecord();
+
+        return null;
+    }
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/class.tx_mksearch_model_Suggestion.php']) {
