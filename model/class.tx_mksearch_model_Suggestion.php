@@ -37,6 +37,7 @@ class tx_mksearch_model_Suggestion extends \Sys25\RnBase\Domain\Model\BaseModel
      * When we migrated from extending tx_rnbase_model_base to extending \Sys25\RnBase\Domain\Model\BaseModel
      * we lost our public $record property. Problem is that this property is used in JavaScript to create
      * the suggestions. So to keep backwards compatibility we add $record as public.
+     *
      * @var array
      */
     public $record;
