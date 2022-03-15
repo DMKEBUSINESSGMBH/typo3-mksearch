@@ -39,7 +39,7 @@ class tx_mksearch_model_Suggestion extends \Sys25\RnBase\Domain\Model\BaseModel
      * the suggestions. So to keep backwards compatibility we add $record as public.
      * @var array
      */
-    public array $record;
+    public $record;
 
     protected function init($rowOrUid = null)
     {
