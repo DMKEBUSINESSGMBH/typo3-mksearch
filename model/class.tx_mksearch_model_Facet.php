@@ -141,6 +141,16 @@ class tx_mksearch_model_Facet extends \Sys25\RnBase\Domain\Model\BaseModel
     {
         return !empty($this->childs);
     }
+
+    /**
+     * The UID of a facet might not be an integer.
+     *
+     * @return array|int|string|null
+     */
+    public function getUid()
+    {
+        return $this->getProperty('uid');
+    }
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/class.tx_mksearch_model_Facet.php']) {
