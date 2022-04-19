@@ -70,6 +70,9 @@ class tx_mksearch_indexer_FAL extends tx_mksearch_indexer_BaseMedia
         // get meta data, too, and fill the abstract
         if ($resourceFile = $this->getFileFromRecord($sourceRecord)) {
             $sourceRecord = $resourceFile->getProperties();
+            if ($options['queueReferencedRecords']) {
+                $this->queueReferencedRecords($resourceFile);
+            }
         }
 
         return parent::prepareSearchData($tableName, $sourceRecord, $indexDoc, $options);
@@ -136,6 +139,28 @@ class tx_mksearch_indexer_FAL extends tx_mksearch_indexer_BaseMedia
         }
 
         return null;
+    }
+
+    protected function queueReferencedRecords(\TYPO3\CMS\Core\Resource\File $file): void
+    {
+        $indexService = $this->getInternalIndexService();
+        /** @var \TYPO3\CMS\Core\Database\Query\QueryBuilder $queryBuilder */
+        $queryBuilder = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                \TYPO3\CMS\Core\Database\ConnectionPool::class
+        )->getQueryBuilderForTable('sys_file_reference');
+
+        $result = $queryBuilder
+            ->select('tablenames', 'uid_foreign')
+            ->from('sys_file_reference')
+            ->where($queryBuilder->expr()->eq(
+                'uid_local',
+                $queryBuilder->createNamedParameter($file->getUid(), \PDO::PARAM_INT)
+            ))
+            ->execute();
+
+        while ($reference = $result->fetchAssociative()) {
+            $indexService->addRecordToIndex($reference['tablenames'], $reference['uid_foreign']);
+        }
     }
 
     /**
@@ -229,6 +254,28 @@ class tx_mksearch_indexer_FAL extends tx_mksearch_indexer_BaseMedia
     protected function getInternalIndexService()
     {
         return tx_mksearch_util_ServiceRegistry::getIntIndexService();
+    }
+
+    /**
+     * Return the default Typoscript configuration for this indexer.
+     *
+     * Note that this config is not used for actual indexing
+     * but only serves as assistance when actually configuring an indexer!
+     * Hence all possible configuration options should be set or
+     * at least be mentioned to provide an easy-to-access inline documentation!
+     *
+     * @return string
+     */
+    public function getDefaultTSConfig()
+    {
+        $defaultTsConfig = parent::getDefaultTSConfig();
+
+        return $defaultTsConfig.<<<CFG
+
+# put all references into queue when indexing a file
+#queueReferencedRecords = 1
+
+CFG;
     }
 }
 
