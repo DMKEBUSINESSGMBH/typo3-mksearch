@@ -272,4 +272,3 @@ class tx_mksearch_tests_indexer_TtNewsNewsTest extends tx_mksearch_tests_Testcas
         self::assertNull($indexerReturn);
     }
 }
-
