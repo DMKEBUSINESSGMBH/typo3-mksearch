@@ -518,7 +518,7 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
         $cObj,
         /* \GeorgRinger\News\Domain\Model\TtContent */ $contentElement
     ) {
-        //we need to complete record to render the gridelement correctly
+        // we need to complete record to render the gridelement correctly
         $rawData = $this->getDatabaseConnection()->doSelect(
             '*',
             'tt_content',
@@ -637,11 +637,4 @@ deleteOnAbort = 0
 #localizationPid = 123
 CONF;
     }
-}
-
-if ((
-    defined('TYPO3_MODE') &&
-    $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_TxNewsNews.php']
-)) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_TxNewsNews.php'];
 }

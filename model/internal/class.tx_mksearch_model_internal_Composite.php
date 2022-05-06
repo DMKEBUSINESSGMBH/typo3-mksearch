@@ -37,7 +37,3 @@ class tx_mksearch_model_internal_Composite extends \Sys25\RnBase\Domain\Model\Ba
         return 'tx_mksearch_configcomposites';
     }
 }
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/internal/class.tx_mksearch_model_internal_Composite.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/internal/class.tx_mksearch_model_internal_Composite.php'];
-}

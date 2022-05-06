@@ -77,18 +77,18 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base
         tx_mksearch_interface_IndexerDocument $indexDoc,
         $options
     ) {
-        //check if at least one category of the current faq
-        //is in the given include categories if this option is used
-        //we could also extend the isIndexableRecord method but than
-        //we would need to get the faq model and the categories
-        //twice
+        // check if at least one category of the current faq
+        // is in the given include categories if this option is used
+        // we could also extend the isIndexableRecord method but than
+        // we would need to get the faq model and the categories
+        // twice
         $categories = $this->getIrfaqCategoryService()->getByQuestion($model);
         if (!$this->checkInOrExcludeOptions($categories, $options)) {
             return null;
         }
         // else go one with indexing
 
-        //index everything about the categories
+        // index everything about the categories
         $this->indexArrayOfModelsByMapping(
             $categories,
             $this->getCategoryMapping(),
@@ -122,7 +122,7 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base
         $indexDoc = $this->indexAnswerTextKeepingHtml($model, $indexDoc);
         $indexDoc = $this->indexShortcutOfFirstCategory($categories, $indexDoc);
 
-        //index everything about the expert
+        // index everything about the expert
         $this->indexModelByMapping(
             $this->getIrfaqExpertService()->get($model->getProperty('expert')),
             $this->getExpertMapping(),
@@ -130,7 +130,7 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base
             'expert_'
         );
 
-        //done
+        // done
         return $indexDoc;
     }
 
@@ -379,8 +379,4 @@ respectNoSearchFlagInRootline = 1
 #workspaceIds = 1,2,3
 CONFIG;
     }
-}
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/seminars/class.tx_mksearch_indexer_seminars_Seminar.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/seminars/class.tx_mksearch_indexer_seminars_Seminar.php'];
 }

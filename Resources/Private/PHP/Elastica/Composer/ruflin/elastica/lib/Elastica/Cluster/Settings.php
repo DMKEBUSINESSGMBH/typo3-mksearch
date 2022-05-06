@@ -1,4 +1,5 @@
 <?php
+
 namespace Elastica\Cluster;
 
 use Elastica\Client;
@@ -9,7 +10,7 @@ use Elastica\Request;
  *
  * @author   Nicolas Ruflin <spam@ruflin.com>
  *
- * @link     https://www.elastic.co/guide/en/elasticsearch/reference/current/cluster-update-settings.html
+ * @see     https://www.elastic.co/guide/en/elasticsearch/reference/current/cluster-update-settings.html
  */
 class Settings
 {
@@ -55,9 +56,9 @@ class Settings
         if (!empty($setting)) {
             if (isset($settings[$setting])) {
                 return $settings[$setting];
-            } else {
-                return;
             }
+
+            return;
         }
 
         return $settings;
@@ -80,23 +81,23 @@ class Settings
         if (!empty($setting)) {
             if (isset($settings[$setting])) {
                 return $settings[$setting];
-            } else {
-                if (strpos($setting, '.') !== false) {
-                    // convert dot notation to nested arrays
-                    $keys = explode('.', $setting);
-                    foreach ($keys as $key) {
-                        if (isset($settings[$key])) {
-                            $settings = $settings[$key];
-                        } else {
-                            return;
-                        }
-                    }
+            }
 
-                    return $settings;
+            if (false !== strpos($setting, '.')) {
+                // convert dot notation to nested arrays
+                $keys = explode('.', $setting);
+                foreach ($keys as $key) {
+                    if (isset($settings[$key])) {
+                        $settings = $settings[$key];
+                    } else {
+                        return;
+                    }
                 }
 
-                return;
+                return $settings;
             }
+
+            return;
         }
 
         return $settings;

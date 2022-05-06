@@ -1,35 +1,213 @@
 # Change Log
 All notable changes to this project will be documented in this file based on the [Keep a Changelog](http://keepachangelog.com/) Standard. This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased](https://github.com/ruflin/Elastica/compare/5.3.1...master)
+## [Unreleased](https://github.com/ruflin/Elastica/compare/6.2.1...6.x)
 
 ### Backward Compatibility Breaks
+### Bugfixes
+### Added
+### Improvements
+* Solve PHP 8.1 deprecations for every class implementing Countable, Iterator or ArrayAccess [#2061](https://github.com/ruflin/Elastica/pull/2061)
+### Deprecated
+
+## [6.2.1](https://github.com/ruflin/Elastica/compare/6.2.0...6.2.1)
+
+### Improvements
+* Solve PHP 8.1 deprecations for every class implementing Countable, Iterator or ArrayAccess [#2061](https://github.com/ruflin/Elastica/pull/2061)
+
+## [6.2.0](https://github.com/ruflin/Elastica/compare/6.1.5...6.2.0)
+
+### Added
+* PHP 8.0 support [#1981](https://github.com/ruflin/Elastica/pull/1981)
+### Improvements
+* Fixed display issue in dependancy table [#1980](https://github.com/ruflin/Elastica/pull/1980)
+* Explicitly equire ext-json in composer.json [#1673](https://github.com/ruflin/Elastica/pull/1673) [#1983](https://github.com/ruflin/Elastica/pull/1983)
+
+## [6.1.5](https://github.com/ruflin/Elastica/compare/6.1.4...6.1.5)
 
 ### Bugfixes
+* Added conflict with `elasticsearch/elasticsearch` version `6.8.1` [#1948](https://github.com/ruflin/Elastica/pull/1948)
+### Added
+* Excluded `docker` directory in `.gitattributes` [#1939](https://github.com/ruflin/Elastica/pull/1939)
+
+## [6.1.4](https://github.com/ruflin/Elastica/compare/6.1.3...6.1.4)
+
+### Bugfixes
+* Added conflict with `elasticsearch/elasticsearch` version `6.8.0` [#1918](https://github.com/ruflin/Elastica/pull/1918)
+### Improvements
+* Marked Elastica 5.x as unmaintained [#1909](https://github.com/ruflin/Elastica/pull/1909)
+
+## [6.1.3](https://github.com/ruflin/Elastica/compare/6.1.2...6.1.3)
+
+### Bugfixes
+* Make MatchQuery.php file valid PHP. [#1902](https://github.com/ruflin/Elastica/pull/1902)
+
+## [6.1.2](https://github.com/ruflin/Elastica/compare/6.1.1...6.1.2)
+
+### Bugfixes
+
+* Always set the Guzzle `base_uri` to support connecting to multiple ES hosts. [#1618](https://github.com/ruflin/Elastica/pull/1618) [#1644](https://github.com/ruflin/Elastica/issues/1644)
 
 ### Added
 
+* Added `Elastica\Aggregation\WeightedAvg` aggregation [#1770](https://github.com/ruflin/Elastica/pull/1770)
+* Added `Elastica\Query\MatchQuery` extending `Elastica\Query\Match`. This is the same as 7.x, which renamed the class for PHP 8.0 support, and makes supporting the use of ruflin/elastica 6.1 and 7.0 in the same project easier. [#1898](https://github.com/ruflin/Elastica/pull/1898)
+
 ### Improvements
 
+* Added missing Response information to Bulk/ResponseSet [#1775](https://github.com/ruflin/Elastica/pull/1775)
 
-## [5.3.1](https://github.com/ruflin/Elastica/compare/5.3.0...5.3.1)
+### Deprecated
+* `Elastica\Query\Match` has been deprecated in favour of `Elastica\Query\MatchQuery`. [#1898](https://github.com/ruflin/Elastica/pull/1898)
+
+## [6.1.1](https://github.com/ruflin/Elastica/compare/6.1.0...6.1.1)
+
+### Added
+
+* Added `BucketSelector` aggregation [#1554](https://github.com/ruflin/Elastica/pull/1554)
+* Added `DerivativeAggregation` [#1553](https://github.com/ruflin/Elastica/pull/1553)
+* The preferred type name is [_doc](https://www.elastic.co/guide/en/elasticsearch/reference/6.5/removal-of-types.html), so that index APIs have the same path as they will have in 7.0
+* Introduced new version of PHP-CS-Fixer and new Lint travis step. [#1555](https://github.com/ruflin/Elastica/pull/1555)
+
+### Improvements
+
+* Reduced memory footprint of response by not keeping the raw JSON data when JSON after JSON has been parsed. [#1588](https://github.com/ruflin/Elastica/pull/1588)
+
+## [6.1.0](https://github.com/ruflin/Elastica/compare/6.0.2...6.1.0)
+
+### Backward Compatibility Breaks
+
+* Made result sets adhere to `\Iterator` interface definition that they implement. Specifically, you need to call `valid()` on the result set before calling `current()`. When using `foreach` this is done by PHP automatically. When `valid` returns false, the return value of `current` is undefined instead of false. [#1506](https://github.com/ruflin/Elastica/pull/1506)
+  * `\Elastica\ResultSet::next` returns `void` instead of `\Elastica\Result|false`
+  * `\Elastica\Bulk\ResponseSet::current` returns `\Elastica\Bulk\Response` instead of `\Elastica\Bulk\Response|false`
+  * `\Elastica\Multi\ResultSet::current` returns `\Elastica\ResultSet` instead of `\Elastica\ResultSet|false`
+
+### Added
+
+* Added a transport class for mocking a HTTP 403 error codes, useful for testing response failures in inheriting clients [#1529](https://github.com/ruflin/Elastica/pull/1529)
+* [Field](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-function-score-query.html#function-random) param for `Elastica\Query\FunctionScore::addRandomScoreFunction` [#1529](https://github.com/ruflin/Elastica/pull/1529)
+* [Index Recovery](https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-recovery.html) : the indices recovery API provides insight into on-going index shard recoveries. It was never been implemented into Elastica. [#1537](https://github.com/ruflin/Elastica/pull/1537)
+* add parent_id (reference [#1518](https://github.com/ruflin/Elastica/issues/1518)) in QueryBuilder. [#1533]([#1518](https://github.com/ruflin/Elastica/issues/1533))
+* implemented ```string_distance``` option in Term Suggestion [#1543](https://github.com/ruflin/Elastica/pull/1543)
+
+### Improvements
+
+* Using `Elastica\Query\FunctionScore::addRandomScoreFunction` without `$field` parameter is deprecated since ES 6.0 and will fail since ES 7.0 [#1522](https://github.com/ruflin/Elastica/pull/1522)
+* `Aggreation\Percentiles` updated to a newer version of the Algorithm (T-Digest 3.2) and Percentiles results changed a bit Have a [look at here](https://github.com/elastic/elasticsearch/pull/28305), so updated tests in order not to fail. [#1531]([#1352](https://github.com/ruflin/Elastica/pull/1531))
+* `Aggregation\Percentiles` have been updated since [Elasticsearch 2.3](https://www.elastic.co/guide/en/elasticsearch/reference/2.3/search-aggregations-metrics-percentile-aggregation.html). In this version `compression, HDR histogram` changed their implementations. The `missing` field has never been implemented. [#1532](https://github.com/ruflin/Elastica/pull/1532)
+
+  Before
+  ```json
+    "compression" : 200,
+    "method" : "hdr",
+    "number_of_significant_value_digits" : 3
+  ```
+
+  Now
+  ```json
+    "tdigest": {
+      "compression" : 200
+    },
+    "hdr": {
+      "number_of_significant_value_digits" : 3
+    }
+  ```
+
+* Never implemented the method *Missing* on [`Aggregation\Percentiles`](https://www.elastic.co/guide/en/elasticsearch/reference/6.4/search-aggregations-metrics-percentile-aggregation.html) [#1532](https://github.com/ruflin/Elastica/pull/1532)
+
+## [6.0.2](https://github.com/ruflin/Elastica/compare/6.0.1...6.0.2)
+
+### Added
+
+* Added support for pipeline when indexing document. [#1455](https://github.com/ruflin/Elastica/pull/1455)
+* Added support for multiple bucket sort orders for aggregations. [#1480](https://github.com/ruflin/Elastica/pull/1480)
+* Added basic support for the Elasticsearch Task Api
+* Added updateByQuery endpoint. [#1499](https://github.com/ruflin/Elastica/pull/1499)
+
+### Improvements
+
+* Use `source` script field instead of deprecated (since ES 5.6) `inline` field. [#1497](https://github.com/ruflin/Elastica/pull/1497)
+* Updated Elasticsearch testing version to 6.2.4. [#1501](https://github.com/ruflin/Elastica/pull/1501)
+
+
+## [6.0.1](https://github.com/ruflin/Elastica/compare/6.0.0...6.0.1)
 
 ### Bugfixes
+- Characters "<" and ">" will be removed when a query term is passed to [`Util::escapeTerm`](https://github.com/ruflin/Elastica/pull/1415/files). Since v5.1 the [documentation](https://www.elastic.co/guide/en/elasticsearch/reference/5.1/query-dsl-query-string-query.html#_reserved_characters) states that these symbols cannot be escaped ever.
+- Remove [`each()`](http://www.php.net/each) usage to fix PHP 7.2 compatibility
+- Fix [#1435](https://github.com/ruflin/Elastica/issues/1435) forcing `doc_as_upsert` to be boolean, acording [Elastic doc-update documentation](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update.html#_literal_doc_as_upsert_literal)
+- Fix [#1456](https://github.com/ruflin/Elastica/issues/1456) set SSL as connection scheme if it is required
 
-- Removed deprecated `min_word_len` field in `Elastica\Suggest\Term`.
-  Use `min_word_length` instead.
+### Added
+
+* Added request parameters to `Client->deleteDocuments()`. [#1419](https://github.com/ruflin/Elastica/pull/1419)
+* Added request parameters to `Type->updateDocuments()`, `Type->addDocuments()`, `Type->addObjects()`, `Index->addDocuments()`, `Index->updateDocuments()`. [#1427](https://github.com/ruflin/Elastica/pull/1427)
+* Added avg_bucket() and sum_bucket() in aggregations [PR#1443](https://github.com/ruflin/Elastica/pull/1443) - (https://github.com/ruflin/Elastica/issues/1279)
+* Added support for [terms lookup mechanism](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-terms-query.html#query-dsl-terms-lookup) on terms query [#1452](https://github.com/ruflin/Elastica/pull/1452)
+
+
+## [6.0.0](https://github.com/ruflin/Elastica/compare/6.0.0-beta1...6.0.0)
+
+### Backward Compatibility Breaks
+- Return the [_source of inner hit nested](https://github.com/elastic/elasticsearch/pull/26982) as is without wrapping it into its full path context [#1398](https://github.com/ruflin/Elastica/pull/1398)
+- Removed CrossIndex Class as from now use Reindex. [#1411](https://github.com/ruflin/Elastica/pull/1411)
 
 ### Added
 
 - Added clear() to `Scroll` for closing search context on ES manually
-- In PHP 7.2 count() now raises a warning when an invalid parameter is passed. Only arrays and objects implementing the Countable interface should be passed. [#1378](https://github.com/ruflin/Elastica/pull/1378)
+- Added Elastica\Aggregation\StatsBucket
 
 ### Improvements
 
 - Clear search context on ES after usage in `Scroll`
 
 
-## [5.3.0](https://github.com/ruflin/Elastica/compare/5.3.0...master)
+## [6.0.0-beta1](https://github.com/ruflin/Elastica/compare/5.3.0...6.0.0-beta1)
+
+### Backward Compatibility Breaks
+
+- Numeric to and from parameters in [date_range aggregation](https://www.elastic.co/guide/en/elasticsearch/reference/6.0/breaking_60_aggregations_changes.html#_numeric_literal_to_literal_and_literal_from_literal_parameters_in_literal_date_range_literal_aggregation_are_interpreted_according_to_literal_format_literal_now) are interpreted according to format of the target field
+- In ES6 only [strict type boolean](https://github.com/elastic/elasticsearch/pull/22200) are accepted. [On ES6 docs](https://www.elastic.co/guide/en/elasticsearch/reference/6.0/boolean.html)
+- removed analyzed/not_analyzed on [indices mapping](https://www.elastic.co/guide/en/elasticsearch/reference/6.0/mapping-index.html)
+- [store](https://www.elastic.co/guide/en/elasticsearch/reference/6.0/mapping-store.html) field only accepts boolean
+- Replace IndexAlreadyExistsException with [ResourceAlreadyExistsException](https://github.com/elastic/elasticsearch/pull/21494) [#1350](https://github.com/ruflin/Elastica/pull/1350)
+- in order to delete an index you should not delete by its alias now you should delete using the [concrete index name](https://github.com/elastic/elasticsearch/blob/6.0/core/src/test/java/org/elasticsearch/aliases/IndexAliasesIT.java#L445) [#1348](https://github.com/ruflin/Elastica/pull/1348)
+- Removed ```optimize``` from Index class as it has been deprecated in ES 2.1 and removed in [ES 5.x+](https://www.elastic.co/guide/en/elasticsearch/reference/2.4/indices-optimize.html) use forcemerge [#1351](https://github.com/ruflin/Elastica/pull/1350)
+- In QueryString is not allowed to use fields parameters in conjunction with default_field parameter. This is not well documented, it's possibile to understand from [Elasticsearch tests :  QueryStringQueryBuilderTests.java](https://github.com/elastic/elasticsearch/blob/6.0/core/src/test/java/org/elasticsearch/index/query/QueryStringQueryBuilderTests.java#L917) [#1352](https://github.com/ruflin/Elastica/pull/1352)
+- Index mapping field of type [*'string'*](https://www.elastic.co/guide/en/elasticsearch/reference/5.5/string.html) has been removed from Elasticsearch 6.0 codebase [#1353](https://github.com/ruflin/Elastica/pull/1353)
+- The [created and found](https://github.com/elastic/elasticsearch/pull/25516) fields in index and delete responses became obsolete after the introduction of the result field in index, update and delete responses [#1354](https://github.com/ruflin/Elastica/pull/1354)
+- Removed file scripts [#24627](https://github.com/elastic/elasticsearch/pull/24627) [#1364](https://github.com/ruflin/Elastica/pull/1364)
+- Removed [groovy script](https://github.com/elastic/elasticsearch/pull/21607) [#1364](https://github.com/ruflin/Elastica/pull/1364)
+- Removed [native script](https://github.com/elastic/elasticsearch/pull/24726) [#1364](https://github.com/ruflin/Elastica/pull/1364)
+- Removed old / removed script language support : javascript, python, mvel [#1364](https://github.com/ruflin/Elastica/pull/1364)
+- Disable [_all](https://github.com/elastic/elasticsearch/pull/22144) by default, disallow configuring _all on 6.0+ indices [#1365](https://github.com/ruflin/Elastica/pull/1365)
+- [Unfiltered nested source](https://github.com/elastic/elasticsearch/pull/26102) should keep its full path [#1366](https://github.com/ruflin/Elastica/pull/1366)
+- The deprecated minimum_number_should_match parameter in the bool query has been removed, use minimum_should_match instead. [#1369](https://github.com/ruflin/Elastica/pull/1369)
+- For geo_distance queries, sorting, and aggregations the sloppy_arc option has been removed from the distance_type parameter. [#1369](https://github.com/ruflin/Elastica/pull/1369)
+- The geo_distance_range query, which was deprecated in 5.0, has been removed. [#1369](https://github.com/ruflin/Elastica/pull/1369)
+- The optimize_bbox parameter has been removed from geo_distance queries. [#1369](https://github.com/ruflin/Elastica/pull/1369)
+- The disable_coord parameter of the bool and common_terms queries has been removed. If provided, it will be ignored and issue a deprecation warning. [#1369](https://github.com/ruflin/Elastica/pull/1369)
+- [Unfiltered nested source](https://github.com/elastic/elasticsearch/pull/26102) should keep its full path [#1366](https://github.com/ruflin/Elastica/pull/1366)
+- [Analyze Explain](https://www.elastic.co/guide/en/elasticsearch/reference/6.0/_explain_analyze.html) no more support [request parameters](https://www.elastic.co/guide/en/elasticsearch/reference/5.5/indices-analyze.html), use request body instead. [#1370](https://github.com/ruflin/Elastica/pull/1370)
+- [Mapper Attachment plugin has been removed](https://github.com/elastic/elasticsearch/pull/20416) Use Ingest-attachment plugin and attachment processors with pipeline to ingest new documents. [#1375](https://github.com/ruflin/Elastica/pull/1375)
+- [Indices](https://github.com/elastic/elasticsearch/pull/21837) Query has been removed in Elasticsearch 6.0 [#1376](https://github.com/ruflin/Elastica/pull/1376)
+- Remove deprecated [type and slop](https://github.com/elastic/elasticsearch/pull/26720) field in match query [#1382](https://github.com/ruflin/Elastica/pull/1382)
+- Remove [several parse field](https://github.com/elastic/elasticsearch/pull/26711) deprecations in query builders [#1382](https://github.com/ruflin/Elastica/pull/1382)
+- Remove [deprecated parameters](https://github.com/elastic/elasticsearch/pull/26508) from ids_query [#1382](https://github.com/ruflin/Elastica/pull/1382)
+- Implemented [join-datatype](https://www.elastic.co/guide/en/elasticsearch/reference/current/parent-join.html) is a special field that creates parent/child relation within documents of the same index. [#1383](https://github.com/ruflin/Elastica/pull/1383)
+
+### Bugfixes
+- Enforce [Content-Type requirement on the layer Rest](https://github.com/elastic/elasticsearch/pull/23146), a [PR on Elastica #1301](https://github.com/ruflin/Elastica/issues/1301) solved it (it has been implemented only in the HTTP Transport), but it was not implemented in the Guzzle Transport. [#1349](https://github.com/ruflin/Elastica/pull/1349)
+- Scroll no longer does an extra iteration both on an empty result and on searches where the last page has a significantly smaller number of results than the pages before it.
+
+### Added
+
+- Added `Query\SpanContaining`, `Query\SpanWithin` and `Query\SpanNot` [#1319](https://github.com/ruflin/Elastica/pull/1319)
+- Implemented [Pipeline](https://www.elastic.co/guide/en/elasticsearch/reference/current/pipeline.html) and [Processors](https://www.elastic.co/guide/en/elasticsearch/reference/current/ingest-processors.html). [#1373](https://github.com/ruflin/Elastica/pull/1373)
+- In PHP 7.2 count() now raises a warning when an invalid parameter is passed. Only arrays and objects implementing the Countable interface should be passed. [#1378](https://github.com/ruflin/Elastica/pull/1378)
+
+
+## [5.3.0](https://github.com/ruflin/Elastica/compare/5.2.1...5.3.0)
 
 ### Backward Compatibility Breaks
 
@@ -42,6 +220,7 @@ All notable changes to this project will be documented in this file based on the
 ### Added
  - Added getNumberOfReplicas() for index settings [PR#1324](https://github.com/ruflin/Elastica/pull/1324)
  - Added getNumberOfShards() for index settings [PR#1321](https://github.com/ruflin/Elastica/pull/1331)
+ - Added `\Elastica\Query\Span*` for proximity searches [#304](https://github.com/ruflin/Elastica/issues/304)
  - Added avg_bucket() and sum_bucket() in aggregations [PR#1443](https://github.com/ruflin/Elastica/pull/1443) - (https://github.com/ruflin/Elastica/issues/1279)
 
 
@@ -56,7 +235,6 @@ All notable changes to this project will be documented in this file based on the
 
 ### Added
 
- - Added `\Elastica\Query\Span*` for proximity searches [#304](https://github.com/ruflin/Elastica/issues/304)
  - Parameter `filter_path` for response filtering (e.g. `$index->search($query, ['filter_path' => 'hits.hits._source'])`)
  - Add support for Health parameters for Cluster\Health endpoint (new prop : delayed_unassigned_shards, number_of_pending_tasks, number_of_in_flight_fetch, task_max_waiting_in_queue_millis, active_shards_percent_as_number)
  - Add support for querystring in Type. this allow to use `update_all_types` in type mapping in order to resolve conflicts between fields in different types. [Conflicts between fields in different types](https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-put-mapping.html#merging-conflicts)

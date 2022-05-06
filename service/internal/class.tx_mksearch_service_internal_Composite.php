@@ -89,7 +89,3 @@ class tx_mksearch_service_internal_Composite extends tx_mksearch_service_interna
         return tx_mksearch_util_Misc::parseTsConfig($sTs);
     }
 }
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/internal/class.tx_mksearch_service_internal_Composite.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/internal/class.tx_mksearch_service_internal_Composite.php'];
-}

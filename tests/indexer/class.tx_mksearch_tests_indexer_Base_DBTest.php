@@ -55,7 +55,7 @@ class tx_mksearch_tests_indexer_Base_DBTest extends tx_mksearch_tests_DbTestcase
         $aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
         self::assertNotNull($aIndexDoc, 'Die Indizierung wurde doch indiziert! 2');
 
-        //noch mit kommaseparierter liste
+        // noch mit kommaseparierter liste
         unset($options);
         $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
         list($extKey, $cType) = $indexer->getContentType();
@@ -92,7 +92,7 @@ class tx_mksearch_tests_indexer_Base_DBTest extends tx_mksearch_tests_DbTestcase
         $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $oIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
         self::assertTrue($oIndexDoc->getDeleted(), 'Das Element wurde doch indiziert! pid:1');
-        //es sollte auch keine exception durch getPrimaryKey geworfen werden damit das Löschen auch wirklich funktioniert
+        // es sollte auch keine exception durch getPrimaryKey geworfen werden damit das Löschen auch wirklich funktioniert
         self::assertEquals('mksearch:dummy:1', $oIndexDoc->getPrimaryKey(true), 'Das Element hat nicht den richtigen primary key! pid:1');
 
         $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
@@ -155,7 +155,7 @@ class tx_mksearch_tests_indexer_Base_DBTest extends tx_mksearch_tests_DbTestcase
 
         self::assertEquals('test value 1', $aIndexDoc['test_field_1_s']->getValue(), 'Es wurde nicht das erste Feld richtig gesetzt!');
         self::assertEquals('test value 2', $aIndexDoc['test_field_2_s']->getValue(), 'Es wurde nicht das zweite Feld richtig gesetzt!');
-        //with keep html
+        // with keep html
         self::assertEquals('<a href="http://www.test.de">test value 1</a>', $aIndexDoc['keepHtml_test_field_1_s']->getValue(), 'Es wurde nicht das erste Feld richtig gesetzt!');
         self::assertEquals('test value 2', $aIndexDoc['keepHtml_test_field_2_s']->getValue(), 'Es wurde nicht das zweite Feld richtig gesetzt!');
     }
@@ -184,19 +184,19 @@ class tx_mksearch_tests_indexer_Base_DBTest extends tx_mksearch_tests_DbTestcase
         list($extKey, $cType) = $indexer->getContentType();
         $options = [];
 
-        //is hidden
+        // is hidden
         $oIndexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $aRawData = ['uid' => 1, 'hidden' => 1];
         $oIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $oIndexDoc, $options);
         self::assertTrue($oIndexDoc->getDeleted(), 'Das Index Doc wurde nicht auf gelöscht gesetzt! 1');
 
-        //is deleted
+        // is deleted
         $oIndexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $aRawData = ['uid' => 1, 'hidden' => 0, 'deleted' => 1];
         $oIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $oIndexDoc, $options);
         self::assertTrue($oIndexDoc->getDeleted(), 'Das Index Doc wurde nicht auf gelöscht gesetzt! 2');
 
-        //everything alright
+        // everything alright
         $oIndexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $aRawData = ['uid' => 1, 'hidden' => 0, 'deleted' => 0];
         $oIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $oIndexDoc, $options);
@@ -212,20 +212,20 @@ class tx_mksearch_tests_indexer_Base_DBTest extends tx_mksearch_tests_DbTestcase
 
         list($extKey, $cType) = $indexer->getContentType();
 
-        //parent is hidden
+        // parent is hidden
         $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $record = ['uid' => 10, 'pid' => 7];
         $indexer->prepareSearchData('doesnt_matter', $record, $indexDoc, $options);
         self::assertEquals(true, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 
-        //parent of parent is hidden
+        // parent of parent is hidden
         $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
         $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $record = ['uid' => 127, 'pid' => 10];
         $indexer->prepareSearchData('doesnt_matter', $record, $indexDoc, $options);
         self::assertEquals(true, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 
-        //everything alright with parents
+        // everything alright with parents
         $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
         $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $record = ['uid' => 125, 'pid' => 3];
@@ -249,7 +249,4 @@ class tx_mksearch_tests_indexer_Base_DBTest extends tx_mksearch_tests_DbTestcase
         $aIndexDoc = $indexer->prepareSearchData('doesnt_matter', $aRawData, $indexDoc, $options);
         self::assertNotNull($aIndexDoc, 'Die Indizierung wurde gestoppt!');
     }
-}
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContentTest.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContentTest.php'];
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Elastica\Bulk;
 
 use Elastica\Response as BaseResponse;
@@ -21,7 +22,10 @@ class ResponseSet extends BaseResponse implements \Iterator, \Countable
      */
     public function __construct(BaseResponse $response, array $bulkResponses)
     {
-        parent::__construct($response->getData());
+        parent::__construct($response->getData(), $response->getStatus());
+
+        $this->setQueryTime($response->getQueryTime());
+        $this->setTransferInfo($response->getTransferInfo());
 
         $this->_bulkResponses = $bulkResponses;
     }
@@ -95,17 +99,15 @@ class ResponseSet extends BaseResponse implements \Iterator, \Countable
     }
 
     /**
-     * @return bool|\Elastica\Bulk\Response
+     * @return \Elastica\Bulk\Response
      */
+    #[\ReturnTypeWillChange]
     public function current()
     {
-        return $this->valid()
-            ? $this->_bulkResponses[$this->key()]
-            : false;
+        return $this->_bulkResponses[$this->key()];
     }
 
-    /**
-     */
+    #[\ReturnTypeWillChange]
     public function next()
     {
         ++$this->_position;
@@ -114,6 +116,7 @@ class ResponseSet extends BaseResponse implements \Iterator, \Countable
     /**
      * @return int
      */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return $this->_position;
@@ -122,13 +125,13 @@ class ResponseSet extends BaseResponse implements \Iterator, \Countable
     /**
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         return isset($this->_bulkResponses[$this->key()]);
     }
 
-    /**
-     */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         $this->_position = 0;
@@ -137,6 +140,7 @@ class ResponseSet extends BaseResponse implements \Iterator, \Countable
     /**
      * @return int
      */
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return count($this->_bulkResponses);

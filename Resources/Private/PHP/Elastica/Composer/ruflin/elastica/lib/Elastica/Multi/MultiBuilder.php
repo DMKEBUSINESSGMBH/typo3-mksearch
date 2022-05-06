@@ -1,4 +1,5 @@
 <?php
+
 namespace Elastica\Multi;
 
 use Elastica\Response;
@@ -47,7 +48,9 @@ class MultiBuilder implements MultiBuilderInterface
         reset($searches);
 
         foreach ($data['responses'] as $responseData) {
-            list($key, $search) = each($searches);
+            $search = current($searches);
+            $key = key($searches);
+            next($searches);
 
             $resultSets[$key] = $this->buildResultSet(new Response($responseData), $search);
         }

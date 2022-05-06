@@ -1,4 +1,5 @@
 <?php
+
 namespace Elastica\Query;
 
 /**
@@ -6,7 +7,7 @@ namespace Elastica\Query;
  *
  * @author Boris Popovschi <zyqsempai@mail.ru>
  *
- * @link https://www.elastic.co/guide/en/elasticsearch/reference/5.0/query-dsl-percolate-query.html
+ * @see https://www.elastic.co/guide/en/elasticsearch/reference/5.0/query-dsl-percolate-query.html
  */
 /**
  * Class Percolate.
@@ -35,18 +36,6 @@ class Percolate extends AbstractQuery
     public function setDocument($document)
     {
         return $this->setParam('document', $document);
-    }
-
-    /**
-     * The type / mapping of the document being percolated. This is a required parameter.
-     *
-     * @param $documentType
-     *
-     * @return $this
-     */
-    public function setDocumentType($documentType)
-    {
-        return $this->setParam('document_type', $documentType);
     }
 
     /**

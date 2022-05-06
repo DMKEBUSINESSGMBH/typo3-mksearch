@@ -31,9 +31,9 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 class HtmlViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Format\HtmlViewHelper
 {
-    ////////
+    // //////
     // We have to overwrite the whole renderStatic() method, because it uses self for the method call
-    ////////
+    // //////
 
     /**
      * @param array                     $arguments

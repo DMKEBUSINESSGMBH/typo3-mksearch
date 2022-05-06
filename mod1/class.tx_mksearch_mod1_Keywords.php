@@ -92,6 +92,3 @@ class tx_mksearch_mod1_Keywords extends \Sys25\RnBase\Backend\Module\BaseModFunc
         return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_mod1_searcher_Keywords', $this->getModule(), $options);
     }
 }
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/class.tx_mksearch_mod1_Keywords.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/class.tx_mksearch_mod1_Keywords.php'];
-}

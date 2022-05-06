@@ -1,4 +1,5 @@
 <?php
+
 namespace Elastica\Transport;
 
 use Elastica\Connection;
@@ -53,9 +54,13 @@ class Guzzle extends AbstractTransport
     {
         $connection = $this->getConnection();
 
-        $client = $this->_getGuzzleClient($this->_getBaseUrl($connection), $connection->isPersistent());
+        $client = $this->_getGuzzleClient($connection->isPersistent());
 
         $options = [
+            'base_uri' => $this->_getBaseUrl($connection),
+            'headers' => [
+                'Content-Type' => $request->getContentType(),
+            ],
             'exceptions' => false, // 4xx and 5xx is expected and NOT an exceptions in this context
         ];
         if ($connection->getTimeout()) {
@@ -83,7 +88,8 @@ class Guzzle extends AbstractTransport
             throw new GuzzleException($ex, $request, new Response($ex->getMessage()));
         }
 
-        $response = new Response((string) $res->getBody(), $res->getStatusCode());
+        $responseBody = (string) $res->getBody();
+        $response = new Response($responseBody, $res->getStatusCode());
         $response->setQueryTime($end - $start);
         if ($connection->hasConfig('bigintConversion')) {
             $response->setJsonBigintConversion($connection->getConfig('bigintConversion'));
@@ -125,11 +131,11 @@ class Guzzle extends AbstractTransport
 
         $data = $request->getData();
         if (!empty($data) || '0' === $data) {
-            if ($req->getMethod() == Request::GET) {
+            if (Request::GET == $req->getMethod()) {
                 $req = $req->withMethod(Request::POST);
             }
 
-            if ($this->hasParam('postWithRequestBody') && $this->getParam('postWithRequestBody') == true) {
+            if ($this->hasParam('postWithRequestBody') && true == $this->getParam('postWithRequestBody')) {
                 $request->setMethod(Request::POST);
                 $req = $req->withMethod(Request::POST);
             }
@@ -148,15 +154,14 @@ class Guzzle extends AbstractTransport
     /**
      * Return Guzzle resource.
      *
-     * @param string $baseUrl
-     * @param bool   $persistent False if not persistent connection
+     * @param bool $persistent False if not persistent connection
      *
      * @return Client
      */
-    protected function _getGuzzleClient($baseUrl, $persistent = true)
+    protected function _getGuzzleClient($persistent = true)
     {
         if (!$persistent || !self::$_guzzleClientConnection) {
-            self::$_guzzleClientConnection = new Client(['base_uri' => $baseUrl]);
+            self::$_guzzleClientConnection = new Client();
         }
 
         return self::$_guzzleClientConnection;
@@ -209,7 +214,9 @@ class Guzzle extends AbstractTransport
         $query = $request->getQuery();
 
         if (!empty($query)) {
-            $action .= '?'.http_build_query($query);
+            $action .= '?'.http_build_query(
+                $this->sanityzeQueryStringBool($query)
+                );
         }
 
         return $action;

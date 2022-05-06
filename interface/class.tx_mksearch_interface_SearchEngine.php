@@ -184,7 +184,3 @@ interface tx_mksearch_interface_SearchEngine
      */
     public function postProcessIndexing(tx_mksearch_model_internal_Index $oIndex);
 }
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/interface/class.tx_mksearch_interface_SearchEngine.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/interface/class.tx_mksearch_interface_SearchEngine.php'];
-}

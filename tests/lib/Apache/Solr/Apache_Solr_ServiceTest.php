@@ -41,7 +41,7 @@ class Apache_Solr_ServiceTest extends tx_mksearch_tests_Testcase
             'Apache_Solr_Service',
             ['_sendRawPost']
         );
-        $service->setSolrVersion(30);
+        $service->setCompatibilityLayer(new Apache_Solr_Compatibility_Solr3CompatibilityLayer());
 
         $expectedUrl = 'http://localhost:8180/solr/update?wt=json';
         $expectedRawPostWithWaitFlushParameter =
@@ -64,11 +64,11 @@ class Apache_Solr_ServiceTest extends tx_mksearch_tests_Testcase
             'Apache_Solr_Service',
             ['_sendRawPost']
         );
-        $service->setSolrVersion(40);
+        $service->setCompatibilityLayer(new Apache_Solr_Compatibility_Solr4CompatibilityLayer());
 
         $expectedUrl = 'http://localhost:8180/solr/update?wt=json';
         $expectedRawPostWithWaitFlushParameter =
-            '<commit expungeDeletes="false" waitSearcher="true" />';
+            '<commit expungeDeletes="false" softCommit="false" waitSearcher="true" />';
         $expectedTimeout = 3600;
 
         $service->expects($this->once())
@@ -87,7 +87,7 @@ class Apache_Solr_ServiceTest extends tx_mksearch_tests_Testcase
             'Apache_Solr_Service',
             ['_sendRawPost']
         );
-        $service->setSolrVersion(30);
+        $service->setCompatibilityLayer(new Apache_Solr_Compatibility_Solr3CompatibilityLayer());
 
         $expectedUrl = 'http://localhost:8180/solr/update?wt=json';
         $expectedRawPostWithWaitFlushParameter =
@@ -110,7 +110,7 @@ class Apache_Solr_ServiceTest extends tx_mksearch_tests_Testcase
             'Apache_Solr_Service',
             ['_sendRawPost']
         );
-        $service->setSolrVersion(40);
+        $service->setCompatibilityLayer(new Apache_Solr_Compatibility_Solr4CompatibilityLayer());
 
         $expectedUrl = 'http://localhost:8180/solr/update?wt=json';
         $expectedRawPostWithWaitFlushParameter =

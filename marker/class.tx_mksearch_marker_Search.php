@@ -82,8 +82,8 @@ class tx_mksearch_marker_Search extends \Sys25\RnBase\Frontend\Marker\SimpleMark
             $glue = explode($splitter, $glue);
             $glue = $glue[1];
         }
-        //wenn wir ein array haben, holen wir uns dazu eine
-        //kommaseparierte Liste um damit einfach im FE arbeiten zu können
+        // wenn wir ein array haben, holen wir uns dazu eine
+        // kommaseparierte Liste um damit einfach im FE arbeiten zu können
         foreach ($item as $field => $value) {
             // wir sichern den originalen Wert von 'field' nach '_field'
             // beser wäre gewesen, den originalen wert beizubehalten

@@ -33,11 +33,11 @@
  */
 class tx_mksearch_model_Facet extends \Sys25\RnBase\Domain\Model\BaseModel
 {
-    const TYPE_FIELD = 'type_field';
-    const TYPE_PIVOT = 'type_pivot';
-    const TYPE_QUERY = 'type_query';
-    const TYPE_RANGE = 'type_range';
-    const TYPE_DATE = 'type_date';
+    public const TYPE_FIELD = 'type_field';
+    public const TYPE_PIVOT = 'type_pivot';
+    public const TYPE_QUERY = 'type_query';
+    public const TYPE_RANGE = 'type_range';
+    public const TYPE_DATE = 'type_date';
 
     private $childs = [];
 
@@ -151,8 +151,4 @@ class tx_mksearch_model_Facet extends \Sys25\RnBase\Domain\Model\BaseModel
     {
         return $this->getProperty('uid');
     }
-}
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/class.tx_mksearch_model_Facet.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/class.tx_mksearch_model_Facet.php'];
 }

@@ -31,10 +31,7 @@
  */
 class tx_mksearch_tests_indexer_TxNewsNewsTest extends tx_mksearch_tests_Testcase
 {
-    /**
-     * Set up testcase.
-     */
-    protected function setUp()
+    protected function setUp(): void
     {
         if (!\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('news')) {
             $this->markTestSkipped('tx_news is not installed!');
@@ -304,11 +301,4 @@ class tx_mksearch_tests_indexer_TxNewsNewsTest extends tx_mksearch_tests_Testcas
 
         return $indexer;
     }
-}
-
-if ((
-    defined('TYPO3_MODE') &&
-    $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TxNewsNewsTest.php']
-)) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TxNewsNewsTest.php'];
 }

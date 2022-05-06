@@ -30,10 +30,8 @@
  */
 class tx_mksearch_tests_util_TikaTest extends tx_mksearch_tests_Testcase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
-        self::markTestIncomplete('Uncaught require(typo3-mksearch/.Build/Web/typo3conf/LocalConfiguration.php)');
-
         if (!tx_mksearch_util_Tika::getInstance()->isAvailable()) {
             $this->markTestSkipped('Tika is not available!');
         }
@@ -87,8 +85,4 @@ class tx_mksearch_tests_util_TikaTest extends tx_mksearch_tests_Testcase
         );
         self::assertTrue(is_array($meta));
     }
-}
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/util/class.tx_mksearch_tests_util_MiscTest.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/util/class.tx_mksearch_tests_util_MiscTest.php'];
 }

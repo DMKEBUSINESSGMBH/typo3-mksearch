@@ -1,4 +1,5 @@
 <?php
+
 namespace Elastica;
 
 use Psr\Log\AbstractLogger;
@@ -41,7 +42,7 @@ class Log extends AbstractLogger
      * @param string $message
      * @param array  $context
      *
-     * @return null|void
+     * @return void|null
      */
     public function log($level, $message, array $context = [])
     {

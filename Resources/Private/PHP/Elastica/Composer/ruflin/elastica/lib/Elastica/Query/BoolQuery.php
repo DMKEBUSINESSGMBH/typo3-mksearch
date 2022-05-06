@@ -1,4 +1,5 @@
 <?php
+
 namespace Elastica\Query;
 
 use Elastica\Exception\InvalidException;
@@ -8,7 +9,7 @@ use Elastica\Exception\InvalidException;
  *
  * @author Nicolas Ruflin <spam@ruflin.com>
  *
- * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-bool-query.html
+ * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-bool-query.html
  */
 class BoolQuery extends AbstractQuery
 {
@@ -89,22 +90,6 @@ class BoolQuery extends AbstractQuery
     public function setBoost($boost)
     {
         return $this->setParam('boost', $boost);
-    }
-
-    /**
-     * Set the minimum number of of should match.
-     *
-     * @param int $minimumNumberShouldMatch Should match minimum
-     *
-     * @return $this
-     *
-     * @deprecated Replaced by setMinimumShouldMatch
-     */
-    public function setMinimumNumberShouldMatch($minimumNumberShouldMatch)
-    {
-        trigger_error('Deprecated: Elastica\Query::setMinimumNumberShouldMatch() is deprecated and will be removed in further Elastica releases. Use Elastica\Query::setMinimumShouldMatch() instead.', E_USER_DEPRECATED);
-
-        return $this->setParam('minimum_number_should_match', $minimumNumberShouldMatch);
     }
 
     /**

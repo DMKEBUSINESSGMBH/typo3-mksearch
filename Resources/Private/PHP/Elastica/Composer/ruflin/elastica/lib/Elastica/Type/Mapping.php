@@ -1,4 +1,5 @@
 <?php
+
 namespace Elastica\Type;
 
 use Elastica\Exception\InvalidException;
@@ -10,7 +11,7 @@ use Elasticsearch\Endpoints\Indices\Mapping\Put;
  *
  * @author Nicolas Ruflin <spam@ruflin.com>
  *
- * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping.html
+ * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping.html
  */
 class Mapping
 {
@@ -89,7 +90,7 @@ class Mapping
      *
      * @return $this
      *
-     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-meta.html
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-meta.html
      */
     public function setMeta(array $meta)
     {
@@ -116,7 +117,7 @@ class Mapping
      *
      * @return $this
      *
-     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-source-field.html
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-source-field.html
      */
     public function setSource(array $source)
     {
@@ -145,10 +146,8 @@ class Mapping
      * _id
      * _type
      * _source
-     * _all
      * _analyzer
      * _boost
-     * _parent
      * _routing
      * _index
      * _size
@@ -177,43 +176,7 @@ class Mapping
      */
     public function getParam($key)
     {
-        return isset($this->_mapping[$key]) ? $this->_mapping[$key] : null;
-    }
-
-    /**
-     * Sets params for the "_all" field.
-     *
-     * @param array $params _all Params (enabled, store, term_vector, analyzer)
-     *
-     * @return $this
-     */
-    public function setAllField(array $params)
-    {
-        return $this->setParam('_all', $params);
-    }
-
-    /**
-     * Enables the "_all" field.
-     *
-     * @param bool $enabled OPTIONAL (default = true)
-     *
-     * @return $this
-     */
-    public function enableAllField($enabled = true)
-    {
-        return $this->setAllField(['enabled' => $enabled]);
-    }
-
-    /**
-     * Set parent type.
-     *
-     * @param string $type Parent type
-     *
-     * @return $this
-     */
-    public function setParent($type)
-    {
-        return $this->setParam('_parent', ['type' => $type]);
+        return $this->_mapping[$key] ?? null;
     }
 
     /**

@@ -1,4 +1,5 @@
 <?php
+
 namespace Elastica\Query;
 
 use Elastica\Script\AbstractScript;
@@ -6,7 +7,7 @@ use Elastica\Script\AbstractScript;
 /**
  * Class FunctionScore.
  *
- * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-function-score-query.html
+ * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-function-score-query.html
  */
 class FunctionScore extends AbstractQuery
 {
@@ -44,6 +45,9 @@ class FunctionScore extends AbstractQuery
     const MULTI_VALUE_MODE_AVG = 'avg';
     const MULTI_VALUE_MODE_SUM = 'sum';
 
+    const RANDOM_SCORE_FIELD_ID = '_id';
+    const RANDOM_SCORE_FIELD_SEQ_NO = '_seq_no';
+
     protected $_functions = [];
 
     /**
@@ -78,7 +82,7 @@ class FunctionScore extends AbstractQuery
             $function['filter'] = $filter;
         }
 
-        if ($weight !== null) {
+        if (null !== $weight) {
             $function['weight'] = $weight;
         }
 
@@ -191,12 +195,21 @@ class FunctionScore extends AbstractQuery
      * @param number        $seed   the seed value
      * @param AbstractQuery $filter a filter associated with this function
      * @param float         $weight an optional boost value associated with this function
+     * @param string        $field  the field to be used for random number generation
      *
      * @return $this
      */
-    public function addRandomScoreFunction($seed, AbstractQuery $filter = null, $weight = null)
+    public function addRandomScoreFunction($seed, AbstractQuery $filter = null, $weight = null, $field = null)
     {
-        return $this->addFunction('random_score', ['seed' => $seed], $filter, $weight);
+        $functionParams = [
+            'seed' => $seed,
+        ];
+
+        if (null !== $field) {
+            $functionParams['field'] = $field;
+        }
+
+        return $this->addFunction('random_score', $functionParams, $filter, $weight);
     }
 
     /**
@@ -238,7 +251,7 @@ class FunctionScore extends AbstractQuery
     /**
      * If set, this query will return results in random order.
      *
-     * @param int $seed Set a seed value to return results in the same random order for consistent pagination.
+     * @param int $seed set a seed value to return results in the same random order for consistent pagination
      *
      * @return $this
      */

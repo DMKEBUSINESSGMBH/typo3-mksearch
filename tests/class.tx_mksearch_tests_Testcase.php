@@ -36,17 +36,12 @@ abstract class tx_mksearch_tests_Testcase extends \Sys25\RnBase\Testing\BaseTest
     /**
      * setUp() = init DB etc.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         tx_mksearch_tests_Util::emptyAddRootlineFields();
 
         // set up hooks
-        self::markTestIncomplete('array_keys() expects parameter 1 to be array, null given');
         tx_mksearch_tests_Util::hooksSetUp();
-
-        // das devlog stört nur bei der Testausführung im BE und ist da auch
-        // vollkommen unnötig
-        tx_mksearch_tests_Util::disableDevlog();
 
         // das TS Parsing frisst in manchen Umgebung mehr als 128MB Speicher. Es gibt aber im Moment keine Zeit
         // die Tests zu refactoren. Also setzen wir das Limit hoch
@@ -57,10 +52,7 @@ abstract class tx_mksearch_tests_Testcase extends \Sys25\RnBase\Testing\BaseTest
         mb_internal_encoding('UTF-8');
     }
 
-    /**
-     * tearDown() = destroy DB etc.
-     */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         // tear down hooks
         tx_mksearch_tests_Util::hooksTearDown();
@@ -90,7 +82,7 @@ abstract class tx_mksearch_tests_Testcase extends \Sys25\RnBase\Testing\BaseTest
             if (!is_array($GLOBALS['TSFE']->rootLine[0])) {
                 $GLOBALS['TSFE']->rootLine[0] = [];
             }
-            //wenn tq_seo kommt sonst ein error
+            // wenn tq_seo kommt sonst ein error
             $GLOBALS['TSFE']->rootLine[0]['uid'] = $options['pid'];
         }
     }
@@ -206,8 +198,4 @@ abstract class tx_mksearch_tests_Testcase extends \Sys25\RnBase\Testing\BaseTest
             $message.'"'.$fieldName.'" contains the wrong value. "'.$expectedValue.'" as expected but "'.$field->getValue().'" given.'
         );
     }
-}
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/class.tx_mksearchTest.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/class.tx_mksearch_testsTest.php'];
 }

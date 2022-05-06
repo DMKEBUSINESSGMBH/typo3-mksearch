@@ -41,9 +41,9 @@ class IndexerConfigurationField extends \TYPO3\CMS\Backend\Form\Element\TextElem
      */
     public function render()
     {
-        $extKey = $this->data['databaseRow']['extkey'][0];
-        $contentType = $this->data['databaseRow']['contenttype'][0];
-        if (!$this->data['databaseRow']['configuration'] && $extKey && $contentType) {
+        $extKey = $this->data['databaseRow']['extkey'][0] ?? '';
+        $contentType = $this->data['databaseRow']['contenttype'][0] ?? '';
+        if (!($this->data['databaseRow']['configuration'] ?? false) && $extKey && $contentType) {
             try {
                 $this->data['parameterArray']['itemFormElValue'] = \tx_mksearch_util_Config::getIndexerDefaultTSConfig(
                     $extKey, $contentType

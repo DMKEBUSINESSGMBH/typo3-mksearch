@@ -1,9 +1,9 @@
 <?php
+
 namespace Elastica;
 
 /**
  * Interface for params.
- *
  *
  * @author Evgeniy Sokolov <ewgraf@gmail.com>
  */

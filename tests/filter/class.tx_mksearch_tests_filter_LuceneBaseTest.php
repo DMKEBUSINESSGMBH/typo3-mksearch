@@ -28,10 +28,10 @@
  * benötigte Klassen einbinden.
  */
 
-//damit die User func ausgeführt werden kann, muss sie geladen werden, was auf dem
-//CLI und TYPO3 < 4.5 nicht der Fall ist
-//im FE geschieht dies durch includeLibs im TS bzw. ab TYPO3 4.5 auch automatisch
-//auf dem CLI
+// damit die User func ausgeführt werden kann, muss sie geladen werden, was auf dem
+// CLI und TYPO3 < 4.5 nicht der Fall ist
+// im FE geschieht dies durch includeLibs im TS bzw. ab TYPO3 4.5 auch automatisch
+// auf dem CLI
 
 /**
  * @author Hannes Bochmann <dev@dmk-ebusiness.de>
@@ -43,15 +43,8 @@ class tx_mksearch_tests_filter_LuceneBaseTest extends tx_mksearch_tests_Testcase
      */
     private $feGroupsBackup;
 
-    /**
-     * (non-PHPdoc).
-     *
-     * @see PHPUnit_Framework_TestCase::setUp()
-     */
-    protected function setUp()
+    protected function setUp(): void
     {
-        self::markTestIncomplete('Uncaught require(typo3-mksearch/.Build/Web/typo3conf/LocalConfiguration.php)');
-
         $zendPath = \Sys25\RnBase\Configuration\Processor::getExtensionCfgValue('mksearch', 'zendPath');
         if (empty($zendPath)) {
             $this->markTestSkipped('Pfad zu Zend nicht konfiguriert.');
@@ -64,12 +57,7 @@ class tx_mksearch_tests_filter_LuceneBaseTest extends tx_mksearch_tests_Testcase
         \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_service_engine_ZendLucene');
     }
 
-    /**
-     * (non-PHPdoc).
-     *
-     * @see PHPUnit_Framework_TestCase::tearDown()
-     */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $GLOBALS['TSFE']->fe_user->groupData['uid'] = $this->feGroupsBackup;

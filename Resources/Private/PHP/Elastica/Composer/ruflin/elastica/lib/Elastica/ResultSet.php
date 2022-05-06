@@ -1,4 +1,5 @@
 <?php
+
 namespace Elastica;
 
 use Elastica\Exception\InvalidException;
@@ -101,7 +102,7 @@ class ResultSet implements \Iterator, \Countable, \ArrayAccess
     {
         $data = $this->_response->getData();
 
-        return isset($data['suggest']) ? $data['suggest'] : [];
+        return $data['suggest'] ?? [];
     }
 
     /**
@@ -125,7 +126,7 @@ class ResultSet implements \Iterator, \Countable, \ArrayAccess
     {
         $data = $this->_response->getData();
 
-        return isset($data['aggregations']) ? $data['aggregations'] : [];
+        return $data['aggregations'] ?? [];
     }
 
     /**
@@ -156,7 +157,7 @@ class ResultSet implements \Iterator, \Countable, \ArrayAccess
     {
         $data = $this->_response->getData();
 
-        return isset($data['hits']['total']) ? (int) $data['hits']['total'] : 0;
+        return (int) ($data['hits']['total'] ?? 0);
     }
 
     /**
@@ -168,7 +169,7 @@ class ResultSet implements \Iterator, \Countable, \ArrayAccess
     {
         $data = $this->_response->getData();
 
-        return isset($data['hits']['max_score']) ? (float) $data['hits']['max_score'] : 0;
+        return (float) ($data['hits']['max_score'] ?? 0);
     }
 
     /**
@@ -180,7 +181,7 @@ class ResultSet implements \Iterator, \Countable, \ArrayAccess
     {
         $data = $this->_response->getData();
 
-        return isset($data['took']) ? $data['took'] : 0;
+        return $data['took'] ?? 0;
     }
 
     /**
@@ -218,6 +219,7 @@ class ResultSet implements \Iterator, \Countable, \ArrayAccess
      *
      * @return int Size of set
      */
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return count($this->_results);
@@ -236,25 +238,21 @@ class ResultSet implements \Iterator, \Countable, \ArrayAccess
     /**
      * Returns the current object of the set.
      *
-     * @return \Elastica\Result|bool Set object or false if not valid (no more entries)
+     * @return \Elastica\Result Set object
      */
+    #[\ReturnTypeWillChange]
     public function current()
     {
-        if ($this->valid()) {
-            return $this->_results[$this->key()];
-        } else {
-            return false;
-        }
+        return $this->_results[$this->key()];
     }
 
     /**
      * Sets pointer (current) to the next item of the set.
      */
+    #[\ReturnTypeWillChange]
     public function next()
     {
         ++$this->_position;
-
-        return $this->current();
     }
 
     /**
@@ -262,6 +260,7 @@ class ResultSet implements \Iterator, \Countable, \ArrayAccess
      *
      * @return int Current position
      */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return $this->_position;
@@ -272,6 +271,7 @@ class ResultSet implements \Iterator, \Countable, \ArrayAccess
      *
      * @return bool True if object exists
      */
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         return isset($this->_results[$this->key()]);
@@ -280,6 +280,7 @@ class ResultSet implements \Iterator, \Countable, \ArrayAccess
     /**
      * Resets position to 0, restarts iterator.
      */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         $this->_position = 0;
@@ -288,12 +289,13 @@ class ResultSet implements \Iterator, \Countable, \ArrayAccess
     /**
      * Whether a offset exists.
      *
-     * @link http://php.net/manual/en/arrayaccess.offsetexists.php
+     * @see http://php.net/manual/en/arrayaccess.offsetexists.php
      *
      * @param int $offset
      *
-     * @return bool true on success or false on failure.
+     * @return bool true on success or false on failure
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         return isset($this->_results[$offset]);
@@ -302,33 +304,35 @@ class ResultSet implements \Iterator, \Countable, \ArrayAccess
     /**
      * Offset to retrieve.
      *
-     * @link http://php.net/manual/en/arrayaccess.offsetget.php
+     * @see http://php.net/manual/en/arrayaccess.offsetget.php
      *
      * @param int $offset
      *
      * @throws Exception\InvalidException If offset doesn't exist
      *
-     * @return Result|null
+     * @return Result
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         if ($this->offsetExists($offset)) {
             return $this->_results[$offset];
-        } else {
-            throw new InvalidException('Offset does not exist.');
         }
+
+        throw new InvalidException('Offset does not exist.');
     }
 
     /**
      * Offset to set.
      *
-     * @link http://php.net/manual/en/arrayaccess.offsetset.php
+     * @see http://php.net/manual/en/arrayaccess.offsetset.php
      *
      * @param int    $offset
      * @param Result $value
      *
      * @throws Exception\InvalidException
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         if (!($value instanceof Result)) {
@@ -345,10 +349,11 @@ class ResultSet implements \Iterator, \Countable, \ArrayAccess
     /**
      * Offset to unset.
      *
-     * @link http://php.net/manual/en/arrayaccess.offsetunset.php
+     * @see http://php.net/manual/en/arrayaccess.offsetunset.php
      *
      * @param int $offset
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         unset($this->_results[$offset]);

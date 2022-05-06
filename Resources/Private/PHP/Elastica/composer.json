@@ -3,6 +3,6 @@
         "vendor-dir": "Composer"
     },
     "require": {
-        "ruflin/elastica": "~5.3"
+        "ruflin/elastica": "~6.2"
     }
 }

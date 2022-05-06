@@ -79,7 +79,7 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
                 $fields['term'] = '*:*';
             }
 
-            //get the index we shall search in
+            // get the index we shall search in
             $index = $this->getSearchIndex($request);
             $pageBrowser = $this->handlePageBrowser($request, $confId, $fields, $options, $index);
 
@@ -152,7 +152,7 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
         if ($result = $oCache->get($sCacheKey)) {
             return $result;
         }
-        //else nix im cache also Solr suchen lassen
+        // else nix im cache also Solr suchen lassen
 
         try {
             // in unserem fall sollte es der solr service sein!
@@ -162,7 +162,7 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
             $result = $searchEngine->search($fields, $options);
             $searchEngine->closeIndex();
 
-            //der solr responce processor bearbeidet die results
+            // der solr responce processor bearbeidet die results
             // es werden hits, facets, uws. erzeugt.
             tx_mksearch_util_SolrResponseProcessor::processSolrResult(
                 $result,
@@ -173,8 +173,8 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
             $this->findCharBrowserData($result, $request);
         } catch (Exception $e) {
             $lastUrl = $e instanceof tx_mksearch_service_engine_SolrException ? $e->getLastUrl() : '';
-            //Da die Exception gefangen wird, würden die Entwickler keine Mail bekommen
-            //also machen wir das manuell
+            // Da die Exception gefangen wird, würden die Entwickler keine Mail bekommen
+            // also machen wir das manuell
             if ($addr = \Sys25\RnBase\Configuration\Processor::getExtensionCfgValue('rn_base', 'sendEmailOnException')) {
                 \Sys25\RnBase\Utility\Misc::sendErrorMail($addr, 'tx_mksearch_action_SearchSolr_searchSolr', $e);
             }
@@ -203,8 +203,8 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
             return false;
         }
 
-        //alles gut gegangen. dann noch das ergebnis für den aktuellen
-        //request in den cache
+        // alles gut gegangen. dann noch das ergebnis für den aktuellen
+        // request in den cache
         $oCache->set($sCacheKey, $result);
 
         return $result;
@@ -249,9 +249,9 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
                 // Dabei müssen wir die bisherigen Parameter mergen,
                 // da diese sonst überschrieben werden.
 
-                //@todo limit über setRegsiter setzen um im TS darauf zugreifen
-                //zu können. Dann werden hier auch nicht alle Parameter von
-                //anderen Plugins überschrieben
+                // @todo limit über setRegsiter setzen um im TS darauf zugreifen
+                // zu können. Dann werden hier auch nicht alle Parameter von
+                // anderen Plugins überschrieben
                 if (!$parameters->getInt($limitParam, $limitQualifier)) {
                     $params = \Sys25\RnBase\Frontend\Request\Parameters::getPostOrGetParameter($limitQualifier);
                     $params = $params ? $params : [];
@@ -395,7 +395,7 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
      */
     protected function processAutocomplete(\Sys25\RnBase\Frontend\Request\RequestInterface $request)
     {
-        //shall we parse the content just as json
+        // shall we parse the content just as json
         if ($request->getParameters()->get('ajax')) {
             // if the frontend debug is enabled, so the json will be invalid.
             // so we has to disable the debug.
@@ -420,8 +420,4 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
     {
         return 'tx_mksearch_view_SearchSolr';
     }
-}
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/action/class.tx_mksearch_action_SearchSolr.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/action/class.tx_mksearch_action_SearchSolr.php'];
 }

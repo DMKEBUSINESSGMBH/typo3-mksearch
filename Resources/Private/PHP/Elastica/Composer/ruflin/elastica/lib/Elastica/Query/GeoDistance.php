@@ -1,4 +1,5 @@
 <?php
+
 namespace Elastica\Query;
 
 /**
@@ -6,17 +7,12 @@ namespace Elastica\Query;
  *
  * @author Nicolas Ruflin <spam@ruflin.com>
  *
- * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-geo-distance-query.html
+ * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-geo-distance-query.html
  */
 class GeoDistance extends AbstractGeoDistance
 {
     const DISTANCE_TYPE_ARC = 'arc';
     const DISTANCE_TYPE_PLANE = 'plane';
-    const DISTANCE_TYPE_SLOPPY_ARC = 'sloppy_arc';
-
-    const OPTIMIZE_BBOX_MEMORY = 'memory';
-    const OPTIMIZE_BBOX_INDEXED = 'indexed';
-    const OPTIMIZE_BBOX_NONE = 'none';
 
     /**
      * Create GeoDistance object.
@@ -49,27 +45,13 @@ class GeoDistance extends AbstractGeoDistance
     /**
      * See DISTANCE_TYPE_* constants.
      *
-     * @param string $distanceType
+     * @param string $distanceType, default arc
      *
      * @return $this
      */
     public function setDistanceType($distanceType)
     {
         $this->setParam('distance_type', $distanceType);
-
-        return $this;
-    }
-
-    /**
-     * See OPTIMIZE_BBOX_* constants.
-     *
-     * @param string $optimizeBbox
-     *
-     * @return $this
-     */
-    public function setOptimizeBbox($optimizeBbox)
-    {
-        $this->setParam('optimize_bbox', $optimizeBbox);
 
         return $this;
     }

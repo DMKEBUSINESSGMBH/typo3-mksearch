@@ -59,7 +59,7 @@ class tx_mksearch_tests_indexer_Page_DBTest extends tx_mksearch_tests_DbTestcase
 
         $result = $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
 
-        //nichtzs direkt indiziert?
+        // nichtzs direkt indiziert?
         self::assertNull($result, 'Es wurde nicht null zurück gegeben!');
 
         $aOptions = [
@@ -69,13 +69,13 @@ class tx_mksearch_tests_indexer_Page_DBTest extends tx_mksearch_tests_DbTestcase
 
         self::assertEquals(3, count($aResult), 'Es wurde nicht der richtige Anzahl in die queue gelegt!');
 
-        //die anderen subpages sollten auch drin liegen
+        // die anderen subpages sollten auch drin liegen
         self::assertEquals('pages', $aResult[0]['tablename'], 'Es wurde nicht das richtige Element (tablename) in die queue gelegt! Element 1');
         self::assertEquals(3, $aResult[0]['recid'], 'Es wurde nicht das richtige Element (recid) in die queue gelegt! Element 1');
         self::assertEquals('pages', $aResult[1]['tablename'], 'Es wurde nicht das richtige Element (tablename) in die queue gelegt! Element 2');
         self::assertEquals(9, $aResult[1]['recid'], 'Es wurde nicht das richtige Element (recid) in die queue gelegt! Element 2');
 
-        //und das shortcut ziel
+        // und das shortcut ziel
         self::assertEquals('pages', $aResult[2]['tablename'], 'Es wurde nicht das richtige Element (tablename) in die queue gelegt! Element 3');
         self::assertEquals(2, $aResult[2]['recid'], 'Es wurde nicht das richtige Element (recid) in die queue gelegt! Element 3');
     }
@@ -107,27 +107,27 @@ class tx_mksearch_tests_indexer_Page_DBTest extends tx_mksearch_tests_DbTestcase
 
         list($extKey, $cType) = $indexer->getContentType();
 
-        //is hidden
+        // is hidden
         $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_Page');
         $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $record = ['uid' => 124, 'pid' => 0, 'deleted' => 0, 'hidden' => 1, 'title' => 'list'];
         $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
         self::assertEquals(true, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 
-        //everything alright
+        // everything alright
         $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_Page');
         $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $record = ['uid' => 125, 'pid' => 1, 'deleted' => 0, 'hidden' => 0, 'title' => 'test'];
         $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
         self::assertEquals(false, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 
-        //parent is hidden
+        // parent is hidden
         $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $record = ['uid' => 10, 'pid' => 7, 'deleted' => 0, 'hidden' => 0, 'title' => 'test'];
         $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
         self::assertEquals(true, $indexDoc->getDeleted(), 'Wrong deleted state for uid '.$record['uid']);
 
-        //everything alright with parents
+        // everything alright with parents
         $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_Page');
         $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $record = ['uid' => 126, 'pid' => 3, 'deleted' => 0, 'hidden' => 0, 'title' => 'test'];
@@ -146,32 +146,32 @@ class tx_mksearch_tests_indexer_Page_DBTest extends tx_mksearch_tests_DbTestcase
 
         $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
 
-        //testbeginn
+        // testbeginn
         $record = ['uid' => 1, 'title' => 'testPage'];
-        $options['exclude.']['pageTrees.'] = [1]; //als array
+        $options['exclude.']['pageTrees.'] = [1]; // als array
         $result = $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
         self::assertNull($result, 'Element sollte gelöscht werden, da nicht im richtigen Seitenbaum. 1');
 
-        $options['exclude.']['pageTrees.'] = [4]; //als array
+        $options['exclude.']['pageTrees.'] = [4]; // als array
         $result = $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
         self::assertNotNull($result, 'Element sollte nicht gelöscht werden, da im richtigen Seitenbaum. 1');
 
         $record = ['uid' => 3, 'title' => 'testPage'];
-        $options['exclude.']['pageTrees.'] = [1]; //als array
+        $options['exclude.']['pageTrees.'] = [1]; // als array
         $result = $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
         self::assertNull($result, 'Element sollte gelöscht werden, da nicht im richtigen Seitenbaum. 2');
 
         $record2 = ['uid' => 5, 'title' => 'testPage'];
         $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
-        $options['exclude.']['pageTrees.'] = [1, 4]; //als array
+        $options['exclude.']['pageTrees.'] = [1, 4]; // als array
         $result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options, 1);
         self::assertNull($result, 'Element sollte gelöscht werden, da im richtigen Seitenbaum. 3');
         $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $result = $indexer->prepareSearchData('tt_content', $record2, $indexDoc, $options, 1);
         self::assertNull($result, 'Element sollte gelöscht werden, da im richtigen Seitenbaum. 4');
 
-        //nichts explizit excluded also alles rein
-        unset($options['exclude.']['pageTrees.']); //zurücksetzen
+        // nichts explizit excluded also alles rein
+        unset($options['exclude.']['pageTrees.']); // zurücksetzen
         $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options, 1);
         self::assertNotNull($result, 'Element sollte nicht gelöscht werden, da nichts excluded. 1');
@@ -191,37 +191,37 @@ class tx_mksearch_tests_indexer_Page_DBTest extends tx_mksearch_tests_DbTestcase
 
         $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
 
-        //testbeginn
+        // testbeginn
         $record = ['uid' => 1, 'title' => 'testPage'];
-        $options['include.']['pageTrees.'] = [1]; //als array
+        $options['include.']['pageTrees.'] = [1]; // als array
         $result = $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
         self::assertNotNull($result, 'Element sollte nicht gelöscht werden, da im richtigen Seitenbaum. 1');
 
-        $options['include.']['pageTrees.'] = [4]; //als array
+        $options['include.']['pageTrees.'] = [4]; // als array
         $result = $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
         self::assertNull($result, 'Element sollte gelöscht werden, da nicht im richtigen Seitenbaum. 1');
 
         $record = ['uid' => 4, 'title' => 'testPage'];
-        $options['include.']['pageTrees.'] = [1]; //als array
+        $options['include.']['pageTrees.'] = [1]; // als array
         $result = $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
         self::assertNull($result, 'Element sollte gelöscht werden, da nicht im richtigen Seitenbaum. 2');
 
         $record = ['uid' => 3, 'title' => 'testPage'];
-        $options['include.']['pageTrees.'] = [1]; //als array
+        $options['include.']['pageTrees.'] = [1]; // als array
         $result = $indexer->prepareSearchData('pages', $record, $indexDoc, $options);
         self::assertNotNull($result, 'Element sollte nicht gelöscht werden, da im richtigen Seitenbaum. 2');
 
         $record2 = ['uid' => 5, 'title' => 'testPage'];
         $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
-        $options['include.']['pageTrees.'] = [1, 4]; //als array
+        $options['include.']['pageTrees.'] = [1, 4]; // als array
         $result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options, 1);
         self::assertNotNull($result, 'Element sollte nicht gelöscht werden, da im richtigen Seitenbaum. 3');
         $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $result = $indexer->prepareSearchData('tt_content', $record2, $indexDoc, $options, 1);
         self::assertNotNull($result, 'Element sollte nicht gelöscht werden, da im richtigen Seitenbaum. 4');
 
-        //nichts explizit included also alles rein
-        unset($options['include.']['pageTrees.']); //zurücksetzen
+        // nichts explizit included also alles rein
+        unset($options['include.']['pageTrees.']); // zurücksetzen
         $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $result = $indexer->prepareSearchData('tt_content', $record, $indexDoc, $options, 1);
         self::assertNotNull($result, 'Element sollte nicht gelöscht werden, da nichts included. 1');
@@ -289,7 +289,7 @@ class tx_mksearch_tests_indexer_Page_DBTest extends tx_mksearch_tests_DbTestcase
         self::assertEquals('test  test page for tests :-D', $aIndexDoc['abstract_s']->getValue(), 'Es wurde nicht das Feld [abstract_s] richtig gesetzt!');
         self::assertEquals(2, $aIndexDoc['doktype_i']->getValue(), 'Es wurde nicht das Feld [doktype_i] richtig gesetzt!');
         self::assertTrue(empty($aIndexDoc['emptyDummyField_s']), 'Es wurde nicht das Feld [emptyDummyField_s] richtig gesetzt!');
-        //common fields
+        // common fields
 
         self::assertEquals('test test page for tests :-D', $aIndexDoc['abstract']->getValue(), 'Es wurde nicht das Feld [abstract] richtig gesetzt!');
         self::assertEquals('testPage', $aIndexDoc['title']->getValue(), 'Es wurde nicht das Feld [title] richtig gesetzt!');
@@ -318,7 +318,7 @@ class tx_mksearch_tests_indexer_Page_DBTest extends tx_mksearch_tests_DbTestcase
         self::assertEquals('<a href="http://www.test.de">test</a> test page for tests :-D', $aIndexDoc['abstract_s']->getValue(), 'Es wurde nicht das Feld [abstract_s] richtig gesetzt!');
         self::assertEquals(2, $aIndexDoc['doktype_i']->getValue(), 'Es wurde nicht das Feld [doktype_i] richtig gesetzt!');
         self::assertTrue(empty($aIndexDoc['emptyDummyField_s']), 'Es wurde nicht das Feld [emptyDummyField_s] richtig gesetzt!');
-        //common fields
+        // common fields
         self::assertEquals('test  test page for tests :-D', $aIndexDoc['abstract']->getValue(), 'Es wurde nicht das Feld [abstract] richtig gesetzt!');
         self::assertEquals('testPage', $aIndexDoc['title']->getValue(), 'Es wurde nicht das Feld [title] richtig gesetzt!');
     }
@@ -338,11 +338,8 @@ class tx_mksearch_tests_indexer_Page_DBTest extends tx_mksearch_tests_DbTestcase
         self::assertTrue(empty($aIndexDoc['abstract_s']), 'Es wurde nicht das Feld [abstract_s] richtig gesetzt!');
         self::assertTrue(empty($aIndexDoc['doktype_i']), 'Es wurde nicht das Feld [doktype_i] richtig gesetzt!');
         self::assertTrue(empty($aIndexDoc['emptyDummyField_s']), 'Es wurde nicht das Feld [emptyDummyField_s] richtig gesetzt!');
-        //common fields
+        // common fields
         self::assertEquals('test page for tests :-D', $aIndexDoc['abstract']->getValue(), 'Es wurde nicht das Feld [abstract] richtig gesetzt!');
         self::assertEquals('testPage', $aIndexDoc['title']->getValue(), 'Es wurde nicht das Feld [title] richtig gesetzt!');
     }
-}
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContentTest.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContentTest.php'];
 }

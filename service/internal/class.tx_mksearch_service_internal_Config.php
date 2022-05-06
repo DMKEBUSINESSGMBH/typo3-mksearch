@@ -73,8 +73,8 @@ class tx_mksearch_service_internal_Config extends tx_mksearch_service_internal_B
 
         $sTs = $index->getProperty('configuration')."\n";
 
-        //use the uid of the index config as key to be able to
-        //get different configs for the same contenttype
+        // use the uid of the index config as key to be able to
+        // get different configs for the same contenttype
         foreach ($tmpCfg as $oModel) {
             $sTs .= $oModel->getProperty('extkey').'.'.$oModel->getProperty('contenttype').'.'.$oModel->getProperty('uid')." {\n".
             $oModel->getProperty('configuration')."\n}\n";
@@ -82,8 +82,4 @@ class tx_mksearch_service_internal_Config extends tx_mksearch_service_internal_B
 
         return tx_mksearch_util_Misc::parseTsConfig($sTs);
     }
-}
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/internal/class.tx_mksearch_service_internal_Config.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/internal/class.tx_mksearch_service_internal_Config.php'];
 }

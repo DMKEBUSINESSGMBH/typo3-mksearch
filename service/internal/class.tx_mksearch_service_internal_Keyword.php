@@ -17,7 +17,3 @@ class tx_mksearch_service_internal_Keyword extends tx_mksearch_service_Base
         return 'tx_mksearch_search_Keyword';
     }
 }
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/class.tx_mksearch_service_internal_Keyword.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/class.tx_mksearch_service_internal_Keyword.php'];
-}

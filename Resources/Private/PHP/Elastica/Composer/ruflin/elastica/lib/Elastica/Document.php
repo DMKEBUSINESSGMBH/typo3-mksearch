@@ -1,4 +1,5 @@
 <?php
+
 namespace Elastica;
 
 use Elastica\Bulk\Action;
@@ -198,7 +199,7 @@ class Document extends AbstractUpdateAction
      * @param float  $latitude  Latitude value
      * @param float  $longitude Longitude value
      *
-     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-geo-point-type.html
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-geo-point-type.html
      *
      * @return $this
      */
@@ -273,6 +274,34 @@ class Document extends AbstractUpdateAction
     public function isAutoPopulate()
     {
         return $this->_autoPopulate;
+    }
+
+    /**
+     * Sets pipeline.
+     *
+     * @param string $pipeline
+     *
+     * @return $this
+     */
+    public function setPipeline($pipeline)
+    {
+        return $this->setParam('_pipeline', $pipeline);
+    }
+
+    /**
+     * @return string
+     */
+    public function getPipeline()
+    {
+        return $this->getParam('_pipeline');
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasPipeline()
+    {
+        return $this->hasParam('_pipeline');
     }
 
     /**

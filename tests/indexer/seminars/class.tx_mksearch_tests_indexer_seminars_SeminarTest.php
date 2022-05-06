@@ -60,10 +60,7 @@ class tx_mksearch_tests_indexer_seminars_SeminarTest extends tx_mksearch_tests_D
         $this->importDataSets[] = tx_mksearch_tests_Util::getFixturePath('db/seminars_timeslots_speakers_mm.xml');
     }
 
-    /**
-     * setUp() = init DB etc.
-     */
-    protected function setUp()
+    protected function setUp(): void
     {
         if (!\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('seminars')) {
             self::markTestSkipped('seminars is not installed');
@@ -71,8 +68,8 @@ class tx_mksearch_tests_indexer_seminars_SeminarTest extends tx_mksearch_tests_D
 
         parent::setUp();
 
-        //if we got here all extensions got successfully imported
-        //so now we can load the appropriate classes
+        // if we got here all extensions got successfully imported
+        // so now we can load the appropriate classes
     }
 
     /**
@@ -80,7 +77,7 @@ class tx_mksearch_tests_indexer_seminars_SeminarTest extends tx_mksearch_tests_D
      */
     public function testPrepareSearchDataWithTableSeminarsAndTypeIs0()
     {
-        //Testdaten aus DB holen
+        // Testdaten aus DB holen
         $aOptions = [
             'where' => 'tx_seminars_seminars.uid=1',
             'enablefieldsoff' => true,
@@ -135,20 +132,20 @@ class tx_mksearch_tests_indexer_seminars_SeminarTest extends tx_mksearch_tests_D
         $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $options = [];
 
-        //Testdaten aus DB holen
+        // Testdaten aus DB holen
         $aOptions = [
             'where' => 'tx_seminars_seminars.uid=1',
             'enablefieldsoff' => true,
         ];
         $aResult = \Sys25\RnBase\Database\Connection::getInstance()->doSelect('*', 'tx_seminars_seminars', $aOptions);
 
-        //manipulate the seminar and set it to deleted
+        // manipulate the seminar and set it to deleted
         $aResult[0]['deleted'] = 1;
 
         $oIndexDoc = $indexer->prepareSearchData('tx_seminars_seminars', $aResult[0], $indexDoc, $options);
         self::assertTrue($oIndexDoc->getDeleted(), 'Element sollte gelöscht werden, da auf deleted');
 
-        //manipulate the seminar and set it to hidden
+        // manipulate the seminar and set it to hidden
         $aResult[0]['deleted'] = 0;
         $aResult[0]['hidden'] = 1;
 
@@ -162,7 +159,7 @@ class tx_mksearch_tests_indexer_seminars_SeminarTest extends tx_mksearch_tests_D
      */
     public function testPrepareSearchDataWithTableSeminarsAndTypeIs1()
     {
-        //Testdaten aus DB holen
+        // Testdaten aus DB holen
         $aOptions = [
             'where' => 'tx_seminars_seminars.uid=2',
             'enablefieldsoff' => true,
@@ -212,7 +209,7 @@ class tx_mksearch_tests_indexer_seminars_SeminarTest extends tx_mksearch_tests_D
      */
     public function testPrepareSearchDataWithTableSeminarsAndTypeIs1ButNoDates()
     {
-        //Testdaten aus DB holen
+        // Testdaten aus DB holen
         $aOptions = [
             'where' => 'tx_seminars_seminars.uid=5',
             'enablefieldsoff' => true,
@@ -239,20 +236,20 @@ class tx_mksearch_tests_indexer_seminars_SeminarTest extends tx_mksearch_tests_D
         $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $options = [];
 
-        //Testdaten aus DB holen
+        // Testdaten aus DB holen
         $aOptions = [
             'where' => 'tx_seminars_seminars.uid=1',
             'enablefieldsoff' => true,
         ];
         $aResult = \Sys25\RnBase\Database\Connection::getInstance()->doSelect('*', 'tx_seminars_seminars', $aOptions);
 
-        //manipulate the seminar and set it to deleted
+        // manipulate the seminar and set it to deleted
         $aResult[0]['deleted'] = 1;
 
         $oIndexDoc = $indexer->prepareSearchData('tx_seminars_seminars', $aResult[0], $indexDoc, $options);
         self::assertTrue($oIndexDoc->getDeleted(), 'Element sollte gelöscht werden, da auf deleted');
 
-        //manipulate the seminar and set it to hidden
+        // manipulate the seminar and set it to hidden
         $aResult[0]['deleted'] = 0;
         $aResult[0]['hidden'] = 1;
 
@@ -265,7 +262,7 @@ class tx_mksearch_tests_indexer_seminars_SeminarTest extends tx_mksearch_tests_D
      */
     public function testPrepareSearchDataWithTableSeminarsAndTypeIs2()
     {
-        //Testdaten aus DB holen
+        // Testdaten aus DB holen
         $aOptions = [
             'where' => 'tx_seminars_seminars.uid=3',
             'enablefieldsoff' => true,
@@ -278,7 +275,7 @@ class tx_mksearch_tests_indexer_seminars_SeminarTest extends tx_mksearch_tests_D
         $options = [];
 
         $aIndexDoc = $indexer->prepareSearchData('tx_seminars_seminars', $aResult[0], $indexDoc, $options);
-        //nichtzs direkt indiziert?
+        // nichtzs direkt indiziert?
         self::assertNull($aIndexDoc, 'Es wurde nicht null zurück gegeben!');
 
         $aOptions = [
@@ -303,7 +300,7 @@ class tx_mksearch_tests_indexer_seminars_SeminarTest extends tx_mksearch_tests_D
         $options = [];
 
         $aIndexDoc = $indexer->prepareSearchData('tx_seminars_categories', $aResult, $indexDoc, $options);
-        //nichtzs direkt indiziert?
+        // nichtzs direkt indiziert?
         self::assertNull($aIndexDoc, 'Es wurde nicht null zurück gegeben!');
 
         $aOptions = [
@@ -330,7 +327,7 @@ class tx_mksearch_tests_indexer_seminars_SeminarTest extends tx_mksearch_tests_D
         $options = [];
 
         $aIndexDoc = $indexer->prepareSearchData('tx_seminars_organizers', $aResult, $indexDoc, $options);
-        //nichtzs direkt indiziert?
+        // nichtzs direkt indiziert?
         self::assertNull($aIndexDoc, 'Es wurde nicht null zurück gegeben!');
 
         $aOptions = [
@@ -357,7 +354,7 @@ class tx_mksearch_tests_indexer_seminars_SeminarTest extends tx_mksearch_tests_D
         $options = [];
 
         $aIndexDoc = $indexer->prepareSearchData('tx_seminars_sites', $aResult, $indexDoc, $options);
-        //nichtzs direkt indiziert?
+        // nichtzs direkt indiziert?
         self::assertNull($aIndexDoc, 'Es wurde nicht null zurück gegeben!');
 
         $aOptions = [
@@ -384,7 +381,7 @@ class tx_mksearch_tests_indexer_seminars_SeminarTest extends tx_mksearch_tests_D
         $options = [];
 
         $aIndexDoc = $indexer->prepareSearchData('tx_seminars_speakers', $aResult, $indexDoc, $options);
-        //nichtzs direkt indiziert?
+        // nichtzs direkt indiziert?
         self::assertNull($aIndexDoc, 'Es wurde nicht null zurück gegeben!');
 
         $aOptions = [
@@ -411,7 +408,7 @@ class tx_mksearch_tests_indexer_seminars_SeminarTest extends tx_mksearch_tests_D
         $options = [];
 
         $aIndexDoc = $indexer->prepareSearchData('tx_seminars_target_groups', $aResult, $indexDoc, $options);
-        //nichtzs direkt indiziert?
+        // nichtzs direkt indiziert?
         self::assertNull($aIndexDoc, 'Es wurde nicht null zurück gegeben!');
 
         $aOptions = [
@@ -438,7 +435,7 @@ class tx_mksearch_tests_indexer_seminars_SeminarTest extends tx_mksearch_tests_D
         $options = [];
 
         $aIndexDoc = $indexer->prepareSearchData('tx_seminars_timeslots', $aResult, $indexDoc, $options);
-        //nichtzs direkt indiziert?
+        // nichtzs direkt indiziert?
         self::assertNull($aIndexDoc, 'Es wurde nicht null zurück gegeben!');
 
         $aOptions = [
@@ -450,7 +447,4 @@ class tx_mksearch_tests_indexer_seminars_SeminarTest extends tx_mksearch_tests_D
         self::assertEquals('tx_seminars_seminars', $aResult[0]['tablename'], 'Es wurde nicht das richtige Seminar (tablename) in die queue gelegt!');
         self::assertEquals(4, $aResult[0]['recid'], 'Es wurde nicht das richtige Seminar (recid) in die queue gelegt!');
     }
-}
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContentTest.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContentTest.php'];
 }

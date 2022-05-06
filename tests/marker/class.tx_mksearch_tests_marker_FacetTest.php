@@ -39,10 +39,7 @@ class tx_mksearch_tests_marker_FacetTest extends tx_mksearch_tests_Testcase
      */
     protected $oMarker;
 
-    /**
-     * setUp() = init DB etc.
-     */
-    protected function setUp()
+    protected function setUp(): void
     {
         self::markTestIncomplete("Error: Class 'TYPO3\CMS\Core\TimeTracker\NullTimeTracker' not found");
         $this->prepareTSFE();
@@ -57,17 +54,17 @@ class tx_mksearch_tests_marker_FacetTest extends tx_mksearch_tests_Testcase
      */
     public function testPrepareLinks()
     {
-        //set noHash as we don't need it in tests
+        // set noHash as we don't need it in tests
         $aConfig = tx_mksearch_tests_Util::loadPageTS4BE();
         $aConfig['searchsolr.']['facet.']['links.']['show.']['noHash'] = 1;
         $this->oConfig = tx_mksearch_tests_Util::loadConfig4BE($aConfig);
         $this->oFormatter = $this->oConfig->getFormatter();
 
-        //now test
+        // now test
         $oItem = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_Facet', 'contentType', 'media', 'media', 2);
         $sTemplate = '###FACET_SHOWLINK######FACET_LABEL### (###FACET_COUNT###)###FACET_SHOWLINK###';
         $sParsedTemplate = $this->oMarker->parseTemplate($sTemplate, $oItem, $this->oFormatter, 'searchsolr.facet.', 'FACET');
-        //Feld noch im Link drin?
+        // Feld noch im Link drin?
         $expectedParsedTemplate = '/(\<a href="\?id=)([a-z0-9]+)(&amp;mksearch%5Bfq%5D=contentType%3Amedia" \>media \(2\)\<\/a\>)/';
         $expectedParsedTemplate = str_replace('" \>', '"\>', $expectedParsedTemplate);
         self::assertRegExp(
@@ -82,7 +79,7 @@ class tx_mksearch_tests_marker_FacetTest extends tx_mksearch_tests_Testcase
      */
     public function testPrepareLinksWithExcludeFieldName()
     {
-        //set noHash as we don't need it in tests
+        // set noHash as we don't need it in tests
         $aConfig = tx_mksearch_tests_Util::loadPageTS4BE();
         $aConfig['searchsolr.']['facet.']['links.']['show.']['noHash'] = 1;
         $aConfig['searchsolr.']['facet.']['links.']['show.']['excludeFieldName'] = 1;
@@ -92,7 +89,7 @@ class tx_mksearch_tests_marker_FacetTest extends tx_mksearch_tests_Testcase
         $oItem = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_Facet', 'contentType', 'media', 'media', 2);
         $sTemplate = '###FACET_SHOWLINK######FACET_LABEL### (###FACET_COUNT###)###FACET_SHOWLINK###';
         $sParsedTemplate = $this->oMarker->parseTemplate($sTemplate, $oItem, $this->oFormatter, 'searchsolr.facet.', 'FACET');
-        //Feld noch im Link drin?
+        // Feld noch im Link drin?
         $expectedParsedTemplate = '/(\<a href="\?id=)([a-z0-9]+)(&amp;mksearch%5Bfq%5D=media" \>media \(2\)\<\/a\>)/';
         $expectedParsedTemplate = str_replace('" \>', '"\>', $expectedParsedTemplate);
         self::assertRegExp(
@@ -107,7 +104,7 @@ class tx_mksearch_tests_marker_FacetTest extends tx_mksearch_tests_Testcase
      */
     public function testPrepareLinksWithFacetIdContainingSeveralWordsAndUmlauts()
     {
-        //set noHash as we don't need it in tests
+        // set noHash as we don't need it in tests
         $aConfig = tx_mksearch_tests_Util::loadPageTS4BE();
         $aConfig['searchsolr.']['facet.']['links.']['show.']['noHash'] = 1;
         $aConfig['searchsolr.']['facet.']['links.']['show.']['excludeFieldName'] = 1;
@@ -117,7 +114,7 @@ class tx_mksearch_tests_marker_FacetTest extends tx_mksearch_tests_Testcase
         $oItem = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_Facet', 'contentType', 'Über uns', 'Über uns', 2);
         $sTemplate = '###FACET_SHOWLINK######FACET_LABEL### (###FACET_COUNT###)###FACET_SHOWLINK###';
         $sParsedTemplate = $this->oMarker->parseTemplate($sTemplate, $oItem, $this->oFormatter, 'searchsolr.facet.', 'FACET');
-        //Feld noch im Link drin?
+        // Feld noch im Link drin?
         $expectedParsedTemplate = '/(\<a href="\?id=)([a-z0-9]+)(&amp;mksearch%5Bfq%5D=%C3%9Cber%20uns" \>Über uns \(2\)\<\/a\>)/';
         $expectedParsedTemplate = str_replace('" \>', '"\>', $expectedParsedTemplate);
         self::assertRegExp(
@@ -126,8 +123,4 @@ class tx_mksearch_tests_marker_FacetTest extends tx_mksearch_tests_Testcase
             'In der Filter Query steht noch immer der Feldname!'
         );
     }
-}
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/class.tx_mksearch_tests_model_SolrHitTest.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/class.tx_mksearch_tests_model_SolrHitTest.php'];
 }

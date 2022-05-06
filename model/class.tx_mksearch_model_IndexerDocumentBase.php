@@ -70,6 +70,11 @@ class tx_mksearch_model_IndexerDocumentBase implements tx_mksearch_interface_Ind
     private $data = [];
 
     /**
+     * @var array
+     */
+    protected $secommands = [];
+
+    /**
      * Factory for getting a new field object instance.
      *
      * @param mixed  $value                Either a scalar or an array value. Possibly not supported by every implementation!
@@ -305,8 +310,4 @@ class tx_mksearch_model_IndexerDocumentBase implements tx_mksearch_interface_Ind
     {
         return $this->deleted;
     }
-}
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/class.tx_mksearch_model_IndexerDocumentBase.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/class.tx_mksearch_model_IndexerDocumentBase.php'];
 }

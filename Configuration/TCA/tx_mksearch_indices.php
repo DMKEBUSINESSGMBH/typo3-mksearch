@@ -12,7 +12,7 @@ return [
         'enablecolumns' => [
             'disabled' => 'hidden',
         ],
-        'iconfile' => 'EXT:mksearch/icons/icon_tx_mksearch_indices.gif',
+        'iconfile' => 'EXT:mksearch/Resources/Public/Icons/icon_tx_mksearch_indices.gif',
         'requestUpdate' => 'engine',
     ],
     'interface' => [

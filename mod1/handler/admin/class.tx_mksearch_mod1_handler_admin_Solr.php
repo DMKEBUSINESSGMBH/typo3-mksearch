@@ -152,7 +152,3 @@ class tx_mksearch_mod1_handler_admin_Solr implements \Sys25\RnBase\Backend\Modul
         return '('.$info.')';
     }
 }
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/handler/admin/class.tx_mksearch_mod1_handler_admin_Solr.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/handler/admin/class.tx_mksearch_mod1_handler_admin_Solr.php'];
-}

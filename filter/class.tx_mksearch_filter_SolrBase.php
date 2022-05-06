@@ -66,7 +66,7 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
      */
     protected function getConfId($extended = true)
     {
-        //$this->confId ist private, deswegen müssen wir deren methode aufrufen.
+        // $this->confId ist private, deswegen müssen wir deren methode aufrufen.
         $confId = parent::getConfId();
         if ($extended) {
             if (empty($this->confIdExtended)) {
@@ -306,7 +306,7 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
         // @see tx_mksearch_marker_Facet::prepareItem
         $fqParams = $parameters->get('fq');
         $fqParams = is_array($fqParams) ? $fqParams : (trim($fqParams) ? [trim($fqParams)] : []);
-        //@todo die if blöcke in eigene funktionen auslagern
+        // @todo die if blöcke in eigene funktionen auslagern
         if (!empty($fqParams)) {
             // FQ field, for single queries
             // Das ist deprecated! Dadurch wäre nur ein festes Facet-Field möglich
@@ -410,9 +410,9 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
 
     public static function getFilterQueryForFeGroups()
     {
-        //wenigstens ein teil der query muss matchen. bei prüfen auf
-        //nicht vorhandensein muss also noch auf ein feld geprüft werden
-        //das garantiert existiert und damit ein match generiert.
+        // wenigstens ein teil der query muss matchen. bei prüfen auf
+        // nicht vorhandensein muss also noch auf ein feld geprüft werden
+        // das garantiert existiert und damit ein match generiert.
         $filterQuery = '(-fe_group_mi:[* TO *] AND id:[* TO *])';
         if (\Sys25\RnBase\Utility\TYPO3::getFEUserUID()) {
             $filterQueriesByFeGroup = ['fe_group_mi:0', 'fe_group_mi:"-2"'];
@@ -877,8 +877,4 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
             $options['fl'] = $fieldlist;
         }
     }
-}
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/filter/class.tx_mksearch_filter_SolrBase.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/filter/class.tx_mksearch_filter_SolrBase.php'];
 }

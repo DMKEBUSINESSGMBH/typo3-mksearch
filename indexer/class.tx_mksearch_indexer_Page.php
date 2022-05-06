@@ -86,7 +86,7 @@ class tx_mksearch_indexer_Page extends tx_mksearch_indexer_Base
                 return true;
             }
         }
-        //else
+        // else
         return parent::stopIndexing($tableName, $rawData, $indexDoc, $options);
     }
 
@@ -124,7 +124,7 @@ class tx_mksearch_indexer_Page extends tx_mksearch_indexer_Base
             );
         }
 
-        //now let's use the given mapping to get the fields separatly into solr
+        // now let's use the given mapping to get the fields separatly into solr
         if (!empty($options['mapping.'])) {
             $this->indexModelByMapping($oModel, $options['mapping.'], $indexDoc, '', $options);
         }
@@ -139,8 +139,8 @@ class tx_mksearch_indexer_Page extends tx_mksearch_indexer_Base
      */
     protected function isIndexableRecord(array $sourceRecord, array $options)
     {
-        //as those functions check via the pid we have to copy the uid of the
-        //current page into the pid this is what we want to check
+        // as those functions check via the pid we have to copy the uid of the
+        // current page into the pid this is what we want to check
         $sourceRecord['pid'] = $sourceRecord['uid'];
 
         return $this->isOnIndexablePage($sourceRecord, $options);
@@ -242,8 +242,4 @@ exclude {
 #workspaceIds = 1,2,3
 CONF;
     }
-}
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_TtContent.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_TtContent.php'];
 }

@@ -32,23 +32,13 @@
  */
 class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Testcase
 {
-    /**
-     * (non-PHPdoc).
-     *
-     * @see tx_mksearch_tests_Testcase::setUp()
-     */
-    protected function setUp()
+    protected function setUp(): void
     {
         tx_mksearch_tests_Util::storeExtConf();
         tx_mksearch_tests_Util::setExtConfVar('enableRnBaseUtilDbHook', 1);
     }
 
-    /**
-     * (non-PHPdoc).
-     *
-     * @see tx_mksearch_tests_Testcase::tearDown()
-     */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         tx_mksearch_tests_Util::restoreExtConf();
     }
@@ -174,8 +164,6 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
      */
     public function testRnBaseDoInsertPost()
     {
-        self::markTestIncomplete('Uncaught require(typo3-mksearch/.Build/Web/typo3conf/LocalConfiguration.php)');
-
         $hook = $this->getHookMock(
             $service = $this->getMock('tx_mksearch_service_internal_Index')
         );
@@ -225,8 +213,6 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
      */
     public function testRnBaseDoUpdatePost()
     {
-        self::markTestIncomplete('Uncaught require(typo3-mksearch/.Build/Web/typo3conf/LocalConfiguration.php)');
-
         $hook = $this->getHookMock(
             $service = $this->getMock('tx_mksearch_service_internal_Index')
         );
@@ -299,8 +285,6 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
      */
     public function testRnBaseDoInsertPostIfHookDeactivated()
     {
-        self::markTestIncomplete('Uncaught require(typo3-mksearch/.Build/Web/typo3conf/LocalConfiguration.php)');
-
         tx_mksearch_tests_Util::setExtConfVar('enableRnBaseUtilDbHook', 0);
 
         $hook = $this->getHookMock(
@@ -333,8 +317,6 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
      */
     public function testRnBaseDoUpdatePostIfHookDeactivated()
     {
-        self::markTestIncomplete('Uncaught require(typo3-mksearch/.Build/Web/typo3conf/LocalConfiguration.php)');
-
         tx_mksearch_tests_Util::setExtConfVar('enableRnBaseUtilDbHook', 0);
 
         $hook = $this->getHookMock(
@@ -609,7 +591,4 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
 
         return $tce;
     }
-}
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/hooks/class.tx_mksearch_tests_hooks_IndexerAutoUpdateTest.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/hooks/class.tx_mksearch_tests_hooks_IndexerAutoUpdateTest.php'];
 }

@@ -91,7 +91,7 @@ class tx_mksearch_tests_indexer_ttcontent_NormalTest extends tx_mksearch_tests_T
             ->method('getModelToIndex')
             ->will(
                 $this->returnValue(
-                    $this->getModel($model)
+                    $this->getModel($record)
                 )
             );
 
@@ -124,7 +124,7 @@ class tx_mksearch_tests_indexer_ttcontent_NormalTest extends tx_mksearch_tests_T
             ->method('getModelToIndex')
             ->will(
                 $this->returnValue(
-                    $this->getModel($model)
+                    $this->getModel($record)
                 )
             );
 

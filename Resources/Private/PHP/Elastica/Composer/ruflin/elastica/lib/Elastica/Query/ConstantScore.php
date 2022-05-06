@@ -1,21 +1,20 @@
 <?php
-namespace Elastica\Query;
 
-use Elastica\Exception\InvalidException;
+namespace Elastica\Query;
 
 /**
  * Constant score query.
  *
  * @author Nicolas Ruflin <spam@ruflin.com>
  *
- * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-constant-score-query.html
+ * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-constant-score-query.html
  */
 class ConstantScore extends AbstractQuery
 {
     /**
      * Construct constant score query.
      *
-     * @param null|AbstractQuery|array $filter
+     * @param AbstractQuery|array|null $filter
      */
     public function __construct(AbstractQuery $filter = null)
     {
@@ -34,24 +33,6 @@ class ConstantScore extends AbstractQuery
     public function setFilter(AbstractQuery $filter)
     {
         return $this->setParam('filter', $filter);
-    }
-
-    /**
-     * Set query.
-     *
-     * @param array|AbstractQuery $query
-     *
-     * @throws InvalidException If query is not an array or instance of AbstractQuery
-     *
-     * @return $this
-     */
-    public function setQuery($query)
-    {
-        if (!is_array($query) && !($query instanceof AbstractQuery)) {
-            throw new InvalidException('Invalid parameter. Has to be array or instance of Elastica\Query\AbstractQuery');
-        }
-
-        return $this->setParam('query', $query);
     }
 
     /**

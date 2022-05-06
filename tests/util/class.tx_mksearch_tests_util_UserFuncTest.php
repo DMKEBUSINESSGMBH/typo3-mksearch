@@ -68,7 +68,3 @@ class tx_mksearch_tests_util_UserFuncTest extends tx_mksearch_tests_Testcase
         return $return;
     }
 }
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/util/class.tx_mksearch_tests_util_SearchBuilderTest.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/util/class.tx_mksearch_tests_util_SearchBuilderTest.php'];
-}

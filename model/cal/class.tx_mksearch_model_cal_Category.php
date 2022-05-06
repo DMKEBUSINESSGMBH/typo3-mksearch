@@ -39,7 +39,3 @@ class tx_mksearch_model_cal_Category extends \Sys25\RnBase\Domain\Model\BaseMode
         return 'tx_cal_category';
     }
 }
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/cal/class.tx_mksearch_model_cal_Category.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/cal/class.tx_mksearch_model_cal_Category.php'];
-}

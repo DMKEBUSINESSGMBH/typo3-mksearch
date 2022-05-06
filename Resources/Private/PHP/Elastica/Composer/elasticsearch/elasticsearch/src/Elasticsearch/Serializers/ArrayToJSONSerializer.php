@@ -1,15 +1,28 @@
 <?php
+/**
+ * Elasticsearch PHP client
+ *
+ * @link      https://github.com/elastic/elasticsearch-php/
+ * @copyright Copyright (c) Elasticsearch B.V (https://www.elastic.co)
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
+ * @license   https://www.gnu.org/licenses/lgpl-2.1.html GNU Lesser General Public License, Version 2.1 
+ * 
+ * Licensed to Elasticsearch B.V under one or more agreements.
+ * Elasticsearch B.V licenses this file to you under the Apache 2.0 License or
+ * the GNU Lesser General Public License, Version 2.1, at your option.
+ * See the LICENSE file in the project root for more information.
+ */
+
+
+declare(strict_types = 1);
 
 namespace Elasticsearch\Serializers;
+
+use Elasticsearch\Common\Exceptions\RuntimeException;
 
 /**
  * Class JSONSerializer
  *
- * @category Elasticsearch
- * @package  Elasticsearch\Serializers\JSONSerializer
- * @author   Zachary Tong <zach@elastic.co>
- * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache2
- * @link     http://elastic.co
  */
 class ArrayToJSONSerializer implements SerializerInterface
 {
@@ -26,6 +39,9 @@ class ArrayToJSONSerializer implements SerializerInterface
             return $data;
         } else {
             $data = json_encode($data, JSON_PRESERVE_ZERO_FRACTION);
+            if ($data === false) {
+                throw new RuntimeException("Failed to JSON encode: ".json_last_error());
+            }
             if ($data === '[]') {
                 return '{}';
             } else {

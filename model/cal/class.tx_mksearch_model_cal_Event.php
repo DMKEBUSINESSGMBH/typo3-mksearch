@@ -130,15 +130,11 @@ class tx_mksearch_model_cal_Event extends \Sys25\RnBase\Domain\Model\BaseModel
             'tx_cal_event_category_mm AS MM JOIN tx_cal_category AS CAT ON '.
             'MM.uid_foreign = CAT.uid',
             [
-                //da MM keine TCA hat
+                // da MM keine TCA hat
                 'enablefieldsoff' => true,
-                //keine versteckten kategorien
+                // keine versteckten kategorien
                 'where' => 'MM.uid_local = '.intval($this->getUid()).' AND CAT.hidden = 0',
             ]
         );
     }
-}
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/cal/class.tx_mksearch_model_cal_Event.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/cal/class.tx_mksearch_model_cal_Event.php'];
 }

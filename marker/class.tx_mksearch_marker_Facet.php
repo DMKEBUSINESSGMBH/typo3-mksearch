@@ -163,20 +163,20 @@ class tx_mksearch_marker_Facet extends tx_mksearch_marker_SearchResultSimple
      */
     public function prepareLinks($item, $marker, &$markerArray, &$subpartArray, &$wrappedSubpartArray, $confId, $formatter, $template)
     {
-        //z.B. wird nach contentType facettiert. Dann sieht der Link bei tt_content
-        //so aus: mksearch[fq]=contentType:tt_content
+        // z.B. wird nach contentType facettiert. Dann sieht der Link bei tt_content
+        // so aus: mksearch[fq]=contentType:tt_content
         $sFq = $item->getProperty('id');
 
-        //ACHTUNG: im Live Einsatz sollte das Feld nicht im Link stehen sondern nur der Wert.
-        //Das Feld sollte dann erst im Filter hinzugefügt werden. In der TS Config sollte
-        //dazu facet.links.show.excludeFieldName auf 1 stehen!!!
+        // ACHTUNG: im Live Einsatz sollte das Feld nicht im Link stehen sondern nur der Wert.
+        // Das Feld sollte dann erst im Filter hinzugefügt werden. In der TS Config sollte
+        // dazu facet.links.show.excludeFieldName auf 1 stehen!!!
         $configurations = $formatter->getConfigurations();
         if (!$configurations->get($confId.'links.show.excludeFieldName')) {
             $sFq = $item->getProperty('field').':'.$sFq;
         }
 
-        //jetzt noch den fq parameter wert in den record schreiben
-        //damit er im TS zur Verfügung steht
+        // jetzt noch den fq parameter wert in den record schreiben
+        // damit er im TS zur Verfügung steht
         $item->getProperty($configurations->get($confId.'links.show.paramField'), $sFq);
 
         parent::prepareLinks($item, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter, $template);
@@ -190,8 +190,4 @@ class tx_mksearch_marker_Facet extends tx_mksearch_marker_SearchResultSimple
         $this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'add', $marker, ['NK_addfq' => $item->getProperty('field').':'.$item->getProperty('id')], $template);
         $this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, 'remove', $marker, ['NK_remfq' => $item->getProperty('field')], $template);
     }
-}
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/marker/class.tx_mksearch_marker_CorePage.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/marker/class.tx_mksearch_marker_CorePage.php'];
 }

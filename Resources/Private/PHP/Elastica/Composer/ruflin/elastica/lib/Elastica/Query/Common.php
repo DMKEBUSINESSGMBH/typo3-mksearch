@@ -1,10 +1,11 @@
 <?php
+
 namespace Elastica\Query;
 
 /**
  * Class Common.
  *
- * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-common-terms-query.html
+ * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-common-terms-query.html
  */
 class Common extends AbstractQuery
 {
@@ -102,7 +103,7 @@ class Common extends AbstractQuery
      *
      * @return $this
      *
-     * @link Possible values for minimum_should_match https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-minimum-should-match.html
+     * @see Possible values for minimum_should_match https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-minimum-should-match.html
      */
     public function setMinimumShouldMatch($minimum)
     {
@@ -131,18 +132,6 @@ class Common extends AbstractQuery
     public function setAnalyzer($analyzer)
     {
         return $this->setQueryParam('analyzer', $analyzer);
-    }
-
-    /**
-     * Enable / disable computation of score factor based on the fraction of all query terms contained in the document.
-     *
-     * @param bool $disable disable_coord is false by default
-     *
-     * @return $this
-     */
-    public function setDisableCoord($disable = true)
-    {
-        return $this->setQueryParam('disable_coord', (bool) $disable);
     }
 
     /**

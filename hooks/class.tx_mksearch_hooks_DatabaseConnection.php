@@ -64,16 +64,16 @@ class tx_mksearch_hooks_DatabaseConnection
             }
 
             // avoid that our changes are overwritten when loadHiddenObjects is true.
-            self::$loadHiddenObjectsConfigurationBackup = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects'];
+            self::$loadHiddenObjectsConfigurationBackup = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['rn_base']['loadHiddenObjects'];
             self::$loadHiddenObjectsConfigurationBackupSet = true;
-            $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects'] = 0;
+            $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['rn_base']['loadHiddenObjects'] = 0;
         }
     }
 
     public function doSelectPost()
     {
         if (true === self::$loadHiddenObjectsConfigurationBackupSet) {
-            $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rn_base']['loadHiddenObjects'] = self::$loadHiddenObjectsConfigurationBackup;
+            $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['rn_base']['loadHiddenObjects'] = self::$loadHiddenObjectsConfigurationBackup;
             self::$loadHiddenObjectsConfigurationBackup = null;
             self::$loadHiddenObjectsConfigurationBackupSet = false;
         }

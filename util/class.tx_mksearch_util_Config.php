@@ -265,7 +265,7 @@ class tx_mksearch_util_Config
      */
     public static function getIndexerByType($extKey, $contentType)
     {
-        $indexerArr = self::$indexerMap[$extKey][$contentType];
+        $indexerArr = self::$indexerMap[$extKey][$contentType] ?? null;
 
         return is_array($indexerArr) ? \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($indexerArr['className']) : false;
     }
@@ -306,7 +306,4 @@ class tx_mksearch_util_Config
                 self::$indexerTableMappings[$extKey][$contentType] :
                 [];
     }
-}
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_Config.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_Config.php'];
 }

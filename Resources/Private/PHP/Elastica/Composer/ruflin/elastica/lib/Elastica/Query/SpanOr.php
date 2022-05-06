@@ -1,4 +1,5 @@
 <?php
+
 namespace Elastica\Query;
 
 use Elastica\Exception\InvalidException;
@@ -8,7 +9,7 @@ use Elastica\Exception\InvalidException;
  *
  * @author Marek Hernik <marek.hernik@gmail.com>
  *
- * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-span-term-query.html
+ * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-span-term-query.html
  */
 class SpanOr extends AbstractSpanQuery
 {
@@ -22,9 +23,7 @@ class SpanOr extends AbstractSpanQuery
         if (!empty($clauses)) {
             foreach ($clauses as $clause) {
                 if (!is_subclass_of($clause, AbstractSpanQuery::class)) {
-                    throw new InvalidException(
-                        'Invalid parameter. Has to be array or instance of Elastica\Query\SpanQuery'
-                    );
+                    throw new InvalidException('Invalid parameter. Has to be array or instance of Elastica\Query\SpanQuery');
                 }
             }
         }

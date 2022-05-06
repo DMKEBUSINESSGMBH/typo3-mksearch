@@ -179,6 +179,3 @@ class tx_mksearch_tests_indexer_TtNewsNews_DBTest extends tx_mksearch_tests_DbTe
         self::assertNotNull($indexDoc, 'Das Element wurde nicht indziert!');
     }
 }
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContentTest.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/indexer/class.tx_mksearch_tests_indexer_TtContentTest.php'];
-}

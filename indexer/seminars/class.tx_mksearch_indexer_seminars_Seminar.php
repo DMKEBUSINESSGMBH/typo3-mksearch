@@ -37,11 +37,11 @@
 class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Indexer
 {
     // In seminars wurden die Konstanten bei getSpeakerBag entfernt. Zur Sicherheit mal hier angelegt.
-    const SEMINARS_TABLE_SEMINARS_SPEAKERS_MM = 'tx_seminars_seminars_speakers_mm';
-    const SEMINARS_TABLE_SEMINARS_PARTNERS_MM = 'tx_seminars_seminars_speakers_mm_partners';
-    const SEMINARS_TABLE_SEMINARS_TUTORS_MM = 'tx_seminars_seminars_speakers_mm_tutors';
-    const SEMINARS_TABLE_SEMINARS_LEADERS_MM = 'tx_seminars_seminars_speakers_mm_leaders';
-    const SEMINARS_TABLE_SPEAKERS = 'tx_seminars_speakers';
+    public const SEMINARS_TABLE_SEMINARS_SPEAKERS_MM = 'tx_seminars_seminars_speakers_mm';
+    public const SEMINARS_TABLE_SEMINARS_PARTNERS_MM = 'tx_seminars_seminars_speakers_mm_partners';
+    public const SEMINARS_TABLE_SEMINARS_TUTORS_MM = 'tx_seminars_seminars_speakers_mm_tutors';
+    public const SEMINARS_TABLE_SEMINARS_LEADERS_MM = 'tx_seminars_seminars_speakers_mm_leaders';
+    public const SEMINARS_TABLE_SPEAKERS = 'tx_seminars_speakers';
 
     /**
      * Our seminar object.
@@ -73,7 +73,7 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
      */
     public function prepareSearchData($tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options)
     {
-        //was a related table changed?
+        // was a related table changed?
         if ('tx_seminars_categories' == $tableName) {
             $this->handleRelatedMmChanged(SEMINARS_TABLE_SEMINARS_CATEGORIES_MM, $rawData);
 
@@ -95,38 +95,38 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
 
             return null;
         } elseif ('tx_seminars_timeslots' == $tableName) {
-            //we have no mm for timeslots
+            // we have no mm for timeslots
             $this->addSeminarToIndex($rawData['seminar']);
 
             return null;
         }
 
-        //seminar indexable?
+        // seminar indexable?
         if (!$this->isIndexableRecord($rawData, $options)) {
             return null;
         }
-        //we seem to have a real seminar so let's go on with the work
+        // we seem to have a real seminar so let's go on with the work
 
-        //init the seminar object to do common checks
-        //@todo load the TS config or simulate the FE so we have the correct timeFormat settings etc.
+        // init the seminar object to do common checks
+        // @todo load the TS config or simulate the FE so we have the correct timeFormat settings etc.
         $this->oSeminar = $this->getSeminar($rawData);
-        //set it's uid
+        // set it's uid
         $indexDoc->setUid($this->oSeminar->getUid());
-        //and check if it's valid at all
-        //@todo if related data is deleted/hidden, handle this!
+        // and check if it's valid at all
+        // @todo if related data is deleted/hidden, handle this!
         if ($rawData['deleted'] || $rawData['hidden']) {
             $indexDoc->setDeleted(true);
 
             return $indexDoc;
         }
 
-        //redirect the indexing to the responsible class
+        // redirect the indexing to the responsible class
         if (0 == $rawData['object_type']) {
             $oIndexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_seminars_SeminarObjectType0');
         } elseif (1 == $rawData['object_type']) {
             $oIndexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_seminars_SeminarObjectType1');
-        } //we dont need to index a event date as this happens when we index
-        //a event topic
+        } // we dont need to index a event date as this happens when we index
+        // a event topic
         elseif (2 == $rawData['object_type']) {
             $this->addSeminarToIndex($rawData['topic']);
 
@@ -146,14 +146,14 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
      */
     private function handleRelatedMmChanged($sTable, $aRawData)
     {
-        //collect all seminar uids for the given related record
-        //for example all seminars with the given category or target group
+        // collect all seminar uids for the given related record
+        // for example all seminars with the given category or target group
         $aSeminarUids = tx_oelib_db::selectColumnForMultiple(
             'uid_local',
             $sTable,
             'uid_foreign = '.$aRawData['uid']
         );
-        //if not empty put everything into the queue
+        // if not empty put everything into the queue
         if (!empty($aSeminarUids)) {
             foreach ($aSeminarUids as $iUid) {
                 $this->addSeminarToIndex($iUid);
@@ -168,7 +168,7 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
      */
     protected function indexSeminar(tx_mksearch_interface_IndexerDocument $indexDoc)
     {
-        //Mapping which function fills which field
+        // Mapping which function fills which field
         $aFunctionFieldMapping = [
             'title_s' => $this->oSeminar->getTitle(),
             'subtitle_s' => $this->oSeminar->getSubtitle(),
@@ -180,9 +180,9 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
             'currentpriceregular_s' => $this->oSeminar->getCurrentPriceRegular(),
             'time_s' => $this->oSeminar->getTime(),
             'titleanddate_s' => $this->oSeminar->getTitleAndDate(),
-            //as this field will be multi value for object_type = 1
-            //we set it to multi value eventhough it will
-            //never happen for object_type = 0
+            // as this field will be multi value for object_type = 1
+            // we set it to multi value eventhough it will
+            // never happen for object_type = 0
             'begin_date_ms' => [0 => $this->oSeminar->getBeginDateAsTimestamp()],
             'end_date_ms' => [0 => $this->oSeminar->getEndDateAsTimestamp()],
         ];
@@ -200,13 +200,13 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
      */
     protected function indexSeminarCategories(tx_mksearch_interface_IndexerDocument $indexDoc)
     {
-        //Mapping which function fills which field
+        // Mapping which function fills which field
         $aCategories = $this->oSeminar->getCategories();
         $aRecordFieldMapping = $this->getCategoriesMapping();
 
         $aTempIndexDoc = $this->getMultiValueFieldsByArray($aCategories, $aRecordFieldMapping);
 
-        //now we index the collected fields
+        // now we index the collected fields
         $this->indexArrayByMapping($indexDoc, $aRecordFieldMapping, $aTempIndexDoc);
     }
 
@@ -217,7 +217,7 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
      */
     protected function indexSeminarTargetGroups(tx_mksearch_interface_IndexerDocument $indexDoc)
     {
-        //Mapping which function fills which field
+        // Mapping which function fills which field
         $aTargetGroups = $this->oSeminar->getTargetGroupsAsArray();
         if (!empty($aTargetGroups)) {
             $indexDoc->addField('targetgroups_title_ms', $aTargetGroups);
@@ -247,8 +247,8 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
     protected function getMultiValueFieldsByListObject($aValues, array $aMapping)
     {
         $aTempIndexDoc = [];
-        //as this is a multivalue field we collect all
-        //information from the given categories
+        // as this is a multivalue field we collect all
+        // information from the given categories
         foreach ($aValues as $oValue) {
             foreach ($aMapping as $sFunction => $mIndexKey) {
                 $mValue = $oValue->$sFunction();
@@ -276,25 +276,25 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
     protected function getMultiValueFieldsByArray($aValues, array $aMapping)
     {
         $aTempIndexDoc = [];
-        //as this is a multivalue field we collect all
-        //information from the given arrays
+        // as this is a multivalue field we collect all
+        // information from the given arrays
         foreach ($aValues as $aValue) {
             foreach ($aMapping as $sRecordKey => $sIndexKey) {
-                //we take the value as key in the resulting array as we dont want doubled values
+                // we take the value as key in the resulting array as we dont want doubled values
                 if (!empty($aValue[$sRecordKey])) {
-                    //handling of one dimensional arrays
+                    // handling of one dimensional arrays
                     if (is_array($aValue[$sRecordKey])) {
                         foreach ($aValue[$sRecordKey] as $key => $mValue) {
                             $aTempIndexDoc[$sIndexKey][$mValue] = $mValue;
                         }
-                    } else {//just a value so put it in
+                    } else {// just a value so put it in
                         $aTempIndexDoc[$sIndexKey][$aValue[$sRecordKey]] = $aValue[$sRecordKey];
                     }
                 }
             }
         }
 
-        //as result we want a simple numeric array
+        // as result we want a simple numeric array
         foreach ($aTempIndexDoc as &$aValue) {
             $aValue = array_values($aValue);
         }
@@ -515,8 +515,4 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
 
 LH;
     }
-}
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/seminars/class.tx_mksearch_indexer_seminars_Seminar.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/seminars/class.tx_mksearch_indexer_seminars_Seminar.php'];
 }

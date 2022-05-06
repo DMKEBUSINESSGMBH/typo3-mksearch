@@ -72,7 +72,7 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
     public function prepareSearchData($tableName, $sourceRecord, tx_mksearch_interface_IndexerDocument $indexDoc, $options)
     {
         // die uid muss vor dem setDeleted gesetzt sein
-        $indexDoc->setUid($sourceRecord['sys_language_uid'] ? $sourceRecord['l18n_parent'] : $sourceRecord['uid']);
+        $indexDoc->setUid(($sourceRecord['sys_language_uid'] ?? 0) ? $sourceRecord['l18n_parent'] : $sourceRecord['uid']);
 
         // pre process hoock
         \Sys25\RnBase\Utility\Misc::callHook(
@@ -106,14 +106,14 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
             return $indexDoc;
         }
 
-        if ($sourceRecord['deleted'] || $sourceRecord['hidden']) {
+        if (($sourceRecord['deleted'] ?? false) || ($sourceRecord['hidden'] ?? false)) {
             $indexDoc->setDeleted(true);
 
             return $indexDoc;
         }
 
         // Check if record is configured to be indexed
-        if (!$this->isIndexableRecord($tableName, $sourceRecord, $options['filter.'])) {
+        if (!$this->isIndexableRecord($tableName, $sourceRecord, $options['filter.'] ?? [])) {
             if (isset($options['deleteIfNotIndexable']) && $options['deleteIfNotIndexable']) {
                 $indexDoc->setDeleted(true);
 
@@ -124,21 +124,21 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
         }
 
         // titel aus dem feld titel oder name holen, als fallback den dateinamen nutzen!
-        $title = $sourceRecord['title'] ? $sourceRecord['title'] : $sourceRecord['name'];
+        $title = $sourceRecord['title'] ?? $sourceRecord['name'] ?? '';
         $title = $title ? $title : basename($this->getRelFileName($tableName, $sourceRecord));
         $indexDoc->setTitle($title);
-        $indexDoc->setTimestamp($sourceRecord['tstamp']);
+        $indexDoc->setTimestamp($sourceRecord['tstamp'] ?? 0);
 
-        $content = $sourceRecord['description'] ? $sourceRecord['description'] : $sourceRecord['alternative'];
+        $content = $sourceRecord['description'] ?? $sourceRecord['alternative'] ?? '';
         $indexDoc->setContent($content);
         $indexDoc->setAbstract($content, $indexDoc->getMaxAbstractLength());
 
-        //den kompletten, relativen Pfad zum Dam Dokument indizieren
+        // den kompletten, relativen Pfad zum Dam Dokument indizieren
         $indexDoc->addField('file_relpath_s', $this->getRelFileName($tableName, $sourceRecord));
 
         $indexDoc->addField('group_s', $this->getGroupFieldValue($indexDoc));
 
-        $fields = (array) $options['fields.'];
+        $fields = (array) ($options['fields.'] ?? []);
         foreach ($fields as $localFieldName => $indexFieldName) {
             $indexDoc->addField($indexFieldName, $sourceRecord[$localFieldName], 'keyword');
         }
@@ -274,8 +274,7 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
     protected function isIndexableRecord($tableName, $sourceRecord, $options)
     {
         $ret = true;
-        $filters = $options[$tableName.'.'];
-        $filters = is_array($filters) ? $filters : [];
+        $filters = (array) ($options[$tableName.'.'] ?? []);
 
         $fileExtension = $this->getFileExtension($tableName, $sourceRecord);
         $filePath = $this->getFilePath($tableName, $sourceRecord);
@@ -286,7 +285,7 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
                 // Als Array      mit byFileExtension.
                 case 'byFileExtension':
                     $filterValue = \Sys25\RnBase\Utility\Strings::trimExplode(',', $filterValue);
-                    $filterValue = is_array($filters['byFileExtension.']) ? array_merge(array_values($filters['byFileExtension.']), $filterValue) : $filterValue;
+                    $filterValue = is_array($filters['byFileExtension.'] ?? null) ? array_merge(array_values($filters['byFileExtension.']), $filterValue) : $filterValue;
                     // no break
                 case 'byFileExtension.':
                     $ret = in_array($fileExtension, $filterValue);
@@ -304,13 +303,13 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
                 case 'byDirectory.':
                     // wir prüfen mit array_search, da wir den key noch brauchen.
                     if (false !== ($key = array_search($filePath, $filterValue))) {
-                        $ret = intval($filterValue[$key.'.']['disallow']) ? false : true;
+                        $ret = intval($filterValue[$key.'.']['disallow'] ?? 0) ? false : true;
                     } // wenn keine treffer gefunden wurden, prüfen wir, ob es ein unterordner davon ist.
-                    elseif ($filterValue['checkSubFolder']) {
+                    elseif ($filterValue['checkSubFolder'] ?? false) {
                         unset($filterValue['checkSubFolder']); // brauchen wir nicht mehr
                         foreach ($filterValue as $key => $folder) {
                             if (\Sys25\RnBase\Utility\Strings::isFirstPartOfStr($filePath, $folder)) {
-                                $ret = intval($filterValue[$key.'.']['disallow']) ? false : true;
+                                $ret = intval($filterValue[$key.'.']['disallow'] ?? 0) ? false : true;
                                 break;
                             }
                         }
@@ -390,7 +389,7 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
         tx_mksearch_interface_IndexerDocument $indexDoc,
         $options = []
     ) {
-        if ($sourceRecord['deleted'] || $sourceRecord['hidden']) {
+        if (($sourceRecord['deleted'] ?? false) || ($sourceRecord['hidden'] ?? false)) {
             return true;
         }
 
@@ -516,8 +515,4 @@ CFG;
     {
         return $indexDoc->getPrimaryKey(true);
     }
-}
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_DamMedia.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_DamMedia.php'];
 }

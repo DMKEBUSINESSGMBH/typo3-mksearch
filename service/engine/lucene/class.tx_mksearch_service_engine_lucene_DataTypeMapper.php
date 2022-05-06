@@ -88,7 +88,3 @@ class tx_mksearch_service_engine_lucene_DataTypeMapper
         return '' === $needle || substr($haystack, -strlen($needle)) === $needle;
     }
 }
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/engine/class.tx_mksearch_service_engine_lucene_DataTypeMapper.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/engine/class.tx_mksearch_service_engine_lucene_DataTypeMapper.php'];
-}

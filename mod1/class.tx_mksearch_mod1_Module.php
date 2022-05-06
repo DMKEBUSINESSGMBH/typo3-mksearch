@@ -88,7 +88,3 @@ class tx_mksearch_mod1_Module extends \Sys25\RnBase\Backend\Module\BaseModule
         return parent::moduleContent();
     }
 }
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/class.tx_mksearch_mod1_Module.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/class.tx_mksearch_mod1_Module.php'];
-}

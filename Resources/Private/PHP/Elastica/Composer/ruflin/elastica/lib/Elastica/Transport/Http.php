@@ -1,4 +1,5 @@
 <?php
+
 namespace Elastica\Transport;
 
 use Elastica\Exception\Connection\HttpException;
@@ -69,7 +70,9 @@ class Http extends AbstractTransport
         $query = $request->getQuery();
 
         if (!empty($query)) {
-            $baseUri .= '?'.http_build_query($query);
+            $baseUri .= '?'.http_build_query(
+                $this->sanityzeQueryStringBool($query)
+                );
         }
 
         curl_setopt($conn, CURLOPT_URL, $baseUri);
@@ -113,7 +116,7 @@ class Http extends AbstractTransport
 
         if (!empty($headersConfig)) {
             $headers = [];
-            while (list($header, $headerValue) = each($headersConfig)) {
+            foreach ($headersConfig as $header => $headerValue) {
                 array_push($headers, $header.': '.$headerValue);
             }
         }
@@ -123,7 +126,7 @@ class Http extends AbstractTransport
         $httpMethod = $request->getMethod();
 
         if (!empty($data) || '0' === $data) {
-            if ($this->hasParam('postWithRequestBody') && $this->getParam('postWithRequestBody') == true) {
+            if ($this->hasParam('postWithRequestBody') && true == $this->getParam('postWithRequestBody')) {
                 $httpMethod = Request::POST;
             }
 
@@ -152,7 +155,7 @@ class Http extends AbstractTransport
 
         curl_setopt($conn, CURLOPT_HTTPHEADER, $headers);
 
-        curl_setopt($conn, CURLOPT_NOBODY, $httpMethod == 'HEAD');
+        curl_setopt($conn, CURLOPT_NOBODY, 'HEAD' == $httpMethod);
 
         curl_setopt($conn, CURLOPT_CUSTOMREQUEST, $httpMethod);
 

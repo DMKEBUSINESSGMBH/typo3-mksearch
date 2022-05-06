@@ -1,5 +1,7 @@
 ### build files
 /.Build
+/.php-cs-fixer.cache
+/.phpunit.result.cache
 /composer.lock
 
 ### ide files

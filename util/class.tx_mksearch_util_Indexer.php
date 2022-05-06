@@ -94,10 +94,10 @@ class tx_mksearch_util_Indexer
             if ($dontIndexHidden && $model->isHidden()) {
                 continue;
             }
-            if (!empty($record[$recordKey]) || $options['keepEmpty']) {
+            if (!empty($record[$recordKey]) || ($options['keepEmpty'] ?? false)) {
                 $indexDoc->addField(
                     $prefix.$indexDocKey,
-                    $options['keepHtml'] ? $record[$recordKey] :
+                    ($options['keepHtml'] ?? false) ? $record[$recordKey] :
                         tx_mksearch_util_Misc::html2plain($record[$recordKey])
                 );
             }
@@ -127,7 +127,7 @@ class tx_mksearch_util_Indexer
         array $options = [],
         $dontIndexHidden = true
     ) {
-        //collect values
+        // collect values
         $tempIndexDoc = [];
         /* @var $model \Sys25\RnBase\Domain\Model\DataInterface */
         foreach ($models as $model) {
@@ -149,7 +149,7 @@ class tx_mksearch_util_Indexer
             }
         }
 
-        //and now add the fields
+        // and now add the fields
         if (!empty($tempIndexDoc)) {
             foreach ($tempIndexDoc as $indexDocKey => $values) {
                 $indexDoc->addField($indexDocKey, $values);
@@ -304,45 +304,45 @@ class tx_mksearch_util_Indexer
      */
     public function checkInOrExcludeOptions($models, $options, $mode = 0, $optionKey = 'categories')
     {
-        //set base returns depending on the mode
+        // set base returns depending on the mode
         switch ($mode) {
             case 0:
             default:
                 $mode = 'include';
-                $noHit = false; //if we have no hit
-                $isHit = true; //if we have a hit
+                $noHit = false; // if we have no hit
+                $isHit = true; // if we have a hit
                 break;
             case 1:
                 $mode = 'exclude';
-                $noHit = true; //if we have no hit
-                $isHit = false; //if we have a hit
+                $noHit = true; // if we have no hit
+                $isHit = false; // if we have a hit
                 break;
         }
 
-        //should only elements with a special category etc. be indexed?
+        // should only elements with a special category etc. be indexed?
         if (!empty($options[$mode.'.'][$optionKey.'.']) || !empty($options[$mode.'.'][$optionKey])) {
-            $isValid = $noHit; //no option given
+            $isValid = $noHit; // no option given
             if (!empty($models)) {
-                //include categories as array like
-                //include.categories{
+                // include categories as array like
+                // include.categories{
                 // 0 = 1
                 // 1 = 2
-                //}
+                // }
                 if (!empty($options[$mode.'.'][$optionKey.'.'])) {
                     $includeCategories = $options[$mode.'.'][$optionKey.'.'];
-                } //include categories as string like
-                //include.categories = 1,2
+                } // include categories as string like
+                // include.categories = 1,2
                 elseif (!empty($options[$mode.'.'][$optionKey])) {
                     $includeCategories = explode(',', $options[$mode.'.'][$optionKey]);
                 }
 
-                //if config is empty nothing to do and everything is alright
+                // if config is empty nothing to do and everything is alright
                 if (empty($includeCategories)) {
                     return true;
                 }
 
-                //check if at least one category of the current element
-                //is in the given include categories
+                // check if at least one category of the current element
+                // is in the given include categories
                 foreach ($models as $model) {
                     if (in_array($model->getUid(), $includeCategories)) {
                         $isValid = $isHit;
@@ -369,8 +369,8 @@ class tx_mksearch_util_Indexer
      */
     public function isOnIndexablePage($sourceRecord, $options)
     {
-        $pid = $sourceRecord['pid'];
-        $includePages = $this->getConfigValue('pages', $options['include.']);
+        $pid = $sourceRecord['pid'] ?? 0;
+        $includePages = $this->getConfigValue('pages', $options['include.'] ?? []);
 
         if (in_array($pid, $includePages)) {
             $isOnIndexablePage = true;
@@ -396,7 +396,7 @@ class tx_mksearch_util_Indexer
      */
     private function pageIsNotInIncludePages($pid, array $options)
     {
-        $includePageTrees = $this->getConfigValue('pageTrees', $options['include.']);
+        $includePageTrees = $this->getConfigValue('pageTrees', $options['include.'] ?? []);
 
         if (empty($includePageTrees)) {
             return $this->includePageTreesNotSet($pid, $options);
@@ -413,7 +413,7 @@ class tx_mksearch_util_Indexer
      */
     private function includePageTreesNotSet($pid, array $options)
     {
-        $excludePageTrees = $this->getConfigValue('pageTrees', $options['exclude.']);
+        $excludePageTrees = $this->getConfigValue('pageTrees', $options['exclude.'] ?? []);
 
         if (false !== $this->getFirstRootlineIndexInPageTrees($pid, $excludePageTrees)) {
             return false;
@@ -431,7 +431,7 @@ class tx_mksearch_util_Indexer
     private function pageIsNotInExcludePageTrees($pid, array $options)
     {
         if ($this->pageIsNotInExcludePages($pid, $options)) {
-            $includePages = $this->getConfigValue('pages', $options['include.']);
+            $includePages = $this->getConfigValue('pages', $options['include.'] ?? []);
 
             return empty($includePages);
         } else {
@@ -447,7 +447,7 @@ class tx_mksearch_util_Indexer
      */
     private function pageIsNotInExcludePages($pid, array $options)
     {
-        $excludePages = $this->getConfigValue('pages', $options['exclude.']);
+        $excludePages = $this->getConfigValue('pages', $options['exclude.'] ?? []);
 
         return !in_array($pid, $excludePages);
     }
@@ -460,7 +460,7 @@ class tx_mksearch_util_Indexer
      */
     private function includePageTreesSet($pid, array $options)
     {
-        $includePageTrees = $this->getConfigValue('pageTrees', $options['include.']);
+        $includePageTrees = $this->getConfigValue('pageTrees', $options['include.'] ?? []);
         $firstRootlineIndexInIncludePageTrees =
             $this->getFirstRootlineIndexInPageTrees($pid, $includePageTrees);
 
@@ -480,7 +480,7 @@ class tx_mksearch_util_Indexer
      */
     private function pageIsInIncludePageTrees($pid, array $options, $firstRootlineIndexInIncludePageTrees)
     {
-        $excludePageTrees = $this->getConfigValue('pageTrees', $options['exclude.']);
+        $excludePageTrees = $this->getConfigValue('pageTrees', $options['exclude.'] ?? []);
         $firstRootlineIndexInExcludePageTrees =
             $this->getFirstRootlineIndexInPageTrees($pid, $excludePageTrees);
 
@@ -633,10 +633,10 @@ class tx_mksearch_util_Indexer
         if (!$pid) {
             return [];
         }
-        //first of all we have to check if the page is not hidden/deleted
+        // first of all we have to check if the page is not hidden/deleted
         $sqlOptions = [
             'where' => 'pages.uid='.$pid.' AND hidden=0 AND deleted=0',
-            'enablefieldsoff' => true, //ignore fe_group and so on
+            'enablefieldsoff' => true, // ignore fe_group and so on
             'limit' => 1,
         ];
         $from = ['pages', 'pages'];

@@ -72,7 +72,7 @@ class tx_mksearch_search_irfaq_Question extends \Sys25\RnBase\Search\SearchBase
     {
         $join = '';
 
-        //rezepte mit typ soundso
+        // rezepte mit typ soundso
         if (isset($tableAliases['IRFAQ_QUESTION_CATEGORY_MM'])) {
             $join .= ' JOIN tx_irfaq_q_cat_mm AS IRFAQ_QUESTION_CATEGORY_MM ON IRFAQ_QUESTION.uid = IRFAQ_QUESTION_CATEGORY_MM.uid_local';
         }
@@ -87,8 +87,4 @@ class tx_mksearch_search_irfaq_Question extends \Sys25\RnBase\Search\SearchBase
 
         return $join;
     }
-}
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/search/irfaq/class.tx_mksearch_search_irfaq_Expert.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/search/irfaq/class.tx_mksearch_search_irfaq_Expert.php'];
 }

@@ -61,10 +61,7 @@ abstract class tx_mksearch_tests_DbTestcase extends tx_mksearch_tests_Testcase
      */
     protected $importDataSets = [];
 
-    /**
-     * setUp() = init DB etc.
-     */
-    protected function setUp()
+    protected function setUp(): void
     {
         self::markTestIncomplete('Database tests are no longer supported. Please switch to functional tests');
 
@@ -102,17 +99,10 @@ abstract class tx_mksearch_tests_DbTestcase extends tx_mksearch_tests_Testcase
             $this->importDataSet($importDataSet);
         }
 
-        // das devlog stört nur bei der Testausführung im BE und ist da auch
-        // vollkommen unnötig
-        tx_mksearch_tests_Util::disableDevlog();
-
         $this->purgeRootlineCaches();
     }
 
-    /**
-     * tearDown() = destroy DB etc.
-     */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         // tear down TCA
         tx_mksearch_tests_Util::tcaTearDown();
@@ -174,8 +164,4 @@ abstract class tx_mksearch_tests_DbTestcase extends tx_mksearch_tests_Testcase
 
         $this->switchToTypo3Database();
     }
-}
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/class.tx_mksearch_tests_DbTestcase.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/class.tx_mksearch_tests_DbTestcase.php'];
 }

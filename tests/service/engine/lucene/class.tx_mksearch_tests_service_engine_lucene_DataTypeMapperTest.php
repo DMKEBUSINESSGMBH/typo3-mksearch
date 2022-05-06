@@ -33,7 +33,7 @@ class tx_mksearch_tests_service_engine_lucene_DataTypeMapperTest extends tx_mkse
     /* @var $mapper tx_mksearch_service_engine_lucene_DataTypeMapper */
     private $mapper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->mapper = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_service_engine_lucene_DataTypeMapper');
@@ -72,7 +72,4 @@ class tx_mksearch_tests_service_engine_lucene_DataTypeMapperTest extends tx_mkse
                 ['someotherfield_mi', 'text'],
         ];
     }
-}
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/service/engine/lucene/class.tx_mksearch_tests_service_engine_lucene_DataTypeMapperTest.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/service/engine/lucene/class.tx_mksearch_tests_service_engine_lucene_DataTypeMapperTest.php'];
 }

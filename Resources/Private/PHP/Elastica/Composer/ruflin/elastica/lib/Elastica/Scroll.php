@@ -1,4 +1,5 @@
 <?php
+
 namespace Elastica;
 
 /**
@@ -6,7 +7,7 @@ namespace Elastica;
  *
  * @author Manuel Andreo Garcia <andreo.garcia@gmail.com>
  *
- * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-scroll.html
+ * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-scroll.html
  */
 class Scroll implements \Iterator
 {
@@ -21,12 +22,12 @@ class Scroll implements \Iterator
     protected $_search;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     protected $_nextScrollId;
 
     /**
-     * @var null|ResultSet
+     * @var ResultSet|null
      */
     protected $_currentResultSet;
 
@@ -56,10 +57,11 @@ class Scroll implements \Iterator
     /**
      * Returns current result set.
      *
-     * @link http://php.net/manual/en/iterator.current.php
+     * @see http://php.net/manual/en/iterator.current.php
      *
      * @return ResultSet
      */
+    #[\ReturnTypeWillChange]
     public function current()
     {
         return $this->_currentResultSet;
@@ -68,8 +70,9 @@ class Scroll implements \Iterator
     /**
      * Next scroll search.
      *
-     * @link http://php.net/manual/en/iterator.next.php
+     * @see http://php.net/manual/en/iterator.next.php
      */
+    #[\ReturnTypeWillChange]
     public function next()
     {
         if ($this->currentPage < $this->totalPages) {
@@ -90,10 +93,11 @@ class Scroll implements \Iterator
     /**
      * Returns scroll id.
      *
-     * @link http://php.net/manual/en/iterator.key.php
+     * @see http://php.net/manual/en/iterator.key.php
      *
      * @return string
      */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return $this->_nextScrollId;
@@ -102,20 +106,22 @@ class Scroll implements \Iterator
     /**
      * Returns true if current result set contains at least one hit.
      *
-     * @link http://php.net/manual/en/iterator.valid.php
+     * @see http://php.net/manual/en/iterator.valid.php
      *
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function valid()
     {
-        return $this->_nextScrollId !== null;
+        return null !== $this->_nextScrollId;
     }
 
     /**
      * Initial scroll search.
      *
-     * @link http://php.net/manual/en/iterator.rewind.php
+     * @see http://php.net/manual/en/iterator.rewind.php
      */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         // reset state
@@ -157,10 +163,13 @@ class Scroll implements \Iterator
      */
     protected function _setScrollId(ResultSet $resultSet)
     {
+        if (0 === $this->currentPage) {
+            $this->totalPages = $resultSet->count() > 0 ? ceil($resultSet->getTotalHits() / $resultSet->count()) : 0;
+        }
+
         $this->_currentResultSet = $resultSet;
         ++$this->currentPage;
-        $this->totalPages = $resultSet->count() > 0 ? ceil($resultSet->getTotalHits() / $resultSet->count()) : 0;
-        $this->_nextScrollId = $resultSet->getResponse()->isOk() ? $resultSet->getResponse()->getScrollId() : null;
+        $this->_nextScrollId = $resultSet->getResponse()->isOk() && $resultSet->count() > 0 ? $resultSet->getResponse()->getScrollId() : null;
     }
 
     /**

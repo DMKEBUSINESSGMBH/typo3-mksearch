@@ -1,4 +1,5 @@
 <?php
+
 namespace Elastica;
 
 use Elastica\Exception\InvalidException;
@@ -82,6 +83,7 @@ class Type implements SearchableInterface
                 'replication',
                 'refresh',
                 'timeout',
+                'pipeline',
             ]
         );
 
@@ -135,7 +137,7 @@ class Type implements SearchableInterface
     /**
      * Update document, using update script. Requires elasticsearch >= 0.19.0.
      *
-     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update.html
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update.html
      *
      * @param \Elastica\Document|\Elastica\Script\AbstractScript $data    Document with update data
      * @param array                                              $options array of query params to use for query. For possible options check es api
@@ -166,49 +168,52 @@ class Type implements SearchableInterface
     /**
      * Uses _bulk to send documents to the server.
      *
-     * @param array|\Elastica\Document[] $docs Array of Elastica\Document
+     * @param array|\Elastica\Document[] $docs    Array of Elastica\Document
+     * @param array                      $options Array of query params to use for query. For possible options check es api
      *
      * @return \Elastica\Bulk\ResponseSet
      *
-     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html
      */
-    public function updateDocuments(array $docs)
+    public function updateDocuments(array $docs, array $options = [])
     {
         foreach ($docs as $doc) {
             $doc->setType($this->getName());
         }
 
-        return $this->getIndex()->updateDocuments($docs);
+        return $this->getIndex()->updateDocuments($docs, $options);
     }
 
     /**
      * Uses _bulk to send documents to the server.
      *
-     * @param array|\Elastica\Document[] $docs Array of Elastica\Document
+     * @param array|\Elastica\Document[] $docs    Array of Elastica\Document
+     * @param array                      $options Array of query params to use for query. For possible options check es api
      *
      * @return \Elastica\Bulk\ResponseSet
      *
-     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html
      */
-    public function addDocuments(array $docs)
+    public function addDocuments(array $docs, array $options = [])
     {
         foreach ($docs as $doc) {
             $doc->setType($this->getName());
         }
 
-        return $this->getIndex()->addDocuments($docs);
+        return $this->getIndex()->addDocuments($docs, $options);
     }
 
     /**
      * Uses _bulk to send documents to the server.
      *
-     * @param objects[] $objects
+     * @param object[] $objects
+     * @param array    $options Array of query params to use for query. For possible options check es api
      *
-     * @return \Elastica\Bulk\ResponseSet
+     * @return Bulk\ResponseSet
      *
-     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html
      */
-    public function addObjects(array $objects)
+    public function addObjects(array $objects, array $options = [])
     {
         if (!isset($this->_serializer)) {
             throw new RuntimeException('No serializer defined');
@@ -223,14 +228,14 @@ class Type implements SearchableInterface
             $docs[] = $doc;
         }
 
-        return $this->getIndex()->addDocuments($docs);
+        return $this->getIndex()->addDocuments($docs, $options);
     }
 
     /**
      * Get the document from search index.
      *
      * @param string $id      Document id
-     * @param array  $options Options for the get request.
+     * @param array  $options options for the get request
      *
      * @throws \Elastica\Exception\NotFoundException
      * @throws \Elastica\Exception\ResponseException
@@ -246,7 +251,7 @@ class Type implements SearchableInterface
         $response = $this->requestEndpoint($endpoint);
         $result = $response->getData();
 
-        if (!isset($result['found']) || $result['found'] === false) {
+        if (!isset($result['found']) || false === $result['found']) {
             throw new NotFoundException('doc id '.$id.' not found');
         }
 
@@ -412,7 +417,7 @@ class Type implements SearchableInterface
      *
      * @return \Elastica\Bulk\ResponseSet
      *
-     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html
      */
     public function deleteDocuments(array $docs)
     {
@@ -426,7 +431,7 @@ class Type implements SearchableInterface
     /**
      * Deletes an entry by its unique identifier.
      *
-     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-delete.html
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-delete.html
      *
      * @param int|string $id      Document id
      * @param array      $options
@@ -450,7 +455,7 @@ class Type implements SearchableInterface
 
         $responseData = $response->getData();
 
-        if (isset($responseData['found']) && false == $responseData['found']) {
+        if (isset($responseData['result']) && 'not_found' == $responseData['result']) {
             throw new NotFoundException('Doc id '.$id.' not found and can not be deleted');
         }
 
@@ -473,12 +478,12 @@ class Type implements SearchableInterface
     /**
      * Deletes entries in the db based on a query.
      *
-     * @param \Elastica\Query|string $query   Query object
-     * @param array                  $options Optional params
+     * @param \Elastica\Query|\Elastica\Query\AbstractQuery|string|array $query   Query object
+     * @param array                                                      $options Optional params
      *
      * @return \Elastica\Response
      *
-     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-delete-by-query.html
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-delete-by-query.html
      */
     public function deleteByQuery($query, array $options = [])
     {
@@ -548,6 +553,6 @@ class Type implements SearchableInterface
     {
         $response = $this->requestEndpoint(new Exists());
 
-        return $response->getStatus() === 200;
+        return 200 === $response->getStatus();
     }
 }

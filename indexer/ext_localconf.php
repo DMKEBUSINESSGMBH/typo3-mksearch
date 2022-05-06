@@ -17,7 +17,7 @@ tx_mksearch_util_Config::registerIndexer(
     'tx_mksearch_indexer_Page',
     [
         'pages',
-        //@todo handle page overlay
+        // @todo handle page overlay
         'pages_language_overlay',
     ]
 );
@@ -27,9 +27,9 @@ tx_mksearch_util_Config::registerIndexer(
     'tt_content',
     'tx_mksearch_indexer_TtContent',
     [
-        //Main Table
+        // Main Table
         'tt_content',
-        //related tables
+        // related tables
         'pages',
     ]
 );
@@ -43,9 +43,9 @@ if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('news')) {
         'news',
         'tx_mksearch_indexer_TxNewsNews',
         [
-            //Main Table
+            // Main Table
             'tx_news_domain_model_news',
-            //related/monitored tables
+            // related/monitored tables
             'sys_category',
             'tx_news_domain_model_tag',
         ]
@@ -65,9 +65,9 @@ if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('seminars')) {
         'seminar',
         'tx_mksearch_indexer_seminars_Seminar',
         [
-            //main table
+            // main table
             'tx_seminars_seminars',
-            //tables with related data
+            // tables with related data
             'tx_seminars_categories',
             'tx_seminars_organizers',
             'tx_seminars_sites',
@@ -85,9 +85,9 @@ if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('irfaq')) {
         'question',
         'tx_mksearch_indexer_Irfaq',
         [
-            //main table
+            // main table
             'tx_irfaq_q',
-            //tables with related data
+            // tables with related data
             'tx_irfaq_expert',
             'tx_irfaq_cat',
         ]
@@ -105,9 +105,9 @@ if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('cal')) {
         'event',
         'tx_mksearch_indexer_Cal',
         [
-            //main table
+            // main table
             'tx_cal_event',
-            //tables with related data
+            // tables with related data
             'tx_cal_category',
             'tx_cal_calendar',
         ]
@@ -125,7 +125,7 @@ if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('a21glossary'))
 }
 
 // Configure core page indexer service
-$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['indexer']['config']['core']['page']['indexedFields'] = ['subtitle', 'url', 'keywords', 'description', 'author', /*'author_email',*/ 'nav_title', 'alias'];
+$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['indexer']['config']['core']['page']['indexedFields'] = ['subtitle', 'url', 'keywords', 'description', 'author', /* 'author_email', */ 'nav_title', 'alias'];
 
 // Configure tt_news indexer service
 $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['indexer']['config']['tt_news']['news']['indexedFields'] = ['imagealttext', 'imagetitletext', 'short', 'bodytext', 'keywords'];

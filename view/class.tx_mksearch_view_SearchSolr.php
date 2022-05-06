@@ -74,7 +74,7 @@ class tx_mksearch_view_SearchSolr extends \Sys25\RnBase\Frontend\View\Marker\Bas
             $markerParams
         );
 
-        //noch die Facetten parsen wenn da
+        // noch die Facetten parsen wenn da
         $out = $this->handleFacets($out, $viewData, $configurations, $formatter, $listBuilder, $result);
         $out = $this->handleSuggestions($out, $viewData, $configurations, $formatter, $listBuilder, $result);
 
@@ -140,7 +140,7 @@ class tx_mksearch_view_SearchSolr extends \Sys25\RnBase\Frontend\View\Marker\Bas
 
         // the old way!
         if (\Sys25\RnBase\Frontend\Marker\BaseMarker::containsMarker($out, 'FACETS')) {
-            //erstmal die Markerklasse holen
+            // erstmal die Markerklasse holen
             $facetMarkerClass = $configurations->get($this->confId.'facet.markerClass');
             $facetMarkerClass = $facetMarkerClass ? $facetMarkerClass : 'tx_mksearch_marker_Facet';
 
@@ -185,7 +185,7 @@ class tx_mksearch_view_SearchSolr extends \Sys25\RnBase\Frontend\View\Marker\Bas
 
         // wir geben die facetten grupiert aus.
         if (\Sys25\RnBase\Frontend\Marker\BaseMarker::containsMarker($out, 'GROUPEDFACETS')) {
-            //erstmal die Markerklasse holen
+            // erstmal die Markerklasse holen
             $groupedMarkerClass = $configurations->get($this->confId.'groupedfacet.markerClass');
             $groupedMarkerClass = $groupedMarkerClass ? $groupedMarkerClass : 'tx_mksearch_marker_GroupedFacet';
 
@@ -231,8 +231,4 @@ class tx_mksearch_view_SearchSolr extends \Sys25\RnBase\Frontend\View\Marker\Bas
         // Fallback, wenn kein Mainpart gesetzt wurde.
         return $mainSubpart ? $mainSubpart : '###SEARCH###';
     }
-}
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/view/class.tx_mksearch_view_SearchSolr.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/view/class.tx_mksearch_view_SearchSolr.php'];
 }

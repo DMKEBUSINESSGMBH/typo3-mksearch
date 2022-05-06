@@ -174,6 +174,3 @@ class tx_mksearch_util_ServiceRegistry
         return \Sys25\RnBase\Utility\Misc::getService('mksearch', 'irfaq_question');
     }
 }
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_ServiceRegistry.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_ServiceRegistry.php'];
-}

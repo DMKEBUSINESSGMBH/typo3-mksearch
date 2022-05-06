@@ -17,7 +17,7 @@ if (TYPO3_MODE == 'BE') {
     \Sys25\RnBase\Backend\Utility\Icons::getIconRegistry()->registerIcon(
         'ext-mksearch-wizard-icon',
         'TYPO3\\CMS\Core\\Imaging\\IconProvider\\BitmapIconProvider',
-        ['source' => 'EXT:mksearch/ext_icon.gif']
+        ['source' => 'EXT:mksearch/Resources/Public/Icons/Extension.gif']
     );
     // Wizardkonfiguration hinzufügen
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
@@ -27,6 +27,6 @@ if (TYPO3_MODE == 'BE') {
     \Sys25\RnBase\Backend\Utility\Icons::getIconRegistry()->registerIcon(
         'apps-pagetree-folder-contains-mksearch',
         'TYPO3\\CMS\Core\\Imaging\\IconProvider\\BitmapIconProvider',
-        ['source' => 'EXT:mksearch/icons/icon_folder.gif']
+        ['source' => 'EXT:mksearch/Resources/Public/Icons/icon_folder.gif']
     );
 }

@@ -194,8 +194,8 @@ abstract class tx_mksearch_mod1_searcher_abstractBase
 
         $pagerData = $pager->render();
 
-        //der zusammengeführte Pager für die Ausgabe
-        //nur wenn es auch Ergebnisse gibt. sonst reicht die noItemsFoundMsg
+        // der zusammengeführte Pager für die Ausgabe
+        // nur wenn es auch Ergebnisse gibt. sonst reicht die noItemsFoundMsg
         $sPagerData = '';
         if ($cnt) {
             $sPagerData = $pagerData['limits'].' - '.$pagerData['pages'];
@@ -224,8 +224,8 @@ abstract class tx_mksearch_mod1_searcher_abstractBase
             $options['enablefieldsbe'] = 1;
         }
 
-        //die fields nun mit dem Suchbegriff und den Spalten,
-        //in denen gesucht werden soll, füllen
+        // die fields nun mit dem Suchbegriff und den Spalten,
+        // in denen gesucht werden soll, füllen
         tx_mksearch_mod1_util_SearchBuilder::buildFreeText($fields, $this->currentSearchWord, $this->getSearchColumns());
     }
 
@@ -252,7 +252,7 @@ abstract class tx_mksearch_mod1_searcher_abstractBase
         if (0 === count($items)) {
             $content = $this->getNoItemsFoundMsg();
 
-            return; //stop
+            return; // stop
         }
         // else
         $aColumns = $this->getColumns($this->getDecorator($this->getModule()));
@@ -373,8 +373,4 @@ abstract class tx_mksearch_mod1_searcher_abstractBase
     {
         return '<p><strong>###LABEL_NO_'.strtoupper($this->getSearcherId()).'_FOUND###</strong></p><br/>';
     }
-}
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/searcher/class.tx_mksearch_mod1_searcher_abstractBase.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/mod1/searcher/class.tx_mksearch_mod1_searcher_abstractBase.php'];
 }

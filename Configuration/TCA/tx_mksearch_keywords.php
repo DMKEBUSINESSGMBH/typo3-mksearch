@@ -12,7 +12,7 @@ return [
         'enablecolumns' => [
             'disabled' => 'hidden',
         ],
-        'iconfile' => 'EXT:mksearch/icons/tx_mksearch_keywords.gif',
+        'iconfile' => 'EXT:mksearch/Resources/Public/Icons/tx_mksearch_keywords.gif',
     ],
     'feInterface' => [
         'fe_admin_fieldList' => 'hidden, keyword, link',

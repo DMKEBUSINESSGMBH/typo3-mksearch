@@ -1,11 +1,14 @@
 <?php
+
 namespace Elastica;
 
 use Elastica\Exception\InvalidException;
 use Elastica\Exception\ResponseException;
+use Elastica\Index\Recovery as IndexRecovery;
 use Elastica\Index\Settings as IndexSettings;
 use Elastica\Index\Stats as IndexStats;
 use Elastica\ResultSet\BuilderInterface;
+use Elastica\Script\AbstractScript;
 use Elasticsearch\Endpoints\AbstractEndpoint;
 use Elasticsearch\Endpoints\DeleteByQuery;
 use Elasticsearch\Endpoints\Indices\Aliases\Update;
@@ -21,6 +24,7 @@ use Elasticsearch\Endpoints\Indices\Mapping\Get;
 use Elasticsearch\Endpoints\Indices\Open;
 use Elasticsearch\Endpoints\Indices\Refresh;
 use Elasticsearch\Endpoints\Indices\Settings\Put;
+use Elasticsearch\Endpoints\UpdateByQuery;
 
 /**
  * Elastica index object.
@@ -86,6 +90,16 @@ class Index implements SearchableInterface
     }
 
     /**
+     * Return Index Recovery.
+     *
+     * @return \Elastica\Index\Recovery
+     */
+    public function getRecovery()
+    {
+        return new IndexRecovery($this);
+    }
+
+    /**
      * Gets all the type mappings for an index.
      *
      * @return array
@@ -118,48 +132,77 @@ class Index implements SearchableInterface
     /**
      * Uses _bulk to send documents to the server.
      *
-     * @param array|\Elastica\Document[] $docs Array of Elastica\Document
+     * @param array|\Elastica\Document[] $docs    Array of Elastica\Document
+     * @param array                      $options Array of query params to use for query. For possible options check es api
      *
      * @return \Elastica\Bulk\ResponseSet
      *
-     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html
      */
-    public function updateDocuments(array $docs)
+    public function updateDocuments(array $docs, array $options = [])
     {
         foreach ($docs as $doc) {
             $doc->setIndex($this->getName());
         }
 
-        return $this->getClient()->updateDocuments($docs);
+        return $this->getClient()->updateDocuments($docs, $options);
+    }
+
+    /**
+     * Update entries in the db based on a query.
+     *
+     * @param \Elastica\Query|string|array $query   Query object or array
+     * @param AbstractScript               $script  Script
+     * @param array                        $options Optional params
+     *
+     * @return \Elastica\Response
+     *
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update-by-query.html
+     */
+    public function updateByQuery($query, AbstractScript $script, array $options = [])
+    {
+        $query = Query::create($query)->getQuery();
+
+        $endpoint = new UpdateByQuery();
+        $body = ['query' => is_array($query)
+            ? $query
+            : $query->toArray(), ];
+
+        $body['script'] = $script->toArray()['script'];
+        $endpoint->setBody($body);
+        $endpoint->setParams($options);
+
+        return $this->requestEndpoint($endpoint);
     }
 
     /**
      * Uses _bulk to send documents to the server.
      *
-     * @param array|\Elastica\Document[] $docs Array of Elastica\Document
+     * @param array|\Elastica\Document[] $docs    Array of Elastica\Document
+     * @param array                      $options Array of query params to use for query. For possible options check es api
      *
      * @return \Elastica\Bulk\ResponseSet
      *
-     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html
      */
-    public function addDocuments(array $docs)
+    public function addDocuments(array $docs, array $options = [])
     {
         foreach ($docs as $doc) {
             $doc->setIndex($this->getName());
         }
 
-        return $this->getClient()->addDocuments($docs);
+        return $this->getClient()->addDocuments($docs, $options);
     }
 
     /**
      * Deletes entries in the db based on a query.
      *
-     * @param \Elastica\Query|string|array $query   Query object or array
-     * @param array                        $options Optional params
+     * @param \Elastica\Query|\Elastica\Query\AbstractQuery|string|array $query   Query object or array
+     * @param array                                                      $options Optional params
      *
      * @return \Elastica\Response
      *
-     * @link https://www.elastic.co/guide/en/elasticsearch/reference/5.0/docs-delete-by-query.html
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/5.0/docs-delete-by-query.html
      */
     public function deleteByQuery($query, array $options = [])
     {
@@ -189,7 +232,7 @@ class Index implements SearchableInterface
      *
      * @return \Elastica\Bulk\ResponseSet
      *
-     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html
      */
     public function deleteDocuments(array $docs)
     {
@@ -201,25 +244,6 @@ class Index implements SearchableInterface
     }
 
     /**
-     * Optimizes search index.
-     *
-     * Detailed arguments can be found here in the link
-     *
-     * @param array $args OPTIONAL Additional arguments
-     *
-     * @return array Server response
-     *
-     * @deprecated Replaced by forcemerge
-     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-optimize.html
-     */
-    public function optimize($args = [])
-    {
-        trigger_error('Deprecated: Elastica\Index::optimize() is deprecated and will be removed in further Elastica releases. Use Elastica\Index::forcemerge() instead.', E_USER_DEPRECATED);
-
-        return $this->forcemerge($args);
-    }
-
-    /**
      * Force merges index.
      *
      * Detailed arguments can be found here in the link
@@ -228,7 +252,7 @@ class Index implements SearchableInterface
      *
      * @return Response
      *
-     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-forcemerge.html
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-forcemerge.html
      */
     public function forcemerge($args = [])
     {
@@ -243,7 +267,7 @@ class Index implements SearchableInterface
      *
      * @return \Elastica\Response Response object
      *
-     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-refresh.html
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-refresh.html
      */
     public function refresh()
     {
@@ -253,7 +277,7 @@ class Index implements SearchableInterface
     /**
      * Creates a new index with the given arguments.
      *
-     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-create-index.html
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-create-index.html
      *
      * @param array      $args    OPTIONAL Arguments to use
      * @param bool|array $options OPTIONAL
@@ -305,7 +329,7 @@ class Index implements SearchableInterface
     {
         $response = $this->requestEndpoint(new Exists());
 
-        return $response->getStatus() === 200;
+        return 200 === $response->getStatus();
     }
 
     /**
@@ -362,7 +386,7 @@ class Index implements SearchableInterface
      *
      * @return \Elastica\Response Response object
      *
-     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-open-close.html
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-open-close.html
      */
     public function open()
     {
@@ -374,7 +398,7 @@ class Index implements SearchableInterface
      *
      * @return \Elastica\Response Response object
      *
-     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-open-close.html
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-open-close.html
      */
     public function close()
     {
@@ -409,7 +433,7 @@ class Index implements SearchableInterface
      *
      * @return \Elastica\Response Response
      *
-     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-aliases.html
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-aliases.html
      */
     public function addAlias($name, $replace = false)
     {
@@ -437,7 +461,7 @@ class Index implements SearchableInterface
      *
      * @return \Elastica\Response Response
      *
-     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-aliases.html
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-aliases.html
      */
     public function removeAlias($name)
     {
@@ -488,7 +512,7 @@ class Index implements SearchableInterface
      *
      * @return \Elastica\Response Response object
      *
-     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-clearcache.html
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-clearcache.html
      */
     public function clearCache()
     {
@@ -503,7 +527,7 @@ class Index implements SearchableInterface
      *
      * @return Response Response object
      *
-     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-flush.html
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-flush.html
      */
     public function flush(array $options = [])
     {
@@ -520,7 +544,7 @@ class Index implements SearchableInterface
      *
      * @return \Elastica\Response Response object
      *
-     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-update-settings.html
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-update-settings.html
      */
     public function setSettings(array $data)
     {
@@ -567,24 +591,24 @@ class Index implements SearchableInterface
      *
      * Detailed arguments can be found here in the link
      *
-     * @param string $text String to be analyzed
-     * @param array  $args OPTIONAL Additional arguments
+     * @param array $body String to be analyzed
+     * @param array $args OPTIONAL Additional arguments
      *
      * @return array Server response
      *
-     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-analyze.html
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-analyze.html
      */
-    public function analyze($text, $args = [])
+    public function analyze(array $body, $args = [])
     {
         $endpoint = new Analyze();
-        $endpoint->setBody(['text' => $text]);
+        $endpoint->setBody($body);
         $endpoint->setParams($args);
 
         $data = $this->requestEndpoint($endpoint)->getData();
 
         // Support for "Explain" parameter, that returns a different response structure from Elastic
         // @see: https://www.elastic.co/guide/en/elasticsearch/reference/current/_explain_analyze.html
-        if (isset($args['explain']) && $args['explain']) {
+        if (isset($body['explain']) && $body['explain']) {
             return $data['detail'];
         }
 

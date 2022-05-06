@@ -38,14 +38,10 @@ class tx_mksearch_marker_CoreTtNews extends tx_mksearch_marker_SearchResultSimpl
      */
     public function parseTemplate($template, &$item, &$formatter, $confId, $marker = 'ITEM')
     {
-        //wir benötigen das datetime_dt feld lediglich zusätzlich als timestamp
+        // wir benötigen das datetime_dt feld lediglich zusätzlich als timestamp
         $oDateTime = new DateTime($item->getProperty('datetime_dt'));
         $item->setProperty('datetime_i', $oDateTime->format('U'));
 
         return parent::parseTemplate($template, $item, $formatter, $confId, $marker);
     }
-}
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/marker/class.tx_mksearch_marker_CoreTtContent.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/marker/class.tx_mksearch_marker_CoreTtContent.php'];
 }

@@ -29,7 +29,7 @@
  */
 class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\Service\AbstractService implements tx_mksearch_interface_SearchEngine
 {
-    const FE_GROUP_FIELD = 'fe_group_mi';
+    public const FE_GROUP_FIELD = 'fe_group_mi';
 
     /**
      * Index used for searching and indexing.
@@ -683,7 +683,7 @@ class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\S
 
         // Core data
         $data = $doc->getPrimaryKey();
-        //$data = $doc->getCoreData();
+        // $data = $doc->getCoreData();
 
         // Hook to manipulate data
         // Note that manipulating data not only influences the indexing itself
@@ -814,7 +814,7 @@ class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\S
     {
         $status = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_util_Status');
         // TODO: sinnvollen Test einfallen lassen...
-        //Läßt sich der Index öffnen?
+        // Läßt sich der Index öffnen?
         if (!$this->indexModel) {
             $status->setStatus(-1, 'Illegal State: No index model found!');
 
@@ -839,8 +839,4 @@ class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\S
     public function postProcessIndexing(tx_mksearch_model_internal_Index $oIndex)
     {
     }
-}
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/engine/class.tx_mksearch_service_engine_ZendLucene.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/engine/class.tx_mksearch_service_engine_ZendLucene.php'];
 }

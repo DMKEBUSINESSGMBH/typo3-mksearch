@@ -12,7 +12,7 @@ return [
         'enablecolumns' => [
             'disabled' => 'hidden',
         ],
-        'iconfile' => 'EXT:mksearch/icons/icon_tx_mksearch_configcomposites.gif',
+        'iconfile' => 'EXT:mksearch/Resources/Public/Icons/icon_tx_mksearch_configcomposites.gif',
     ],
     'interface' => [
         'showRecordFieldList' => 'hidden,title,description,indices,configs,configuration',

@@ -37,7 +37,3 @@ class tx_mksearch_model_internal_Config extends \Sys25\RnBase\Domain\Model\BaseM
         return 'tx_mksearch_indexerconfigs';
     }
 }
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/internal/class.tx_mksearch_model_internal_Config.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/internal/class.tx_mksearch_model_internal_Config.php'];
-}

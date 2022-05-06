@@ -59,8 +59,8 @@ class tx_mksearch_tests_fixtures_indexer_Dummy extends tx_mksearch_indexer_Base
      */
     protected function stopIndexing($sTableName, $aRawData, tx_mksearch_interface_IndexerDocument $oIndexDoc, $aOptions)
     {
-        //nothing to handle by default. continue indexing
-        return $aRawData['stopIndexing'];
+        // nothing to handle by default. continue indexing
+        return $aRawData['stopIndexing'] ?? false;
     }
 
     /**
@@ -71,7 +71,7 @@ class tx_mksearch_tests_fixtures_indexer_Dummy extends tx_mksearch_indexer_Base
     public function indexData(\Sys25\RnBase\Domain\Model\DataInterface $oModel, $sTableName, $aRawData, tx_mksearch_interface_IndexerDocument $oIndexDoc, $aOptions)
     {
         $this->indexModelByMapping($oModel, $this->getTestMapping(), $oIndexDoc);
-        //with keep html
+        // with keep html
         $this->indexModelByMapping($oModel, $this->getTestMapping(), $oIndexDoc, 'keepHtml_', ['keepHtml' => 1]);
 
         if ($oModel->getProperty('multiValue')) {
@@ -85,11 +85,11 @@ class tx_mksearch_tests_fixtures_indexer_Dummy extends tx_mksearch_indexer_Base
         }
 
         $aCategories = $this->getTestCategories();
-        //includes
+        // includes
         if (!$this->checkInOrExcludeOptions($aCategories, $aOptions)) {
             return null;
         }
-        //excludes found
+        // excludes found
         if (!$this->checkInOrExcludeOptions($aCategories, $aOptions, 1)) {
             return null;
         }
@@ -151,8 +151,4 @@ class tx_mksearch_tests_fixtures_indexer_Dummy extends tx_mksearch_indexer_Base
     {
         return $this->_getPidList('');
     }
-}
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/seminars/class.tx_mksearch_indexer_seminars_Seminar.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/seminars/class.tx_mksearch_indexer_seminars_Seminar.php'];
 }

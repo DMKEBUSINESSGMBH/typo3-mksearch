@@ -43,7 +43,3 @@ class tx_mksearch_model_irfaq_Expert extends \Sys25\RnBase\Domain\Model\BaseMode
         return 'tx_irfaq_expert';
     }
 }
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/irfaq/class.tx_mksearch_model_irfaq_Expert.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/irfaq/class.tx_mksearch_model_irfaq_Expert.php'];
-}

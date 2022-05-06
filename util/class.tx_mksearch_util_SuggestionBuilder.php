@@ -45,7 +45,7 @@ class tx_mksearch_util_SuggestionBuilder
     {
         static $instance;
         $class = empty($class) ? 'tx_mksearch_util_SuggestionBuilder' : $class;
-        if (!$instance[$class]) {
+        if (!($instance[$class] ?? null)) {
             $instance[$class] = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($class);
         }
 
@@ -69,7 +69,7 @@ class tx_mksearch_util_SuggestionBuilder
             if (isset($oSearchWord->suggestion) && is_array($oSearchWord->suggestion)) {
                 $uid = 0;
                 foreach ($oSearchWord->suggestion as $sSuggestion) {
-                    //sorted by search word
+                    // sorted by search word
                     $aSuggestions[$sSearchWord][] = $this->getSimpleSuggestion(
                         [
                             'uid' => ++$uid,
@@ -95,8 +95,4 @@ class tx_mksearch_util_SuggestionBuilder
     {
         return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_Suggestion', $aSuggestion);
     }
-}
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_SuggestionBuilder.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_SuggestionBuilder.php'];
 }

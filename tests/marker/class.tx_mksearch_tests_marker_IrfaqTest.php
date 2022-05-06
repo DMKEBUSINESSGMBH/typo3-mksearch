@@ -42,10 +42,7 @@ class tx_mksearch_tests_marker_IrfaqTest extends tx_mksearch_tests_Testcase
      */
     protected $marker;
 
-    /**
-     * setUp() = init DB etc.
-     */
-    protected function setUp()
+    protected function setUp(): void
     {
         self::markTestIncomplete("Error: Class 'TYPO3\CMS\Core\TimeTracker\NullTimeTracker' not found");
         $this->prepareTSFE();
@@ -64,7 +61,7 @@ class tx_mksearch_tests_marker_IrfaqTest extends tx_mksearch_tests_Testcase
         $configurations = tx_mksearch_tests_Util::loadConfig4BE($config);
         $formatter = $configurations->getFormatter();
 
-        //now test
+        // now test
         $doc = new Apache_Solr_Document();
         $doc->category_first_shortcut_s = '';
 
@@ -91,7 +88,7 @@ class tx_mksearch_tests_marker_IrfaqTest extends tx_mksearch_tests_Testcase
         $configurations = tx_mksearch_tests_Util::loadConfig4BE($config);
         $formatter = $configurations->getFormatter();
 
-        //now test
+        // now test
         $doc = new Apache_Solr_Document();
         $doc->category_first_shortcut_s = 'filled';
 

@@ -13,7 +13,7 @@ return [
             'disabled' => 'hidden',
         ],
         'requestUpdate' => 'extkey,contenttype',
-        'iconfile' => 'EXT:mksearch/icons/icon_tx_mksearch_indexconfigs.gif',
+        'iconfile' => 'EXT:mksearch/Resources/Public/Icons/icon_tx_mksearch_indexconfigs.gif',
     ],
     'interface' => [
         'showRecordFieldList' => 'hidden,title,description,extkey,contenttype,config,composites',

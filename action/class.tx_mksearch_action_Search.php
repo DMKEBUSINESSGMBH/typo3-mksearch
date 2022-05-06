@@ -42,9 +42,9 @@ class tx_mksearch_action_Search extends tx_mksearch_action_AbstractSearch
 
         $filter = $this->createFilter($request, $confId);
 
-        //manchmal will man nur ein Suchformular auf jeder Seite im Header einbinden
-        //dieses soll dann aber nur auf eine Ergebnisseite verweisen ohne
-        //selbst zu suchen
+        // manchmal will man nur ein Suchformular auf jeder Seite im Header einbinden
+        // dieses soll dann aber nur auf eine Ergebnisseite verweisen ohne
+        // selbst zu suchen
         if ($configurations->get($confId.'nosearch')) {
             return null;
         }
@@ -112,8 +112,4 @@ class tx_mksearch_action_Search extends tx_mksearch_action_AbstractSearch
     {
         return 'tx_mksearch_view_Search';
     }
-}
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/action/class.tx_mksearch_action_Search.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/action/class.tx_mksearch_action_Search.php'];
 }

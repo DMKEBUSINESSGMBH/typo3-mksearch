@@ -195,7 +195,3 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
         return $allowedCTypes;
     }
 }
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/ttcontent/class.tx_mksearch_indexer_ttcontent_Gridelements.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/ttcontent/class.tx_mksearch_indexer_ttcontent_Gridelements.php'];
-}

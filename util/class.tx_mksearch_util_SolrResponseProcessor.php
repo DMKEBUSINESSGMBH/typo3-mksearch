@@ -96,7 +96,7 @@ class tx_mksearch_util_SolrResponseProcessor
     {
         $confId = $this->getConfId().'hit.';
 
-        //highlighting einfügen
+        // highlighting einfügen
         $highlights = $this->getHighlighting($response);
 
         // hier wird nur highlighting gesetzt
@@ -106,18 +106,18 @@ class tx_mksearch_util_SolrResponseProcessor
         }
 
         foreach ($hits as &$hit) {
-            //highlighting hinzufügen für alle Felder
+            // highlighting hinzufügen für alle Felder
             if (!empty($highlights[$hit->getProperty('id')])) {
                 foreach ($highlights[$hit->getProperty('id')] as $docField => $highlightValue) {
-                    //Solr liefert die Highlightings gesondert weshalb wir diese in das
-                    //eigentliche Dokument bekommen müssen. Dafür gibts es 2 Möglichkeiten:
-                    //1. wenn overrideWithHl auf true gesetzt ist werden die jeweiligen Inhaltsfelder
-                    //mit den korrespondierenden Highlighting Snippets überschrieben. Dabei muss man auf
-                    //hl.fragsize achten da die Snippets nur so lang sind wie in hl.fragsize angegeben
-                    //2. ist overrideWithHl nicht gesetzt dann werden die Highlighting Snippets
-                    //in ein eigenes Feld nach folgendem Schema ins Dokument geschrieben: $Feldname_hl
-                    //dabei wäre es dann möglich die Felder flexibel über TS überschrieben zu lassen
-                    //indem bspw. ein TS wie content.override.field = content_hl angegeben wird ;)
+                    // Solr liefert die Highlightings gesondert weshalb wir diese in das
+                    // eigentliche Dokument bekommen müssen. Dafür gibts es 2 Möglichkeiten:
+                    // 1. wenn overrideWithHl auf true gesetzt ist werden die jeweiligen Inhaltsfelder
+                    // mit den korrespondierenden Highlighting Snippets überschrieben. Dabei muss man auf
+                    // hl.fragsize achten da die Snippets nur so lang sind wie in hl.fragsize angegeben
+                    // 2. ist overrideWithHl nicht gesetzt dann werden die Highlighting Snippets
+                    // in ein eigenes Feld nach folgendem Schema ins Dokument geschrieben: $Feldname_hl
+                    // dabei wäre es dann möglich die Felder flexibel über TS überschrieben zu lassen
+                    // indem bspw. ein TS wie content.override.field = content_hl angegeben wird ;)
                     $overrideWithHl = $this->getConfigurations()->get($confId.'overrideWithHl');
                     $overrideWithHl = $overrideWithHl ? $overrideWithHl : (isset($options['overrideWithHl']) && $options['overrideWithHl']);
                     $highlightField = ($overrideWithHl) ? $docField : $docField.'_hl';
@@ -238,7 +238,7 @@ class tx_mksearch_util_SolrResponseProcessor
     public function processSuggestions(Apache_Solr_Response &$response)
     {
         $confId = $this->getConfId().'suggestions.';
-        //Suggestions
+        // Suggestions
         if ($response->spellcheck->suggestions) {
             $builderClass = $this->getConfigurations()->get($confId.'builderClass');
             $builderClass = $builderClass ? $builderClass : 'tx_mksearch_util_SuggestionBuilder';
@@ -261,14 +261,14 @@ class tx_mksearch_util_SolrResponseProcessor
     protected function getHighlighting(Apache_Solr_Response $response)
     {
         $aHighlights = [];
-        //Highlighting für jedes gefundene Dokument
+        // Highlighting für jedes gefundene Dokument
         if (!empty($response->highlighting)) {
             foreach ($response->highlighting as $iHighlightId => $aHighlighting) {
-                //jedes Feld mit einem Highlighting
+                // jedes Feld mit einem Highlighting
                 foreach ($aHighlighting as $sHighlightFieldsName => $aHighlightFields) {
-                    //jedes Highlighting
+                    // jedes Highlighting
                     foreach ($aHighlightFields as $sHighlightField) {
-                        //wir nehmen als key die Dokument ID ($highlightId) zwecks Zuordnung
+                        // wir nehmen als key die Dokument ID ($highlightId) zwecks Zuordnung
                         $aHighlights[$iHighlightId][$sHighlightFieldsName] = $sHighlightField;
                     }
                 }
@@ -277,8 +277,4 @@ class tx_mksearch_util_SolrResponseProcessor
 
         return $aHighlights;
     }
-}
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_SolrResponseProcessor.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_SolrResponseProcessor.php'];
 }

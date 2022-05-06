@@ -58,12 +58,12 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
             return null;
         }
 
-        //include, exclude etc. prüfen
+        // include, exclude etc. prüfen
         if (!$this->isIndexableRecord($rawData, $options)) {
-            return null; //no need to index
+            return null; // no need to index
         }
 
-        //TODO: basicly this indexer could inherit from tx_mksearch_indexer_Base
+        // TODO: basicly this indexer could inherit from tx_mksearch_indexer_Base
         if ($this->stopIndexing($tableName, $rawData, $indexDoc, $options)) {
             return null;
         }
@@ -128,7 +128,7 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
         $indexDoc->addField('fax_s', $rawData['fax'], 'unindexed', $boost, 'string');
         $indexDoc->addField('description_s', $rawData['description'], 'unindexed', $boost, 'text');
 
-        //@TODO: adressgruppen integrieren!
+        // @TODO: adressgruppen integrieren!
         if (!empty($rawData['addressgroup'])) {
             $indexDoc->addField('addressgroup_i', $rawData['addressgroup'], 'unindexed', $boost, 'int');
         }
@@ -187,7 +187,7 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
            ) {
             return true;
         }
-        //else
+        // else
         return false;
     }
 
@@ -326,8 +326,4 @@ exclude {
 #workspaceIds = 1,2,3
 CONF;
     }
-}
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/indexer/class.tx_mksearch_indexer_TtAddressAddress.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/indexer/class.tx_mksearch_indexer_TtAddressAddress.php'];
 }

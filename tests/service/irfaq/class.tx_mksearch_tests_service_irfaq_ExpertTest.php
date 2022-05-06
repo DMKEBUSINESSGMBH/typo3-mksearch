@@ -33,12 +33,7 @@
  */
 class tx_mksearch_tests_service_irfaq_ExpertTest extends tx_mksearch_tests_Testcase
 {
-    /**
-     * {@inheritdoc}
-     *
-     * @see tx_mksearch_tests_Testcase::setUp()
-     */
-    protected function setUp()
+    protected function setUp(): void
     {
         if (!\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('irfaq')) {
             self::markTestSkipped('irfaq nicht installiert');

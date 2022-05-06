@@ -27,9 +27,9 @@
  */
 class tx_mksearch_util_Status
 {
-    const STATUS_OKAY = 1;
-    const STATUS_UNKNOWN = 0;
-    const STATUS_ERROR = -1;
+    public const STATUS_OKAY = 1;
+    public const STATUS_UNKNOWN = 0;
+    public const STATUS_ERROR = -1;
 
     private $status;
     private $message;
@@ -65,7 +65,4 @@ class tx_mksearch_util_Status
         $this->status = $status;
         $this->message = $message;
     }
-}
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_Status.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_Status.php'];
 }

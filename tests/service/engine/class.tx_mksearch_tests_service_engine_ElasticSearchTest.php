@@ -31,13 +31,6 @@
  */
 class tx_mksearch_tests_service_engine_ElasticSearchTest extends tx_mksearch_tests_Testcase
 {
-    public function setUp()
-    {
-        if (version_compare(phpversion(), '7.0.0') >= 0) {
-            $this->markTestSkipped('Elastic does not support php 7 currently');
-        }
-    }
-
     /**
      * @group unit
      */
@@ -271,11 +264,12 @@ class tx_mksearch_tests_service_engine_ElasticSearchTest extends tx_mksearch_tes
 
     /**
      * @group unit
-     * @expectedException \Elastica\Exception\ClientException
-     * @expectedExceptionMessage ElasticSearch service not responding.
      */
     public function testInitElasticSearchConnectionThrowsExceptionAndLogsErrorIfServerNotAvailable()
     {
+        $this->expectException(\Elastica\Exception\ClientException::class);
+        $this->expectErrorMessage('ElasticSearch service not responding.');
+
         $service = $this->getMock(
             'tx_mksearch_service_engine_ElasticSearch',
             ['getElasticaIndex', 'isServerAvailable', 'getLogger']
@@ -886,14 +880,9 @@ class tx_mksearch_tests_service_engine_ElasticSearchTest extends tx_mksearch_tes
 
         $service->closeIndex();
 
-        $indexProperty = new ReflectionProperty(
-            'tx_mksearch_service_engine_ElasticSearch',
-            'index'
-        );
-        $indexProperty->setAccessible(true);
-
-        self::assertNull(
-            $indexProperty->getValue($service),
+        self::assertObjectNotHasAttribute(
+            'index',
+            $service,
             'index property nicht auf NULL gesetzt'
         );
     }
@@ -995,11 +984,12 @@ class tx_mksearch_tests_service_engine_ElasticSearchTest extends tx_mksearch_tes
 
     /**
      * @group unit
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage ohoh
      */
     public function testSearchThrowsRuntimeExceptionIfElasticaThrowsException()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectErrorMessage('ohoh');
+
         $exception = new Exception('ohoh');
 
         $service = $this->getMock(
@@ -1015,11 +1005,11 @@ class tx_mksearch_tests_service_engine_ElasticSearchTest extends tx_mksearch_tes
 
     /**
      * @group unit
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Exception caught from ElasticSearch: Error requesting ElasticSearch. HTTP status: 201; Path: pfad; Query: query
      */
     public function testSearchThrowsRuntimeExceptionIfResponseHttpStatusIsNot200()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectErrorMessage('Exception caught from ElasticSearch: Error requesting ElasticSearch. HTTP status: 201; Path: pfad; Query: query');
         $response = $this->getMock(
             'stdClass',
             ['getStatus']
@@ -1302,7 +1292,7 @@ class tx_mksearch_tests_service_engine_ElasticSearchTest extends tx_mksearch_tes
         self::assertEquals('pfad', $result['searchUrl'], 'searchUrl falsch');
         self::assertEquals('query', $result['searchQuery'], 'searchQuery falsch');
         self::assertEquals('data', $result['searchData'], 'searchQuery falsch');
-        self::assertContains(
+        self::assertStringContainsString(
             ' ms',
             $result['searchTime'],
             'searchTime enthält nicht die Einheit'
@@ -1380,10 +1370,6 @@ class tx_mksearch_tests_service_engine_ElasticSearchTest extends tx_mksearch_tes
      */
     public function testSearchPrintsDebugIfSetInOptions()
     {
-        $this->markTestIncomplete(
-            'The output is version dependent. Refactoring needet.'
-        );
-        // es reicht zu prüfen ob einige Teile des Debug vorhanden sind
         // "s" modifier, damit auf der CLI alle Zeilen in Betracht gezogen werden. Sonst
         // wird nur die Zeile genommen, mit dem ersten Treffer.
         $regularExpression = '/.*(debug.+=>.+TRUE).*/s';

@@ -177,7 +177,7 @@ class tx_mksearch_util_TCA
         $fields = [];
         $fields['INDX.ENGINE'][OP_EQ] = 'solr';
         $options = [];
-        //$options['debug'] = 1;
+        // $options['debug'] = 1;
         $options['enablefieldsfe'] = 1;
         $indexer = tx_mksearch_util_ServiceRegistry::getIntIndexService()->search($fields, $options);
         foreach ($indexer as $index) {
@@ -225,7 +225,4 @@ class tx_mksearch_util_TCA
 
         return $TCA[$tableName]['ctrl']['languageField'];
     }
-}
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_TCA.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_TCA.php'];
 }

@@ -102,8 +102,8 @@ class tx_mksearch_action_ShowHit extends \Sys25\RnBase\Frontend\Controller\Abstr
             $searchEngine->closeIndex();
         } catch (Exception $e) {
             $lastUrl = $e instanceof tx_mksearch_service_engine_SolrException ? $e->getLastUrl() : '';
-            //Da die Exception gefangen wird, würden die Entwickler keine Mail bekommen
-            //also machen wir das manuell
+            // Da die Exception gefangen wird, würden die Entwickler keine Mail bekommen
+            // also machen wir das manuell
             if ($addr = \Sys25\RnBase\Configuration\Processor::getExtensionCfgValue('rn_base', 'sendEmailOnException')) {
                 \Sys25\RnBase\Utility\Misc::sendErrorMail($addr, 'tx_mksearch_action_SearchSolr_searchSolr', $e);
             }
@@ -135,7 +135,7 @@ class tx_mksearch_action_ShowHit extends \Sys25\RnBase\Frontend\Controller\Abstr
     {
         if (false === $this->index) {
             $indexUid = $this->getConfigurations()->get($this->getConfId().'usedIndex');
-            //let's see if we got a index to use via parameters
+            // let's see if we got a index to use via parameters
             if (empty($indexUid)) {
                 $indexUid = $this->getConfigurations()->getParameters()->get('usedIndex');
             }
@@ -161,8 +161,4 @@ class tx_mksearch_action_ShowHit extends \Sys25\RnBase\Frontend\Controller\Abstr
     {
         return 'tx_mksearch_view_ShowHit';
     }
-}
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/action/class.tx_mksearch_action_ShowHit.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/action/class.tx_mksearch_action_ShowHit.php'];
 }

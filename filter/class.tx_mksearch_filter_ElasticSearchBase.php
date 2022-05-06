@@ -383,7 +383,3 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_mksearch_filter_BaseFilter
         return $this->filterUtility;
     }
 }
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/filter/class.tx_mksearch_filter_ElasticSearchBase.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/filter/class.tx_mksearch_filter_ElasticSearchBase.php'];
-}

@@ -73,7 +73,7 @@ class tx_mksearch_scheduler_IndexTask extends \TYPO3\CMS\Scheduler\Task\Abstract
 
         try {
             $rows = tx_mksearch_util_ServiceRegistry::getIntIndexService()->triggerQueueIndexing($this->getAmountOfItems());
-            if (!empty($rows)) {//sonst gibts ne PHP Warning bei array_merge
+            if (!empty($rows)) {// sonst gibts ne PHP Warning bei array_merge
                 $rows = count(call_user_func_array('array_merge', array_values($rows)));
             }
             $msg = sprintf($rows ? '%d item(s) indexed' : 'No items in indexing queue.', $rows);
@@ -82,10 +82,10 @@ class tx_mksearch_scheduler_IndexTask extends \TYPO3\CMS\Scheduler\Task\Abstract
             }
         } catch (Exception $e) {
             \Sys25\RnBase\Utility\Logger::fatal('Indexing failed!', 'mksearch', ['Exception' => $e->getMessage()]);
-            //Da die Exception gefangen wird, würden die Entwickler keine Mail bekommen
-            //also machen wir das manuell
+            // Da die Exception gefangen wird, würden die Entwickler keine Mail bekommen
+            // also machen wir das manuell
             if ($addr = \Sys25\RnBase\Configuration\Processor::getExtensionCfgValue('rn_base', 'sendEmailOnException')) {
-                //die Mail soll immer geschickt werden
+                // die Mail soll immer geschickt werden
                 $aOptions = ['ignoremaillock' => true];
                 \Sys25\RnBase\Utility\Misc::sendErrorMail($addr, 'tx_mksearch_scheduler_IndexTask', $e, $aOptions);
             }
@@ -139,8 +139,4 @@ class tx_mksearch_scheduler_IndexTask extends \TYPO3\CMS\Scheduler\Task\Abstract
     {
         return tx_mksearch_util_ServiceRegistry::getIntIndexService()->countItemsInQueue();
     }
-}
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/scheduler/class.tx_mksearch_scheduler_IndexTask.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/scheduler/class.tx_mksearch_scheduler_IndexTask.php'];
 }

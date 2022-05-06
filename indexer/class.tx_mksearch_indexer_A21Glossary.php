@@ -93,7 +93,7 @@ class tx_mksearch_indexer_A21Glossary extends tx_mksearch_indexer_Base
             $options
         );
 
-        //done
+        // done
         return $indexDoc;
     }
 
@@ -140,8 +140,4 @@ respectNoSearchFlagInRootline = 1
 #workspaceIds = 1,2,3
 CONFIG;
     }
-}
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/seminars/class.tx_mksearch_indexer_seminars_Seminar.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/seminars/class.tx_mksearch_indexer_seminars_Seminar.php'];
 }

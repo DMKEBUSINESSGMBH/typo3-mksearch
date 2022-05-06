@@ -46,8 +46,8 @@ class tx_mksearch_tests_util_SuggestionBuilderTest extends tx_mksearch_tests_Tes
         $suggestionData->searchWord->startOffset = 0;
         $suggestionData->searchWord->endOffset = 3;
         $suggestionData->searchWord->suggestion = [
-            0 => searchWordFoundOnce,
-            1 => searchWordFoundTwice,
+            0 => 'searchWordFoundOnce',
+            1 => 'searchWordFoundTwice',
         ];
         $suggestionData->collation = 'test collation should be ignored.';
 
@@ -62,8 +62,4 @@ class tx_mksearch_tests_util_SuggestionBuilderTest extends tx_mksearch_tests_Tes
         self::assertEquals('searchWordFoundTwice', $suggestionData['searchWord'][1]->getProperty('value'), 'Datensatz 2 - Feld:value hat den falschen Wert!');
         self::assertEquals('searchWord', $suggestionData['searchWord'][1]->getProperty('searchWord'), 'Datensatz 2 - Feld:searchWord hat den falschen Wert!');
     }
-}
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/util/class.tx_mksearch_tests_util_MiscTest.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/util/class.tx_mksearch_tests_util_MiscTest.php'];
 }

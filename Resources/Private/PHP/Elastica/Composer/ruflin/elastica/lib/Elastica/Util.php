@@ -1,4 +1,5 @@
 <?php
+
 namespace Elastica;
 
 /**
@@ -72,12 +73,12 @@ class Util
     }
 
     /**
-     * Replace the following reserved words: AND OR NOT
+     * Replace known reserved words (e.g. AND OR NOT)
      * and
-     * escapes the following terms: + - && || ! ( ) { } [ ] ^ " ~ * ? : \.
+     * escape known special characters (e.g. + - && || ! ( ) { } [ ] ^ " ~ * ? : etc.).
      *
-     * @link http://lucene.apache.org/java/2_4_0/queryparsersyntax.html#Boolean%20operators
-     * @link http://lucene.apache.org/java/2_4_0/queryparsersyntax.html#Escaping%20Special%20Characters
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/5.1/query-dsl-query-string-query.html#_boolean_operators
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/5.1/query-dsl-query-string-query.html#_reserved_characters
      *
      * @param string $term Query term to replace and escape
      *
@@ -96,7 +97,7 @@ class Util
      * Escapes the following terms (because part of the query language)
      * + - && || ! ( ) { } [ ] ^ " ~ * ? : \ < >.
      *
-     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html#_reserved_characters
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html#_reserved_characters
      *
      * @param string $term Query term to escape
      *
@@ -106,10 +107,18 @@ class Util
     {
         $result = $term;
         // \ escaping has to be first, otherwise escaped later once again
-        $chars = ['\\', '+', '-', '&&', '||', '!', '(', ')', '{', '}', '[', ']', '^', '"', '~', '*', '?', ':', '/', '<', '>'];
+        $escapableChars = ['\\', '+', '-', '&&', '||', '!', '(', ')', '{', '}', '[', ']', '^', '"', '~', '*', '?', ':', '/'];
 
-        foreach ($chars as $char) {
+        foreach ($escapableChars as $char) {
             $result = str_replace($char, '\\'.$char, $result);
+        }
+
+        // < and > cannot be escaped, so they should be removed
+        // @see https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html#_reserved_characters
+        $nonEscapableChars = ['<', '>'];
+
+        foreach ($nonEscapableChars as $char) {
+            $result = str_replace($char, '', $result);
         }
 
         return $result;
@@ -119,7 +128,7 @@ class Util
      * Replace the following reserved words (because part of the query language)
      * AND OR NOT.
      *
-     * @link http://lucene.apache.org/java/2_4_0/queryparsersyntax.html#Boolean%20operators
+     * @see http://lucene.apache.org/java/2_4_0/queryparsersyntax.html#Boolean%20operators
      *
      * @param string $term Query term to replace
      *
@@ -196,7 +205,7 @@ class Util
      */
     public static function convertDateTimeObject(\DateTime $dateTime, $includeTimezone = true)
     {
-        $formatString = 'Y-m-d\TH:i:s'.($includeTimezone === true ? 'P' : '\Z');
+        $formatString = 'Y-m-d\TH:i:s'.(true === $includeTimezone ? 'P' : '\Z');
         $string = $dateTime->format($formatString);
 
         return $string;

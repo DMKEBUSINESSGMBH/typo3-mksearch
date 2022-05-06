@@ -1,4 +1,5 @@
 <?php
+
 namespace Elastica\Script;
 
 /**
@@ -8,7 +9,7 @@ namespace Elastica\Script;
  * @author Tobias Schultze <http://tobion.de>
  * @author Martin Janser <martin.janser@liip.ch>
  *
- * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-scripting.html
+ * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-scripting.html
  */
 class Script extends AbstractScript
 {
@@ -55,6 +56,6 @@ class Script extends AbstractScript
      */
     protected function getScriptTypeArray()
     {
-        return ['inline' => $this->_scriptCode];
+        return ['source' => $this->_scriptCode];
     }
 }

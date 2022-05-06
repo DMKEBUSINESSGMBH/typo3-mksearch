@@ -204,7 +204,3 @@ class tx_mksearch_util_KeyValueFacet
         return $exploded;
     }
 }
-
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_KeyValueFacet.php']) {
-    include_once $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_KeyValueFacet.php'];
-}

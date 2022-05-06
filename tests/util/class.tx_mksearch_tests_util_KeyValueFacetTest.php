@@ -191,7 +191,3 @@ class tx_mksearch_tests_util_KeyValueFacetTest extends tx_mksearch_tests_Testcas
         self::assertEquals($expected, $actual);
     }
 }
-
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/tests/util/class.tx_mksearch_tests_util_KeyValueFacetTest.php']) {
-    include_once $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mksearch/tests/util/class.tx_mksearch_tests_util_KeyValueFacetTest.php'];
-}

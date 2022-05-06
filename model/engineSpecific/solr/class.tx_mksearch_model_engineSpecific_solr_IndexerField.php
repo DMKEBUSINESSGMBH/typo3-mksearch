@@ -102,9 +102,9 @@ class tx_mksearch_model_engineSpecific_solr_IndexerField extends tx_mksearch_mod
 //                                                        // Flat fallback to first boost value
 //            $res[] = array('value' => $val[$i], 'boost' => $boost[(empty($boost[$i])?0:$i)]);
 //         }
-        //so gibt es weniger Probleme bei Arrays wie array(0 => wert, 3 => wert, 5 => wert)
-        //in einer for Schleife wären die 2 letzten Values leer da bei array[1] oder array[2]
-        //kein Wert vorhanden ist, sondern erst wieder bei array[3]
+        // so gibt es weniger Probleme bei Arrays wie array(0 => wert, 3 => wert, 5 => wert)
+        // in einer for Schleife wären die 2 letzten Values leer da bei array[1] oder array[2]
+        // kein Wert vorhanden ist, sondern erst wieder bei array[3]
         foreach ($val as $key => $value) {
             // Flat fallback to first boost value
             $res[] = ['value' => $val[$key], 'boost' => $boost[(empty($boost[$key]) ? 0 : $i)]];
@@ -117,8 +117,4 @@ class tx_mksearch_model_engineSpecific_solr_IndexerField extends tx_mksearch_mod
     {
         return parent::__toString();
     }
-}
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/engineSpecific/solr/class.tx_mksearch_model_engineSpecific_solr_IndexerField']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/engineSpecific/solr/class.tx_mksearch_model_engineSpecific_solr_IndexerField.php'];
 }

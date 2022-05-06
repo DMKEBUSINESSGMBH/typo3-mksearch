@@ -1,17 +1,18 @@
 <?php
+
 namespace Elastica\Aggregation;
 
 /**
  * Class Histogram.
  *
- * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-histogram-aggregation.html
+ * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-histogram-aggregation.html
  */
 class Histogram extends AbstractSimpleAggregation
 {
     /**
-     * @param string $name     the name of this aggregation
-     * @param string $field    the name of the field on which to perform the aggregation
-     * @param int    $interval the interval by which documents will be bucketed
+     * @param string     $name     the name of this aggregation
+     * @param string     $field    the name of the field on which to perform the aggregation
+     * @param int|string $interval the interval by which documents will be bucketed
      */
     public function __construct($name, $field, $interval)
     {

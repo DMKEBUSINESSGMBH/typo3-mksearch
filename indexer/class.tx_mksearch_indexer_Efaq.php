@@ -88,7 +88,7 @@ class tx_mksearch_indexer_Efaq implements tx_mksearch_interface_Indexer
             );
         }
 
-        //done
+        // done
         return $indexDoc;
     }
 
@@ -132,8 +132,4 @@ titlePrefix = FAQ:
 #workspaceIds = 1,2,3
 CONFIG;
     }
-}
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_Efaq.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_Efaq.php'];
 }

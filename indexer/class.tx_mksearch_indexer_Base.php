@@ -73,10 +73,11 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
      */
     public function prepareSearchData($tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options)
     {
-        if ($this->loadFrontendForLocalization && $options['lang'] > 0) {
+        $language = $options['lang'] ?? 0;
+        if ($this->loadFrontendForLocalization && $language) {
             tx_mksearch_util_Indexer::prepareTSFE(
-                ($options['localizationPid'] ?: ('pages' == $tableName ? $rawData['uid'] : $rawData['pid'])),
-                $options['lang']
+                ($options['localizationPid'] ?? ('pages' == $tableName ? ($rawData['uid'] ?? 0) : ($rawData['pid'] ?? 0))),
+                $language
             );
         }
 
@@ -331,9 +332,9 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
         // @todo sollten nicht auch Shortcuts etc. invalide sein?
         $sysPage = \Sys25\RnBase\Utility\TYPO3::getSysPage();
         foreach ($rootline as $page) {
-            if ($page['hidden'] ||
-                ($page['doktype'] == $sysPage::DOKTYPE_BE_USER_SECTION) ||
-                ($this->getConfigValue('respectNoSearchFlagInRootline', $options) && 1 == $page['no_search'])
+            if (($page['hidden'] ?? false) ||
+                (($page['doktype'] ?? '') == $sysPage::DOKTYPE_BE_USER_SECTION) ||
+                ($this->getConfigValue('respectNoSearchFlagInRootline', $options) && 1 == ($page['no_search'] ?? 0))
             ) {
                 return true;
             }
@@ -395,7 +396,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
         tx_mksearch_interface_IndexerDocument $indexDoc,
         $indexDocFieldsPrefix = ''
     ) {
-        $enableColumns = $GLOBALS['TCA'][$tableName]['ctrl']['enablecolumns'];
+        $enableColumns = $GLOBALS['TCA'][$tableName]['ctrl']['enablecolumns'] ?? null;
 
         if (!is_array($enableColumns)) {
             return $indexDoc;
@@ -543,7 +544,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
                 $this->setRecordValue(
                     $model,
                     $enableColumnName,
-                    $this->convertTimestampToDateTime($this->getRecordFromModel($model)[$enableColumnName])
+                    $this->convertTimestampToDateTime($this->getRecordFromModel($model)[$enableColumnName] ?? 0)
                 );
                 break;
             case 'fe_group':
@@ -551,8 +552,8 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
                     $model,
                     $enableColumnName,
                     $this->getEffectiveFeGroups(
-                        $this->getRecordFromModel($model)[$enableColumnName],
-                        $this->getRecordFromModel($model)['pid']
+                        $this->getRecordFromModel($model)[$enableColumnName] ?? '',
+                        $this->getRecordFromModel($model)['pid'] ?? 0
                     )
                 );
                 break;
@@ -956,8 +957,4 @@ CONFIG;
 
         $indexDoc->addField('first_letter_s', $firstChar);
     }
-}
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_Base.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_Base.php'];
 }

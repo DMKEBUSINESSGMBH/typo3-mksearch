@@ -56,7 +56,7 @@ class tx_mksearch_tests_util_SearchBuilderTest extends tx_mksearch_tests_Testcas
                 __LINE__ => ['Hallo  Welt', MKSEARCH_OP_EXACT, ['quote' => 0, 'dismax' => 0, 'fuzzy' => 0], '("Hallo Welt")'],
                 __LINE__ => ['Hallo  Welt', MKSEARCH_OP_FREE, ['quote' => 0, 'dismax' => 0, 'fuzzy' => 0], 'Hallo Welt'],
                 __LINE__ => ['Hallo  Welt', MKSEARCH_OP_NONE, ['quote' => 0, 'dismax' => 0, 'fuzzy' => 0], '(Hallo Welt)'],
-                __LINE__ => ['Hallo  Welt', null, ['quote' => 0, 'dismax' => 0], '(Hallo Welt)'],
+                __LINE__ => ['Hallo  Welt', null, ['quote' => 0, 'dismax' => 0, 'fuzzy' => 0], '(Hallo Welt)'],
 
                 __LINE__ => ['Hallo  Welt', MKSEARCH_OP_AND, ['quote' => 1, 'dismax' => 1, 'fuzzy' => 0], '+"Hallo" +"Welt"'],
                 __LINE__ => ['Hallo  Welt', MKSEARCH_OP_OR, ['quote' => 1, 'dismax' => 1, 'fuzzy' => 0], '"Hallo" "Welt"'],
@@ -72,7 +72,7 @@ class tx_mksearch_tests_util_SearchBuilderTest extends tx_mksearch_tests_Testcas
                 __LINE__ => ['Hallo  Welt', MKSEARCH_OP_NONE, ['quote' => 0, 'dismax' => 1, 'fuzzy' => 0], 'Hallo Welt'],
                 __LINE__ => ['Hallo  Welt', null, ['quote' => 0, 'dismax' => 1, 'fuzzy' => 0], 'Hallo Welt'],
 
-                //@TODO: doppelte operatoren müssen verhindert werden!
+                // @TODO: doppelte operatoren müssen verhindert werden!
 //              __LINE__ => array('+Hallo  -Welt', MKSEARCH_OP_AND, array('quote' => 1, 'dismax' => 0, 'fuzzy' => 0), '(+"Hallo" -"Welt")'),
                 __LINE__ => ['+Hallo  -Welt', MKSEARCH_OP_OR, ['quote' => 1, 'dismax' => 0, 'fuzzy' => 0], '(+"Hallo" -"Welt")'],
                 __LINE__ => ['+Hallo  -Welt', MKSEARCH_OP_EXACT, ['quote' => 1, 'dismax' => 0, 'fuzzy' => 0], '("+Hallo -Welt")'],
@@ -106,8 +106,4 @@ class tx_mksearch_tests_util_SearchBuilderTest extends tx_mksearch_tests_Testcas
 
         return $return;
     }
-}
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/util/class.tx_mksearch_tests_util_SearchBuilderTest.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/util/class.tx_mksearch_tests_util_SearchBuilderTest.php'];
 }

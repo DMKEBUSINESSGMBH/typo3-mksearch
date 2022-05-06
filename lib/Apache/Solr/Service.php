@@ -183,6 +183,8 @@ class Apache_Solr_Service
      */
     protected $_compatibilityLayer;
 
+    public string $lastUrl = '';
+
     /**
      * Escape a value for special query characters such as ':', '(', ')', '*', '?', etc.
      *

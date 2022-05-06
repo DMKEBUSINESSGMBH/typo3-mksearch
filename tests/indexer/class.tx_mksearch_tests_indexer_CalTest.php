@@ -30,12 +30,7 @@
  */
 class tx_mksearch_tests_indexer_CalTest extends tx_mksearch_tests_Testcase
 {
-    /**
-     * (non-PHPdoc).
-     *
-     * @see PHPUnit_Framework_TestCase::setUp()
-     */
-    protected function setUp()
+    protected function setUp(): void
     {
         if (!\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('cal')) {
             $this->markTestSkipped('cal nicht geladen.');

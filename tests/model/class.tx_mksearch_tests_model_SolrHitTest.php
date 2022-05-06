@@ -41,7 +41,3 @@ class tx_mksearch_tests_model_SolrHitTest extends tx_mksearch_tests_Testcase
         self::assertEquals('myid', $hit->getSolrId());
     }
 }
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/class.tx_mksearch_tests_model_SolrHitTest.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/class.tx_mksearch_tests_model_SolrHitTest.php'];
-}

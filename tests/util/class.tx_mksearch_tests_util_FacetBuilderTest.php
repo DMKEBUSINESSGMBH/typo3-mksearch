@@ -32,7 +32,8 @@ class tx_mksearch_tests_util_FacetBuilderTest extends tx_mksearch_tests_Testcase
 {
     public function testBuildFacetsWithEmptyFacetData()
     {
-        $facetData = [];
+        $facetData = new \stdClass();
+        $facetData->facet_queries = $facetData->facet_fields = $facetData->facet_pivot = null;
         $facetData = tx_mksearch_util_FacetBuilder::getInstance()->buildFacets($facetData);
         self::assertTrue(is_array($facetData), 'es wurde kein array zurück gegeben!');
         self::assertTrue(empty($facetData), 'es wurde kein leeres array zurück gegeben!');
@@ -42,6 +43,7 @@ class tx_mksearch_tests_util_FacetBuilderTest extends tx_mksearch_tests_Testcase
     {
         $facetCount = new stdClass();
         $facetCount->facet_queries = $this->buildQueryFacets();
+        $facetCount->facet_fields = $facetCount->facet_pivot = null;
 
         $facetGroups = tx_mksearch_util_FacetBuilder::getInstance()->buildFacets($facetCount);
 
@@ -70,6 +72,7 @@ class tx_mksearch_tests_util_FacetBuilderTest extends tx_mksearch_tests_Testcase
     {
         $facetCount = new stdClass();
         $facetCount->facet_pivot = $this->buildPivotFacets();
+        $facetCount->facet_queries = $facetCount->facet_fields = null;
 
         $facetGroups = tx_mksearch_util_FacetBuilder::getInstance()->buildFacets($facetCount);
 
@@ -142,6 +145,7 @@ class tx_mksearch_tests_util_FacetBuilderTest extends tx_mksearch_tests_Testcase
     {
         $facetCount = new stdClass();
         $facetCount->facet_fields = $this->buildFieldFacets();
+        $facetCount->facet_queries = $facetCount->facet_pivot = null;
 
         $facetGroups = tx_mksearch_util_FacetBuilder::getInstance()->buildFacets($facetCount);
         self::assertTrue(is_array($facetGroups), 'es wurde kein array zurück gegeben!');
@@ -158,6 +162,7 @@ class tx_mksearch_tests_util_FacetBuilderTest extends tx_mksearch_tests_Testcase
     {
         $facetData = new stdClass();
         $facetData->facet_fields = $this->buildFieldFacets();
+        $facetData->facet_queries = $facetData->facet_pivot = null;
         // die facetten kommen immer grupiert!
         $facetGroups = tx_mksearch_util_FacetBuilder::getInstance()->buildFacets($facetData);
 
@@ -177,8 +182,8 @@ class tx_mksearch_tests_util_FacetBuilderTest extends tx_mksearch_tests_Testcase
             // field facets
             $this->getModel(
                 [
-                    'uid' => ++$uid,
-                    'field' => $field,
+                    'uid' => 0,
+                    'field' => '',
                     'items' => [
                         \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
                             'tx_mksearch_model_Facet',
@@ -223,7 +228,7 @@ class tx_mksearch_tests_util_FacetBuilderTest extends tx_mksearch_tests_Testcase
         );
 
         self::assertTrue(is_array($sorted));
-        self::assertInstanceOf(\Sys25\RnBase\Domain\Model\BaseModel, $sorted[0]);
+        self::assertInstanceOf(\Sys25\RnBase\Domain\Model\BaseModel::class, $sorted[0]);
         self::assertTrue(is_array($sorted[0]->getProperty('items')));
         self::assertCount(3, $sorted[0]->getProperty('items'));
         self::assertSame('C', $sorted[0]->getProperty('items')[0]->getProperty('label'));
@@ -330,8 +335,4 @@ class tx_mksearch_tests_util_FacetBuilderTest extends tx_mksearch_tests_Testcase
 
         return $facetData;
     }
-}
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/util/class.tx_mksearch_tests_util_MiscTest.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/util/class.tx_mksearch_tests_util_MiscTest.php'];
 }

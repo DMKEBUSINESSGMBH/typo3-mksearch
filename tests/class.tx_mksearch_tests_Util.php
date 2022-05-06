@@ -71,7 +71,7 @@ class tx_mksearch_tests_Util
     public static function hooksSetUp($hooks = null)
     {
         if (!is_array($hooks)) {
-            $hooks = array_keys($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch']);
+            $hooks = array_keys($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch'] ?? []);
         }
         foreach ($hooks as $hook) {
             if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch'][$hook])) {
@@ -162,7 +162,7 @@ class tx_mksearch_tests_Util
             if (is_array($extensionInformation) && $extensionInformation['ext_tables.php']) {
                 // 'mksearch' and $_EXTCONF are available in ext_tables.php
                 // and are explicitly set in cached file as well
-                $_EXTCONF = $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$extensionKey];
+                $_EXTCONF = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS'][$extensionKey] ?? [];
                 require $extensionInformation['ext_tables.php'];
                 // loads the dynamicConfigFile
                 // @TODO: implement, if needet!
@@ -278,18 +278,6 @@ class tx_mksearch_tests_Util
     }
 
     /**
-     * Disabled das Logging über die Devlog Extension für die
-     * gegebene Extension.
-     *
-     * @param string $extKey
-     * @param bool   $bDisable
-     */
-    public static function disableDevlog($extKey = 'devlog', $bDisable = true)
-    {
-        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$extKey]['nolog'] = $bDisable;
-    }
-
-    /**
      * Setzt eine XCLASS, um den Relationmanager von Typo3 > 6 zu deaktivieren.
      */
     public static function disableRelationManager()
@@ -370,7 +358,7 @@ class tx_mksearch_tests_Util
     public static function storeExtConf($extKey = 'mksearch', $overwrite = false)
     {
         if (!isset(self::$extConf[$extKey]) || $overwrite) {
-            self::$extConf[$extKey] = $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$extKey];
+            self::$extConf[$extKey] = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS'][$extKey] ?? [];
         }
     }
 
@@ -384,7 +372,7 @@ class tx_mksearch_tests_Util
     public static function restoreExtConf($extKey = 'mksearch')
     {
         if (isset(self::$extConf[$extKey])) {
-            $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$extKey] = self::$extConf[$extKey];
+            $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS'][$extKey] = self::$extConf[$extKey];
 
             return true;
         }
@@ -403,7 +391,7 @@ class tx_mksearch_tests_Util
     public static function setExtConfVar($cfgKey, $cfgValue, $extKey = 'mksearch')
     {
         // aktuelle Konfiguration auslesen
-        $extConfig = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$extKey]);
+        $extConfig = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS'][$extKey] ?? [];
         // wenn keine Konfiguration existiert, legen wir eine an.
         if (!is_array($extConfig)) {
             $extConfig = [];
@@ -411,7 +399,7 @@ class tx_mksearch_tests_Util
         // neuen Wert setzen
         $extConfig[$cfgKey] = $cfgValue;
         // neue Konfiguration zurückschreiben
-        $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$extKey] = serialize($extConfig);
+        $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS'][$extKey] = $extConfig;
     }
 
     /**
@@ -440,8 +428,4 @@ class tx_mksearch_tests_Util
             self::$addRootLineFieldsBackup = null;
         }
     }
-}
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/class.tx_mksearch_tests_Util.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/class.tx_mksearch_tests_Util.php'];
 }

@@ -59,7 +59,3 @@ class tx_mksearch_hooks_EngineZendLucene
         $p['term'] = mb_strtolower($p['term'], 'utf-8');
     }
 }
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/hooks/class.tx_mksearch_hooks_EngineZendLucene.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/hooks/class.tx_mksearch_hooks_EngineZendLucene.php'];
-}

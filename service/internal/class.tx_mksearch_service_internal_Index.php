@@ -45,7 +45,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
      */
     private static $queueTable = 'tx_mksearch_queue';
 
-    const TYPE_SOLR = 'solr';
+    public const TYPE_SOLR = 'solr';
 
     /**
      * Search database for all configurated Indices.
@@ -344,7 +344,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
      */
     public function triggerQueueIndexing($config = [])
     {
-        //checks whether items with state "being_indexed" got stuck in queue
+        // checks whether items with state "being_indexed" got stuck in queue
         if ($this->countItemsInQueueBeingIndexed() > 0) {
             $this->resetOldBeingIndexedEntries();
         }
@@ -464,18 +464,18 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
                         foreach ($dbRecords as $record) {
                             // Diese Records müssen jetzt den jeweiligen Indexern übegeben werden.
                             foreach ($this->getIndexersForTable($index, $queueRecord['tablename']) as $indexer) {
-                                //foreach (tx_mksearch_util_Config::getIndexersForTable($queueRecord['tablename']) as $indexer) {
+                                // foreach (tx_mksearch_util_Config::getIndexersForTable($queueRecord['tablename']) as $indexer) {
                                 if (!$indexer) {
                                     continue;
                                 } // Invalid indexer
                                 // Collect all index documents
                                 list($extKey, $contentType) = $indexer->getContentType();
-                                //there can be more than one config for the current indexer
-                                //so we execute the indexer with each config that was found.
-                                //when one element (tt_content) is indexed by let's say tow indexer configs which
-                                //aim to the same index than you should take care that the element
-                                //isn't taken by both indexer configs as the doc of the element for
-                                //the first config will be overwritten by the second one
+                                // there can be more than one config for the current indexer
+                                // so we execute the indexer with each config that was found.
+                                // when one element (tt_content) is indexed by let's say tow indexer configs which
+                                // aim to the same index than you should take care that the element
+                                // isn't taken by both indexer configs as the doc of the element for
+                                // the first config will be overwritten by the second one
                                 foreach ($indexConfig[$extKey.'.'][$contentType.'.'] as $aConfigByContentType) {
                                     // config mit der default config mergen, falls vorhanden
                                     if (is_array($indexConfig['default.'][$extKey.'.'][$contentType.'.'])) {
@@ -503,7 +503,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
                                             );
                                         }
 
-                                        //add fixed_fields from indexer config if defined
+                                        // add fixed_fields from indexer config if defined
                                         $doc = $this->addFixedFields($doc, $aConfigByContentType);
 
                                         try {
@@ -555,9 +555,9 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
                         }
                     }
                     $searchEngine->commitIndex();
-                    //shall something be done after indexing?
+                    // shall something be done after indexing?
                     $searchEngine->postProcessIndexing($index);
-                    //that's it
+                    // that's it
                     $searchEngine->closeIndex();
                 }
             }
@@ -619,25 +619,25 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
     protected function addFixedFields(tx_mksearch_interface_IndexerDocument $indexDoc, $options)
     {
         $aFixedFields = $options['fixedFields.'];
-        //without config there is nothing to do
+        // without config there is nothing to do
         if (empty($aFixedFields)) {
             return $indexDoc;
         }
 
         foreach ($aFixedFields as $sFixedFieldKey => $mFixedFieldValue) {
-            //config is something like
-            //site_area{
+            // config is something like
+            // site_area{
             // 0 = first
             // 1 = second
-            //}
+            // }
             if (is_array($mFixedFieldValue)) {
-                //if we have an array we have to delete the
-                //trailing dot of the key name because this
-                //seems senseless to add
+                // if we have an array we have to delete the
+                // trailing dot of the key name because this
+                // seems senseless to add
                 $sFixedFieldKey = substr($sFixedFieldKey, 0, strlen($sFixedFieldKey) - 1);
             }
-            //else the config is something like
-            //site_area = first
+            // else the config is something like
+            // site_area = first
             $indexDoc->addField($sFixedFieldKey, $mFixedFieldValue);
         }
 
@@ -834,8 +834,4 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
     {
         self::$indexingInProgress = false;
     }
-}
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/internal/class.tx_mksearch_service_internal_Index.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/internal/class.tx_mksearch_service_internal_Index.php'];
 }

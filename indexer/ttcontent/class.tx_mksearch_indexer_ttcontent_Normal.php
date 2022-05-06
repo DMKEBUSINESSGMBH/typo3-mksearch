@@ -39,17 +39,17 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
     /**
      * @var int
      */
-    const USE_INDEXER_CONFIGURATION = 0;
+    public const USE_INDEXER_CONFIGURATION = 0;
 
     /**
      * @var int
      */
-    const IS_INDEXABLE = 1;
+    public const IS_INDEXABLE = 1;
 
     /**
      * @var int
      */
-    const IS_NOT_INDEXABLE = -1;
+    public const IS_NOT_INDEXABLE = -1;
 
     /**
      * Do the actual indexing for the given model.
@@ -78,12 +78,13 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
         $title = $this->getTitle($options);
         $indexDoc->setTitle($title);
 
-        $indexDoc->setTimestamp($rawData['tstamp']);
+        $indexDoc->setTimestamp($rawData['tstamp'] ?? 0);
 
         $indexDoc->addField('pid', $model->getProperty('pid'), 'keyword');
-        $indexDoc->addField('CType', $rawData['CType'], 'keyword');
+        $contentType = $rawData['CType'] ?? '';
+        $indexDoc->addField('CType', $contentType, 'keyword');
 
-        if ($options['addPageMetaData']) {
+        if ($options['addPageMetaData'] ?? false) {
             // @TODO: keywords werden doch immer kommasepariert angegeben,
             // warum mit leerzeichen trennen, das macht die keywords kaputt.
             $separator = (!empty($options['addPageMetaData.']['separator'])) ? $options['addPageMetaData.']['separator'] : ' ';
@@ -100,14 +101,14 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
             }
         }
 
-        if ($options['indexPageData']) {
+        if ($options['indexPageData'] ?? false) {
             $this->indexPageData($indexDoc, $options);
         }
 
         // Try to call hook for the current CType.
         // A hook MUST call both $indexDoc->setContent and
         // $indexDoc->setAbstract (respect $indexDoc->getMaxAbstractLength())!
-        $hookKey = 'indexer_core_TtContent_prepareData_CType_'.$rawData['CType'];
+        $hookKey = 'indexer_core_TtContent_prepareData_CType_'.$contentType;
         if (isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch'][$hookKey])
             && is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch'][$hookKey])
         ) {
@@ -116,13 +117,13 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
                 $hookKey,
                 [
                     'rawData' => &$rawData,
-                    'options' => isset($options['CType.'][$rawData['CType'].'.']) ? $options['CType'][$rawData['CType'].'.'] : [],
+                    'options' => isset($options['CType.'][$contentType.'.']) ? $options['CType'][$contentType.'.'] : [],
                     'indexDoc' => &$indexDoc,
                 ]
             );
         } else {
             // No hook found - we have to take care for content and abstract by ourselves...
-            $fields = isset($options['CType.'][$rawData['CType'].'.']['indexedFields.']) ? $options['CType.'][$rawData['CType'].'.']['indexedFields.'] : $options['CType.']['_default_.']['indexedFields.'];
+            $fields = isset($options['CType.'][$contentType.'.']['indexedFields.']) ? $options['CType.'][$contentType.'.']['indexedFields.'] : ($options['CType.']['_default_.']['indexedFields.'] ?? []);
 
             $content = $this->getContentByContentType($rawData, $options);
             // Dieser Content-String ist deprecated!
@@ -193,7 +194,7 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
         // optional fallback to page title, if the content title is empty
         if (empty($title) && empty($options['leaveHeaderEmpty'])) {
             $pageData = $this->getPageContent($model->getPid());
-            $title = $pageData['title'];
+            $title = $pageData['title'] ?? '';
         }
 
         return $title;
@@ -245,7 +246,7 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
      */
     protected function getContentByFieldAndCType($field, array $rawData)
     {
-        switch ($rawData['CType']) {
+        switch ($rawData['CType'] ?? '') {
             case 'table':
                 $tempContent = $rawData[$field];
                 // explode bodytext containing table cells separated
@@ -274,7 +275,7 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
                 }
                 break;
             default:
-                $tempContent = $rawData[$field];
+                $tempContent = $rawData[$field] ?? null;
         }
 
         return $tempContent;
@@ -493,11 +494,11 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
      */
     protected function isIndexableColumn($sourceRecord, $options)
     {
-        $columns = $this->getConfigValue('columns', $options['include.']);
+        $columns = $this->getConfigValue('columns', $options['include.'] ?? []);
         $isIndexableColumn = true;
 
         if (is_array($columns) && count($columns)) {
-            $isIndexableColumn = in_array($sourceRecord['colPos'], $columns);
+            $isIndexableColumn = in_array($sourceRecord['colPos'] ?? null, $columns);
         }
 
         return $isIndexableColumn;
@@ -560,8 +561,4 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
 
         return join(':', $parts);
     }
-}
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/ttcontent/class.tx_mksearch_indexer_ttcontent_Normal.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/ttcontent/class.tx_mksearch_indexer_ttcontent_Normal.php'];
 }

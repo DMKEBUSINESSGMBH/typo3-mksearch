@@ -37,7 +37,3 @@ class tx_mksearch_service_irfaq_Expert extends tx_mksearch_service_Base
         return 'tx_mksearch_search_irfaq_Expert';
     }
 }
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/internal/class.tx_mksearch_service_internal_Base.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/internal/class.tx_mksearch_service_internal_Base.php'];
-}

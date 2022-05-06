@@ -54,7 +54,7 @@ abstract class tx_mksearch_action_AbstractSearch extends \Sys25\RnBase\Frontend\
             $confId = $this->getConfId();
 
             $indexUid = $configurations->get($confId.'usedIndex');
-            //let's see if we got a index to use via parameters
+            // let's see if we got a index to use via parameters
             if (empty($indexUid)) {
                 $indexUid = $configurations->getParameters()->get('usedIndex');
             }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Elastica\Query;
 
 use Elastica\Exception\InvalidException;
@@ -8,7 +9,7 @@ use Elastica\Exception\InvalidException;
  *
  * @author   Nicolas Ruflin <spam@ruflin.com>, Jasper van Wanrooy <jasper@vanwanrooy.net>
  *
- * @link     https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html
+ * @see     https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html
  */
 class QueryString extends AbstractQuery
 {
@@ -49,6 +50,7 @@ class QueryString extends AbstractQuery
 
     /**
      * Sets the default field.
+     * You cannot set fields and default_field.
      *
      * If no field is set, _all is chosen
      *
@@ -202,6 +204,7 @@ class QueryString extends AbstractQuery
 
     /**
      * Sets the fields. If no fields are set, _all is chosen.
+     * You cannot set fields and default_field.
      *
      * @param array $fields Fields
      *

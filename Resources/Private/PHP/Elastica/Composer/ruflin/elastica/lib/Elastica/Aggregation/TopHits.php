@@ -1,4 +1,5 @@
 <?php
+
 namespace Elastica\Aggregation;
 
 use Elastica\Script\AbstractScript;
@@ -7,7 +8,7 @@ use Elastica\Script\ScriptFields;
 /**
  * Class TopHits.
  *
- * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-metrics-top-hits-aggregation.html
+ * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-metrics-top-hits-aggregation.html
  */
 class TopHits extends AbstractAggregation
 {
@@ -66,7 +67,7 @@ class TopHits extends AbstractAggregation
     /**
      * Allows to control how the _source field is returned with every hit.
      *
-     * @param array|bool $params Fields to be returned or false to disable source
+     * @param array|string|bool $params Fields to be returned or false to disable source
      *
      * @return $this
      */

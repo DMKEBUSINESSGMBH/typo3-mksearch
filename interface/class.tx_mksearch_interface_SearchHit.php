@@ -41,7 +41,3 @@ interface tx_mksearch_interface_SearchHit
      */
 //   public function getRecord();// allready declared in \Sys25\RnBase\Domain\Model\DataInterface
 }
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/interface/class.tx_mksearch_interface_SearchHit.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/interface/class.tx_mksearch_interface_SearchHit.php'];
-}

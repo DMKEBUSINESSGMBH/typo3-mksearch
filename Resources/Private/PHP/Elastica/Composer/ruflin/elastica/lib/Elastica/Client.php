@@ -1,4 +1,5 @@
 <?php
+
 namespace Elastica;
 
 use Elastica\Bulk\Action;
@@ -37,7 +38,7 @@ class Client
         'transport' => null,
         'persistent' => true,
         'timeout' => null,
-        'connections' => [], // host, port, path, timeout, transport, compression, persistent, timeout, config -> (curl, headers, url)
+        'connections' => [], // host, port, path, timeout, transport, compression, persistent, timeout, username, password, config -> (curl, headers, url)
         'roundRobin' => false,
         'log' => false,
         'retryOnConflict' => 0,
@@ -135,7 +136,7 @@ class Client
         }
 
         if (!isset($this->_config['connectionStrategy'])) {
-            if ($this->getConfig('roundRobin') === true) {
+            if (true === $this->getConfig('roundRobin')) {
                 $this->setConfigValue('connectionStrategy', 'RoundRobin');
             } else {
                 $this->setConfigValue('connectionStrategy', 'Simple');
@@ -303,15 +304,16 @@ class Client
      * set inside the document, because for bulk settings documents,
      * documents can belong to any type and index
      *
-     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html
      *
-     * @param array|\Elastica\Document[] $docs Array of Elastica\Document
+     * @param array|\Elastica\Document[] $docs          Array of Elastica\Document
+     * @param array                      $requestParams
      *
      * @throws \Elastica\Exception\InvalidException If docs is empty
      *
      * @return \Elastica\Bulk\ResponseSet Response object
      */
-    public function updateDocuments(array $docs)
+    public function updateDocuments(array $docs, array $requestParams = [])
     {
         if (empty($docs)) {
             throw new InvalidException('Array has to consist of at least one element');
@@ -320,6 +322,9 @@ class Client
         $bulk = new Bulk($this);
 
         $bulk->addDocuments($docs, Action::OP_TYPE_UPDATE);
+        foreach ($requestParams as $key => $value) {
+            $bulk->setRequestParam($key, $value);
+        }
 
         return $bulk->send();
     }
@@ -331,15 +336,16 @@ class Client
      * set inside the document, because for bulk settings documents,
      * documents can belong to any type and index
      *
-     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html
      *
-     * @param array|\Elastica\Document[] $docs Array of Elastica\Document
+     * @param array|\Elastica\Document[] $docs          Array of Elastica\Document
+     * @param array                      $requestParams
      *
      * @throws \Elastica\Exception\InvalidException If docs is empty
      *
      * @return \Elastica\Bulk\ResponseSet Response object
      */
-    public function addDocuments(array $docs)
+    public function addDocuments(array $docs, array $requestParams = [])
     {
         if (empty($docs)) {
             throw new InvalidException('Array has to consist of at least one element');
@@ -348,6 +354,10 @@ class Client
         $bulk = new Bulk($this);
 
         $bulk->addDocuments($docs);
+
+        foreach ($requestParams as $key => $value) {
+            $bulk->setRequestParam($key, $value);
+        }
 
         return $bulk->send();
     }
@@ -363,7 +373,7 @@ class Client
      *
      * @return \Elastica\Response
      *
-     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update.html
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update.html
      */
     public function updateDocument($id, $data, $index, $type, array $options = [])
     {
@@ -472,12 +482,13 @@ class Client
      * Bulk deletes documents.
      *
      * @param array|\Elastica\Document[] $docs
+     * @param array                      $requestParams
      *
      * @throws \Elastica\Exception\InvalidException
      *
      * @return \Elastica\Bulk\ResponseSet
      */
-    public function deleteDocuments(array $docs)
+    public function deleteDocuments(array $docs, array $requestParams = [])
     {
         if (empty($docs)) {
             throw new InvalidException('Array has to consist of at least one element');
@@ -485,6 +496,10 @@ class Client
 
         $bulk = new Bulk($this);
         $bulk->addDocuments($docs, Action::OP_TYPE_DELETE);
+
+        foreach ($requestParams as $key => $value) {
+            $bulk->setRequestParam($key, $value);
+        }
 
         return $bulk->send();
     }
@@ -580,7 +595,7 @@ class Client
     /**
      * Deletes documents with the given ids, index, type from the index.
      *
-     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html
      *
      * @param array                  $ids     Document ids
      * @param string|\Elastica\Index $index   Index name
@@ -627,7 +642,7 @@ class Client
      *         array('delete' => array('_index' => 'test', '_type' => 'user', '_id' => '2'))
      * );
      *
-     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html
      *
      * @param array $params Parameter array
      *
@@ -660,7 +675,7 @@ class Client
      * @param array        $query       OPTIONAL Query params
      * @param string       $contentType Content-Type sent with this request
      *
-     * @throws Exception\ConnectionException|\Exception
+     * @throws Exception\ConnectionException|Exception\ClientException
      *
      * @return Response Response object
      */
@@ -749,7 +764,7 @@ class Client
      * @return \Elastica\Response Response object
      *
      * @deprecated Replaced by forcemergeAll
-     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-optimize.html
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-optimize.html
      */
     public function optimizeAll($args = [])
     {
@@ -765,7 +780,7 @@ class Client
      *
      * @return \Elastica\Response Response object
      *
-     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-forcemerge.html
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-forcemerge.html
      */
     public function forcemergeAll($args = [])
     {
@@ -780,7 +795,7 @@ class Client
      *
      * @return \Elastica\Response Response object
      *
-     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-refresh.html
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-refresh.html
      */
     public function refreshAll()
     {

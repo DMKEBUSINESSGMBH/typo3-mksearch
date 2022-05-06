@@ -1,17 +1,29 @@
 <?php
+/**
+ * Elasticsearch PHP client
+ *
+ * @link      https://github.com/elastic/elasticsearch-php/
+ * @copyright Copyright (c) Elasticsearch B.V (https://www.elastic.co)
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
+ * @license   https://www.gnu.org/licenses/lgpl-2.1.html GNU Lesser General Public License, Version 2.1 
+ * 
+ * Licensed to Elasticsearch B.V under one or more agreements.
+ * Elasticsearch B.V licenses this file to you under the Apache 2.0 License or
+ * the GNU Lesser General Public License, Version 2.1, at your option.
+ * See the LICENSE file in the project root for more information.
+ */
+
+
+declare(strict_types = 1);
 
 namespace Elasticsearch;
 
 use Elasticsearch\Common\Exceptions\InvalidArgumentException;
 use Elasticsearch\Common\Exceptions\RuntimeException;
-use Elasticsearch\ConnectionPool\AbstractConnectionPool;
-use Elasticsearch\ConnectionPool\Selectors\SelectorInterface;
 use Elasticsearch\ConnectionPool\StaticNoPingConnectionPool;
-use Elasticsearch\Connections\Connection;
 use Elasticsearch\Connections\ConnectionFactory;
 use Elasticsearch\Connections\ConnectionFactoryInterface;
 use Elasticsearch\Namespaces\NamespaceBuilderInterface;
-use Elasticsearch\Serializers\SerializerInterface;
 use Elasticsearch\ConnectionPool\Selectors;
 use Elasticsearch\Serializers\SmartSerializer;
 use GuzzleHttp\Ring\Client\CurlHandler;
@@ -19,25 +31,20 @@ use GuzzleHttp\Ring\Client\CurlMultiHandler;
 use GuzzleHttp\Ring\Client\Middleware;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
-use Monolog\Processor\IntrospectionProcessor;
+use ReflectionClass;
+
+use function filter_var;
 
 /**
  * Class ClientBuilder
  *
- * @category Elasticsearch
- * @package  Elasticsearch\Common\Exceptions
- * @author   Zachary Tong <zach@elastic.co>
- * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache2
- * @link     http://elastic.co
   */
 class ClientBuilder
 {
     /** @var Transport */
     private $transport;
 
-    /** @var callback */
+    /** @var callable */
     private $endpoint;
 
     /** @var NamespaceBuilderInterface[] */
@@ -89,43 +96,45 @@ class ClientBuilder
     /** @var null|bool|string */
     private $sslVerification = null;
 
-    /** @var bool  */
-    private $allowBadJSON = false;
+    /**
+     * @var bool
+     */
+    private $elasticMetaHeader = true;
 
     /**
      * @return ClientBuilder
      */
-    public static function create()
+    public static function create(): ClientBuilder
     {
         return new static();
     }
 
     /**
      * Can supply first parm to Client::__construct() when invoking manually or with dependency injection
-     * @return this->ransport
+     * @return Transport
      *
      */
-    public function getTransport()
+    public function getTransport(): Transport
     {
         return $this->transport;
     }
 
     /**
      * Can supply second parm to Client::__construct() when invoking manually or with dependency injection
-     * @return this->endpoint
+     * @return callable
      *
      */
-    public function getEndpoint()
+    public function getEndpoint(): callable
     {
         return $this->endpoint;
     }
 
     /**
      * Can supply third parm to Client::__construct() when invoking manually or with dependency injection
-     * @return this->registeredNamespacesBuilders
+     * @return NamespaceBuilderInterface[]
      *
      */
-    public function getRegisteredNamespacesBuilders()
+    public function getRegisteredNamespacesBuilders(): array
     {
         return $this->registeredNamespacesBuilders;
     }
@@ -146,7 +155,7 @@ class ClientBuilder
      * @throws Common\Exceptions\RuntimeException
      * @return \Elasticsearch\Client
      */
-    public static function fromConfig($config, $quiet = false)
+    public static function fromConfig(array $config, bool $quiet = false): Client
     {
         $builder = new self;
         foreach ($config as $key => $value) {
@@ -165,12 +174,12 @@ class ClientBuilder
     }
 
     /**
-     * @param array $singleParams
      * @param array $multiParams
+     * @param array $singleParams
      * @throws \RuntimeException
      * @return callable
      */
-    public static function defaultHandler($multiParams = [], $singleParams = [])
+    public static function defaultHandler(array $multiParams = [], array $singleParams = []): callable
     {
         $future = null;
         if (extension_loaded('curl')) {
@@ -193,7 +202,7 @@ class ClientBuilder
      * @throws \RuntimeException
      * @return CurlMultiHandler
      */
-    public static function multiHandler($params = [])
+    public static function multiHandler(array $params = []): CurlMultiHandler
     {
         if (function_exists('curl_multi_init')) {
             return new CurlMultiHandler(array_merge([ 'mh' => curl_multi_init() ], $params));
@@ -206,7 +215,7 @@ class ClientBuilder
      * @return CurlHandler
      * @throws \RuntimeException
      */
-    public static function singleHandler()
+    public static function singleHandler(): CurlHandler
     {
         if (function_exists('curl_reset')) {
             return new CurlHandler();
@@ -216,23 +225,10 @@ class ClientBuilder
     }
 
     /**
-     * @param $path string
-     * @return \Monolog\Logger\Logger
-     */
-    public static function defaultLogger($path, $level = Logger::WARNING)
-    {
-        $log       = new Logger('log');
-        $handler   = new StreamHandler($path, $level);
-        $log->pushHandler($handler);
-
-        return $log;
-    }
-
-    /**
      * @param \Elasticsearch\Connections\ConnectionFactoryInterface $connectionFactory
      * @return $this
      */
-    public function setConnectionFactory(ConnectionFactoryInterface $connectionFactory)
+    public function setConnectionFactory(ConnectionFactoryInterface $connectionFactory): ClientBuilder
     {
         $this->connectionFactory = $connectionFactory;
 
@@ -245,7 +241,7 @@ class ClientBuilder
      * @throws \InvalidArgumentException
      * @return $this
      */
-    public function setConnectionPool($connectionPool, array $args = [])
+    public function setConnectionPool($connectionPool, array $args = []): ClientBuilder
     {
         if (is_string($connectionPool)) {
             $this->connectionPool = $connectionPool;
@@ -263,7 +259,7 @@ class ClientBuilder
      * @param callable $endpoint
      * @return $this
      */
-    public function setEndpoint($endpoint)
+    public function setEndpoint(callable $endpoint): ClientBuilder
     {
         $this->endpoint = $endpoint;
 
@@ -274,7 +270,7 @@ class ClientBuilder
      * @param NamespaceBuilderInterface $namespaceBuilder
      * @return $this
      */
-    public function registerNamespace(NamespaceBuilderInterface $namespaceBuilder)
+    public function registerNamespace(NamespaceBuilderInterface $namespaceBuilder): ClientBuilder
     {
         $this->registeredNamespacesBuilders[] = $namespaceBuilder;
 
@@ -285,7 +281,7 @@ class ClientBuilder
      * @param \Elasticsearch\Transport $transport
      * @return $this
      */
-    public function setTransport($transport)
+    public function setTransport(Transport $transport): ClientBuilder
     {
         $this->transport = $transport;
 
@@ -296,7 +292,7 @@ class ClientBuilder
      * @param mixed $handler
      * @return $this
      */
-    public function setHandler($handler)
+    public function setHandler($handler): ClientBuilder
     {
         $this->handler = $handler;
 
@@ -307,7 +303,7 @@ class ClientBuilder
      * @param \Psr\Log\LoggerInterface $logger
      * @return $this
      */
-    public function setLogger($logger)
+    public function setLogger(LoggerInterface $logger): ClientBuilder
     {
         $this->logger = $logger;
 
@@ -318,7 +314,7 @@ class ClientBuilder
      * @param \Psr\Log\LoggerInterface $tracer
      * @return $this
      */
-    public function setTracer($tracer)
+    public function setTracer(LoggerInterface $tracer): ClientBuilder
     {
         $this->tracer = $tracer;
 
@@ -330,7 +326,7 @@ class ClientBuilder
      * @throws \InvalidArgumentException
      * @return $this
      */
-    public function setSerializer($serializer)
+    public function setSerializer($serializer): ClientBuilder
     {
         $this->parseStringOrObject($serializer, $this->serializer, 'SerializerInterface');
 
@@ -352,7 +348,7 @@ class ClientBuilder
      * @param array $params
      * @return $this
      */
-    public function setConnectionParams(array $params)
+    public function setConnectionParams(array $params): ClientBuilder
     {
         $this->connectionParams = $params;
 
@@ -363,7 +359,7 @@ class ClientBuilder
      * @param int $retries
      * @return $this
      */
-    public function setRetries($retries)
+    public function setRetries($retries): ClientBuilder
     {
         $this->retries = $retries;
 
@@ -375,7 +371,7 @@ class ClientBuilder
      * @throws \InvalidArgumentException
      * @return $this
      */
-    public function setSelector($selector)
+    public function setSelector($selector): ClientBuilder
     {
         $this->parseStringOrObject($selector, $this->selector, 'SelectorInterface');
 
@@ -386,7 +382,7 @@ class ClientBuilder
      * @param boolean $sniffOnStart
      * @return $this
      */
-    public function setSniffOnStart($sniffOnStart)
+    public function setSniffOnStart(bool $sniffOnStart): ClientBuilder
     {
         $this->sniffOnStart = $sniffOnStart;
 
@@ -394,11 +390,11 @@ class ClientBuilder
     }
 
     /**
-     * @param $cert
+     * @param string $cert The name of a file containing a PEM formatted certificate.
      * @param null|string $password
      * @return $this
      */
-    public function setSSLCert($cert, $password = null)
+    public function setSSLCert(string $cert, string $password = null): ClientBuilder
     {
         $this->sslCert = [$cert, $password];
 
@@ -406,11 +402,11 @@ class ClientBuilder
     }
 
     /**
-     * @param $key
+     * @param string $key The name of a file containing a private SSL key.
      * @param null|string $password
      * @return $this
      */
-    public function setSSLKey($key, $password = null)
+    public function setSSLKey(string $key, string $password = null): ClientBuilder
     {
         $this->sslKey = [$key, $password];
 
@@ -421,31 +417,28 @@ class ClientBuilder
      * @param bool|string $value
      * @return $this
      */
-    public function setSSLVerification($value = true)
+    public function setSSLVerification($value = true): ClientBuilder
     {
         $this->sslVerification = $value;
 
         return $this;
     }
 
-    public function allowBadJSONSerialization()
+    /**
+     * Set or disable the x-elastic-client-meta header
+     */
+    public function setElasticMetaHeader($value = true): ClientBuilder
     {
-        $this->allowBadJSON = true;
+        $this->elasticMetaHeader = $value;
+
         return $this;
     }
 
     /**
      * @return Client
      */
-    public function build()
+    public function build(): Client
     {
-        if(!defined('JSON_PRESERVE_ZERO_FRACTION') && $this->allowBadJSON === false) {
-            throw new RuntimeException("Your version of PHP / json-ext does not support the constant 'JSON_PRESERVE_ZERO_FRACTION',".
-            " which is important for proper type mapping in Elasticsearch. Please upgrade your PHP or json-ext.\n".
-            "If you are unable to upgrade, and are willing to accept the consequences, you may use the allowBadJSONSerialization()".
-            " method on the ClientBuilder to bypass this limitation.");
-        }
-
         $this->buildLoggers();
 
         if (is_null($this->handler)) {
@@ -483,6 +476,8 @@ class ClientBuilder
         } elseif (is_string($this->serializer)) {
             $this->serializer = new $this->serializer;
         }
+
+        $this->connectionParams['client']['x-elastic-client-meta'] = $this->elasticMetaHeader;
 
         if (is_null($this->connectionFactory)) {
             if (is_null($this->connectionParams)) {
@@ -525,7 +520,11 @@ class ClientBuilder
 
             $this->endpoint = function ($class) use ($serializer) {
                 $fullPath = '\\Elasticsearch\\Endpoints\\' . $class;
-                if ($class === 'Bulk' || $class === 'Msearch' || $class === 'MsearchTemplate' || $class === 'MPercolate') {
+                
+                $reflection = new ReflectionClass($fullPath);
+                $constructor = $reflection->getConstructor();
+
+                if ($constructor && $constructor->getParameters()) {
                     return new $fullPath($serializer);
                 } else {
                     return new $fullPath();
@@ -535,7 +534,7 @@ class ClientBuilder
 
         $registeredNamespaces = [];
         foreach ($this->registeredNamespacesBuilders as $builder) {
-            /** @var $builder NamespaceBuilderInterface */
+            /** @var NamespaceBuilderInterface $builder */
             $registeredNamespaces[$builder->getName()] = $builder->getObject($this->transport, $this->serializer);
         }
 
@@ -548,12 +547,12 @@ class ClientBuilder
      * @param Object[] $registeredNamespaces
      * @return Client
      */
-    protected function instantiate(Transport $transport, callable $endpoint, array $registeredNamespaces)
+    protected function instantiate(Transport $transport, callable $endpoint, array $registeredNamespaces): Client
     {
         return new Client($transport, $endpoint, $registeredNamespaces);
     }
 
-    private function buildLoggers()
+    private function buildLoggers(): void
     {
         if (is_null($this->logger)) {
             $this->logger = new NullLogger();
@@ -564,7 +563,7 @@ class ClientBuilder
         }
     }
 
-    private function buildTransport()
+    private function buildTransport(): void
     {
         $connections = $this->buildConnectionsFromHosts($this->hosts);
 
@@ -573,13 +572,15 @@ class ClientBuilder
                 $connections,
                 $this->selector,
                 $this->connectionFactory,
-                $this->connectionPoolArgs);
+                $this->connectionPoolArgs
+            );
         } elseif (is_null($this->connectionPool)) {
             $this->connectionPool = new StaticNoPingConnectionPool(
                 $connections,
                 $this->selector,
                 $this->connectionFactory,
-                $this->connectionPoolArgs);
+                $this->connectionPoolArgs
+            );
         }
 
         if (is_null($this->retries)) {
@@ -587,11 +588,11 @@ class ClientBuilder
         }
 
         if (is_null($this->transport)) {
-            $this->transport = new Transport($this->retries, $this->sniffOnStart, $this->connectionPool, $this->logger);
+            $this->transport = new Transport($this->retries, $this->connectionPool, $this->logger, $this->sniffOnStart);
         }
     }
 
-    private function parseStringOrObject($arg, &$destination, $interface)
+    private function parseStringOrObject($arg, &$destination, $interface): void
     {
         if (is_string($arg)) {
             $destination = new $arg;
@@ -605,7 +606,7 @@ class ClientBuilder
     /**
      * @return array
      */
-    private function getDefaultHost()
+    private function getDefaultHost(): array
     {
         return ['localhost:9200'];
     }
@@ -616,7 +617,7 @@ class ClientBuilder
      * @throws \InvalidArgumentException
      * @return \Elasticsearch\Connections\Connection[]
      */
-    private function buildConnectionsFromHosts($hosts)
+    private function buildConnectionsFromHosts(array $hosts): array
     {
         if (is_array($hosts) === false) {
             $this->logger->error("Hosts parameter must be an array of strings, or an array of Connection hashes.");
@@ -628,7 +629,7 @@ class ClientBuilder
             if (is_string($host)) {
                 $host = $this->prependMissingScheme($host);
                 $host = $this->extractURIParts($host);
-            } else if (is_array($host)) {
+            } elseif (is_array($host)) {
                 $host = $this->normalizeExtendedHost($host);
             } else {
                 $this->logger->error("Could not parse host: ".print_r($host, true));
@@ -641,10 +642,11 @@ class ClientBuilder
     }
 
     /**
-     * @param $host
+     * @param array $host
      * @return array
      */
-    private function normalizeExtendedHost($host) {
+    private function normalizeExtendedHost(array $host): array
+    {
         if (isset($host['host']) === false) {
             $this->logger->error("Required 'host' was not defined in extended format: ".print_r($host, true));
             throw new RuntimeException("Required 'host' was not defined in extended format: ".print_r($host, true));
@@ -660,17 +662,17 @@ class ClientBuilder
     }
 
     /**
-     * @param array $host
+     * @param string $host
      *
      * @throws \InvalidArgumentException
      * @return array
      */
-    private function extractURIParts($host)
+    private function extractURIParts(string $host): array
     {
         $parts = parse_url($host);
 
         if ($parts === false) {
-            throw new InvalidArgumentException("Could not parse URI");
+            throw new InvalidArgumentException(sprintf('Could not parse URI: "%s"', $host));
         }
 
         if (isset($parts['port']) !== true) {
@@ -685,9 +687,9 @@ class ClientBuilder
      *
      * @return string
      */
-    private function prependMissingScheme($host)
+    private function prependMissingScheme(string $host): string
     {
-        if (!filter_var($host, FILTER_VALIDATE_URL, FILTER_FLAG_SCHEME_REQUIRED)) {
+        if (!filter_var($host, FILTER_VALIDATE_URL)) {
             $host = 'http://' . $host;
         }
 

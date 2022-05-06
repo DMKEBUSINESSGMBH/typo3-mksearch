@@ -41,15 +41,15 @@ class tx_mksearch_filter_FacetBase extends tx_mksearch_filter_SolrBase
      */
     protected function initFilter(&$fields, &$options, \Sys25\RnBase\Frontend\Request\RequestInterface $request)
     {
-        //erstmal die prinzipielle Suche von unserem Elter initialisieren lassen
+        // erstmal die prinzipielle Suche von unserem Elter initialisieren lassen
         if (parent::initFilter($fields, $options, $request)) {
-            //dann setzen wir die Werte fest, da Facetten weder echte Ergebnisse benötigen
-            //noch eingeschränkt werden wollen. Sollen sie doch eingeschränkt werden
-            //dann einfach einen Filter verwenden der "fq" nicht statisch auf nichts setzt
-            $options['limit'] = 0; //nie wirklich suchen
+            // dann setzen wir die Werte fest, da Facetten weder echte Ergebnisse benötigen
+            // noch eingeschränkt werden wollen. Sollen sie doch eingeschränkt werden
+            // dann einfach einen Filter verwenden der "fq" nicht statisch auf nichts setzt
+            $options['limit'] = 0; // nie wirklich suchen
             $options['facet'] = 'true';
 
-            return true; //damit der Filter als valide betrachtet wird
+            return true; // damit der Filter als valide betrachtet wird
         }
     }
 
@@ -67,8 +67,4 @@ class tx_mksearch_filter_FacetBase extends tx_mksearch_filter_SolrBase
         // respect Root Page
         $this->handleFqForSiteRootPage($options, $configurations, $confId);
     }
-}
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/filter/class.tx_mksearch_filter_SearchForm.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/filter/class.tx_mksearch_filter_SearchForm.php'];
 }

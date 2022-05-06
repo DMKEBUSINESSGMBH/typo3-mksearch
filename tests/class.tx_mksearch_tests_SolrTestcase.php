@@ -93,22 +93,16 @@ abstract class tx_mksearch_tests_SolrTestcase extends tx_mksearch_tests_Testcase
      *
      * @see PHPUnit_Framework_TestCase::setUp()
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
-        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['devlog']['nolog'] = true;
 
         $this->initAbsolutePathsForConfigs();
         \Sys25\RnBase\Utility\Files::rmdir($this->instanceDir, true);
         $this->createCore();
     }
 
-    /**
-     * (non-PHPdoc).
-     *
-     * @see PHPUnit_Framework_TestCase::tearDown()
-     */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->unloadCore();
@@ -157,16 +151,16 @@ abstract class tx_mksearch_tests_SolrTestcase extends tx_mksearch_tests_Testcase
 
     private function setSolrCredentialsForNewCore()
     {
-        //$this->getDefaultIndexModel()->record['name'] ist z.B.
-        //"localhost,8081,/solr-3.5.0/mycore"
+        // $this->getDefaultIndexModel()->record['name'] ist z.B.
+        // "localhost,8081,/solr-3.5.0/mycore"
         $credentialsStringParts =
             \Sys25\RnBase\Utility\Strings::trimExplode(',', $this->getDefaultIndexModel()->getProperty('name'));
 
-        //damit ist also $credentialsStringParts[2] z.B.
-        //"/solr-3.5.0/mycore"
+        // damit ist also $credentialsStringParts[2] z.B.
+        // "/solr-3.5.0/mycore"
         $solrPathParts = \Sys25\RnBase\Utility\Strings::trimExplode('/', $credentialsStringParts[2]);
 
-        //build new credential string
+        // build new credential string
         $newCredentialsString = $credentialsStringParts[0].','.$credentialsStringParts[1].
             ',/'.$solrPathParts[1].'/'.$this->getCoreName();
 
@@ -235,9 +229,9 @@ abstract class tx_mksearch_tests_SolrTestcase extends tx_mksearch_tests_Testcase
     protected function getCoreName()
     {
         if (!$this->coreName) {
-            //muss mit einem buchstaben beginnen da der name
-            //in setSolrCredentialsForNewCore in preg_replace
-            //nicht korrekt ersetzt wird
+            // muss mit einem buchstaben beginnen da der name
+            // in setSolrCredentialsForNewCore in preg_replace
+            // nicht korrekt ersetzt wird
             $this->coreName = 'a'.md5(microtime());
         }
 
@@ -270,11 +264,11 @@ abstract class tx_mksearch_tests_SolrTestcase extends tx_mksearch_tests_Testcase
      */
     protected function createInstanceDir($path)
     {
-        //da auf den ordner auch der nutzer zugreift, der solr ausführt und das
-        //nicht der gleiche wie der nutzer von tyop3 sein sollte, müssen wir
-        //diesem zugriff auf den ordner geben. die default umask, die über setfacl
-        //gesetzt wird, wird von TYPO3 überschrieben. Also setzen wir die umask vorrübergehend wie
-        //wir es brauchen
+        // da auf den ordner auch der nutzer zugreift, der solr ausführt und das
+        // nicht der gleiche wie der nutzer von tyop3 sein sollte, müssen wir
+        // diesem zugriff auf den ordner geben. die default umask, die über setfacl
+        // gesetzt wird, wird von TYPO3 überschrieben. Also setzen wir die umask vorrübergehend wie
+        // wir es brauchen
         $umaskBackup = $GLOBALS['TYPO3_CONF_VARS']['BE']['folderCreateMask'];
         $GLOBALS['TYPO3_CONF_VARS']['BE']['folderCreateMask'] = '0775';
 
@@ -404,8 +398,4 @@ abstract class tx_mksearch_tests_SolrTestcase extends tx_mksearch_tests_Testcase
         self::assertEquals(0, $result['numFound'], 'doch etwas gefunden');
         self::assertEmpty($result['items'], 'doch items etwas gefunden');
     }
-}
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/class.tx_mksearch_tests_SolrTestcase.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/tests/class.tx_mksearch_tests_SolrTestcase.php'];
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Elastica\Query;
 
 use Elastica\Exception\InvalidException;
@@ -8,7 +9,7 @@ use Elastica\Exception\InvalidException;
  *
  * @author Marek Hernik <marek.hernik@gmail.com>
  *
- * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-span-near-query.html
+ * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-span-near-query.html
  */
 class SpanNear extends AbstractSpanQuery
 {
@@ -24,9 +25,7 @@ class SpanNear extends AbstractSpanQuery
         if (!empty($clauses)) {
             foreach ($clauses as $clause) {
                 if (!is_subclass_of($clause, AbstractSpanQuery::class)) {
-                    throw new InvalidException(
-                        'Invalid parameter. Has to be array or instance of Elastica\Query\SpanQuery'
-                    );
+                    throw new InvalidException('Invalid parameter. Has to be array or instance of Elastica\Query\SpanQuery');
                 }
             }
         }
@@ -37,18 +36,22 @@ class SpanNear extends AbstractSpanQuery
 
     /**
      * @param int $slop
+     *
+     * @return $this
      */
     public function setSlop($slop)
     {
-        $this->setParam('slop', $slop);
+        return $this->setParam('slop', $slop);
     }
 
     /**
      * @param bool $inOrder
+     *
+     * @return $this
      */
     public function setInOrder($inOrder)
     {
-        $this->setParam('in_order', $inOrder);
+        return $this->setParam('in_order', $inOrder);
     }
 
     /**

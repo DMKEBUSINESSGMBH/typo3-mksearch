@@ -91,7 +91,7 @@ class tx_mksearch_service_internal_Base extends \Sys25\RnBase\Typo3Wrapper\Servi
     public function findAll()
     {
         $fields = $options = [];
-        //$options['debug'] = 1;
+        // $options['debug'] = 1;
         $options['enablefieldsfe'] = 1;
 
         return $this->search($fields, $options);
@@ -107,7 +107,7 @@ class tx_mksearch_service_internal_Base extends \Sys25\RnBase\Typo3Wrapper\Servi
      */
     public function getByPageId($pageId)
     {
-        //$options['debug'] = 1;
+        // $options['debug'] = 1;
         $alias = $this->getSearcher()->getBaseTableAlias();
         if (intval($pageId)) {
             $fields[$alias.'.pid'][OP_EQ_INT] = $pageId;
@@ -129,8 +129,4 @@ class tx_mksearch_service_internal_Base extends \Sys25\RnBase\Typo3Wrapper\Servi
     {
         return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($this->getSearcher()->getWrapperClass(), $uid);
     }
-}
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/internal/class.tx_mksearch_service_internal_Base.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/service/internal/class.tx_mksearch_service_internal_Base.php'];
 }

@@ -98,7 +98,7 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base
             'uid_local as uid',
             'tx_cal_event_category_mm',
             [
-                //da MM keine TCA hat
+                // da MM keine TCA hat
                 'enablefieldsoff' => true,
                 'where' => 'uid_foreign = '.intval($categoryUid),
             ]
@@ -440,8 +440,4 @@ respectNoSearchFlagInRootline = 1
 #workspaceIds = 1,2,3
 CONFIG;
     }
-}
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_Cal.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/indexer/class.tx_mksearch_indexer_Cal.php'];
 }

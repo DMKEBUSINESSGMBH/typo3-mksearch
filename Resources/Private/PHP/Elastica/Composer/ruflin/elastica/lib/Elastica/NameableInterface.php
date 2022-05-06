@@ -1,9 +1,9 @@
 <?php
+
 namespace Elastica;
 
 /**
  * Interface for named objects.
- *
  *
  * @author Evgeniy Sokolov <ewgraf@gmail.com>
  */

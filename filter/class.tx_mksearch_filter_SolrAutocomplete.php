@@ -54,11 +54,7 @@ class tx_mksearch_filter_SolrAutocomplete extends tx_mksearch_filter_SolrBase
         ) {
             $term = mb_strtolower($term, 'UTF-8');
         }
-        //we just need the plain, given term, sanitize it and put it in
+        // we just need the plain, given term, sanitize it and put it in
         $fields['term'] = tx_mksearch_util_Misc::sanitizeTerm($term);
     }
-}
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/filter/class.tx_mksearch_filter_SolrAutocomplete.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/filter/class.tx_mksearch_filter_SolrAutocomplete.php'];
 }

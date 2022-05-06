@@ -45,7 +45,7 @@ class tx_mksearch_util_SearchBuilder
             switch ($operator) {
                 case '-':
                 case '+':
-                    $term = ($removeOperators ? '' : $operator).'"'.substr($term, 1).'"';
+                    $term = $operator.'"'.substr($term, 1).'"';
                     break;
                 default:
                     $term = '"'.$term.'"';
@@ -86,7 +86,7 @@ class tx_mksearch_util_SearchBuilder
         }
 
         foreach ($terms as $key => &$term) {
-            //remove empty strings. can happen when the term contains only control chars
+            // remove empty strings. can happen when the term contains only control chars
             $term = tx_mksearch_util_Misc::sanitizeTerm($term);
             if (self::emptyTerm($term)) {
                 unset($terms[$key]);
@@ -132,7 +132,7 @@ class tx_mksearch_util_SearchBuilder
     {
         // brauchen wir nur wen ein term angegeben wurde
         if (!self::emptyTerm($fields['term'])) {
-            //@todo: in generiche methode auslagern, welche werte anhand combination und confid ausliest!
+            // @todo: in generiche methode auslagern, welche werte anhand combination und confid ausliest!
             $combination = $parameters->get('combination');
             if ($combination) {
                 // mm aus der config holen
@@ -174,7 +174,7 @@ class tx_mksearch_util_SearchBuilder
                     break;
                 default:
                     $options['qf'] = $options['qf'] ? $options['qf'].' ' : '';
-                    //@TODO: das feld indem gesucht werden soll konfigurierbar machen
+                    // @TODO: das feld indem gesucht werden soll konfigurierbar machen
                     // am besten generich wie handleMinShouldMatch umstellen
                     $options['qf'] .= 'text:'.$fields['term'];
                     $fields['term'] = '';
@@ -204,11 +204,11 @@ class tx_mksearch_util_SearchBuilder
             return '';
         }
 
-        $quote = intval($options['quote']);
-        $dismax = intval($options['dismax']);
-        $fuzzy = intval($options['fuzzy']) || !empty($options['fuzzy']);
-        $sanitize = intval($options['sanitize']);
-        $wildcard = intval($options['wildcard']);
+        $quote = intval($options['quote'] ?? ß);
+        $dismax = intval($options['dismax'] ?? 0);
+        $fuzzy = intval($options['fuzzy'] ?? 0) || !empty($options['fuzzy'] ?? 0);
+        $sanitize = intval($options['sanitize'] ?? 0);
+        $wildcard = intval($options['wildcard'] ?? 0);
 
         // sanitize term?
         if ($sanitize) {
@@ -249,7 +249,7 @@ class tx_mksearch_util_SearchBuilder
 
         // fuzzy
         if ($fuzzy) {
-            $fuzzySlop = $options['fuzzySlop'] ? $options['fuzzySlop'] : '0.2';
+            $fuzzySlop = $options['fuzzySlop'] ?? '0.2';
             switch ($combination) {
                 // fuzzy nicht bei free, bei exact wird es später gesetzt!
                 case MKSEARCH_OP_FREE:
@@ -260,7 +260,7 @@ class tx_mksearch_util_SearchBuilder
                     break;
             }
         }
-        //ist ein Suchstring übrig geblieben?
+        // ist ein Suchstring übrig geblieben?
         if (!self::emptyTerm($terms)) {
             switch ($combination) {
                 case MKSEARCH_OP_AND:
@@ -309,8 +309,4 @@ class tx_mksearch_util_SearchBuilder
             return 0 == strlen($term);
         }
     }
-}
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_SearchBuilder.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_SearchBuilder.php'];
 }

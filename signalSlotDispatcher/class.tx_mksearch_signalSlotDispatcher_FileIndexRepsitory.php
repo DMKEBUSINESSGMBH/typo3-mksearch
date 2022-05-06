@@ -52,7 +52,3 @@ class tx_mksearch_signalSlotDispatcher_FileIndexRepsitory
         return tx_mksearch_util_ServiceRegistry::getIntIndexService();
     }
 }
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/signalSlotDispatcher/class.tx_mksearch_signalSlotDispatcher_FileIndexRepsitory.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/signalSlotDispatcher/class.tx_mksearch_signalSlotDispatcher_FileIndexRepsitory.php'];
-}

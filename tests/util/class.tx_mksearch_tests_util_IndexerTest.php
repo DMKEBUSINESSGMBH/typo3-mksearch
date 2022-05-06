@@ -30,7 +30,7 @@
  */
 class tx_mksearch_tests_util_IndexerTest extends \Sys25\RnBase\Testing\BaseTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -893,13 +893,12 @@ class tx_mksearch_tests_util_IndexerTest extends \Sys25\RnBase\Testing\BaseTestC
 
         $utility = $this->getMock('tx_mksearch_util_Indexer', ['addModelToIndex']);
 
-        $utility->expects(self::at(0))
+        $utility->expects(self::exactly(2))
             ->method('addModelToIndex')
-            ->with($models[0], $tableName, $prefer, $resolver, $data, $options);
-
-        $utility->expects(self::at(1))
-            ->method('addModelToIndex')
-            ->with($models[1], $tableName, $prefer, $resolver, $data, $options);
+            ->withConsecutive(
+                [$models[0], $tableName, $prefer, $resolver, $data, $options],
+                [$models[1], $tableName, $prefer, $resolver, $data, $options],
+            );
 
         $utility->addModelsToIndex($models, $tableName, $prefer, $resolver, $data, $options);
     }

@@ -40,7 +40,7 @@ class tx_mksearch_model_SearchHit extends \Sys25\RnBase\Domain\Model\BaseModel i
     public function init($rowOrUid = null)
     {
         if (is_array($rowOrUid)) {
-            $this->uid = $rowOrUid['uid'];
+            $this->uid = $rowOrUid['uid'] ?? 0;
             $this->setProperty($rowOrUid);
         } else {
             $this->uid = $rowOrUid;
@@ -91,8 +91,4 @@ class tx_mksearch_model_SearchHit extends \Sys25\RnBase\Domain\Model\BaseModel i
     {
         return 0;
     }
-}
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/class.tx_mksearch_model_SearchHit.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/class.tx_mksearch_model_SearchHit.php'];
 }

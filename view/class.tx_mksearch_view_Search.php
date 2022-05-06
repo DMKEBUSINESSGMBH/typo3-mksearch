@@ -60,12 +60,8 @@ class tx_mksearch_view_Search extends \Sys25\RnBase\Frontend\View\Marker\BaseVie
      *
      * @return string
      */
-    public function getMainSubpart(\Sys25\RnBase\Frontend\View\ContextInterface &$viewData)
+    public function getMainSubpart(\Sys25\RnBase\Frontend\View\ContextInterface $viewData)
     {
         return '###SEARCH###';
     }
-}
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/view/class.tx_mksearch_view_Search.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/view/class.tx_mksearch_view_Search.php'];
 }

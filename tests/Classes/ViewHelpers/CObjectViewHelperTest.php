@@ -2,6 +2,8 @@
 
 namespace DMK\Mksearch\Tests\ViewHelpers;
 
+use DMK\Mksearch\ViewHelpers\CObjectViewHelper;
+
 /***************************************************************
  * Copyright notice
  *
@@ -34,12 +36,7 @@ namespace DMK\Mksearch\Tests\ViewHelpers;
  */
 class CObjectViewHelperTest extends \tx_mksearch_tests_Testcase
 {
-    /**
-     * {@inheritdoc}
-     *
-     * @see tx_mksearch_tests_Testcase::tearDown()
-     */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $property = new \ReflectionProperty('tx_mksearch_service_internal_Index', 'indexingInProgress');
         $property->setAccessible(true);
@@ -109,11 +106,8 @@ class CObjectViewHelperTest extends \tx_mksearch_tests_Testcase
         self::assertSame('tsfeBackup', $GLOBALS['TSFE']);
     }
 
-    /**
-     * @return DMK\Mksearch\ViewHelpers\CObjectViewHelper
-     */
-    protected function getViewHelper()
+    protected function getViewHelper(): CObjectViewHelper
     {
-        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Fluid\\ViewHelpers\\CObjectViewHelper');
+        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(CObjectViewHelper::class);
     }
 }

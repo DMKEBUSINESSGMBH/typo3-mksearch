@@ -30,11 +30,11 @@
  */
 class tx_mksearch_tests_action_ElasticSearchTest extends tx_mksearch_tests_Testcase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
     }
 

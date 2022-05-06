@@ -50,7 +50,7 @@ class tx_mksearch_marker_SearchResultSimple extends tx_mksearch_marker_Search
         $record = $item->getProperty();
         $ignore = self::findUnusedCols($record, $template, $marker);
         $item->setProperty($record);
-        //diese felder werden auch bei nicht vorhanden sein gesetzt damit die market nicht ausgegeben werden
+        // diese felder werden auch bei nicht vorhanden sein gesetzt damit die market nicht ausgegeben werden
         $initFields = $this->getInitFields($template, $item, $formatter, $confId, $marker);
 
         $markerArray = $formatter->getItemMarkerArrayWrapped($item->getProperty(), $confId, $ignore, $marker.'_', $initFields);
@@ -104,7 +104,7 @@ class tx_mksearch_marker_SearchResultSimple extends tx_mksearch_marker_Search
         if (!$config->get($confId.'disableOldShowLink')) {
             $linkId = 'show';
             $linkConfId = $confId.'links.'.$linkId.'.';
-            //cObject Daten sichern und durch unseren solr record ersetzen
+            // cObject Daten sichern und durch unseren solr record ersetzen
             $sCObjTempData = $config->getCObj()->data;
             $config->getCObj()->data = $item->getProperties();
 
@@ -140,11 +140,8 @@ class tx_mksearch_marker_SearchResultSimple extends tx_mksearch_marker_Search
 
                 $this->initLink($markerArray, $subpartArray, $wrappedSubpartArray, $formatter, $confId, $linkId, $marker, $addParams, $template);
             }
-            //cObject Daten wieder zurück
+            // cObject Daten wieder zurück
             $config->getCObj()->data = $sCObjTempData;
         }
     }
-}
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/marker/class.tx_mksearch_marker_SearchResultSimple.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/marker/class.tx_mksearch_marker_SearchResultSimple.php'];
 }

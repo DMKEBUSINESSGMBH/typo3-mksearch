@@ -31,10 +31,7 @@
  */
 class tx_mksearch_tests_indexer_ttcontent_GridelementsTest extends tx_mksearch_tests_Testcase
 {
-    /**
-     * setUp() = init DB etc.
-     */
-    protected function setUp()
+    protected function setUp(): void
     {
         if (!\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('gridelements')) {
             $this->markTestSkipped('Gridelements not installed.');

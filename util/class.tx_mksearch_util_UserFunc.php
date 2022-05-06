@@ -43,8 +43,8 @@ class tx_mksearch_util_UserFunc
 
         /* @var $parameters \Sys25\RnBase\Frontend\Request\Parameters */
         $parameters = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Frontend\Request\Parameters::class);
-        $combination = $parameters->get('combination', $conf['qualifier']);
-        //fallback aus TS
+        $combination = $parameters->get('combination', $conf['qualifier'] ?? '');
+        // fallback aus TS
         if (empty($combination)) {
             $combination = $conf['combination'];
         }
@@ -53,7 +53,7 @@ class tx_mksearch_util_UserFunc
             return $term;
         }
 
-        $options = $parameters->get('options', $conf['qualifier']);
+        $options = $parameters->get('options', $conf['qualifier'] ?? '');
 
         $options = is_array($options) ? array_merge($conf, $options) : $conf;
 
@@ -69,8 +69,4 @@ class tx_mksearch_util_UserFunc
     {
         return self::searchSolrOptions($term, $conf);
     }
-}
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_UserFunc.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/util/class.tx_mksearch_util_UserFunc.php'];
 }

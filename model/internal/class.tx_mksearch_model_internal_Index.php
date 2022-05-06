@@ -195,7 +195,3 @@ class tx_mksearch_model_internal_Index extends \Sys25\RnBase\Domain\Model\BaseMo
         return 40 == $this->getSolrVersion();
     }
 }
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/internal/class.tx_mksearch_model_internal_Index.php']) {
-    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mksearch/model/internal/class.tx_mksearch_model_internal_Index.php'];
-}

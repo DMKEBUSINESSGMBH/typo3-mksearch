@@ -33,12 +33,7 @@
  */
 class tx_mksearch_tests_util_SolrAutocompleteTest extends tx_mksearch_tests_Testcase
 {
-    /**
-     * {@inheritdoc}
-     *
-     * @see tx_mksearch_tests_Testcase::setUp()
-     */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
