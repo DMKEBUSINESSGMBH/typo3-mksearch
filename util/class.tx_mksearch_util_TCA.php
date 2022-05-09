@@ -77,8 +77,7 @@ class tx_mksearch_util_TCA
      */
     public static function getIndexerContentTypes(array &$params)
     {
-        $extKey = is_array($params['row']['extkey']) ?
-            $params['row']['extkey'][0] : $params['row']['extkey'];
+        $extKey = $params['row']['extkey'][0] ?? $params['row']['extkey'] ?? '';
 
         // im flexform nachsehen
         if (!$extKey && !empty($params['config']['extKeyField']) && !empty($params['config']['extKeySection'])) {

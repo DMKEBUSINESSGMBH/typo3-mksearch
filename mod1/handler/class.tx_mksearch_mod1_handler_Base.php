@@ -18,11 +18,13 @@ abstract class tx_mksearch_mod1_handler_Base
      */
     public function showScreen($template, \Sys25\RnBase\Backend\Module\IModule $mod, $options)
     {
+        $markerArray = [];
+
         return tx_mksearch_mod1_util_Template::parseList(
             $template,
             $mod,
-            $markerArray = [],
-            $this->getSearcher($mod, $options = []),
+            $markerArray,
+            $this->getSearcher($mod, $options),
             strtoupper($this->getSubID())
         );
     }

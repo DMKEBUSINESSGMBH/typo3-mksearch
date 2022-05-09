@@ -67,7 +67,7 @@ abstract class tx_mksearch_mod1_searcher_abstractBase
     {
         // locallang einlesen
         if (!self::$llLoaded) {
-            $GLOBALS['LANG']->includeLLFile('EXT:mksearch/mod1/locallang.xml');
+            $GLOBALS['LANG']->includeLLFile('EXT:mksearch/Resources/Private/Language/BackendModule/locallang.xlf');
             self::$llLoaded = true;
         }
         $this->setOptions($options);

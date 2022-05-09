@@ -95,7 +95,7 @@ class tx_mksearch_view_SearchSolr extends \Sys25\RnBase\Frontend\View\Marker\Bas
      */
     protected function handleSuggestions($template, $viewData, $configurations, $formatter, $listBuilder, $result)
     {
-        $suggestions = $result ? $result['suggestions'] : [];
+        $suggestions = $result['suggestions'] ?? [];
 
         if (!empty($suggestions)) {
             $suggestions = reset($suggestions);
@@ -136,7 +136,7 @@ class tx_mksearch_view_SearchSolr extends \Sys25\RnBase\Frontend\View\Marker\Bas
         $out = $template;
 
         // dann Liste parsen
-        $facets = $result ? (array) $result['facets'] : [];
+        $facets = (array) ($result['facets'] ?? []);
 
         // the old way!
         if (\Sys25\RnBase\Frontend\Marker\BaseMarker::containsMarker($out, 'FACETS')) {
@@ -225,7 +225,7 @@ class tx_mksearch_view_SearchSolr extends \Sys25\RnBase\Frontend\View\Marker\Bas
     {
         // Wir versuchen den Mainpart aus der viewdata zu holen.
         // Das kann der Fall sein, wenn der Mainpart im Filter oder einer eigenen Action gesetzt wurde.
-        $mainSubpart = $viewData->offsetGet('mainsubpart');
+        $mainSubpart = $viewData->offsetExists('mainsubpart') ? $viewData->offsetGet('mainsubpart') : null;
         // Wir holen uns den Mainpart vom Typoscript.
         $mainSubpart = $mainSubpart ? $mainSubpart : $this->configurations->get($this->confId.'mainsubpart');
         // Fallback, wenn kein Mainpart gesetzt wurde.

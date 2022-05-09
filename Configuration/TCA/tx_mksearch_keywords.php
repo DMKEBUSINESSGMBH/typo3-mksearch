@@ -2,7 +2,7 @@
 
 return [
     'ctrl' => [
-        'title' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_keywords',
+        'title' => 'LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_keywords',
         'label' => 'keyword',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
@@ -31,7 +31,7 @@ return [
         ],
         'keyword' => [
             'exclude' => 1,
-            'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_keywords_keyword',
+            'label' => 'LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_keywords_keyword',
             'config' => [
                 'type' => 'input',
                 'size' => '30',
@@ -40,7 +40,7 @@ return [
         ],
         'link' => [
             'exclude' => 1,
-            'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_keywords_link',
+            'label' => 'LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_keywords_link',
             'config' => [
                 'type' => 'input',
                 'size' => '15',

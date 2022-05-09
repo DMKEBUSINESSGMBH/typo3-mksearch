@@ -113,11 +113,11 @@
         ],
         "test:phpcompatibility:7.4": [
             "[ -e .Build/bin/phpcs ] || composer update",
-            ".Build/bin/phpcs --ignore=.Build/*,./res/*,./Resources/Private/PHP/Elastica/Composer/elasticsearch/elasticsearch/src/Elasticsearch/Endpoints/Indices/Split.php -p . --standard=.Build/vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 7.4"
+            ".Build/bin/phpcs --ignore=.Build/*,./Resources/Public/JavaScript/*,./Resources/Private/PHP/Elastica/Composer/elasticsearch/elasticsearch/src/Elasticsearch/Endpoints/Indices/Split.php -p . --standard=.Build/vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 7.4"
         ],
         "test:phpcompatibility:8.0": [
             "[ -e .Build/bin/phpcs ] || composer update",
-            ".Build/bin/phpcs --ignore=.Build/*,./res/*,./Resources/Private/PHP/Elastica/Composer/elasticsearch/elasticsearch/src/Elasticsearch/Endpoints/Indices/Split.php -p . --standard=.Build/vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.0"
+            ".Build/bin/phpcs --ignore=.Build/*,/Resources/Public/JavaScript/*,./Resources/Private/PHP/Elastica/Composer/elasticsearch/elasticsearch/src/Elasticsearch/Endpoints/Indices/Split.php -p . --standard=.Build/vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.0"
         ],
         "test:phpunit": [
             "[ -e .Build/bin/phpunit ] || composer update --ansi",

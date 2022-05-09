@@ -44,6 +44,6 @@ class tx_mksearch_marker_General extends \Sys25\RnBase\Frontend\Marker\BaseMarke
         // Es wird das MarkerArray gefüllt.
         $markerArray = $formatter->getItemMarkerArrayWrapped($data, $confId, 0, $marker, array_keys($data));
 
-        return \Sys25\RnBase\Frontend\Marker\Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
+        return \Sys25\RnBase\Frontend\Marker\Templates::substituteMarkerArrayCached($template, $markerArray, [], []);
     }
 }

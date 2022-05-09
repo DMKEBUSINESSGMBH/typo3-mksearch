@@ -710,14 +710,14 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
             }
 
             $options = ['fuzzy'];
-            $currentOptions = $this->getParameters()->get('options');
+            $currentOptions = $this->getParameters()->get('options') ?? [];
             foreach ($options as $option) {
                 // wenn anders benötigt, via ts ändern werden
                 $formData['option_'.$option] = empty($currentOptions[$option]) ? '' : ' checked="checked"';
             }
 
             $availableModes = $this->getModeValuesAvailable();
-            if ($currentOptions['mode']) {
+            if ($currentOptions['mode'] ?? false) {
                 foreach ($availableModes as $availableMode) {
                     $formData['mode_'.$availableMode.'_selected'] =
                     $currentOptions['mode'] == $availableMode ? 'checked=checked' : '';

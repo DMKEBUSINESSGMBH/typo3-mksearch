@@ -292,11 +292,11 @@ class tx_mksearch_tests_action_SearchSolrTest extends tx_mksearch_tests_Testcase
 
         self::assertEquals(2, count($javaScriptLibraries), 'mehr header daten als erwartet!');
         self::assertEquals(
-            'typo3conf/ext/mksearch/res/js/jquery-1.6.2.min.js',
+            'typo3conf/ext/mksearch/Resources/Public/JavaScript/jquery-1.6.2.min.js',
             $javaScriptLibraries['jquery-1.6.2.min.js']['file']
         );
         self::assertEquals(
-            'typo3conf/ext/mksearch/res/js/jquery-ui-1.8.15.core.min.js',
+            'typo3conf/ext/mksearch/Resources/Public/JavaScript/jquery-ui-1.8.15.core.min.js',
             $javaScriptLibraries['jquery-ui-1.8.15.core.min.js']['file']
         );
     }
@@ -377,15 +377,15 @@ class tx_mksearch_tests_action_SearchSolrTest extends tx_mksearch_tests_Testcase
 
         self::assertEquals(3, count($javaScriptLibraries), 'mehr header daten als erwartet!');
         self::assertEquals(
-            'typo3conf/ext/mksearch/res/js/jquery-1.6.2.min.js',
+            'typo3conf/ext/mksearch/Resources/Public/JavaScript/jquery-1.6.2.min.js',
             $javaScriptLibraries['jquery-1.6.2.min.js']['file']
         );
         self::assertEquals(
-            'typo3conf/ext/mksearch/res/js/jquery-ui-1.8.15.core.min.js',
+            'typo3conf/ext/mksearch/Resources/Public/JavaScript/jquery-ui-1.8.15.core.min.js',
             $javaScriptLibraries['jquery-ui-1.8.15.core.min.js']['file']
         );
         self::assertEquals(
-            'typo3conf/ext/mksearch/res/js/jquery-ui-1.8.15.autocomplete.min.js',
+            'typo3conf/ext/mksearch/Resources/Public/JavaScript/jquery-ui-1.8.15.autocomplete.min.js',
             $javaScriptLibraries['jquery-ui-1.8.15.autocomplete.min.js']['file']
         );
     }

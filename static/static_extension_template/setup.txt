@@ -6,7 +6,7 @@ plugin.tx_mksearch {
     defaultAction = tx_mksearch_action_Search
     qualifier = mksearch
     templatePath = EXT:mksearch/templates
-    locallangFilename = EXT:mksearch/locallang.xml
+    locallangFilename = EXT:mksearch/Resources/Private/Language/locallang.xlf
 }
 
 tt_content.list.20.tx_mksearch =< plugin.tx_mksearch

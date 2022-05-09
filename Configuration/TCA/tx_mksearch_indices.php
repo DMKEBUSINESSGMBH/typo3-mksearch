@@ -2,7 +2,7 @@
 
 return [
     'ctrl' => [
-        'title' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices',
+        'title' => 'LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_indices',
         'label' => 'title',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
@@ -21,7 +21,7 @@ return [
     'columns' => [
         'hidden' => [
             'exclude' => 1,
-            'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices.hidden',
+            'label' => 'LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_indices.hidden',
             'config' => [
                 'type' => 'check',
                 'default' => '0',
@@ -29,7 +29,7 @@ return [
         ],
         'title' => [
             'exclude' => 0,
-            'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices.title',
+            'label' => 'LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_indices.title',
             'config' => [
                 'type' => 'input',
                 'size' => '30',
@@ -39,7 +39,7 @@ return [
         ],
         'description' => [
             'exclude' => 1,
-            'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices.description',
+            'label' => 'LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_indices.description',
             'config' => [
                 'type' => 'text',
                 'cols' => '30',
@@ -48,7 +48,7 @@ return [
         ],
         'name' => [
             'exclude' => 0,
-            'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices.name',
+            'label' => 'LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_indices.name',
             'config' => [
                 'type' => 'input',
                 'size' => '30',
@@ -58,7 +58,7 @@ return [
         ],
         'composites' => [
             'exclude' => 0,
-            'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices.composites',
+            'label' => 'LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_indices.composites',
             'config' => [
                 'type' => 'select',
                 'renderType' => 'selectMultipleSideBySide',
@@ -77,13 +77,13 @@ return [
         ],
         'engine' => [
             'exclude' => 1,
-            'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices_engine',
+            'label' => 'LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_indices_engine',
             'config' => [
                 'type' => 'radio',
                 'items' => [
-                    ['LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices_engine_zendlucene', 'zend_lucene'],
-                    ['LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices_engine_solr', 'solr'],
-                    ['LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices_engine_elasticsearch', 'elasticsearch'],
+                    ['LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_indices_engine_zendlucene', 'zend_lucene'],
+                    ['LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_indices_engine_solr', 'solr'],
+                    ['LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_indices_engine_elasticsearch', 'elasticsearch'],
                 ],
                 'eval' => 'required',
                 'default' => 'zend_lucene',
@@ -92,12 +92,12 @@ return [
         ],
         'solrversion' => [
             'exclude' => 1,
-            'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices_solrversion',
+            'label' => 'LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_indices_solrversion',
             'config' => [
                 'type' => 'radio',
                 'items' => [
-                    ['LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices_solrversion_35', 35],
-                    ['LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indices_solrversion_40', 40],
+                    ['LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_indices_solrversion_35', 35],
+                    ['LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_indices_solrversion_40', 40],
                 ],
                 'default' => 35,
             ],
@@ -105,7 +105,7 @@ return [
         ],
         'configuration' => [
             'exclude' => 0,
-            'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indexerconfigs.configuration',
+            'label' => 'LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_indexerconfigs.configuration',
             'config' => [
                 'type' => 'text',
                 'cols' => '200',

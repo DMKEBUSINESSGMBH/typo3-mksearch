@@ -2,7 +2,7 @@
 
 return [
     'ctrl' => [
-        'title' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_configcomposites',
+        'title' => 'LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_configcomposites',
         'label' => 'title',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
@@ -20,7 +20,7 @@ return [
     'columns' => [
         'hidden' => [
             'exclude' => 1,
-            'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_configcomposites.hidden',
+            'label' => 'LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_configcomposites.hidden',
             'config' => [
                 'type' => 'check',
                 'default' => '0',
@@ -28,7 +28,7 @@ return [
         ],
         'title' => [
             'exclude' => 0,
-            'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_configcomposites.title',
+            'label' => 'LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_configcomposites.title',
             'config' => [
                 'type' => 'input',
                 'size' => '30',
@@ -38,7 +38,7 @@ return [
         ],
         'description' => [
             'exclude' => 0,
-            'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_configcomposites.description',
+            'label' => 'LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_configcomposites.description',
             'config' => [
                 'type' => 'text',
                 'cols' => '30',
@@ -47,7 +47,7 @@ return [
         ],
         'indices' => [
             'exclude' => 0,
-            'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_configcomposites.indices',
+            'label' => 'LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_configcomposites.indices',
             'config' => [
                 'type' => 'select',
                 'renderType' => 'selectMultipleSideBySide',
@@ -67,7 +67,7 @@ return [
         ],
         'configs' => [
             'exclude' => 0,
-            'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_configcomposites.configs',
+            'label' => 'LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_configcomposites.configs',
             'config' => [
                 'type' => 'select',
                 'renderType' => 'selectMultipleSideBySide',
@@ -86,7 +86,7 @@ return [
         ],
         'configuration' => [
             'exclude' => 0,
-            'label' => 'LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_configcomposites.configuration',
+            'label' => 'LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_configcomposites.configuration',
             'config' => [
                 'type' => 'text',
                 'cols' => '200',

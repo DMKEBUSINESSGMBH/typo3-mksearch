@@ -8,7 +8,7 @@
         <sDEF>
             <ROOT>
                 <TCEforms>
-                    <sheetTitle>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.tab.action</sheetTitle>
+                    <sheetTitle>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.tab.action</sheetTitle>
                 </TCEforms>
 
                 <type>array</type>
@@ -17,25 +17,25 @@
                     <action> <!-- Bezeichner ist frei wählbar -->
                         <TCEforms>
                             <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.tab.action</label>
+                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.tab.action</label>
                             <config>
                                 <type>select</type>
                                 <renderType>selectSingle</renderType>
                                 <items type="array">
                                     <numIndex index="0" type="array">
-                                        <numIndex index="0">LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.action.searchLucene</numIndex>
+                                        <numIndex index="0">LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.action.searchLucene</numIndex>
                                         <numIndex index="1">tx_mksearch_action_Search</numIndex>
                                     </numIndex>
                                     <numIndex index="10" type="array">
-                                        <numIndex index="0">LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.action.searchSolr</numIndex>
+                                        <numIndex index="0">LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.action.searchSolr</numIndex>
                                         <numIndex index="1">tx_mksearch_action_SearchSolr</numIndex>
                                     </numIndex>
                                     <numIndex index="20" type="array">
-                                        <numIndex index="0">LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.action.elasticSearch</numIndex>
+                                        <numIndex index="0">LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.action.elasticSearch</numIndex>
                                         <numIndex index="1">tx_mksearch_action_ElasticSearch</numIndex>
                                     </numIndex>
                                     <numIndex index="100" type="array">
-                                        <numIndex index="0">LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.action.showHit</numIndex>
+                                        <numIndex index="0">LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.action.showHit</numIndex>
                                         <numIndex index="1">tx_mksearch_action_ShowHit</numIndex>
                                     </numIndex>
                                 </items>
@@ -52,14 +52,14 @@
         <s_searchlucene>
             <ROOT>
                 <TCEforms>
-                    <sheetTitle>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.action.searchLucene</sheetTitle>
+                    <sheetTitle>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.action.searchLucene</sheetTitle>
                 </TCEforms>
                 <type>array</type>
                 <el>
                     <searchlucene.usedIndex>
                         <TCEforms>
                             <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.usedIndex</label>
+                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.usedIndex</label>
                             <config>
                                 <type>select</type>
                                 <renderType>selectSingle</renderType>
@@ -74,7 +74,7 @@
                     <searchlucene.filter.options.debug>
                         <TCEforms>
                             <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.filter.debugQuery</label>
+                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.filter.debugQuery</label>
                             <config>
                               <type>check</type>
                             </config>
@@ -83,7 +83,7 @@
                     <searchlucene.filter.config.template>
                         <TCEforms>
                             <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.searchFormTemplate</label>
+                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.searchFormTemplate</label>
                             <config>
                                 <type>input</type>
                                 <size>24</size>
@@ -110,7 +110,7 @@
                     <searchluceneTemplate>
                         <TCEforms>
                             <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.resultListTemplate</label>
+                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.resultListTemplate</label>
                             <config>
                                 <type>input</type>
                                 <size>24</size>
@@ -137,7 +137,7 @@
                     <searchlucene.filter.forceSearch>
                         <TCEforms>
                             <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.force</label>
+                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.force</label>
                             <config>
                                 <type>check</type>
                             </config>
@@ -149,14 +149,14 @@
         <s_searchsolr>
             <ROOT>
                 <TCEforms>
-                    <sheetTitle>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.action.searchSolr</sheetTitle>
+                    <sheetTitle>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.action.searchSolr</sheetTitle>
                 </TCEforms>
                 <type>array</type>
                 <el>
                     <searchsolr.usedIndex>
                         <TCEforms>
                             <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.usedIndex</label>
+                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.usedIndex</label>
                             <config>
                                 <type>select</type>
                                 <renderType>selectSingle</renderType>
@@ -178,17 +178,17 @@
                     <searchsolr.filter.confid>
                         <TCEforms>
                             <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.filter.confid</label>
+                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.filter.confid</label>
                             <config>
                                 <type>select</type>
                                 <renderType>selectSingle</renderType>
                                 <items type="array">
                                   <numIndex index="0" type="array">
-                                    <numIndex index="0">LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.filter.confid.default</numIndex>
+                                    <numIndex index="0">LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.filter.confid.default</numIndex>
                                     <numIndex index="1">default</numIndex>
                                   </numIndex>
                                   <numIndex index="10" type="array">
-                                    <numIndex index="0">LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.filter.confid.dismax</numIndex>
+                                    <numIndex index="0">LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.filter.confid.dismax</numIndex>
                                     <numIndex index="1">dismax</numIndex>
                                   </numIndex>
                                 </items>
@@ -202,7 +202,7 @@
                     <searchsolr.requestHandler>
                         <TCEforms>
                             <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.requestHandler</label>
+                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.requestHandler</label>
                             <config>
                                 <type>input</type>
                                 <size>50</size>
@@ -214,7 +214,7 @@
                     <searchsolr.filter._overwrite.options.limit>
                         <TCEforms>
                             <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.limit</label>
+                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.limit</label>
                             <config>
                                 <type>input</type>
                                 <size>5</size>
@@ -227,7 +227,7 @@
                     <searchsolr.filter._overwrite.force>
                         <TCEforms>
                             <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.force</label>
+                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.force</label>
                             <config>
                                 <type>check</type>
                             </config>
@@ -236,7 +236,7 @@
                     <searchsolr.autocomplete.enable>
                         <TCEforms>
                             <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.enableAutoComplete</label>
+                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.enableAutoComplete</label>
                             <config>
                                 <type>check</type>
                             </config>
@@ -245,7 +245,7 @@
                     <searchsolr.autocomplete.includeJquery>
                         <TCEforms>
                             <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.includeJquery</label>
+                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.includeJquery</label>
                             <config>
                                 <type>check</type>
                             </config>
@@ -254,7 +254,7 @@
                     <searchsolr.autocomplete.includeJqueryUiCore>
                         <TCEforms>
                             <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.includeJqueryUiCore</label>
+                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.includeJqueryUiCore</label>
                             <config>
                                 <type>check</type>
                             </config>
@@ -263,7 +263,7 @@
                     <searchsolr.autocomplete.includeJqueryUiAutocomplete>
                         <TCEforms>
                             <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.includeJqueryUiAutocomplete</label>
+                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.includeJqueryUiAutocomplete</label>
                             <config>
                                 <type>check</type>
                             </config>
@@ -273,7 +273,7 @@
                     <searchsolr.filter._overwrite.options.debug>
                         <TCEforms>
                             <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.filter.debugQuery</label>
+                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.filter.debugQuery</label>
                             <config>
                               <type>check</type>
                             </config>
@@ -282,7 +282,7 @@
                     <searchsolr.filter._overwrite.options.facet.fields>
                         <TCEforms>
                             <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.facetfields</label>
+                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.facetfields</label>
                             <config>
                                 <type>input</type>
                                 <size>50</size>
@@ -294,7 +294,7 @@
                     <searchsolr.filter._overwrite.options.group.enable>
                         <TCEforms>
                             <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.options.group.enable</label>
+                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.options.group.enable</label>
                             <config>
                                 <type>check</type>
                                 <defautl>1</defautl>
@@ -304,7 +304,7 @@
                     <searchsolr.filter._overwrite.options.group.useNumberOfGroupsAsSearchResultCount>
                         <TCEforms>
                             <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.options.group.useNumberOfGroupsAsSearchResultCount</label>
+                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.options.group.useNumberOfGroupsAsSearchResultCount</label>
                             <config>
                                 <type>check</type>
                                 <defautl>1</defautl>
@@ -314,7 +314,7 @@
                     <searchsolr.filter._overwrite.options.group.field>
                         <TCEforms>
                             <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.options.group.field</label>
+                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.options.group.field</label>
                             <config>
                                 <type>input</type>
                                 <size>50</size>
@@ -327,7 +327,7 @@
                     <searchsolr.filter>
                         <TCEforms>
                             <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.filterClass</label>
+                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.filterClass</label>
                             <config>
                                 <type>input</type>
                                 <size>50</size>
@@ -340,7 +340,7 @@
                     <searchsolr.mainmarkerclass>
                         <TCEforms>
                             <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.mainmarkerclass</label>
+                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.mainmarkerclass</label>
                             <config>
                                 <type>input</type>
                                 <size>50</size>
@@ -353,7 +353,7 @@
                     <searchsolr.filter._overwrite.template.subpart>
                         <TCEforms>
                             <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.mainsubpartForm</label>
+                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.mainsubpartForm</label>
                             <config>
                                 <type>input</type>
                                 <size>50</size>
@@ -366,7 +366,7 @@
                     <searchsolr.filter._overwrite.template.file>
                         <TCEforms>
                             <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.searchFormTemplate</label>
+                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.searchFormTemplate</label>
                             <config>
                                 <type>input</type>
                                 <size>24</size>
@@ -393,7 +393,7 @@
                     <searchsolr.mainsubpart>
                         <TCEforms>
                             <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.mainsubpartList</label>
+                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.mainsubpartList</label>
                             <config>
                                 <type>input</type>
                                 <size>50</size>
@@ -406,7 +406,7 @@
                     <searchsolrTemplate>
                         <TCEforms>
                             <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.resultListTemplate</label>
+                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.resultListTemplate</label>
                             <config>
                                 <type>input</type>
                                 <size>50</size>
@@ -437,14 +437,14 @@
         <s_elasticsearch>
             <ROOT>
                 <TCEforms>
-                    <sheetTitle>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.action.elasticSearch</sheetTitle>
+                    <sheetTitle>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.action.elasticSearch</sheetTitle>
                 </TCEforms>
                 <type>array</type>
                 <el>
                     <elasticsearch.usedIndex>
                         <TCEforms>
                             <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.usedIndex</label>
+                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.usedIndex</label>
                             <config>
                                 <type>select</type>
                                 <renderType>selectSingle</renderType>
@@ -459,7 +459,7 @@
                     <elasticsearch.filter.options.debug>
                         <TCEforms>
                             <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.filter.debugQuery</label>
+                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.filter.debugQuery</label>
                             <config>
                               <type>check</type>
                             </config>
@@ -468,7 +468,7 @@
                     <elasticsearch.filter.template>
                         <TCEforms>
                             <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.searchFormTemplate</label>
+                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.searchFormTemplate</label>
                             <config>
                                 <type>input</type>
                                 <size>24</size>
@@ -495,7 +495,7 @@
                     <elasticsearchTemplate>
                         <TCEforms>
                             <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.resultListTemplate</label>
+                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.resultListTemplate</label>
                             <config>
                                 <type>input</type>
                                 <size>24</size>
@@ -522,7 +522,7 @@
                     <elasticsearch.filter.forceSearch>
                         <TCEforms>
                             <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.force</label>
+                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.force</label>
                             <config>
                                 <type>check</type>
                             </config>
@@ -535,14 +535,14 @@
         <s_showhit>
             <ROOT>
                 <TCEforms>
-                    <sheetTitle>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.action.showHit</sheetTitle>
+                    <sheetTitle>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.action.showHit</sheetTitle>
                 </TCEforms>
                 <type>array</type>
                 <el>
                     <showhit.usedIndex>
                         <TCEforms>
                             <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.usedIndex</label>
+                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.usedIndex</label>
                             <config>
                                 <type>select</type>
                                 <renderType>selectSingle</renderType>
@@ -562,7 +562,7 @@
                     <showhit.extkey>
                         <TCEforms>
                             <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indexerconfigs.extkey</label>
+                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_indexerconfigs.extkey</label>
                             <config>
                                 <type>select</type>
                                 <renderType>selectSingle</renderType>
@@ -582,7 +582,7 @@
                     <showhit.contenttype>
                         <TCEforms>
                             <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/locallang_db.xml:tx_mksearch_indexerconfigs.contenttype</label>
+                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_indexerconfigs.contenttype</label>
                             <config>
                                 <type>select</type>
                                 <renderType>selectSingle</renderType>
@@ -604,7 +604,7 @@
                     <showhit.uidParamName>
                         <TCEforms>
                             <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.uidParamName</label>
+                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.uidParamName</label>
                             <config>
                                 <type>input</type>
                                 <size>50</size>
@@ -617,7 +617,7 @@
                     <showhit.template.markerclass>
                         <TCEforms>
                             <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.mainmarkerclass</label>
+                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.mainmarkerclass</label>
                             <config>
                                 <type>input</type>
                                 <size>50</size>
@@ -630,7 +630,7 @@
                     <showhit.template.subpart>
                         <TCEforms>
                             <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.mainsubpartList</label>
+                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.mainsubpartList</label>
                             <config>
                                 <type>input</type>
                                 <size>50</size>
@@ -643,7 +643,7 @@
                     <showhitTemplate>
                         <TCEforms>
                             <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.showHitTemplate</label>
+                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.showHitTemplate</label>
                             <config>
                                 <type>input</type>
                                 <size>50</size>
@@ -673,14 +673,14 @@
         <s_softlink>
             <ROOT>
                 <TCEforms>
-                    <sheetTitle>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.tab.softlink</sheetTitle>
+                    <sheetTitle>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.tab.softlink</sheetTitle>
                 </TCEforms>
                 <type>array</type>
                 <el>
                     <softlink.enable>
                         <TCEforms>
                             <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/locallang_db.xml:plugin_common_enable</label>
+                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin_common_enable</label>
                             <config>
                                 <type>check</type>
                             </config>
@@ -746,14 +746,14 @@
         <s_tssetup>
             <ROOT>
                 <TCEforms>
-                    <sheetTitle>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.tab.tssetup</sheetTitle>
+                    <sheetTitle>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.tab.tssetup</sheetTitle>
                 </TCEforms>
                 <type>array</type>
                 <el>
                     <flexformTS>
                         <TCEforms>
                             <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.flexform.tssetup</label>
+                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.tssetup</label>
                             <config>
                                 <type>text</type>
                                 <cols>80</cols>

@@ -387,25 +387,17 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
             return [];
         }
 
-        if (1 != $GLOBALS['TYPO3_CONF_VARS']['MKSEARCH_testmode']) {
-            $ret = \Sys25\RnBase\Database\Connection::getInstance()->doUpdate(
-                self::$queueTable,
-                'uid IN ('.implode(',', $uids).')',
-                ['deleted' => 1, 'being_indexed' => 0, 'lastupdate' => date('Y-m-d H:i:s')]
-            );
-            $this->deleteOldQueueEntries();
-            \Sys25\RnBase\Utility\Logger::info(
-                'Indexing run finished with '.$ret.' items executed.',
-                'mksearch',
-                ['data' => $data]
-            );
-        } else {
-            \Sys25\RnBase\Utility\Logger::info(
-                'Indexing run finished in test mode. Queue not deleted!',
-                'mksearch',
-                ['data' => $data]
-            );
-        }
+        $ret = \Sys25\RnBase\Database\Connection::getInstance()->doUpdate(
+            self::$queueTable,
+            'uid IN ('.implode(',', $uids).')',
+            ['deleted' => 1, 'being_indexed' => 0, 'lastupdate' => date('Y-m-d H:i:s')]
+        );
+        $this->deleteOldQueueEntries();
+        \Sys25\RnBase\Utility\Logger::info(
+            'Indexing run finished with '.$ret.' items executed.',
+            'mksearch',
+            ['data' => $data]
+        );
 
         return $rows;
     }
@@ -478,7 +470,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
                                 // the first config will be overwritten by the second one
                                 foreach ($indexConfig[$extKey.'.'][$contentType.'.'] as $aConfigByContentType) {
                                     // config mit der default config mergen, falls vorhanden
-                                    if (is_array($indexConfig['default.'][$extKey.'.'][$contentType.'.'])) {
+                                    if (is_array($indexConfig['default.'][$extKey.'.'][$contentType.'.'] ?? false)) {
                                         $aConfigByContentType = \Sys25\RnBase\Utility\Arrays::mergeRecursiveWithOverrule(
                                             $indexConfig['default.'][$extKey.'.'][$contentType.'.'],
                                             $aConfigByContentType
@@ -590,9 +582,10 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
         array $record,
         tx_mksearch_interface_IndexerDocument $indexDocument
     ) {
-        $workspacesToIndex = $configurationByContentType['workspaceIds'] ?
-            \Sys25\RnBase\Utility\Strings::trimExplode(',', $configurationByContentType['workspaceIds']) :
-            [0];
+        $workspacesToIndex = \Sys25\RnBase\Utility\Strings::trimExplode(
+            ',',
+            $configurationByContentType['workspaceIds'] ?? '0'
+        );
 
         $isInIndexableWorkspace = false;
         foreach ($workspacesToIndex as $workspaceId) {
@@ -618,27 +611,21 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
      */
     protected function addFixedFields(tx_mksearch_interface_IndexerDocument $indexDoc, $options)
     {
-        $aFixedFields = $options['fixedFields.'];
-        // without config there is nothing to do
-        if (empty($aFixedFields)) {
-            return $indexDoc;
-        }
-
-        foreach ($aFixedFields as $sFixedFieldKey => $mFixedFieldValue) {
+        foreach (($options['fixedFields.'] ?? []) as $fixedFieldKey => $fixedFieldValue) {
             // config is something like
             // site_area{
             // 0 = first
             // 1 = second
             // }
-            if (is_array($mFixedFieldValue)) {
+            if (is_array($fixedFieldValue)) {
                 // if we have an array we have to delete the
                 // trailing dot of the key name because this
                 // seems senseless to add
-                $sFixedFieldKey = substr($sFixedFieldKey, 0, strlen($sFixedFieldKey) - 1);
+                $fixedFieldKey = substr($fixedFieldKey, 0, strlen($fixedFieldKey) - 1);
             }
             // else the config is something like
             // site_area = first
-            $indexDoc->addField($sFixedFieldKey, $mFixedFieldValue);
+            $indexDoc->addField($fixedFieldKey, $fixedFieldValue);
         }
 
         return $indexDoc;
@@ -704,7 +691,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
         $query .= 'SELECT DISTINCT '.$fullQuoted.', '.$uidName.
             ', CONCAT(\''.$resolver.'\') FROM '.$from.$where;
 
-        if ($options['debug']) {
+        if ($options['debug'] ?? false) {
             \Sys25\RnBase\Utility\Debug::debug(
                 $query,
                 'class.tx_mksearch_srv_Search.php : '.__LINE__

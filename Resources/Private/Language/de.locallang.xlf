@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2022-05-09T10:50:13Z" product-name="mksearch">
+		<header/>
+		<body>
+			<trans-unit id="label_search_foundresults" resname="label_search_foundresults"  approved="yes">
+				<source>Number of search results found:</source>
+				<target>Anzahl der gefundenen Ergebnisse:</target>
+			</trans-unit>
+			<trans-unit id="label_search_term_was" resname="label_search_term_was"  approved="yes">
+				<source>term was:</source>
+				<target>Suchbegriff war:</target>
+			</trans-unit>
+			<trans-unit id="label_search_term" resname="label_search_term"  approved="yes">
+				<source>term</source>
+				<target>Suchbegriff</target>
+			</trans-unit>
+			<trans-unit id="label_search_searchterm" resname="label_search_searchterm"  approved="yes">
+				<source>Search for:</source>
+				<target>Suche</target>
+			</trans-unit>
+			<trans-unit id="label_search_options" resname="label_search_options"  approved="yes">
+				<source>Options:</source>
+				<target>Optionen:</target>
+			</trans-unit>
+			<trans-unit id="label_search_options_standard" resname="label_search_options_standard"  approved="yes">
+				<source>Standard search:</source>
+				<target>Standardsuche:</target>
+			</trans-unit>
+			<trans-unit id="label_search_options_standard_label" resname="label_search_options_standard_label"  approved="yes">
+				<source>Use this type for standard search options.</source>
+				<target>Verwenden Sie diesen Typ für Standard-Suchmöglichkeiten.</target>
+			</trans-unit>
+			<trans-unit id="label_search_options_standard_hint" resname="label_search_options_standard_hint"  approved="yes">
+				<source>Note: You may prepend individual words with a &quot;-&quot; to exclude documents containing this word.</source>
+				<target>Hinweis: Sie können einzelnen Wörter ein &quot;-&quot; voranstellen, um Dokumente mit diesem Wort auszuschließen.</target>
+			</trans-unit>
+			<trans-unit id="label_search_options_standard_combination" resname="label_search_options_standard_combination"  approved="yes">
+				<source>Combination:</source>
+				<target>Kombination:</target>
+			</trans-unit>
+			<trans-unit id="label_search_options_standard_combination_none" resname="label_search_options_standard_combination_none"  approved="yes">
+				<source>None (same as or at the moment)</source>
+				<target>Standard (zurzeit das selbe wie or)</target>
+			</trans-unit>
+			<trans-unit id="label_search_options_standard_combination_free" resname="label_search_options_standard_combination_free"  approved="yes">
+				<source>Free syntax</source>
+				<target>Freie Syntax</target>
+			</trans-unit>
+			<trans-unit id="label_search_options_standard_combination_or" resname="label_search_options_standard_combination_or"  approved="yes">
+				<source>Find either word</source>
+				<target>Einzelne Wörter suchen</target>
+			</trans-unit>
+			<trans-unit id="label_search_options_standard_combination_and" resname="label_search_options_standard_combination_and"  approved="yes">
+				<source>Find all words</source>
+				<target>Alle Wörter suchen</target>
+			</trans-unit>
+			<trans-unit id="label_search_options_standard_combination_exact" resname="label_search_options_standard_combination_exact"  approved="yes">
+				<source>Find exact phrase</source>
+				<target>Den exakten Ausdruck</target>
+			</trans-unit>
+			<trans-unit id="label_search_options_standard_others" resname="label_search_options_standard_others"  approved="yes">
+				<source>Others:</source>
+				<target>Andere:</target>
+			</trans-unit>
+			<trans-unit id="label_search_options_standard_others_fuzzy" resname="label_search_options_standard_others_fuzzy"  approved="yes">
+				<source>Fuzzy search</source>
+				<target>Fuzzy-Suche</target>
+			</trans-unit>
+			<trans-unit id="label_search_options_standard_others_fuzzy_lucene" resname="label_search_options_standard_others_fuzzy_lucene"  approved="yes">
+				<source>Fuzzy search (not yet implemented!)</source>
+				<target>Fuzzy-Suche (noch nicht implementiert!)</target>
+			</trans-unit>
+			<trans-unit id="label_search_options_standard_others_contenttypes" resname="label_search_options_standard_others_contenttypes"  approved="yes">
+				<source>Search within content types only (not yet implemented!)</source>
+				<target>Suche innerhalb der Content-Typen (noch nicht  implementiert!)</target>
+			</trans-unit>
+			<trans-unit id="label_search_options_advanced" resname="label_search_options_advanced"  approved="yes">
+				<source>Advanced search:</source>
+				<target>Erweiterte Suche:</target>
+			</trans-unit>
+			<trans-unit id="label_search_options_advanced_label" resname="label_search_options_advanced_label"  approved="yes">
+				<source>Use this type if you want to form complex (boolean) searches.</source>
+				<target>Verwenden Sie diesen Typ, wenn Sie komplexe (boolean) sucht Form wünschen.</target>
+			</trans-unit>
+			<trans-unit id="label_search_submit" resname="label_search_submit"  approved="yes">
+				<source>Submit search</source>
+				<target>Suche abschicken</target>
+			</trans-unit>
+			<trans-unit id="label_search_yoursearchtermwas" resname="label_search_yoursearchtermwas"  approved="yes">
+				<source>Your search term was:</source>
+				<target>Ihr Suchbegriff war:</target>
+			</trans-unit>
+			<trans-unit id="label_search_readmore" resname="label_search_readmore"  approved="yes">
+				<source>read more</source>
+				<target>mehr lesen</target>
+			</trans-unit>
+			<trans-unit id="label_search_readmorefaqs" resname="label_search_readmorefaqs"  approved="yes">
+				<source>read more related questions</source>
+				<target>mehr verwandte Fragen</target>
+			</trans-unit>
+			<trans-unit id="label_search_noresultsfound" resname="label_search_noresultsfound"  approved="yes">
+				<source>Your search did not return any results.</source>
+				<target>Ihre Suche brachte keine Ergebnisse.</target>
+			</trans-unit>
+			<trans-unit id="label_search_reset" resname="label_search_reset"  approved="yes">
+				<source>reset Search</source>
+				<target>Suche zurücksetzen</target>
+			</trans-unit>
+			<trans-unit id="label_score" resname="label_score"  approved="yes">
+				<source>Score</source>
+				<target>Relevanz</target>
+			</trans-unit>
+			<trans-unit id="label_time_asc" resname="label_time_asc"  approved="yes">
+				<source>Time ascending</source>
+				<target>Aktualität aufsteigend</target>
+			</trans-unit>
+			<trans-unit id="label_time_desc" resname="label_time_desc"  approved="yes">
+				<source>Time descending</source>
+				<target>Aktualität absteigend</target>
+			</trans-unit>
+			<trans-unit id="label_pagelimit_10" resname="label_pagelimit_10"  approved="yes">
+				<source>10 hits</source>
+				<target>10 Treffer</target>
+			</trans-unit>
+			<trans-unit id="label_pagelimit_50" resname="label_pagelimit_50"  approved="yes">
+				<source>50 hits</source>
+				<target>50 Treffer</target>
+			</trans-unit>
+			<trans-unit id="label_pagelimit_100" resname="label_pagelimit_100"  approved="yes">
+				<source>100 hits</source>
+				<target>100 Treffer</target>
+			</trans-unit>
+			<trans-unit id="ERROR_default" resname="ERROR_default"  approved="yes">
+				<source>There was an unexpected error!</source>
+				<target>Es gab einen unerwarteten Fehler!</target>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

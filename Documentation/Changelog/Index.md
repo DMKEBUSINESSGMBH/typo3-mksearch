@@ -1,6 +1,20 @@
 Changelog
 =========
 
+11.0.0
+-----
+
+- compatbility to TYPO3 10.4 and 11.5 only
+- all locallang files have been moved to Resources/Private/Language/
+- updated Elastica from 5.3 to 6.2
+- tx_mksearch_util_Tree was removed
+
+
+10.1.5
+-----
+
+- Bugfixes
+
 10.1.4
 -----
 

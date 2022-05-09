@@ -82,10 +82,11 @@ class tx_mksearch_service_internal_Composite extends tx_mksearch_service_interna
             ],
         ];
         $tmpCfg = $this->search($fields, $options);
+        $typoScript = '';
         foreach ($tmpCfg as $oModel) {
-            $sTs .= "{\n".$oModel->getProperty('configuration')."\n}";
+            $typoScript .= "{\n".$oModel->getProperty('configuration')."\n}";
         }
 
-        return tx_mksearch_util_Misc::parseTsConfig($sTs);
+        return tx_mksearch_util_Misc::parseTsConfig($typoScript);
     }
 }

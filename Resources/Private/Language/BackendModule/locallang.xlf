@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+	<file source-language="en" datatype="plaintext" original="messages" date="2022-05-09T10:59:50Z" product-name="mksearch">
+		<header/>
+		<body>
+			<trans-unit id="title" resname="title" >
+				<source>MK Search</source>
+			</trans-unit>
+			<trans-unit id="func_config_indizes" resname="func_config_indizes" >
+				<source>Configure indizes</source>
+			</trans-unit>
+			<trans-unit id="func_keywords" resname="func_keywords" >
+				<source>Keywords</source>
+			</trans-unit>
+			<trans-unit id="func_config_indizesdblist" resname="func_config_indizesdblist" >
+				<source>Configure indizes (old db list)</source>
+			</trans-unit>
+			<trans-unit id="func_indize_indizes" resname="func_indize_indizes" >
+				<source>Indexing Queue</source>
+			</trans-unit>
+			<trans-unit id="func_solradmin" resname="func_solradmin" >
+				<source>Admin Panel</source>
+			</trans-unit>
+			<trans-unit id="label_no_page_selected" resname="label_no_page_selected" >
+				<source>No Page selected.</source>
+			</trans-unit>
+			<trans-unit id="label_handler_index" resname="label_handler_index" >
+				<source>Indizes</source>
+			</trans-unit>
+			<trans-unit id="label_handler_indexerconfig" resname="label_handler_indexerconfig" >
+				<source>Indexer Configuration</source>
+			</trans-unit>
+			<trans-unit id="label_handler_composite" resname="label_handler_composite" >
+				<source>Indexer Composites</source>
+			</trans-unit>
+			<trans-unit id="label_handler_adminsolr" resname="label_handler_adminsolr" >
+				<source>Solr</source>
+			</trans-unit>
+			<trans-unit id="label_no_indexers_found" resname="label_no_indexers_found" >
+				<source>No indexers defined on this page!</source>
+			</trans-unit>
+			<trans-unit id="label_configured_indexer_tables_head" resname="label_configured_indexer_tables_head" >
+				<source>Tables from configured indexers</source>
+			</trans-unit>
+			<trans-unit id="label_core_status_head" resname="label_core_status_head" >
+				<source>Core status</source>
+			</trans-unit>
+			<trans-unit id="label_triger_queue_head" resname="label_triger_queue_head" >
+				<source>Trigger indexing queue</source>
+			</trans-unit>
+			<trans-unit id="label_triger_queue_input" resname="label_triger_queue_input" >
+				<source>Trigger indexing queue</source>
+			</trans-unit>
+			<trans-unit id="label_triger_queue_items" resname="label_triger_queue_items" >
+				<source>Items</source>
+			</trans-unit>
+			<trans-unit id="label_queue_size_being_indexed" resname="label_queue_size_being_indexed" >
+				<source>Items currently being indexed</source>
+			</trans-unit>
+			<trans-unit id="label_trigger_being_indexed_items" resname="label_trigger_being_indexed_items" >
+				<source>Reset items currently being indexed. Items will be available in queue again for further indexing.</source>
+			</trans-unit>
+			<trans-unit id="label_trigger_reset_being_indexed_items" resname="label_trigger_reset_being_indexed_items" >
+				<source>Reset all items with status &quot;being_indexed&quot;</source>
+			</trans-unit>
+			<trans-unit id="label_queue_being_indexed_empty" resname="label_queue_being_indexed_empty" >
+				<source>no entries found being indexed in this time period</source>
+			</trans-unit>
+			<trans-unit id="label_items_being_indexed_resetted" resname="label_items_being_indexed_resetted" >
+				<source>items with status &quot;being_indexed&quot; resetted</source>
+			</trans-unit>
+			<trans-unit id="label_reset_options" resname="label_reset_options" >
+				<source>Reset options</source>
+			</trans-unit>
+			<trans-unit id="label_reset_deleted" resname="label_reset_deleted" >
+				<source>Add deleted records to queue</source>
+			</trans-unit>
+			<trans-unit id="label_reset_hidden" resname="label_reset_hidden" >
+				<source>Add hidden records to queue</source>
+			</trans-unit>
+			<trans-unit id="label_queue_cleared" resname="label_queue_cleared" >
+				<source>The elements of the following tables are removed from the index queue: </source>
+			</trans-unit>
+			<trans-unit id="label_queue_reseted" resname="label_queue_reseted" >
+				<source>The elements of the following tables are put into the indexing queue: </source>
+			</trans-unit>
+			<trans-unit id="label_queue_indexed" resname="label_queue_indexed" >
+				<source>Indexing queue was triggered! Records processed: </source>
+			</trans-unit>
+			<trans-unit id="label_queue_runtime" resname="label_queue_runtime" >
+				<source>Runtime</source>
+			</trans-unit>
+			<trans-unit id="label_queue_indexed_empty" resname="label_queue_indexed_empty" >
+				<source>Nothing to do at the moment - indexing queue is empty.</source>
+			</trans-unit>
+			<trans-unit id="label_queue_state_head" resname="label_queue_state_head" >
+				<source>Status</source>
+			</trans-unit>
+			<trans-unit id="label_queue_size" resname="label_queue_size" >
+				<source>global size:</source>
+			</trans-unit>
+			<trans-unit id="label_table_count" resname="label_table_count" >
+				<source>tables found.</source>
+			</trans-unit>
+			<trans-unit id="label_table_name" resname="label_table_name" >
+				<source>Table</source>
+			</trans-unit>
+			<trans-unit id="label_table_queuecount" resname="label_table_queuecount" >
+				<source>Queue (Global)</source>
+			</trans-unit>
+			<trans-unit id="label_table_reset" resname="label_table_reset" >
+				<source>Reset (In this Root Page)</source>
+			</trans-unit>
+			<trans-unit id="label_table_resetG" resname="label_table_resetG" >
+				<source>Reset (Global)</source>
+			</trans-unit>
+			<trans-unit id="label_table_clear" resname="label_table_clear" >
+				<source>Clear (Global)</source>
+			</trans-unit>
+			<trans-unit id="label_solr_cores" resname="label_solr_cores" >
+				<source>Solr cores</source>
+			</trans-unit>
+			<trans-unit id="label_solr_nocores_found" resname="label_solr_nocores_found" >
+				<source>No Solr cores found on current page.</source>
+			</trans-unit>
+			<trans-unit id="label_solr_nocore_found" resname="label_solr_nocore_found" >
+				<source>No solr core found!</source>
+			</trans-unit>
+			<trans-unit id="label_solr_delete_query" resname="label_solr_delete_query" >
+				<source>Submit raw delete query</source>
+			</trans-unit>
+			<trans-unit id="label_solr_submit_delete" resname="label_solr_submit_delete" >
+				<source>Submit delete</source>
+			</trans-unit>
+			<trans-unit id="label_solr_delete_successful" resname="label_solr_delete_successful" >
+				<source>Delete successfully submitted.</source>
+			</trans-unit>
+			<trans-unit id="label_common_start" resname="label_common_start" >
+				<source>Requestinfos</source>
+			</trans-unit>
+			<trans-unit id="label_common_end" resname="label_common_end" >
+				<source>Requestinfos</source>
+			</trans-unit>
+			<trans-unit id="label_common_warning" resname="label_common_warning" >
+				<source>Warning</source>
+			</trans-unit>
+			<trans-unit id="label_common_error" resname="label_common_error" >
+				<source>Error</source>
+			</trans-unit>
+			<trans-unit id="label_common_info" resname="label_common_info" >
+				<source>Information</source>
+			</trans-unit>
+			<trans-unit id="label_search_form" resname="label_search_form" >
+				<source>Filter</source>
+			</trans-unit>
+			<trans-unit id="label_buttons" resname="label_buttons" >
+				<source>Functions</source>
+			</trans-unit>
+			<trans-unit id="label_pager" resname="label_pager" >
+				<source>Navigation</source>
+			</trans-unit>
+			<trans-unit id="label_list" resname="label_list" >
+				<source>Results</source>
+			</trans-unit>
+			<trans-unit id="label_search" resname="label_search" >
+				<source>Free text search:</source>
+			</trans-unit>
+			<trans-unit id="label_hidden" resname="label_hidden" >
+				<source>Hidden entries:</source>
+			</trans-unit>
+			<trans-unit id="label_button_search" resname="label_button_search" >
+				<source>search</source>
+			</trans-unit>
+			<trans-unit id="label_select_hide_hidden" resname="label_select_hide_hidden" >
+				<source>Hide</source>
+			</trans-unit>
+			<trans-unit id="label_select_show_hidden" resname="label_select_show_hidden" >
+				<source>Show</source>
+			</trans-unit>
+			<trans-unit id="label_list_size" resname="label_list_size" >
+				<source>Entries found: </source>
+			</trans-unit>
+			<trans-unit id="confirmation_deletion" resname="confirmation_deletion" >
+				<source>Delete this record?</source>
+			</trans-unit>
+			<trans-unit id="label_uid" resname="label_uid" >
+				<source>ID</source>
+			</trans-unit>
+			<trans-unit id="label_tableheader_title" resname="label_tableheader_title" >
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="label_tableheader_core" resname="label_tableheader_core" >
+				<source>Core</source>
+			</trans-unit>
+			<trans-unit id="label_tableheader_name" resname="label_tableheader_name" >
+				<source>Name</source>
+			</trans-unit>
+			<trans-unit id="label_tableheader_engine" resname="label_tableheader_engine" >
+				<source>Engine</source>
+			</trans-unit>
+			<trans-unit id="label_tableheader_keyword" resname="label_tableheader_keyword" >
+				<source>Keyword</source>
+			</trans-unit>
+			<trans-unit id="label_tableheader_link" resname="label_tableheader_link" >
+				<source>Link</source>
+			</trans-unit>
+			<trans-unit id="label_tableheader_contenttype" resname="label_tableheader_contenttype" >
+				<source>ContentType</source>
+			</trans-unit>
+			<trans-unit id="label_tableheader_composites" resname="label_tableheader_composites" >
+				<source>Composites</source>
+			</trans-unit>
+			<trans-unit id="label_tableheader_indices" resname="label_tableheader_indices" >
+				<source>Indizes</source>
+			</trans-unit>
+			<trans-unit id="label_tableheader_configs" resname="label_tableheader_configs" >
+				<source>Configurations</source>
+			</trans-unit>
+			<trans-unit id="label_tableheader_actions" resname="label_tableheader_actions" >
+				<source> </source>
+			</trans-unit>
+			<trans-unit id="label_no_indizes" resname="label_no_indizes" >
+				<source>No indizes found.</source>
+			</trans-unit>
+			<trans-unit id="label_no_composites" resname="label_no_composites" >
+				<source>No indexer composites found.</source>
+			</trans-unit>
+			<trans-unit id="label_no_indexerconfigurations" resname="label_no_indexerconfigurations" >
+				<source>No indexer configurations found.</source>
+			</trans-unit>
+			<trans-unit id="label_add_keyword" resname="label_add_keyword" >
+				<source>add Keyword</source>
+			</trans-unit>
+			<trans-unit id="label_add_index" resname="label_add_index" >
+				<source>add Index</source>
+			</trans-unit>
+			<trans-unit id="label_add_indexerconfig" resname="label_add_indexerconfig" >
+				<source>add Indexer Configuration</source>
+			</trans-unit>
+			<trans-unit id="label_add_composite" resname="label_add_composite" >
+				<source>add Indexer Composite</source>
+			</trans-unit>
+			<trans-unit id="allow_url_fopen_deactivated_hint" resname="allow_url_fopen_deactivated_hint" >
+				<source>&lt;div class=&quot;message-error&quot; style=&quot;width:16px; height:16px; float:left;&quot;&gt;&lt;/div&gt;&lt;strong&gt;&lt;div style=&quot;background-color: #F6D3CF; height:16px; font-size: 15px;&quot;&gt;allow_url_fopen is not activated but mksearch is not configured to use curl for HTTP transport!&lt;/div&gt;&lt;/strong&gt;</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

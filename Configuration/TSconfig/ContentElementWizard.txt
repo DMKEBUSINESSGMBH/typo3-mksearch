@@ -2,8 +2,8 @@ mod.wizards.newContentElement.wizardItems.plugins {
     elements {
         mksearch {
             iconIdentifier = ext-mksearch-wizard-icon
-            title = LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.label
-            description = LLL:EXT:mksearch/locallang_db.xml:plugin.mksearch.description
+            title = LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.label
+            description = LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.description
             tt_content_defValues {
                 CType = list
                 list_type = tx_mksearch

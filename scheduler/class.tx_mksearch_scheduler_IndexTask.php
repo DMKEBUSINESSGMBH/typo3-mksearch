@@ -129,7 +129,7 @@ class tx_mksearch_scheduler_IndexTask extends \TYPO3\CMS\Scheduler\Task\Abstract
     public function getAdditionalInformation()
     {
         return sprintf(
-            $GLOBALS['LANG']->sL('LLL:EXT:mksearch/locallang_db.xml:scheduler_indexTask_taskinfo'),
+            $GLOBALS['LANG']->sL('LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:scheduler_indexTask_taskinfo'),
             $this->getAmountOfItems(),
             $this->getItemsInQueue()
         );

@@ -185,7 +185,7 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
                     ['Exception' => $e->getMessage(), 'fields' => $fields, 'options' => $options, 'URL' => $lastUrl]
                 );
             }
-            if ($options['debug']) {
+            if ($options['debug'] ?? false) {
                 \Sys25\RnBase\Utility\Debug::debug(
                     [
                         'Exception' => $e->getMessage(),
@@ -232,14 +232,14 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
             && is_array($conf = $configurations->get($typoScriptPathPageBrowser))
         ) {
             // PageBrowser initialisieren
-            $pageBrowserId = $conf['pbid'] ? $conf['pbid'] : 'search'.$configurations->getPluginId();
+            $pageBrowserId = $conf['pbid'] ?? 'search'.$configurations->getPluginId();
             /* @var $pageBrowser \Sys25\RnBase\Utility\PageBrowser */
             $pageBrowser = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Utility\PageBrowser::class, $pageBrowserId);
             // wenn bereits ein limit gesetzt ist, dann nutzen wir dieses, nicht das des pagebrowsers
             $pageSize = isset($options['limit']) ? $options['limit'] : intval($conf['limit']);
-            if ($conf['limitFromRequest']) {
-                $limitParam = $conf['limitFromRequest.']['param'] ? $conf['limitFromRequest.']['param'] : 'limit';
-                $limitQualifier = $conf['limitFromRequest.']['qualifier'] ? $conf['limitFromRequest.']['qualifier'] : '';
+            if ($conf['limitFromRequest'] ?? false) {
+                $limitParam = $conf['limitFromRequest.']['param'] ?? 'limit';
+                $limitQualifier = $conf['limitFromRequest.']['qualifier'] ?? '';
                 $size = $parameters->getInt($limitParam, $limitQualifier);
                 $pageSize = $size ? $size : $pageSize;
 
@@ -352,23 +352,28 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
 
         $configurationArray = $configurations->get($autocompleteTsPath);
 
-        $javascriptsPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::siteRelPath('mksearch').'res/js/';
         $jsScripts = [];
 
         if ($configurationArray['includeJquery']) {
-            $jsScripts[] = 'jquery-1.6.2.min.js';
+            $jsScripts[] = \TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName(
+                'EXT:mksearch/Resources/Public/JavaScript/jquery-1.6.2.min.js'
+            );
         }
         if ($configurationArray['includeJqueryUiCore']) {
-            $jsScripts[] = 'jquery-ui-1.8.15.core.min.js';
+            $jsScripts[] = \TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName(
+                'EXT:mksearch/Resources/Public/JavaScript/jquery-ui-1.8.15.core.min.js'
+            );
         }
         if ($configurationArray['includeJqueryUiAutocomplete']) {
-            $jsScripts[] = 'jquery-ui-1.8.15.autocomplete.min.js';
+            $jsScripts[] = \TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName(
+                'EXT:mksearch/Resources/Public/JavaScript/jquery-ui-1.8.15.autocomplete.min.js'
+            );
         }
 
         $pageRenderer = \Sys25\RnBase\Utility\TYPO3::getPageRenderer();
         if (!empty($jsScripts)) {
             foreach ($jsScripts as $javaScriptFilename) {
-                $pageRenderer->addJsLibrary($javaScriptFilename, $javascriptsPath.$javaScriptFilename);
+                $pageRenderer->addJsLibrary($javaScriptFilename, $javaScriptFilename);
             }
         }
 

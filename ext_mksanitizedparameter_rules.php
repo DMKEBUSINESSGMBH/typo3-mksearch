@@ -8,9 +8,9 @@ defined('TYPO3_MODE') || exit('Access denied.');
         // Also hier nix machen.
         'term' => FILTER_UNSAFE_RAW,
          'fq' => [
-             tx_mksanitizedparameters_Rules::DEFAULT_RULES_KEY => FILTER_UNSAFE_RAW,
+             \DMK\MkSanitizedParameters\Rules::DEFAULT_RULES_KEY => FILTER_UNSAFE_RAW,
          ],
      ],
  ];
 
-tx_mksanitizedparameters_Rules::addRulesForFrontend($rulesForFrontend);
+\DMK\MkSanitizedParameters\Rules::addRulesForFrontend($rulesForFrontend);

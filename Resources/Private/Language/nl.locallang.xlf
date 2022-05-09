@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+	<file source-language="en" target-language="nl" datatype="plaintext" original="messages" date="2022-05-09T10:50:13Z" product-name="mksearch">
+		<header/>
+		<body>
+			<trans-unit id="label_search_foundresults" resname="label_search_foundresults"  approved="yes">
+				<source>Number of search results found:</source>
+				<target>Aantal resultaten gevonden:</target>
+			</trans-unit>
+			<trans-unit id="label_search_term_was" resname="label_search_term_was"  approved="yes">
+				<source>term was:</source>
+				<target>Termijn was:</target>
+			</trans-unit>
+			<trans-unit id="label_search_term" resname="label_search_term"  approved="yes">
+				<source>term</source>
+				<target>Term</target>
+			</trans-unit>
+			<trans-unit id="label_search_searchterm" resname="label_search_searchterm"  approved="yes">
+				<source>Search for:</source>
+				<target>Zoeken</target>
+			</trans-unit>
+			<trans-unit id="label_search_options" resname="label_search_options"  approved="yes">
+				<source>Options:</source>
+				<target>Opties:</target>
+			</trans-unit>
+			<trans-unit id="label_search_options_standard" resname="label_search_options_standard"  approved="yes">
+				<source>Standard search:</source>
+				<target>standaard zoek:</target>
+			</trans-unit>
+			<trans-unit id="label_search_options_standard_label" resname="label_search_options_standard_label"  approved="yes">
+				<source>Use this type for standard search options.</source>
+				<target>Gebruik dit type voor de standaard zoekopties.</target>
+			</trans-unit>
+			<trans-unit id="label_search_options_standard_hint" resname="label_search_options_standard_hint"  approved="yes">
+				<source>Note: You may prepend individual words with a &quot;-&quot; to exclude documents containing this word.</source>
+				<target>Let op: U kunt afzonderlijke woorden prepend met een &quot;-&quot; om documenten met dit woord uit te sluiten.</target>
+			</trans-unit>
+			<trans-unit id="label_search_options_standard_combination" resname="label_search_options_standard_combination"  approved="yes">
+				<source>Combination:</source>
+				<target>Combinatie:</target>
+			</trans-unit>
+			<trans-unit id="label_search_options_standard_combination_none" resname="label_search_options_standard_combination_none"  approved="yes">
+				<source>None (same as or at the moment)</source>
+				<target>None</target>
+			</trans-unit>
+			<trans-unit id="label_search_options_standard_combination_free" resname="label_search_options_standard_combination_free"  approved="yes">
+				<source>Free syntax</source>
+				<target>Vrije syntaxis</target>
+			</trans-unit>
+			<trans-unit id="label_search_options_standard_combination_or" resname="label_search_options_standard_combination_or"  approved="yes">
+				<source>Find either word</source>
+				<target>Zoek ofwel woord</target>
+			</trans-unit>
+			<trans-unit id="label_search_options_standard_combination_and" resname="label_search_options_standard_combination_and"  approved="yes">
+				<source>Find all words</source>
+				<target>Zoek naar alle woorden</target>
+			</trans-unit>
+			<trans-unit id="label_search_options_standard_combination_exact" resname="label_search_options_standard_combination_exact"  approved="yes">
+				<source>Find exact phrase</source>
+				<target>Zoek exacte zin</target>
+			</trans-unit>
+			<trans-unit id="label_search_options_standard_others" resname="label_search_options_standard_others"  approved="yes">
+				<source>Others:</source>
+				<target>Anderen:</target>
+			</trans-unit>
+			<trans-unit id="label_search_options_standard_others_fuzzy" resname="label_search_options_standard_others_fuzzy"  approved="yes">
+				<source>Fuzzy search</source>
+				<target>Fuzzy zoeken</target>
+			</trans-unit>
+			<trans-unit id="label_search_options_standard_others_fuzzy_lucene" resname="label_search_options_standard_others_fuzzy_lucene"  approved="yes">
+				<source>Fuzzy search (not yet implemented!)</source>
+				<target>Fuzzy zoeken (not yet implemented!)</target>
+			</trans-unit>
+			<trans-unit id="label_search_options_standard_others_contenttypes" resname="label_search_options_standard_others_contenttypes"  approved="yes">
+				<source>Search within content types only (not yet implemented!)</source>
+				<target>Zoeken binnen slechts types inhoud (not yet implemented!)</target>
+			</trans-unit>
+			<trans-unit id="label_search_options_advanced" resname="label_search_options_advanced"  approved="yes">
+				<source>Advanced search:</source>
+				<target>Aeavanceerd zoeken:</target>
+			</trans-unit>
+			<trans-unit id="label_search_options_advanced_label" resname="label_search_options_advanced_label"  approved="yes">
+				<source>Use this type if you want to form complex (boolean) searches.</source>
+				<target>Gebruik dit type als u complexe (boolean) zoekopdrachten vormen.</target>
+			</trans-unit>
+			<trans-unit id="label_search_submit" resname="label_search_submit"  approved="yes">
+				<source>Submit search</source>
+				<target>Zoek indienen</target>
+			</trans-unit>
+			<trans-unit id="label_search_yoursearchtermwas" resname="label_search_yoursearchtermwas"  approved="yes">
+				<source>Your search term was:</source>
+				<target>Uw zoekterm was:</target>
+			</trans-unit>
+			<trans-unit id="label_search_readmore" resname="label_search_readmore"  approved="yes">
+				<source>read more</source>
+				<target>lees meer</target>
+			</trans-unit>
+			<trans-unit id="label_search_readmorefaqs" resname="label_search_readmorefaqs"  approved="yes">
+				<source>read more related questions</source>
+				<target>lees meer gerelateerde vragen</target>
+			</trans-unit>
+			<trans-unit id="label_search_noresultsfound" resname="label_search_noresultsfound"  approved="yes">
+				<source>Your search did not return any results.</source>
+				<target>Uw zoekopdracht heeft geen resultaten.</target>
+			</trans-unit>
+			<trans-unit id="label_search_reset" resname="label_search_reset"  approved="yes">
+				<source>reset Search</source>
+				<target>reset Zoeken</target>
+			</trans-unit>
+			<trans-unit id="label_score" resname="label_score"  approved="yes">
+				<source>Score</source>
+				<target/>
+			</trans-unit>
+			<trans-unit id="label_time_asc" resname="label_time_asc"  approved="yes">
+				<source>Time ascending</source>
+				<target/>
+			</trans-unit>
+			<trans-unit id="label_time_desc" resname="label_time_desc"  approved="yes">
+				<source>Time descending</source>
+				<target/>
+			</trans-unit>
+			<trans-unit id="label_pagelimit_10" resname="label_pagelimit_10"  approved="yes">
+				<source>10 hits</source>
+				<target/>
+			</trans-unit>
+			<trans-unit id="label_pagelimit_50" resname="label_pagelimit_50"  approved="yes">
+				<source>50 hits</source>
+				<target/>
+			</trans-unit>
+			<trans-unit id="label_pagelimit_100" resname="label_pagelimit_100"  approved="yes">
+				<source>100 hits</source>
+				<target/>
+			</trans-unit>
+			<trans-unit id="ERROR_default" resname="ERROR_default"  approved="yes">
+				<source>There was an unexpected error!</source>
+				<target>Er is een onverwachte fout opgetreden!</target>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

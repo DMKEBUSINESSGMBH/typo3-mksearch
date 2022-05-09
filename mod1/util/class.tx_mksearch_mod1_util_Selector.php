@@ -48,7 +48,7 @@ class tx_mksearch_mod1_util_Selector
             $options['buttonName'] ? $options['buttonName'] : $key,
             $options['buttonValue'] ? $options['buttonValue'] : $GLOBALS['LANG']->getLL('label_button_search')
         );
-        $out['label'] = $options['label'] ? $options['label'] : $GLOBALS['LANG']->getLL('label_search');
+        $out['label'] = $options['label'] ?? $GLOBALS['LANG']->getLL('label_search');
 
         return $searchstring;
     }
@@ -68,7 +68,7 @@ class tx_mksearch_mod1_util_Selector
             1 => $GLOBALS['LANG']->getLL('label_select_show_hidden'),
         ];
 
-        $options['label'] = $options['label'] ? $options['label'] : $GLOBALS['LANG']->getLL('label_hidden');
+        $options['label'] = $options['label'] ?? $GLOBALS['LANG']->getLL('label_hidden');
 
         return $this->showSelectorByArray($items, 'showhidden', $data, $options);
     }

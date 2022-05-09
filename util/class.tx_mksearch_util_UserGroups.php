@@ -69,22 +69,24 @@ class tx_mksearch_util_UserGroups
             return $this->groupCache[$groupId];
         }
 
-        // the old obsolete db connection
-        $connection = \Sys25\RnBase\Database\Connection::getInstance()->getDatabaseConnection();
-
-        // Simplify query via table sys_refindex so what
-        // we don't need to struggle with those stupid csv fields...
-        $res = $connection->exec_SELECTquery(
-            'ref_uid',
-            'fe_groups JOIN sys_refindex AS ref ON fe_groups.uid = ref.ref_uid',
-            '1=1'.\Sys25\RnBase\Utility\TYPO3::getSysPage()->enableFields('fe_groups').
-            ' AND ref.ref_table = \'fe_groups\' AND ref.field = \'subgroup\''.
-            ' AND ref.recuid = '.intval($groupId)
+        $queryBuilder = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Database\ConnectionPool::class)->getQueryBuilderForTable(
+            'fe_groups'
         );
+        $result = $queryBuilder
+            ->select('ref_uid')
+            ->from('fe_groups')
+            ->join('fe_groups', 'sys_refindex', 'sys_refindex', 'fe_groups.uid = sys_refindex.ref_uid')
+            ->where($queryBuilder->expr()->andX(
+                $queryBuilder->expr()->eq('sys_refindex.ref_table', $queryBuilder->quote('fe_groups')),
+                $queryBuilder->expr()->eq('sys_refindex.field', $queryBuilder->quote('subgroup')),
+                $queryBuilder->expr()->eq('sys_refindex.recuid', $queryBuilder->createNamedParameter($groupId, \PDO::PARAM_INT))
+            ))
+            ->executeQuery();
+
         // Initialize suber group array with ourselves!
         $sub = [$groupId];
 
-        while ($row = $connection->sql_fetch_assoc($res)) {
+        while ($row = $result->fetchAssociative()) {
             // Recursively get sub groups, avoiding endless recursion
             if (!in_array($row['ref_uid'], $callStackGroups)) {
                 $sub = array_merge($sub, $this->getSubGroups($row['ref_uid'], $sub));

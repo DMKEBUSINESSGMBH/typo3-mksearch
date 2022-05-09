@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+	<file source-language="en" datatype="plaintext" original="messages" date="2022-05-09T10:51:13Z" product-name="mksearch">
+		<header/>
+		<body>
+			<trans-unit id="general.undef" resname="general.undef" >
+				<source>Undefined</source>
+			</trans-unit>
+			<trans-unit id="plugin.mksearch.label" resname="plugin.mksearch.label" >
+				<source>MK Search</source>
+			</trans-unit>
+			<trans-unit id="plugin.mksearch.description" resname="plugin.mksearch.description" >
+				<source>Powerful search interface for various search engines.</source>
+			</trans-unit>
+			<trans-unit id="plugin.mksearch.flexform.tab.tssetup" resname="plugin.mksearch.flexform.tab.tssetup" >
+				<source>TypoScript setup</source>
+			</trans-unit>
+			<trans-unit id="plugin.mksearch.flexform.tab.action" resname="plugin.mksearch.flexform.tab.action" >
+				<source>View</source>
+			</trans-unit>
+			<trans-unit id="plugin.mksearch.flexform.tab.softlink" resname="plugin.mksearch.flexform.tab.softlink" >
+				<source>Softlink</source>
+			</trans-unit>
+			<trans-unit id="plugin.mksearch.flexform.tssetup" resname="plugin.mksearch.flexform.tssetup" >
+				<source>TS config path: plugin.tx_mksearch.</source>
+			</trans-unit>
+			<trans-unit id="plugin.mksearch.flexform.action.searchLucene" resname="plugin.mksearch.flexform.action.searchLucene" >
+				<source>Search Form for Lucene</source>
+			</trans-unit>
+			<trans-unit id="plugin.mksearch.flexform.action.searchSolr" resname="plugin.mksearch.flexform.action.searchSolr" >
+				<source>Search view for Solr</source>
+			</trans-unit>
+			<trans-unit id="plugin.mksearch.flexform.action.showHit" resname="plugin.mksearch.flexform.action.showHit" >
+				<source>Detail view for contenttype</source>
+			</trans-unit>
+			<trans-unit id="plugin.mksearch.flexform.usedIndex" resname="plugin.mksearch.flexform.usedIndex" >
+				<source>Search Index to use</source>
+			</trans-unit>
+			<trans-unit id="plugin.mksearch.flexform.filter.debugQuery" resname="plugin.mksearch.flexform.filter.debugQuery" >
+				<source>Debug filter query</source>
+			</trans-unit>
+			<trans-unit id="plugin.mksearch.flexform.facetfields" resname="plugin.mksearch.flexform.facetfields" >
+				<source>Facet fields (as comma-separated list)</source>
+			</trans-unit>
+			<trans-unit id="plugin.mksearch.flexform.filter.confid" resname="plugin.mksearch.flexform.filter.confid" >
+				<source>Filter</source>
+			</trans-unit>
+			<trans-unit id="plugin.mksearch.flexform.filter.confid.default" resname="plugin.mksearch.flexform.filter.confid.default" >
+				<source>default</source>
+			</trans-unit>
+			<trans-unit id="plugin.mksearch.flexform.filter.confid.dismax" resname="plugin.mksearch.flexform.filter.confid.dismax" >
+				<source>DisMax</source>
+			</trans-unit>
+			<trans-unit id="plugin.mksearch.flexform.force" resname="plugin.mksearch.flexform.force" >
+				<source>Force search</source>
+			</trans-unit>
+			<trans-unit id="plugin.mksearch.flexform.limit" resname="plugin.mksearch.flexform.limit" >
+				<source>Limit Search Results (-1 for unlimited, -2 for an empty result)</source>
+			</trans-unit>
+			<trans-unit id="plugin.mksearch.flexform.requestHandler" resname="plugin.mksearch.flexform.requestHandler" >
+				<source>Request handler</source>
+			</trans-unit>
+			<trans-unit id="plugin.mksearch.flexform.filterClass" resname="plugin.mksearch.flexform.filterClass" >
+				<source>Filter class</source>
+			</trans-unit>
+			<trans-unit id="plugin.mksearch.flexform.mainmarkerclass" resname="plugin.mksearch.flexform.mainmarkerclass" >
+				<source>Main marker class</source>
+			</trans-unit>
+			<trans-unit id="plugin.mksearch.flexform.mainsubpartList" resname="plugin.mksearch.flexform.mainsubpartList" >
+				<source>Subpart for result list</source>
+			</trans-unit>
+			<trans-unit id="plugin.mksearch.flexform.mainsubpartForm" resname="plugin.mksearch.flexform.mainsubpartForm" >
+				<source>Subpart for search formular</source>
+			</trans-unit>
+			<trans-unit id="plugin.mksearch.flexform.uidParamName" resname="plugin.mksearch.flexform.uidParamName" >
+				<source>Parameter identifiername (item = &amp;mksearch[item])</source>
+			</trans-unit>
+			<trans-unit id="plugin.mksearch.flexform.template" resname="plugin.mksearch.flexform.template" >
+				<source>Template</source>
+			</trans-unit>
+			<trans-unit id="plugin.mksearch.flexform.searchFormTemplate" resname="plugin.mksearch.flexform.searchFormTemplate" >
+				<source>Template for search formular</source>
+			</trans-unit>
+			<trans-unit id="plugin.mksearch.flexform.resultListTemplate" resname="plugin.mksearch.flexform.resultListTemplate" >
+				<source>Template for result list</source>
+			</trans-unit>
+			<trans-unit id="plugin.mksearch.flexform.showHitTemplate" resname="plugin.mksearch.flexform.showHitTemplate" >
+				<source>Template for detail view</source>
+			</trans-unit>
+			<trans-unit id="plugin.mksearch.flexform.enableAutoComplete" resname="plugin.mksearch.flexform.enableAutoComplete" >
+				<source>Enable autocomplete/suggest</source>
+			</trans-unit>
+			<trans-unit id="plugin.mksearch.flexform.includeJquery" resname="plugin.mksearch.flexform.includeJquery" >
+				<source>Include jQuery main</source>
+			</trans-unit>
+			<trans-unit id="plugin.mksearch.flexform.includeJqueryUiCore" resname="plugin.mksearch.flexform.includeJqueryUiCore" >
+				<source>Include jQuery-UI Core</source>
+			</trans-unit>
+			<trans-unit id="plugin.mksearch.flexform.includeJqueryUiAutocomplete" resname="plugin.mksearch.flexform.includeJqueryUiAutocomplete" >
+				<source>Include JS for UI Autocomplete</source>
+			</trans-unit>
+			<trans-unit id="scheduler_indexTask_name" resname="scheduler_indexTask_name" >
+				<source>MKSearch Indexing</source>
+			</trans-unit>
+			<trans-unit id="scheduler_indexTask_description" resname="scheduler_indexTask_description" >
+				<source>Start indexing process of documents</source>
+			</trans-unit>
+			<trans-unit id="scheduler_indexTask_field_amountOfItems" resname="scheduler_indexTask_field_amountOfItems" >
+				<source>Amount of items to be indexed per run</source>
+			</trans-unit>
+			<trans-unit id="scheduler_indexTask_taskinfo" resname="scheduler_indexTask_taskinfo" >
+				<source>Index %d items per run. Currently %d items in queue.</source>
+			</trans-unit>
+			<trans-unit id="tx_mksearch_indices" resname="tx_mksearch_indices" >
+				<source>Index</source>
+			</trans-unit>
+			<trans-unit id="tx_mksearch_indices.hidden" resname="tx_mksearch_indices.hidden" >
+				<source>Hidden, i.e. creation / update of index is disabled</source>
+			</trans-unit>
+			<trans-unit id="tx_mksearch_indices.title" resname="tx_mksearch_indices.title" >
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="tx_mksearch_indices.description" resname="tx_mksearch_indices.description" >
+				<source>Description</source>
+			</trans-unit>
+			<trans-unit id="tx_mksearch_indices.name" resname="tx_mksearch_indices.name" >
+				<source>Name of the index used for actual storage. Depending on the indexing engine this might be the file system directory path or similar.</source>
+			</trans-unit>
+			<trans-unit id="tx_mksearch_indices.composites" resname="tx_mksearch_indices.composites" >
+				<source>Used configuration composites</source>
+			</trans-unit>
+			<trans-unit id="tx_mksearch_indices_engine" resname="tx_mksearch_indices_engine" >
+				<source>Search engine</source>
+			</trans-unit>
+			<trans-unit id="tx_mksearch_indices_engine_solr" resname="tx_mksearch_indices_engine_solr" >
+				<source>Apache Solr</source>
+			</trans-unit>
+			<trans-unit id="tx_mksearch_indices_engine_zendlucene" resname="tx_mksearch_indices_engine_zendlucene" >
+				<source>Zend Lucene (PHP)</source>
+			</trans-unit>
+			<trans-unit id="tx_mksearch_indices_engine_elasticsearch" resname="tx_mksearch_indices_engine_elasticsearch" >
+				<source>ElasticSearch</source>
+			</trans-unit>
+			<trans-unit id="tx_mksearch_indices_solrversion" resname="tx_mksearch_indices_solrversion" >
+				<source>Solr Version</source>
+			</trans-unit>
+			<trans-unit id="tx_mksearch_indices_solrversion_35" resname="tx_mksearch_indices_solrversion_35" >
+				<source>&lt;= 3.5 (e.g 1.4 or 3.4)</source>
+			</trans-unit>
+			<trans-unit id="tx_mksearch_indices_solrversion_40" resname="tx_mksearch_indices_solrversion_40" >
+				<source>&gt;= 3.6 (e.g 4.7 or 6.2)</source>
+			</trans-unit>
+			<trans-unit id="tx_mksearch_configcomposites" resname="tx_mksearch_configcomposites" >
+				<source>Indexer configuration composite</source>
+			</trans-unit>
+			<trans-unit id="tx_mksearch_configcomposites.hidden" resname="tx_mksearch_configcomposites.hidden" >
+				<source>Hidden, i.e. composite is disabled</source>
+			</trans-unit>
+			<trans-unit id="tx_mksearch_configcomposites.title" resname="tx_mksearch_configcomposites.title" >
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="tx_mksearch_configcomposites.description" resname="tx_mksearch_configcomposites.description" >
+				<source>Description</source>
+			</trans-unit>
+			<trans-unit id="tx_mksearch_configcomposites.indices" resname="tx_mksearch_configcomposites.indices" >
+				<source>Assigned to indices</source>
+			</trans-unit>
+			<trans-unit id="tx_mksearch_configcomposites.configs" resname="tx_mksearch_configcomposites.configs" >
+				<source>Connected index configurations</source>
+			</trans-unit>
+			<trans-unit id="tx_mksearch_configcomposites.configuration" resname="tx_mksearch_configcomposites.configuration" >
+				<source>Default Configuration for index configurations</source>
+			</trans-unit>
+			<trans-unit id="tx_mksearch_indexerconfigs" resname="tx_mksearch_indexerconfigs" >
+				<source>Indexer configuration</source>
+			</trans-unit>
+			<trans-unit id="tx_mksearch_indexerconfigs.hidden" resname="tx_mksearch_indexerconfigs.hidden" >
+				<source>Hidden, i.e. configuration is disabled</source>
+			</trans-unit>
+			<trans-unit id="tx_mksearch_indexerconfigs.title" resname="tx_mksearch_indexerconfigs.title" >
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="tx_mksearch_indexerconfigs.description" resname="tx_mksearch_indexerconfigs.description" >
+				<source>Description</source>
+			</trans-unit>
+			<trans-unit id="tx_mksearch_indexerconfigs.extkey" resname="tx_mksearch_indexerconfigs.extkey" >
+				<source>Extension key, i.e. first part of indexer service subtype</source>
+			</trans-unit>
+			<trans-unit id="tx_mksearch_indexerconfigs.contenttype" resname="tx_mksearch_indexerconfigs.contenttype" >
+				<source>Content type, i.e. second part of indexer service subtype</source>
+			</trans-unit>
+			<trans-unit id="tx_mksearch_indexerconfigs.configuration" resname="tx_mksearch_indexerconfigs.configuration" >
+				<source>Configuration. Define all necessary parameters of this indexer here.</source>
+			</trans-unit>
+			<trans-unit id="tx_mksearch_indexerconfigs.composites" resname="tx_mksearch_indexerconfigs.composites" >
+				<source>Assigned to composites</source>
+			</trans-unit>
+			<trans-unit id="tx_mksearch_keywords" resname="tx_mksearch_keywords" >
+				<source>MKSearch keyword</source>
+			</trans-unit>
+			<trans-unit id="tx_mksearch_keywords_keyword" resname="tx_mksearch_keywords_keyword" >
+				<source>Keyword</source>
+			</trans-unit>
+			<trans-unit id="tx_mksearch_keywords_link" resname="tx_mksearch_keywords_link" >
+				<source>Link</source>
+			</trans-unit>
+			<trans-unit id="plugin_common_enable" resname="plugin_common_enable" >
+				<source>Enable</source>
+			</trans-unit>
+			<trans-unit id="plugin.mksearch.tt_content.header_layout" resname="plugin.mksearch.tt_content.header_layout" >
+				<source>Hidden (but indexed via mksearch)</source>
+			</trans-unit>
+			<trans-unit id="tt_content.tx_mksearch_is_indexable" resname="tt_content.tx_mksearch_is_indexable" >
+				<source>indexable through mksearch?</source>
+			</trans-unit>
+			<trans-unit id="tt_content.tx_mksearch_is_indexable.use_indexer_config" resname="tt_content.tx_mksearch_is_indexable.use_indexer_config" >
+				<source>use configuration of indexer</source>
+			</trans-unit>
+			<trans-unit id="tt_content.tx_mksearch_is_indexable.yes" resname="tt_content.tx_mksearch_is_indexable.yes" >
+				<source>yes</source>
+			</trans-unit>
+			<trans-unit id="tt_content.tx_mksearch_is_indexable.no" resname="tt_content.tx_mksearch_is_indexable.no" >
+				<source>no</source>
+			</trans-unit>
+			<trans-unit id="plugin.mksearch.flexform.action.elasticSearch" resname="plugin.mksearch.flexform.action.elasticSearch" >
+				<source>Search view for ElasticSearch</source>
+			</trans-unit>
+			<trans-unit id="plugin.mksearch.flexform.options.group.enable" resname="plugin.mksearch.flexform.options.group.enable" >
+				<source>enable group? (might slow down the search a bit)</source>
+			</trans-unit>
+			<trans-unit id="plugin.mksearch.flexform.options.group.useNumberOfGroupsAsSearchResultCount" resname="plugin.mksearch.flexform.options.group.useNumberOfGroupsAsSearchResultCount" >
+				<source>use number of groups as search result count?</source>
+			</trans-unit>
+			<trans-unit id="plugin.mksearch.flexform.options.group.field" resname="plugin.mksearch.flexform.options.group.field" >
+				<source>group field</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2022-05-09T10:59:50Z" product-name="mksearch">
+		<header/>
+		<body>
+			<trans-unit id="title" resname="title"  approved="yes">
+				<source>MK Search</source>
+				<target/>
+			</trans-unit>
+			<trans-unit id="func_config_indizes" resname="func_config_indizes"  approved="yes">
+				<source>Configure indizes</source>
+				<target>Indizes konfigurieren</target>
+			</trans-unit>
+			<trans-unit id="func_keywords" resname="func_keywords"  approved="yes">
+				<source>Keywords</source>
+				<target/>
+			</trans-unit>
+			<trans-unit id="func_config_indizesdblist" resname="func_config_indizesdblist"  approved="yes">
+				<source>Configure indizes (old db list)</source>
+				<target>Indizes konfigurieren (alte DB Liste)</target>
+			</trans-unit>
+			<trans-unit id="func_indize_indizes" resname="func_indize_indizes"  approved="yes">
+				<source>Indexing Queue</source>
+				<target>Wartenschlange für Indizierung</target>
+			</trans-unit>
+			<trans-unit id="func_solradmin" resname="func_solradmin"  approved="yes">
+				<source>Admin Panel</source>
+				<target/>
+			</trans-unit>
+			<trans-unit id="label_no_page_selected" resname="label_no_page_selected"  approved="yes">
+				<source>No Page selected.</source>
+				<target>keine Seite ausgewählt.</target>
+			</trans-unit>
+			<trans-unit id="label_handler_index" resname="label_handler_index"  approved="yes">
+				<source>Indizes</source>
+				<target/>
+			</trans-unit>
+			<trans-unit id="label_handler_indexerconfig" resname="label_handler_indexerconfig"  approved="yes">
+				<source>Indexer Configuration</source>
+				<target>Indexer Konfiguration</target>
+			</trans-unit>
+			<trans-unit id="label_handler_composite" resname="label_handler_composite"  approved="yes">
+				<source>Indexer Composites</source>
+				<target>Indize-Konfiguration Relationen</target>
+			</trans-unit>
+			<trans-unit id="label_handler_adminsolr" resname="label_handler_adminsolr"  approved="yes">
+				<source>Solr</source>
+				<target/>
+			</trans-unit>
+			<trans-unit id="label_no_indexers_found" resname="label_no_indexers_found"  approved="yes">
+				<source>No indexers defined on this page!</source>
+				<target>Kein Indexer auf dieser Seite definiert!</target>
+			</trans-unit>
+			<trans-unit id="label_configured_indexer_tables_head" resname="label_configured_indexer_tables_head"  approved="yes">
+				<source>Tables from configured indexers</source>
+				<target>Tabellen der konfigurierten Indexer</target>
+			</trans-unit>
+			<trans-unit id="label_core_status_head" resname="label_core_status_head"  approved="yes">
+				<source>Core status</source>
+				<target>Core Status</target>
+			</trans-unit>
+			<trans-unit id="label_triger_queue_head" resname="label_triger_queue_head"  approved="yes">
+				<source>Trigger indexing queue</source>
+				<target>Indizierung ausführen</target>
+			</trans-unit>
+			<trans-unit id="label_triger_queue_input" resname="label_triger_queue_input"  approved="yes">
+				<source>Trigger indexing queue</source>
+				<target>Indizierung ausführen</target>
+			</trans-unit>
+			<trans-unit id="label_triger_queue_items" resname="label_triger_queue_items"  approved="yes">
+				<source>Items</source>
+				<target>Elemente</target>
+			</trans-unit>
+			<trans-unit id="label_queue_size_being_indexed" resname="label_queue_size_being_indexed"  approved="yes">
+				<source>Items currently being indexed</source>
+				<target>Elemente die aktuell indexiert werden</target>
+			</trans-unit>
+			<trans-unit id="label_trigger_being_indexed_items" resname="label_trigger_being_indexed_items"  approved="yes">
+				<source>Reset items currently being indexed. Items will be available in queue again for further indexing.</source>
+				<target>Elemente die aktuell indexiert werden zurücksetzen. Diese Elemente werden wieder in die Warteschlange eingereiht und in der folgenden Indexierung abgearbeitet.</target>
+			</trans-unit>
+			<trans-unit id="label_trigger_reset_being_indexed_items" resname="label_trigger_reset_being_indexed_items"  approved="yes">
+				<source>Reset all items with status &quot;being_indexed&quot;</source>
+				<target>Alle Elemente mit dem Status &quot;being_indexed&quot; zurücksetzen</target>
+			</trans-unit>
+			<trans-unit id="label_queue_being_indexed_empty" resname="label_queue_being_indexed_empty"  approved="yes">
+				<source>no entries found being indexed in this time period</source>
+				<target>Keine Einträge gefunden, die in diesem Zeitraum auf &quot;being_indexed&quot; stehen</target>
+			</trans-unit>
+			<trans-unit id="label_items_being_indexed_resetted" resname="label_items_being_indexed_resetted"  approved="yes">
+				<source>items with status &quot;being_indexed&quot; resetted</source>
+				<target>Einträge mit dem Status &quot;being_indexed&quot; zurückgesetzt</target>
+			</trans-unit>
+			<trans-unit id="label_reset_options" resname="label_reset_options"  approved="yes">
+				<source>Reset options</source>
+				<target>Reset-Optionen</target>
+			</trans-unit>
+			<trans-unit id="label_reset_deleted" resname="label_reset_deleted"  approved="yes">
+				<source>Add deleted records to queue</source>
+				<target>Gelöschte Datensätze zur Warteschlange hinzufügen</target>
+			</trans-unit>
+			<trans-unit id="label_reset_hidden" resname="label_reset_hidden"  approved="yes">
+				<source>Add hidden records to queue</source>
+				<target>Versteckte Datensätze zur Warteschlange hinzufügen</target>
+			</trans-unit>
+			<trans-unit id="label_queue_cleared" resname="label_queue_cleared"  approved="yes">
+				<source>The elements of the following tables are removed from the index queue: </source>
+				<target>Die Elemente der folgenden Tabellen wurden aus der Warteschlange entfernt: </target>
+			</trans-unit>
+			<trans-unit id="label_queue_reseted" resname="label_queue_reseted"  approved="yes">
+				<source>The elements of the following tables are put into the indexing queue: </source>
+				<target>Alle Elemente der folgenden Tabellen wurden in die Warteschlange gelegt: </target>
+			</trans-unit>
+			<trans-unit id="label_queue_indexed" resname="label_queue_indexed"  approved="yes">
+				<source>Indexing queue was triggered! Records processed: </source>
+				<target>Indizierung wurde ausgeführt! Datensätze verarbeitet: </target>
+			</trans-unit>
+			<trans-unit id="label_queue_runtime" resname="label_queue_runtime"  approved="yes">
+				<source>Runtime</source>
+				<target>Laufzeit</target>
+			</trans-unit>
+			<trans-unit id="label_queue_indexed_empty" resname="label_queue_indexed_empty"  approved="yes">
+				<source>Nothing to do at the moment - indexing queue is empty.</source>
+				<target>Nichts zu tun - die Warteschlange ist leer</target>
+			</trans-unit>
+			<trans-unit id="label_queue_state_head" resname="label_queue_state_head"  approved="yes">
+				<source>Status</source>
+				<target/>
+			</trans-unit>
+			<trans-unit id="label_queue_size" resname="label_queue_size"  approved="yes">
+				<source>global size:</source>
+				<target>globale Größe:</target>
+			</trans-unit>
+			<trans-unit id="label_table_count" resname="label_table_count"  approved="yes">
+				<source>tables found.</source>
+				<target>Tabelle gefunden.</target>
+			</trans-unit>
+			<trans-unit id="label_table_name" resname="label_table_name"  approved="yes">
+				<source>Table</source>
+				<target>Tabelle</target>
+			</trans-unit>
+			<trans-unit id="label_table_queuecount" resname="label_table_queuecount"  approved="yes">
+				<source>Queue (Global)</source>
+				<target>Warteschlange (global)</target>
+			</trans-unit>
+			<trans-unit id="label_table_reset" resname="label_table_reset"  approved="yes">
+				<source>Reset (In this Root Page)</source>
+				<target>Zurücksetzen (global) (In dieser Root-Seite)</target>
+			</trans-unit>
+			<trans-unit id="label_table_resetG" resname="label_table_resetG"  approved="yes">
+				<source>Reset (Global)</source>
+				<target>Zurücksetzen (global)</target>
+			</trans-unit>
+			<trans-unit id="label_table_clear" resname="label_table_clear"  approved="yes">
+				<source>Clear (Global)</source>
+				<target>Leeren (global)</target>
+			</trans-unit>
+			<trans-unit id="label_solr_cores" resname="label_solr_cores"  approved="yes">
+				<source>Solr cores</source>
+				<target>Solr Cores</target>
+			</trans-unit>
+			<trans-unit id="label_solr_nocores_found" resname="label_solr_nocores_found"  approved="yes">
+				<source>No Solr cores found on current page.</source>
+				<target>keine Solr Cores auf aktueller Seite gefunden.</target>
+			</trans-unit>
+			<trans-unit id="label_solr_nocore_found" resname="label_solr_nocore_found"  approved="yes">
+				<source>No solr core found!</source>
+				<target>kein Solr Core gefunden.</target>
+			</trans-unit>
+			<trans-unit id="label_solr_delete_query" resname="label_solr_delete_query"  approved="yes">
+				<source>Submit raw delete query</source>
+				<target>unveränderte delete Query abschicken</target>
+			</trans-unit>
+			<trans-unit id="label_solr_submit_delete" resname="label_solr_submit_delete"  approved="yes">
+				<source>Submit delete</source>
+				<target>delete abschicken</target>
+			</trans-unit>
+			<trans-unit id="label_solr_delete_successful" resname="label_solr_delete_successful"  approved="yes">
+				<source>Delete successfully submitted.</source>
+				<target>Delete erfolgreich abgeschickt.</target>
+			</trans-unit>
+			<trans-unit id="label_common_start" resname="label_common_start"  approved="yes">
+				<source>Requestinfos</source>
+				<target/>
+			</trans-unit>
+			<trans-unit id="label_common_end" resname="label_common_end"  approved="yes">
+				<source>Requestinfos</source>
+				<target/>
+			</trans-unit>
+			<trans-unit id="label_common_warning" resname="label_common_warning"  approved="yes">
+				<source>Warning</source>
+				<target>Warnung</target>
+			</trans-unit>
+			<trans-unit id="label_common_error" resname="label_common_error"  approved="yes">
+				<source>Error</source>
+				<target>Fehler</target>
+			</trans-unit>
+			<trans-unit id="label_common_info" resname="label_common_info"  approved="yes">
+				<source>Information</source>
+				<target/>
+			</trans-unit>
+			<trans-unit id="label_search_form" resname="label_search_form"  approved="yes">
+				<source>Filter</source>
+				<target/>
+			</trans-unit>
+			<trans-unit id="label_buttons" resname="label_buttons"  approved="yes">
+				<source>Functions</source>
+				<target>Funktionen</target>
+			</trans-unit>
+			<trans-unit id="label_pager" resname="label_pager"  approved="yes">
+				<source>Navigation</source>
+				<target/>
+			</trans-unit>
+			<trans-unit id="label_list" resname="label_list"  approved="yes">
+				<source>Results</source>
+				<target>Ergebnisse</target>
+			</trans-unit>
+			<trans-unit id="label_search" resname="label_search"  approved="yes">
+				<source>Free text search:</source>
+				<target>Freitextsuche:</target>
+			</trans-unit>
+			<trans-unit id="label_hidden" resname="label_hidden"  approved="yes">
+				<source>Hidden entries:</source>
+				<target>Versteckte Einträge:</target>
+			</trans-unit>
+			<trans-unit id="label_button_search" resname="label_button_search"  approved="yes">
+				<source>search</source>
+				<target>suchen</target>
+			</trans-unit>
+			<trans-unit id="label_select_hide_hidden" resname="label_select_hide_hidden"  approved="yes">
+				<source>Hide</source>
+				<target>Ausblenden</target>
+			</trans-unit>
+			<trans-unit id="label_select_show_hidden" resname="label_select_show_hidden"  approved="yes">
+				<source>Show</source>
+				<target>Einblenden</target>
+			</trans-unit>
+			<trans-unit id="label_list_size" resname="label_list_size"  approved="yes">
+				<source>Entries found: </source>
+				<target>Einträge gefunden: </target>
+			</trans-unit>
+			<trans-unit id="confirmation_deletion" resname="confirmation_deletion"  approved="yes">
+				<source>Delete this record?</source>
+				<target>Diesen Datensatz löschen?</target>
+			</trans-unit>
+			<trans-unit id="label_uid" resname="label_uid"  approved="yes">
+				<source>ID</source>
+				<target/>
+			</trans-unit>
+			<trans-unit id="label_tableheader_title" resname="label_tableheader_title"  approved="yes">
+				<source>Title</source>
+				<target>Titel</target>
+			</trans-unit>
+			<trans-unit id="label_tableheader_core" resname="label_tableheader_core"  approved="yes">
+				<source>Core</source>
+				<target/>
+			</trans-unit>
+			<trans-unit id="label_tableheader_name" resname="label_tableheader_name"  approved="yes">
+				<source>Name</source>
+				<target/>
+			</trans-unit>
+			<trans-unit id="label_tableheader_engine" resname="label_tableheader_engine"  approved="yes">
+				<source>Engine</source>
+				<target/>
+			</trans-unit>
+			<trans-unit id="label_tableheader_keyword" resname="label_tableheader_keyword"  approved="yes">
+				<source>Keyword</source>
+				<target/>
+			</trans-unit>
+			<trans-unit id="label_tableheader_link" resname="label_tableheader_link"  approved="yes">
+				<source>Link</source>
+				<target/>
+			</trans-unit>
+			<trans-unit id="label_tableheader_contenttype" resname="label_tableheader_contenttype"  approved="yes">
+				<source>ContentType</source>
+				<target>Inhaltstyp</target>
+			</trans-unit>
+			<trans-unit id="label_tableheader_composites" resname="label_tableheader_composites"  approved="yes">
+				<source>Composites</source>
+				<target>Indize-Konfiguration Relationen</target>
+			</trans-unit>
+			<trans-unit id="label_tableheader_indices" resname="label_tableheader_indices"  approved="yes">
+				<source>Indizes</source>
+				<target>Indizes</target>
+			</trans-unit>
+			<trans-unit id="label_tableheader_configs" resname="label_tableheader_configs"  approved="yes">
+				<source>Configurations</source>
+				<target>Konfigurationen</target>
+			</trans-unit>
+			<trans-unit id="label_tableheader_actions" resname="label_tableheader_actions"  approved="yes">
+				<source> </source>
+				<target/>
+			</trans-unit>
+			<trans-unit id="label_no_indizes" resname="label_no_indizes"  approved="yes">
+				<source>No indizes found.</source>
+				<target>Keine Indizes gefunden.</target>
+			</trans-unit>
+			<trans-unit id="label_no_composites" resname="label_no_composites"  approved="yes">
+				<source>No indexer composites found.</source>
+				<target>Keine Indize-Konfiguration Relationen gefunden.</target>
+			</trans-unit>
+			<trans-unit id="label_no_indexerconfigurations" resname="label_no_indexerconfigurations"  approved="yes">
+				<source>No indexer configurations found.</source>
+				<target>Keine Indexerkonfigurationen gefunden</target>
+			</trans-unit>
+			<trans-unit id="label_add_keyword" resname="label_add_keyword"  approved="yes">
+				<source>add Keyword</source>
+				<target>Keyword hinzufügen</target>
+			</trans-unit>
+			<trans-unit id="label_add_index" resname="label_add_index"  approved="yes">
+				<source>add Index</source>
+				<target>Index hinzufügen</target>
+			</trans-unit>
+			<trans-unit id="label_add_indexerconfig" resname="label_add_indexerconfig"  approved="yes">
+				<source>add Indexer Configuration</source>
+				<target>Indexer Konfiguration hinzufügen</target>
+			</trans-unit>
+			<trans-unit id="label_add_composite" resname="label_add_composite"  approved="yes">
+				<source>add Indexer Composite</source>
+				<target>Indize-Konfiguration Relation hinzufügen</target>
+			</trans-unit>
+			<trans-unit id="allow_url_fopen_deactivated_hint" resname="allow_url_fopen_deactivated_hint"  approved="yes">
+				<source>&lt;div class=&quot;message-error&quot; style=&quot;width:16px; height:16px; float:left;&quot;&gt;&lt;/div&gt;&lt;strong&gt;&lt;div style=&quot;background-color: #F6D3CF; height:16px; font-size: 15px;&quot;&gt;allow_url_fopen is not activated but mksearch is not configured to use curl for HTTP transport!&lt;/div&gt;&lt;/strong&gt;</source>
+				<target>&lt;div class=&quot;message-error&quot; style=&quot;width:16px; height:16px; float:left;&quot;&gt;&lt;/div&gt;&lt;strong&gt;&lt;div style=&quot;background-color: #F6D3CF; height:16px; font-size: 15px;&quot;&gt;allow_url_fopen ist nicht aktiv aber mksearch ist nicht konfiguriert um cURL zu verwenden für den HTTP Transport!!&lt;/div&gt;&lt;/strong&gt;</target>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

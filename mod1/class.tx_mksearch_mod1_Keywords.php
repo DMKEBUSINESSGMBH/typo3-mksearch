@@ -67,11 +67,13 @@ class tx_mksearch_mod1_Keywords extends \Sys25\RnBase\Backend\Module\BaseModFunc
      */
     protected function showSearch($template, $configurations, $formTool, &$markerArray)
     {
+        $options = [];
+
         return tx_mksearch_mod1_util_Template::parseList(
             $template,
             $this->getModule(),
             $markerArray,
-            $this->getSearcher($options = []),
+            $this->getSearcher($options),
             'KEYWORD'
         );
     }

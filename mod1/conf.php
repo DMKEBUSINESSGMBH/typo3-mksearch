@@ -9,8 +9,8 @@ $MCONF['script'] = '_DISPATCH';
 
 $MCONF['access'] = 'user,group';
 
-$MLANG['default']['tabs_images']['tab'] = 'moduleicon.gif';
-$MLANG['default']['ll_ref'] = 'LLL:EXT:mksearch/mod1/locallang_mod.xml';
+$MLANG['default']['tabs_images']['tab'] = 'Resources/Public/Icons/moduleicon.png';
+$MLANG['default']['ll_ref'] = 'LLL:EXT:mksearch/Resources/Private/Language/BackendModule/locallang_mod.xlf';
 
 define('ICON_OK', -1);
 define('ICON_INFO', 1);

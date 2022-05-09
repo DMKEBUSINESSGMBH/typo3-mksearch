@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+	<file source-language="en" datatype="plaintext" original="messages" date="2022-05-09T10:50:13Z" product-name="mksearch">
+		<header/>
+		<body>
+			<trans-unit id="label_search_foundresults" resname="label_search_foundresults" >
+				<source>Number of search results found:</source>
+			</trans-unit>
+			<trans-unit id="label_search_term_was" resname="label_search_term_was" >
+				<source>term was:</source>
+			</trans-unit>
+			<trans-unit id="label_search_term" resname="label_search_term" >
+				<source>term</source>
+			</trans-unit>
+			<trans-unit id="label_search_searchterm" resname="label_search_searchterm" >
+				<source>Search for:</source>
+			</trans-unit>
+			<trans-unit id="label_search_options" resname="label_search_options" >
+				<source>Options:</source>
+			</trans-unit>
+			<trans-unit id="label_search_options_standard" resname="label_search_options_standard" >
+				<source>Standard search:</source>
+			</trans-unit>
+			<trans-unit id="label_search_options_standard_label" resname="label_search_options_standard_label" >
+				<source>Use this type for standard search options.</source>
+			</trans-unit>
+			<trans-unit id="label_search_options_standard_hint" resname="label_search_options_standard_hint" >
+				<source>Note: You may prepend individual words with a &quot;-&quot; to exclude documents containing this word.</source>
+			</trans-unit>
+			<trans-unit id="label_search_options_standard_combination" resname="label_search_options_standard_combination" >
+				<source>Combination:</source>
+			</trans-unit>
+			<trans-unit id="label_search_options_standard_combination_none" resname="label_search_options_standard_combination_none" >
+				<source>None (same as or at the moment)</source>
+			</trans-unit>
+			<trans-unit id="label_search_options_standard_combination_free" resname="label_search_options_standard_combination_free" >
+				<source>Free syntax</source>
+			</trans-unit>
+			<trans-unit id="label_search_options_standard_combination_or" resname="label_search_options_standard_combination_or" >
+				<source>Find either word</source>
+			</trans-unit>
+			<trans-unit id="label_search_options_standard_combination_and" resname="label_search_options_standard_combination_and" >
+				<source>Find all words</source>
+			</trans-unit>
+			<trans-unit id="label_search_options_standard_combination_exact" resname="label_search_options_standard_combination_exact" >
+				<source>Find exact phrase</source>
+			</trans-unit>
+			<trans-unit id="label_search_options_standard_others" resname="label_search_options_standard_others" >
+				<source>Others:</source>
+			</trans-unit>
+			<trans-unit id="label_search_options_standard_others_fuzzy" resname="label_search_options_standard_others_fuzzy" >
+				<source>Fuzzy search</source>
+			</trans-unit>
+			<trans-unit id="label_search_options_standard_others_fuzzy_lucene" resname="label_search_options_standard_others_fuzzy_lucene" >
+				<source>Fuzzy search (not yet implemented!)</source>
+			</trans-unit>
+			<trans-unit id="label_search_options_standard_others_contenttypes" resname="label_search_options_standard_others_contenttypes" >
+				<source>Search within content types only (not yet implemented!)</source>
+			</trans-unit>
+			<trans-unit id="label_search_options_advanced" resname="label_search_options_advanced" >
+				<source>Advanced search:</source>
+			</trans-unit>
+			<trans-unit id="label_search_options_advanced_label" resname="label_search_options_advanced_label" >
+				<source>Use this type if you want to form complex (boolean) searches.</source>
+			</trans-unit>
+			<trans-unit id="label_search_submit" resname="label_search_submit" >
+				<source>Submit search</source>
+			</trans-unit>
+			<trans-unit id="label_search_yoursearchtermwas" resname="label_search_yoursearchtermwas" >
+				<source>Your search term was:</source>
+			</trans-unit>
+			<trans-unit id="label_search_readmore" resname="label_search_readmore" >
+				<source>read more</source>
+			</trans-unit>
+			<trans-unit id="label_search_readmorefaqs" resname="label_search_readmorefaqs" >
+				<source>read more related questions</source>
+			</trans-unit>
+			<trans-unit id="label_search_noresultsfound" resname="label_search_noresultsfound" >
+				<source>Your search did not return any results.</source>
+			</trans-unit>
+			<trans-unit id="label_search_reset" resname="label_search_reset" >
+				<source>reset Search</source>
+			</trans-unit>
+			<trans-unit id="label_score" resname="label_score" >
+				<source>Score</source>
+			</trans-unit>
+			<trans-unit id="label_time_asc" resname="label_time_asc" >
+				<source>Time ascending</source>
+			</trans-unit>
+			<trans-unit id="label_time_desc" resname="label_time_desc" >
+				<source>Time descending</source>
+			</trans-unit>
+			<trans-unit id="label_pagelimit_10" resname="label_pagelimit_10" >
+				<source>10 hits</source>
+			</trans-unit>
+			<trans-unit id="label_pagelimit_50" resname="label_pagelimit_50" >
+				<source>50 hits</source>
+			</trans-unit>
+			<trans-unit id="label_pagelimit_100" resname="label_pagelimit_100" >
+				<source>100 hits</source>
+			</trans-unit>
+			<trans-unit id="ERROR_default" resname="ERROR_default" >
+				<source>There was an unexpected error!</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

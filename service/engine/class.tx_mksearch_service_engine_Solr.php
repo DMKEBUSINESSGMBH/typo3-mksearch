@@ -235,7 +235,12 @@ class tx_mksearch_service_engine_Solr extends \Sys25\RnBase\Typo3Wrapper\Service
         $ret = [];
         $solr = $this->getSolr();
         try {
-            $response = $solr->search($fields['term'], intval($options['offset']), intval($options['limit']), $options);
+            $response = $solr->search(
+                $fields['term'] ?? '',
+                intval($options['offset'] ?? 0),
+                intval($options['limit'] ?? 0),
+                $options
+            );
             if (200 != $response->getHttpStatus()) {
                 throw new tx_mksearch_service_engine_SolrException('Error requesting solr. HTTP status:'.$response->getHttpStatus(), -1, $solr->lastUrl);
             }
@@ -248,7 +253,7 @@ class tx_mksearch_service_engine_Solr extends \Sys25\RnBase\Typo3Wrapper\Service
             $ret['searchUrl'] = $solr->lastUrl;
             $ret['searchTime'] = (microtime(true) - $start).' ms';
 
-            if ('true' == $options['group.ngroups']) {
+            if ('true' == ($options['group.ngroups'] ?? '')) {
                 $ret['numFound'] = $response->grouped->{$options['group.field']}->ngroups;
             } else {
                 $ret['numFound'] = $response->response->numFound;
@@ -256,7 +261,7 @@ class tx_mksearch_service_engine_Solr extends \Sys25\RnBase\Typo3Wrapper\Service
 
             $ret['response'] = &$response; // wichtig, wird im SolrResponseProcessor benötigt
 
-            if ($options['debug']) {
+            if ($options['debug'] ?? false) {
                 if (is_object($response->debug)) {
                     $ret['debug'] = get_object_vars($response->debug);
                 }
@@ -768,7 +773,7 @@ class tx_mksearch_service_engine_Solr extends \Sys25\RnBase\Typo3Wrapper\Service
     {
         $aConfig = $oIndex->getIndexConfig();
         // shall the autocomplete/spellcheck be updated?
-        if ($aConfig['solr.']['builtSpellcheck']) {
+        if ($aConfig['solr.']['builtSpellcheck'] ?? false) {
             $this->builtSpellcheckIndex($aConfig['solr.']['builtSpellcheck']);
         }
     }
@@ -818,7 +823,7 @@ class tx_mksearch_service_engine_Solr extends \Sys25\RnBase\Typo3Wrapper\Service
      */
     public static function getHitsFromSolrResponse(Apache_Solr_Response $response, array $options)
     {
-        if ('true' == $options['group']) {
+        if ('true' == ($options['group'] ?? '')) {
             foreach ((array) $response->grouped->{$options['group.field']}->groups as $group) {
                 foreach ($group->doclist->docs as $doc) {
                     $solrDocument = new Apache_Solr_Document();

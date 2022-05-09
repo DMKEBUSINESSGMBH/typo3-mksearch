@@ -24,6 +24,8 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
 
+use TYPO3\CMS\Core\Http\ApplicationType;
+
 /**
  * Base service class.
  */
@@ -56,12 +58,14 @@ abstract class tx_mksearch_service_Base extends \Sys25\RnBase\Typo3Wrapper\Servi
     {
         $searcher = $this->getSearcher();
 
+        $isBackendRequest = $GLOBALS['TYPO3_REQUEST']->getAttribute('applicationType')
+            && ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isBackend();
         // On default, return hidden and deleted fields in backend
         // @TODO: realy return deleted fields? make Konfigurable!
-        if (TYPO3_MODE == 'BE' &&
-        !isset($options['enablefieldsoff']) &&
-        !isset($options['enablefieldsbe']) &&
-        !isset($options['enablefieldsfe'])
+        if ($isBackendRequest &&
+            !isset($options['enablefieldsoff']) &&
+            !isset($options['enablefieldsbe']) &&
+            !isset($options['enablefieldsfe'])
         ) {
             $options['enablefieldsoff'] = true;
         }
