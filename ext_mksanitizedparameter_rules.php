@@ -1,6 +1,6 @@
 <?php
 
-defined('TYPO3_MODE') || exit('Access denied.');
+defined('TYPO3') || exit('Access denied.');
 
  $rulesForFrontend = [
      'mksearch' => [

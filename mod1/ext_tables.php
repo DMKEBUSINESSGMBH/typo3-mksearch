@@ -1,6 +1,6 @@
 <?php
 
-defined('TYPO3_MODE') or exit('Access denied.');
+defined('TYPO3') or exit('Access denied.');
 
 \Sys25\RnBase\Utility\Extensions::registerModule(
     'mksearch',
