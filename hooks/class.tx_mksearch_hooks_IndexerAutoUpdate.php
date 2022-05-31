@@ -65,7 +65,7 @@ class tx_mksearch_hooks_IndexerAutoUpdate
             foreach (array_keys($uids) as $uid) {
                 // New element?
                 if (!is_numeric($uid)) {
-                    $uid = $dataHandler->substNEWwithIDs[$uid];
+                    $uid = $dataHandler->substNEWwithIDs[$uid] ?? 0;
                 }
                 $records[$table][] = (int) $uid;
             }
