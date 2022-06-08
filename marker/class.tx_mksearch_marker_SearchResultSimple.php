@@ -47,9 +47,7 @@ class tx_mksearch_marker_SearchResultSimple extends tx_mksearch_marker_Search
         $this->prepareItem($item, $formatter->getConfigurations(), $confId);
 
         // Fill MarkerArray
-        $record = $item->getProperty();
-        $ignore = self::findUnusedCols($record, $template, $marker);
-        $item->setProperty($record);
+        $ignore = \Sys25\RnBase\Frontend\Marker\MarkerUtility::findUnusedAttributes($item, $template, $marker);
         // diese felder werden auch bei nicht vorhanden sein gesetzt damit die market nicht ausgegeben werden
         $initFields = $this->getInitFields($template, $item, $formatter, $confId, $marker);
 

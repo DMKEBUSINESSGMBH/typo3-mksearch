@@ -50,7 +50,7 @@ class tx_mksearch_marker_Search extends \Sys25\RnBase\Frontend\Marker\SimpleMark
             $template = $this->addInfo($template, $item, $formatter, $confId.'extrainfo.', $marker.'_EXTRAINFO');
         }
         // Fill MarkerArray
-        $unused = $this->findUnusedCols($item->getProperty(), $template, $marker);
+        $unused = \Sys25\RnBase\Frontend\Marker\MarkerUtility::findUnusedAttributes($item, $template, $marker);
         $initFields = $this->getInitFields($template, $item, $formatter, $confId, $marker);
         $markerArray = $formatter->getItemMarkerArrayWrapped($item->getProperty(), $confId, $unused, $marker.'_', $initFields);
 
