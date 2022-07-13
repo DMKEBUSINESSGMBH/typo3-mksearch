@@ -167,7 +167,7 @@ class tx_mksearch_model_IndexerFieldBase implements tx_mksearch_interface_Indexe
                     break;
 
                 default:
-                    ;
+                ;
             }
             // If data type is not set explicitely:
             if (!$this->_dataType) {
@@ -188,7 +188,7 @@ class tx_mksearch_model_IndexerFieldBase implements tx_mksearch_interface_Indexe
                         $this->updateDataType('int'); break;
 
                     default:
-                        ;
+                    ;
                 }
             }
         }

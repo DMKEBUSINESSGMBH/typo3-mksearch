@@ -85,8 +85,8 @@ searchsolr.filter.default.formfields {
         $this->assertEquals(1, substr_count($result, '<option value="tstamp asc" selected="selected">'), 'Mehr als 1 Feld als aktiv markiert.');
 
         // <html> <label class="sort"> Sortierung <select name="mksearch[sort]"> <option value="score desc" >Score</option>
-// <option value="tstamp asc" selected="selected">Aktualität aufsteigend</option> <option value="tstamp desc" >Aktualität absteigend</option>
-// </select> </label> </html>
+        // <option value="tstamp asc" selected="selected">Aktualität aufsteigend</option> <option value="tstamp desc" >Aktualität absteigend</option>
+        // </select> </label> </html>
     }
 
     public function test_parseCustomFiltersWithNoConfiguration()

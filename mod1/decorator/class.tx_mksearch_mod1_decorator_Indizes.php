@@ -65,8 +65,8 @@ class tx_mksearch_mod1_decorator_Indizes
                 $ret = '<input type="checkbox" name="clearTables[]" value="'.$record['name'].'" id="clearTables'.$record['name'].'" />';
                 break;
             case 'queuecount':
-                    $oIntIndexSrv = tx_mksearch_util_ServiceRegistry::getIntIndexService();
-                    $ret = $oIntIndexSrv->countItemsInQueue($record['name']);
+                $oIntIndexSrv = tx_mksearch_util_ServiceRegistry::getIntIndexService();
+                $ret = $oIntIndexSrv->countItemsInQueue($record['name']);
                 break;
             default:
                 $ret = $value;

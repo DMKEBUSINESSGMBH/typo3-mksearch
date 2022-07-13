@@ -487,7 +487,7 @@ class tx_mksearch_util_Indexer
         if ($this->isExcludePageTreeCloserToThePidThanAnIncludePageTree(
             $firstRootlineIndexInExcludePageTrees,
             $firstRootlineIndexInIncludePageTrees
-        )
+            )
         ) {
             return false;
         } else {

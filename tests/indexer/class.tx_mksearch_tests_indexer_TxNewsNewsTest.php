@@ -70,7 +70,7 @@ class tx_mksearch_tests_indexer_TxNewsNewsTest extends tx_mksearch_tests_Testcas
             \Sys25\RnBase\Database\Connection::class,
             ['doSelect']
         );
-        ($connection
+        $connection
             ->expects(self::once())
             ->method('doSelect')
             ->with(
@@ -99,35 +99,35 @@ class tx_mksearch_tests_indexer_TxNewsNewsTest extends tx_mksearch_tests_Testcas
                     ]
                 )
             )
-        );
+        ;
 
         $indexSrv = $this->getMock(
             'tx_mksearch_service_internal_Index',
             ['addRecordToIndex']
         );
-        ($indexSrv
+        $indexSrv
             ->expects(self::exactly(3))
             ->method('addRecordToIndex')
             ->with(
                 $this->equalTo('tx_news_domain_model_news'),
                 $this->logicalOr(6, 8, 10)
             )
-        );
+        ;
 
         $indexer = $this->getMock(
             'tx_mksearch_indexer_TxNewsNews',
             ['getDatabaseConnection', 'getIntIndexService']
         );
-        ($indexer
+        $indexer
             ->expects(self::once())
             ->method('getDatabaseConnection')
             ->will(self::returnValue($connection))
-        );
-        ($indexer
+        ;
+        $indexer
             ->expects(self::once())
             ->method('getIntIndexService')
             ->will(self::returnValue($indexSrv))
-        );
+        ;
 
         $stopIndexing = $this->callInaccessibleMethod(
             [$indexer, 'stopIndexing'],
@@ -288,7 +288,7 @@ class tx_mksearch_tests_indexer_TxNewsNewsTest extends tx_mksearch_tests_Testcas
             ['createLocalizedExtbaseDomainModel']
         );
 
-        ($indexer
+        $indexer
             ->expects(self::once())
             ->method('createLocalizedExtbaseDomainModel')
             ->with(
@@ -297,7 +297,7 @@ class tx_mksearch_tests_indexer_TxNewsNewsTest extends tx_mksearch_tests_Testcas
                 'GeorgRinger\\News\\Domain\\Repository\\NewsRepository'
             )
             ->will(self::returnValue($model))
-        );
+        ;
 
         return $indexer;
     }

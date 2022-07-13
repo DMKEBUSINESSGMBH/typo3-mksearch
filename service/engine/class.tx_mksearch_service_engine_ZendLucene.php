@@ -331,7 +331,7 @@ class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\S
                 $queryString = $fields['term'];
             }
 
-            // @TODO: Check syntax etc.
+        // @TODO: Check syntax etc.
         } else {
             // @TODO: Change to $docIds  = $index->termDocs($term) => use filters
 

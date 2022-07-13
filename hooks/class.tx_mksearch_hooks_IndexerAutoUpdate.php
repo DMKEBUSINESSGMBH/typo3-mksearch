@@ -286,7 +286,7 @@ class tx_mksearch_hooks_IndexerAutoUpdate
                 $options['where'] = $options['where'] ?? $data['where'] ?? '';
                 $options['enablefieldsoff'] = true;
                 $databaseUtility = $this->getRnbaseDatabaseUtility();
-                if (($rows = $databaseUtility->doSelect('uid', $from, $options))) {
+                if ($rows = $databaseUtility->doSelect('uid', $from, $options)) {
                     $rows = call_user_func_array('array_merge_recursive', $rows);
                 }
                 if (empty($rows['uid'])) {

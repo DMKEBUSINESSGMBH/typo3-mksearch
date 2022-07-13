@@ -290,10 +290,10 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
                 case 'byFileExtension.':
                     $ret = in_array($fileExtension, $filterValue);
                     break;
-                // Auf den Pfad hin prüfen! Achtung: Funktioniert nicht in Kombination:
-                // trifft preg_match nicht zu, wird in_array nicht mehr geprüft!
-                // entwerder preg_match mit byDirectory
-                // oder      in_array   mit byDirectory.
+                    // Auf den Pfad hin prüfen! Achtung: Funktioniert nicht in Kombination:
+                    // trifft preg_match nicht zu, wird in_array nicht mehr geprüft!
+                    // entwerder preg_match mit byDirectory
+                    // oder      in_array   mit byDirectory.
                 case 'byDirectory':
                     $pattern = $filterValue;
                     // TODO: Validate pattern

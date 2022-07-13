@@ -485,7 +485,7 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
         $firstChar = substr(
             strtoupper($firstChar),
             0,
-            ('0' == $firstChar[0] ? 3 : 1)
+            '0' == $firstChar[0] ? 3 : 1
         );
 
         // store firstchar

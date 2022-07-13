@@ -153,7 +153,7 @@ class tx_mksearch_util_Filter
                     $template,
                     \Sys25\RnBase\Frontend\Marker\SimpleMarker::class,
                     $confId.'formfields.'.$field.'.',
-                    ($fieldMarker),
+                    $fieldMarker,
                     $configurations->getFormatter()
                 );
             }

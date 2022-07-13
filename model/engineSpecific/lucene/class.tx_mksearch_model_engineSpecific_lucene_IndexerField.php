@@ -95,7 +95,7 @@ class tx_mksearch_model_engineSpecific_lucene_IndexerField extends tx_mksearch_m
                 $encoding,
                 'class.tx_mksearch_model_engineSpecific_lucene_IndexerField.php'
             );
-            exit();
+            exit;
         }
     }
 

@@ -76,7 +76,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
         $language = $options['lang'] ?? 0;
         if ($this->loadFrontendForLocalization && $language) {
             tx_mksearch_util_Indexer::prepareTSFE(
-                ($options['localizationPid'] ?? ('pages' == $tableName ? ($rawData['uid'] ?? 0) : ($rawData['pid'] ?? 0))),
+                $options['localizationPid'] ?? ('pages' == $tableName ? ($rawData['uid'] ?? 0) : ($rawData['pid'] ?? 0)),
                 $language
             );
         }

@@ -39,5 +39,5 @@ interface tx_mksearch_interface_SearchHit
      * Returns the data record as array
      * @return array
      */
-//   public function getRecord();// allready declared in \Sys25\RnBase\Domain\Model\DataInterface
+    //   public function getRecord();// allready declared in \Sys25\RnBase\Domain\Model\DataInterface
 }

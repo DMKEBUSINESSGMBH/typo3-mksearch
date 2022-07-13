@@ -48,14 +48,14 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
     ) {
         // @codingStandardsIgnoreEnd
         // should the element be removed from the index?
-        if ((
+        if (
             // only for gridelements? no, other elements should be deleted too!
             // $this->isGridelement($oModel->getRecord()) &&
             // only if not directly set do indexable or not indexable!
             self::USE_INDEXER_CONFIGURATION == $oModel->getTxMksearchIsIndexable() &&
             // only, if there are a parent container
             $oModel->getTxGridelementsContainer() > 0
-        )) {
+        ) {
             // add the parent do index, so the changes are writen to index
             $this->addGridelementsContainerToIndex($oModel);
 

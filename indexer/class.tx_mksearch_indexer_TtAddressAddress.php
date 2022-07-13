@@ -180,11 +180,11 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
     {
         if (// vom indexer entfernen wenn
             // gelöscht
-            ($sourceRecord['deleted'])
+            $sourceRecord['deleted']
             ||
             // hidden
             (isset($options['removeIfHidden']) && $options['removeIfHidden'] && $sourceRecord['hidden'])
-           ) {
+        ) {
             return true;
         }
         // else

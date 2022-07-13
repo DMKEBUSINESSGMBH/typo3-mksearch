@@ -148,7 +148,7 @@ class tx_mksearch_indexer_FAL extends tx_mksearch_indexer_BaseMedia
         $indexService = $this->getInternalIndexService();
         /** @var \TYPO3\CMS\Core\Database\Query\QueryBuilder $queryBuilder */
         $queryBuilder = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-                \TYPO3\CMS\Core\Database\ConnectionPool::class
+            \TYPO3\CMS\Core\Database\ConnectionPool::class
         )->getQueryBuilderForTable('sys_file_reference');
 
         $result = $queryBuilder
