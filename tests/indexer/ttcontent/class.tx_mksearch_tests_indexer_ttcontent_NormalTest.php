@@ -22,8 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch', 'lib/Apache/Solr/Document.php');
-
 /**
  * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
  * @license http://www.gnu.org/licenses/lgpl.html

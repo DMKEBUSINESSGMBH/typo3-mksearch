@@ -25,11 +25,6 @@
  */
 
 /**
- * benötigte Klassen einbinden.
- */
-require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch').'lib/Apache/Solr/Document.php';
-
-/**
  * @author Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
  * @author Michael Wagner <michael.wagner@dmk-ebusiness.de>
  * @license http://www.gnu.org/licenses/lgpl.html

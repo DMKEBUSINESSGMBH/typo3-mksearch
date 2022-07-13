@@ -22,8 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch').'lib/Apache/Solr/Service.php';
-
 /**
  * Service "Solr search engine" for the "mksearch" extension.
  */
@@ -84,7 +82,6 @@ class tx_mksearch_service_engine_Solr extends \Sys25\RnBase\Typo3Wrapper\Service
         // Sicherheitslücke. Alternativ bieten wir daher an alle Http Aufrufe
         // per Curl durchzuführen.
         if (\Sys25\RnBase\Configuration\Processor::getExtensionCfgValue('mksearch', 'useCurlAsHttpTransport')) {
-            require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch').'lib/Apache/Solr/HttpTransport/Curl.php';
             $oHttpTransport = new Apache_Solr_HttpTransport_Curl();
             $this->index->setHttpTransport($oHttpTransport);
         }
