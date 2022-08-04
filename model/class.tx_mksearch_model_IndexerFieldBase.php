@@ -167,28 +167,32 @@ class tx_mksearch_model_IndexerFieldBase implements tx_mksearch_interface_Indexe
                     break;
 
                 default:
-                ;
+                    ;
             }
             // If data type is not set explicitely:
             if (!$this->_dataType) {
                 switch ($this->_storageType) {
                     case 'text':
                     case 'unstored':
-                        $this->updateDataType('text'); break;
+                        $this->updateDataType('text');
+                        break;
 
                     case 'keyword':
                     case 'tinytext':
                     case 'unindexed':
-                        $this->updateDataType('string'); break;
+                        $this->updateDataType('string');
+                        break;
 
                     case 'binary':
-                        $this->updateDataType('blob'); break;
+                        $this->updateDataType('blob');
+                        break;
 
                     case 'uid':
-                        $this->updateDataType('int'); break;
+                        $this->updateDataType('int');
+                        break;
 
                     default:
-                    ;
+                        ;
                 }
             }
         }

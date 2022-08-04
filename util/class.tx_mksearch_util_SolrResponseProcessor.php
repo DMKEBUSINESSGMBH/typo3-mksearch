@@ -181,7 +181,7 @@ class tx_mksearch_util_SolrResponseProcessor
             if (!\Sys25\RnBase\Utility\Strings::isFirstPartOfStr(
                 $cleanOriginalValue,
                 $cleanHighlighted
-                )
+            )
             ) {
                 $highlightedValue = $wrap[0].$highlightedValue;
             }
@@ -189,7 +189,7 @@ class tx_mksearch_util_SolrResponseProcessor
             if (!\Sys25\RnBase\Utility\Strings::isLastPartOfStr(
                 $cleanOriginalValue,
                 $cleanHighlighted
-                )
+            )
             ) {
                 $highlightedValue = $highlightedValue.$wrap[1];
             }
