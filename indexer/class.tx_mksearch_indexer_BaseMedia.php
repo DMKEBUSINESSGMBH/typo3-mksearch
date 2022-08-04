@@ -140,7 +140,7 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
 
         $fields = (array) ($options['fields.'] ?? []);
         foreach ($fields as $localFieldName => $indexFieldName) {
-            $indexDoc->addField($indexFieldName, $sourceRecord[$localFieldName], 'keyword');
+            $indexDoc->addField($indexFieldName, $sourceRecord[$localFieldName] ?? '');
         }
         // Wie sollen die Binärdaten indiziert werden? Solr Cell oder Tika?
         $indexMethod = $this->getIndexMethod($options);

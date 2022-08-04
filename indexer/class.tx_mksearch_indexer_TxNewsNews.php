@@ -208,7 +208,7 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
                     'uid' => $rawData['uid'],
                 ]
             );
-            if ($options['deleteOnAbort']) {
+            if ($options['deleteOnAbort'] ?? false) {
                 $indexDoc->setDeleted(true);
 
                 return $indexDoc;
@@ -258,7 +258,8 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
 
         $indexDoc->addField('pid', $news->getPid());
         $indexDoc->setTitle($news->getTitle());
-        $indexDoc->setTimestamp($news->getTstamp());
+        $timestamp = $news->getTstamp() instanceof DateTime ? $news->getTstamp()->getTimestamp() : $news->getTstamp();
+        $indexDoc->setTimestamp($timestamp);
 
         $content = trim(
             implode(
@@ -413,7 +414,7 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
 
         $indexDoc->addField(
             'categorySinglePid_i',
-            $singlePid ?: (int) $options['defaultSinglePid']
+            $singlePid ?: (int) ($options['defaultSinglePid'] ?? 0)
         );
 
         $indexDoc->addField('categories_mi', array_keys($categories));

@@ -70,7 +70,7 @@ class tx_mksearch_indexer_FAL extends tx_mksearch_indexer_BaseMedia
         // get meta data, too, and fill the abstract
         if ($resourceFile = $this->getFileFromRecord($sourceRecord)) {
             $sourceRecord = $resourceFile->getProperties();
-            if ($options['queueReferencedRecords']) {
+            if ($options['queueReferencedRecords'] ?? false) {
                 $this->queueReferencedRecords($resourceFile);
             }
         }
@@ -88,6 +88,8 @@ class tx_mksearch_indexer_FAL extends tx_mksearch_indexer_BaseMedia
      */
     protected function getRelFileName($tableName, $sourceRecord)
     {
+        // falls wir keine ressource haben, bauen die url selbst zusammen.
+        $relativeFileName = $GLOBALS['TYPO3_CONF_VARS']['BE']['fileadminDir'].$sourceRecord['identifier'];
         // wir haben ein indiziertes dokument
         if (isset($sourceRecord['uid']) && intval($sourceRecord['uid']) > 0) {
             $resourceFile = $this->getFileFromRecord($sourceRecord);
@@ -97,11 +99,12 @@ class tx_mksearch_indexer_FAL extends tx_mksearch_indexer_BaseMedia
                 // womit wir das wieder dekodieren müssen. Es gibt leider
                 // keine besser Möglichkeit an den unbehandelten Pfad zur Datei
                 // inkl. Pfad vom Storage zu kommen.
-                return rawurldecode($resourceFile->getPublicUrl());
+                $relativeFileName = rawurldecode($resourceFile->getPublicUrl());
             }
         }
-        // wenn wir keine ressource haben, bauen die url selbst zusammen.
-        return $GLOBALS['TYPO3_CONF_VARS']['BE']['fileadminDir'].$sourceRecord['identifier'];
+
+        // make sure there is no leading forward slash which get's added since TYPO3 11.x
+        return ltrim($relativeFileName, '/');
     }
 
     /**
@@ -231,6 +234,7 @@ class tx_mksearch_indexer_FAL extends tx_mksearch_indexer_BaseMedia
         if (!\TYPO3\CMS\Core\Utility\PathUtility::isAbsolutePath($filePath)) {
             $filePath = \Sys25\RnBase\Utility\Environment::getPublicPath().$filePath;
         }
+
         if (// In FALs sys_file table there are no cloumns for hidden and deleted
             // items. Nevertheless we check the deleted flag, because in
             // tx_mksearch_util_ResolverT3DB::getRecords() may be a "minimal model"

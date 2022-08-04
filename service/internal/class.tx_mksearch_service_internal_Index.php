@@ -414,7 +414,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
         self::setSignalThatIndexingIsInProgress();
 
         // alle indexer fragen oder nur von der aktuellen pid?
-        if ($config['pid']) {
+        if ($config['pid'] ?? null) {
             $indices = $this->getByPageId($config['pid']);
         } else {
             $indices = $this->findAll();
@@ -487,7 +487,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
                                         $aConfigByContentType
                                     );
                                     if ($doc) {
-                                        if ($GLOBALS['TCA'][$queueRecord['tablename']]['ctrl']['versioningWS']) {
+                                        if ($GLOBALS['TCA'][$queueRecord['tablename']]['ctrl']['versioningWS'] ?? false) {
                                             $this->deleteDocumentIfNotCorrectWorkspace(
                                                 $aConfigByContentType,
                                                 $record,
