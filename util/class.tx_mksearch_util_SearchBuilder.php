@@ -193,7 +193,7 @@ class tx_mksearch_util_SearchBuilder
      *
      * @return string
      */
-    public static function searchSolrOptions($term = '', $combination, $options = [])
+    public static function searchSolrOptions($term = '', $combination = '', $options = [])
     {
         if (self::emptyTerm($term)) {
             return '';

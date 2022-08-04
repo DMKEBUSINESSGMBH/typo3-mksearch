@@ -177,7 +177,7 @@ class tx_mksearch_marker_Facet extends tx_mksearch_marker_SearchResultSimple
 
         // jetzt noch den fq parameter wert in den record schreiben
         // damit er im TS zur Verfügung steht
-        $item->getProperty($configurations->get($confId.'links.show.paramField'), $sFq);
+        $item->setProperty($configurations->get($confId.'links.show.paramField'), $sFq);
 
         parent::prepareLinks($item, $marker, $markerArray, $subpartArray, $wrappedSubpartArray, $confId, $formatter, $template);
 

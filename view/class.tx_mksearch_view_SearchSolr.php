@@ -48,7 +48,7 @@ class tx_mksearch_view_SearchSolr extends \Sys25\RnBase\Frontend\View\Marker\Bas
     {
         $viewData = $request->getViewContext();
         $configurations = $request->getConfigurations();
-        $result = &$viewData->offsetGet('result');
+        $result = $viewData->offsetExists('result') ? $viewData->offsetGet('result') : [];
 
         $items = $result ? $result['items'] : [];
         /* @var $listBuilder \Sys25\RnBase\Frontend\Marker\ListBuilder */

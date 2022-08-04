@@ -105,9 +105,9 @@ class tx_mksearch_util_FacetBuilder
     public function buildFacets($facetData)
     {
         $facetGroups = array_merge(
-            $this->buildFieldFacets($facetData->facet_fields),
-            $this->buildQueryFacets($facetData->facet_queries),
-            $this->buildPivotFacets($facetData->facet_pivot)
+            $this->buildFieldFacets($facetData->facet_fields ?? null),
+            $this->buildQueryFacets($facetData->facet_queries ?? null),
+            $this->buildPivotFacets($facetData->facet_pivot ?? null)
         );
         // TODO: RANGE-Facet integrieren
 

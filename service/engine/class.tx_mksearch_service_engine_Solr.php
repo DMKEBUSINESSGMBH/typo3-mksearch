@@ -820,6 +820,7 @@ class tx_mksearch_service_engine_Solr extends \Sys25\RnBase\Typo3Wrapper\Service
      */
     public static function getHitsFromSolrResponse(Apache_Solr_Response $response, array $options)
     {
+        $docs = [];
         if ('true' == ($options['group'] ?? '')) {
             foreach ((array) $response->grouped->{$options['group.field']}->groups as $group) {
                 foreach ($group->doclist->docs as $doc) {

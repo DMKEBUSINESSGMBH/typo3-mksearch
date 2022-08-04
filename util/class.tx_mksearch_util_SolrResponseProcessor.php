@@ -239,7 +239,7 @@ class tx_mksearch_util_SolrResponseProcessor
     {
         $confId = $this->getConfId().'suggestions.';
         // Suggestions
-        if ($response->spellcheck->suggestions) {
+        if ($response->spellcheck && $response->spellcheck->suggestions) {
             $builderClass = $this->getConfigurations()->get($confId.'builderClass');
             $builderClass = $builderClass ? $builderClass : 'tx_mksearch_util_SuggestionBuilder';
             $builder = tx_mksearch_util_SuggestionBuilder::getInstance($builderClass);
