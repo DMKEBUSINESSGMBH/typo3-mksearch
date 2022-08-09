@@ -141,7 +141,7 @@ class tx_mksearch_util_Filter
                         \Sys25\RnBase\Domain\Model\BaseModel::class,
                         [
                             'uid' => $fieldId,
-                            'caption' => is_array($config) ? $config['caption'] : $config,
+                            'caption' => is_array($config) ? ($config['caption'] ?? '') : $config,
                             'selected' => $fieldId == $fieldActive ? $activeMark : '',
                         ]
                     );
