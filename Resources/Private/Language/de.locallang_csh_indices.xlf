@@ -7,10 +7,6 @@
 				<source>If you use Solr you have to set the name by following schema: 'host,port,core' e.g. 'localhost,8983,/solr/core-name'. &lt;br /&gt;&lt;br /&gt;  If you use Zend Lucene you just have to provide the index name. &lt;br /&gt;&lt;br /&gt;  If you use ElasticSearch you have to set the name by the following schema: 'index;host,port,path;host,port,path' e.g. 'typo3-content;first-server,8983,/;second-server,8983,/'</source>
 				<target>Wenn Sie Solr nutzen muss der Name nach folgendem Schema angegeben werden: 'Host,Port,Core' z.B.: 'localhost,8983,/solr/core-name'. &lt;br /&gt;&lt;br /&gt;  Wenn Sie Zend Lucene nutzen, dann müssen Sie nur den Indexnamen angeben. &lt;br /&gt;&lt;br /&gt;  Wenn Sie ElasticSearch nutzen, dann muss der Name nach folgendem Schema angegeben werden: 'index;host,port,path;host,port,path' e.g. 'typo3-content;erster-server,8983,/;zweiter-server,8983,/'</target>
 			</trans-unit>
-			<trans-unit id="name.details" resname="name.details"  approved="yes">
-				<source/>
-				<target/>
-			</trans-unit>
 		</body>
 	</file>
 </xliff>

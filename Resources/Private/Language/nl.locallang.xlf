@@ -107,30 +107,6 @@
 				<source>reset Search</source>
 				<target>reset Zoeken</target>
 			</trans-unit>
-			<trans-unit id="label_score" resname="label_score"  approved="yes">
-				<source>Score</source>
-				<target/>
-			</trans-unit>
-			<trans-unit id="label_time_asc" resname="label_time_asc"  approved="yes">
-				<source>Time ascending</source>
-				<target/>
-			</trans-unit>
-			<trans-unit id="label_time_desc" resname="label_time_desc"  approved="yes">
-				<source>Time descending</source>
-				<target/>
-			</trans-unit>
-			<trans-unit id="label_pagelimit_10" resname="label_pagelimit_10"  approved="yes">
-				<source>10 hits</source>
-				<target/>
-			</trans-unit>
-			<trans-unit id="label_pagelimit_50" resname="label_pagelimit_50"  approved="yes">
-				<source>50 hits</source>
-				<target/>
-			</trans-unit>
-			<trans-unit id="label_pagelimit_100" resname="label_pagelimit_100"  approved="yes">
-				<source>100 hits</source>
-				<target/>
-			</trans-unit>
 			<trans-unit id="ERROR_default" resname="ERROR_default"  approved="yes">
 				<source>There was an unexpected error!</source>
 				<target>Er is een onverwachte fout opgetreden!</target>
