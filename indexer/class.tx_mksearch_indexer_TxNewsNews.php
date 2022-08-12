@@ -104,6 +104,10 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
      */
     private function handleCategoryChanged($catRecord)
     {
+        $whereClause = 'CATMM.tablenames = "tx_news_domain_model_news" AND CATMM.uid_local = '.(int) $catRecord['uid'];
+        if ($catRecord['l10n_parent'] ?? false) {
+            $whereClause .= 'OR CATMM.tablenames = "tx_news_domain_model_news" AND CATMM.uid_local = '.(int) $catRecord['l10n_parent'];
+        }
         $rows = $this->getDatabaseConnection()->doSelect(
             'NEWS.uid AS uid',
             [
@@ -113,7 +117,7 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
                 'NEWS',
             ],
             [
-                'where' => 'CATMM.tablenames = "tx_news_domain_model_news" AND CATMM.uid_local = '.(int) $catRecord['uid'],
+                'where' => $whereClause,
                 'orderby' => 'sorting_foreign DESC',
             ]
         );

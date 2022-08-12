@@ -74,8 +74,14 @@ class tx_mksearch_indexer_Cal extends tx_mksearch_indexer_Base
     ) {
         if ('tx_cal_category' == $tableName) {
             $events = $this->getEventsByCategoryUid($rawData['uid']);
+            if ($rawData['l18n_parent'] ?? false) {
+                $events = array_merge($events, $this->getEventsByCategoryUid($rawData['l18n_parent']));
+            }
         } elseif ('tx_cal_calendar' == $tableName) {
             $events = $this->getEventsByCalendarUid($rawData['uid']);
+            if ($rawData['l18n_parent'] ?? false) {
+                $events = array_merge($events, $this->getEventsByCalendarUid($rawData['l18n_parent']));
+            }
         }
 
         if ($events) {
