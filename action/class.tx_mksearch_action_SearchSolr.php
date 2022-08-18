@@ -407,7 +407,6 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
             $GLOBALS['TYPO3_CONF_VARS']['FE']['debug'] = 0;
             $tsfe = \Sys25\RnBase\Utility\TYPO3::getTSFE();
             $tsfe->config['config']['debug'] = 0;
-            $tsfe->TYPO3_CONF_VARS['FE']['debug'] = 0;
 
             $result = $request->getViewContext()->offsetGet('result');
             $forbiddenResultItems = ['searchUrl' => null, 'searchTime' => null, 'response' => null];

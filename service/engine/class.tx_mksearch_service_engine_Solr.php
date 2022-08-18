@@ -251,7 +251,7 @@ class tx_mksearch_service_engine_Solr extends \Sys25\RnBase\Typo3Wrapper\Service
             $ret['searchTime'] = (microtime(true) - $start).' ms';
 
             if ('true' == ($options['group.ngroups'] ?? '')) {
-                $ret['numFound'] = $response->grouped->{$options['group.field']}->ngroups;
+                $ret['numFound'] = $response->grouped->{$options['group.field']}->ngroups ?? 0;
             } else {
                 $ret['numFound'] = $response->response->numFound;
             }
@@ -822,7 +822,7 @@ class tx_mksearch_service_engine_Solr extends \Sys25\RnBase\Typo3Wrapper\Service
     {
         $docs = [];
         if ('true' == ($options['group'] ?? '')) {
-            foreach ((array) $response->grouped->{$options['group.field']}->groups as $group) {
+            foreach ((array) ($response->grouped->{$options['group.field']}->groups ?? []) as $group) {
                 foreach ($group->doclist->docs as $doc) {
                     $solrDocument = new Apache_Solr_Document();
                     foreach ($doc as $field => $value) {
