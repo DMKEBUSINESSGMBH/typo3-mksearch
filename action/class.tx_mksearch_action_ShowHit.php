@@ -21,10 +21,10 @@ class tx_mksearch_action_ShowHit extends \Sys25\RnBase\Frontend\Controller\Abstr
     }
 
     /**
+     * @return tx_mksearch_interface_SearchHit
+     *
      * @throws InvalidArgumentException
      * @throws Ambigous                 <Exception, LogicException, LogicException, tx_mksearch_service_engine_SolrException>
-     *
-     * @return tx_mksearch_interface_SearchHit
      */
     protected function findItem()
     {
@@ -81,9 +81,9 @@ class tx_mksearch_action_ShowHit extends \Sys25\RnBase\Frontend\Controller\Abstr
      * @param string $extKey
      * @param string $contentType
      *
-     * @throws Ambigous <Exception, InvalidArgumentException, tx_mksearch_service_engine_SolrException>
-     *
      * @return
+     *
+     * @throws Ambigous <Exception, InvalidArgumentException, tx_mksearch_service_engine_SolrException>
      */
     protected function searchByContentUid($uid, $extKey, $contentType)
     {
@@ -127,9 +127,9 @@ class tx_mksearch_action_ShowHit extends \Sys25\RnBase\Frontend\Controller\Abstr
     /**
      * returns the dataset for the current used index.
      *
-     * @throws Exception
-     *
      * @return tx_mksearch_model_internal_Index
+     *
+     * @throws Exception
      */
     protected function getIndex()
     {
