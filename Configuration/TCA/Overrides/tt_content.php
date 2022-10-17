@@ -47,13 +47,13 @@ $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist']['tx_mksea
 // so this type is just like the 100 type in the FE but this type is indexed instead
 // of the standard type (100)
 $aTempConfig = $GLOBALS['TCA']['tt_content']['columns']['header_layout']['config']['items'];
-$aTempConfig[] = ['LLL:EXT:'.'mksearch'.'/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.tt_content.header_layout', '101'];
+$aTempConfig[] = ['LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.tt_content.header_layout', '101'];
 $GLOBALS['TCA']['tt_content']['columns']['header_layout']['config']['items'] = $aTempConfig;
 
 // Add flexform and plugin
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue('tx_mksearch', 'FILE:EXT:'.'mksearch'.'/flexform_main.xml');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue('tx_mksearch', 'FILE:EXT:mksearch/flexform_main.xml');
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPlugin(
-    ['LLL:EXT:'.'mksearch'.'/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.label', 'tx_mksearch'],
+    ['LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.label', 'tx_mksearch'],
     'list_type',
     'mksearch'
 );

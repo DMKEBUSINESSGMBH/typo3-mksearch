@@ -43,7 +43,7 @@ class tx_mksearch_model_SolrHit extends \Sys25\RnBase\Domain\Model\BaseModel imp
     {
         $solrDoc = $rowOrUid;
         if (!$solrDoc instanceof Apache_Solr_Document) {
-            throw new InvalidArgumentException('The solr doc has to be an object instance of "Apache_Solr_Document",'.'"'.(is_object($solrDoc) ? get_class($solrDoc) : gettype($solrDoc)).'" given.', 1370252783);
+            throw new InvalidArgumentException('The solr doc has to be an object instance of "Apache_Solr_Document","'.(is_object($solrDoc) ? get_class($solrDoc) : gettype($solrDoc)).'" given.', 1370252783);
         }
         $this->solrDoc = $solrDoc;
         $uidField = $solrDoc->getField('uid');

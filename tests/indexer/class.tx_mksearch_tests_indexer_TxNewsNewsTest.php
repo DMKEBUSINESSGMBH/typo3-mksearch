@@ -43,6 +43,7 @@ class tx_mksearch_tests_indexer_TxNewsNewsTest extends tx_mksearch_tests_Testcas
      * Testet die indexData Methode.
      *
      * @group unit
+     *
      * @test
      */
     public function testGetContentType()
@@ -62,6 +63,7 @@ class tx_mksearch_tests_indexer_TxNewsNewsTest extends tx_mksearch_tests_Testcas
      * Testet die indexData Methode.
      *
      * @group unit
+     *
      * @test
      */
     public function testHandleCategoryChanged()
@@ -146,6 +148,7 @@ class tx_mksearch_tests_indexer_TxNewsNewsTest extends tx_mksearch_tests_Testcas
      * Testet die indexData Methode.
      *
      * @group unit
+     *
      * @test
      */
     public function testIndexData()

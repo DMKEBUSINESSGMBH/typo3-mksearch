@@ -60,6 +60,7 @@ class tx_mksearch_tests_indexer_A21GlossaryTest extends tx_mksearch_tests_Testca
      * Testet die getContentType Methode.
      *
      * @group unit
+     *
      * @test
      */
     public function testGetContentType()
@@ -75,6 +76,7 @@ class tx_mksearch_tests_indexer_A21GlossaryTest extends tx_mksearch_tests_Testca
      * Testet die getContentType Methode.
      *
      * @group unit
+     *
      * @test
      */
     public function testIndexData()

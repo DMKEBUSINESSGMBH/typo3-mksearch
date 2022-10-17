@@ -138,7 +138,7 @@ class tx_mksearch_marker_Search extends \Sys25\RnBase\Frontend\Marker\SimpleMark
                 $extraInfo = sprintf('<!-- NO FILE OR SUBPART FOUND: %s -->', $e->getMessage());
             }
         } else {
-            $extraInfo = '<!-- NO MARKER-CLASS FOUND: '.$typeConfId.'markerClass'.' -->';
+            $extraInfo = '<!-- NO MARKER-CLASS FOUND: '.$typeConfId.'markerClass -->';
         }
 
         $markerArray = ['###'.$markerPrefix.'###' => $extraInfo];

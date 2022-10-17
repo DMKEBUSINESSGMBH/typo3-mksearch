@@ -261,7 +261,7 @@ class tx_mksearch_tests_Util
             $extKey = $extKeyOrIndexer;
         } // falscher datentyp
         else {
-            throw new Exception('First argument of getIndexerDocument has to be an "string"'.' or instance of "tx_mksearch_interface_Indexer", '.(is_object($extKeyOrIndexer) ? get_class($extKeyOrIndexer) : gettype($extKeyOrIndexer)).' given.');
+            throw new Exception('First argument of getIndexerDocument has to be an "string" or instance of "tx_mksearch_interface_Indexer", '.(is_object($extKeyOrIndexer) ? get_class($extKeyOrIndexer) : gettype($extKeyOrIndexer)).' given.');
         }
 
         return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($documentClass, $extKey, $cType);

@@ -53,7 +53,9 @@ class tx_mksearch_tests_indexer_TtContentTest extends tx_mksearch_tests_Testcase
      * @param string $expectedTitle
      *
      * @group unit
+     *
      * @test
+     *
      * @dataProvider getGetTitleData
      */
     public function testGetTitle(

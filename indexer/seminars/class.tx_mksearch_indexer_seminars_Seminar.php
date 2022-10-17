@@ -376,7 +376,7 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
 
         return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_seminars_Bag_Speaker',
-            $mmTable.'.uid_local = '.$uid.' AND '.'tx_seminars_speakers.uid = '.$mmTable.'.uid_foreign',
+            $mmTable.'.uid_local = '.$uid.' AND tx_seminars_speakers.uid = '.$mmTable.'.uid_foreign',
             $mmTable,
             'sorting'
         );

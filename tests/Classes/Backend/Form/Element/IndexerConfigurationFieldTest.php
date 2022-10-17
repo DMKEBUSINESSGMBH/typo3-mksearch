@@ -36,6 +36,7 @@ class IndexerConfigurationFieldTest extends \Sys25\RnBase\Testing\BaseTestCase
 {
     /**
      * @group unit
+     *
      * @dataProvider dataProviderRenderWhenDefaultValueShouldNotBeSet
      */
     public function testRenderWhenDefaultValueShouldNotBeSet(array $databaseRow)

@@ -289,6 +289,7 @@ class tx_mksearch_tests_indexer_BaseMediaTest extends tx_mksearch_tests_Testcase
 
     /**
      * @group unit
+     *
      * @dataProvider providerHasDocToBeDeleted
      */
     public function testHasDocToBeDeleted($sourceRecord, $expected)

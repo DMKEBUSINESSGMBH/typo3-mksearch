@@ -125,6 +125,7 @@ class tx_mksearch_tests_service_internal_IndexTest extends tx_mksearch_tests_Tes
      * test for tx_mksearch_service_internal_Index::addModelsToIndex.
      *
      * @group unit
+     *
      * @test
      */
     public function testAddModelsToIndex()
@@ -158,6 +159,7 @@ class tx_mksearch_tests_service_internal_IndexTest extends tx_mksearch_tests_Tes
 
     /**
      * @group unit
+     *
      * @dataProvider dataProviderDeleteDocumentIfNotCorrectWorkspaceTest
      */
     public function testDeleteDocumentIfNotCorrectWorkspace(

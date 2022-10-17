@@ -33,6 +33,7 @@ use Sys25\RnBase\Frontend\Request\ParametersInterface;
  * Filter für autocomplete Anfragen.
  *
  * @author hbochmann
+ *
  * @TODO Unit Test ob das hinzufügen der FE Gruppen funktioniert.
  */
 class tx_mksearch_filter_SolrAutocomplete extends tx_mksearch_filter_SolrBase

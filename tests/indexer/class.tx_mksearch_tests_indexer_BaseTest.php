@@ -1077,6 +1077,7 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
 
     /**
      * @group unit
+     *
      * @dataProvider getTestDataForShouldIndexSiteRootPageTest
      */
     public function testShouldIndexSiteRootPage($options, $expected)
@@ -1160,6 +1161,7 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
 
     /**
      * @group unit
+     *
      * @dataProvider getHandleCharBrowserFieldsData
      */
     public function testHandleCharBrowserFields(
@@ -1197,6 +1199,7 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
      * @param int  $languageUid
      * @param bool $loadFrontendForLocalization
      * @param bool $frontendLoaded
+     *
      * @dataProvider dataProviderPrepareSearchDataLoadsFrontendIfDesiredAndNeeded
      */
     public function testPrepareSearchDataLoadsFrontendIfDesiredAndNeeded(

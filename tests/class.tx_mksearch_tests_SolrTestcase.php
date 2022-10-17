@@ -283,7 +283,7 @@ abstract class tx_mksearch_tests_SolrTestcase extends tx_mksearch_tests_Testcase
      */
     protected function getAdminCoresPath()
     {
-        return $this->getBaseUrl().'/'.'admin/cores';
+        return $this->getBaseUrl().'/admin/cores';
     }
 
     /**

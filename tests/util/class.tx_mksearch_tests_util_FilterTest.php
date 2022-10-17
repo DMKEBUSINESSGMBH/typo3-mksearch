@@ -267,7 +267,9 @@ searchsolr.filter.default.sort {
      * Tests tx_mksearch_util_Filter::parseFqFieldAndValue.
      *
      * @group unit
+     *
      * @test
+     *
      * @dataProvider getParseFqFieldAndValueData
      */
     public function testParseFqFieldAndValue(

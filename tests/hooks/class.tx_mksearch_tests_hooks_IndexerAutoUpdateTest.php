@@ -433,6 +433,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
 
     /**
      * @unit
+     *
      * @dataProvider dataProviderGetUidsToIndex
      */
     public function testGetUidsToIndexIfDataIsArrayAndHasSelectTypeKey(

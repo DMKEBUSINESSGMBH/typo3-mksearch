@@ -75,6 +75,7 @@ class tx_mksearch_tests_service_engine_ElasticSearchTest extends tx_mksearch_tes
 
     /**
      * @group unit
+     *
      * @dataProvider getServerStatus
      */
     public function testIsServerAvailable($returnCode, $expectedReturn)
@@ -1109,6 +1110,7 @@ class tx_mksearch_tests_service_engine_ElasticSearchTest extends tx_mksearch_tes
 
     /**
      * @group unit
+     *
      * @dataProvider getOptionsForElastica
      */
     public function testGetOptionsForElastica($initialOption, $expectedMappedOption)

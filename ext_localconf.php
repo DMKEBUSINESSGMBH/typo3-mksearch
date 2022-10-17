@@ -50,8 +50,8 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['proc
 // Register information for the test and sleep tasks
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['tx_mksearch_scheduler_IndexTask'] = [
     'extension' => 'mksearch',
-    'title' => 'LLL:EXT:'.'mksearch'.'/Resources/Private/Language/locallang_db.xlf:scheduler_indexTask_name',
-    'description' => 'LLL:EXT:'.'mksearch'.'/Resources/Private/Language/locallang_db.xlf:scheduler_indexTask_description',
+    'title' => 'LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:scheduler_indexTask_name',
+    'description' => 'LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:scheduler_indexTask_description',
     'additionalFields' => 'tx_mksearch_scheduler_IndexTaskAddFieldProvider',
 ];
 

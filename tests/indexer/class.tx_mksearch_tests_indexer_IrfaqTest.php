@@ -359,6 +359,7 @@ class tx_mksearch_tests_indexer_IrfaqTest extends tx_mksearch_tests_Testcase
 
     /**
      * @group unit
+     *
      * @dataProvider getIncludeOptions
      *
      * @param array $options

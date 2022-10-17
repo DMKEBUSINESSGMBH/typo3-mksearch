@@ -366,6 +366,7 @@ class tx_mksearch_tests_indexer_FALTest extends tx_mksearch_tests_Testcase
 
     /**
      * @group unit
+     *
      * @dataProvider providerHasDocToBeDeleted
      */
     public function testHasDocToBeDeletedWithRecordWithDeleteFlag($sourceRecord, $expected)

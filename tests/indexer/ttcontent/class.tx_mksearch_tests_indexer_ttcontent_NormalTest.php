@@ -293,6 +293,7 @@ class tx_mksearch_tests_indexer_ttcontent_NormalTest extends tx_mksearch_tests_T
 
     /**
      * @group unit
+     *
      * @dataProvider getTestDataForShouldRespectIncludeInSearchDisable
      */
     public function testShouldRespectIncludeInSearchDisable($options, $expected)
@@ -448,6 +449,7 @@ class tx_mksearch_tests_indexer_ttcontent_NormalTest extends tx_mksearch_tests_T
 
     /**
      * @group unit
+     *
      * @dataProvider getTestDataForIsIndexableRecordWithAllMethodPossibilities
      */
     public function testIsIndexableRecordWithAllMethodPossibilities($sourceRecord, $expected)
@@ -670,6 +672,7 @@ class tx_mksearch_tests_indexer_ttcontent_NormalTest extends tx_mksearch_tests_T
 
     /**
      * @group unit
+     *
      * @dataProvider getTestDataForIsIndexableRecordWithIndexableAndWithoutMethods
      */
     public function testIsIndexableRecordWithIndexableAndWithoutMethods($sourceRecord, $options, $expected)
@@ -836,6 +839,7 @@ class tx_mksearch_tests_indexer_ttcontent_NormalTest extends tx_mksearch_tests_T
 
     /**
      * @group unit
+     *
      * @dataProvider dataProviderDokTypes
      */
     public function testHasDocToBeDeletedDependentOnDokType($dokType, $hasToBeDeleted = true, $options = [])

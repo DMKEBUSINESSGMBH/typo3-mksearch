@@ -70,7 +70,7 @@ class tx_mksearch_action_ShowHit extends \Sys25\RnBase\Frontend\Controller\Abstr
             throw new LogicException('No hit found for "'.$extKey.':'.$contentType.':'.$uid.'" in index "'.$this->getIndex()->getUid().'".', 1377774172);
         }
         if (!$item instanceof tx_mksearch_interface_SearchHit) {
-            throw new LogicException('The hit has to be an object instance of "tx_mksearch_interface_SearchHit",'.'"'.(is_object($item) ? get_class($item) : gettype($item)).'" given.', 1377774178);
+            throw new LogicException('The hit has to be an object instance of "tx_mksearch_interface_SearchHit","'.(is_object($item) ? get_class($item) : gettype($item)).'" given.', 1377774178);
         }
 
         return $item;

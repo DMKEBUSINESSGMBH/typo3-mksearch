@@ -244,7 +244,7 @@ class tx_mksearch_filter_LuceneBase extends tx_mksearch_filter_BaseFilter implem
                     $formTxt = '<!-- NO SUBPART '.$subpartName.' FOUND -->';
                 }
             } else {
-                $formTxt = '<!-- NO FORM TEMPLATE FOUND: '.$confId.'.template'.' -->';
+                $formTxt = '<!-- NO FORM TEMPLATE FOUND: '.$confId.'.template -->';
             }
             // Insert form template into main template
             $template = str_replace('###'.$conf['config.']['marker'].'###', $formTxt, $template);
