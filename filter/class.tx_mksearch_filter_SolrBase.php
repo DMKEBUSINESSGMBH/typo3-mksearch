@@ -728,6 +728,14 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
             }
 
             $templateMarker = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_marker_General');
+            // During marker template parsing stdWrap will be performed on every array member. The value passed to
+            // stdWrap can never be an array so we remove every array as it can't be parsed anyways. 'fq' will be an
+            // array for example.
+            foreach ($formData as $key => $formDatum) {
+                if (is_array($formDatum)) {
+                    unset($formData[$key]);
+                }
+            }
             $formTemplate = $templateMarker->parseTemplate($formTemplate, $formData, $formatter, $confId.'form.', 'FORM');
 
             // Formularfelder
