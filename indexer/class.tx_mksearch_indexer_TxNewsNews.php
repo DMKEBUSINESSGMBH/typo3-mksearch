@@ -481,7 +481,7 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
         if (empty($options['indexInlineContentElements'])) {
             return '';
         }
-        tx_mksearch_util_Indexer::prepareTSFE($options['defaultSinglePid'], $options['lang']);
+        tx_mksearch_util_Indexer::prepareTSFE($options['defaultSinglePid'] ?? 0, $options['lang'] ?? 0);
 
         $ce = [];
         $contentElements = $news->getContentElements();
