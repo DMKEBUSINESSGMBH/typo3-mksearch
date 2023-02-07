@@ -690,7 +690,7 @@ class tx_mksearch_service_engine_Solr extends \Sys25\RnBase\Typo3Wrapper\Service
             }
             $ret['response'] = &$response; // wichtig, wird im SolrResponseProcessor benötigt
 
-            if ($options['debug']) {
+            if ($options['debug'] ?? false) {
                 $ret['debug'] = get_object_vars($response->debug);
                 \Sys25\RnBase\Utility\Debug::debug([$options, $ret], 'class.tx_mksearch_service_engine_Solr.php Line: '.__LINE__); // TODO: remove me
             }
