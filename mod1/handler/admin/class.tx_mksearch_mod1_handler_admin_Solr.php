@@ -98,7 +98,7 @@ class tx_mksearch_mod1_handler_admin_Solr implements \Sys25\RnBase\Backend\Modul
         $formTool = $mod->getFormTool();
 
         $markerArray['###SEL_CORES###'] = $this->getCoreSelector($cores, $mod);
-        $markerArray['###INPUT_DELETEQUERY###'] = $formTool->createTextArea('data[deletequery]', $this->data['deletequery']);
+        $markerArray['###INPUT_DELETEQUERY###'] = $formTool->createTextArea('data[deletequery]', $this->data['deletequery'] ?? '');
         $markerArray['###BTN_SEND###'] = $formTool->createSubmit('doDelete', '###LABEL_SOLR_SUBMIT_DELETE###', 'Do you really want to submit this DELETE query?');
 
         $out = \Sys25\RnBase\Frontend\Marker\Templates::substituteMarkerArrayCached($template, $markerArray);
