@@ -333,7 +333,7 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
         if ($news->getDatetime()) {
             $indexDoc->addField(
                 'datetime_dt',
-                tx_mksearch_util_Misc::getIsoDate($news->getDatetime()),
+                tx_mksearch_util_Misc::getISODateFromTimestamp($news->getDatetime()->getTimestamp()),
                 'keyword',
                 1.0,
                 'date'

@@ -195,7 +195,7 @@ abstract class tx_mksearch_tests_Testcase extends \Sys25\RnBase\Testing\BaseTest
         self::assertSame(
             $expectedValue,
             $field->getValue(),
-            $message.'"'.$fieldName.'" contains the wrong value. "'.$expectedValue.'" as expected but "'.$field->getValue().'" given.'
+            $message.'"'.$fieldName.'" contains the wrong value. "'.print_r($expectedValue, true).'" as expected but "'.print_r($field->getValue(), true).'" given.'
         );
     }
 }

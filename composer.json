@@ -47,7 +47,8 @@
         "friendsofphp/php-cs-fixer": "^3.3",
         "nimut/testing-framework": "^6.0",
         "php-parallel-lint/php-parallel-lint": "^1.2",
-        "phpcompatibility/php-compatibility": "^9.3.5"
+        "phpcompatibility/php-compatibility": "^9.3.5",
+        "georgringer/news": "*"
     },
     "autoload": {
         "classmap": [
