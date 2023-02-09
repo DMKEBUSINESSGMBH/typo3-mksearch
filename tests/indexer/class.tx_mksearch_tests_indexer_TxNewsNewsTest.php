@@ -213,7 +213,7 @@ class tx_mksearch_tests_indexer_TxNewsNewsTest extends tx_mksearch_tests_Testcas
                 'uid' => '5',
                 'pid' => '7',
                 'tstamp' => $GLOBALS['EXEC_TIME'],
-                'datetime' => new \DateTime('2023-02-14 17:15:00'),
+                'datetime' => new \DateTime('2023-02-14 17:15:00', new DateTimeZone('Europe/Berlin')),
                 'title' => 'first news',
                 'teaser' => 'the first news',
                 'bodytext' => '<span>html in body text</span>',
