@@ -93,7 +93,7 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
                 $result = ['items' => []];
             }
         } // auch einen debug ausgeben, wenn nichts gesucht wird
-        elseif ($options['debug']) {
+        elseif ($options['debug'] ?? false) {
             \Sys25\RnBase\Utility\Debug::debug(
                 [
                     'Filter returns false, no search done.',
@@ -293,7 +293,7 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
      */
     protected function findCharBrowserData(array &$result, \Sys25\RnBase\Frontend\Request\RequestInterface $request)
     {
-        if (empty($result['facets'])) {
+        if (empty($result['facets'] ?? null)) {
             return;
         }
 
