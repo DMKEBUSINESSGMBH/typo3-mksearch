@@ -64,7 +64,6 @@
             "scheduler/",
             "search/",
             "service/",
-            "signalSlotDispatcher/",
             "tests/",
             "util/",
             "view/"
@@ -99,7 +98,7 @@
         ],
         "lint:php": [
             "[ -e .Build/bin/parallel-lint ] || composer update",
-            ".Build/bin/parallel-lint ./Classes ./action ./filter ./hooks ./indexer ./interface ./marker ./mod1 ./model ./scheduler ./search ./service ./signalSlotDispatcher ./tests ./util ./view"
+            ".Build/bin/parallel-lint ./Classes ./action ./filter ./hooks ./indexer ./interface ./marker ./mod1 ./model ./scheduler ./search ./service ./tests ./util ./view"
         ],
         "lint": [
             "@lint:php"

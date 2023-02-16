@@ -1,0 +1,40 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    DMK\Mksearch\:
+        resource: '../Classes/*'
+        exclude: '../Classes/Constants.php'
+
+    tx_mksearch_service_internal_Index:
+        public: true
+        class: 'tx_mksearch_service_internal_Index'
+
+    DMK\Mksearch\EventListener\ResourceStorage\PutFilesIntoQueueListener:
+        tags:
+            - name: event.listener
+              identifier: 'mksearch_after_file_added'
+              event: TYPO3\CMS\Core\Resource\Event\AfterFileAddedEvent
+              method: handleEvent
+            - name: event.listener
+              identifier: 'mksearch_after_file_deleted'
+              event: TYPO3\CMS\Core\Resource\Event\AfterFileDeletedEvent
+              method: handleEvent
+            - name: event.listener
+              identifier: 'mksearch_after_file_copied'
+              event: TYPO3\CMS\Core\Resource\Event\AfterFileCopiedEvent
+              method: handleEvent
+            - name: event.listener
+              identifier: 'mksearch_after_file_moved'
+              event: TYPO3\CMS\Core\Resource\Event\AfterFileMovedEvent
+              method: handleEvent
+            - name: event.listener
+              identifier: 'mksearch_after_file_renamed'
+              event: TYPO3\CMS\Core\Resource\Event\AfterFileRenamedEvent
+              method: handleEvent
+            - name: event.listener
+              identifier: 'mksearch_after_file_replaced'
+              event: TYPO3\CMS\Core\Resource\Event\AfterFileReplacedEvent
+              method: handleEvent

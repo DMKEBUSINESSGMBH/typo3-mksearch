@@ -89,7 +89,7 @@ class tx_mksearch_indexer_FAL extends tx_mksearch_indexer_BaseMedia
     protected function getRelFileName($tableName, $sourceRecord)
     {
         // falls wir keine ressource haben, bauen die url selbst zusammen.
-        $relativeFileName = $GLOBALS['TYPO3_CONF_VARS']['BE']['fileadminDir'].$sourceRecord['identifier'];
+        $relativeFileName = $GLOBALS['TYPO3_CONF_VARS']['BE']['fileadminDir'].($sourceRecord['identifier'] ?? '');
         // wir haben ein indiziertes dokument
         if (isset($sourceRecord['uid']) && intval($sourceRecord['uid']) > 0) {
             $resourceFile = $this->getFileFromRecord($sourceRecord);
@@ -178,7 +178,7 @@ class tx_mksearch_indexer_FAL extends tx_mksearch_indexer_BaseMedia
      */
     protected function getFileExtension($tableName, $sourceRecord)
     {
-        return $sourceRecord['extension'];
+        return $sourceRecord['extension'] ?? '';
     }
 
     /**

@@ -59,7 +59,6 @@ if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('mksanitizedpar
     require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch', 'ext_mksanitizedparameter_rules.php');
 }
 
-require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch', 'Configuration/SignalSlotDispatcher.php');
 require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch', 'Configuration/XClasses.php');
 
 \Sys25\RnBase\Utility\CHashUtility::addExcludedParametersForCacheHash([

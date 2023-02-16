@@ -1,6 +1,28 @@
 Changelog
 =========
 
+11.0.4
+-----
+
+- fix indexing of files when added, deleted, renamed, copied, moved or replaced
+
+11.0.3
+-----
+
+- fix some PHP 8 warnings
+
+11.0.2
+-----
+
+- make sure to index datetime of news as UTC
+
+
+11.0.1
+-----
+
+- fix some PHP 8 warnings
+
+
 11.0.0
 -----
 

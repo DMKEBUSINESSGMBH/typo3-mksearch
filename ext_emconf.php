@@ -55,7 +55,6 @@ $EM_CONF['mksearch'] = [
             'scheduler/',
             'search/',
             'service/',
-            'signalSlotDispatcher/',
             'tests/',
             'util/',
             'view/',
