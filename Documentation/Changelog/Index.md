@@ -1,6 +1,26 @@
 Changelog
 =========
 
+10.1.8
+-----
+
+- make sure to index tx_news datetime as UTC
+
+10.1.7
+-----
+
+- handle translated tags of tx_news
+
+10.1.6
+-----
+
+- handle changes of translations in tx_news and cal indexer the correct way
+
+10.1.5
+-----
+
+- fix facets filter
+
 10.1.4
 -----
 
