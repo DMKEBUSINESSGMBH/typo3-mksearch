@@ -1,6 +1,13 @@
 Changelog
 =========
 
+
+11.0.5
+-----
+
+- call indexer_TxNews_prepareDataBeforeAddFields only when news exists and not the other way around
+
+
 11.0.4
 -----
 
