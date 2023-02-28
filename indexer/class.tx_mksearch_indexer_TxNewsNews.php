@@ -190,7 +190,7 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
         );
 
         // Hook to append indexer data
-        if (!$news) {
+        if ($news) {
             \Sys25\RnBase\Utility\Misc::callHook(
                 'mksearch',
                 'indexer_TxNews_prepareDataBeforeAddFields',
