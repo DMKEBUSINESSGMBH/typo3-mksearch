@@ -248,7 +248,7 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
     {
         switch ($rawData['CType'] ?? '') {
             case 'table':
-                $tempContent = $rawData[$field];
+                $tempContent = $rawData[$field] ?? '';
                 // explode bodytext containing table cells separated
                 // by the character defined in flexform
                 if ('bodytext' == $field) {

@@ -1,5 +1,7 @@
 <?php
 
+use Psr\Http\Message\ServerRequestInterface;
+
 /**
  * Mksearch backend module.
  *
@@ -22,9 +24,9 @@ class tx_mksearch_mod1_ConfigIndizes extends \Sys25\RnBase\Backend\Module\Extend
         return $this->getModule()->getPid();
     }
 
-    public function main()
+    public function main(?ServerRequestInterface $request = null)
     {
-        $out = parent::main();
+        $out = parent::main($request);
         $out = tx_mksearch_mod1_util_Template::parseBasics($out, $this);
 
         return $out;
