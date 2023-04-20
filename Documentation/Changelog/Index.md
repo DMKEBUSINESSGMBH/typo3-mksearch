@@ -1,6 +1,10 @@
 Changelog
 =========
 
+11.0.6
+-----
+
+- support for rn_base 1.16.7
 
 11.0.5
 -----
