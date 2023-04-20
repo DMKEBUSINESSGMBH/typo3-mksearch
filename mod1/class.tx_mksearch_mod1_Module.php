@@ -35,23 +35,12 @@ class tx_mksearch_mod1_Module extends \Sys25\RnBase\Backend\Module\BaseModule
      */
     public function init()
     {
-        // fallback for TYPO3 4 and index.php calls
-        if (!($this->MCONF['name'] ?? '')) {
-            $this->MCONF = array_merge(
-                (array) $GLOBALS['MCONF'],
-                [
-                    'name' => 'web_MksearchM1',
-                    'access' => 'user,group',
-                    'default' => [
-                        'tabs_images' => ['tab' => 'Resources/Public/Icons/moduleicon.png'],
-                        'll_ref' => 'LLL:EXT:mksearch/Resources/Private/Language/BackendModule/locallang_mod.xlf',
-                    ],
-                ]
-            );
-        }
+        $this->MCONF = [
+            'name' => 'web_MksearchM1',
+        ];
 
-        $GLOBALS['LANG']->includeLLFile('EXT:mksearch/Resources/Private/Language/BackendModule/locallang.xlf');
-        $GLOBALS['BE_USER']->modAccess($this->MCONF, 1);
+        $this->getLanguageService()->includeLLFile('EXT:mksearch/Resources/Private/Language/BackendModule/locallang.xlf');
+        $this->getBackendUser()->modAccess($this->MCONF, 1);
         parent::init();
     }
 
