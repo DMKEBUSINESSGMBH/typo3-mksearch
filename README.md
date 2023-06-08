@@ -1,4 +1,4 @@
-# mksearch
+# MK Search
 
 ![TYPO3 compatibility](https://img.shields.io/badge/TYPO3-10.4%20%7C%2011.5-orange?maxAge=3600&style=flat-square&logo=typo3)
 [![Latest Stable Version](https://img.shields.io/packagist/v/dmk/mksearch.svg?maxAge=3600&style=flat-square&logo=composer)](https://packagist.org/packages/dmk/mksearch)
