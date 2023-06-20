@@ -43,20 +43,14 @@
         matches, a warning will be logged. The examples below can be used to load
         some solr-contribs along with their external dependencies. -->
     <lib dir="${solr.install.dir:../../../..}/contrib/extraction/lib"
-        regex=".*\.jar" />
-    <lib dir="${solr.install.dir:../../../..}/dist/" regex="solr-cell-\d.*\.jar" />
+         regex=".*\.jar" />
 
     <lib dir="${solr.install.dir:../../../..}/contrib/clustering/lib/"
-        regex=".*\.jar" />
-    <lib dir="${solr.install.dir:../../../..}/dist/" regex="solr-clustering-\d.*\.jar" />
+         regex=".*\.jar" />
 
     <lib dir="${solr.install.dir:../../../..}/contrib/langid/lib/"
-        regex=".*\.jar" />
-    <lib dir="${solr.install.dir:../../../..}/dist/" regex="solr-langid-\d.*\.jar" />
+         regex=".*\.jar" />
 
-    <lib dir="${solr.install.dir:../../../..}/contrib/velocity/lib"
-        regex=".*\.jar" />
-    <lib dir="${solr.install.dir:../../../..}/dist/" regex="solr-velocity-\d.*\.jar" />
     <!-- an exact 'path' can be used instead of a 'dir' to specify a specific
         jar file. This will cause a serious error to be logged if it can't be loaded. -->
     <!-- <lib path="../a-jar-that-does-not-exist.jar" /> -->
@@ -77,7 +71,7 @@
         or solr.SimpleFSDirectoryFactory. solr.RAMDirectoryFactory is memory based,
         not persistent, and doesn't work with replication. -->
     <directoryFactory name="DirectoryFactory"
-        class="${solr.directoryFactory:solr.NRTCachingDirectoryFactory}" />
+                      class="${solr.directoryFactory:solr.NRTCachingDirectoryFactory}" />
 
     <!-- The CodecFactory for defining the format of the inverted index. The
         default implementation is SchemaCodecFactory, which is the official Lucene
@@ -164,11 +158,6 @@
     </indexConfig>
 
 
-    <!-- JMX This example enables JMX if and only if an existing MBeanServer
-        is found, use this if you want to configure JMX through JVM parameters. Remove
-        this to disable exposing Solr configuration and statistics to JMX. For more
-        details see http://wiki.apache.org/solr/SolrJmx -->
-    <jmx />
     <!-- If you want to connect to a particular server, specify the agentId -->
     <!-- <jmx agentId="myAgent" /> -->
     <!-- If you want to start a new MBeanServer, specify the serviceUrl -->
@@ -270,30 +259,30 @@
             FastLRUCache) size - the maximum number of entries in the cache initialSize
             - the initial capacity (number of entries) of the cache. (see java.util.HashMap)
             autowarmCount - the number of entries to prepopulate from and old cache. -->
-        <filterCache class="solr.FastLRUCache" size="512"
-            initialSize="512" autowarmCount="0" />
+        <filterCache class="solr.search.CaffeineCache" size="512"
+                     initialSize="512" autowarmCount="0" />
 
         <!-- Query Result Cache Caches results of searches - ordered lists of document
             ids (DocList) based on a query, a sort, and the range of documents requested.
             Additional supported parameter by LRUCache: maxRamMB - the maximum amount
             of RAM (in MB) that this cache is allowed to occupy -->
-        <queryResultCache class="solr.LRUCache" size="512"
-            initialSize="512" autowarmCount="0" />
+        <queryResultCache class="solr.search.CaffeineCache" size="512"
+                          initialSize="512" autowarmCount="0" />
 
         <!-- Document Cache Caches Lucene Document objects (the stored fields for
             each document). Since Lucene internal document ids are transient, this cache
             will not be autowarmed. -->
-        <documentCache class="solr.LRUCache" size="512"
-            initialSize="512" autowarmCount="0" />
+        <documentCache class="solr.search.CaffeineCache" size="512"
+                       initialSize="512" autowarmCount="0" />
 
         <!-- custom cache currently used by block join -->
-        <cache name="perSegFilter" class="solr.search.LRUCache" size="10"
-            initialSize="0" autowarmCount="10" regenerator="solr.NoOpRegenerator" />
+        <cache name="perSegFilter" class="solr.search.CaffeineCache" size="10"
+               initialSize="0" autowarmCount="10" regenerator="solr.NoOpRegenerator" />
 
         <!-- Field Value Cache Cache used to hold field values that are quickly
             accessible by document id. The fieldValueCache is created by default even
             if not configured here. -->
-        <!-- <fieldValueCache class="solr.FastLRUCache" size="512" autowarmCount="128"
+        <!-- <fieldValueCache class="solr.search.CaffeineCache" size="512" autowarmCount="128"
             showItems="32" /> -->
 
         <!-- Custom Cache Example of a generic cache. These caches may be accessed
@@ -301,7 +290,7 @@
             The purpose is to enable easy caching of user/application level data. The
             regenerator argument should be specified as an implementation of solr.CacheRegenerator
             if autowarming is desired. -->
-        <!-- <cache name="myUserCache" class="solr.LRUCache" size="4096" initialSize="1024"
+        <!-- <cache name="myUserCache" class="solr.search.CaffeineCache" size="4096" initialSize="1024"
             autowarmCount="1024" regenerator="com.mycompany.MyRegenerator" /> -->
 
 
