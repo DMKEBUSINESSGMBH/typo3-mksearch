@@ -1,6 +1,16 @@
 Changelog
 =========
 
+10.1.10
+-----
+
+- Bugfix ignore being_indexed when adding records to queue
+
+10.1.9
+-----
+
+- Cleanup
+
 10.1.8
 -----
 
