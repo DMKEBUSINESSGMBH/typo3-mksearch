@@ -790,10 +790,10 @@ CONFIG;
      *
      * @return array
      */
-    protected function getPageContent($pid)
+    protected function getPageContent($pid, array $options = [])
     {
         return tx_mksearch_util_Indexer::getInstance()
-            ->getPageContent($pid);
+            ->getPageContent($pid, $options);
     }
 
     /**

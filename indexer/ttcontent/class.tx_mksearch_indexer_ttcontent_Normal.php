@@ -91,7 +91,7 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
             // @TODO:
             //        konfigurierbar machen: description, author, etc.
             //        könnte wichtig werden!?
-            $pageData = $this->getPageContent($model->getProperty('pid'));
+            $pageData = $this->getPageContent($model->getProperty('pid'), $options);
             if (!empty($pageData['keywords'])) {
                 $keywords = explode($separator, $pageData['keywords']);
                 foreach ($keywords as $key => $keyword) {
@@ -193,7 +193,7 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
 
         // optional fallback to page title, if the content title is empty
         if (empty($title) && empty($options['leaveHeaderEmpty'])) {
-            $pageData = $this->getPageContent($model->getPid());
+            $pageData = $this->getPageContent($model->getPid(), $options);
             $title = $pageData['title'] ?? '';
         }
 
@@ -206,7 +206,7 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
      */
     protected function indexPageData(tx_mksearch_interface_IndexerDocument $indexDoc, array $options)
     {
-        $pageRecord = $this->getPageContent($this->getModelToIndex()->getProperty('pid'));
+        $pageRecord = $this->getPageContent($this->getModelToIndex()->getProperty('pid'), $options);
         $pageModel = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Domain\Model\BaseModel::class, $pageRecord);
         $pageModel->setTableName('pages');
 
@@ -400,7 +400,7 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
         $sysPage = \Sys25\RnBase\Utility\TYPO3::getSysPage();
 
         return
-            !($pageData = $this->getPageContent($model->getProperty('pid')))
+            !($pageData = $this->getPageContent($model->getProperty('pid'), $aOptions))
             || !in_array($pageData['doktype'], $this->getSupportedDokTypes($aOptions))
             || $this->isPageSetIncludeInSearchDisable($model, $aOptions)
             || parent::hasDocToBeDeleted($model, $oIndexDoc, $aOptions);
@@ -434,7 +434,7 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
     protected function isPageSetIncludeInSearchDisable($model, $options)
     {
         if ($this->shouldRespectIncludeInSearchDisable($options)) {
-            $page = $this->getPageContent($model->getProperty('pid'));
+            $page = $this->getPageContent($model->getProperty('pid'), $options);
             if (array_key_exists('no_search', $page) && 1 == $page['no_search']) {
                 return true;
             }

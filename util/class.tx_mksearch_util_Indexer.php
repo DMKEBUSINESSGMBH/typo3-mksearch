@@ -627,7 +627,7 @@ class tx_mksearch_util_Indexer
      *
      * @return array
      */
-    public function getPageContent($pid)
+    public function getPageContent($pid, array $options = [])
     {
         $pid = (int) $pid;
         if (!$pid) {
@@ -640,9 +640,10 @@ class tx_mksearch_util_Indexer
             'limit' => 1,
         ];
         $from = ['pages', 'pages'];
-        $page = \Sys25\RnBase\Database\Connection::getInstance()->doSelect('*', $from, $sqlOptions);
+        $page = \Sys25\RnBase\Database\Connection::getInstance()->doSelect('*', $from, $sqlOptions)[0] ?? [];
 
-        return !empty($page[0]) ? $page[0] : [];
+        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\Page\PageRepository::class)
+            ->getPageOverlay($page, $options['lang'] ?? 0);
     }
 
     /**
