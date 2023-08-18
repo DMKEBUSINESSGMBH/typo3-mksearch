@@ -642,7 +642,7 @@ class tx_mksearch_util_Indexer
         $from = ['pages', 'pages'];
         $page = \Sys25\RnBase\Database\Connection::getInstance()->doSelect('*', $from, $sqlOptions)[0] ?? [];
 
-        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\Page\PageRepository::class)
+        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Domain\Repository\PageRepository::class)
             ->getPageOverlay($page, $options['lang'] ?? 0);
     }
 
