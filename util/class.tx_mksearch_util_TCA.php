@@ -185,7 +185,7 @@ class tx_mksearch_util_TCA
             $rootOfIndex = tx_mksearch_util_Indexer::getInstance()->getSiteRootPage($index->getProperty('pid'));
             // Sind die RootPages identisch oder ist der Index global,
             // kann der Index verwendet werden.
-            if (empty($rootOfIndex['uid']) || $rootOfIndex['uid'] == $rootOfPlugin['uid']) {
+            if (empty($rootOfIndex['uid'] ?? null) || $rootOfIndex['uid'] == ($rootOfPlugin['uid'] ?? null)) {
                 $params['items'][] = [$index->getTitle(), $index->getUid()];
             }
         }
