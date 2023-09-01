@@ -24,7 +24,7 @@ class tx_mksearch_mod1_IndizeIndizes extends \Sys25\RnBase\Backend\Module\BaseMo
         return $this->getModule()->getPid();
     }
 
-    public function main(?ServerRequestInterface $request = null)
+    public function main(ServerRequestInterface $request = null)
     {
         $out = parent::main($request);
         $out = tx_mksearch_mod1_util_Template::parseBasics($out, $this);

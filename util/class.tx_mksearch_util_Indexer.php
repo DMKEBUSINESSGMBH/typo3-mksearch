@@ -172,8 +172,8 @@ class tx_mksearch_util_Indexer
      */
     public function doValueConversion($value, $indexDocKey, $rawData, $sRecordKey, $options)
     {
-        if (!(array_key_exists('fieldsConversion.', $options) &&
-            array_key_exists($indexDocKey.'.', $options['fieldsConversion.']))) {
+        if (!(array_key_exists('fieldsConversion.', $options)
+            && array_key_exists($indexDocKey.'.', $options['fieldsConversion.']))) {
             return $value;
         }
 
@@ -679,8 +679,8 @@ class tx_mksearch_util_Indexer
 
             // stop if not set to "All languages" and lang doesn't match
             if (
-                $sourceRecord[$sysLanguageUidField] >= 0 &&
-                !in_array($sourceRecord[$sysLanguageUidField], $languages)
+                $sourceRecord[$sysLanguageUidField] >= 0
+                && !in_array($sourceRecord[$sysLanguageUidField], $languages)
             ) {
                 return true;
             }

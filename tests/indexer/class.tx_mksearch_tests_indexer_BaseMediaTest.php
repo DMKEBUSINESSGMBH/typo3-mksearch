@@ -409,7 +409,7 @@ class tx_mksearch_tests_indexer_BaseMediaTest extends tx_mksearch_tests_Testcase
     /**
      * @param array $mockedMethods
      *
-     * @return Ambigous <PHPUnit_Framework_MockObject_MockObject, tx_mksearch_indexer_BaseMedia>
+     * @return PHPUnit_Framework_MockObject_MockObject|tx_mksearch_indexer_BaseMedia
      */
     private function getIndexerMock(
         array $mockedMethods = [

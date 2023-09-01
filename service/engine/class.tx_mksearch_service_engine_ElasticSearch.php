@@ -41,12 +41,12 @@ class tx_mksearch_service_engine_ElasticSearch extends \Sys25\RnBase\Typo3Wrappe
      *
      * @var Index
      */
-    private $index = null;
+    private $index;
 
     /**
      * @var tx_mksearch_model_internal_Index
      */
-    private $mksearchIndexModel = null;
+    private $mksearchIndexModel;
 
     /**
      * @var string

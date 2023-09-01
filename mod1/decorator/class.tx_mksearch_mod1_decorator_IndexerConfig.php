@@ -113,6 +113,7 @@ class tx_mksearch_mod1_decorator_IndexerConfig
         $out = '';
         $out .= $formtool->createEditLink($item->getTableName(), $item->getUid(), '');
         $out .= $item->getTitle();
+
         // $out .= '<br />'; // @TODO: in indices und configs wahlweise mit ausgeben
         return '<div>'.$out.'</div>';
     }

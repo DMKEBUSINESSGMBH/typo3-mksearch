@@ -317,10 +317,10 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
         tx_mksearch_interface_IndexerDocument $indexDoc,
         $options = []
     ) {
-        if (!$model ||
-            !$model->isValid() ||
-            $model->isHidden() ||
-            $model->isDeleted()
+        if (!$model
+            || !$model->isValid()
+            || $model->isHidden()
+            || $model->isDeleted()
         ) {
             return true;
         }
@@ -332,13 +332,14 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
         // @todo sollten nicht auch Shortcuts etc. invalide sein?
         $sysPage = \Sys25\RnBase\Utility\TYPO3::getSysPage();
         foreach ($rootline as $page) {
-            if (($page['hidden'] ?? false) ||
-                (($page['doktype'] ?? '') == $sysPage::DOKTYPE_BE_USER_SECTION) ||
-                ($this->getConfigValue('respectNoSearchFlagInRootline', $options) && 1 == ($page['no_search'] ?? 0))
+            if (($page['hidden'] ?? false)
+                || (($page['doktype'] ?? '') == $sysPage::DOKTYPE_BE_USER_SECTION)
+                || ($this->getConfigValue('respectNoSearchFlagInRootline', $options) && 1 == ($page['no_search'] ?? 0))
             ) {
                 return true;
             }
         }
+
         // The rootline can be empty when the rootline is broken. This might happen if a page in the rootline
         // is deleted.
         return empty($rootline);

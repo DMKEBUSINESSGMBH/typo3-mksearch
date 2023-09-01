@@ -46,7 +46,7 @@ class tx_mksearch_tests_Util
      *
      * @var array
      */
-    private static $TCA = null;
+    private static $TCA;
 
     /**
      * @var array
@@ -56,7 +56,7 @@ class tx_mksearch_tests_Util
     /**
      * @var string
      */
-    private static $addRootLineFieldsBackup = null;
+    private static $addRootLineFieldsBackup;
 
     /**
      * @var array

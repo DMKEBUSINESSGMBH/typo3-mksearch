@@ -34,7 +34,7 @@ class tx_mksearch_model_internal_Index extends \Sys25\RnBase\Domain\Model\BaseMo
      *
      * @var tx_mksearch_interface_SearchEngine
      */
-    private $indexSrv = null;
+    private $indexSrv;
 
     /**
      * Return this model's table name.

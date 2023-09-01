@@ -43,7 +43,7 @@ class tx_mksearch_util_KeyValueFacet
     /**
      * @var tx_mksearch_util_KeyValueFacet|null
      */
-    private static $defaultInstance = null;
+    private static $defaultInstance;
 
     /**
      * @var string
@@ -198,9 +198,9 @@ class tx_mksearch_util_KeyValueFacet
      */
     protected function sortExplodedFacetValues(array $exploded)
     {
-//         foreach ($exploded as $values) {
-//             $values['sorting'];
-//         }
+        //         foreach ($exploded as $values) {
+        //             $values['sorting'];
+        //         }
         return $exploded;
     }
 }

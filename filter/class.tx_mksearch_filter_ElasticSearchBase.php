@@ -77,8 +77,8 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_mksearch_filter_BaseFilter
         $confId = $this->getConfId();
 
         // Es muss ein Submit-Parameter im request liegen, damit der Filter greift
-        if (!($parameters->offsetExists('submit') ||
-            $configurations->get($confId.'forceSearch'))
+        if (!($parameters->offsetExists('submit')
+            || $configurations->get($confId.'forceSearch'))
         ) {
             return false;
         }

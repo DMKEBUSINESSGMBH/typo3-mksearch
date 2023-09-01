@@ -125,6 +125,7 @@ class tx_mksearch_mod1_decorator_Index
         $out = '';
         $out .= $formtool->createEditLink($item->getTableName(), $item->getUid(), '');
         $out .= $item->getTitle();
+
         // $out .= '<br />'; // @TODO: verbundene tabellen anhand von options ausgeben
         return '<div>'.$out.'</div>';
     }

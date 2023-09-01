@@ -37,14 +37,14 @@ class tx_mksearch_model_cal_Event extends \Sys25\RnBase\Domain\Model\BaseModel
      *
      * @var tx_mksearch_model_cal_Calendar
      */
-    private $calendar = null;
+    private $calendar;
 
     /**
      * Location model for this event.
      *
      * @var tx_mksearch_model_cal_Location
      */
-    private $location = null;
+    private $location;
 
     /**
      * Category models for this event.

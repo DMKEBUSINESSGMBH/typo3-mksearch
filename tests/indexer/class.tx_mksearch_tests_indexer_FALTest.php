@@ -47,7 +47,7 @@ class tx_mksearch_indexer_FALTest extends tx_mksearch_indexer_FAL
  */
 class tx_mksearch_tests_indexer_FALTest extends tx_mksearch_tests_Testcase
 {
-    private static $oFALTest = null;
+    private static $oFALTest;
 
     /**
      * Constructs a test case with the given name.

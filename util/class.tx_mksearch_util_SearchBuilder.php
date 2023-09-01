@@ -143,11 +143,11 @@ class tx_mksearch_util_SearchBuilder
                     $options['mm'] = $mm;
                 }
             }
-//             switch ($combination) {
-//                 case MKSEARCH_OP_NONE:
-//                 case MKSEARCH_OP_OR:
-//                     $options['mm'] = '20%';
-//             }
+            //             switch ($combination) {
+            //                 case MKSEARCH_OP_NONE:
+            //                 case MKSEARCH_OP_OR:
+            //                     $options['mm'] = '20%';
+            //             }
         }
     }
 
@@ -165,9 +165,9 @@ class tx_mksearch_util_SearchBuilder
      */
     public static function handleDismaxFuzzySearch(&$fields, &$options, &$parameters, &$configurations, $confId)
     {
-        if (!self::emptyTerm($fields['term']) &&
-            is_array($params = $parameters->get('options')) &&
-            $params['fuzzy']
+        if (!self::emptyTerm($fields['term'])
+            && is_array($params = $parameters->get('options'))
+            && $params['fuzzy']
         ) {
             switch ($parameters->get('combination')) {
                 case MKSEARCH_OP_FREE:

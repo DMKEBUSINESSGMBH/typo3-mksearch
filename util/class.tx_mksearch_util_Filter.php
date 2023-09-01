@@ -45,22 +45,22 @@ class tx_mksearch_util_Filter
      *
      * dazu folgendes TS Setup
      *
-         # Die hier konfigurierten Parameter werden als Marker im Term-String verwendet
-        # Es sind verschiedene Extensions möglich
-        $confId.params.mksearch {
-            term = TEXT
-            term {
-                field = term
-            }
-        }
-        # So wurden auch alle Parameter von tt_news ausgelesen
-        #$confId.params.tt_news {
-        #}
-
-        $confId.fields {
-            # Die Marker haben das Format ###PARAM_EXTQUALIFIER_PARAMNAME###
-            ### beim DisMaxRequestHandler darf hier nur ###PARAM_MKSEARCH_TERM### stehen!
-            term = contentType:* ###PARAM_MKSEARCH_TERM###
+     * # Die hier konfigurierten Parameter werden als Marker im Term-String verwendet
+     * # Es sind verschiedene Extensions möglich
+     * $confId.params.mksearch {
+     * term = TEXT
+     * term {
+     * field = term
+     * }
+     * }
+     * # So wurden auch alle Parameter von tt_news ausgelesen
+     * #$confId.params.tt_news {
+     * #}
+     *
+     * $confId.fields {
+     * # Die Marker haben das Format ###PARAM_EXTQUALIFIER_PARAMNAME###
+     * ### beim DisMaxRequestHandler darf hier nur ###PARAM_MKSEARCH_TERM### stehen!
+     * term = contentType:* ###PARAM_MKSEARCH_TERM###
      *
      * @param string                   $termTemplate
      * @param ParametersInterface      $parameters

@@ -34,12 +34,12 @@ class tx_mksearch_util_FacetBuilder
     /**
      * @var \Sys25\RnBase\Domain\Model\DataModel
      */
-    private $options = null;
+    private $options;
 
     /**
      * @var tx_mksearch_util_KeyValueFacet|null
      */
-    private $keyValueFacetInstance = null;
+    private $keyValueFacetInstance;
 
     /**
      * Get singelton.

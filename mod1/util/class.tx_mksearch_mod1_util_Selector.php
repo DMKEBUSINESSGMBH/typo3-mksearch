@@ -233,6 +233,7 @@ class tx_mksearch_mod1_util_Selector
         if (isset($modData[$key])) {
             return $modData[$key];
         }
+
         // else
         return null;
     }

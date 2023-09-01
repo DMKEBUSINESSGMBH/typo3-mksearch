@@ -124,8 +124,8 @@ class tx_mksearch_util_TCA
         $contentType = is_array($params['row']['contenttype']) ?
             $params['row']['contenttype'][0] : $params['row']['contenttype'];
 
-        if (!(isset($params['params']['insertBetween']) && is_array($params['params']['insertBetween']) &&
-                    !empty($extKey) && !empty($contentType))) {
+        if (!(isset($params['params']['insertBetween']) && is_array($params['params']['insertBetween'])
+                    && !empty($extKey) && !empty($contentType))) {
             return;
         }
 

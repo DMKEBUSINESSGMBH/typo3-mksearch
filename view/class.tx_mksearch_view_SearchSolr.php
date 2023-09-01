@@ -35,7 +35,7 @@ class tx_mksearch_view_SearchSolr extends \Sys25\RnBase\Frontend\View\Marker\Bas
     /**
      * @var \Sys25\RnBase\Configuration\Processor
      */
-    private $configurations = null;
+    private $configurations;
 
     public function render($view, \Sys25\RnBase\Frontend\Request\RequestInterface $request)
     {
@@ -228,6 +228,7 @@ class tx_mksearch_view_SearchSolr extends \Sys25\RnBase\Frontend\View\Marker\Bas
         $mainSubpart = $viewData->offsetExists('mainsubpart') ? $viewData->offsetGet('mainsubpart') : null;
         // Wir holen uns den Mainpart vom Typoscript.
         $mainSubpart = $mainSubpart ? $mainSubpart : $this->configurations->get($this->confId.'mainsubpart');
+
         // Fallback, wenn kein Mainpart gesetzt wurde.
         return $mainSubpart ? $mainSubpart : '###SEARCH###';
     }

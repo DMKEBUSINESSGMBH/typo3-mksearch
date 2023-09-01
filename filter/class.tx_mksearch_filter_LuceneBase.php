@@ -74,9 +74,9 @@ class tx_mksearch_filter_LuceneBase extends tx_mksearch_filter_BaseFilter implem
         $parameters = $request->getParameters();
         $confId = $this->getConfId();
 
-        if ($configurations->get($confId.'filter.formOnly') ||
-            !($parameters->offsetExists('submit') ||
-            $configurations->get($confId.'filter.forceSearch'))
+        if ($configurations->get($confId.'filter.formOnly')
+            || !($parameters->offsetExists('submit')
+            || $configurations->get($confId.'filter.forceSearch'))
         ) {
             return false;
         }

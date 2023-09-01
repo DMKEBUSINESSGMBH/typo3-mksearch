@@ -32,21 +32,21 @@ class tx_mksearch_model_IndexerDocumentBase implements tx_mksearch_interface_Ind
      *
      * @var tx_mksearch_interface_IndexerField
      */
-    private $extKey = null;
+    private $extKey;
 
     /**
      * Content type of indexed data.
      *
      * @var tx_mksearch_interface_IndexerField
      */
-    private $contentType = null;
+    private $contentType;
 
     /**
      * UID field.
      *
      * @var tx_mksearch_interface_IndexerField
      */
-    private $uid = null;
+    private $uid;
 
     /**
      * deleted flag.
@@ -60,7 +60,7 @@ class tx_mksearch_model_IndexerDocumentBase implements tx_mksearch_interface_Ind
      *
      * @var string
      */
-    private $fieldClass = null;
+    private $fieldClass;
 
     /**
      * All content fields (except primary key fields) of the indexer document.
@@ -257,10 +257,10 @@ class tx_mksearch_model_IndexerDocumentBase implements tx_mksearch_interface_Ind
     public function getMaxAbstractLength()
     {
         return 200;
-//         return \Sys25\RnBase\Configuration\Processor::getExtensionCfgValue(
-//             'mksearch',
-//             'abstractMaxLength_' . $this->extKey->getValue() . '_' . $this->contentType->getValue()
-//         );
+        //         return \Sys25\RnBase\Configuration\Processor::getExtensionCfgValue(
+        //             'mksearch',
+        //             'abstractMaxLength_' . $this->extKey->getValue() . '_' . $this->contentType->getValue()
+        //         );
     }
 
     /**

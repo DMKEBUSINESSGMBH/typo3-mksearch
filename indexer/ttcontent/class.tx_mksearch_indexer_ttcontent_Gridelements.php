@@ -52,9 +52,9 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
             // only for gridelements? no, other elements should be deleted too!
             // $this->isGridelement($oModel->getRecord()) &&
             // only if not directly set do indexable or not indexable!
-            self::USE_INDEXER_CONFIGURATION == $oModel->getTxMksearchIsIndexable() &&
+            self::USE_INDEXER_CONFIGURATION == $oModel->getTxMksearchIsIndexable()
             // only, if there are a parent container
-            $oModel->getTxGridelementsContainer() > 0
+            && $oModel->getTxGridelementsContainer() > 0
         ) {
             // add the parent do index, so the changes are writen to index
             $this->addGridelementsContainerToIndex($oModel);
@@ -130,8 +130,8 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
         array $rawData
     ) {
         return
-            \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('gridelements') &&
-            'gridelements_pi1' == $rawData['CType']
+            \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('gridelements')
+            && 'gridelements_pi1' == $rawData['CType']
         ;
     }
 

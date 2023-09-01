@@ -68,6 +68,7 @@ class tx_mksearch_indexer_seminars_SeminarObjectType1 extends tx_mksearch_indexe
         $this->indexSeminarPlaces($indexDoc);
         $this->indexSeminarSpeakers($indexDoc);
         $this->indexSeminarTimeslots($indexDoc);
+
         // @todo handle skills of speakers, tutors etc and everything
         // about lodgings, foods and payments
         return $indexDoc;

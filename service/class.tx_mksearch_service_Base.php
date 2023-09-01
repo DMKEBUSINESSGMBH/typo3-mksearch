@@ -62,10 +62,10 @@ abstract class tx_mksearch_service_Base extends \Sys25\RnBase\Typo3Wrapper\Servi
             && ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isBackend();
         // On default, return hidden and deleted fields in backend
         // @TODO: realy return deleted fields? make Konfigurable!
-        if ($isBackendRequest &&
-            !isset($options['enablefieldsoff']) &&
-            !isset($options['enablefieldsbe']) &&
-            !isset($options['enablefieldsfe'])
+        if ($isBackendRequest
+            && !isset($options['enablefieldsoff'])
+            && !isset($options['enablefieldsbe'])
+            && !isset($options['enablefieldsfe'])
         ) {
             $options['enablefieldsoff'] = true;
         }

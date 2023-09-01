@@ -239,14 +239,14 @@ class tx_mksearch_indexer_FAL extends tx_mksearch_indexer_BaseMedia
             // items. Nevertheless we check the deleted flag, because in
             // tx_mksearch_util_ResolverT3DB::getRecords() may be a "minimal model"
             // with such a column defined.
-            ($sourceRecord['deleted'] ?? false) ||
+            ($sourceRecord['deleted'] ?? false)
 
             // missing flag is set by FAL indexing scheduler, if the file is
             // directly deleted in OS filesystem (see https://forge.typo3.org/issues/50876)
-            ($sourceRecord['missing'] ?? false) ||
+            || ($sourceRecord['missing'] ?? false)
 
             // file does not exist anymore
-            !file_exists($filePath.($sourceRecord['name'] ?? ''))
+            || !file_exists($filePath.($sourceRecord['name'] ?? ''))
         ) {
             return true;
         }

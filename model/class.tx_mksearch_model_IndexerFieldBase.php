@@ -100,7 +100,7 @@ class tx_mksearch_model_IndexerFieldBase implements tx_mksearch_interface_Indexe
      *
      * @var string
      */
-    private $_storageType = null;
+    private $_storageType;
 
     /**
      * Data type of the given field.
@@ -126,14 +126,14 @@ class tx_mksearch_model_IndexerFieldBase implements tx_mksearch_interface_Indexe
      *
      * @var string
      */
-    private $_dataType = null;
+    private $_dataType;
 
     /**
      * Charset encoding.
      *
      * @var string
      */
-    private $_encoding = null;
+    private $_encoding;
 
     /**
      * Split storage option / storage type.
@@ -242,6 +242,7 @@ class tx_mksearch_model_IndexerFieldBase implements tx_mksearch_interface_Indexe
             // aus dem int ein string machen
             $value = strval($value);
         }
+
         //		elseif(is_object($value)) {
         //			// was passiert mit objekten?
         //		}

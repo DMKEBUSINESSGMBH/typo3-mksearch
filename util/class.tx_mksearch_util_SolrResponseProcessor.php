@@ -12,7 +12,7 @@ class tx_mksearch_util_SolrResponseProcessor
      *
      * @var \Sys25\RnBase\Configuration\Processor
      */
-    private $configurations = null;
+    private $configurations;
     private $confId = 'responseProcessor.';
 
     /**

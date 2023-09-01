@@ -14,7 +14,7 @@ class tx_mksearch_action_ShowHit extends \Sys25\RnBase\Frontend\Controller\Abstr
 
     protected function handleRequest(\Sys25\RnBase\Frontend\Request\RequestInterface $request)
     {
-        $item = $this->findItem();
+        $item = $this->findItem($request);
         $request->getViewContext()->offsetSet('item', $item);
 
         return null;
@@ -24,12 +24,12 @@ class tx_mksearch_action_ShowHit extends \Sys25\RnBase\Frontend\Controller\Abstr
      * @return tx_mksearch_interface_SearchHit
      *
      * @throws InvalidArgumentException
-     * @throws Ambigous                 <Exception, LogicException, LogicException, tx_mksearch_service_engine_SolrException>
+     * @throws Exception|LogicException|LogicException|tx_mksearch_service_engine_SolrException
      */
-    protected function findItem()
+    protected function findItem(\Sys25\RnBase\Frontend\Request\RequestInterface $request)
     {
         $item = null;
-        $configurations = $this->getConfigurations();
+        $configurations = $request->getConfigurations();
         $confId = $this->getConfId();
 
         $extKey = $configurations->get($confId.'extkey');
@@ -52,7 +52,7 @@ class tx_mksearch_action_ShowHit extends \Sys25\RnBase\Frontend\Controller\Abstr
             $this
         );
 
-        $item = $this->searchByContentUid($uid, $extKey, $contentType);
+        $item = $this->searchByContentUid($uid, $extKey, $contentType, $request);
 
         \Sys25\RnBase\Utility\Misc::callHook(
             'mksearch',
@@ -67,7 +67,7 @@ class tx_mksearch_action_ShowHit extends \Sys25\RnBase\Frontend\Controller\Abstr
         );
 
         if (is_null($item)) {
-            throw new LogicException('No hit found for "'.$extKey.':'.$contentType.':'.$uid.'" in index "'.$this->getIndex()->getUid().'".', 1377774172);
+            throw new LogicException('No hit found for "'.$extKey.':'.$contentType.':'.$uid.'" in index "'.$this->getIndex($request)->getUid().'".', 1377774172);
         }
         if (!$item instanceof tx_mksearch_interface_SearchHit) {
             throw new LogicException('The hit has to be an object instance of "tx_mksearch_interface_SearchHit","'.(is_object($item) ? get_class($item) : gettype($item)).'" given.', 1377774178);
@@ -83,9 +83,9 @@ class tx_mksearch_action_ShowHit extends \Sys25\RnBase\Frontend\Controller\Abstr
      *
      * @return
      *
-     * @throws Ambigous <Exception, InvalidArgumentException, tx_mksearch_service_engine_SolrException>
+     * @throws Exception|InvalidArgumentException|tx_mksearch_service_engine_SolrException
      */
-    protected function searchByContentUid($uid, $extKey, $contentType)
+    protected function searchByContentUid($uid, $extKey, $contentType, \Sys25\RnBase\Frontend\Request\RequestInterface $request)
     {
         $item = null;
 
@@ -96,8 +96,8 @@ class tx_mksearch_action_ShowHit extends \Sys25\RnBase\Frontend\Controller\Abstr
         try {
             // in unserem fall sollte es der solr service sein!
             /* @var $searchEngine tx_mksearch_service_engine_Solr */
-            $searchEngine = tx_mksearch_util_ServiceRegistry::getSearchEngine($this->getIndex());
-            $searchEngine->openIndex($this->getIndex());
+            $searchEngine = tx_mksearch_util_ServiceRegistry::getSearchEngine($this->getIndex($request));
+            $searchEngine->openIndex($this->getIndex($request));
             $item = $searchEngine->getByContentUid($uid, $extKey, $contentType);
             $searchEngine->closeIndex();
         } catch (Exception $e) {
@@ -115,7 +115,7 @@ class tx_mksearch_action_ShowHit extends \Sys25\RnBase\Frontend\Controller\Abstr
                     'URL' => $lastUrl,
                 ]
             );
-            $configurations = $this->getConfigurations();
+            $configurations = $request->getConfigurations();
             if ($configurations->getBool($this->getConfId().'throwSolrSearchException')) {
                 throw $e;
             }
@@ -131,13 +131,13 @@ class tx_mksearch_action_ShowHit extends \Sys25\RnBase\Frontend\Controller\Abstr
      *
      * @throws Exception
      */
-    protected function getIndex()
+    protected function getIndex(\Sys25\RnBase\Frontend\Request\RequestInterface $request)
     {
         if (false === $this->index) {
-            $indexUid = $this->getConfigurations()->get($this->getConfId().'usedIndex');
+            $indexUid = $request->getConfigurations()->get($this->getConfId().'usedIndex');
             // let's see if we got a index to use via parameters
             if (empty($indexUid)) {
-                $indexUid = $this->getConfigurations()->getParameters()->get('usedIndex');
+                $indexUid = $request->getConfigurations()->getParameters()->get('usedIndex');
             }
 
             $index = tx_mksearch_util_ServiceRegistry::getIntIndexService()->get($indexUid);

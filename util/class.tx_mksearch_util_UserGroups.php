@@ -206,6 +206,7 @@ class tx_mksearch_util_UserGroups
         if (isset($foo['local'])) {
             return $foo['local'];
         }
+
         // else
         return $foo['groups'];
     }

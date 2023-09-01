@@ -27,8 +27,8 @@
  */
 class tx_mksearch_util_Tika
 {
-    private static $instance = null;
-    private $tikaJar = null;
+    private static $instance;
+    private $tikaJar;
     private $tikaAvailable = -1;
     private $tikaLocaleType;
 

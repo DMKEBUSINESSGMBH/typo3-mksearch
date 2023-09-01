@@ -84,8 +84,8 @@ class tx_mksearch_model_engineSpecific_lucene_IndexerField extends tx_mksearch_m
     public function __construct($value, $storageType, $encoding = null)
     {
         // Don't check this anymore. @see self::$_possibleStorageTypes
-//         if (!in_array($storageType, self::$_possibleStorageTypes))
-//             throw new Exception('tx_mksearch_model_engineSpecific_lucene_IndexerField::__construct(): Invalid storage type "'.$storageType.'"!');
+        //         if (!in_array($storageType, self::$_possibleStorageTypes))
+        //             throw new Exception('tx_mksearch_model_engineSpecific_lucene_IndexerField::__construct(): Invalid storage type "'.$storageType.'"!');
         $this->setValue($value);
         $this->_storageType = $storageType;
         $this->_encoding = $encoding;
@@ -127,8 +127,8 @@ class tx_mksearch_model_engineSpecific_lucene_IndexerField extends tx_mksearch_m
     public function updateStorageType($storageType)
     {
         // Don't check this anymore. @see self::$_possibleStorageTypes
-//         if (!in_array($storageType, self::$_possibleStorageTypes))
-//             throw new Exception('tx_mksearch_model_engineSpecific_lucene_IndexerField::updateStorageType(): Invalid storage type "'.$storageType.'"!');
+        //         if (!in_array($storageType, self::$_possibleStorageTypes))
+        //             throw new Exception('tx_mksearch_model_engineSpecific_lucene_IndexerField::updateStorageType(): Invalid storage type "'.$storageType.'"!');
         $this->_storageType = $storageType;
     }
 

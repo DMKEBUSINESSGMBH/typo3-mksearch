@@ -33,7 +33,7 @@ interface tx_mksearch_interface_SearchHit
      * Returns the uid
      * @return int
      */
-//    public function getUid(); // allready declared in \Sys25\RnBase\Domain\Model\DataInterface
+    //    public function getUid(); // allready declared in \Sys25\RnBase\Domain\Model\DataInterface
 
     /*
      * Returns the data record as array

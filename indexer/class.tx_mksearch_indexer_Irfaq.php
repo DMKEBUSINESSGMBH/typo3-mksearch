@@ -61,8 +61,8 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base
         tx_mksearch_interface_IndexerDocument $indexDoc,
         $options = []
     ) {
-        return parent::hasDocToBeDeleted($model, $indexDoc, $options) ||
-                !$this->checkInOrExcludeOptions($this->getIrfaqCategoryService()->getByQuestion($model), $options);
+        return parent::hasDocToBeDeleted($model, $indexDoc, $options)
+                || !$this->checkInOrExcludeOptions($this->getIrfaqCategoryService()->getByQuestion($model), $options);
     }
 
     /**
@@ -175,8 +175,8 @@ class tx_mksearch_indexer_Irfaq extends tx_mksearch_indexer_Base
         array $categories,
         tx_mksearch_interface_IndexerDocument $indexDoc
     ) {
-        if (isset($categories[0]) &&
-            $categories[0] instanceof tx_mksearch_model_irfaq_Category
+        if (isset($categories[0])
+            && $categories[0] instanceof tx_mksearch_model_irfaq_Category
         ) {
             $indexDoc->addField('category_first_shortcut_s', $categories[0]->getProperty('shortcut'));
         }

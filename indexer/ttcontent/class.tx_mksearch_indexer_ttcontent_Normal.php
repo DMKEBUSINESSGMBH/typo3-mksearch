@@ -470,13 +470,13 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
      */
     protected function isIndexableRecord(array $sourceRecord, array $options)
     {
-        if (!isset($sourceRecord['tx_mksearch_is_indexable']) ||
-            (self::USE_INDEXER_CONFIGURATION == $sourceRecord['tx_mksearch_is_indexable'])
+        if (!isset($sourceRecord['tx_mksearch_is_indexable'])
+            || (self::USE_INDEXER_CONFIGURATION == $sourceRecord['tx_mksearch_is_indexable'])
         ) {
             $isIndexablePage =
-                $this->isOnIndexablePage($sourceRecord, $options) &&
-                $this->checkCTypes($sourceRecord, $options) &&
-                $this->isIndexableColumn($sourceRecord, $options);
+                $this->isOnIndexablePage($sourceRecord, $options)
+                && $this->checkCTypes($sourceRecord, $options)
+                && $this->isIndexableColumn($sourceRecord, $options);
         } else {
             $isIndexablePage = (self::IS_INDEXABLE == $sourceRecord['tx_mksearch_is_indexable']);
         }
