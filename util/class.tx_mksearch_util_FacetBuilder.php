@@ -313,6 +313,7 @@ class tx_mksearch_util_FacetBuilder
     {
         // field facets are an instance of \Sys25\RnBase\Domain\Model\BaseModel with childs in "items" of record
         // other facets, like pivot, are an instance of tx_mksearch_model_Facet with childs
+        $facet = null;
         foreach ($facets as $facet) {
             $childs = $facet instanceof tx_mksearch_model_Facet ? $facet->getChilds() : $facet->getItems();
             if (!empty($childs) && is_array($childs)) {
