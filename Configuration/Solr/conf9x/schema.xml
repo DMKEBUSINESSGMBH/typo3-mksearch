@@ -191,7 +191,7 @@
         <!--
             For Geospatial search
         -->
-        <fieldType name="location" class="solr.LatLonPointSpatialField" />
+        <fieldType name="location" class="solr.LatLonPointSpatialField" docValues="true" />
 
         <!-- solr.TextField allows the specification of custom text analyzers specified
             as a tokenizer and a list of token filters. Different analyzers may be specified

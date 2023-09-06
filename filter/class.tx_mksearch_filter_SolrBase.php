@@ -577,6 +577,13 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
      * Dieses Feld muss konfiguriert werden,
      * da darin die Umkreissuche stattfindet.
      *
+     * Wenn zusätzlich in der Antwort die Entfernung enthalten sein und nach dieser
+     * sortiert werden soll, dann sollte ein eigenes Filter bereitgestellt werden,
+     * der diese Methode erweitert und am Ende das folgende setzt:
+     *
+     * $options['fl'] = '*,distance:geodist()';
+     * $options['sort'] = 'geodist() asc';
+     *
      * @param array &$fields
      * @param array &$options
      */
