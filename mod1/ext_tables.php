@@ -11,7 +11,7 @@ defined('TYPO3') or exit('Access denied.');
     [
         'access' => 'user,group',
         'routeTarget' => 'tx_mksearch_mod1_Module',
-        'icon' => 'EXT:mksearch/Resources/Public/Icons/moduleicon.png',
+        'icon' => 'EXT:mksearch/Resources/Public/Icons/Extension.svg',
         'labels' => 'LLL:EXT:mksearch/Resources/Private/Language/BackendModule/locallang_mod.xlf',
     ]
 );
