@@ -1,6 +1,12 @@
 Changelog
 =========
 
+11.0.8 - 11.0.11
+----------------
+- several bugfixes
+- new icon
+- more info about spatial search
+
 11.0.7
 -----
 
