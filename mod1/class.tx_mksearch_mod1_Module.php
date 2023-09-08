@@ -43,7 +43,7 @@ class tx_mksearch_mod1_Module extends \Sys25\RnBase\Backend\Module\BaseModule
                     'name' => 'web_MksearchM1',
                     'access' => 'user,group',
                     'default' => [
-                        'tabs_images' => ['tab' => 'moduleicon.gif'],
+                        'tabs_images' => ['tab' => 'moduleicon.png'],
                         'll_ref' => 'LLL:EXT:mksearch/mod1/locallang_mod.xml',
                     ],
                 ]
