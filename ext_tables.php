@@ -17,8 +17,8 @@ require_once $_EXT_PATH.'mod1/ext_tables.php';
 // register icon
 \Sys25\RnBase\Backend\Utility\Icons::getIconRegistry()->registerIcon(
     'ext-mksearch-wizard-icon',
-    'TYPO3\\CMS\Core\\Imaging\\IconProvider\\BitmapIconProvider',
-    ['source' => 'EXT:mksearch/Resources/Public/Icons/Extension.gif']
+    \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+    ['source' => 'EXT:mksearch/Resources/Public/Icons/Extension.svg']
 );
 // Wizardkonfiguration hinzufügen
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>MKSearch_icn_32px</title>
+    <g id="MKSearch_icn_32px" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Bildteil">
+            <path d="M16,0 C24.8368326,0 32,7.16337868 32,15.9998639 C32,24.8366213 24.8368326,32 16,32 C7.16343962,32 0,24.8366213 0,15.9998639 C0,7.16337868 7.16343962,0 16,0" id="Fill-4" fill="#1068C9"></path>
+            <g id="Group" transform="translate(7.5, 7.5)" fill="#FFFFFF">
+                <path d="M8.5,0 C13.1944539,0 17,3.80554611 17,8.5 C17,13.1944539 13.1944539,17 8.5,17 C3.80554611,17 0,13.1944539 0,8.5 C0,3.80554611 3.80554611,0 8.5,0" id="Fill-6" fill-opacity="0.6"></path>
+                <circle id="Oval" fill-opacity="0.6" cx="11.2" cy="5.55" r="4.5"></circle>
+                <path d="M13.6121402,9.35073349 L13.5281096,9.40399148 C12.8488778,9.81542151 12.0520965,10.0522537 11.2,10.0522537 C8.71471863,10.0522537 6.7,8.03753511 6.7,5.55225374 C6.7,4.71925885 6.92633304,3.93912687 7.32085691,3.27 C10.37949,3.9773168 12.8052548,6.33322049 13.6121402,9.35073349 Z" id="Combined-Shape"></path>
+            </g>
+        </g>
+    </g>
+</svg>

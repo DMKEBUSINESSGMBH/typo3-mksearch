@@ -400,7 +400,7 @@ class tx_mksearch_tests_indexer_FALTest extends tx_mksearch_tests_Testcase
     {
         return [
             __LINE__ => [
-                'sourceRecord' => ['name' => 'Resources/Public/Icons/Extension.gif'],
+                'sourceRecord' => ['name' => 'Resources/Public/Icons/Extension.svg'],
                 'expected' => false,
             ],
             __LINE__ => [
