@@ -191,7 +191,7 @@ class tx_mksearch_util_SolrResponseProcessor
                 $cleanHighlighted
             )
             ) {
-                $highlightedValue = $highlightedValue.$wrap[1];
+                $highlightedValue .= $wrap[1];
             }
         }
 
