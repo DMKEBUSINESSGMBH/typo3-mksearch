@@ -1,7 +1,12 @@
 Changelog
 =========
 
-11.0.8 - 11.0.11
+11.0.13
+-----
+
+- Fix compatibility with TYPO3 10.4
+ 
+11.0.8 - 11.0.12
 ----------------
 - several bugfixes
 - new icon
