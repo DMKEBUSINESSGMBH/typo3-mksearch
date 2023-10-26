@@ -72,7 +72,7 @@ class tx_mksearch_util_UserGroups
         $queryBuilder = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Database\ConnectionPool::class)->getQueryBuilderForTable(
             'fe_groups'
         );
-        $result = $queryBuilder
+        $queryBuilder
             ->select('ref_uid')
             ->from('fe_groups')
             ->join('fe_groups', 'sys_refindex', 'sys_refindex', 'fe_groups.uid = sys_refindex.ref_uid')
@@ -80,8 +80,8 @@ class tx_mksearch_util_UserGroups
                 $queryBuilder->expr()->eq('sys_refindex.ref_table', $queryBuilder->quote('fe_groups')),
                 $queryBuilder->expr()->eq('sys_refindex.field', $queryBuilder->quote('subgroup')),
                 $queryBuilder->expr()->eq('sys_refindex.recuid', $queryBuilder->createNamedParameter($groupId, \PDO::PARAM_INT))
-            ))
-            ->executeQuery();
+            ));
+        $result = \Sys25\RnBase\Utility\TYPO3::isTYPO115OrHigher() ? $queryBuilder->executeQuery() : $queryBuilder->execute();
 
         // Initialize suber group array with ourselves!
         $sub = [$groupId];
