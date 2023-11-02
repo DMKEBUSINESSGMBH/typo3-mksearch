@@ -39,7 +39,7 @@ class IndexerConfigurationField extends \TYPO3\CMS\Backend\Form\Element\TextElem
      *
      * @see TYPO3\CMS\Backend\Form\Element\TextElement::render()
      */
-    public function render()
+    public function render(): array
     {
         $extKey = $this->data['databaseRow']['extkey'][0] ?? '';
         $contentType = $this->data['databaseRow']['contenttype'][0] ?? '';

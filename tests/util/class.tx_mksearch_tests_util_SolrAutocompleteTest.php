@@ -33,19 +33,6 @@
  */
 class tx_mksearch_tests_util_SolrAutocompleteTest extends tx_mksearch_tests_Testcase
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsInline');
-        $property->setAccessible(true);
-        $property->setValue(\Sys25\RnBase\Utility\TYPO3::getPageRenderer(), []);
-
-        $property = new ReflectionProperty('\\TYPO3\\CMS\\Core\\Page\\PageRenderer', 'jsLibs');
-        $property->setAccessible(true);
-        $property->setValue(\Sys25\RnBase\Utility\TYPO3::getPageRenderer(), []);
-    }
-
     /**
      * @group unit
      */

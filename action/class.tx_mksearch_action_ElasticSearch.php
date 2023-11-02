@@ -50,6 +50,7 @@ class tx_mksearch_action_ElasticSearch extends tx_mksearch_action_AbstractSearch
         $options = [];
         $items = [];
 
+        $searchResult = [];
         if ($filter->init($fields, $options)) {
             $index = $this->getSearchIndex($request);
 
@@ -75,8 +76,8 @@ class tx_mksearch_action_ElasticSearch extends tx_mksearch_action_AbstractSearch
         }
 
         $viewData->offsetSet('result', $searchResult);
-        $viewData->offsetSet('searchcount', $searchResult['numFound']);
-        $viewData->offsetSet('search', $searchResult['items']);
+        $viewData->offsetSet('searchcount', $searchResult['numFound'] ?? 0);
+        $viewData->offsetSet('search', $searchResult['items'] ?? []);
 
         return null;
     }

@@ -35,10 +35,9 @@ class Apache_Solr_ServiceTest extends tx_mksearch_tests_Testcase
      */
     public function testCommitCallsSendRawPostWithWaitFlushParameterIfNotSolr4()
     {
-        $service = $this->getMock(
-            'Apache_Solr_Service',
-            ['_sendRawPost']
-        );
+        $service = $this->getMockBuilder('Apache_Solr_Service')
+            ->onlyMethods(['_sendRawPost'])
+            ->getMock();
         $service->setCompatibilityLayer(new Apache_Solr_Compatibility_Solr3CompatibilityLayer());
 
         $expectedUrl = 'http://localhost:8180/solr/update?wt=json';
@@ -58,10 +57,9 @@ class Apache_Solr_ServiceTest extends tx_mksearch_tests_Testcase
      */
     public function testCommitCallsSendRawPostWithoutWaitFlushParameterIfSolr4()
     {
-        $service = $this->getMock(
-            'Apache_Solr_Service',
-            ['_sendRawPost']
-        );
+        $service = $this->getMockBuilder('Apache_Solr_Service')
+            ->onlyMethods(['_sendRawPost'])
+            ->getMock();
         $service->setCompatibilityLayer(new Apache_Solr_Compatibility_Solr4CompatibilityLayer());
 
         $expectedUrl = 'http://localhost:8180/solr/update?wt=json';
@@ -81,10 +79,9 @@ class Apache_Solr_ServiceTest extends tx_mksearch_tests_Testcase
      */
     public function testOptimizeCallsSendRawPostWithWaitFlushParameterIfNotSolr4()
     {
-        $service = $this->getMock(
-            'Apache_Solr_Service',
-            ['_sendRawPost']
-        );
+        $service = $this->getMockBuilder('Apache_Solr_Service')
+            ->onlyMethods(['_sendRawPost'])
+            ->getMock();
         $service->setCompatibilityLayer(new Apache_Solr_Compatibility_Solr3CompatibilityLayer());
 
         $expectedUrl = 'http://localhost:8180/solr/update?wt=json';
@@ -104,10 +101,9 @@ class Apache_Solr_ServiceTest extends tx_mksearch_tests_Testcase
      */
     public function testOptimizeCallsSendRawPostWithoutWaitFlushParameterIfSolr4()
     {
-        $service = $this->getMock(
-            'Apache_Solr_Service',
-            ['_sendRawPost']
-        );
+        $service = $this->getMockBuilder('Apache_Solr_Service')
+            ->onlyMethods(['_sendRawPost'])
+            ->getMock();
         $service->setCompatibilityLayer(new Apache_Solr_Compatibility_Solr4CompatibilityLayer());
 
         $expectedUrl = 'http://localhost:8180/solr/update?wt=json';

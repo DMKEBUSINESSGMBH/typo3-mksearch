@@ -28,6 +28,11 @@
  */
 class tx_mksearch_mod1_decorator_Indizes
 {
+    /**
+     * @var \Sys25\RnBase\Backend\Module\IModule
+     */
+    protected $mod;
+
     public function __construct($mod)
     {
         $this->mod = $mod;

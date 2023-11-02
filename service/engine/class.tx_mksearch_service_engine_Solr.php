@@ -125,79 +125,6 @@ class tx_mksearch_service_engine_Solr extends \Sys25\RnBase\Typo3Wrapper\Service
     }
 
     /**
-     * Build query recursively from query array.
-     *
-     * @param $fields
-     *
-     * @return Zend_Search_Lucene_Search_Query_Boolean
-     */
-    private function buildQuery(array $fields)
-    {
-        $query = new Zend_Search_Lucene_Search_Query_Boolean();
-        $mtquery = new Zend_Search_Lucene_Search_Query_MultiTerm();
-
-        // Loop through all items of the field
-        foreach ($fields as $key => $f) {
-            foreach ($f as $ff) {
-                if (!is_array($ff['term'])) {
-                    // The term is a single token
-                    if (!(isset($ff['phrase']) and $ff['phrase'])) {
-                        // Call hook to manipulate search term. Term is utf8-encoded!
-                        \Sys25\RnBase\Utility\Misc::callHook(
-                            'mksearch',
-                            'engine_ZendLucene_buildQuery_manipulateSingleTerm',
-                            ['term' => &$ff['term']],
-                            $this
-                        );
-
-                        // The term is really just a simple string
-                        $mtquery->addTerm(
-                            new Zend_Search_Lucene_Index_Term(
-                                $ff['term'],
-                                '__default__' == $key ? null : $key
-                            ),
-                            isset($ff['sign']) ? $ff['sign'] : null
-                        );
-                    } else {
-                        // The term is a complete phrase, which must be build from its parts
-                        $pq = new Zend_Search_Lucene_Search_Query_Phrase();
-                        foreach (explode(' ', $ff['term']) as $t) { // @todo: explode with regex for respecting white spaces in general
-                            // Call hook to manipulate search term. Term is utf8-encoded!
-                            \Sys25\RnBase\Utility\Misc::callHook(
-                                'mksearch',
-                                'engine_ZendLucene_buildQuery_manipulateSingleTerm',
-                                ['term' => &$t],
-                                $this
-                            );
-                            if ($t) {
-                                $pq->addTerm(
-                                    new Zend_Search_Lucene_Index_Term(
-                                        $t,
-                                        '__default__' == $key ? null : $key
-                                    )
-                                );
-                            }
-                        }
-
-                        $query->addSubquery($pq);
-                    }
-                } else {
-                    // The term represents a subquery - step down recursively
-                    $query->addSubquery(
-                        $this->buildQuery($ff['term']),
-                        isset($ff['sign']) ? $ff['sign'] : null
-                    );
-                }
-            }
-        }
-        if ($mtquery->getTerms()) {
-            $query->addSubquery($mtquery);
-        }
-
-        return $query;
-    }
-
-    /**
      * Search indexed data via Apache Solr.
      *
      * Search term must be charset-encoded identically like data was indexed (utf-8 by default)!
@@ -365,7 +292,7 @@ class tx_mksearch_service_engine_Solr extends \Sys25\RnBase\Typo3Wrapper\Service
     public function deleteIndex($name = null)
     {
         // Close index if necessary
-        if (!$name or is_object($this) and $this->getOpenIndex() == $name) {
+        if (!$name or is_object($this) and $this->indexName == $name) {
             $name = $this->indexName;
             $this->closeIndex();
         }
@@ -470,63 +397,11 @@ class tx_mksearch_service_engine_Solr extends \Sys25\RnBase\Typo3Wrapper\Service
     }
 
     /**
-     * Add a field to the given index document
-     * TODO: wird hier in Solr vermutlich nicht verwendet! tx_mksearch_model_IndexerField gibt es nicht mehr...
-     *
-     * @param string                         $key
-     * @param tx_mksearch_model_IndexerField &$field
-     * @param Zend_Search_Lucene_Document    &$doc
-     */
-    private function addFieldToIndexDoc(
-        $key,
-        tx_mksearch_model_IndexerField &$field,
-        Zend_Search_Lucene_Document &$doc
-    ) {
-        switch ($field->getStorageType()) {
-            case 'text':
-                $doc->addField(Zend_Search_Lucene_Field::Text(
-                    $key,
-                    $field->getValue(),
-                    $field->getEncoding()
-                ));
-                break;
-            case 'keyword':
-                $doc->addField(Zend_Search_Lucene_Field::Keyword(
-                    $key,
-                    $field->getValue(),
-                    $field->getEncoding()
-                ));
-                break;
-            case 'unindexed':
-                $doc->addField(Zend_Search_Lucene_Field::UnIndexed(
-                    $key,
-                    $field->getValue(),
-                    $field->getEncoding()
-                ));
-                break;
-            case 'unstored':
-                $doc->addField(Zend_Search_Lucene_Field::UnStored(
-                    $key,
-                    $field->getValue(),
-                    $field->getEncoding()
-                ));
-                break;
-            case 'binary':
-                $doc->addField(Zend_Search_Lucene_Field::Binary(
-                    $key,
-                    $field->getValue(),
-                    $field->getEncoding()
-                ));
-                break;
-            default:
-                throw new Exception('tx_mksearch_service_engine_Colr::_addFieldToIndexDoc(): Unknown storage type "'.$field->getStorageType().'"!');
-        }
-    }
-
-    /**
      * Put a new record into index.
      *
      * @param tx_mksearch_interface_IndexerDocument $doc "Document" to index
+     *
+     * @return void
      */
     public function indexNew(tx_mksearch_interface_IndexerDocument $doc)
     {
@@ -632,6 +507,8 @@ class tx_mksearch_service_engine_Solr extends \Sys25\RnBase\Typo3Wrapper\Service
      * Update or create an index record.
      *
      * @param tx_mksearch_interface_IndexerDocument $doc "Document" to index
+     *
+     * @return void
      */
     public function indexUpdate(tx_mksearch_interface_IndexerDocument $doc)
     {
@@ -787,6 +664,7 @@ class tx_mksearch_service_engine_Solr extends \Sys25\RnBase\Typo3Wrapper\Service
     {
         $oSolr = $this->getSolr();
         // remove trailing slash of the path
+        $sPath = '';
         if ('/' == substr($oSolr->getPath(), -1)) {
             $sPath = substr($oSolr->getPath(), 0, -1);
         }
@@ -804,7 +682,6 @@ class tx_mksearch_service_engine_Solr extends \Sys25\RnBase\Typo3Wrapper\Service
      */
     public function reset()
     {
-        parent::reset();
         unset($this->index);
         unset($this->indexModel);
         $this->index = null;
@@ -843,5 +720,10 @@ class tx_mksearch_service_engine_Solr extends \Sys25\RnBase\Typo3Wrapper\Service
         }
 
         return $hits;
+    }
+
+    public function init(): bool
+    {
+        return true;
     }
 }

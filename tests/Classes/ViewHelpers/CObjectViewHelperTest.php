@@ -3,6 +3,7 @@
 namespace DMK\Mksearch\Tests\ViewHelpers;
 
 use DMK\Mksearch\ViewHelpers\CObjectViewHelper;
+use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /***************************************************************
  * Copyright notice
@@ -52,11 +53,11 @@ class CObjectViewHelperTest extends \tx_mksearch_tests_Testcase
         $property->setAccessible(true);
         $property->setValue(null, true);
 
-        $GLOBALS['TSFE'] = 'test';
+        $GLOBALS['TSFE'] = null;
 
         $viewHelper = $this->getViewHelper();
-        $this->callInaccessibleMethod($viewHelper, 'simulateFrontendEnvironment');
-        self::assertSame('test', $GLOBALS['TSFE']);
+        $viewHelper->_call('simulateFrontendEnvironment');
+        self::assertNull($GLOBALS['TSFE']);
     }
 
     /**
@@ -64,10 +65,14 @@ class CObjectViewHelperTest extends \tx_mksearch_tests_Testcase
      */
     public function testSimulateFrontendEnvironmentWhenMksearchIndexingIsNotInProgress()
     {
-        $GLOBALS['TSFE'] = 'test';
+        $property = new \ReflectionProperty('tx_mksearch_service_internal_Index', 'indexingInProgress');
+        $property->setAccessible(true);
+        $property->setValue(null, false);
+
+        $GLOBALS['TSFE'] = null;
 
         $viewHelper = $this->getViewHelper();
-        $this->callInaccessibleMethod($viewHelper, 'simulateFrontendEnvironment');
+        $viewHelper->_call('simulateFrontendEnvironment');
         self::assertInstanceOf('stdCLass', $GLOBALS['TSFE']);
     }
 
@@ -81,12 +86,12 @@ class CObjectViewHelperTest extends \tx_mksearch_tests_Testcase
         $property->setValue(null, true);
 
         $viewHelper = $this->getViewHelper();
-        $property = new \ReflectionProperty('TYPO3\\CMS\\Fluid\\ViewHelpers\\CObjectViewHelper', 'tsfeBackup');
-        $property->setAccessible(true);
-        $property->setValue($viewHelper, 'tsfeBackup');
 
         $GLOBALS['TSFE'] = 'test';
-        $this->callInaccessibleMethod($viewHelper, 'resetFrontendEnvironment');
+        $viewHelper->_call(
+            'resetFrontendEnvironment',
+            $this->getMockBuilder(TypoScriptFrontendController::class)->disableOriginalConstructor()->getMock()
+        );
         self::assertSame('test', $GLOBALS['TSFE']);
     }
 
@@ -95,19 +100,23 @@ class CObjectViewHelperTest extends \tx_mksearch_tests_Testcase
      */
     public function testResetFrontendEnvironmentWhenMksearchIndexingIsNotInProgress()
     {
+        $property = new \ReflectionProperty('tx_mksearch_service_internal_Index', 'indexingInProgress');
+        $property->setAccessible(true);
+        $property->setValue(null, false);
+
         $GLOBALS['TSFE'] = 'test';
 
         $viewHelper = $this->getViewHelper();
-        $property = new \ReflectionProperty('TYPO3\\CMS\\Fluid\\ViewHelpers\\CObjectViewHelper', 'tsfeBackup');
-        $property->setAccessible(true);
-        $property->setValue($viewHelper, 'tsfeBackup');
 
-        $this->callInaccessibleMethod($viewHelper, 'resetFrontendEnvironment');
-        self::assertSame('tsfeBackup', $GLOBALS['TSFE']);
+        $viewHelper->_call(
+            'resetFrontendEnvironment',
+            $this->getMockBuilder(TypoScriptFrontendController::class)->disableOriginalConstructor()->getMock()
+        );
+        self::assertInstanceOf(TypoScriptFrontendController::class, $GLOBALS['TSFE']);
     }
 
     protected function getViewHelper(): CObjectViewHelper
     {
-        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(CObjectViewHelper::class);
+        return $this->getAccessibleMock(CObjectViewHelper::class, ['render']);
     }
 }

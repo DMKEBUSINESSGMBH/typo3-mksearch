@@ -163,6 +163,7 @@ class Apache_Solr_Service
     protected $_searchUrl;
     protected $_systemUrl;
     protected $_threadsUrl;
+    protected $_extractUrl;
 
     /**
      * Keep track of whether our URLs have been constructed.

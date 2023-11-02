@@ -75,23 +75,23 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
     {
         // was a related table changed?
         if ('tx_seminars_categories' == $tableName) {
-            $this->handleRelatedMmChanged(SEMINARS_TABLE_SEMINARS_CATEGORIES_MM, $rawData);
+            $this->handleRelatedMmChanged(\constant('SEMINARS_TABLE_SEMINARS_CATEGORIES_MM'), $rawData);
 
             return null;
         } elseif ('tx_seminars_organizers' == $tableName) {
-            $this->handleRelatedMmChanged(SEMINARS_TABLE_SEMINARS_ORGANIZERS_MM, $rawData);
+            $this->handleRelatedMmChanged(\constant('SEMINARS_TABLE_SEMINARS_ORGANIZERS_MM'), $rawData);
 
             return null;
         } elseif ('tx_seminars_sites' == $tableName) {
-            $this->handleRelatedMmChanged(SEMINARS_TABLE_SEMINARS_SITES_MM, $rawData);
+            $this->handleRelatedMmChanged(\constant('SEMINARS_TABLE_SEMINARS_SITES_MM'), $rawData);
 
             return null;
         } elseif ('tx_seminars_speakers' == $tableName) {
-            $this->handleRelatedMmChanged(SEMINARS_TABLE_SEMINARS_SPEAKERS_MM, $rawData);
+            $this->handleRelatedMmChanged(\constant('SEMINARS_TABLE_SEMINARS_SPEAKERS_MM'), $rawData);
 
             return null;
         } elseif ('tx_seminars_target_groups' == $tableName) {
-            $this->handleRelatedMmChanged(SEMINARS_TABLE_SEMINARS_TARGET_GROUPS_MM, $rawData);
+            $this->handleRelatedMmChanged(\constant('SEMINARS_TABLE_SEMINARS_TARGET_GROUPS_MM'), $rawData);
 
             return null;
         } elseif ('tx_seminars_timeslots' == $tableName) {
@@ -120,6 +120,7 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
             return $indexDoc;
         }
 
+        $oIndexer = null;
         // redirect the indexing to the responsible class
         if (0 == $rawData['object_type']) {
             $oIndexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_seminars_SeminarObjectType0');
@@ -133,7 +134,11 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
             return null;
         }
 
-        return $oIndexer->prepareSearchData($tableName, $rawData, $indexDoc, $options);
+        if ($oIndexer) {
+            return $oIndexer->prepareSearchData($tableName, $rawData, $indexDoc, $options);
+        }
+
+        return null;
     }
 
     /**
@@ -505,7 +510,7 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
 #
 # you should always configure the root pageTree for this indexer in the includes. mostly the domain
 # include.pageTrees {
-#   0 = $pid-of-domain
+#   0 = pid-of-domain
 # }
 
 # should a special workspace be indexed?

@@ -35,6 +35,11 @@ class tx_mksearch_model_SolrHit extends \Sys25\RnBase\Domain\Model\BaseModel imp
     private $solrDoc;
 
     /**
+     * @var int
+     */
+    protected $uid;
+
+    /**
      * Initialiaze model and fill it with data if provided.
      *
      * @param $rowOrUid

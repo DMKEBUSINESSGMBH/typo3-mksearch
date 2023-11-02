@@ -55,7 +55,7 @@ class tx_mksearch_util_TCA
      *
      * @param array &$params
      *
-     * @return array
+     * @return void
      */
     public static function getIndexerExtKeys(array &$params)
     {
@@ -73,7 +73,7 @@ class tx_mksearch_util_TCA
      *
      * @param array &$params
      *
-     * @return array
+     * @return void
      */
     public static function getIndexerContentTypes(array &$params)
     {

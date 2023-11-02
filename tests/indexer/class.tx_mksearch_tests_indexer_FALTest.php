@@ -377,7 +377,7 @@ class tx_mksearch_tests_indexer_FALTest extends tx_mksearch_tests_Testcase
         );
         $indexer->expects(self::any())
             ->method('getFilePath')
-            ->will(self::returnValue(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch')));
+            ->will(self::returnValue(__DIR__.'/../../'));
 
         $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',

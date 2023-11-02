@@ -218,7 +218,7 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
      * @param ParametersInterface      $parameters
      * @param \Sys25\RnBase\Configuration\Processor $configurations
      *
-     * @return \Sys25\RnBase\Utility\PageBrowser
+     * @return \Sys25\RnBase\Utility\PageBrowser|null
      */
     public function handlePageBrowser(\Sys25\RnBase\Frontend\Request\RequestInterface $request, $confId, &$fields, &$options, $index)
     {
@@ -283,6 +283,8 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
 
             return $pageBrowser;
         }
+
+        return null;
     }
 
     /**

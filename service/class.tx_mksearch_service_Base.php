@@ -99,4 +99,9 @@ abstract class tx_mksearch_service_Base extends \Sys25\RnBase\Typo3Wrapper\Servi
     {
         return $this->search([], []);
     }
+
+    public function init(): bool
+    {
+        return true;
+    }
 }

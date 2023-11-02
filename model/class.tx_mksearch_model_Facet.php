@@ -42,6 +42,11 @@ class tx_mksearch_model_Facet extends \Sys25\RnBase\Domain\Model\BaseModel
     private $childs = [];
 
     /**
+     * @var int
+     */
+    protected $uid;
+
+    /**
      * Gibt ein Facet Model zurück.
      *
      * @param string $field

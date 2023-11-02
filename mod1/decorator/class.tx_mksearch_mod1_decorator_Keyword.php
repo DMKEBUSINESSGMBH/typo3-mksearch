@@ -27,6 +27,11 @@
  */
 class tx_mksearch_mod1_decorator_Keyword
 {
+    /**
+     * @var \Sys25\RnBase\Backend\Module\IModule
+     */
+    protected $mod;
+
     public function __construct($mod)
     {
         $this->mod = $mod;
@@ -62,7 +67,7 @@ class tx_mksearch_mod1_decorator_Keyword
                 // hide undhide link
                 $ret .= $formtool->createHideLink($item->getTableName(), $item->getUid(), $item->getProperty('hidden'));
                 // remove link
-                $ret .= $formtool->createDeleteLink($item->getTableName(), $item->getUid(), '', ['confirm' => $GLOBALS['LANG']->getLL('confirmation_deletion')]);
+                $ret .= $formtool->createDeleteLink($item->getTableName(), $item->getUid(), '', ['confirm' => $GLOBALS['LANG']->sL('LLL:EXT:mksearch/Resources/Private/Language/BackendModule/locallang.xlf:confirmation_deletion')]);
                 break;
             default:
                 $ret = $value;

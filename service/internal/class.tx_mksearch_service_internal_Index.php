@@ -70,7 +70,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
      * @param string $resolver  class name of record resolver
      * @param array  $data
      *
-     * @return bool true if record was successfully spooled
+     * @return void
      */
     public function indexRecord($tableName, $uid, $prefer = false, $resolver = false, $data = false)
     {

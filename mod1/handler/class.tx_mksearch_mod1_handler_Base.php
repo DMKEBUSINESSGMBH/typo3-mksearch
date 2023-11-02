@@ -48,6 +48,13 @@ abstract class tx_mksearch_mod1_handler_Base
     abstract protected function getSearcher(\Sys25\RnBase\Backend\Module\IModule $mod, &$options);
 
     /**
+     * Returns a unique ID for this handler. This is used to created the subpart in template.
+     *
+     * @return string
+     */
+    abstract protected function getSubID();
+
+    /**
      * Returns the label for Handler in SubMenu. You can use a label-Marker.
      *
      * @return string

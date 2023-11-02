@@ -22,7 +22,7 @@ class tx_mksearch_mod1_util_Misc
                 continue;
             }
             $pageinfo = \Sys25\RnBase\Backend\Utility\BackendUtility::readPageAccess($pid, $mod->perms_clause);
-            $modUrl = \Sys25\RnBase\Backend\Utility\BackendUtility::getModuleUrl('web_MksearchM1', ['id' => $pid], '');
+            $modUrl = \Sys25\RnBase\Backend\Utility\BackendUtility::getModuleUrl('web_MksearchM1', ['id' => $pid]);
             $page = '<a href="'.$modUrl.'">';
             $page .= \Sys25\RnBase\Backend\Utility\Icons::getSpriteIconForRecord('pages', $pageRecord);
             $page .= ' '.$pageinfo['title'];

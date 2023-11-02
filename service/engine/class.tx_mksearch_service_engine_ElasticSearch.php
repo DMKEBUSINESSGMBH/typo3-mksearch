@@ -326,7 +326,7 @@ class tx_mksearch_service_engine_ElasticSearch extends \Sys25\RnBase\Typo3Wrappe
      * @param string $extKey
      * @param string $contentType
      *
-     * @return tx_mksearch_model_SearchHit
+     * @return void
      */
     public function getByContentUid($uid, $extKey, $contentType)
     {
@@ -433,7 +433,7 @@ class tx_mksearch_service_engine_ElasticSearch extends \Sys25\RnBase\Typo3Wrappe
     /**
      * Commit index.
      *
-     * @return bool success
+     * @return void
      */
     public function commitIndex()
     {
@@ -635,5 +635,10 @@ class tx_mksearch_service_engine_ElasticSearch extends \Sys25\RnBase\Typo3Wrappe
      */
     public function postProcessIndexing(tx_mksearch_model_internal_Index $index)
     {
+    }
+
+    public function init(): bool
+    {
+        return true;
     }
 }

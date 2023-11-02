@@ -12,9 +12,9 @@ class tx_mksearch_action_CacheHandler extends tx_rnbase_action_CacheHandlerDefau
      *
      * @return string
      */
-    protected function generateKey()
+    protected function getCacheKey()
     {
-        $key = parent::generateKey(null);
+        $key = parent::getCacheKey();
         // Parameter cHash anhängen
         $key .= '_'.md5(serialize($this->getAllowedParameters()));
 

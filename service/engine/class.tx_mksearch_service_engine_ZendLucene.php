@@ -537,7 +537,7 @@ class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\S
     public function deleteIndex($name = null)
     {
         // Close index if necessary
-        if (!$name or is_object($this) and $this->getOpenIndex() == $name) {
+        if (!$name or is_object($this) and $this->indexName == $name) {
             $name = $this->indexName;
             $this->closeIndex();
         }
@@ -629,7 +629,7 @@ class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\S
             );
         }
 
-        return empty($results) ? null : reset($results);
+        return !$results ? null : reset($results);
     }
 
     /**
@@ -676,6 +676,8 @@ class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\S
      * Put a new record into index.
      *
      * @param tx_mksearch_model_IndexerDocument $doc "Document" to index
+     *
+     * @return void
      */
     public function indexNew(tx_mksearch_interface_IndexerDocument $doc)
     {
@@ -729,6 +731,8 @@ class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\S
      * Update or create an index record.
      *
      * @param tx_mksearch_model_IndexerDocument $doc "Document" to index
+     *
+     * @return void
      */
     public function indexUpdate(tx_mksearch_interface_IndexerDocument $doc)
     {
@@ -838,5 +842,10 @@ class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\S
      */
     public function postProcessIndexing(tx_mksearch_model_internal_Index $oIndex)
     {
+    }
+
+    public function init(): bool
+    {
+        return true;
     }
 }

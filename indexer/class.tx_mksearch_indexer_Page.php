@@ -120,13 +120,13 @@ class tx_mksearch_indexer_Page extends tx_mksearch_indexer_Base
         // "abstractMaxLength_[your extkey]_[your content type]" as defined at $indexDoc constructor
         if (!empty($oModel->getProperty('abstract'))) {
             $indexDoc->setAbstract(
-                $options['keepHtml'] ? $oModel->getProperty('abstract') : tx_mksearch_util_Misc::html2plain($oModel->getProperty('abstract')),
+                ($options['keepHtml'] ?? false) ? $oModel->getProperty('abstract') : tx_mksearch_util_Misc::html2plain($oModel->getProperty('abstract')),
                 $indexDoc->getMaxAbstractLength()
             );
         }
 
         // now let's use the given mapping to get the fields separatly into solr
-        if (!empty($options['mapping.'])) {
+        if ($options['mapping.'] ?? []) {
             $this->indexModelByMapping($oModel, $options['mapping.'], $indexDoc, '', $options);
         }
 

@@ -3,6 +3,7 @@
 namespace DMK\Mksearch\Tests\ViewHelpers\Format;
 
 use DMK\Mksearch\ViewHelpers\Format\HtmlViewHelper;
+use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /***************************************************************
  * Copyright notice
@@ -41,6 +42,8 @@ class HtmlViewHelperTest extends \tx_mksearch_tests_Testcase
         $property = new \ReflectionProperty('tx_mksearch_service_internal_Index', 'indexingInProgress');
         $property->setAccessible(true);
         $property->setValue(null, false);
+
+        parent::tearDown();
     }
 
     /**
@@ -52,25 +55,11 @@ class HtmlViewHelperTest extends \tx_mksearch_tests_Testcase
         $property->setAccessible(true);
         $property->setValue(null, true);
 
-        $GLOBALS['TSFE'] = 'test';
+        $GLOBALS['TSFE'] = null;
 
         $viewHelper = $this->getViewHelper();
-        $this->callInaccessibleMethod($viewHelper, 'simulateFrontendEnvironment');
-        self::assertSame('test', $GLOBALS['TSFE']);
-    }
-
-    /**
-     * @group unit
-     */
-    public function testSimulateFrontendEnvironmentWhenMksearchIndexingIsNotInProgress()
-    {
-        self::markTestSkipped('Test needs refactoring.');
-
-        $GLOBALS['TSFE'] = 'test';
-
-        $viewHelper = $this->getViewHelper();
-        $this->callInaccessibleMethod($viewHelper, 'simulateFrontendEnvironment');
-        self::assertInstanceOf('stdCLass', $GLOBALS['TSFE']);
+        $viewHelper->_call('simulateFrontendEnvironment');
+        self::assertNull($GLOBALS['TSFE']);
     }
 
     /**
@@ -83,12 +72,12 @@ class HtmlViewHelperTest extends \tx_mksearch_tests_Testcase
         $property->setValue(null, true);
 
         $viewHelper = $this->getViewHelper();
-        $property = new \ReflectionProperty('TYPO3\\CMS\\Fluid\\ViewHelpers\\Format\\HtmlViewHelper', 'tsfeBackup');
-        $property->setAccessible(true);
-        $property->setValue($viewHelper, 'tsfeBackup');
 
         $GLOBALS['TSFE'] = 'test';
-        $this->callInaccessibleMethod($viewHelper, 'resetFrontendEnvironment');
+        $viewHelper->_call(
+            'resetFrontendEnvironment',
+            $this->getMockBuilder(TypoScriptFrontendController::class)->disableOriginalConstructor()->getMock()
+        );
         self::assertSame('test', $GLOBALS['TSFE']);
     }
 
@@ -100,16 +89,16 @@ class HtmlViewHelperTest extends \tx_mksearch_tests_Testcase
         $GLOBALS['TSFE'] = 'test';
 
         $viewHelper = $this->getViewHelper();
-        $property = new \ReflectionProperty('TYPO3\\CMS\\Fluid\\ViewHelpers\\Format\\HtmlViewHelper', 'tsfeBackup');
-        $property->setAccessible(true);
-        $property->setValue($viewHelper, 'tsfeBackup');
 
-        $this->callInaccessibleMethod($viewHelper, 'resetFrontendEnvironment');
-        self::assertSame('tsfeBackup', $GLOBALS['TSFE']);
+        $viewHelper->_call(
+            'resetFrontendEnvironment',
+            $this->getMockBuilder(TypoScriptFrontendController::class)->disableOriginalConstructor()->getMock()
+        );
+        self::assertInstanceOf(TypoScriptFrontendController::class, $GLOBALS['TSFE']);
     }
 
     protected function getViewHelper(): HtmlViewHelper
     {
-        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(HtmlViewHelper::class);
+        return $this->getAccessibleMock(HtmlViewHelper::class, ['render']);
     }
 }

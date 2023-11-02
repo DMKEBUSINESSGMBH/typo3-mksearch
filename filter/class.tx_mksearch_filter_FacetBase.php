@@ -51,6 +51,8 @@ class tx_mksearch_filter_FacetBase extends tx_mksearch_filter_SolrBase
 
             return true; // damit der Filter als valide betrachtet wird
         }
+
+        return false;
     }
 
     /**

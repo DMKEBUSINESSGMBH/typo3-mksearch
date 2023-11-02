@@ -34,7 +34,7 @@ class tx_mksearch_tests_indexer_ttcontent_NormalTest extends tx_mksearch_tests_T
      */
     public function testPrepareSearchDataIncludesPageMetaKeywords()
     {
-        $indexer = $this->getMock(
+        $indexer = $this->getAccessibleMock(
             'tx_mksearch_indexer_ttcontent_Normal',
             ['getPageContent', 'isIndexableRecord', 'hasDocToBeDeleted']
         );
@@ -68,7 +68,7 @@ class tx_mksearch_tests_indexer_ttcontent_NormalTest extends tx_mksearch_tests_T
      */
     public function testIndexDataCallsIndexPageDataIfConfigured()
     {
-        $indexer = $this->getMock(
+        $indexer = $this->getAccessibleMock(
             'tx_mksearch_indexer_ttcontent_Normal',
             ['indexPageData', 'getModelToIndex']
         );
@@ -101,7 +101,7 @@ class tx_mksearch_tests_indexer_ttcontent_NormalTest extends tx_mksearch_tests_T
      */
     public function testIndexDataCallsIndexPageDataNotIfNotConfigured()
     {
-        $indexer = $this->getMock(
+        $indexer = $this->getAccessibleMock(
             'tx_mksearch_indexer_ttcontent_Normal',
             ['indexPageData', 'getModelToIndex']
         );
@@ -818,7 +818,7 @@ class tx_mksearch_tests_indexer_ttcontent_NormalTest extends tx_mksearch_tests_T
         $indexDoc = $this->getIndexDocMock('core', 'tt_content');
         $ttContentModel = $this->getModel(['pid' => 123]);
 
-        $indexer = $this->getMock(
+        $indexer = $this->getAccessibleMock(
             'tx_mksearch_indexer_ttcontent_Normal',
             ['getPageContent']
         );
@@ -847,7 +847,7 @@ class tx_mksearch_tests_indexer_ttcontent_NormalTest extends tx_mksearch_tests_T
         $indexDoc = $this->getIndexDocMock('core', 'tt_content');
         $ttContentModel = $this->getModel(['pid' => 123]);
 
-        $indexer = $this->getMock(
+        $indexer = $this->getAccessibleMock(
             'tx_mksearch_indexer_ttcontent_Normal',
             ['getPageContent']
         );

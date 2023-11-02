@@ -228,7 +228,7 @@ class tx_mksearch_util_Indexer
         array $options = []
     ) {
         static $indexSrv;
-        if (!empty($model) && $model->isValid()) {
+        if ($model && $model->isValid()) {
             if (!$indexSrv) {
                 $indexSrv = $this->getInternalIndexService();
             }

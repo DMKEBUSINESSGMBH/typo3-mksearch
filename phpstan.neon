@@ -1,0 +1,129 @@
+parameters:
+    level: 1
+    bootstrapFiles:
+        - "%currentWorkingDirectory%/.Build/vendor/autoload.php"
+        - "%currentWorkingDirectory%/Resources/Private/PHP/Elastica/Composer/autoload.php"
+    paths:
+        - %currentWorkingDirectory%/action
+        - %currentWorkingDirectory%/filter
+        - %currentWorkingDirectory%/hooks
+        - %currentWorkingDirectory%/indexer
+        - %currentWorkingDirectory%/interface
+        - %currentWorkingDirectory%/lib
+        - %currentWorkingDirectory%/marker
+        - %currentWorkingDirectory%/mod1
+        - %currentWorkingDirectory%/model
+        - %currentWorkingDirectory%/scheduler
+        - %currentWorkingDirectory%/search
+        - %currentWorkingDirectory%/service
+        - %currentWorkingDirectory%/util
+        - %currentWorkingDirectory%/view
+        - %currentWorkingDirectory%/Classes
+        - %currentWorkingDirectory%/ext_localconf.php
+        - %currentWorkingDirectory%/ext_emconf.php
+    reportUnmatchedIgnoredErrors: false
+    ignoreErrors:
+    		-
+    			message: "#^Call to static method setMinPrefixLength\\(\\) on an unknown class Zend_Search_Lucene_Search_Query_Wildcard\\.$#"
+    			count: 1
+    			path: filter/class.tx_mksearch_filter_LuceneBase.php
+
+    		-
+    			message: "#^Call to static method setResultSetLimit\\(\\) on an unknown class Zend_Search_Lucene\\.$#"
+    			count: 1
+    			path: filter/class.tx_mksearch_filter_LuceneBase.php
+
+    		-
+    			message: "#^Call to static method selectColumnForMultiple\\(\\) on an unknown class tx_oelib_db\\.$#"
+    			count: 1
+    			path: indexer/seminars/class.tx_mksearch_indexer_seminars_Seminar.php
+
+    		-
+    			message: "#^Instantiated class tx_seminars_seminar not found\\.$#"
+    			count: 1
+    			path: indexer/seminars/class.tx_mksearch_indexer_seminars_Seminar.php
+
+    		-
+    			message: "#^Call to static method Binary\\(\\) on an unknown class Zend_Search_Lucene_Field\\.$#"
+    			count: 1
+    			path: service/engine/class.tx_mksearch_service_engine_ZendLucene.php
+
+    		-
+    			message: "#^Call to static method Keyword\\(\\) on an unknown class Zend_Search_Lucene_Field\\.$#"
+    			count: 1
+    			path: service/engine/class.tx_mksearch_service_engine_ZendLucene.php
+
+    		-
+    			message: "#^Call to static method Text\\(\\) on an unknown class Zend_Search_Lucene_Field\\.$#"
+    			count: 1
+    			path: service/engine/class.tx_mksearch_service_engine_ZendLucene.php
+
+    		-
+    			message: "#^Call to static method UnIndexed\\(\\) on an unknown class Zend_Search_Lucene_Field\\.$#"
+    			count: 1
+    			path: service/engine/class.tx_mksearch_service_engine_ZendLucene.php
+
+    		-
+    			message: "#^Call to static method UnStored\\(\\) on an unknown class Zend_Search_Lucene_Field\\.$#"
+    			count: 1
+    			path: service/engine/class.tx_mksearch_service_engine_ZendLucene.php
+
+    		-
+    			message: "#^Call to static method create\\(\\) on an unknown class Zend_Search_Lucene\\.$#"
+    			count: 1
+    			path: service/engine/class.tx_mksearch_service_engine_ZendLucene.php
+
+    		-
+    			message: "#^Call to static method getInstance\\(\\) on an unknown class Zend_Loader_Autoloader\\.$#"
+    			count: 1
+    			path: service/engine/class.tx_mksearch_service_engine_ZendLucene.php
+
+    		-
+    			message: "#^Call to static method open\\(\\) on an unknown class Zend_Search_Lucene\\.$#"
+    			count: 1
+    			path: service/engine/class.tx_mksearch_service_engine_ZendLucene.php
+
+    		-
+    			message: "#^Call to static method setDefault\\(\\) on an unknown class Zend_Search_Lucene_Analysis_Analyzer\\.$#"
+    			count: 1
+    			path: service/engine/class.tx_mksearch_service_engine_ZendLucene.php
+
+    		-
+    			message: "#^Call to static method setDefaultEncoding\\(\\) on an unknown class Zend_Search_Lucene_Search_QueryParser\\.$#"
+    			count: 1
+    			path: service/engine/class.tx_mksearch_service_engine_ZendLucene.php
+
+    		-
+    			message: "#^Caught class Zend_Search_Lucene_Exception not found\\.$#"
+    			count: 1
+    			path: service/engine/class.tx_mksearch_service_engine_ZendLucene.php
+
+    		-
+    			message: "#^Instantiated class Zend_Search_Lucene_Document not found\\.$#"
+    			count: 1
+    			path: service/engine/class.tx_mksearch_service_engine_ZendLucene.php
+
+    		-
+    			message: "#^Instantiated class Zend_Search_Lucene_Index_Term not found\\.$#"
+    			count: 2
+    			path: service/engine/class.tx_mksearch_service_engine_ZendLucene.php
+
+    		-
+    			message: "#^Instantiated class Zend_Search_Lucene_Search_Query_Boolean not found\\.$#"
+    			count: 1
+    			path: service/engine/class.tx_mksearch_service_engine_ZendLucene.php
+
+    		-
+    			message: "#^Instantiated class Zend_Search_Lucene_Search_Query_MultiTerm not found\\.$#"
+    			count: 1
+    			path: service/engine/class.tx_mksearch_service_engine_ZendLucene.php
+
+    		-
+    			message: "#^Instantiated class Zend_Search_Lucene_Search_Query_Phrase not found\\.$#"
+    			count: 1
+    			path: service/engine/class.tx_mksearch_service_engine_ZendLucene.php
+
+    		-
+    			message: "#^Parameter \\$doc of method tx_mksearch_service_engine_ZendLucene\\:\\:addFieldToIndexDoc\\(\\) has invalid type Zend_Search_Lucene_Document\\.$#"
+    			count: 1
+    			path: service/engine/class.tx_mksearch_service_engine_ZendLucene.php

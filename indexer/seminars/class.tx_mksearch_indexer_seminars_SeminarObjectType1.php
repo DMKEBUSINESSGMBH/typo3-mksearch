@@ -219,7 +219,7 @@ class tx_mksearch_indexer_seminars_SeminarObjectType1 extends tx_mksearch_indexe
         }
 
         // nothing found?
-        if (empty($aTempIndexDocs)) {
+        if (0 == count($aTempIndexDocs)) {
             return null;
         }
         // else
@@ -247,9 +247,9 @@ class tx_mksearch_indexer_seminars_SeminarObjectType1 extends tx_mksearch_indexe
         // we have to take an own method as the seminars extension seems not to provide
         // a method to do that
         $aOptions = [];
-        $aOptions['where'] = SEMINARS_TABLE_SEMINARS.'.topic='.$this->oSeminar->getUid();
-        $aFrom = [SEMINARS_TABLE_SEMINARS, SEMINARS_TABLE_SEMINARS];
-        $aRows = \Sys25\RnBase\Database\Connection::getInstance()->doSelect(SEMINARS_TABLE_SEMINARS.'.uid', $aFrom, $aOptions);
+        $aOptions['where'] = \constant('SEMINARS_TABLE_SEMINARS').'.topic='.$this->oSeminar->getUid();
+        $aFrom = [\constant('SEMINARS_TABLE_SEMINARS'), \constant('SEMINARS_TABLE_SEMINARS')];
+        $aRows = \Sys25\RnBase\Database\Connection::getInstance()->doSelect(\constant('SEMINARS_TABLE_SEMINARS').'.uid', $aFrom, $aOptions);
 
         // now we get the according objects
         $aSeminars = [];

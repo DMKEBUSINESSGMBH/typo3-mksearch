@@ -87,7 +87,7 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
         if ($options['addPageMetaData'] ?? false) {
             // @TODO: keywords werden doch immer kommasepariert angegeben,
             // warum mit leerzeichen trennen, das macht die keywords kaputt.
-            $separator = (!empty($options['addPageMetaData.']['separator'])) ? $options['addPageMetaData.']['separator'] : ' ';
+            $separator = ($options['addPageMetaData.']['separator'] ?? null) ? $options['addPageMetaData.']['separator'] : ' ';
             // @TODO:
             //        konfigurierbar machen: description, author, etc.
             //        könnte wichtig werden!?
@@ -138,13 +138,13 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
 
             // Support für normale IndexedFields
             if (isset($options['indexedFields.'])) {
-                $aIndexedFields = $options['indexedFields.'];
+                $aIndexedFields = $options['indexedFields.'] ?? [];
                 if (is_array($aIndexedFields) && !empty($aIndexedFields)) {
                     foreach ($aIndexedFields as $sDocKey => $sRecordKey) {
                         // makes only sense if we have content
                         if (!empty($rawData[$sRecordKey])) {
                             // Enable field conversions...
-                            $value = $options['keepHtml'] ? $rawData[$sRecordKey] : tx_mksearch_util_Misc::html2plain($rawData[$sRecordKey]);
+                            $value = ($options['keepHtml'] ?? false) ? $rawData[$sRecordKey] : tx_mksearch_util_Misc::html2plain($rawData[$sRecordKey]);
                             $value = tx_mksearch_util_Indexer::getInstance()->doValueConversion($value, $sDocKey, $rawData, $sRecordKey, $options);
                             $indexDoc->addField(
                                 $sDocKey,
@@ -188,11 +188,11 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
         // if the title shouldn't be displayed in the FE but indexed
         if (100 != $model->getHeaderLayout()) {
             // Decode HTML
-            $title = trim(tx_mksearch_util_Misc::html2plain($model->getHeader()));
+            $title = trim((string) tx_mksearch_util_Misc::html2plain($model->getHeader()));
         }
 
         // optional fallback to page title, if the content title is empty
-        if (empty($title) && empty($options['leaveHeaderEmpty'])) {
+        if (empty($title) && !($options['leaveHeaderEmpty'] ?? false)) {
             $pageData = $this->getPageContent($model->getPid(), $options);
             $title = $pageData['title'] ?? '';
         }
@@ -210,7 +210,7 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
         $pageModel = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Domain\Model\BaseModel::class, $pageRecord);
         $pageModel->setTableName('pages');
 
-        if (!empty($options['pageDataFieldMapping.'])) {
+        if ($options['pageDataFieldMapping.'] ?? []) {
             $this->indexModelByMapping(
                 $pageModel,
                 $options['pageDataFieldMapping.'],
@@ -257,14 +257,14 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
                     if (is_array($flex)) {
                         $flexParsingOptions = $flex['data']['s_parsing']['lDEF'];
                         // Replace special parsing characters
-                        if ($flexParsingOptions['tableparsing_quote']['vDEF']) {
+                        if ($flexParsingOptions['tableparsing_quote']['vDEF'] ?? null) {
                             $tempContent = str_replace(
                                 chr($flexParsingOptions['tableparsing_quote']['vDEF']),
                                 '',
                                 $tempContent
                             );
                         }
-                        if ($flexParsingOptions['tableparsing_delimiter']['vDEF']) {
+                        if ($flexParsingOptions['tableparsing_delimiter']['vDEF'] ?? null) {
                             $tempContent = str_replace(
                                 chr($flexParsingOptions['tableparsing_delimiter']['vDEF']),
                                 ' ',

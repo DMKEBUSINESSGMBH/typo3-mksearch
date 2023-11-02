@@ -64,11 +64,11 @@ class tx_mksearch_tests_action_ElasticSearchTest extends tx_mksearch_tests_Testc
         $fields = [];
         $options = ['limit' => 10];
 
-        $searchEngine = $this->getMock(
-            'tx_mksearch_service_engine_ElasticSearch',
-            ['getIndex']
-        );
-        $index = $this->getMock('stdClass', ['count']);
+        $searchEngine = $this->getMockBuilder('tx_mksearch_service_engine_ElasticSearch')
+            ->onlyMethods(['getIndex'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $index = $this->getMockBuilder('stdClass')->addMethods(['count'])->getMock();
         $index->expects($this->once())
             ->method('count')
             ->will($this->returnValue(123));
@@ -133,11 +133,11 @@ class tx_mksearch_tests_action_ElasticSearchTest extends tx_mksearch_tests_Testc
         $fields = [];
         $options = ['limit' => 10];
 
-        $searchEngine = $this->getMock(
-            'tx_mksearch_service_engine_ElasticSearch',
-            ['getIndex']
-        );
-        $index = $this->getMock('stdClass', ['count']);
+        $searchEngine = $this->getMockBuilder('tx_mksearch_service_engine_ElasticSearch')
+            ->onlyMethods(['getIndex'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $index = $this->getMockBuilder('stdClass')->addMethods(['count'])->getMock();
         $index->expects($this->once())
             ->method('count')
             ->will($this->returnValue(123));
@@ -185,12 +185,16 @@ class tx_mksearch_tests_action_ElasticSearchTest extends tx_mksearch_tests_Testc
      */
     public function testGetServiceRegistry()
     {
+        $action = $this->getAccessibleMock(
+            'tx_mksearch_action_ElasticSearch',
+            ['handleRequest'],
+            [],
+            '',
+            false
+        );
         self::assertEquals(
             'tx_mksearch_util_ServiceRegistry',
-            $this->callInaccessibleMethod(
-                \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_action_ElasticSearch'),
-                'getServiceRegistry'
-            )
+            $action->_call('getServiceRegistry')
         );
     }
 
@@ -211,17 +215,14 @@ class tx_mksearch_tests_action_ElasticSearchTest extends tx_mksearch_tests_Testc
 
         $viewData = $configurations->getViewData();
 
-        $action = $this->getMock(
-            'tx_mksearch_action_ElasticSearch',
-            ['getServiceRegistry', 'handlePageBrowser', 'getConfigurations']
-        );
+        $action = $this->getMockBuilder('tx_mksearch_action_ElasticSearch')
+            ->onlyMethods(['getServiceRegistry', 'handlePageBrowser'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $action->expects($this->never())
             ->method('getServiceRegistry');
         $action->expects($this->never())
             ->method('handlePageBrowser');
-        $action->expects($this->any())
-            ->method('getConfigurations')
-            ->will($this->returnValue($configurations));
 
         $request = new \Sys25\RnBase\Frontend\Request\Request($parameters, $configurations, '');
         $actionReturn = $action->handleRequest($request);
@@ -262,26 +263,23 @@ class tx_mksearch_tests_action_ElasticSearchTest extends tx_mksearch_tests_Testc
         );
         $configurations->setParameters($parameters);
 
-        $action = $this->getMock(
-            'tx_mksearch_action_ElasticSearch',
-            ['getSearchIndex', 'getServiceRegistry', 'handlePageBrowser', 'getConfigurations']
-        );
+        $action = $this->getMockBuilder('tx_mksearch_action_ElasticSearch')
+            ->onlyMethods(['getServiceRegistry', 'handlePageBrowser', 'getSearchIndex'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $index = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_internal_Index', []);
         $action->expects($this->once())
             ->method('getSearchIndex')
             ->will($this->returnValue($index));
-        $action->expects($this->any())
-            ->method('getConfigurations')
-            ->will($this->returnValue($configurations));
 
-        $serviceRegistry = $this->getMock(
-            'stdClass',
-            ['getSearchEngine']
-        );
-        $searchEngine = $this->getMock(
-            'tx_mksearch_service_engine_ElasticSearch',
-            ['openIndex', 'search']
-        );
+        $serviceRegistry = $this->getMockBuilder('stdClass')
+            ->addMethods(['getSearchEngine'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $searchEngine = $this->getMockBuilder('tx_mksearch_service_engine_ElasticSearch')
+            ->onlyMethods(['openIndex', 'search'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $searchEngine->expects($this->once())
             ->method('openIndex')
             ->with($index);

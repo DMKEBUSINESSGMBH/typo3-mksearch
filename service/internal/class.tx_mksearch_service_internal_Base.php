@@ -107,8 +107,8 @@ class tx_mksearch_service_internal_Base extends \Sys25\RnBase\Typo3Wrapper\Servi
      */
     public function getByPageId($pageId)
     {
-        // $options['debug'] = 1;
         $alias = $this->getSearcher()->getBaseTableAlias();
+        $fields = [];
         if (intval($pageId)) {
             $fields[$alias.'.pid'][OP_EQ_INT] = $pageId;
         }
@@ -128,5 +128,10 @@ class tx_mksearch_service_internal_Base extends \Sys25\RnBase\Typo3Wrapper\Servi
     public function get($uid)
     {
         return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($this->getSearcher()->getWrapperClass(), $uid);
+    }
+
+    public function init(): bool
+    {
+        return true;
     }
 }

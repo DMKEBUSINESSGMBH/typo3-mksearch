@@ -125,7 +125,7 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
 
         // titel aus dem feld titel oder name holen, als fallback den dateinamen nutzen!
         $title = $sourceRecord['title'] ?? $sourceRecord['name'] ?? '';
-        $title = $title ? $title : basename($this->getRelFileName($tableName, $sourceRecord));
+        $title = $title ? $title : basename((string) $this->getRelFileName($tableName, $sourceRecord));
         $indexDoc->setTitle($title);
         $indexDoc->setTimestamp($sourceRecord['tstamp'] ?? 0);
 
@@ -212,7 +212,7 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
 
             return;
         }
-        $tikaFields = $options['tikafields.'];
+        $tikaFields = $options['tikafields.'] ?? [];
         $tikaFields = is_array($tikaFields) ? $tikaFields : [];
         $contentField = $tikaFields['content'];
         if ($contentField) {
@@ -329,7 +329,7 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
 
     private function getIndexMethod($options)
     {
-        $mode = empty($options['indexMode']) ? 'solr' : strtolower($options['indexMode']);
+        $mode = !($options['indexMode'] ?? null) ? 'solr' : strtolower($options['indexMode']);
         switch ($mode) {
             case 'tika':
                 return 'indexTika';

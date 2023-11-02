@@ -1,6 +1,5 @@
 <?php
 
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\Session;
 
 /*
@@ -844,11 +843,9 @@ CONFIG;
         $versioningConfiguration = $GLOBALS['TCA'][$tableName]['ctrl']['versioningWS'];
         $GLOBALS['TCA'][$tableName]['ctrl']['versioningWS'] = false;
 
-        /* @var $objectManager \TYPO3\CMS\Extbase\Object\ObjectManager */
-        $objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(ObjectManager::class);
-        $repository = $objectManager->get($repositoryClass);
+        $repository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($repositoryClass);
         /* @var $persistenceSession \TYPO3\CMS\Extbase\Persistence\Generic\Session */
-        $persistenceSession = $objectManager->get(Session::class);
+        $persistenceSession = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(Session::class);
 
         // update query settings to respect the current language
         $querySettings = $repository->createQuery()->getQuerySettings();

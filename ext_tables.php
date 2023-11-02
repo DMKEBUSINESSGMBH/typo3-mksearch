@@ -6,11 +6,6 @@ if (!defined('TYPO3')) {
 
 $_EXT_PATH = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch');
 
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr(
-    'tx_mksearch_indices',
-    'EXT:mksearch/Resources/Private/Language/locallang_csh_indices.xml'
-);
-
 require_once $_EXT_PATH.'mod1/ext_tables.php';
 
 // Add plugin wizards

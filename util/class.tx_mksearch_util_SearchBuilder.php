@@ -204,7 +204,7 @@ class tx_mksearch_util_SearchBuilder
             return '';
         }
 
-        $quote = intval($options['quote'] ?? ß);
+        $quote = intval($options['quote'] ?? 0);
         $dismax = intval($options['dismax'] ?? 0);
         $fuzzy = intval($options['fuzzy'] ?? 0) || !empty($options['fuzzy'] ?? 0);
         $sanitize = intval($options['sanitize'] ?? 0);

@@ -32,9 +32,7 @@ class tx_mksearch_tests_util_TikaTest extends tx_mksearch_tests_Testcase
 {
     protected function setUp(): void
     {
-        if (!tx_mksearch_util_Tika::getInstance()->isAvailable()) {
-            $this->markTestSkipped('Tika is not available!');
-        }
+        $this->markTestSkipped('Tika jar needs to be provided for tests!');
         parent::setUp();
     }
 

@@ -2,6 +2,8 @@
 
 namespace DMK\Mksearch\Backend\Form\Element;
 
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
+
 /**
  *  Copyright notice.
  *
@@ -32,7 +34,7 @@ namespace DMK\Mksearch\Backend\Form\Element;
  * @license         http://www.gnu.org/licenses/lgpl.html
  *                  GNU Lesser General Public License, version 3 or later
  */
-class IndexerConfigurationFieldTest extends \Sys25\RnBase\Testing\BaseTestCase
+class IndexerConfigurationFieldTest extends UnitTestCase
 {
     /**
      * @group unit
@@ -51,9 +53,9 @@ class IndexerConfigurationFieldTest extends \Sys25\RnBase\Testing\BaseTestCase
         $field
             ->expects(self::once())
             ->method('callRenderOnParent')
-            ->willReturn('test');
+            ->willReturn(['test']);
 
-        self::assertEquals('test', $field->render());
+        self::assertEquals(['test'], $field->render());
         self::assertArrayNotHasKey('parameterArray', $field->_get('data'));
     }
 
@@ -101,9 +103,9 @@ class IndexerConfigurationFieldTest extends \Sys25\RnBase\Testing\BaseTestCase
         $field
             ->expects(self::once())
             ->method('callRenderOnParent')
-            ->willReturn('test');
+            ->willReturn(['test']);
 
-        self::assertEquals('test', $field->render());
+        self::assertEquals(['test'], $field->render());
         self::assertNotEmpty($field->_get('data')['parameterArray']['itemFormElValue']);
         self::assertGreaterThan(1, strlen($field->_get('data')['parameterArray']['itemFormElValue']));
         self::assertEquals(
@@ -129,9 +131,9 @@ class IndexerConfigurationFieldTest extends \Sys25\RnBase\Testing\BaseTestCase
         $field
             ->expects(self::once())
             ->method('callRenderOnParent')
-            ->willReturn('test');
+            ->willReturn(['test']);
 
-        self::assertEquals('test', $field->render());
+        self::assertEquals(['test'], $field->render());
         self::assertEmpty($field->_get('data')['parameterArray']['itemFormElValue']);
     }
 }

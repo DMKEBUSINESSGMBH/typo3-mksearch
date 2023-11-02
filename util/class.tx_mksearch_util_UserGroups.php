@@ -76,7 +76,7 @@ class tx_mksearch_util_UserGroups
             ->select('ref_uid')
             ->from('fe_groups')
             ->join('fe_groups', 'sys_refindex', 'sys_refindex', 'fe_groups.uid = sys_refindex.ref_uid')
-            ->where($queryBuilder->expr()->andX(
+            ->where($queryBuilder->expr()->and(
                 $queryBuilder->expr()->eq('sys_refindex.ref_table', $queryBuilder->quote('fe_groups')),
                 $queryBuilder->expr()->eq('sys_refindex.field', $queryBuilder->quote('subgroup')),
                 $queryBuilder->expr()->eq('sys_refindex.recuid', $queryBuilder->createNamedParameter($groupId, \PDO::PARAM_INT))

@@ -156,7 +156,7 @@ abstract class tx_mksearch_mod1_searcher_abstractBase
     {
         $out = $this->getFormTool()->createSubmit(
             $this->getSearcherId().'Search',
-            $GLOBALS['LANG']->getLL('label_button_search')
+            $GLOBALS['LANG']->sL('LLL:EXT:mksearch/Resources/Private/Language/BackendModule/locallang.xlf:label_button_search')
         );
 
         return $out;

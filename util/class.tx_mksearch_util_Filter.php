@@ -168,7 +168,10 @@ class tx_mksearch_util_Filter
             $markArray['###'.$formMarker.'_FORM_VALUE###'] = $parameters->getCleaned($formField);
         }
 
-        if (\Sys25\RnBase\Frontend\Marker\BaseMarker::containsMarker($template, $markerName.'_SPATIAL')) {
+        if (
+            \Sys25\RnBase\Frontend\Marker\BaseMarker::containsMarker($template, $markerName.'_SPATIAL')
+            && method_exists($this, 'getSpatialPoint')
+        ) {
             $markArray['###'.$markerName.'_SPATIAL_VALUE###'] = $this->getSpatialPoint();
         }
 
@@ -229,11 +232,11 @@ class tx_mksearch_util_Filter
      *
      * @return string
      */
-    public function getSortString(array &$options, Parameters &$parameters)
+    public function getSortString(array &$options, Parameters $parameters)
     {
         $sortString = '';
         // die parameter nach einer sortierung fragen
-        $sort = trim($parameters->get('sort'));
+        $sort = trim((string) $parameters->get('sort'));
         // wurden keine parameter gefunden, nutzen wir den default des filters
         $sort = $sort ? $sort : $this->sortField;
         if ($sort) {
@@ -270,7 +273,7 @@ class tx_mksearch_util_Filter
         &$markArray,
         &$subpartArray,
         &$wrappedSubpartArray,
-        &$formatter,
+        $formatter,
         $confId,
         $marker = 'FILTER'
     ) {

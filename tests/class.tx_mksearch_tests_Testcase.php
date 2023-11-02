@@ -31,62 +31,6 @@
  */
 abstract class tx_mksearch_tests_Testcase extends \Sys25\RnBase\Testing\BaseTestCase
 {
-    protected $backups = [];
-
-    /**
-     * setUp() = init DB etc.
-     */
-    protected function setUp(): void
-    {
-        tx_mksearch_tests_Util::emptyAddRootlineFields();
-
-        // set up hooks
-        tx_mksearch_tests_Util::hooksSetUp();
-
-        // das TS Parsing frisst in manchen Umgebung mehr als 128MB Speicher. Es gibt aber im Moment keine Zeit
-        // die Tests zu refactoren. Also setzen wir das Limit hoch
-        ini_set('memory_limit', '1024M');
-
-        // set internal encoding for multibyte strings to utf-8
-        $this->backups['mb_internal_encoding'] = mb_internal_encoding();
-        mb_internal_encoding('UTF-8');
-    }
-
-    protected function tearDown(): void
-    {
-        // tear down hooks
-        tx_mksearch_tests_Util::hooksTearDown();
-
-        tx_mksearch_tests_Util::resetAddRootlineFields();
-
-        // reset internal encoding for multibyte strings
-        if (!empty($this->backups['mb_internal_encoding'])) {
-            mb_internal_encoding($this->backups['mb_internal_encoding']);
-        }
-    }
-
-    /**
-     * Prepare classes for FE-rendering if it is needed in TYPO3 backend.
-     *
-     * @return \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController or tslib_fe
-     */
-    protected function prepareTSFE(array $options = ['force' => true, 'pid' => 1])
-    {
-        \Sys25\RnBase\Utility\Misc::prepareTSFE($options);
-
-        if (!empty($options['pid'])) {
-            $GLOBALS['TSFE']->id = $options['pid'];
-            if (!is_array($GLOBALS['TSFE']->rootLine)) {
-                $GLOBALS['TSFE']->rootLine = [];
-            }
-            if (!is_array($GLOBALS['TSFE']->rootLine[0])) {
-                $GLOBALS['TSFE']->rootLine[0] = [];
-            }
-            // wenn tq_seo kommt sonst ein error
-            $GLOBALS['TSFE']->rootLine[0]['uid'] = $options['pid'];
-        }
-    }
-
     /**
      * @param string|array $extKey
      * @param string       $contentType

@@ -23,5 +23,10 @@ mod {
         indizeindizes {
             template = EXT:mksearch/mod1/templates/indizeindizes.html
         }
+
+        template = EXT:mksearch/mod1/template.html
+        languagefiles {
+            10 = EXT:mksearch/Resources/Private/Language/BackendModule/locallang.xlf
+        }
     }
 }

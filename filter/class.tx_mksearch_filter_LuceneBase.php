@@ -341,7 +341,7 @@ class tx_mksearch_filter_LuceneBase extends tx_mksearch_filter_BaseFilter implem
      *
      * @return string
      */
-    public function getEmptyListMessage($confId, &$viewData, &$configurations)
+    public function getEmptyListMessage($confId, $viewData, &$configurations)
     {
         if ($this->isSearch) {
             $emptyMsg = $configurations->getLL($configurations->get($confId.'listinfo.llkeyEmpty'));

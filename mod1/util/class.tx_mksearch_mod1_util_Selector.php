@@ -46,9 +46,9 @@ class tx_mksearch_mod1_util_Selector
         $out['field'] = $this->formTool->createTxtInput('SET['.$key.']', $searchstring, 10);
         $out['button'] = empty($options['submit']) ? '' : $this->formTool->createSubmit(
             $options['buttonName'] ? $options['buttonName'] : $key,
-            $options['buttonValue'] ? $options['buttonValue'] : $GLOBALS['LANG']->getLL('label_button_search')
+            $options['buttonValue'] ? $options['buttonValue'] : $GLOBALS['LANG']->sL('LLL:EXT:mksearch/Resources/Private/Language/BackendModule/locallang.xlf:label_button_search')
         );
-        $out['label'] = $options['label'] ?? $GLOBALS['LANG']->getLL('label_search');
+        $out['label'] = $options['label'] ?? $GLOBALS['LANG']->sL('LLL:EXT:mksearch/Resources/Private/Language/BackendModule/locallang.xlf:label_search');
 
         return $searchstring;
     }
@@ -64,11 +64,11 @@ class tx_mksearch_mod1_util_Selector
     public function showHiddenSelector(&$data, $options = [])
     {
         $items = [
-            0 => $GLOBALS['LANG']->getLL('label_select_hide_hidden'),
-            1 => $GLOBALS['LANG']->getLL('label_select_show_hidden'),
+            0 => $GLOBALS['LANG']->sL('LLL:EXT:mksearch/Resources/Private/Language/BackendModule/locallang.xlf:label_select_hide_hidden'),
+            1 => $GLOBALS['LANG']->sL('LLL:EXT:mksearch/Resources/Private/Language/BackendModule/locallang.xlf:label_select_show_hidden'),
         ];
 
-        $options['label'] = $options['label'] ?? $GLOBALS['LANG']->getLL('label_hidden');
+        $options['label'] = $options['label'] ?? $GLOBALS['LANG']->sL('LLL:EXT:mksearch/Resources/Private/Language/BackendModule/locallang.xlf:label_hidden');
 
         return $this->showSelectorByArray($items, 'showhidden', $data, $options);
     }

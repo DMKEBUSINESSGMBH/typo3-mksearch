@@ -52,7 +52,7 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
     {
         if ('tt_address' != $tableName) {
             if (\Sys25\RnBase\Utility\Logger::isWarningEnabled()) {
-                \Sys25\RnBase\Utility\Logger::warn(__METHOD__.': Unknown table "'.$tableName.'" given.', 'mksearch', ['tableName' => $tableName, 'sourceRecord' => $sourceRecord]);
+                \Sys25\RnBase\Utility\Logger::warn(__METHOD__.': Unknown table "'.$tableName.'" given.', 'mksearch', ['tableName' => $tableName, 'sourceRecord' => $rawData]);
             }
 
             return null;
@@ -133,10 +133,10 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
             $indexDoc->addField('addressgroup_i', $rawData['addressgroup'], 'unindexed', $boost, 'int');
         }
 
-        $sContent = $this->getContentFromFields($rawData, $options['content.']);
+        $sContent = $this->getContentFromFields($rawData, $options['content.'] ?? []);
         $indexDoc->setContent($sContent);
 
-        $sContent = $this->getContentFromFields($rawData, $options['abstract.']);
+        $sContent = $this->getContentFromFields($rawData, $options['abstract.'] ?? []);
         $indexDoc->setAbstract('', 1);
 
         // Hook to append indexer
@@ -240,14 +240,14 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
     protected function getContentFromFields($sourceRecord, $options)
     {
         $aContent = [];
-        $aContentFields = \Sys25\RnBase\Utility\Strings::trimExplode(',', $options['fields'], true);
+        $aContentFields = \Sys25\RnBase\Utility\Strings::trimExplode(',', $options['fields'] ?? '', true);
 
         foreach ($aContentFields as $field) {
             if (array_key_exists($field, $sourceRecord) && !empty($sourceRecord[$field])) {
                 $aContent[] = trim($sourceRecord[$field]);
             }
         }
-        $wrap = \Sys25\RnBase\Utility\Strings::trimExplode('|', $options['wrap'], true);
+        $wrap = \Sys25\RnBase\Utility\Strings::trimExplode('|', $options['wrap'] ?? '', true);
         if (2 != count($wrap)) {
             $wrap = ['', ''];
         }
@@ -317,7 +317,7 @@ exclude {
 
 # you should always configure the root pageTree for this indexer in the includes. mostly the domain
 # include.pageTrees {
-#   0 = $pid-of-domain
+#   0 = pid-of-domain
 # }
 
 # should a special workspace be indexed?

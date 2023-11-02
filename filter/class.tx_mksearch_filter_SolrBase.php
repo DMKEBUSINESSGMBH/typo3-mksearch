@@ -446,7 +446,7 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
             $siteRootPage = tx_mksearch_util_Indexer::getInstance()->getSiteRootPage(
                 $GLOBALS['TSFE']->id
             );
-            if ($options['siteRootPage'] || !is_array($siteRootPage)) {
+            if (($options['siteRootPage'] ?? null) || !is_array($siteRootPage)) {
                 $siteRootPage = $options['siteRootPage'];
             }
             if (is_array($siteRootPage) && !empty($siteRootPage)) {

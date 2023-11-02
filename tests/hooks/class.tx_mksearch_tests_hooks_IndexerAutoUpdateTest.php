@@ -51,7 +51,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
         self::markTestIncomplete('A cache with identifier cache_runtime does not exist.');
 
         $hook = $this->getHookMock(
-            $service = $this->getMock('tx_mksearch_service_internal_Index')
+            $service = $this->getMockBuilder('tx_mksearch_service_internal_Index')->getMock()
         );
         $tce = $this->getTceMock();
         $tce->BE_USER->workspace = 1;
@@ -72,7 +72,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
         self::markTestIncomplete('A cache with identifier cache_runtime does not exist.');
 
         $hook = $this->getHookMock(
-            $service = $this->getMock('tx_mksearch_service_internal_Index')
+            $service = $this->getMockBuilder('tx_mksearch_service_internal_Index')->getMock()
         );
         $tce = $this->getTceMock();
         $tce->datamap = [];
@@ -112,7 +112,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
         self::markTestIncomplete('A cache with identifier cache_runtime does not exist.');
 
         $hook = $this->getHookMock(
-            $service = $this->getMock('tx_mksearch_service_internal_Index')
+            $service = $this->getMockBuilder('tx_mksearch_service_internal_Index')->getMock()
         );
         $tce = $this->getTceMock();
 
@@ -165,7 +165,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
     public function testRnBaseDoInsertPost()
     {
         $hook = $this->getHookMock(
-            $service = $this->getMock('tx_mksearch_service_internal_Index')
+            $service = $this->getMockBuilder('tx_mksearch_service_internal_Index')->getMock()
         );
 
         $hookParams = ['tablename' => 'tt_content', 'uid' => 1];
@@ -180,13 +180,9 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
             ));
 
         $indices = [
-            $this->getMock(
-                'tx_mksearch_model_internal_Index',
-                null,
-                [
-                    ['uid' => 1],
-                ]
-            ),
+            $this->getMockBuilder('tx_mksearch_model_internal_Index')
+                ->setConstructorArgs([['uid' => 1]])
+                ->getMock(),
         ];
 
         $service
@@ -214,7 +210,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
     public function testRnBaseDoUpdatePost()
     {
         $hook = $this->getHookMock(
-            $service = $this->getMock('tx_mksearch_service_internal_Index')
+            $service = $this->getMockBuilder('tx_mksearch_service_internal_Index')->getMock()
         );
 
         $hookParams = [
@@ -243,13 +239,9 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
             ->will($this->returnValue(['1', '2']));
 
         $indices = [
-            $this->getMock(
-                'tx_mksearch_model_internal_Index',
-                null,
-                [
-                    ['uid' => 1],
-                ]
-            ),
+            $this->getMockBuilder('tx_mksearch_model_internal_Index')
+                ->setConstructorArgs([['uid' => 1]])
+                ->getMock(),
         ];
 
         $service
@@ -288,7 +280,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
         tx_mksearch_tests_Util::setExtConfVar('enableRnBaseUtilDbHook', 0);
 
         $hook = $this->getHookMock(
-            $service = $this->getMock('tx_mksearch_service_internal_Index')
+            $service = $this->getMockBuilder('tx_mksearch_service_internal_Index')->getMock()
         );
 
         $hookParams = ['tablename' => 'tt_content', 'uid' => 1];
@@ -320,7 +312,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
         tx_mksearch_tests_Util::setExtConfVar('enableRnBaseUtilDbHook', 0);
 
         $hook = $this->getHookMock(
-            $service = $this->getMock('tx_mksearch_service_internal_Index')
+            $service = $this->getMockBuilder('tx_mksearch_service_internal_Index')->getMock()
         );
 
         $hookParams = [
@@ -354,7 +346,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
     {
         self::assertInstanceOf(
             \Sys25\RnBase\Database\Connection::class,
-            $this->callInaccessibleMethod($this->getHookMock(), 'getRnbaseDatabaseUtility')
+            $this->getHookMock()->_call('getRnbaseDatabaseUtility')
         );
     }
 
@@ -363,7 +355,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
      */
     public function testGetUidsToIndexIfDataIsNumeric()
     {
-        $hook = $this->getMock(
+        $hook = $this->getAccessibleMock(
             'tx_mksearch_hooks_IndexerAutoUpdate',
             ['getRnbaseDatabaseUtility']
         );
@@ -371,7 +363,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
 
         self::assertEquals(
             [123],
-            $this->callInaccessibleMethod($hook, 'getUidsToIndex', '', 123)
+            $hook->_call('getUidsToIndex', '', 123)
         );
     }
 
@@ -380,7 +372,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
      */
     public function testGetUidsToIndexIfDataIsString()
     {
-        $hook = $this->getMock(
+        $hook = $this->getAccessibleMock(
             'tx_mksearch_hooks_IndexerAutoUpdate',
             ['getRnbaseDatabaseUtility']
         );
@@ -388,7 +380,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
 
         self::assertEquals(
             [],
-            $this->callInaccessibleMethod($hook, 'getUidsToIndex', '', 'testString')
+            $hook->_call('getUidsToIndex', '', 'testString')
         );
     }
 
@@ -397,7 +389,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
      */
     public function testGetUidsToIndexIfDataIsArrayButHasNoTypeKey()
     {
-        $hook = $this->getMock(
+        $hook = $this->getAccessibleMock(
             'tx_mksearch_hooks_IndexerAutoUpdate',
             ['getRnbaseDatabaseUtility']
         );
@@ -405,7 +397,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
 
         self::assertEquals(
             [],
-            $this->callInaccessibleMethod($hook, 'getUidsToIndex', '', [])
+            $hook->_call('getUidsToIndex', '', [])
         );
     }
 
@@ -414,7 +406,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
      */
     public function testGetUidsToIndexIfDataIsArrayAndHasWrongTypeKey()
     {
-        $hook = $this->getMock(
+        $hook = $this->getAccessibleMock(
             'tx_mksearch_hooks_IndexerAutoUpdate',
             ['getRnbaseDatabaseUtility']
         );
@@ -422,8 +414,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
 
         self::assertEquals(
             [],
-            $this->callInaccessibleMethod(
-                $hook,
+            $hook->_call(
                 'getUidsToIndex',
                 '',
                 ['type' => 'noSelect']
@@ -443,14 +434,13 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
         $selectReturn,
         $expectedReturn
     ) {
-        $hook = $this->getMock(
+        $hook = $this->getAccessibleMock(
             'tx_mksearch_hooks_IndexerAutoUpdate',
             ['getRnbaseDatabaseUtility']
         );
-        $databaseUtility = $this->getMock(
-            \Sys25\RnBase\Database\Connection::class,
-            ['doSelect']
-        );
+        $databaseUtility = $this->getMockBuilder(\Sys25\RnBase\Database\Connection::class)
+            ->onlyMethods(['doSelect'])
+            ->getMock();
         $databaseUtility->expects($this->once())
             ->method('doSelect')
             ->with('uid', $expectedFrom, $expectedOptions)
@@ -461,8 +451,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
 
         self::assertEquals(
             $expectedReturn,
-            $this->callInaccessibleMethod(
-                $hook,
+            $hook->_call(
                 'getUidsToIndex',
                 'test_table',
                 $data
@@ -548,9 +537,9 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
      */
     protected function getHookMock($service = null)
     {
-        $service = $service ? $service : $this->getMock('tx_mksearch_service_internal_Index');
+        $service = $service ? $service : $this->getMockBuilder('tx_mksearch_service_internal_Index')->getMock();
 
-        $hook = $this->getMock(
+        $hook = $this->getAccessibleMock(
             'tx_mksearch_hooks_IndexerAutoUpdate',
             ['getIntIndexService', 'getIndexersForTable', 'getUidsToIndex']
         );

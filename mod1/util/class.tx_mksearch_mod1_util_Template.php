@@ -47,6 +47,7 @@ class tx_mksearch_mod1_util_Template
 
         if (is_array($rootPage)) {
             // felder erzeugen
+            $markerArr = [];
             foreach ($rootPage as $field => $value) {
                 $markerArr['###ROOTPAGE_'.strtoupper($field).'###'] = $value;
             }
@@ -73,7 +74,7 @@ class tx_mksearch_mod1_util_Template
 
             $markerArray = [];
             if (!$allowUrlFopen && !$useCurlAsHttpTransport) {
-                $markerArray['###ALLOW_URL_FOPEN_DEACTIVATED_HINT###'] = $GLOBALS['LANG']->getLL('allow_url_fopen_deactivated_hint');
+                $markerArray['###ALLOW_URL_FOPEN_DEACTIVATED_HINT###'] = $GLOBALS['LANG']->sL('LLL:EXT:mksearch/Resources/Private/Language/BackendModule/locallang.xlf:allow_url_fopen_deactivated_hint');
             } else {
                 $markerArray['###ALLOW_URL_FOPEN_DEACTIVATED_HINT###'] = '';
             }

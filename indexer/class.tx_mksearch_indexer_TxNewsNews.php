@@ -307,7 +307,7 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
         }
 
         // html entfernen
-        if (empty($options['keepHtml'])) {
+        if (!($options['keepHtml'] ?? false)) {
             foreach ([&$content, &$abstract, &$bodyText] as &$html) {
                 $html = tx_mksearch_util_Misc::html2plain($html);
             }
@@ -478,7 +478,7 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
         tx_mksearch_interface_IndexerDocument $indexDoc,
         array $options = []
     ) {
-        if (empty($options['indexInlineContentElements'])) {
+        if (!($options['indexInlineContentElements'] ?? false)) {
             return '';
         }
         tx_mksearch_util_Indexer::prepareTSFE($options['defaultSinglePid'] ?? 0, $options['lang'] ?? 0);
@@ -489,8 +489,9 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
         /** @var \GeorgRinger\News\Domain\Model\TtContent $contentElement */
         foreach ($contentElements as $contentElement) {
             $contentUid = $contentElement->getUid();
-            $cObj = tx_mktools_util_T3Loader::getContentObject($contentUid);
-
+            $cObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class
+            );
             // render gridelment or default content element
             $ce[$contentUid] = 'gridelements_pi1' === $contentElement->getCType()
                 ? trim($this->renderGridelement($cObj, $contentElement))

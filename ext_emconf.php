@@ -31,12 +31,12 @@ $EM_CONF['mksearch'] = [
     'author_company' => 'DMK E-Business GmbH',
     'constraints' => [
         'depends' => [
-            'rn_base' => '1.15.0-',
-            'typo3' => '10.4.25-11.5.99',
+            'rn_base' => '1.17.0-',
+            'typo3' => '11.5.7-12.4.99',
         ],
         'conflicts' => [],
         'suggests' => [
-            'mksanitizedparameters' => '11.0.0-',
+            'mksanitizedparameters' => '12.0.0-',
         ],
     ],
     'suggests' => [],

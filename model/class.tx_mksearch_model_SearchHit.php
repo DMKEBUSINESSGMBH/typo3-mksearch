@@ -33,6 +33,11 @@
 class tx_mksearch_model_SearchHit extends \Sys25\RnBase\Domain\Model\BaseModel implements tx_mksearch_interface_SearchHit
 {
     /**
+     * @var int
+     */
+    protected $uid;
+
+    /**
      * Initialiaze model and fill it with data if provided.
      *
      * @param $rowOrUid

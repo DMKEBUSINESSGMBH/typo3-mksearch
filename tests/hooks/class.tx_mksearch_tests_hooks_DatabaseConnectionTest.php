@@ -63,8 +63,8 @@ class tx_mksearch_tests_hooks_DatabaseConnectionTest extends tx_mksearch_tests_T
     {
         $backUpProperty = new ReflectionProperty('tx_mksearch_hooks_DatabaseConnection', 'loadHiddenObjectsConfigurationBackup');
         $backUpProperty->setAccessible(true);
-        $backUpProperty->setValue(null, $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['rn_base']['loadHiddenObjects']);
-        $initialValue = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['rn_base']['loadHiddenObjects'];
+        $backUpProperty->setValue(null, $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['rn_base']['loadHiddenObjects'] ?? null);
+        $initialValue = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['rn_base']['loadHiddenObjects'] ?? null;
 
         $backUpSetProperty = new ReflectionProperty('tx_mksearch_hooks_DatabaseConnection', 'loadHiddenObjectsConfigurationBackupSet');
         $backUpSetProperty->setAccessible(true);
@@ -86,8 +86,8 @@ class tx_mksearch_tests_hooks_DatabaseConnectionTest extends tx_mksearch_tests_T
     {
         $backUpProperty = new ReflectionProperty('tx_mksearch_hooks_DatabaseConnection', 'loadHiddenObjectsConfigurationBackup');
         $backUpProperty->setAccessible(true);
-        $backUpProperty->setValue(null, $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['rn_base']['loadHiddenObjects']);
-        $initialValue = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['rn_base']['loadHiddenObjects'];
+        $backUpProperty->setValue(null, $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['rn_base']['loadHiddenObjects'] ?? null);
+        $initialValue = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['rn_base']['loadHiddenObjects'] ?? null;
 
         $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['rn_base']['loadHiddenObjects'] = 'test';
 

@@ -35,9 +35,12 @@ class tx_mksearch_mod1_Module extends \Sys25\RnBase\Backend\Module\BaseModule
      */
     public function init()
     {
-        $this->MCONF = [
-            'name' => 'web_MksearchM1',
-        ];
+        if (!isset($this->MCONF['name'])) {
+            $this->MCONF = array_merge((array) $GLOBALS['MCONF'], [
+                'name' => 'web_MksearchM1',
+                'access' => 'user,group',
+            ]);
+        }
 
         $this->getLanguageService()->includeLLFile('EXT:mksearch/Resources/Private/Language/BackendModule/locallang.xlf');
         $this->getBackendUser()->modAccess($this->MCONF, 1);
@@ -60,8 +63,7 @@ class tx_mksearch_mod1_Module extends \Sys25\RnBase\Backend\Module\BaseModule
             'web_MksearchM1',
             [
                 'id' => $this->getPid(),
-            ],
-            ''
+            ]
         );
 
         return '<form action="'.$modUrl.'" method="POST" name="editform" id="editform">';
@@ -75,5 +77,10 @@ class tx_mksearch_mod1_Module extends \Sys25\RnBase\Backend\Module\BaseModule
         }
 
         return parent::moduleContent();
+    }
+
+    protected function getModuleTemplate()
+    {
+        return 'EXT:mksearch/mod1/template.html';
     }
 }
