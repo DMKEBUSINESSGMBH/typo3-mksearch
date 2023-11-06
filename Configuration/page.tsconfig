@@ -11,15 +11,6 @@ mod {
         admin {
             template = EXT:mksearch/mod1/templates/admin.html
         }
-        configindizesdblist {
-            template = EXT:mksearch/mod1/templates/configindizesdblist.html
-            showerror = CASE
-            showerror.key.field = showerror
-            showerror.default = TEXT
-            showerror.default.value = none
-            showerror.1 = TEXT
-            showerror.1.value = block
-        }
         indizeindizes {
             template = EXT:mksearch/mod1/templates/indizeindizes.html
         }

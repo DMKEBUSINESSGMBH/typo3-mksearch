@@ -18,7 +18,7 @@ class tx_mksearch_mod1_handler_Index extends tx_mksearch_mod1_handler_Base imple
     protected function getSearcher(\Sys25\RnBase\Backend\Module\IModule $mod, &$options)
     {
         if (!isset($options['pid'])) {
-            $options['pid'] = $mod->id;
+            $options['pid'] = $mod->getPid();
         }
 
         return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_mod1_searcher_Index', $mod, $options);

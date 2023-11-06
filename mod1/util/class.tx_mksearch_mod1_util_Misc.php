@@ -1,5 +1,7 @@
 <?php
 
+use Sys25\RnBase\Backend\Module\IModFunc;
+
 /**
  * @author Michael Wagner <dev@dmk-ebusiness.de>
  */
@@ -21,7 +23,10 @@ class tx_mksearch_mod1_util_Misc
             if (null == $pageRecord) {
                 continue;
             }
-            $pageinfo = \Sys25\RnBase\Backend\Utility\BackendUtility::readPageAccess($pid, $mod->perms_clause);
+            $pageinfo = \Sys25\RnBase\Backend\Utility\BackendUtility::readPageAccess(
+                $pid,
+                $GLOBALS['BE_USER']->getPagePermsClause(\TYPO3\CMS\Core\Type\Bitmask\Permission::PAGE_SHOW)
+            );
             $modUrl = \Sys25\RnBase\Backend\Utility\BackendUtility::getModuleUrl('web_MksearchM1', ['id' => $pid]);
             $page = '<a href="'.$modUrl.'">';
             $page .= \Sys25\RnBase\Backend\Utility\Icons::getSpriteIconForRecord('pages', $pageRecord);
@@ -85,5 +90,45 @@ class tx_mksearch_mod1_util_Misc
         $pids = $pages;
 
         return $pids;
+    }
+
+    /**
+     * @param string|\Psr\Http\Message\ResponseInterface $content
+     *
+     * @return \Psr\Http\Message\MessageInterface|\Psr\Http\Message\ResponseInterface|string|\TYPO3\CMS\Core\Http\RedirectResponse|string
+     */
+    public static function getSubModuleContent(
+        $content,
+        IModFunc $subModule,
+        string $subModuleName
+    ) {
+        $ret = tx_mksearch_mod1_util_Misc::checkPid($subModule->getModule());
+        if ($ret) {
+            if (\Sys25\RnBase\Utility\TYPO3::isTYPO121OrHigher()) {
+                $modUrl = \Sys25\RnBase\Backend\Utility\BackendUtility::getModuleUrl(
+                    $subModuleName.'.pageNotSelected',
+                    ['id' => $subModule->getModule()->getPid()]
+                );
+            } else {
+                $modUrl = \Sys25\RnBase\Backend\Utility\BackendUtility::getModuleUrl(
+                    'web_MksearchM1',
+                    ['id' => $subModule->getModule()->getPid()]
+                );
+            }
+
+            return new \TYPO3\CMS\Core\Http\RedirectResponse($modUrl);
+        }
+
+        if ($content instanceof \Psr\Http\Message\ResponseInterface) {
+            $content = $content->withBody(
+                \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Http\StreamFactory::class)->createStream(
+                    tx_mksearch_mod1_util_Template::parseBasics($content->getBody()->getContents(), $subModule)
+                )
+            );
+        } else {
+            $content = tx_mksearch_mod1_util_Template::parseBasics($content, $subModule);
+        }
+
+        return $content;
     }
 }

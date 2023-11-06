@@ -26,10 +26,11 @@ class tx_mksearch_mod1_IndizeIndizes extends \Sys25\RnBase\Backend\Module\BaseMo
 
     public function main(ServerRequestInterface $request = null)
     {
-        $out = parent::main($request);
-        $out = tx_mksearch_mod1_util_Template::parseBasics($out, $this);
-
-        return $out;
+        return tx_mksearch_mod1_util_Misc::getSubModuleContent(
+            parent::main($request),
+            $this,
+            'web_MksearchM1_indices'
+        );
     }
 
     /**
@@ -318,5 +319,10 @@ class tx_mksearch_mod1_IndizeIndizes extends \Sys25\RnBase\Backend\Module\BaseMo
         }
 
         return $status;
+    }
+
+    public function getModuleIdentifier()
+    {
+        return 'mksearch';
     }
 }

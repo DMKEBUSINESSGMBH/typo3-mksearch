@@ -83,4 +83,14 @@ class tx_mksearch_mod1_Module extends \Sys25\RnBase\Backend\Module\BaseModule
     {
         return 'EXT:mksearch/mod1/template.html';
     }
+
+    public function getTitle()
+    {
+        return 'EXT:mksearch/Resources/Private/Language/BackendModule/locallang.xlf';
+    }
+
+    public function getRouteIdentifier()
+    {
+        return 'web_MksearchM1';
+    }
 }

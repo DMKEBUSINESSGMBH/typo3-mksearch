@@ -26,10 +26,7 @@ class tx_mksearch_mod1_Keywords extends \Sys25\RnBase\Backend\Module\BaseModFunc
 
     public function main(ServerRequestInterface $request = null)
     {
-        $out = parent::main($request);
-        $out = tx_mksearch_mod1_util_Template::parseBasics($out, $this);
-
-        return $out;
+        return tx_mksearch_mod1_util_Misc::getSubModuleContent(parent::main($request), $this, 'web_MksearchM1_keywords');
     }
 
     /**
@@ -90,9 +87,14 @@ class tx_mksearch_mod1_Keywords extends \Sys25\RnBase\Backend\Module\BaseModFunc
     private function getSearcher(&$options)
     {
         if (!isset($options['pid'])) {
-            $options['pid'] = $this->getModule()->id;
+            $options['pid'] = $this->getModule()->getPid();
         }
 
         return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_mod1_searcher_Keywords', $this->getModule(), $options);
+    }
+
+    public function getModuleIdentifier()
+    {
+        return 'mksearch';
     }
 }

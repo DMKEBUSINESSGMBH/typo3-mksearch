@@ -26,10 +26,11 @@ class tx_mksearch_mod1_ConfigIndizes extends \Sys25\RnBase\Backend\Module\Extend
 
     public function main(ServerRequestInterface $request = null)
     {
-        $out = parent::main($request);
-        $out = tx_mksearch_mod1_util_Template::parseBasics($out, $this);
-
-        return $out;
+        return tx_mksearch_mod1_util_Misc::getSubModuleContent(
+            parent::main($request),
+            $this,
+            'web_MksearchM1_config_indices'
+        );
     }
 
     /**
@@ -40,14 +41,19 @@ class tx_mksearch_mod1_ConfigIndizes extends \Sys25\RnBase\Backend\Module\Extend
     protected function getSubMenuItems()
     {
         return [
-                \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_mod1_handler_Index'),
-                \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_mod1_handler_Composite'),
-                \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_mod1_handler_IndexerConfig'),
-            ];
+            \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_mod1_handler_Index'),
+            \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_mod1_handler_Composite'),
+            \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_mod1_handler_IndexerConfig'),
+        ];
     }
 
     protected function makeSubSelectors(&$selStr)
     {
         return false;
+    }
+
+    public function getModuleIdentifier()
+    {
+        return 'mksearch';
     }
 }

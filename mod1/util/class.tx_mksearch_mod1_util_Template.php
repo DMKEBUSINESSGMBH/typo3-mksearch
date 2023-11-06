@@ -106,7 +106,7 @@ class tx_mksearch_mod1_util_Template
         // button für einen neuen Eintrag
         $markerArray['###BUTTON_'.$marker.'_NEW###'] = $formTool->createNewLink(
             $table,
-            $mod->id,
+            $mod->getPid(),
             $GLOBALS['LANG']->getLL('label_add_'.strtolower($marker))
         );
         // ergebnisliste und pager

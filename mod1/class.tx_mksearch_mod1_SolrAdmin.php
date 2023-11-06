@@ -29,10 +29,11 @@ class tx_mksearch_mod1_SolrAdmin extends \Sys25\RnBase\Backend\Module\ExtendedMo
 
     public function main(ServerRequestInterface $request = null)
     {
-        $out = parent::main($request);
-        $out = tx_mksearch_mod1_util_Template::parseBasics($out, $this);
-
-        return $out;
+        return tx_mksearch_mod1_util_Misc::getSubModuleContent(
+            parent::main($request),
+            $this,
+            'web_MksearchM1_solradmin'
+        );
     }
 
     /**
@@ -50,5 +51,10 @@ class tx_mksearch_mod1_SolrAdmin extends \Sys25\RnBase\Backend\Module\ExtendedMo
     protected function makeSubSelectors(&$selStr)
     {
         return false;
+    }
+
+    public function getModuleIdentifier()
+    {
+        return 'mksearch';
     }
 }
