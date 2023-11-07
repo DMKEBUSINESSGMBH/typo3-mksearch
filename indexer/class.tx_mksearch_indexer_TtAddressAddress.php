@@ -102,11 +102,12 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
         $indexDoc->addField('deleted', $rawData['deleted'], 'keyword', $boost, 'int');
 
         $indexDoc->setTimestamp($rawData['tstamp']);
-        $indexDoc->setTitle($rawData['name']);
+        $name = $this->getName($rawData);
+        $indexDoc->setTitle($name);
 
         $indexDoc->addField('pid', $rawData['pid'], 'keyword');
 
-        $indexDoc->addField('name_s', $rawData['name'], 'unindexed', $boost, 'string');
+        $indexDoc->addField('name_s', $name, 'unindexed', $boost, 'string');
         $indexDoc->addField('gender_s', $rawData['gender'], 'unindexed', $boost, 'string');
         $indexDoc->addField('first_name_s', $rawData['first_name'], 'unindexed', $boost, 'string');
         $indexDoc->addField('middle_name_s', $rawData['middle_name'], 'unindexed', $boost, 'string');
@@ -152,6 +153,20 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
         );
 
         return $indexDoc;
+    }
+
+    protected function getName(array $ttAddressRecord): string
+    {
+        return join(
+            ' ',
+            array_filter(
+                [
+                    $ttAddressRecord['first_name'] ?? '',
+                    $ttAddressRecord['middle_name'] ?? '',
+                    $ttAddressRecord['last_name'] ?? '',
+                ]
+            )
+        );
     }
 
     /**
