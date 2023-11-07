@@ -1,4 +1,7 @@
 <?php
+
+use TYPO3\CMS\Core\Http\ServerRequestFactory;
+
 /***************************************************************
 *  Copyright notice
 *
@@ -718,7 +721,7 @@ class tx_mksearch_util_Indexer
         // load TypoScript templates
         $context = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Context\Context::class);
         if ($pid) {
-            $rootlineByPid = self::getInstance()->getRootlineByPid($pid);
+            $rootlineByPid = self::getInstance()->getRootlineByPid((int) $pid);
 
             $tsfe->rootLine = $rootlineByPid;
             $context->setAspect(
@@ -728,8 +731,13 @@ class tx_mksearch_util_Indexer
                     true
                 )
             );
-            $GLOBALS['TSFE']->getConfigArray();
             $tsfe->id = $pid;
+            // @todo the if part can be removed when support for TYPO3 11 is dropped.
+            if (is_callable([$tsfe, 'getConfigArray'])) {
+                $tsfe->getConfigArray();
+            } else {
+                $GLOBALS['TYPO3_REQUEST'] = $tsfe->getFromCache($GLOBALS['TYPO3_REQUEST'] ?? ServerRequestFactory::fromGlobals());
+            }
         }
 
         // handle language
