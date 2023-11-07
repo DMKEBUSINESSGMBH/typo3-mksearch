@@ -840,7 +840,7 @@ CONFIG;
 
         // That's the only way to let extbase ignore the workspace restrictions. Otherwise workspace versions could
         // never be indexed.
-        $versioningConfiguration = $GLOBALS['TCA'][$tableName]['ctrl']['versioningWS'];
+        $versioningConfiguration = $GLOBALS['TCA'][$tableName]['ctrl']['versioningWS'] ?? null;
         $GLOBALS['TCA'][$tableName]['ctrl']['versioningWS'] = false;
 
         $repository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($repositoryClass);
