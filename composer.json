@@ -120,9 +120,7 @@
         "test:phpcompatibility:8.0": [
             "[ -e .Build/bin/phpcs ] || composer update",
             ".Build/bin/phpcs --ignore=.Build/*,/Resources/Public/JavaScript/*,./Resources/Private/PHP/Elastica/Composer/elasticsearch/elasticsearch/src/Elasticsearch/Endpoints/Indices/Split.php -p . --standard=.Build/vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.0"
-        ],"branch-alias" : {
-            "dev-12.4": "12.0.x-dev"
-        },
+        ],
         "test:phpcompatibility:8.1": [
             "[ -e .Build/bin/phpcs ] || composer update",
             ".Build/bin/phpcs --ignore=.Build/*,/Resources/Public/JavaScript/*,./Resources/Private/PHP/Elastica/Composer/elasticsearch/elasticsearch/src/Elasticsearch/Endpoints/Indices/Split.php -p . --standard=.Build/vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.1"
