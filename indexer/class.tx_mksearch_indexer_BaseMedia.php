@@ -308,7 +308,7 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
                     elseif ($filterValue['checkSubFolder'] ?? false) {
                         unset($filterValue['checkSubFolder']); // brauchen wir nicht mehr
                         foreach ($filterValue as $key => $folder) {
-                            if (\Sys25\RnBase\Utility\Strings::isFirstPartOfStr($filePath, $folder)) {
+                            if (is_string($folder) && \Sys25\RnBase\Utility\Strings::isFirstPartOfStr($filePath, $folder)) {
                                 $ret = intval($filterValue[$key.'.']['disallow'] ?? 0) ? false : true;
                                 break;
                             }
