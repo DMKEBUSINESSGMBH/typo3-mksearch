@@ -589,7 +589,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 
         $isInIndexableWorkspace = false;
         foreach ($workspacesToIndex as $workspaceId) {
-            if ($record['t3ver_wsid'] == $workspaceId) {
+            if (($record['t3ver_wsid'] ?? 0) == $workspaceId) {
                 $isInIndexableWorkspace = true;
                 break;
             }
