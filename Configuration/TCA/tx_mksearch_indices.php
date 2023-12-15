@@ -52,7 +52,7 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => '30',
-                'max' => '100',
+                'max' => '255',
                 'eval' => 'required,trim',
             ],
         ],
