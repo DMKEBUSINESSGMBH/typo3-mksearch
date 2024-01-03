@@ -236,10 +236,7 @@ class tx_mksearch_service_engine_Solr extends \Sys25\RnBase\Typo3Wrapper\Service
     {
         $data = \Sys25\RnBase\Utility\Strings::trimExplode(',', $data);
         if (3 != count($data)) {
-            throw new Exception(
-                'Wrong credentials for solr defined. Must consist of 3 parts (host like https://my.solr, port, '.
-                'path to core like solr/core_de) separated by comma. So make sure there is no comma else.'
-            );
+            throw new Exception('Wrong credentials for solr defined. Must consist of 3 parts (host like https://my.solr, port, path to core like solr/core_de) separated by comma. So make sure there is no comma else.');
         }
         $ret = [];
         $ret['host'] = $data[0];
