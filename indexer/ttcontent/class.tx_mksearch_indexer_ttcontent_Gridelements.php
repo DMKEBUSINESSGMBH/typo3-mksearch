@@ -148,28 +148,39 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
         array $options
     ) {
         tx_mksearch_util_Indexer::prepareTSFE($record['pid'], $options['lang'] ?? 0);
-        $uid = $this->getUid('tt_content', $record, []);
 
         $allowedCTypes = $this->getAllowedCTypes($options);
 
+        /** @var \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer $cObj */
+        $cObj = $GLOBALS['TSFE']->cObj;
+        $setup = \Sys25\RnBase\Utility\TYPO3::isTYPO121OrHigher()
+            ? $cObj->getRequest()->getAttribute('frontend.typoscript')->getSetupArray()
+            : $GLOBALS['TSFE']->tmpl->setup;
+
         if (is_array($allowedCTypes)) {
-            foreach ($GLOBALS['TSFE']->tmpl->setup['tt_content.'] as $currentCType => $conf) {
+            foreach ($setup['tt_content.'] as $currentCType => $conf) {
                 if ('key.' == $currentCType) {
                     continue;
                 }
                 // Config der nicht definierten ContentTypen entfernen, damit
                 // Elemente nicht durch Gridelements gerendert werden
                 if (!in_array($currentCType, $allowedCTypes)) {
-                    unset($GLOBALS['TSFE']->tmpl->setup['tt_content.'][$currentCType]);
+                    unset($setup['tt_content.'][$currentCType]);
                 }
             }
+
+            if (\Sys25\RnBase\Utility\TYPO3::isTYPO121OrHigher()) {
+                $frontendTypoScript = $cObj->getRequest()->getAttribute('frontend.typoscript');
+                $frontendTypoScript->setSetupArray($setup);
+                $cObj->setRequest($cObj->getRequest()->withAttribute('frontend.typoscript', $frontendTypoScript));
+            }
         }
-        /** @var \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer $cObj */
-        $cObj = $GLOBALS['TSFE']->cObj;
+
         $cObj->start($record, 'tt_content');
+
         $content = $cObj->cObjGetSingle(
-            $GLOBALS['TSFE']->tmpl->setup['tt_content.']['gridelements_pi1'],
-            $GLOBALS['TSFE']->tmpl->setup['tt_content.']['gridelements_pi1.']
+            $setup['tt_content.']['gridelements_pi1'],
+            $setup['tt_content.']['gridelements_pi1.']
         );
 
         return $content;

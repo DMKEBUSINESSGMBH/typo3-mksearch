@@ -22,6 +22,8 @@
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Sys25\RnBase\Utility\TYPO3;
+
 /**
  * Indexer service for tx_news.news called by the "mksearch" extension.
  *
@@ -542,9 +544,13 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
             $cObj->start($rawData[0], 'tt_content');
         }
 
+        $setup = TYPO3::isTYPO121OrHigher()
+            ? $cObj->getRequest()->getAttribute('frontend.typoscript')->getSetupArray()
+            : $GLOBALS['TSFE']->tmpl->setup;
+
         return $cObj->cObjGetSingle(
-            $GLOBALS['TSFE']->tmpl->setup['tt_content.']['gridelements_pi1'],
-            $GLOBALS['TSFE']->tmpl->setup['tt_content.']['gridelements_pi1.']
+            $setup['tt_content.']['gridelements_pi1'],
+            $setup['tt_content.']['gridelements_pi1.']
         );
     }
 
