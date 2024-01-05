@@ -164,7 +164,9 @@ class tx_mksearch_indexer_FAL extends tx_mksearch_indexer_BaseMedia
             ->execute();
 
         while ($reference = $result->fetchAssociative()) {
-            $indexService->addRecordToIndex($reference['tablenames'], $reference['uid_foreign']);
+            if ($reference['tablenames'] && $reference['uid_foreign']) {
+                $indexService->addRecordToIndex($reference['tablenames'], $reference['uid_foreign']);
+            }
         }
     }
 
