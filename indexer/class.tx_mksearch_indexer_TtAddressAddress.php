@@ -112,7 +112,7 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
         $indexDoc->addField('first_name_s', $rawData['first_name'], 'unindexed', $boost, 'string');
         $indexDoc->addField('middle_name_s', $rawData['middle_name'], 'unindexed', $boost, 'string');
         $indexDoc->addField('last_name_s', $rawData['last_name'], 'unindexed', $boost, 'string');
-        $indexDoc->addField('birthday_i', $rawData['birthday'], 'unindexed', $boost, 'int');
+        $indexDoc->addField('birthday_i', $rawData['birthday'] > 0 ? $rawData['birthday'] : 0, 'unindexed', $boost, 'int');
         $indexDoc->addField('title_name_s', $rawData['title'], 'unindexed', $boost, 'string');
         $indexDoc->addField('email_s', $rawData['email'], 'unindexed', $boost, 'string');
         $indexDoc->addField('phone_s', $rawData['phone'], 'unindexed', $boost, 'string');
