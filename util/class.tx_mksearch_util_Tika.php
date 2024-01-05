@@ -135,7 +135,7 @@ class tx_mksearch_util_Tika
             throw new Exception('Tika not available!');
         }
 
-        return $this->shell_exec($file, 't');
+        return $this->shell_exec($file, 't', $tikaCommand);
     }
 
     /**
@@ -209,7 +209,7 @@ class tx_mksearch_util_Tika
      *
      * @return string
      */
-    private function shell_exec($file, $tikaCmdType)
+    private function shell_exec($file, $tikaCmdType, &$tikaCommand = null)
     {
         $absFile = self::checkFile($file);
 
