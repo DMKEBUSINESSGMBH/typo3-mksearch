@@ -577,12 +577,8 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
      * Dieses Feld muss konfiguriert werden,
      * da darin die Umkreissuche stattfindet.
      *
-     * Wenn zusätzlich in der Antwort die Entfernung enthalten sein und nach dieser
-     * sortiert werden soll, dann sollte ein eigenes Filter bereitgestellt werden,
-     * der diese Methode erweitert und am Ende das folgende setzt:
-     *
-     * $options['fl'] = '*,distance:geodist()';
-     * $options['sort'] = 'geodist() asc';
+     * @see EXT:mksearch/static/static_extension_template/setup.txt (lib.mksearch.defaultsolrfilter.spatial)
+     * für alle Konfigurationsoptionen.
      *
      * @param array &$fields
      * @param array &$options
@@ -618,17 +614,20 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
         // @TODO: methode konfigurierbar machen ({!bbox}, {!geofilt}, ...)
         self::addFilterQuery($options, '{!geofilt}');
 
-        // damit die ergebnisse auch nach umkreis sortiert werden können,
-        // muss eine distanzberechnung mit in die query
-        // &q={!func}recip(geodist(), 2, 200, 20)
-        // dabei müssen wir aufpassen, ob wir uns im dismax befinden oder nicht.
-        // wir schreiben die funktion direkt mit in den term,
-        // ggf. als neuen parameter.
-        $func = '{!func}recip(geodist(), 2, 200, 20)';
-        if (empty($fields['term'])) {
-            $fields['term'] = $func;
-        } else {
-            $fields['term'] = [$fields['term'], $func];
+        if ($configurations->get($confId.'returnDistanceInResults')) {
+            if (empty($options['fl'])) {
+                $options['fl'] = '*,distance:geodist()';
+            } else {
+                $options['fl'] .= ',distance:geodist()';
+            }
+        }
+
+        if ($configurations->get($confId.'sortByLowestDistance')) {
+            $options['sort'] = 'geodist() asc';
+        }
+
+        if ($configurations->get($confId.'sortByHighestDistance')) {
+            $options['sort'] = 'geodist() desc';
         }
     }
 
