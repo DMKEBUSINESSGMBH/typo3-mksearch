@@ -320,7 +320,7 @@ lib.mksearch.defaultsolrfilter {
 ###SORT_TITLE_LINKURL### = index.php?mksearch[sort]=title&mksearch[sortorder]=asc
 ###SORT_TITLE_LINK### = wrappedArray mit dem A-Tag
 
-    ### Konfiguration für die Umkreissuche
+    ### Konfiguration für die Umkreissuche (spatial)
     spatial {
         ### das feld in dem die koordinaten im solr doc zu finden sind (location_latlon).
         sfield =
@@ -328,6 +328,17 @@ lib.mksearch.defaultsolrfilter {
             ### die distanz für die Umkreissuche, falls der parameter mksearch[distance] leer ist.
             distance = 50
         }
+
+        ### Die Distanz im Feld distance in jedem Ergebnis liefern. Das setzt den "fl" Paramater.
+        ### Falls ein Request Handler genutzt wird, der in der solrconfig.xml "fl" setzt, dann sollte
+        ### returnDistanceInResults nicht gesetzt werden. Stattdessen muss "distance:geodist()" im "fl" Parameter
+        ### in der solrconfig.xml hinzugefügt werden.
+        ### returnDistanceInResults = 1
+
+        ### Nach Distanz sortieren. Falls z.B. Nutzer die Sortierung ändern können sollen, sollte die entsprechende
+        ### Konfiguration per Condition abhängig von einem URL Parameter gesetzt werden.
+        ### sortByLowestDistance = 1
+        ### sortByHighestDistance = 1
     }
 
     options {
