@@ -1,6 +1,11 @@
 Changelog
 =========
 
+11.0.14
+-----
+
+- Optimize spatial search
+
 11.0.13
 -----
 
