@@ -480,7 +480,7 @@ class tx_mksearch_tests_indexer_CalTest extends tx_mksearch_tests_Testcase
      */
     private function getIndexDocFieldArrayByCalRecord(
         array $calRecord,
-        tx_mksearch_indexer_Cal $indexer = null,
+        ?tx_mksearch_indexer_Cal $indexer = null,
         $table = 'tx_cal_event'
     ) {
         if (null === $indexer) {
