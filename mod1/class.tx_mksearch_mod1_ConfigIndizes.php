@@ -24,7 +24,7 @@ class tx_mksearch_mod1_ConfigIndizes extends \Sys25\RnBase\Backend\Module\Extend
         return $this->getModule()->getPid();
     }
 
-    public function main(ServerRequestInterface $request = null)
+    public function main(?ServerRequestInterface $request = null)
     {
         return tx_mksearch_mod1_util_Misc::getSubModuleContent(
             parent::main($request),
