@@ -873,7 +873,7 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
                 $options['group.ngroups'] = 'true';
                 $options['group.truncate'] = 'true';
             }
-        } elseif (is_array($options['group'])) {
+        } elseif (is_array($options['group'] ?? null)) {
             // remove group config from options array so useless parameters
             // are not taken into the request. this can happen if grouping not enabled
             // but options.group.useNumberOfGroupsAsSearchResultCount is set.
