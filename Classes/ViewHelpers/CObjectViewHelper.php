@@ -77,6 +77,7 @@ class CObjectViewHelper extends AbstractViewHelper
         $this->registerArgument('typoscriptObjectPath', 'string', 'the TypoScript setup path of the TypoScript object to render', true);
         $this->registerArgument('currentValueKey', 'string', 'currentValueKey');
         $this->registerArgument('table', 'string', 'the table name associated with "data" argument. Typically tt_content or one of your custom tables. This argument should be set if rendering a FILES cObject where file references are used, or if the data argument is a database record.', false, '');
+        $this->registerArgument('setContentObjectAsCurrentToRequest', 'bool', 'During rendering a fresh content object is created and rendered. But the extbase configuration manager still uses the current/surrounding content object. As the TypoScript configuration of mksearch contains setup that breaks the flexform parsing this option might come in handy if inside the mksearch plugin some extbase functions like repositories is used.', false, false);
     }
 
     /**
@@ -94,6 +95,9 @@ class CObjectViewHelper extends AbstractViewHelper
         $request = $renderingContext->getRequest();
         $contentObjectRenderer = self::getContentObjectRenderer($request);
         $contentObjectRenderer->setRequest($request);
+        if ($arguments['setContentObjectToRequest'] ?? false) {
+            self::getConfigurationManager()->setRequest($request->withAttribute('currentContentObject', $contentObjectRenderer));
+        }
         $tsfeBackup = null;
         if (!isset($GLOBALS['TSFE']) || !($GLOBALS['TSFE'] instanceof TypoScriptFrontendController)) {
             $tsfeBackup = self::simulateFrontendEnvironment();
@@ -126,6 +130,9 @@ class CObjectViewHelper extends AbstractViewHelper
         $content = self::renderContentObject($contentObjectRenderer, $setup, $typoscriptObjectPath, $lastSegment);
         if (!isset($GLOBALS['TSFE']) || !($GLOBALS['TSFE'] instanceof TypoScriptFrontendController)) {
             self::resetFrontendEnvironment($tsfeBackup);
+        }
+        if ($arguments['setContentObjectToRequest'] ?? false) {
+            self::getConfigurationManager()->setRequest($request);
         }
 
         return $content;
