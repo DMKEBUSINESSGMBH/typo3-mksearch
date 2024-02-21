@@ -95,7 +95,7 @@ class CObjectViewHelper extends AbstractViewHelper
         $request = $renderingContext->getRequest();
         $contentObjectRenderer = self::getContentObjectRenderer($request);
         $contentObjectRenderer->setRequest($request);
-        if ($arguments['setContentObjectToRequest'] ?? false) {
+        if ($arguments['setContentObjectAsCurrentToRequest'] ?? false) {
             self::getConfigurationManager()->setRequest($request->withAttribute('currentContentObject', $contentObjectRenderer));
         }
         $tsfeBackup = null;
@@ -131,7 +131,7 @@ class CObjectViewHelper extends AbstractViewHelper
         if (!isset($GLOBALS['TSFE']) || !($GLOBALS['TSFE'] instanceof TypoScriptFrontendController)) {
             self::resetFrontendEnvironment($tsfeBackup);
         }
-        if ($arguments['setContentObjectToRequest'] ?? false) {
+        if ($arguments['setContentObjectAsCurrentToRequest'] ?? false) {
             self::getConfigurationManager()->setRequest($request);
         }
 
