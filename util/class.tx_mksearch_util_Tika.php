@@ -196,8 +196,12 @@ class tx_mksearch_util_Tika
 
         $ret = [];
         foreach ($shellOutput as $line) {
-            list($meta, $value) = explode(':', $line, 2);
-            $ret[$meta] = trim($value);
+            $splitLine = explode(':', $line, 2);
+            $meta = $splitLine[0] ?? '';
+            $value = $splitLine[1] ?? '';
+            if ($meta) {
+                $ret[$meta] = trim($value);
+            }
         }
 
         return $ret;
