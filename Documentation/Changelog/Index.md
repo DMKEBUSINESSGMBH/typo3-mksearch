@@ -1,6 +1,12 @@
 Changelog
 =========
 
+12.0.0
+-----
+
+- Compatibility with TYPO3 12.4
+
+
 11.0.13
 -----
 
