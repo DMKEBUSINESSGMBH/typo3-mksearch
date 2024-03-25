@@ -530,19 +530,19 @@ class tx_mksearch_tests_util_IndexerTest extends \Sys25\RnBase\Testing\BaseTestC
             ''
         );
         $models = [
-                \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-                    \Sys25\RnBase\Domain\Model\BaseModel::class,
-                    ['recordField' => 1440668593]
-                ),
-                \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-                    \Sys25\RnBase\Domain\Model\BaseModel::class,
-                    ['recordField' => 1439034300]
-                ),
+            \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                \Sys25\RnBase\Domain\Model\BaseModel::class,
+                ['recordField' => 1440668593]
+            ),
+            \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                \Sys25\RnBase\Domain\Model\BaseModel::class,
+                ['recordField' => 1439034300]
+            ),
         ];
         $options = [
-                'fieldsConversion.' => ['documentField.' => [
-                        'unix2isodate' => 1,
-                ]],
+            'fieldsConversion.' => ['documentField.' => [
+                'unix2isodate' => 1,
+            ]],
         ];
 
         tx_mksearch_util_Indexer::getInstance()->indexArrayOfModelsByMapping(
@@ -569,14 +569,14 @@ class tx_mksearch_tests_util_IndexerTest extends \Sys25\RnBase\Testing\BaseTestC
             ''
         );
         $models = [
-                \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-                    \Sys25\RnBase\Domain\Model\BaseModel::class,
-                    ['recordField' => 123]
-                ),
-                \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-                    \Sys25\RnBase\Domain\Model\BaseModel::class,
-                    ['recordField' => 456]
-                ),
+            \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                \Sys25\RnBase\Domain\Model\BaseModel::class,
+                ['recordField' => 123]
+            ),
+            \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                \Sys25\RnBase\Domain\Model\BaseModel::class,
+                ['recordField' => 456]
+            ),
         ];
 
         tx_mksearch_util_Indexer::getInstance()->indexArrayOfModelsByMapping(

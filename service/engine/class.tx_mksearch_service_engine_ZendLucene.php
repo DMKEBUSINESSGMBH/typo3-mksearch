@@ -350,15 +350,15 @@ class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\S
 
                 // Re-Build new $fields by "AND"ing fe_groups
                 $fields = ['fe_groups_aware' => [
-                        [
-                            'term' => [self::FE_GROUP_FIELD => $fe_groups],
-                            'sign' => true,
-                        ],
-                        [
-                            'term' => $fields,    // Original fields
-                            'sign' => true,
-                        ],
+                    [
+                        'term' => [self::FE_GROUP_FIELD => $fe_groups],
+                        'sign' => true,
                     ],
+                    [
+                        'term' => $fields,    // Original fields
+                        'sign' => true,
+                    ],
+                ],
                 ];
             }
             $queryString = $this->buildQuery($fields);

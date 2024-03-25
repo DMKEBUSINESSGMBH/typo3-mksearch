@@ -80,11 +80,11 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
         }
         // dummy record bauen!
         $record = [
-                'recid' => $uid,
-                'tablename' => $tableName,
-                'resolver' => $resolver,
-                'data' => is_array($data) ? serialize($data) : $data,
-            ];
+            'recid' => $uid,
+            'tablename' => $tableName,
+            'resolver' => $resolver,
+            'data' => is_array($data) ? serialize($data) : $data,
+        ];
         // Indizierung starten
         $this->executeQueueData([$record]);
     }

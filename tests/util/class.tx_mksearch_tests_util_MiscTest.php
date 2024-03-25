@@ -43,49 +43,49 @@ class tx_mksearch_tests_util_MiscTest extends tx_mksearch_tests_Testcase
     {
         $return = [];
         foreach ([
-                    // array($before, $after),
-                __LINE__ => [
-                    'Kapstadt Messetrailer <object width="5" height="5"><param name="movie" value="hier muss eigentlich die url rein ^^" /><param name="allowFullScreen" value="true" /><param name="allowscriptaccess" value="always" /><embed src="hier gehts zum player" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="5" height="5"></embed></object> Eternit Schönes Beschützen',
-                    [], // emty option
-                    'Kapstadt Messetrailer   Eternit Schönes Beschützen',
-                ],
-                __LINE__ => [
-                    'Hallo Welt',
-                    [], // emty option
-                    'Hallo Welt',
-                ],
-                __LINE__ => [
-                    'Hallo <!-- Kommentar --> Welt',
-                    [], // emty option
-                    'Hallo   Welt',
-                ],
-                __LINE__ => [
-                    '<br>Hallo</br> <i>Welt</i>',
-                    [], // emty option
-                    'Hallo   Welt',
-                ],
-                __LINE__ => [
-                    'Umlaute encoded F&ouml;rderm&ouml;glichkeiten',
-                    [], // emty option
-                    'Umlaute encoded Fördermöglichkeiten',
-                ],
-                __LINE__ => [
-                    'Zeile1'.PHP_EOL.'Zeile2',
-                    [], // emty option
-                    'Zeile1 Zeile2',
-                ],
-                __LINE__ => [
-                    'Zeile1'.PHP_EOL.'Zeile2',
-                    ['lineendings' => true],
-                    'Zeile1'.PHP_EOL.'Zeile2',
-                ],
-                __LINE__ => [
-                        'one two  three   one five     zero',
-                    ['removedoublespaces' => true],
-                    'one two three one five zero',
-                ],
-                __LINE__ => [
-                    '<a class="collapsed"
+            // array($before, $after),
+            __LINE__ => [
+                'Kapstadt Messetrailer <object width="5" height="5"><param name="movie" value="hier muss eigentlich die url rein ^^" /><param name="allowFullScreen" value="true" /><param name="allowscriptaccess" value="always" /><embed src="hier gehts zum player" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="5" height="5"></embed></object> Eternit Schönes Beschützen',
+                [], // emty option
+                'Kapstadt Messetrailer   Eternit Schönes Beschützen',
+            ],
+            __LINE__ => [
+                'Hallo Welt',
+                [], // emty option
+                'Hallo Welt',
+            ],
+            __LINE__ => [
+                'Hallo <!-- Kommentar --> Welt',
+                [], // emty option
+                'Hallo   Welt',
+            ],
+            __LINE__ => [
+                '<br>Hallo</br> <i>Welt</i>',
+                [], // emty option
+                'Hallo   Welt',
+            ],
+            __LINE__ => [
+                'Umlaute encoded F&ouml;rderm&ouml;glichkeiten',
+                [], // emty option
+                'Umlaute encoded Fördermöglichkeiten',
+            ],
+            __LINE__ => [
+                'Zeile1'.PHP_EOL.'Zeile2',
+                [], // emty option
+                'Zeile1 Zeile2',
+            ],
+            __LINE__ => [
+                'Zeile1'.PHP_EOL.'Zeile2',
+                ['lineendings' => true],
+                'Zeile1'.PHP_EOL.'Zeile2',
+            ],
+            __LINE__ => [
+                'one two  three   one five     zero',
+                ['removedoublespaces' => true],
+                'one two three one five zero',
+            ],
+            __LINE__ => [
+                '<a class="collapsed"
                 aria-controls="collapse3379"
                 aria-expanded="false"
                 data-parent="#accordion3383"
@@ -95,10 +95,10 @@ class tx_mksearch_tests_util_MiscTest extends tx_mksearch_tests_Testcase
             >
                 HTML tags with line breaks
             </a>',
-                    [],
-                    'HTML tags with line breaks',
-                ],
-            ] as $key => $row) {
+                [],
+                'HTML tags with line breaks',
+            ],
+        ] as $key => $row) {
             $key = 'Line:'.$key;
             $return[$key] = $row;
         }

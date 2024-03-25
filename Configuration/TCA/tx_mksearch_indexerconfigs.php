@@ -22,7 +22,7 @@ return [
         'hidden' => [
             'exclude' => 1,
             'label' => 'LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_indexerconfigs.hidden',
-                'config' => [
+            'config' => [
                 'type' => 'check',
                 'default' => '0',
             ],

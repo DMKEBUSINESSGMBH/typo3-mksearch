@@ -76,106 +76,106 @@ class tx_mksearch_tests_indexer_FALTest extends tx_mksearch_tests_Testcase
     public function providerIsIndexableRecord()
     {
         return [
-                'Line: '.__LINE__ => [
-                    [
-                        'identifier' => 'unterordner/test.html',
-                        'extension' => 'html',
-                    ], [
-                        'byFileExtension' => 'pdf, html',
-                        'byDirectory' => '/^fileadmin\/.*\//',
-                    ], true,
-                ],
-                'Line: '.__LINE__ => [
-                    [
-                        'identifier' => 'unterordner/test.html',
-                        'extension' => 'html',
-                    ], [
-                        'byFileExtension' => 'pdf, html',
-                        'byDirectory' => '/^fileadmin\/unterordner.*\//',
-                    ], true,
-                ],
-                'Line: '.__LINE__ => [
-                    [
-                        'identifier' => 'unterordner/test.txt',
-                        'extension' => 'txt',
-                    ], [
-                        'byFileExtension' => 'pdf, html',
-                        'byDirectory' => '/^fileadmin\/unterordner.*\//',
-                    ], false,
-                ],
-                'Line: '.__LINE__ => [
-                    [
-                        'identifier' => 'denied/test.txt',
-                        'extension' => 'txt',
-                    ], [
-                        'byFileExtension' => 'pdf, html',
-                        'byDirectory' => '/^fileadmin\/unterordner.*\//',
-                    ], false,
-                ],
-                'Line: '.__LINE__ => [
-                    [
-                        'identifier' => 'allowed/test.pdf',
-                        'extension' => 'pdf',
-                    ], [
-                        'byFileExtension.' => ['pdf', 'txt'],
-                        'byDirectory.' => ['fileadmin/unterordner/', 'fileadmin/allowed/'],
-                    ], true,
-                ],
-                'Line: '.__LINE__ => [
-                    [
-                        'identifier' => 'denied/test.pdf',
-                        'extension' => 'pdf',
-                    ], [
-                        'byFileExtension' => 'pdf, html',
-                        'byDirectory.' => ['fileadmin/unterordner/', 'fileadmin/allowed/'],
-                    ], false,
-                ],
-                'Line: '.__LINE__ => [
-                    [
-                        'identifier' => 'unterordner/test.txt',
-                        'extension' => 'txt',
-                    ], [
-                        'byFileExtension' => 'html, xhtml',
-                        'byFileExtension.' => ['pdf', 'txt'],
-                        'byDirectory' => '/^fileadmin\/.*\//',
-                        'byDirectory.' => ['fileadmin/unterordner/', 'fileadmin/allowed/'],
-                    ], true,
-                ],
-                'Line: '.__LINE__ => [
-                    [
-                        'identifier' => 'unterordner/subfolder/test.txt',
-                        'extension' => 'txt',
-                    ], [
-                        'byFileExtension' => 'html, xhtml',
-                        'byFileExtension.' => ['pdf', 'txt'],
-                        'byDirectory' => '/^fileadmin\/.*\//',
-                        'byDirectory.' => ['fileadmin/unterordner/', 'fileadmin/allowed/'],
-                    ], false,
-                ],
-                'Line: '.__LINE__ => [
-                    [
-                        'identifier' => 'unterordner/subfolder/test.txt',
-                        'extension' => 'txt',
-                    ], [
-                        'byFileExtension' => 'html, xhtml',
-                        'byFileExtension.' => ['pdf', 'txt'],
-                        'byDirectory' => '/^fileadmin\/.*\//',
-                        'byDirectory.' => ['checkSubFolder' => 1, 'fileadmin/unterordner/', 'fileadmin/allowed/'],
-                    ], true,
-                ],
-                // spezieller eternit fall
-                'Line: '.__LINE__ => [
-                    [
-                        'identifier' => 'downloads/tx_eternitdownload/test.txt',
-                        'extension' => 'txt',
-                    ], [
-                        'byFileExtension' => 'html, xhtml',
-                        'byFileExtension.' => ['pdf', 'txt'],
-                        'byDirectory' => '/^fileadmin\/.*\//',
-                        'byDirectory.' => ['checkSubFolder' => '1', 'fileadmin/downloads/', '10' => 'fileadmin/downloads/tx_eternitdownload/', '10.' => ['disallow' => 1]],
-                    ], false,
-                ],
-            ];
+            'Line: '.__LINE__ => [
+                [
+                    'identifier' => 'unterordner/test.html',
+                    'extension' => 'html',
+                ], [
+                    'byFileExtension' => 'pdf, html',
+                    'byDirectory' => '/^fileadmin\/.*\//',
+                ], true,
+            ],
+            'Line: '.__LINE__ => [
+                [
+                    'identifier' => 'unterordner/test.html',
+                    'extension' => 'html',
+                ], [
+                    'byFileExtension' => 'pdf, html',
+                    'byDirectory' => '/^fileadmin\/unterordner.*\//',
+                ], true,
+            ],
+            'Line: '.__LINE__ => [
+                [
+                    'identifier' => 'unterordner/test.txt',
+                    'extension' => 'txt',
+                ], [
+                    'byFileExtension' => 'pdf, html',
+                    'byDirectory' => '/^fileadmin\/unterordner.*\//',
+                ], false,
+            ],
+            'Line: '.__LINE__ => [
+                [
+                    'identifier' => 'denied/test.txt',
+                    'extension' => 'txt',
+                ], [
+                    'byFileExtension' => 'pdf, html',
+                    'byDirectory' => '/^fileadmin\/unterordner.*\//',
+                ], false,
+            ],
+            'Line: '.__LINE__ => [
+                [
+                    'identifier' => 'allowed/test.pdf',
+                    'extension' => 'pdf',
+                ], [
+                    'byFileExtension.' => ['pdf', 'txt'],
+                    'byDirectory.' => ['fileadmin/unterordner/', 'fileadmin/allowed/'],
+                ], true,
+            ],
+            'Line: '.__LINE__ => [
+                [
+                    'identifier' => 'denied/test.pdf',
+                    'extension' => 'pdf',
+                ], [
+                    'byFileExtension' => 'pdf, html',
+                    'byDirectory.' => ['fileadmin/unterordner/', 'fileadmin/allowed/'],
+                ], false,
+            ],
+            'Line: '.__LINE__ => [
+                [
+                    'identifier' => 'unterordner/test.txt',
+                    'extension' => 'txt',
+                ], [
+                    'byFileExtension' => 'html, xhtml',
+                    'byFileExtension.' => ['pdf', 'txt'],
+                    'byDirectory' => '/^fileadmin\/.*\//',
+                    'byDirectory.' => ['fileadmin/unterordner/', 'fileadmin/allowed/'],
+                ], true,
+            ],
+            'Line: '.__LINE__ => [
+                [
+                    'identifier' => 'unterordner/subfolder/test.txt',
+                    'extension' => 'txt',
+                ], [
+                    'byFileExtension' => 'html, xhtml',
+                    'byFileExtension.' => ['pdf', 'txt'],
+                    'byDirectory' => '/^fileadmin\/.*\//',
+                    'byDirectory.' => ['fileadmin/unterordner/', 'fileadmin/allowed/'],
+                ], false,
+            ],
+            'Line: '.__LINE__ => [
+                [
+                    'identifier' => 'unterordner/subfolder/test.txt',
+                    'extension' => 'txt',
+                ], [
+                    'byFileExtension' => 'html, xhtml',
+                    'byFileExtension.' => ['pdf', 'txt'],
+                    'byDirectory' => '/^fileadmin\/.*\//',
+                    'byDirectory.' => ['checkSubFolder' => 1, 'fileadmin/unterordner/', 'fileadmin/allowed/'],
+                ], true,
+            ],
+            // spezieller eternit fall
+            'Line: '.__LINE__ => [
+                [
+                    'identifier' => 'downloads/tx_eternitdownload/test.txt',
+                    'extension' => 'txt',
+                ], [
+                    'byFileExtension' => 'html, xhtml',
+                    'byFileExtension.' => ['pdf', 'txt'],
+                    'byDirectory' => '/^fileadmin\/.*\//',
+                    'byDirectory.' => ['checkSubFolder' => '1', 'fileadmin/downloads/', '10' => 'fileadmin/downloads/tx_eternitdownload/', '10.' => ['disallow' => 1]],
+                ], false,
+            ],
+        ];
     }
 
     public function testIsIndexableRecordWithoutDeleteIfNotIndexableOption()

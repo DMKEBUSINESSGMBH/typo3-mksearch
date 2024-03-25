@@ -295,12 +295,12 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
 
         $bodyText = '';
         foreach ([
-                $news->getBodytext(),
-                $news->getTeaser(),
-                $news->getTitle(),
-                $content,
-                $abstract,
-            ] as $html) {
+            $news->getBodytext(),
+            $news->getTeaser(),
+            $news->getTitle(),
+            $content,
+            $abstract,
+        ] as $html) {
             if (empty($html)) {
                 continue;
             }

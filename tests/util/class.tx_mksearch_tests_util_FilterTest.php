@@ -323,7 +323,7 @@ searchsolr.filter.default.sort {
             __LINE__ => [
                 'fq' => 'contentType:frühstück',
                 'expected' => 'contentType:"frühstück"',
-        ],
+            ],
             __LINE__ => [
                 'fq' => 'frühstück',
                 'expected' => '',

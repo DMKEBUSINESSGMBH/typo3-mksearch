@@ -141,10 +141,10 @@ class tx_mksearch_util_FacetBuilder
                 $facetGroups[$groupName] = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
                     \Sys25\RnBase\Domain\Model\BaseModel::class,
                     [
-                                'uid' => ++$uid,
-                                'field' => $groupName,
-                                'items' => [],
-                        ]
+                        'uid' => ++$uid,
+                        'field' => $groupName,
+                        'items' => [],
+                    ]
                 );
             }
             $items = $facetGroups[$groupName]->getProperty('items');

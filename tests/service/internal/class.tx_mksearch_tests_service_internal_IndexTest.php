@@ -246,12 +246,12 @@ class tx_mksearch_tests_service_internal_IndexTest extends tx_mksearch_tests_Tes
             ->with(
                 'tx_mksearch_queue',
                 [
-                        'cr_date' => \Sys25\RnBase\Utility\Dates::datetime_tstamp2mysql($GLOBALS['EXEC_TIME']),
-                        'prefer' => 0,
-                        'recid' => 50,
-                        'tablename' => 'tx_mktest_table',
-                        'data' => '',
-                        'resolver' => 'tx_mksearch_resolver_Test',
+                    'cr_date' => \Sys25\RnBase\Utility\Dates::datetime_tstamp2mysql($GLOBALS['EXEC_TIME']),
+                    'prefer' => 0,
+                    'recid' => 50,
+                    'tablename' => 'tx_mktest_table',
+                    'data' => '',
+                    'resolver' => 'tx_mksearch_resolver_Test',
                 ]
             )
             ->will(self::returnValue(123));
