@@ -38,7 +38,7 @@ class tx_mksearch_mod1_Module extends \Sys25\RnBase\Backend\Module\BaseModule
         if (!isset($this->MCONF['name'])) {
             $this->MCONF = array_merge((array) $GLOBALS['MCONF'], [
                 'name' => 'web_MksearchM1',
-                'access' => 'user,group',
+                'access' => \Sys25\RnBase\Utility\TYPO3::isTYPO121OrHigher() ? 'user' : 'user,group',
             ]);
         }
 

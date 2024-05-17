@@ -4,7 +4,7 @@ return [
     'web_MksearchM1' => [
         'parent' => 'web',
         'position' => ['bottom'],
-        'access' => 'user,group',
+        'access' => 'user',
         'workspaces' => 'live',
         'path' => '/module/web/mksearch',
         'icon' => 'EXT:mksearch/Resources/Public/Icons/Extension.svg',
@@ -13,7 +13,7 @@ return [
     ],
     'web_MksearchM1_config_indices' => [
         'parent' => 'web_MksearchM1',
-        'access' => 'user,group',
+        'access' => 'user',
         'workspaces' => 'live',
         'path' => '/module/web/mksearch/config_indices',
         'icon' => 'EXT:mksearch/Resources/Public/Icons/Extension.svg',
@@ -36,7 +36,7 @@ return [
     ],
     'web_MksearchM1_keywords' => [
         'parent' => 'web_MksearchM1',
-        'access' => 'user,group',
+        'access' => 'user',
         'workspaces' => 'live',
         'path' => '/module/web/mksearch/keywords',
         'icon' => 'EXT:mksearch/Resources/Public/Icons/Extension.svg',
@@ -59,7 +59,7 @@ return [
     ],
     'web_MksearchM1_indices' => [
         'parent' => 'web_MksearchM1',
-        'access' => 'user,group',
+        'access' => 'user',
         'workspaces' => 'live',
         'path' => '/module/web/mksearch/indices',
         'icon' => 'EXT:mksearch/Resources/Public/Icons/Extension.svg',
@@ -82,7 +82,7 @@ return [
     ],
     'web_MksearchM1_solradmin' => [
         'parent' => 'web_MksearchM1',
-        'access' => 'user,group',
+        'access' => 'user',
         'workspaces' => 'live',
         'path' => '/module/web/mksearch/solradmin',
         'icon' => 'EXT:mksearch/Resources/Public/Icons/Extension.svg',
