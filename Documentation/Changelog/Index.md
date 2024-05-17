@@ -1,6 +1,12 @@
 Changelog
 =========
 
+12.0.1
+-----
+
+- Fix BE module access for none admins
+
+
 12.0.0
 -----
 
