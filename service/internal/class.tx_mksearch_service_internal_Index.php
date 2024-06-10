@@ -122,7 +122,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
         $record = [
             'cr_date' => \Sys25\RnBase\Utility\Dates::datetime_tstamp2mysql($GLOBALS['EXEC_TIME']),
             'lastupdate' => \Sys25\RnBase\Utility\Dates::datetime_tstamp2mysql($GLOBALS['EXEC_TIME']),
-            'prefer' => (int) $prefer,
+            'prefer' => self::getPreferByTableName((int) $prefer, (string) $tableName),
             'recid' => $uid,
             'tablename' => $tableName,
             'data' => false !== $data ? (is_array($data) ? serialize($data) : $data) : '',
@@ -130,6 +130,15 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
         ];
 
         return $record;
+    }
+
+    protected static function getPreferByTableName(int $initialPrefer, string $tableName): int
+    {
+        if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['indexingPriority'][$tableName] ?? false) {
+            $initialPrefer += $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch']['indexingPriority'][$tableName];
+        }
+
+        return $initialPrefer;
     }
 
     /**
@@ -682,14 +691,16 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
         $resolver = tx_mksearch_util_Config::getResolverForDatabaseTable($table);
         $resolver = count($resolver) ? $resolver['className'] : '';
 
+        $prefer = self::getPreferByTableName(0, $table);
+
         $fullQuoted = $database->fullQuoteStr($table, self::$queueTable);
         $uidName = isset($options['uidcol']) ? $options['uidcol'] : 'uid';
         $from = isset($options['from']) ? $options['from'] : $table;
         $where = isset($options['where']) ? ' WHERE '.$options['where'] : '';
 
-        $query = 'INSERT INTO '.self::$queueTable.'(tablename, recid, resolver) ';
+        $query = 'INSERT INTO '.self::$queueTable.'(tablename, recid, resolver, prefer) ';
         $query .= 'SELECT DISTINCT '.$fullQuoted.', '.$uidName.
-            ', CONCAT(\''.$resolver.'\') FROM '.$from.$where;
+            ', CONCAT(\''.$resolver.'\'), CONCAT(\''.$prefer.'\') FROM '.$from.$where;
 
         if ($options['debug'] ?? false) {
             \Sys25\RnBase\Utility\Debug::debug(

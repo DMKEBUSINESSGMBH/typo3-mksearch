@@ -32,4 +32,6 @@ User manual
 
 [Verwendung von Keywords](VerwendungVonKeywords/Index.md)
 
+[Priorität der Indizierung beeinflussen](Indizierung/Priority.md)
+
 [FAQ](Faq/Index.md)
