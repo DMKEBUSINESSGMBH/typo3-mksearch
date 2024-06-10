@@ -1,6 +1,11 @@
 Changelog
 =========
 
+12.0.2
+-----
+
+- Make indexing priority configurable
+
 12.0.1
 -----
 
