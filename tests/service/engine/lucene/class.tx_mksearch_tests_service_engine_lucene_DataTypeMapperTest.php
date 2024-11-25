@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************
 *  Copyright notice
 *
@@ -65,11 +66,11 @@ class tx_mksearch_tests_service_engine_lucene_DataTypeMapperTest extends tx_mkse
     public function getSolrLikeFieldNames()
     {
         return [
-                ['test_s', 'text'],
-                ['test_i', 'keyword'],
-                ['pid', 'keyword'],
-                ['someotherfield', 'text'],
-                ['someotherfield_mi', 'text'],
+            ['test_s', 'text'],
+            ['test_i', 'keyword'],
+            ['pid', 'keyword'],
+            ['someotherfield', 'text'],
+            ['someotherfield_mi', 'text'],
         ];
     }
 }

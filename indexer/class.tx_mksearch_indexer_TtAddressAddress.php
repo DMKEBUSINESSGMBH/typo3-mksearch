@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************
  *  Copyright notice
  *
@@ -84,11 +85,11 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
             'mksearch',
             'indexer_TtAddress_prepareData_beforeAddFields',
             [
-                                    'rawData' => &$rawData,
-                                    'options' => $options,
-                                    'indexDoc' => &$indexDoc,
-                                    'boost' => &$boost,
-                                    'abort' => &$abort,
+                'rawData' => &$rawData,
+                'options' => $options,
+                'indexDoc' => &$indexDoc,
+                'boost' => &$boost,
+                'abort' => &$abort,
             ],
             $this
         );
@@ -144,9 +145,9 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
             'mksearch',
             'indexer_TtAddress_prepareData_afterAddFields',
             [
-                                    'rawData' => &$rawData,
-                                    'options' => $options,
-                                    'indexDoc' => &$indexDoc,
+                'rawData' => &$rawData,
+                'options' => $options,
+                'indexDoc' => &$indexDoc,
             ],
             $this
         );

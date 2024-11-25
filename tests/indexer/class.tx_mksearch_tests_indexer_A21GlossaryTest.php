@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************
  * Copyright notice
  *
@@ -84,12 +85,12 @@ class tx_mksearch_tests_indexer_A21GlossaryTest extends tx_mksearch_tests_Testca
         $indexer = $this->getIndexerMock();
         $model = $this->getModel(
             [
-                    'uid' => 57,
-                    'short' => 'Titel',
-                    'shortcut' => 'Alternative',
-                    'longversion' => 'Long',
-                    'description' => 'Beschreibung',
-                ]
+                'uid' => 57,
+                'short' => 'Titel',
+                'shortcut' => 'Alternative',
+                'longversion' => 'Long',
+                'description' => 'Beschreibung',
+            ]
         )
             ->setTableName('tx_a21glossary_main');
         /* @var $indexDoc tx_mksearch_model_IndexerDocumentBase */

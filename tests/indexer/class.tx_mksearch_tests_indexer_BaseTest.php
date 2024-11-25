@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************
 *  Copyright notice
 *
@@ -179,7 +180,7 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
 
         list($extKey, $cType) = $indexer->getContentType();
         $options = [
-                'include.' => ['categories.' => [3]],
+            'include.' => ['categories.' => [3]],
         ];
 
         $aRawData = ['uid' => 1, 'pid' => 1];
@@ -200,7 +201,7 @@ class tx_mksearch_tests_indexer_BaseTest extends tx_mksearch_tests_Testcase
 
         list($extKey, $cType) = $indexer->getContentType();
         $options = [
-                'exclude.' => ['categories.' => [3]],
+            'exclude.' => ['categories.' => [3]],
         ];
 
         $aRawData = ['uid' => 1, 'pid' => 1];

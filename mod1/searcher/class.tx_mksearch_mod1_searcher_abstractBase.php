@@ -202,10 +202,10 @@ abstract class tx_mksearch_mod1_searcher_abstractBase
         }
 
         return [
-                'table' => $content,
-                'totalsize' => $cnt,
-                'pager' => '<div class="pager">'.$sPagerData.'</div>',
-            ];
+            'table' => $content,
+            'totalsize' => $cnt,
+            'pager' => '<div class="pager">'.$sPagerData.'</div>',
+        ];
     }
 
     /**

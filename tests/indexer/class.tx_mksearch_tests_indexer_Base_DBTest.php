@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************
 *  Copyright notice
 *
@@ -42,7 +43,7 @@ class tx_mksearch_tests_indexer_Base_DBTest extends tx_mksearch_tests_DbTestcase
         $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
         list($extKey, $cType) = $indexer->getContentType();
         $options = [
-                'include.' => ['pages.' => [2]],
+            'include.' => ['pages.' => [2]],
         ];
 
         $aRawData = ['uid' => 1, 'pid' => 1];
@@ -60,7 +61,7 @@ class tx_mksearch_tests_indexer_Base_DBTest extends tx_mksearch_tests_DbTestcase
         $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
         list($extKey, $cType) = $indexer->getContentType();
         $options = [
-                'include.' => ['pages' => '2,3'],
+            'include.' => ['pages' => '2,3'],
         ];
 
         $aRawData = ['uid' => 1, 'pid' => 1];
@@ -84,8 +85,8 @@ class tx_mksearch_tests_indexer_Base_DBTest extends tx_mksearch_tests_DbTestcase
         $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
         list($extKey, $cType) = $indexer->getContentType();
         $options = [
-                'include.' => ['pages.' => [2]],
-                'deleteIfNotIndexable' => 1,
+            'include.' => ['pages.' => [2]],
+            'deleteIfNotIndexable' => 1,
         ];
 
         $aRawData = ['uid' => 1, 'pid' => 1];
@@ -107,7 +108,7 @@ class tx_mksearch_tests_indexer_Base_DBTest extends tx_mksearch_tests_DbTestcase
         $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
         list($extKey, $cType) = $indexer->getContentType();
         $options = [
-                'exclude.' => ['pages.' => [2]],
+            'exclude.' => ['pages.' => [2]],
         ];
 
         $aRawData = ['uid' => 1, 'pid' => 1];
@@ -123,7 +124,7 @@ class tx_mksearch_tests_indexer_Base_DBTest extends tx_mksearch_tests_DbTestcase
         $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_tests_fixtures_indexer_Dummy');
         list($extKey, $cType) = $indexer->getContentType();
         $options = [
-                'exclude.' => ['pages' => '2,3'],
+            'exclude.' => ['pages' => '2,3'],
         ];
 
         $aRawData = ['uid' => 1, 'pid' => 1];

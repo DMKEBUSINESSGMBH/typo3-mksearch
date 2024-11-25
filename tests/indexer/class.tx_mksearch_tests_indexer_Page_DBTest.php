@@ -1,4 +1,5 @@
 <?php
+
 /***************************************************************
 *  Copyright notice
 *
@@ -272,11 +273,11 @@ class tx_mksearch_tests_indexer_Page_DBTest extends tx_mksearch_tests_DbTestcase
         list($extKey, $cType) = $indexer->getContentType();
         $indexDoc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_IndexerDocumentBase', $extKey, $cType);
         $options = ['mapping.' => [
-                'title' => 'title_s',
-                'abstract' => 'abstract_s',
-                'doktype' => 'doktype_i',
-                'emptyDummyField' => 'emptyDummyField_s',
-            ],
+            'title' => 'title_s',
+            'abstract' => 'abstract_s',
+            'doktype' => 'doktype_i',
+            'emptyDummyField' => 'emptyDummyField_s',
+        ],
         ];
 
         $aRawData = ['uid' => 1, 'title' => 'testPage', 'abstract' => '<a href="http://www.test.de">test</a> test page for tests :-D', 'doktype' => 2];

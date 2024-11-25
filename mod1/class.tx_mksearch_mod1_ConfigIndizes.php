@@ -40,10 +40,10 @@ class tx_mksearch_mod1_ConfigIndizes extends \Sys25\RnBase\Backend\Module\Extend
     protected function getSubMenuItems()
     {
         return [
-                \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_mod1_handler_Index'),
-                \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_mod1_handler_Composite'),
-                \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_mod1_handler_IndexerConfig'),
-            ];
+            \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_mod1_handler_Index'),
+            \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_mod1_handler_Composite'),
+            \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_mod1_handler_IndexerConfig'),
+        ];
     }
 
     protected function makeSubSelectors(&$selStr)

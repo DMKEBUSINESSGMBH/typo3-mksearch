@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author Hannes Bochmann
  *
@@ -470,7 +471,7 @@ class tx_mksearch_tests_action_SearchSolrTest extends tx_mksearch_tests_Testcase
                 'actionLink.' => [
                     'useKeepVars' => 1,
                     'useKeepVars.' => [
-                            'add' => '::type=540',
+                        'add' => '::type=540',
                     ],
                     'noHash' => 1,
                 ],

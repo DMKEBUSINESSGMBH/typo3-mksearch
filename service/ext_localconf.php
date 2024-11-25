@@ -64,68 +64,68 @@ if (!defined('TYPO3')) {
     'mksearch',
     'tx_mksearch_indexer_internal_index',
     [
-            'title' => 'Index',
-            'description' => 'Service for indices',
-            'subtype' => 'int_index',
-            'available' => true,
-            'priority' => 50,
-            'quality' => 50,
-            'os' => '',
-            'exec' => '',
-            'classFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch').'service/internal/class.tx_mksearch_service_internal_Index.php',
-            'className' => 'tx_mksearch_service_internal_Index',
-        ]
+        'title' => 'Index',
+        'description' => 'Service for indices',
+        'subtype' => 'int_index',
+        'available' => true,
+        'priority' => 50,
+        'quality' => 50,
+        'os' => '',
+        'exec' => '',
+        'classFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch').'service/internal/class.tx_mksearch_service_internal_Index.php',
+        'className' => 'tx_mksearch_service_internal_Index',
+    ]
 );
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addService(
     'mksearch',
     'mksearch',
     'tx_mksearch_indexer_internal_composite',
     [
-            'title' => 'Indexer configuration composites',
-            'description' => 'Service for indexer configuration composites',
-            'subtype' => 'int_composite',
-            'available' => true,
-            'priority' => 50,
-            'quality' => 50,
-            'os' => '',
-            'exec' => '',
-            'classFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch').'service/internal/class.tx_mksearch_service_internal_Composite.php',
-            'className' => 'tx_mksearch_service_internal_Composite',
-        ]
+        'title' => 'Indexer configuration composites',
+        'description' => 'Service for indexer configuration composites',
+        'subtype' => 'int_composite',
+        'available' => true,
+        'priority' => 50,
+        'quality' => 50,
+        'os' => '',
+        'exec' => '',
+        'classFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch').'service/internal/class.tx_mksearch_service_internal_Composite.php',
+        'className' => 'tx_mksearch_service_internal_Composite',
+    ]
 );
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addService(
     'mksearch',
     'mksearch',
     'tx_mksearch_indexer_internal_config',
     [
-            'title' => 'Indexer configuration',
-            'description' => 'Service for indexer configurations',
-            'subtype' => 'int_config',
-            'available' => true,
-            'priority' => 50,
-            'quality' => 50,
-            'os' => '',
-            'exec' => '',
-            'classFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch').'service/internal/class.tx_mksearch_service_internal_Config.php',
-            'className' => 'tx_mksearch_service_internal_Config',
-        ]
+        'title' => 'Indexer configuration',
+        'description' => 'Service for indexer configurations',
+        'subtype' => 'int_config',
+        'available' => true,
+        'priority' => 50,
+        'quality' => 50,
+        'os' => '',
+        'exec' => '',
+        'classFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch').'service/internal/class.tx_mksearch_service_internal_Config.php',
+        'className' => 'tx_mksearch_service_internal_Config',
+    ]
 );
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addService(
     'mksearch',
     'mksearch',
     'tx_mksearch_service_internal_Keyword',
     [
-            'title' => 'Keyword Service',
-            'description' => 'Service for keywords',
-            'subtype' => 'keyword',
-            'available' => true,
-            'priority' => 50,
-            'quality' => 50,
-            'os' => '',
-            'exec' => '',
-            'classFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch').'service/internal/class.tx_mksearch_service_internal_Keyword.php',
-            'className' => 'tx_mksearch_service_internal_Keyword',
-        ]
+        'title' => 'Keyword Service',
+        'description' => 'Service for keywords',
+        'subtype' => 'keyword',
+        'available' => true,
+        'priority' => 50,
+        'quality' => 50,
+        'os' => '',
+        'exec' => '',
+        'classFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch').'service/internal/class.tx_mksearch_service_internal_Keyword.php',
+        'className' => 'tx_mksearch_service_internal_Keyword',
+    ]
 );
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addService(
@@ -133,17 +133,17 @@ if (!defined('TYPO3')) {
     'mksearch',
     'tx_mksearch_service_irfaq_Expert',
     [
-            'title' => 'Irfaq Expert Service',
-            'description' => 'Service for Irfaq Experts',
-            'subtype' => 'irfaq_expert',
-            'available' => true,
-            'priority' => 50,
-            'quality' => 50,
-            'os' => '',
-            'exec' => '',
-            'classFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch').'service/irfaq/class.tx_mksearch_service_irfaq_Expert.php',
-            'className' => 'tx_mksearch_service_irfaq_Expert',
-        ]
+        'title' => 'Irfaq Expert Service',
+        'description' => 'Service for Irfaq Experts',
+        'subtype' => 'irfaq_expert',
+        'available' => true,
+        'priority' => 50,
+        'quality' => 50,
+        'os' => '',
+        'exec' => '',
+        'classFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch').'service/irfaq/class.tx_mksearch_service_irfaq_Expert.php',
+        'className' => 'tx_mksearch_service_irfaq_Expert',
+    ]
 );
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addService(
@@ -151,17 +151,17 @@ if (!defined('TYPO3')) {
     'mksearch',
     'tx_mksearch_service_irfaq_Category',
     [
-            'title' => 'Irfaq Category Service',
-            'description' => 'Service for Irfaq Categories',
-            'subtype' => 'irfaq_category',
-            'available' => true,
-            'priority' => 50,
-            'quality' => 50,
-            'os' => '',
-            'exec' => '',
-            'classFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch').'service/irfaq/class.tx_mksearch_service_irfaq_Category.php',
-            'className' => 'tx_mksearch_service_irfaq_Category',
-        ]
+        'title' => 'Irfaq Category Service',
+        'description' => 'Service for Irfaq Categories',
+        'subtype' => 'irfaq_category',
+        'available' => true,
+        'priority' => 50,
+        'quality' => 50,
+        'os' => '',
+        'exec' => '',
+        'classFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch').'service/irfaq/class.tx_mksearch_service_irfaq_Category.php',
+        'className' => 'tx_mksearch_service_irfaq_Category',
+    ]
 );
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addService(
@@ -169,15 +169,15 @@ if (!defined('TYPO3')) {
     'mksearch',
     'tx_mksearch_service_irfaq_Question',
     [
-            'title' => 'Irfaq Question Service',
-            'description' => 'Service for Irfaq Questions',
-            'subtype' => 'irfaq_question',
-            'available' => true,
-            'priority' => 50,
-            'quality' => 50,
-            'os' => '',
-            'exec' => '',
-            'classFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch').'service/irfaq/class.tx_mksearch_service_irfaq_Question.php',
-            'className' => 'tx_mksearch_service_irfaq_Question',
-        ]
+        'title' => 'Irfaq Question Service',
+        'description' => 'Service for Irfaq Questions',
+        'subtype' => 'irfaq_question',
+        'available' => true,
+        'priority' => 50,
+        'quality' => 50,
+        'os' => '',
+        'exec' => '',
+        'classFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch').'service/irfaq/class.tx_mksearch_service_irfaq_Question.php',
+        'className' => 'tx_mksearch_service_irfaq_Question',
+    ]
 );
