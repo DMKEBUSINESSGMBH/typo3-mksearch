@@ -489,13 +489,13 @@ class tx_mksearch_service_engine_Solr extends \Sys25\RnBase\Typo3Wrapper\Service
         if (!$file) {
             throw new Exception('No filename found for binary document: '.(is_array($id) ? $id['value'] : '"no id given"'));
         }
-        $fileType = $options['file_type'];
-        $fileMimeType = $options['file_mime_type'];
-        $fileMimeSubtype = $options['file_mime_subtype'];
+        $fileType = $options['file_type'] ?? '';
+        $fileMimeType = $options['file_mime_type'] ?? '';
+        $fileMimeSubtype = $options['file_mime_subtype'] ?? '';
 
         // Zuerst nach Optionen für Filetype suchen
-        $params = $options['solr.']['indexOptions.'][$fileType.'.']['params.'];
-        $params = is_array($params) ? $params : $options['solr.']['indexOptions.']['params.'];
+        $params = $options['solr.']['indexOptions.'][$fileType.'.']['params.'] ?? null;
+        $params = is_array($params) ? $params : ($options['solr.']['indexOptions.']['params.'] ?? null);
         $params = is_array($params) ? $params : [];
 
         $solrMimeType = ($fileMimeType && $fileMimeSubtype) ? $fileMimeType.'/'.$fileMimeSubtype : 'application/octet-stream';
