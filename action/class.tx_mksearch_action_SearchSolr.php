@@ -334,8 +334,13 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
             'pointername' => $pointername,
         ];
 
-        $firstChar = $viewData->offsetGet('charpointer');
-        $firstChar = $firstChar ?: $configurations->getParameters()->offsetGet($pointername);
+        $firstChar = '';
+        if ($viewData->offsetExists('charpointer')) {
+            $firstChar = $viewData->offsetGet('charpointer');
+        }
+        if (!$firstChar && $configurations->getParameters()->offsetExists($pointername)) {
+            $firstChar = $configurations->getParameters()->offsetGet($pointername);
+        }
 
         $viewData->offsetSet('pagerData', $pagerData);
         $viewData->offsetSet('charpointer', $firstChar);
