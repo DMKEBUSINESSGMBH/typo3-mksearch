@@ -29,7 +29,7 @@ jobs:
         steps:
             -
                 name: "Checkout"
-                uses: "actions/checkout@v2"
+                uses: "actions/checkout@v4"
             -
                 name: "Setup PHP"
                 uses: "shivammathur/setup-php@v2"
@@ -45,7 +45,7 @@ jobs:
                 run: "echo \"::set-output name=directory::$(composer config cache-dir)\""
             -
                 name: "Cache dependencies installed with composer"
-                uses: "actions/cache@v2.0.0"
+                uses: "actions/cache@v4"
                 with:
                     path: "${{ steps.determine-composer-cache-directory.outputs.directory }}"
                     key: "php-${{ matrix.php-version }}-composer-${{ hashFiles('composer.lock') }}"
@@ -80,7 +80,7 @@ jobs:
         steps:
             -
                 name: "Checkout"
-                uses: "actions/checkout@v2"
+                uses: "actions/checkout@v4"
             -
                 name: "Setup PHP"
                 uses: "shivammathur/setup-php@v2"
@@ -96,7 +96,7 @@ jobs:
                 run: "echo \"::set-output name=directory::$(composer config cache-dir)\""
             -
                 name: "Cache dependencies installed with composer"
-                uses: "actions/cache@v2.0.0"
+                uses: "actions/cache@v4"
                 with:
                     path: "${{ steps.determine-composer-cache-directory.outputs.directory }}"
                     key: "php-${{ matrix.php-version }}-composer-${{ hashFiles('composer.lock') }}"
@@ -140,7 +140,7 @@ jobs:
         steps:
             -
                 name: "Checkout"
-                uses: "actions/checkout@v2"
+                uses: "actions/checkout@v4"
             -
                 name: "Setup PHP"
                 uses: "shivammathur/setup-php@v2"
@@ -156,7 +156,7 @@ jobs:
                 run: "echo \"::set-output name=directory::$(composer config cache-dir)\""
             -
                 name: "Cache dependencies installed with composer"
-                uses: "actions/cache@v2.0.0"
+                uses: "actions/cache@v4"
                 with:
                     path: "${{ steps.determine-composer-cache-directory.outputs.directory }}"
                     key: "php-${{ matrix.php-version }}-composer-${{ hashFiles('composer.lock') }}"
