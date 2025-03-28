@@ -1,6 +1,13 @@
 Changelog
 =========
 
+12.0.3
+-----
+
+- Use PSR12 as new coding standard
+- Some maintenance
+- Fix some undefined array key warnings
+
 12.0.2
 -----
 
