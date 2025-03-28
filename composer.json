@@ -111,7 +111,8 @@
             "@test:phpcompatibility:8.0",
             "@test:phpcompatibility:8.1",
             "@test:phpcompatibility:8.2",
-            "@test:phpcompatibility:8.3"
+            "@test:phpcompatibility:8.3",
+			"@test:phpcompatibility:8.4"
         ],
         "test:phpcompatibility:7.4": [
             "[ -e .Build/bin/phpcs ] || composer update",
@@ -133,6 +134,10 @@
             "[ -e .Build/bin/phpcs ] || composer update",
             ".Build/bin/phpcs --ignore=.Build/*,/Resources/Public/JavaScript/*,./Resources/Private/PHP/Elastica/Composer/elasticsearch/elasticsearch/src/Elasticsearch/Endpoints/Indices/Split.php -p . --standard=.Build/vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.3"
         ],
+		"test:phpcompatibility:8.4": [
+			"[ -e .Build/bin/phpcs ] || composer update",
+			".Build/bin/phpcs --ignore=.Build/*,/Resources/Public/JavaScript/*,./Resources/Private/PHP/Elastica/Composer/elasticsearch/elasticsearch/src/Elasticsearch/Endpoints/Indices/Split.php -p . --standard=.Build/vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.4"
+		],
         "test:phpstan": [
             "[ -e .Build/bin/phpstan ] || composer update --ansi",
             ".Build/bin/phpstan analyse -c phpstan.neon --memory-limit=512M --ansi"
