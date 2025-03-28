@@ -45,7 +45,6 @@
         "digedag/rn-base": "^1.17"
     },
     "require-dev": {
-        "digedag/rn-base": "@dev",
         "friendsofphp/php-cs-fixer": "^3.3",
         "georgringer/news": "*",
         "php-parallel-lint/php-parallel-lint": "^1.3",
