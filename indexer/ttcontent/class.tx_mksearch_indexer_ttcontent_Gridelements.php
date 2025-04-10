@@ -148,7 +148,8 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
         array $record,
         array $options
     ) {
-        tx_mksearch_util_Indexer::prepareTSFE($record['pid'], $options['lang'] ?? 0);
+        $pageIdOfRecord = $record['pid'];
+        tx_mksearch_util_Indexer::prepareTSFE($pageIdOfRecord, $options['lang'] ?? 0);
 
         $allowedCTypes = $this->getAllowedCTypes($options);
 
@@ -177,12 +178,37 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
             }
         }
 
+        // This is needed so the BackendConfigurationManager loads the TypoScript for the current tt_content
+        // record during it's rendering and not for the page that is selected in the BE page tree.
+        if (\Sys25\RnBase\Utility\TYPO3::isTYPO121OrHigher()) {
+            $originalRequest = $cObj->getRequest();
+            $configurationManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::class
+            );
+            $configurationManager->setRequest($originalRequest->withParsedBody(array_merge(
+                $originalRequest->getParsedBody(),
+                ['id' => $pageIdOfRecord]
+            )));
+        } else {
+            $originalPageId = $_POST['id'];
+            $_POST['id'] = $pageIdOfRecord;
+        }
+
         $cObj->start($record, 'tt_content');
 
         $content = $cObj->cObjGetSingle(
             $setup['tt_content.']['gridelements_pi1'],
             $setup['tt_content.']['gridelements_pi1.']
         );
+
+        // Make sure to reset the request/id so the configuration manager will load the TypoScript for the page that is
+        // selected in the BE page tree if it's needed after this point.
+        if (isset($originalRequest) && isset($configurationManager)) {
+            $configurationManager->setRequest($originalRequest);
+        }
+        if (isset($originalPageId)) {
+            $_POST['id'] = $originalPageId;
+        }
 
         return $content;
     }
