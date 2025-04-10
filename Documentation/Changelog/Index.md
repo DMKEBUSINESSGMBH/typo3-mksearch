@@ -1,6 +1,11 @@
 Changelog
 =========
 
+12.0.4
+-----
+
+- Load correct TypoScript during tt_content rendering
+
 12.0.3
 -----
 
