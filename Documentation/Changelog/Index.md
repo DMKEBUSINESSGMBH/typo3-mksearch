@@ -1,6 +1,11 @@
 Changelog
 =========
 
+12.0.5
+-----
+
+- Fix indexing in CLI context
+
 12.0.4
 -----
 

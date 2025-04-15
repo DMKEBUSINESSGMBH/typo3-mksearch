@@ -186,11 +186,11 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
                 \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::class
             );
             $configurationManager->setRequest($originalRequest->withParsedBody(array_merge(
-                $originalRequest->getParsedBody(),
+                $originalRequest->getParsedBody() ?? [],
                 ['id' => $pageIdOfRecord]
             )));
         } else {
-            $originalPageId = $_POST['id'];
+            $originalPageId = $_POST['id'] ?? null;
             $_POST['id'] = $pageIdOfRecord;
         }
 
