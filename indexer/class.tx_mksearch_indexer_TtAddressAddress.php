@@ -129,6 +129,7 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
         $indexDoc->addField('country_s', $rawData['country'], 'unindexed', $boost, 'string');
         $indexDoc->addField('fax_s', $rawData['fax'], 'unindexed', $boost, 'string');
         $indexDoc->addField('description_s', $rawData['description'], 'unindexed', $boost, 'text');
+        $indexDoc->addField('position_s', $rawData['position'], 'unindexed', $boost, 'string');
 
         // @TODO: adressgruppen integrieren!
         if (!empty($rawData['addressgroup'])) {
