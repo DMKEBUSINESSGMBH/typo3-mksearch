@@ -5,6 +5,7 @@ Changelog
 -----
 
 - Fix indexing of gridelements with data processing lib content element
+- Fix undefined array key warning
 
 12.0.5
 -----
