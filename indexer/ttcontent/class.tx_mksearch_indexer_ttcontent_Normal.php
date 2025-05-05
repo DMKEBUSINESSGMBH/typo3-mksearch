@@ -371,7 +371,7 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
             if (is_array($ctypes) && count($ctypes)) {
                 // Wenn das Element keines der definierten ContentTypen ist,
                 // NICHT indizieren
-                if (!in_array($sourceRecord['CType'], $ctypes)) {
+                if (!in_array($sourceRecord['CType'] ?? '', $ctypes)) {
                     return false;
                 }
             }
