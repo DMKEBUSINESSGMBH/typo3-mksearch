@@ -47,6 +47,7 @@
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.3",
         "georgringer/news": "*",
+		"gridelementsteam/gridelements": "*",
         "php-parallel-lint/php-parallel-lint": "^1.3",
         "phpcompatibility/php-compatibility": "^9.3.5",
         "phpunit/phpunit": "^9.6",

@@ -1,6 +1,11 @@
 Changelog
 =========
 
+12.0.6
+-----
+
+- Fix indexing of gridelements with data processing lib content element
+
 12.0.5
 -----
 

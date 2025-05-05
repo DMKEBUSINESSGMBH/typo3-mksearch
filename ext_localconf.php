@@ -86,3 +86,8 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry']['mksearch_index
 $GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'] .= ',no_search';
 
 require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch', 'Classes/Constants.php');
+
+if (TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('gridelements')) {
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][GridElementsTeam\Gridelements\DataProcessing\GridChildrenProcessor::class] =
+        ['className' => DMK\Mksearch\DataProcessing\GridChildrenProcessor::class];
+}

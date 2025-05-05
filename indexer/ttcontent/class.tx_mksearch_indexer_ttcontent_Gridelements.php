@@ -160,6 +160,13 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
             : $GLOBALS['TSFE']->tmpl->setup;
 
         if (is_array($allowedCTypes)) {
+            // This configuration is used in the overwrite for
+            // GridElementsTeam\Gridelements\DataProcessing\GridChildrenProcessor so we can exclude unwanted records
+            // when gridelements is used with data processing lib content element
+            $setup['tt_content.']['gridelements_pi1.']['includeCTypesInGridelementRendering.'] = $allowedCTypes;
+
+            // We remove TypoScript configuration for unwanted content types which is used when the old gridelements
+            // plugin is used.
             foreach ($setup['tt_content.'] as $currentCType => $conf) {
                 if ('key.' == $currentCType) {
                     continue;
@@ -200,7 +207,6 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
             $setup['tt_content.']['gridelements_pi1'],
             $setup['tt_content.']['gridelements_pi1.']
         );
-
         // Make sure to reset the request/id so the configuration manager will load the TypoScript for the page that is
         // selected in the BE page tree if it's needed after this point.
         if (isset($originalRequest) && isset($configurationManager)) {
