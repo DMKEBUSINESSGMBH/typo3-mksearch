@@ -23,6 +23,8 @@
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Psr\Http\Message\ServerRequestInterface;
+
 /**
  * Gridelements indexer.
  *
@@ -148,13 +150,42 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
         array $record,
         array $options
     ) {
-        $pageIdOfRecord = $record['pid'];
+        $pageIdOfRecord = (int) $record['pid'];
         tx_mksearch_util_Indexer::prepareTSFE($pageIdOfRecord, $options['lang'] ?? 0);
-
-        $allowedCTypes = $this->getAllowedCTypes($options);
 
         /** @var \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer $cObj */
         $cObj = $GLOBALS['TSFE']->cObj;
+        $setup = $this->getTypoScriptConfiguration($cObj, $options, $pageIdOfRecord);
+
+        // This is needed so the BackendConfigurationManager loads the TypoScript for the current tt_content
+        // record during it's rendering and not for the page that is selected in the BE page tree.
+        if (\Sys25\RnBase\Utility\TYPO3::isTYPO121OrHigher()) {
+            $originalRequest = $cObj->getRequest();
+            $originalPageId = null;
+        } else {
+            $originalPageId = $_POST['id'] ?? null;
+            $originalRequest = null;
+        }
+        $this->populatePageIdOfRecord($cObj, $pageIdOfRecord);
+
+        $cObj->start($record, 'tt_content');
+
+        $content = $cObj->cObjGetSingle(
+            $setup['tt_content.']['gridelements_pi1'],
+            $setup['tt_content.']['gridelements_pi1.']
+        );
+        $this->resetPopulatedPageIdOfRecord($originalRequest, $originalPageId);
+
+        return $content;
+    }
+
+    protected function getTypoScriptConfiguration(
+        \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer $cObj,
+        array $options,
+        int $pageIdOfRecord
+    ): array {
+        $allowedCTypes = $this->getAllowedCTypes($options);
+
         $setup = \Sys25\RnBase\Utility\TYPO3::isTYPO121OrHigher()
             ? $cObj->getRequest()->getAttribute('frontend.typoscript')->getSetupArray()
             : $GLOBALS['TSFE']->tmpl->setup;
@@ -183,40 +214,56 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
                 $frontendTypoScript->setSetupArray($setup);
                 $cObj->setRequest($cObj->getRequest()->withAttribute('frontend.typoscript', $frontendTypoScript));
             }
+
+            // Put in runtime cache for TYPO3\CMS\Extbase\Configuration\BackendConfigurationManager so
+            // includeCTypesInGridelementRendering is available at this point
+            \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Cache\CacheManager::class)->getCache(
+                'runtime'
+            )->set('extbase-backend-typoscript-pageId-'.$pageIdOfRecord, $setup);
         }
 
-        // This is needed so the BackendConfigurationManager loads the TypoScript for the current tt_content
-        // record during it's rendering and not for the page that is selected in the BE page tree.
+        return $setup;
+    }
+
+    /**
+     * This is needed so the BackendConfigurationManager loads the TypoScript for the current tt_content
+     * record during it's rendering and not for the page that is selected in the BE page tree.
+     */
+    protected function populatePageIdOfRecord(
+        \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer $cObj,
+        int $pageIdOfRecord
+    ): void {
         if (\Sys25\RnBase\Utility\TYPO3::isTYPO121OrHigher()) {
-            $originalRequest = $cObj->getRequest();
             $configurationManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
                 \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::class
             );
-            $configurationManager->setRequest($originalRequest->withParsedBody(array_merge(
-                $originalRequest->getParsedBody() ?? [],
+            $configurationManager->setRequest($cObj->getRequest()->withParsedBody(array_merge(
+                $cObj->getRequest()->getParsedBody() ?? [],
                 ['id' => $pageIdOfRecord]
             )));
         } else {
-            $originalPageId = $_POST['id'] ?? null;
             $_POST['id'] = $pageIdOfRecord;
         }
+    }
 
-        $cObj->start($record, 'tt_content');
-
-        $content = $cObj->cObjGetSingle(
-            $setup['tt_content.']['gridelements_pi1'],
-            $setup['tt_content.']['gridelements_pi1.']
-        );
+    /**
+     * Make sure to reset the request/id so the configuration manager will load the TypoScript for the page that is
+     * selected in the BE page tree if it's needed after this point.
+     */
+    protected function resetPopulatedPageIdOfRecord(
+        ?ServerRequestInterface $originalRequest,
+        ?int $originalPageId
+    ): void {
         // Make sure to reset the request/id so the configuration manager will load the TypoScript for the page that is
         // selected in the BE page tree if it's needed after this point.
-        if (isset($originalRequest) && isset($configurationManager)) {
+        if (\Sys25\RnBase\Utility\TYPO3::isTYPO121OrHigher()) {
+            $configurationManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::class
+            );
             $configurationManager->setRequest($originalRequest);
-        }
-        if (isset($originalPageId)) {
+        } else {
             $_POST['id'] = $originalPageId;
         }
-
-        return $content;
     }
 
     /**
