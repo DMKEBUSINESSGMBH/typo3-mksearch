@@ -142,6 +142,8 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
         $sContent = $this->getContentFromFields($rawData, $options['abstract.'] ?? []);
         $indexDoc->setAbstract('', 1);
 
+        $indexDoc->addField('group_s', $indexDoc->getPrimaryKey(true));
+
         // Hook to append indexer
         \Sys25\RnBase\Utility\Misc::callHook(
             'mksearch',

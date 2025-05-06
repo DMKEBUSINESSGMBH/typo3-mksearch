@@ -1,6 +1,11 @@
 Changelog
 =========
 
+12.0.7
+-----
+
+- Fix grouping tt_address results
+
 12.0.6
 -----
 
