@@ -1,27 +1,29 @@
 <?php
 
-/***************************************************************
-*  Copyright notice
-*
-*  (c) 2010 das Medienkombinat
-*  All rights reserved
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
+/*
+ * Copyright notice
+ *
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
+ *
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
+ *
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
+ *
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * This copyright notice MUST APPEAR in all copies of the script!
+ */
 
 use Sys25\RnBase\Frontend\Request\Parameters;
 use Sys25\RnBase\Frontend\Request\ParametersInterface;
@@ -63,16 +65,15 @@ class tx_mksearch_util_Filter
      * ### beim DisMaxRequestHandler darf hier nur ###PARAM_MKSEARCH_TERM### stehen!
      * term = contentType:* ###PARAM_MKSEARCH_TERM###
      *
-     * @param string                   $termTemplate
-     * @param ParametersInterface      $parameters
-     * @param \Sys25\RnBase\Configuration\Processor $configurations
-     * @param string                   $confId
+     * @param string                               $termTemplate
+     * @param ParametersInterface                  $parameters
+     * @param Sys25\RnBase\Configuration\Processor $configurations
      *
      * @return string
      */
-    public function parseTermTemplate($termTemplate, $parameters, $configurations, $confId)
+    public function parseTermTemplate($termTemplate, $parameters, $configurations, string $confId)
     {
-        $templateMarker = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_marker_General');
+        $templateMarker = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_marker_General');
         // Welche Extension-Parameter werden verwendet?
         $extQualifiers = $configurations->getKeyNames($confId.'params.');
         foreach ($extQualifiers as $qualifier) {
@@ -100,35 +101,34 @@ class tx_mksearch_util_Filter
      * Rendert Formularfelder. Derzeit kann man damit das Seiten-Limit und die Sortierung einstellen.
      *
      * @param string $template
-     * @param string $confId
-     * @param string $markerName
      *
      * @return string
      */
-    public function parseCustomFilters($template, \Sys25\RnBase\Configuration\Processor $configurations, $confId, $markerName = 'SEARCH_FILTER')
+    public function parseCustomFilters($template, Sys25\RnBase\Configuration\Processor $configurations, string $confId, string $markerName = 'SEARCH_FILTER')
     {
-        if (!\Sys25\RnBase\Frontend\Marker\BaseMarker::containsMarker($template, $markerName)) {
+        if (!Sys25\RnBase\Frontend\Marker\BaseMarker::containsMarker($template, $markerName)) {
             return $template;
         }
 
         $parameters = $configurations->getParameters();
         $formfields = $configurations->getKeyNames($confId.'formfields.');
 
-        if (!is_array($formfields) || empty($formfields)) {
+        if (!is_array($formfields) || [] === $formfields) {
             return $template;
         }
 
         $markArray = [];
         /* @var $listBuilder \Sys25\RnBase\Frontend\Marker\ListBuilder */
-        $listBuilder = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Frontend\Marker\ListBuilder::class);
+        $listBuilder = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(Sys25\RnBase\Frontend\Marker\ListBuilder::class);
         foreach ($formfields as $field) {
             $fieldMarker = $markerName.'_'.strtoupper($field);
             $fieldConfId = $confId.'formfields.'.$field.'.';
-            if (!\Sys25\RnBase\Frontend\Marker\BaseMarker::containsMarker($template, $fieldMarker)) {
+            if (!Sys25\RnBase\Frontend\Marker\BaseMarker::containsMarker($template, $fieldMarker)) {
                 continue;
             }
+
             $activeMark = $configurations->get($fieldConfId.'activeMark', true);
-            $activeMark = '' == ''.$activeMark ? 'selected="selected"' : $activeMark;
+            $activeMark = '' === ''.$activeMark ? 'selected="selected"' : $activeMark;
             $fieldActive = $parameters->getCleaned($field);
             $markArray['###'.$fieldMarker.'_FORM_NAME###'] = $configurations->getQualifier().'['.$field.']';
             $markArray['###'.$fieldMarker.'_FORM_VALUE###'] = $fieldActive;
@@ -138,8 +138,8 @@ class tx_mksearch_util_Filter
                 foreach ($fieldValues as $value => $config) {
                     $fieldActive = empty($fieldActive) ? $configurations->get($fieldConfId.'default') : $fieldActive;
                     $fieldId = is_array($config) ? $config['value'] : $value;
-                    $fieldItems[] = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-                        \Sys25\RnBase\Domain\Model\BaseModel::class,
+                    $fieldItems[] = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                        Sys25\RnBase\Domain\Model\BaseModel::class,
                         [
                             'uid' => $fieldId,
                             'caption' => is_array($config) ? ($config['caption'] ?? '') : $config,
@@ -152,7 +152,7 @@ class tx_mksearch_util_Filter
                     $fieldItems,
                     false,
                     $template,
-                    \Sys25\RnBase\Frontend\Marker\SimpleMarker::class,
+                    Sys25\RnBase\Frontend\Marker\SimpleMarker::class,
                     $confId.'formfields.'.$field.'.',
                     $fieldMarker,
                     $configurations->getFormatter()
@@ -163,21 +163,22 @@ class tx_mksearch_util_Filter
         $formValues = ['term', 'place'];
         foreach ($formValues as $formField) {
             $formMarker = $markerName.'_'.strtoupper($formField);
-            if (!\Sys25\RnBase\Frontend\Marker\BaseMarker::containsMarker($template, $formMarker)) {
+            if (!Sys25\RnBase\Frontend\Marker\BaseMarker::containsMarker($template, $formMarker)) {
                 continue;
             }
+
             $markArray['###'.$formMarker.'_FORM_VALUE###'] = $parameters->getCleaned($formField);
         }
 
         if (
-            \Sys25\RnBase\Frontend\Marker\BaseMarker::containsMarker($template, $markerName.'_SPATIAL')
+            Sys25\RnBase\Frontend\Marker\BaseMarker::containsMarker($template, $markerName.'_SPATIAL')
             && method_exists($this, 'getSpatialPoint')
         ) {
             $markArray['###'.$markerName.'_SPATIAL_VALUE###'] = $this->getSpatialPoint();
         }
 
-        if (!empty($markArray)) {
-            $template = \Sys25\RnBase\Frontend\Marker\Templates::substituteMarkerArrayCached(
+        if ([] !== $markArray) {
+            return Sys25\RnBase\Frontend\Marker\Templates::substituteMarkerArrayCached(
                 $template,
                 $markArray
             );
@@ -187,21 +188,20 @@ class tx_mksearch_util_Filter
     }
 
     /**
-     * @param Parameters    $parameters
-     * @param \Sys25\RnBase\Configuration\Processor $configurations
-     * @param string                   $confId
-     * @param int                      $defaultValue
+     * @param Sys25\RnBase\Configuration\Processor $configurations
+     * @param int                                  $defaultValue
      */
-    public function getPageLimit(Parameters $parameters, $configurations, $confId, $defaultValue)
+    public function getPageLimit(Parameters $parameters, $configurations, string $confId, $defaultValue)
     {
         $pageLimit = $parameters->getInt('pagelimit');
         // Die möglichen Wert suchen
         $limitValues = [];
         $limits = $configurations->get($confId.'formfields.pagelimit.values.');
-        if (is_array($limits) && count($limits) > 0) {
+        if (is_array($limits) && [] !== $limits) {
             foreach ($limits as $cfg) {
                 $limitValues[] = $cfg['value'];
             }
+
             if (!in_array($pageLimit, $limitValues)) {
                 // Der Defaultwert kommt jetzt letztendlich aus dem Flexform
                 $pageLimit = $defaultValue;
@@ -209,6 +209,7 @@ class tx_mksearch_util_Filter
         } else {
             $pageLimit = $defaultValue;
         }
+
         if (-1 === $pageLimit) {
             // ein unset führt durch den default von 10 in Apache_Solr_Service::search nicht zum erfolg,
             // wir müssen zwingend ein limit setzen
@@ -227,25 +228,20 @@ class tx_mksearch_util_Filter
      * Fügt die Sortierung zu dem Filter hinzu.
      *
      * @TODO: das klappt zurzeit nur bei einfacher sortierung!
-     *
-     * @param array                 $options
-     * @param Parameters $parameters
-     *
-     * @return string
      */
-    public function getSortString(array &$options, Parameters $parameters)
+    public function getSortString(array &$options, Parameters $parameters): string
     {
         $sortString = '';
         // die parameter nach einer sortierung fragen
         $sort = trim((string) $parameters->get('sort'));
         // wurden keine parameter gefunden, nutzen wir den default des filters
-        $sort = $sort ? $sort : $this->sortField;
+        $sort = '' !== $sort && '0' !== $sort ? $sort : $this->sortField;
         if ($sort) {
-            list($sort, $sortOrder) = explode(' ', $sort);
+            [$sort, $sortOrder] = explode(' ', $sort);
             // wenn order nicht mit gesetzt wurde, aus den parametern holen
-            $sortOrder = $sortOrder ? $sortOrder : $parameters->get('sortorder');
+            $sortOrder = '' !== $sortOrder && '0' !== $sortOrder ? $sortOrder : $parameters->get('sortorder');
             // den default order nutzen!
-            $sortOrder = $sortOrder ? $sortOrder : $this->sortOrder;
+            $sortOrder = $sortOrder ?: $this->sortOrder;
             // sicherstellen, das immer desc oder asc gesetzt ist
             $sortOrder = ('desc' === strtolower($sortOrder)) ? 'desc' : 'asc';
             // wird beim parsetemplate benötigt
@@ -261,23 +257,22 @@ class tx_mksearch_util_Filter
     /**
      * Sortierungslinks bereitstellen.
      *
-     * @param string                    $template            HTML template
-     * @param array                     $markArray
-     * @param array                     $subpartArray
-     * @param array                     $wrappedSubpartArray
-     * @param \Sys25\RnBase\Frontend\Marker\FormatUtil $formatter
-     * @param string                    $confId
-     * @param string                    $marker
+     * @param string                                  $template     HTML template
+     * @param array                                   $markArray
+     * @param array                                   $subpartArray
+     * @param Sys25\RnBase\Frontend\Marker\FormatUtil $formatter
+     * @param string                                  $confId
+     * @param string                                  $marker
      */
     public function parseSortFields(
         $template,
         &$markArray,
         &$subpartArray,
-        &$wrappedSubpartArray,
+        array &$wrappedSubpartArray,
         $formatter,
         $confId,
-        $marker = 'FILTER'
-    ) {
+        $marker = 'FILTER',
+    ): void {
         $marker = 'SORT';
         $confId .= 'sort.';
         $configurations = $formatter->getConfigurations();
@@ -285,7 +280,7 @@ class tx_mksearch_util_Filter
         // die felder für die sortierung stehen kommasepariert im ts
         $sortFields = $configurations->get($confId.'fields');
 
-        $sortFields = $sortFields ? \Sys25\RnBase\Utility\Strings::trimExplode(',', $sortFields, true) : [];
+        $sortFields = $sortFields ? Sys25\RnBase\Utility\Strings::trimExplode(',', $sortFields, true) : [];
 
         if (!empty($sortFields)) {
             $token = md5(microtime());
@@ -296,8 +291,8 @@ class tx_mksearch_util_Filter
                 $markOrders[$field.'_order'] = $isField ? $this->sortOrder : '';
 
                 $fieldMarker = $marker.'_'.strtoupper($field).'_LINK';
-                $makeLink = \Sys25\RnBase\Frontend\Marker\BaseMarker::containsMarker($template, $fieldMarker);
-                $makeUrl = \Sys25\RnBase\Frontend\Marker\BaseMarker::containsMarker($template, $fieldMarker.'URL');
+                $makeLink = Sys25\RnBase\Frontend\Marker\BaseMarker::containsMarker($template, $fieldMarker);
+                $makeUrl = Sys25\RnBase\Frontend\Marker\BaseMarker::containsMarker($template, $fieldMarker.'URL');
                 // link generieren
                 if ($makeLink || $makeUrl) {
                     // sortierungslinks ausgeben
@@ -311,11 +306,13 @@ class tx_mksearch_util_Filter
                     if ($makeLink) {
                         $wrappedSubpartArray['###'.$fieldMarker.'###'] = explode($token, $link->makeTag());
                     }
+
                     if ($makeUrl) {
                         $markArray['###'.$fieldMarker.'URL###'] = $link->makeUrl(false);
                     }
                 }
             }
+
             // die sortOrders parsen
             $markOrders = $formatter->getItemMarkerArrayWrapped(
                 $markOrders,
@@ -336,43 +333,36 @@ class tx_mksearch_util_Filter
      *
      * @param string $sFq
      * @param array  $allowedFqParams
-     *
-     * @return string
      */
-    public function parseFqFieldAndValue($sFq, $allowedFqParams)
+    public function parseFqFieldAndValue($sFq, $allowedFqParams): string
     {
         if (empty($sFq) || empty($allowedFqParams)) {
             return '';
         }
 
         $filterQueryPartKeys = ['field', 'value'];
-        $filterQueryParts = \Sys25\RnBase\Utility\Strings::trimExplode(':', $sFq);
+        $filterQueryParts = Sys25\RnBase\Utility\Strings::trimExplode(':', $sFq);
 
         // die initiale fq muss aus $feldName:$feldWert bestehen. Das ist der alte Weg. Der neue Weg
         // der fq soll hier ignoriert werden.
         if (2 == count($filterQueryParts)) {
-            $matches = array_combine($filterQueryPartKeys, \Sys25\RnBase\Utility\Strings::trimExplode(':', $sFq));
+            $matches = array_combine($filterQueryPartKeys, Sys25\RnBase\Utility\Strings::trimExplode(':', $sFq));
         } else {
             $matches = [];
         }
 
-        if (// wurde das feld gefunden?
-            isset($matches['field']) && !empty($matches['field'])
-            // wurde der wert gefunden?
-            && isset($matches['value']) && !empty($matches['value'])
-            // das feld muss erlaubt sein!
-            && in_array($matches['field'], $allowedFqParams)
-            // werte reinigen
-            && ($field = tx_mksearch_util_Misc::sanitizeFq($matches['field']))
-            && ($term = tx_mksearch_util_Misc::sanitizeFq($matches['value']))
-        ) {
+        if (isset($matches['field']) && (isset($matches['field']) && ('' !== $matches['field'] && '0' !== $matches['field']))
+        // wurde der wert gefunden?
+        && isset($matches['value']) && (isset($matches['value']) && ('' !== $matches['value'] && '0' !== $matches['value']))
+        // das feld muss erlaubt sein!
+        && in_array($matches['field'], $allowedFqParams)
+        // werte reinigen
+        && ($field = tx_mksearch_util_Misc::sanitizeFq($matches['field']))
+        && ($term = tx_mksearch_util_Misc::sanitizeFq($matches['value']))) {
             // fq wieder zusammensetzen
-            $sFq = $field.':"'.$term.'"';
-        } // kein feld und oder wert gefunden oder feld nicht erlaubt, wir lassen den qs leer!
-        else {
-            $sFq = '';
+            return $field.':"'.$term.'"';
         }
 
-        return $sFq;
+        return '';
     }
 }

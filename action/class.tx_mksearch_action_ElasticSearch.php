@@ -1,10 +1,12 @@
 <?php
 
-/***************************************************************
+/*
  * Copyright notice
  *
- * (c) 2009-2020 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
+ *
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
  *
  * This script is part of the TYPO3 project. The TYPO3 project is
  * free software; you can redistribute it and/or modify
@@ -12,8 +14,8 @@
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
- * The GNU General Public License can be found at
- * http://www.gnu.org/copyleft/gpl.html.
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
  *
  * This script is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -21,7 +23,7 @@
  * GNU General Public License for more details.
  *
  * This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
+ */
 
 /**
  * Elastic search action.
@@ -33,7 +35,7 @@
  */
 class tx_mksearch_action_ElasticSearch extends tx_mksearch_action_AbstractSearch
 {
-    public function handleRequest(\Sys25\RnBase\Frontend\Request\RequestInterface $request)
+    protected function handleRequest(Sys25\RnBase\Frontend\Request\RequestInterface $request)
     {
         $configurations = $request->getConfigurations();
         $parameters = $request->getParameters();
@@ -49,7 +51,6 @@ class tx_mksearch_action_ElasticSearch extends tx_mksearch_action_AbstractSearch
 
         $fields = [];
         $options = [];
-        $items = [];
 
         $searchResult = [];
         if ($filter->init($fields, $options)) {
@@ -86,37 +87,25 @@ class tx_mksearch_action_ElasticSearch extends tx_mksearch_action_AbstractSearch
     /**
      * @return string
      */
-    protected function getSearchSolrAction()
+    protected function getSearchSolrAction(): object
     {
-        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_action_SearchSolr');
+        return TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_action_SearchSolr');
     }
 
-    /**
-     * @return string
-     */
-    protected function getServiceRegistry()
+    protected function getServiceRegistry(): string
     {
         return 'tx_mksearch_util_ServiceRegistry';
     }
 
-    /**
-     * @param \Sys25\RnBase\Frontend\Request\ParametersInterface $parameters
-     * @param \Sys25\RnBase\Configuration\ConfigurationInterface $configurations
-     * @param string $confId
-     * @param ArrayObject $viewdata
-     * @param array $fields
-     * @param array $options
-     * @param tx_mksearch_service_engine_ElasticSearch $index
-     */
     public function handlePageBrowser(
-        \Sys25\RnBase\Frontend\Request\ParametersInterface $parameters,
-        \Sys25\RnBase\Configuration\ConfigurationInterface $configurations,
-        $confId,
+        Sys25\RnBase\Frontend\Request\ParametersInterface $parameters,
+        Sys25\RnBase\Configuration\ConfigurationInterface $configurations,
+        string $confId,
         ArrayObject $viewdata,
         array &$fields,
         array &$options,
-        tx_mksearch_service_engine_ElasticSearch $searchEngine
-    ) {
+        tx_mksearch_service_engine_ElasticSearch $searchEngine,
+    ): void {
         $typoScriptPathPageBrowser = $confId.'hit.pagebrowser.';
         if ((isset($options['limit']))
             && is_array($conf = $configurations->get($confId.'hit.pagebrowser.'))
@@ -124,13 +113,13 @@ class tx_mksearch_action_ElasticSearch extends tx_mksearch_action_AbstractSearch
             // PageBrowser initialisieren
             $pageBrowserId = $conf['pbid'] ?? 'search'.$configurations->getPluginId();
             /* @var $pageBrowser \Sys25\RnBase\Utility\PageBrowser */
-            $pageBrowser = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-                \Sys25\RnBase\Utility\PageBrowser::class,
+            $pageBrowser = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                Sys25\RnBase\Utility\PageBrowser::class,
                 $pageBrowserId
             );
 
             $listSize = 0;
-            if ($result = $searchEngine->getIndex()->count($fields['term'] ?? '')) {
+            if (($result = $searchEngine->getIndex()->count($fields['term'] ?? '')) !== 0) {
                 $listSize = $result;
             }
 
@@ -149,7 +138,7 @@ class tx_mksearch_action_ElasticSearch extends tx_mksearch_action_AbstractSearch
      *
      * @see \Sys25\RnBase\Frontend\Controller\AbstractAction::getTemplateName()
      */
-    public function getTemplateName()
+    protected function getTemplateName()
     {
         return 'elasticsearch';
     }
@@ -159,7 +148,7 @@ class tx_mksearch_action_ElasticSearch extends tx_mksearch_action_AbstractSearch
      *
      * @see \Sys25\RnBase\Frontend\Controller\AbstractAction::getViewClassName()
      */
-    public function getViewClassName()
+    protected function getViewClassName()
     {
         return 'tx_mksearch_view_Search';
     }

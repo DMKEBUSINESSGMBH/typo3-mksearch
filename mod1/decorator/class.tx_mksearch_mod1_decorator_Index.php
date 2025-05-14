@@ -1,27 +1,29 @@
 <?php
 
-/***************************************************************
- *  Copyright notice
+/*
+ * Copyright notice
  *
- *  (c) 2011 Michael Wagner <dev@dmk-ebusiness.de>
- *  All rights reserved
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
  *
- *  This script is part of the TYPO3 project. The TYPO3 project is
- *  free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
  *
- *  The GNU General Public License can be found at
- *  http://www.gnu.org/copyleft/gpl.html.
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
  *
- *  This script is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
  *
- *  This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * This copyright notice MUST APPEAR in all copies of the script!
+ */
 
 /**
  * Diese Klasse ist für die Darstellung von Indexer tabellen im Backend verantwortlich.
@@ -29,23 +31,10 @@
 class tx_mksearch_mod1_decorator_Index
 {
     /**
-     * @var \Sys25\RnBase\Backend\Module\IModule
+     * @param Sys25\RnBase\Backend\Module\IModule $mod
      */
-    protected $mod;
-
-    public function __construct($mod)
+    public function __construct(protected $mod)
     {
-        $this->mod = $mod;
-    }
-
-    /**
-     * Returns the module.
-     *
-     * @return \Sys25\RnBase\Backend\Module\IModule
-     */
-    private function getModule()
-    {
-        return $this->mod;
     }
 
     /**
@@ -64,30 +53,24 @@ class tx_mksearch_mod1_decorator_Index
                 if (!empty($item->getProperty('description'))) {
                     $ret .= '<br /><pre>'.$item->getProperty('description').'</pre>';
                 }
+
                 break;
             case 'engine':
-                switch ($value) {
-                    case 'zend_lucene':
-                        $ret = $GLOBALS['LANG']->sL('LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_indices_engine_zendlucene');
-                        break;
-                    case 'solr':
-                        $ret = $GLOBALS['LANG']->sL('LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_indices_engine_solr');
-                        break;
-                    case 'elasticsearch':
-                        $ret = $GLOBALS['LANG']->sL('LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_indices_engine_elasticsearch');
-                        break;
-                    default:
-                        $ret = $value;
-                }
+                $ret = match ($value) {
+                    'zend_lucene' => $GLOBALS['LANG']->sL('LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_indices_engine_zendlucene'),
+                    'solr' => $GLOBALS['LANG']->sL('LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_indices_engine_solr'),
+                    'elasticsearch' => $GLOBALS['LANG']->sL('LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_indices_engine_elasticsearch'),
+                    default => $value,
+                };
                 break;
             case 'composites':
                 $composites = tx_mksearch_util_ServiceRegistry::getIntCompositeService()->getByIndex($item);
                 /* @var $compositeDecorator tx_mksearch_mod1_decorator_Composite */
-                $compositeDecorator = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_mod1_decorator_Composite', $this->getModule());
+                $compositeDecorator = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_mod1_decorator_Composite', $this->mod);
                 $ret = $compositeDecorator->getCompositeInfos($composites, ['includeConfig' => 1]);
                 break;
             case 'actions':
-                $formtool = $this->getModule()->getFormTool();
+                $formtool = $this->mod->getFormTool();
                 // bearbeiten link
                 $ret .= $formtool->createEditLink($item->getTableName(), $item->getUid(), '');
                 // hide undhide link
@@ -105,15 +88,15 @@ class tx_mksearch_mod1_decorator_Index
     /**
      * @param array $items
      * @param array $options
-     *
-     * @return string
      */
-    public function getIndexInfos($items, $options = [])
+    public function getIndexInfos($items, $options = []): string
     {
+        $ret = [];
         foreach ($items as $item) {
             $ret[] = $this->getIndexInfo($item, $options);
         }
-        $ret = empty($ret) ? '###LABEL_NO_INDIZES###' : implode('</li><li class="hr"></li><li>', $ret);
+
+        $ret = [] === $ret ? '###LABEL_NO_INDIZES###' : implode('</li><li class="hr"></li><li>', $ret);
 
         return '<ul><li>'.$ret.'</li></ul>';
     }
@@ -121,12 +104,10 @@ class tx_mksearch_mod1_decorator_Index
     /**
      * @param tx_mksearch_model_internal_Composite $item
      * @param array                                $options
-     *
-     * @return string
      */
-    public function getIndexInfo(tx_mksearch_model_internal_Index $item, $options = [])
+    public function getIndexInfo(tx_mksearch_model_internal_Index $item, $options = []): string
     {
-        $formtool = $this->getModule()->getFormTool();
+        $formtool = $this->mod->getFormTool();
 
         $out = '';
         $out .= $formtool->createEditLink($item->getTableName(), $item->getUid(), '');

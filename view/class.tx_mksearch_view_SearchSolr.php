@@ -1,51 +1,50 @@
 <?php
 
-/***************************************************************
-*  Copyright notice
-*
-*  (c) 2011-2013 das Medienkombinat
-*  All rights reserved
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
+/*
+ * Copyright notice
+ *
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
+ *
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
+ *
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
+ *
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * This copyright notice MUST APPEAR in all copies of the script!
+ */
 
 /**
  * View class for displaying a list of solr search results.
  */
-class tx_mksearch_view_SearchSolr extends \Sys25\RnBase\Frontend\View\Marker\BaseView
+class tx_mksearch_view_SearchSolr extends Sys25\RnBase\Frontend\View\Marker\BaseView
 {
-    /**
-     * @var string
-     */
-    private $confId = '';
+    private string $confId = '';
 
     /**
-     * @var \Sys25\RnBase\Configuration\Processor
+     * @var Sys25\RnBase\Configuration\Processor
      */
     private $configurations;
 
-    public function render($view, \Sys25\RnBase\Frontend\Request\RequestInterface $request)
+    public function render($view, Sys25\RnBase\Frontend\Request\RequestInterface $request)
     {
         $this->confId = $request->getConfId();
 
         return parent::render($view, $request);
     }
 
-    protected function createOutput($template, \Sys25\RnBase\Frontend\Request\RequestInterface $request, $formatter)
+    protected function createOutput($template, Sys25\RnBase\Frontend\Request\RequestInterface $request, $formatter)
     {
         $viewData = $request->getViewContext();
         $configurations = $request->getConfigurations();
@@ -53,16 +52,16 @@ class tx_mksearch_view_SearchSolr extends \Sys25\RnBase\Frontend\View\Marker\Bas
 
         $items = $result ? $result['items'] : [];
         /* @var $listBuilder \Sys25\RnBase\Frontend\Marker\ListBuilder */
-        $listBuilder = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-            \Sys25\RnBase\Frontend\Marker\ListBuilder::class,
-            $viewData->offsetGet('filter') instanceof \Sys25\RnBase\Frontend\Marker\IListBuilderInfo ? $viewData->offsetGet('filter') : null
+        $listBuilder = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+            Sys25\RnBase\Frontend\Marker\ListBuilder::class,
+            $viewData->offsetGet('filter') instanceof Sys25\RnBase\Frontend\Marker\IListBuilderInfo ? $viewData->offsetGet('filter') : null
         );
 
         // wurden options für die markerklassen gesetzt?
         $markerParams = $viewData->offsetExists('markerParams') ? $viewData->offsetGet('markerParams') : [];
 
         $markerClass = $configurations->get($this->confId.'mainmarkerclass');
-        $markerClass = $markerClass ? $markerClass : 'tx_mksearch_marker_Search';
+        $markerClass = $markerClass ?: 'tx_mksearch_marker_Search';
 
         $out = $listBuilder->render(
             $items,
@@ -77,20 +76,19 @@ class tx_mksearch_view_SearchSolr extends \Sys25\RnBase\Frontend\View\Marker\Bas
 
         // noch die Facetten parsen wenn da
         $out = $this->handleFacets($out, $viewData, $configurations, $formatter, $listBuilder, $result);
-        $out = $this->handleSuggestions($out, $viewData, $configurations, $formatter, $listBuilder, $result);
 
-        return $out;
+        return $this->handleSuggestions($out, $viewData, $configurations, $formatter, $listBuilder, $result);
     }
 
     /**
      * Ausgabe von Suggestions für alternative Suchbegriffe.
      *
-     * @param string                     $template
-     * @param array_object               $viewData
-     * @param \Sys25\RnBase\Configuration\Processor   $configurations
-     * @param \Sys25\RnBase\Frontend\Marker\FormatUtil  $formatter
-     * @param \Sys25\RnBase\Frontend\Marker\ListBuilder $listBuilder
-     * @param array                      $result
+     * @param string                                   $template
+     * @param array_object                             $viewData
+     * @param Sys25\RnBase\Configuration\Processor     $configurations
+     * @param Sys25\RnBase\Frontend\Marker\FormatUtil  $formatter
+     * @param Sys25\RnBase\Frontend\Marker\ListBuilder $listBuilder
+     * @param array                                    $result
      *
      * @return string
      */
@@ -102,9 +100,9 @@ class tx_mksearch_view_SearchSolr extends \Sys25\RnBase\Frontend\View\Marker\Bas
             $suggestions = reset($suggestions);
         }
 
-        if (\Sys25\RnBase\Frontend\Marker\BaseMarker::containsMarker($template, 'SUGGESTIONS')) {
+        if (Sys25\RnBase\Frontend\Marker\BaseMarker::containsMarker($template, 'SUGGESTIONS')) {
             $markerClass = $configurations->get($this->confId.'suggestions.markerClass');
-            $markerClass = $markerClass ? $markerClass : \Sys25\RnBase\Frontend\Marker\SimpleMarker::class;
+            $markerClass = $markerClass ?: Sys25\RnBase\Frontend\Marker\SimpleMarker::class;
 
             $template = $listBuilder->render(
                 $suggestions,
@@ -123,12 +121,12 @@ class tx_mksearch_view_SearchSolr extends \Sys25\RnBase\Frontend\View\Marker\Bas
     /**
      * Kümmert sich um das Parsen der Facetten.
      *
-     * @param string                     $template
-     * @param array_object               $viewData
-     * @param \Sys25\RnBase\Configuration\Processor   $configurations
-     * @param \Sys25\RnBase\Frontend\Marker\FormatUtil  $formatter
-     * @param \Sys25\RnBase\Frontend\Marker\ListBuilder $listBuilder
-     * @param array                      $result
+     * @param string                                   $template
+     * @param array_object                             $viewData
+     * @param Sys25\RnBase\Configuration\Processor     $configurations
+     * @param Sys25\RnBase\Frontend\Marker\FormatUtil  $formatter
+     * @param Sys25\RnBase\Frontend\Marker\ListBuilder $listBuilder
+     * @param array                                    $result
      *
      * @return string
      */
@@ -140,10 +138,10 @@ class tx_mksearch_view_SearchSolr extends \Sys25\RnBase\Frontend\View\Marker\Bas
         $facets = (array) ($result['facets'] ?? []);
 
         // the old way!
-        if (\Sys25\RnBase\Frontend\Marker\BaseMarker::containsMarker($out, 'FACETS')) {
+        if (Sys25\RnBase\Frontend\Marker\BaseMarker::containsMarker($out, 'FACETS')) {
             // erstmal die Markerklasse holen
             $facetMarkerClass = $configurations->get($this->confId.'facet.markerClass');
-            $facetMarkerClass = $facetMarkerClass ? $facetMarkerClass : 'tx_mksearch_marker_Facet';
+            $facetMarkerClass = $facetMarkerClass ?: 'tx_mksearch_marker_Facet';
 
             // früher wurden alle facetten in einer liste nacheinander herausgerendert!
             // dies muss aus kompatibilitätsgründen beibehalten werden.
@@ -151,6 +149,7 @@ class tx_mksearch_view_SearchSolr extends \Sys25\RnBase\Frontend\View\Marker\Bas
             foreach ($facets as $group) {
                 $mergedFacets = array_merge($mergedFacets, $group->getItems());
             }
+
             $out = $listBuilder->render(
                 $mergedFacets,
                 $viewData,
@@ -163,8 +162,10 @@ class tx_mksearch_view_SearchSolr extends \Sys25\RnBase\Frontend\View\Marker\Bas
 
             // den alten zurücklink
             /* @var $baseMarker \Sys25\RnBase\Frontend\Marker\BaseMarker */
-            $baseMarker = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Frontend\Marker\BaseMarker::class);
-            $wrappedSubpartArray = $subpartArray = $markerArray = [];
+            $baseMarker = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(Sys25\RnBase\Frontend\Marker\BaseMarker::class);
+            $wrappedSubpartArray = [];
+            $subpartArray = [];
+            $markerArray = [];
             $baseMarker->initLink(
                 $markerArray,
                 $subpartArray,
@@ -176,7 +177,7 @@ class tx_mksearch_view_SearchSolr extends \Sys25\RnBase\Frontend\View\Marker\Bas
                 [],
                 $out
             );
-            $out = \Sys25\RnBase\Frontend\Marker\Templates::substituteMarkerArrayCached(
+            $out = Sys25\RnBase\Frontend\Marker\Templates::substituteMarkerArrayCached(
                 $out,
                 $markerArray,
                 $subpartArray,
@@ -185,10 +186,10 @@ class tx_mksearch_view_SearchSolr extends \Sys25\RnBase\Frontend\View\Marker\Bas
         }
 
         // wir geben die facetten grupiert aus.
-        if (\Sys25\RnBase\Frontend\Marker\BaseMarker::containsMarker($out, 'GROUPEDFACETS')) {
+        if (Sys25\RnBase\Frontend\Marker\BaseMarker::containsMarker($out, 'GROUPEDFACETS')) {
             // erstmal die Markerklasse holen
             $groupedMarkerClass = $configurations->get($this->confId.'groupedfacet.markerClass');
-            $groupedMarkerClass = $groupedMarkerClass ? $groupedMarkerClass : 'tx_mksearch_marker_GroupedFacet';
+            $groupedMarkerClass = $groupedMarkerClass ?: 'tx_mksearch_marker_GroupedFacet';
 
             $out = $listBuilder->render(
                 $facets,
@@ -207,9 +208,9 @@ class tx_mksearch_view_SearchSolr extends \Sys25\RnBase\Frontend\View\Marker\Bas
     /**
      * This method is called first.
      *
-     * @param \Sys25\RnBase\Configuration\Processor $configurations
+     * @param Sys25\RnBase\Configuration\Processor $configurations
      */
-    public function _init(\Sys25\RnBase\Configuration\ConfigurationInterface $configurations)
+    protected function _init(Sys25\RnBase\Configuration\ConfigurationInterface $configurations)
     {
         $this->configurations = &$configurations;
     }
@@ -222,15 +223,15 @@ class tx_mksearch_view_SearchSolr extends \Sys25\RnBase\Frontend\View\Marker\Bas
      *
      * @return string
      */
-    public function getMainSubpart(\Sys25\RnBase\Frontend\View\ContextInterface $viewData)
+    protected function getMainSubpart(Sys25\RnBase\Frontend\View\ContextInterface $viewData)
     {
         // Wir versuchen den Mainpart aus der viewdata zu holen.
         // Das kann der Fall sein, wenn der Mainpart im Filter oder einer eigenen Action gesetzt wurde.
         $mainSubpart = $viewData->offsetExists('mainsubpart') ? $viewData->offsetGet('mainsubpart') : null;
         // Wir holen uns den Mainpart vom Typoscript.
-        $mainSubpart = $mainSubpart ? $mainSubpart : $this->configurations->get($this->confId.'mainsubpart');
+        $mainSubpart = $mainSubpart ?: $this->configurations->get($this->confId.'mainsubpart');
 
         // Fallback, wenn kein Mainpart gesetzt wurde.
-        return $mainSubpart ? $mainSubpart : '###SEARCH###';
+        return $mainSubpart ?: '###SEARCH###';
     }
 }

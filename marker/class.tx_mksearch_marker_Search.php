@@ -1,44 +1,46 @@
 <?php
 
-/***************************************************************
-*  Copyright notice
-*
-*  (c) 2009-2017 das Medienkombinat
-*  All rights reserved
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
+/*
+ * Copyright notice
+ *
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
+ *
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
+ *
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
+ *
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * This copyright notice MUST APPEAR in all copies of the script!
+ */
 
 /**
  * Renders a search result.
  */
-class tx_mksearch_marker_Search extends \Sys25\RnBase\Frontend\Marker\SimpleMarker
+class tx_mksearch_marker_Search extends Sys25\RnBase\Frontend\Marker\SimpleMarker
 {
     /**
-     * @param string                      $template  HTML template
-     * @param tx_mksearch_model_SearchHit $item
-     * @param \Sys25\RnBase\Frontend\Marker\FormatUtil   $formatter Formatter to use
-     * @param string                      $confId    Path in TS config of the item, e. g. 'search.hit.'
-     * @param string                      $marker    name of marker, z.B. CLUB
-     *                                               Von diesem String hängen die entsprechenden weiteren Marker ab: ###CLUB_NAME###, ###COACH_ADDRESS_WEBSITE###
+     * @param string                                  $template  HTML template
+     * @param tx_mksearch_model_SearchHit             $item
+     * @param Sys25\RnBase\Frontend\Marker\FormatUtil $formatter Formatter to use
+     * @param string                                  $confId    Path in TS config of the item, e. g. 'search.hit.'
+     * @param string                                  $marker    name of marker, z.B. CLUB
+     *                                                           Von diesem String hängen die entsprechenden weiteren Marker ab: ###CLUB_NAME###, ###COACH_ADDRESS_WEBSITE###
      *
      * @return string das geparste Template
      */
-    public function parseTemplate($template, &$item, &$formatter, $confId, $marker = 'SEARCHRESULT')
+    public function parseTemplate($template, $item, $formatter, $confId, $marker = 'SEARCHRESULT')
     {
         if (!is_object($item)) {
             return '';
@@ -50,28 +52,27 @@ class tx_mksearch_marker_Search extends \Sys25\RnBase\Frontend\Marker\SimpleMark
         if ($this->containsMarker($template, $marker.'_EXTRAINFO')) {
             $template = $this->addInfo($template, $item, $formatter, $confId.'extrainfo.', $marker.'_EXTRAINFO');
         }
+
         // Fill MarkerArray
-        $unused = \Sys25\RnBase\Frontend\Marker\MarkerUtility::findUnusedAttributes($item, $template, $marker);
+        $unused = Sys25\RnBase\Frontend\Marker\MarkerUtility::findUnusedAttributes($item, $template, $marker);
         $initFields = $this->getInitFields($template, $item, $formatter, $confId, $marker);
         $markerArray = $formatter->getItemMarkerArrayWrapped($item->getProperty(), $confId, $unused, $marker.'_', $initFields);
-
         // subparts erzeugen
-        $subpartArray = $wrappedSubpartArray = [];
+        $subpartArray = [];
+        $wrappedSubpartArray = [];
         $this->prepareSubparts($wrappedSubpartArray, $subpartArray, $template, $item, $formatter, $confId, $marker);
 
-        $out = \Sys25\RnBase\Frontend\Marker\Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
-
-        return $out;
+        return Sys25\RnBase\Frontend\Marker\Templates::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
     }
 
     /**
-     * @param string                      $template  HTML template
-     * @param tx_mksearch_model_SearchHit $item
-     * @param \Sys25\RnBase\Frontend\Marker\FormatUtil   $formatter Formatter to use
-     * @param string                      $confId    Path in TS config of the item, e. g. 'search.hit.'
-     * @param string                      $marker    name of marker
+     * @param string                                  $template  HTML template
+     * @param tx_mksearch_model_SearchHit             $item
+     * @param Sys25\RnBase\Frontend\Marker\FormatUtil $formatter Formatter to use
+     * @param string                                  $confId    Path in TS config of the item, e. g. 'search.hit.'
+     * @param string                                  $marker    name of marker
      */
-    protected function prepareHit($template, $item, $formatter, $confId, $marker)
+    protected function prepareHit($template, Sys25\RnBase\Domain\Model\DataInterface $item, $formatter, string $confId, $marker)
     {
         $this->prepareItem($item, $formatter->getConfigurations(), $confId);
         $configurations = $formatter->getConfigurations();
@@ -79,10 +80,11 @@ class tx_mksearch_marker_Search extends \Sys25\RnBase\Frontend\Marker\SimpleMark
         $removeEmptyValues = $configurations->getBool($confId.'multiValuedGlue.removeEmptyValues');
         if ($configurations->getBool($confId.'multiValuedGlue.noTrim')) {
             $splitter = $configurations->get($confId.'multiValuedGlue.noTrim.splitChar');
-            $splitter = $splitter ? $splitter : '|';
+            $splitter = $splitter ?: '|';
             $glue = explode($splitter, $glue);
             $glue = $glue[1];
         }
+
         // wenn wir ein array haben, holen wir uns dazu eine
         // kommaseparierte Liste um damit einfach im FE arbeiten zu können
         foreach ($item as $field => $value) {
@@ -98,9 +100,11 @@ class tx_mksearch_marker_Search extends \Sys25\RnBase\Frontend\Marker\SimpleMark
                 if ($removeEmptyValues) {
                     $value = tx_mksearch_util_Misc::removeEmptyValues($value);
                 }
+
                 if ($configurations->getBool($confId.'multiValuedGlue.sort')) {
                     sort($value);
                 }
+
                 $item->setProperty($field, implode($glue, $value));
             }
         }
@@ -110,13 +114,11 @@ class tx_mksearch_marker_Search extends \Sys25\RnBase\Frontend\Marker\SimpleMark
      * Diese Methode ersetzt im HTML-Template der Marker ###..._EXTRAINFO###. Es wird dafür nach einem konfigurierten
      * Marker für den Typ des Logeintrages gesucht. Diesem wird dann ein passendes HTML-Template übergeben.
      *
-     * @param string                    $template
-     * @param tx_mksearch_model_SolrHit $item
-     * @param \Sys25\RnBase\Frontend\Marker\FormatUtil $formatter
-     * @param string                    $confId
-     * @param string                    $markerPrefix
+     * @param string                                  $template
+     * @param tx_mksearch_model_SolrHit               $item
+     * @param Sys25\RnBase\Frontend\Marker\FormatUtil $formatter
      */
-    protected function addInfo($template, $item, $formatter, $confId, $markerPrefix)
+    protected function addInfo($template, $item, $formatter, string $confId, string $markerPrefix)
     {
         $typeConfId = $confId.$item->getProperty('extKey').'.'.$item->getProperty('contentType').'.';
         $markerClass = $formatter->getConfigurations()->get($typeConfId.'markerClass');
@@ -128,14 +130,15 @@ class tx_mksearch_marker_Search extends \Sys25\RnBase\Frontend\Marker\SimpleMark
             if (!$subpartName) {
                 $subpartName = strtoupper($item->getProperty('extKey').'_'.$item->getProperty('contentType'));
             }
+
             try {
-                $typeTemplate = \Sys25\RnBase\Frontend\Marker\Templates::getSubpartFromFile($file, '###'.$subpartName.'###');
-                $marker = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($markerClass);
+                $typeTemplate = Sys25\RnBase\Frontend\Marker\Templates::getSubpartFromFile($file, '###'.$subpartName.'###');
+                $marker = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($markerClass);
                 // Ist es sinnvoll hier den Marker-Prefix nicht zu übergeben? Wenn man einen eigenen
                 // Marker verwendet, fällt man dadurch immer auf den Default zurück. Bei Wechsel des Markers
                 // muss also das Template angepasst werden...
                 $extraInfo = $marker->parseTemplate($typeTemplate, $item, $formatter, $typeConfId.'hit.');
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $extraInfo = sprintf('<!-- NO FILE OR SUBPART FOUND: %s -->', $e->getMessage());
             }
         } else {
@@ -144,23 +147,19 @@ class tx_mksearch_marker_Search extends \Sys25\RnBase\Frontend\Marker\SimpleMark
 
         $markerArray = ['###'.$markerPrefix.'###' => $extraInfo];
 
-        $template = \Sys25\RnBase\Frontend\Marker\Templates::substituteMarkerArrayCached($template, $markerArray);
-
-        return $template;
+        return Sys25\RnBase\Frontend\Marker\Templates::substituteMarkerArrayCached($template, $markerArray);
     }
 
     /**
      * Liefert alle Felder, welche im Template zwingend erforderlich sind.
      *
-     * @param string                      $template  HTML template
-     * @param tx_mksearch_model_SearchHit $item      search hit
-     * @param \Sys25\RnBase\Frontend\Marker\FormatUtil   $formatter
-     * @param string                      $confId    path of typoscript configuration
-     * @param string                      $marker    name of marker
-     *
-     * @return array
+     * @param string                                  $template  HTML template
+     * @param tx_mksearch_model_SearchHit             $item      search hit
+     * @param Sys25\RnBase\Frontend\Marker\FormatUtil $formatter
+     * @param string                                  $confId    path of typoscript configuration
+     * @param string                                  $marker    name of marker
      */
-    protected function getInitFields($template, $item, $formatter, $confId, $marker)
+    protected function getInitFields($template, $item, $formatter, string $confId, $marker): array
     {
         $fields = $formatter->getConfigurations()->get($confId.'initFields.');
 

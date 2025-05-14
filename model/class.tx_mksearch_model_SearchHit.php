@@ -1,27 +1,29 @@
 <?php
 
-/***************************************************************
-*  Copyright notice
-*
-*  (c) 2009 das Medienkombinat
-*  All rights reserved
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
+/*
+ * Copyright notice
+ *
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
+ *
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
+ *
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
+ *
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * This copyright notice MUST APPEAR in all copies of the script!
+ */
 
 /**
  * Model for search hits.
@@ -31,7 +33,7 @@
  * rn_base model. We use it anyway to keep all the remaining nice
  * functions like automatic marker filling etc.
  */
-class tx_mksearch_model_SearchHit extends \Sys25\RnBase\Domain\Model\BaseModel implements tx_mksearch_interface_SearchHit
+class tx_mksearch_model_SearchHit extends Sys25\RnBase\Domain\Model\BaseModel implements tx_mksearch_interface_SearchHit
 {
     /**
      * @var int
@@ -40,10 +42,8 @@ class tx_mksearch_model_SearchHit extends \Sys25\RnBase\Domain\Model\BaseModel i
 
     /**
      * Initialiaze model and fill it with data if provided.
-     *
-     * @param $rowOrUid
      */
-    public function init($rowOrUid = null)
+    protected function init($rowOrUid = null)
     {
         if (is_array($rowOrUid)) {
             $this->uid = $rowOrUid['uid'] ?? 0;
@@ -56,10 +56,9 @@ class tx_mksearch_model_SearchHit extends \Sys25\RnBase\Domain\Model\BaseModel i
     /**
      * Fill model with data.
      *
-     * @param array         $data
      * @param bool optional $merge Merge existing data with new data with precedence to the new data
      */
-    public function fillData(array $data, $merge = true)
+    public function fillData(array $data, $merge = true): void
     {
         if ($merge) {
             $this->setProperty(array_merge($this->getProperty(), $data));

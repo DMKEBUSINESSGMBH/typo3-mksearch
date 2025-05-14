@@ -1,0 +1,25 @@
+paths:
+    - Configuration
+    - static
+filePatterns:
+    - "*.typoscript"
+    - "*.tsconfig"
+    - "*.txt"
+excludePatterns:
+    - "protwords_*.txt"
+    - "dictionary_de.txt"
+    - "synonyms_de.txt"
+    - "stopwords_*.txt"
+sniffs:
+    - class: Indentation
+      parameters:
+          useSpaces: true
+          indentPerLevel: 4
+          indentConditions: true
+    - class: DeadCode
+    - class: OperatorWhitespace
+    - class: DuplicateAssignment
+    - class: EmptySection
+    - class: ConfigNoCache
+    - class: NestingConsistency
+    - class: RepeatingRValue

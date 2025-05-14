@@ -1,27 +1,29 @@
 <?php
 
-/***************************************************************
-*  Copyright notice
-*
-*  (c) 2009 das Medienkombinat
-*  All rights reserved
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
+/*
+ * Copyright notice
+ *
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
+ *
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
+ *
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
+ *
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * This copyright notice MUST APPEAR in all copies of the script!
+ */
 
 /**
  * Model for solr specific indexer fields.
@@ -32,8 +34,6 @@ class tx_mksearch_model_engineSpecific_solr_IndexerField extends tx_mksearch_mod
      * Return the field's value
      * FIXEME Wenn hier nacharbeiten notwendig sind, dann gehören die in die Engine-Implementierung bei der Übergabe der
      * Daten in den Indexer.
-     *
-     * @return mixed
      */
     /*
     public function getValue() {
@@ -74,11 +74,8 @@ class tx_mksearch_model_engineSpecific_solr_IndexerField extends tx_mksearch_mod
      *
      * Solr-specific: Set storage option "multiValued" if $value is an array.
      * // Note that the self::$_storageOption['boost'] may also be ... (???)
-     *
-     * @param mixed $value
-     * @param mixed $boost
      */
-    public function updateValue($value, $boost = 1.0)
+    public function updateValue($value, $boost = 1.0): void
     {
         parent::updateValue($value, $boost);
         parent::updateStorageOption('multiValued', is_array($value));
@@ -89,13 +86,14 @@ class tx_mksearch_model_engineSpecific_solr_IndexerField extends tx_mksearch_mod
      *
      * @return unknown
      */
-    public function getValuesWithBoost()
+    public function getValuesWithBoost(): array
     {
         $val = $this->getValue();
         $boost = $this->getBoost();
         if (!$this->getStorageOption('multiValued')) {
             return ['value' => $val, 'boost' => $boost];
         }
+
         // else
         $res = [];
         // so gibt es weniger Probleme bei Arrays wie array(0 => wert, 3 => wert, 5 => wert)
@@ -109,7 +107,7 @@ class tx_mksearch_model_engineSpecific_solr_IndexerField extends tx_mksearch_mod
         return $res;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return parent::__toString();
     }

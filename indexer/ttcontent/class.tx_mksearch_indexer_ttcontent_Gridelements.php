@@ -1,10 +1,12 @@
 <?php
 
-/***************************************************************
+/*
  * Copyright notice
  *
- * (c) 2016 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
+ *
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
  *
  * This script is part of the TYPO3 project. The TYPO3 project is
  * free software; you can redistribute it and/or modify
@@ -12,8 +14,8 @@
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
- * The GNU General Public License can be found at
- * http://www.gnu.org/copyleft/gpl.html.
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
  *
  * This script is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -21,7 +23,7 @@
  * GNU General Public License for more details.
  *
  * This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
+ */
 
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -37,18 +39,14 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
     /**
      * Sets the index doc to deleted if neccessary.
      *
-     * @param \Sys25\RnBase\Domain\Model\DataInterface                      $oModel
-     * @param tx_mksearch_interface_IndexerDocument $oIndexDoc
-     * @param array                                 $aOptions
-     *
-     * @return bool
+     * @param array $aOptions
      */
     // @codingStandardsIgnoreStart (interface/abstract mistake)
     protected function hasDocToBeDeleted(
-        \Sys25\RnBase\Domain\Model\DataInterface $oModel,
+        Sys25\RnBase\Domain\Model\DataInterface $oModel,
         tx_mksearch_interface_IndexerDocument $oIndexDoc,
-        $aOptions = []
-    ) {
+        $aOptions = [],
+    ): bool {
         // @codingStandardsIgnoreEnd
         // should the element be removed from the index?
         if (
@@ -71,29 +69,23 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
     /**
      * Sets the index doc to deleted if neccessary.
      *
-     * @param \Sys25\RnBase\Domain\Model\DataInterface                      $oModel
-     * @param tx_mksearch_interface_IndexerDocument $oIndexDoc
-     * @param array                                 $aOptions
-     *
-     * @return bool
+     * @param array $aOptions
      */
     // @codingStandardsIgnoreStart (interface/abstract mistake)
     protected function hasNonGridelementDocToBeDeleted(
-        \Sys25\RnBase\Domain\Model\DataInterface $oModel,
+        Sys25\RnBase\Domain\Model\DataInterface $oModel,
         tx_mksearch_interface_IndexerDocument $oIndexDoc,
-        $aOptions = []
-    ) {
+        $aOptions = [],
+    ): bool {
         // @codingStandardsIgnoreEnd
         return parent::hasDocToBeDeleted($oModel, $oIndexDoc, $aOptions);
     }
 
     /**
      * Adds the parent to index.
-     *
-     * @param \Sys25\RnBase\Domain\Model\DataInterface $oModel
      */
     protected function addGridelementsContainerToIndex(
-        \Sys25\RnBase\Domain\Model\DataInterface $oModel
+        Sys25\RnBase\Domain\Model\DataInterface $oModel,
     ) {
         // add the parent do index, so the changes are writen to index
         $indexSrv = tx_mksearch_util_ServiceRegistry::getIntIndexService();
@@ -105,16 +97,11 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
 
     /**
      * Get the content by CType.
-     *
-     * @param array $rawData
-     * @param array $options
-     *
-     * @return string
      */
     protected function getContentByContentType(
         array $rawData,
-        array $options
-    ) {
+        array $options,
+    ): string {
         if (!$this->isGridelement($rawData)) {
             return '';
         }
@@ -124,16 +111,12 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
 
     /**
      * Is the given record an gridelement?
-     *
-     * @param array $rawData
-     *
-     * @return bool
      */
     protected function isGridelement(
-        array $rawData
-    ) {
+        array $rawData,
+    ): bool {
         return
-            \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('gridelements')
+            TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('gridelements')
             && 'gridelements_pi1' == $rawData['CType']
         ;
     }
@@ -141,31 +124,20 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
     /**
      * Fetches the content of an grid element.
      *
-     * @param array $record
-     * @param array $options
-     *
      * @return string
      */
     protected function getGridelementElementContent(
         array $record,
-        array $options
+        array $options,
     ) {
         $pageIdOfRecord = (int) $record['pid'];
         tx_mksearch_util_Indexer::prepareTSFE($pageIdOfRecord, $options['lang'] ?? 0);
 
-        /** @var \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer $cObj */
+        /** @var TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer $cObj */
         $cObj = $GLOBALS['TSFE']->cObj;
         $setup = $this->getTypoScriptConfiguration($cObj, $options, $pageIdOfRecord);
-
-        // This is needed so the BackendConfigurationManager loads the TypoScript for the current tt_content
-        // record during it's rendering and not for the page that is selected in the BE page tree.
-        if (\Sys25\RnBase\Utility\TYPO3::isTYPO121OrHigher()) {
-            $originalRequest = $cObj->getRequest();
-            $originalPageId = null;
-        } else {
-            $originalPageId = $_POST['id'] ?? null;
-            $originalRequest = null;
-        }
+        $originalRequest = $cObj->getRequest();
+        $originalPageId = null;
         $this->populatePageIdOfRecord($cObj, $pageIdOfRecord);
 
         $cObj->start($record, 'tt_content');
@@ -180,15 +152,13 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
     }
 
     protected function getTypoScriptConfiguration(
-        \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer $cObj,
+        TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer $cObj,
         array $options,
-        int $pageIdOfRecord
+        int $pageIdOfRecord,
     ): array {
         $allowedCTypes = $this->getAllowedCTypes($options);
 
-        $setup = \Sys25\RnBase\Utility\TYPO3::isTYPO121OrHigher()
-            ? $cObj->getRequest()->getAttribute('frontend.typoscript')->getSetupArray()
-            : $GLOBALS['TSFE']->tmpl->setup;
+        $setup = $cObj->getRequest()->getAttribute('frontend.typoscript')->getSetupArray();
 
         if (is_array($allowedCTypes)) {
             // This configuration is used in the overwrite for
@@ -202,6 +172,7 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
                 if ('key.' == $currentCType) {
                     continue;
                 }
+
                 // Config der nicht definierten ContentTypen entfernen, damit
                 // Elemente nicht durch Gridelements gerendert werden
                 if (!in_array($currentCType, $allowedCTypes)) {
@@ -209,15 +180,13 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
                 }
             }
 
-            if (\Sys25\RnBase\Utility\TYPO3::isTYPO121OrHigher()) {
-                $frontendTypoScript = $cObj->getRequest()->getAttribute('frontend.typoscript');
-                $frontendTypoScript->setSetupArray($setup);
-                $cObj->setRequest($cObj->getRequest()->withAttribute('frontend.typoscript', $frontendTypoScript));
-            }
+            $frontendTypoScript = $cObj->getRequest()->getAttribute('frontend.typoscript');
+            $frontendTypoScript->setSetupArray($setup);
+            $cObj->setRequest($cObj->getRequest()->withAttribute('frontend.typoscript', $frontendTypoScript));
 
             // Put in runtime cache for TYPO3\CMS\Extbase\Configuration\BackendConfigurationManager so
             // includeCTypesInGridelementRendering is available at this point
-            \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Cache\CacheManager::class)->getCache(
+            TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(TYPO3\CMS\Core\Cache\CacheManager::class)->getCache(
                 'runtime'
             )->set('extbase-backend-typoscript-pageId-'.$pageIdOfRecord, $setup);
         }
@@ -230,20 +199,16 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
      * record during it's rendering and not for the page that is selected in the BE page tree.
      */
     protected function populatePageIdOfRecord(
-        \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer $cObj,
-        int $pageIdOfRecord
+        TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer $cObj,
+        int $pageIdOfRecord,
     ): void {
-        if (\Sys25\RnBase\Utility\TYPO3::isTYPO121OrHigher()) {
-            $configurationManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-                \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::class
-            );
-            $configurationManager->setRequest($cObj->getRequest()->withParsedBody(array_merge(
-                $cObj->getRequest()->getParsedBody() ?? [],
-                ['id' => $pageIdOfRecord]
-            )));
-        } else {
-            $_POST['id'] = $pageIdOfRecord;
-        }
+        $configurationManager = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+            TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::class
+        );
+        $configurationManager->setRequest($cObj->getRequest()->withParsedBody(array_merge(
+            $cObj->getRequest()->getParsedBody() ?? [],
+            ['id' => $pageIdOfRecord]
+        )));
     }
 
     /**
@@ -252,18 +217,14 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
      */
     protected function resetPopulatedPageIdOfRecord(
         ?ServerRequestInterface $originalRequest,
-        ?int $originalPageId
+        ?int $originalPageId,
     ): void {
         // Make sure to reset the request/id so the configuration manager will load the TypoScript for the page that is
         // selected in the BE page tree if it's needed after this point.
-        if (\Sys25\RnBase\Utility\TYPO3::isTYPO121OrHigher()) {
-            $configurationManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-                \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::class
-            );
-            $configurationManager->setRequest($originalRequest);
-        } else {
-            $_POST['id'] = $originalPageId;
-        }
+        $configurationManager = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+            TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::class
+        );
+        $configurationManager->setRequest($originalRequest);
     }
 
     /**

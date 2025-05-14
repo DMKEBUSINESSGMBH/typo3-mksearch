@@ -1,27 +1,30 @@
 <?php
 
-/***************************************************************
-*  Copyright notice
-*
-*  (c) 2010 René Nitzsche <dev@dmk-ebusiness.de>
-*  All rights reserved
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
+/*
+ * Copyright notice
+ *
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
+ *
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
+ *
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
+ *
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * This copyright notice MUST APPEAR in all copies of the script!
+ */
+
 define('FIELD_ITEMS', 'amountOfItems');
 
 /**
@@ -31,15 +34,15 @@ define('FIELD_ITEMS', 'amountOfItems');
  * @license         http://www.gnu.org/licenses/lgpl.html
  *                  GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_scheduler_IndexTaskAddFieldProvider implements \TYPO3\CMS\Scheduler\AdditionalFieldProviderInterface
+class tx_mksearch_scheduler_IndexTaskAddFieldProvider implements TYPO3\CMS\Scheduler\AdditionalFieldProviderInterface
 {
     /**
      * This method is used to define new fields for adding or editing a task
      * In this case, it adds an email field.
      *
-     * @param array                                                     $taskInfo:        reference to the array containing the info used in the add/edit form
-     * @param \TYPO3\CMS\Scheduler\Task\AbstractTask                    $task:            when editing, reference to the current task object. Null when adding.
-     * @param \TYPO3\CMS\Scheduler\Controller\SchedulerModuleController $schedulerModule: reference to the calling object (Scheduler's BE module)
+     * @param array                                                    $taskInfo:        reference to the array containing the info used in the add/edit form
+     * @param TYPO3\CMS\Scheduler\Task\AbstractTask                    $task:            when editing, reference to the current task object. Null when adding.
+     * @param TYPO3\CMS\Scheduler\Controller\SchedulerModuleController $schedulerModule: reference to the calling object (Scheduler's BE module)
      *
      * @return array Array containg all the information pertaining to the additional fields
      *               The array is multidimensional, keyed to the task class name and each field's id
@@ -49,7 +52,7 @@ class tx_mksearch_scheduler_IndexTaskAddFieldProvider implements \TYPO3\CMS\Sche
      *               ['cshKey']      => The CSH key for the field
      *               ['cshLabel']    => The code of the CSH label
      */
-    public function getAdditionalFields(array &$taskInfo, $task, \TYPO3\CMS\Scheduler\Controller\SchedulerModuleController $schedulerModule)
+    public function getAdditionalFields(array &$taskInfo, $task, TYPO3\CMS\Scheduler\Controller\SchedulerModuleController $schedulerModule)
     {
         $action = $schedulerModule->getCurrentAction();
         // Initialize extra field value
@@ -85,12 +88,12 @@ class tx_mksearch_scheduler_IndexTaskAddFieldProvider implements \TYPO3\CMS\Sche
      * This method checks any additional data that is relevant to the specific task
      * If the task class is not relevant, the method is expected to return true.
      *
-     * @param array                                                     $submittedData:   reference to the array containing the data submitted by the user
-     * @param \TYPO3\CMS\Scheduler\Controller\SchedulerModuleController $schedulerModule: reference to the calling object (Scheduler's BE module)
+     * @param array                                                    $submittedData:   reference to the array containing the data submitted by the user
+     * @param TYPO3\CMS\Scheduler\Controller\SchedulerModuleController $schedulerModule: reference to the calling object (Scheduler's BE module)
      *
      * @return bool True if validation was ok (or selected class is not relevant), false otherwise
      */
-    public function validateAdditionalFields(array &$submittedData, \TYPO3\CMS\Scheduler\Controller\SchedulerModuleController $schedulerModule)
+    public function validateAdditionalFields(array &$submittedData, TYPO3\CMS\Scheduler\Controller\SchedulerModuleController $schedulerModule)
     {
         return true;
     }
@@ -102,7 +105,7 @@ class tx_mksearch_scheduler_IndexTaskAddFieldProvider implements \TYPO3\CMS\Sche
      * @param array                           $submittedData: array containing the data submitted by the user
      * @param tx_mksearch_scheduler_IndexTask $task:          reference to the current task object
      */
-    public function saveAdditionalFields(array $submittedData, \TYPO3\CMS\Scheduler\Task\AbstractTask $task)
+    public function saveAdditionalFields(array $submittedData, TYPO3\CMS\Scheduler\Task\AbstractTask $task): void
     {
         $task->setAmountOfItems($submittedData[FIELD_ITEMS]);
     }

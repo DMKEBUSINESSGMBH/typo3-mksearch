@@ -1,29 +1,31 @@
 <?php
 
-use TYPO3\CMS\Core\Http\ServerRequestFactory;
+/*
+ * Copyright notice
+ *
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
+ *
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
+ *
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
+ *
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * This copyright notice MUST APPEAR in all copies of the script!
+ */
 
-/***************************************************************
-*  Copyright notice
-*
-*  (c) 2010 das Medienkombinat
-*  All rights reserved
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
+use TYPO3\CMS\Core\Http\ServerRequestFactory;
 
 class tx_mksearch_util_Indexer
 {
@@ -44,8 +46,6 @@ class tx_mksearch_util_Indexer
      * Liefert die UID des Datensatzes.
      *
      * @param string $tableName
-     * @param array  $rawData
-     * @param array  $options
      *
      * @return int
      *
@@ -53,20 +53,18 @@ class tx_mksearch_util_Indexer
      */
     public function getRecordsUid($tableName, array $rawData, array $options)
     {
-        return \Sys25\RnBase\Backend\Utility\TCA::getUid($tableName, $rawData);
+        return Sys25\RnBase\Backend\Utility\TCA::getUid($tableName, $rawData);
     }
 
     /**
      * Liefert eine Datumsfeld für Solr.
      *
      * @param string $date | insert "@" before timestamps
-     *
-     * @return string
      */
-    public function getDateTime($date)
+    public function getDateTime($date): string
     {
-        $dateTime = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('DateTime', $date, \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('DateTimeZone', 'GMT-0'));
-        $dateTime->setTimeZone(\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('DateTimeZone', 'UTC'));
+        $dateTime = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('DateTime', $date, TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('DateTimeZone', 'GMT-0'));
+        $dateTime->setTimeZone(TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('DateTimeZone', 'UTC'));
 
         return $dateTime->format('Y-m-d\TH:i:s\Z');
     }
@@ -74,29 +72,23 @@ class tx_mksearch_util_Indexer
     /**
      * Indexes all fields of the model according to the given mapping.
      *
-     * @param \Sys25\RnBase\Domain\Model\DataInterface                      $model
-     * @param array                                 $aMapping
-     * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @param string                                $prefix
-     * @param array                                 $options
-     * @param bool                                  $dontIndexHidden
-     *
-     * @return tx_mksearch_interface_IndexerDocument
+     * @param bool $dontIndexHidden
      */
     public function indexModelByMapping(
-        \Sys25\RnBase\Domain\Model\DataInterface $model,
+        Sys25\RnBase\Domain\Model\DataInterface $model,
         array $recordIndexMapping,
         tx_mksearch_interface_IndexerDocument $indexDoc,
-        $prefix = '',
+        string $prefix = '',
         array $options = [],
-        $dontIndexHidden = true
-    ) {
+        $dontIndexHidden = true,
+    ): tx_mksearch_interface_IndexerDocument {
         // get the record from the model, so the new rnbase models are supportet, who do not have access to ->record!
         $record = $model->getRecord();
         foreach ($recordIndexMapping as $recordKey => $indexDocKey) {
             if ($dontIndexHidden && $model->isHidden()) {
                 continue;
             }
+
             if (!empty($record[$recordKey]) || ($options['keepEmpty'] ?? false)) {
                 $indexDoc->addField(
                     $prefix.$indexDocKey,
@@ -114,22 +106,16 @@ class tx_mksearch_util_Indexer
      * and adds them as multivalue (array).
      *
      * @param array[\Sys25\RnBase\Domain\Model\DataInterface]               $model
-     * @param array                                 $aMapping
-     * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @param string                                $prefix
-     * @param array                                 $options
-     * @param bool                                  $dontIndexHidden
-     *
-     * @return tx_mksearch_interface_IndexerDocument
+     * @param bool $dontIndexHidden
      */
     public function indexArrayOfModelsByMapping(
         array $models,
         array $recordIndexMapping,
         tx_mksearch_interface_IndexerDocument $indexDoc,
-        $prefix = '',
+        string $prefix = '',
         array $options = [],
-        $dontIndexHidden = true
-    ) {
+        $dontIndexHidden = true,
+    ): tx_mksearch_interface_IndexerDocument {
         // collect values
         $tempIndexDoc = [];
         /* @var $model \Sys25\RnBase\Domain\Model\DataInterface */
@@ -137,13 +123,15 @@ class tx_mksearch_util_Indexer
             if (!$model) {
                 continue;
             }
+
             foreach ($recordIndexMapping as $recordKey => $indexDocKey) {
                 if ($dontIndexHidden && $model->isHidden()) {
                     continue;
                 }
+
                 if (!empty($model->getProperty($recordKey))) {
                     // Attributes can be commaseparated to index values into different fields
-                    $indexDocKeys = \Sys25\RnBase\Utility\Strings::trimExplode(',', $indexDocKey);
+                    $indexDocKeys = Sys25\RnBase\Utility\Strings::trimExplode(',', $indexDocKey);
                     foreach ($indexDocKeys as $indexDocKey) {
                         $value = $model->getProperty($recordKey);
                         $tempIndexDoc[$prefix.$indexDocKey][] = $this->doValueConversion($value, $indexDocKey, $model->getProperty(), $recordKey, $options);
@@ -153,10 +141,8 @@ class tx_mksearch_util_Indexer
         }
 
         // and now add the fields
-        if (!empty($tempIndexDoc)) {
-            foreach ($tempIndexDoc as $indexDocKey => $values) {
-                $indexDoc->addField($indexDocKey, $values);
-            }
+        foreach ($tempIndexDoc as $indexDocKey => $values) {
+            $indexDoc->addField($indexDocKey, $values);
         }
 
         return $indexDoc;
@@ -166,14 +152,12 @@ class tx_mksearch_util_Indexer
      * Handle fieldsConversion from indexer configuration.
      *
      * @param string $value
-     * @param string $indexDocKey
      * @param array  $rawData
      * @param string $sRecordKey
-     * @param array  $options
      *
      * @return array
      */
-    public function doValueConversion($value, $indexDocKey, $rawData, $sRecordKey, $options)
+    public function doValueConversion($value, string $indexDocKey, $rawData, $sRecordKey, array $options)
     {
         if (!(array_key_exists('fieldsConversion.', $options)
             && array_key_exists($indexDocKey.'.', $options['fieldsConversion.']))) {
@@ -188,10 +172,11 @@ class tx_mksearch_util_Indexer
             $offset = isset($cfg['unix2isodate_offset']) ? intval($cfg['unix2isodate_offset']) : 0;
             $value = tx_mksearch_util_Misc::getISODateFromTimestamp($value, $offset);
         }
+
         // stdWrap ausführen
-        \Sys25\RnBase\Utility\TYPO3::getTSFE(); // TSFE wird für cObj benötigt
+        Sys25\RnBase\Utility\TYPO3::getTSFE(); // TSFE wird für cObj benötigt
         /* @var $cObj TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer */
-        $cObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);
+        $cObj = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);
         $cObj->data = $rawData;
 
         if ($options['fieldsConversion.'][$indexDocKey]) {
@@ -201,9 +186,10 @@ class tx_mksearch_util_Indexer
         } else {
             $value = $cObj->stdWrap($value, $options['fieldsConversion.'][$indexDocKey.'.']);
         }
+
         // userFunc can return serialized strings to support arrays as return value
         if (false !== ($data = @unserialize($value))) {
-            $value = $data;
+            return $data;
         }
 
         return $value;
@@ -215,26 +201,25 @@ class tx_mksearch_util_Indexer
      * @TODO refactor to tx_mksearch_service_internal_Index::addModelsToIndex
      * @TODO remove static indexSrv cache
      *
-     * @param \Sys25\RnBase\Domain\Model\DataInterface $model
-     * @param string           $tableName
-     * @param bool             $prefer
-     * @param string           $resolver  class name of record resolver
-     * @param array            $data
-     * @param array            $options
+     * @param string $tableName
+     * @param bool   $prefer
+     * @param string $resolver  class name of record resolver
+     * @param array  $data
      */
     public function addModelToIndex(
-        \Sys25\RnBase\Domain\Model\DataInterface $model,
+        Sys25\RnBase\Domain\Model\DataInterface $model,
         $tableName,
         $prefer = false,
         $resolver = false,
         $data = false,
-        array $options = []
-    ) {
+        array $options = [],
+    ): void {
         static $indexSrv;
-        if ($model && $model->isValid()) {
+        if ($model->isValid()) {
             if (!$indexSrv) {
                 $indexSrv = $this->getInternalIndexService();
             }
+
             $indexSrv->addRecordToIndex(
                 $tableName,
                 $model->getUid(),
@@ -264,7 +249,6 @@ class tx_mksearch_util_Indexer
      * @param bool   $prefer
      * @param string $resolver  class name of record resolver
      * @param array  $data
-     * @param array  $options
      */
     public function addModelsToIndex(
         $models,
@@ -272,8 +256,8 @@ class tx_mksearch_util_Indexer
         $prefer = false,
         $resolver = false,
         $data = false,
-        array $options = []
-    ) {
+        array $options = [],
+    ): void {
         if (!empty($models)) {
             foreach ($models as $model) {
                 $this->addModelToIndex(
@@ -296,16 +280,15 @@ class tx_mksearch_util_Indexer
      * for the include option returning true means no option set or we have a hit
      * for the exclude option returning true means no option was set or we have no hit.
      *
-     * @param array $models  | array of models
-     * @param array $options
-     * @param int   $mode    | 0 stands for "include" and 1 "exclude"
+     * @param array $models | array of models
+     * @param int   $mode   | 0 stands for "include" and 1 "exclude"
      *
      * @return bool
      *
      * @todo move function to a helper class as the method has nothing to do
      * with actual indexing. it's just a helper.
      */
-    public function checkInOrExcludeOptions($models, $options, $mode = 0, $optionKey = 'categories')
+    public function checkInOrExcludeOptions($models, array $options, $mode = 0, string $optionKey = 'categories')
     {
         // set base returns depending on the mode
         switch ($mode) {
@@ -366,23 +349,20 @@ class tx_mksearch_util_Indexer
      * illustriert werden.
      *
      * @param array $sourceRecord
-     * @param array $options
      *
      * @return bool
      */
-    public function isOnIndexablePage($sourceRecord, $options)
+    public function isOnIndexablePage($sourceRecord, array $options)
     {
         $pid = $sourceRecord['pid'] ?? 0;
         $includePages = $this->getConfigValue('pages', $options['include.'] ?? []);
 
         if (in_array($pid, $includePages)) {
             $isOnIndexablePage = true;
+        } elseif ($isOfflineVersion = (-1 == $pid)) {
+            $isOnIndexablePage = false;
         } else {
-            if ($isOfflineVersion = (-1 == $pid)) {
-                $isOnIndexablePage = false;
-            } else {
-                $isOnIndexablePage = $this->pageIsNotInIncludePages($pid, $options);
-            }
+            $isOnIndexablePage = $this->pageIsNotInIncludePages($pid, $options);
         }
 
         return $isOnIndexablePage;
@@ -392,8 +372,7 @@ class tx_mksearch_util_Indexer
      * entweder sind die include pages leer oder es wurde kein eintrag gefunden.
      * was der fall wird in.
      *
-     * @param int   $pid
-     * @param array $options
+     * @param int $pid
      *
      * @return bool
      */
@@ -403,14 +382,13 @@ class tx_mksearch_util_Indexer
 
         if (empty($includePageTrees)) {
             return $this->includePageTreesNotSet($pid, $options);
-        } else {
-            return $this->includePageTreesSet($pid, $options);
         }
+
+        return $this->includePageTreesSet($pid, $options);
     }
 
     /**
-     * @param int   $pid
-     * @param array $options
+     * @param int $pid
      *
      * @return bool
      */
@@ -420,14 +398,13 @@ class tx_mksearch_util_Indexer
 
         if (false !== $this->getFirstRootlineIndexInPageTrees($pid, $excludePageTrees)) {
             return false;
-        } else {
-            return $this->pageIsNotInExcludePageTrees($pid, $options);
         }
+
+        return $this->pageIsNotInExcludePageTrees($pid, $options);
     }
 
     /**
-     * @param int   $pid
-     * @param array $options
+     * @param int $pid
      *
      * @return bool
      */
@@ -437,18 +414,15 @@ class tx_mksearch_util_Indexer
             $includePages = $this->getConfigValue('pages', $options['include.'] ?? []);
 
             return empty($includePages);
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
-     * @param int   $pid
-     * @param array $options
-     *
-     * @return bool
+     * @param int $pid
      */
-    private function pageIsNotInExcludePages($pid, array $options)
+    private function pageIsNotInExcludePages($pid, array $options): bool
     {
         $excludePages = $this->getConfigValue('pages', $options['exclude.'] ?? []);
 
@@ -456,8 +430,7 @@ class tx_mksearch_util_Indexer
     }
 
     /**
-     * @param int   $pid
-     * @param array $options
+     * @param int $pid
      *
      * @return bool
      */
@@ -469,19 +442,18 @@ class tx_mksearch_util_Indexer
 
         if (false === $firstRootlineIndexInIncludePageTrees) {
             return false;
-        } else {
-            return $this->pageIsInIncludePageTrees($pid, $options, $firstRootlineIndexInIncludePageTrees);
         }
+
+        return $this->pageIsInIncludePageTrees($pid, $options, $firstRootlineIndexInIncludePageTrees);
     }
 
     /**
-     * @param int            $pid
-     * @param array          $options
+     * @param int $pid
      * @param int || boolean $firstRootlineIndexInIncludePageTrees
      *
      * @return bool
      */
-    private function pageIsInIncludePageTrees($pid, array $options, $firstRootlineIndexInIncludePageTrees)
+    private function pageIsInIncludePageTrees($pid, array $options, int|string $firstRootlineIndexInIncludePageTrees)
     {
         $excludePageTrees = $this->getConfigValue('pageTrees', $options['exclude.'] ?? []);
         $firstRootlineIndexInExcludePageTrees =
@@ -493,9 +465,9 @@ class tx_mksearch_util_Indexer
         )
         ) {
             return false;
-        } else {
-            return $this->pageIsNotInExcludePages($pid, $options);
         }
+
+        return $this->pageIsNotInExcludePages($pid, $options);
     }
 
     /**
@@ -504,13 +476,11 @@ class tx_mksearch_util_Indexer
      *
      * @param int $excludePageTreesIndex
      * @param int $includePageTreesIndex
-     *
-     * @return bool
      */
     private function isExcludePageTreeCloserToThePidThanAnIncludePageTree(
-        $excludePageTreesIndex,
-        $includePageTreesIndex
-    ) {
+        int|string|bool $excludePageTreesIndex,
+        int|string $includePageTreesIndex,
+    ): bool {
         return $excludePageTreesIndex > $includePageTreesIndex;
     }
 
@@ -520,7 +490,7 @@ class tx_mksearch_util_Indexer
      *
      * @return int the index in the rootline of the hit || boolean
      */
-    private function getFirstRootlineIndexInPageTrees($pid, $pageTrees)
+    private function getFirstRootlineIndexInPageTrees($pid, $pageTrees): int|string|false
     {
         $rootline = $this->getRootlineByPid($pid);
 
@@ -541,25 +511,23 @@ class tx_mksearch_util_Indexer
      * der index desto näher sind wir an der pid dran.
      *
      * @param int $pid
-     *
-     * @return array
      */
-    public function getRootlineByPid($pid)
+    public function getRootlineByPid($pid): array
     {
         try {
-            $rootlineUtility = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-                \TYPO3\CMS\Core\Utility\RootlineUtility::class,
+            $rootlineUtility = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                TYPO3\CMS\Core\Utility\RootlineUtility::class,
                 $pid
             );
 
             return $rootlineUtility->get();
-        } catch (\RuntimeException $ex) {
-            if (1343589451 === $ex->getCode()) {
+        } catch (RuntimeException $runtimeException) {
+            if (1343589451 === $runtimeException->getCode()) {
                 /* @see \TYPO3\CMS\Core\Utility\RootlineUtility::getRecordArray */
                 return [];
             }
 
-            throw $ex;
+            throw $runtimeException;
         }
     }
 
@@ -595,7 +563,7 @@ class tx_mksearch_util_Indexer
             return '';
         }
 
-        return \Sys25\RnBase\Utility\Misc::getPidList($rootPage['uid'], $recursive);
+        return Sys25\RnBase\Utility\Misc::getPidList($rootPage['uid'], $recursive);
     }
 
     /**
@@ -604,17 +572,16 @@ class tx_mksearch_util_Indexer
      * Dann wird geprüft ob test eine kommaseparierte Liste liegt
      * Ist das nicht der Fall wird noch geprüft ob test. ein array ist.
      *
-     * @param string $key
-     * @param array  $options
+     * @param array $options
      *
      * @return array
      */
-    public function getConfigValue($key, $options)
+    public function getConfigValue(string $key, $options)
     {
         $config = [];
         if (is_array($options)) {
             if (isset($options[$key]) && strlen(trim($options[$key]))) {
-                $config = \Sys25\RnBase\Utility\Strings::trimExplode(',', $options[$key]);
+                $config = Sys25\RnBase\Utility\Strings::trimExplode(',', $options[$key]);
             } elseif (isset($options[$key.'.']) && is_array($options[$key.'.'])) {
                 $config = $options[$key.'.'];
             }
@@ -627,15 +594,14 @@ class tx_mksearch_util_Indexer
      * Get's the page of the content element if it's not hidden/deleted.
      *
      * @param int $pid
-     *
-     * @return array
      */
-    public function getPageContent($pid, array $options = [])
+    public function getPageContent($pid, array $options = []): array
     {
         $pid = (int) $pid;
-        if (!$pid) {
+        if (0 === $pid) {
             return [];
         }
+
         // first of all we have to check if the page is not hidden/deleted
         $sqlOptions = [
             'where' => 'pages.uid='.$pid.' AND hidden=0 AND deleted=0',
@@ -643,9 +609,9 @@ class tx_mksearch_util_Indexer
             'limit' => 1,
         ];
         $from = ['pages', 'pages'];
-        $page = \Sys25\RnBase\Database\Connection::getInstance()->doSelect('*', $from, $sqlOptions)[0] ?? [];
+        $page = Sys25\RnBase\Database\Connection::getInstance()->doSelect('*', $from, $sqlOptions)[0] ?? [];
 
-        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Domain\Repository\PageRepository::class)
+        return TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(TYPO3\CMS\Core\Domain\Repository\PageRepository::class)
             ->getPageOverlay($page, $options['lang'] ?? 0);
     }
 
@@ -658,26 +624,23 @@ class tx_mksearch_util_Indexer
      * do something different like putting a record into the queue
      * if it's not the table that should be indexed
      *
-     * @param string                                $tableName
-     * @param array                                 $sourceRecord
-     * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @param array                                 $options
-     *
-     * @return bool
+     * @param string $tableName
+     * @param array  $sourceRecord
+     * @param array  $options
      */
     public function stopIndexing(
         $tableName,
         $sourceRecord,
         tx_mksearch_interface_IndexerDocument $indexDoc,
-        $options
-    ) {
+        $options,
+    ): bool {
         // Wir prüfen, ob die zu indizierende Sprache stimmt.
         $sysLanguageUidField = tx_mksearch_util_TCA::getLanguageFieldForTable($tableName);
         if (isset($sourceRecord[$sysLanguageUidField])) {
             // @TODO: getTransOrigPointerFieldForTable abprüfen, wenn $lang!=0 !
             $languages = [0];
             if (isset($options['lang'])) {
-                $languages = \Sys25\RnBase\Utility\Strings::intExplode(',', $options['lang'], true);
+                $languages = Sys25\RnBase\Utility\Strings::intExplode(',', $options['lang'], true);
             }
 
             // stop if not set to "All languages" and lang doesn't match
@@ -698,9 +661,9 @@ class tx_mksearch_util_Indexer
      * @param int $pid
      * @param int $sysLanguage
      */
-    public static function prepareTSFE($pid, $sysLanguage = 0)
+    public static function prepareTSFE($pid, $sysLanguage = 0): void
     {
-        $tsfe = \Sys25\RnBase\Utility\Misc::prepareTSFE(
+        $tsfe = Sys25\RnBase\Utility\Misc::prepareTSFE(
             [
                 'force' => true,
                 'pid' => $pid,
@@ -711,40 +674,38 @@ class tx_mksearch_util_Indexer
         );
 
         // add cobject for some plugins like tt_news
-        $tsfe->cObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-            \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class
+        $tsfe->cObj = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+            TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class
         );
 
         // disable cache for be indexing!
         $tsfe->no_cache = true;
 
         // load TypoScript templates
-        $context = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Context\Context::class);
+        $context = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(TYPO3\CMS\Core\Context\Context::class);
         if ($pid) {
             $rootlineByPid = self::getInstance()->getRootlineByPid((int) $pid);
 
             $tsfe->rootLine = $rootlineByPid;
-            $context->setAspect(
-                'typoscript',
-                \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-                    \TYPO3\CMS\Core\Context\TypoScriptAspect::class,
-                    true
-                )
-            );
-            $tsfe->id = $pid;
-            // @todo the if part can be removed when support for TYPO3 11 is dropped.
-            if (is_callable([$tsfe, 'getConfigArray'])) {
-                $tsfe->getConfigArray();
-            } else {
-                $GLOBALS['TYPO3_REQUEST'] = $tsfe->getFromCache($GLOBALS['TYPO3_REQUEST'] ?? ServerRequestFactory::fromGlobals());
+            if (!Sys25\RnBase\Utility\TYPO3::isTYPO130OrHigher()) {
+                $context->setAspect(
+                    'typoscript',
+                    TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                        TYPO3\CMS\Core\Context\TypoScriptAspect::class,
+                        true
+                    )
+                );
             }
+
+            $tsfe->id = $pid;
+            $GLOBALS['TYPO3_REQUEST'] = $tsfe->getFromCache($GLOBALS['TYPO3_REQUEST'] ?? ServerRequestFactory::fromGlobals());
         }
 
         // handle language
         $context->setAspect(
             'language',
-            \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-                \TYPO3\CMS\Core\Context\LanguageAspect::class,
+            TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                TYPO3\CMS\Core\Context\LanguageAspect::class,
                 $context->getAspect('language')->getId(),
                 intval($sysLanguage),
                 $context->getAspect('language')->getOverlayType(),

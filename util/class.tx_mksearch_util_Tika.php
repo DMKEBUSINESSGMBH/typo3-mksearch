@@ -1,56 +1,59 @@
 <?php
 
-/***************************************************************
-*  Copyright notice
-*
-*  (c) 2011 das Medienkombinat
-*  All rights reserved
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
+/*
+ * Copyright notice
+ *
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
+ *
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
+ *
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
+ *
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * This copyright notice MUST APPEAR in all copies of the script!
+ */
 
 /**
  * Tika controller class.
  */
 class tx_mksearch_util_Tika
 {
-    private static $instance;
+    private static ?tx_mksearch_util_Tika $instance = null;
+
     private $tikaJar;
-    private $tikaAvailable = -1;
+
+    private int $tikaAvailable = -1;
+
     private $tikaLocaleType;
 
-    /**
-     * @return tx_mksearch_util_Tika
-     */
-    public static function getInstance()
+    public static function getInstance(): tx_mksearch_util_Tika
     {
-        if (null === self::$instance) {
-            $tikaJar = \Sys25\RnBase\Configuration\Processor::getExtensionCfgValue(
+        if (!self::$instance instanceof tx_mksearch_util_Tika) {
+            $tikaJar = Sys25\RnBase\Configuration\Processor::getExtensionCfgValue(
                 'mksearch',
                 'tikaJar'
             );
             // check relative path to webroot.
-            if (is_file(\Sys25\RnBase\Utility\Environment::getPublicPath().$tikaJar)) {
+            if (is_file(Sys25\RnBase\Utility\Environment::getPublicPath().$tikaJar)) {
                 // Here are paths outside of the webroot allowed.
-                $tikaJar = \Sys25\RnBase\Utility\Environment::getPublicPath().$tikaJar;
+                $tikaJar = Sys25\RnBase\Utility\Environment::getPublicPath().$tikaJar;
             } else {
                 // Here only paths within the webroot and EXT:myext paths allowed.
-                $tikaJar = \Sys25\RnBase\Utility\Files::getFileAbsFileName($tikaJar, false);
+                $tikaJar = Sys25\RnBase\Utility\Files::getFileAbsFileName($tikaJar, false);
             }
+
             self::$instance = new tx_mksearch_util_Tika($tikaJar);
         }
 
@@ -60,7 +63,7 @@ class tx_mksearch_util_Tika
     private function __construct($tikaJar)
     {
         $this->setTikaJar($tikaJar);
-        $this->tikaLocaleType = \Sys25\RnBase\Configuration\Processor::getExtensionCfgValue(
+        $this->tikaLocaleType = Sys25\RnBase\Configuration\Processor::getExtensionCfgValue(
             'mksearch',
             'tikaLocaleType'
         );
@@ -71,31 +74,33 @@ class tx_mksearch_util_Tika
      *
      * @return bool
      */
-    public function isAvailable()
+    public function isAvailable(): bool|int
     {
         if (-1 != $this->tikaAvailable) {
-            return 1 == $this->tikaAvailable ? true : false;
+            return 1 == $this->tikaAvailable;
         }
+
         if (!is_file($this->tikaJar)) {
-            \Sys25\RnBase\Utility\Logger::warn('Tika Jar not found!', 'mksearch', ['Jar' => $this->tikaJar]);
+            Sys25\RnBase\Utility\Logger::warn('Tika Jar not found!', 'mksearch', ['Jar' => $this->tikaJar]);
             $this->tikaAvailable = 0;
 
             return $this->tikaAvailable;
         }
 
-        $commandUtilityClass = \TYPO3\CMS\Core\Utility\CommandUtility::class;
+        $commandUtilityClass = TYPO3\CMS\Core\Utility\CommandUtility::class;
         if (!$commandUtilityClass::checkCommand('java')) {
-            \Sys25\RnBase\Utility\Logger::warn('Java not found! Java is required to run Apache Tika.', 'mksearch');
+            Sys25\RnBase\Utility\Logger::warn('Java not found! Java is required to run Apache Tika.', 'mksearch');
             $this->tikaAvailable = 0;
 
             return $this->tikaAvailable;
         }
+
         $this->tikaAvailable = 1;
 
         return $this->tikaAvailable;
     }
 
-    private function setTikaJar($tikaJar)
+    private function setTikaJar($tikaJar): void
     {
         $this->tikaJar = $tikaJar;
     }
@@ -107,14 +112,14 @@ class tx_mksearch_util_Tika
      *
      * @see http://www.php.net/manual/de/function.escapeshellarg.php#99213
      */
-    private function setLocaleTypeForNonWindowsSystems()
+    private function setLocaleTypeForNonWindowsSystems(): void
     {
-        if (!\TYPO3\CMS\Core\Core\Environment::isWindows() && $this->tikaLocaleType) {
+        if (!TYPO3\CMS\Core\Core\Environment::isWindows() && $this->tikaLocaleType) {
             setlocale(LC_CTYPE, $this->tikaLocaleType);
         }
     }
 
-    private function resetLocaleType()
+    private function resetLocaleType(): void
     {
         setlocale(LC_CTYPE, '');
     }
@@ -126,13 +131,11 @@ class tx_mksearch_util_Tika
      * @param   string      Content type
      * @param   array       Configuration array
      *
-     * @return string
-     *
      * @throws Exception
      */
-    public function extractContent($file, &$tikaCommand = null)
+    public function extractContent($file, &$tikaCommand = null): string
     {
-        if (!$this->isAvailable()) {
+        if (in_array($this->isAvailable(), [false, 0], true)) {
             throw new Exception('Tika not available!');
         }
 
@@ -146,13 +149,11 @@ class tx_mksearch_util_Tika
      * @param   string      Content type
      * @param   array       Configuration array
      *
-     * @return string
-     *
      * @throws Exception
      */
-    public function extractLanguage($file)
+    public function extractLanguage($file): string
     {
-        if (!$this->isAvailable()) {
+        if (in_array($this->isAvailable(), [false, 0], true)) {
             throw new Exception('Tika not available!');
         }
 
@@ -164,26 +165,24 @@ class tx_mksearch_util_Tika
      *
      * @param   string file path
      *
-     * @return array
-     *
      * @throws Exception
      */
-    public function extractMetaData($file)
+    public function extractMetaData($file): array
     {
-        if (!$this->isAvailable()) {
+        if (in_array($this->isAvailable(), [false, 0], true)) {
             throw new Exception('Tika not available!');
         }
 
-        $absFile = self::checkFile($file);
+        $absFile = $this->checkFile($file);
 
         $this->setLocaleTypeForNonWindowsSystems();
 
-        $commandUtilityClass = \TYPO3\CMS\Core\Utility\CommandUtility::class;
+        $commandUtilityClass = TYPO3\CMS\Core\Utility\CommandUtility::class;
         $tikaCommand = $commandUtilityClass::getCommand('java')
             .' -Dfile.encoding=UTF8' // forces UTF8 output
             .' -jar '.escapeshellarg($this->tikaJar)
             .' -m '.escapeshellarg($absFile)
-            .' '.\Sys25\RnBase\Configuration\Processor::getExtensionCfgValue(
+            .' '.Sys25\RnBase\Configuration\Processor::getExtensionCfgValue(
                 'mksearch',
                 'postTikaCommandParameters'
             );
@@ -200,7 +199,7 @@ class tx_mksearch_util_Tika
             $splitLine = explode(':', $line, 2);
             $meta = $splitLine[0] ?? '';
             $value = $splitLine[1] ?? '';
-            if ($meta) {
+            if ('' !== $meta && '0' !== $meta) {
                 $ret[$meta] = trim($value);
             }
         }
@@ -210,22 +209,19 @@ class tx_mksearch_util_Tika
 
     /**
      * @param string $file
-     * @param string $tikaCmdType
-     *
-     * @return string
      */
-    private function shell_exec($file, $tikaCmdType, &$tikaCommand = null)
+    private function shell_exec($file, string $tikaCmdType, &$tikaCommand = null): string
     {
-        $absFile = self::checkFile($file);
+        $absFile = $this->checkFile($file);
 
         $this->setLocaleTypeForNonWindowsSystems();
 
-        $commandUtilityClass = \TYPO3\CMS\Core\Utility\CommandUtility::class;
+        $commandUtilityClass = TYPO3\CMS\Core\Utility\CommandUtility::class;
         $tikaCommand = $commandUtilityClass::getCommand('java')
             .' -Dfile.encoding=UTF-8' // forces UTF8 output
             .' -jar '.escapeshellarg($this->tikaJar)
             .' -'.$tikaCmdType.' '.escapeshellarg($absFile)
-            .' '.\Sys25\RnBase\Configuration\Processor::getExtensionCfgValue(
+            .' '.Sys25\RnBase\Configuration\Processor::getExtensionCfgValue(
                 'mksearch',
                 'postTikaCommandParameters'
             );
@@ -239,15 +235,10 @@ class tx_mksearch_util_Tika
         ));
     }
 
-    /**
-     * @param string $tikaCommand
-     *
-     * @return string
-     */
-    private function getTikaCommandWithLocaleTypePrefixForNonWindowsSystems($tikaCommand)
+    private function getTikaCommandWithLocaleTypePrefixForNonWindowsSystems(string $tikaCommand): string
     {
-        if (!\TYPO3\CMS\Core\Core\Environment::isWindows() && $this->tikaLocaleType) {
-            $tikaCommand = 'LANG='.$this->tikaLocaleType.' '.$tikaCommand;
+        if (!TYPO3\CMS\Core\Core\Environment::isWindows() && $this->tikaLocaleType) {
+            return 'LANG='.$this->tikaLocaleType.' '.$tikaCommand;
         }
 
         return $tikaCommand;
@@ -262,13 +253,14 @@ class tx_mksearch_util_Tika
      *
      * @throws Exception
      */
-    private static function checkFile($fName)
+    private function checkFile($fName)
     {
-        $absFile = \Sys25\RnBase\Utility\Files::getFileAbsFileName($fName);
-        $absFile = self::fixFilenameWithPossibleUmlautsForWindows($absFile);
-        if (!(\Sys25\RnBase\Utility\Files::isAllowedAbsPath($absFile) && @is_file($absFile))) {
+        $absFile = Sys25\RnBase\Utility\Files::getFileAbsFileName($fName);
+        $absFile = $this->fixFilenameWithPossibleUmlautsForWindows($absFile);
+        if (!(Sys25\RnBase\Utility\Files::isAllowedAbsPath($absFile) && @is_file($absFile))) {
             throw new Exception('File not found: '.$absFile);
         }
+
         if (!@is_readable($absFile)) {
             throw new Exception('File is not readable: '.$absFile);
         }
@@ -283,10 +275,10 @@ class tx_mksearch_util_Tika
      *
      * @return string
      */
-    private static function fixFilenameWithPossibleUmlautsForWindows($fileName)
+    private function fixFilenameWithPossibleUmlautsForWindows($fileName)
     {
-        if (\TYPO3\CMS\Core\Core\Environment::isWindows()) {
-            $fileName = utf8_decode($fileName);
+        if (TYPO3\CMS\Core\Core\Environment::isWindows()) {
+            return utf8_decode($fileName);
         }
 
         return $fileName;

@@ -1,10 +1,12 @@
 <?php
 
-/***************************************************************
+/*
  * Copyright notice
  *
- * (c) 2009-2018 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
+ *
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
  *
  * This script is part of the TYPO3 project. The TYPO3 project is
  * free software; you can redistribute it and/or modify
@@ -12,8 +14,8 @@
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
- * The GNU General Public License can be found at
- * http://www.gnu.org/copyleft/gpl.html.
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
  *
  * This script is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -21,9 +23,7 @@
  * GNU General Public License for more details.
  *
  * This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
-
-use Sys25\RnBase\Frontend\Request\ParametersInterface;
+ */
 
 /**
  * Solr search action.
@@ -40,7 +40,7 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
      */
     protected $autocompleteConfId = 'autocomplete.';
 
-    public function handleRequest(\Sys25\RnBase\Frontend\Request\RequestInterface $request)
+    protected function handleRequest(Sys25\RnBase\Frontend\Request\RequestInterface $request)
     {
         $configurations = $request->getConfigurations();
         $parameters = $request->getParameters();
@@ -66,12 +66,11 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
         $fields = [];
         $options = [];
 
-        if ($parameters->get('debug')) {
-            if (tx_mksearch_util_Misc::isDevIpMask()) {
-                $options['debug'] = 1;
-                $options['debugQuery'] = 'true';
-            }
+        if ($parameters->get('debug') && tx_mksearch_util_Misc::isDevIpMask()) {
+            $options['debug'] = 1;
+            $options['debugQuery'] = 'true';
         }
+
         $result = null;
         if ($filter->init($fields, $options)) {
             // wenn der DisMaxRequestHandler genutzt wird, verursacht *:* ein leeres Ergebnis.
@@ -95,7 +94,7 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
             }
         } // auch einen debug ausgeben, wenn nichts gesucht wird
         elseif ($options['debug'] ?? false) {
-            \Sys25\RnBase\Utility\Debug::debug(
+            Sys25\RnBase\Utility\Debug::debug(
                 [
                     'Filter returns false, no search done.',
                     $fields, $options,
@@ -103,6 +102,7 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
                 'class.tx_mksearch_action_SearchSolr.php Line: '.__LINE__
             );
         }
+
         $viewData->offsetSet('result', $result);
 
         return $this->processAutocomplete($request);
@@ -110,22 +110,18 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
 
     /**
      * Generiert den Cache-Schlüssel für die aktuelle Anfrage.
-     *
-     * @param array $fields
-     * @param array $options
-     *
-     * @return string
      */
     private function generateCacheKey(
         array $fields,
-        array $options = []
-    ) {
+        array $options = [],
+    ): string {
         $data = array_merge($fields, $options);
         ksort($data);
         foreach ($data as $key => $value) {
             if (is_array($value)) {
                 $value = $this->generateCacheKey($value);
             }
+
             $data[$key] = $key.$value;
         }
 
@@ -135,24 +131,22 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
     /**
      * Sucht in Solr.
      *
-     * @param array                            $fields
-     * @param array                            $options
-     * @param \Sys25\RnBase\Configuration\Processor         $configurations
-     * @param tx_mksearch_model_internal_Index $index
+     * @param array $options
      *
      * @return array|false
      */
-    protected function searchSolr(&$fields, &$options, \Sys25\RnBase\Frontend\Request\RequestInterface $request, $index)
+    protected function searchSolr(array &$fields, &$options, Sys25\RnBase\Frontend\Request\RequestInterface $request, tx_mksearch_model_internal_Index $index)
     {
         $configurations = $request->getConfigurations();
         // erstmal den cache fragen. Das ist vor allem interessant wenn
         // das plugin mehrfach auf einer Seite eingebunden wird. Dadurch
         // muss die Solr Suche nur einmal ausgeführt werden
-        $oCache = \Sys25\RnBase\Cache\CacheManager::getCache('mksearch');
+        $oCache = Sys25\RnBase\Cache\CacheManager::getCache('mksearch');
         $sCacheKey = $this->generateCacheKey($fields, $options);
         if ($result = $oCache->get($sCacheKey)) {
             return $result;
         }
+
         // else nix im cache also Solr suchen lassen
 
         try {
@@ -172,24 +166,26 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
                 $this->getConfId().'responseProcessor.'
             );
             $this->findCharBrowserData($result, $request);
-        } catch (Exception $e) {
-            $lastUrl = $e instanceof tx_mksearch_service_engine_SolrException ? $e->getLastUrl() : '';
+        } catch (Exception $exception) {
+            $lastUrl = $exception instanceof tx_mksearch_service_engine_SolrException ? $exception->getLastUrl() : '';
             // Da die Exception gefangen wird, würden die Entwickler keine Mail bekommen
             // also machen wir das manuell
-            if ($addr = \Sys25\RnBase\Configuration\Processor::getExtensionCfgValue('rn_base', 'sendEmailOnException')) {
-                \Sys25\RnBase\Utility\Misc::sendErrorMail($addr, 'tx_mksearch_action_SearchSolr_searchSolr', $e);
+            if ($addr = Sys25\RnBase\Configuration\Processor::getExtensionCfgValue('rn_base', 'sendEmailOnException')) {
+                Sys25\RnBase\Utility\Misc::sendErrorMail($addr, 'tx_mksearch_action_SearchSolr_searchSolr', $exception);
             }
-            if (\Sys25\RnBase\Utility\Logger::isFatalEnabled()) {
-                \Sys25\RnBase\Utility\Logger::fatal(
+
+            if (Sys25\RnBase\Utility\Logger::isFatalEnabled()) {
+                Sys25\RnBase\Utility\Logger::fatal(
                     'Solr search failed with Exception!',
                     'mksearch',
-                    ['Exception' => $e->getMessage(), 'fields' => $fields, 'options' => $options, 'URL' => $lastUrl]
+                    ['Exception' => $exception->getMessage(), 'fields' => $fields, 'options' => $options, 'URL' => $lastUrl]
                 );
             }
+
             if ($options['debug'] ?? false) {
-                \Sys25\RnBase\Utility\Debug::debug(
+                Sys25\RnBase\Utility\Debug::debug(
                     [
-                        'Exception' => $e->getMessage(),
+                        'Exception' => $exception->getMessage(),
                         'fields' => $fields,
                         'options' => $options,
                         'URL' => $lastUrl,
@@ -197,8 +193,9 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
                     'class.tx_mksearch_action_SearchSolr.php Line: '.__LINE__
                 );
             }
+
             if ($configurations->getBool($this->getConfId().'throwSolrSearchException')) {
-                throw $e;
+                throw $exception;
             }
 
             return false;
@@ -216,12 +213,9 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
      * Solr liefert bei einer Suchanfrage immer die Gesamtzahl der Treffer mit.
      * Somit ist eine spezielle Suche für die Trefferzahl nicht notwendig.
      *
-     * @param ParametersInterface      $parameters
-     * @param \Sys25\RnBase\Configuration\Processor $configurations
-     *
-     * @return \Sys25\RnBase\Utility\PageBrowser|null
+     * @return Sys25\RnBase\Utility\PageBrowser|null
      */
-    public function handlePageBrowser(\Sys25\RnBase\Frontend\Request\RequestInterface $request, $confId, &$fields, &$options, $index)
+    public function handlePageBrowser(Sys25\RnBase\Frontend\Request\RequestInterface $request, string $confId, &$fields, &$options, $index): ?object
     {
         $configurations = $request->getConfigurations();
         $parameters = $request->getParameters();
@@ -235,14 +229,14 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
             // PageBrowser initialisieren
             $pageBrowserId = $conf['pbid'] ?? 'search'.$configurations->getPluginId();
             /* @var $pageBrowser \Sys25\RnBase\Utility\PageBrowser */
-            $pageBrowser = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Utility\PageBrowser::class, $pageBrowserId);
+            $pageBrowser = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(Sys25\RnBase\Utility\PageBrowser::class, $pageBrowserId);
             // wenn bereits ein limit gesetzt ist, dann nutzen wir dieses, nicht das des pagebrowsers
-            $pageSize = isset($options['limit']) ? $options['limit'] : intval($conf['limit']);
+            $pageSize = $options['limit'] ?? intval($conf['limit']);
             if ($conf['limitFromRequest'] ?? false) {
                 $limitParam = $conf['limitFromRequest.']['param'] ?? 'limit';
                 $limitQualifier = $conf['limitFromRequest.']['qualifier'] ?? '';
                 $size = $parameters->getInt($limitParam, $limitQualifier);
-                $pageSize = $size ? $size : $pageSize;
+                $pageSize = $size ?: $pageSize;
 
                 // Wir schreiben das Limit in die Parameter, wenn diese noch nicht gesetzt wurden.
                 // Das wird Beispielsweise für Limit-Links benötigt,
@@ -253,16 +247,11 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
                 // @todo limit über setRegsiter setzen um im TS darauf zugreifen
                 // zu können. Dann werden hier auch nicht alle Parameter von
                 // anderen Plugins überschrieben
-                if (!$parameters->getInt($limitParam, $limitQualifier)) {
-                    $params = \Sys25\RnBase\Frontend\Request\Parameters::getPostOrGetParameter($limitQualifier);
-                    $params = $params ? $params : [];
-                    $params = array_merge([$limitParam => $pageSize], $params);
-                    \Sys25\RnBase\Frontend\Request\Parameters::setGetParameter($params, $limitQualifier);
-                    if ($limitQualifier == $parameters->getQualifier()) {
-                        $parameters->offsetSet($limitParam, $pageSize);
-                    }
+                if (!$parameters->getInt($limitParam, $limitQualifier) && $limitQualifier == $parameters->getQualifier()) {
+                    $parameters->offsetSet($limitParam, $pageSize);
                 }
             }
+
             // Für den Pagebrowser müssen wir wissen wie viel gefunden werden wird.
             // Dafür reicht uns der Count, also setzen wir limit auf 0 zwecks performanz.
             $aOptionsForCountOnly = $options;
@@ -274,6 +263,7 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
             if ($result = $this->searchSolr($fields, $aOptionsForCountOnly, $request, $index)) {
                 $listSize = $result['numFound'];
             }
+
             $pageBrowser->setState($parameters, $listSize, $pageSize);
             $state = $pageBrowser->getState();
 
@@ -291,10 +281,8 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
     /**
      * Extracts the charbrowser data from the facets
      * and fills the viewdata for the tempate output.
-     *
-     * @param array $result
      */
-    protected function findCharBrowserData(array &$result, \Sys25\RnBase\Frontend\Request\RequestInterface $request)
+    protected function findCharBrowserData(array &$result, Sys25\RnBase\Frontend\Request\RequestInterface $request)
     {
         if (empty($result['facets'] ?? null)) {
             return;
@@ -330,7 +318,7 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
 
         $pagerData = [
             'list' => $list,
-            'default' => empty($list) ? 0 : key($list),
+            'default' => [] === $list ? 0 : key($list),
             'pointername' => $pointername,
         ];
 
@@ -338,6 +326,7 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
         if ($viewData->offsetExists('charpointer')) {
             $firstChar = $viewData->offsetGet('charpointer');
         }
+
         if (!$firstChar && $configurations->getParameters()->offsetExists($pointername)) {
             $firstChar = $configurations->getParameters()->offsetGet($pointername);
         }
@@ -349,7 +338,7 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
     /**
      * Include the neccessary javascripts for the autocomplete feature.
      */
-    protected function prepareAutocomplete(\Sys25\RnBase\Frontend\Request\RequestInterface $request)
+    protected function prepareAutocomplete(Sys25\RnBase\Frontend\Request\RequestInterface $request)
     {
         $configurations = $request->getConfigurations();
         $autocompleteTsPath = $this->getConfId().$this->autocompleteConfId;
@@ -363,26 +352,26 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
         $jsScripts = [];
 
         if ($configurationArray['includeJquery']) {
-            $jsScripts[] = \TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName(
+            $jsScripts[] = TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName(
                 'EXT:mksearch/Resources/Public/JavaScript/jquery-1.6.2.min.js'
             );
         }
+
         if ($configurationArray['includeJqueryUiCore']) {
-            $jsScripts[] = \TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName(
+            $jsScripts[] = TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName(
                 'EXT:mksearch/Resources/Public/JavaScript/jquery-ui-1.8.15.core.min.js'
             );
         }
+
         if ($configurationArray['includeJqueryUiAutocomplete']) {
-            $jsScripts[] = \TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName(
+            $jsScripts[] = TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName(
                 'EXT:mksearch/Resources/Public/JavaScript/jquery-ui-1.8.15.autocomplete.min.js'
             );
         }
 
-        $pageRenderer = \Sys25\RnBase\Utility\TYPO3::getPageRenderer();
-        if (!empty($jsScripts)) {
-            foreach ($jsScripts as $javaScriptFilename) {
-                $pageRenderer->addJsLibrary($javaScriptFilename, $javaScriptFilename);
-            }
+        $pageRenderer = Sys25\RnBase\Utility\TYPO3::getPageRenderer();
+        foreach ($jsScripts as $javaScriptFilename) {
+            $pageRenderer->addJsLibrary($javaScriptFilename, $javaScriptFilename);
         }
 
         $link = tx_mksearch_util_SolrAutocomplete::getAutocompleteActionLinkByConfigurationsAndConfId(
@@ -397,23 +386,21 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
         );
 
         $javaScriptSnippetSuffix =
-            $configurations->get($this->getConfId().$this->autocompleteConfId.'javaScriptSnippetSuffix') ?
-                $configurations->get($this->getConfId().$this->autocompleteConfId.'javaScriptSnippetSuffix') :
-                $request->getConfigurations()->getPluginId();
+            $configurations->get($this->getConfId().$this->autocompleteConfId.'javaScriptSnippetSuffix') ?: $request->getConfigurations()->getPluginId();
         $pageRenderer->addJsFooterInlineCode('mksearch_autocomplete_'.$javaScriptSnippetSuffix, $autocompleteJS);
     }
 
     /**
      * Process a autocomplete call and return the json directly!
      */
-    protected function processAutocomplete(\Sys25\RnBase\Frontend\Request\RequestInterface $request)
+    protected function processAutocomplete(Sys25\RnBase\Frontend\Request\RequestInterface $request)
     {
         // shall we parse the content just as json
         if ($request->getParameters()->get('ajax')) {
             // if the frontend debug is enabled, so the json will be invalid.
             // so we has to disable the debug.
             $GLOBALS['TYPO3_CONF_VARS']['FE']['debug'] = 0;
-            $tsfe = \Sys25\RnBase\Utility\TYPO3::getTSFE();
+            $tsfe = Sys25\RnBase\Utility\TYPO3::getTSFE();
             $tsfe->config['config']['debug'] = 0;
 
             $result = $request->getViewContext()->offsetGet('result');
@@ -421,14 +408,16 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
 
             return json_encode(array_diff_key($result, $forbiddenResultItems));
         }
+
+        return null;
     }
 
-    public function getTemplateName()
+    protected function getTemplateName()
     {
         return 'searchsolr';
     }
 
-    public function getViewClassName()
+    protected function getViewClassName()
     {
         return 'tx_mksearch_view_SearchSolr';
     }

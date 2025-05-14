@@ -56,17 +56,17 @@ class Apache_Solr_HttpTransport_FileGetContents extends Apache_Solr_HttpTranspor
      * @var resource
      */
     private $_getContext;
+
     private $_headContext;
+
     private $_postContext;
 
     /**
      * For POST operations, we're already using the Header context value for
      * specifying the content type too, so we have to keep our computed
      * authorization header around.
-     *
-     * @var string
      */
-    private $_authHeader = '';
+    private string $_authHeader = '';
 
     /**
      * Initializes our reuseable get and post stream contexts.
@@ -78,7 +78,7 @@ class Apache_Solr_HttpTransport_FileGetContents extends Apache_Solr_HttpTranspor
         $this->_postContext = stream_context_create();
     }
 
-    public function setAuthenticationCredentials($username, $password)
+    public function setAuthenticationCredentials($username, $password): void
     {
         // compute the Authorization header
         $this->_authHeader = 'Authorization: Basic '.base64_encode($username.':'.$password);
@@ -92,7 +92,7 @@ class Apache_Solr_HttpTransport_FileGetContents extends Apache_Solr_HttpTranspor
         $this->_authHeader .= "\r\n";
     }
 
-    public function performGetRequest($url, $timeout = false)
+    public function performGetRequest($url, $timeout = false): \Apache_Solr_HttpTransport_Response
     {
         // set the timeout if specified
         if (false !== $timeout && $timeout > 0.0) {
@@ -115,7 +115,7 @@ class Apache_Solr_HttpTransport_FileGetContents extends Apache_Solr_HttpTranspor
         return $this->_getResponseFromParts($responseBody, $http_response_header);
     }
 
-    public function performHeadRequest($url, $timeout = false)
+    public function performHeadRequest($url, $timeout = false): \Apache_Solr_HttpTransport_Response
     {
         stream_context_set_option($this->_headContext, [
                 'http' => [
@@ -146,7 +146,7 @@ class Apache_Solr_HttpTransport_FileGetContents extends Apache_Solr_HttpTranspor
         return $this->_getResponseFromParts($responseBody, $http_response_header);
     }
 
-    public function performPostRequest($url, $rawPost, $contentType, $timeout = false)
+    public function performPostRequest($url, $rawPost, $contentType, $timeout = false): \Apache_Solr_HttpTransport_Response
     {
         stream_context_set_option($this->_postContext, [
                 'http' => [
@@ -154,7 +154,7 @@ class Apache_Solr_HttpTransport_FileGetContents extends Apache_Solr_HttpTranspor
                     'method' => 'POST',
 
                     // Add our posted content type (and auth header - see setAuthentication)
-                    'header' => "{$this->_authHeader}Content-Type: {$contentType}",
+                    'header' => sprintf('%sContent-Type: %s', $this->_authHeader, $contentType),
 
                     // the posted content
                     'content' => $rawPost,
@@ -186,14 +186,14 @@ class Apache_Solr_HttpTransport_FileGetContents extends Apache_Solr_HttpTranspor
         return $this->_getResponseFromParts($responseBody, $http_response_header);
     }
 
-    private function _getResponseFromParts($rawResponse, $httpHeaders)
+    private function _getResponseFromParts(string|bool $rawResponse, array $httpHeaders): \Apache_Solr_HttpTransport_Response
     {
         //Assume 0, false as defaults
         $status = 0;
         $contentType = false;
 
         //iterate through headers for real status, type, and encoding
-        if (is_array($httpHeaders) && count($httpHeaders) > 0) {
+        if ($httpHeaders !== []) {
             //look at the first headers for the HTTP status code
             //and message (errors are usually returned this way)
             //
@@ -204,7 +204,7 @@ class Apache_Solr_HttpTransport_FileGetContents extends Apache_Solr_HttpTranspor
             //the spec: http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.1
             //
             //Thanks to Daniel Andersson for pointing out this oversight
-            while (isset($httpHeaders[0]) && 'HTTP' == substr($httpHeaders[0], 0, 4)) {
+            while (isset($httpHeaders[0]) && str_starts_with($httpHeaders[0], 'HTTP')) {
                 // we can do a intval on status line without the "HTTP/1.X " to get the code
                 $status = intval(substr($httpHeaders[0], 9));
 

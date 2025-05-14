@@ -1,34 +1,36 @@
 <?php
 
-/***************************************************************
-*  Copyright notice
-*
-*  (c) 2009 Lars Heber <dev@dmk-ebusiness.de>
-*  All rights reserved
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
+/*
+ * Copyright notice
+ *
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
+ *
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
+ *
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
+ *
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * This copyright notice MUST APPEAR in all copies of the script!
+ */
 
 /**
  * Service "ZendLucene search engine" for the "mksearch" extension.
  *
  * @author  Lars Heber <dev@dmk-ebusiness.de>
  */
-class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\Service\AbstractService implements tx_mksearch_interface_SearchEngine
+class tx_mksearch_service_engine_ZendLucene extends Sys25\RnBase\Typo3Wrapper\Service\AbstractService implements tx_mksearch_interface_SearchEngine
 {
     public const FE_GROUP_FIELD = 'fe_group_mi';
 
@@ -48,13 +50,11 @@ class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\S
 
     /**
      * Reference to index configuration.
-     *
-     * @var tx_mksearch_model_internal_Index
      */
-    private $indexModel;
+    private ?tx_mksearch_model_internal_Index $indexModel = null;
 
     /* @var tx_mksearch_service_engine_lucene_DataTypeMapper */
-    private $dataTypeMapper;
+    private ?object $dataTypeMapper = null;
 
     /**
      * Constructor.
@@ -62,59 +62,64 @@ class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\S
     public function __construct()
     {
         // Explicitely include zend path if necessary
-        $zendPath = \Sys25\RnBase\Configuration\Processor::getExtensionCfgValue('mksearch', 'zendPath');
-        $zendPath = \Sys25\RnBase\Utility\Files::getFileAbsFileName($zendPath);
+        $zendPath = Sys25\RnBase\Configuration\Processor::getExtensionCfgValue('mksearch', 'zendPath');
+        $zendPath = Sys25\RnBase\Utility\Files::getFileAbsFileName($zendPath);
 
         $iniPath = get_include_path();
-        if (false === strpos($zendPath, $iniPath)) {
+        if (!str_contains($zendPath, $iniPath)) {
             set_include_path($iniPath.PATH_SEPARATOR.$zendPath);
         }
+
         if (!is_readable($zendPath)) {
-            \Sys25\RnBase\Utility\Logger::fatal('Current path to Zend root does not exist!', 'mksearch', ['Path' => $zendPath]);
+            Sys25\RnBase\Utility\Logger::fatal('Current path to Zend root does not exist!', 'mksearch', ['Path' => $zendPath]);
             throw new Exception('Current path to Zend root does not exist!');
         }
 
         $autoLoaderPath = rtrim($zendPath, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.'Zend'.DIRECTORY_SEPARATOR.'Loader'.DIRECTORY_SEPARATOR.'Autoloader.php';
         if (!is_readable($autoLoaderPath)) {
-            \Sys25\RnBase\Utility\Logger::fatal('Zend auto loader class not found. Check extension settings!', 'mksearch', ['Path' => $autoLoaderPath]);
+            Sys25\RnBase\Utility\Logger::fatal('Zend auto loader class not found. Check extension settings!', 'mksearch', ['Path' => $autoLoaderPath]);
             throw new Exception('Zend auto loader class not found. Check extension settings! More info in devlog.');
         }
 
         // Trigger Zend autoloading mechanism
-        require_once 'Zend/Loader/Autoloader.php';
+        require_once __DIR__.'/Zend/Loader/Autoloader.php';
         $autoloader = Zend_Loader_Autoloader::getInstance();
         $autoloader->registerNamespace('Zend_');
 
         // Set utf-8-able analyzer
         // @todo: Make configurable
         Zend_Search_Lucene_Analysis_Analyzer::setDefault(
-            \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Zend_Search_Lucene_Analysis_Analyzer_Common_Utf8Num_CaseInsensitive')
+            TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Zend_Search_Lucene_Analysis_Analyzer_Common_Utf8Num_CaseInsensitive')
         );
     }
 
     /**
      * @return tx_mksearch_service_engine_lucene_DataTypeMapper
      */
-    protected function getDataTypeMapper()
+    protected function getDataTypeMapper(): object
     {
         if (!is_object($this->dataTypeMapper)) {
             // Der Mapper sollte noch mit einer Config gefüttert werden, aus der er
             // weitere Informationen zu den gewünschten Typen gesetzt bekommt. Das wäre
             // dann eine Art schema.xml für Lucene...
             $data = $this->indexModel->getIndexConfig();
-            $mapperCfg = isset($data['lucene.']['schema.']) ? $data['lucene.']['schema.'] : [];
-            $this->dataTypeMapper = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_service_engine_lucene_DataTypeMapper', $mapperCfg);
+            $mapperCfg = $data['lucene.']['schema.'] ?? [];
+            $this->dataTypeMapper = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_service_engine_lucene_DataTypeMapper', $mapperCfg);
         }
 
         return $this->dataTypeMapper;
     }
 
-    public function getFieldNames($indexed = false)
+    /**
+     * @return mixed[]
+     */
+    public function getFieldNames($indexed = false): array
     {
         $ret = [];
         if (!$this->checkForOpenIndex(false)) {
             return $ret;
         }
+
         $fieldNames = array_values($this->index->getFieldNames($indexed));
         sort($fieldNames);
 
@@ -125,14 +130,14 @@ class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\S
      * Check if an index was opened.
      *
      * @param bool $throwException throw exception in case of error
-     *
-     * @return bool
      */
-    private function checkForOpenIndex($throwException = true)
+    private function checkForOpenIndex(bool $throwException = true): bool
     {
         if ($this->index) {
             return true;
-        } elseif ($throwException) {
+        }
+
+        if ($throwException) {
             throw new Exception('class.tx_mksearch_service_ZendLucene.php - no open index available!');
         }
 
@@ -143,14 +148,12 @@ class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\S
      * Return index directory path.
      *
      * @param string $name Name of index
-     *
-     * @return string
      */
-    private function getIndexDirectory($name)
+    private function getIndexDirectory(string $name): string
     {
-        $path = \Sys25\RnBase\Configuration\Processor::getExtensionCfgValue('mksearch', 'luceneIndexDir').DIRECTORY_SEPARATOR.$name;
-        if (!\Sys25\RnBase\Utility\Files::isAbsPath($path)) {
-            $path = \Sys25\RnBase\Utility\Environment::getPublicPath().$path;
+        $path = Sys25\RnBase\Configuration\Processor::getExtensionCfgValue('mksearch', 'luceneIndexDir').DIRECTORY_SEPARATOR.$name;
+        if (!Sys25\RnBase\Utility\Files::isAbsPath($path)) {
+            return Sys25\RnBase\Utility\Environment::getPublicPath().$path;
         }
 
         return $path;
@@ -158,12 +161,8 @@ class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\S
 
     /**
      * Build query recursively from query array.
-     *
-     * @param $fields
-     *
-     * @return Zend_Search_Lucene_Search_Query_Boolean
      */
-    private function buildQuery(array $fields)
+    private function buildQuery(array $fields): Zend_Search_Lucene_Search_Query_Boolean
     {
         $query = new Zend_Search_Lucene_Search_Query_Boolean();
         $mtquery = new Zend_Search_Lucene_Search_Query_MultiTerm();
@@ -173,9 +172,9 @@ class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\S
             foreach ($f as $ff) {
                 if (!is_array($ff['term'])) {
                     // The term is a single token
-                    if (!(isset($ff['phrase']) and $ff['phrase'])) {
+                    if (!(isset($ff['phrase']) && $ff['phrase'])) {
                         // Call hook to manipulate search term. Term is utf8-encoded!
-                        \Sys25\RnBase\Utility\Misc::callHook(
+                        Sys25\RnBase\Utility\Misc::callHook(
                             'mksearch',
                             'engine_ZendLucene_buildQuery_manipulateSingleTerm',
                             ['term' => &$ff['term']],
@@ -185,20 +184,20 @@ class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\S
                         // The term is really just a simple string
                         $mtquery->addTerm(
                             new Zend_Search_Lucene_Index_Term($ff['term'], '__default__' == $key ? null : $key),
-                            isset($ff['sign']) ? $ff['sign'] : null
+                            $ff['sign'] ?? null
                         );
                     } else {
                         // The term is a complete phrase, which must be build from its parts
                         $pq = new Zend_Search_Lucene_Search_Query_Phrase();
                         foreach (explode(' ', $ff['term']) as $t) { // @todo: explode with regex for respecting white spaces in general
                             // Call hook to manipulate search term. Term is utf8-encoded!
-                            \Sys25\RnBase\Utility\Misc::callHook(
+                            Sys25\RnBase\Utility\Misc::callHook(
                                 'mksearch',
                                 'engine_ZendLucene_buildQuery_manipulateSingleTerm',
                                 ['term' => &$t],
                                 $this
                             );
-                            if ($t) {
+                            if ('' !== $t && '0' !== $t) {
                                 $pq->addTerm(
                                     new Zend_Search_Lucene_Index_Term(
                                         $t,
@@ -214,11 +213,12 @@ class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\S
                     // The term represents a subquery - step down recursively
                     $query->addSubquery(
                         $this->buildQuery($ff['term']),
-                        isset($ff['sign']) ? $ff['sign'] : null
+                        $ff['sign'] ?? null
                     );
                 }
             }
         }
+
         if ($mtquery->getTerms()) {
             $query->addSubquery($mtquery);
         }
@@ -317,16 +317,18 @@ class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\S
     {
         $this->checkForOpenIndex();
         // Advanced search, i. e. search term follows lucene query syntax?
-        if (isset($options['rawFormat']) and $options['rawFormat']) {
+        if (isset($options['rawFormat']) && $options['rawFormat']) {
             // Add access rights to search query
             if (array_key_exists('fe_groups', $options)) {
                 // Explicitely add 0 to fe_groups to enable searches of anonymous users
                 if (!in_array(0, $options['fe_groups'])) {
                     $options['fe_groups'][] = 0;
                 }
+
                 foreach ($options['fe_groups'] as &$f) {
                     $f = self::FE_GROUP_FIELD.':'.$f;
                 }
+
                 $queryString = '('.implode(' OR ', $options['fe_groups']).') AND ('.$fields['term'].')';
             } else {
                 $queryString = $fields['term'];
@@ -362,8 +364,10 @@ class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\S
                 ],
                 ];
             }
+
             $queryString = $this->buildQuery($fields);
         }
+
         // Attention: $queryString may also be an object...
         if ($options['debug'] && !is_string($queryString)) {
             $queryString->debug = true;
@@ -371,8 +375,8 @@ class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\S
 
         if ($options['sort']) {
             $sortParts = explode(' ', $options['sort']);
-            list($sortField, $sortOrder) = explode(' ', $options['sort']);
-            $sortOrder = ('asc' == strtolower($sortOrder)) ? SORT_ASC : SORT_DESC;
+            [$sortField, $sortOrder] = explode(' ', $options['sort']);
+            $sortOrder = ('asc' === strtolower($sortOrder)) ? SORT_ASC : SORT_DESC;
             $hits = $this->index->find($queryString, $sortField, SORT_REGULAR, $sortOrder);
         } else {
             $hits = $this->index->find($queryString);
@@ -383,7 +387,7 @@ class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\S
         }
 
         if ($options['debug']) {
-            \Sys25\RnBase\Utility\Debug::debug(
+            Sys25\RnBase\Utility\Debug::debug(
                 [
                     'Fields' => $fields, 'Options' => $options,
                     'Query' => $queryString, 'Hits' => count($hits),
@@ -392,7 +396,7 @@ class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\S
             );
         }
 
-        if (isset($options['rawOutput']) and $options['rawOutput']) {
+        if (isset($options['rawOutput']) && $options['rawOutput']) {
             return $hits;
         }
 
@@ -412,7 +416,7 @@ class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\S
         for ($i = $offset; $i < $limit + $offset; ++$i) {
             if (array_key_exists($i, $hits)) {
                 $searchHit = $this->buildSearchHit($hits[$i]);
-                if ($searchHit) {
+                if ($searchHit instanceof tx_mksearch_model_SearchHit) {
                     $results[] = $searchHit;
                 }
             } else {
@@ -423,21 +427,17 @@ class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\S
         return $results;
     }
 
-    private function buildSearchHit($hit)
+    private function buildSearchHit($hit): ?tx_mksearch_model_SearchHit
     {
         $doc = $hit->getDocument();
         $data = [];
         foreach ($doc->getFieldNames() as $fn) {
             $field = $doc->getField($fn);
             // Get all fields except binary ones utf8-encoded
-            if (!$field->isBinary) {
-                $data[$fn] = $doc->getFieldUtf8Value($fn);
-            } else {
-                $data[$fn] = $doc->getFieldValue($fn);
-            }
+            $data[$fn] = $field->isBinary ? $doc->getFieldValue($fn) : $doc->getFieldUtf8Value($fn);
         }
 
-        return $data ? new tx_mksearch_model_SearchHit($data) : null;
+        return [] !== $data ? new tx_mksearch_model_SearchHit($data) : null;
     }
 
     /**
@@ -453,10 +453,9 @@ class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\S
     /**
      * Open an index.
      *
-     * @param tx_mksearch_model_internal_Index $name          Name of the index to open
-     * @param bool                             $forceCreation Force creation of index if it doesn't exist
+     * @param bool $forceCreation Force creation of index if it doesn't exist
      */
-    public function openIndex(tx_mksearch_model_internal_Index $index, $forceCreation = false)
+    public function openIndex(tx_mksearch_model_internal_Index $index, $forceCreation = false): void
     {
         if ($this->checkForOpenIndex(false)) {
             throw new Exception('class.tx_mksearch_service_ZendLucene.php::openIndex() - there is still an open index!');
@@ -467,16 +466,16 @@ class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\S
         // At first try to open index
         try {
             $this->index = Zend_Search_Lucene::open($indexDir);
-        } catch (Zend_Search_Lucene_Exception $e) {
+        } catch (Zend_Search_Lucene_Exception $zendSearchLuceneException) {
             // Didn't work? That's because it doesn't exist.
             // Are we instructed to create the index if necessary? Then do so:
-            \Sys25\RnBase\Utility\Logger::warn('Lucene index open failed!', 'mksearch', ['indexDir' => $indexDir, 'Exception' => $e->getMessage()]);
+            Sys25\RnBase\Utility\Logger::warn('Lucene index open failed!', 'mksearch', ['indexDir' => $indexDir, 'Exception' => $zendSearchLuceneException->getMessage()]);
             if ($forceCreation) {
                 $this->index = Zend_Search_Lucene::create($indexDir);
-                \Sys25\RnBase\Utility\Logger::warn('New Lucene index created!', 'mksearch', ['indexDir' => $indexDir]);
+                Sys25\RnBase\Utility\Logger::warn('New Lucene index created!', 'mksearch', ['indexDir' => $indexDir]);
             } // No? Then re-throw the Exception:
             else {
-                throw $e;
+                throw $zendSearchLuceneException;
             }
         }
 
@@ -491,7 +490,7 @@ class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\S
         Zend_Search_Lucene_Search_QueryParser::setDefaultEncoding('utf-8');
     }
 
-    public function setIndexModel(tx_mksearch_model_internal_Index $index)
+    public function setIndexModel(tx_mksearch_model_internal_Index $index): void
     {
         $this->indexModel = $index;
     }
@@ -500,10 +499,8 @@ class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\S
      * Check if the specified index exists.
      *
      * @param string $name Name of index
-     *
-     * @return bool
      */
-    public function indexExists($name)
+    public function indexExists($name): bool
     {
         return is_dir($this->getIndexDirectory($name));
     }
@@ -516,7 +513,7 @@ class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\S
      *
      * @return bool success
      */
-    public function commitIndex()
+    public function commitIndex(): bool
     {
         return true;
     }
@@ -524,7 +521,7 @@ class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\S
     /**
      * Close index.
      */
-    public function closeIndex()
+    public function closeIndex(): void
     {
         $this->indexName = null;
         unset($this->index);
@@ -535,10 +532,10 @@ class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\S
      *
      * @param optional string $name Name of index to delete, if not the open index is meant to be deleted
      */
-    public function deleteIndex($name = null)
+    public function deleteIndex($name = null): void
     {
         // Close index if necessary
-        if (!$name or is_object($this) and $this->indexName == $name) {
+        if (!$name || is_object($this) && $this->indexName == $name) {
             $name = $this->indexName;
             $this->closeIndex();
         }
@@ -555,13 +552,14 @@ class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\S
                 unlink($file->getPathname());
             }
         }
+
         rmdir($indexDir);
     }
 
     /**
      * Optimize index.
      */
-    public function optimizeIndex()
+    public function optimizeIndex(): void
     {
         // Committing the index before doing the actual optimization is not necessary
         // as the commit happens implictely on optimization by Zend_Lucene
@@ -577,9 +575,9 @@ class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\S
      * @param string $which Name of index to be replaced i. e. deleted
      * @param string $by    Name of index which replaces the index named $which
      */
-    public function replaceIndex($which, $by)
+    public function replaceIndex($which, $by): void
     {
-        if (!($this->indexExists($which) and $this->indexExists($by))) {
+        if (!($this->indexExists($which) && $this->indexExists($by))) {
             throw new Exception('class.tx_mksearch_service_ZendLucene.php::replaceIndex() - at least one of the specified indexes doesn\'n exist!');
         }
 
@@ -592,15 +590,11 @@ class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\S
     /**
      * Get a document from index.
      *
-     * @param $uid
-     * @param $extKey
-     * @param $contentType
-     *
      * @return unknown_type
      */
     private function getIndexDocumentByContentUid($uid, $extKey, $contentType)
     {
-        $searchTerm = "+uid:$uid +extKey:$extKey +contentType:$contentType";
+        $searchTerm = sprintf('+uid:%s +extKey:%s +contentType:%s', $uid, $extKey, $contentType);
 
         return $this->search(['term' => $searchTerm], ['rawFormat' => 1, 'rawOutput' => 1]);
     }
@@ -618,11 +612,11 @@ class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\S
     {
         $results = $this->getIndexDocumentByContentUid($uid, $extKey, $contentType);
         if (count($results) > 1) {
-            \Sys25\RnBase\Utility\Logger::warn(
+            Sys25\RnBase\Utility\Logger::warn(
                 'getByContentUid has returned more than one element.',
                 'mksearch',
                 [
-                    'service' => get_class($this),
+                    'service' => static::class,
                     'uid' => $uid,
                     'extKey' => $extKey,
                     'contentType' => $contentType,
@@ -630,23 +624,22 @@ class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\S
             );
         }
 
-        return !$results ? null : reset($results);
+        return $results ? reset($results) : null;
     }
 
     /**
      * Add a field to the given index document.
      *
-     * @param string                             $key
-     * @param tx_mksearch_interface_IndexerField &$field
-     * @param Zend_Search_Lucene_Document        &$doc
+     * @param string $key
      */
-    private function addFieldToIndexDoc($key, tx_mksearch_interface_IndexerField $field, Zend_Search_Lucene_Document $doc)
+    private function addFieldToIndexDoc($key, tx_mksearch_interface_IndexerField $field, Zend_Search_Lucene_Document $doc): void
     {
         $value = $field->getValue();
         if (is_array($value)) {
             // Zend Lucene doesn't support multivalued fields. So we implode all data with withspace
             $value = implode(' ', $value);
         }
+
         // Den Type über den DataTypeMapper ermitteln. Dieser ersetzt die schema.xml von Solr...
         $storageType = $this->getDataTypeMapper()->getDataType($key);
         $encoding = '' != $field->getEncoding() ? $field->getEncoding() : 'utf8'; // Lucene unterstützt nur UTF-8.
@@ -677,10 +670,8 @@ class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\S
      * Put a new record into index.
      *
      * @param tx_mksearch_model_IndexerDocument $doc "Document" to index
-     *
-     * @return void
      */
-    public function indexNew(tx_mksearch_interface_IndexerDocument $doc)
+    public function indexNew(tx_mksearch_interface_IndexerDocument $doc): void
     {
         $zlDoc = new Zend_Search_Lucene_Document();
 
@@ -693,7 +684,7 @@ class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\S
         // but also the search result data at search time.
         // Keep in mind that e. g. lowercasing fields will result
         // in lowercased output on displaying search results!
-        \Sys25\RnBase\Utility\Misc::callHook(
+        Sys25\RnBase\Utility\Misc::callHook(
             'mksearch',
             'engine_ZendLucene_indexNew_beforeAddingCoreDataToDocument',
             ['data' => &$data],
@@ -703,10 +694,11 @@ class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\S
         foreach ($data as $key => $field) {
             $this->addFieldToIndexDoc($key, $field, $zlDoc);
         }
+
         // Additional data
         $data = $doc->getData();
         // Hook to manipulate data
-        \Sys25\RnBase\Utility\Misc::callHook(
+        Sys25\RnBase\Utility\Misc::callHook(
             'mksearch',
             'engine_ZendLucene_indexNew_beforeAddingAdditionalDataToDocument',
             ['data' => &$data],
@@ -723,6 +715,7 @@ class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\S
         foreach ($data as $key => $field) {
             $this->addFieldToIndexDoc($key, $field, $zlDoc);
         }
+
         // There's intentionally no test if $this->index is valid for performance reasons.
         // You should not have made it to this point without a valid index anyway...
         $this->index->addDocument($zlDoc);
@@ -732,10 +725,8 @@ class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\S
      * Update or create an index record.
      *
      * @param tx_mksearch_model_IndexerDocument $doc "Document" to index
-     *
-     * @return void
      */
-    public function indexUpdate(tx_mksearch_interface_IndexerDocument $doc)
+    public function indexUpdate(tx_mksearch_interface_IndexerDocument $doc): void
     {
         $data = $doc->getPrimaryKey();
         $old = $this->getIndexDocumentByContentUid($data['uid']->getValue(), $data['extKey']->getValue(), $data['contentType']->getValue());
@@ -759,13 +750,14 @@ class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\S
      *
      * @return bool success
      */
-    public function indexDeleteByContentUid($uid, $extKey, $contentType)
+    public function indexDeleteByContentUid($uid, $extKey, $contentType): bool
     {
         $hits = $this->getIndexDocumentByContentUid($uid, $extKey, $contentType);
         // No document with passed uid found?
         if (!$hits) {
             return false;
         }
+
         // else
         foreach ($hits as $h) {
             $this->index->delete($h->id);
@@ -779,7 +771,7 @@ class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\S
      *
      * @param int $id
      */
-    public function indexDeleteByIndexId($id)
+    public function indexDeleteByIndexId($id): void
     {
         $this->index->delete($id);
     }
@@ -789,7 +781,7 @@ class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\S
      *
      * @see tx_mksearch_interface_SearchEngine::indexDeleteByQuery()
      */
-    public function indexDeleteByQuery($query, $options = [])
+    public function indexDeleteByQuery($query, $options = []): bool
     {
         // Not implemented!
         return false;
@@ -803,9 +795,9 @@ class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\S
      *
      * @return tx_mksearch_interface_IndexerDocument
      */
-    public function makeIndexDocInstance($extKey, $contentType)
+    public function makeIndexDocInstance($extKey, $contentType): object
     {
-        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+        return TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
             $extKey,
             $contentType
@@ -817,14 +809,15 @@ class tx_mksearch_service_engine_ZendLucene extends \Sys25\RnBase\Typo3Wrapper\S
      */
     public function getStatus()
     {
-        $status = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_util_Status');
+        $status = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_util_Status');
         // TODO: sinnvollen Test einfallen lassen...
         // Läßt sich der Index öffnen?
-        if (!$this->indexModel) {
+        if (!$this->indexModel instanceof tx_mksearch_model_internal_Index) {
             $status->setStatus(-1, 'Illegal State: No index model found!');
 
             return $status;
         }
+
         $id = 1;
         $this->openIndex($this->indexModel, true);
 

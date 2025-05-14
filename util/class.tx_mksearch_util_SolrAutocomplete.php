@@ -1,27 +1,29 @@
 <?php
 
-/***************************************************************
-*  Copyright notice
-*
-*  (c) 2012 das Medienkombinat <dev@dmk-ebusiness.de>
-*  All rights reserved
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
+/*
+ * Copyright notice
+ *
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
+ *
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
+ *
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
+ *
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * This copyright notice MUST APPEAR in all copies of the script!
+ */
 
 /**
  * @author Hannes Bochmann <dev@dmk-ebusiness.de>
@@ -34,8 +36,7 @@ class tx_mksearch_util_SolrAutocomplete
     protected static $autocompleteConfId = 'autocomplete.';
 
     /**
-     * @param \Sys25\RnBase\Configuration\Processor $configurations
-     * @param string                   $confId
+     * @param string $confId
      *
      * example TS config:
      * myConfId {
@@ -50,11 +51,11 @@ class tx_mksearch_util_SolrAutocomplete
      *  }
      * }
      *
-     * @return \Sys25\RnBase\Utility\Link
+     * @return Sys25\RnBase\Utility\Link
      */
     public static function getAutocompleteActionLinkByConfigurationsAndConfId(
-        \Sys25\RnBase\Configuration\Processor $configurations,
-        $confId
+        Sys25\RnBase\Configuration\Processor $configurations,
+        string $confId,
     ) {
         $linkParameters = ['ajax' => 1];
         $usedIndex = $configurations->get($confId.'usedIndex');
@@ -76,29 +77,26 @@ class tx_mksearch_util_SolrAutocomplete
      * @deprecated use getAutocompleteJavaScriptByConfigurationArrayAndLink
      */
     public static function getAutocompleteJsByConfigurationsConfIdAndLink(
-        $configArray,
-        \Sys25\RnBase\Utility\Link $link,
-        $wrapInScriptTags = true
-    ) {
+        array $configArray,
+        Sys25\RnBase\Utility\Link $link,
+        $wrapInScriptTags = true,
+    ): string {
         return self::getAutocompleteJavaScriptByConfigurationArrayAndLink($configArray, $link, $wrapInScriptTags);
     }
 
     /**
-     * @param array               $configArray      example:
-     *                                              array (
-     *                                              minLength = 2
-     *                                              elementSelector = "#mksearch_term"
-     *                                              )
-     * @param \Sys25\RnBase\Utility\Link $link
-     * @param bool                $wrapInScriptTags
-     *
-     * @return string
+     * @param array $configArray      example:
+     *                                array (
+     *                                minLength = 2
+     *                                elementSelector = "#mksearch_term"
+     *                                )
+     * @param bool  $wrapInScriptTags
      */
     public static function getAutocompleteJavaScriptByConfigurationArrayAndLink(
-        $configArray,
-        \Sys25\RnBase\Utility\Link $link,
-        $wrapInScriptTags = true
-    ) {
+        array $configArray,
+        Sys25\RnBase\Utility\Link $link,
+        $wrapInScriptTags = true,
+    ): string {
         $javaScript = 'jQuery(document).ready(function(){'.
             'jQuery('.$configArray['elementSelector'].').autocomplete({'.
                 'source: function( request, response ) {'.
@@ -127,7 +125,7 @@ class tx_mksearch_util_SolrAutocomplete
         'jQuery(".ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all").show();';
 
         if ($wrapInScriptTags) {
-            $javaScript = '<script type="text/javascript">'.$javaScript.'</script>';
+            return '<script type="text/javascript">'.$javaScript.'</script>';
         }
 
         return $javaScript;

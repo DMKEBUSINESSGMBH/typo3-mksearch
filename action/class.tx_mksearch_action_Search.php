@@ -1,10 +1,12 @@
 <?php
 
-/***************************************************************
+/*
  * Copyright notice
  *
- * (c) 2009-2018 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
+ *
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
  *
  * This script is part of the TYPO3 project. The TYPO3 project is
  * free software; you can redistribute it and/or modify
@@ -12,8 +14,8 @@
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
- * The GNU General Public License can be found at
- * http://www.gnu.org/copyleft/gpl.html.
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
  *
  * This script is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -21,7 +23,7 @@
  * GNU General Public License for more details.
  *
  * This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
+ */
 
 /**
  * Base search action.
@@ -33,7 +35,7 @@
  */
 class tx_mksearch_action_Search extends tx_mksearch_action_AbstractSearch
 {
-    public function handleRequest(\Sys25\RnBase\Frontend\Request\RequestInterface $request)
+    protected function handleRequest(Sys25\RnBase\Frontend\Request\RequestInterface $request)
     {
         $configurations = $request->getConfigurations();
         $parameters = $request->getParameters();
@@ -86,15 +88,15 @@ class tx_mksearch_action_Search extends tx_mksearch_action_AbstractSearch
      *
      * @todo 404 werfen wenn Seite außerhalb des Bereichs -> siehe $pageBrowser->markPageNotFoundIfPointerOutOfRange()
      */
-    protected function handlePageBrowser($parameters, $configurations, $viewdata, &$fields, &$options)
+    protected function handlePageBrowser($parameters, $configurations, $viewdata, &$fields, array &$options)
     {
         $confId = $this->getConfId();
         $typoScriptPathPageBrowser = $confId.'hit.pagebrowser.';
         if (is_array($conf = $configurations->get($typoScriptPathPageBrowser))) {
             // PageBrowser initialisieren
-            $pageBrowserId = $conf['pbid'] ? $conf['pbid'] : 'search'.$configurations->getPluginId();
+            $pageBrowserId = $conf['pbid'] ?: 'search'.$configurations->getPluginId();
             /* @var $pageBrowser \Sys25\RnBase\Utility\PageBrowser */
-            $pageBrowser = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Utility\PageBrowser::class, $pageBrowserId);
+            $pageBrowser = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(Sys25\RnBase\Utility\PageBrowser::class, $pageBrowserId);
             $pageSize = intval($conf['limit']);
             // Den PageBrowser mit PageSize und der aktuellen Seite füllen
             $pageBrowser->setPageSize($pageSize);
@@ -104,12 +106,12 @@ class tx_mksearch_action_Search extends tx_mksearch_action_AbstractSearch
         }
     }
 
-    public function getTemplateName()
+    protected function getTemplateName()
     {
         return 'searchlucene';
     }
 
-    public function getViewClassName()
+    protected function getViewClassName()
     {
         return 'tx_mksearch_view_Search';
     }

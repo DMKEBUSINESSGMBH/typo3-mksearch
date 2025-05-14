@@ -1,5 +1,30 @@
 <?php
 
+/*
+ * Copyright notice
+ *
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
+ *
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
+ *
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
+ *
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * This copyright notice MUST APPEAR in all copies of the script!
+ */
+
 namespace DMK\Mksearch\ViewHelpers;
 
 /*                                                                        *
@@ -25,7 +50,9 @@ namespace DMK\Mksearch\ViewHelpers;
  */
 
 use Psr\Http\Message\ServerRequestInterface;
+use Sys25\RnBase\Utility\TYPO3;
 use TYPO3\CMS\Core\Context\Context;
+use TYPO3\CMS\Core\Domain\RecordInterface;
 use TYPO3\CMS\Core\Routing\PageArguments;
 use TYPO3\CMS\Core\Site\Entity\SiteInterface;
 use TYPO3\CMS\Core\Site\SiteFinder;
@@ -33,14 +60,11 @@ use TYPO3\CMS\Core\TimeTracker\TimeTracker;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
-use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
 use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
-use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3Fluid\Fluid\Core\ViewHelper\Exception;
-use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithContentArgumentAndRenderStatic;
 
 /**
  * Class CObjectViewHelper.
@@ -55,8 +79,6 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithContentArgumentAndRenderS
  */
 class CObjectViewHelper extends AbstractViewHelper
 {
-    use CompileWithContentArgumentAndRenderStatic;
-
     /**
      * Disable escaping of child nodes' output.
      *
@@ -85,36 +107,47 @@ class CObjectViewHelper extends AbstractViewHelper
      *
      * @throws Exception
      */
-    public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext): string
+    public function render(): string
     {
-        $data = $renderChildrenClosure();
-        $typoscriptObjectPath = (string) $arguments['typoscriptObjectPath'];
-        $currentValueKey = $arguments['currentValueKey'];
-        $table = $arguments['table'];
-        /** @var RenderingContext $renderingContext */
-        $request = $renderingContext->getRequest();
+        $data = $this->renderChildren() ?? [];
+        $typoscriptObjectPath = (string) $this->arguments['typoscriptObjectPath'];
+        $currentValueKey = $this->arguments['currentValueKey'];
+        $table = $this->arguments['table'];
+        $request = $this->renderingContext->getRequest();
+        if (!$request) {
+            throw new \RuntimeException('Required request not found in RenderingContext', 1724243608);
+        }
+
         $contentObjectRenderer = self::getContentObjectRenderer($request);
         $contentObjectRenderer->setRequest($request);
-        if ($arguments['setContentObjectAsCurrentToRequest'] ?? false) {
+        if ($this->arguments['setContentObjectAsCurrentToRequest'] ?? false) {
             self::getConfigurationManager()->setRequest($request->withAttribute('currentContentObject', $contentObjectRenderer));
         }
+
         $tsfeBackup = null;
         if (!isset($GLOBALS['TSFE']) || !($GLOBALS['TSFE'] instanceof TypoScriptFrontendController)) {
             $tsfeBackup = self::simulateFrontendEnvironment();
         }
+
         $currentValue = null;
         if (is_object($data)) {
-            $data = ObjectAccess::getGettableProperties($data);
+            if (TYPO3::isTYPO130OrHigher()) {
+                $data = $data instanceof RecordInterface ? ($data->getRawRecord()?->toArray(true) ?? $data->toArray()) : ObjectAccess::getGettableProperties($data);
+            } else {
+                $data = ObjectAccess::getGettableProperties($data);
+            }
         } elseif (is_string($data) || is_numeric($data)) {
             $currentValue = (string) $data;
             $data = [$data];
         }
+
         $contentObjectRenderer->start($data, $table);
         if (null !== $currentValue) {
             $contentObjectRenderer->setCurrentVal($currentValue);
         } elseif (null !== $currentValueKey && isset($data[$currentValueKey])) {
             $contentObjectRenderer->setCurrentVal($data[$currentValueKey]);
         }
+
         $pathSegments = GeneralUtility::trimExplode('.', $typoscriptObjectPath);
         $lastSegment = (string) array_pop($pathSegments);
         $setup = self::getConfigurationManager()->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
@@ -122,16 +155,20 @@ class CObjectViewHelper extends AbstractViewHelper
             if (!array_key_exists($segment.'.', $setup)) {
                 throw new Exception('TypoScript object path "'.$typoscriptObjectPath.'" does not exist', 1253191023);
             }
+
             $setup = $setup[$segment.'.'];
         }
+
         if (!isset($setup[$lastSegment])) {
             throw new Exception('No Content Object definition found at TypoScript object path "'.$typoscriptObjectPath.'"', 1540246570);
         }
+
         $content = self::renderContentObject($contentObjectRenderer, $setup, $typoscriptObjectPath, $lastSegment);
         if (!isset($GLOBALS['TSFE']) || !($GLOBALS['TSFE'] instanceof TypoScriptFrontendController)) {
             self::resetFrontendEnvironment($tsfeBackup);
         }
-        if ($arguments['setContentObjectAsCurrentToRequest'] ?? false) {
+
+        if ($this->arguments['setContentObjectAsCurrentToRequest'] ?? false) {
             self::getConfigurationManager()->setRequest($request);
         }
 
@@ -147,6 +184,7 @@ class CObjectViewHelper extends AbstractViewHelper
         if ($timeTracker->LR) {
             $timeTracker->push('/f:cObject/', '<'.$typoscriptObjectPath);
         }
+
         $timeTracker->incStackPointer();
         $content = $contentObjectRenderer->cObjGetSingle($setup[$lastSegment], $setup[$lastSegment.'.'] ?? [], $typoscriptObjectPath);
         $timeTracker->decStackPointer();
@@ -167,12 +205,17 @@ class CObjectViewHelper extends AbstractViewHelper
     {
         if (($GLOBALS['TSFE'] ?? null) instanceof TypoScriptFrontendController) {
             $tsfe = $GLOBALS['TSFE'];
+        } elseif (TYPO3::isTYPO130OrHigher()) {
+            $tsfe = GeneralUtility::makeInstance(TypoScriptFrontendController::class);
+            $tsfe->initializePageRenderer($request);
+            $tsfe->initializeLanguageService($request);
         } else {
             $site = $request->getAttribute('site');
             if (!($site instanceof SiteInterface)) {
                 $sites = GeneralUtility::makeInstance(SiteFinder::class)->getAllSites();
                 $site = reset($sites);
             }
+
             $language = $request->getAttribute('language') ?? $site->getDefaultLanguage();
             $pageArguments = $request->getAttribute('routing') ?? new PageArguments(0, '0', []);
             $tsfe = GeneralUtility::makeInstance(
@@ -184,6 +227,7 @@ class CObjectViewHelper extends AbstractViewHelper
                 GeneralUtility::makeInstance(FrontendUserAuthentication::class)
             );
         }
+
         $contentObjectRenderer = GeneralUtility::makeInstance(ContentObjectRenderer::class, $tsfe);
         $parent = $request->getAttribute('currentContentObject');
         if ($parent instanceof ContentObjectRenderer) {
@@ -220,7 +264,7 @@ class CObjectViewHelper extends AbstractViewHelper
     /**
      * Explicitly set argument name to be used as content.
      */
-    public function resolveContentArgumentName(): string
+    public function getContentArgumentName(): string
     {
         return 'data';
     }

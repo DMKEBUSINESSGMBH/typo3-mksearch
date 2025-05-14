@@ -48,29 +48,23 @@ class Apache_Solr_HttpTransportException extends Apache_Solr_Exception
 
     /**
      * Response for which exception was generated.
-     *
-     * @var Apache_Solr_Response
      */
-    private $_response;
+    private \Apache_Solr_Response $_response;
 
     /**
      * HttpTransportException Constructor.
-     *
-     * @param Apache_Solr_Response $response
      */
     public function __construct(Apache_Solr_Response $response)
     {
-        parent::__construct("'{$response->getHttpStatus()}' Status: {$response->getHttpStatusMessage()}", $response->getHttpStatus());
+        parent::__construct(sprintf("'%d' Status: %s", $response->getHttpStatus(), $response->getHttpStatusMessage()), $response->getHttpStatus());
 
         $this->_response = $response;
     }
 
     /**
      * Get the response for which this exception was generated.
-     *
-     * @return Apache_Solr_Response
      */
-    public function getResponse()
+    public function getResponse(): \Apache_Solr_Response
     {
         return $this->_response;
     }

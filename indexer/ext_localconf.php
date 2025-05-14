@@ -1,5 +1,30 @@
 <?php
 
+/*
+ * Copyright notice
+ *
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
+ *
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
+ *
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
+ *
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * This copyright notice MUST APPEAR in all copies of the script!
+ */
+
 if (!defined('TYPO3')) {
     exit('Access denied.');
 }
@@ -33,7 +58,7 @@ tx_mksearch_util_Config::registerIndexer(
     ]
 );
 
-if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('news')) {
+if (TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('news')) {
     tx_mksearch_util_Config::registerIndexer(
         'tx_news',
         'news',
@@ -48,14 +73,14 @@ if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('news')) {
     );
 }
 
-if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('tt_address')) {
+if (TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('tt_address')) {
     tx_mksearch_util_Config::registerIndexer('tt_address', 'address', 'tx_mksearch_indexer_TtAddressAddress', ['tt_address']);
 }
 
 tx_mksearch_util_Config::registerIndexer('core', 'file', 'tx_mksearch_indexer_FAL', ['sys_file', 'sys_file_metadata']);
 
 // seminars Extension
-if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('seminars')) {
+if (TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('seminars')) {
     tx_mksearch_util_Config::registerIndexer(
         'seminars',
         'seminar',

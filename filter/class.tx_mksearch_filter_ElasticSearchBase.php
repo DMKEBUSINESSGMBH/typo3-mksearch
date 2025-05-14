@@ -1,10 +1,12 @@
 <?php
 
-/***************************************************************
+/*
  * Copyright notice
  *
- * (c) 2009-2020 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
+ *
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
  *
  * This script is part of the TYPO3 project. The TYPO3 project is
  * free software; you can redistribute it and/or modify
@@ -12,8 +14,8 @@
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
- * The GNU General Public License can be found at
- * http://www.gnu.org/copyleft/gpl.html.
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
  *
  * This script is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -21,7 +23,7 @@
  * GNU General Public License for more details.
  *
  * This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
+ */
 
 /**
  * @author Hannes Bochmann
@@ -46,7 +48,7 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_mksearch_filter_BaseFilter
     {
         $confId = $this->getConfId();
         $fields = $this->getConfigurations()->get($confId.'fields.');
-        \Sys25\RnBase\Search\SearchBase::setConfigOptions(
+        Sys25\RnBase\Search\SearchBase::setConfigOptions(
             $options,
             $this->getConfigurations(),
             $confId.'options.'
@@ -64,22 +66,21 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_mksearch_filter_BaseFilter
      *
      * @param array $fields
      * @param array $options
-     * \Sys25\RnBase\Frontend\Request\RequestInterface $request
+     *                       \Sys25\RnBase\Frontend\Request\RequestInterface $request
      *
      * @return bool Should subsequent query be executed at all?
      */
     protected function initFilter(
         &$fields,
         &$options,
-        \Sys25\RnBase\Frontend\Request\RequestInterface $request
+        Sys25\RnBase\Frontend\Request\RequestInterface $request,
     ) {
         $configurations = $request->getConfigurations();
         $parameters = $request->getParameters();
         $confId = $this->getConfId();
 
         // Es muss ein Submit-Parameter im request liegen, damit der Filter greift
-        if (!($parameters->offsetExists('submit')
-            || $configurations->get($confId.'forceSearch'))
+        if (!$parameters->offsetExists('submit') && !$configurations->get($confId.'forceSearch')
         ) {
             return false;
         }
@@ -93,12 +94,10 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_mksearch_filter_BaseFilter
     /**
      * Fügt den Suchstring zu dem Filter hinzu.
      *
-     * @param array $fields
-     * @param \Sys25\RnBase\Frontend\Request\ParametersInterface $parameters
-     * @param \Sys25\RnBase\Configuration\Processor $configurations
-     * @param string $confId
+     * @param Sys25\RnBase\Frontend\Request\ParametersInterface $parameters
+     * @param Sys25\RnBase\Configuration\Processor              $configurations
      */
-    protected function handleTerm(&$fields, &$parameters, &$configurations, $confId)
+    protected function handleTerm(array &$fields, &$parameters, &$configurations, string $confId)
     {
         if ($termTemplate = $fields['term']) {
             $parsedTemplate = $this->getFilterUtility()->parseTermTemplate(
@@ -115,10 +114,8 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_mksearch_filter_BaseFilter
      * Fügt die Sortierung zu dem Filter hinzu.
      *
      * @TODO: das klappt zurzeit nur bei einfacher sortierung!
-     *
-     * @param array               $options
      */
-    protected function handleSorting(&$options)
+    protected function handleSorting(array &$options)
     {
         if ($sortString = $this->getFilterUtility()->getSortString(
             $options,
@@ -129,17 +126,18 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_mksearch_filter_BaseFilter
     }
 
     /**
-     * @param string                    $template  HTML template
-     * @param \Sys25\RnBase\Frontend\Marker\FormatUtil $formatter
-     * @param string                    $confId
-     * @param string                    $marker
+     * @param string                                  $template  HTML template
+     * @param Sys25\RnBase\Frontend\Marker\FormatUtil $formatter
+     * @param string                                  $confId
+     * @param string                                  $marker
      *
      * @return string
      */
     public function parseTemplate($template, &$formatter, $confId, $marker = 'FILTER')
     {
-        $markArray = $subpartArray = $wrappedSubpartArray = [];
-
+        $markArray = [];
+        $subpartArray = [];
+        $wrappedSubpartArray = [];
         $this->parseSearchForm(
             $template,
             $markArray,
@@ -160,7 +158,7 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_mksearch_filter_BaseFilter
             $marker
         );
 
-        return \Sys25\RnBase\Frontend\Marker\Templates::substituteMarkerArrayCached(
+        return Sys25\RnBase\Frontend\Marker\Templates::substituteMarkerArrayCached(
             $template,
             $markArray,
             $subpartArray,
@@ -171,13 +169,12 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_mksearch_filter_BaseFilter
     /**
      * Treat search form.
      *
-     * @param string                    $template            HTML template
-     * @param array                     $markArray
-     * @param array                     $subpartArray
-     * @param array                     $wrappedSubpartArray
-     * @param \Sys25\RnBase\Frontend\Marker\FormatUtil $formatter
-     * @param string                    $confId
-     * @param string                    $marker
+     * @param string                                  $template            HTML template
+     * @param array                                   $subpartArray
+     * @param array                                   $wrappedSubpartArray
+     * @param Sys25\RnBase\Frontend\Marker\FormatUtil $formatter
+     * @param string                                  $confId
+     * @param string                                  $marker
      *
      * @return string
      *
@@ -185,15 +182,15 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_mksearch_filter_BaseFilter
      */
     public function parseSearchForm(
         $template,
-        &$markArray,
+        array &$markArray,
         &$subpartArray,
         &$wrappedSubpartArray,
         &$formatter,
         $confId,
-        $marker = 'FILTER'
+        $marker = 'FILTER',
     ) {
         $markerName = 'SEARCH_FORM';
-        if (!\Sys25\RnBase\Frontend\Marker\BaseMarker::containsMarker($template, $markerName)) {
+        if (!Sys25\RnBase\Frontend\Marker\BaseMarker::containsMarker($template, $markerName)) {
             return $template;
         }
 
@@ -203,7 +200,7 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_mksearch_filter_BaseFilter
         $formTemplate = $configurations->get($confId.'template.file');
 
         $subpart = $configurations->get($confId.'template.subpart');
-        $formTemplate = \Sys25\RnBase\Frontend\Marker\Templates::getSubpartFromFile(
+        $formTemplate = Sys25\RnBase\Frontend\Marker\Templates::getSubpartFromFile(
             $formTemplate,
             $subpart
         );
@@ -216,12 +213,12 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_mksearch_filter_BaseFilter
             $formData = $this->getParameters()->get('submit') ? $paramArray : $this->getFormData();
             $formData['action'] = $link->makeUrl(false);
             $formData['searchterm'] = htmlspecialchars($this->getParameters()->get('term'), ENT_QUOTES);
-            $formData['hiddenfields'] = \Sys25\RnBase\Backend\Form\FormUtil::getHiddenFieldsForUrlParams($formData['action']);
+            $formData['hiddenfields'] = Sys25\RnBase\Backend\Form\FormUtil::getHiddenFieldsForUrlParams($formData['action']);
             $this->prepareFormFields($formData, $this->getParameters());
 
             $combinations = ['none', 'free', 'or', 'and', 'exact'];
             $currentCombination = $this->getParameters()->get('combination');
-            $currentCombination = $currentCombination ? $currentCombination : 'none';
+            $currentCombination = $currentCombination ?: 'none';
             foreach ($combinations as $combination) {
                 // wenn anders benötigt, via ts ändern werden
                 $formData['combination_'.$combination] = ($combination == $currentCombination) ? ' checked="checked"' : '';
@@ -245,7 +242,7 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_mksearch_filter_BaseFilter
                 $formData['mode_standard_selected'] = 'checked=checked';
             }
 
-            $templateMarker = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_marker_General');
+            $templateMarker = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_marker_General');
             $formTemplate = $templateMarker->parseTemplate($formTemplate, $formData, $formatter, $confId.'form.', 'FORM');
         }
 
@@ -257,8 +254,8 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_mksearch_filter_BaseFilter
     /**
      * Werte für Formularfelder aufbereiten. Daten aus dem Request übernehmen und wieder füllen.
      *
-     * @param array $formData
-     * @param \Sys25\RnBase\Frontend\Request\ParametersInterface $parameters
+     * @param array                                             $formData
+     * @param Sys25\RnBase\Frontend\Request\ParametersInterface $parameters
      */
     protected function prepareFormFields(&$formData, $parameters)
     {
@@ -273,6 +270,7 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_mksearch_filter_BaseFilter
             // Default
             $formData['combination_or_selected'] = 'checked=checked';
         }
+
         $values = $this->getModeValuesAvailable();
         if ($options['mode']) {
             foreach ($values as $value) {
@@ -284,20 +282,17 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_mksearch_filter_BaseFilter
         }
 
         $formData = $this->fillFormDataWithRequiredFormFieldsIfNoSet(
-            $formData,
-            $parameters
+            $formData
         );
     }
 
     /**
      * Returns all values possible for form field mksearch[options][mode].
      * Makes it possible to easily add more modes in other filters/forms.
-     *
-     * @return array
      */
-    protected function getModeValuesAvailable()
+    protected function getModeValuesAvailable(): array
     {
-        $availableModes = \Sys25\RnBase\Utility\Strings::trimExplode(
+        $availableModes = Sys25\RnBase\Utility\Strings::trimExplode(
             ',',
             $this->getConfigurations()->get($this->getConfId().'availableModes')
         );
@@ -309,17 +304,11 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_mksearch_filter_BaseFilter
      * ist notwendig weil sonst die Marker, welche die Formulardaten
      * enthalten ungeparsed rauskommen, falls das Formular noch
      * nicht abgeschickt wurde.
-     *
-     * @param array $formData
-     * @param \Sys25\RnBase\Frontend\Request\ParametersInterface $parameters
-     *
-     * @return array
      */
     private function fillFormDataWithRequiredFormFieldsIfNoSet(
         array $formData,
-        \Sys25\RnBase\Frontend\Request\ParametersInterface $parameters
-    ) {
-        $formFields = \Sys25\RnBase\Utility\Strings::trimExplode(
+    ): array {
+        $formFields = Sys25\RnBase\Utility\Strings::trimExplode(
             ',',
             $this->getConfigurations()->get($this->getConfId().'requiredFormFields')
         );
@@ -336,23 +325,22 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_mksearch_filter_BaseFilter
     /**
      * die methode ist nur noch da für abwärtskompatiblität.
      *
-     * @param string                    $template            HTML template
-     * @param array                     $markArray
-     * @param array                     $subpartArray
-     * @param array                     $wrappedSubpartArray
-     * @param \Sys25\RnBase\Frontend\Marker\FormatUtil $formatter
-     * @param string                    $confId
-     * @param string                    $marker
+     * @param string                                  $template     HTML template
+     * @param array                                   $markArray
+     * @param array                                   $subpartArray
+     * @param Sys25\RnBase\Frontend\Marker\FormatUtil $formatter
+     * @param string                                  $confId
+     * @param string                                  $marker
      */
     public function parseSortFields(
         $template,
         &$markArray,
         &$subpartArray,
-        &$wrappedSubpartArray,
+        array &$wrappedSubpartArray,
         &$formatter,
         $confId,
-        $marker = 'FILTER'
-    ) {
+        $marker = 'FILTER',
+    ): void {
         $this->getFilterUtility()->parseSortFields(
             $template,
             $markArray,
@@ -364,10 +352,7 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_mksearch_filter_BaseFilter
         );
     }
 
-    /**
-     * @return array
-     */
-    private function getFormData()
+    private function getFormData(): array
     {
         return [];
     }
@@ -378,7 +363,7 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_mksearch_filter_BaseFilter
     protected function getFilterUtility()
     {
         if (!$this->filterUtility) {
-            $this->filterUtility = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_util_Filter');
+            $this->filterUtility = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_util_Filter');
         }
 
         return $this->filterUtility;

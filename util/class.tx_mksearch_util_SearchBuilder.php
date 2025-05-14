@@ -1,27 +1,29 @@
 <?php
 
-/***************************************************************
- *  Copyright notice
+/*
+ * Copyright notice
  *
- *  (c) 2011 das Medienkombinat
- *  All rights reserved
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
  *
- *  This script is part of the TYPO3 project. The TYPO3 project is
- *  free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
  *
- *  The GNU General Public License can be found at
- *  http://www.gnu.org/copyleft/gpl.html.
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
  *
- *  This script is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
  *
- *  This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * This copyright notice MUST APPEAR in all copies of the script!
+ */
 
 use Sys25\RnBase\Frontend\Request\ParametersInterface;
 
@@ -33,25 +35,16 @@ class tx_mksearch_util_SearchBuilder
     /**
      * Setzt jedes Wort in Anführungszeichen.
      * Dabei werden operatoren wie + und - beachtet.
-     *
-     * @param array $terms
-     *
-     * @return array
      */
-    private static function quoteTerms(array $terms)
+    private static function quoteTerms(array $terms): array
     {
         foreach ($terms as &$term) {
             // minus und plus dürfen nicht mit in die quotes
             $operator = $term[0];
-            switch ($operator) {
-                case '-':
-                case '+':
-                    $term = $operator.'"'.substr($term, 1).'"';
-                    break;
-                default:
-                    $term = '"'.$term.'"';
-                    break;
-            }
+            $term = match ($operator) {
+                '-', '+' => $operator.'"'.substr($term, 1).'"',
+                default => '"'.$term.'"',
+            };
         }
 
         return $terms;
@@ -59,12 +52,8 @@ class tx_mksearch_util_SearchBuilder
 
     /**
      * Setzt hinter jedes Wort eine tilde für die fuzzy search.
-     *
-     * @param array $terms
-     *
-     * @return array
      */
-    private static function fuzzyTerms(array $terms, $slop = '0.2')
+    private static function fuzzyTerms(array $terms, string $slop = '0.2'): array
     {
         foreach ($terms as &$term) {
             $term = $term.'~'.$slop;
@@ -75,12 +64,8 @@ class tx_mksearch_util_SearchBuilder
 
     /**
      * Removes all solr control characters.
-     *
-     * @param array $terms
-     *
-     * @return array
      */
-    private static function sanitizeTerms(array $terms)
+    private static function sanitizeTerms(array $terms): array
     {
         if (self::emptyTerm($terms)) {
             return $terms;
@@ -99,18 +84,14 @@ class tx_mksearch_util_SearchBuilder
 
     /**
      * wraps terms in wildcards.
-     *
-     * @param array $terms
-     *
-     * @return array
      */
-    private static function wrapTermsInWildcards(array $terms)
+    private static function wrapTermsInWildcards(array $terms): array
     {
         if (self::emptyTerm($terms)) {
             return $terms;
         }
 
-        foreach ($terms as $key => &$term) {
+        foreach ($terms as &$term) {
             $term = '*'.$term.'*';
         }
 
@@ -123,13 +104,10 @@ class tx_mksearch_util_SearchBuilder
      *
      * @todo: tests schreiben
      *
-     * @param array                    $fields
-     * @param array                    $options
-     * @param ParametersInterface      $parameters
-     * @param \Sys25\RnBase\Configuration\Processor $configurations
-     * @param string                   $confId
+     * @param ParametersInterface                  $parameters
+     * @param Sys25\RnBase\Configuration\Processor $configurations
      */
-    public static function handleMinShouldMatch(&$fields, &$options, &$parameters, &$configurations, $confId)
+    public static function handleMinShouldMatch(array &$fields, array &$options, &$parameters, &$configurations, string $confId): void
     {
         // brauchen wir nur wen ein term angegeben wurde
         if (!self::emptyTerm($fields['term'])) {
@@ -139,11 +117,12 @@ class tx_mksearch_util_SearchBuilder
                 // mm aus der config holen
                 $mm = $configurations->get($confId.'mm.'.$combination);
                 // default nutzen wir aus none, wenn gesetzt
-                $mm = $mm ? $mm : $configurations->get($confId.'mm.'.MKSEARCH_OP_NONE);
+                $mm = $mm ?: $configurations->get($confId.'mm.'.MKSEARCH_OP_NONE);
                 if ($mm) {
                     $options['mm'] = $mm;
                 }
             }
+
             //             switch ($combination) {
             //                 case MKSEARCH_OP_NONE:
             //                 case MKSEARCH_OP_OR:
@@ -158,13 +137,11 @@ class tx_mksearch_util_SearchBuilder
      *
      * @todo: tests schreiben
      *
-     * @param array                    $fields
-     * @param array                    $options
-     * @param ParametersInterface      $parameters
-     * @param \Sys25\RnBase\Configuration\Processor $configurations
-     * @param string                   $confId
+     * @param ParametersInterface                  $parameters
+     * @param Sys25\RnBase\Configuration\Processor $configurations
+     * @param string                               $confId
      */
-    public static function handleDismaxFuzzySearch(&$fields, &$options, &$parameters, &$configurations, $confId)
+    public static function handleDismaxFuzzySearch(array &$fields, array &$options, &$parameters, &$configurations, $confId): void
     {
         if (!self::emptyTerm($fields['term'])
             && is_array($params = $parameters->get('options'))
@@ -189,18 +166,16 @@ class tx_mksearch_util_SearchBuilder
      *
      * Wurde nichts oder none übergeben wird die auswertung solr überlassen
      *
-     * @param string $content
-     * @param array  $options
-     *
-     * @return string
+     * @param array $options
      */
-    public static function searchSolrOptions($term = '', $combination = '', $options = [])
+    public static function searchSolrOptions($term = '', $combination = '', $options = []): ?string
     {
         if (self::emptyTerm($term)) {
             return '';
         }
+
         // die wörter aufsplitten
-        $terms = \Sys25\RnBase\Utility\Strings::trimExplode(' ', $term, 1);
+        $terms = Sys25\RnBase\Utility\Strings::trimExplode(' ', $term, 1);
         if (self::emptyTerm($terms)) {
             return '';
         }
@@ -212,7 +187,7 @@ class tx_mksearch_util_SearchBuilder
         $wildcard = intval($options['wildcard'] ?? 0);
 
         // sanitize term?
-        if ($sanitize) {
+        if (0 !== $sanitize) {
             switch ($combination) {
                 // sanitize nie bei free
                 case MKSEARCH_OP_FREE:
@@ -224,7 +199,7 @@ class tx_mksearch_util_SearchBuilder
         }
 
         // wrap in wildcards?
-        if ($wildcard) {
+        if (0 !== $wildcard) {
             switch ($combination) {
                 // wildcards nie bei free
                 case MKSEARCH_OP_FREE:
@@ -236,7 +211,7 @@ class tx_mksearch_util_SearchBuilder
         }
 
         // quotes
-        if ($quote) {
+        if (0 !== $quote) {
             switch ($combination) {
                 // exact und free nicht quoten
                 case MKSEARCH_OP_EXACT:
@@ -261,6 +236,7 @@ class tx_mksearch_util_SearchBuilder
                     break;
             }
         }
+
         // ist ein Suchstring übrig geblieben?
         if (!self::emptyTerm($terms)) {
             switch ($combination) {
@@ -269,13 +245,13 @@ class tx_mksearch_util_SearchBuilder
                     // @TODO: wenn vor dem term bereits ein + steht und wir noch eines anfügen, bekommen wir eine exception von solr!
                     $return = '+'.implode(' +', $terms);
                     // wenn nicht dismax, klammern drum rum
-                    $return = $dismax ? $return : '('.$return.')';
+                    $return = 0 !== $dismax ? $return : '('.$return.')';
                     break;
                 case MKSEARCH_OP_EXACT:
                     // in anführungszeichen setzen, bei fuzzy auch die tilde anfügen!
                     $return = '"'.implode(' ', $terms).'"'.($fuzzy ? '~'.$fuzzySlop : '');
                     // wenn nicht dismax, klammern drum rum
-                    $return = $dismax ? $return : '('.$return.')';
+                    $return = 0 !== $dismax ? $return : '('.$return.')';
                     break;
                 case MKSEARCH_OP_FREE:
                     $return = implode(' ', $terms);
@@ -286,7 +262,7 @@ class tx_mksearch_util_SearchBuilder
                 default:
                     $return = implode(' ', $terms);
                     // wenn nicht dismax, klammern drum rum
-                    $return = $dismax ? $return : '('.$return.')';
+                    $return = 0 !== $dismax ? $return : '('.$return.')';
                     break;
             }
         } else {
@@ -296,18 +272,13 @@ class tx_mksearch_util_SearchBuilder
         return $return;
     }
 
-    /**
-     * @param mixed $term
-     *
-     * @return bool
-     */
-    public static function emptyTerm($term)
+    public static function emptyTerm($term): bool
     {
         if (is_array($term)) {
             return 0 == count($term);
-        } else {
-            // wir nutzen strlen und nicht empty damit auch bei "0" gesucht wird
-            return 0 == strlen($term);
         }
+
+        // wir nutzen strlen und nicht empty damit auch bei "0" gesucht wird
+        return 0 == strlen($term);
     }
 }

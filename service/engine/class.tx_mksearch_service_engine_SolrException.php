@@ -1,46 +1,44 @@
 <?php
 
-/***************************************************************
- *  Copyright notice
+/*
+ * Copyright notice
  *
- *  (c) 2011 René Nitzche <dev@dmk-ebusiness.de>
- *  All rights reserved
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
  *
- * This library is distributed in the hope that it will be useful,
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
+ *
+ * This script is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- ***************************************************************/
+ * This copyright notice MUST APPEAR in all copies of the script!
+ */
 
 /**
  * Solr exception.
  */
-class tx_mksearch_service_engine_SolrException extends \Sys25\RnBase\Exception\AdditionalException
+class tx_mksearch_service_engine_SolrException extends Sys25\RnBase\Exception\AdditionalException
 {
-    private $lastUrl = '';
-    private $parent = false;
-
     /**
      * Erstellt eine neue Exeption.
      *
      * @param string $message
      * @param int    $code
-     * @param mixed  $additional
      */
-    public function __construct($message, $code = 0, $lastUrl = false, $parent = false)
+    public function __construct($message, $code = 0, private $lastUrl = false, private $parent = false)
     {
         parent::__construct($message, $code);
-        $this->lastUrl = $lastUrl;
-        $this->parent = $parent;
     }
 
     public function getLastUrl()

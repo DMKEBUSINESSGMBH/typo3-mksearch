@@ -1,32 +1,28 @@
 <?php
 
-/**
- *  @author Hannes Bochmann
+/*
+ * Copyright notice
  *
- *  Copyright notice
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
  *
- *  (c) 2010 - 2011 DMK E-Business GmbH <dev@dmk-ebusiness.de>
- *  All rights reserved
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
  *
- *  This script is part of the TYPO3 project. The TYPO3 project is
- *  free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
  *
- *  The GNU General Public License can be found at
- *  http://www.gnu.org/copyleft/gpl.html.
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
  *
- *  This script is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *  This copyright notice MUST APPEAR in all copies of the script!
- */
-
-/**
- * benötigte Klassen einbinden.
+ * This copyright notice MUST APPEAR in all copies of the script!
  */
 
 /**
@@ -47,7 +43,7 @@ class tx_mksearch_util_SuggestionBuilder
         static $instance;
         $class = empty($class) ? 'tx_mksearch_util_SuggestionBuilder' : $class;
         if (!($instance[$class] ?? null)) {
-            $instance[$class] = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($class);
+            $instance[$class] = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($class);
         }
 
         return $instance[$class];
@@ -60,12 +56,13 @@ class tx_mksearch_util_SuggestionBuilder
      *
      * @return array Ausgabedaten
      */
-    public function buildSuggestions($aSuggestionData)
+    public function buildSuggestions($aSuggestionData): array
     {
         $aSuggestions = [];
         if (!$aSuggestionData) {
             return $aSuggestions;
         }
+
         foreach ($aSuggestionData as $sSearchWord => $oSearchWord) {
             if (isset($oSearchWord->suggestion) && is_array($oSearchWord->suggestion)) {
                 $uid = 0;
@@ -88,12 +85,10 @@ class tx_mksearch_util_SuggestionBuilder
     /**
      * Liefert eine simple Suggestion zurück.
      *
-     * @param string $field
-     *
      * @return tx_mksearch_model_Suggestion
      */
-    protected function getSimpleSuggestion($aSuggestion)
+    protected function getSimpleSuggestion($aSuggestion): object
     {
-        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_Suggestion', $aSuggestion);
+        return TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_Suggestion', $aSuggestion);
     }
 }

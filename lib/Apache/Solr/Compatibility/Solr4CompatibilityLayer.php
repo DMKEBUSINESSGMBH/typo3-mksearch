@@ -13,15 +13,13 @@ class Apache_Solr_Compatibility_Solr4CompatibilityLayer implements Apache_Solr_C
      *
      * @return string An XML string
      */
-    public function createCommitXml($expungeDeletes = false, $waitFlush = true, $waitSearcher = true, $timeout = 3600, $softCommit = false)
+    public function createCommitXml($expungeDeletes = false, $waitFlush = true, $waitSearcher = true, $timeout = 3600, $softCommit = false): string
     {
         $expungeValue = $expungeDeletes ? 'true' : 'false';
         $searcherValue = $waitSearcher ? 'true' : 'false';
         $softCommitValue = $softCommit ? 'true' : 'false';
 
-        $rawPost = '<commit expungeDeletes="'.$expungeValue.'" softCommit="'.$softCommitValue.'" waitSearcher="'.$searcherValue.'" />';
-
-        return $rawPost;
+        return '<commit expungeDeletes="'.$expungeValue.'" softCommit="'.$softCommitValue.'" waitSearcher="'.$searcherValue.'" />';
     }
 
     /**
@@ -33,13 +31,11 @@ class Apache_Solr_Compatibility_Solr4CompatibilityLayer implements Apache_Solr_C
      *
      * @return string An XML string
      */
-    public function createOptimizeXml($waitFlush = true, $waitSearcher = true)
+    public function createOptimizeXml($waitFlush = true, $waitSearcher = true): string
     {
         $searcherValue = $waitSearcher ? 'true' : 'false';
 
-        $rawPost = '<optimize waitSearcher="'.$searcherValue.'" />';
-
-        return $rawPost;
+        return '<optimize waitSearcher="'.$searcherValue.'" />';
     }
 
     /**
@@ -61,16 +57,15 @@ class Apache_Solr_Compatibility_Solr4CompatibilityLayer implements Apache_Solr_C
         $overwritePending = true,
         $overwriteCommitted = true,
         $commitWithin = 0
-    ) {
-        $dupValue = !$allowDups ? 'true' : 'false';
+    ): string {
+        $dupValue = $allowDups ? 'false' : 'true';
 
         $commitWithin = (int) $commitWithin;
-        $commitWithinString = $commitWithin > 0 ? " commitWithin=\"{$commitWithin}\"" : '';
+        $commitWithinString = $commitWithin > 0 ? sprintf(' commitWithin="%d"', $commitWithin) : '';
 
-        $addXmlFragment = "<add overwrite=\"{$dupValue}\"{$commitWithinString}>";
+        $addXmlFragment = sprintf('<add overwrite="%s"%s>', $dupValue, $commitWithinString);
         $addXmlFragment .= $rawDocuments;
-        $addXmlFragment .= '</add>';
 
-        return $addXmlFragment;
+        return $addXmlFragment . '</add>';
     }
 }

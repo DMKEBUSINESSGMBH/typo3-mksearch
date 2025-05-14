@@ -1,46 +1,43 @@
 <?php
 
-/***************************************************************
- *  Copyright notice
+/*
+ * Copyright notice
  *
- *  (c) 2010 das Medienkombinat
- *  All rights reserved
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
  *
- * This library is distributed in the hope that it will be useful,
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
+ *
+ * This script is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- ***************************************************************/
+ * This copyright notice MUST APPEAR in all copies of the script!
+ */
 
 /**
  * Class to search index configurations from database.
  */
-class tx_mksearch_search_Config extends \Sys25\RnBase\Search\SearchBase
+class tx_mksearch_search_Config extends Sys25\RnBase\Search\SearchBase
 {
     /**
      * Return table mappings.
      *
      * MUST be public as we need these data from external!
      */
-    public function getTableMappings()
+    protected function getTableMappings()
     {
-        $tableMapping = [];
-        $tableMapping['CFG'] = self::getBaseTable();
-        $tableMapping['CMP'] = 'tx_mksearch_configcomposites';
-        $tableMapping['CMPCFGMM'] = 'tx_mksearch_configcomposites_indexerconfigs_mm';
-        $tableMapping['INDX'] = 'tx_mksearch_indices';
-        $tableMapping['INDXCMPMM'] = 'tx_mksearch_indices_configcomposites_mm';
-
-        return $tableMapping;
+        return ['CFG' => self::getBaseTable(), 'CMP' => 'tx_mksearch_configcomposites', 'CMPCFGMM' => 'tx_mksearch_configcomposites_indexerconfigs_mm', 'INDX' => 'tx_mksearch_indices', 'INDXCMPMM' => 'tx_mksearch_indices_configcomposites_mm'];
     }
 
     /**
@@ -49,7 +46,7 @@ class tx_mksearch_search_Config extends \Sys25\RnBase\Search\SearchBase
      *
      * @see \Sys25\RnBase\Search\SearchBase::getBaseTable()
      */
-    public function getBaseTable()
+    protected function getBaseTable()
     {
         return 'tx_mksearch_indexerconfigs';
     }
@@ -60,7 +57,7 @@ class tx_mksearch_search_Config extends \Sys25\RnBase\Search\SearchBase
      *
      * @see util/\Sys25\RnBase\Search\SearchBase#getBaseTable()
      */
-    public function getBaseTableAlias()
+    protected function getBaseTableAlias()
     {
         return 'CFG';
     }
@@ -84,7 +81,7 @@ class tx_mksearch_search_Config extends \Sys25\RnBase\Search\SearchBase
         $tableMapping = $this->getTableMappings();
 
         // Additional table "composites" or its MM table?
-        if (isset($tableAliases['CMPCFGMM']) or isset($tableAliases['CMP'])) {
+        if (isset($tableAliases['CMPCFGMM']) || isset($tableAliases['CMP'])) {
             $join .=
                 ' JOIN '.$tableMapping['CMPCFGMM'].
                     ' ON '.$tableMapping['CFG'].'.uid = '.$tableMapping['CMPCFGMM'].'.uid_foreign';
@@ -96,7 +93,7 @@ class tx_mksearch_search_Config extends \Sys25\RnBase\Search\SearchBase
         }
 
         // Additional table "indices" or its MM table?
-        if (isset($tableAliases['INDXCMPMM']) or isset($tableAliases['INDX'])) {
+        if (isset($tableAliases['INDXCMPMM']) || isset($tableAliases['INDX'])) {
             $join .=
                 ' JOIN '.$tableMapping['INDXCMPMM'].
                     ' ON '.$tableMapping['CMP'].'.uid = '.$tableMapping['INDXCMPMM'].'.uid_foreign';

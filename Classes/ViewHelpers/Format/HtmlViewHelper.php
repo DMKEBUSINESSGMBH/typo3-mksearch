@@ -1,5 +1,30 @@
 <?php
 
+/*
+ * Copyright notice
+ *
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
+ *
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
+ *
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
+ *
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * This copyright notice MUST APPEAR in all copies of the script!
+ */
+
 namespace DMK\Mksearch\ViewHelpers\Format;
 
 /*                                                                        *
@@ -27,16 +52,14 @@ namespace DMK\Mksearch\ViewHelpers\Format;
  */
 
 use Psr\Http\Message\ServerRequestInterface;
+use Sys25\RnBase\Utility\TYPO3;
 use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
-use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
-use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
-use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
 
 /**
  * Class HtmlViewHelper.
@@ -51,8 +74,6 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
  */
 class HtmlViewHelper extends AbstractViewHelper
 {
-    use CompileWithRenderStatic;
-
     /**
      * Children must not be escaped, to be able to pass {bodytext} directly to it.
      *
@@ -76,25 +97,26 @@ class HtmlViewHelper extends AbstractViewHelper
         $this->registerArgument('table', 'string', 'The table name associated with the "data" argument.', false, '');
     }
 
-    public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext): string
+    public function render(): string
     {
-        $parseFuncTSPath = $arguments['parseFuncTSPath'];
-        $data = $arguments['data'];
-        $current = $arguments['current'];
-        $currentValueKey = $arguments['currentValueKey'];
-        $table = $arguments['table'];
-
-        /** @var RenderingContext $renderingContext */
-        $request = $renderingContext->getRequest();
+        $parseFuncTSPath = $this->arguments['parseFuncTSPath'];
+        $data = $this->arguments['data'];
+        $current = $this->arguments['current'];
+        $currentValueKey = $this->arguments['currentValueKey'];
+        $table = $this->arguments['table'];
+        $request = $this->renderingContext->getRequest();
         $isBackendRequest = $request instanceof ServerRequestInterface && ApplicationType::fromRequest($request)->isBackend();
         if ($isBackendRequest) {
+            if (TYPO3::isTYPO130OrHigher() && !\tx_mksearch_service_internal_Index::isIndexingInProgress()) {
+                throw new \RuntimeException('Using f:format.html in backend context is not allowed. Use f:sanitize.html or f:transform.html instead.', 1686813703);
+            }
+
             // @deprecated since v12, remove in v13: Drop simulateFrontendEnvironment() and resetFrontendEnvironment() and throw a \RuntimeException here.
             trigger_error('Using f:format.html in backend context has been deprecated in TYPO3 v12 and will be removed with v13', E_USER_DEPRECATED);
             $tsfeBackup = self::simulateFrontendEnvironment();
         }
 
-        $value = $renderChildrenClosure() ?? '';
-
+        $value = $this->renderChildren() ?? '';
         // Prepare data array
         if (is_object($data)) {
             $data = ObjectAccess::getGettableProperties($data);
@@ -105,7 +127,6 @@ class HtmlViewHelper extends AbstractViewHelper
         $contentObject = GeneralUtility::makeInstance(ContentObjectRenderer::class);
         $contentObject->setRequest($request);
         $contentObject->start($data, $table);
-
         if (null !== $current) {
             $contentObject->setCurrentVal($current);
         } elseif (null !== $currentValueKey && isset($data[$currentValueKey])) {
@@ -113,7 +134,6 @@ class HtmlViewHelper extends AbstractViewHelper
         }
 
         $content = $contentObject->parseFunc($value, null, '< '.$parseFuncTSPath);
-
         if ($isBackendRequest) {
             self::resetFrontendEnvironment($tsfeBackup);
         }

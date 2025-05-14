@@ -1,32 +1,28 @@
 <?php
 
-/**
- * @author Hannes Bochmann
+/*
+ * Copyright notice
  *
- *  Copyright notice
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
  *
- *  (c) 2011 Hannes Bochmann <dev@dmk-ebusiness.de>
- *  All rights reserved
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
  *
- *  This script is part of the TYPO3 project. The TYPO3 project is
- *  free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
  *
- *  The GNU General Public License can be found at
- *  http://www.gnu.org/copyleft/gpl.html.
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
  *
- *  This script is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *  This copyright notice MUST APPEAR in all copies of the script!
- */
-
-/**
- * benötigte Klassen einbinden.
+ * This copyright notice MUST APPEAR in all copies of the script!
  */
 
 /**
@@ -39,9 +35,13 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
 {
     // In seminars wurden die Konstanten bei getSpeakerBag entfernt. Zur Sicherheit mal hier angelegt.
     public const SEMINARS_TABLE_SEMINARS_SPEAKERS_MM = 'tx_seminars_seminars_speakers_mm';
+
     public const SEMINARS_TABLE_SEMINARS_PARTNERS_MM = 'tx_seminars_seminars_speakers_mm_partners';
+
     public const SEMINARS_TABLE_SEMINARS_TUTORS_MM = 'tx_seminars_seminars_speakers_mm_tutors';
+
     public const SEMINARS_TABLE_SEMINARS_LEADERS_MM = 'tx_seminars_seminars_speakers_mm_leaders';
+
     public const SEMINARS_TABLE_SPEAKERS = 'tx_seminars_speakers';
 
     /**
@@ -59,10 +59,8 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
      * as you at the same time are responsible for
      * uniqueness (i.e. no overlapping with other content types) and
      * consistency (i.e. recognition) on indexing and searching data.
-     *
-     * @return array
      */
-    public static function getContentType()
+    public static function getContentType(): array
     {
         return ['seminars', 'seminar'];
     }
@@ -79,23 +77,34 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
             $this->handleRelatedMmChanged(\constant('SEMINARS_TABLE_SEMINARS_CATEGORIES_MM'), $rawData);
 
             return null;
-        } elseif ('tx_seminars_organizers' == $tableName) {
+        }
+
+        if ('tx_seminars_organizers' == $tableName) {
             $this->handleRelatedMmChanged(\constant('SEMINARS_TABLE_SEMINARS_ORGANIZERS_MM'), $rawData);
 
             return null;
-        } elseif ('tx_seminars_sites' == $tableName) {
+        }
+
+        if ('tx_seminars_sites' == $tableName) {
             $this->handleRelatedMmChanged(\constant('SEMINARS_TABLE_SEMINARS_SITES_MM'), $rawData);
 
             return null;
-        } elseif ('tx_seminars_speakers' == $tableName) {
+        }
+
+        if ('tx_seminars_speakers' == $tableName) {
             $this->handleRelatedMmChanged(\constant('SEMINARS_TABLE_SEMINARS_SPEAKERS_MM'), $rawData);
 
             return null;
-        } elseif ('tx_seminars_target_groups' == $tableName) {
+        }
+
+        if ('tx_seminars_target_groups' == $tableName) {
             $this->handleRelatedMmChanged(\constant('SEMINARS_TABLE_SEMINARS_TARGET_GROUPS_MM'), $rawData);
 
             return null;
-        } elseif ('tx_seminars_timeslots' == $tableName) {
+        }
+
+        // was a related table changed?
+        if ('tx_seminars_timeslots' == $tableName) {
             // we have no mm for timeslots
             $this->addSeminarToIndex($rawData['seminar']);
 
@@ -106,6 +115,7 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
         if (!$this->isIndexableRecord($rawData, $options)) {
             return null;
         }
+
         // we seem to have a real seminar so let's go on with the work
 
         // init the seminar object to do common checks
@@ -124,9 +134,9 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
         $oIndexer = null;
         // redirect the indexing to the responsible class
         if (0 == $rawData['object_type']) {
-            $oIndexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_seminars_SeminarObjectType0');
+            $oIndexer = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_seminars_SeminarObjectType0');
         } elseif (1 == $rawData['object_type']) {
-            $oIndexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_seminars_SeminarObjectType1');
+            $oIndexer = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_seminars_SeminarObjectType1');
         } // we dont need to index a event date as this happens when we index
         // a event topic
         elseif (2 == $rawData['object_type']) {
@@ -135,7 +145,7 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
             return null;
         }
 
-        if ($oIndexer) {
+        if (null !== $oIndexer) {
             return $oIndexer->prepareSearchData($tableName, $rawData, $indexDoc, $options);
         }
 
@@ -150,7 +160,7 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
      * @param string $sTable   | the MM Table
      * @param array  $aRawData | the record (non seminar; e.g. category) containing the foreign uid
      */
-    private function handleRelatedMmChanged($sTable, $aRawData)
+    private function handleRelatedMmChanged($sTable, array $aRawData): void
     {
         // collect all seminar uids for the given related record
         // for example all seminars with the given category or target group
@@ -169,8 +179,6 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
 
     /**
      * Indexes everything about the seminar.
-     *
-     * @param tx_mksearch_interface_IndexerDocument $indexDoc
      */
     protected function indexSeminar(tx_mksearch_interface_IndexerDocument $indexDoc)
     {
@@ -201,8 +209,6 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
 
     /**
      * Indexes everything about the seminar categories.
-     *
-     * @param tx_mksearch_interface_IndexerDocument $indexDoc
      */
     protected function indexSeminarCategories(tx_mksearch_interface_IndexerDocument $indexDoc)
     {
@@ -218,8 +224,6 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
 
     /**
      * Indexes everything about the seminar organizers.
-     *
-     * @param tx_mksearch_interface_IndexerDocument $indexDoc
      */
     protected function indexSeminarTargetGroups(tx_mksearch_interface_IndexerDocument $indexDoc)
     {
@@ -247,10 +251,8 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
      *
      * @param array $aValues  | array of objects
      * @param array $aMapping | the field key and the function name delivering the data
-     *
-     * @return array
      */
-    protected function getMultiValueFieldsByListObject($aValues, array $aMapping)
+    protected function getMultiValueFieldsByListObject($aValues, array $aMapping): array
     {
         $aTempIndexDoc = [];
         // as this is a multivalue field we collect all
@@ -265,6 +267,7 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
                         $getter = $mIndexKey['getter'];
                         $mValue = $mValue->$getter();
                     }
+
                     $aTempIndexDoc[$sIndexKey][] = $mValue;
                 }
             }
@@ -277,9 +280,10 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
      * Collects the values from an array.
      *
      * @param array $aValues
-     * @param array $aMapping
+     *
+     * @return non-empty-array[]
      */
-    protected function getMultiValueFieldsByArray($aValues, array $aMapping)
+    protected function getMultiValueFieldsByArray($aValues, array $aMapping): array
     {
         $aTempIndexDoc = [];
         // as this is a multivalue field we collect all
@@ -290,7 +294,7 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
                 if (!empty($aValue[$sRecordKey])) {
                     // handling of one dimensional arrays
                     if (is_array($aValue[$sRecordKey])) {
-                        foreach ($aValue[$sRecordKey] as $key => $mValue) {
+                        foreach ($aValue[$sRecordKey] as $mValue) {
                             $aTempIndexDoc[$sIndexKey][$mValue] = $mValue;
                         }
                     } else {// just a value so put it in
@@ -310,14 +314,10 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
 
     /**
      * Indexes the given array by the mapping.
-     *
-     * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @param array                                 $aMapping
-     * @param array                                 $aValues
      */
     protected function indexArrayByMapping(tx_mksearch_interface_IndexerDocument $indexDoc, array $aMapping, array $aValues)
     {
-        foreach ($aMapping as $sRecordKey => $sIndexKey) {
+        foreach ($aMapping as $sIndexKey) {
             if (!empty($aValues[$sIndexKey])) {
                 $indexDoc->addField($sIndexKey, $aValues[$sIndexKey]);
             }
@@ -329,24 +329,19 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
      * TODO: implement.
      *
      * @param array $sourceRecord
-     * @param array $options
      */
-    protected function isIndexableRecord($sourceRecord, $options)
+    protected function isIndexableRecord($sourceRecord, array $options)
     {
-        $ret = tx_mksearch_util_Indexer::getInstance()
+        return tx_mksearch_util_Indexer::getInstance()
                     ->isOnIndexablePage($sourceRecord, $options);
-
-        return $ret;
     }
 
     /**
      * Liefert das Seminar Objekt zur gegebenen Uid.
      *
-     * @param array $rawData
-     *
      * @return tx_seminars_seminar
      */
-    protected function getSeminar($rawData)
+    protected function getSeminar(array $rawData)
     {
         return new tx_seminars_seminar($rawData['uid']);
     }
@@ -361,26 +356,16 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
      *
      * @return tx_seminars_speakerbag a speakerbag object
      */
-    protected function getSpeakerBag($uid, $speakerRelation = 'speakers')
+    protected function getSpeakerBag(string $uid, $speakerRelation = 'speakers'): object
     {
-        switch ($speakerRelation) {
-            case 'partners':
-                $mmTable = self::SEMINARS_TABLE_SEMINARS_PARTNERS_MM;
-                break;
-            case 'tutors':
-                $mmTable = self::SEMINARS_TABLE_SEMINARS_TUTORS_MM;
-                break;
-            case 'leaders':
-                $mmTable = self::SEMINARS_TABLE_SEMINARS_LEADERS_MM;
-                break;
-            case 'speakers':
-                // The fallthrough is intended.
-            default:
-                $mmTable = self::SEMINARS_TABLE_SEMINARS_SPEAKERS_MM;
-                break;
-        }
+        $mmTable = match ($speakerRelation) {
+            'partners' => self::SEMINARS_TABLE_SEMINARS_PARTNERS_MM,
+            'tutors' => self::SEMINARS_TABLE_SEMINARS_TUTORS_MM,
+            'leaders' => self::SEMINARS_TABLE_SEMINARS_LEADERS_MM,
+            default => self::SEMINARS_TABLE_SEMINARS_SPEAKERS_MM,
+        };
 
-        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+        return TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_seminars_Bag_Speaker',
             $mmTable.'.uid_local = '.$uid.' AND tx_seminars_speakers.uid = '.$mmTable.'.uid_foreign',
             $mmTable,
@@ -391,10 +376,8 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
     /**
      * Provides the mapping for the fields in Solr
      * and the fields in the category object.
-     *
-     * @return array
      */
-    protected function getCategoriesMapping()
+    protected function getCategoriesMapping(): array
     {
         return [
             'title' => 'categories_title_ms',
@@ -405,10 +388,8 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
      * Provides the mapping for the fields in Solr
      * and the functions of the organizer object delivering
      * the data.
-     *
-     * @return array
      */
-    protected function getOrganizersMapping()
+    protected function getOrganizersMapping(): array
     {
         return [
             'getTitle' => 'organizers_title_ms',
@@ -422,10 +403,8 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
      * Provides the mapping for the fields in Solr
      * and the functions of the places object delivering
      * the data.
-     *
-     * @return array
      */
-    protected function getPlacesMapping()
+    protected function getPlacesMapping(): array
     {
         return [
             'getAddress' => 'place_adress_ms',
@@ -444,10 +423,8 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
      * Provides the mapping for the fields in Solr
      * and the functions of the speakers object delivering
      * the data.
-     *
-     * @return array
      */
-    protected function getSpeakersMapping()
+    protected function getSpeakersMapping(): array
     {
         return [
             'getTitle' => 'speakers_title_ms',
@@ -467,10 +444,8 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
     /**
      * Provides the mapping for the fields in Solr
      * and the fields in the timeslots object.
-     *
-     * @return array
      */
-    protected function getTimeslotsMapping()
+    protected function getTimeslotsMapping(): array
     {
         return [
             'title' => 'timeslots_title_ms',
@@ -490,10 +465,8 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
      * but only serves as assistance when actually configuring an indexer!
      * Hence all possible configuration options should be set or
      * at least be mentioned to provide an easy-to-access inline documentation!
-     *
-     * @return string
      */
-    public function getDefaultTSConfig()
+    public function getDefaultTSConfig(): string
     {
         return <<<LH
 # Fields which are set statically to the given value

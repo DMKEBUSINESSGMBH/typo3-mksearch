@@ -1,32 +1,28 @@
 <?php
 
-/**
- * @author Hannes Bochmann
+/*
+ * Copyright notice
  *
- *  Copyright notice
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
  *
- *  (c) 2011 Hannes Bochmann <dev@dmk-ebusiness.de>
- *  All rights reserved
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
  *
- *  This script is part of the TYPO3 project. The TYPO3 project is
- *  free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
  *
- *  The GNU General Public License can be found at
- *  http://www.gnu.org/copyleft/gpl.html.
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
  *
- *  This script is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *  This copyright notice MUST APPEAR in all copies of the script!
- */
-
-/**
- * benötigte Klassen einbinden.
+ * This copyright notice MUST APPEAR in all copies of the script!
  */
 
 /**
@@ -46,7 +42,7 @@ class tx_mksearch_indexer_seminars_SeminarObjectType1 extends tx_mksearch_indexe
      *
      * @see tx_mksearch_interface_Indexer::prepareSearchData()
      */
-    public function prepareSearchData($tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options)
+    public function prepareSearchData($tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options): ?tx_mksearch_interface_IndexerDocument
     {
         // we have to init the seminar again
         $this->oSeminar = $this->getSeminar($rawData);
@@ -54,7 +50,7 @@ class tx_mksearch_indexer_seminars_SeminarObjectType1 extends tx_mksearch_indexe
         // so we fetch all dates related to this topic and collect their
         // data
         $this->aDates = $this->getSeminarDatesByTopic();
-        if (empty($this->aDates)) {
+        if (null === $this->aDates || [] === $this->aDates) {
             return null;
         }// nothing to do as we have no dates
         // else
@@ -78,8 +74,6 @@ class tx_mksearch_indexer_seminars_SeminarObjectType1 extends tx_mksearch_indexe
     /**
      * the begin_date and end_date comes from the dates so we have to fetch them
      * from there and override the existing (mostly) empty dates.
-     *
-     * @param tx_mksearch_interface_IndexerDocument $indexDoc
      */
     protected function indexSeminar(tx_mksearch_interface_IndexerDocument $indexDoc)
     {
@@ -87,23 +81,24 @@ class tx_mksearch_indexer_seminars_SeminarObjectType1 extends tx_mksearch_indexe
         parent::indexSeminar($indexDoc);
         // the begin_date and end_date comes from our dates so we take them from there
         // and overwrite the existing values
-        $aBeginDates = $aEndDates = [];
+        $aBeginDates = [];
+        $aEndDates = [];
         foreach ($this->aDates as $oDate) {
             $aBeginDates[] = $oDate->getBeginDateAsTimestamp();
             $aEndDates[] = $oDate->getEndDateAsTimestamp();
         }
-        if (!empty($aBeginDates)) {
+
+        if ([] !== $aBeginDates) {
             $indexDoc->addField('begin_date_ms', $aBeginDates);
         }
-        if (!empty($aEndDates)) {
+
+        if ([] !== $aEndDates) {
             $indexDoc->addField('end_date_ms', $aEndDates);
         }
     }
 
     /**
      * Indexes everything about the seminar target groups.
-     *
-     * @param tx_mksearch_interface_IndexerDocument $indexDoc
      */
     protected function indexSeminarOrganizers(tx_mksearch_interface_IndexerDocument $indexDoc)
     {
@@ -123,8 +118,6 @@ class tx_mksearch_indexer_seminars_SeminarObjectType1 extends tx_mksearch_indexe
 
     /**
      * Indexes everything about the seminar places.
-     *
-     * @param tx_mksearch_interface_IndexerDocument $indexDoc
      */
     protected function indexSeminarPlaces(tx_mksearch_interface_IndexerDocument $indexDoc)
     {
@@ -145,8 +138,6 @@ class tx_mksearch_indexer_seminars_SeminarObjectType1 extends tx_mksearch_indexe
 
     /**
      * Indexes everything about the seminar speakers.
-     *
-     * @param tx_mksearch_interface_IndexerDocument $indexDoc
      */
     protected function indexSeminarSpeakers(tx_mksearch_interface_IndexerDocument $indexDoc)
     {
@@ -169,8 +160,6 @@ class tx_mksearch_indexer_seminars_SeminarObjectType1 extends tx_mksearch_indexe
 
     /**
      * Indexes everything about the seminar timeslots.
-     *
-     * @param tx_mksearch_interface_IndexerDocument $indexDoc
      */
     protected function indexSeminarTimeslots(tx_mksearch_interface_IndexerDocument $indexDoc)
     {
@@ -180,21 +169,24 @@ class tx_mksearch_indexer_seminars_SeminarObjectType1 extends tx_mksearch_indexe
 
         // as the speakers will be a comma separated list we have to make
         // an array out of it
-        if (empty($aTimeslotsByDate)) {
+        if ([] === $aTimeslotsByDate) {
             return null;
         }// nothing to do
         // else
         $aMergedTimeslots = [];
         foreach ($aTimeslotsByDate as $aTimeslots) {
             foreach ($aTimeslots as &$aTimeslot) {
-                $aTimeslot['speakers'] = \Sys25\RnBase\Utility\Strings::trimExplode(',', $aTimeslot['speakers']);
+                $aTimeslot['speakers'] = Sys25\RnBase\Utility\Strings::trimExplode(',', $aTimeslot['speakers']);
                 $aMergedTimeslots[] = $aTimeslot;
             }
         }
+
         $aTempIndexDoc = $this->getMultiValueFieldsByArray($aMergedTimeslots, $aRecordFieldMapping);
 
         // now we index the collected fields
         $this->indexArrayByMapping($indexDoc, $aRecordFieldMapping, $aTempIndexDoc);
+
+        return null;
     }
 
     /**
@@ -204,12 +196,10 @@ class tx_mksearch_indexer_seminars_SeminarObjectType1 extends tx_mksearch_indexe
      *
      * @param array $aValues  | array of array of objects
      * @param array $aMapping | the field key and the function name delivering the data
-     *
-     * @return array
      */
-    private function getMultiValueFieldsByListObjectArray($aValues, array $aMapping)
+    private function getMultiValueFieldsByListObjectArray(array $aValues, array $aMapping): ?array
     {
-        if (empty($aValues)) {
+        if ([] === $aValues) {
             return null;
         }// nothing to do
         // else
@@ -223,6 +213,7 @@ class tx_mksearch_indexer_seminars_SeminarObjectType1 extends tx_mksearch_indexe
         if (0 == count($aTempIndexDocs)) {
             return null;
         }
+
         // else
         // now merge the data of the several index docs
         $aNewTempIndexDoc = [];
@@ -239,10 +230,8 @@ class tx_mksearch_indexer_seminars_SeminarObjectType1 extends tx_mksearch_indexe
 
     /**
      * fetches all dates related to this topic.
-     *
-     * @return array
      */
-    private function getSeminarDatesByTopic()
+    private function getSeminarDatesByTopic(): array
     {
         // first of all we collect all seminar uids with the topic
         // we have to take an own method as the seminars extension seems not to provide
@@ -250,7 +239,7 @@ class tx_mksearch_indexer_seminars_SeminarObjectType1 extends tx_mksearch_indexe
         $aOptions = [];
         $aOptions['where'] = \constant('SEMINARS_TABLE_SEMINARS').'.topic='.$this->oSeminar->getUid();
         $aFrom = [\constant('SEMINARS_TABLE_SEMINARS'), \constant('SEMINARS_TABLE_SEMINARS')];
-        $aRows = \Sys25\RnBase\Database\Connection::getInstance()->doSelect(\constant('SEMINARS_TABLE_SEMINARS').'.uid', $aFrom, $aOptions);
+        $aRows = Sys25\RnBase\Database\Connection::getInstance()->doSelect(\constant('SEMINARS_TABLE_SEMINARS').'.uid', $aFrom, $aOptions);
 
         // now we get the according objects
         $aSeminars = [];
@@ -266,12 +255,8 @@ class tx_mksearch_indexer_seminars_SeminarObjectType1 extends tx_mksearch_indexe
     /**
      * Gets data which is related to the dates
      * for example deliviering all places of the several dates.
-     *
-     * @param string $sFunction
-     *
-     * @return array
      */
-    private function getRelatedDataByDates($sFunction)
+    private function getRelatedDataByDates(string $sFunction): array
     {
         $aRelatedDataByDates = [];
         foreach ($this->aDates as $oDate) {

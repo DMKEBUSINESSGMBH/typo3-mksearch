@@ -1,32 +1,28 @@
 <?php
 
-/**
- * @author Hannes Bochmann <dev@dmk-ebusiness.de>
+/*
+ * Copyright notice
  *
- *  Copyright notice
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
  *
- *  (c) 2011 Hannes Bochmann <dev@dmk-ebusiness.de>
- *  All rights reserved
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
  *
- *  This script is part of the TYPO3 project. The TYPO3 project is
- *  free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
  *
- *  The GNU General Public License can be found at
- *  http://www.gnu.org/copyleft/gpl.html.
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
  *
- *  This script is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *  This copyright notice MUST APPEAR in all copies of the script!
- */
-
-/**
- * benötigte Klassen einbinden.
+ * This copyright notice MUST APPEAR in all copies of the script!
  */
 
 /**
@@ -42,17 +38,17 @@ class tx_mksearch_indexer_TtContent implements tx_mksearch_interface_Indexer
      *
      * @var tx_mksearch_indexer_Base
      */
-    protected $actualIndexer;
+    protected object $actualIndexer;
 
     /**
      * load the appropriate indexer depending on gridelements.
      */
     public function __construct()
     {
-        if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('gridelements')) {
-            $this->actualIndexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_ttcontent_Gridelements');
+        if (TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('gridelements')) {
+            $this->actualIndexer = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_ttcontent_Gridelements');
         } else {
-            $this->actualIndexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_ttcontent_Normal');
+            $this->actualIndexer = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_ttcontent_Normal');
         }
     }
 
@@ -76,10 +72,8 @@ class tx_mksearch_indexer_TtContent implements tx_mksearch_interface_Indexer
      * as you at the same time are responsible for
      * uniqueness (i.e. no overlapping with other content types) and
      * consistency (i.e. recognition) on indexing and searching data.
-     *
-     * @return array
      */
-    public static function getContentType()
+    public static function getContentType(): array
     {
         return ['core', 'tt_content'];
     }
@@ -92,10 +86,8 @@ class tx_mksearch_indexer_TtContent implements tx_mksearch_interface_Indexer
      *  a new indexer configuration record!
      * Hence all possible configuration options should be set or at least
      * be mentioned (i.e. commented out) to provide an easy-to-access inline documentation!
-     *
-     * @return string
      */
-    public function getDefaultTSConfig()
+    public function getDefaultTSConfig(): string
     {
         return <<<CONF
 # Fields which are set statically to the given value

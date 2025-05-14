@@ -1,25 +1,29 @@
 <?php
 
-/***************************************************************
- *  Copyright notice
+/*
+ * Copyright notice
  *
- *  (c) 2009 das Medienkombinat
- *  All rights reserved
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
  *
- * This library is distributed in the hope that it will be useful,
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
+ *
+ * This script is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- ***************************************************************/
+ * This copyright notice MUST APPEAR in all copies of the script!
+ */
 
 use Sys25\RnBase\Frontend\Request\ParametersInterface;
 
@@ -49,10 +53,7 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
      */
     protected $filterUtility;
 
-    /**
-     * @return string
-     */
-    protected function getConfIdOverwrite()
+    protected function getConfIdOverwrite(): string
     {
         return $this->getConfId(false).'filter._overwrite.';
     }
@@ -71,8 +72,9 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
         if ($extended) {
             if (empty($this->confIdExtended)) {
                 $this->confIdExtended = $this->getConfigurations()->get($confId.'filter.confid');
-                $this->confIdExtended = 'filter.'.($this->confIdExtended ? $this->confIdExtended : 'default').'.';
+                $this->confIdExtended = 'filter.'.($this->confIdExtended ?: 'default').'.';
             }
+
             $confId .= $this->confIdExtended;
         }
 
@@ -89,7 +91,7 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
     {
         $confId = $this->getConfId();
         $fields = $this->getConfigurations()->get($confId.'fields.');
-        \Sys25\RnBase\Search\SearchBase::setConfigOptions($options, $this->getConfigurations(), $confId.'options.');
+        Sys25\RnBase\Search\SearchBase::setConfigOptions($options, $this->getConfigurations(), $confId.'options.');
 
         return $this->initFilter($fields, $options, $this->request);
     }
@@ -115,7 +117,7 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
         $value = $configurations->get($this->getConfIdOverwrite().$confId);
         if (empty($value)) {
             // wert aus normalem ts holen.
-            $value = $configurations->get($this->getConfId().$confId);
+            return $configurations->get($this->getConfId().$confId);
         }
 
         return $value;
@@ -124,22 +126,22 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
     /**
      * Filter for search form.
      *
-     * @param array                    $fields
-     * @param array                    $options
-     * @param \Sys25\RnBase\Frontend\Request\RequestInterface $request
+     * @param array $fields
+     * @param array $options
      *
      * @return bool Should subsequent query be executed at all?
      */
-    protected function initFilter(&$fields, &$options, \Sys25\RnBase\Frontend\Request\RequestInterface $request)
+    protected function initFilter(&$fields, &$options, Sys25\RnBase\Frontend\Request\RequestInterface $request)
     {
         $configurations = $request->getConfigurations();
         $parameters = $request->getParameters();
         $confId = $this->getConfId();
 
         // Es muss ein Submit-Parameter im request liegen, damit der Filter greift
-        if (!($parameters->offsetExists('submit') || $this->getConfValue($configurations, 'force'))) {
+        if (!$parameters->offsetExists('submit') && !$this->getConfValue($configurations, 'force')) {
             return false;
         }
+
         // request handler setzen
         if ($requestHandler = $configurations->get($this->getConfId(false).'requestHandler')) {
             $options['qt'] = $requestHandler;
@@ -180,10 +182,8 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
 
     /**
      * Setzt die Anzahl der Treffer pro Seite.
-     *
-     * @param array $options
      */
-    protected function handleLimit(&$options)
+    protected function handleLimit(array &$options)
     {
         $options['limit'] = $this->getFilterUtility()->getPageLimit(
             $this->getParameters(),
@@ -196,12 +196,11 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
     /**
      * Fügt den Suchstring zu dem Filter hinzu.
      *
-     * @param array                    $fields
-     * @param ParametersInterface      $parameters
-     * @param \Sys25\RnBase\Configuration\Processor $configurations
-     * @param string                   $confId
+     * @param array                                $fields
+     * @param ParametersInterface                  $parameters
+     * @param Sys25\RnBase\Configuration\Processor $configurations
      */
-    protected function handleTerm(&$fields, &$parameters, &$configurations, $confId)
+    protected function handleTerm(&$fields, &$parameters, &$configurations, string $confId)
     {
         if ($termTemplate = ($fields['term'] ?? '')) {
             $termTemplate = $this->getFilterUtility()->parseTermTemplate(
@@ -218,15 +217,15 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
     }
 
     /**
-     * @param array                    $options
-     * @param ParametersInterface      $parameters
-     * @param \Sys25\RnBase\Configuration\Processor $configurations
-     * @param string                   $confId
+     * @param array                                $options
+     * @param ParametersInterface                  $parameters
+     * @param Sys25\RnBase\Configuration\Processor $configurations
+     * @param string                               $confId
      */
     protected function handleFacet(&$options, &$parameters, &$configurations, $confId)
     {
         $fields = $this->getConfValue('options.facet.fields');
-        $fields = \Sys25\RnBase\Utility\Strings::trimExplode(',', $fields, true);
+        $fields = Sys25\RnBase\Utility\Strings::trimExplode(',', $fields, true);
 
         if (empty($fields)) {
             return;
@@ -244,13 +243,14 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
         if (empty($options['facet.mincount'])) {
             // typoscript auf mincount checken.
             $facetMinCountConfig = $this->getConfValue('options.facet.mincount');
-            $options['facet.mincount'] = strlen($facetMinCountConfig) ? (int) $facetMinCountConfig : '1';
+            $options['facet.mincount'] = 0 !== strlen($facetMinCountConfig) ? (int) $facetMinCountConfig : '1';
         }
 
         $sortFacetsFromConfiguration = $this->getConfValue('options.facet.sort');
         if ($sortFacetsFromConfiguration && empty($options['facet.sort'])) {
             $options['facet.sort'] = $sortFacetsFromConfiguration;
         }
+
         // als fallback immer nach der anzahl sortieren, die alternative wäre index.
         if (empty($options['facet.sort'])) {
             $options['facet.sort'] = 'count';
@@ -264,13 +264,10 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
      *
      * @see tx_mksearch_util_SearchBuilder::searchSolrOptions
      *
-     * @param array                    $fields
-     * @param array                    $options
-     * @param ParametersInterface      $parameters
-     * @param \Sys25\RnBase\Configuration\Processor $configurations
-     * @param string                   $confId
+     * @param ParametersInterface                  $parameters
+     * @param Sys25\RnBase\Configuration\Processor $configurations
      */
-    protected function handleOperators(&$fields, &$options, &$parameters, &$configurations, $confId)
+    protected function handleOperators(array &$fields, array &$options, &$parameters, &$configurations, string $confId)
     {
         // wenn der DisMaxRequestHandler genutzt wird, müssen wir ggf. den term und die options ändern.
         if ($configurations->get($confId.'useDisMax')) {
@@ -282,12 +279,11 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
     /**
      * Fügt eine Filter Query (Einschränkung) zu dem Filter hinzu.
      *
-     * @param array                    $options
-     * @param ParametersInterface      $parameters
-     * @param \Sys25\RnBase\Configuration\Processor $configurations
-     * @param string                   $confId
+     * @param array                                $options
+     * @param ParametersInterface                  $parameters
+     * @param Sys25\RnBase\Configuration\Processor $configurations
      */
-    protected function handleFq(&$options, &$parameters, &$configurations, $confId)
+    protected function handleFq(&$options, &$parameters, &$configurations, string $confId)
     {
         self::addFilterQuery($options, self::getFilterQueryForFeGroups());
 
@@ -305,16 +301,16 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
         // parameter der filterquery prüfen
         // @see tx_mksearch_marker_Facet::prepareItem
         $fqParams = $parameters->get('fq');
-        $fqParams = is_array($fqParams) ? $fqParams : (trim($fqParams) ? [trim($fqParams)] : []);
+        $fqParams = is_array($fqParams) ? $fqParams : ('' !== trim($fqParams) && '0' !== trim($fqParams) ? [trim($fqParams)] : []);
         // @todo die if blöcke in eigene funktionen auslagern
-        if (!empty($fqParams)) {
+        if ([] !== $fqParams) {
             // FQ field, for single queries
             // Das ist deprecated! Dadurch wäre nur ein festes Facet-Field möglich
             $sFqField = $configurations->get($confId.'fqField');
             foreach ($fqParams as $fqField => $fqValues) {
                 $fieldOptions = [];
-                $fqValues = is_array($fqValues) ? $fqValues : (trim($fqValues) ? [trim($fqValues)] : []);
-                if (empty($fqValues)) {
+                $fqValues = is_array($fqValues) ? $fqValues : ('' !== trim($fqValues) && '0' !== trim($fqValues) ? [trim($fqValues)] : []);
+                if ([] === $fqValues) {
                     continue;
                 }
 
@@ -323,22 +319,22 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
                     if ($sFqField) {
                         // deprecated: sollte nicht mehr vorkommen
                         $fq = $sFqField.':"'.tx_mksearch_util_Misc::sanitizeFq($fqValue).'"';
-                    } else {
+                    } elseif (tx_mksearch_model_Facet::TYPE_QUERY === $fqField) {
                         // Query-Facet prüfen
-                        if (tx_mksearch_model_Facet::TYPE_QUERY === $fqField) {
-                            $fq = $this->buildFq4QueryFacet($fqName, $configurations, $confId);
-                        } else {
-                            // check field facets
-                            // field value konstellation prüfen
-                            $fq = $this->parseFieldAndValue($fqValue, $allowedFqParams);
-                            if (empty($fq) && !empty($fqField) && in_array($fqField, $allowedFqParams)) {
-                                $fq = tx_mksearch_util_Misc::sanitizeFq($fqField);
-                                $fq .= ':"'.tx_mksearch_util_Misc::sanitizeFq($fqValue).'"';
-                            }
+                        $fq = $this->buildFq4QueryFacet($fqName, $configurations, $confId);
+                    } else {
+                        // check field facets
+                        // field value konstellation prüfen
+                        $fq = $this->parseFieldAndValue($fqValue, $allowedFqParams);
+                        if (('' === $fq || '0' === $fq) && ('' !== $fqField && '0' !== $fqField && 0 !== $fqField) && in_array($fqField, $allowedFqParams)) {
+                            $fq = tx_mksearch_util_Misc::sanitizeFq($fqField);
+                            $fq .= ':"'.tx_mksearch_util_Misc::sanitizeFq($fqValue).'"';
                         }
                     }
+
                     self::addFilterQuery($fieldOptions, $fq);
                 }
+
                 if (!empty($fieldOptions['fq'])) {
                     $fieldQuery = $fieldOptions['fq'];
                     if (is_array($fieldQuery)) {
@@ -346,25 +342,31 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
                         $fqOperator = 'OR' == $fqOperator ? 'OR' : 'AND';
                         $fieldQuery = implode(' '.$fqOperator.' ', $fieldQuery);
                     }
+
                     self::addFilterQuery($options, $this->handleFqTags($fieldQuery));
                 }
             }
         }
-        if ($sAddFq = trim($parameters->get('addfq'))) {
+
+        $sAddFq = trim($parameters->get('addfq'));
+        if ('' !== $sAddFq && '0' !== $sAddFq) {
             // field value konstelation prüfen
             $sAddFq = $this->parseFieldAndValue($sAddFq, $allowedFqParams);
             self::addFilterQuery($options, $this->handleFqTags($sAddFq));
         }
-        if ($sRemoveFq = trim($parameters->get('remfq'))) {
+
+        $sRemoveFq = trim($parameters->get('remfq'));
+        if ('' !== $sRemoveFq && '0' !== $sRemoveFq) {
             $aFQ = isset($options['fq']) ? (is_array($options['fq']) ? $options['fq'] : [$options['fq']]) : [];
             // hier steckt nur der feldname drin
             foreach ($aFQ as $iKey => $sFq) {
-                list($sfield) = explode(':', $sFq);
+                [$sfield] = explode(':', $sFq);
                 // wir löschen das feld
-                if (in_array($sRemoveFq, $allowedFqParams) && $sRemoveFq == $sfield) {
+                if (in_array($sRemoveFq, $allowedFqParams) && $sRemoveFq === $sfield) {
                     unset($aFQ[$iKey]);
                 }
             }
+
             $options['fq'] = $aFQ;
         }
     }
@@ -397,32 +399,31 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
      * Baut den fq-Parameter für eine Query-Facette zusammen. Die Filter-Anweisung dafür muss im Typoscript
      * konfiguriert sein. Sie sollte identisch mit der Anweisung in der solrconfig.xml sein.
      *
-     * @param string                   $queryFacetAlias
-     * @param \Sys25\RnBase\Configuration\Processor $configurations
-     * @param string                   $confId
+     * @param string $queryFacetAlias
      *
      * @return string
      */
-    private function buildFq4QueryFacet($queryFacetAlias, $configurations, $confId)
+    private function buildFq4QueryFacet(int|string $queryFacetAlias, Sys25\RnBase\Configuration\Processor $configurations, string $confId)
     {
         return $configurations->get($confId.'facet.queries.'.$queryFacetAlias);
     }
 
-    public static function getFilterQueryForFeGroups()
+    public static function getFilterQueryForFeGroups(): string
     {
         // wenigstens ein teil der query muss matchen. bei prüfen auf
         // nicht vorhandensein muss also noch auf ein feld geprüft werden
         // das garantiert existiert und damit ein match generiert.
         $filterQuery = '(-fe_group_mi:[* TO *] AND id:[* TO *])';
-        if (\Sys25\RnBase\Utility\TYPO3::getFEUserUID()) {
+        if (Sys25\RnBase\Utility\TYPO3::getFEUserUID()) {
             $filterQueriesByFeGroup = ['fe_group_mi:0', 'fe_group_mi:"-2"'];
-            $feUser = \Sys25\RnBase\Utility\TYPO3::getFEUser();
+            $feUser = Sys25\RnBase\Utility\TYPO3::getFEUser();
             if (is_array($feUser->groupData['uid'])) {
                 foreach ($feUser->groupData['uid'] as $feGroup) {
                     $filterQueriesByFeGroup[] = 'fe_group_mi:'.$feGroup;
                 }
             }
-            $filterQuery .= ' OR (('.join(' OR ', $filterQueriesByFeGroup).') AND -fe_group_mi:"-1")';
+
+            $filterQuery .= ' OR (('.implode(' OR ', $filterQueriesByFeGroup).') AND -fe_group_mi:"-1")';
         } else {
             $filterQuery .= ' OR fe_group_mi:0 OR fe_group_mi:"-1"';
         }
@@ -433,15 +434,14 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
     /**
      * Fügt die SiteRootPage zur Filter Query hinzu.
      *
-     * @param array                    $options
-     * @param \Sys25\RnBase\Configuration\Processor $configurations
-     * @param string                   $confId
+     * @param array                                $options
+     * @param Sys25\RnBase\Configuration\Processor $configurations
      */
     public function handleFqForSiteRootPage(
         &$options,
         &$configurations,
-        $confId
-    ) {
+        string $confId,
+    ): void {
         if ($configurations->getBool($confId.'respectSiteRootPage')) {
             $siteRootPage = tx_mksearch_util_Indexer::getInstance()->getSiteRootPage(
                 $GLOBALS['TSFE']->id
@@ -449,7 +449,8 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
             if (($options['siteRootPage'] ?? null) || !is_array($siteRootPage)) {
                 $siteRootPage = $options['siteRootPage'];
             }
-            if (is_array($siteRootPage) && !empty($siteRootPage)) {
+
+            if (is_array($siteRootPage) && [] !== $siteRootPage) {
                 self::addFilterQuery(
                     $options,
                     // Alle Dokumente mit der passenden siteRootPage oder ohne dieses Feld.
@@ -464,12 +465,10 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
 
     /**
      * Adds filter for the charbrowser.
-     *
-     * @param array $options
      */
     public function handleFqForCharBrowser(
-        &$options
-    ) {
+        array &$options,
+    ): void {
         $confId = $this->getConfId(false).'charbrowser.';
         $configurations = $this->getConfigurations();
 
@@ -505,14 +504,14 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
      *
      * @TODO: kann die fq nicht immer ein array sein!? dann könnten wir uns das sparen!
      *
-     * @param array        $options
-     * @param string       $sFQ
+     * @param string $sFQ
      */
-    public static function addFilterQuery(array &$options, $sFQ)
+    public static function addFilterQuery(array &$options, $sFQ): void
     {
         if (empty($sFQ)) {
             return;
         }
+
         // vorhandene fq berücksichtigen
         if (isset($options['fq'])) {
             // den neuen wert anhängen
@@ -531,12 +530,9 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
     /**
      * Prüft den fq parameter auf richtigkeit.
      *
-     * @param string $sFq
-     * @param array  $allowedFqParams
-     *
-     * @return string
+     * @param array $allowedFqParams
      */
-    private function parseFieldAndValue($sFq, $allowedFqParams)
+    private function parseFieldAndValue(string $sFq, $allowedFqParams): string
     {
         return $this->getFilterUtility()->parseFqFieldAndValue($sFq, $allowedFqParams);
     }
@@ -550,10 +546,8 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
      *
      * Diese Methode sollte die Kindklasse überschreiben,
      * um Koordinaten zu liefern.
-     *
-     * @return string or false for no spatial search
      */
-    protected function getSpatialPoint()
+    protected function getSpatialPoint(): string|false
     {
         return false;
     }
@@ -587,7 +581,7 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
     {
         // Die Koordinaten, anhand der gesucht werden soll.
         $point = $this->getSpatialPoint();
-        if (!$point) {
+        if ('' === $point || '0' === $point || false === $point) {
             return;
         }
 
@@ -599,6 +593,7 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
         if (empty($coordField)) {
             return;
         }
+
         $options['sfield'] = $coordField;
 
         // die distanz bzw. den umkreis für die umkreissuche ermitteln
@@ -635,10 +630,8 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
      * Fügt die Sortierung zu dem Filter hinzu.
      *
      * @TODO: das klappt zurzeit nur bei einfacher sortierung!
-     *
-     * @param array $options
      */
-    protected function handleSorting(&$options)
+    protected function handleSorting(array &$options)
     {
         if ($sortString = $this->getFilterUtility()->getSortString($options, $this->getParameters())) {
             $options['sort'] = $sortString;
@@ -646,17 +639,18 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
     }
 
     /**
-     * @param string                    $template  HTML template
-     * @param \Sys25\RnBase\Frontend\Marker\FormatUtil $formatter
-     * @param string                    $confId
-     * @param string                    $marker
+     * @param string                                  $template  HTML template
+     * @param Sys25\RnBase\Frontend\Marker\FormatUtil $formatter
+     * @param string                                  $confId
+     * @param string                                  $marker
      *
      * @return string
      */
     public function parseTemplate($template, &$formatter, $confId, $marker = 'FILTER')
     {
-        $markArray = $subpartArray = $wrappedSubpartArray = [];
-
+        $markArray = [];
+        $subpartArray = [];
+        $wrappedSubpartArray = [];
         $this->parseSearchForm(
             $template,
             $markArray,
@@ -679,7 +673,7 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
         // Aufpassen: In $confId steht "searchsolr.hit.filter."
         // in $this->getConfId() steht "searchsolr.filter.default." (bzw. dismax)
 
-        return \Sys25\RnBase\Frontend\Marker\Templates::substituteMarkerArrayCached(
+        return Sys25\RnBase\Frontend\Marker\Templates::substituteMarkerArrayCached(
             $template,
             $markArray,
             $subpartArray,
@@ -688,11 +682,9 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
     }
 
     /**
-     * @param string                    $formTemplate
-     * @param \Sys25\RnBase\Frontend\Marker\FormatUtil $formatter
-     * @param string                    $confId
+     * @param string $formTemplate
      */
-    protected function renderSearchForm($formTemplate, \Sys25\RnBase\Frontend\Marker\FormatUtil $formatter, $confId, $templateConfId)
+    protected function renderSearchForm($formTemplate, Sys25\RnBase\Frontend\Marker\FormatUtil $formatter, string $confId, $templateConfId)
     {
         $configurations = $formatter->getConfigurations();
         $viewData = $this->request->getViewContext();
@@ -705,11 +697,11 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
             $formData['action'] = $link->makeUrl(false);
             $formData['searchterm'] = htmlspecialchars($this->getParameters()->get('term'), ENT_QUOTES);
             $formData['listsize'] = $viewData->offsetExists('pagebrowser') ? $viewData->offsetGet('pagebrowser')->getListSize() : 0;
-            $formData['hiddenfields'] = \Sys25\RnBase\Backend\Form\FormUtil::getHiddenFieldsForUrlParams($formData['action']);
+            $formData['hiddenfields'] = Sys25\RnBase\Backend\Form\FormUtil::getHiddenFieldsForUrlParams($formData['action']);
 
             $combinations = ['none', 'free', 'or', 'and', 'exact'];
             $currentCombination = $this->getParameters()->get('combination');
-            $currentCombination = $currentCombination ? $currentCombination : 'none';
+            $currentCombination = $currentCombination ?: 'none';
             foreach ($combinations as $combination) {
                 // wenn anders benötigt, via ts ändern werden
                 $formData['combination_'.$combination] = ($combination == $currentCombination) ? ' checked="checked"' : '';
@@ -733,7 +725,7 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
                 $formData['mode_standard_selected'] = 'checked=checked';
             }
 
-            $templateMarker = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_marker_General');
+            $templateMarker = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_marker_General');
             // During marker template parsing stdWrap will be performed on every array member. The value passed to
             // stdWrap can never be an array so we remove every array as it can't be parsed anyways. 'fq' will be an
             // array for example.
@@ -742,6 +734,7 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
                     unset($formData[$key]);
                 }
             }
+
             $formTemplate = $templateMarker->parseTemplate($formTemplate, $formData, $formatter, $confId.'form.', 'FORM');
 
             // Formularfelder
@@ -755,20 +748,18 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
      * protected
      * Treat search form.
      *
-     * @param string                    $template            HTML template
-     * @param array                     $markArray
-     * @param array                     $subpartArray
-     * @param array                     $wrappedSubpartArray
-     * @param \Sys25\RnBase\Frontend\Marker\FormatUtil $formatter
-     * @param string                    $confId
-     * @param string                    $marker
+     * @param string $template            HTML template
+     * @param array  $subpartArray
+     * @param array  $wrappedSubpartArray
+     * @param string $confId
+     * @param string $marker
      *
      * @return string
      */
-    public function parseSearchForm($template, &$markArray, &$subpartArray, &$wrappedSubpartArray, &$formatter, $confId, $marker = 'FILTER')
+    public function parseSearchForm($template, array &$markArray, &$subpartArray, &$wrappedSubpartArray, Sys25\RnBase\Frontend\Marker\FormatUtil &$formatter, $confId, $marker = 'FILTER')
     {
         $markerName = 'SEARCH_FORM';
-        if (!\Sys25\RnBase\Frontend\Marker\BaseMarker::containsMarker($template, $markerName)) {
+        if (!Sys25\RnBase\Frontend\Marker\BaseMarker::containsMarker($template, $markerName)) {
             return $template;
         }
 
@@ -777,7 +768,7 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
         $configurations = $formatter->getConfigurations();
         $formTemplate = $this->getConfValue($configurations, 'template.file');
         $subpart = $this->getConfValue($configurations, 'template.subpart');
-        $formTemplate = \Sys25\RnBase\Frontend\Marker\Templates::getSubpartFromFile($formTemplate, $subpart);
+        $formTemplate = Sys25\RnBase\Frontend\Marker\Templates::getSubpartFromFile($formTemplate, $subpart);
 
         $formTemplate = $this->renderSearchForm($formTemplate, $formatter, $confId, 'template.');
         $markArray['###'.$markerName.'###'] = $formTemplate;
@@ -787,10 +778,10 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
             foreach ($templateKeys as $templateKey) {
                 $templateConfId = 'templates.'.$templateKey.'.';
                 $markerName = strtoupper($configurations->get($confId.$templateConfId.'name'));
-                if (\Sys25\RnBase\Frontend\Marker\BaseMarker::containsMarker($template, $markerName)) {
+                if (Sys25\RnBase\Frontend\Marker\BaseMarker::containsMarker($template, $markerName)) {
                     $templateFile = $this->getConfValue($configurations, $templateConfId.'file');
                     $subpart = $this->getConfValue($configurations, $templateConfId.'subpart');
-                    $formTemplate = \Sys25\RnBase\Frontend\Marker\Templates::getSubpartFromFile($templateFile, $subpart);
+                    $formTemplate = Sys25\RnBase\Frontend\Marker\Templates::getSubpartFromFile($templateFile, $subpart);
                     $formTemplate = $this->renderSearchForm($formTemplate, $formatter, $confId, $templateConfId);
                     $markArray['###'.$markerName.'###'] = $formTemplate;
                 }
@@ -803,12 +794,10 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
     /**
      * Returns all values possible for form field mksearch[options][mode].
      * Makes it possible to easily add more modes in other filters/forms.
-     *
-     * @return array
      */
-    protected function getModeValuesAvailable()
+    protected function getModeValuesAvailable(): array
     {
-        $availableModes = \Sys25\RnBase\Utility\Strings::trimExplode(
+        $availableModes = Sys25\RnBase\Utility\Strings::trimExplode(
             ',',
             $this->getConfValue($this->getConfigurations(), 'availableModes')
         );
@@ -819,15 +808,14 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
     /**
      * die methode ist nur noch da für abwärtskompatiblität.
      *
-     * @param string                    $template            HTML template
-     * @param array                     $markArray
-     * @param array                     $subpartArray
-     * @param array                     $wrappedSubpartArray
-     * @param \Sys25\RnBase\Frontend\Marker\FormatUtil $formatter
-     * @param string                    $confId
-     * @param string                    $marker
+     * @param string                                  $template     HTML template
+     * @param array                                   $markArray
+     * @param array                                   $subpartArray
+     * @param Sys25\RnBase\Frontend\Marker\FormatUtil $formatter
+     * @param string                                  $confId
+     * @param string                                  $marker
      */
-    public function parseSortFields($template, &$markArray, &$subpartArray, &$wrappedSubpartArray, &$formatter, $confId, $marker = 'FILTER')
+    public function parseSortFields($template, &$markArray, &$subpartArray, array &$wrappedSubpartArray, &$formatter, $confId, $marker = 'FILTER'): void
     {
         $this->getFilterUtility()->parseSortFields(
             $template,
@@ -840,10 +828,7 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
         );
     }
 
-    /**
-     * @return array
-     */
-    protected function getFormData()
+    protected function getFormData(): array
     {
         return [];
     }
@@ -854,15 +839,12 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
     protected function getFilterUtility()
     {
         if (!$this->filterUtility) {
-            $this->filterUtility = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_util_Filter');
+            $this->filterUtility = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_util_Filter');
         }
 
         return $this->filterUtility;
     }
 
-    /**
-     * @param array $options
-     */
     protected function handleGrouping(array &$options)
     {
         if ($this->getConfValue('options.group.enable')) {
@@ -881,9 +863,6 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
         }
     }
 
-    /**
-     * @param array $options
-     */
     protected function handleWhat(array &$options)
     {
         $fieldlist = $this->getConfValue('options.what');

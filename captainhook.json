@@ -1,0 +1,59 @@
+{
+	"config": {
+		"vendor-directory": ".Build/vendor",
+		"bootstrap": ".Build/vendor/autoload.php"
+	},
+	"commit-msg": {
+		"enabled": true,
+		"actions": [
+			{
+				"action": "\\CaptainHook\\App\\Hook\\Message\\Action\\Beams",
+				"options": []
+			},
+			{
+				"action": "\\CaptainHook\\App\\Hook\\Message\\Action\\Regex",
+				"options": {
+					"regex": "#^(Cleanup|Bugfix|Version|Task) .*#i",
+					"error": "Commit message has to start with 'Task' or 'Cleanup' or 'Bugfix' or 'Version'"
+				},
+				"conditions": []
+			}
+		]
+	},
+	"pre-push": {
+		"enabled": true,
+		"actions": [
+			{
+				"action": "composer test",
+				"options": [],
+				"conditions": []
+			}
+		]
+	},
+	"pre-commit": {
+		"enabled": true,
+		"actions": [
+			{
+				"action": "composer lint",
+				"options": [],
+				"conditions": []
+			}
+		]
+	},
+	"prepare-commit-msg": {
+		"enabled": false,
+		"actions": []
+	},
+	"post-commit": {
+		"enabled": false,
+		"actions": []
+	},
+	"post-merge": {
+		"enabled": false,
+		"actions": []
+	},
+	"post-checkout": {
+		"enabled": false,
+		"actions": []
+	}
+}

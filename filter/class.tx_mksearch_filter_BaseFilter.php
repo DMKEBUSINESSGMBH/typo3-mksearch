@@ -1,25 +1,29 @@
 <?php
 
-/***************************************************************
- *  Copyright notice
+/*
+ * Copyright notice
  *
- *  (c) 2009 das Medienkombinat
- *  All rights reserved
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
  *
- * This library is distributed in the hope that it will be useful,
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
+ *
+ * This script is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- ***************************************************************/
+ * This copyright notice MUST APPEAR in all copies of the script!
+ */
 
 /**
  * Der Filter liest seine Konfiguration passend zum Typ des Solr RequestHandlers. Der Typ
@@ -38,7 +42,7 @@
  *
  * @author René Nitzsche
  */
-class tx_mksearch_filter_BaseFilter extends \Sys25\RnBase\Frontend\Filter\BaseFilter
+class tx_mksearch_filter_BaseFilter extends Sys25\RnBase\Frontend\Filter\BaseFilter
 {
     /**
      * Method is called in \Sys25\RnBase\Frontend\Marker\ListBuilder::render() and used to trigger the
@@ -46,7 +50,7 @@ class tx_mksearch_filter_BaseFilter extends \Sys25\RnBase\Frontend\Filter\BaseFi
      *
      * @return $this
      */
-    public function getMarker(): \Sys25\RnBase\Frontend\Filter\BaseFilter
+    public function getMarker(): Sys25\RnBase\Frontend\Filter\BaseFilter
     {
         return $this;
     }

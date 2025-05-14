@@ -1,5 +1,30 @@
 <?php
 
+/*
+ * Copyright notice
+ *
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
+ *
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
+ *
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
+ *
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * This copyright notice MUST APPEAR in all copies of the script!
+ */
+
 /**
  * Searcher for keywords.
  *
@@ -10,7 +35,7 @@ class tx_mksearch_mod1_searcher_IndexerConfig extends tx_mksearch_mod1_searcher_
     /**
      * Liefert die Funktions-Id.
      */
-    public function getSearcherId()
+    protected function getSearcherId(): string
     {
         return 'indexerconfig';
     }
@@ -27,9 +52,6 @@ class tx_mksearch_mod1_searcher_IndexerConfig extends tx_mksearch_mod1_searcher_
 
     /**
      * Kann von der Kindklasse überschrieben werden, um weitere Filter zu setzen.
-     *
-     * @param array $fields
-     * @param array $options
      */
     protected function prepareFieldsAndOptions(array &$fields, array &$options)
     {
@@ -42,19 +64,17 @@ class tx_mksearch_mod1_searcher_IndexerConfig extends tx_mksearch_mod1_searcher_
     /**
      * @return tx_mksearch_mod1_decorator_Keyword
      */
-    protected function getDecorator(&$mod)
+    protected function getDecorator(&$mod): object
     {
-        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_mod1_decorator_IndexerConfig', $mod);
+        return TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_mod1_decorator_IndexerConfig', $mod);
     }
 
     /**
      * Liefert die Spalten für den Decorator.
      *
      * @param tx_mksearch_mod1_decorator_Keyword $oDecorator
-     *
-     * @return array
      */
-    protected function getColumns(&$oDecorator)
+    protected function getColumns(&$oDecorator): array
     {
         return [
             'uid' => [
@@ -85,7 +105,7 @@ class tx_mksearch_mod1_searcher_IndexerConfig extends tx_mksearch_mod1_searcher_
      *
      * @see tx_mksearch_mod1_searcher_abstractBase::getSearchColumns()
      */
-    protected function getSearchColumns()
+    protected function getSearchColumns(): array
     {
         return [
             'CFG.uid', 'CFG.title', 'CFG.extkey', 'CFG.contenttype', 'CFG.configuration',

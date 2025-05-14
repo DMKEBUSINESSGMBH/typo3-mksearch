@@ -1,74 +1,65 @@
 <?php
 
-/***************************************************************
-*  Copyright notice
-*
-*  (c) 2010 Lars Heber <dev@dmk-ebusiness.de>
-*  All rights reserved
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
+/*
+ * Copyright notice
+ *
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
+ *
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
+ *
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
+ *
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * This copyright notice MUST APPEAR in all copies of the script!
+ */
 
 /**
  * Generic class for indexer documents.
  */
-class tx_mksearch_model_IndexerDocumentBase implements tx_mksearch_interface_IndexerDocument
+class tx_mksearch_model_IndexerDocumentBase implements tx_mksearch_interface_IndexerDocument, Stringable
 {
     /**
      * Extension key of indexed data.
      *
      * @var tx_mksearch_interface_IndexerField
      */
-    private $extKey;
+    private object $extKey;
 
     /**
      * Content type of indexed data.
      *
      * @var tx_mksearch_interface_IndexerField
      */
-    private $contentType;
+    private object $contentType;
 
     /**
      * UID field.
-     *
-     * @var tx_mksearch_interface_IndexerField
      */
-    private $uid;
+    private ?object $uid = null;
 
     /**
      * deleted flag.
-     *
-     * @var bool
      */
-    private $deleted = false;
-
-    /**
-     * Indexer field class name.
-     *
-     * @var string
-     */
-    private $fieldClass;
+    private bool $deleted = false;
 
     /**
      * All content fields (except primary key fields) of the indexer document.
      *
      * @var array[tx_mksearch_interface_IndexerField]
      */
-    private $data = [];
+    private array $data = [];
 
     /**
      * @var array
@@ -86,9 +77,9 @@ class tx_mksearch_model_IndexerDocumentBase implements tx_mksearch_interface_Ind
      *
      * @return tx_mksearch_interface_IndexerField
      */
-    protected function getFieldInstance($value, $storageOptionsOrType, $boost = 1.0, $dataType = null, $encoding = null)
+    protected function getFieldInstance(mixed $value, mixed $storageOptionsOrType, $boost = 1.0, $dataType = null, $encoding = null): object
     {
-        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($this->fieldClass, $value, $storageOptionsOrType, $boost, $dataType, $encoding);
+        return TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($this->fieldClass, $value, $storageOptionsOrType, $boost, $dataType, $encoding);
     }
 
     /***********************************
@@ -105,14 +96,12 @@ class tx_mksearch_model_IndexerDocumentBase implements tx_mksearch_interface_Ind
      * @param string $contentType Name of content type the indexed data represents
      * @param string $fieldClass  Indexer field class name to be instantiated for each indexer field (must implement tx_mksearch_interface_IndexerField!)
      */
-    public function __construct($extKey, $contentType, $fieldClass = 'tx_mksearch_model_IndexerFieldBase')
+    public function __construct($extKey, $contentType, /**
+     * Indexer field class name.
+     */
+        private $fieldClass = 'tx_mksearch_model_IndexerFieldBase')
     {
-        $this->fieldClass = $fieldClass;
         $this->extKey = $this->getFieldInstance($extKey, 'keyword');
-
-        if (!$this->extKey instanceof tx_mksearch_interface_IndexerField) {
-            throw new Exception('tx_mksearch_model_IndexerDocumentBase->__construct(): Given class in $fieldClass must implement tx_mksearch_interface_IndexerField!');
-        }
 
         $this->contentType = $this->getFieldInstance($contentType, 'keyword');
 
@@ -128,7 +117,7 @@ class tx_mksearch_model_IndexerDocumentBase implements tx_mksearch_interface_Ind
      *
      * @param int $uid
      */
-    public function setUid($uid)
+    public function setUid($uid): void
     {
         $this->uid = $this->getFieldInstance($uid, 'keyword', 1.0, 'int');
     }
@@ -143,7 +132,7 @@ class tx_mksearch_model_IndexerDocumentBase implements tx_mksearch_interface_Ind
      * @param string $dataType
      * @param string $encoding=null
      */
-    public function addField($key, $data, $storageOptionsOrType = 'keyword', $boost = 1.0, $dataType = null, $encoding = null)
+    public function addField($key, $data, $storageOptionsOrType = 'keyword', $boost = 1.0, $dataType = null, $encoding = null): void
     {
         $this->data[$key] = $this->getFieldInstance($data, $storageOptionsOrType, $boost, $dataType, $encoding);
     }
@@ -163,15 +152,13 @@ class tx_mksearch_model_IndexerDocumentBase implements tx_mksearch_interface_Ind
             throw new Exception('tx_mksearch_model_IndexerDocumentBase->getPrimaryKey(): uid not yet set!');
         }
 
-        return !$flat ? ['extKey' => $this->extKey, 'contentType' => $this->contentType, 'uid' => $this->uid] :
-             $this->extKey->getValue().':'.$this->contentType->getValue().':'.$this->uid->getValue();
+        return $flat ? $this->extKey->getValue().':'.$this->contentType->getValue().':'.$this->uid->getValue() :
+             ['extKey' => $this->extKey, 'contentType' => $this->contentType, 'uid' => $this->uid];
     }
 
-    public function __toString()
+    public function __toString(): string
     {
-        $ret = $this->extKey->getValue().':'.$this->contentType->getValue().':'.(!empty($this->uid) ? $this->uid->getValue() : 'undefined');
-
-        return $ret;
+        return $this->extKey->getValue().':'.$this->contentType->getValue().':'.(empty($this->uid) ? 'undefined' : $this->uid->getValue());
     }
 
     /**
@@ -179,7 +166,7 @@ class tx_mksearch_model_IndexerDocumentBase implements tx_mksearch_interface_Ind
      *
      * @return array[tx_mksearch_interface_IndexerField]
      */
-    public function getData()
+    public function getData(): array
     {
         return $this->data;
     }
@@ -199,11 +186,12 @@ class tx_mksearch_model_IndexerDocumentBase implements tx_mksearch_interface_Ind
      *
      * @see tx_mksearch_interface_IndexerDocument::addSECommand()
      */
-    public function addSECommand($command, $options)
+    public function addSECommand($command, $options): void
     {
         if (!is_array($this->secommands)) {
             $this->secommands = [];
         }
+
         $this->secommands[$command] = $options;
     }
 
@@ -219,7 +207,7 @@ class tx_mksearch_model_IndexerDocumentBase implements tx_mksearch_interface_Ind
      * @param string $title
      * @param string $encoding='utf-8'
      */
-    public function setTitle($title, $encoding = 'utf-8')
+    public function setTitle($title, $encoding = 'utf-8'): void
     {
         $this->data['title'] = $this->getFieldInstance($title, 'text', 1.0, 'string', $encoding);
     }
@@ -238,13 +226,14 @@ class tx_mksearch_model_IndexerDocumentBase implements tx_mksearch_interface_Ind
      * @param bool   $wordCut          Cut at last full word
      * @param string $encoding='utf-8'
      */
-    public function setAbstract($abstract, $length = null, $wordCut = true, $encoding = 'utf-8')
+    public function setAbstract($abstract, $length = null, $wordCut = true, $encoding = 'utf-8'): void
     {
         $abstract = tx_mksearch_util_Misc::html2plain($abstract);
 
         if ($length || ($length = $this->getMaxAbstractLength())) {
             $abstract = mb_substr($abstract, 0, $length, $encoding);
         }
+
         $this->data['abstract'] = $this->getFieldInstance($abstract, 'unindexed', 1.0, 'string', $encoding);
     }
 
@@ -255,7 +244,7 @@ class tx_mksearch_model_IndexerDocumentBase implements tx_mksearch_interface_Ind
      *
      * @return int Max. length of abstract as defined in mksearch extension config parameter abstractMaxLength_[your extkey]_[your content type]
      */
-    public function getMaxAbstractLength()
+    public function getMaxAbstractLength(): int
     {
         return 200;
         //         return \Sys25\RnBase\Configuration\Processor::getExtensionCfgValue(
@@ -275,7 +264,7 @@ class tx_mksearch_model_IndexerDocumentBase implements tx_mksearch_interface_Ind
      * @param string $content
      * @param string $encoding='utf-8'
      */
-    public function setContent($content, $encoding = 'utf-8')
+    public function setContent($content, $encoding = 'utf-8'): void
     {
         $this->data['content'] = $this->getFieldInstance($content, 'unstored', 1.0, 'text', $encoding);
     }
@@ -284,10 +273,8 @@ class tx_mksearch_model_IndexerDocumentBase implements tx_mksearch_interface_Ind
      * Set timestamp.
      *
      * Shortcut for setting a 'tstamp' field as indexed and stored keyword.
-     *
-     * @param $title
      */
-    public function setTimestamp($tstamp)
+    public function setTimestamp($tstamp): void
     {
         $this->data['tstamp'] = $this->getFieldInstance(intval($tstamp), 'keyword', 1.0, 'int');
     }
@@ -297,7 +284,7 @@ class tx_mksearch_model_IndexerDocumentBase implements tx_mksearch_interface_Ind
      *
      * @see tx_mksearch_interface_IndexerDocument::setDeleted()
      */
-    public function setDeleted($deleted)
+    public function setDeleted($deleted): void
     {
         $this->deleted = $deleted;
     }
@@ -307,7 +294,7 @@ class tx_mksearch_model_IndexerDocumentBase implements tx_mksearch_interface_Ind
      *
      * @see tx_mksearch_interface_IndexerDocument::getDeleted()
      */
-    public function getDeleted()
+    public function getDeleted(): bool
     {
         return $this->deleted;
     }

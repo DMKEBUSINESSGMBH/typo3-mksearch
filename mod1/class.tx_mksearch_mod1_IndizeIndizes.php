@@ -1,5 +1,30 @@
 <?php
 
+/*
+ * Copyright notice
+ *
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
+ *
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
+ *
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
+ *
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * This copyright notice MUST APPEAR in all copies of the script!
+ */
+
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
@@ -7,7 +32,7 @@ use Psr\Http\Message\ServerRequestInterface;
  *
  * @author Michael Wagner <dev@dmk-ebusiness.de>
  */
-class tx_mksearch_mod1_IndizeIndizes extends \Sys25\RnBase\Backend\Module\BaseModFunc
+class tx_mksearch_mod1_IndizeIndizes extends Sys25\RnBase\Backend\Module\BaseModFunc
 {
     /**
      * Return function id (used in page typoscript etc.).
@@ -39,10 +64,10 @@ class tx_mksearch_mod1_IndizeIndizes extends \Sys25\RnBase\Backend\Module\BaseMo
      * Actually, just the list view of the defined storage folder
      * is displayed within an iframe.
      *
-     * @param string                    $template
-     * @param \Sys25\RnBase\Configuration\Processor  $configurations
-     * @param \Sys25\RnBase\Frontend\Marker\FormatUtil $formatter
-     * @param \Sys25\RnBase\Backend\Form\ToolBox   $formTool
+     * @param string                                  $template
+     * @param Sys25\RnBase\Configuration\Processor    $configurations
+     * @param Sys25\RnBase\Frontend\Marker\FormatUtil $formatter
+     * @param Sys25\RnBase\Backend\Form\ToolBox       $formTool
      *
      * @return string
      */
@@ -55,43 +80,40 @@ class tx_mksearch_mod1_IndizeIndizes extends \Sys25\RnBase\Backend\Module\BaseMo
 
         $oIntIndexSrv = tx_mksearch_util_ServiceRegistry::getIntIndexService();
 
-        if (\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('updateIndex')) {
+        if ($GLOBALS['TYPO3_REQUEST']->getParsedBody()['updateIndex'] ?? $GLOBALS['TYPO3_REQUEST']->getQueryParams()['updateIndex'] ?? null) {
             $status[] = $this->handleResetBeingIndexed($oIntIndexSrv);
-            $status[] = $this->handleReset($oIntIndexSrv, $configurations);
-            $status[] = $this->handleClear($oIntIndexSrv, $configurations);
-            $status[] = $this->handleTrigger($oIntIndexSrv, $configurations);
+            $status[] = $this->handleReset($oIntIndexSrv);
+            $status[] = $this->handleClear($oIntIndexSrv);
+            $status[] = $this->handleTrigger($oIntIndexSrv);
         }
 
         $markerArray = [];
-        $bIsStatus = count($status = array_filter($status)) ? true : false;
+        $bIsStatus = (bool) count($status = array_filter($status));
         $markerArray['###ISSTATUS###'] = $bIsStatus ? 'block' : 'none';
         $markerArray['###STATUS###'] = $bIsStatus ? implode('<br />', $status) : '';
         $markerArray['###QUEUESIZE###'] = $oIntIndexSrv->countItemsInQueue();
         $markerArray['###QUEUE_SIZE_BEING_INDEXED###'] = $oIntIndexSrv->countItemsInQueueBeingIndexed();
-        $beingIndexedOlderThan = intval(\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('beingIndexedOlderThan'));
+        $beingIndexedOlderThan = intval($GLOBALS['TYPO3_REQUEST']->getParsedBody()['beingIndexedOlderThan'] ?? $GLOBALS['TYPO3_REQUEST']->getQueryParams()['beingIndexedOlderThan'] ?? null);
         $markerArray['###BEINGINDEXEDOLDERTHAN###'] = $beingIndexedOlderThan > 0 ? $beingIndexedOlderThan : 120;
-        $indexItems = intval(\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('triggerIndexingQueueCount'));
+        $indexItems = intval($GLOBALS['TYPO3_REQUEST']->getParsedBody()['triggerIndexingQueueCount'] ?? $GLOBALS['TYPO3_REQUEST']->getQueryParams()['triggerIndexingQueueCount'] ?? null);
         $markerArray['###INDEXITEMS###'] = $indexItems > 0 ? $indexItems : 100;
 
         $markerArray['###CORE_STATUS###'] = tx_mksearch_mod1_util_IndexStatusHandler::getInstance()->handleRequest(['pid' => $this->getPid()]);
 
         $this->showTables($template, $configurations, $formTool, $markerArray, $oIntIndexSrv);
 
-        $out = \Sys25\RnBase\Frontend\Marker\Templates::substituteMarkerArrayCached($template, $markerArray);
-
-        return $out;
+        return Sys25\RnBase\Frontend\Marker\Templates::substituteMarkerArrayCached($template, $markerArray);
     }
 
     /**
      * Returns search form.
      *
-     * @param string                             $template
-     * @param \Sys25\RnBase\Configuration\Processor           $configurations
-     * @param \Sys25\RnBase\Backend\Form\ToolBox            $formTool
-     * @param array                              $markerArray
-     * @param tx_mksearch_service_internal_Index $oIntIndexSrv
+     * @param string                               $template
+     * @param Sys25\RnBase\Configuration\Processor $configurations
+     * @param Sys25\RnBase\Backend\Form\ToolBox    $formTool
+     * @param tx_mksearch_service_internal_Index   $oIntIndexSrv
      */
-    protected function showTables($template, $configurations, $formTool, &$markerArray, $oIntIndexSrv)
+    protected function showTables($template, $configurations, $formTool, array &$markerArray, $oIntIndexSrv)
     {
         $aIndexers = tx_mksearch_util_Config::getIndexers();
         $aIndices = $oIntIndexSrv->getByPageId($this->getPid());
@@ -104,7 +126,7 @@ class tx_mksearch_mod1_IndizeIndizes extends \Sys25\RnBase\Backend\Module\BaseMo
                     continue;
                 }
 
-                list($extKey, $contentType) = $indexer->getContentType();
+                [$extKey, $contentType] = $indexer->getContentType();
                 $aTables = tx_mksearch_util_Config::getDatabaseTablesForIndexer($extKey, $contentType);
                 $aRecord = [];
                 $aRecord['name'] = array_shift($aTables);
@@ -115,7 +137,7 @@ class tx_mksearch_mod1_IndizeIndizes extends \Sys25\RnBase\Backend\Module\BaseMo
             }
         }
 
-        $decor = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_mod1_decorator_Indizes', $this->getModule());
+        $decor = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_mod1_decorator_Indizes', $this->getModule());
         $columns = [
             'name' => ['title' => 'label_table_name', 'decorator' => $decor],
             'queuecount' => ['title' => 'label_table_queuecount', 'decorator' => $decor],
@@ -124,10 +146,10 @@ class tx_mksearch_mod1_IndizeIndizes extends \Sys25\RnBase\Backend\Module\BaseMo
             'reset' => ['title' => 'label_table_reset', 'decorator' => $decor],
         ];
 
-        if (!empty($aDefinedTables)) {
+        if ([] !== $aDefinedTables) {
             /* @var $tables \Sys25\RnBase\Backend\Utility\Tables */
-            $tables = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Backend\Utility\Tables::class);
-            list($tableData, $tableLayout) = $tables->prepareTable(
+            $tables = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(Sys25\RnBase\Backend\Utility\Tables::class);
+            [$tableData, $tableLayout] = $tables->prepareTable(
                 $aDefinedTables,
                 $columns,
                 $this->getModule()->getFormTool(),
@@ -149,10 +171,6 @@ class tx_mksearch_mod1_IndizeIndizes extends \Sys25\RnBase\Backend\Module\BaseMo
         // nur elemente dieser page id dürfen in der Queue landen
         $pidList = tx_mksearch_util_Indexer::getInstance()->getPidListFromSiteRootPage($this->getPid(), 999);
 
-        if (empty($pidList)) {
-            return $pidList;
-        }
-
         return $pidList;
     }
 
@@ -161,14 +179,11 @@ class tx_mksearch_mod1_IndizeIndizes extends \Sys25\RnBase\Backend\Module\BaseMo
      * indexing queue.
      *
      * @param tx_mksearch_service_internal_Index $oIntIndexSrv
-     * @param \Sys25\RnBase\Configuration\Processor           $configurations
-     *
-     * @return string
      */
-    private function handleClear($oIntIndexSrv, &$configurations)
+    private function handleClear($oIntIndexSrv): string
     {
-        $aTables = \TYPO3\CMS\Core\Utility\GeneralUtility::_GP('clearTables');
-        if (!(is_array($aTables) && (!empty($aTables)))) {
+        $aTables = $GLOBALS['TYPO3_REQUEST']->getParsedBody()['clearTables'] ?? $GLOBALS['TYPO3_REQUEST']->getQueryParams()['clearTables'] ?? null;
+        if (!(is_array($aTables) && ([] !== $aTables))) {
             return '';
         }
 
@@ -177,51 +192,50 @@ class tx_mksearch_mod1_IndizeIndizes extends \Sys25\RnBase\Backend\Module\BaseMo
             $oIntIndexSrv->clearIndexingQueueForTable($sTable);
         }
 
-        $status .= '<ul><li>'.implode('</li><li/>', $aTables).'</li></ul>';
-
-        return $status;
+        return $status.('<ul><li>'.implode('</li><li/>', $aTables).'</li></ul>');
     }
 
     /**
      * Handle reset command from request.
      *
      * @param tx_mksearch_service_internal_Index $oIntIndexSrv
-     * @param \Sys25\RnBase\Configuration\Processor           $configurations
-     *
-     * @return string
      */
-    private function handleReset($oIntIndexSrv, &$configurations)
+    private function handleReset($oIntIndexSrv): string
     {
         $aTables = [];
         // reset aller elemente im siteroot
-        $aTables['pid'] = \TYPO3\CMS\Core\Utility\GeneralUtility::_GP('resetTables');
+        $aTables['pid'] = $GLOBALS['TYPO3_REQUEST']->getParsedBody()['resetTables'] ?? $GLOBALS['TYPO3_REQUEST']->getQueryParams()['resetTables'] ?? null;
         // global, alle elemente
-        $aTables['global'] = \TYPO3\CMS\Core\Utility\GeneralUtility::_GP('resetTablesG');
+        $aTables['global'] = $GLOBALS['TYPO3_REQUEST']->getParsedBody()['resetTablesG'] ?? $GLOBALS['TYPO3_REQUEST']->getQueryParams()['resetTablesG'] ?? null;
         if ((!is_array($aTables['pid']) && empty($aTables['pid']))
             && (!is_array($aTables['global']) && empty($aTables['global']))
         ) {
             return '';
         }
 
-        $where = $options = [];
+        $where = [];
+        $options = [];
         // deleted aussschließen, wenn nicht gesetzt
-        if (!\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('resetDeleted')) {
+        if (!($GLOBALS['TYPO3_REQUEST']->getParsedBody()['resetDeleted'] ?? $GLOBALS['TYPO3_REQUEST']->getQueryParams()['resetDeleted'] ?? null)) {
             $where[] = 'deleted = 0';
         }
+
         // hidden aussschließen, wenn nicht gesetzt
-        if (!\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('resetHidden')) {
+        if (!($GLOBALS['TYPO3_REQUEST']->getParsedBody()['resetHidden'] ?? $GLOBALS['TYPO3_REQUEST']->getQueryParams()['resetHidden'] ?? null)) {
             $where[] = 'hidden = 0';
         }
-        if (!empty($where)) {
+
+        if ([] !== $where) {
             $options['where'] = implode(' AND ', $where);
         }
+
         $status = '###LABEL_QUEUE_RESETED###';
         foreach ($aTables as $key => $aResets) {
             if (is_array($aResets)) {
                 foreach ($aResets as $sTable) {
                     $tableOptions = $options;
 
-                    if ('pid' == $key) {
+                    if ('pid' === $key) {
                         // wir holen uns eine liste von page ids
                         // nur elemente dieser page id dürfen in der Queue landen
                         $pidList = $this->getPidList();
@@ -229,37 +243,31 @@ class tx_mksearch_mod1_IndizeIndizes extends \Sys25\RnBase\Backend\Module\BaseMo
                             $tableOptions['where'] = 'pid IN ('.$pidList.')';
                         }
                     }
+
                     $oIntIndexSrv->resetIndexingQueueForTable($sTable, $tableOptions);
                 }
             }
         }
 
-        $status .= '<ul><li>'.
-                    implode(
-                        '</li><li/>',
-                        array_unique(
-                            array_merge(
-                                is_array($aTables['pid']) ? $aTables['pid'] : [],
-                                is_array($aTables['global']) ? $aTables['global'] : []
-                            )
-                        )
-                    ).
-                    '</li></ul>';
-
-        return $status;
+        return $status.('<ul><li>'.implode(
+            '</li><li/>',
+            array_unique(
+                array_merge(
+                    is_array($aTables['pid']) ? $aTables['pid'] : [],
+                    is_array($aTables['global']) ? $aTables['global'] : []
+                )
+            )
+        ).'</li></ul>');
     }
 
     /**
      * Handle trigger command from request.
      *
      * @param tx_mksearch_service_internal_Index $oIntIndexSrv
-     * @param \Sys25\RnBase\Configuration\Processor           $configurations
-     *
-     * @return string
      */
-    private function handleTrigger($oIntIndexSrv, &$configurations)
+    private function handleTrigger($oIntIndexSrv): string
     {
-        $triggerIndexingQueue = \TYPO3\CMS\Core\Utility\GeneralUtility::_GP('triggerIndexingQueue');
+        $triggerIndexingQueue = $GLOBALS['TYPO3_REQUEST']->getParsedBody()['triggerIndexingQueue'] ?? $GLOBALS['TYPO3_REQUEST']->getQueryParams()['triggerIndexingQueue'] ?? null;
         if (!$triggerIndexingQueue) {
             return '';
         }
@@ -268,7 +276,7 @@ class tx_mksearch_mod1_IndizeIndizes extends \Sys25\RnBase\Backend\Module\BaseMo
         set_time_limit(0);
 
         $status = '';
-        $indexItems = intval(\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('triggerIndexingQueueCount'));
+        $indexItems = intval($GLOBALS['TYPO3_REQUEST']->getParsedBody()['triggerIndexingQueueCount'] ?? $GLOBALS['TYPO3_REQUEST']->getQueryParams()['triggerIndexingQueueCount'] ?? null);
 
         $options = [
             'limit' => $indexItems > 0 ? $indexItems : 100,
@@ -280,12 +288,13 @@ class tx_mksearch_mod1_IndizeIndizes extends \Sys25\RnBase\Backend\Module\BaseMo
         if ($rows) {
             $status .= '###LABEL_QUEUE_INDEXED###';
             // Komplette Anzahl ausgeben.
-            $countAll = count(call_user_func_array('array_merge', array_values($rows)));
+            $countAll = count(array_merge(...array_values($rows)));
             $status .= sprintf(' %d ###LABEL_QUEUE_RUNTIME###: %01.2fs (%01.2f/sec)', $countAll, $runTime, $countAll / $runTime);
             // Anzahl einzelner Tabellen ausgeben
             foreach ($rows as $table => $row) {
                 $rows[$table] = $table.': '.count($row);
             }
+
             $status .= '<ul><li>'.implode('</li><li/>', array_values($rows)).'</li></ul>';
         } else {
             $status .= '###LABEL_QUEUE_INDEXED_EMPTY###';
@@ -299,12 +308,10 @@ class tx_mksearch_mod1_IndizeIndizes extends \Sys25\RnBase\Backend\Module\BaseMo
      * Reset entries older then time given in parameter "beingIndexedOlderThan" in minutes.
      *
      * @param tx_mksearch_service_internal_Index $indexSrv
-     *
-     * @return string
      */
-    private function handleResetBeingIndexed($indexSrv)
+    private function handleResetBeingIndexed($indexSrv): string
     {
-        $triggerResetBeingIndexed = \TYPO3\CMS\Core\Utility\GeneralUtility::_GP('triggerResetBeingIndexed');
+        $triggerResetBeingIndexed = $GLOBALS['TYPO3_REQUEST']->getParsedBody()['triggerResetBeingIndexed'] ?? $GLOBALS['TYPO3_REQUEST']->getQueryParams()['triggerResetBeingIndexed'] ?? null;
         if (!$triggerResetBeingIndexed) {
             return '';
         }

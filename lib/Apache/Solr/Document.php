@@ -90,7 +90,7 @@ class Apache_Solr_Document implements IteratorAggregate
     /**
      * Clear all boosts and fields from this document.
      */
-    public function clear()
+    public function clear(): void
     {
         $this->_documentBoost = false;
 
@@ -113,15 +113,11 @@ class Apache_Solr_Document implements IteratorAggregate
      *
      * @param mixed $boost Use false for default boost, else cast to float that should be > 0 or will be treated as false
      */
-    public function setBoost($boost)
+    public function setBoost(mixed $boost): void
     {
         $boost = (float) $boost;
 
-        if ($boost > 0.0) {
-            $this->_documentBoost = $boost;
-        } else {
-            $this->_documentBoost = false;
-        }
+        $this->_documentBoost = $boost > 0.0 ? $boost : false;
     }
 
     /**
@@ -144,10 +140,9 @@ class Apache_Solr_Document implements IteratorAggregate
      * </code>
      *
      * @param string $key
-     * @param mixed  $value
      * @param mixed  $boost Use false for default boost, else cast to float that should be > 0 or will be treated as false
      */
-    public function addField($key, $value, $boost = false)
+    public function addField($key, mixed $value, mixed $boost = false): void
     {
         if (!isset($this->_fields[$key])) {
             // create holding array if this is the first value
@@ -178,7 +173,7 @@ class Apache_Solr_Document implements IteratorAggregate
      *
      * @deprecated Use addField(...) instead
      */
-    public function setMultiValue($key, $value, $boost = false)
+    public function setMultiValue($key, $value, mixed $boost = false): void
     {
         $this->addField($key, $value, $boost);
     }
@@ -190,7 +185,7 @@ class Apache_Solr_Document implements IteratorAggregate
      *
      * @return mixed associative array of info if field exists, false otherwise
      */
-    public function getField($key)
+    public function getField($key): array|false
     {
         if (isset($this->_fields[$key])) {
             return [
@@ -209,10 +204,9 @@ class Apache_Solr_Document implements IteratorAggregate
      * make sure the field is an array.
      *
      * @param string $key
-     * @param mixed  $value
      * @param mixed  $boost Use false for default boost, else cast to float that should be > 0 or will be treated as false
      */
-    public function setField($key, $value, $boost = false)
+    public function setField($key, mixed $value, mixed $boost = false): void
     {
         $this->_fields[$key] = $value;
         $this->setFieldBoost($key, $boost);
@@ -227,7 +221,7 @@ class Apache_Solr_Document implements IteratorAggregate
      */
     public function getFieldBoost($key)
     {
-        return isset($this->_fieldBoosts[$key]) ? $this->_fieldBoosts[$key] : false;
+        return $this->_fieldBoosts[$key] ?? false;
     }
 
     /**
@@ -236,15 +230,11 @@ class Apache_Solr_Document implements IteratorAggregate
      * @param string $key   field name for the boost
      * @param mixed  $boost Use false for default boost, else cast to float that should be > 0 or will be treated as false
      */
-    public function setFieldBoost($key, $boost)
+    public function setFieldBoost($key, mixed $boost): void
     {
         $boost = (float) $boost;
 
-        if ($boost > 0.0) {
-            $this->_fieldBoosts[$key] = $boost;
-        } else {
-            $this->_fieldBoosts[$key] = false;
-        }
+        $this->_fieldBoosts[$key] = $boost > 0.0 ? $boost : false;
     }
 
     /**
@@ -259,20 +249,16 @@ class Apache_Solr_Document implements IteratorAggregate
 
     /**
      * Get the names of all fields in this document.
-     *
-     * @return array
      */
-    public function getFieldNames()
+    public function getFieldNames(): array
     {
         return array_keys($this->_fields);
     }
 
     /**
      * Get the values of all fields in this document.
-     *
-     * @return array
      */
-    public function getFieldValues()
+    public function getFieldValues(): array
     {
         return array_values($this->_fields);
     }
@@ -303,11 +289,7 @@ class Apache_Solr_Document implements IteratorAggregate
      */
     public function __get($key)
     {
-        if (isset($this->_fields[$key])) {
-            return $this->_fields[$key];
-        }
-
-        return null;
+        return $this->_fields[$key] ?? null;
     }
 
     /**
@@ -316,9 +298,8 @@ class Apache_Solr_Document implements IteratorAggregate
      * make sure the field is an array.
      *
      * @param string $key
-     * @param mixed  $value
      */
-    public function __set($key, $value)
+    public function __set($key, mixed $value)
     {
         $this->setField($key, $value);
     }

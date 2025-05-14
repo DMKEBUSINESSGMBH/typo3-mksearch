@@ -1,21 +1,42 @@
 <?php
 
+/*
+ * Copyright notice
+ *
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
+ *
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
+ *
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
+ *
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * This copyright notice MUST APPEAR in all copies of the script!
+ */
+
 return [
     'ctrl' => [
         'title' => 'LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_configcomposites',
         'label' => 'title',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
-        'cruser_id' => 'cruser_id',
         'default_sortby' => 'ORDER BY title',
         'delete' => 'deleted',
         'enablecolumns' => [
             'disabled' => 'hidden',
         ],
         'iconfile' => 'EXT:mksearch/Resources/Public/Icons/icon_tx_mksearch_configcomposites.gif',
-    ],
-    'interface' => [
-        'showRecordFieldList' => 'hidden,title,description,indices,configs,configuration',
     ],
     'columns' => [
         'hidden' => [
@@ -33,7 +54,8 @@ return [
                 'type' => 'input',
                 'size' => '30',
                 'max' => '100',
-                'eval' => 'required,trim',
+                'eval' => 'trim',
+                'required' => true,
             ],
         ],
         'description' => [
@@ -59,7 +81,7 @@ return [
                 'minitems' => 0,
                 'maxitems' => 100,
                 'fieldControl' => ['editPopup' => true, 'addRecord' => true],
-                'wizards' => \Sys25\RnBase\Backend\Utility\TcaTool::getWizards(
+                'wizards' => Sys25\RnBase\Backend\Utility\TcaTool::getWizards(
                     'tx_mksearch_indices',
                     ['add' => true, 'edit' => true, 'list' => true]
                 ),
@@ -78,7 +100,7 @@ return [
                 'minitems' => 0,
                 'maxitems' => 100,
                 'fieldControl' => ['editPopup' => true, 'addRecord' => true],
-                'wizards' => \Sys25\RnBase\Backend\Utility\TcaTool::getWizards(
+                'wizards' => Sys25\RnBase\Backend\Utility\TcaTool::getWizards(
                     'tx_mksearch_indexerconfigs',
                     ['add' => true, 'edit' => true, 'list' => true]
                 ),

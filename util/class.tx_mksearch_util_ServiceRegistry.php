@@ -1,27 +1,29 @@
 <?php
 
-/***************************************************************
-*  Copyright notice
-*
-*  (c) 2009 das Medienkombinat
-*  All rights reserved
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
+/*
+ * Copyright notice
+ *
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
+ *
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
+ *
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
+ *
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * This copyright notice MUST APPEAR in all copies of the script!
+ */
 
 /**
  * Access a service instance.
@@ -31,20 +33,20 @@ class tx_mksearch_util_ServiceRegistry
     /**
      * Return best search engine service which implements tx_mksearch_interface_SearchEngine.
      *
-     * @param tx_mksearch_model_internal_Index $index
-     *
      * @return tx_mksearch_interface_SearchEngine
      */
-    public static function getSearchEngine($index)
+    public static function getSearchEngine(tx_mksearch_model_internal_Index $index)
     {
         $type = $index->getEngineType();
         if (!$type) {
             throw new Exception('No engine type configured in search index. Check your index configuration!', 100);
         }
-        $srv = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstanceService('mksearch_engine', $type);
+
+        $srv = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstanceService('mksearch_engine', $type);
         if (!is_object($srv)) {
             throw new Exception('Service mksearch_engine not found for type: '.$type);
         }
+
         if (!$srv instanceof tx_mksearch_interface_SearchEngine) {
             throw new Exception('Service "'.$srv->info['className'].'" does not implement tx_mksearch_interface_SearchEngine!');
         }
@@ -63,10 +65,11 @@ class tx_mksearch_util_ServiceRegistry
      */
     public static function getSearchEngineService()
     {
-        $srv = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstanceService('mksearch_engine', 'zend_lucene');
+        $srv = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstanceService('mksearch_engine', 'zend_lucene');
         if (!is_object($srv)) {
             throw new Exception('Service mksearch_engine not found!');
         }
+
         // else
         if (!$srv instanceof tx_mksearch_interface_SearchEngine) {
             throw new Exception('Service "'.$srv->info['className'].'" does not implement tx_mksearch_interface_SearchEngine!');
@@ -82,18 +85,16 @@ class tx_mksearch_util_ServiceRegistry
      * This method does NOT use \Sys25\RnBase\Utility\Misc::getService intentionally,
      * as we do not want to "mayday" in case of an error!
      *
-     * @param string $extKey
-     * @param string $contentType
-     *
      * @return tx_mksearch_interface_Indexer
      */
-    public static function getIndexerService($extKey, $contentType)
+    public static function getIndexerService(string $extKey, string $contentType)
     {
         $subType = $extKey.'.'.$contentType;
-        $srv = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstanceService('mksearch_indexer', $subType);
+        $srv = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstanceService('mksearch_indexer', $subType);
         if (!is_object($srv)) {
             throw new Exception('Service "mksearch_indexer.'.$subType.'" not found!');
         }
+
         // else
         if (!$srv instanceof tx_mksearch_interface_Indexer) {
             throw new Exception('Service "'.$srv->info['className'].'" does not implement tx_mksearch_interface_Indexer!');
@@ -110,7 +111,7 @@ class tx_mksearch_util_ServiceRegistry
      */
     public static function getIntIndexService()
     {
-        return \Sys25\RnBase\Utility\Misc::getService('mksearch', 'int_index');
+        return Sys25\RnBase\Utility\Misc::getService('mksearch', 'int_index');
     }
 
     /**
@@ -120,7 +121,7 @@ class tx_mksearch_util_ServiceRegistry
      */
     public static function getIntCompositeService()
     {
-        return \Sys25\RnBase\Utility\Misc::getService('mksearch', 'int_composite');
+        return Sys25\RnBase\Utility\Misc::getService('mksearch', 'int_composite');
     }
 
     /**
@@ -130,7 +131,7 @@ class tx_mksearch_util_ServiceRegistry
      */
     public static function getIntConfigService()
     {
-        return \Sys25\RnBase\Utility\Misc::getService('mksearch', 'int_config');
+        return Sys25\RnBase\Utility\Misc::getService('mksearch', 'int_config');
     }
 
     /**
@@ -140,7 +141,7 @@ class tx_mksearch_util_ServiceRegistry
      */
     public static function getKeywordService()
     {
-        return \Sys25\RnBase\Utility\Misc::getService('mksearch', 'keyword');
+        return Sys25\RnBase\Utility\Misc::getService('mksearch', 'keyword');
     }
 
     /**
@@ -151,7 +152,7 @@ class tx_mksearch_util_ServiceRegistry
      */
     public static function getIrfaqExpertService()
     {
-        return \Sys25\RnBase\Utility\Misc::getService('mksearch', 'irfaq_expert');
+        return Sys25\RnBase\Utility\Misc::getService('mksearch', 'irfaq_expert');
     }
 
     /**
@@ -162,7 +163,7 @@ class tx_mksearch_util_ServiceRegistry
      */
     public static function getIrfaqCategoryService()
     {
-        return \Sys25\RnBase\Utility\Misc::getService('mksearch', 'irfaq_category');
+        return Sys25\RnBase\Utility\Misc::getService('mksearch', 'irfaq_category');
     }
 
     /**
@@ -173,6 +174,6 @@ class tx_mksearch_util_ServiceRegistry
      */
     public static function getIrfaqQuestionService()
     {
-        return \Sys25\RnBase\Utility\Misc::getService('mksearch', 'irfaq_question');
+        return Sys25\RnBase\Utility\Misc::getService('mksearch', 'irfaq_question');
     }
 }

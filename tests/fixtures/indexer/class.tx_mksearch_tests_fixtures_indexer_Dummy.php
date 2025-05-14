@@ -1,32 +1,28 @@
 <?php
 
-/**
- * @author Hannes Bochmann
+/*
+ * Copyright notice
  *
- *  Copyright notice
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
  *
- *  (c) 2011 Hannes Bochmann <dev@dmk-ebusiness.de>
- *  All rights reserved
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
  *
- *  This script is part of the TYPO3 project. The TYPO3 project is
- *  free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
  *
- *  The GNU General Public License can be found at
- *  http://www.gnu.org/copyleft/gpl.html.
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
  *
- *  This script is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *  This copyright notice MUST APPEAR in all copies of the script!
- */
-
-/**
- * benötigte Klassen einbinden.
+ * This copyright notice MUST APPEAR in all copies of the script!
  */
 
 /**
@@ -45,16 +41,15 @@ class tx_mksearch_tests_fixtures_indexer_Dummy extends tx_mksearch_indexer_Base
      *
      * @return array('extKey' => [extension key], 'name' => [key of content type]
      */
-    public static function getContentType()
+    public static function getContentType(): array
     {
         return ['mksearch', 'dummy'];
     }
 
     /**
-     * @param string                                $sTableName
-     * @param array                                 $aRawData
-     * @param tx_mksearch_interface_IndexerDocument $oIndexDoc
-     * @param array                                 $aOptions
+     * @param string $sTableName
+     * @param array  $aRawData
+     * @param array  $aOptions
      *
      * @return bool
      */
@@ -69,7 +64,7 @@ class tx_mksearch_tests_fixtures_indexer_Dummy extends tx_mksearch_indexer_Base
      *
      * @see tx_mksearch_interface_Indexer::prepareSearchData()
      */
-    public function indexData(\Sys25\RnBase\Domain\Model\DataInterface $oModel, $sTableName, $aRawData, tx_mksearch_interface_IndexerDocument $oIndexDoc, $aOptions)
+    protected function indexData(Sys25\RnBase\Domain\Model\DataInterface $oModel, $sTableName, $aRawData, tx_mksearch_interface_IndexerDocument $oIndexDoc, $aOptions): ?tx_mksearch_interface_IndexerDocument
     {
         $this->indexModelByMapping($oModel, $this->getTestMapping(), $oIndexDoc);
         // with keep html
@@ -90,6 +85,7 @@ class tx_mksearch_tests_fixtures_indexer_Dummy extends tx_mksearch_indexer_Base
         if (!$this->checkInOrExcludeOptions($aCategories, $aOptions)) {
             return null;
         }
+
         // excludes found
         if (!$this->checkInOrExcludeOptions($aCategories, $aOptions, 1)) {
             return null;
@@ -98,7 +94,7 @@ class tx_mksearch_tests_fixtures_indexer_Dummy extends tx_mksearch_indexer_Base
         return $oIndexDoc;
     }
 
-    protected function getTestCategories()
+    protected function getTestCategories(): array
     {
         return [
             0 => $this->createModel(['uid' => 1]),
@@ -109,10 +105,8 @@ class tx_mksearch_tests_fixtures_indexer_Dummy extends tx_mksearch_indexer_Base
     /**
      * Returns the mapping of the record fields to the
      * solr doc fields.
-     *
-     * @return array
      */
-    protected function getTestMapping()
+    protected function getTestMapping(): array
     {
         return [
             'test_field_1' => 'test_field_1_s',
@@ -123,13 +117,11 @@ class tx_mksearch_tests_fixtures_indexer_Dummy extends tx_mksearch_indexer_Base
     /**
      * Returns the model to be indexed.
      *
-     * @param array $aRawData
-     *
-     * @return \Sys25\RnBase\Domain\Model\DataInterface
+     * @return Sys25\RnBase\Domain\Model\DataInterface
      */
-    protected function createModel(array $rawData, $tableName = null, $options = [])
+    protected function createModel(array $rawData, $tableName = null, $options = []): object
     {
-        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Domain\Model\BaseModel::class, $rawData);
+        return TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(Sys25\RnBase\Domain\Model\BaseModel::class, $rawData);
     }
 
     /**
@@ -140,10 +132,8 @@ class tx_mksearch_tests_fixtures_indexer_Dummy extends tx_mksearch_indexer_Base
      * but only serves as assistance when actually configuring an indexer!
      * Hence all possible configuration options should be set or
      * at least be mentioned to provide an easy-to-access inline documentation!
-     *
-     * @return string
      */
-    public function getDefaultTSConfig()
+    public function getDefaultTSConfig(): string
     {
         return '';
     }

@@ -45,10 +45,8 @@ class Apache_Solr_HttpTransport_Response
     /**
      * Status Messages indexed by Status Code
      * Obtained from: http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html.
-     *
-     * @var array
      */
-    private static $_defaultStatusMessages = [
+    private static array $_defaultStatusMessages = [
         // Specific to PHP Solr Client
         0 => 'Communication Error',
 
@@ -112,19 +110,13 @@ class Apache_Solr_HttpTransport_Response
     {
         $statusCode = (int) $statusCode;
 
-        if (isset(self::$_defaultStatusMessages[$statusCode])) {
-            return self::$_defaultStatusMessages[$statusCode];
-        }
-
-        return 'Unknown Status';
+        return self::$_defaultStatusMessages[$statusCode] ?? 'Unknown Status';
     }
 
     /**
      * The response's HTTP status code.
-     *
-     * @var int
      */
-    private $_statusCode;
+    private int $_statusCode;
 
     /**
      * The response's HTTP status message.
@@ -135,24 +127,18 @@ class Apache_Solr_HttpTransport_Response
 
     /**
      * The response's mime type.
-     *
-     * @var string
      */
-    private $_mimeType;
+    private string $_mimeType = 'text/plain';
 
     /**
      * The response's character encoding.
-     *
-     * @var string
      */
-    private $_encoding;
+    private string $_encoding = 'UTF-8';
 
     /**
      * The response's data.
-     *
-     * @var string
      */
-    private $_responseBody;
+    private string $_responseBody;
 
     /**
      * Construct a HTTP transport response.
@@ -171,12 +157,6 @@ class Apache_Solr_HttpTransport_Response
 
         // set the response body, it should always be a string
         $this->_responseBody = (string) $responseBody;
-
-        // parse the content type header value for mimetype and encoding
-        // first set default values that will remain if we can't find
-        // what we're looking for in the content type
-        $this->_mimeType = 'text/plain';
-        $this->_encoding = 'UTF-8';
 
         if ($contentType) {
             // now break apart the header to see if there's character encoding
@@ -199,10 +179,8 @@ class Apache_Solr_HttpTransport_Response
 
     /**
      * Get the status code of the response.
-     *
-     * @return int
      */
-    public function getStatusCode()
+    public function getStatusCode(): int
     {
         return $this->_statusCode;
     }
@@ -219,30 +197,24 @@ class Apache_Solr_HttpTransport_Response
 
     /**
      * Get the mimetype of the response body.
-     *
-     * @return string
      */
-    public function getMimeType()
+    public function getMimeType(): string
     {
         return $this->_mimeType;
     }
 
     /**
      * Get the charset encoding of the response body.
-     *
-     * @return string
      */
-    public function getEncoding()
+    public function getEncoding(): string
     {
         return $this->_encoding;
     }
 
     /**
      * Get the raw response body.
-     *
-     * @return string
      */
-    public function getBody()
+    public function getBody(): string
     {
         return $this->_responseBody;
     }

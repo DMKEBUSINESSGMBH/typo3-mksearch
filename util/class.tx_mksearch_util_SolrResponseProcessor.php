@@ -1,5 +1,30 @@
 <?php
 
+/*
+ * Copyright notice
+ *
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
+ *
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
+ *
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
+ *
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * This copyright notice MUST APPEAR in all copies of the script!
+ */
+
 /**
  * Der FacetBuilder erstellt aus den Rohdaten der Facets passende Objekte für das Rendering.
  *
@@ -8,24 +33,12 @@
 class tx_mksearch_util_SolrResponseProcessor
 {
     /**
-     * Konfigurations Objekt.
-     *
-     * @var \Sys25\RnBase\Configuration\Processor
-     */
-    private $configurations;
-    private $confId = 'responseProcessor.';
-
-    /**
      * Enter description here ...
      *
-     * @param array                    $response
-     * @param array                    $options
-     * @param \Sys25\RnBase\Configuration\Processor $configurations
-     * @param string                   $confId
-     *
-     * @return bool
+     * @param array                                $options
+     * @param Sys25\RnBase\Configuration\Processor $configurations
      */
-    public static function processSolrResult(array &$result, $options, &$configurations, $confId)
+    public static function processSolrResult(array &$result, $options, &$configurations, string $confId): bool
     {
         static $instance = null;
 
@@ -37,8 +50,8 @@ class tx_mksearch_util_SolrResponseProcessor
 
         if (!$instance) {
             $processorClass = $configurations->get($confId.'class');
-            $processorClass = $processorClass ? $processorClass : get_called_class();
-            $instance = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($processorClass, $configurations, $confId);
+            $processorClass = $processorClass ?: static::class;
+            $instance = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($processorClass, $configurations, $confId);
         }
 
         $response = &$result['response'];
@@ -47,14 +60,20 @@ class tx_mksearch_util_SolrResponseProcessor
         return true;
     }
 
-    public function __construct(&$configurations, $confId)
-    {
-        $this->configurations = $configurations;
-        $this->confId = $confId;
+    /**
+     * @param Sys25\RnBase\Configuration\Processor $configurations
+     */
+    public function __construct(
+        /**
+         * Konfigurations Objekt.
+         */
+        private $configurations,
+        private $confId,
+    ) {
     }
 
     /**
-     * @return \Sys25\RnBase\Configuration\Processor
+     * @return Sys25\RnBase\Configuration\Processor
      */
     protected function getConfigurations()
     {
@@ -71,12 +90,8 @@ class tx_mksearch_util_SolrResponseProcessor
 
     /**
      * Enter description here ...
-     *
-     * @param Apache_Solr_Response $response
-     * @param array $options
-     * @param array $result
      */
-    public function processSolrResponse(Apache_Solr_Response &$response, $options, $result = [])
+    public function processSolrResponse(Apache_Solr_Response &$response, array $options, array $result = []): array
     {
         $result['items'] = $this->processHits($response, $options, empty($result['items']) ? [] : $result['items']);
         $result['facets'] = $this->processFacets($response);
@@ -87,12 +102,8 @@ class tx_mksearch_util_SolrResponseProcessor
 
     /**
      * @TODO: sollte es hierfür nicht auch eine klasse wie tx_mksearch_util_HitBuilder geben?
-     *
-     * @param Apache_Solr_Response $response
-     *
-     * @return array
      */
-    public function processHits(Apache_Solr_Response &$response, array $options, array $hits = [])
+    public function processHits(Apache_Solr_Response &$response, array $options, array $hits = []): array
     {
         $confId = $this->getConfId().'hit.';
 
@@ -101,7 +112,7 @@ class tx_mksearch_util_SolrResponseProcessor
 
         // hier wird nur highlighting gesetzt
         // wenn keins existiert brauchen wir nichts machen
-        if (empty($highlights)) {
+        if ([] === $highlights) {
             return $hits;
         }
 
@@ -119,7 +130,7 @@ class tx_mksearch_util_SolrResponseProcessor
                     // dabei wäre es dann möglich die Felder flexibel über TS überschrieben zu lassen
                     // indem bspw. ein TS wie content.override.field = content_hl angegeben wird ;)
                     $overrideWithHl = $this->getConfigurations()->get($confId.'overrideWithHl');
-                    $overrideWithHl = $overrideWithHl ? $overrideWithHl : (isset($options['overrideWithHl']) && $options['overrideWithHl']);
+                    $overrideWithHl = $overrideWithHl ?: isset($options['overrideWithHl']) && $options['overrideWithHl'];
                     $highlightField = ($overrideWithHl) ? $docField : $docField.'_hl';
 
                     if ($this->getConfigurations()->getBool($confId.'hellip')) {
@@ -145,14 +156,13 @@ class tx_mksearch_util_SolrResponseProcessor
      *
      * @param string $originalValue
      * @param string $highlightedValue
-     * @param array  $options
      *
      * @return string
      */
     protected function handleHellip(
         $originalValue,
         $highlightedValue,
-        array $options = []
+        array $options = [],
     ) {
         // cleanup the source and the highlightd
         $cleanOriginalValue = tx_mksearch_util_Misc::html2plain(
@@ -178,15 +188,16 @@ class tx_mksearch_util_SolrResponseProcessor
             }
 
             // add pre, if the first part is not the same!
-            if (!\Sys25\RnBase\Utility\Strings::isFirstPartOfStr(
+            if (!Sys25\RnBase\Utility\Strings::isFirstPartOfStr(
                 $cleanOriginalValue,
                 $cleanHighlighted
             )
             ) {
                 $highlightedValue = $wrap[0].$highlightedValue;
             }
+
             // add post, if the last part is not the same!
-            if (!\Sys25\RnBase\Utility\Strings::isLastPartOfStr(
+            if (!Sys25\RnBase\Utility\Strings::isLastPartOfStr(
                 $cleanOriginalValue,
                 $cleanHighlighted
             )
@@ -199,8 +210,6 @@ class tx_mksearch_util_SolrResponseProcessor
     }
 
     /**
-     * @param Apache_Solr_Response $response
-     *
      * @return array
      */
     public function processFacets(Apache_Solr_Response &$response)
@@ -214,7 +223,7 @@ class tx_mksearch_util_SolrResponseProcessor
         $configurations = $this->getConfigurations();
 
         $builderClass = $configurations->get($confId.'builderClass');
-        $builderClass = $builderClass ? $builderClass : 'tx_mksearch_util_FacetBuilder';
+        $builderClass = $builderClass ?: 'tx_mksearch_util_FacetBuilder';
 
         $facetBuilder = tx_mksearch_util_FacetBuilder::getInstance(
             $builderClass,
@@ -224,41 +233,31 @@ class tx_mksearch_util_SolrResponseProcessor
         $facets = $facetBuilder->buildFacets($response->facet_counts);
 
         if ($configurations->getBool($confId.'sorting')) {
-            $facets = $facetBuilder->sortFacets($facets);
+            return $facetBuilder->sortFacets($facets);
         }
 
         return $facets;
     }
 
-    /**
-     * @param Apache_Solr_Response $response
-     *
-     * @return array
-     */
-    public function processSuggestions(Apache_Solr_Response &$response)
+    public function processSuggestions(Apache_Solr_Response &$response): array
     {
         $confId = $this->getConfId().'suggestions.';
         // Suggestions
         if ($response->spellcheck && $response->spellcheck->suggestions) {
             $builderClass = $this->getConfigurations()->get($confId.'builderClass');
-            $builderClass = $builderClass ? $builderClass : 'tx_mksearch_util_SuggestionBuilder';
+            $builderClass = $builderClass ?: 'tx_mksearch_util_SuggestionBuilder';
             $builder = tx_mksearch_util_SuggestionBuilder::getInstance($builderClass);
-            $suggestions = $builder->buildSuggestions($response->spellcheck->suggestions);
-        } else {
-            $suggestions = [];
+
+            return $builder->buildSuggestions($response->spellcheck->suggestions);
         }
 
-        return $suggestions;
+        return [];
     }
 
     /**
      * Checks if we got highlightings and wraps them in case in an array.
-     *
-     * @param Apache_Solr_Response $response
-     *
-     * @return array
      */
-    protected function getHighlighting(Apache_Solr_Response $response)
+    protected function getHighlighting(Apache_Solr_Response $response): array
     {
         $aHighlights = [];
         // Highlighting für jedes gefundene Dokument

@@ -1,32 +1,28 @@
 <?php
 
-/**
- * @author Hannes Bochmann
+/*
+ * Copyright notice
  *
- *  Copyright notice
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
  *
- *  (c) 2011 Hannes Bochmann <dev@dmk-ebusiness.de>
- *  All rights reserved
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
  *
- *  This script is part of the TYPO3 project. The TYPO3 project is
- *  free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
  *
- *  The GNU General Public License can be found at
- *  http://www.gnu.org/copyleft/gpl.html.
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
  *
- *  This script is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *  This copyright notice MUST APPEAR in all copies of the script!
- */
-
-/**
- * benötigte Klassen einbinden.
+ * This copyright notice MUST APPEAR in all copies of the script!
  */
 
 /**
@@ -36,10 +32,8 @@ class tx_mksearch_tests_Util
 {
     /**
      * Sicherung von hoocks.
-     *
-     * @var array
      */
-    private static $hooks = [];
+    private static array $hooks = [];
 
     /**
      * Sicherung der TCA.
@@ -48,10 +42,7 @@ class tx_mksearch_tests_Util
      */
     private static $TCA;
 
-    /**
-     * @var array
-     */
-    private static $extConf = [];
+    private static array $extConf = [];
 
     /**
      * @var string
@@ -68,15 +59,17 @@ class tx_mksearch_tests_Util
      *
      * @param array $hooks
      */
-    public static function hooksSetUp($hooks = null)
+    public static function hooksSetUp($hooks = null): void
     {
         if (!is_array($hooks)) {
             $hooks = array_keys($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch'] ?? []);
         }
+
         foreach ($hooks as $hook) {
             if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch'][$hook])) {
                 self::$hooks[$hook] = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch'][$hook];
             }
+
             $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch'][$hook] = [];
         }
     }
@@ -84,11 +77,12 @@ class tx_mksearch_tests_Util
     /**
      * Setzt die im setUp gesetzten Hooks zurück.
      */
-    public static function hooksTearDown()
+    public static function hooksTearDown(): void
     {
         foreach (self::$hooks as $hookName => $hookConfig) {
             $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mksearch'][$hookName] = $hookConfig;
         }
+
         self::$hooks = [];
     }
 
@@ -99,10 +93,8 @@ class tx_mksearch_tests_Util
      * welche in der TCA Definiert sind.
      * So kann es vorkommen, das auf Tabellen zugegriffen wird,
      * welche in einem DB-TestCase nicht existieren.
-     *
-     * @param array $extensions
      */
-    public static function tcaSetUp(array $extensions = [])
+    public static function tcaSetUp(array $extensions = []): void
     {
         self::$TCA = $GLOBALS['TCA'];
         $GLOBALS['TCA'] = [];
@@ -110,12 +102,14 @@ class tx_mksearch_tests_Util
         $categoryRegistryClass = 'TYPO3\\CMS\\Core\\Category\\CategoryRegistry';
         $registry = new ReflectionProperty($categoryRegistryClass, 'registry');
         $registry->setAccessible(true);
+
         $categoryRegistry = $categoryRegistryClass::getInstance();
         self::$categoryRegistry = $registry->getValue($categoryRegistry);
+
         $registry->setValue($categoryRegistry, []);
 
         // \TYPO3\CMS\Core\Core\Bootstrap::getInstance()->loadExtensionTables(FALSE);
-        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::loadBaseTca(false);
+        TYPO3\CMS\Core\Utility\ExtensionManagementUtility::loadBaseTca(false);
         // spezielle Extension TCA's laden!?
         self::loadSingleExtTablesFiles($extensions);
     }
@@ -123,7 +117,7 @@ class tx_mksearch_tests_Util
     /**
      * Setzt die TCA zurück.
      */
-    public static function tcaTearDown()
+    public static function tcaTearDown(): void
     {
         if (null !== self::$TCA) {
             $GLOBALS['TCA'] = self::$TCA;
@@ -143,17 +137,16 @@ class tx_mksearch_tests_Util
      *
      * This Method is taken from
      *     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::loadSingleExtTablesFiles
-     *
-     * @param array $extensions
      */
-    public static function loadSingleExtTablesFiles(array $extensions)
+    public static function loadSingleExtTablesFiles(array $extensions): void
     {
         // Load each ext_tables.php file of loaded extensions
-        $packageManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Package\PackageManager::class);
+        $packageManager = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(TYPO3\CMS\Core\Package\PackageManager::class);
         foreach ($extensions as $extensionKey) {
             if (!$packageManager->isPackageActive($extensionKey)) {
                 continue;
             }
+
             $extTablesFile = $packageManager->getPackage($extensionKey)->getPackagePath().'ext_tables.php';
             if (is_file($extTablesFile)) {
                 require $extTablesFile;
@@ -163,16 +156,10 @@ class tx_mksearch_tests_Util
 
     /**
      * Liefert einen kompletten Dateipfad für eine Datei in einer Extension.
-     *
-     * @param $filename
-     * @param $dir
-     * @param $extKey
-     *
-     * @return string
      */
-    public static function getFixturePath($filename, $dir = 'tests/fixtures/', $extKey = 'mksearch')
+    public static function getFixturePath(string $filename, string $dir = 'tests/fixtures/', string $extKey = 'mksearch'): string
     {
-        return \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($extKey).$dir.$filename;
+        return TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($extKey).$dir.$filename;
     }
 
     /**
@@ -180,23 +167,20 @@ class tx_mksearch_tests_Util
      * Dabei wird alles geholt was in "plugin.tx_$extKey", "lib.$extKey." und
      * "lib.links." liegt.
      *
-     * @return \Sys25\RnBase\Configuration\Processor
+     * @return Sys25\RnBase\Configuration\Processor
      */
     public static function loadPageTS4BE()
     {
-        $extKeyTS = $extKey = 'mksearch';
+        $extKeyTS = 'mksearch';
 
-        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig('<INCLUDE_TYPOSCRIPT: source="FILE:EXT:mksearch/static/static_extension_template/setup.txt">');
+        TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig('<INCLUDE_TYPOSCRIPT: source="FILE:EXT:mksearch/static/static_extension_template/setup.txt">');
 
         $pageTSconfig = self::getPagesTSconfig(0);
         $tempConfig = $pageTSconfig['plugin.']['tx_'.$extKeyTS.'.'];
         $tempConfig['lib.'][$extKeyTS.'.'] = $pageTSconfig['lib.'][$extKeyTS.'.'];
         $tempConfig['lib.']['links.'] = $pageTSconfig['lib.']['links.'];
-        $pageTSconfig = $tempConfig;
 
-        $qualifier = $pageTSconfig['qualifier'] ? $pageTSconfig['qualifier'] : $extKeyTS;
-
-        return $pageTSconfig;
+        return $tempConfig;
     }
 
     /**
@@ -215,26 +199,24 @@ class tx_mksearch_tests_Util
         // die gerade hinzugefügten TS Dateien nicht beachtet
         $rootLine = 1;
 
-        return \Sys25\RnBase\Backend\Utility\BackendUtility::getPagesTSconfig($pageId, $rootLine);
+        return Sys25\RnBase\Backend\Utility\BackendUtility::getPagesTSconfig($pageId, $rootLine);
     }
 
     /**
      * Lädt ein COnfigurations Objekt nach mit der TS aus der Extension
      * Dabei wird alles geholt was in "plugin.tx_$extKey", "lib.$extKey." und
      * "lib.links." liegt.
-     *
-     * @return \Sys25\RnBase\Configuration\Processor
      */
-    public static function loadConfig4BE($pageTSconfig)
+    public static function loadConfig4BE($pageTSconfig): Sys25\RnBase\Configuration\Processor
     {
-        \Sys25\RnBase\Utility\Misc::prepareTSFE(); // Ist bei Aufruf aus BE notwendig!
+        Sys25\RnBase\Utility\Misc::prepareTSFE(); // Ist bei Aufruf aus BE notwendig!
         $GLOBALS['TSFE']->config = [];
-        $cObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);
+        $cObj = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);
 
-        $configurations = new \Sys25\RnBase\Configuration\Processor();
+        $configurations = new Sys25\RnBase\Configuration\Processor();
         $pageTSconfig = (array) $pageTSconfig;
         $configurations->init($pageTSconfig, $cObj, 'mksearch', 'mksearch');
-        $configurations->setParameters(\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Frontend\Request\Parameters::class));
+        $configurations->setParameters(TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(Sys25\RnBase\Frontend\Request\Parameters::class));
 
         return $configurations;
     }
@@ -244,35 +226,34 @@ class tx_mksearch_tests_Util
      *
      * @param string $extKeyOrIndexer
      * @param string $cType
-     * @param string $documentClass
      *
      * @return tx_mksearch_model_IndexerDocumentBase
      */
     public static function getIndexerDocument(
         $extKeyOrIndexer,
         $cType = null,
-        $documentClass = 'tx_mksearch_model_IndexerDocumentBase'
-    ) {
+        string $documentClass = 'tx_mksearch_model_IndexerDocumentBase',
+    ): object {
         // extkey und contenttype vom indexer holen
         if ($extKeyOrIndexer instanceof tx_mksearch_interface_Indexer) {
-            list($extKey, $cType) = $extKeyOrIndexer->getContentType();
+            [$extKey, $cType] = $extKeyOrIndexer->getContentType();
         } // extkey und contenttype von den parametern nutzen
         elseif (is_string($extKeyOrIndexer)) {
             $extKey = $extKeyOrIndexer;
         } // falscher datentyp
         else {
-            throw new Exception('First argument of getIndexerDocument has to be an "string" or instance of "tx_mksearch_interface_Indexer", '.(is_object($extKeyOrIndexer) ? get_class($extKeyOrIndexer) : gettype($extKeyOrIndexer)).' given.');
+            throw new Exception('First argument of getIndexerDocument has to be an "string" or instance of "tx_mksearch_interface_Indexer", '.get_debug_type($extKeyOrIndexer).' given.');
         }
 
-        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($documentClass, $extKey, $cType);
+        return TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($documentClass, $extKey, $cType);
     }
 
     /**
      * Setzt eine XCLASS, um den Relationmanager von Typo3 > 6 zu deaktivieren.
      */
-    public static function disableRelationManager()
+    public static function disableRelationManager(): void
     {
-        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Core\\Database\\RelationHandler'] = [
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][TYPO3\CMS\Core\Database\RelationHandler::class] = [
             'className' => 'tx_mksearch_tests_fixtures_typo3_CoreDbRelationHandler',
         ];
     }
@@ -280,9 +261,9 @@ class tx_mksearch_tests_Util
     /**
      * entfernt eine XCLASS, um den Relationmanager von Typo3 > 6 zu deaktivieren.
      */
-    public static function restoreRelationManager()
+    public static function restoreRelationManager(): void
     {
-        unset($GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Core\\Database\\RelationHandler']);
+        unset($GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][TYPO3\CMS\Core\Database\RelationHandler::class]);
     }
 
     /**
@@ -296,11 +277,11 @@ class tx_mksearch_tests_Util
      *
      * @param string $extensionKey
      */
-    public static function unloadExtensionForTypo362OrHigher($extensionKey)
+    public static function unloadExtensionForTypo362OrHigher($extensionKey): void
     {
         // wir kommen an den Pfad zur Package Datei nur über Reflection
-        $packageManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Package\PackageManager::class);
-        $packageStatesPathAndFilename = new ReflectionProperty('TYPO3\\CMS\\Core\\Package\\PackageManager', 'packageStatesPathAndFilename');
+        $packageManager = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(TYPO3\CMS\Core\Package\PackageManager::class);
+        $packageStatesPathAndFilename = new ReflectionProperty(TYPO3\CMS\Core\Package\PackageManager::class, 'packageStatesPathAndFilename');
         $packageStatesPathAndFilename->setAccessible(true);
 
         // backup machen
@@ -310,7 +291,7 @@ class tx_mksearch_tests_Util
 
         $extensionManagementUtility = new TYPO3\CMS\Core\Utility\ExtensionManagementUtility();
 
-        $method = new ReflectionMethod(\TYPO3\CMS\Core\Package\PackageManager::class, 'getDependencyArrayForPackage');
+        $method = new ReflectionMethod(TYPO3\CMS\Core\Package\PackageManager::class, 'getDependencyArrayForPackage');
         $method->setAccessible(true);
 
         // falls eine extension von gridelements abhängt, müssen wir diese auch deinstallieren
@@ -318,7 +299,7 @@ class tx_mksearch_tests_Util
             $packageKey = $package->getPackageMetaData()->getPackageKey();
             $dependencies = $method->invokeArgs($packageManager, [$packageKey]);
 
-            if (false !== array_search($extensionKey, $dependencies)) {
+            if (in_array($extensionKey, $dependencies)) {
                 $extensionManagementUtility->unloadExtension($packageKey);
             }
         }
@@ -327,8 +308,9 @@ class tx_mksearch_tests_Util
 
         // bei autoloading werden die initialen packages durchsucht. Daher müssen
         // wir die aktualisierten packages dem class loader mitgeben
-        $classLoaderProperty = new ReflectionProperty('TYPO3\\CMS\\Core\\Package\\PackageManager', 'classLoader');
+        $classLoaderProperty = new ReflectionProperty(TYPO3\CMS\Core\Package\PackageManager::class, 'classLoader');
         $classLoaderProperty->setAccessible(true);
+
         $classLoader = $classLoaderProperty->getValue($packageManager);
         $classLoader->setPackages($packageManager->getActivePackages());
 
@@ -345,7 +327,7 @@ class tx_mksearch_tests_Util
      * @param string $extKey
      * @param bool   $overwrite
      */
-    public static function storeExtConf($extKey = 'mksearch', $overwrite = false)
+    public static function storeExtConf($extKey = 'mksearch', $overwrite = false): void
     {
         if (!isset(self::$extConf[$extKey]) || $overwrite) {
             self::$extConf[$extKey] = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS'][$extKey] ?? [];
@@ -359,7 +341,7 @@ class tx_mksearch_tests_Util
      *
      * @return bool wurde die Konfiguration zurückgesetzt?
      */
-    public static function restoreExtConf($extKey = 'mksearch')
+    public static function restoreExtConf($extKey = 'mksearch'): bool
     {
         if (isset(self::$extConf[$extKey])) {
             $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS'][$extKey] = self::$extConf[$extKey];
@@ -378,7 +360,7 @@ class tx_mksearch_tests_Util
      * @param string $cfgValue
      * @param string $extKey
      */
-    public static function setExtConfVar($cfgKey, $cfgValue, $extKey = 'mksearch')
+    public static function setExtConfVar($cfgKey, $cfgValue, $extKey = 'mksearch'): void
     {
         // aktuelle Konfiguration auslesen
         $extConfig = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS'][$extKey] ?? [];
@@ -386,6 +368,7 @@ class tx_mksearch_tests_Util
         if (!is_array($extConfig)) {
             $extConfig = [];
         }
+
         // neuen Wert setzen
         $extConfig[$cfgKey] = $cfgValue;
         // neue Konfiguration zurückschreiben
@@ -397,23 +380,24 @@ class tx_mksearch_tests_Util
      * aber nicht importiert wurden, führt das zu Testfehlern. Also machen wir die einfach leer.
      * sollte nicht stören.
      */
-    public static function emptyAddRootlineFields()
+    public static function emptyAddRootlineFields(): void
     {
         self::$addRootLineFieldsBackup = $GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'];
         $GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'] = '';
-        $property = new ReflectionProperty('TYPO3\\CMS\\Core\\Utility\\RootlineUtility', 'rootlineFields');
+        $property = new ReflectionProperty(TYPO3\CMS\Core\Utility\RootlineUtility::class, 'rootlineFields');
         $property->setAccessible(true);
-        $rootLineFields = \Sys25\RnBase\Utility\Strings::trimExplode(',', self::$addRootLineFieldsBackup, true);
+
+        $rootLineFields = Sys25\RnBase\Utility\Strings::trimExplode(',', self::$addRootLineFieldsBackup, true);
         $property->setValue(null, array_diff($property->getValue(null), $rootLineFields));
     }
 
-    public static function resetAddRootlineFields()
+    public static function resetAddRootlineFields(): void
     {
         if (null != self::$addRootLineFieldsBackup) {
             $GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'] = self::$addRootLineFieldsBackup;
-            $property = new ReflectionProperty('TYPO3\\CMS\\Core\\Utility\\RootlineUtility', 'rootlineFields');
+            $property = new ReflectionProperty(TYPO3\CMS\Core\Utility\RootlineUtility::class, 'rootlineFields');
             $property->setAccessible(true);
-            $rootLineFields = \Sys25\RnBase\Utility\Strings::trimExplode(',', self::$addRootLineFieldsBackup, true);
+            $rootLineFields = Sys25\RnBase\Utility\Strings::trimExplode(',', self::$addRootLineFieldsBackup, true);
             $property->setValue(null, array_unique(array_merge($property->getValue(null), $rootLineFields)));
             self::$addRootLineFieldsBackup = null;
         }

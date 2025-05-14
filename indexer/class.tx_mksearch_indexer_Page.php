@@ -1,32 +1,28 @@
 <?php
 
-/**
- * @author Hannes Bochmann
+/*
+ * Copyright notice
  *
- *  Copyright notice
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
  *
- *  (c) 2011 Hannes Bochmann <dev@dmk-ebusiness.de>
- *  All rights reserved
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
  *
- *  This script is part of the TYPO3 project. The TYPO3 project is
- *  free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
  *
- *  The GNU General Public License can be found at
- *  http://www.gnu.org/copyleft/gpl.html.
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
  *
- *  This script is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *  This copyright notice MUST APPEAR in all copies of the script!
- */
-
-/**
- * benötigte Klassen einbinden.
+ * This copyright notice MUST APPEAR in all copies of the script!
  */
 
 /**
@@ -34,6 +30,8 @@
  */
 class tx_mksearch_indexer_Page extends tx_mksearch_indexer_Base
 {
+    public $options;
+
     /**
      * Return content type identification.
      * This identification is part of the indexed data
@@ -42,10 +40,8 @@ class tx_mksearch_indexer_Page extends tx_mksearch_indexer_Base
      * as you at the same time are responsible for
      * uniqueness (i.e. no overlapping with other content types) and
      * consistency (i.e. recognition) on indexing and searching data.
-     *
-     * @return array
      */
-    public static function getContentType()
+    public static function getContentType(): array
     {
         return ['core', 'page'];
     }
@@ -95,19 +91,20 @@ class tx_mksearch_indexer_Page extends tx_mksearch_indexer_Base
     /**
      * @see tx_mksearch_indexer_Base::indexData()
      */
-    public function indexData(\Sys25\RnBase\Domain\Model\DataInterface $oModel, $tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options)
+    protected function indexData(Sys25\RnBase\Domain\Model\DataInterface $oModel, $tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options): ?tx_mksearch_interface_IndexerDocument
     {
-        $lang = isset($this->options['lang']) ? $this->options['lang'] : 0;
+        $lang = $this->options['lang'] ?? 0;
 
         // Localize record, if necessary
         if ($lang) {
-            $page = \Sys25\RnBase\Utility\TYPO3::getSysPage();
+            $page = Sys25\RnBase\Utility\TYPO3::getSysPage();
             $rawData = $page->getPageOverlay($rawData, $lang);
             // No success in record translation?
             if (!isset($rawData['_PAGES_OVERLAY'])) {
                 return null;
             }
         }
+
         // Fill indexer document
         $indexDoc->setUid($rawData['uid']);
         $indexDoc->setTitle($rawData['title']);
@@ -151,7 +148,6 @@ class tx_mksearch_indexer_Page extends tx_mksearch_indexer_Base
     /**
      * Returns the model to be indexed.
      *
-     * @param array  $rawData
      * @param string $tableName
      * @param array  $options
      *
@@ -160,9 +156,9 @@ class tx_mksearch_indexer_Page extends tx_mksearch_indexer_Base
     protected function createModel(
         array $rawData,
         $tableName = null,
-        $options = []
-    ) {
-        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Domain\Model\BaseModel::class, $rawData);
+        $options = [],
+    ): object {
+        return TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(Sys25\RnBase\Domain\Model\BaseModel::class, $rawData);
     }
 
     /**
@@ -172,16 +168,11 @@ class tx_mksearch_indexer_Page extends tx_mksearch_indexer_Base
      * but only serves as assistance when actually configuring an indexer!
      * Hence all possible configuration options should be set or
      * at least be mentioned to provide an easy-to-access inline documentation!
-     *
-     * @return string
      */
-
     /**
      * Return the default Typoscript configuration for this indexer.
-     *
-     * @return string
      */
-    public function getDefaultTSConfig()
+    public function getDefaultTSConfig(): string
     {
         return <<<CONF
 # Fields which are set statically to the given value

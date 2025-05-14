@@ -1,23 +1,45 @@
 <?php
 
+/*
+ * Copyright notice
+ *
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
+ *
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
+ *
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
+ *
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * This copyright notice MUST APPEAR in all copies of the script!
+ */
+
 /**
  * Class to search keywords from database.
  *
  * @author Michael Wagner <dev@dmk-ebusiness.de>
  */
-class tx_mksearch_search_Keyword extends \Sys25\RnBase\Search\SearchBase
+class tx_mksearch_search_Keyword extends Sys25\RnBase\Search\SearchBase
 {
     /**
      * Return table mappings.
      *
      * MUST be public as we need these data from external!
      */
-    public function getTableMappings()
+    protected function getTableMappings()
     {
-        $tableMapping = [];
-        $tableMapping['KEYWORD'] = 'tx_mksearch_keywords';
-
-        return $tableMapping;
+        return ['KEYWORD' => 'tx_mksearch_keywords'];
     }
 
     /**
@@ -26,7 +48,7 @@ class tx_mksearch_search_Keyword extends \Sys25\RnBase\Search\SearchBase
      *
      * @see util/\Sys25\RnBase\Search\SearchBase#getBaseTable()
      */
-    public function getBaseTable()
+    protected function getBaseTable()
     {
         return 'tx_mksearch_keywords';
     }
@@ -37,7 +59,7 @@ class tx_mksearch_search_Keyword extends \Sys25\RnBase\Search\SearchBase
      *
      * @see util/\Sys25\RnBase\Search\SearchBase#getBaseTable()
      */
-    public function getBaseTableAlias()
+    protected function getBaseTableAlias()
     {
         return 'KEYWORD';
     }
@@ -57,8 +79,6 @@ class tx_mksearch_search_Keyword extends \Sys25\RnBase\Search\SearchBase
 
     protected function getJoins($tableAliases)
     {
-        $join = '';
-
-        return $join;
+        return '';
     }
 }

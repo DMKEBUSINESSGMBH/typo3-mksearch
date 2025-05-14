@@ -74,7 +74,7 @@ abstract class Apache_Solr_HttpTransport_Abstract implements Apache_Solr_HttpTra
      *
      * @param float $timeout
      */
-    public function setDefaultTimeout($timeout)
+    public function setDefaultTimeout($timeout): void
     {
         $timeout = (float) $timeout;
 

@@ -1,27 +1,29 @@
 <?php
 
-/***************************************************************
- *  Copyright notice
+/*
+ * Copyright notice
  *
- *  (c) DMK E-BUSINESS GmbH
- *  All rights reserved
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
  *
- *  This script is part of the TYPO3 project. The TYPO3 project is
- *  free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
  *
- *  The GNU General Public License can be found at
- *  http://www.gnu.org/copyleft/gpl.html.
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
  *
- *  This script is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
  *
- *  This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * This copyright notice MUST APPEAR in all copies of the script!
+ */
 
 /**
  * tx_mksearch_hooks_DatabaseConnection.
@@ -37,10 +39,7 @@ class tx_mksearch_hooks_DatabaseConnection
      */
     private static $loadHiddenObjectsConfigurationBackup;
 
-    /**
-     * @var bool
-     */
-    private static $loadHiddenObjectsConfigurationBackupSet = false;
+    private static bool $loadHiddenObjectsConfigurationBackupSet = false;
 
     /**
      * During indexing we always use enablefieldsfe for selects to avoid hidden
@@ -50,10 +49,8 @@ class tx_mksearch_hooks_DatabaseConnection
      *
      * Example without this fix: Wneh a news is indexed hidden categories will be
      * indexed.
-     *
-     * @param array $parameters
      */
-    public function doSelectPre(array &$parameters)
+    public function doSelectPre(array &$parameters): void
     {
         if (tx_mksearch_service_internal_Index::isIndexingInProgress()
             && !isset($parameters['options']['enablefieldsoff'])
@@ -71,9 +68,9 @@ class tx_mksearch_hooks_DatabaseConnection
         }
     }
 
-    public function doSelectPost()
+    public function doSelectPost(): void
     {
-        if (true === self::$loadHiddenObjectsConfigurationBackupSet) {
+        if (self::$loadHiddenObjectsConfigurationBackupSet) {
             $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['rn_base']['loadHiddenObjects'] = self::$loadHiddenObjectsConfigurationBackup;
             self::$loadHiddenObjectsConfigurationBackup = null;
             self::$loadHiddenObjectsConfigurationBackupSet = false;

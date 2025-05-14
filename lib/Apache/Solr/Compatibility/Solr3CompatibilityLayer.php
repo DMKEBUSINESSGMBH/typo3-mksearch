@@ -13,15 +13,13 @@ class Apache_Solr_Compatibility_Solr3CompatibilityLayer implements Apache_Solr_C
      *
      * @return string An XML string
      */
-    public function createCommitXml($expungeDeletes = false, $waitFlush = true, $waitSearcher = true, $timeout = 3600, $softCommit = false)
+    public function createCommitXml($expungeDeletes = false, $waitFlush = true, $waitSearcher = true, $timeout = 3600, $softCommit = false): string
     {
         $expungeValue = $expungeDeletes ? 'true' : 'false';
         $flushValue = $waitFlush ? 'true' : 'false';
         $searcherValue = $waitSearcher ? 'true' : 'false';
 
-        $rawPost = '<commit expungeDeletes="'.$expungeValue.'" waitFlush="'.$flushValue.'" waitSearcher="'.$searcherValue.'" />';
-
-        return $rawPost;
+        return '<commit expungeDeletes="'.$expungeValue.'" waitFlush="'.$flushValue.'" waitSearcher="'.$searcherValue.'" />';
     }
 
     /**
@@ -33,13 +31,11 @@ class Apache_Solr_Compatibility_Solr3CompatibilityLayer implements Apache_Solr_C
      *
      * @return string An XML string
      */
-    public function createOptimizeXml($waitFlush = true, $waitSearcher = true)
+    public function createOptimizeXml($waitFlush = true, $waitSearcher = true): string
     {
         $flushValue = $waitFlush ? 'true' : 'false';
         $searcherValue = $waitSearcher ? 'true' : 'false';
 
-        $rawPost = '<optimize waitFlush="'.$flushValue.'" waitSearcher="'.$searcherValue.'" />';
-
-        return $rawPost;
+        return '<optimize waitFlush="'.$flushValue.'" waitSearcher="'.$searcherValue.'" />';
     }
 }

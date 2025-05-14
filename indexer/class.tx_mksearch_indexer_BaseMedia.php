@@ -1,31 +1,30 @@
 <?php
 
-/***************************************************************
-*  Copyright notice
-*
-*  (c) 2010 René Nitzsche <dev@dmk-ebusiness.de>
-*  All rights reserved
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
-
-/**
- * Indexer service for dam.media called by the "mksearch" extension.
+/*
+ * Copyright notice
+ *
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
+ *
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
+ *
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
+ *
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * This copyright notice MUST APPEAR in all copies of the script!
  */
+
 abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_Indexer
 {
     /**
@@ -76,7 +75,7 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
         $indexDoc->setUid(($sourceRecord['sys_language_uid'] ?? 0) ? $sourceRecord['l18n_parent'] : $sourceRecord['uid']);
 
         // pre process hoock
-        \Sys25\RnBase\Utility\Misc::callHook(
+        Sys25\RnBase\Utility\Misc::callHook(
             'mksearch',
             'indexerBaseMedia_preProcessSearchData',
             [
@@ -88,7 +87,7 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
             $this
         );
         // check, if the doc was skiped or has to be deleted
-        if (is_null($indexDoc) || $indexDoc->getDeleted()) {
+        if ($indexDoc->getDeleted()) {
             return $indexDoc;
         }
 
@@ -119,14 +118,15 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
                 $indexDoc->setDeleted(true);
 
                 return $indexDoc;
-            } else {
-                return null;
             }
+
+            return null;
         }
 
         // titel aus dem feld titel oder name holen, als fallback den dateinamen nutzen!
         $title = $sourceRecord['title'] ?? $sourceRecord['name'] ?? '';
-        $title = $title ? $title : basename((string) $this->getRelFileName($tableName, $sourceRecord));
+        $title = $title ?: basename((string) $this->getRelFileName($tableName, $sourceRecord));
+
         $indexDoc->setTitle($title);
         $indexDoc->setTimestamp($sourceRecord['tstamp'] ?? 0);
 
@@ -143,10 +143,11 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
         foreach ($fields as $localFieldName => $indexFieldName) {
             $indexDoc->addField($indexFieldName, $sourceRecord[$localFieldName] ?? '');
         }
+
         // Wie sollen die Binärdaten indiziert werden? Solr Cell oder Tika?
         $indexMethod = $this->getIndexMethod($options);
         if (!method_exists($this, $indexMethod)) {
-            \Sys25\RnBase\Utility\Logger::warn('Configured index method not supported: '.$indexMethod, 'mksearch');
+            Sys25\RnBase\Utility\Logger::warn('Configured index method not supported: '.$indexMethod, 'mksearch');
 
             return false;
         }
@@ -154,7 +155,7 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
         $this->$indexMethod($tableName, $sourceRecord, $indexDoc, $options);
 
         // post precess hock
-        \Sys25\RnBase\Utility\Misc::callHook(
+        Sys25\RnBase\Utility\Misc::callHook(
             'mksearch',
             'indexerBaseMedia_postProcessSearchData',
             [
@@ -171,21 +172,12 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
     }
 
     /**
-     * Do not do anything here.
-     */
-    private function indexNone($tableName, $sourceRecord, tx_mksearch_interface_IndexerDocument $indexDoc, $options)
-    {
-    }
-
-    /**
      * Indexing binary data by Solr CELL.
      *
-     * @param table                                 $tableName
-     * @param array                                 $sourceRecord
-     * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @param array                                 $options
+     * @param table $tableName
+     * @param array $sourceRecord
      */
-    private function indexSolr($tableName, $sourceRecord, tx_mksearch_interface_IndexerDocument $indexDoc, $options)
+    private function indexSolr($tableName, $sourceRecord, tx_mksearch_interface_IndexerDocument $indexDoc): void
     {
         $binaryOptions = [];
         $binaryOptions['sourcefile'] = $this->getAbsFileName($tableName, $sourceRecord);
@@ -193,33 +185,36 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
         if (isset($sourceRecord['file_mime_type'])) {
             $binaryOptions['file_mime_type'] = $sourceRecord['file_mime_type'];
         }
+
         if (isset($sourceRecord['file_mime_subtype'])) {
             $binaryOptions['file_mime_subtype'] = $sourceRecord['file_mime_subtype'];
         }
+
         $indexDoc->addSECommand('indexBinary', $binaryOptions);
     }
 
     /**
-     * @param table                                 $tableName
-     * @param array                                 $sourceRecord
-     * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @param array                                 $options
+     * @param table $tableName
+     * @param array $sourceRecord
+     * @param array $options
      */
-    private function indexTika($tableName, $sourceRecord, tx_mksearch_interface_IndexerDocument $indexDoc, $options)
+    private function indexTika($tableName, $sourceRecord, tx_mksearch_interface_IndexerDocument $indexDoc, $options): void
     {
         $file = $this->getAbsFileName($tableName, $sourceRecord);
-        if (!tx_mksearch_util_Tika::getInstance()->isAvailable()) {
-            \Sys25\RnBase\Utility\Logger::warn('Apache Tika not available!', 'mksearch');
+        if (in_array(tx_mksearch_util_Tika::getInstance()->isAvailable(), [false, 0], true)) {
+            Sys25\RnBase\Utility\Logger::warn('Apache Tika not available!', 'mksearch');
 
             return;
         }
+
         $tikaFields = $options['tikafields.'] ?? [];
         $tikaFields = is_array($tikaFields) ? $tikaFields : [];
+
         $contentField = $tikaFields['content'];
         if ($contentField) {
             $tikaCommand = '';
-            if (!$content = tx_mksearch_util_Tika::getInstance()->extractContent($file, $tikaCommand)) {
-                \Sys25\RnBase\Utility\Logger::warn(
+            if (($content = tx_mksearch_util_Tika::getInstance()->extractContent($file, $tikaCommand)) === '' || ($content = tx_mksearch_util_Tika::getInstance()->extractContent($file, $tikaCommand)) === '0') {
+                Sys25\RnBase\Utility\Logger::warn(
                     'Apache Tika returned empty content!',
                     'mksearch',
                     [
@@ -235,11 +230,13 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
                 $indexDoc->setAbstract($content, $indexDoc->getMaxAbstractLength());
             }
         }
+
         $langField = $tikaFields['language'];
         if ($langField) {
             $lang = tx_mksearch_util_Tika::getInstance()->extractLanguage($file);
             $indexDoc->addField($langField, $lang);
         }
+
         $metaFields = $tikaFields['meta.'];
         if (is_array($metaFields)) {
             $meta = tx_mksearch_util_Tika::getInstance()->extractMetaData($file);
@@ -261,18 +258,17 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
      */
     protected function getAbsFileName($tableName, $sourceRecord)
     {
-        return \Sys25\RnBase\Utility\Environment::getPublicPath().$this->getRelFileName($tableName, $sourceRecord);
+        return Sys25\RnBase\Utility\Environment::getPublicPath().$this->getRelFileName($tableName, $sourceRecord);
     }
 
     /**
      * Prüft anhand der Konfiguration, ob der übergebene FAL-Datensatz indiziert werden soll.
      * Aktuell kann dies über die Dateiendung und/oder das Verzeichnis festgelegt werden.
      *
-     * @param string $tableName
-     * @param array  $sourceRecord
-     * @param array  $options
+     * @param array $sourceRecord
+     * @param array $options
      */
-    protected function isIndexableRecord($tableName, $sourceRecord, $options)
+    protected function isIndexableRecord(string $tableName, $sourceRecord, $options)
     {
         $ret = true;
         $filters = (array) ($options[$tableName.'.'] ?? []);
@@ -285,7 +281,7 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
                 //  Kommagetrennt mit byFileExtension
                 // Als Array      mit byFileExtension.
                 case 'byFileExtension':
-                    $filterValue = \Sys25\RnBase\Utility\Strings::trimExplode(',', $filterValue);
+                    $filterValue = Sys25\RnBase\Utility\Strings::trimExplode(',', $filterValue);
                     $filterValue = is_array($filters['byFileExtension.'] ?? null) ? array_merge(array_values($filters['byFileExtension.']), $filterValue) : $filterValue;
                     // no break
                 case 'byFileExtension.':
@@ -303,14 +299,14 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
                     break;
                 case 'byDirectory.':
                     // wir prüfen mit array_search, da wir den key noch brauchen.
-                    if (false !== ($key = array_search($filePath, $filterValue))) {
-                        $ret = intval($filterValue[$key.'.']['disallow'] ?? 0) ? false : true;
+                    if (false !== ($key = array_search($filePath, $filterValue, true))) {
+                        $ret = !(bool) intval($filterValue[$key.'.']['disallow'] ?? 0);
                     } // wenn keine treffer gefunden wurden, prüfen wir, ob es ein unterordner davon ist.
                     elseif ($filterValue['checkSubFolder'] ?? false) {
                         unset($filterValue['checkSubFolder']); // brauchen wir nicht mehr
                         foreach ($filterValue as $key => $folder) {
-                            if (is_string($folder) && \Sys25\RnBase\Utility\Strings::isFirstPartOfStr($filePath, $folder)) {
-                                $ret = intval($filterValue[$key.'.']['disallow'] ?? 0) ? false : true;
+                            if (is_string($folder) && Sys25\RnBase\Utility\Strings::isFirstPartOfStr($filePath, $folder)) {
+                                $ret = !(bool) intval($filterValue[$key.'.']['disallow'] ?? 0);
                                 break;
                             }
                         }
@@ -318,8 +314,10 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
                     else {
                         $ret = false;
                     }
+
                     break;
             }
+
             if (!$ret) {
                 break;
             }
@@ -328,20 +326,19 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
         return $ret;
     }
 
-    private function getIndexMethod($options)
+    private function getIndexMethod($options): string
     {
-        $mode = !($options['indexMode'] ?? null) ? 'solr' : strtolower($options['indexMode']);
-        switch ($mode) {
-            case 'tika':
-                return 'indexTika';
-            case 'none':
-                return 'indexNone';
-            case 'solr':
-            default:
-                return 'indexSolr';
-        }
+        $mode = $options['indexMode'] ?? null ? strtolower($options['indexMode']) : 'solr';
 
-        return $ret;
+        return match ($mode) {
+            'tika' => 'indexTika',
+            'none' => 'indexNone',
+            default => 'indexSolr',
+        };
+    }
+
+    protected function indexNone($tableName, $sourceRecord, tx_mksearch_interface_IndexerDocument $indexDoc, $options): void
+    {
     }
 
     /**
@@ -353,10 +350,9 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
      * do something different like putting a record into the queue
      * if it's not the table that should be indexed
      *
-     * @param string                                $tableName
-     * @param array                                 $sourceRecord
-     * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @param array                                 $options
+     * @param string $tableName
+     * @param array  $sourceRecord
+     * @param array  $options
      *
      * @return bool
      */
@@ -364,7 +360,7 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
         $tableName,
         $sourceRecord,
         tx_mksearch_interface_IndexerDocument $indexDoc,
-        $options
+        $options,
     ) {
         return $this->getIndexerUtility()->stopIndexing(
             $tableName,
@@ -377,24 +373,15 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
     /**
      * Sets the index doc to deleted if neccessary.
      *
-     * @param string                                $tableName
-     * @param array                                 $sourceRecord
-     * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @param array                                 $options
+     * @param string $tableName
+     * @param array  $sourceRecord
+     * @param array  $options
      *
      * @return bool
      */
-    protected function hasDocToBeDeleted(
-        $tableName,
-        $sourceRecord,
-        tx_mksearch_interface_IndexerDocument $indexDoc,
-        $options = []
-    ) {
-        if (($sourceRecord['deleted'] ?? false) || ($sourceRecord['hidden'] ?? false)) {
-            return true;
-        }
-
-        return false;
+    protected function hasDocToBeDeleted($tableName, $sourceRecord, tx_mksearch_interface_IndexerDocument $indexDoc, $options = [])
+    {
+        return ($sourceRecord['deleted'] ?? false) || ($sourceRecord['hidden'] ?? false);
     }
 
     /**
@@ -402,7 +389,7 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
      */
     protected function getIndexerUtility()
     {
-        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_util_Indexer');
+        return TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_util_Indexer');
     }
 
     /**
@@ -445,7 +432,7 @@ indexMode = solr
 deleteIfNotIndexable = 1
 
 # define filters for FAL records. All filters must match to index a record.
-filter.$table {
+filter.{$table} {
   # a regular expression
   byDirectory = /^fileadmin\/.*\//
   # Diese Ordner werden geprüft, wenn byDirectory wahr oder nicht gesetzt ist.
@@ -507,8 +494,6 @@ CFG;
      * on the other side will be grouped.
      *
      * @TODO if needed make the value configurable through the indexer options
-     *
-     * @param tx_mksearch_interface_IndexerDocument $indexDoc
      *
      * @return string
      */

@@ -55,13 +55,6 @@ class Apache_Solr_Response
     const SVN_ID = '$Id$';
 
     /**
-     * Holds the raw response used in construction.
-     *
-     * @var Apache_Solr_HttpTransport_Response HTTP response
-     */
-    protected $_response;
-
-    /**
      * Whether the raw response has been parsed.
      *
      * @var bool
@@ -78,11 +71,10 @@ class Apache_Solr_Response
     /**
      * Data parsing flags.  Determines what extra processing should be done
      * after the data is initially converted to a data structure.
-     *
-     * @var bool
      */
-    protected $_createDocuments = true;
-    protected $_collapseSingleValueArrays = true;
+    protected bool $_createDocuments;
+
+    protected bool $_collapseSingleValueArrays;
 
     /**
      * Constructor. Takes the raw HTTP response body and the exploded HTTP headers.
@@ -92,19 +84,21 @@ class Apache_Solr_Response
      * @param bool $createDocuments           Whether to convert the documents json_decoded as stdClass instances to Apache_Solr_Document instances
      * @param bool $collapseSingleValueArrays Whether to make multivalued fields appear as single values
      */
-    public function __construct(Apache_Solr_HttpTransport_Response $response, $createDocuments = true, $collapseSingleValueArrays = true)
+    public function __construct(/**
+     * Holds the raw response used in construction.
+     *
+     * @var Apache_Solr_HttpTransport_Response HTTP response
+     */
+    protected \Apache_Solr_HttpTransport_Response $_response, $createDocuments = true, $collapseSingleValueArrays = true)
     {
-        $this->_response = $response;
         $this->_createDocuments = (bool) $createDocuments;
         $this->_collapseSingleValueArrays = (bool) $collapseSingleValueArrays;
     }
 
     /**
      * Get the HTTP status code.
-     *
-     * @return int
      */
-    public function getHttpStatus()
+    public function getHttpStatus(): int
     {
         return $this->_response->getStatusCode();
     }
@@ -121,30 +115,24 @@ class Apache_Solr_Response
 
     /**
      * Get content type of this Solr response.
-     *
-     * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return $this->_response->getMimeType();
     }
 
     /**
      * Get character encoding of this response. Should usually be utf-8, but just in case.
-     *
-     * @return string
      */
-    public function getEncoding()
+    public function getEncoding(): string
     {
         return $this->_response->getEncoding();
     }
 
     /**
      * Get the raw response as it was given to this object.
-     *
-     * @return string
      */
-    public function getRawResponse()
+    public function getRawResponse(): string
     {
         return $this->_response->getBody();
     }
@@ -163,11 +151,7 @@ class Apache_Solr_Response
             $this->_isParsed = true;
         }
 
-        if (isset($this->_parsedData->$key)) {
-            return $this->_parsedData->$key;
-        }
-
-        return null;
+        return $this->_parsedData->$key ?? null;
     }
 
     /**
@@ -208,11 +192,7 @@ class Apache_Solr_Response
             $documents = [];
 
             foreach ($data->response->docs as $originalDocument) {
-                if ($this->_createDocuments) {
-                    $document = new Apache_Solr_Document();
-                } else {
-                    $document = $originalDocument;
-                }
+                $document = $this->_createDocuments ? new Apache_Solr_Document() : $originalDocument;
 
                 foreach ($originalDocument as $key => $value) {
                     //If a result is an array with only a single

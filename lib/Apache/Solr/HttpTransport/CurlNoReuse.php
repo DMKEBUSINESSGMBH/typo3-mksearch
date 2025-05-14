@@ -54,13 +54,13 @@ class Apache_Solr_HttpTransport_CurlNoReuse extends Apache_Solr_HttpTransport_Ab
 
     private $_authString = false;
 
-    public function setAuthenticationCredentials($username, $password)
+    public function setAuthenticationCredentials($username, $password): void
     {
         // this is how curl wants it for the CURLOPT_USERPWD
         $this->_authString = $username.':'.$password;
     }
 
-    public function performGetRequest($url, $timeout = false)
+    public function performGetRequest($url, $timeout = false): \Apache_Solr_HttpTransport_Response
     {
         // check the timeout value
         if (false === $timeout || $timeout <= 0.0) {
@@ -109,7 +109,7 @@ class Apache_Solr_HttpTransport_CurlNoReuse extends Apache_Solr_HttpTransport_Ab
         return new Apache_Solr_HttpTransport_Response($statusCode, $contentType, $responseBody);
     }
 
-    public function performHeadRequest($url, $timeout = false)
+    public function performHeadRequest($url, $timeout = false): \Apache_Solr_HttpTransport_Response
     {
         // check the timeout value
         if (false === $timeout || $timeout <= 0.0) {
@@ -161,7 +161,7 @@ class Apache_Solr_HttpTransport_CurlNoReuse extends Apache_Solr_HttpTransport_Ab
         return new Apache_Solr_HttpTransport_Response($statusCode, $contentType, $responseBody);
     }
 
-    public function performPostRequest($url, $postData, $contentType, $timeout = false)
+    public function performPostRequest($url, $postData, $contentType, $timeout = false): \Apache_Solr_HttpTransport_Response
     {
         // check the timeout value
         if (false === $timeout || $timeout <= 0.0) {
@@ -192,7 +192,7 @@ class Apache_Solr_HttpTransport_CurlNoReuse extends Apache_Solr_HttpTransport_Ab
             CURLOPT_POSTFIELDS => $postData,
 
             // set the content type
-            CURLOPT_HTTPHEADER => ["Content-Type: {$contentType}"],
+            CURLOPT_HTTPHEADER => ['Content-Type: ' . $contentType],
 
             // set the timeout
             CURLOPT_TIMEOUT => $timeout,

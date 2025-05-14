@@ -1,25 +1,29 @@
 <?php
 
-/***************************************************************
- *  Copyright notice
+/*
+ * Copyright notice
  *
- *  (c) 2009-2014 DMK E-BUSINESS GmbH
- *  All rights reserved
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
  *
- * This library is distributed in the hope that it will be useful,
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
+ *
+ * This script is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- ***************************************************************/
+ * This copyright notice MUST APPEAR in all copies of the script!
+ */
 
 use Sys25\RnBase\Frontend\Request\ParametersInterface;
 
@@ -28,9 +32,9 @@ use Sys25\RnBase\Frontend\Request\ParametersInterface;
  *
  * @author rene
  */
-class tx_mksearch_filter_LuceneBase extends tx_mksearch_filter_BaseFilter implements \Sys25\RnBase\Frontend\Marker\IListBuilderInfo
+class tx_mksearch_filter_LuceneBase extends tx_mksearch_filter_BaseFilter implements Sys25\RnBase\Frontend\Marker\IListBuilderInfo
 {
-    private static $formData = [];
+    private static array $formData = [];
 
     /**
      * @var tx_mksearch_util_Filter
@@ -39,10 +43,8 @@ class tx_mksearch_filter_LuceneBase extends tx_mksearch_filter_BaseFilter implem
 
     /**
      * Store info if a search request was submitted - needed for empty list message.
-     *
-     * @var bool
      */
-    private $isSearch = false;
+    private bool $isSearch = false;
 
     /**
      * Initialize filter.
@@ -54,7 +56,7 @@ class tx_mksearch_filter_LuceneBase extends tx_mksearch_filter_BaseFilter implem
     {
         $confId = $this->getConfId();
         $fields = $this->getConfigurations()->get($confId.'filter.fields.');
-        \Sys25\RnBase\Search\SearchBase::setConfigOptions($options, $this->getConfigurations(), $confId.'filter.options.');
+        Sys25\RnBase\Search\SearchBase::setConfigOptions($options, $this->getConfigurations(), $confId.'filter.options.');
 
         return $this->initFilter($fields, $options, $this->request);
     }
@@ -62,21 +64,19 @@ class tx_mksearch_filter_LuceneBase extends tx_mksearch_filter_BaseFilter implem
     /**
      * Filter for search form.
      *
-     * @param array                    $fields
-     * @param array                    $options
-     * @param \Sys25\RnBase\Frontend\Request\RequestInterface $request
+     * @param array $fields
+     * @param array $options
      *
      * @return bool Should subsequent query be executed at all?
      */
-    protected function initFilter(&$fields, &$options, \Sys25\RnBase\Frontend\Request\RequestInterface $request)
+    protected function initFilter(&$fields, &$options, Sys25\RnBase\Frontend\Request\RequestInterface $request)
     {
         $configurations = $request->getConfigurations();
         $parameters = $request->getParameters();
         $confId = $this->getConfId();
 
         if ($configurations->get($confId.'filter.formOnly')
-            || !($parameters->offsetExists('submit')
-            || $configurations->get($confId.'filter.forceSearch'))
+            || !$parameters->offsetExists('submit') && !$configurations->get($confId.'filter.forceSearch')
         ) {
             return false;
         }
@@ -91,11 +91,7 @@ class tx_mksearch_filter_LuceneBase extends tx_mksearch_filter_BaseFilter implem
         return true;
     }
 
-    /**
-     * @param array $fields
-     * @param array $options
-     */
-    protected function handleTerm(&$fields, &$options)
+    protected function handleTerm(array &$fields, array &$options)
     {
         if ($termTemplate = $fields['term']) {
             $options['rawFormat'] = true;
@@ -116,10 +112,8 @@ class tx_mksearch_filter_LuceneBase extends tx_mksearch_filter_BaseFilter implem
      * Fügt die Sortierung zu dem Filter hinzu.
      *
      * @TODO: das klappt zurzeit nur bei einfacher sortierung!
-     *
-     * @param array $options
      */
-    protected function handleSorting(&$options)
+    protected function handleSorting(array &$options)
     {
         if ($sortString = $this->getFilterUtility()->getSortString($options, $this->getParameters())) {
             $options['sort'] = $sortString;
@@ -128,8 +122,6 @@ class tx_mksearch_filter_LuceneBase extends tx_mksearch_filter_BaseFilter implem
 
     /**
      * Schränkt das Ergebnis ein, wenn ein limit gesetzt ist.
-     *
-     * @param array $options
      */
     protected function handleLimit(array $options)
     {
@@ -139,12 +131,7 @@ class tx_mksearch_filter_LuceneBase extends tx_mksearch_filter_BaseFilter implem
         }
     }
 
-    /**
-     * @param array $options
-     *
-     * @return array
-     */
-    protected function setFeGroupsToOptions(array $options)
+    protected function setFeGroupsToOptions(array $options): array
     {
         $options['fe_groups'] = $GLOBALS['TSFE']->fe_user->groupData['uid'];
 
@@ -158,17 +145,17 @@ class tx_mksearch_filter_LuceneBase extends tx_mksearch_filter_BaseFilter implem
      */
     protected function fixMinimalPrefixLengthInZend()
     {
-        \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_service_engine_ZendLucene');
+        TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_service_engine_ZendLucene');
         Zend_Search_Lucene_Search_Query_Wildcard::setMinPrefixLength(0);
     }
 
     /**
      * Treat search form, sorting fields etc.
      *
-     * @param string                    $template  HTML template
-     * @param \Sys25\RnBase\Frontend\Marker\FormatUtil $formatter
-     * @param string                    $confId
-     * @param string                    $marker
+     * @param string                                  $template  HTML template
+     * @param Sys25\RnBase\Frontend\Marker\FormatUtil $formatter
+     * @param string                                  $confId
+     * @param string                                  $marker
      *
      * @return string
      */
@@ -177,8 +164,9 @@ class tx_mksearch_filter_LuceneBase extends tx_mksearch_filter_BaseFilter implem
         $confId = $this->getConfId().'filter.';
 
         $template = $this->parseSearchForm($template, $formatter, $confId, $marker);
-
-        $markArray = $subpartArray = $wrappedSubpartArray = [];
+        $markArray = [];
+        $subpartArray = [];
+        $wrappedSubpartArray = [];
 
         $this->getFilterUtility()->parseSortFields(
             $template,
@@ -190,7 +178,7 @@ class tx_mksearch_filter_LuceneBase extends tx_mksearch_filter_BaseFilter implem
             $marker
         );
 
-        return \Sys25\RnBase\Frontend\Marker\Templates::substituteMarkerArrayCached(
+        return Sys25\RnBase\Frontend\Marker\Templates::substituteMarkerArrayCached(
             $template,
             $markArray,
             $subpartArray,
@@ -201,16 +189,15 @@ class tx_mksearch_filter_LuceneBase extends tx_mksearch_filter_BaseFilter implem
     /**
      * Treat search form.
      *
-     * @param string                    $template  HTML template
-     * @param \Sys25\RnBase\Frontend\Marker\FormatUtil $formatter
-     * @param string                    $confId
-     * @param string                    $marker
+     * @param string                                  $template  HTML template
+     * @param Sys25\RnBase\Frontend\Marker\FormatUtil $formatter
+     * @param string                                  $marker
      *
      * @return string
      *
      * @todo refactoring da die gleiche Methode wie in tx_mksearch_filter_ElasticSearchBase
      */
-    protected function parseSearchForm($template, &$formatter, $confId, $marker = 'FILTER')
+    protected function parseSearchForm($template, &$formatter, string $confId, $marker = 'FILTER')
     {
         $configurations = $this->getConfigurations();
         // Aufpassen mit der confId. Der Listbuilder bekommt view.hit. übergeben,
@@ -218,13 +205,13 @@ class tx_mksearch_filter_LuceneBase extends tx_mksearch_filter_BaseFilter implem
         $conf = $configurations->get($confId);
 
         // Form template required?
-        if (\Sys25\RnBase\Frontend\Marker\BaseMarker::containsMarker($template, $conf['config']['marker'])) {
+        if (Sys25\RnBase\Frontend\Marker\BaseMarker::containsMarker($template, $conf['config']['marker'])) {
             // Get template from TS
-            $templateCode = \Sys25\RnBase\Utility\Files::getFileResource($conf['config.']['template']);
+            $templateCode = Sys25\RnBase\Utility\Files::getFileResource($conf['config.']['template']);
             if ($templateCode) {
                 // Get subpart from TS
                 $subpartName = $conf['config.']['subpart'];
-                $typeTemplate = \Sys25\RnBase\Frontend\Marker\Templates::getSubpart($templateCode, '###'.$subpartName.'###');
+                $typeTemplate = Sys25\RnBase\Frontend\Marker\Templates::getSubpart($templateCode, '###'.$subpartName.'###');
                 if ($typeTemplate) {
                     $parameters = $this->getParameters();
                     $paramArray = $parameters->getArrayCopy();
@@ -235,10 +222,10 @@ class tx_mksearch_filter_LuceneBase extends tx_mksearch_filter_BaseFilter implem
                     $formData = $parameters->get('submit') ? $paramArray : self::$formData;
                     $formData['action'] = $link->makeUrl(false);
                     $formData['searchcount'] = $this->request->getViewContext()->offsetGet('searchcount');
-                    $formData['hiddenfields'] = \Sys25\RnBase\Backend\Form\FormUtil::getHiddenFieldsForUrlParams($formData['action']);
+                    $formData['hiddenfields'] = Sys25\RnBase\Backend\Form\FormUtil::getHiddenFieldsForUrlParams($formData['action']);
                     $this->prepareFormFields($formData, $parameters);
 
-                    $templateMarker = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_marker_General');
+                    $templateMarker = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_marker_General');
                     $formTxt = $templateMarker->parseTemplate($typeTemplate, $formData, $formatter, $confId.'form.', 'FORM');
                 } else {
                     $formTxt = '<!-- NO SUBPART '.$subpartName.' FOUND -->';
@@ -246,6 +233,7 @@ class tx_mksearch_filter_LuceneBase extends tx_mksearch_filter_BaseFilter implem
             } else {
                 $formTxt = '<!-- NO FORM TEMPLATE FOUND: '.$confId.'.template -->';
             }
+
             // Insert form template into main template
             $template = str_replace('###'.$conf['config.']['marker'].'###', $formTxt, $template);
         }
@@ -272,6 +260,7 @@ class tx_mksearch_filter_LuceneBase extends tx_mksearch_filter_BaseFilter implem
             // Default
             $formData['combination_or_selected'] = 'checked=checked';
         }
+
         $values = $this->getModeValuesAvailable();
         if ($options['mode']) {
             foreach ($values as $value) {
@@ -283,20 +272,17 @@ class tx_mksearch_filter_LuceneBase extends tx_mksearch_filter_BaseFilter implem
         }
 
         $formData = $this->fillFormDataWithRequiredFormFieldsIfNoSet(
-            $formData,
-            $parameters
+            $formData
         );
     }
 
     /**
      * Returns all values possible for form field mksearch[options][mode].
      * Makes it possible to easily add more modes in other filters/forms.
-     *
-     * @return array
      */
-    protected function getModeValuesAvailable()
+    protected function getModeValuesAvailable(): array
     {
-        $availableModes = \Sys25\RnBase\Utility\Strings::trimExplode(
+        $availableModes = Sys25\RnBase\Utility\Strings::trimExplode(
             ',',
             $this->getConfigurations()->get($this->getConfId().'filter.availableModes')
         );
@@ -308,17 +294,11 @@ class tx_mksearch_filter_LuceneBase extends tx_mksearch_filter_BaseFilter implem
      * ist notwendig weil sonst die Marker, welche die Formulardaten
      * enthalten ungeparsed rauskommen, falls das Formular noch
      * nicht abgeschickt wurde.
-     *
-     * @param array               $formData
-     * @param ParametersInterface $parameters
-     *
-     * @return array
      */
     private function fillFormDataWithRequiredFormFieldsIfNoSet(
         array $formData,
-        ParametersInterface $parameters
-    ) {
-        $formFields = \Sys25\RnBase\Utility\Strings::trimExplode(
+    ): array {
+        $formFields = Sys25\RnBase\Utility\Strings::trimExplode(
             ',',
             $this->getConfigurations()->get($this->getConfId().'filter.requiredFormFields')
         );
@@ -336,8 +316,8 @@ class tx_mksearch_filter_LuceneBase extends tx_mksearch_filter_BaseFilter implem
      * Get a message string for empty list. This is an language string. The key is
      * taken from ts-config: [item].listinfo.llkeyEmpty.
      *
-     * @param array_object             $viewData
-     * @param \Sys25\RnBase\Configuration\Processor $configurations
+     * @param array_object                         $viewData
+     * @param Sys25\RnBase\Configuration\Processor $configurations
      *
      * @return string
      */
@@ -371,7 +351,7 @@ class tx_mksearch_filter_LuceneBase extends tx_mksearch_filter_BaseFilter implem
     protected function getFilterUtility()
     {
         if (!$this->filterUtility) {
-            $this->filterUtility = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_util_Filter');
+            $this->filterUtility = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_util_Filter');
         }
 
         return $this->filterUtility;

@@ -1,27 +1,29 @@
 <?php
 
-/***************************************************************
- *  Copyright notice
+/*
+ * Copyright notice
  *
- *  (c) 2010 René Nitzche <dev@dmk-ebusiness.de>
- *  All rights reserved
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
  *
- *  This script is part of the TYPO3 project. The TYPO3 project is
- *  free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
  *
- *  The GNU General Public License can be found at
- *  http://www.gnu.org/copyleft/gpl.html.
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
  *
- *  This script is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
  *
- *  This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * This copyright notice MUST APPEAR in all copies of the script!
+ */
 
 use Elastica\Client;
 use Elastica\Document;
@@ -35,24 +37,16 @@ use Elastica\Search;
 /**
  * Service "ElasticSearch search engine" for the "mksearch" extension.
  */
-class tx_mksearch_service_engine_ElasticSearch extends \Sys25\RnBase\Typo3Wrapper\Service\AbstractService implements tx_mksearch_interface_SearchEngine
+class tx_mksearch_service_engine_ElasticSearch extends Sys25\RnBase\Typo3Wrapper\Service\AbstractService implements tx_mksearch_interface_SearchEngine
 {
     /**
      * Index used for searching and indexing.
-     *
-     * @var Index
      */
-    private $index;
+    private ?Index $index = null;
 
-    /**
-     * @var tx_mksearch_model_internal_Index
-     */
-    private $mksearchIndexModel;
+    private ?tx_mksearch_model_internal_Index $mksearchIndexModel = null;
 
-    /**
-     * @var string
-     */
-    private $credentialsString = '';
+    private string $credentialsString = '';
 
     /**
      * Name of the currently open index.
@@ -66,20 +60,18 @@ class tx_mksearch_service_engine_ElasticSearch extends \Sys25\RnBase\Typo3Wrappe
      */
     public function __construct()
     {
-        $useInternalElasticaLib = \Sys25\RnBase\Configuration\Processor::getExtensionCfgValue(
+        $useInternalElasticaLib = Sys25\RnBase\Configuration\Processor::getExtensionCfgValue(
             'mksearch',
             'useInternalElasticaLib'
         );
         // if no config is set, enable the internal lib by default!
         $useInternalElasticaLib = false === $useInternalElasticaLib ? true : (int) $useInternalElasticaLib > 0;
         if ($useInternalElasticaLib > 0) {
-            \DMK\Mksearch\Utility\ComposerUtility::autoloadElastica();
+            DMK\Mksearch\Utility\ComposerUtility::autoloadElastica();
         }
     }
 
     /**
-     * @param array $credentials
-     *
      * @throws Exception
      */
     protected function initElasticSearchConnection(array $credentials)
@@ -88,6 +80,7 @@ class tx_mksearch_service_engine_ElasticSearch extends \Sys25\RnBase\Typo3Wrappe
         if (!$this->index->exists()) {
             $this->index->create();
         }
+
         $this->index->open();
 
         if (!$this->isServerAvailable()) {
@@ -107,39 +100,28 @@ class tx_mksearch_service_engine_ElasticSearch extends \Sys25\RnBase\Typo3Wrappe
 
     /**
      * @param array $credentials
-     *
-     * @return Index
      */
-    protected function getElasticaIndex($credentials)
+    protected function getElasticaIndex($credentials): Index
     {
         $elasticaClient = new Client($credentials);
 
         return $elasticaClient->getIndex($this->getOpenIndexName());
     }
 
-    /**
-     * @return bool
-     */
-    protected function isServerAvailable()
+    protected function isServerAvailable(): bool
     {
         $response = $this->getIndex()->getClient()->getStatus()->getResponse();
 
         return 200 == $response->getStatus();
     }
 
-    /**
-     * @return string
-     */
-    protected function getLogger()
+    protected function getLogger(): string
     {
-        return \Sys25\RnBase\Utility\Logger::class;
+        return Sys25\RnBase\Utility\Logger::class;
     }
 
     /**
      * Search indexed data.
-     *
-     * @param array $fields
-     * @param array $options
      *
      * @return array[tx_mksearch_model_SearchResult] search results
      *
@@ -147,7 +129,7 @@ class tx_mksearch_service_engine_ElasticSearch extends \Sys25\RnBase\Typo3Wrappe
      *
      * @see  http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html
      */
-    public function search(array $fields = [], array $options = [])
+    public function search(array $fields = [], array $options = []): array
     {
         $startTime = microtime(true);
         $result = [];
@@ -173,23 +155,20 @@ class tx_mksearch_service_engine_ElasticSearch extends \Sys25\RnBase\Typo3Wrappe
             $result['items'] = $items;
 
             if ($options['debug'] ?? false) {
-                \Sys25\RnBase\Utility\Debug::debug(
+                Sys25\RnBase\Utility\Debug::debug(
                     ['options' => $options, 'result' => $result],
                     __METHOD__.' Line: '.__LINE__
                 );
             }
-        } catch (Exception $e) {
-            $message = 'Exception caught from ElasticSearch: '.$e->getMessage();
-            throw new RuntimeException($message);
+        } catch (Exception $exception) {
+            $message = 'Exception caught from ElasticSearch: '.$exception->getMessage();
+            throw new RuntimeException($message, $exception->getCode(), $exception);
         }
 
         return $result;
     }
 
     /**
-     * @param array $fields
-     * @param array $options
-     *
      * @return Query
      */
     protected function getElasticaQuery(array $fields, array $options)
@@ -201,16 +180,10 @@ class tx_mksearch_service_engine_ElasticSearch extends \Sys25\RnBase\Typo3Wrappe
         return $elasticaQuery;
     }
 
-    /**
-     * @param Query $elasticaQuery
-     * @param array $options
-     *
-     * @return Query
-     */
-    private function handleSorting(Query $elasticaQuery, array $options)
+    private function handleSorting(Query $elasticaQuery, array $options): Query
     {
         if ($options['sort'] ?? '') {
-            list($field, $order) = \Sys25\RnBase\Utility\Strings::trimExplode(' ', $options['sort'],
+            [$field, $order] = Sys25\RnBase\Utility\Strings::trimExplode(' ', $options['sort'],
                 true);
             $elasticaQuery->addSort(
                 [
@@ -225,8 +198,6 @@ class tx_mksearch_service_engine_ElasticSearch extends \Sys25\RnBase\Typo3Wrappe
     }
 
     /**
-     * @param ResultSet $searchResult
-     *
      * @throws RuntimeException
      */
     protected function checkResponseOfSearchResult(ResultSet $searchResult)
@@ -243,18 +214,16 @@ class tx_mksearch_service_engine_ElasticSearch extends \Sys25\RnBase\Typo3Wrappe
     }
 
     /**
-     * @param ResultSet $searchResult
-     *
-     * @return \tx_mksearch_model_SearchHit[]
+     * @return tx_mksearch_model_SearchHit[]
      */
-    protected function getItemsFromSearchResult(ResultSet $searchResult)
+    protected function getItemsFromSearchResult(ResultSet $searchResult): array
     {
         $items = [];
         if ($elasticSearchResult = $searchResult->getResults()) {
             /* @var $item Result */
             foreach ($elasticSearchResult as $item) {
                 /* @var $hit tx_mksearch_model_SearchHit */
-                $hit = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                $hit = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
                     'tx_mksearch_model_SearchHit',
                     $item->getData()
                 );
@@ -269,12 +238,7 @@ class tx_mksearch_service_engine_ElasticSearch extends \Sys25\RnBase\Typo3Wrappe
         return $items;
     }
 
-    /**
-     * @param array $options
-     *
-     * @return array
-     */
-    protected function getOptionsForElastica(array $options)
+    protected function getOptionsForElastica(array $options): array
     {
         $elasticaOptions = [];
 
@@ -306,18 +270,13 @@ class tx_mksearch_service_engine_ElasticSearch extends \Sys25\RnBase\Typo3Wrappe
      *
      * @return string
      */
-    private function remapElasticaOptionKey($optionKey)
+    private function remapElasticaOptionKey(int|string $optionKey): int|string
     {
-        switch ($optionKey) {
-            case 'debug':
-                $optionKey = 'explain';
-                break;
-            case 'offset':
-                $optionKey = Search::OPTION_FROM;
-                break;
-        }
-
-        return $optionKey;
+        return match ($optionKey) {
+            'debug' => 'explain',
+            'offset' => Search::OPTION_FROM,
+            default => $optionKey,
+        };
     }
 
     /**
@@ -352,8 +311,8 @@ class tx_mksearch_service_engine_ElasticSearch extends \Sys25\RnBase\Typo3Wrappe
      */
     public function openIndex(
         tx_mksearch_model_internal_Index $index,
-        $forceCreation = false
-    ) {
+        $forceCreation = false,
+    ): void {
         $credentialsForElastica = $this->getElasticaCredentialsFromCredentialsString(
             $index->getCredentialString()
         );
@@ -364,15 +323,11 @@ class tx_mksearch_service_engine_ElasticSearch extends \Sys25\RnBase\Typo3Wrappe
      * Der String ist semikolon separiert. der erste Teil ist der Index,
      * alle weiteren sind die Server. Die Credentials für die Server
      * werden kommasepariert erwartet wobei erst host, dann port dann url pfad.
-     *
-     * @param string $credentialString
-     *
-     * @return array
      */
-    protected function getElasticaCredentialsFromCredentialsString($credentialString)
+    protected function getElasticaCredentialsFromCredentialsString(string $credentialString): array
     {
         $this->credentialsString = $credentialString;
-        $serverCredentials = \Sys25\RnBase\Utility\Strings::trimExplode(';', $credentialString, true);
+        $serverCredentials = Sys25\RnBase\Utility\Strings::trimExplode(';', $credentialString, true);
 
         $this->indexName = $serverCredentials[0];
         unset($serverCredentials[0]);
@@ -390,13 +345,11 @@ class tx_mksearch_service_engine_ElasticSearch extends \Sys25\RnBase\Typo3Wrappe
 
     /**
      * @param string $credentialString
-     *
-     * @return array
      */
     private function getElasticaCredentialArrayFromIndexCredentialStringForOneServer(
-        $credentialString
-    ) {
-        $serverCredential = \Sys25\RnBase\Utility\Strings::trimExplode(',', $credentialString);
+        $credentialString,
+    ): array {
+        $serverCredential = Sys25\RnBase\Utility\Strings::trimExplode(',', $credentialString);
 
         return [
             'host' => $serverCredential[0],
@@ -407,10 +360,8 @@ class tx_mksearch_service_engine_ElasticSearch extends \Sys25\RnBase\Typo3Wrappe
 
     /**
      * Liefert den Index.
-     *
-     * @return Index
      */
-    public function getIndex()
+    public function getIndex(): ?Index
     {
         if (!is_object($this->index)) {
             $this->openIndex($this->mksearchIndexModel);
@@ -433,10 +384,8 @@ class tx_mksearch_service_engine_ElasticSearch extends \Sys25\RnBase\Typo3Wrappe
 
     /**
      * Commit index.
-     *
-     * @return void
      */
-    public function commitIndex()
+    public function commitIndex(): void
     {
         // wird direkt beim Hinzufügen oder Löschen ausgeführt
     }
@@ -444,7 +393,7 @@ class tx_mksearch_service_engine_ElasticSearch extends \Sys25\RnBase\Typo3Wrappe
     /**
      * Close index.
      */
-    public function closeIndex()
+    public function closeIndex(): void
     {
         $this->getIndex()->close();
         unset($this->index);
@@ -456,7 +405,7 @@ class tx_mksearch_service_engine_ElasticSearch extends \Sys25\RnBase\Typo3Wrappe
      * @param optional              string $name Name of index to delete, if not the open index is
      *                                           meant to be deleted
      */
-    public function deleteIndex($name = null)
+    public function deleteIndex($name = null): void
     {
         if ($name) {
             $this->getIndex()->getClient()->getIndex($name)->delete();
@@ -468,7 +417,7 @@ class tx_mksearch_service_engine_ElasticSearch extends \Sys25\RnBase\Typo3Wrappe
     /**
      * Optimize index.
      */
-    public function optimizeIndex()
+    public function optimizeIndex(): void
     {
         $this->getIndex()->optimize();
     }
@@ -482,7 +431,7 @@ class tx_mksearch_service_engine_ElasticSearch extends \Sys25\RnBase\Typo3Wrappe
      * @param string $which Name of index to be replaced i. e. deleted
      * @param string $by    Name of index which replaces the index named $which
      */
-    public function replaceIndex($which, $by)
+    public function replaceIndex($which, $by): void
     {
         // vorerst nichts zu tun
     }
@@ -494,7 +443,7 @@ class tx_mksearch_service_engine_ElasticSearch extends \Sys25\RnBase\Typo3Wrappe
      *
      * @return bool $success
      */
-    public function indexNew(tx_mksearch_interface_IndexerDocument $doc)
+    public function indexNew(tx_mksearch_interface_IndexerDocument $doc): bool
     {
         $data = [];
 
@@ -505,6 +454,7 @@ class tx_mksearch_service_engine_ElasticSearch extends \Sys25\RnBase\Typo3Wrappe
                 $data[$key] = tx_mksearch_util_Misc::utf8Encode($field->getValue());
             }
         }
+
         foreach ($doc->getData() as $key => $field) {
             if ($field) {
                 $data[$key] = tx_mksearch_util_Misc::utf8Encode($field->getValue());
@@ -528,7 +478,7 @@ class tx_mksearch_service_engine_ElasticSearch extends \Sys25\RnBase\Typo3Wrappe
      *
      * @return bool $success
      */
-    public function indexUpdate(tx_mksearch_interface_IndexerDocument $doc)
+    public function indexUpdate(tx_mksearch_interface_IndexerDocument $doc): bool
     {
         // ElasticSearch erkennt selbst ob ein Update nötig ist
         return $this->indexNew($doc);
@@ -544,7 +494,7 @@ class tx_mksearch_service_engine_ElasticSearch extends \Sys25\RnBase\Typo3Wrappe
      *
      * @return bool success
      */
-    public function indexDeleteByContentUid($uid, $extKey, $contentType)
+    public function indexDeleteByContentUid($uid, $extKey, $contentType): bool
     {
         $type = $extKey.':'.$contentType;
         $elasticaDocument = new Document($uid);
@@ -579,9 +529,9 @@ class tx_mksearch_service_engine_ElasticSearch extends \Sys25\RnBase\Typo3Wrappe
      *
      * @return tx_mksearch_interface_IndexerDocument
      */
-    public function makeIndexDocInstance($extKey, $contentType)
+    public function makeIndexDocInstance($extKey, $contentType): object
     {
-        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+        return TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_model_IndexerDocumentBase',
             $extKey,
             $contentType,
@@ -597,7 +547,7 @@ class tx_mksearch_service_engine_ElasticSearch extends \Sys25\RnBase\Typo3Wrappe
     public function getStatus()
     {
         /* @var $status tx_mksearch_util_Status */
-        $status = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_util_Status');
+        $status = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_util_Status');
 
         $id = -1;
         $msg = 'Down. Maybe not started?';
@@ -608,8 +558,8 @@ class tx_mksearch_service_engine_ElasticSearch extends \Sys25\RnBase\Typo3Wrappe
                     $this->getIndex()->getClient()->getStatus()->getResponse()->getQueryTime().
                     ' ms)';
             }
-        } catch (Exception $e) {
-            $msg = 'Error connecting ElasticSearch: '.$e->getMessage().'.';
+        } catch (Exception $exception) {
+            $msg = 'Error connecting ElasticSearch: '.$exception->getMessage().'.';
             $msg .= ' Credentials: '.$this->credentialsString;
         }
 
@@ -623,7 +573,7 @@ class tx_mksearch_service_engine_ElasticSearch extends \Sys25\RnBase\Typo3Wrappe
      *
      * @param tx_mksearch_model_internal_Index $index Instance of the index to open
      */
-    public function setIndexModel(tx_mksearch_model_internal_Index $index)
+    public function setIndexModel(tx_mksearch_model_internal_Index $index): void
     {
         $this->mksearchIndexModel = $index;
     }
@@ -631,8 +581,6 @@ class tx_mksearch_service_engine_ElasticSearch extends \Sys25\RnBase\Typo3Wrappe
     /**
      * This function is called for each index after the indexing
      * is done.
-     *
-     * @param tx_mksearch_model_internal_Index $index
      */
     public function postProcessIndexing(tx_mksearch_model_internal_Index $index)
     {

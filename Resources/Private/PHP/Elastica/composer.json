@@ -1,8 +1,11 @@
 {
     "config": {
-        "vendor-dir": "Composer"
+        "vendor-dir": "Composer",
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
     },
     "require": {
-        "ruflin/elastica": "~6.2"
+        "ruflin/elastica": "~8.0"
     }
 }

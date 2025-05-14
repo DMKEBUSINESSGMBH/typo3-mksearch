@@ -1,41 +1,36 @@
 <?php
 
-/***************************************************************
-*  Copyright notice
-*
-*  (c) 2010 das Medienkombinat
-*  All rights reserved
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
+/*
+ * Copyright notice
+ *
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
+ *
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
+ *
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
+ *
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * This copyright notice MUST APPEAR in all copies of the script!
+ */
 
 /**
  * Model for indices.
  */
-class tx_mksearch_model_internal_Index extends \Sys25\RnBase\Domain\Model\BaseModel
+class tx_mksearch_model_internal_Index extends Sys25\RnBase\Domain\Model\BaseModel
 {
     private $options = false;
-
-    /**
-     * Index service instance.
-     *
-     * @var tx_mksearch_interface_SearchEngine
-     */
-    private $indexSrv;
 
     /**
      * Return this model's table name.
@@ -130,7 +125,7 @@ class tx_mksearch_model_internal_Index extends \Sys25\RnBase\Domain\Model\BaseMo
             // get default configuation from composite
             $compositeConfig = tx_mksearch_util_ServiceRegistry::getIntCompositeService()
                 ->getIndexerOptionsByIndex($this);
-            $this->options['default.'] = \Sys25\RnBase\Utility\Arrays::mergeRecursiveWithOverrule(
+            $this->options['default.'] = Sys25\RnBase\Utility\Arrays::mergeRecursiveWithOverrule(
                 $this->options['default.'],
                 $compositeConfig
             );
@@ -142,8 +137,6 @@ class tx_mksearch_model_internal_Index extends \Sys25\RnBase\Domain\Model\BaseMo
     /**
      * Returns the configuration for this index.
      *
-     * @param tx_mksearch_model_internal_Index $oIndex
-     *
      * @return array configuration array
      */
     public function getIndexConfig()
@@ -151,12 +144,13 @@ class tx_mksearch_model_internal_Index extends \Sys25\RnBase\Domain\Model\BaseMo
         return tx_mksearch_util_Misc::parseTsConfig("{\n".$this->getProperty('configuration')."\n}");
     }
 
-    public function __toString()
+    public function __toString(): string
     {
-        $out = get_class($this)."\n\nRecord:\n";
+        $out = static::class."\n\nRecord:\n";
         foreach ($this->getProperty() as $key => $value) {
             $out .= $key.' = '.$value."\n";
         }
+
         $out = "\n\nIndexer Options:\n";
         foreach ($this->getIndexerOptions() as $key => $value) {
             $out .= $key.' = '.$value."\n";
@@ -187,11 +181,9 @@ class tx_mksearch_model_internal_Index extends \Sys25\RnBase\Domain\Model\BaseMo
     }
 
     /**
-     * @return bool
-     *
      * @deprecated wrong place for engine specific version check
      */
-    public function isSolr4()
+    public function isSolr4(): bool
     {
         return 40 == $this->getSolrVersion();
     }

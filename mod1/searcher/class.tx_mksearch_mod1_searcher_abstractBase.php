@@ -1,30 +1,42 @@
 <?php
 
-/**
- * Basisklasse für Suchfunktionen in BE-Modulen.
+/*
+ * Copyright notice
  *
- * @author Michael Wagner <dev@dmk-ebusiness.de>
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
+ *
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
+ *
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
+ *
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * This copyright notice MUST APPEAR in all copies of the script!
  */
+
 abstract class tx_mksearch_mod1_searcher_abstractBase
 {
     /**
-     * Wurde die ll bereits geladen?
-     *
-     * @var bool
+     * Selector Klasse.
      */
-    private static $llLoaded = false;
+    private Sys25\RnBase\Backend\Module\IModule $mod;
+
     /**
      * Selector Klasse.
-     *
-     * @var \Sys25\RnBase\Backend\Module\IModule
      */
-    private $mod;
-    /**
-     * Selector Klasse.
-     *
-     * @var tx_mksearch_mod1_util_Selector
-     */
-    private $selector;
+    private ?object $selector = null;
+
     /**
      * Otions.
      *
@@ -48,11 +60,8 @@ abstract class tx_mksearch_mod1_searcher_abstractBase
 
     /**
      * Constructor.
-     *
-     * @param \Sys25\RnBase\Backend\Module\IModule $mod
-     * @param array                 $options
      */
-    public function __construct(\Sys25\RnBase\Backend\Module\IModule $mod, array $options = [])
+    public function __construct(Sys25\RnBase\Backend\Module\IModule $mod, array $options = [])
     {
         $this->init($mod, $options);
     }
@@ -60,16 +69,10 @@ abstract class tx_mksearch_mod1_searcher_abstractBase
     /**
      * Init object.
      *
-     * @param \Sys25\RnBase\Backend\Module\IModule $mod
-     * @param array                 $options
+     * @param array $options
      */
-    protected function init(\Sys25\RnBase\Backend\Module\IModule $mod, $options)
+    protected function init(Sys25\RnBase\Backend\Module\IModule $mod, $options)
     {
-        // locallang einlesen
-        if (!self::$llLoaded) {
-            $GLOBALS['LANG']->includeLLFile('EXT:mksearch/Resources/Private/Language/BackendModule/locallang.xlf');
-            self::$llLoaded = true;
-        }
         $this->setOptions($options);
         $this->mod = $mod;
     }
@@ -79,7 +82,7 @@ abstract class tx_mksearch_mod1_searcher_abstractBase
      *
      * @param array $options
      */
-    public function setOptions($options)
+    public function setOptions($options): void
     {
         $this->options = $options;
     }
@@ -106,9 +109,8 @@ abstract class tx_mksearch_mod1_searcher_abstractBase
         $data = $this->getFilterTableDataForSearchForm();
 
         $selector = $this->getSelector();
-        $out = $selector->buildFilterTable($data);
 
-        return $out;
+        return $selector->buildFilterTable($data);
     }
 
     /**
@@ -124,6 +126,7 @@ abstract class tx_mksearch_mod1_searcher_abstractBase
         if (isset($this->options['pid'])) {
             $options['pid'] = $this->options['pid'];
         }
+
         $selector = $this->getSelector();
 
         $this->currentSearchWord = $selector->showFreeTextSearchForm(
@@ -154,12 +157,10 @@ abstract class tx_mksearch_mod1_searcher_abstractBase
      */
     protected function getSearchButton()
     {
-        $out = $this->getFormTool()->createSubmit(
+        return $this->getFormTool()->createSubmit(
             $this->getSearcherId().'Search',
             $GLOBALS['LANG']->sL('LLL:EXT:mksearch/Resources/Private/Language/BackendModule/locallang.xlf:label_button_search')
         );
-
-        return $out;
     }
 
     /**
@@ -171,14 +172,14 @@ abstract class tx_mksearch_mod1_searcher_abstractBase
     {
         $srv = $this->getService();
         /* @var $pager \Sys25\RnBase\Backend\Utility\BEPager */
-        $pager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-            \Sys25\RnBase\Backend\Utility\BEPager::class,
+        $pager = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+            Sys25\RnBase\Backend\Utility\BEPager::class,
             $this->getSearcherId().'Pager',
             $this->getModule()->getName(),
-            (isset($this->options['pid'])) ? $this->options['pid'] : 0
+            $this->options['pid'] ?? 0
         );
-
-        $fields = $options = [];
+        $fields = [];
+        $options = [];
         $this->prepareFieldsAndOptions($fields, $options);
 
         // Get counted data
@@ -210,9 +211,6 @@ abstract class tx_mksearch_mod1_searcher_abstractBase
 
     /**
      * Kann von der Kindklasse überschrieben werden, um weitere Filter zu setzen.
-     *
-     * @param array $fields
-     * @param array $options
      */
     protected function prepareFieldsAndOptions(array &$fields, array &$options)
     {
@@ -243,23 +241,23 @@ abstract class tx_mksearch_mod1_searcher_abstractBase
      * Start creation of result list.
      *
      * @param string $content
-     * @param array  $items
      *
      * @return string
      */
     protected function showItems(&$content, array $items)
     {
-        if (0 === count($items)) {
+        if ([] === $items) {
             $content = $this->getNoItemsFoundMsg();
 
-            return; // stop
+            return null; // stop
         }
+
         // else
         $aColumns = $this->getColumns($this->getDecorator($this->getModule()));
 
         /* @var $tables \Sys25\RnBase\Backend\Utility\Tables */
-        $tables = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Backend\Utility\Tables::class);
-        list($tableData, $tableLayout) = $tables->prepareTable(
+        $tables = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(Sys25\RnBase\Backend\Utility\Tables::class);
+        [$tableData, $tableLayout] = $tables->prepareTable(
             $items,
             $aColumns,
             $this->getFormTool(),
@@ -274,7 +272,7 @@ abstract class tx_mksearch_mod1_searcher_abstractBase
     }
 
     /**
-     * @return \Sys25\RnBase\Backend\Decorator\InterfaceDecorator
+     * @return Sys25\RnBase\Backend\Decorator\InterfaceDecorator
      */
     abstract protected function getDecorator(&$mod);
 
@@ -289,7 +287,7 @@ abstract class tx_mksearch_mod1_searcher_abstractBase
     /**
      * Liefert die Spalten für den Decorator.
      *
-     * @param \Sys25\RnBase\Backend\Decorator\InterfaceDecorator $oDecorator
+     * @param Sys25\RnBase\Backend\Decorator\InterfaceDecorator $oDecorator
      *
      * @return array
      */
@@ -314,18 +312,14 @@ abstract class tx_mksearch_mod1_searcher_abstractBase
      */
     protected function getSelector()
     {
-        if (!$this->selector) {
-            $this->selector = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_mod1_util_Selector');
+        if (null === $this->selector) {
+            $this->selector = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_mod1_util_Selector');
             $this->selector->init($this->getModule());
         }
 
         return $this->selector;
     }
 
-    /**
-     * @param array $fields
-     * @param array $options
-     */
     protected function getCount(array &$fields, array $options)
     {
         // Get counted data
@@ -337,7 +331,7 @@ abstract class tx_mksearch_mod1_searcher_abstractBase
     /**
      * Returns an instance of \Sys25\RnBase\Backend\Module\IModule.
      *
-     * @return \Sys25\RnBase\Backend\Module\IModule
+     * @return Sys25\RnBase\Backend\Module\IModule
      */
     protected function getModule()
     {
@@ -347,7 +341,7 @@ abstract class tx_mksearch_mod1_searcher_abstractBase
     /**
      * Returns an instance of \Sys25\RnBase\Backend\Module\IModule.
      *
-     * @return \Sys25\RnBase\Backend\Module\IModule
+     * @return Sys25\RnBase\Backend\Module\IModule
      */
     protected function getOptions()
     {
@@ -357,7 +351,7 @@ abstract class tx_mksearch_mod1_searcher_abstractBase
     /**
      * Returns an instance of \Sys25\RnBase\Backend\Module\IModule.
      *
-     * @return \Sys25\RnBase\Backend\Form\ToolBox
+     * @return Sys25\RnBase\Backend\Form\ToolBox
      */
     protected function getFormTool()
     {

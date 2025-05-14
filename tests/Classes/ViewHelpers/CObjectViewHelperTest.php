@@ -1,15 +1,12 @@
 <?php
 
-namespace DMK\Mksearch\Tests\ViewHelpers;
-
-use DMK\Mksearch\ViewHelpers\CObjectViewHelper;
-use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
-
-/***************************************************************
+/*
  * Copyright notice
  *
- * (c) 2016 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
+ *
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
  *
  * This script is part of the TYPO3 project. The TYPO3 project is
  * free software; you can redistribute it and/or modify
@@ -17,8 +14,8 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
- * The GNU General Public License can be found at
- * http://www.gnu.org/copyleft/gpl.html.
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
  *
  * This script is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -26,7 +23,12 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
  * GNU General Public License for more details.
  *
  * This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
+ */
+
+namespace DMK\Mksearch\Tests\ViewHelpers;
+
+use DMK\Mksearch\ViewHelpers\CObjectViewHelper;
+use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
  * DMK\Mksearch\Tests\ViewHelpers$CObjectViewHelperTest.
@@ -44,10 +46,7 @@ class CObjectViewHelperTest extends \tx_mksearch_tests_Testcase
         $property->setValue(null, false);
     }
 
-    /**
-     * @group unit
-     */
-    public function testSimulateFrontendEnvironmentWhenMksearchIndexingIsInProgress()
+    public function testSimulateFrontendEnvironmentWhenMksearchIndexingIsInProgress(): void
     {
         $property = new \ReflectionProperty('tx_mksearch_service_internal_Index', 'indexingInProgress');
         $property->setAccessible(true);
@@ -60,10 +59,7 @@ class CObjectViewHelperTest extends \tx_mksearch_tests_Testcase
         self::assertNull($GLOBALS['TSFE']);
     }
 
-    /**
-     * @group unit
-     */
-    public function testSimulateFrontendEnvironmentWhenMksearchIndexingIsNotInProgress()
+    public function testSimulateFrontendEnvironmentWhenMksearchIndexingIsNotInProgress(): void
     {
         $property = new \ReflectionProperty('tx_mksearch_service_internal_Index', 'indexingInProgress');
         $property->setAccessible(true);
@@ -76,10 +72,7 @@ class CObjectViewHelperTest extends \tx_mksearch_tests_Testcase
         self::assertInstanceOf('stdCLass', $GLOBALS['TSFE']);
     }
 
-    /**
-     * @group unit
-     */
-    public function testResetFrontendEnvironmentWhenMksearchIndexingIsInProgress()
+    public function testResetFrontendEnvironmentWhenMksearchIndexingIsInProgress(): void
     {
         $property = new \ReflectionProperty('tx_mksearch_service_internal_Index', 'indexingInProgress');
         $property->setAccessible(true);
@@ -95,10 +88,7 @@ class CObjectViewHelperTest extends \tx_mksearch_tests_Testcase
         self::assertSame('test', $GLOBALS['TSFE']);
     }
 
-    /**
-     * @group unit
-     */
-    public function testResetFrontendEnvironmentWhenMksearchIndexingIsNotInProgress()
+    public function testResetFrontendEnvironmentWhenMksearchIndexingIsNotInProgress(): void
     {
         $property = new \ReflectionProperty('tx_mksearch_service_internal_Index', 'indexingInProgress');
         $property->setAccessible(true);

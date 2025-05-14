@@ -1,77 +1,613 @@
-# Change Log
-All notable changes to this project will be documented in this file based on the [Keep a Changelog](http://keepachangelog.com/) Standard. This project adheres to [Semantic Versioning](http://semver.org/).
+# Changelog
+All notable changes to this project will be documented in this file.
 
-## [Unreleased](https://github.com/ruflin/Elastica/compare/6.2.1...6.x)
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased](https://github.com/ruflin/Elastica/compare/8.1.0...8.x)
 
 ### Backward Compatibility Breaks
-### Bugfixes
 ### Added
-### Improvements
-* Solve PHP 8.1 deprecations for every class implementing Countable, Iterator or ArrayAccess [#2061](https://github.com/ruflin/Elastica/pull/2061)
+### Changed
 ### Deprecated
+### Removed
+### Fixed
+### Security
 
-## [6.2.1](https://github.com/ruflin/Elastica/compare/6.2.0...6.2.1)
-
-### Improvements
-* Solve PHP 8.1 deprecations for every class implementing Countable, Iterator or ArrayAccess [#2061](https://github.com/ruflin/Elastica/pull/2061)
-
-## [6.2.0](https://github.com/ruflin/Elastica/compare/6.1.5...6.2.0)
+## [8.1.0](https://github.com/ruflin/Elastica/compare/8.0.0...8.1.0)
 
 ### Added
-* PHP 8.0 support [#1981](https://github.com/ruflin/Elastica/pull/1981)
-### Improvements
-* Fixed display issue in dependancy table [#1980](https://github.com/ruflin/Elastica/pull/1980)
-* Explicitly equire ext-json in composer.json [#1673](https://github.com/ruflin/Elastica/pull/1673) [#1983](https://github.com/ruflin/Elastica/pull/1983)
+* Added support for the multi-match query type `bool_prefix` [#2220](https://github.com/ruflin/Elastica/pull/2220)
+* Added support for PHP 8.4 [#2221](https://github.com/ruflin/Elastica/pull/2221)
+* Added support for custom key to IpRange and GeoDistance `addRange` using a common trait [#2227](https://github.com/ruflin/Elastica/pull/2227)
+* Added bucket sort aggregation [#2229](https://github.com/ruflin/Elastica/pull/2229)
 
-## [6.1.5](https://github.com/ruflin/Elastica/compare/6.1.4...6.1.5)
+### Fixed
+* Fixed Pipeline Processor handling to allow for multiple processors of the same type [#2218](https://github.com/ruflin/Elastica/pull/2218)
 
-### Bugfixes
-* Added conflict with `elasticsearch/elasticsearch` version `6.8.1` [#1948](https://github.com/ruflin/Elastica/pull/1948)
+## [8.0.0](https://github.com/ruflin/Elastica/compare/8.0.0-alpha1...8.0.0)
+
+This a major release with breaking changes.
+Have a look at the [Upgrade guide](https://github.com/ruflin/Elastica/blob/8.x/UPGRADE-8.0.md).
+
+### Backward Compatibility Breaks
+* Dropped support for PHP <8.0 [#2131](https://github.com/ruflin/Elastica/pull/2131)
+* Removed deprecated classes in 7.x [#2132](https://github.com/ruflin/Elastica/pull/2132)
+  * `Elastica\Exception\ElasticsearchException` -> use `Elastica\Exception\ResponseException::getResponse()::getFullError()` instead
+  * `Elastica\Exception\ResponseException::getElasticsearchException()` -> use `Elastica\Exception\ResponseException::getResponse()::getFullError()` instead
+  * `Elastica\Processor\Append` -> use `Elastica\Processor\AppendProcessor` instead
+  * `Elastica\Processor\Attachment` -> use `Elastica\Processor\AttachmentProcessor` instead
+  * `Elastica\Processor\Convert` -> use `Elastica\Processor\ConvertProcessor` instead
+  * `Elastica\Processor\Date` -> use `Elastica\Processor\DateProcessor` instead
+  * `Elastica\Processor\DateIndexName` -> use `Elastica\Processor\DateIndexNameProcessor` instead
+  * `Elastica\Processor\DotExpander` -> use `Elastica\Processor\DotExpanderProcessor` instead
+  * `Elastica\Processor\Fail` -> use `Elastica\Processor\FailProcessor` instead
+  * `Elastica\Processor\Join` -> use `Elastica\Processor\JoinProcessor` instead
+  * `Elastica\Processor\Json` -> use `Elastica\Processor\JsonProcessor` instead
+  * `Elastica\Processor\Kv` -> use `Elastica\Processor\KvProcessor` instead
+  * `Elastica\Processor\Lowercase` -> use `Elastica\Processor\LowercaseProcessor` instead
+  * `Elastica\Processor\Remove` -> use `Elastica\Processor\RemoveProcessor` instead
+  * `Elastica\Processor\Rename` -> use `Elastica\Processor\RenameProcessor` instead
+  * `Elastica\Processor\Set` -> use `Elastica\Processor\SetProcessor` instead
+  * `Elastica\Processor\Sort` -> use `Elastica\Processor\SortProcessor` instead
+  * `Elastica\Processor\Split` -> use `Elastica\Processor\SplitProcessor` instead
+  * `Elastica\Processor\Trim` -> use `Elastica\Processor\AppendProcessor` instead
+  * `Elastica\Processor\Uppercase` -> use `Elastica\Processor\UppercaseProcessor` instead
+  * `Elastica\Query\Common` -> use `Elastica\Query\MatchQuery` instead
+  * `Elastica\QueryBuilder\DSL\Query::common_terms()` -> use `Elastica\QueryBuilder\DSL\Query::match()` instead
+  * `Elastica\Transport\HttpAdapter` -> use `Elastica\Transport\Http` instead
+* Removed deprecated methods [#2135](https://github.com/ruflin/Elastica/pull/2135)
+  * `Elastica\Aggregation\Range::setKeyedResponse()` -> use `Elastica\Aggregation\Range::setKeyed()` instead
+  * `Elastica\Bulk::toString()` -> use `Elastica\Bulk::__toString()` or cast to string instead
+  * `Elastica\Query\MatchQuery::setFieldCutoffFrequency()`
+  * `Elastica\Query\MultiMatch::setCutoffFrequency()`
+  * `Elastica\QueryBuilder\DSL\Aggregation::global_agg()` -> use `Elastica\QueryBuilder\DSL\Aggregation::global()` instead
+  * `Elastica\Request::toString()` -> use `Elastica\Request::__toString()` or cast to string instead
+  * `Elastica\Result::getType()`
+  * `Elastica\Suggest\Phrase::addCandidateGenerator()` -> use `Elastica\Suggest\Phrase::addDirectGenerator()` instead
+  * `Elastica\Util::getParamName()`
+* Changed following aggregation constructors [#2138](https://github.com/ruflin/Elastica/pull/2138)
+  * `Elastica\Aggregation\AvgBucket`: The second argument `$bucketsPath` is now mandatory
+  * `Elastica\Aggregation\BucketScript`: The second (`array $bucketsPath`) and the third (`string $script`) argument are now mandatory
+  * `Elastica\Aggregation\BucketSelector`: The second (`array $bucketsPath`) and the third (`string $script`) argument are now mandatory
+  * `Elastica\Aggregation\Derivative`: The second argument (`string $bucketsPath`) is now mandatory
+  * `Elastica\Aggregation\NormalizeAggregation`: The second (`string $bucketsPath`) and the third (`string $method`) argument are now mandatory
+  * `Elastica\Aggregation\PercentilesBucket`: The second argument (`string $bucketsPath`) is now mandatory
+  * `Elastica\Aggregation\SerialDiff`: The second argument (`string $bucketsPath`) is now mandatory
+  * `Elastica\Aggregation\StatsBucket`: The second argument (`string $bucketsPath`) is now mandatory
+  * `Elastica\Aggregation\SumBucket`: The second argument (`string $bucketsPath`) is now mandatory
+* Changed return type of `Elastica\Cluster\Health::getActiveShardsPercentAsNumber()` method to `float` [#2144](https://github.com/ruflin/Elastica/pull/2144)
+* Changed `$origin` and `$scale` parameter types of `Elastica\Query\FunctionScore::addDecayFunction()` to allow `float|int|string` [#2144](https://github.com/ruflin/Elastica/pull/2144)
+* Changed `$key` parameter type of `Elastica\Multi\Search::addSearch()` to allow `int|string|null` [#2144](https://github.com/ruflin/Elastica/pull/2144)
+* Changed `$options` parameter type of `Elastica\Index::create()` to only allow `array<string, mixed>` [#2147](https://github.com/ruflin/Elastica/pull/2147)
+* Changed `Elastica\Reindex::setWaitForCompletion()` to only allow `bool` [#2151](https://github.com/ruflin/Elastica/pull/2151)
+* Changed `Elastica\Search::addIndex()`, `Elasica\Search::addIndices()` and `Elastica\Search::hasIndex()` parameter type to only allow `Elastica\Index` [#2150](https://github.com/ruflin/Elastica/pull/2150)
+* Changed `$options` argument to not accept `int` in the following methods [#2148](https://github.com/ruflin/Elastica/pull/2148)
+  * `Elastica\SearchableInterface::search()`
+  * `Elastica\SearchableInterface::createSearch()`
+  * `Elastica\Search::search()`
+  * `Elastica\Search::createSearch()`
+  * `Elastica\Search::setOptionsAndQuery()`
+  * `Elastica\Index::search()`
+  * `Elastica\Index::createSearch()`
+* Removed classes [#2188](https://github.com/ruflin/Elastica/pull/2188)
+  * `Elastica\Connection`
+  * `Elastica\Connection\ConnectionPool`
+  * `Elastica\Connection\Strategy\CallbackStrategy`
+  * `Elastica\Connection\Strategy\RoundRobin`
+  * `Elastica\Connection\Strategy\Simple`
+  * `Elastica\Connection\Strategy\StrategyFactory`
+  * `Elastica\Connection\Strategy\StrategyInterface`
+* Removed `Elastica\Client::setLogger()` method [#2148](https://github.com/ruflin/Elastica/pull/2148)
+* Enabled `strict_types` on all classes [#2190](https://github.com/ruflin/Elastica/pull/2190)
+* Changed `Elastica\Scroll:clear` to use `scroll_id` body parameter instead of url parameter [#2211](https://github.com/ruflin/Elastica/pull/2211)
+* Remove branch alias for dev-master from composer file [#2215](https://github.com/ruflin/Elastica/pull/2215)
+
 ### Added
-* Excluded `docker` directory in `.gitattributes` [#1939](https://github.com/ruflin/Elastica/pull/1939)
+* Added support for PHP 8.2 [#2136](https://github.com/ruflin/Elastica/pull/2136)
+* Added missing `@throws` annotations to Client::request and related methods [#2152](https://github.com/ruflin/Elastica/pull/2152)
+* Added ElasticSearch 8.x to CI [#2123](https://github.com/ruflin/Elastica/pull/2123)
+* Added more versions of ElasticSearch to CI [#2155](https://github.com/ruflin/Elastica/pull/2155)
+* If not expicitly set, use `retry_on_conflict` from Client configuration in Bulk updates (ported from 7.x [#2184](https://github.com/ruflin/Elastica/pull/2184))
+* Added support for the Combined Fields query type [#2195](https://github.com/ruflin/Elastica/issues/2195)
+### Changed
+* Updated `php-cs-fixer` to `3.13.2` [#2143](https://github.com/ruflin/Elastica/pull/2143)
+* Modernize code using `match` expression [#2141](https://github.com/ruflin/Elastica/pull/2141)
+* Updated docker/php/Dockerfile added AllowSymfonyFlexPlugin (false) on docker phpuser context [#2194](https://github.com/ruflin/Elastica/pull/2194)
 
-## [6.1.4](https://github.com/ruflin/Elastica/compare/6.1.3...6.1.4)
+### Removed
+* Removed the JSONParseException class, which is replaced by \JsonException
+* Removed the JSONParseException test class
+* Removed `nyholm/dsn` as no longer needed.
+* Removed `symfony/deprecation-contracts` as no longer needed.
+### Fixed
+* Fix types order in `Elastica\Query` to work with psalm & expand the `aggs` type to include raw arrays
 
-### Bugfixes
-* Added conflict with `elasticsearch/elasticsearch` version `6.8.0` [#1918](https://github.com/ruflin/Elastica/pull/1918)
-### Improvements
-* Marked Elastica 5.x as unmaintained [#1909](https://github.com/ruflin/Elastica/pull/1909)
-
-## [6.1.3](https://github.com/ruflin/Elastica/compare/6.1.2...6.1.3)
-
-### Bugfixes
-* Make MatchQuery.php file valid PHP. [#1902](https://github.com/ruflin/Elastica/pull/1902)
-
-## [6.1.2](https://github.com/ruflin/Elastica/compare/6.1.1...6.1.2)
-
-### Bugfixes
-
-* Always set the Guzzle `base_uri` to support connecting to multiple ES hosts. [#1618](https://github.com/ruflin/Elastica/pull/1618) [#1644](https://github.com/ruflin/Elastica/issues/1644)
+## [8.0.0-alpha1](https://github.com/ruflin/Elastica/compare/7.3.0...8.0.0-alpha1)
+### Backward Compatibility Breaks
+* Dropped support for PHP <8.0 [#2131](https://github.com/ruflin/Elastica/pull/2131)
+* Removed deprecated classes in 7.x [#2132](https://github.com/ruflin/Elastica/pull/2132)
+  * `Elastica\Exception\ElasticsearchException` -> use `Elastica\Exception\ResponseException::getResponse()::getFullError()` instead
+  * `Elastica\Exception\ResponseException::getElasticsearchException()` -> use `Elastica\Exception\ResponseException::getResponse()::getFullError()` instead
+  * `Elastica\Processor\Append` -> use `Elastica\Processor\AppendProcessor` instead
+  * `Elastica\Processor\Attachment` -> use `Elastica\Processor\AttachmentProcessor` instead
+  * `Elastica\Processor\Convert` -> use `Elastica\Processor\ConvertProcessor` instead
+  * `Elastica\Processor\Date` -> use `Elastica\Processor\DateProcessor` instead
+  * `Elastica\Processor\DateIndexName` -> use `Elastica\Processor\DateIndexNameProcessor` instead
+  * `Elastica\Processor\DotExpander` -> use `Elastica\Processor\DotExpanderProcessor` instead
+  * `Elastica\Processor\Fail` -> use `Elastica\Processor\FailProcessor` instead
+  * `Elastica\Processor\Join` -> use `Elastica\Processor\JoinProcessor` instead
+  * `Elastica\Processor\Json` -> use `Elastica\Processor\JsonProcessor` instead
+  * `Elastica\Processor\Kv` -> use `Elastica\Processor\KvProcessor` instead
+  * `Elastica\Processor\Lowercase` -> use `Elastica\Processor\LowercaseProcessor` instead
+  * `Elastica\Processor\Remove` -> use `Elastica\Processor\RemoveProcessor` instead
+  * `Elastica\Processor\Rename` -> use `Elastica\Processor\RenameProcessor` instead
+  * `Elastica\Processor\Set` -> use `Elastica\Processor\SetProcessor` instead
+  * `Elastica\Processor\Sort` -> use `Elastica\Processor\SortProcessor` instead
+  * `Elastica\Processor\Split` -> use `Elastica\Processor\SplitProcessor` instead
+  * `Elastica\Processor\Trim` -> use `Elastica\Processor\AppendProcessor` instead
+  * `Elastica\Processor\Uppercase` -> use `Elastica\Processor\UppercaseProcessor` instead
+  * `Elastica\Query\Common` -> use `Elastica\Query\MatchQuery` instead
+  * `Elastica\QueryBuilder\DSL\Query::common_terms()` -> use `Elastica\QueryBuilder\DSL\Query::match()` instead
+  * `Elastica\Transport\HttpAdapter` -> use `Elastica\Transport\Http` instead
+* Removed deprecated methods [#2135](https://github.com/ruflin/Elastica/pull/2135)
+  * `Elastica\Aggregation\Range::setKeyedResponse()` -> use `Elastica\Aggregation\Range::setKeyed()` instead
+  * `Elastica\Bulk::toString()` -> use `Elastica\Bulk::__toString()` or cast to string instead
+  * `Elastica\Query\MatchQuery::setFieldCutoffFrequency()`
+  * `Elastica\Query\MultiMatch::setCutoffFrequency()`
+  * `Elastica\QueryBuilder\DSL\Aggregation::global_agg()` -> use `Elastica\QueryBuilder\DSL\Aggregation::global()` instead
+  * `Elastica\Request::toString()` -> use `Elastica\Request::__toString()` or cast to string instead
+  * `Elastica\Result::getType()`
+  * `Elastica\Suggest\Phrase::addCandidateGenerator()` -> use `Elastica\Suggest\Phrase::addDirectGenerator()` instead
+  * `Elastica\Util::getParamName()`
+* Changed following aggregation constructors [#2138](https://github.com/ruflin/Elastica/pull/2138)
+  * `Elastica\Aggregation\AvgBucket`: The second argument `$bucketsPath` is now mandatory
+  * `Elastica\Aggregation\BucketScript`: The second (`array $bucketsPath`) and the third (`string $script`) argument are now mandatory
+  * `Elastica\Aggregation\BucketSelector`: The second (`array $bucketsPath`) and the third (`string $script`) argument are now mandatory
+  * `Elastica\Aggregation\Derivative`: The second argument (`string $bucketsPath`) is now mandatory
+  * `Elastica\Aggregation\NormalizeAggregation`: The second (`string $bucketsPath`) and the third (`string $method`) argument are now mandatory
+  * `Elastica\Aggregation\PercentilesBucket`: The second argument (`string $bucketsPath`) is now mandatory
+  * `Elastica\Aggregation\SerialDiff`: The second argument (`string $bucketsPath`) is now mandatory
+  * `Elastica\Aggregation\StatsBucket`: The second argument (`string $bucketsPath`) is now mandatory
+  * `Elastica\Aggregation\SumBucket`: The second argument (`string $bucketsPath`) is now mandatory
+* Changed return type of `Elastica\Cluster\Health::getActiveShardsPercentAsNumber()` method to `float` [#2144](https://github.com/ruflin/Elastica/pull/2144)
+* Changed `$origin` and `$scale` parameter types of `Elastica\Query\FunctionScore::addDecayFunction()` to allow `float|int|string` [#2144](https://github.com/ruflin/Elastica/pull/2144)
+* Changed `$key` parameter type of `Elastica\Multi\Search::addSearch()` to allow `int|string|null` [#2144](https://github.com/ruflin/Elastica/pull/2144)
+* Changed `$options` parameter type of `Elastica\Index::create()` to only allow `array<string, mixed>` [#2147](https://github.com/ruflin/Elastica/pull/2147)
+* Changed `Elastica\Reindex::setWaitForCompletion()` to only allow `bool` [#2151](https://github.com/ruflin/Elastica/pull/2151)
+* Changed `Elastica\Search::addIndex()`, `Elasica\Search::addIndices()` and `Elastica\Search::hasIndex()` parameter type to only allow `Elastica\Index` [#2150](https://github.com/ruflin/Elastica/pull/2150)
+* Changed `$options` argument to not accept `int` in the following methods [#2148](https://github.com/ruflin/Elastica/pull/2148)
+  * `Elastica\SearchableInterface::search()`
+  * `Elastica\SearchableInterface::createSearch()`
+  * `Elastica\Search::search()`
+  * `Elastica\Search::createSearch()`
+  * `Elastica\Search::setOptionsAndQuery()`
+  * `Elastica\Index::search()`
+  * `Elastica\Index::createSearch()`
+* Removed classes [#2188](https://github.com/ruflin/Elastica/pull/2188)
+  * `Elastica\Connection`
+  * `Elastica\Connection\ConnectionPool`
+  * `Elastica\Connection\Strategy\CallbackStrategy`
+  * `Elastica\Connection\Strategy\RoundRobin`
+  * `Elastica\Connection\Strategy\Simple`
+  * `Elastica\Connection\Strategy\StrategyFactory`
+  * `Elastica\Connection\Strategy\StrategyInterface`
+* Removed `Elastica\Client::setLogger()` method [#2148](https://github.com/ruflin/Elastica/pull/2148)
+* Enabled `strict_types` on all classes [#2190](https://github.com/ruflin/Elastica/pull/2190)
+* Changed `Elastica\Scroll:clear` to use `scroll_id` body parameter instead of url parameter [#2211](https://github.com/ruflin/Elastica/pull/2211)
 
 ### Added
+* Added support for PHP 8.2 [#2136](https://github.com/ruflin/Elastica/pull/2136)
+* Added missing `@throws` annotations to Client::request and related methods [#2152](https://github.com/ruflin/Elastica/pull/2152)
+* Added ElasticSearch 8.x to CI [#2123](https://github.com/ruflin/Elastica/pull/2123)
+* Added more versions of ElasticSearch to CI [#2155](https://github.com/ruflin/Elastica/pull/2155)
+* If not expicitly set, use `retry_on_conflict` from Client configuration in Bulk updates (ported from 7.x [#2184](https://github.com/ruflin/Elastica/pull/2184))
+* Added support for the Combined Fields query type [#2195](https://github.com/ruflin/Elastica/issues/2195)
+### Changed
+* Updated `php-cs-fixer` to `3.13.2` [#2143](https://github.com/ruflin/Elastica/pull/2143)
+* Modernize code using `match` expression [#2141](https://github.com/ruflin/Elastica/pull/2141)
+* Updated docker/php/Dockerfile added AllowSymfonyFlexPlugin (false) on docker phpuser context [#2194](https://github.com/ruflin/Elastica/pull/2194)
 
+### Removed
+* Removed the JSONParseException class, which is replaced by \JsonException
+* Removed the JSONParseException test class
+* Removed `nyholm/dsn` as no longer needed.
+* Removed `symfony/deprecation-contracts` as no longer needed.
+### Fixed
+* Fix types order in `Elastica\Query` to work with psalm & expand the `aggs` type to include raw arrays
+
+## [7.3.0](https://github.com/ruflin/Elastica/compare/7.3.0...7.2.0)
+### Changed
+* Use `ramsey/composer-install` to simplify CI jobs and test with the lowest set of dependencies [#2113](https://github.com/ruflin/Elastica/pull/2113)
+* Bumped `elasticsearch/elasticsearch` to `7.10` to be able to use `OpenPointInTime` class [#2113](https://github.com/ruflin/Elastica/pull/2113)
+* Updated `php-cs-fixer` to `3.9.5` [#2110](https://github.com/ruflin/Elastica/pull/2110)
+* Changed `Elastica\Index\Settings::get` adding ability to get default settings by @krasilnikovm [#2115](https://github.com/ruflin/Elastica/pull/2115)
+* Update `AWSAuthV4 transport` to sanitize host name for AWS requests before signing [#2090](https://github.com/ruflin/Elastica/pull/2090)
+* New method `Elastica\Aggregation\Terms::setMissingBucket`. For Composite Agg. Include in the response documents without a value for a given source. [#2117](https://github.com/ruflin/Elastica/pull/2117)
+* Increased `PHPStan` level to `5` by @franmomu [#2108](https://github.com/ruflin/Elastica/pull/2108)
+### Removed
+* Removed `CallbackStrategyTestHelper` and `ErrorsCollector` from `tests` [#2111](https://github.com/ruflin/Elastica/pull/2111)
+### Fixed
+* Fixed `Query/Terms` terms phpdoc from `array<bool|float|int|string>` to `list<bool|float|int|string>` [#2118](https://github.com/ruflin/Elastica/pull/2118)
+* Fixed `Response` to prevent throwing JSONParseException when the response is empty.
+
+## [7.2.0](https://github.com/ruflin/Elastica/compare/7.2.0...7.1.5)
+### Backward Compatibility Breaks
+* Changed `SetProcessor::setValue` signature to allow to pass any type, if you are overriding this method you must update the signature removing the `string` type-hint by @franmomu [#2082](https://github.com/ruflin/Elastica/pull/2082)
+* Changed `Settings::setMergePolicy` signature to allow to pass `int` and `string` as argument 2, if you are overriding this method you must update the signature removing the `string` type-hint by @franmomu [#2085](https://github.com/ruflin/Elastica/pull/2085)
+### Added
+* Added `PHPStan` at level 3 by @franmomu [#2064](https://github.com/ruflin/Elastica/pull/2064)
+* Added coverage check to CI by @franmomu [#2071](https://github.com/ruflin/Elastica/pull/2071)
+* Added `string` as a valid type for `data` in `Request`  by @franmomu [#2078](https://github.com/ruflin/Elastica/pull/2078)
+* Added missing `throws` PHPDoc tags by @franmomu [#2077](https://github.com/ruflin/Elastica/pull/2077)
+* Added `Search::addIndexByName()`, `Search::hasIndexByName()` and `Search::addIndicesByName()` by @franmomu [#2103](https://github.com/ruflin/Elastica/pull/2103)
+### Changed
+* Updated `symfony/phpunit-bridge` to `6.0` by @franmomu [#2067](https://github.com/ruflin/Elastica/pull/2067)
+* Updated `php-cs-fixer` to `3.8.0` [#2074](https://github.com/ruflin/Elastica/pull/2074)
+* Updated `composer-normalize` to `2.2.28` by @deguif [#2084](https://github.com/ruflin/Elastica/pull/2084)
+* Increased `PHPStan` level to `4` [#2080](https://github.com/ruflin/Elastica/pull/2080)
+* `ExceptionInterface` extends `Throwable` [#2083](https://github.com/ruflin/Elastica/pull/2083)
+* Changed `value` in `SetProcessor` to accept `mixed` instead of `string` by @franmomu [#2082](https://github.com/ruflin/Elastica/pull/2082)
+* Updated `Query::create` PHPDoc to include supported types and propagate it to callers by @franmomu [#2088](https://github.com/ruflin/Elastica/pull/2088)
+* Update some iterable types in PHPDoc to be more specific by @franmomu [#2092](https://github.com/ruflin/Elastica/pull/2092)
+* Updated `AwsAuthV4Test` adding assertions for exception type by @franmomu [#2094](https://github.com/ruflin/Elastica/pull/2094)
+### Deprecated
+* Deprecated `Elastica\Reindex::WAIT_FOR_COMPLETION_FALSE`, use a boolean as parameter instead by @franmomu [#2070](https://github.com/ruflin/Elastica/pull/2070)
+* Passing anything else than a boolean as 1st argument to `Reindex::setWaitForCompletion`, pass a boolean instead by @franmomu [#2070](https://github.com/ruflin/Elastica/pull/2070)
+* Deprecated passing a `string` as 1st argument to `Search::addIndex()` and `Search::hasIndex()`, pass an Index instance instead by @franmomu [#2103](https://github.com/ruflin/Elastica/pull/2103)
+* Deprecated passing an array of `string` as 1st argument to `Search::addIndices()`, use an array of Index instances by @franmomu [#2103](https://github.com/ruflin/Elastica/pull/2103)
+
+### Removed
+* Removed `egeloen/http-adapter` as suggested package since the project is abandoned by @franmomu [#2069](https://github.com/ruflin/Elastica/pull/2069)
+* Removed `0` as valid request data using Analyze API by @franmomu [#2068](https://github.com/ruflin/Elastica/pull/2068)
+* Removed dead code in `AwsAuthV4Test` by @franmomu [#2073](https://github.com/ruflin/Elastica/pull/2073)
+### Fixed
+* Fixed some PHPDoc types adding `null` as possible value by @franmomu [#2070](https://github.com/ruflin/Elastica/pull/2070) and [#2087](https://github.com/ruflin/Elastica/pull/2087)
+* Fixed passing wrong types to `GapPolicyInterface::setGapPolicy()`, `Document::setDocAsUpsert()` and `Connection::setPort()` methods  by @franmomu [#2081](https://github.com/ruflin/Elastica/pull/2081)
+* Fixed `Http` PHPDoc adding `\CurlHandle` type for Curl connection by @franmomu [#2086](https://github.com/ruflin/Elastica/pull/2086)
+* Fixed case mismatch in method calls by @franmomu [#2087](https://github.com/ruflin/Elastica/pull/2087)
+* Fixed `MoreLikeThis::setLike()` PHPDoc allowing `Document` by @franmomu [#2091](https://github.com/ruflin/Elastica/pull/2091)
+* Fixed `Term::setTerm()` PHPDoc allowing scalar values for `$value` parameter by @franmomu [#2094](https://github.com/ruflin/Elastica/pull/2094)
+* Fixed `DateHistogram` deprecation: use `fixed_interval` or `calendar_interval` instead of `interval` by @VincentLanglet [#2099](https://github.com/ruflin/Elastica/pull/2099)
+
+## [7.1.5](https://github.com/ruflin/Elastica/compare/7.1.5...7.1.4)
+### Added
+* Added explicit return annotation to `Elastica\Multi\ResultSet::current()` and `Elastica\Multi\ResultSet::offsetGet()` by @franmomu [2056](https://github.com/ruflin/Elastica/pull/2056)
+* Add throwing `\Elastica\Exception\RequestEntityTooLargeException` on HTTP-413 responses in `\Elastica\Bulk` by @Vetaxon [2055](https://github.com/ruflin/Elastica/pull/2055)
+
+## [7.1.4](https://github.com/ruflin/Elastica/compare/7.1.4...7.1.3)
+### Added
+* Added support for `symfony/deprecation-contracts` 3.0 by @rguennichi [#2047](https://github.com/ruflin/Elastica/pull/2047)
+* Added aggregation `auto_date_histogram` @andriinavrotskii [#2051](https://github.com/ruflin/Elastica/pull/2051)
+### Fixed
+* Fixed version parameters for DeleteDocument by @pheyse24 [#2048](https://github.com/ruflin/Elastica/pull/2048)
+* Fixed version parameters for Index::addDocument() by @pidera [#2050](https://github.com/ruflin/Elastica/pull/2050)
+
+## [7.1.3](https://github.com/ruflin/Elastica/compare/7.1.2...7.1.3)
+### Added
+* Added support for scripted upsert on bulk requests by @dsgrillo [#1974](https://github.com/ruflin/Elastica/pull/1974)
+* Added `Elastica\Aggregation\CumulativeSum` by @limenet [#1987](https://github.com/ruflin/Elastica/pull/1987)
+* Added `ignore_failure` option to suitable ingest processors by @deguif [#2003](https://github.com/ruflin/Elastica/pull/2003)
+* Added `ignore_missing` option to `lowercase`, `remove`, `trim` and `uppercase` processors by @deguif [#2001](https://github.com/ruflin/Elastica/pull/2001)
+* Added `allow_duplicates` option to `append` processor by @deguif [#2004](https://github.com/ruflin/Elastica/pull/2004)
+* Added `bytes` processor by @deguif [#2008](https://github.com/ruflin/Elastica/pull/2008)
+* Added `indices_boost` option to `Elastica\Query` by @deguif [#2018](https://github.com/ruflin/Elastica/pull/2018)
+* Added `Elastica\Query\Terms::setBoost()` method to configure boost by @deguif [#2035](https://github.com/ruflin/Elastica/pull/2035)
+* Added `Elastica\Query\TermsSet` query by @mamchyts [#2020](https://github.com/ruflin/Elastica/pull/2020)
+* Added `terms_set` in query builder by @deguif [#2036](https://github.com/ruflin/Elastica/pull/2036)
+* Added `Elastica\Aggregation\Traits\BucketsPathTrait` to configure `buckets_path` on aggregations by @deguif
+  [#2037](https://github.com/ruflin/Elastica/pull/2037)
+  [#2039](https://github.com/ruflin/Elastica/pull/2039)
+* Allowed to configure a sub key when adding a param with `Elastica\Param::addParam()` by @deguif [#2030](https://github.com/ruflin/Elastica/pull/2030)
+### Changed
+* Triggered deprecation in `Elastica\Result::getType()` method by @deguif [#2016](https://github.com/ruflin/Elastica/pull/2016)
+* Updated `php-cs-fixer` to `3.3.2` by @deguif [#2022](https://github.com/ruflin/Elastica/pull/2022)
+* Updated `composer-normalize` to `2.15.0` by @deguif [#2021](https://github.com/ruflin/Elastica/pull/2021)
+* Updated `elasticsearch` test version to `7.15.2` by @deguif [#2027](https://github.com/ruflin/Elastica/pull/2027)
+* Extracted setting gap policy to `\Elastica\Aggregation\Traits\GapPolicyTrait` and introduced `\Elastica\Aggregation\GapPolicyInterface` with constants for options by @stchr [#2023](https://github.com/ruflin/Elastica/pull/2023)
+* Extracted setting `field` to `Elastica\Processor\Traits\FieldTrait` by @deguif [#2024](https://github.com/ruflin/Elastica/pull/2024)
+* Extracted setting `target_field` to `Elastica\Processor\Traits\TargetFieldTrait` by @deguif [#2026](https://github.com/ruflin/Elastica/pull/2026)
+* Simplified github action matrix for continuous integration workflow by @deguif [#2025](https://github.com/ruflin/Elastica/pull/2025)
+### Deprecated
+* Deprecated `Elastica\Query\Common` class, use `Elastica\Query\MatchQuery` instead by @deguif [#2013](https://github.com/ruflin/Elastica/pull/2013)
+* Deprecated `Elastica\QueryBuilder\DSL\Query::common_terms()`, use `match()` instead by @deguif [#2013](https://github.com/ruflin/Elastica/pull/2013)
+* Deprecated passing an `int` as 1st argument to `Elastica\Search::setOptionsAndQuery()`, pass an array with the key `size` instead by @deguif [#2010](https://github.com/ruflin/Elastica/pull/2010)
+* Deprecated `cutoff_frequency` option of `Elastica\Query\MatchQuery` by @deguif [#2014](https://github.com/ruflin/Elastica/pull/2014)
+* Deprecated `cutoff_frequency` option of `Elastica\Query\MultiMatch` by @deguif [#2015](https://github.com/ruflin/Elastica/pull/2015)
+* Deprecated `Elastica\Bulk::toString()`, `Elastica\Bulk\Action::toString()` and `Elastica\Request::toString()` methods, use `__toString()` method or cast to string instead by @deguif [#2033](https://github.com/ruflin/Elastica/pull/2033)
+* Deprecated not passing a `buckets_path` when constructing `Elastica\Aggregation\AvgBucket`, `Elastica\Aggregation\Derivative`, `Elastica\Aggregation\NormalizeAggregation`, `Elastica\Aggregation\PercentilesBucket`, `Elastica\Aggregation\SerialDiff`, `Elastica\Aggregation\StatsBucket` and `Elastica\Aggregation\SumBucket` by @deguif [#2038](https://github.com/ruflin/Elastica/pull/2038)
+* Deprecated not passing a `method` when constructing `Elastica\Aggregation\NormalizeAggregation` by @deguif [#2040](https://github.com/ruflin/Elastica/pull/2040)
+### Removed
+* Removed remaining `_type` field usages by @deguif [#2017](https://github.com/ruflin/Elastica/pull/2017)
+* Removed `Elastica\Bulk::$_type` dead property by @deguif [#2034](https://github.com/ruflin/Elastica/pull/2034)
+* Removed Elasticsearch old version checks in tests by @deguif [#2041](https://github.com/ruflin/Elastica/pull/2041)
+### Fixed
+* Fixed type-hint for `Elastica\Search::setOptionsAndQuery()` by @deguif [#2009](https://github.com/ruflin/Elastica/pull/2009)
+* Fixed terms query params resolution by @deguif [#2032](https://github.com/ruflin/Elastica/pull/2032)
+
+## [7.1.2](https://github.com/ruflin/Elastica/compare/7.1.1...7.1.2)
+### Backward Compatibility Breaks
+* Changed `Elastica\Exception\JSONParseException` inheritance, it now extends `\JsonException` instead of `\RuntimeException` [#1949](https://github.com/ruflin/Elastica/pull/1949)
+### Added
+* Added `Elastica\Aggregation\NormalizeAggregation` [#1956](https://github.com/ruflin/Elastica/pull/1956)
+* Added `Elastica\Suggest\Phrase::addDirectGenerator` to align with ES specification [#1964](https://github.com/ruflin/Elastica/pull/1964)
+* Added support for `psr/log` 2.0 and 3.0 [#1971](https://github.com/ruflin/Elastica/pull/1971)
+* Added new optional 'case_insensitive' option to `Elastica\Query\Wildcard` [#1894](https://github.com/ruflin/Elastica/pull/1894)
+* Added `Elastica\Result::getSort()` fetching the "sort" property of results [#1979](https://github.com/ruflin/Elastica/pull/1979)
+* Added exposure of Point-In-Time ID for search responses in `Elastica\ResultSet::getPointInTimeId()` [#1991](https://github.com/ruflin/Elastica/pull/1991)
+* Added `Elastica\Index::openPointInTime()` for opening a PiT on the index [#1994](https://github.com/ruflin/Elastica/pull/1994)
+* Added possibility to specify PointInTime on `Elastica\Query::setPointInTime()` [#1992](https://github.com/ruflin/Elastica/pull/1992)
+* Added `Elastica\Client::closePointInTime()` for closing a PiT [#1995](https://github.com/ruflin/Elastica/pull/1995)
+### Changed
+* Updated `php-cs-fixer` to `3.2.1`
+  [#1996](https://github.com/ruflin/Elastica/pull/1996)
+  [#1959](https://github.com/ruflin/Elastica/pull/1959)
+  [#1955](https://github.com/ruflin/Elastica/pull/1955)
+* Using default Elasticsearch images for testing instead of OSS https://github.com/ruflin/Elastica/pull/1954
+### Fixed
+* Fixed compatibility with `guzzlehttp/psr7` version `2.x` [#2002](https://github.com/ruflin/Elastica/pull/2002)
+* Fixed the assignment of `version`, `seq_no` and `primary_term` on `getDocument` [#1973](https://github.com/ruflin/Elastica/pull/1973)
+
+## [7.1.1](https://github.com/ruflin/Elastica/compare/7.1.0...7.1.1)
+### Backward Compatibility Breaks
+* Changed `Elastica\Query\MatchQuery::setFieldParam()` signature to allow passing bool, float or int [#1941](https://github.com/ruflin/Elastica/pull/1941)
+* Changed `Elastica\Query\MatchPhraseQuery::setFieldParam()` signature to allow passing bool, float or int [#1944](https://github.com/ruflin/Elastica/pull/1944)
+### Added
+* Excluded `docker` directory in `.gitattributes` [#1938](https://github.com/ruflin/Elastica/pull/1938)
+### Changed
+* Included `Content-Type` HTTP header every time, whatever the content of the body is [#1780](https://github.com/ruflin/Elastica/pull/1780)
+* Changed `Elastica\Status::indexExists()`, `Elastica\Status::aliasExists()` and `Elastica\Status::getIndicesWithAlias()` signatures [#1929](https://github.com/ruflin/Elastica/pull/1929)
+* Replaced `call_user_func()` and `call_user_func_array()` by direct calls [#1923](https://github.com/ruflin/Elastica/pull/1923)
+* Replaced legacy constant `CURLINFO_HTTP_CODE` by `CURLINFO_RESPONSE_CODE` [#1931](https://github.com/ruflin/Elastica/pull/1931)
+* Updated `php-cs-fixer` to `2.18.3` [#1915](https://github.com/ruflin/Elastica/pull/1915)
+* Updated `composer-normalize` to `2.13.3` [#1927](https://github.com/ruflin/Elastica/pull/1927)
+### Deprecated
+* Deprecated `Elastica\Transport\HttpAdapter` class [#1940](https://github.com/ruflin/Elastica/pull/1940)
+* Deprecated `Elastica\Exception\JSONParseException` exception, catch `\JsonException` instead [#1949](https://github.com/ruflin/Elastica/pull/1949)
+### Fixed
+* Fixed wrong `ltrim` usage in guzzle transport [#1783](https://github.com/ruflin/Elastica/pull/1783)
+* Fixed `_seq_no` and `_primary_term` wrong initialization [#1920](https://github.com/ruflin/Elastica/pull/1920)
+* Fixed `Elastica\Connection\StrategyInterface` instance checks [#1921](https://github.com/ruflin/Elastica/pull/1921)
+* Fixed various PHPDoc annotations [#1922](https://github.com/ruflin/Elastica/pull/1922)
+* Fixed numeric index names are returned as `int` in `Elastica\Status::getIndexNames()` [#1928](https://github.com/ruflin/Elastica/pull/1928)
+* Fixed using raw array in `post_filter` [#1950](https://github.com/ruflin/Elastica/pull/1950)
+
+## [7.1.0](https://github.com/ruflin/Elastica/compare/7.0.0...7.1.0)
+### Backward Compatibility Breaks
+* Added a default value to `Elastica\Aggregation\Range::setKeyed()` and `Elastica\Aggregation\PercentilesBucket::setKeyed()` [#1876](https://github.com/ruflin/Elastica/pull/1876)
+* Removed type-hint to `Elastica\Aggregation\Percentiles::setMissing()` argument [#1875](https://github.com/ruflin/Elastica/pull/1875)
+* Allowed the Terms query to accept an array of bool, float, int and/or string [#1872](https://github.com/ruflin/Elastica/pull/1872)
+### Added
+* Added `auth_type` parameter in the client class config to specify the type of authentication (allowed values are `basic, digest, gssnegotiate, ntlm`) [#1790](https://github.com/ruflin/Elastica/pull/1790)
+* Added `if_seq_no` / `if_primary_term` to replace `version` for [optimistic concurrency control](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/optimistic-concurrency-control.html) [#1803](https://github.com/ruflin/Elastica/pull/1803)
+* Added `Elastica\Aggregation\PercentilesBucket` aggregation [#1806](https://github.com/ruflin/Elastica/pull/1806)
+* Added `weighted_avg` to aggregations DSL [#1814](https://github.com/ruflin/Elastica/pull/1814)
+* Added support for defining a connection pool with DSN. Example: `pool(http://127.0.0.1 http://127.0.0.2/bar?timeout=4)` [#1808](https://github.com/ruflin/Elastica/pull/1808)
+* Added `Elastica\Aggregation\Composite` aggregation [#1804](https://github.com/ruflin/Elastica/pull/1804)
+* Added `symfony/deprecation-contracts` package to handle deprecations [#1823](https://github.com/ruflin/Elastica/pull/1823)
+* Added `list_syntax` CS rule [#1854](https://github.com/ruflin/Elastica/pull/1854)
+* Added `native_constant_invocation` CS rule [#1833](https://github.com/ruflin/Elastica/pull/1833)
+* Added `static_lambda` CS rule [#1870](https://github.com/ruflin/Elastica/pull/1870)
+* Added `Elastica\Aggregation\DateRange::setTimezone()` [#1847](https://github.com/ruflin/Elastica/pull/1847)
+* Added endpoint options support to `Elastica\Index::create()` [#1859](https://github.com/ruflin/Elastica/pull/1859)
+* Added `Elastica\Aggregation\DateHistogram::setKeyed()` [#1876](https://github.com/ruflin/Elastica/pull/1876)
+* Added `Elastica\Aggregation\GeoDistance::setKeyed()` [#1876](https://github.com/ruflin/Elastica/pull/1876)
+* Added `Elastica\Aggregation\Histogram::setKeyed()` [#1876](https://github.com/ruflin/Elastica/pull/1876)
+* Added `Elastica\Aggregation\IpRange::setKeyed()` [#1876](https://github.com/ruflin/Elastica/pull/1876)
+* Added `Elastica\Aggregation\GeotileGridAggregation` [#1880](https://github.com/ruflin/Elastica/pull/1880)
+* Added `Elastica\Aggregation\Avg::setMissing()`, `Elastica\Aggregation\Cardinality::setMissing()`, `Elastica\Aggregation\DateRange::setMissing()`, `Elastica\Aggregation\DateHistogram::setMissing()`, `Elastica\Aggregation\ExtendedStats::setMissing()`, `Elastica\Aggregation\Histogram::setMissing()`, `Elastica\Aggregation\Max::setMissing()`, `Elastica\Aggregation\Min::setMissing()`, `Elastica\Aggregation\Stats::setMissing()`, `Elastica\Aggregation\Sum::setMissing()`, `Elastica\Aggregation\Terms::setMissing()` [#1876](https://github.com/ruflin/Elastica/pull/1876)
+* Supported `guzzlehttp/guzzle` 7.x [#1816](https://github.com/ruflin/Elastica/pull/1816)
+* Supported PHP 8.0 [#1794](https://github.com/ruflin/Elastica/pull/1794)
+* Supported BC break on `elasticsearch/elasticsearch` version `7.4.0` [#1864](https://github.com/ruflin/Elastica/pull/1864)
+### Changed
+* Allowed `string` such as `wait_for` to be passed to `AbstractUpdateAction::setRefresh` [#1791](https://github.com/ruflin/Elastica/pull/1791)
+* Allowed float values for connection timeout and connection connect-timeout, providing ms precision for those. Previous precision was second. [#1868](https://github.com/ruflin/Elastica/pull/1868)
+* Changed the return type of `AbstractUpdateAction::getRefresh` to `boolean|string` [#1791](https://github.com/ruflin/Elastica/pull/1791)
+* Reviewed options handling in `Elastica\Index::create()` [#1822](https://github.com/ruflin/Elastica/pull/1822)
+* Replaced deprecated `exceptions` request option by `http_errors` request option in Guzzle transport [#1817](https://github.com/ruflin/Elastica/pull/1817)
+* Run coding styles check on github action [#1878](https://github.com/ruflin/Elastica/pull/1878)
+* Run unit tests on github action [#1882](https://github.com/ruflin/Elastica/pull/1882)
+* Run functional tests on github action [#1885](https://github.com/ruflin/Elastica/pull/1885)
+* Updated `php-cs-fixer` to `2.16.4` [#1830](https://github.com/ruflin/Elastica/pull/1830)
+* Updated `php-cs-fixer` to `2.16.7` [#1881](https://github.com/ruflin/Elastica/pull/1881)
+* Updated `php-cs-fixer` to `2.17.3` [#1895](https://github.com/ruflin/Elastica/pull/1895)
+* Updated `php-cs-fixer` to `2.18.2` [#1897](https://github.com/ruflin/Elastica/pull/1897)
+* Used `GuzzleHttp\RequestOptions` constants for configuring request options [#1820](https://github.com/ruflin/Elastica/pull/1820)
+* Used new alias endpoints classes [#1839](https://github.com/ruflin/Elastica/pull/1839)
+* Used new cache endpoints classes [#1840](https://github.com/ruflin/Elastica/pull/1840)
+* Used new ingest pipeline endpoints classes [#1834](https://github.com/ruflin/Elastica/pull/1834)
+* Used new mapping endpoints classes [#1845](https://github.com/ruflin/Elastica/pull/1845)
+* Used new nodes endpoints classes [#1863](https://github.com/ruflin/Elastica/pull/1863)
+* Used new settings endpoints classes [#1852](https://github.com/ruflin/Elastica/pull/1852)
+### Deprecated
+* Deprecated `Elastica\Aggregation\Range::setKeyedResponse()`, use `setKeyed()` instead [#1848](https://github.com/ruflin/Elastica/pull/1848)
+* Deprecated `Elastica\Exception\ResponseException::getElasticsearchException()`, use `getResponse()::getFullError()` instead [#1829](https://github.com/ruflin/Elastica/pull/1829)
+* Deprecated `Elastica\QueryBuilder\DSL\Aggregation::global_agg()`, use `global()` instead [#1826](https://github.com/ruflin/Elastica/pull/1826)
+* Deprecated `Elastica\Util::getParamName()` [#1832](https://github.com/ruflin/Elastica/pull/1832)
+* Deprecated all Processor class names in favor of suffixed class names [#1893](https://github.com/ruflin/Elastica/pull/1893)
+* Deprecated Match query class and introduced MatchQuery instead for PHP 8.0 compatibility reason [#1799](https://github.com/ruflin/Elastica/pull/1799)
+* Deprecated `version`/`version_type` options [(deprecated in `6.7.0`)](https://www.elastic.co/guide/en/elasticsearch/reference/6.8/docs-update.html) and added `if_seq_no` / `if_primary_term` that replaced it
+* Deprecated passing `bool` or `null` as 2nd argument to `Elastica\Index::create()` [#1828](https://github.com/ruflin/Elastica/pull/1828)
+### Removed
+* Removed HHVM proxy detection [#1818](https://github.com/ruflin/Elastica/pull/1818)
+### Fixed
+* Fixed issue [1789](https://github.com/ruflin/Elastica/issues/1789)
+* Fixed type-hint for `Elastica\QueryBuilder\DSL\Aggregation::sampler()` not consistent with the underlying constructor call [#1815](https://github.com/ruflin/Elastica/pull/1815)
+* Fixed `Elastica\Util::toSnakeCase()` with first letter being lower cased [#1831](https://github.com/ruflin/Elastica/pull/1831)
+* Fixed handling precision as string in `Elastica\Aggregation\GeohashGrid::setPrecision()` [#1884](https://github.com/ruflin/Elastica/pull/1884)
+* Fixed calling `Elastica\Aggregation\Composite::addAfter()` with the `null` value [1877](https://github.com/ruflin/Elastica/pull/1877)
+* Replaced `_routing` and `_retry_on_conflict` by `routing` and `retry_on_conflict` in `AbstractUpdateAction` [#1807](https://github.com/ruflin/Elastica/issues/1807)
+
+
+## [7.0.0](https://github.com/ruflin/Elastica/compare/7.0.0-beta.4...7.0.0)
+### Added
 * Added `Elastica\Aggregation\WeightedAvg` aggregation [#1770](https://github.com/ruflin/Elastica/pull/1770)
-* Added `Elastica\Query\MatchQuery` extending `Elastica\Query\Match`. This is the same as 7.x, which renamed the class for PHP 8.0 support, and makes supporting the use of ruflin/elastica 6.1 and 7.0 in the same project easier. [#1898](https://github.com/ruflin/Elastica/pull/1898)
+
+### Changed
+* Added missing Response information to Bulk/ResponseSet [#1776](https://github.com/ruflin/Elastica/pull/1776)
+
+
+## [7.0.0-beta.4](https://github.com/ruflin/Elastica/compare/7.0.0-beta3...7.0.0-beta.4)
+### Backward Compatibility Breaks
+* If you're **NOT** using composer to manage your libraries: the root directory of the library's source code moved from `lib/Elastica/` to `src/`.
+* The `Wildcard::setValue()` changed its signature: use it to set the value of the wildcard query only.
+* The `Wildcard` Query's constructor now requires the `name` and `value` properties.
+* The `Terms` Query's constructor now requires the `field` and `terms` properties.
+
+### Added
+* Added `AbstractTermsAggregation::setIncludeAsExactMatch()` [#1766](https://github.com/ruflin/Elastica/pull/1766)
+* Added `AbstractTermsAggregation::setExcludeAsExactMatch()` [#1766](https://github.com/ruflin/Elastica/pull/1766)
+* Added `AbstractTermsAggregation::setIncludeWithPartitions()` [#1766](https://github.com/ruflin/Elastica/pull/1766)
+* Added `Elastica\Reindex->setPipeline(Elastica\Pipeline $pipeline): void`. The link between the reindex and the pipeline is solved when `run()` is called, and thus the pipeline given doesn't need to be created before calling `setPipeline()` [#1752](https://github.com/ruflin/Elastica/pull/1752)
+* Added `Elastica\Reindex->setRefresh(string $value): void`. It accepts `REFRESH_*` constants from its class [#1752](https://github.com/ruflin/Elastica/pull/1752) and [#1758](https://github.com/ruflin/Elastica/pull/1758)
+* Added `Elastica\Reindex->setQuery(Elastica\Query\AbstractQuery $query): void` [#1752](https://github.com/ruflin/Elastica/pull/1752)
+* Added constants `PIPELINE`, `REFRESH_TRUE`, `REFRESH_FALSE`, `REFRESH_WAIT_FOR`, `SLICES` and `SLICES_AUTO` to `Elastica\Reindex` [#1752](https://github.com/ruflin/Elastica/pull/1752)
+* Added `Elastica\Pipeline->getId(): ?string` [#1752](https://github.com/ruflin/Elastica/pull/1752)
+* Added `Elastica\Aggregation\ExtendedStatsBucket` aggregation [#1756](https://github.com/ruflin/Elastica/pull/1756)
+
+### Changed
+* Changed `Terms::setTerms()` signature: it now accepts a list of strings only [#1765](https://github.com/ruflin/Elastica/pull/1765)
+* Changed `Terms::setTermsLookup()` signature: `index`, `path` and `id` are now required arguments [#1765](https://github.com/ruflin/Elastica/pull/1765)
+* Changed `Wildcard::setValue()` and constructor's signature: added more specific `Wildcard::setBoost()` and `Wildcard::setRewrite` methods
+* Updated PHP coding standards to adhere to PSR-12 [#1760](https://github.com/ruflin/Elastica/pull/1760)
+* Updated to PHPUnit v8.5 [#1759](https://github.com/ruflin/Elastica/pull/1759)
+* Refactored code structure: use `src/` and `tests/` folders [#1755](https://github.com/ruflin/Elastica/pull/1755)
+* Require elastica-php library >= v7.1.1, fixes an issue on Ingestion/Put() type-hinting
+* Require guzzle >= v6.3 as development library: fixes issues on PHP >= 7.2
+* Require phpunit >= v7.5, fixes deprecations in with PHP 7.3
+* Scroll is now throwing an exception when calling `current()` on an invalid iteration: always call `valid()` before
+    accessing the current item, as documented in PHP's Iterator documentation [#1749](https://github.com/ruflin/Elastica/pull/1749)
+
+### Removed
+* Removed unsupported `flags` from `AbstractTermsAggregation::setInclude()` [#1766](https://github.com/ruflin/Elastica/pull/1766)
+* Removed unsupported `flags` from `AbstractTermsAggregation::setExclude()` [#1766](https://github.com/ruflin/Elastica/pull/1766)
+* `Terms::setMinimumMatch()` has been removed as not supported by ES 7.x
+
+
+## [7.0.0-beta.3](https://github.com/ruflin/Elastica/compare/7.0.0-beta2...7.0.0-beta.3)
+* Marked Elastica 5.x as unmaintained
+
+### Bugfixes
+* Fix Search::count() not counting all results [#1746](https://github.com/ruflin/Elastica/pull/1746)
+* Fixed handling of Search::OPTION_SEARCH_IGNORE_UNAVAILABLE inside Scroll object
+
+### Added
+* Added `DiversifiedSampler` aggregation [#1735](https://github.com/ruflin/Elastica/pull/1735)
+* Added `\Elastica\Query\DistanceFeature` [#1730](https://github.com/ruflin/Elastica/pull/1730)
+* Added support for injecting a callable AWS credential provider to use static, cached, or custom-sourced credentials [#1667](https://github.com/ruflin/Elastica/pull/1667)
+
+### Improvements
+* Scroll releases previous ResultSet from memory before calling ES for next data batch [#1740](https://github.com/ruflin/Elastica/pull/1740)
+
+
+## [7.0.0-beta2](https://github.com/ruflin/Elastica/compare/7.0.0-beta1...7.0.0-beta2)
+
+### Backward Compatibility Breaks
+
+* The method `Index::deleteById()` does not throw an `NotFoundException` when deleting a non-existing document [#1732](https://github.com/ruflin/Elastica/pull/1732)
+* The class `\Elastica\QueryBuilder\Version\Version240` has been moved to `\Elastica\QueryBuilder\Version\Version700` [#1693](https://github.com/ruflin/Elastica/pull/1693)
+* Dropped support for PHP 7.1 [#1703](https://github.com/ruflin/Elastica/pull/1703)
+
+### Bugfixes
+
+* Renamed `\Elastica\Suggest\Term` deprecated option `prefix_len` to `prefix_length` [#1707](https://github.com/ruflin/Elastica/pull/1707)
+* The `\Elastica\Query\GeoPolygon::count()` method now returns the count of points passed to the filter [#1696](https://github.com/ruflin/Elastica/pull/1696)
+* Fix issue in `\Elastica\Client::request()` which causes request data to not be sent to the logger [#1682](https://github.com/ruflin/Elastica/pull/1682)
+
+### Added
+
+* Added `geo_bounding_box`, `geo_polygon`, `match_phrase`, `match_phrase_prefix`, `match_none` to `\Elastica\QueryBuilder\Version\Version700` [#1702](https://github.com/ruflin/Elastica/pull/1702)
+* Added `\Elastica\ResultSet::getTotalHitsRelation()` to get relation for total hits [#1694](https://github.com/ruflin/Elastica/pull/1694)
+* Added `Sampler` aggregation [#1688](https://github.com/ruflin/Elastica/pull/1688)
 
 ### Improvements
 
-* Added missing Response information to Bulk/ResponseSet [#1775](https://github.com/ruflin/Elastica/pull/1775)
+* Launched tests with PHP 7.4 [#1704](https://github.com/ruflin/Elastica/pull/1704)
+* Launched local tests with PHP 7.2 by default [#1725](https://github.com/ruflin/Elastica/pull/1725)
+* Added `nullable_type_declaration_for_default_null_value`, `no_alias_functions` CS rules [#1706](https://github.com/ruflin/Elastica/pull/1706)
+* Configured `visibility_required` CS rule for constants [#1723](https://github.com/ruflin/Elastica/pull/1723)
+* Added `Collapse` DSL to `QueryBuilder` [#1724](https://github.com/ruflin/Elastica/pull/1724)
 
-### Deprecated
-* `Elastica\Query\Match` has been deprecated in favour of `Elastica\Query\MatchQuery`. [#1898](https://github.com/ruflin/Elastica/pull/1898)
+
+## [7.0.0-beta1](https://github.com/ruflin/Elastica/compare/6.1.1...7.0.0-beta1)
+
+### Backward Compatibility Breaks
+* The class `\Elastica\Type\Mapping` has been moved to `\Elastica\Mapping` [#1666](https://github.com/ruflin/Elastica/pull/1666)
+* The `\Elastica\Query::$_suggest` property has been renamed to `$hasSuggest` and is now private, it should not be used from extending classes [#1679](https://github.com/ruflin/Elastica/pull/1679)
+* `\Elastica\Document` expects a string as ID, not an int [#1672](https://github.com/ruflin/Elastica/pull/1672).
+* Removed `\Elastica\Query\GeohashCell` query, use `\Elastica\Query\GeoBoundingBox` instead [#1672](https://github.com/ruflin/Elastica/pull/1672).
+* Deprecated usage of `\Elastica\Type` class, `\Elastica\Index` class must be used instead [#1666](https://github.com/ruflin/Elastica/pull/1666)
+* Removed `\Elastica\Type` class, `\Elastica\Index` class must be used instead [#1666](https://github.com/ruflin/Elastica/pull/1666)
+* Forced index names to string in `\Elastica\Index::__construct()` [#1666](https://github.com/ruflin/Elastica/pull/1666)
+* Removed Type query `\Elastica\Query\Type` [#1666](https://github.com/ruflin/Elastica/pull/1666)
+* Removed `Elastica\Type` class, `Elastica\Index` class must be used instead [#1666](https://github.com/ruflin/Elastica/pull/1666)
+* Removed `type` handling from `Elastica\Search` class [#1666](https://github.com/ruflin/Elastica/pull/1666)
+* Removed `type` handling from `Elastica\Bulk` and `Elastica\Bulk\Action` classes [#1666](https://github.com/ruflin/Elastica/pull/1666)
+* Forced index names to string in `Elastica\Index::__construct()` [#1666](https://github.com/ruflin/Elastica/pull/1666)
+* Removed Type query `Elastica\Query\Type` [#1666](https://github.com/ruflin/Elastica/pull/1666)
+* Dropped support for PHP 7.0
+* \Elastica\AbstractUpdateAction::getOptions( $fields ) no longer supports the $underscore parameter, option names must match what elasticsearch expects.
+* Removed no longer supported \Elastica\Query\QueryString::setAutoGeneratePhraseQueries( $bool ) [#1622](https://github.com/ruflin/Elastica/pull/1622)
+* Replaced [params._agg](https://www.elastic.co/guide/en/elasticsearch/reference/master/breaking-changes-7.0.html#_replaced_literal_params__agg_literal_with_literal_state_literal_context_variable_in_scripted_metric_aggregations) with state context variable in scripted metric aggregations
+* [Camel Case](https://www.elastic.co/guide/en/elasticsearch/reference/master/breaking-changes-7.0.html#_camel_case_and_underscore_parameters_deprecated_in_6_x_have_been_removed) and underscore parameters deprecated in 6.x have been removed
+* The parameter [fields](https://www.elastic.co/guide/en/elasticsearch/reference/master/breaking-changes-7.0.html#_the_parameter_literal_fields_literal_deprecated_in_6_x_has_been_removed_from_bulk_request) deprecated in 6.x has been removed from Bulk requestedit and Update request.
+* The [_parent](https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-parent-field.html) field has been removed in favour of the join field.
+* hits.total is now an object in the search response [hits.total](https://www.elastic.co/guide/en/elasticsearch/reference/master/breaking-changes-7.0.html#_literal_hits_total_literal_is_now_an_object_in_the_search_response)
+* Elastica\Reindex does not return an Index anymore but a Response.
+* Elastica\Reindex->run() does not refresh the new Index after completion anymore. Use `$reindex->setParam(Reindex::REFRESH, 'wait_for')` instead.
+* `Elastica\Search->search()` and `Elastica\Search->count()` use request method `POST` by default. Same for `Elastica\Index`, `Elastica\Type\AbstractType`, `Elastica\Type`.
+* Elastica\Client `$_config` field is now a `ClientConfiguration` instead of an array
+* Removed `\Elastica\Client::_log`, `\Elastica\Log` and the `log` configuration option. Use the `Psr\Log\LoggerInterface $logger` client argument to customize logging.
+* Changed all factory methods to make use of [late static bindings](http://docs.php.net/manual/en/language.oop5.late-static-bindings.php) by using `static` instead of `self` keyword. This is to increase extendability for classes with factory methods.
+
+
+### Bugfixes
+
+* Always set the Guzzle `base_uri` to support connecting to multiple ES hosts. [#1618](https://github.com/ruflin/Elastica/pull/1618)
+* Properly handle underscore prefixes in options and bulk request metadata ([cf upstream](https://github.com/elastic/elasticsearch/issues/26886). [#1621](https://github.com/ruflin/Elastica/pull/1621)
+* Preserve zeros while doing float serialization to JSON. [#1635](https://github.com/ruflin/Elastica/pull/1635)
+* Add ```settings``` level on json to create an Index in all tests (it worked till 6.x but it shouldn't work)
+
+
+### Added
+
+* support for elasticsearch-php ^7.0
+* Added `ParentAggregation` [#1616](https://github.com/ruflin/Elastica/pull/1616)
+* Elastica\Reindex missing options (script, remote, wait_for_completion, scroll...)
+* Added `AdjacencyMatrix` aggregation [#1642](https://github.com/ruflin/Elastica/pull/1642)
+* Added request method parameter to `Elastica\SearchableInterface->search()` and `Elastica\SearchableInterface->count()`. Same for `Elastica\Search`[#1441](https://github.com/ruflin/Elastica/issues/1441)
+* Added support for Field Collapsing (Issue: [#1392](https://github.com/ruflin/Elastica/issues/1392); PR: [#1653](https://github.com/ruflin/Elastica/pull/1653))
+* Support string DSN in `\Elastica\Client` constructor for config argument [#1640](https://github.com/ruflin/Elastica/issues/1640)
+* Move Client configuration in a dedicated class
+* Added `callable` type hinting to `$callback` in `Client` constructor. [#1659](https://github.com/ruflin/Elastica/pull/1659)
+* Added `setTrackTotalHits` method to `Elastica\Query`[#1663](https://github.com/ruflin/Elastica/issues/1663)
+* Allow metadata to be set on Aggregations (via `AbstractAggregation::setMeta(array)`). [#1677](https://github.com/ruflin/Elastica/issues/1677)
+
+
+### Improvements
+
+* Added `native_function_invocation` CS rule [#1606](https://github.com/ruflin/Elastica/pull/1606)
+* Elasticsearch test version changed from 6.5.2 to 6.6.1 [#1620](https://github.com/ruflin/Elastica/pull/1620)
+* Clear scroll context also when empty page was received [#1660](https://github.com/ruflin/Elastica/pull/1660)
+
 
 ## [6.1.1](https://github.com/ruflin/Elastica/compare/6.1.0...6.1.1)
 
 ### Added
 
+* The preferred type name is [_doc](https://www.elastic.co/guide/en/elasticsearch/reference/6.5/removal-of-types.html), so that index APIs have the same path as they will have in 7.0
 * Added `BucketSelector` aggregation [#1554](https://github.com/ruflin/Elastica/pull/1554)
 * Added `DerivativeAggregation` [#1553](https://github.com/ruflin/Elastica/pull/1553)
 * The preferred type name is [_doc](https://www.elastic.co/guide/en/elasticsearch/reference/6.5/removal-of-types.html), so that index APIs have the same path as they will have in 7.0
 * Introduced new version of PHP-CS-Fixer and new Lint travis step. [#1555](https://github.com/ruflin/Elastica/pull/1555)
+* Added `typed_keys` support for Search queries [#1603](https://github.com/ruflin/Elastica/pull/1603)
 
 ### Improvements
 
 * Reduced memory footprint of response by not keeping the raw JSON data when JSON after JSON has been parsed. [#1588](https://github.com/ruflin/Elastica/pull/1588)
+
+### Deprecated
+* Index templates use index_patterns instead of [template](https://www.elastic.co/guide/en/elasticsearch/reference/6.5/breaking-changes-6.0.html#_index_templates_use_literal_index_patterns_literal_instead_of_literal_template_literal)
 
 ## [6.1.0](https://github.com/ruflin/Elastica/compare/6.0.2...6.1.0)
 
@@ -657,7 +1193,7 @@ $indices[$indexName]
 - Update Elasticsearch dependency to 1.7.1 and update plugin dependencies [#909](https://github.com/ruflin/Elastica/pull/909)
 - Update php-cs-fixer to 1.10 [#898](https://github.com/ruflin/Elastica/pull/898)
 - Elastica\QueryBuilder now uses Elastica\QueryBuilder\Version\Latest as default version to avoid empty version classes. [#897](https://github.com/ruflin/Elastica/pull/897)
-- Update elasticseach-image to work with ES 1.7.1 [#907](https://github.com/ruflin/Elastica/pull/907)
+- Update elasticsearch-image to work with ES 1.7.1 [#907](https://github.com/ruflin/Elastica/pull/907)
 - Local dev environment was refactored to fully work in docker environment. Running tests is now only one command: `make tests` [#901](https://github.com/ruflin/Elastica/pull/901)
 
 ### Deprecated

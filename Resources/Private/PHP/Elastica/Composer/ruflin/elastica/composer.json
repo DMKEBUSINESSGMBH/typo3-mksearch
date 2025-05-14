@@ -1,50 +1,54 @@
 {
     "name": "ruflin/elastica",
     "description": "Elasticsearch Client",
-    "keywords": ["search","client"],
-    "homepage": "http://elastica.io/",
-    "type": "library",
     "license": "MIT",
+    "type": "library",
+    "keywords": [
+        "search",
+        "client"
+    ],
     "authors": [
         {
             "name": "Nicolas Ruflin",
             "homepage": "http://ruflin.com/"
         }
     ],
+    "homepage": "http://elastica.io/",
     "require": {
-        "php": "^7.0||^8.0",
+        "php": "~8.0.0 || ~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0",
         "ext-json": "*",
-        "psr/log": "~1.0",
-        "elasticsearch/elasticsearch": "^6.0"
+        "elastic/transport": "^8.8",
+        "elasticsearch/elasticsearch": "^8.4.1",
+        "psr/log": "^1.0 || ^2.0 || ^3.0"
     },
     "require-dev": {
-        "aws/aws-sdk-php": "~3.0",
-        "guzzlehttp/guzzle": "~6.0",
-        "phpunit/phpunit": "^6.0||^8.5.20",
-        "yoast/phpunit-polyfills": "1.0.1"
+        "guzzlehttp/guzzle": "^7.2",
+        "phpstan/phpstan": "^1.5",
+        "phpstan/phpstan-phpunit": "^1.1",
+        "phpunit/phpunit": "^9.5",
+        "symfony/phpunit-bridge": "^6.0"
     },
     "conflict": {
-        "elasticsearch/elasticsearch": "6.8.0 || 6.8.1"
+        "guzzlehttp/psr7": "<2.0.0"
     },
     "suggest": {
         "aws/aws-sdk-php": "Allow using IAM authentication with Amazon ElasticSearch Service",
-        "egeloen/http-adapter": "Allow using httpadapter transport",
-        "guzzlehttp/guzzle": "Allow using guzzle 6 as the http transport",
         "monolog/monolog": "Logging request"
     },
     "autoload": {
         "psr-4": {
-            "Elastica\\": "lib/Elastica/"
+            "Elastica\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Elastica\\Test\\": "test/Elastica/"
+            "Elastica\\Test\\": "tests/"
         }
     },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "6.0.x-dev"
-        }
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true
+        },
+        "sort-packages": true
     }
 }

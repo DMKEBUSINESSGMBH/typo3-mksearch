@@ -1,27 +1,29 @@
 <?php
 
-/***************************************************************
- *  Copyright notice
+/*
+ * Copyright notice
  *
- *  (c) 2011 Michael Wagner <dev@dmk-ebusiness.de>
- *  All rights reserved
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
  *
- *  This script is part of the TYPO3 project. The TYPO3 project is
- *  free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
  *
- *  The GNU General Public License can be found at
- *  http://www.gnu.org/copyleft/gpl.html.
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
  *
- *  This script is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
  *
- *  This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * This copyright notice MUST APPEAR in all copies of the script!
+ */
 
 /**
  * Indexer service for core.tt_address called by the "mksearch" extension.
@@ -36,10 +38,8 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
      * as you at the same time are responsible for
      * uniqueness (i.e. no overlapping with other content types) and
      * consistency (i.e. recognition) on indexing and searching data.
-     *
-     * @return array
      */
-    public static function getContentType()
+    public static function getContentType(): array
     {
         return ['tt_address', 'address'];
     }
@@ -52,8 +52,8 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
     public function prepareSearchData($tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options)
     {
         if ('tt_address' != $tableName) {
-            if (\Sys25\RnBase\Utility\Logger::isWarningEnabled()) {
-                \Sys25\RnBase\Utility\Logger::warn(__METHOD__.': Unknown table "'.$tableName.'" given.', 'mksearch', ['tableName' => $tableName, 'sourceRecord' => $rawData]);
+            if (Sys25\RnBase\Utility\Logger::isWarningEnabled()) {
+                Sys25\RnBase\Utility\Logger::warn(__METHOD__.': Unknown table "'.$tableName.'" given.', 'mksearch', ['tableName' => $tableName, 'sourceRecord' => $rawData]);
             }
 
             return null;
@@ -81,7 +81,7 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
         }
 
         // Hook to append indexer
-        \Sys25\RnBase\Utility\Misc::callHook(
+        Sys25\RnBase\Utility\Misc::callHook(
             'mksearch',
             'indexer_TtAddress_prepareData_beforeAddFields',
             [
@@ -95,7 +95,7 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
         );
 
         // Abbrechen, wenn im Hook gesetzt.
-        if (false !== $abort) {
+        if ($abort) {
             return $abort;
         }
 
@@ -103,6 +103,7 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
         $indexDoc->addField('deleted', $rawData['deleted'], 'keyword', $boost, 'int');
 
         $indexDoc->setTimestamp($rawData['tstamp']);
+
         $name = $this->getName($rawData);
         $indexDoc->setTitle($name);
 
@@ -139,13 +140,13 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
         $sContent = $this->getContentFromFields($rawData, $options['content.'] ?? []);
         $indexDoc->setContent($sContent);
 
-        $sContent = $this->getContentFromFields($rawData, $options['abstract.'] ?? []);
+        $this->getContentFromFields($rawData, $options['abstract.'] ?? []);
         $indexDoc->setAbstract('', 1);
 
         $indexDoc->addField('group_s', $indexDoc->getPrimaryKey(true));
 
         // Hook to append indexer
-        \Sys25\RnBase\Utility\Misc::callHook(
+        Sys25\RnBase\Utility\Misc::callHook(
             'mksearch',
             'indexer_TtAddress_prepareData_afterAddFields',
             [
@@ -161,7 +162,7 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
 
     protected function getName(array $ttAddressRecord): string
     {
-        return join(
+        return implode(
             ' ',
             array_filter(
                 [
@@ -175,39 +176,24 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
 
     /**
      * @param array $sourceRecord
-     * @param array $options
      *
      * @return bool
      */
-    protected function isIndexableRecord($sourceRecord, $options)
+    protected function isIndexableRecord($sourceRecord, array $options)
     {
-        $ret = tx_mksearch_util_Indexer::getInstance()
+        return tx_mksearch_util_Indexer::getInstance()
                 ->isOnIndexablePage($sourceRecord, $options);
-
-        return $ret;
     }
 
     /**
      * Sets the index doc to deleted if neccessary.
      *
-     * @param array $sourceRecord
      * @param array $options
-     *
-     * @return bool
      */
-    protected function hasDocToBeDeleted($sourceRecord, $options)
+    protected function hasDocToBeDeleted(array $sourceRecord, $options): bool
     {
-        if (// vom indexer entfernen wenn
-            // gelöscht
-            $sourceRecord['deleted']
-            // hidden
-            || (isset($options['removeIfHidden']) && $options['removeIfHidden'] && $sourceRecord['hidden'])
-        ) {
-            return true;
-        }
-
         // else
-        return false;
+        return $sourceRecord['deleted'] || isset($options['removeIfHidden']) && $options['removeIfHidden'] && $sourceRecord['hidden'];
     }
 
     /**
@@ -219,19 +205,16 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
      * do something different like putting a record into the queue
      * if it's not the table that should be indexed
      *
-     * @param string                                $tableName
-     * @param array                                 $sourceRecord
-     * @param tx_mksearch_interface_IndexerDocument $indexDoc
-     * @param array                                 $options
-     *
-     * @return bool
+     * @param string $tableName
+     * @param array  $sourceRecord
+     * @param array  $options
      */
     protected function stopIndexing(
         $tableName,
         $sourceRecord,
         tx_mksearch_interface_IndexerDocument $indexDoc,
-        $options
-    ) {
+        $options,
+    ): bool {
         return $this->getIndexerUtility()->stopIndexing(
             $tableName,
             $sourceRecord,
@@ -253,23 +236,23 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
      *
      * @param array $sourceRecord
      * @param array $options
-     *
-     * @return string
      */
-    protected function getContentFromFields($sourceRecord, $options)
+    protected function getContentFromFields($sourceRecord, $options): string
     {
         $aContent = [];
-        $aContentFields = \Sys25\RnBase\Utility\Strings::trimExplode(',', $options['fields'] ?? '', true);
+        $aContentFields = Sys25\RnBase\Utility\Strings::trimExplode(',', $options['fields'] ?? '', true);
 
         foreach ($aContentFields as $field) {
             if (array_key_exists($field, $sourceRecord) && !empty($sourceRecord[$field])) {
                 $aContent[] = trim($sourceRecord[$field]);
             }
         }
-        $wrap = \Sys25\RnBase\Utility\Strings::trimExplode('|', $options['wrap'] ?? '', true);
+
+        $wrap = Sys25\RnBase\Utility\Strings::trimExplode('|', $options['wrap'] ?? '', true);
         if (2 != count($wrap)) {
             $wrap = ['', ''];
         }
+
         $sContent = $wrap[0].implode($wrap[1].$wrap[0], $aContent).$wrap[1];
 
         // Decode HTML
@@ -280,10 +263,8 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
 
     /**
      * Return the default Typoscript configuration for this indexer.
-     *
-     * @return string
      */
-    public function getDefaultTSConfig()
+    public function getDefaultTSConfig(): string
     {
         return <<<CONF
 # Fields which are set statically to the given value

@@ -1,27 +1,29 @@
 <?php
 
-/***************************************************************
-*  Copyright notice
-*
-*  (c) 2009 das Medienkombinat
-*  All rights reserved
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
+/*
+ * Copyright notice
+ *
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
+ *
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
+ *
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
+ *
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * This copyright notice MUST APPEAR in all copies of the script!
+ */
 
 /**
  * Miscellaneous methods.
@@ -31,11 +33,9 @@ class tx_mksearch_util_Misc
     /**
      * Convert a Timestamp to a ISO formatted DateTime string in GMT time zone.
      *
-     * @param \DateTime $datetime
-     *
      * @return string in format Y-m-d\TH:i:s\Z
      */
-    public static function getIsoDate(\DateTime $datetime)
+    public static function getIsoDate(DateTime $datetime): string
     {
         return $datetime->format('Y-m-d\TH:i:s\Z');
     }
@@ -48,17 +48,16 @@ class tx_mksearch_util_Misc
      *
      * @return string in format Y-m-d\TH:i:s\Z
      */
-    public static function getISODateFromTimestamp($tstamp, $offset = 0)
+    public static function getISODateFromTimestamp($tstamp, $offset = 0): string
     {
         return self::getIsoDate(
-            new \DateTime('@'.($tstamp + $offset))
+            new DateTime('@'.($tstamp + $offset))
         );
     }
 
     /**
      * Allgemeine Include/exclude-Prüfung. Derzeit auf PID-Ebene.
      *
-     * @param array $sourceRecord
      * @param array $options
      *
      * @return bool
@@ -66,13 +65,14 @@ class tx_mksearch_util_Misc
      * @deprecated unbedingt tx_mksearch_util_Indexer::getInstance()->isOnIndexablePage nutzen.
      * das unterstützt sowohl pages als auch pageTrees.
      */
-    public static function isOnValidPage($sourceRecord, $options)
+    public static function isOnValidPage(array $sourceRecord, $options)
     {
         if (!is_array($options)) {
             return true;
         }
+
         if (array_key_exists('include.', $options) && is_array($options['include.'])) {
-            $aPages = (array_key_exists('pages', $options['include.']) && strlen(trim($options['include.']['pages']))) ? \Sys25\RnBase\Utility\Strings::intExplode(',', $options['include.']['pages']) : false;
+            $aPages = (array_key_exists('pages', $options['include.']) && strlen(trim($options['include.']['pages']))) ? Sys25\RnBase\Utility\Strings::intExplode(',', $options['include.']['pages']) : false;
             if (!is_array($aPages)) {
                 $aPages = $options['include.']['pages.'] ?? [];
             }
@@ -82,11 +82,13 @@ class tx_mksearch_util_Misc
                 return in_array($sourceRecord['pid'], $aPages);
             }
         }
+
         if (array_key_exists('exclude.', $options) && is_array($options['exclude.'])) {
-            $aPages = (array_key_exists('pages', $options['exclude.']) && strlen(trim($options['exclude.']['pages']))) ? \Sys25\RnBase\Utility\Strings::intExplode(',', $options['exclude.']['pages']) : false;
+            $aPages = (array_key_exists('pages', $options['exclude.']) && strlen(trim($options['exclude.']['pages']))) ? Sys25\RnBase\Utility\Strings::intExplode(',', $options['exclude.']['pages']) : false;
             if (!is_array($aPages)) {
                 $aPages = $options['exclude.']['pages.'] ?? [];
             }
+
             if (is_array($aPages) && count($aPages)) {
                 // Wenn das Element auf einer dieser Seiten eingebunden ist,
                 // NICHT indizieren!
@@ -101,10 +103,6 @@ class tx_mksearch_util_Misc
      * Liefert einen UTF8 codierten String.
      *
      * @TODO: wäre in der \Sys25\RnBase\Utility\Strings besser aufgehoben?
-     *
-     * @param mixed $t
-     *
-     * @return mixed
      */
     public static function utf8Encode($mixed)
     {
@@ -112,9 +110,10 @@ class tx_mksearch_util_Misc
         if (!is_string($mixed)) {
             return $mixed;
         }
+
         // String prüfen und ggf. encodieren
 
-        return \Sys25\RnBase\Utility\Strings::isUtf8String($mixed) ? $mixed : utf8_encode($mixed);
+        return Sys25\RnBase\Utility\Strings::isUtf8String($mixed) ? $mixed : utf8_encode($mixed);
     }
 
     /**
@@ -124,7 +123,6 @@ class tx_mksearch_util_Misc
      * to their applicable characters.
      *
      * @param string $text
-     * @param array  $options
      *
      * @return string Converted string (utf8-encoded)
      */
@@ -135,7 +133,7 @@ class tx_mksearch_util_Misc
         }
 
         // sollen zeilenumbrüche übernommen werden? default is OFF
-        $whitespaces = isset($options['lineendings']) && $options['lineendings'] ? true : false;
+        $whitespaces = isset($options['lineendings']) && $options['lineendings'];
         $whitespaces = $whitespaces ? '[ \t\f]' : '\s';
 
         $replaces = [
@@ -172,14 +170,12 @@ class tx_mksearch_util_Misc
      *
      * @param string $sTerm
      *
-     * @return string
-     *
      * @todo sollte hier nicht Apache_Solr_Service::escape() genutzt werden!?
      * siehe auch die escape Methode aus der Apache Solr TYPO3 Extension wie Phrasen
      * unterstützt werden könnten? Sollte aber alles nur fir nicht dismax interessant sein.
      * @todo dont remove the characters but escape them like sanitizeFq() does.
      */
-    public static function sanitizeTerm($sTerm)
+    public static function sanitizeTerm($sTerm): ?string
     {
         // wir brauchen 3 backslashes (\\\) um einen einfachen zu entwerten.
         // der erste entwertet den zweiten für die hochkommas. der zweite
@@ -202,13 +198,11 @@ class tx_mksearch_util_Misc
      * does the same as sanitizeTerm, but dows not escape
      * , . / # ' % < >
      *
-     * @param string $sTerm
-     *
      * @return string
      *
      * @see Apache_Solr_Service::escape()
      */
-    public static function sanitizeFq($value)
+    public static function sanitizeFq($value): string|array
     {
         $match = ['\\', '+', '-', '&', '|', '!', '(', ')', '{', '}', '[', ']', '^', '~', '*', '?', ':', '"', ';'];
         $replace = ['\\\\', '\\+', '\\-', '\\&', '\\|', '\\!', '\\(', '\\)', '\\{', '\\}', '\\[', '\\]', '\\^', '\\~', '\\*', '\\?', '\\:', '\\"', '\\;'];
@@ -226,10 +220,10 @@ class tx_mksearch_util_Misc
      */
     public static function isDevIpMask($remoteAddress = '', $devIPmask = '')
     {
-        $devIPmask = trim(strcmp($devIPmask, '') ? $devIPmask : $GLOBALS['TYPO3_CONF_VARS']['SYS']['devIPmask']);
-        $remoteAddress = trim(strcmp($remoteAddress, '') ? $remoteAddress : \Sys25\RnBase\Utility\Misc::getIndpEnv('REMOTE_ADDR'));
+        $devIPmask = trim(0 !== strcmp($devIPmask, '') ? $devIPmask : $GLOBALS['TYPO3_CONF_VARS']['SYS']['devIPmask']);
+        $remoteAddress = trim(0 !== strcmp($remoteAddress, '') ? $remoteAddress : Sys25\RnBase\Utility\Misc::getIndpEnv('REMOTE_ADDR'));
 
-        return \Sys25\RnBase\Utility\Network::cmpIP($remoteAddress, $devIPmask);
+        return Sys25\RnBase\Utility\Network::cmpIP($remoteAddress, $devIPmask);
     }
 
     /**
@@ -239,7 +233,7 @@ class tx_mksearch_util_Misc
      */
     public static function parseTsConfig($sTs)
     {
-        return \Sys25\RnBase\Utility\TypoScript::parseTsConfig($sTs);
+        return (new Sys25\RnBase\Utility\TypoScript())->parseTsConfig($sTs);
     }
 
     /**
@@ -249,12 +243,9 @@ class tx_mksearch_util_Misc
      *
      * @author 2011 mwagner
      *
-     * @param array $aArray
-     * @param bool  $bResetIndex setzt die Array Keys zurück, falls sie numerisch sind
-     *
-     * @return array
+     * @param bool $bResetIndex setzt die Array Keys zurück, falls sie numerisch sind
      */
-    public static function removeEmptyValues(array $aArray, $bResetIndex = false)
+    public static function removeEmptyValues(array $aArray, $bResetIndex = false): array
     {
         $aEmptyElements = array_keys($aArray, '');
         foreach ($aEmptyElements as $key) {

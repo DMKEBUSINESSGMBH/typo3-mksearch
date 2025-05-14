@@ -56,18 +56,27 @@ class Apache_Solr_Service_Balancer
     protected $_createDocuments = true;
 
     protected $_readableServices = [];
+
     protected $_writeableServices = [];
 
-    protected $_currentReadService = null;
-    protected $_currentWriteService = null;
+    protected $_currentReadService;
+
+    protected $_currentWriteService;
 
     protected $_readPingTimeout = 2;
+
     protected $_writePingTimeout = 4;
 
     // Configuration for server selection backoff intervals
-    protected $_useBackoff = false;		// Set to true to use more resillient write server selection
-    protected $_backoffLimit = 600;		// 10 minute default maximum
-    protected $_backoffEscalation = 2.0; 	// Rate at which to increase backoff period
+    protected $_useBackoff = false;
+
+    		// Set to true to use more resillient write server selection
+    protected $_backoffLimit = 600;
+
+    		// 10 minute default maximum
+    protected $_backoffEscalation = 2.0;
+
+     	// Rate at which to increase backoff period
     protected $_defaultBackoff = 2.0;		// Default backoff interval
 
     /**
@@ -79,7 +88,7 @@ class Apache_Solr_Service_Balancer
      *
      * @return string
      */
-    public static function escape($value)
+    public static function escape($value): ?string
     {
         return Apache_Solr_Service::escape($value);
     }
@@ -91,7 +100,7 @@ class Apache_Solr_Service_Balancer
      *
      * @return string
      */
-    public static function escapePhrase($value)
+    public static function escapePhrase($value): ?string
     {
         return Apache_Solr_Service::escapePhrase($value);
     }
@@ -100,10 +109,8 @@ class Apache_Solr_Service_Balancer
      * Convenience function for creating phrase syntax from a value.
      *
      * @param string $value
-     *
-     * @return string
      */
-    public static function phrase($value)
+    public static function phrase($value): string
     {
         return Apache_Solr_Service::phrase($value);
     }
@@ -127,17 +134,17 @@ class Apache_Solr_Service_Balancer
         }
     }
 
-    public function setReadPingTimeout($timeout)
+    public function setReadPingTimeout($timeout): void
     {
         $this->_readPingTimeout = $timeout;
     }
 
-    public function setWritePingTimeout($timeout)
+    public function setWritePingTimeout($timeout): void
     {
         $this->_writePingTimeout = $timeout;
     }
 
-    public function setUseBackoff($enable)
+    public function setUseBackoff($enable): void
     {
         $this->_useBackoff = $enable;
     }
@@ -145,13 +152,10 @@ class Apache_Solr_Service_Balancer
     /**
      * Generates a service ID.
      *
-     * @param string $host
      * @param int    $port
-     * @param string $path
      *
-     * @return string
      */
-    protected function _getServiceId($host, $port, $path)
+    protected function _getServiceId(string $host, $port, string $path): string
     {
         return $host.':'.$port.$path;
     }
@@ -160,11 +164,10 @@ class Apache_Solr_Service_Balancer
      * Adds a service instance or service descriptor (if it is already
      * not added).
      *
-     * @param mixed $service
      *
      * @throws Apache_Solr_InvalidArgumentException If service descriptor is not valid
      */
-    public function addReadService($service)
+    public function addReadService(mixed $service): void
     {
         if ($service instanceof Apache_Solr_Service) {
             $id = $this->_getServiceId($service->getHost(), $service->getPort(), $service->getPath());
@@ -184,11 +187,10 @@ class Apache_Solr_Service_Balancer
     /**
      * Removes a service instance or descriptor from the available services.
      *
-     * @param mixed $service
      *
      * @throws Apache_Solr_InvalidArgumentException If service descriptor is not valid
      */
-    public function removeReadService($service)
+    public function removeReadService(mixed $service): void
     {
         $id = '';
 
@@ -213,11 +215,10 @@ class Apache_Solr_Service_Balancer
      * Adds a service instance or service descriptor (if it is already
      * not added).
      *
-     * @param mixed $service
      *
      * @throws Apache_Solr_InvalidArgumentException If service descriptor is not valid
      */
-    public function addWriteService($service)
+    public function addWriteService(mixed $service): void
     {
         if ($service instanceof Apache_Solr_Service) {
             $id = $this->_getServiceId($service->getHost(), $service->getPort(), $service->getPath());
@@ -237,11 +238,10 @@ class Apache_Solr_Service_Balancer
     /**
      * Removes a service instance or descriptor from the available services.
      *
-     * @param mixed $service
      *
      * @throws Apache_Solr_InvalidArgumentException If service descriptor is not valid
      */
-    public function removeWriteService($service)
+    public function removeWriteService(mixed $service): void
     {
         $id = '';
 
@@ -273,18 +273,16 @@ class Apache_Solr_Service_Balancer
     protected function _selectReadService($forceSelect = false)
     {
         if (!$this->_currentReadService || !isset($this->_readableServices[$this->_currentReadService]) || $forceSelect) {
-            if ($this->_currentReadService && isset($this->_readableServices[$this->_currentReadService]) && $forceSelect) {
-                // we probably had a communication error, ping the current read service, remove it if it times out
-                if (false === $this->_readableServices[$this->_currentReadService]->ping($this->_readPingTimeout)) {
-                    $this->removeReadService($this->_currentReadService);
-                }
+            // we probably had a communication error, ping the current read service, remove it if it times out
+            if ($this->_currentReadService && isset($this->_readableServices[$this->_currentReadService]) && $forceSelect && false === $this->_readableServices[$this->_currentReadService]->ping($this->_readPingTimeout)) {
+                $this->removeReadService($this->_currentReadService);
             }
 
-            if (count($this->_readableServices)) {
+            if (count($this->_readableServices) > 0) {
                 // select one of the read services at random
                 $ids = array_keys($this->_readableServices);
 
-                $id = $ids[rand(0, count($ids) - 1)];
+                $id = $ids[random_int(0, count($ids) - 1)];
                 $service = $this->_readableServices[$id];
 
                 if (is_array($service)) {
@@ -318,18 +316,16 @@ class Apache_Solr_Service_Balancer
         }
 
         if (!$this->_currentWriteService || !isset($this->_writeableServices[$this->_currentWriteService]) || $forceSelect) {
-            if ($this->_currentWriteService && isset($this->_writeableServices[$this->_currentWriteService]) && $forceSelect) {
-                // we probably had a communication error, ping the current read service, remove it if it times out
-                if (false === $this->_writeableServices[$this->_currentWriteService]->ping($this->_writePingTimeout)) {
-                    $this->removeWriteService($this->_currentWriteService);
-                }
+            // we probably had a communication error, ping the current read service, remove it if it times out
+            if ($this->_currentWriteService && isset($this->_writeableServices[$this->_currentWriteService]) && $forceSelect && false === $this->_writeableServices[$this->_currentWriteService]->ping($this->_writePingTimeout)) {
+                $this->removeWriteService($this->_currentWriteService);
             }
 
-            if (count($this->_writeableServices)) {
+            if (count($this->_writeableServices) > 0) {
                 // select one of the read services at random
                 $ids = array_keys($this->_writeableServices);
 
-                $id = $ids[rand(0, count($ids) - 1)];
+                $id = $ids[random_int(0, count($ids) - 1)];
                 $service = $this->_writeableServices[$id];
 
                 if (is_array($service)) {
@@ -361,14 +357,14 @@ class Apache_Solr_Service_Balancer
     protected function _selectWriteServiceSafe($forceSelect = false)
     {
         if (!$this->_currentWriteService || !isset($this->_writeableServices[$this->_currentWriteService]) || $forceSelect) {
-            if (count($this->_writeableServices)) {
+            if (count($this->_writeableServices) > 0) {
                 $backoff = $this->_defaultBackoff;
 
                 do {
                     // select one of the read services at random
                     $ids = array_keys($this->_writeableServices);
 
-                    $id = $ids[rand(0, count($ids) - 1)];
+                    $id = $ids[random_int(0, count($ids) - 1)];
                     $service = $this->_writeableServices[$id];
 
                     if (is_array($service)) {
@@ -399,7 +395,7 @@ class Apache_Solr_Service_Balancer
      *
      * @param bool $createDocuments
      */
-    public function setCreateDocuments($createDocuments)
+    public function setCreateDocuments($createDocuments): void
     {
         $this->_createDocuments = (bool) $createDocuments;
 
@@ -452,13 +448,11 @@ class Apache_Solr_Service_Balancer
     /**
      * Add a Solr Document to the index.
      *
-     * @param Apache_Solr_Document $document
      * @param bool                 $allowDups
      * @param bool                 $overwritePending
      * @param bool                 $overwriteCommitted
      *
      * @return Apache_Solr_Response
-     *
      * @throws Apache_Solr_HttpTransportException If an error occurs during the service call
      */
     public function addDocument(Apache_Solr_Document $document, $allowDups = false, $overwritePending = true, $overwriteCommitted = true)

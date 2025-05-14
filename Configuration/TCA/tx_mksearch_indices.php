@@ -1,12 +1,36 @@
 <?php
 
+/*
+ * Copyright notice
+ *
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
+ *
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
+ *
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
+ *
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * This copyright notice MUST APPEAR in all copies of the script!
+ */
+
 return [
     'ctrl' => [
         'title' => 'LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_indices',
         'label' => 'title',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
-        'cruser_id' => 'cruser_id',
         'default_sortby' => 'ORDER BY title',
         'delete' => 'deleted',
         'enablecolumns' => [
@@ -14,9 +38,6 @@ return [
         ],
         'iconfile' => 'EXT:mksearch/Resources/Public/Icons/icon_tx_mksearch_indices.gif',
         'requestUpdate' => 'engine',
-    ],
-    'interface' => [
-        'showRecordFieldList' => 'hidden,title,description,name,composites,configuration',
     ],
     'columns' => [
         'hidden' => [
@@ -34,7 +55,8 @@ return [
                 'type' => 'input',
                 'size' => '30',
                 'max' => '100',
-                'eval' => 'required,trim',
+                'eval' => 'trim',
+                'required' => true,
             ],
         ],
         'description' => [
@@ -53,7 +75,8 @@ return [
                 'type' => 'input',
                 'size' => '30',
                 'max' => '255',
-                'eval' => 'required,trim',
+                'eval' => 'trim',
+                'required' => true,
             ],
         ],
         'composites' => [
@@ -69,7 +92,7 @@ return [
                 'minitems' => 0,
                 'maxitems' => 100,
                 'fieldControl' => ['editPopup' => true, 'addRecord' => true],
-                'wizards' => \Sys25\RnBase\Backend\Utility\TcaTool::getWizards(
+                'wizards' => Sys25\RnBase\Backend\Utility\TcaTool::getWizards(
                     'tx_mksearch_configcomposites',
                     ['add' => true, 'edit' => true, 'list' => true]
                 ),
@@ -81,12 +104,12 @@ return [
             'config' => [
                 'type' => 'radio',
                 'items' => [
-                    ['LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_indices_engine_zendlucene', 'zend_lucene'],
-                    ['LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_indices_engine_solr', 'solr'],
-                    ['LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_indices_engine_elasticsearch', 'elasticsearch'],
+                    ['label' => 'LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_indices_engine_zendlucene', 'value' => 'zend_lucene'],
+                    ['label' => 'LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_indices_engine_solr', 'value' => 'solr'],
+                    ['label' => 'LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_indices_engine_elasticsearch', 'value' => 'elasticsearch'],
                 ],
-                'eval' => 'required',
                 'default' => 'zend_lucene',
+                'required' => true,
             ],
             'onChange' => 'reload',
         ],
@@ -96,8 +119,8 @@ return [
             'config' => [
                 'type' => 'radio',
                 'items' => [
-                    ['LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_indices_solrversion_35', 35],
-                    ['LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_indices_solrversion_40', 40],
+                    ['label' => 'LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_indices_solrversion_35', 'value' => 35],
+                    ['label' => 'LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_indices_solrversion_40', 'value' => 40],
                 ],
                 'default' => 35,
             ],

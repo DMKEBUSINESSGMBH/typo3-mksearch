@@ -1,27 +1,29 @@
 <?php
 
-/***************************************************************
-*  Copyright notice
-*
-*  (c) 2014 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
-*  All rights reserved
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
+/*
+ * Copyright notice
+ *
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
+ *
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
+ *
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
+ *
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * This copyright notice MUST APPEAR in all copies of the script!
+ */
 
 /**
  * Bei Facetten von Lucene oder Solr ist es nicht Möglich,
@@ -46,10 +48,7 @@ class tx_mksearch_util_KeyValueFacet
      */
     private static $defaultInstance;
 
-    /**
-     * @var string
-     */
-    private $facetDelimiter = '<[DFS]>';
+    private string $facetDelimiter = '<[DFS]>';
 
     /**
      * @param string $delimiter
@@ -71,7 +70,7 @@ class tx_mksearch_util_KeyValueFacet
      */
     public static function getInstance($delimiter = null)
     {
-        $instance = self::$defaultInstance && null === $delimiter ? self::$defaultInstance : \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+        $instance = self::$defaultInstance && null === $delimiter ? self::$defaultInstance : TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_util_KeyValueFacet',
             $delimiter
         );
@@ -83,13 +82,9 @@ class tx_mksearch_util_KeyValueFacet
     }
 
     /**
-     * @param string $key
-     * @param string $value
      * @param string $sorting
-     *
-     * @return string
      */
-    public function buildFacetValue($key, $value, $sorting = null)
+    public function buildFacetValue(string $key, string $value, $sorting = null): string
     {
         $builded = $key.$this->facetDelimiter.$value;
         if (null !== $sorting) {
@@ -100,13 +95,9 @@ class tx_mksearch_util_KeyValueFacet
     }
 
     /**
-     * @param array $keys
-     * @param array $value
-     * @param array $sorting
-     *
      * @return string
      */
-    public function buildFacetValues($keys, $values, $sortings = null)
+    public function buildFacetValues(array $keys, array $values, $sortings = null): array
     {
         $builded = [];
         foreach (array_keys($keys) as $index) {
@@ -123,11 +114,11 @@ class tx_mksearch_util_KeyValueFacet
     /**
      * Prüft, ob es sich bei dem Wert um einen zusammengebauten handelt.
      *
-     * @param string$value
+     * @param string $value
      */
-    public function checkValue($value)
+    public function checkValue($value): bool
     {
-        return false !== strpos($value, $this->facetDelimiter);
+        return str_contains($value, $this->facetDelimiter);
     }
 
     /**
@@ -135,9 +126,9 @@ class tx_mksearch_util_KeyValueFacet
      *
      * @return array ($sorting | $value | $sorting[optional] )
      */
-    public function explodeFacetValue($value)
+    public function explodeFacetValue($value): array
     {
-        $exploded = \Sys25\RnBase\Utility\Strings::trimExplode($this->facetDelimiter, $value);
+        $exploded = Sys25\RnBase\Utility\Strings::trimExplode($this->facetDelimiter, $value);
 
         return [
             'key' => array_shift($exploded),
@@ -146,15 +137,10 @@ class tx_mksearch_util_KeyValueFacet
         ];
     }
 
-    /**
-     * @param array $values
-     *
-     * @return array
-     */
-    public function explodeFacetValues(array $values)
+    public function explodeFacetValues(array $values): array
     {
         $extracted = [];
-        foreach ($values as $key => $value) {
+        foreach ($values as $value) {
             $exploded = $this->explodeFacetValue($value);
             $extracted[] = $exploded;
         }
@@ -174,12 +160,7 @@ class tx_mksearch_util_KeyValueFacet
         return $exploded['value'];
     }
 
-    /**
-     * @param array $values
-     *
-     * @return array
-     */
-    public function extractFacetValues(array $values)
+    public function extractFacetValues(array $values): array
     {
         $extracted = [];
         $exploded = $this->explodeFacetValues($values);
@@ -192,12 +173,8 @@ class tx_mksearch_util_KeyValueFacet
 
     /**
      * @TODO: implement sorting on the sorting key
-     *
-     * @param array $exploded
-     *
-     * @return array
      */
-    protected function sortExplodedFacetValues(array $exploded)
+    protected function sortExplodedFacetValues(array $exploded): array
     {
         //         foreach ($exploded as $values) {
         //             $values['sorting'];

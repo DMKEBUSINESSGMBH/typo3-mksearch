@@ -1,27 +1,29 @@
 <?php
 
-/***************************************************************
-*  Copyright notice
-*
-*  (c) 2010 das Medienkombinat
-*  All rights reserved
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
+/*
+ * Copyright notice
+ *
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
+ *
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
+ *
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
+ *
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * This copyright notice MUST APPEAR in all copies of the script!
+ */
 
 /**
  * Hooks for auto-updating search indices.
@@ -32,13 +34,13 @@ class tx_mksearch_hooks_IndexerAutoUpdate
      * Hook after saving a record in Typo3 backend:
      * Perform index update depending on given data.
      *
-     * @param \TYPO3\CMS\Core\DataHandling\DataHandler $dataHandler
+     * @param TYPO3\CMS\Core\DataHandling\DataHandler $dataHandler
      */
     public function processDatamap_afterAllOperations($dataHandler)
     {
         // Nothing to do?
-        if (empty($dataHandler->datamap)) {
-            return;
+        if ([] === $dataHandler->datamap) {
+            return null;
         }
 
         // daten sammeln
@@ -68,6 +70,7 @@ class tx_mksearch_hooks_IndexerAutoUpdate
                 if (!is_numeric($uid)) {
                     $uid = $dataHandler->substNEWwithIDs[$uid] ?? 0;
                 }
+
                 $records[$table][] = (int) $uid;
             }
         }
@@ -79,18 +82,18 @@ class tx_mksearch_hooks_IndexerAutoUpdate
      * Hook after performing different record actions in Typo3 backend:
      * Update indexes according to the just performed action.
      *
-     * @param string                                   $command
-     * @param string                                   $table
-     * @param int                                      $id
-     * @param int                                      $value
-     * @param \TYPO3\CMS\Core\DataHandling\DataHandler $dataHandler
+     * @param string                                  $command
+     * @param string                                  $table
+     * @param int                                     $id
+     * @param int                                     $value
+     * @param TYPO3\CMS\Core\DataHandling\DataHandler $dataHandler
      *
      * @todo Treatment of any additional actions necessary?
      */
-    public function processCmdmap_postProcess($command, $table, $id, $value, $dataHandler)
+    public function processCmdmap_postProcess($command, $table, $id, $value, $dataHandler): void
     {
         $indexer = tx_mksearch_util_Config::getIndexersForDatabaseTable($table);
-        if (!count($indexer)) {
+        if (0 === count($indexer)) {
             return;
         }
 
@@ -110,10 +113,8 @@ class tx_mksearch_hooks_IndexerAutoUpdate
     /**
      * rn_base hook nachdem ein insert durchgeführt wurde.
      * Requires rn_base 0.14.6.
-     *
-     * @param array &$params
      */
-    public function rnBaseDoInsertPost(&$params)
+    public function rnBaseDoInsertPost(array &$params)
     {
         if (!$this->isRnBaseUtilDbHookActivated()) {
             return null;
@@ -131,10 +132,8 @@ class tx_mksearch_hooks_IndexerAutoUpdate
     /**
      * rn_base hook nachdem ein Update durchgeführt wurde.
      * Requires rn_base 0.14.6.
-     *
-     * @param array &$params
      */
-    public function rnBaseDoUpdatePost(&$params)
+    public function rnBaseDoUpdatePost(array &$params)
     {
         if (!$this->isRnBaseUtilDbHookActivated()) {
             return null;
@@ -164,16 +163,14 @@ class tx_mksearch_hooks_IndexerAutoUpdate
      */
     protected function isRnBaseUtilDbHookActivated()
     {
-        return \Sys25\RnBase\Configuration\Processor::getExtensionCfgValue('mksearch', 'enableRnBaseUtilDbHook');
+        return Sys25\RnBase\Configuration\Processor::getExtensionCfgValue('mksearch', 'enableRnBaseUtilDbHook');
     }
 
     /**
      * rn_base hook nachdem ein Update durchgeführt wurde.
      * Requires rn_base 0.14.6.
-     *
-     * @param array &$params
      */
-    public function rnBaseDoDeletePre(&$params)
+    public function rnBaseDoDeletePre(array &$params)
     {
         // use the same method as doUpdate
         return $this->rnBaseDoUpdatePost($params);
@@ -194,7 +191,7 @@ class tx_mksearch_hooks_IndexerAutoUpdate
      */
     public function processAutoUpdate(array $records)
     {
-        if (empty($records)) {
+        if ([] === $records) {
             return null;
         }
 
@@ -208,7 +205,7 @@ class tx_mksearch_hooks_IndexerAutoUpdate
         }
 
         foreach ($records as $table => $uidList) {
-            if (false !== strstr($table, 'tx_mksearch_')) {
+            if (str_contains($table, 'tx_mksearch_')) {
                 // Ignore internal tables
                 continue;
             }
@@ -230,6 +227,7 @@ class tx_mksearch_hooks_IndexerAutoUpdate
                     }
                 }
             }
+
             // In die Queue legen, wenn Indexer für die Tabelle existieren.
             if ($isDefined) {
                 foreach ($uidList as $uid) {
@@ -246,14 +244,12 @@ class tx_mksearch_hooks_IndexerAutoUpdate
      *
      * @param string $table
      * @param mixed  $data  uid or where clause
-     *
-     * @return bool
      */
-    protected function addRecordToIndex($table, $data)
+    protected function addRecordToIndex($table, mixed $data): bool
     {
         $rows = $this->getUidsToIndex($table, $data);
 
-        if (empty($rows)) {
+        if ([] === $rows) {
             return false;
         }
 
@@ -269,44 +265,39 @@ class tx_mksearch_hooks_IndexerAutoUpdate
      * in $data kann eine uid oder ein array
      * mit beispielsweise einem notwendigen select stecken,
      * um die uids zu erfahren.
-     *
-     * @param mixed $data
-     *
-     * @return array
      */
-    protected function getUidsToIndex($table, $data)
+    protected function getUidsToIndex($table, $data): array
     {
         if (is_numeric($data)) {
             return [(int) $data];
         }
 
-        if (is_array($data) && isset($data['type'])) {
-            if ('select' === $data['type']) {
-                $from = empty($data['from']) ? $table : $data['from'];
-                $options = empty($data['options']) || !is_array($data['options']) ? [] : $data['options'];
-                $options['where'] = $options['where'] ?? $data['where'] ?? '';
-                $options['enablefieldsoff'] = true;
-                $databaseUtility = $this->getRnbaseDatabaseUtility();
-                if ($rows = $databaseUtility->doSelect('uid', $from, $options)) {
-                    $rows = call_user_func_array('array_merge_recursive', $rows);
-                }
-                if (empty($rows['uid'])) {
-                    return [];
-                }
-
-                return is_array($rows['uid']) ? $rows['uid'] : [$rows['uid']];
+        if (is_array($data) && isset($data['type']) && 'select' === $data['type']) {
+            $from = empty($data['from']) ? $table : $data['from'];
+            $options = empty($data['options']) || !is_array($data['options']) ? [] : $data['options'];
+            $options['where'] ??= $data['where'] ?? '';
+            $options['enablefieldsoff'] = true;
+            $databaseUtility = $this->getRnbaseDatabaseUtility();
+            if ($rows = $databaseUtility->doSelect('uid', $from, $options)) {
+                $rows = array_merge_recursive(...$rows);
             }
+
+            if (empty($rows['uid'])) {
+                return [];
+            }
+
+            return is_array($rows['uid']) ? $rows['uid'] : [$rows['uid']];
         }
 
         return [];
     }
 
     /**
-     * @return \Sys25\RnBase\Database\Connection
+     * @return Sys25\RnBase\Database\Connection
      */
-    protected function getRnbaseDatabaseUtility()
+    protected function getRnbaseDatabaseUtility(): object
     {
-        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Sys25\RnBase\Database\Connection::class);
+        return TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(Sys25\RnBase\Database\Connection::class);
     }
 
     /**

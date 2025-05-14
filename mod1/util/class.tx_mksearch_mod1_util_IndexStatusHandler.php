@@ -1,27 +1,29 @@
 <?php
 
-/***************************************************************
- *  Copyright notice
+/*
+ * Copyright notice
  *
- *  (c) 2011 René Nitzsche (dev@dmk-ebusiness.de)
- *  All rights reserved
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
  *
- *  This script is part of the TYPO3 project. The TYPO3 project is
- *  free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
  *
- *  The GNU General Public License can be found at
- *  http://www.gnu.org/copyleft/gpl.html.
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
  *
- *  This script is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
  *
- *  This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * This copyright notice MUST APPEAR in all copies of the script!
+ */
 
 /**
  * Show status of search cores.
@@ -33,48 +35,46 @@ class tx_mksearch_mod1_util_IndexStatusHandler
      *
      * @return tx_mksearch_mod1_util_IndexStatusHandler
      */
-    public static function getInstance()
+    public static function getInstance(): object
     {
-        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_mod1_util_IndexStatusHandler');
+        return TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_mod1_util_IndexStatusHandler');
     }
 
     /**
      * Enter description here ...
-     *
-     * @param tx_mksearch_model_internal_Index $index
-     *
-     * @return string
      */
-    public function handleRequest4Index(tx_mksearch_model_internal_Index $index)
+    public function handleRequest4Index(tx_mksearch_model_internal_Index $index): string
     {
         try {
             $searchEngine = tx_mksearch_util_ServiceRegistry::getSearchEngine($index);
             $status = $searchEngine->getStatus();
             $msg = $status->getMessage();
             $color = $status->getStatus() > 0 ? 'green' : ($status->getStatus() < 0 ? 'red' : 'yellow');
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $color = 'red';
-            $msg = 'Exception occured: '.$e->getMessage();
+            $msg = 'Exception occured: '.$exception->getMessage();
         }
+
         $ret = '';
         $ret .= '<a href="#hint" class="mktooltip">';
         $ret .= '<span style="width:20px; background-color:'.$color.'">&nbsp;&nbsp;&nbsp;</span>&nbsp;';
         $ret .= '<strong>'.$index->getTitle().'</strong> - '.$index->getCredentialString().'<br />';
         $ret .= '<span class="info">'.$msg.'</span>';
-        $ret .= '</a>';
 
-        return $ret;
+        return $ret.'</a>';
     }
 
     /**
      * Handle request.
      */
-    public function handleRequest(array $options = [])
+    public function handleRequest(array $options = []): string
     {
-        $fields = $states = [];
+        $fields = [];
+        $states = [];
         if (!empty($options['pid'])) {
             $fields['INDX.PID'][OP_EQ_INT] = $options['pid'];
         }
+
         $options['enablefieldsfe'] = 1;
         $indices = tx_mksearch_util_ServiceRegistry::getIntIndexService()->search($fields, $options);
 
@@ -82,8 +82,7 @@ class tx_mksearch_mod1_util_IndexStatusHandler
         foreach ($indices as $index) {
             $states[] = $this->handleRequest4Index($index);
         }
-        $ret = implode('<br />', $states);
 
-        return $ret;
+        return implode('<br />', $states);
     }
 }

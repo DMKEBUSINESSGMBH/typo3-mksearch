@@ -1,7 +1,6 @@
 plugin.tx_mksearch = USER
 plugin.tx_mksearch {
     extensionKey = mksearch
-    # flexform = flexform_main.xml
     userFunc = tx_rnbase_controller->main
     defaultAction = tx_mksearch_action_Search
     qualifier = mksearch
@@ -9,7 +8,12 @@ plugin.tx_mksearch {
     locallangFilename = EXT:mksearch/Resources/Private/Language/locallang.xlf
 }
 
-tt_content.list.20.tx_mksearch =< plugin.tx_mksearch
+tt_content.tx_mksearch =< lib.contentElement
+tt_content.tx_mksearch {
+    templateName = Generic
+    20 =< plugin.tx_mksearch
+}
+
 
 
 # Default page browser config

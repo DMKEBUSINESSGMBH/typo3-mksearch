@@ -1,10 +1,12 @@
 <?php
 
-/***************************************************************
+/*
  * Copyright notice
  *
- * (c) 2011 - 2015 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
+ *
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
  *
  * This script is part of the TYPO3 project. The TYPO3 project is
  * free software; you can redistribute it and/or modify
@@ -12,8 +14,8 @@
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
- * The GNU General Public License can be found at
- * http://www.gnu.org/copyleft/gpl.html.
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
  *
  * This script is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -21,7 +23,7 @@
  * GNU General Public License for more details.
  *
  * This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
+ */
 
 /**
  * Der FacetBuilder erstellt aus den Rohdaten
@@ -33,20 +35,19 @@
 class tx_mksearch_util_FacetBuilder
 {
     /**
-     * @var \Sys25\RnBase\Domain\Model\DataModel
+     * @var Sys25\RnBase\Domain\Model\DataModel
      */
     private $options;
 
     /**
      * @var tx_mksearch_util_KeyValueFacet|null
      */
-    private $keyValueFacetInstance;
+    private ?object $keyValueFacetInstance = null;
 
     /**
      * Get singelton.
      *
      * @param string $class
-     * @param array  $options
      *
      * @return tx_mksearch_util_FacetBuilder
      */
@@ -55,7 +56,7 @@ class tx_mksearch_util_FacetBuilder
         static $instance;
         $class = empty($class) ? 'tx_mksearch_util_FacetBuilder' : $class;
         if (!($instance[$class] ?? '')) {
-            $instance[$class] = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($class, $options);
+            $instance[$class] = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($class, $options);
         }
 
         return $instance[$class];
@@ -63,19 +64,17 @@ class tx_mksearch_util_FacetBuilder
 
     /**
      * Constructor.
-     *
-     * @param array $options
      */
     public function __construct(
-        array $options = []
+        array $options = [],
     ) {
-        $this->options = \Sys25\RnBase\Domain\Model\DataModel::getInstance($options);
+        $this->options = Sys25\RnBase\Domain\Model\DataModel::getInstance($options);
     }
 
     /**
      * The options for this builder.
      *
-     * @return \Sys25\RnBase\Domain\Model\DataModel
+     * @return Sys25\RnBase\Domain\Model\DataModel
      */
     protected function getOptions()
     {
@@ -85,10 +84,10 @@ class tx_mksearch_util_FacetBuilder
     /**
      * @return tx_mksearch_util_KeyValueFacet
      */
-    protected function getKeyValueFacetInstance()
+    protected function getKeyValueFacetInstance(): object
     {
         if (null === $this->keyValueFacetInstance) {
-            $this->keyValueFacetInstance = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+            $this->keyValueFacetInstance = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
                 'tx_mksearch_util_KeyValueFacet'
             );
         }
@@ -103,16 +102,15 @@ class tx_mksearch_util_FacetBuilder
      *
      * @return array[] Ausgabedaten
      */
-    public function buildFacets($facetData)
+    public function buildFacets($facetData): array
     {
-        $facetGroups = array_merge(
+        // TODO: RANGE-Facet integrieren
+
+        return array_merge(
             $this->buildFieldFacets($facetData->facet_fields ?? null),
             $this->buildQueryFacets($facetData->facet_queries ?? null),
             $this->buildPivotFacets($facetData->facet_pivot ?? null)
         );
-        // TODO: RANGE-Facet integrieren
-
-        return $facetGroups;
     }
 
     /**
@@ -128,7 +126,7 @@ class tx_mksearch_util_FacetBuilder
      *
      * @return array[\Sys25\RnBase\Domain\Model\BaseModel] Ausgabedaten
      */
-    protected function buildQueryFacets($facetData)
+    protected function buildQueryFacets($facetData): array
     {
         $facetGroups = [];
         if (!$facetData) {
@@ -137,10 +135,10 @@ class tx_mksearch_util_FacetBuilder
 
         $uid = 0;
         foreach ($facetData as $key => $value) {
-            list($groupName, $queryName) = explode('_', $key, 2);
+            [$groupName, $queryName] = explode('_', $key, 2);
             if (!array_key_exists($groupName, $facetGroups)) {
-                $facetGroups[$groupName] = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-                    \Sys25\RnBase\Domain\Model\BaseModel::class,
+                $facetGroups[$groupName] = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                    Sys25\RnBase\Domain\Model\BaseModel::class,
                     [
                         'uid' => ++$uid,
                         'field' => $groupName,
@@ -148,6 +146,7 @@ class tx_mksearch_util_FacetBuilder
                     ]
                 );
             }
+
             $items = $facetGroups[$groupName]->getProperty('items');
             $items[] = $this->getSimpleFacet(
                 $groupName,
@@ -174,16 +173,17 @@ class tx_mksearch_util_FacetBuilder
      *
      * @return array[\Sys25\RnBase\Domain\Model\BaseModel] Ausgabedaten
      */
-    protected function buildPivotFacets($facetData)
+    protected function buildPivotFacets($facetData): array
     {
         $facetGroups = [];
         if (!$facetData) {
             return $facetGroups;
         }
+
         $uid = 0;
         foreach ($facetData as $fields => $pivots) {
-            $facetGroups[] = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-                \Sys25\RnBase\Domain\Model\BaseModel::class,
+            $facetGroups[] = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                Sys25\RnBase\Domain\Model\BaseModel::class,
                 [
                     'uid' => ++$uid,
                     'field' => implode('-', explode(',', $fields)),
@@ -201,13 +201,15 @@ class tx_mksearch_util_FacetBuilder
      * @param array $pivots
      *
      * @return multitype:tx_mksearch_model_Facet
+     * @return mixed[]
      */
-    protected function buildPivotChildFacets($pivots)
+    protected function buildPivotChildFacets($pivots): array
     {
         $fields = [];
         if (empty($pivots) || !is_array($pivots)) {
             return $fields;
         }
+
         foreach ($pivots as $pivot) {
             $field = $this->getSimpleFacet(
                 (string) $pivot->field,
@@ -229,17 +231,18 @@ class tx_mksearch_util_FacetBuilder
      *
      * @return array Ausgabedaten
      */
-    protected function buildFieldFacets($facetData)
+    protected function buildFieldFacets($facetData): array
     {
         $facetGroups = [];
         if (!$facetData) {
             return $facetGroups;
         }
+
         $uid = 0;
         foreach ($facetData as $field => $facetGroup) {
             if (empty($facetGroups[$field])) {
-                $facetGroups[$field] = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-                    \Sys25\RnBase\Domain\Model\BaseModel::class,
+                $facetGroups[$field] = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                    Sys25\RnBase\Domain\Model\BaseModel::class,
                     [
                         'uid' => ++$uid,
                         'field' => $field,
@@ -247,6 +250,7 @@ class tx_mksearch_util_FacetBuilder
                     ]
                 );
             }
+
             foreach ($facetGroup as $id => $count) {
                 $items = $facetGroups[$field]->getProperty('items');
                 $items[] = $this->getSimpleFacet($field, $id, $count);
@@ -274,7 +278,7 @@ class tx_mksearch_util_FacetBuilder
         $field,
         $id,
         $count,
-        $facetType = tx_mksearch_model_Facet::TYPE_FIELD
+        $facetType = tx_mksearch_model_Facet::TYPE_FIELD,
     ) {
         if ($this->getKeyValueFacetInstance()->checkValue($id)) {
             $exploded = $this->getKeyValueFacetInstance()->explodeFacetValue($id);
@@ -285,7 +289,8 @@ class tx_mksearch_util_FacetBuilder
         } else {
             $title = $id;
         }
-        $facet = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+
+        $facet = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'tx_mksearch_model_Facet',
             $field,
             $id,
@@ -296,6 +301,7 @@ class tx_mksearch_util_FacetBuilder
         if (isset($sorting)) {
             $facet->setSorting($sorting);
         }
+
         if (isset($raw)) {
             $facet->setLabelRaw($raw);
         }
@@ -305,12 +311,8 @@ class tx_mksearch_util_FacetBuilder
 
     /**
      * checks the sorting field of the facets and and sorts afterwards.
-     *
-     * @param array $facets
-     *
-     * @return array
      */
-    public function sortFacets(array $facets)
+    public function sortFacets(array $facets): array
     {
         // field facets are an instance of \Sys25\RnBase\Domain\Model\BaseModel with childs in "items" of record
         // other facets, like pivot, are an instance of tx_mksearch_model_Facet with childs
@@ -328,7 +330,7 @@ class tx_mksearch_util_FacetBuilder
         if ($facet && $facet->hasSorting()) {
             $s = usort(
                 $facets,
-                [__CLASS__, 'cbSortFacets']
+                [self::class, 'cbSortFacets']
             );
         }
 
@@ -340,24 +342,16 @@ class tx_mksearch_util_FacetBuilder
      *
      * @param tx_mksearch_model_Facet $a
      * @param tx_mksearch_model_Facet $b
-     *
-     * @return int
      */
-    public static function cbSortFacets($a, $b)
+    public static function cbSortFacets($a, $b): int
     {
-        if ($a->getSorting() == $b->getSorting()) {
-            return 0;
-        }
-
-        return ($a->getSorting() < $b->getSorting()) ? -1 : 1;
+        return $a->getSorting() <=> $b->getSorting();
     }
 
     /**
      * Debugs the big facet array for better readability.
      *
-     * @param mixed  $var
      * @param number $levels
-     * @param mixed
      */
     public static function debugFacets($var, $levels = 99)
     {
@@ -365,7 +359,7 @@ class tx_mksearch_util_FacetBuilder
             foreach ($var as &$sub) {
                 $sub = self::debugFacets($sub, $levels);
             }
-        } elseif ($var instanceof \Sys25\RnBase\Domain\Model\BaseModel) {
+        } elseif ($var instanceof Sys25\RnBase\Domain\Model\BaseModel) {
             $childs = $var instanceof tx_mksearch_model_Facet ? $var->getChilds() : $var->getItems();
             $childs = is_array($childs) ? $childs : [];
             $var = array_map('strval', $var->getProperty());

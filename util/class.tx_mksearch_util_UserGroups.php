@@ -1,27 +1,29 @@
 <?php
 
-/***************************************************************
-*  Copyright notice
-*
-*  (c) 2010 das Medienkombinat
-*  All rights reserved
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
+/*
+ * Copyright notice
+ *
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
+ *
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
+ *
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
+ *
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * This copyright notice MUST APPEAR in all copies of the script!
+ */
 
 class tx_mksearch_util_UserGroups
 {
@@ -34,14 +36,12 @@ class tx_mksearch_util_UserGroups
      *                     * 'groups':  all groups of a page relevant when page is seen as parent of another page
      *                     * 'local':   all groups of a page in its local context (i.e. including local fe groups which aren't relevant for children because access rights are not marked as "extend to subpages")
      */
-    private $resultingAccessCache = [];
+    private array $resultingAccessCache = [];
 
     /**
      * Cache for storing subgroups.
-     *
-     * @var array
      */
-    private static $groupCache = [];
+    private static array $groupCache = [];
 
     /**
      * @return tx_mksearch_util_UserGroups
@@ -66,11 +66,11 @@ class tx_mksearch_util_UserGroups
      */
     private function getSubGroups($groupId, array $callStackGroups = [])
     {
-        if (isset($this->groupCache[$groupId])) {
-            return $this->groupCache[$groupId];
+        if (isset(self::$groupCache[$groupId])) {
+            return self::$groupCache[$groupId];
         }
 
-        $queryBuilder = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Database\ConnectionPool::class)->getQueryBuilderForTable(
+        $queryBuilder = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(TYPO3\CMS\Core\Database\ConnectionPool::class)->getQueryBuilderForTable(
             'fe_groups'
         );
         $queryBuilder
@@ -80,9 +80,9 @@ class tx_mksearch_util_UserGroups
             ->where($queryBuilder->expr()->and(
                 $queryBuilder->expr()->eq('sys_refindex.ref_table', $queryBuilder->quote('fe_groups')),
                 $queryBuilder->expr()->eq('sys_refindex.field', $queryBuilder->quote('subgroup')),
-                $queryBuilder->expr()->eq('sys_refindex.recuid', $queryBuilder->createNamedParameter($groupId, \PDO::PARAM_INT))
+                $queryBuilder->expr()->eq('sys_refindex.recuid', $queryBuilder->createNamedParameter($groupId, TYPO3\CMS\Core\Database\Connection::PARAM_INT))
             ));
-        $result = \Sys25\RnBase\Utility\TYPO3::isTYPO115OrHigher() ? $queryBuilder->executeQuery() : $queryBuilder->execute();
+        $result = $queryBuilder->executeQuery();
 
         // Initialize suber group array with ourselves!
         $sub = [$groupId];
@@ -95,12 +95,12 @@ class tx_mksearch_util_UserGroups
         }
 
         // Eliminate duplicates
-        if ($sub) {
+        if ([] !== $sub) {
             $sub = array_unique($sub);
         }
 
         // Fill cache
-        $this->groupCache[$groupId] = $sub;
+        self::$groupCache[$groupId] = $sub;
 
         return $sub;
     }
@@ -127,67 +127,62 @@ class tx_mksearch_util_UserGroups
         if (isset($this->resultingAccessCache[$pid])) {
             return $this->resultingAccessCache[$pid];
         }
+
         // else: Begin calculating...
         $rootline = tx_mksearch_util_Indexer::getInstance()->getRootlineByPid($pid);
 
-        if (!sizeof($rootline)) {
+        if (0 === count($rootline)) {
             // MW: Keine Rootline gefunden, Seite gelöscht!?
             return false;
         }
 
         // Page's index in rootline array (i.e. last element)
-        $selfIndex = sizeof($rootline) - 1;
+        $selfIndex = count($rootline) - 1;
 
         // Get fe groups and all their superordinate groups
         // as these are also allowed to view the page!
         $self = [];
 
-        $baseGroups = \Sys25\RnBase\Utility\Strings::trimExplode(',', $rootline[$selfIndex]['fe_group'], true);
+        $baseGroups = Sys25\RnBase\Utility\Strings::trimExplode(',', $rootline[$selfIndex]['fe_group'], true);
         foreach ($baseGroups as $b) {
             $sub = self::getSubGroups($b);
             if ($sub) {
                 $self = array_merge($self, $sub);
             }
         }
+
         $self = array_unique($self);
 
         $this->resultingAccessCache[$pid] = [];
 
         // We're root! We're god! Our access rules are valid without any further checks!
-        if (1 == sizeof($rootline)) {
+        if (1 == count($rootline)) {
             $this->resultingAccessCache[$pid]['groups'] = $self;
         } // We really have to calculate...
         else {
             // Get parent page's access rights
             $parent = $this->calculateEffectiveFeGroups($rootline[$selfIndex]['pid']);
 
-            if (false === $parent) { // MW: keine parrent uid found
+            if (false === $parent) {
+                // MW: keine parrent uid found
                 $this->resultingAccessCache[$pid]['groups'] = $self;
-            } else {
+            } elseif ($rootline[$selfIndex]['fe_group']) {
                 // If current page has explicitely set FE groups:
-                if ($rootline[$selfIndex]['fe_group']) {
-                    // Prepare merged parent and current pages' fe_groups:
-                    if ($parent['groups']) {
-                        $merged = array_intersect($parent['groups'], $self);
-                    } else {
-                        $merged = $self;
-                    }
-
-                    // Current page's fe_groups forced to "extend to subpages"?
-                    // Effective groups are merged ones:
-                    if ($rootline[$selfIndex]['extendToSubpages']) {
-                        $this->resultingAccessCache[$pid]['groups'] = $merged;
-                    } // Current page's fe_groups NOT forced to "extend to subpages"?
-                    // Merged groups are only locally valid,
-                    // whilst groups valid for children are only parent page's groups...
-                    else {
-                        $this->resultingAccessCache[$pid]['groups'] = $parent['groups'];
-                        $this->resultingAccessCache[$pid]['local'] = $merged;
-                    }
-                } // No fe_groups defined in current page: Use parent page's groups
+                // Prepare merged parent and current pages' fe_groups:
+                $merged = $parent['groups'] ? array_intersect($parent['groups'], $self) : $self;
+                // Current page's fe_groups forced to "extend to subpages"?
+                // Effective groups are merged ones:
+                if ($rootline[$selfIndex]['extendToSubpages']) {
+                    $this->resultingAccessCache[$pid]['groups'] = $merged;
+                } // Current page's fe_groups NOT forced to "extend to subpages"?
+                // Merged groups are only locally valid,
+                // whilst groups valid for children are only parent page's groups...
                 else {
                     $this->resultingAccessCache[$pid]['groups'] = $parent['groups'];
+                    $this->resultingAccessCache[$pid]['local'] = $merged;
                 }
+            } else {
+                $this->resultingAccessCache[$pid]['groups'] = $parent['groups'];
             }
         }
 
@@ -204,12 +199,9 @@ class tx_mksearch_util_UserGroups
     public function getEffectivePageFeGroups($pid)
     {
         $foo = $this->calculateEffectiveFeGroups($pid);
-        if (isset($foo['local'])) {
-            return $foo['local'];
-        }
 
         // else
-        return $foo['groups'];
+        return $foo['local'] ?? $foo['groups'];
     }
 
     /**
@@ -224,12 +216,12 @@ class tx_mksearch_util_UserGroups
     {
         // Page's effective groups:
         $groupsArr = $this->calculateEffectiveFeGroups($pid);
-        $groupsArr = (isset($groupsArr['local'])) ? $groupsArr['local'] : $groupsArr['groups'];
-        $groupsArr = !empty($groupsArr) ? $groupsArr : [0];
+        $groupsArr = $groupsArr['local'] ?? $groupsArr['groups'];
+        $groupsArr = empty($groupsArr) ? [0] : $groupsArr;
 
         // Explicite groups for content element?
         if ($ceGroups) {
-            $groupsArr = \Sys25\RnBase\Utility\Arrays::mergeRecursiveWithOverrule($groupsArr, $ceGroups);
+            $groupsArr = Sys25\RnBase\Utility\Arrays::mergeRecursiveWithOverrule($groupsArr, $ceGroups);
         }
 
         if (empty($groupsArr)) {

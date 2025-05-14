@@ -1,29 +1,31 @@
 <?php
 
-/***************************************************************
-*  Copyright notice
-*
-*  (c) 2010 René Nitzsche <dev@dmk-ebusiness.de>
-*  All rights reserved
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
+/*
+ * Copyright notice
+ *
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
+ *
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
+ *
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
+ *
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * This copyright notice MUST APPEAR in all copies of the script!
+ */
 
-class tx_mksearch_scheduler_IndexTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
+class tx_mksearch_scheduler_IndexTask extends TYPO3\CMS\Scheduler\Task\AbstractTask
 {
     /**
      * Was used as the scheduler options before making the extension compatible with TYPO3 9. But as private
@@ -75,21 +77,23 @@ class tx_mksearch_scheduler_IndexTask extends \TYPO3\CMS\Scheduler\Task\Abstract
         try {
             $rows = tx_mksearch_util_ServiceRegistry::getIntIndexService()->triggerQueueIndexing($this->getAmountOfItems());
             if (!empty($rows)) {// sonst gibts ne PHP Warning bei array_merge
-                $rows = count(call_user_func_array('array_merge', array_values($rows)));
+                $rows = count(array_merge(...array_values($rows)));
             }
-            $msg = sprintf($rows ? '%d item(s) indexed' : 'No items in indexing queue.', $rows);
-            if ($rows) { // TODO: Schalter im Task anlegen.
-                \Sys25\RnBase\Utility\Logger::info($msg, 'mksearch');
+
+            $msg = sprintf(0 !== $rows && [] !== $rows ? '%d item(s) indexed' : 'No items in indexing queue.', $rows);
+            if (0 !== $rows && [] !== $rows) { // TODO: Schalter im Task anlegen.
+                Sys25\RnBase\Utility\Logger::info($msg, 'mksearch');
             }
-        } catch (Exception $e) {
-            \Sys25\RnBase\Utility\Logger::fatal('Indexing failed!', 'mksearch', ['Exception' => $e->getMessage()]);
+        } catch (Exception $exception) {
+            Sys25\RnBase\Utility\Logger::fatal('Indexing failed!', 'mksearch', ['Exception' => $exception->getMessage()]);
             // Da die Exception gefangen wird, würden die Entwickler keine Mail bekommen
             // also machen wir das manuell
-            if ($addr = \Sys25\RnBase\Configuration\Processor::getExtensionCfgValue('rn_base', 'sendEmailOnException')) {
+            if ($addr = Sys25\RnBase\Configuration\Processor::getExtensionCfgValue('rn_base', 'sendEmailOnException')) {
                 // die Mail soll immer geschickt werden
                 $aOptions = ['ignoremaillock' => true];
-                \Sys25\RnBase\Utility\Misc::sendErrorMail($addr, 'tx_mksearch_scheduler_IndexTask', $e, $aOptions);
+                Sys25\RnBase\Utility\Misc::sendErrorMail($addr, 'tx_mksearch_scheduler_IndexTask', $exception, $aOptions);
             }
+
             $success = false;
         }
 
@@ -111,13 +115,14 @@ class tx_mksearch_scheduler_IndexTask extends \TYPO3\CMS\Scheduler\Task\Abstract
      *
      * @param int $val
      */
-    public function setAmountOfItems($val)
+    public function setAmountOfItems($val): void
     {
         $val = intval($val);
 
         if ($val <= 0) {
             throw new Exception('tx_mksearch_scheduler_TaskTriggerIndexingQueue->setAmountOfItems(): Invalid amount of items given!');
         }
+
         // else
         $this->amountOfItemsToIndexPerRun = $val;
     }

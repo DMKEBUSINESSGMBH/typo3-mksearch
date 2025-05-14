@@ -1,32 +1,34 @@
 <?php
 
-/***************************************************************
-*  Copyright notice
-*
-*  (c) 2010 das Medienkombinat
-*  All rights reserved
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
+/*
+ * Copyright notice
+ *
+ * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * All rights reserved
+ *
+ * This file is part of the "mksearch" Extension for TYPO3 CMS.
+ *
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
+ *
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * This copyright notice MUST APPEAR in all copies of the script!
+ */
 
 /**
  * Service for accessing models from database.
  */
-class tx_mksearch_service_internal_Base extends \Sys25\RnBase\Typo3Wrapper\Service\AbstractService
+class tx_mksearch_service_internal_Base extends Sys25\RnBase\Typo3Wrapper\Service\AbstractService
 {
     /**
      * Search class - set this to the search class name.
@@ -36,18 +38,15 @@ class tx_mksearch_service_internal_Base extends \Sys25\RnBase\Typo3Wrapper\Servi
     protected $searchClass;
 
     /**
-     * @return \Sys25\RnBase\Search\SearchBase
+     * @return Sys25\RnBase\Search\SearchBase
      */
     public function getSearcher()
     {
-        return \Sys25\RnBase\Search\SearchBase::getInstance($this->searchClass);
+        return Sys25\RnBase\Search\SearchBase::getInstance($this->searchClass);
     }
 
     /**
      * Search database.
-     *
-     * @param array $fields
-     * @param array $options
      *
      * @return array[tx_mksearch_model_internal_Index]
      */
@@ -68,14 +67,12 @@ class tx_mksearch_service_internal_Base extends \Sys25\RnBase\Typo3Wrapper\Servi
     {
         $ret = false;
         $cfg = $core->getIndexerOptions();
-        $indexerType = $indexer->getContentType();
-        list($extKey, $contentType) = $indexer->getContentType();
+        $indexer->getContentType();
+        [$extKey, $contentType] = $indexer->getContentType();
         $indexerData = ['extKey' => $extKey, 'contentType' => $contentType];
 
-        if (array_key_exists($indexerData['extKey'].'.', $cfg)) {
-            if (array_key_exists($indexerData['contentType'].'.', $cfg[$indexerData['extKey'].'.'])) {
-                $ret = true;
-            }
+        if (array_key_exists($indexerData['extKey'].'.', $cfg) && array_key_exists($indexerData['contentType'].'.', $cfg[$indexerData['extKey'].'.'])) {
+            return true;
         }
 
         return $ret;
@@ -84,14 +81,12 @@ class tx_mksearch_service_internal_Base extends \Sys25\RnBase\Typo3Wrapper\Servi
     /**
      * Search database for all configurated Indices.
      *
-     * @param array $fields
-     * @param array $options
-     *
      * @return array[tx_mksearch_model_internal_Index]
      */
     public function findAll()
     {
-        $fields = $options = [];
+        $fields = [];
+        $options = [];
         // $options['debug'] = 1;
         $options['enablefieldsfe'] = 1;
 
@@ -101,18 +96,16 @@ class tx_mksearch_service_internal_Base extends \Sys25\RnBase\Typo3Wrapper\Servi
     /**
      * Search database for all configurated Indices.
      *
-     * @param array $fields
-     * @param array $options
-     *
      * @return array[tx_mksearch_model_internal_Index]
      */
     public function getByPageId($pageId)
     {
         $alias = $this->getSearcher()->getBaseTableAlias();
         $fields = [];
-        if (intval($pageId)) {
+        if (0 !== intval($pageId)) {
             $fields[$alias.'.pid'][OP_EQ_INT] = $pageId;
         }
+
         $options['enablefieldsfe'] = 1;
 
         return $this->search($fields, $options);
@@ -121,14 +114,11 @@ class tx_mksearch_service_internal_Base extends \Sys25\RnBase\Typo3Wrapper\Servi
     /**
      * Get model from database by its uid.
      *
-     * @param array $fields
-     * @param array $options
-     *
      * @return tx_mksearch_model_*
      */
-    public function get($uid)
+    public function get($uid): object
     {
-        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($this->getSearcher()->getWrapperClass(), $uid);
+        return TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($this->getSearcher()->getWrapperClass(), $uid);
     }
 
     public function init(): bool
