@@ -37,10 +37,7 @@ class tx_mksearch_service_internal_Base extends Sys25\RnBase\Typo3Wrapper\Servic
      */
     protected $searchClass;
 
-    /**
-     * @return Sys25\RnBase\Search\SearchBase
-     */
-    public function getSearcher()
+    public function getSearcher(): tx_mksearch_search_Interface
     {
         return Sys25\RnBase\Search\SearchBase::getInstance($this->searchClass);
     }
@@ -100,7 +97,7 @@ class tx_mksearch_service_internal_Base extends Sys25\RnBase\Typo3Wrapper\Servic
      */
     public function getByPageId($pageId)
     {
-        $alias = $this->getSearcher()->getBaseTableAlias();
+        $alias = $this->getSearcher()->getMainTableAlias();
         $fields = [];
         if (0 !== intval($pageId)) {
             $fields[$alias.'.pid'][OP_EQ_INT] = $pageId;

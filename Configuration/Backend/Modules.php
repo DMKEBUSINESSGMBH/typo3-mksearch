@@ -46,9 +46,6 @@ return [
             'title' => 'LLL:EXT:mksearch/Resources/Private/Language/BackendModule/locallang.xlf:func_config_indizes',
         ],
         'routes' => [
-            'pageNotSelected' => [
-                'target' => 'tx_mksearch_mod1_Module',
-            ],
             '_default' => [
                 'target' => 'tx_mksearch_mod1_ConfigIndizes::main',
             ],
@@ -69,9 +66,6 @@ return [
             'title' => 'LLL:EXT:mksearch/Resources/Private/Language/BackendModule/locallang.xlf:func_keywords',
         ],
         'routes' => [
-            'pageNotSelected' => [
-                'target' => 'tx_mksearch_mod1_Module',
-            ],
             '_default' => [
                 'target' => 'tx_mksearch_mod1_Keywords::main',
             ],
@@ -92,9 +86,6 @@ return [
             'title' => 'LLL:EXT:mksearch/Resources/Private/Language/BackendModule/locallang.xlf:func_indize_indizes',
         ],
         'routes' => [
-            'pageNotSelected' => [
-                'target' => 'tx_mksearch_mod1_Module',
-            ],
             '_default' => [
                 'target' => 'tx_mksearch_mod1_IndizeIndizes::main',
             ],
@@ -115,9 +106,6 @@ return [
             'title' => 'LLL:EXT:mksearch/Resources/Private/Language/BackendModule/locallang.xlf:func_solradmin',
         ],
         'routes' => [
-            'pageNotSelected' => [
-                'target' => 'tx_mksearch_mod1_Module',
-            ],
             '_default' => [
                 'target' => 'tx_mksearch_mod1_SolrAdmin::main',
             ],

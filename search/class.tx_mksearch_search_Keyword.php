@@ -30,14 +30,14 @@
  *
  * @author Michael Wagner <dev@dmk-ebusiness.de>
  */
-class tx_mksearch_search_Keyword extends Sys25\RnBase\Search\SearchBase
+class tx_mksearch_search_Keyword extends Sys25\RnBase\Search\SearchBase implements tx_mksearch_search_Interface
 {
     /**
      * Return table mappings.
      *
      * MUST be public as we need these data from external!
      */
-    protected function getTableMappings()
+    protected function getTableMappings(): array
     {
         return ['KEYWORD' => 'tx_mksearch_keywords'];
     }
@@ -48,36 +48,35 @@ class tx_mksearch_search_Keyword extends Sys25\RnBase\Search\SearchBase
      *
      * @see util/\Sys25\RnBase\Search\SearchBase#getBaseTable()
      */
-    protected function getBaseTable()
+    protected function getBaseTable(): string
     {
         return 'tx_mksearch_keywords';
     }
 
-    /**
-     * return name of base table
-     * MUST be public as we need these data from external!
-     *
-     * @see util/\Sys25\RnBase\Search\SearchBase#getBaseTable()
-     */
-    protected function getBaseTableAlias()
+    protected function getBaseTableAlias(): string
     {
         return 'KEYWORD';
     }
 
     /**
-     * @return bool
+     * Is used in tx_mksearch_service_internal_Base::getByPageId()).
      */
-    protected function useAlias()
+    public function getMainTableAlias(): string
+    {
+        return $this->getBaseTableAlias();
+    }
+
+    protected function useAlias(): bool
     {
         return false;
     }
 
-    public function getWrapperClass()
+    public function getWrapperClass(): string
     {
         return 'tx_mksearch_model_internal_Keyword';
     }
 
-    protected function getJoins($tableAliases)
+    protected function getJoins($tableAliases): string
     {
         return '';
     }

@@ -233,7 +233,7 @@ class tx_mksearch_util_Misc
      */
     public static function parseTsConfig($sTs)
     {
-        return (new Sys25\RnBase\Utility\TypoScript())->parseTsConfig($sTs);
+        return (new Sys25\RnBase\Utility\TypoScript())->parseTsConfig($sTs, 'mksearch');
     }
 
     /**

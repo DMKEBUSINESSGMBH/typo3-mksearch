@@ -61,7 +61,7 @@ class tx_mksearch_mod1_util_Selector
      *
      * @return string search term
      */
-    public function showFreeTextSearchForm(&$out, string $key, array $options = [])
+    public function showFreeTextSearchForm(array &$out, string $key, array $options = [])
     {
         $searchstring = $this->getValueFromModuleData($key);
 
@@ -190,7 +190,7 @@ class tx_mksearch_mod1_util_Selector
         $selectedItem = array_key_exists('forcevalue', $aOptions) ? $aOptions['forcevalue'] : $this->getValueFromModuleData($id);
 
         // Build select box items
-        $aData['selector'] = Sys25\RnBase\Backend\Utility\BackendUtility::getFuncMenu(
+        $aData['selector'] = Sys25\RnBase\Backend\Utility\BackendUtility::getDropdownMenu(
             $this->mod->getPid(),
             'SET['.$id.']',
             $selectedItem,

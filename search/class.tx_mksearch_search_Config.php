@@ -28,14 +28,14 @@
 /**
  * Class to search index configurations from database.
  */
-class tx_mksearch_search_Config extends Sys25\RnBase\Search\SearchBase
+class tx_mksearch_search_Config extends Sys25\RnBase\Search\SearchBase implements tx_mksearch_search_Interface
 {
     /**
      * Return table mappings.
      *
      * MUST be public as we need these data from external!
      */
-    protected function getTableMappings()
+    protected function getTableMappings(): array
     {
         return ['CFG' => self::getBaseTable(), 'CMP' => 'tx_mksearch_configcomposites', 'CMPCFGMM' => 'tx_mksearch_configcomposites_indexerconfigs_mm', 'INDX' => 'tx_mksearch_indices', 'INDXCMPMM' => 'tx_mksearch_indices_configcomposites_mm'];
     }
@@ -46,36 +46,35 @@ class tx_mksearch_search_Config extends Sys25\RnBase\Search\SearchBase
      *
      * @see \Sys25\RnBase\Search\SearchBase::getBaseTable()
      */
-    protected function getBaseTable()
+    protected function getBaseTable(): string
     {
         return 'tx_mksearch_indexerconfigs';
     }
 
-    /**
-     * return name of base table
-     * MUST be public as we need these data from external!
-     *
-     * @see util/\Sys25\RnBase\Search\SearchBase#getBaseTable()
-     */
-    protected function getBaseTableAlias()
+    protected function getBaseTableAlias(): string
     {
         return 'CFG';
     }
 
     /**
-     * @return bool
+     * Is used in tx_mksearch_service_internal_Base::getByPageId()).
      */
-    protected function useAlias()
+    public function getMainTableAlias(): string
+    {
+        return $this->getBaseTableAlias();
+    }
+
+    protected function useAlias(): bool
     {
         return false;
     }
 
-    public function getWrapperClass()
+    public function getWrapperClass(): string
     {
         return 'tx_mksearch_model_internal_Config';
     }
 
-    protected function getJoins($tableAliases)
+    protected function getJoins($tableAliases): string
     {
         $join = '';
         $tableMapping = $this->getTableMappings();

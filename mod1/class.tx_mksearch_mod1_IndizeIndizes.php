@@ -36,10 +36,8 @@ class tx_mksearch_mod1_IndizeIndizes extends Sys25\RnBase\Backend\Module\BaseMod
 {
     /**
      * Return function id (used in page typoscript etc.).
-     *
-     * @return string
      */
-    protected function getFuncId()
+    protected function getFuncId(): string
     {
         return 'indizeindizes';
     }
@@ -53,8 +51,7 @@ class tx_mksearch_mod1_IndizeIndizes extends Sys25\RnBase\Backend\Module\BaseMod
     {
         return tx_mksearch_mod1_util_Misc::getSubModuleContent(
             parent::main($request),
-            $this,
-            'web_MksearchM1_indices'
+            $this
         );
     }
 
@@ -76,6 +73,11 @@ class tx_mksearch_mod1_IndizeIndizes extends Sys25\RnBase\Backend\Module\BaseMod
         $status = [];
         if (!$GLOBALS['BE_USER']->isAdmin()) {
             return '';
+        }
+
+        $ret = tx_mksearch_mod1_util_Misc::checkPid($this->getModule());
+        if (null !== $ret && '' !== $ret && '0' !== $ret) {
+            return $ret;
         }
 
         $oIntIndexSrv = tx_mksearch_util_ServiceRegistry::getIntIndexService();
@@ -328,7 +330,7 @@ class tx_mksearch_mod1_IndizeIndizes extends Sys25\RnBase\Backend\Module\BaseMod
         return $status;
     }
 
-    public function getModuleIdentifier()
+    public function getModuleIdentifier(): string
     {
         return 'mksearch';
     }

@@ -121,7 +121,10 @@ abstract class tx_mksearch_mod1_searcher_abstractBase
      */
     protected function getFilterTableDataForSearchForm()
     {
-        $data = [];
+        $data = [
+            'search' => [],
+            'hidden' => [],
+        ];
         $options = [];
         if (isset($this->options['pid'])) {
             $options['pid'] = $this->options['pid'];
@@ -175,7 +178,7 @@ abstract class tx_mksearch_mod1_searcher_abstractBase
         $pager = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             Sys25\RnBase\Backend\Utility\BEPager::class,
             $this->getSearcherId().'Pager',
-            $this->getModule()->getName(),
+            $this->getModule(),
             $this->options['pid'] ?? 0
         );
         $fields = [];

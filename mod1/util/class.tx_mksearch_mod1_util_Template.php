@@ -119,7 +119,9 @@ class tx_mksearch_mod1_util_Template
         $formTool = $mod->getFormTool();
 
         // die tabelle von der suchklasse besorgen (für die buttons)
-        $table = $searcher->getService()->getSearcher()->getBaseTable();
+        $table = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+            $searcher->getService()->getSearcher()->getWrapperClass(), []
+        )->getTableName();
 
         // Suchformular
         $markerArray['###'.$marker.'_SEARCHFORM###'] = $searcher->getSearchForm();

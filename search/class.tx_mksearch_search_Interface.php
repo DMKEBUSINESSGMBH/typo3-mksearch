@@ -25,41 +25,17 @@
  * This copyright notice MUST APPEAR in all copies of the script!
  */
 
-use Psr\Http\Message\ServerRequestInterface;
-
 /**
- * Mksearch backend module.
+ * Interface tx_mksearch_search_Interface.
  *
- * Hat nchts mehr speziell mit Solr zu tun,
- * wurde von der Namensgebung allerdings so beibehalten.
- *
- * @author René Nitzsche <dev@dmk-ebusiness.de>
+ * @author  Hannes Bochmann
+ * @license http://www.gnu.org/licenses/lgpl.html
+ *          GNU Lesser General Public License, version 3 or later
  */
-class tx_mksearch_mod1_SolrAdmin extends tx_mksearch_mod1_ModuleWithSubModules
+interface tx_mksearch_search_Interface
 {
     /**
-     * Return function id (used in page typoscript etc.).
+     * Is used in tx_mksearch_service_internal_Base::getByPageId()).
      */
-    protected function getFuncId(): string
-    {
-        return 'admin';
-    }
-
-    public function main(?ServerRequestInterface $request = null)
-    {
-        return tx_mksearch_mod1_util_Misc::getSubModuleContent(
-            parent::main($request),
-            $this
-        );
-    }
-
-    /**
-     * Liefert die Einträge für das Tab-Menü.
-     */
-    protected function getSubMenuItems(): array
-    {
-        return [
-            TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_mod1_handler_admin_Solr'),
-        ];
-    }
+    public function getMainTableAlias(): string;
 }

@@ -25,8 +25,6 @@
  * This copyright notice MUST APPEAR in all copies of the script!
  */
 
-use Psr\Http\Message\ServerRequestInterface;
-
 /**
  * Mksearch backend module.
  *
@@ -35,31 +33,30 @@ use Psr\Http\Message\ServerRequestInterface;
  *
  * @author René Nitzsche <dev@dmk-ebusiness.de>
  */
-class tx_mksearch_mod1_SolrAdmin extends tx_mksearch_mod1_ModuleWithSubModules
+abstract class tx_mksearch_mod1_ModuleWithSubModules extends Sys25\RnBase\Backend\Module\ExtendedModFunc
 {
-    /**
-     * Return function id (used in page typoscript etc.).
-     */
-    protected function getFuncId(): string
+    public function getPid()
     {
-        return 'admin';
+        return $this->getModule()->getPid();
     }
 
-    public function main(?ServerRequestInterface $request = null)
+    protected function renderOutput()
     {
-        return tx_mksearch_mod1_util_Misc::getSubModuleContent(
-            parent::main($request),
-            $this
-        );
+        $ret = tx_mksearch_mod1_util_Misc::checkPid($this->getModule());
+        if (null !== $ret && '' !== $ret && '0' !== $ret) {
+            return $ret;
+        }
+
+        return parent::renderOutput();
     }
 
-    /**
-     * Liefert die Einträge für das Tab-Menü.
-     */
-    protected function getSubMenuItems(): array
+    protected function makeSubSelectors(&$selStr)
     {
-        return [
-            TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_mod1_handler_admin_Solr'),
-        ];
+        return false;
+    }
+
+    public function getModuleIdentifier()
+    {
+        return 'mksearch';
     }
 }

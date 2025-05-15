@@ -36,10 +36,8 @@ class tx_mksearch_mod1_Keywords extends Sys25\RnBase\Backend\Module\BaseModFunc
 {
     /**
      * Return function id (used in page typoscript etc.).
-     *
-     * @return string
      */
-    protected function getFuncId()
+    protected function getFuncId(): string
     {
         return 'keywords';
     }
@@ -51,7 +49,7 @@ class tx_mksearch_mod1_Keywords extends Sys25\RnBase\Backend\Module\BaseModFunc
 
     public function main(?ServerRequestInterface $request = null)
     {
-        return tx_mksearch_mod1_util_Misc::getSubModuleContent(parent::main($request), $this, 'web_MksearchM1_keywords');
+        return tx_mksearch_mod1_util_Misc::getSubModuleContent(parent::main($request), $this);
     }
 
     /**
@@ -66,6 +64,11 @@ class tx_mksearch_mod1_Keywords extends Sys25\RnBase\Backend\Module\BaseModFunc
      */
     protected function getContent($template, &$configurations, &$formatter, $formTool)
     {
+        $ret = tx_mksearch_mod1_util_Misc::checkPid($this->getModule());
+        if (null !== $ret && '' !== $ret && '0' !== $ret) {
+            return $ret;
+        }
+
         $markerArray = [];
 
         $markerArray['###COMMON_START###'] = $markerArray['###COMMON_END###'] = '';
@@ -115,7 +118,7 @@ class tx_mksearch_mod1_Keywords extends Sys25\RnBase\Backend\Module\BaseModFunc
         return TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_mod1_searcher_Keywords', $this->getModule(), $options);
     }
 
-    public function getModuleIdentifier()
+    public function getModuleIdentifier(): string
     {
         return 'mksearch';
     }

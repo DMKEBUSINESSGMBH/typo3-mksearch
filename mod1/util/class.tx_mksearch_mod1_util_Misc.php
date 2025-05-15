@@ -127,26 +127,11 @@ class tx_mksearch_mod1_util_Misc
     public static function getSubModuleContent(
         $content,
         IModFunc $subModule,
-        string $subModuleName,
     ) {
-        $ret = tx_mksearch_mod1_util_Misc::checkPid($subModule->getModule());
-        if (null !== $ret && '' !== $ret && '0' !== $ret) {
-            $modUrl = Sys25\RnBase\Backend\Utility\BackendUtility::getModuleUrl(
-                $subModuleName.'.pageNotSelected',
-                ['id' => $subModule->getModule()->getPid()]
-            );
-
-            return new TYPO3\CMS\Core\Http\RedirectResponse($modUrl);
-        }
-
-        if ($content instanceof Psr\Http\Message\ResponseInterface) {
-            return $content->withBody(
-                TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(TYPO3\CMS\Core\Http\StreamFactory::class)->createStream(
-                    tx_mksearch_mod1_util_Template::parseBasics($content->getBody()->getContents(), $subModule)
-                )
-            );
-        }
-
-        return tx_mksearch_mod1_util_Template::parseBasics($content, $subModule);
+        return $content->withBody(
+            TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(TYPO3\CMS\Core\Http\StreamFactory::class)->createStream(
+                tx_mksearch_mod1_util_Template::parseBasics($content->getBody()->getContents(), $subModule)
+            )
+        );
     }
 }

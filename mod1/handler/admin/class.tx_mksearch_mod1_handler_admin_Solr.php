@@ -36,20 +36,16 @@ class tx_mksearch_mod1_handler_admin_Solr implements Sys25\RnBase\Backend\Module
 
     /**
      * Returns a unique ID for this handler. This is used to created the subpart in template.
-     *
-     * @return string
      */
-    public function getSubID()
+    public function getSubID(): string
     {
         return 'AdminSolr';
     }
 
     /**
      * Returns the label for Handler in SubMenu. You can use a label-Marker.
-     *
-     * @return string
      */
-    public function getSubLabel()
+    public function getSubLabel(): string
     {
         return '###LABEL_HANDLER_'.strtoupper($this->getSubID()).'###';
     }
@@ -57,7 +53,7 @@ class tx_mksearch_mod1_handler_admin_Solr implements Sys25\RnBase\Backend\Module
     /**
      * This method is called each time the method func is clicked, to handle request data.
      */
-    public function handleRequest(Sys25\RnBase\Backend\Module\IModule $mod)
+    public function handleRequest(Sys25\RnBase\Backend\Module\IModule $mod): ?string
     {
         $submitted = Sys25\RnBase\Frontend\Request\Parameters::getPostOrGetParameter('doDelete') || Sys25\RnBase\Frontend\Request\Parameters::getPostOrGetParameter('doQuery');
         if (!$submitted) {
