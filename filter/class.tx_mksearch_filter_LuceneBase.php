@@ -284,7 +284,7 @@ class tx_mksearch_filter_LuceneBase extends tx_mksearch_filter_BaseFilter implem
     {
         $availableModes = Sys25\RnBase\Utility\Strings::trimExplode(
             ',',
-            $this->getConfigurations()->get($this->getConfId().'filter.availableModes')
+            $this->getConfigurations()->get($this->getConfId().'filter.availableModes') ?? ''
         );
 
         return (array) $availableModes;
@@ -300,7 +300,7 @@ class tx_mksearch_filter_LuceneBase extends tx_mksearch_filter_BaseFilter implem
     ): array {
         $formFields = Sys25\RnBase\Utility\Strings::trimExplode(
             ',',
-            $this->getConfigurations()->get($this->getConfId().'filter.requiredFormFields')
+            $this->getConfigurations()->get($this->getConfId().'filter.requiredFormFields') ?? ''
         );
 
         foreach ($formFields as $formField) {

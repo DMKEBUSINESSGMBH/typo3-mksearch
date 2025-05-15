@@ -294,7 +294,7 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_mksearch_filter_BaseFilter
     {
         $availableModes = Sys25\RnBase\Utility\Strings::trimExplode(
             ',',
-            $this->getConfigurations()->get($this->getConfId().'availableModes')
+            $this->getConfigurations()->get($this->getConfId().'availableModes') ?? ''
         );
 
         return (array) $availableModes;
@@ -310,7 +310,7 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_mksearch_filter_BaseFilter
     ): array {
         $formFields = Sys25\RnBase\Utility\Strings::trimExplode(
             ',',
-            $this->getConfigurations()->get($this->getConfId().'requiredFormFields')
+            $this->getConfigurations()->get($this->getConfId().'requiredFormFields') ?? ''
         );
 
         foreach ($formFields as $formField) {

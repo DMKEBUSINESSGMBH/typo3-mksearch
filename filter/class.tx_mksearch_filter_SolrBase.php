@@ -224,7 +224,7 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
      */
     protected function handleFacet(&$options, &$parameters, &$configurations, $confId)
     {
-        $fields = $this->getConfValue('options.facet.fields');
+        $fields = $this->getConfValue('options.facet.fields') ?? '';
         $fields = Sys25\RnBase\Utility\Strings::trimExplode(',', $fields, true);
 
         if (empty($fields)) {
@@ -799,7 +799,7 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
     {
         $availableModes = Sys25\RnBase\Utility\Strings::trimExplode(
             ',',
-            $this->getConfValue($this->getConfigurations(), 'availableModes')
+            $this->getConfValue($this->getConfigurations(), 'availableModes') ?? ''
         );
 
         return (array) $availableModes;

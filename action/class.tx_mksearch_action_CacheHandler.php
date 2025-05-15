@@ -54,7 +54,7 @@ class tx_mksearch_action_CacheHandler extends tx_rnbase_action_CacheHandlerDefau
         $params = [];
         $allowed = Sys25\RnBase\Utility\Strings::trimExplode(
             ',',
-            $this->getConfigValue('params.allowed', ''),
+            $this->getConfigValue('params.allowed', '') ?? '',
             1
         );
         foreach ($allowed as $p) {

@@ -278,7 +278,7 @@ class tx_mksearch_util_Filter
         $configurations = $formatter->getConfigurations();
 
         // die felder für die sortierung stehen kommasepariert im ts
-        $sortFields = $configurations->get($confId.'fields');
+        $sortFields = $configurations->get($confId.'fields') ?? '';
 
         $sortFields = $sortFields ? Sys25\RnBase\Utility\Strings::trimExplode(',', $sortFields, true) : [];
 
