@@ -138,7 +138,7 @@ class tx_mksearch_action_ElasticSearch extends tx_mksearch_action_AbstractSearch
      *
      * @see \Sys25\RnBase\Frontend\Controller\AbstractAction::getTemplateName()
      */
-    protected function getTemplateName()
+    protected function getTemplateName(): string
     {
         return 'elasticsearch';
     }
@@ -148,7 +148,7 @@ class tx_mksearch_action_ElasticSearch extends tx_mksearch_action_AbstractSearch
      *
      * @see \Sys25\RnBase\Frontend\Controller\AbstractAction::getViewClassName()
      */
-    protected function getViewClassName()
+    protected function getViewClassName(): string
     {
         return 'tx_mksearch_view_Search';
     }

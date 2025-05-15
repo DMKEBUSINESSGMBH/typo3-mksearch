@@ -52,7 +52,7 @@ class tx_mksearch_filter_LuceneBase extends tx_mksearch_filter_BaseFilter implem
      * @param array $fields
      * @param array $options
      */
-    public function init(&$fields, &$options)
+    public function init(&$fields, &$options): bool
     {
         $confId = $this->getConfId();
         $fields = $this->getConfigurations()->get($confId.'filter.fields.');
@@ -69,7 +69,7 @@ class tx_mksearch_filter_LuceneBase extends tx_mksearch_filter_BaseFilter implem
      *
      * @return bool Should subsequent query be executed at all?
      */
-    protected function initFilter(&$fields, &$options, Sys25\RnBase\Frontend\Request\RequestInterface $request)
+    protected function initFilter(&$fields, &$options, Sys25\RnBase\Frontend\Request\RequestInterface $request): bool
     {
         $configurations = $request->getConfigurations();
         $parameters = $request->getParameters();

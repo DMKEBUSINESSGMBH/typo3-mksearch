@@ -78,10 +78,8 @@ class tx_mksearch_model_SolrHit extends Sys25\RnBase\Domain\Model\BaseModel impl
 
     /**
      * Return name of model's base table - not used in this model.
-     *
-     * @return string
      */
-    public function getTableName()
+    public function getTableName(): string
     {
         return '';
     }
@@ -93,7 +91,7 @@ class tx_mksearch_model_SolrHit extends Sys25\RnBase\Domain\Model\BaseModel impl
      *
      * @return 0
      */
-    public function getColumnNames()
+    public function getColumnNames(): int
     {
         return 0;
     }
@@ -101,7 +99,7 @@ class tx_mksearch_model_SolrHit extends Sys25\RnBase\Domain\Model\BaseModel impl
     /**
      * @see #getColumnNames()
      */
-    public function getTCAColumns()
+    public function getTCAColumns(): int
     {
         return 0;
     }

@@ -177,12 +177,12 @@ class tx_mksearch_action_ShowHit extends Sys25\RnBase\Frontend\Controller\Abstra
         return $this->index;
     }
 
-    protected function getTemplateName()
+    protected function getTemplateName(): string
     {
         return 'showhit';
     }
 
-    protected function getViewClassName()
+    protected function getViewClassName(): string
     {
         return 'tx_mksearch_view_ShowHit';
     }

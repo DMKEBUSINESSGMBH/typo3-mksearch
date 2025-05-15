@@ -44,7 +44,7 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_mksearch_filter_BaseFilter
      * @param array $fields
      * @param array $options
      */
-    public function init(&$fields, &$options)
+    public function init(&$fields, &$options): bool
     {
         $confId = $this->getConfId();
         $fields = $this->getConfigurations()->get($confId.'fields.');
@@ -74,7 +74,7 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_mksearch_filter_BaseFilter
         &$fields,
         &$options,
         Sys25\RnBase\Frontend\Request\RequestInterface $request,
-    ) {
+    ): bool {
         $configurations = $request->getConfigurations();
         $parameters = $request->getParameters();
         $confId = $this->getConfId();

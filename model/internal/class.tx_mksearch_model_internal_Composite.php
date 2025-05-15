@@ -32,10 +32,8 @@ class tx_mksearch_model_internal_Composite extends Sys25\RnBase\Domain\Model\Bas
 {
     /**
      * Return this model's table name.
-     *
-     * @return string
      */
-    public function getTableName()
+    public function getTableName(): string
     {
         return 'tx_mksearch_configcomposites';
     }

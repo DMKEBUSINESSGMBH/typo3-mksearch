@@ -412,12 +412,12 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
         return null;
     }
 
-    protected function getTemplateName()
+    protected function getTemplateName(): string
     {
         return 'searchsolr';
     }
 
-    protected function getViewClassName()
+    protected function getViewClassName(): string
     {
         return 'tx_mksearch_view_SearchSolr';
     }

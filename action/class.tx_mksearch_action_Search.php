@@ -106,12 +106,12 @@ class tx_mksearch_action_Search extends tx_mksearch_action_AbstractSearch
         }
     }
 
-    protected function getTemplateName()
+    protected function getTemplateName(): string
     {
         return 'searchlucene';
     }
 
-    protected function getViewClassName()
+    protected function getViewClassName(): string
     {
         return 'tx_mksearch_view_Search';
     }

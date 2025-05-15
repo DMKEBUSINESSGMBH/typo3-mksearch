@@ -59,10 +59,8 @@ class tx_mksearch_view_Search extends Sys25\RnBase\Frontend\View\Marker\BaseView
 
     /**
      * Subpart der im HTML-Template geladen werden soll.
-     *
-     * @return string
      */
-    protected function getMainSubpart(Sys25\RnBase\Frontend\View\ContextInterface $viewData)
+    protected function getMainSubpart(Sys25\RnBase\Frontend\View\ContextInterface $viewData): string
     {
         return '###SEARCH###';
     }

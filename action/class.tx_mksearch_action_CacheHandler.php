@@ -34,10 +34,8 @@ class tx_mksearch_action_CacheHandler extends tx_rnbase_action_CacheHandlerDefau
 {
     /**
      * Generate a key used to store data to cache.
-     *
-     * @return string
      */
-    protected function getCacheKey()
+    protected function getCacheKey(): string
     {
         $key = parent::getCacheKey();
         // Parameter cHash anhängen

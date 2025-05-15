@@ -52,7 +52,7 @@ class tx_mksearch_scheduler_IndexTaskAddFieldProvider implements TYPO3\CMS\Sched
      *               ['cshKey']      => The CSH key for the field
      *               ['cshLabel']    => The code of the CSH label
      */
-    public function getAdditionalFields(array &$taskInfo, $task, TYPO3\CMS\Scheduler\Controller\SchedulerModuleController $schedulerModule)
+    public function getAdditionalFields(array &$taskInfo, $task, TYPO3\CMS\Scheduler\Controller\SchedulerModuleController $schedulerModule): array
     {
         $action = $schedulerModule->getCurrentAction();
         // Initialize extra field value
@@ -93,7 +93,7 @@ class tx_mksearch_scheduler_IndexTaskAddFieldProvider implements TYPO3\CMS\Sched
      *
      * @return bool True if validation was ok (or selected class is not relevant), false otherwise
      */
-    public function validateAdditionalFields(array &$submittedData, TYPO3\CMS\Scheduler\Controller\SchedulerModuleController $schedulerModule)
+    public function validateAdditionalFields(array &$submittedData, TYPO3\CMS\Scheduler\Controller\SchedulerModuleController $schedulerModule): bool
     {
         return true;
     }
