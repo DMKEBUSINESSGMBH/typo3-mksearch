@@ -7,428 +7,331 @@
     <sheets>
         <sDEF>
             <ROOT>
-                <TCEforms>
-                    <sheetTitle>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.tab.action</sheetTitle>
-                </TCEforms>
-
+                <sheetTitle>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.tab.action</sheetTitle>
                 <type>array</type>
                 <el>
-
-                    <action> <!-- Bezeichner ist frei wählbar -->
-                        <TCEforms>
-                            <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.tab.action</label>
-                            <config>
-                                <type>select</type>
-                                <renderType>selectSingle</renderType>
-                                <items type="array">
-                                    <numIndex index="0" type="array">
-                                        <numIndex index="0">LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.action.searchLucene</numIndex>
-                                        <numIndex index="1">tx_mksearch_action_Search</numIndex>
-                                    </numIndex>
-                                    <numIndex index="10" type="array">
-                                        <numIndex index="0">LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.action.searchSolr</numIndex>
-                                        <numIndex index="1">tx_mksearch_action_SearchSolr</numIndex>
-                                    </numIndex>
-                                    <numIndex index="20" type="array">
-                                        <numIndex index="0">LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.action.elasticSearch</numIndex>
-                                        <numIndex index="1">tx_mksearch_action_ElasticSearch</numIndex>
-                                    </numIndex>
-                                    <numIndex index="100" type="array">
-                                        <numIndex index="0">LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.action.showHit</numIndex>
-                                        <numIndex index="1">tx_mksearch_action_ShowHit</numIndex>
-                                    </numIndex>
-                                </items>
-                                <multiple>0</multiple>
-                                <maxitems>1</maxitems>
-                                <size>1</size>
-                            </config>
-                        </TCEforms>
+                    <action>
+                        <exclude>1</exclude>
+                        <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.tab.action</label>
+                        <config>
+                            <type>select</type>
+                            <renderType>selectSingle</renderType>
+                            <items type="array">
+                                <numIndex index="0" type="array">
+                                    <numIndex index="0">LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.action.searchLucene</numIndex>
+                                    <numIndex index="1">tx_mksearch_action_Search</numIndex>
+                                </numIndex>
+                                <numIndex index="10" type="array">
+                                    <numIndex index="0">LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.action.searchSolr</numIndex>
+                                    <numIndex index="1">tx_mksearch_action_SearchSolr</numIndex>
+                                </numIndex>
+                                <numIndex index="20" type="array">
+                                    <numIndex index="0">LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.action.elasticSearch</numIndex>
+                                    <numIndex index="1">tx_mksearch_action_ElasticSearch</numIndex>
+                                </numIndex>
+                                <numIndex index="100" type="array">
+                                    <numIndex index="0">LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.action.showHit</numIndex>
+                                    <numIndex index="1">tx_mksearch_action_ShowHit</numIndex>
+                                </numIndex>
+                            </items>
+                            <multiple>0</multiple>
+                            <maxitems>1</maxitems>
+                            <size>1</size>
+                        </config>
                     </action>
-
                 </el>
             </ROOT>
         </sDEF>
         <s_searchlucene>
             <ROOT>
-                <TCEforms>
-                    <sheetTitle>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.action.searchLucene</sheetTitle>
-                </TCEforms>
+                <sheetTitle>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.action.searchLucene</sheetTitle>
                 <type>array</type>
                 <el>
                     <searchlucene.usedIndex>
-                        <TCEforms>
-                            <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.usedIndex</label>
-                            <config>
-                                <type>select</type>
-                                <renderType>selectSingle</renderType>
-                                <foreign_table>tx_mksearch_indices</foreign_table>
-                                <foreign_table_where>AND engine='zend_lucene' ORDER BY name</foreign_table_where>
-                                <multiple>0</multiple>
-                                <maxitems>1</maxitems>
-                                <size>1</size>
-                            </config>
-                        </TCEforms>
+                        <exclude>1</exclude>
+                        <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.usedIndex</label>
+                        <config>
+                            <type>select</type>
+                            <renderType>selectSingle</renderType>
+                            <foreign_table>tx_mksearch_indices</foreign_table>
+                            <foreign_table_where>AND engine='zend_lucene' ORDER BY name</foreign_table_where>
+                            <multiple>0</multiple>
+                            <maxitems>1</maxitems>
+                            <size>1</size>
+                        </config>
                     </searchlucene.usedIndex>
                     <searchlucene.filter.options.debug>
-                        <TCEforms>
-                            <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.filter.debugQuery</label>
-                            <config>
-                              <type>check</type>
-                            </config>
-                        </TCEforms>
+                        <exclude>1</exclude>
+                        <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.filter.debugQuery</label>
+                        <config>
+                          <type>check</type>
+                        </config>
                     </searchlucene.filter.options.debug>
                     <searchlucene.filter.config.template>
-                        <TCEforms>
-                            <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.searchFormTemplate</label>
-                            <config>
-                                <type>input</type>
-                                <size>24</size>
-                                <max>256</max>
-                                <eval>trim</eval>
-                                <wizards type="array">
-                                    <_PADDING>2</_PADDING>
-                                    <link type="array">
-                                        <type>popup</type>
-                                        <title>Link</title>
-                                        <icon>link_popup.gif</icon>
-                                        <script>browse_links.php?mode=wizard&amp;act=file</script>
-                                        <module><name>wizard_link</name></module>
-                                        <params type="array">
-                                            <blindLinkOptions>page,url,mail,spec</blindLinkOptions>
-                                            <allowedExtensions>htm,html,tmpl,tpl</allowedExtensions>
-                                        </params>
-                                        <JSopenParams>height=300,width=500,status=0,menubar=0,scrollbars=1</JSopenParams>
-                                    </link>
-                                </wizards>
-                            </config>
-                        </TCEforms>
+                        <exclude>1</exclude>
+                        <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.searchFormTemplate</label>
+                        <config>
+                            <type>input</type>
+                            <eval>trim</eval>
+                            <renderType>inputLink</renderType>
+                            <fieldControl>
+                                <linkPopup>
+                                    <options>
+                                        <blindLinkOptions>page,url,mail,spec</blindLinkOptions>
+                                    </options>
+                                </linkPopup>
+                            </fieldControl>
+                        </config>
                     </searchlucene.filter.config.template>
                     <searchluceneTemplate>
-                        <TCEforms>
-                            <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.resultListTemplate</label>
-                            <config>
-                                <type>input</type>
-                                <size>24</size>
-                                <max>256</max>
-                                <eval>trim</eval>
-                                <wizards type="array">
-                                    <_PADDING>2</_PADDING>
-                                    <link type="array">
-                                        <type>popup</type>
-                                        <title>Link</title>
-                                        <icon>link_popup.gif</icon>
-                                        <script>browse_links.php?mode=wizard&amp;act=file</script>
-                                        <module><name>wizard_link</name></module>
-                                        <params type="array">
-                                            <blindLinkOptions>page,url,mail,spec</blindLinkOptions>
-                                            <allowedExtensions>htm,html,tmpl,tpl</allowedExtensions>
-                                        </params>
-                                        <JSopenParams>height=300,width=500,status=0,menubar=0,scrollbars=1</JSopenParams>
-                                    </link>
-                                </wizards>
-                            </config>
-                        </TCEforms>
+                        <exclude>1</exclude>
+                        <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.resultListTemplate</label>
+                        <config>
+                            <type>input</type>
+                            <eval>trim</eval>
+                            <renderType>inputLink</renderType>
+                            <fieldControl>
+                                <linkPopup>
+                                    <options>
+                                        <blindLinkOptions>page,url,mail,spec</blindLinkOptions>
+                                    </options>
+                                </linkPopup>
+                            </fieldControl>
+                        </config>
                     </searchluceneTemplate>
                     <searchlucene.filter.forceSearch>
-                        <TCEforms>
-                            <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.force</label>
-                            <config>
-                                <type>check</type>
-                            </config>
-                        </TCEforms>
+                        <exclude>1</exclude>
+                        <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.force</label>
+                        <config>
+                            <type>check</type>
+                        </config>
                     </searchlucene.filter.forceSearch>
                 </el>
             </ROOT>
         </s_searchlucene>
         <s_searchsolr>
             <ROOT>
-                <TCEforms>
-                    <sheetTitle>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.action.searchSolr</sheetTitle>
-                </TCEforms>
+                <sheetTitle>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.action.searchSolr</sheetTitle>
                 <type>array</type>
                 <el>
                     <searchsolr.usedIndex>
-                        <TCEforms>
-                            <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.usedIndex</label>
-                            <config>
-                                <type>select</type>
-                                <renderType>selectSingle</renderType>
-                                <items type="array">
-                                  <numIndex index="0" type="array">
-                                    <numIndex index="0"></numIndex>
-                                    <numIndex index="1"></numIndex>
-                                  </numIndex>
-                                </items>
-                                <itemsProcFunc>tx_mksearch_util_TCA->getIndexes</itemsProcFunc>
-                                <!--foreign_table>tx_mksearch_indices</foreign_table>
-                                <foreign_table_where>AND engine='solr' ORDER BY name</foreign_table_where-->
-                                <multiple>0</multiple>
-                                <maxitems>1</maxitems>
-                                <size>1</size>
-                            </config>
-                        </TCEforms>
+                        <exclude>1</exclude>
+                        <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.usedIndex</label>
+                        <config>
+                            <type>select</type>
+                            <renderType>selectSingle</renderType>
+                            <items type="array">
+                              <numIndex index="0" type="array">
+                                <numIndex index="0"></numIndex>
+                                <numIndex index="1"></numIndex>
+                              </numIndex>
+                            </items>
+                            <itemsProcFunc>tx_mksearch_util_TCA->getIndexes</itemsProcFunc>
+                            <!--foreign_table>tx_mksearch_indices</foreign_table>
+                            <foreign_table_where>AND engine='solr' ORDER BY name</foreign_table_where-->
+                            <multiple>0</multiple>
+                            <maxitems>1</maxitems>
+                            <size>1</size>
+                        </config>
                     </searchsolr.usedIndex>
                     <searchsolr.filter.confid>
-                        <TCEforms>
-                            <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.filter.confid</label>
-                            <config>
-                                <type>select</type>
-                                <renderType>selectSingle</renderType>
-                                <items type="array">
-                                  <numIndex index="0" type="array">
-                                    <numIndex index="0">LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.filter.confid.default</numIndex>
-                                    <numIndex index="1">default</numIndex>
-                                  </numIndex>
-                                  <numIndex index="10" type="array">
-                                    <numIndex index="0">LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.filter.confid.dismax</numIndex>
-                                    <numIndex index="1">dismax</numIndex>
-                                  </numIndex>
-                                </items>
-                                <multiple>0</multiple>
-                                <minitems>1</minitems>
-                                <maxitems>1</maxitems>
-                                <size>1</size>
-                            </config>
-                        </TCEforms>
+                        <exclude>1</exclude>
+                        <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.filter.confid</label>
+                        <config>
+                            <type>select</type>
+                            <renderType>selectSingle</renderType>
+                            <items type="array">
+                              <numIndex index="0" type="array">
+                                <numIndex index="0">LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.filter.confid.default</numIndex>
+                                <numIndex index="1">default</numIndex>
+                              </numIndex>
+                              <numIndex index="10" type="array">
+                                <numIndex index="0">LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.filter.confid.dismax</numIndex>
+                                <numIndex index="1">dismax</numIndex>
+                              </numIndex>
+                            </items>
+                            <multiple>0</multiple>
+                            <minitems>1</minitems>
+                            <maxitems>1</maxitems>
+                            <size>1</size>
+                        </config>
                     </searchsolr.filter.confid>
                     <searchsolr.requestHandler>
-                        <TCEforms>
-                            <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.requestHandler</label>
-                            <config>
-                                <type>input</type>
-                                <size>50</size>
-                                <max>256</max>
-                                <eval>trim</eval>
-                            </config>
-                        </TCEforms>
+                        <exclude>1</exclude>
+                        <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.requestHandler</label>
+                        <config>
+                            <type>input</type>
+                            <size>50</size>
+                            <max>256</max>
+                            <eval>trim</eval>
+                        </config>
                     </searchsolr.requestHandler>
                     <searchsolr.filter._overwrite.options.limit>
-                        <TCEforms>
-                            <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.limit</label>
-                            <config>
-                                <type>input</type>
-                                <size>5</size>
-                                <max>5</max>
-                                <eval>int, trim</eval>
-                                <default>10</default>
-                            </config>
-                        </TCEforms>
+                        <exclude>1</exclude>
+                        <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.limit</label>
+                        <config>
+                            <type>input</type>
+                            <size>5</size>
+                            <max>5</max>
+                            <eval>int, trim</eval>
+                            <default>10</default>
+                        </config>
                     </searchsolr.filter._overwrite.options.limit>
                     <searchsolr.filter._overwrite.force>
-                        <TCEforms>
-                            <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.force</label>
-                            <config>
-                                <type>check</type>
-                            </config>
-                        </TCEforms>
+                        <exclude>1</exclude>
+                        <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.force</label>
+                        <config>
+                            <type>check</type>
+                        </config>
                     </searchsolr.filter._overwrite.force>
                     <searchsolr.autocomplete.enable>
-                        <TCEforms>
-                            <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.enableAutoComplete</label>
-                            <config>
-                                <type>check</type>
-                            </config>
-                        </TCEforms>
+                        <exclude>1</exclude>
+                        <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.enableAutoComplete</label>
+                        <config>
+                            <type>check</type>
+                        </config>
                     </searchsolr.autocomplete.enable>
                     <searchsolr.autocomplete.includeJquery>
-                        <TCEforms>
-                            <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.includeJquery</label>
-                            <config>
-                                <type>check</type>
-                            </config>
-                        </TCEforms>
+                        <exclude>1</exclude>
+                        <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.includeJquery</label>
+                        <config>
+                            <type>check</type>
+                        </config>
                     </searchsolr.autocomplete.includeJquery>
                     <searchsolr.autocomplete.includeJqueryUiCore>
-                        <TCEforms>
-                            <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.includeJqueryUiCore</label>
-                            <config>
-                                <type>check</type>
-                            </config>
-                        </TCEforms>
+                        <exclude>1</exclude>
+                        <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.includeJqueryUiCore</label>
+                        <config>
+                            <type>check</type>
+                        </config>
                     </searchsolr.autocomplete.includeJqueryUiCore>
                     <searchsolr.autocomplete.includeJqueryUiAutocomplete>
-                        <TCEforms>
-                            <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.includeJqueryUiAutocomplete</label>
-                            <config>
-                                <type>check</type>
-                            </config>
-                        </TCEforms>
+                        <exclude>1</exclude>
+                        <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.includeJqueryUiAutocomplete</label>
+                        <config>
+                            <type>check</type>
+                        </config>
                     </searchsolr.autocomplete.includeJqueryUiAutocomplete>
 
                     <searchsolr.filter._overwrite.options.debug>
-                        <TCEforms>
-                            <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.filter.debugQuery</label>
-                            <config>
-                              <type>check</type>
-                            </config>
-                        </TCEforms>
+                        <exclude>1</exclude>
+                        <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.filter.debugQuery</label>
+                        <config>
+                          <type>check</type>
+                        </config>
                     </searchsolr.filter._overwrite.options.debug>
                     <searchsolr.filter._overwrite.options.facet.fields>
-                        <TCEforms>
-                            <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.facetfields</label>
-                            <config>
-                                <type>input</type>
-                                <size>50</size>
-                                <max>256</max>
-                                <eval>trim</eval>
-                            </config>
-                        </TCEforms>
+                        <exclude>1</exclude>
+                        <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.facetfields</label>
+                        <config>
+                            <type>input</type>
+                            <size>50</size>
+                            <max>256</max>
+                            <eval>trim</eval>
+                        </config>
                     </searchsolr.filter._overwrite.options.facet.fields>
                     <searchsolr.filter._overwrite.options.group.enable>
-                        <TCEforms>
-                            <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.options.group.enable</label>
-                            <config>
-                                <type>check</type>
-                                <defautl>1</defautl>
-                            </config>
-                        </TCEforms>
+                        <exclude>1</exclude>
+                        <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.options.group.enable</label>
+                        <config>
+                            <type>check</type>
+                            <defautl>1</defautl>
+                        </config>
                     </searchsolr.filter._overwrite.options.group.enable>
                     <searchsolr.filter._overwrite.options.group.useNumberOfGroupsAsSearchResultCount>
-                        <TCEforms>
-                            <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.options.group.useNumberOfGroupsAsSearchResultCount</label>
-                            <config>
-                                <type>check</type>
-                                <defautl>1</defautl>
-                            </config>
-                        </TCEforms>
+                        <exclude>1</exclude>
+                        <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.options.group.useNumberOfGroupsAsSearchResultCount</label>
+                        <config>
+                            <type>check</type>
+                            <defautl>1</defautl>
+                        </config>
                     </searchsolr.filter._overwrite.options.group.useNumberOfGroupsAsSearchResultCount>
                     <searchsolr.filter._overwrite.options.group.field>
-                        <TCEforms>
-                            <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.options.group.field</label>
-                            <config>
-                                <type>input</type>
-                                <size>50</size>
-                                <max>256</max>
-                                <eval>trim</eval>
-                                <default>group_s</default>
-                            </config>
-                        </TCEforms>
+                        <exclude>1</exclude>
+                        <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.options.group.field</label>
+                        <config>
+                            <type>input</type>
+                            <size>50</size>
+                            <max>256</max>
+                            <eval>trim</eval>
+                            <default>group_s</default>
+                        </config>
                     </searchsolr.filter._overwrite.options.group.field>
                     <searchsolr.filter>
-                        <TCEforms>
-                            <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.filterClass</label>
-                            <config>
-                                <type>input</type>
-                                <size>50</size>
-                                <max>256</max>
-                                <eval>trim</eval>
-                                <default>tx_mksearch_filter_SolrBase</default>
-                            </config>
-                        </TCEforms>
+                        <exclude>1</exclude>
+                        <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.filterClass</label>
+                        <config>
+                            <type>input</type>
+                            <size>50</size>
+                            <max>256</max>
+                            <eval>trim</eval>
+                            <default>tx_mksearch_filter_SolrBase</default>
+                        </config>
                     </searchsolr.filter>
                     <searchsolr.mainmarkerclass>
-                        <TCEforms>
-                            <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.mainmarkerclass</label>
-                            <config>
-                                <type>input</type>
-                                <size>50</size>
-                                <max>256</max>
-                                <eval>trim</eval>
-                                <default>tx_mksearch_marker_Search</default>
-                            </config>
-                        </TCEforms>
+                        <exclude>1</exclude>
+                        <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.mainmarkerclass</label>
+                        <config>
+                            <type>input</type>
+                            <size>50</size>
+                            <max>256</max>
+                            <eval>trim</eval>
+                            <default>tx_mksearch_marker_Search</default>
+                        </config>
                     </searchsolr.mainmarkerclass>
                     <searchsolr.filter._overwrite.template.subpart>
-                        <TCEforms>
-                            <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.mainsubpartForm</label>
-                            <config>
-                                <type>input</type>
-                                <size>50</size>
-                                <max>256</max>
-                                <eval>trim</eval>
-                                <default>###SIMPLE###</default>
-                            </config>
-                        </TCEforms>
+                        <exclude>1</exclude>
+                        <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.mainsubpartForm</label>
+                        <config>
+                            <type>input</type>
+                            <size>50</size>
+                            <max>256</max>
+                            <eval>trim</eval>
+                            <default>###SIMPLE###</default>
+                        </config>
                     </searchsolr.filter._overwrite.template.subpart>
                     <searchsolr.filter._overwrite.template.file>
-                        <TCEforms>
-                            <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.searchFormTemplate</label>
-                            <config>
-                                <type>input</type>
-                                <size>24</size>
-                                <max>256</max>
-                                <eval>trim</eval>
-                                <wizards type="array">
-                                    <_PADDING>2</_PADDING>
-                                    <link type="array">
-                                        <type>popup</type>
-                                        <title>Link</title>
-                                        <icon>link_popup.gif</icon>
-                                        <script>browse_links.php?mode=wizard&amp;act=file</script>
-                                        <module><name>wizard_link</name></module>
-                                        <params type="array">
-                                            <blindLinkOptions>page,url,mail,spec</blindLinkOptions>
-                                            <allowedExtensions>htm,html,tmpl,tpl</allowedExtensions>
-                                        </params>
-                                        <JSopenParams>height=300,width=500,status=0,menubar=0,scrollbars=1</JSopenParams>
-                                    </link>
-                                </wizards>
-                            </config>
-                        </TCEforms>
+                        <exclude>1</exclude>
+                        <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.searchFormTemplate</label>
+                        <config>
+                            <type>input</type>
+                            <eval>trim</eval>
+                            <renderType>inputLink</renderType>
+                            <fieldControl>
+                                <linkPopup>
+                                    <options>
+                                        <blindLinkOptions>page,url,mail,spec</blindLinkOptions>
+                                    </options>
+                                </linkPopup>
+                            </fieldControl>
+                        </config>
                     </searchsolr.filter._overwrite.template.file>
                     <searchsolr.mainsubpart>
-                        <TCEforms>
-                            <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.mainsubpartList</label>
-                            <config>
-                                <type>input</type>
-                                <size>50</size>
-                                <max>256</max>
-                                <eval>trim</eval>
-                                <default>###SEARCH###</default>
-                            </config>
-                        </TCEforms>
+                        <exclude>1</exclude>
+                        <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.mainsubpartList</label>
+                        <config>
+                            <type>input</type>
+                            <size>50</size>
+                            <max>256</max>
+                            <eval>trim</eval>
+                            <default>###SEARCH###</default>
+                        </config>
                     </searchsolr.mainsubpart>
                     <searchsolrTemplate>
-                        <TCEforms>
-                            <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.resultListTemplate</label>
-                            <config>
-                                <type>input</type>
-                                <size>50</size>
-                                <max>256</max>
-                                <eval>trim</eval>
-                                <wizards type="array">
-                                    <_PADDING>2</_PADDING>
-                                    <link type="array">
-                                        <type>popup</type>
-                                        <title>Link</title>
-                                        <icon>link_popup.gif</icon>
-                                        <script>browse_links.php?mode=wizard&amp;act=file</script>
-                                        <module><name>wizard_link</name></module>
-                                        <params type="array">
-                                            <blindLinkOptions>page,url,mail,spec</blindLinkOptions>
-                                            <allowedExtensions>htm,html</allowedExtensions>
-                                        </params>
-                                        <JSopenParams>height=300,width=500,status=0,menubar=0,scrollbars=1</JSopenParams>
-                                    </link>
-                                </wizards>
-                            </config>
-                        </TCEforms>
+                        <exclude>1</exclude>
+                        <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.resultListTemplate</label>
+                        <config>
+                            <type>input</type>
+                            <eval>trim</eval>
+                            <renderType>inputLink</renderType>
+                            <fieldControl>
+                                <linkPopup>
+                                    <options>
+                                        <blindLinkOptions>page,url,mail,spec</blindLinkOptions>
+                                    </options>
+                                </linkPopup>
+                            </fieldControl>
+                        </config>
                     </searchsolrTemplate>
                     <!-- TODO: eigene Indexauswahl mit für Solr konfigurierte Indizes -->
                 </el>
@@ -436,97 +339,67 @@
         </s_searchsolr>
         <s_elasticsearch>
             <ROOT>
-                <TCEforms>
-                    <sheetTitle>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.action.elasticSearch</sheetTitle>
-                </TCEforms>
+                <sheetTitle>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.action.elasticSearch</sheetTitle>
                 <type>array</type>
                 <el>
                     <elasticsearch.usedIndex>
-                        <TCEforms>
-                            <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.usedIndex</label>
-                            <config>
-                                <type>select</type>
-                                <renderType>selectSingle</renderType>
-                                <foreign_table>tx_mksearch_indices</foreign_table>
-                                <foreign_table_where>AND engine='elasticsearch' ORDER BY name</foreign_table_where>
-                                <multiple>0</multiple>
-                                <maxitems>1</maxitems>
-                                <size>1</size>
-                            </config>
-                        </TCEforms>
+                        <exclude>1</exclude>
+                        <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.usedIndex</label>
+                        <config>
+                            <type>select</type>
+                            <renderType>selectSingle</renderType>
+                            <foreign_table>tx_mksearch_indices</foreign_table>
+                            <foreign_table_where>AND engine='elasticsearch' ORDER BY name</foreign_table_where>
+                            <multiple>0</multiple>
+                            <maxitems>1</maxitems>
+                            <size>1</size>
+                        </config>
                     </elasticsearch.usedIndex>
                     <elasticsearch.filter.options.debug>
-                        <TCEforms>
-                            <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.filter.debugQuery</label>
-                            <config>
-                              <type>check</type>
-                            </config>
-                        </TCEforms>
+                        <exclude>1</exclude>
+                        <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.filter.debugQuery</label>
+                        <config>
+                          <type>check</type>
+                        </config>
                     </elasticsearch.filter.options.debug>
                     <elasticsearch.filter.template>
-                        <TCEforms>
-                            <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.searchFormTemplate</label>
-                            <config>
-                                <type>input</type>
-                                <size>24</size>
-                                <max>256</max>
-                                <eval>trim</eval>
-                                <wizards type="array">
-                                    <_PADDING>2</_PADDING>
-                                    <link type="array">
-                                        <type>popup</type>
-                                        <title>Link</title>
-                                        <icon>link_popup.gif</icon>
-                                        <script>browse_links.php?mode=wizard&amp;act=file</script>
-                                        <module><name>wizard_link</name></module>
-                                        <params type="array">
-                                            <blindLinkOptions>page,url,mail,spec</blindLinkOptions>
-                                            <allowedExtensions>htm,html,tmpl,tpl</allowedExtensions>
-                                        </params>
-                                        <JSopenParams>height=300,width=500,status=0,menubar=0,scrollbars=1</JSopenParams>
-                                    </link>
-                                </wizards>
-                            </config>
-                        </TCEforms>
+                        <exclude>1</exclude>
+                        <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.searchFormTemplate</label>
+                        <config>
+                            <type>input</type>
+                            <eval>trim</eval>
+                            <renderType>inputLink</renderType>
+                            <fieldControl>
+                                <linkPopup>
+                                    <options>
+                                        <blindLinkOptions>page,url,mail,spec</blindLinkOptions>
+                                    </options>
+                                </linkPopup>
+                            </fieldControl>
+                        </config>
                     </elasticsearch.filter.template>
                     <elasticsearchTemplate>
-                        <TCEforms>
-                            <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.resultListTemplate</label>
-                            <config>
-                                <type>input</type>
-                                <size>24</size>
-                                <max>256</max>
-                                <eval>trim</eval>
-                                <wizards type="array">
-                                    <_PADDING>2</_PADDING>
-                                    <link type="array">
-                                        <type>popup</type>
-                                        <title>Link</title>
-                                        <icon>link_popup.gif</icon>
-                                        <script>browse_links.php?mode=wizard&amp;act=file</script>
-                                        <module><name>wizard_link</name></module>
-                                        <params type="array">
-                                            <blindLinkOptions>page,url,mail,spec</blindLinkOptions>
-                                            <allowedExtensions>htm,html,tmpl,tpl</allowedExtensions>
-                                        </params>
-                                        <JSopenParams>height=300,width=500,status=0,menubar=0,scrollbars=1</JSopenParams>
-                                    </link>
-                                </wizards>
-                            </config>
-                        </TCEforms>
+                        <exclude>1</exclude>
+                        <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.resultListTemplate</label>
+                        <config>
+                            <type>input</type>
+                            <eval>trim</eval>
+                            <renderType>inputLink</renderType>
+                            <fieldControl>
+                                <linkPopup>
+                                    <options>
+                                        <blindLinkOptions>page,url,mail,spec</blindLinkOptions>
+                                    </options>
+                                </linkPopup>
+                            </fieldControl>
+                        </config>
                     </elasticsearchTemplate>
                     <elasticsearch.filter.forceSearch>
-                        <TCEforms>
-                            <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.force</label>
-                            <config>
-                                <type>check</type>
-                            </config>
-                        </TCEforms>
+                        <exclude>1</exclude>
+                        <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.force</label>
+                        <config>
+                            <type>check</type>
+                        </config>
                     </elasticsearch.filter.forceSearch>
                 </el>
             </ROOT>
@@ -534,233 +407,196 @@
 
         <s_showhit>
             <ROOT>
-                <TCEforms>
-                    <sheetTitle>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.action.showHit</sheetTitle>
-                </TCEforms>
+                <sheetTitle>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.action.showHit</sheetTitle>
                 <type>array</type>
                 <el>
                     <showhit.usedIndex>
-                        <TCEforms>
-                            <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.usedIndex</label>
-                            <config>
-                                <type>select</type>
-                                <renderType>selectSingle</renderType>
-                                <items type="array">
-                                  <numIndex index="0" type="array">
-                                    <numIndex index="0"></numIndex>
-                                    <numIndex index="1"></numIndex>
-                                  </numIndex>
-                                </items>
-                                <itemsProcFunc>tx_mksearch_util_TCA->getIndexes</itemsProcFunc>
-                                <multiple>0</multiple>
-                                <maxitems>1</maxitems>
-                                <size>1</size>
-                            </config>
-                        </TCEforms>
+                        <exclude>1</exclude>
+                        <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.usedIndex</label>
+                        <config>
+                            <type>select</type>
+                            <renderType>selectSingle</renderType>
+                            <items type="array">
+                              <numIndex index="0" type="array">
+                                <numIndex index="0"></numIndex>
+                                <numIndex index="1"></numIndex>
+                              </numIndex>
+                            </items>
+                            <itemsProcFunc>tx_mksearch_util_TCA->getIndexes</itemsProcFunc>
+                            <multiple>0</multiple>
+                            <maxitems>1</maxitems>
+                            <size>1</size>
+                        </config>
                     </showhit.usedIndex>
                     <showhit.extkey>
-                        <TCEforms>
-                            <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_indexerconfigs.extkey</label>
-                            <config>
-                                <type>select</type>
-                                <renderType>selectSingle</renderType>
-                                <items type="array">
-                                    <numIndex index="0" type="array">
-                                        <numIndex index="0"></numIndex>
-                                        <numIndex index="1"></numIndex>
-                                    </numIndex>
-                                </items>
-                                <itemsProcFunc>tx_mksearch_util_TCA->getIndexerExtKeys</itemsProcFunc>
-                                <size>1</size>
-                                <maxitems>1</maxitems>
-                                <eval>trim</eval>
-                            </config>
-                        </TCEforms>
+                        <exclude>1</exclude>
+                        <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_indexerconfigs.extkey</label>
+                        <config>
+                            <type>select</type>
+                            <renderType>selectSingle</renderType>
+                            <items type="array">
+                                <numIndex index="0" type="array">
+                                    <numIndex index="0"></numIndex>
+                                    <numIndex index="1"></numIndex>
+                                </numIndex>
+                            </items>
+                            <itemsProcFunc>tx_mksearch_util_TCA->getIndexerExtKeys</itemsProcFunc>
+                            <size>1</size>
+                            <maxitems>1</maxitems>
+                            <eval>trim</eval>
+                        </config>
                     </showhit.extkey>
                     <showhit.contenttype>
-                        <TCEforms>
-                            <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_indexerconfigs.contenttype</label>
-                            <config>
-                                <type>select</type>
-                                <renderType>selectSingle</renderType>
-                                <items type="array">
-                                    <numIndex index="0" type="array">
-                                        <numIndex index="0"></numIndex>
-                                        <numIndex index="1"></numIndex>
-                                    </numIndex>
-                                </items>
-                                <itemsProcFunc>tx_mksearch_util_TCA->getIndexerContentTypes</itemsProcFunc>
-                                <extKeySection>s_showhit</extKeySection>
-                                <extKeyField>showhit.extkey</extKeyField>
-                                <size>1</size>
-                                <maxitems>1</maxitems>
-                                <eval>trim</eval>
-                            </config>
-                        </TCEforms>
+                        <exclude>1</exclude>
+                        <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_indexerconfigs.contenttype</label>
+                        <config>
+                            <type>select</type>
+                            <renderType>selectSingle</renderType>
+                            <items type="array">
+                                <numIndex index="0" type="array">
+                                    <numIndex index="0"></numIndex>
+                                    <numIndex index="1"></numIndex>
+                                </numIndex>
+                            </items>
+                            <itemsProcFunc>tx_mksearch_util_TCA->getIndexerContentTypes</itemsProcFunc>
+                            <extKeySection>s_showhit</extKeySection>
+                            <extKeyField>showhit.extkey</extKeyField>
+                            <size>1</size>
+                            <maxitems>1</maxitems>
+                            <eval>trim</eval>
+                        </config>
                     </showhit.contenttype>
                     <showhit.uidParamName>
-                        <TCEforms>
-                            <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.uidParamName</label>
-                            <config>
-                                <type>input</type>
-                                <size>50</size>
-                                <max>256</max>
-                                <eval>trim</eval>
-                                <default>item</default>
-                            </config>
-                        </TCEforms>
+                        <exclude>1</exclude>
+                        <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.uidParamName</label>
+                        <config>
+                            <type>input</type>
+                            <size>50</size>
+                            <max>256</max>
+                            <eval>trim</eval>
+                            <default>item</default>
+                        </config>
                     </showhit.uidParamName>
                     <showhit.template.markerclass>
-                        <TCEforms>
-                            <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.mainmarkerclass</label>
-                            <config>
-                                <type>input</type>
-                                <size>50</size>
-                                <max>256</max>
-                                <eval>trim</eval>
-                                <default>tx_mksearch_marker_Search</default>
-                            </config>
-                        </TCEforms>
+                        <exclude>1</exclude>
+                        <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.mainmarkerclass</label>
+                        <config>
+                            <type>input</type>
+                            <size>50</size>
+                            <max>256</max>
+                            <eval>trim</eval>
+                            <default>tx_mksearch_marker_Search</default>
+                        </config>
                     </showhit.template.markerclass>
                     <showhit.template.subpart>
-                        <TCEforms>
-                            <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.mainsubpartList</label>
-                            <config>
-                                <type>input</type>
-                                <size>50</size>
-                                <max>256</max>
-                                <eval>trim</eval>
-                                <default>###SHOWHIT###</default>
-                            </config>
-                        </TCEforms>
+                        <exclude>1</exclude>
+                        <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.mainsubpartList</label>
+                        <config>
+                            <type>input</type>
+                            <size>50</size>
+                            <max>256</max>
+                            <eval>trim</eval>
+                            <default>###SHOWHIT###</default>
+                        </config>
                     </showhit.template.subpart>
                     <showhitTemplate>
-                        <TCEforms>
-                            <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.showHitTemplate</label>
-                            <config>
-                                <type>input</type>
-                                <size>50</size>
-                                <max>256</max>
-                                <eval>trim</eval>
-                                <wizards type="array">
-                                    <_PADDING>2</_PADDING>
-                                    <link type="array">
-                                        <type>popup</type>
-                                        <title>Link</title>
-                                        <icon>link_popup.gif</icon>
-                                        <script>browse_links.php?mode=wizard&amp;act=file</script>
-                                        <module><name>wizard_link</name></module>
-                                        <params type="array">
-                                            <blindLinkOptions>page,url,mail,spec</blindLinkOptions>
-                                            <allowedExtensions>htm,html</allowedExtensions>
-                                        </params>
-                                        <JSopenParams>height=300,width=500,status=0,menubar=0,scrollbars=1</JSopenParams>
-                                    </link>
-                                </wizards>
-                            </config>
-                        </TCEforms>
+                        <exclude>1</exclude>
+                        <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.showHitTemplate</label>
+                        <config>
+                            <type>input</type>
+                            <eval>trim</eval>
+                            <renderType>inputLink</renderType>
+                            <fieldControl>
+                                <linkPopup>
+                                    <options>
+                                        <blindLinkOptions>page,url,mail,spec</blindLinkOptions>
+                                    </options>
+                                </linkPopup>
+                            </fieldControl>
+                        </config>
                     </showhitTemplate>
                 </el>
             </ROOT>
         </s_showhit>
         <s_softlink>
             <ROOT>
-                <TCEforms>
-                    <sheetTitle>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.tab.softlink</sheetTitle>
-                </TCEforms>
+                <sheetTitle>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.tab.softlink</sheetTitle>
                 <type>array</type>
                 <el>
                     <softlink.enable>
-                        <TCEforms>
-                            <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin_common_enable</label>
-                            <config>
-                                <type>check</type>
-                            </config>
-                        </TCEforms>
+                        <exclude>1</exclude>
+                        <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin_common_enable</label>
+                        <config>
+                            <type>check</type>
+                        </config>
                     </softlink.enable>
                     <softlink.options.pidlist>
-                        <TCEforms>
-                            <exclude>1</exclude>
-                            <label>LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.startingpoint</label>
-                            <config>
-                                <type>group</type>
-                                <allowed>pages</allowed>
-                                <size>3</size>
-                                <maxitems>22</maxitems>
-                                <minitems>0</minitems>
-                                <show_thumbs>1</show_thumbs>
-                            </config>
-                        </TCEforms>
+                        <exclude>1</exclude>
+                        <label>LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.startingpoint</label>
+                        <config>
+                            <type>group</type>
+                            <allowed>pages</allowed>
+                            <size>3</size>
+                            <maxitems>22</maxitems>
+                            <minitems>0</minitems>
+                            <show_thumbs>1</show_thumbs>
+                        </config>
                     </softlink.options.pidlist>
                     <softlink.options.recursive>
-                        <TCEforms>
-                            <exclude>1</exclude>
-                            <label>LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.recursive</label>
-                            <config>
-                                <type>select</type>
-                                <renderType>selectSingle</renderType>
-                                <items type="array">
-                                    <numIndex index="0" type="array">
-                                        <numIndex index="0"></numIndex>
-                                        <numIndex index="1"></numIndex>
-                                    </numIndex>
-                                    <numIndex index="1" type="array">
-                                        <numIndex index="0">LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:recursive.I.1</numIndex>
-                                        <numIndex index="1">1</numIndex>
-                                    </numIndex>
-                                    <numIndex index="2" type="array">
-                                        <numIndex index="0">LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:recursive.I.2</numIndex>
-                                        <numIndex index="1">2</numIndex>
-                                    </numIndex>
-                                    <numIndex index="3" type="array">
-                                        <numIndex index="0">LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:recursive.I.3</numIndex>
-                                        <numIndex index="1">3</numIndex>
-                                    </numIndex>
-                                    <numIndex index="4" type="array">
-                                        <numIndex index="0">LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:recursive.I.4</numIndex>
-                                        <numIndex index="1">4</numIndex>
-                                    </numIndex>
-                                    <numIndex index="5" type="array">
-                                        <numIndex index="0">LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:recursive.I.5</numIndex>
-                                        <numIndex index="1">250</numIndex>
-                                    </numIndex>
-                                </items>
-                                <minitems>0</minitems>
-                                <maxitems>1</maxitems>
-                                <size>1</size>
-                            </config>
-                        </TCEforms>
+                        <exclude>1</exclude>
+                        <label>LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.recursive</label>
+                        <config>
+                            <type>select</type>
+                            <renderType>selectSingle</renderType>
+                            <items type="array">
+                                <numIndex index="0" type="array">
+                                    <numIndex index="0"></numIndex>
+                                    <numIndex index="1"></numIndex>
+                                </numIndex>
+                                <numIndex index="1" type="array">
+                                    <numIndex index="0">LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:recursive.I.1</numIndex>
+                                    <numIndex index="1">1</numIndex>
+                                </numIndex>
+                                <numIndex index="2" type="array">
+                                    <numIndex index="0">LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:recursive.I.2</numIndex>
+                                    <numIndex index="1">2</numIndex>
+                                </numIndex>
+                                <numIndex index="3" type="array">
+                                    <numIndex index="0">LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:recursive.I.3</numIndex>
+                                    <numIndex index="1">3</numIndex>
+                                </numIndex>
+                                <numIndex index="4" type="array">
+                                    <numIndex index="0">LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:recursive.I.4</numIndex>
+                                    <numIndex index="1">4</numIndex>
+                                </numIndex>
+                                <numIndex index="5" type="array">
+                                    <numIndex index="0">LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:recursive.I.5</numIndex>
+                                    <numIndex index="1">250</numIndex>
+                                </numIndex>
+                            </items>
+                            <minitems>0</minitems>
+                            <maxitems>1</maxitems>
+                            <size>1</size>
+                        </config>
                     </softlink.options.recursive>
                 </el>
             </ROOT>
         </s_softlink>
         <s_tssetup>
             <ROOT>
-                <TCEforms>
-                    <sheetTitle>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.tab.tssetup</sheetTitle>
-                </TCEforms>
+                <sheetTitle>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.tab.tssetup</sheetTitle>
                 <type>array</type>
                 <el>
                     <flexformTS>
-                        <TCEforms>
-                            <exclude>1</exclude>
-                            <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.tssetup</label>
-                            <config>
-                                <type>text</type>
-                                <cols>80</cols>
-                                <rows>10</rows>
-                                <default>
-                                </default>
-                            </config>
-                        </TCEforms>
+                        <exclude>1</exclude>
+                        <label>LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.flexform.tssetup</label>
+                        <config>
+                            <type>text</type>
+                            <cols>80</cols>
+                            <rows>10</rows>
+                            <default>
+                            </default>
+                        </config>
                     </flexformTS>
                 </el>
             </ROOT>
