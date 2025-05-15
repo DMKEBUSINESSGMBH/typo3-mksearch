@@ -25,6 +25,7 @@
  * This copyright notice MUST APPEAR in all copies of the script!
  */
 
+use TYPO3\CMS\Core\Context\LanguageAspect;
 use TYPO3\CMS\Extbase\Persistence\Generic\Session;
 
 /**
@@ -800,18 +801,21 @@ CONFIG;
         $persistenceSession = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(Session::class);
 
         // update query settings to respect the current language
+        /* @var \TYPO3\CMS\Extbase\Persistence\Generic\QuerySettingsInterface $querySettings */
         $querySettings = $repository->createQuery()->getQuerySettings();
         $newQuerySettings = clone $querySettings;
         $newQuerySettings->setRespectStoragePage(false);
         $newQuerySettings->setRespectSysLanguage(false);
 
-        $language = 0;
+        $languageUid = 0;
         $languageField = tx_mksearch_util_TCA::getLanguageFieldForTable($tableName);
         if ($languageField) {
-            $language = (int) $rawData[$languageField];
+            $languageUid = (int) $rawData[$languageField];
         }
 
-        $newQuerySettings->setLanguageUid($language);
+        $newQuerySettings->setLanguageAspect(
+            new LanguageAspect($languageUid, $languageUid, $newQuerySettings->getLanguageAspect()->getOverlayType())
+        );
         $repository->setDefaultQuerySettings($newQuerySettings);
 
         // clear the current persistent session

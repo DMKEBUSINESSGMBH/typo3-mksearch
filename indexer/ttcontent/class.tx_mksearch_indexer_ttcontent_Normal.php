@@ -236,7 +236,7 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
                 // by the character defined in flexform
                 if ('bodytext' == $field) {
                     // Get table parsing options from flexform
-                    $flex = Sys25\RnBase\Utility\Arrays::xml2array($rawData['pi_flexform']);
+                    $flex = Sys25\RnBase\Utility\Arrays::xml2array($rawData['pi_flexform'] ?? '');
                     if (is_array($flex)) {
                         $flexParsingOptions = $flex['data']['s_parsing']['lDEF'];
                         // Replace special parsing characters
