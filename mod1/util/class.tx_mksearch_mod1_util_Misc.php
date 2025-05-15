@@ -52,7 +52,7 @@ class tx_mksearch_mod1_util_Misc
                 $pid,
                 $GLOBALS['BE_USER']->getPagePermsClause(TYPO3\CMS\Core\Type\Bitmask\Permission::PAGE_SHOW)
             );
-            $modUrl = Sys25\RnBase\Backend\Utility\BackendUtility::getModuleUrl('web_MksearchM1', ['id' => $pid]);
+            $modUrl = Sys25\RnBase\Backend\Utility\BackendUtility::getModuleUrl($mod->getRouteIdentifier(), ['id' => $pid]);
             $page = '<a href="'.$modUrl.'">';
             $page .= Sys25\RnBase\Backend\Utility\Icons::getSpriteIconForRecord('pages', $pageRecord);
             $page .= ' '.$pageinfo['title'];
