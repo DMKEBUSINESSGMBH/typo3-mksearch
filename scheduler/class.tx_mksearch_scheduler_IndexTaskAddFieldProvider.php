@@ -57,10 +57,16 @@ class tx_mksearch_scheduler_IndexTaskAddFieldProvider implements TYPO3\CMS\Sched
         $action = $schedulerModule->getCurrentAction();
         // Initialize extra field value
         if (!array_key_exists(FIELD_ITEMS, $taskInfo) || empty($taskInfo[FIELD_ITEMS])) {
-            if ('add' == $action) {
+            $addAction = Sys25\RnBase\Utility\TYPO3::isTYPO130OrHigher()
+                ? constant('\\TYPO3\\CMS\\Scheduler\\SchedulerManagementAction::ADD')
+                : 'add';
+            $editAction = Sys25\RnBase\Utility\TYPO3::isTYPO130OrHigher()
+                ? constant('\\TYPO3\\CMS\\Scheduler\\SchedulerManagementAction::EDIT')
+                : 'edit';
+            if ($addAction == $action) {
                 // New task
                 $taskInfo[FIELD_ITEMS] = '';
-            } elseif ('edit' == $action) {
+            } elseif ($editAction == $action) {
                 // Editing a task, set to internal value if data was not submitted already
                 $taskInfo[FIELD_ITEMS] = $task->getAmountOfItems();
             } else {

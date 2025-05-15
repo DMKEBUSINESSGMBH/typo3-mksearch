@@ -521,13 +521,8 @@ class tx_mksearch_util_Indexer
             );
 
             return $rootlineUtility->get();
-        } catch (RuntimeException $runtimeException) {
-            if (1343589451 === $runtimeException->getCode()) {
-                /* @see \TYPO3\CMS\Core\Utility\RootlineUtility::getRecordArray */
-                return [];
-            }
-
-            throw $runtimeException;
+        } catch (TYPO3\CMS\Core\Exception\Page\PageNotFoundException) {
+            return [];
         }
     }
 

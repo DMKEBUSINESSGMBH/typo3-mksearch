@@ -93,5 +93,10 @@ return static function (RectorConfig $rectorConfig): void {
         Rector\Php55\Rector\String_\StringClassNameToClassConstantRector::class => [
             '/ext_localconf.php',
         ],
+
+        // We check for a class name that does not exist in TYPO3 12.4
+        Rector\CodingStyle\Rector\String_\UseClassKeywordForClassNameResolutionRector::class => [
+            __DIR__.'/scheduler/class.tx_mksearch_scheduler_IndexTaskAddFieldProvider.php',
+        ],
     ]);
 };
