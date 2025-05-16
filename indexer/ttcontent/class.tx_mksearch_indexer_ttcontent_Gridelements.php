@@ -23,8 +23,6 @@
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use Psr\Http\Message\ServerRequestInterface;
-
 /**
  * Gridelements indexer.
  *
@@ -156,17 +154,7 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
         /** @var \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer $cObj */
         $cObj = $GLOBALS['TSFE']->cObj;
         $setup = $this->getTypoScriptConfiguration($cObj, $options, $pageIdOfRecord);
-
-        // This is needed so the BackendConfigurationManager loads the TypoScript for the current tt_content
-        // record during it's rendering and not for the page that is selected in the BE page tree.
-        if (\Sys25\RnBase\Utility\TYPO3::isTYPO121OrHigher()) {
-            $originalRequest = $cObj->getRequest();
-            $originalPageId = null;
-        } else {
-            $originalPageId = $_POST['id'] ?? null;
-            $originalRequest = null;
-        }
-        $this->populatePageIdOfRecord($cObj, $pageIdOfRecord);
+        $originalPageId = $this->populatePageIdOfRecord($pageIdOfRecord);
 
         $cObj->start($record, 'tt_content');
 
@@ -174,7 +162,7 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
             $setup['tt_content.']['gridelements_pi1'],
             $setup['tt_content.']['gridelements_pi1.']
         );
-        $this->resetPopulatedPageIdOfRecord($originalRequest, $originalPageId);
+        $this->resetPopulatedPageIdOfRecord($originalPageId);
 
         return $content;
     }
@@ -227,43 +215,58 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
 
     /**
      * This is needed so the BackendConfigurationManager loads the TypoScript for the current tt_content
-     * record during it's rendering and not for the page that is selected in the BE page tree.
+     * record during it's rendering and not for the page that is selected in the BE page tree. As it might have
+     * happened that the BackendConfigurationManager has retrieved the current page id already the request is not
+     * checked anymore. So we need to inject the page id through other ways.
      */
-    protected function populatePageIdOfRecord(
-        \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer $cObj,
-        int $pageIdOfRecord
-    ): void {
+    protected function populatePageIdOfRecord(int $pageIdOfRecord): ?int
+    {
         if (\Sys25\RnBase\Utility\TYPO3::isTYPO121OrHigher()) {
-            $configurationManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-                \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::class
-            );
-            $configurationManager->setRequest($cObj->getRequest()->withParsedBody(array_merge(
-                $cObj->getRequest()->getParsedBody() ?? [],
-                ['id' => $pageIdOfRecord]
-            )));
+            $originalPageId = $this->setCurrentPageIdInConfigurationManager($pageIdOfRecord);
         } else {
+            $originalPageId = $_POST['id'];
             $_POST['id'] = $pageIdOfRecord;
         }
+
+        return $originalPageId;
     }
 
     /**
      * Make sure to reset the request/id so the configuration manager will load the TypoScript for the page that is
      * selected in the BE page tree if it's needed after this point.
      */
-    protected function resetPopulatedPageIdOfRecord(
-        ?ServerRequestInterface $originalRequest,
-        ?int $originalPageId
-    ): void {
+    protected function resetPopulatedPageIdOfRecord(?int $originalPageId): void
+    {
         // Make sure to reset the request/id so the configuration manager will load the TypoScript for the page that is
         // selected in the BE page tree if it's needed after this point.
         if (\Sys25\RnBase\Utility\TYPO3::isTYPO121OrHigher()) {
-            $configurationManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-                \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::class
-            );
-            $configurationManager->setRequest($originalRequest);
+            $this->setCurrentPageIdInConfigurationManager($originalPageId);
         } else {
             $_POST['id'] = $originalPageId;
         }
+    }
+
+    protected function setCurrentPageIdInConfigurationManager(int $pageIdOfRecord): ?int
+    {
+        if (\Sys25\RnBase\Utility\TYPO3::isTYPO130OrHigher()) {
+            $runtimeCache = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Cache\CacheManager::class)
+                ->getCache('runtime');
+            $originalPageId = $runtimeCache->get('extbase-backend-typoscript-currentPageId');
+            $runtimeCache->set('extbase-backend-typoscript-currentPageId', $pageIdOfRecord);
+        } else {
+            $property = new \ReflectionProperty(
+                \TYPO3\CMS\Extbase\Configuration\BackendConfigurationManager::class,
+                'currentPageId'
+            );
+            $property->setAccessible(true);
+            $manager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                \TYPO3\CMS\Extbase\Configuration\BackendConfigurationManager::class
+            );
+            $originalPageId = $property->getValue($manager);
+            $property->setValue($manager, $pageIdOfRecord);
+        }
+
+        return $originalPageId;
     }
 
     /**
