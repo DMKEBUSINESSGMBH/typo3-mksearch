@@ -1,6 +1,11 @@
 Changelog
 =========
 
+12.0.9
+-----
+
+- Fix indexing if other scheduler tasks ran prior
+
 12.0.8
 -----
 
