@@ -59,7 +59,7 @@ class tx_mksearch_tests_indexer_FALTest extends tx_mksearch_tests_Testcase
     }
 
     #[PHPUnit\Framework\Attributes\DataProvider('providerIsIndexableRecord')]
-    public function testIsIndexableRecord($aSourceRecord, $aOptions, $bIndexable): void
+    public function testIsIndexableRecord(array $aSourceRecord, array $aOptions, bool $bIndexable): void
     {
         self::assertEquals(
             $bIndexable,
@@ -348,7 +348,7 @@ class tx_mksearch_tests_indexer_FALTest extends tx_mksearch_tests_Testcase
     }
 
     #[PHPUnit\Framework\Attributes\DataProvider('providerHasDocToBeDeleted')]
-    public function testHasDocToBeDeletedWithRecordWithDeleteFlag($sourceRecord, $expected): void
+    public function testHasDocToBeDeletedWithRecordWithDeleteFlag(array $sourceRecord, bool $expected): void
     {
         $indexer = $this->getMock(
             'tx_mksearch_indexer_FAL',
