@@ -52,14 +52,9 @@ class tx_mksearch_tests_indexer_FALTest extends tx_mksearch_tests_Testcase
 {
     private static tx_mksearch_indexer_FALTest $oFALTest;
 
-    /**
-     * Constructs a test case with the given name.
-     *
-     * @param string $dataName
-     */
-    public function __construct(?string $name = null, array $data = [], $dataName = '')
+    protected function setUp(): void
     {
-        parent::__construct($name, $data, $dataName);
+        parent::setUp();
         self::$oFALTest = new tx_mksearch_indexer_FALTest();
     }
 
