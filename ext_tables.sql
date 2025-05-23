@@ -129,8 +129,8 @@ CREATE TABLE tx_mksearch_keywords (
     cruser_id int(11) DEFAULT '0' NOT NULL,
     deleted tinyint(4) DEFAULT '0' NOT NULL,
     hidden tinyint(4) DEFAULT '0' NOT NULL,
-    keyword tinytext NOT NULL,
-    link tinytext NOT NULL,
+    keyword tinytext DEFAULT '' NOT NULL,
+    link tinytext DEFAULT '' NOT NULL,
 
     PRIMARY KEY (uid),
     KEY parent (pid)
