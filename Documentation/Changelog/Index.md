@@ -1,6 +1,12 @@
 Changelog
 =========
 
+12.0.10
+-----
+
+- Fix gridelements indexing in some cases
+
+
 12.0.9
 -----
 

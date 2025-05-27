@@ -246,7 +246,7 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
         }
     }
 
-    protected function setCurrentPageIdInConfigurationManager(int $pageIdOfRecord): ?int
+    protected function setCurrentPageIdInConfigurationManager(?int $pageIdOfRecord): ?int
     {
         if (\Sys25\RnBase\Utility\TYPO3::isTYPO130OrHigher()) {
             $runtimeCache = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Cache\CacheManager::class)
