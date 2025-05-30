@@ -486,7 +486,7 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
                 tx_mksearch_util_TCA::getLanguageFieldForTable($tableName)
             );
             if (null !== $sysLanguageUid) {
-                $indexDoc->addField('language_uid_i', $sysLanguageUid);
+                $indexDoc->addField('language_uid_i', (int) $sysLanguageUid);
             }
         }
 
