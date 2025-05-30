@@ -1,6 +1,11 @@
 Changelog
 =========
 
+12.0.11
+-----
+
+- Make sure to index language uid as integer 
+
 12.0.10
 -----
 
