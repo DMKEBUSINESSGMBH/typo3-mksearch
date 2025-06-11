@@ -714,7 +714,10 @@ class tx_mksearch_service_engine_Solr extends \Sys25\RnBase\Typo3Wrapper\Service
                 }
             }
         } else {
-            $docs = $response->response?->docs ?? null;
+            $docs = null;
+            if ($response->response ?? null) {
+                $docs = $response->response->docs ?? null;
+            }
         }
 
         $hits = [];

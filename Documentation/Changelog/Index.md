@@ -1,6 +1,11 @@
 Changelog
 =========
 
+12.0.13
+-----
+
+- Fix PHP 7.4 compatibility
+
 12.0.12
 -----
 
