@@ -39,7 +39,7 @@
         "typo3-ter/mksearch": "self.version"
     },
     "require": {
-        "digedag/rn-base": "^1.17 || dev-upgrade/typo3_13",
+        "digedag/rn-base": "dev-upgrade/typo3_13",
         "typo3/cms-core": "^12.4 || ^13.4",
         "typo3/cms-install": "^12.4 || ^13.4",
         "typo3/cms-scheduler": "^12.4 || ^13.4"
