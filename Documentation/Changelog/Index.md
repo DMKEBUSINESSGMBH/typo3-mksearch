@@ -1,6 +1,11 @@
 Changelog
 =========
 
+12.0.12
+-----
+
+- Fix PHP warnings
+
 12.0.11
 -----
 

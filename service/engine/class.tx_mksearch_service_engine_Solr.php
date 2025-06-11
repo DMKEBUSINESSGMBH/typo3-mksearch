@@ -151,7 +151,7 @@ class tx_mksearch_service_engine_Solr extends Sys25\RnBase\Typo3Wrapper\Service\
             if ('true' == ($options['group.ngroups'] ?? '')) {
                 $ret['numFound'] = $response->grouped->{$options['group.field']}->ngroups ?? 0;
             } else {
-                $ret['numFound'] = $response->response->numFound;
+                $ret['numFound'] = $response->response?->numFound ?? 0;
             }
 
             $ret['response'] = &$response; // wichtig, wird im SolrResponseProcessor benötigt
@@ -672,7 +672,7 @@ class tx_mksearch_service_engine_Solr extends Sys25\RnBase\Typo3Wrapper\Service\
                 }
             }
         } else {
-            $docs = $response->response->docs;
+            $docs = $response->response?->docs ?? null;
         }
 
         $hits = [];
