@@ -181,7 +181,11 @@ class tx_mksearch_service_engine_Solr extends \Sys25\RnBase\Typo3Wrapper\Service
             if ('true' == ($options['group.ngroups'] ?? '')) {
                 $ret['numFound'] = $response->grouped->{$options['group.field']}->ngroups ?? 0;
             } else {
-                $ret['numFound'] = $response->response?->numFound ?? 0;
+                $numFound = 0;
+                if ($response->response ?? null) {
+                    $numFound = $response->response->numFound ?? 0;
+                }
+                $ret['numFound'] = $numFound;
             }
 
             $ret['response'] = &$response; // wichtig, wird im SolrResponseProcessor benötigt
