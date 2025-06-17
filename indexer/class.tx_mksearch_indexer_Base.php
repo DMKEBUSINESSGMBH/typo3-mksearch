@@ -855,7 +855,7 @@ CONFIG;
         $language = 0;
         $languageField = tx_mksearch_util_TCA::getLanguageFieldForTable($tableName);
         if ($languageField) {
-            $language = (int) $rawData[$languageField];
+            $language = (int) ($rawData[$languageField] ?? 0);
         }
         $newQuerySettings->setLanguageUid($language);
         $repository->setDefaultQuerySettings($newQuerySettings);
