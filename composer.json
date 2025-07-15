@@ -40,6 +40,7 @@
     },
     "require": {
         "digedag/rn-base": "dev-upgrade/typo3_13",
+        "linawolf/list-type-migration": "^1.0",
         "typo3/cms-core": "^12.4 || ^13.4",
         "typo3/cms-install": "^12.4 || ^13.4",
         "typo3/cms-scheduler": "^12.4 || ^13.4"

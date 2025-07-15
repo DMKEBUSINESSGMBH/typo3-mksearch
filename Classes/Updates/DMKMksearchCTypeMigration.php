@@ -29,8 +29,8 @@ declare(strict_types=1);
 
 namespace DMK\Mksearch\Updates;
 
+use Linawolf\ListTypeMigration\Upgrades\AbstractListTypeToCTypeUpdate;
 use TYPO3\CMS\Install\Attribute\UpgradeWizard;
-use TYPO3\CMS\Install\Updates\AbstractListTypeToCTypeUpdate;
 
 #[UpgradeWizard('dmkMksearchCTypeMigration')]
 final class DMKMksearchCTypeMigration extends AbstractListTypeToCTypeUpdate
