@@ -43,7 +43,7 @@ class tx_mksearch_util_TCA
     public static function html2plain($t): string
     {
         return html_entity_decode(
-            preg_replace(
+            (string) preg_replace(
                 ['/(\s+|(<.*?>)+)/', '/<!--.*?-->/'],
                 [' ', ''],
                 $t
@@ -134,21 +134,21 @@ class tx_mksearch_util_TCA
             return '';
         }
 
-        $lpos = strpos($params['item'], (string) $params['params']['insertBetween'][0]);
+        $lpos = strpos((string) $params['item'], (string) $params['params']['insertBetween'][0]);
         if (false === $lpos) {
             return null;
         }
 
-        $lpos += strlen($params['params']['insertBetween'][0]);
-        $rpos = strrpos($params['item'], (string) $params['params']['insertBetween'][1]);
+        $lpos += strlen((string) $params['params']['insertBetween'][0]);
+        $rpos = strrpos((string) $params['item'], (string) $params['params']['insertBetween'][1]);
 
         if (false === $rpos || $lpos > $rpos) {
             return null;
         }
 
-        $between = substr($params['item'], $lpos, $rpos - $lpos);
+        $between = substr((string) $params['item'], $lpos, $rpos - $lpos);
         if (!isset($params['params']['onMatchOnly']) || preg_match($params['params']['onMatchOnly'], $between)) {
-            $params['item'] = substr($params['item'], 0, $lpos).$ts.substr($params['item'], $rpos, strlen($params['item']) - $rpos);
+            $params['item'] = substr((string) $params['item'], 0, $lpos).$ts.substr((string) $params['item'], $rpos, strlen((string) $params['item']) - $rpos);
         }
 
         return null;

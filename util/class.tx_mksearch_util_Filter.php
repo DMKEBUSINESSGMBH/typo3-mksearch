@@ -83,12 +83,12 @@ class tx_mksearch_util_Filter
                 $params,
                 $configurations->getFormatter(),
                 $confId.'params.'.$qualifier.'.',
-                'PARAM_'.strtoupper($qualifier)
+                'PARAM_'.strtoupper((string) $qualifier)
             );
             // wenn keine params gesetzt sind, kommt der marker ungeparsed raus.
             // also ersetzen wir diesen prinzipiell am ende durch ein leeren string.
             $termTemplate = preg_replace(
-                '/(###PARAM_'.strtoupper($qualifier).'_)\w.*###/',
+                '/(###PARAM_'.strtoupper((string) $qualifier).'_)\w.*###/',
                 '',
                 $termTemplate
             );
@@ -121,7 +121,7 @@ class tx_mksearch_util_Filter
         /* @var $listBuilder \Sys25\RnBase\Frontend\Marker\ListBuilder */
         $listBuilder = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(Sys25\RnBase\Frontend\Marker\ListBuilder::class);
         foreach ($formfields as $field) {
-            $fieldMarker = $markerName.'_'.strtoupper($field);
+            $fieldMarker = $markerName.'_'.strtoupper((string) $field);
             $fieldConfId = $confId.'formfields.'.$field.'.';
             if (!Sys25\RnBase\Frontend\Marker\BaseMarker::containsMarker($template, $fieldMarker)) {
                 continue;
@@ -243,7 +243,7 @@ class tx_mksearch_util_Filter
             // den default order nutzen!
             $sortOrder = $sortOrder ?: $this->sortOrder;
             // sicherstellen, das immer desc oder asc gesetzt ist
-            $sortOrder = ('desc' === strtolower($sortOrder)) ? 'desc' : 'asc';
+            $sortOrder = ('desc' === strtolower((string) $sortOrder)) ? 'desc' : 'asc';
             // wird beim parsetemplate benötigt
             $this->sortField = $sort;
             $this->sortOrder = $sortOrder;

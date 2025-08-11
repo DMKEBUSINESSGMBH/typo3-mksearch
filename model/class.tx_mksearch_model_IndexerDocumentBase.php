@@ -35,14 +35,14 @@ class tx_mksearch_model_IndexerDocumentBase implements tx_mksearch_interface_Ind
      *
      * @var tx_mksearch_interface_IndexerField
      */
-    private object $extKey;
+    private readonly object $extKey;
 
     /**
      * Content type of indexed data.
      *
      * @var tx_mksearch_interface_IndexerField
      */
-    private object $contentType;
+    private readonly object $contentType;
 
     /**
      * UID field.

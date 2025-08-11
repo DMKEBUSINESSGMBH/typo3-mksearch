@@ -615,7 +615,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
                 // if we have an array we have to delete the
                 // trailing dot of the key name because this
                 // seems senseless to add
-                $fixedFieldKey = substr($fixedFieldKey, 0, strlen($fixedFieldKey) - 1);
+                $fixedFieldKey = substr((string) $fixedFieldKey, 0, strlen((string) $fixedFieldKey) - 1);
             }
 
             // else the config is something like

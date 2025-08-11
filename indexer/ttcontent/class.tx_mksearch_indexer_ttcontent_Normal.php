@@ -87,7 +87,7 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
             //        könnte wichtig werden!?
             $pageData = $this->getPageContent($model->getProperty('pid'), $options);
             if (!empty($pageData['keywords'])) {
-                $keywords = explode($separator, $pageData['keywords']);
+                $keywords = explode($separator, (string) $pageData['keywords']);
                 foreach ($keywords as $key => $keyword) {
                     $keywords[$key] = trim($keyword);
                 }

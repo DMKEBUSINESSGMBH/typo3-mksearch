@@ -243,7 +243,7 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
         if (empty($options['facet.mincount'])) {
             // typoscript auf mincount checken.
             $facetMinCountConfig = $this->getConfValue('options.facet.mincount');
-            $options['facet.mincount'] = 0 !== strlen($facetMinCountConfig) ? (int) $facetMinCountConfig : '1';
+            $options['facet.mincount'] = 0 !== strlen((string) $facetMinCountConfig) ? (int) $facetMinCountConfig : '1';
         }
 
         $sortFacetsFromConfiguration = $this->getConfValue('options.facet.sort');
@@ -301,7 +301,7 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
         // parameter der filterquery prüfen
         // @see tx_mksearch_marker_Facet::prepareItem
         $fqParams = $parameters->get('fq');
-        $fqParams = is_array($fqParams) ? $fqParams : ('' !== trim($fqParams) && '0' !== trim($fqParams) ? [trim($fqParams)] : []);
+        $fqParams = is_array($fqParams) ? $fqParams : ('' !== trim((string) $fqParams) && '0' !== trim((string) $fqParams) ? [trim((string) $fqParams)] : []);
         // @todo die if blöcke in eigene funktionen auslagern
         if ([] !== $fqParams) {
             // FQ field, for single queries
@@ -309,13 +309,13 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
             $sFqField = $configurations->get($confId.'fqField');
             foreach ($fqParams as $fqField => $fqValues) {
                 $fieldOptions = [];
-                $fqValues = is_array($fqValues) ? $fqValues : ('' !== trim($fqValues) && '0' !== trim($fqValues) ? [trim($fqValues)] : []);
+                $fqValues = is_array($fqValues) ? $fqValues : ('' !== trim((string) $fqValues) && '0' !== trim((string) $fqValues) ? [trim((string) $fqValues)] : []);
                 if ([] === $fqValues) {
                     continue;
                 }
 
                 foreach ($fqValues as $fqName => $fqValue) {
-                    $fqValue = trim($fqValue);
+                    $fqValue = trim((string) $fqValue);
                     if ($sFqField) {
                         // deprecated: sollte nicht mehr vorkommen
                         $fq = $sFqField.':"'.tx_mksearch_util_Misc::sanitizeFq($fqValue).'"';
@@ -348,19 +348,19 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
             }
         }
 
-        $sAddFq = trim($parameters->get('addfq'));
+        $sAddFq = trim((string) $parameters->get('addfq'));
         if ('' !== $sAddFq && '0' !== $sAddFq) {
             // field value konstelation prüfen
             $sAddFq = $this->parseFieldAndValue($sAddFq, $allowedFqParams);
             self::addFilterQuery($options, $this->handleFqTags($sAddFq));
         }
 
-        $sRemoveFq = trim($parameters->get('remfq'));
+        $sRemoveFq = trim((string) $parameters->get('remfq'));
         if ('' !== $sRemoveFq && '0' !== $sRemoveFq) {
             $aFQ = isset($options['fq']) ? (is_array($options['fq']) ? $options['fq'] : [$options['fq']]) : [];
             // hier steckt nur der feldname drin
             foreach ($aFQ as $iKey => $sFq) {
-                [$sfield] = explode(':', $sFq);
+                [$sfield] = explode(':', (string) $sFq);
                 // wir löschen das feld
                 if (in_array($sRemoveFq, $allowedFqParams) && $sRemoveFq === $sfield) {
                     unset($aFQ[$iKey]);
@@ -482,7 +482,7 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
 
         // crop pointer value
         $firstChar = substr(
-            strtoupper($firstChar),
+            strtoupper((string) $firstChar),
             0,
             '0' == $firstChar[0] ? 3 : 1
         );
@@ -695,7 +695,7 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
             $paramArray = $this->getParameters()->getArrayCopy();
             $formData = $this->getParameters()->get('submit') ? $paramArray : $this->getFormData();
             $formData['action'] = $link->makeUrl(false);
-            $formData['searchterm'] = htmlspecialchars($this->getParameters()->get('term'), ENT_QUOTES);
+            $formData['searchterm'] = htmlspecialchars((string) $this->getParameters()->get('term'), ENT_QUOTES);
             $formData['listsize'] = $viewData->offsetExists('pagebrowser') ? $viewData->offsetGet('pagebrowser')->getListSize() : 0;
             $formData['hiddenfields'] = Sys25\RnBase\Backend\Form\FormUtil::getHiddenFieldsForUrlParams($formData['action']);
 

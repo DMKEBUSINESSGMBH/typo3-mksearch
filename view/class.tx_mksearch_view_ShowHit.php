@@ -41,7 +41,7 @@ class tx_mksearch_view_ShowHit extends Sys25\RnBase\Frontend\View\Marker\ListVie
 
         $marker = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($markerClass);
 
-        return $marker->parseTemplate($template, $item, $formatter, $confId.$itemPath.'.', strtoupper($itemPath));
+        return $marker->parseTemplate($template, $item, $formatter, $confId.$itemPath.'.', strtoupper((string) $itemPath));
     }
 
     protected function getItemPath($configurations, $confId)

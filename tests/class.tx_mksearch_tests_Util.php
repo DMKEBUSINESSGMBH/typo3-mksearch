@@ -383,7 +383,6 @@ class tx_mksearch_tests_Util
     public static function emptyAddRootlineFields(): void
     {
         self::$addRootLineFieldsBackup = $GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'];
-        $GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'] = '';
         $property = new ReflectionProperty(TYPO3\CMS\Core\Utility\RootlineUtility::class, 'rootlineFields');
         $property->setAccessible(true);
 
@@ -394,7 +393,6 @@ class tx_mksearch_tests_Util
     public static function resetAddRootlineFields(): void
     {
         if (null != self::$addRootLineFieldsBackup) {
-            $GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'] = self::$addRootLineFieldsBackup;
             $property = new ReflectionProperty(TYPO3\CMS\Core\Utility\RootlineUtility::class, 'rootlineFields');
             $property->setAccessible(true);
             $rootLineFields = Sys25\RnBase\Utility\Strings::trimExplode(',', self::$addRootLineFieldsBackup, true);

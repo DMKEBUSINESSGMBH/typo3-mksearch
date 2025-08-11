@@ -42,7 +42,7 @@ class tx_mksearch_util_SearchBuilder
             // minus und plus dürfen nicht mit in die quotes
             $operator = $term[0];
             $term = match ($operator) {
-                '-', '+' => $operator.'"'.substr($term, 1).'"',
+                '-', '+' => $operator.'"'.substr((string) $term, 1).'"',
                 default => '"'.$term.'"',
             };
         }
@@ -279,6 +279,6 @@ class tx_mksearch_util_SearchBuilder
         }
 
         // wir nutzen strlen und nicht empty damit auch bei "0" gesucht wird
-        return 0 == strlen($term);
+        return 0 == strlen((string) $term);
     }
 }

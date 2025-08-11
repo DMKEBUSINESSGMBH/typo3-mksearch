@@ -56,7 +56,7 @@ class tx_mksearch_mod1_util_Misc
             $page = '<a href="'.$modUrl.'">';
             $page .= Sys25\RnBase\Backend\Utility\Icons::getSpriteIconForRecord('pages', $pageRecord);
             $page .= ' '.$pageinfo['title'];
-            $page .= ' '.htmlspecialchars($pageinfo['_thePath']);
+            $page .= ' '.htmlspecialchars((string) $pageinfo['_thePath']);
             $page .= '</a>';
         }
 

@@ -99,4 +99,17 @@ return static function (RectorConfig $rectorConfig): void {
             __DIR__.'/scheduler/class.tx_mksearch_scheduler_IndexTaskAddFieldProvider.php',
         ],
     ]);
+
+    // keep backwards compatibility to TYPO3 12.4
+    if (class_exists(Ssch\TYPO3Rector\TYPO313\v0\MigrateTypoScriptFrontendControllerReadOnlyPropertiesRector::class)) {
+        $rectorConfig->skip([
+            Ssch\TYPO3Rector\TYPO313\v0\MigrateTypoScriptFrontendControllerReadOnlyPropertiesRector::class,
+        ]);
+    }
+
+    if (class_exists(Ssch\TYPO3Rector\TYPO313\v0\MigrateTypoScriptFrontendControllerFeUserRector::class)) {
+        $rectorConfig->skip([
+            Ssch\TYPO3Rector\TYPO313\v0\MigrateTypoScriptFrontendControllerFeUserRector::class,
+        ]);
+    }
 };

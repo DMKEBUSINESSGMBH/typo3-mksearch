@@ -49,7 +49,7 @@ class Apache_Solr_HttpTransportException extends Apache_Solr_Exception
     /**
      * Response for which exception was generated.
      */
-    private \Apache_Solr_Response $_response;
+    private readonly \Apache_Solr_Response $_response;
 
     /**
      * HttpTransportException Constructor.

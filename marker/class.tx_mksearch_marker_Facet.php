@@ -134,9 +134,9 @@ class tx_mksearch_marker_Facet extends tx_mksearch_marker_SearchResultSimple
                 } else {
                     // check addfq parameter for active state
                     $params = $configurations->getParameters()->get('addfq');
-                    if ($field == substr($params, 0, strpos($params, ':'))) {
+                    if ($field == substr((string) $params, 0, strpos((string) $params, ':'))) {
                         $params = [
-                            substr($params, strpos($params, ':') + 1) => $params,
+                            substr((string) $params, strpos((string) $params, ':') + 1) => $params,
                         ];
                     } else {
                         $params = [];

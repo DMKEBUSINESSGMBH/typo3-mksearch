@@ -189,7 +189,7 @@ class tx_mksearch_service_engine_ZendLucene extends Sys25\RnBase\Typo3Wrapper\Se
                     } else {
                         // The term is a complete phrase, which must be build from its parts
                         $pq = new Zend_Search_Lucene_Search_Query_Phrase();
-                        foreach (explode(' ', $ff['term']) as $t) { // @todo: explode with regex for respecting white spaces in general
+                        foreach (explode(' ', (string) $ff['term']) as $t) { // @todo: explode with regex for respecting white spaces in general
                             // Call hook to manipulate search term. Term is utf8-encoded!
                             Sys25\RnBase\Utility\Misc::callHook(
                                 'mksearch',
@@ -374,8 +374,8 @@ class tx_mksearch_service_engine_ZendLucene extends Sys25\RnBase\Typo3Wrapper\Se
         }
 
         if ($options['sort']) {
-            $sortParts = explode(' ', $options['sort']);
-            [$sortField, $sortOrder] = explode(' ', $options['sort']);
+            $sortParts = explode(' ', (string) $options['sort']);
+            [$sortField, $sortOrder] = explode(' ', (string) $options['sort']);
             $sortOrder = ('asc' === strtolower($sortOrder)) ? SORT_ASC : SORT_DESC;
             $hits = $this->index->find($queryString, $sortField, SORT_REGULAR, $sortOrder);
         } else {

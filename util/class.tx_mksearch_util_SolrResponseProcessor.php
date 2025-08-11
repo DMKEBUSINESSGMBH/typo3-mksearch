@@ -184,7 +184,7 @@ class tx_mksearch_util_SolrResponseProcessor
                     $token,
                     $options['stdWrap.']
                 );
-                $wrap = explode($token, $wrap);
+                $wrap = explode($token, (string) $wrap);
             }
 
             // add pre, if the first part is not the same!

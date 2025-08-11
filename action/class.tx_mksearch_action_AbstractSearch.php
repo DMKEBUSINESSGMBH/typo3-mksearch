@@ -82,7 +82,7 @@ abstract class tx_mksearch_action_AbstractSearch extends Sys25\RnBase\Frontend\C
         $paramName = $paramName ?: 'term';
 
         $value = $parameters->get($paramName);
-        $value = $value ? substr($value, 0, 150) : '';
+        $value = $value ? substr((string) $value, 0, 150) : '';
 
         $options = [];
         Sys25\RnBase\Search\SearchBase::setConfigOptions($options, $configurations, 'softlink.options.');

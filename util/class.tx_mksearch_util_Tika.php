@@ -180,7 +180,7 @@ class tx_mksearch_util_Tika
         $commandUtilityClass = TYPO3\CMS\Core\Utility\CommandUtility::class;
         $tikaCommand = $commandUtilityClass::getCommand('java')
             .' -Dfile.encoding=UTF8' // forces UTF8 output
-            .' -jar '.escapeshellarg($this->tikaJar)
+            .' -jar '.escapeshellarg((string) $this->tikaJar)
             .' -m '.escapeshellarg($absFile)
             .' '.Sys25\RnBase\Configuration\Processor::getExtensionCfgValue(
                 'mksearch',
@@ -219,7 +219,7 @@ class tx_mksearch_util_Tika
         $commandUtilityClass = TYPO3\CMS\Core\Utility\CommandUtility::class;
         $tikaCommand = $commandUtilityClass::getCommand('java')
             .' -Dfile.encoding=UTF-8' // forces UTF8 output
-            .' -jar '.escapeshellarg($this->tikaJar)
+            .' -jar '.escapeshellarg((string) $this->tikaJar)
             .' -'.$tikaCmdType.' '.escapeshellarg($absFile)
             .' '.Sys25\RnBase\Configuration\Processor::getExtensionCfgValue(
                 'mksearch',

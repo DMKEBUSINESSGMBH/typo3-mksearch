@@ -56,7 +56,6 @@
         "phpspec/prophecy-phpunit": "^2.0",
         "phpstan/extension-installer": "^1.1 || ^2.0",
         "phpstan/phpstan": "^1.1 || ^2.0",
-        "rector/rector": "^1.0 || 2.0.10",
         "saschaegerer/phpstan-typo3": "^1.0 || ^2.0",
         "ssch/typo3-rector": "^2.8 | ^3.1",
         "typo3/cms-seo": "^12.4 || ^13.4"
@@ -127,7 +126,7 @@
         ],
         "test:phpcs": [
             "[ -e .Build/bin/php-cs-fixer ] || composer update",
-            "export PHP_CS_FIXER_IGNORE_ENV=1 && .Build/bin/php-cs-fixer fix -v --dry-run --diff"
+            ".Build/bin/php-cs-fixer fix -v --dry-run --diff"
         ],
         "test:rector": [
             "[ -e .Build/bin/rector ] || composer update",
@@ -154,7 +153,7 @@
         ],
         "fix:phpcs": [
             "[ -e .Build/bin/php-cs-fixer ] || composer update",
-            "export PHP_CS_FIXER_IGNORE_ENV=1 && .Build/bin/php-cs-fixer fix -v"
+            ".Build/bin/php-cs-fixer fix -v"
         ],
         "fix:rector": [
             "[ -e .Build/bin/rector ] || composer update",

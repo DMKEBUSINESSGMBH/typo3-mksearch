@@ -51,7 +51,7 @@ class tx_mksearch_filter_SolrAutocomplete extends tx_mksearch_filter_SolrBase
         if (null === $configurations->get($confId.'autocomplete.termToLower')
             || $configurations->getBool($confId.'autocomplete.termToLower')
         ) {
-            $term = mb_strtolower($term, 'UTF-8');
+            $term = mb_strtolower((string) $term, 'UTF-8');
         }
 
         // we just need the plain, given term, sanitize it and put it in

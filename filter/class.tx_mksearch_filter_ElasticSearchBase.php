@@ -212,7 +212,7 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_mksearch_filter_BaseFilter
             $paramArray = $this->getParameters()->getArrayCopy();
             $formData = $this->getParameters()->get('submit') ? $paramArray : $this->getFormData();
             $formData['action'] = $link->makeUrl(false);
-            $formData['searchterm'] = htmlspecialchars($this->getParameters()->get('term'), ENT_QUOTES);
+            $formData['searchterm'] = htmlspecialchars((string) $this->getParameters()->get('term'), ENT_QUOTES);
             $formData['hiddenfields'] = Sys25\RnBase\Backend\Form\FormUtil::getHiddenFieldsForUrlParams($formData['action']);
             $this->prepareFormFields($formData, $this->getParameters());
 
@@ -259,7 +259,7 @@ class tx_mksearch_filter_ElasticSearchBase extends tx_mksearch_filter_BaseFilter
      */
     protected function prepareFormFields(&$formData, $parameters)
     {
-        $formData['searchterm'] = htmlspecialchars($parameters->get('term'), ENT_QUOTES);
+        $formData['searchterm'] = htmlspecialchars((string) $parameters->get('term'), ENT_QUOTES);
         $values = ['or', 'and', 'exact'];
         $options = $parameters->get('options');
         if ($options['combination']) {

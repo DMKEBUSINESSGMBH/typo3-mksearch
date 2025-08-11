@@ -72,7 +72,7 @@ class tx_mksearch_util_Misc
         }
 
         if (array_key_exists('include.', $options) && is_array($options['include.'])) {
-            $aPages = (array_key_exists('pages', $options['include.']) && strlen(trim($options['include.']['pages']))) ? Sys25\RnBase\Utility\Strings::intExplode(',', $options['include.']['pages']) : false;
+            $aPages = (array_key_exists('pages', $options['include.']) && strlen(trim((string) $options['include.']['pages']))) ? Sys25\RnBase\Utility\Strings::intExplode(',', $options['include.']['pages']) : false;
             if (!is_array($aPages)) {
                 $aPages = $options['include.']['pages.'] ?? [];
             }
@@ -84,7 +84,7 @@ class tx_mksearch_util_Misc
         }
 
         if (array_key_exists('exclude.', $options) && is_array($options['exclude.'])) {
-            $aPages = (array_key_exists('pages', $options['exclude.']) && strlen(trim($options['exclude.']['pages']))) ? Sys25\RnBase\Utility\Strings::intExplode(',', $options['exclude.']['pages']) : false;
+            $aPages = (array_key_exists('pages', $options['exclude.']) && strlen(trim((string) $options['exclude.']['pages']))) ? Sys25\RnBase\Utility\Strings::intExplode(',', $options['exclude.']['pages']) : false;
             if (!is_array($aPages)) {
                 $aPages = $options['exclude.']['pages.'] ?? [];
             }
@@ -152,7 +152,7 @@ class tx_mksearch_util_Misc
 
         return trim(
             html_entity_decode(
-                preg_replace(
+                (string) preg_replace(
                     array_keys($replaces),
                     array_values($replaces),
                     $text

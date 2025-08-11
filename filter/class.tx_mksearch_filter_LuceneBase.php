@@ -249,7 +249,7 @@ class tx_mksearch_filter_LuceneBase extends tx_mksearch_filter_BaseFilter implem
      */
     protected function prepareFormFields(&$formData, $parameters)
     {
-        $formData['searchterm'] = htmlspecialchars($parameters->get('term'), ENT_QUOTES);
+        $formData['searchterm'] = htmlspecialchars((string) $parameters->get('term'), ENT_QUOTES);
         $values = ['or', 'and', 'exact'];
         $options = $parameters->get('options');
         if ($options['combination']) {

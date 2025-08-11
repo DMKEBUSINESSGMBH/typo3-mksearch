@@ -244,7 +244,7 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
 
         foreach ($aContentFields as $field) {
             if (array_key_exists($field, $sourceRecord) && !empty($sourceRecord[$field])) {
-                $aContent[] = trim($sourceRecord[$field]);
+                $aContent[] = trim((string) $sourceRecord[$field]);
             }
         }
 

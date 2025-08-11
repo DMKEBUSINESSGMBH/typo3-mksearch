@@ -61,7 +61,7 @@ class tx_mksearch_mod1_handler_admin_Solr implements Sys25\RnBase\Backend\Module
         }
 
         $this->data = Sys25\RnBase\Frontend\Request\Parameters::getPostOrGetParameter('data');
-        $deleteQuery = trim($this->data['deletequery']);
+        $deleteQuery = trim((string) $this->data['deletequery']);
         $SET = Sys25\RnBase\Frontend\Request\Parameters::getPostOrGetParameter('SET');
         $core = intval($SET['solr_core']);
         if (0 === $core) {

@@ -116,7 +116,7 @@ class Apache_Solr_HttpTransport_Response
     /**
      * The response's HTTP status code.
      */
-    private int $_statusCode;
+    private readonly int $_statusCode;
 
     /**
      * The response's HTTP status message.
@@ -138,7 +138,7 @@ class Apache_Solr_HttpTransport_Response
     /**
      * The response's data.
      */
-    private string $_responseBody;
+    private readonly string $_responseBody;
 
     /**
      * Construct a HTTP transport response.

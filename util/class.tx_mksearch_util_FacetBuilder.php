@@ -135,7 +135,7 @@ class tx_mksearch_util_FacetBuilder
 
         $uid = 0;
         foreach ($facetData as $key => $value) {
-            [$groupName, $queryName] = explode('_', $key, 2);
+            [$groupName, $queryName] = explode('_', (string) $key, 2);
             if (!array_key_exists($groupName, $facetGroups)) {
                 $facetGroups[$groupName] = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
                     Sys25\RnBase\Domain\Model\BaseModel::class,
@@ -186,7 +186,7 @@ class tx_mksearch_util_FacetBuilder
                 Sys25\RnBase\Domain\Model\BaseModel::class,
                 [
                     'uid' => ++$uid,
-                    'field' => implode('-', explode(',', $fields)),
+                    'field' => implode('-', explode(',', (string) $fields)),
                     'items' => $this->buildPivotChildFacets($pivots),
                 ]
             );
@@ -330,7 +330,7 @@ class tx_mksearch_util_FacetBuilder
         if ($facet && $facet->hasSorting()) {
             $s = usort(
                 $facets,
-                [self::class, 'cbSortFacets']
+                self::cbSortFacets(...)
             );
         }
 

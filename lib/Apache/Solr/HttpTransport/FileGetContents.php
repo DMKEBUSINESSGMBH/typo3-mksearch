@@ -216,8 +216,8 @@ class Apache_Solr_HttpTransport_FileGetContents extends Apache_Solr_HttpTranspor
             //and encoding from it (if possible - such as 'Content-Type: text/plain; charset=UTF-8')
             foreach ($httpHeaders as $header) {
                 // look for the header that starts appropriately
-                if (0 == strncasecmp($header, 'Content-Type:', 13)) {
-                    $contentType = substr($header, 13);
+                if (0 == strncasecmp((string) $header, 'Content-Type:', 13)) {
+                    $contentType = substr((string) $header, 13);
                     break;
                 }
             }

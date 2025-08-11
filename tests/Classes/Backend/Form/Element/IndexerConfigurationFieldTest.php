@@ -103,7 +103,7 @@ class IndexerConfigurationFieldTest extends UnitTestCase
 
         self::assertEquals(['test'], $field->render());
         self::assertNotEmpty($field->_get('data')['parameterArray']['itemFormElValue']);
-        self::assertGreaterThan(1, strlen($field->_get('data')['parameterArray']['itemFormElValue']));
+        self::assertGreaterThan(1, strlen((string) $field->_get('data')['parameterArray']['itemFormElValue']));
         self::assertEquals(
             \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_indexer_Page')->getDefaultTSConfig(),
             $field->_get('data')['parameterArray']['itemFormElValue']

@@ -895,7 +895,7 @@ CONFIG;
         }
 
         $title = $data['title']->getValue();
-        $firstChar = mb_substr(mb_strtoupper($title), 0, 1);
+        $firstChar = mb_substr(mb_strtoupper((string) $title), 0, 1);
 
         $specials = Sys25\RnBase\Search\SearchBase::getSpecialChars();
         foreach ($specials as $ascii => $variations) {

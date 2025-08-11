@@ -95,7 +95,7 @@ class tx_mksearch_indexer_FAL extends tx_mksearch_indexer_BaseMedia
                 // womit wir das wieder dekodieren müssen. Es gibt leider
                 // keine besser Möglichkeit an den unbehandelten Pfad zur Datei
                 // inkl. Pfad vom Storage zu kommen.
-                $relativeFileName = rawurldecode($resourceFile->getPublicUrl());
+                $relativeFileName = rawurldecode((string) $resourceFile->getPublicUrl());
             }
         }
 

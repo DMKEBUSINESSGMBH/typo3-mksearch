@@ -76,10 +76,6 @@ jobs:
                     - "8.2"
                     - "8.3"
                     - "8.4"
-                ### Exclude PHP 8.4 for php-c-fixers as there is currently no support
-                exclude:
-                    - command: "test:phpcs"
-                      php-version: "8.4"
 
         steps:
             -

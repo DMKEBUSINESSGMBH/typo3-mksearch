@@ -53,7 +53,7 @@ class Apache_Solr_HttpTransport_Curl extends Apache_Solr_HttpTransport_Abstract
     /**
      * Curl Session Handle.
      */
-    private \CurlHandle|bool $_curl;
+    private readonly \CurlHandle|bool $_curl;
 
     /**
      * Initializes a curl session.

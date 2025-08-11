@@ -63,7 +63,7 @@ class tx_mksearch_util_Config
      *
      * @deprecated
      */
-    public static function getIndexerOption($name, $contentType)
+    public static function getIndexerOption($name, $contentType): never
     {
         throw new Exception('tx_mksearch_util_Config::getIndexerOption is deprecated! Use config file instead.');
     }

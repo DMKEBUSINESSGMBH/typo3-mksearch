@@ -297,7 +297,7 @@ class Apache_Solr_Service
             $escapedParams = [];
 
             foreach ($params as $key => $value) {
-                $escapedParams[] = urlencode($key).'='.urlencode($value);
+                $escapedParams[] = urlencode((string) $key).'='.urlencode((string) $value);
             }
 
             $queryString = $this->_queryDelimiter.implode($this->_queryStringDelimiter, $escapedParams);
@@ -826,7 +826,7 @@ class Apache_Solr_Service
         $xml .= '>';
 
         foreach ($document as $key => $value) {
-            $key = htmlspecialchars($key, ENT_QUOTES, 'UTF-8');
+            $key = htmlspecialchars((string) $key, ENT_QUOTES, 'UTF-8');
             $fieldBoost = $document->getFieldBoost($key);
 
             if (is_array($value)) {
@@ -840,7 +840,7 @@ class Apache_Solr_Service
                         $fieldBoost = false;
                     }
 
-                    $multivalue = htmlspecialchars($multivalue, ENT_NOQUOTES, 'UTF-8');
+                    $multivalue = htmlspecialchars((string) $multivalue, ENT_NOQUOTES, 'UTF-8');
 
                     $xml .= '>'.$multivalue.'</field>';
                 }
@@ -851,7 +851,7 @@ class Apache_Solr_Service
                     $xml .= ' boost="'.$fieldBoost.'"';
                 }
 
-                $value = htmlspecialchars($value, ENT_NOQUOTES, 'UTF-8');
+                $value = htmlspecialchars((string) $value, ENT_NOQUOTES, 'UTF-8');
 
                 $xml .= '>'.$value.'</field>';
             }
@@ -977,7 +977,7 @@ class Apache_Solr_Service
 
         foreach ($ids as $id) {
             //escape special xml characters
-            $id = htmlspecialchars($id, ENT_NOQUOTES, 'UTF-8');
+            $id = htmlspecialchars((string) $id, ENT_NOQUOTES, 'UTF-8');
 
             $rawPost .= '<id>'.$id.'</id>';
         }

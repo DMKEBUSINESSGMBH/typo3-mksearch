@@ -319,7 +319,7 @@ class tx_mksearch_util_Indexer
                 } // include categories as string like
                 // include.categories = 1,2
                 elseif (!empty($options[$mode.'.'][$optionKey])) {
-                    $includeCategories = explode(',', $options[$mode.'.'][$optionKey]);
+                    $includeCategories = explode(',', (string) $options[$mode.'.'][$optionKey]);
                 }
 
                 // if config is empty nothing to do and everything is alright
@@ -575,7 +575,7 @@ class tx_mksearch_util_Indexer
     {
         $config = [];
         if (is_array($options)) {
-            if (isset($options[$key]) && strlen(trim($options[$key]))) {
+            if (isset($options[$key]) && strlen(trim((string) $options[$key]))) {
                 $config = Sys25\RnBase\Utility\Strings::trimExplode(',', $options[$key]);
             } elseif (isset($options[$key.'.']) && is_array($options[$key.'.'])) {
                 $config = $options[$key.'.'];
