@@ -208,7 +208,6 @@ class tx_mksearch_indexer_ttcontent_Gridelements extends tx_mksearch_indexer_ttc
                 TYPO3\CMS\Extbase\Configuration\BackendConfigurationManager::class,
                 'currentPageId'
             );
-            $property->setAccessible(true);
             $manager = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
                 TYPO3\CMS\Extbase\Configuration\BackendConfigurationManager::class
             );

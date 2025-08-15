@@ -42,14 +42,12 @@ class CObjectViewHelperTest extends \tx_mksearch_tests_Testcase
     protected function tearDown(): void
     {
         $property = new \ReflectionProperty('tx_mksearch_service_internal_Index', 'indexingInProgress');
-        $property->setAccessible(true);
         $property->setValue(null, false);
     }
 
     public function testSimulateFrontendEnvironmentWhenMksearchIndexingIsInProgress(): void
     {
         $property = new \ReflectionProperty('tx_mksearch_service_internal_Index', 'indexingInProgress');
-        $property->setAccessible(true);
         $property->setValue(null, true);
 
         $GLOBALS['TSFE'] = null;
@@ -62,7 +60,6 @@ class CObjectViewHelperTest extends \tx_mksearch_tests_Testcase
     public function testSimulateFrontendEnvironmentWhenMksearchIndexingIsNotInProgress(): void
     {
         $property = new \ReflectionProperty('tx_mksearch_service_internal_Index', 'indexingInProgress');
-        $property->setAccessible(true);
         $property->setValue(null, false);
 
         $GLOBALS['TSFE'] = null;
@@ -75,7 +72,6 @@ class CObjectViewHelperTest extends \tx_mksearch_tests_Testcase
     public function testResetFrontendEnvironmentWhenMksearchIndexingIsInProgress(): void
     {
         $property = new \ReflectionProperty('tx_mksearch_service_internal_Index', 'indexingInProgress');
-        $property->setAccessible(true);
         $property->setValue(null, true);
 
         $viewHelper = $this->getViewHelper();
@@ -91,7 +87,6 @@ class CObjectViewHelperTest extends \tx_mksearch_tests_Testcase
     public function testResetFrontendEnvironmentWhenMksearchIndexingIsNotInProgress(): void
     {
         $property = new \ReflectionProperty('tx_mksearch_service_internal_Index', 'indexingInProgress');
-        $property->setAccessible(true);
         $property->setValue(null, false);
 
         $GLOBALS['TSFE'] = 'test';

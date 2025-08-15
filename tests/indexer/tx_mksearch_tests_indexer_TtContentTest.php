@@ -130,7 +130,6 @@ class tx_mksearch_tests_indexer_TtContentTest extends tx_mksearch_tests_Testcase
             ->willReturn('return');
 
         $actualIndexerProperty = new ReflectionProperty('tx_mksearch_indexer_TtContent', 'actualIndexer');
-        $actualIndexerProperty->setAccessible(true);
         $actualIndexerProperty->setValue($indexer, $actualIndexer);
 
         self::assertEquals(
@@ -202,7 +201,6 @@ class tx_mksearch_tests_indexer_TtContentTest extends tx_mksearch_tests_Testcase
         $actualIndexer = $this->getMock('tx_mksearch_indexer_ttcontent_Normal', ['hasDocToBeDeleted']);
 
         $actualIndexerProperty = new ReflectionProperty('tx_mksearch_indexer_TtContent', 'actualIndexer');
-        $actualIndexerProperty->setAccessible(true);
         $actualIndexerProperty->setValue($indexer, $actualIndexer);
 
         $indexDoc = $indexer->prepareSearchData('doesnt_matter', $record, $indexDoc, $this->getDefaultOptions());

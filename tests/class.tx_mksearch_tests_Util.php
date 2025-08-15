@@ -101,7 +101,6 @@ class tx_mksearch_tests_Util
         // otherwise we may get warnings like ...no category registered for table..Key was already registered
         $categoryRegistryClass = 'TYPO3\\CMS\\Core\\Category\\CategoryRegistry';
         $registry = new ReflectionProperty($categoryRegistryClass, 'registry');
-        $registry->setAccessible(true);
 
         $categoryRegistry = $categoryRegistryClass::getInstance();
         self::$categoryRegistry = $registry->getValue($categoryRegistry);
@@ -125,7 +124,6 @@ class tx_mksearch_tests_Util
 
             $categoryRegistryClass = 'TYPO3\\CMS\\Core\\Category\\CategoryRegistry';
             $registry = new ReflectionProperty($categoryRegistryClass, 'registry');
-            $registry->setAccessible(true);
             $categoryRegistry = $categoryRegistryClass::getInstance();
             $registry->setValue($categoryRegistry, self::$categoryRegistry);
             self::$categoryRegistry = null;
@@ -282,7 +280,6 @@ class tx_mksearch_tests_Util
         // wir kommen an den Pfad zur Package Datei nur über Reflection
         $packageManager = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(TYPO3\CMS\Core\Package\PackageManager::class);
         $packageStatesPathAndFilename = new ReflectionProperty(TYPO3\CMS\Core\Package\PackageManager::class, 'packageStatesPathAndFilename');
-        $packageStatesPathAndFilename->setAccessible(true);
 
         // backup machen
         $packageStatesFile = $packageStatesPathAndFilename->getValue($packageManager);
@@ -292,7 +289,6 @@ class tx_mksearch_tests_Util
         $extensionManagementUtility = new TYPO3\CMS\Core\Utility\ExtensionManagementUtility();
 
         $method = new ReflectionMethod(TYPO3\CMS\Core\Package\PackageManager::class, 'getDependencyArrayForPackage');
-        $method->setAccessible(true);
 
         // falls eine extension von gridelements abhängt, müssen wir diese auch deinstallieren
         foreach ($packageManager->getActivePackages() as $package) {
@@ -309,7 +305,6 @@ class tx_mksearch_tests_Util
         // bei autoloading werden die initialen packages durchsucht. Daher müssen
         // wir die aktualisierten packages dem class loader mitgeben
         $classLoaderProperty = new ReflectionProperty(TYPO3\CMS\Core\Package\PackageManager::class, 'classLoader');
-        $classLoaderProperty->setAccessible(true);
 
         $classLoader = $classLoaderProperty->getValue($packageManager);
         $classLoader->setPackages($packageManager->getActivePackages());
@@ -384,7 +379,6 @@ class tx_mksearch_tests_Util
     {
         self::$addRootLineFieldsBackup = $GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'];
         $property = new ReflectionProperty(TYPO3\CMS\Core\Utility\RootlineUtility::class, 'rootlineFields');
-        $property->setAccessible(true);
 
         $rootLineFields = Sys25\RnBase\Utility\Strings::trimExplode(',', self::$addRootLineFieldsBackup, true);
         $property->setValue(null, array_diff($property->getValue(null), $rootLineFields));
@@ -394,7 +388,6 @@ class tx_mksearch_tests_Util
     {
         if (null != self::$addRootLineFieldsBackup) {
             $property = new ReflectionProperty(TYPO3\CMS\Core\Utility\RootlineUtility::class, 'rootlineFields');
-            $property->setAccessible(true);
             $rootLineFields = Sys25\RnBase\Utility\Strings::trimExplode(',', self::$addRootLineFieldsBackup, true);
             $property->setValue(null, array_unique(array_merge($property->getValue(null), $rootLineFields)));
             self::$addRootLineFieldsBackup = null;

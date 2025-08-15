@@ -55,7 +55,6 @@ class tx_mksearch_tests_action_ElasticSearchTest extends tx_mksearch_tests_Testc
         $configurations->setParameters($parameters);
 
         $pluginUid = new ReflectionProperty(Sys25\RnBase\Configuration\Processor::class, 'pluginUid');
-        $pluginUid->setAccessible(true);
         $pluginUid->setValue($configurations, 456);
 
         $viewData = $configurations->getViewData();

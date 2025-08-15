@@ -46,7 +46,6 @@ class tx_mksearch_tests_service_engine_ElasticSearchTest extends tx_mksearch_tes
             'tx_mksearch_service_engine_ElasticSearch',
             'indexName'
         );
-        $indexName->setAccessible(true);
         $indexName->setValue($service, 'unknown');
 
         $elasticaClient = $this->callInaccessibleMethod(
@@ -161,7 +160,6 @@ class tx_mksearch_tests_service_engine_ElasticSearchTest extends tx_mksearch_tes
             'tx_mksearch_service_engine_ElasticSearch',
             'index'
         );
-        $indexProperty->setAccessible(true);
 
         $this->callInaccessibleMethod(
             $service,
@@ -205,7 +203,6 @@ class tx_mksearch_tests_service_engine_ElasticSearchTest extends tx_mksearch_tes
             'tx_mksearch_service_engine_ElasticSearch',
             'index'
         );
-        $indexProperty->setAccessible(true);
 
         $this->callInaccessibleMethod(
             $service,
@@ -296,7 +293,6 @@ class tx_mksearch_tests_service_engine_ElasticSearchTest extends tx_mksearch_tes
             'tx_mksearch_service_engine_ElasticSearch',
             'credentialsString'
         );
-        $credentialsStringProperty->setAccessible(true);
         self::assertEquals(
             'index;1,2,3,4',
             $credentialsStringProperty->getValue($service),
@@ -316,7 +312,6 @@ class tx_mksearch_tests_service_engine_ElasticSearchTest extends tx_mksearch_tes
             'tx_mksearch_service_engine_ElasticSearch',
             'indexName'
         );
-        $indexNameProperty->setAccessible(true);
         self::assertEquals(
             'index',
             $indexNameProperty->getValue($service),
@@ -432,7 +427,6 @@ class tx_mksearch_tests_service_engine_ElasticSearchTest extends tx_mksearch_tes
             'tx_mksearch_service_engine_ElasticSearch',
             'mksearchIndexModel'
         );
-        $indexModelProperty->setAccessible(true);
 
         $indexModel = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_model_internal_Index', []);
         $indexModelProperty->setValue($service, $indexModel);
@@ -453,7 +447,6 @@ class tx_mksearch_tests_service_engine_ElasticSearchTest extends tx_mksearch_tes
             'tx_mksearch_service_engine_ElasticSearch',
             'index'
         );
-        $indexProperty->setAccessible(true);
         $indexProperty->setValue($service, new stdClass());
 
         $service->expects($this->never())
@@ -473,7 +466,6 @@ class tx_mksearch_tests_service_engine_ElasticSearchTest extends tx_mksearch_tes
             'tx_mksearch_service_engine_ElasticSearch',
             'mksearchIndexModel'
         );
-        $indexModelProperty->setAccessible(true);
         self::assertSame(
             $indexModel,
             $indexModelProperty->getValue($service),
@@ -567,7 +559,6 @@ class tx_mksearch_tests_service_engine_ElasticSearchTest extends tx_mksearch_tes
             'tx_mksearch_service_engine_ElasticSearch',
             'credentialsString'
         );
-        $credentialsStringProperty->setAccessible(true);
         $credentialsStringProperty->setValue($service, '1,2,3,4');
 
         $status = $service->getStatus();
@@ -698,7 +689,6 @@ class tx_mksearch_tests_service_engine_ElasticSearchTest extends tx_mksearch_tes
             'tx_mksearch_model_IndexerDocumentBase',
             'extKey'
         );
-        $extKey->setAccessible(true);
         self::assertEquals(
             'mksearch',
             $extKey->getValue($docInstance)->getValue(),
@@ -709,7 +699,6 @@ class tx_mksearch_tests_service_engine_ElasticSearchTest extends tx_mksearch_tes
             'tx_mksearch_model_IndexerDocumentBase',
             'contentType'
         );
-        $contentType->setAccessible(true);
         self::assertEquals(
             'tt_content',
             $contentType->getValue($docInstance)->getValue(),
@@ -720,7 +709,6 @@ class tx_mksearch_tests_service_engine_ElasticSearchTest extends tx_mksearch_tes
             'tx_mksearch_model_IndexerDocumentBase',
             'fieldClass'
         );
-        $fieldClass->setAccessible(true);
         self::assertEquals(
             'tx_mksearch_model_IndexerFieldBase',
             $fieldClass->getValue($docInstance),
@@ -754,7 +742,6 @@ class tx_mksearch_tests_service_engine_ElasticSearchTest extends tx_mksearch_tes
             'tx_mksearch_service_engine_ElasticSearch',
             'indexName'
         );
-        $indexName->setAccessible(true);
         $indexName->setValue($service, 'unknown');
 
         self::assertEquals('unknown', $service->getOpenIndexName());
@@ -1035,7 +1022,6 @@ class tx_mksearch_tests_service_engine_ElasticSearchTest extends tx_mksearch_tes
             ),
             1 => new Elastica\Result(['_source' => ['title' => 'hit data two']]),
         ];
-        $resultProperty->setAccessible(true);
         $resultProperty->setValue($searchResult, $results);
 
         $service = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_service_engine_ElasticSearch');

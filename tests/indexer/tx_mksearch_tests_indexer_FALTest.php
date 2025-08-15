@@ -335,7 +335,6 @@ class tx_mksearch_tests_indexer_FALTest extends tx_mksearch_tests_Testcase
             ['is_public' => 2, 'driver' => 'Local']
         );
         $isOnline = new ReflectionProperty($storage::class, 'isOnline');
-        $isOnline->setAccessible(true);
         $isOnline->setValue($storage, true);
         $indexer->expects(self::once())
             ->method('getResourceStorage')

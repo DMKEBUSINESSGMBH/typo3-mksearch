@@ -42,7 +42,6 @@ class HtmlViewHelperTest extends \tx_mksearch_tests_Testcase
     protected function tearDown(): void
     {
         $property = new \ReflectionProperty('tx_mksearch_service_internal_Index', 'indexingInProgress');
-        $property->setAccessible(true);
         $property->setValue(null, false);
 
         parent::tearDown();
@@ -51,7 +50,6 @@ class HtmlViewHelperTest extends \tx_mksearch_tests_Testcase
     public function testSimulateFrontendEnvironmentWhenMksearchIndexingIsInProgress(): void
     {
         $property = new \ReflectionProperty('tx_mksearch_service_internal_Index', 'indexingInProgress');
-        $property->setAccessible(true);
         $property->setValue(null, true);
 
         $GLOBALS['TSFE'] = null;
@@ -64,7 +62,6 @@ class HtmlViewHelperTest extends \tx_mksearch_tests_Testcase
     public function testResetFrontendEnvironmentWhenMksearchIndexingIsInProgress(): void
     {
         $property = new \ReflectionProperty('tx_mksearch_service_internal_Index', 'indexingInProgress');
-        $property->setAccessible(true);
         $property->setValue(null, true);
 
         $viewHelper = $this->getViewHelper();
