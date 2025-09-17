@@ -205,7 +205,7 @@ class tx_mksearch_hooks_IndexerAutoUpdate
         }
 
         foreach ($records as $table => $uidList) {
-            if (str_contains($table, 'tx_mksearch_')) {
+            if (str_contains((string) $table, 'tx_mksearch_')) {
                 // Ignore internal tables
                 continue;
             }

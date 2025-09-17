@@ -157,16 +157,13 @@ class tx_mksearch_tests_indexer_FALTest extends tx_mksearch_tests_Testcase
                     'byDirectory.' => ['checkSubFolder' => 1, 'fileadmin/unterordner/', 'fileadmin/allowed/'],
                 ], true,
             ],
-            // spezieller eternit fall
             10 => [
                 [
-                    'identifier' => 'downloads/tx_eternitdownload/test.txt',
-                    'extension' => 'txt',
+                    'identifier' => 'unterordner/_recycler_/test.html',
+                    'extension' => 'html',
                 ], [
-                    'byFileExtension' => 'html, xhtml',
-                    'byFileExtension.' => ['pdf', 'txt'],
+                    'byFileExtension' => 'pdf, html',
                     'byDirectory' => '/^fileadmin\/.*\//',
-                    'byDirectory.' => ['checkSubFolder' => '1', 'fileadmin/downloads/', '10' => 'fileadmin/downloads/tx_eternitdownload/', '10.' => ['disallow' => 1]],
                 ], false,
             ],
         ];

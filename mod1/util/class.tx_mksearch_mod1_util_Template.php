@@ -73,7 +73,7 @@ class tx_mksearch_mod1_util_Template
             // felder erzeugen
             $markerArr = [];
             foreach ($rootPage as $field => $value) {
-                $markerArr['###ROOTPAGE_'.strtoupper($field).'###'] = $value;
+                $markerArr['###ROOTPAGE_'.strtoupper((string) $field).'###'] = $value;
             }
 
             return Sys25\RnBase\Frontend\Marker\Templates::substituteMarkerArrayCached($out, $markerArr);

@@ -250,7 +250,7 @@ class tx_mksearch_tests_util_FacetBuilderTest extends tx_mksearch_tests_Testcase
      *
      * @param unknown $facetGroup
      */
-    private function doFieldFacetAssertations($facetGroup): void
+    private function doFieldFacetAssertations(Sys25\RnBase\Domain\Model\BaseModel $facetGroup): void
     {
         // in einer gruppe sind die eigentlichen facetten enthalten
         $array = $facetGroup->getItems();

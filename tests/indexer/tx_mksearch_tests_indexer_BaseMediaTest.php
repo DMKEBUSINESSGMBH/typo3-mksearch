@@ -384,8 +384,14 @@ class tx_mksearch_tests_indexer_BaseMediaTest extends tx_mksearch_tests_Testcase
             $mockedMethods[] = 'getContentType';
         }
 
-        return $this->getMockBuilder('tx_mksearch_indexer_BaseMedia')
+        $mock = $this->getMockBuilder('tx_mksearch_indexer_BaseMedia')
             ->onlyMethods($mockedMethods)
             ->getMock();
+
+        $mock->expects(self::any())
+            ->method('getFilePath')
+            ->willReturn('');
+
+        return $mock;
     }
 }

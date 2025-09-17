@@ -253,7 +253,7 @@ class tx_mksearch_util_Tika
      *
      * @throws Exception
      */
-    private function checkFile($fName)
+    private function checkFile($fName): string
     {
         $absFile = Sys25\RnBase\Utility\Files::getFileAbsFileName($fName);
         $absFile = $this->fixFilenameWithPossibleUmlautsForWindows($absFile);
