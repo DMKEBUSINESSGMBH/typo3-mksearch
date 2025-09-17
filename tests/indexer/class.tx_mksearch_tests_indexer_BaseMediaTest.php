@@ -418,7 +418,7 @@ class tx_mksearch_tests_indexer_BaseMediaTest extends tx_mksearch_tests_Testcase
             'getFilePath', 'getRelFileName', 'stopIndexing',
         ]
     ) {
-        return $this->getMockForAbstractClass(
+        $mock = $this->getMockForAbstractClass(
             'tx_mksearch_indexer_BaseMedia',
             [],
             '',
@@ -427,5 +427,11 @@ class tx_mksearch_tests_indexer_BaseMediaTest extends tx_mksearch_tests_Testcase
             true,
             $mockedMethods
         );
+
+        $mock->expects(self::any())
+            ->method('getFilePath')
+            ->willReturn('');
+
+        return $mock;
     }
 }

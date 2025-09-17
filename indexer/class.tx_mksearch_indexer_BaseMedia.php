@@ -279,6 +279,11 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
 
         $fileExtension = $this->getFileExtension($tableName, $sourceRecord);
         $filePath = $this->getFilePath($tableName, $sourceRecord);
+
+        if ($this->isPathInRecyclerFolder($filePath)) {
+            return false;
+        }
+
         foreach ($filters as $filterName => $filterValue) {
             switch ($filterName) {
                 // Auf Dateiendung Prüfen
@@ -326,6 +331,11 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
         }
 
         return $ret;
+    }
+
+    protected function isPathInRecyclerFolder(string $filePath): bool
+    {
+        return preg_match('/.*\/_recycler_\/.*/', $filePath);
     }
 
     private function getIndexMethod($options)
