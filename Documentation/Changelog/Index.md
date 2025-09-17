@@ -1,6 +1,11 @@
 Changelog
 =========
 
+12.0.15
+-----
+
+- Fix indexed of files in recycler
+
 12.0.14
 -----
 
