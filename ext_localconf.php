@@ -85,7 +85,7 @@ if (TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('mksanitizedpara
 require_once TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksearch', 'Configuration/XClasses.php');
 
 Sys25\RnBase\Utility\CHashUtility::addExcludedParametersForCacheHash([
-    'mksearch[pb-search-pointer]',
+    '^mksearch[pb-',
     'mksearch[submit]',
     'mksearch[term]',
     'mksearch[sort]',
