@@ -1,6 +1,11 @@
 Changelog
 =========
 
+12.0.16
+-----
+
+- Exclude all pagebrowser pointers from chash
+
 12.0.15
 -----
 
