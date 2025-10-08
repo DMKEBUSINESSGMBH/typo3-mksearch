@@ -76,8 +76,8 @@ class tx_mksearch_util_Tika
      */
     public function isAvailable(): bool|int
     {
-        if (-1 != $this->tikaAvailable) {
-            return 1 == $this->tikaAvailable;
+        if (-1 !== $this->tikaAvailable) {
+            return 1 === $this->tikaAvailable;
         }
 
         if (!is_file($this->tikaJar)) {

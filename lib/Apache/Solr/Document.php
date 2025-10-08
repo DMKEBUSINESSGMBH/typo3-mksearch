@@ -283,11 +283,9 @@ class Apache_Solr_Document implements IteratorAggregate
     /**
      * Magic get for field values.
      *
-     * @param string $key
      *
-     * @return mixed
      */
-    public function __get($key)
+    public function __get(string $key): mixed
     {
         return $this->_fields[$key] ?? null;
     }
@@ -296,10 +294,8 @@ class Apache_Solr_Document implements IteratorAggregate
      * Magic set for field values. Multi-valued fields should be set as arrays
      * or instead use the addField(...) function which will automatically
      * make sure the field is an array.
-     *
-     * @param string $key
      */
-    public function __set($key, mixed $value)
+    public function __set(string $key, mixed $value)
     {
         $this->setField($key, $value);
     }
@@ -311,11 +307,10 @@ class Apache_Solr_Document implements IteratorAggregate
      * isset($document->some_field);
      * </code>
      *
-     * @param string $key
      *
      * @return bool
      */
-    public function __isset($key)
+    public function __isset(string $key)
     {
         return isset($this->_fields[$key]);
     }
@@ -326,10 +321,8 @@ class Apache_Solr_Document implements IteratorAggregate
      * <code>
      * unset($document->some_field);
      * </code>
-     *
-     * @param string $key
      */
-    public function __unset($key)
+    public function __unset(string $key)
     {
         unset($this->_fields[$key]);
         unset($this->_fieldBoosts[$key]);

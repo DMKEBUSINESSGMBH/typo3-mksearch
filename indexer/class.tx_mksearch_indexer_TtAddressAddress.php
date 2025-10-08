@@ -175,11 +175,9 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
     }
 
     /**
-     * @param array $sourceRecord
-     *
      * @return bool
      */
-    protected function isIndexableRecord($sourceRecord, array $options)
+    protected function isIndexableRecord(array $sourceRecord, array $options)
     {
         return tx_mksearch_util_Indexer::getInstance()
                 ->isOnIndexablePage($sourceRecord, $options);
@@ -187,10 +185,8 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
 
     /**
      * Sets the index doc to deleted if neccessary.
-     *
-     * @param array $options
      */
-    protected function hasDocToBeDeleted(array $sourceRecord, $options): bool
+    protected function hasDocToBeDeleted(array $sourceRecord, array $options): bool
     {
         // else
         return $sourceRecord['deleted'] || isset($options['removeIfHidden']) && $options['removeIfHidden'] && $sourceRecord['hidden'];
@@ -206,14 +202,12 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
      * if it's not the table that should be indexed
      *
      * @param string $tableName
-     * @param array  $sourceRecord
-     * @param array  $options
      */
     protected function stopIndexing(
         $tableName,
-        $sourceRecord,
+        array $sourceRecord,
         tx_mksearch_interface_IndexerDocument $indexDoc,
-        $options,
+        array $options,
     ): bool {
         return $this->getIndexerUtility()->stopIndexing(
             $tableName,
@@ -226,18 +220,15 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
     /**
      * @return tx_mksearch_util_Indexer
      */
-    protected function getIndexerUtility()
+    protected function getIndexerUtility(): object
     {
         return tx_mksearch_util_Indexer::getInstance();
     }
 
     /**
      * erzeugt Inhalt aus den feldern anhand der Konfiguration.
-     *
-     * @param array $sourceRecord
-     * @param array $options
      */
-    protected function getContentFromFields($sourceRecord, $options): string
+    protected function getContentFromFields(array $sourceRecord, array $options): string
     {
         $aContent = [];
         $aContentFields = Sys25\RnBase\Utility\Strings::trimExplode(',', $options['fields'] ?? '', true);
@@ -249,7 +240,7 @@ class tx_mksearch_indexer_TtAddressAddress implements tx_mksearch_interface_Inde
         }
 
         $wrap = Sys25\RnBase\Utility\Strings::trimExplode('|', $options['wrap'] ?? '', true);
-        if (2 != count($wrap)) {
+        if (2 !== count($wrap)) {
             $wrap = ['', ''];
         }
 

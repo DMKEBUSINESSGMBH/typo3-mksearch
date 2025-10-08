@@ -279,7 +279,7 @@ class tx_mksearch_util_FacetBuilder
         $id,
         $count,
         $facetType = tx_mksearch_model_Facet::TYPE_FIELD,
-    ) {
+    ): object {
         if ($this->getKeyValueFacetInstance()->checkValue($id)) {
             $exploded = $this->getKeyValueFacetInstance()->explodeFacetValue($id);
             $raw = $id;

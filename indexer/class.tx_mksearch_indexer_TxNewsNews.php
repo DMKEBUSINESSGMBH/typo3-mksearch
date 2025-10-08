@@ -101,10 +101,8 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
 
     /**
      * Handle data change for category. All connected news should be updated.
-     *
-     * @param array $catRecord
      */
-    private function handleCategoryChanged($catRecord): void
+    private function handleCategoryChanged(array $catRecord): void
     {
         $whereClause = 'CATMM.tablenames = "tx_news_domain_model_news" AND (CATMM.uid_local = '.(int) $catRecord['uid'];
         if ($catRecord['l10n_parent'] ?? false) {
@@ -135,10 +133,8 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
 
     /**
      * Handle data change for tags. All related news for that tag should be updated.
-     *
-     * @param array $tagRecord
      */
-    private function handleTagChanged($tagRecord): void
+    private function handleTagChanged(array $tagRecord): void
     {
         $whereClause = 'TAGMM.uid_foreign = '.(int) $tagRecord['uid'];
         if ($tagRecord['l10n_parent'] ?? false) {

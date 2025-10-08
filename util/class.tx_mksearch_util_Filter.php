@@ -345,7 +345,7 @@ class tx_mksearch_util_Filter
 
         // die initiale fq muss aus $feldName:$feldWert bestehen. Das ist der alte Weg. Der neue Weg
         // der fq soll hier ignoriert werden.
-        if (2 == count($filterQueryParts)) {
+        if (2 === count($filterQueryParts)) {
             $matches = array_combine($filterQueryPartKeys, Sys25\RnBase\Utility\Strings::trimExplode(':', $sFq));
         } else {
             $matches = [];

@@ -45,13 +45,6 @@ class tx_mksearch_service_engine_Solr extends Sys25\RnBase\Typo3Wrapper\Service\
     private ?tx_mksearch_model_internal_Index $indexModel = null;
 
     /**
-     * Constructor.
-     */
-    public function __construct()
-    {
-    }
-
-    /**
      * Try to connect to the named server, port, and url.
      *
      * @throws Exception
@@ -136,7 +129,7 @@ class tx_mksearch_service_engine_Solr extends Sys25\RnBase\Typo3Wrapper\Service\
                 intval($options['limit'] ?? 0),
                 $options
             );
-            if (200 != $response->getHttpStatus()) {
+            if (200 !== $response->getHttpStatus()) {
                 throw new tx_mksearch_service_engine_SolrException('Error requesting solr. HTTP status:'.$response->getHttpStatus(), -1, $solr->lastUrl);
             }
 
@@ -205,7 +198,7 @@ class tx_mksearch_service_engine_Solr extends Sys25\RnBase\Typo3Wrapper\Service\
     public static function getCredentialsFromString($data): array
     {
         $data = Sys25\RnBase\Utility\Strings::trimExplode(',', $data);
-        if (3 != count($data)) {
+        if (3 !== count($data)) {
             throw new Exception('Wrong credentials for solr defined. Must consist of 3 parts (host like https://my.solr, port, path to core like solr/core_de) separated by comma. So make sure there is no comma else.');
         }
 
@@ -528,7 +521,7 @@ class tx_mksearch_service_engine_Solr extends Sys25\RnBase\Typo3Wrapper\Service\
         try {
             $ret = [];
             $response = $solr->deleteByQuery($query);
-            if (200 != $response->getHttpStatus()) {
+            if (200 !== $response->getHttpStatus()) {
                 throw new tx_mksearch_service_engine_SolrException('Error requesting solr. HTTP status:'.$response->getHttpStatus(), -1, $solr->lastUrl);
             }
 
@@ -567,7 +560,7 @@ class tx_mksearch_service_engine_Solr extends Sys25\RnBase\Typo3Wrapper\Service\
     /**
      * @return tx_mksearch_util_Status
      */
-    public function getStatus()
+    public function getStatus(): object
     {
         /* @var $status tx_mksearch_util_Status */
         $status = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_util_Status');

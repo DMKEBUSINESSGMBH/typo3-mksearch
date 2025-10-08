@@ -560,7 +560,7 @@ class tx_mksearch_tests_hooks_IndexerAutoUpdateTest extends tx_mksearch_tests_Te
     /**
      * @return TYPO3\CMS\Core\DataHandling\DataHandler
      */
-    protected function getTceMock()
+    protected function getTceMock(): object
     {
         $tce = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(TYPO3\CMS\Core\DataHandling\DataHandler::class);
         // default datamap

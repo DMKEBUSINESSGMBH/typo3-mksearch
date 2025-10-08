@@ -210,7 +210,7 @@ class tx_mksearch_mod1_util_Selector
      *
      * @return string selected item
      */
-    protected function showSelectorByTCA($sDefId, $table, $column, array &$aData, $aOptions = [])
+    protected function showSelectorByTCA($sDefId, $table, $column, array &$aData, array $aOptions = [])
     {
         $items = [];
         if (is_array($aOptions['additionalItems'])) {

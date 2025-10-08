@@ -84,9 +84,8 @@ class tx_mksearch_mod1_decorator_Composite
 
     /**
      * @param array $items
-     * @param array $options
      */
-    public function getCompositeInfos($items, $options = []): string
+    public function getCompositeInfos($items, array $options = []): string
     {
         $ret = [];
         foreach ($items as $item) {
@@ -98,10 +97,7 @@ class tx_mksearch_mod1_decorator_Composite
         return '<ul><li>'.$ret.'</li></ul>';
     }
 
-    /**
-     * @param array $options
-     */
-    public function getCompositeInfo(tx_mksearch_model_internal_Composite $item, $options = []): string
+    public function getCompositeInfo(tx_mksearch_model_internal_Composite $item, array $options = []): string
     {
         $formtool = $this->mod->getFormTool();
 

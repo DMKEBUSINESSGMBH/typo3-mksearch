@@ -165,10 +165,8 @@ class tx_mksearch_util_SearchBuilder
      * Mögliche Werte: 'none', 'free', 'or', 'and', 'exact'.
      *
      * Wurde nichts oder none übergeben wird die auswertung solr überlassen
-     *
-     * @param array $options
      */
-    public static function searchSolrOptions($term = '', $combination = '', $options = []): ?string
+    public static function searchSolrOptions($term = '', $combination = '', array $options = []): ?string
     {
         if (self::emptyTerm($term)) {
             return '';
@@ -275,10 +273,10 @@ class tx_mksearch_util_SearchBuilder
     public static function emptyTerm($term): bool
     {
         if (is_array($term)) {
-            return 0 == count($term);
+            return [] === $term;
         }
 
         // wir nutzen strlen und nicht empty damit auch bei "0" gesucht wird
-        return 0 == strlen((string) $term);
+        return '' === (string) $term;
     }
 }

@@ -103,7 +103,7 @@ class tx_mksearch_indexer_FAL extends tx_mksearch_indexer_BaseMedia
         return ltrim($relativeFileName, '/');
     }
 
-    protected function getFileFromRecord($sourceRecord): TYPO3\CMS\Core\Resource\File|false
+    protected function getFileFromRecord(array $sourceRecord): TYPO3\CMS\Core\Resource\File|false
     {
         $resourceStorage = $this->getResourceStorage($sourceRecord['storage'] ?? 0);
         // wir holen uns die url von dem storage, falls vorhanden

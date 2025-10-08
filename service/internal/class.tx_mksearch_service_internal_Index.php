@@ -600,10 +600,8 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
     /**
      * Adds fixed fields which are defined in the indexer config
      * if none are defined we have nothing to do.
-     *
-     * @param array $options
      */
-    protected function addFixedFields(tx_mksearch_interface_IndexerDocument $indexDoc, $options): tx_mksearch_interface_IndexerDocument
+    protected function addFixedFields(tx_mksearch_interface_IndexerDocument $indexDoc, array $options): tx_mksearch_interface_IndexerDocument
     {
         foreach (($options['fixedFields.'] ?? []) as $fixedFieldKey => $fixedFieldValue) {
             // config is something like

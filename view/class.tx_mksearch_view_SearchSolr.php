@@ -88,11 +88,10 @@ class tx_mksearch_view_SearchSolr extends Sys25\RnBase\Frontend\View\Marker\Base
      * @param Sys25\RnBase\Configuration\Processor     $configurations
      * @param Sys25\RnBase\Frontend\Marker\FormatUtil  $formatter
      * @param Sys25\RnBase\Frontend\Marker\ListBuilder $listBuilder
-     * @param array                                    $result
      *
      * @return string
      */
-    protected function handleSuggestions($template, $viewData, $configurations, $formatter, $listBuilder, $result)
+    protected function handleSuggestions($template, $viewData, $configurations, $formatter, $listBuilder, array $result)
     {
         $suggestions = $result['suggestions'] ?? [];
 
@@ -126,11 +125,10 @@ class tx_mksearch_view_SearchSolr extends Sys25\RnBase\Frontend\View\Marker\Base
      * @param Sys25\RnBase\Configuration\Processor     $configurations
      * @param Sys25\RnBase\Frontend\Marker\FormatUtil  $formatter
      * @param Sys25\RnBase\Frontend\Marker\ListBuilder $listBuilder
-     * @param array                                    $result
      *
      * @return string
      */
-    protected function handleFacets($template, $viewData, $configurations, $formatter, $listBuilder, $result)
+    protected function handleFacets($template, $viewData, $configurations, $formatter, $listBuilder, array $result)
     {
         $out = $template;
 

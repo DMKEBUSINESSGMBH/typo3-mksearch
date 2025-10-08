@@ -210,7 +210,7 @@ class tx_mksearch_indexer_seminars_SeminarObjectType1 extends tx_mksearch_indexe
         }
 
         // nothing found?
-        if (0 == count($aTempIndexDocs)) {
+        if ([] === $aTempIndexDocs) {
             return null;
         }
 

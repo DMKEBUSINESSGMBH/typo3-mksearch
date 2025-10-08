@@ -189,12 +189,9 @@ class tx_mksearch_tests_indexer_ttcontent_NormalTest extends tx_mksearch_tests_T
      */
     private function getDefaultOptions(): array
     {
-        $options = [];
-        $options['CType.']['_default_.']['indexedFields.'] = [
+        return ['CType.' => ['_default_.' => ['indexedFields.' => [
             'bodytext', 'imagecaption', 'altText', 'titleText',
-        ];
-
-        return $options;
+        ]]]];
     }
 
     public function testIsPageSetIncludeInSearchDisableIfPageIsSetDisable(): void

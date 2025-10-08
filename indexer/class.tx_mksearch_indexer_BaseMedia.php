@@ -175,9 +175,8 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
      * Indexing binary data by Solr CELL.
      *
      * @param table $tableName
-     * @param array $sourceRecord
      */
-    private function indexSolr($tableName, $sourceRecord, tx_mksearch_interface_IndexerDocument $indexDoc): void
+    private function indexSolr($tableName, array $sourceRecord, tx_mksearch_interface_IndexerDocument $indexDoc): void
     {
         $binaryOptions = [];
         $binaryOptions['sourcefile'] = $this->getAbsFileName($tableName, $sourceRecord);
@@ -196,9 +195,8 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
     /**
      * @param table $tableName
      * @param array $sourceRecord
-     * @param array $options
      */
-    private function indexTika($tableName, $sourceRecord, tx_mksearch_interface_IndexerDocument $indexDoc, $options): void
+    private function indexTika($tableName, $sourceRecord, tx_mksearch_interface_IndexerDocument $indexDoc, array $options): void
     {
         $file = $this->getAbsFileName($tableName, $sourceRecord);
         if (in_array(tx_mksearch_util_Tika::getInstance()->isAvailable(), [false, 0], true)) {
@@ -266,9 +264,8 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
      * Aktuell kann dies über die Dateiendung und/oder das Verzeichnis festgelegt werden.
      *
      * @param array $sourceRecord
-     * @param array $options
      */
-    protected function isIndexableRecord(string $tableName, $sourceRecord, $options)
+    protected function isIndexableRecord(string $tableName, $sourceRecord, array $options)
     {
         $ret = true;
         $filters = (array) ($options[$tableName.'.'] ?? []);
@@ -336,7 +333,7 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
         return preg_match('/.*\/_recycler_\/.*/', $filePath);
     }
 
-    private function getIndexMethod($options): string
+    private function getIndexMethod(array $options): string
     {
         $mode = $options['indexMode'] ?? null ? strtolower($options['indexMode']) : 'solr';
 
@@ -361,16 +358,14 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
      * if it's not the table that should be indexed
      *
      * @param string $tableName
-     * @param array  $sourceRecord
-     * @param array  $options
      *
      * @return bool
      */
     protected function stopIndexing(
         $tableName,
-        $sourceRecord,
+        array $sourceRecord,
         tx_mksearch_interface_IndexerDocument $indexDoc,
-        $options,
+        array $options,
     ) {
         return $this->getIndexerUtility()->stopIndexing(
             $tableName,
@@ -384,12 +379,11 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
      * Sets the index doc to deleted if neccessary.
      *
      * @param string $tableName
-     * @param array  $sourceRecord
      * @param array  $options
      *
      * @return bool
      */
-    protected function hasDocToBeDeleted($tableName, $sourceRecord, tx_mksearch_interface_IndexerDocument $indexDoc, $options = [])
+    protected function hasDocToBeDeleted($tableName, array $sourceRecord, tx_mksearch_interface_IndexerDocument $indexDoc, $options = [])
     {
         return ($sourceRecord['deleted'] ?? false) || ($sourceRecord['hidden'] ?? false);
     }

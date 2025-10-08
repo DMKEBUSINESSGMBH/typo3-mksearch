@@ -46,7 +46,7 @@ class tx_mksearch_util_UserGroups
     /**
      * @return tx_mksearch_util_UserGroups
      */
-    public static function getInstance()
+    public static function getInstance(): object
     {
         static $instance = null;
         if (!is_object($instance)) {
@@ -156,7 +156,7 @@ class tx_mksearch_util_UserGroups
         $this->resultingAccessCache[$pid] = [];
 
         // We're root! We're god! Our access rules are valid without any further checks!
-        if (1 == count($rootline)) {
+        if (1 === count($rootline)) {
             $this->resultingAccessCache[$pid]['groups'] = $self;
         } // We really have to calculate...
         else {

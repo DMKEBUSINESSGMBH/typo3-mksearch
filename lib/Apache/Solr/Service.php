@@ -365,7 +365,7 @@ class Apache_Solr_Service
         $httpResponse = $httpTransport->performGetRequest($url, $timeout);
         $solrResponse = new Apache_Solr_Response($httpResponse, $this->_createDocuments, $this->_collapseSingleValueArrays);
 
-        if (200 != $solrResponse->getHttpStatus()) {
+        if (200 !== $solrResponse->getHttpStatus()) {
             throw new Apache_Solr_HttpTransportException($solrResponse);
         }
 
@@ -390,7 +390,7 @@ class Apache_Solr_Service
         $httpResponse = $httpTransport->performPostRequest($url, $rawPost, $contentType, $timeout);
         $solrResponse = new Apache_Solr_Response($httpResponse, $this->_createDocuments, $this->_collapseSingleValueArrays);
 
-        if (200 != $solrResponse->getHttpStatus()) {
+        if (200 !== $solrResponse->getHttpStatus()) {
             throw new Apache_Solr_HttpTransportException($solrResponse);
         }
 
@@ -480,7 +480,7 @@ class Apache_Solr_Service
     {
         $path = trim($path, '/');
 
-        $this->_path = strlen($path) > 0 ? '/'.$path.'/' : '/';
+        $this->_path = $path !== '' ? '/'.$path.'/' : '/';
 
         if ($this->_urlsInited) {
             $this->_initUrls();
@@ -671,7 +671,7 @@ class Apache_Solr_Service
         $httpResponse = $httpTransport->performHeadRequest($this->_pingUrl, $timeout);
         $solrResponse = new Apache_Solr_Response($httpResponse, $this->_createDocuments, $this->_collapseSingleValueArrays);
 
-        if (200 == $solrResponse->getHttpStatus()) {
+        if (200 === $solrResponse->getHttpStatus()) {
             return microtime(true) - $start;
         }
 

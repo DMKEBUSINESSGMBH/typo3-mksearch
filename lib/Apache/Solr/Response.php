@@ -140,11 +140,9 @@ class Apache_Solr_Response
     /**
      * Magic get to expose the parsed data and to lazily load it.
      *
-     * @param string $key
      *
-     * @return mixed
      */
-    public function __get($key)
+    public function __get(string $key): mixed
     {
         if (!$this->_isParsed) {
             $this->_parseData();
@@ -157,11 +155,10 @@ class Apache_Solr_Response
     /**
      * Magic function for isset function on parsed data.
      *
-     * @param string $key
      *
      * @return bool
      */
-    public function __isset($key)
+    public function __isset(string $key)
     {
         if (!$this->_isParsed) {
             $this->_parseData();

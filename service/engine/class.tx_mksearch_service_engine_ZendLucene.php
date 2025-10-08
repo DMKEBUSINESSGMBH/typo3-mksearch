@@ -807,7 +807,7 @@ class tx_mksearch_service_engine_ZendLucene extends Sys25\RnBase\Typo3Wrapper\Se
     /**
      * @return tx_mksearch_util_Status
      */
-    public function getStatus()
+    public function getStatus(): object
     {
         $status = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_util_Status');
         // TODO: sinnvollen Test einfallen lassen...

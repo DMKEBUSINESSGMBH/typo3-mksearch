@@ -42,12 +42,9 @@ class tx_mksearch_tests_indexer_TtContentTest extends tx_mksearch_tests_Testcase
 
     private function getDefaultOptions(): array
     {
-        $options = [];
-        $options['CType.']['_default_.']['indexedFields.'] = [
+        return ['CType.' => ['_default_.' => ['indexedFields.' => [
             'bodytext', 'imagecaption', 'altText', 'titleText',
-        ];
-
-        return $options;
+        ]]]];
     }
 
     #[PHPUnit\Framework\Attributes\DataProvider('getGetTitleData')]

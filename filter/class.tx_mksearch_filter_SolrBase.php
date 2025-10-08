@@ -196,11 +196,10 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
     /**
      * Fügt den Suchstring zu dem Filter hinzu.
      *
-     * @param array                                $fields
      * @param ParametersInterface                  $parameters
      * @param Sys25\RnBase\Configuration\Processor $configurations
      */
-    protected function handleTerm(&$fields, &$parameters, &$configurations, string $confId)
+    protected function handleTerm(array &$fields, &$parameters, &$configurations, string $confId)
     {
         if ($termTemplate = ($fields['term'] ?? '')) {
             $termTemplate = $this->getFilterUtility()->parseTermTemplate(
@@ -217,12 +216,11 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
     }
 
     /**
-     * @param array                                $options
      * @param ParametersInterface                  $parameters
      * @param Sys25\RnBase\Configuration\Processor $configurations
      * @param string                               $confId
      */
-    protected function handleFacet(&$options, &$parameters, &$configurations, $confId)
+    protected function handleFacet(array &$options, &$parameters, &$configurations, $confId)
     {
         $fields = $this->getConfValue('options.facet.fields') ?? '';
         $fields = Sys25\RnBase\Utility\Strings::trimExplode(',', $fields, true);
@@ -279,11 +277,10 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
     /**
      * Fügt eine Filter Query (Einschränkung) zu dem Filter hinzu.
      *
-     * @param array                                $options
      * @param ParametersInterface                  $parameters
      * @param Sys25\RnBase\Configuration\Processor $configurations
      */
-    protected function handleFq(&$options, &$parameters, &$configurations, string $confId)
+    protected function handleFq(array &$options, &$parameters, &$configurations, string $confId)
     {
         self::addFilterQuery($options, self::getFilterQueryForFeGroups());
 
@@ -434,11 +431,10 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
     /**
      * Fügt die SiteRootPage zur Filter Query hinzu.
      *
-     * @param array                                $options
      * @param Sys25\RnBase\Configuration\Processor $configurations
      */
     public function handleFqForSiteRootPage(
-        &$options,
+        array &$options,
         &$configurations,
         string $confId,
     ): void {
@@ -575,9 +571,8 @@ class tx_mksearch_filter_SolrBase extends tx_mksearch_filter_BaseFilter
      * für alle Konfigurationsoptionen.
      *
      * @param array &$fields
-     * @param array &$options
      */
-    protected function handleSpatial(&$fields, &$options)
+    protected function handleSpatial(&$fields, array &$options)
     {
         // Die Koordinaten, anhand der gesucht werden soll.
         $point = $this->getSpatialPoint();

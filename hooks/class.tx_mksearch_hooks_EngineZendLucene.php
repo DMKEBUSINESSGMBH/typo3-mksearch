@@ -47,7 +47,7 @@ class tx_mksearch_hooks_EngineZendLucene
      * This method can be used to normalize search terms
      * to match conditions of indexed data, e. g. adapt charse encoding.
      */
-    public function manipulateSingleTerm($p): void
+    public function manipulateSingleTerm(array $p): void
     {
         if (!isset($p['term'])) {
             throw new Exception('tx_mksearch_hooks_EngineZendLucene::manipulateSingleTerm(): No term given!');

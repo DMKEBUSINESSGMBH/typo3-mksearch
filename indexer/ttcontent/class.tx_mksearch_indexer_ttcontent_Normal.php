@@ -168,11 +168,9 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
     /**
      * returns the title for the element to index.
      *
-     * @param array $options
-     *
      * @return string
      */
-    protected function getTitle($options)
+    protected function getTitle(array $options)
     {
         $title = '';
         $model = $this->getModelToIndex();
@@ -332,10 +330,9 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
     /**
      * Prüft ob das Element anhand des CType inkludiert oder ignoriert werden soll.
      *
-     * @param array $sourceRecord
      * @param array $options
      */
-    protected function checkCTypes($sourceRecord, $options): bool
+    protected function checkCTypes(array $sourceRecord, $options): bool
     {
         $ctypes = $this->getConfigValue('ignoreCTypes', $options);
         if (is_array($ctypes) && count($ctypes)) {
@@ -449,12 +446,9 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
     /**
      * Prüft ob das Element anhand der Spalte inkludiert oder ausgeschlossen werden soll.
      *
-     * @param array $sourceRecord
-     * @param array $options
-     *
      * @return bool
      */
-    protected function isIndexableColumn($sourceRecord, $options)
+    protected function isIndexableColumn(array $sourceRecord, array $options)
     {
         $columns = $this->getConfigValue('columns', $options['include.'] ?? []);
         if (is_array($columns) && count($columns)) {

@@ -544,7 +544,7 @@ class tx_mksearch_service_engine_ElasticSearch extends Sys25\RnBase\Typo3Wrapper
      *
      * @return tx_mksearch_util_Status
      */
-    public function getStatus()
+    public function getStatus(): object
     {
         /* @var $status tx_mksearch_util_Status */
         $status = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_util_Status');

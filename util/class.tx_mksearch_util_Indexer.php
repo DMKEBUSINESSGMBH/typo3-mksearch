@@ -32,7 +32,7 @@ class tx_mksearch_util_Indexer
     /**
      * @return tx_mksearch_util_Indexer
      */
-    public static function getInstance()
+    public static function getInstance(): object
     {
         static $instance = null;
         if (!is_object($instance)) {
@@ -348,11 +348,9 @@ class tx_mksearch_util_Indexer
      * Der Entscheidungsbaum dafür ist relativ, sollte aber durch den Code
      * illustriert werden.
      *
-     * @param array $sourceRecord
-     *
      * @return bool
      */
-    public function isOnIndexablePage($sourceRecord, array $options)
+    public function isOnIndexablePage(array $sourceRecord, array $options)
     {
         $pid = $sourceRecord['pid'] ?? 0;
         $includePages = $this->getConfigValue('pages', $options['include.'] ?? []);
@@ -620,14 +618,12 @@ class tx_mksearch_util_Indexer
      * if it's not the table that should be indexed
      *
      * @param string $tableName
-     * @param array  $sourceRecord
-     * @param array  $options
      */
     public function stopIndexing(
         $tableName,
-        $sourceRecord,
+        array $sourceRecord,
         tx_mksearch_interface_IndexerDocument $indexDoc,
-        $options,
+        array $options,
     ): bool {
         // Wir prüfen, ob die zu indizierende Sprache stimmt.
         $sysLanguageUidField = tx_mksearch_util_TCA::getLanguageFieldForTable($tableName);

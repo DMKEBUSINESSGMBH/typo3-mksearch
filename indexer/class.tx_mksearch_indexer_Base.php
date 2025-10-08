@@ -209,16 +209,14 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
      * if it's not the table that should be indexed
      *
      * @param string $tableName
-     * @param array  $sourceRecord
-     * @param array  $options
      *
      * @return bool
      */
     protected function stopIndexing(
         $tableName,
-        $sourceRecord,
+        array $sourceRecord,
         tx_mksearch_interface_IndexerDocument $indexDoc,
-        $options,
+        array $options,
     ) {
         return $this->getIndexerUtility()->stopIndexing(
             $tableName,
@@ -461,14 +459,13 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
     /**
      * Erweitert den record um die enable columns.
      *
-     * @param string $typo3InternalName
      * @param string $enableColumnName
      *
      * @return array
      */
     protected function enhanceRecordIndexMappingForEnableColumn(
         array $recordIndexMapping,
-        $typo3InternalName,
+        string $typo3InternalName,
         $enableColumnName,
         string $indexDocFieldsPrefix,
     ) {
@@ -692,11 +689,9 @@ CONFIG;
      * Der Entscheidungsbaum dafür ist relativ, sollte aber durch den Code
      * illustriert werden.
      *
-     * @param array $sourceRecord
-     *
      * @return bool
      */
-    protected function isOnIndexablePage($sourceRecord, array $options)
+    protected function isOnIndexablePage(array $sourceRecord, array $options)
     {
         return tx_mksearch_util_Indexer::getInstance()
             ->isOnIndexablePage(

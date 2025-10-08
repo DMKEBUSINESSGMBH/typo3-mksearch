@@ -131,11 +131,9 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
     /**
      * Sucht in Solr.
      *
-     * @param array $options
-     *
      * @return array|false
      */
-    protected function searchSolr(array &$fields, &$options, Sys25\RnBase\Frontend\Request\RequestInterface $request, tx_mksearch_model_internal_Index $index)
+    protected function searchSolr(array &$fields, array &$options, Sys25\RnBase\Frontend\Request\RequestInterface $request, tx_mksearch_model_internal_Index $index)
     {
         $configurations = $request->getConfigurations();
         // erstmal den cache fragen. Das ist vor allem interessant wenn
