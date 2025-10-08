@@ -34,7 +34,7 @@
 class tx_mksearch_tests_util_SearchBuilderTest extends tx_mksearch_tests_Testcase
 {
     #[PHPUnit\Framework\Attributes\DataProvider('providerSearchSolrOptions')]
-    public function testSearchSolrOptions($term, $combination, $options, $result): void
+    public function testSearchSolrOptions($term, $combination, array $options, $result): void
     {
         $res = tx_mksearch_util_SearchBuilder::searchSolrOptions($term, $combination, $options);
         self::assertEquals($result, $res);

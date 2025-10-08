@@ -190,9 +190,9 @@ class tx_mksearch_indexer_FAL extends tx_mksearch_indexer_BaseMedia
      */
     protected function stopIndexing(
         $tableName,
-        $sourceRecord,
+        array $sourceRecord,
         tx_mksearch_interface_IndexerDocument $indexDoc,
-        $options,
+        array $options,
     ) {
         if ('sys_file_metadata' == $tableName) {
             $this->getInternalIndexService()->addRecordToIndex(

@@ -35,7 +35,7 @@
 class tx_mksearch_indexer_FALTest extends tx_mksearch_indexer_FAL
 {
     // wir wollen isIndexableRecord nicht erst public machen
-    public function testIsIndexableRecord(string $tableName, $sourceRecord, $options)
+    public function testIsIndexableRecord(string $tableName, $sourceRecord, array $options)
     {
         return $this->isIndexableRecord($tableName, $sourceRecord, $options);
     }

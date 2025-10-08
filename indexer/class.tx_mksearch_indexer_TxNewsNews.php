@@ -60,16 +60,14 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
      * check if related data has changed.
      *
      * @param string $tableName
-     * @param array  $rawData
-     * @param array  $options
      *
      * @return bool
      */
     protected function stopIndexing(
         $tableName,
-        $rawData,
+        array $rawData,
         tx_mksearch_interface_IndexerDocument $indexDoc,
-        $options,
+        array $options,
     ) {
         $stopIndexing = parent::stopIndexing($tableName, $rawData, $indexDoc, $options);
 

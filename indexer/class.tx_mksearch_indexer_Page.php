@@ -61,7 +61,7 @@ class tx_mksearch_indexer_Page extends tx_mksearch_indexer_Base
      *
      * @see tx_mksearch_indexer_Base::stopIndexing()
      */
-    protected function stopIndexing($tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options)
+    protected function stopIndexing($tableName, array $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, array $options)
     {
         if ('pages' == $tableName) {
             // this our first entry point. so we fetch all subpages and put them into

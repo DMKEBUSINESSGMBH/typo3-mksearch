@@ -327,10 +327,8 @@ class tx_mksearch_indexer_seminars_Seminar implements tx_mksearch_interface_Inde
     /**
      * Prüft anhand der Konfiguration, ob der übergebene Datensatz indiziert werden soll.
      * TODO: implement.
-     *
-     * @param array $sourceRecord
      */
-    protected function isIndexableRecord($sourceRecord, array $options)
+    protected function isIndexableRecord(array $sourceRecord, array $options)
     {
         return tx_mksearch_util_Indexer::getInstance()
                     ->isOnIndexablePage($sourceRecord, $options);

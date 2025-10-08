@@ -274,12 +274,10 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
      * if it's not the table that should be indexed
      *
      * @param string $tableName
-     * @param array  $rawData
-     * @param array  $options
      *
      * @return bool
      */
-    protected function stopIndexing($tableName, $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, $options)
+    protected function stopIndexing($tableName, array $rawData, tx_mksearch_interface_IndexerDocument $indexDoc, array $options)
     {
         if ('pages' == $tableName) {
             $this->handlePagesChanged($rawData);
