@@ -116,6 +116,9 @@ CREATE TABLE tx_mksearch_queue (
     being_indexed tinyint(4) DEFAULT '0' NOT NULL,
 
     PRIMARY KEY (uid)
+    KEY being_indexed (being_indexed),
+    KEY recid (recid),
+    KEY tablename (tablename)
 );
 
 #
@@ -133,7 +136,8 @@ CREATE TABLE tx_mksearch_keywords (
     link tinytext DEFAULT '' NOT NULL,
 
     PRIMARY KEY (uid),
-    KEY parent (pid)
+    KEY parent (pid),
+    KEY keyword (keyword)
 );
 
 #
