@@ -1,6 +1,11 @@
 Changelog
 =========
 
+12.0.17
+-----
+
+- Add some database indices/keys for better performance
+
 12.0.16
 -----
 
