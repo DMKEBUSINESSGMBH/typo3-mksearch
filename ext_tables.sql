@@ -115,7 +115,7 @@ CREATE TABLE tx_mksearch_queue (
     resolver varchar(255) NOT NULL default '',
     being_indexed tinyint(4) DEFAULT '0' NOT NULL,
 
-    PRIMARY KEY (uid)
+    PRIMARY KEY (uid),
     KEY being_indexed (being_indexed),
     KEY recid (recid),
     KEY tablename (tablename)
