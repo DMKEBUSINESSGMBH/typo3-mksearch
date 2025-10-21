@@ -676,7 +676,7 @@ class Apache_Solr_Service_Balancer
      *
      * @throws Apache_Solr_InvalidArgumentException if $file, $params, or $document are invalid
      */
-    public function extract($file, $params = [], $document = null, $mimetype = 'application/octet-stream')
+    public function extract(string $file, $params = [], $document = null, $mimetype = 'application/octet-stream')
     {
         $service = $this->_selectWriteService();
 
@@ -778,7 +778,7 @@ class Apache_Solr_Service_Balancer
      *
      * @throws Apache_Solr_HttpTransportException If an error occurs during the service call
      */
-    public function search($query, $offset = 0, $limit = 10, $params = [], $method = Apache_Solr_Service::METHOD_GET)
+    public function search($query, $offset = 0, $limit = 10, $params = [], string $method = Apache_Solr_Service::METHOD_GET)
     {
         $service = $this->_selectReadService();
 
