@@ -592,7 +592,7 @@ class tx_mksearch_service_engine_ZendLucene extends Sys25\RnBase\Typo3Wrapper\Se
      *
      * @return unknown_type
      */
-    private function getIndexDocumentByContentUid($uid, $extKey, $contentType)
+    private function getIndexDocumentByContentUid(string $uid, $extKey, $contentType)
     {
         $searchTerm = sprintf('+uid:%s +extKey:%s +contentType:%s', $uid, $extKey, $contentType);
 

@@ -1028,7 +1028,7 @@ class Apache_Solr_Service
      *
      * @throws Apache_Solr_InvalidArgumentException if $file, $params, or $document are invalid
      */
-    public function extract($file, $params = [], $document = null, $mimetype = 'application/octet-stream'): \Apache_Solr_Response
+    public function extract(string $file, $params = [], $document = null, $mimetype = 'application/octet-stream'): \Apache_Solr_Response
     {
         // check if $params is an array (allow null for default empty array)
         if (!is_null($params)) {
@@ -1133,7 +1133,7 @@ class Apache_Solr_Service
      *
      * @throws Apache_Solr_InvalidArgumentException if $url, $params, or $document are invalid
      */
-    public function extractFromUrl($url, $params = [], $document = null, $mimetype = 'application/octet-stream'): \Apache_Solr_Response
+    public function extractFromUrl(string $url, $params = [], $document = null, $mimetype = 'application/octet-stream'): \Apache_Solr_Response
     {
         // check if $params is an array (allow null for default empty array)
         if (!is_null($params)) {
@@ -1199,7 +1199,7 @@ class Apache_Solr_Service
      * @throws Apache_Solr_HttpTransportException   If an error occurs during the service call
      * @throws Apache_Solr_InvalidArgumentException If an invalid HTTP method is used
      */
-    public function search($query, $offset = 0, $limit = 10, $params = [], $method = self::METHOD_GET): ?\Apache_Solr_Response
+    public function search($query, $offset = 0, $limit = 10, $params = [], string $method = self::METHOD_GET): ?\Apache_Solr_Response
     {
         // ensure params is an array
         if (!is_null($params)) {
@@ -1222,11 +1222,11 @@ class Apache_Solr_Service
         $params['rows'] = $limit;
 
         $queryString = $this->_generateQueryString($params);
-        if (self::METHOD_GET == $method) {
+        if (self::METHOD_GET === $method) {
             return $this->_sendRawGet($this->_searchUrl.$this->_queryDelimiter.$queryString);
         }
 
-        if (self::METHOD_POST == $method) {
+        if (self::METHOD_POST === $method) {
             return $this->_sendRawPost($this->_searchUrl, $queryString, false, 'application/x-www-form-urlencoded; charset=UTF-8');
         }
 

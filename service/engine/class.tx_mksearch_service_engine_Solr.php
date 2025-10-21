@@ -311,7 +311,7 @@ class tx_mksearch_service_engine_Solr extends Sys25\RnBase\Typo3Wrapper\Service\
      *
      * @return unknown_type
      */
-    private function getIndexDocumentByContentUid($uid, $extKey, $contentType): array
+    private function getIndexDocumentByContentUid(string $uid, $extKey, $contentType): array
     {
         $searchTerm = sprintf('+uid:%s +extKey:%s +contentType:%s', $uid, $extKey, $contentType);
 
