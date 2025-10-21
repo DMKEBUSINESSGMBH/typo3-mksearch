@@ -136,8 +136,7 @@ CREATE TABLE tx_mksearch_keywords (
     link tinytext NOT NULL,
 
     PRIMARY KEY (uid),
-    KEY parent (pid),
-    KEY keyword (keyword)
+    KEY parent (pid)
 );
 
 #
