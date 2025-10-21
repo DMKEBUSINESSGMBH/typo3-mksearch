@@ -1,6 +1,11 @@
 Changelog
 =========
 
+12.0.19
+-----
+
+- Fix another error in sql declarations
+
 12.0.18
 -----
 
