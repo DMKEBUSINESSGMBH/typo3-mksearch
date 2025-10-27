@@ -362,7 +362,7 @@ class tx_mksearch_util_FacetBuilder
         } elseif ($var instanceof Sys25\RnBase\Domain\Model\BaseModel) {
             $childs = $var instanceof tx_mksearch_model_Facet ? $var->getChilds() : $var->getItems();
             $childs = is_array($childs) ? $childs : [];
-            $var = array_map('strval', $var->getProperty());
+            $var = array_map(strval(...), $var->getProperty());
             $var['childs'] = $levels-- <= 0 ? 'length: '.count($childs) : self::debugFacets($childs, $levels);
         }
 

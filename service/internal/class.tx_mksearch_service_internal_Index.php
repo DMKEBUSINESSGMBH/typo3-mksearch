@@ -542,7 +542,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
                                     // getData liefert die IndexerField Objekte.
                                     // Diese wandeln wir in Strings um, da sonst die Objekte
                                     // nicht wiederhergesetllt werden können und Serialisiert auch zu viel Speicher rauben!
-                                    'data' => array_map('strval', $doc->getData()),
+                                    'data' => array_map(strval(...), $doc->getData()),
                                 ]
                             );
                         }
