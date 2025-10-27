@@ -194,7 +194,7 @@ class tx_mksearch_indexer_FAL extends tx_mksearch_indexer_BaseMedia
         tx_mksearch_interface_IndexerDocument $indexDoc,
         array $options,
     ) {
-        if ('sys_file_metadata' == $tableName) {
+        if ('sys_file_metadata' == $tableName && ($sourceRecord['file'] ?? null)) {
             $this->getInternalIndexService()->addRecordToIndex(
                 'sys_file',
                 $sourceRecord['file']

@@ -1,6 +1,46 @@
 Changelog
 =========
 
+12.0.20
+-----
+
+- require rn_base < 1.20.0
+
+12.0.19
+-----
+
+- Fix another error in sql declarations
+
+12.0.18
+-----
+
+- Fix error in sql declarations
+
+12.0.17
+-----
+
+- Add some database indices/keys for better performance
+
+12.0.16
+-----
+
+- Exclude all pagebrowser pointers from chash
+
+12.0.15
+-----
+
+- Fix indexed of files in recycler
+
+12.0.14
+-----
+
+- Fix PHP warnings
+
+12.0.13
+-----
+
+- Fix PHP 7.4 compatibility
+
 12.0.12
 -----
 

@@ -805,7 +805,7 @@ CONFIG;
         $languageUid = 0;
         $languageField = tx_mksearch_util_TCA::getLanguageFieldForTable($tableName);
         if ($languageField) {
-            $languageUid = (int) $rawData[$languageField];
+            $languageUid = (int) ($rawData[$languageField] ?? 0);
         }
 
         $newQuerySettings->setLanguageAspect(
