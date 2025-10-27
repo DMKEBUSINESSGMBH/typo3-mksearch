@@ -148,6 +148,7 @@ class tx_mksearch_service_engine_Solr extends Sys25\RnBase\Typo3Wrapper\Service\
                 if ($response->response ?? null) {
                     $numFound = $response->response->numFound ?? 0;
                 }
+
                 $ret['numFound'] = $numFound;
             }
 
