@@ -31,12 +31,12 @@ $EM_CONF['mksearch'] = [
     'category' => 'plugin',
     'author' => 'Michael Wagner, Hannes Bochmann, Rene Nitzsche',
     'author_email' => 'dev@dmk-ebusiness.de',
-    'version' => '12.0.20',
+    'version' => '13.0.0',
     'state' => 'stable',
     'author_company' => 'DMK E-Business GmbH',
     'constraints' => [
         'depends' => [
-            'rn_base' => '',
+            'rn_base' => '1.20.0-',
             'typo3' => '12.4.0-13.4.99',
         ],
         'conflicts' => [],

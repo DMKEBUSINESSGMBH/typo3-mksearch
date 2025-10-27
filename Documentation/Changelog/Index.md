@@ -1,6 +1,11 @@
 Changelog
 =========
 
+13.0.0
+-----
+
+- Support for TYPO3 12.4 and 13.4 only
+
 12.0.20
 -----
 

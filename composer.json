@@ -39,7 +39,7 @@
         "typo3-ter/mksearch": "self.version"
     },
     "require": {
-        "digedag/rn-base": "dev-upgrade/typo3_13",
+        "digedag/rn-base": "~1.20.0",
         "linawolf/list-type-migration": "^1.0",
         "typo3/cms-core": "^12.4 || ^13.4",
         "typo3/cms-install": "^12.4 || ^13.4",
