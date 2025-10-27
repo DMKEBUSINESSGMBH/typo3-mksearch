@@ -42,7 +42,7 @@
         "php": "^7.4 || ^8.0",
         "typo3/cms-core": "^11.5.7 || ^12.4.7",
         "typo3/cms-scheduler": "^11.5.7 || ^12.4.7",
-        "digedag/rn-base": "^1.17"
+        "digedag/rn-base": "~1.17.0 || ~1.18.0 || ~1.19.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.3",
