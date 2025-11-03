@@ -75,8 +75,8 @@ class tx_mksearch_tests_hooks_DatabaseConnectionTest extends tx_mksearch_tests_T
         TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_hooks_DatabaseConnection')->doSelectPost();
 
         self::assertSame($initialValue, $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['rn_base']['loadHiddenObjects']);
-        self::assertFalse($backUpSetProperty->getValue(null));
-        self::assertNull($backUpProperty->getValue(null));
+        self::assertFalse($backUpSetProperty->getValue());
+        self::assertNull($backUpProperty->getValue());
     }
 
     /**
@@ -96,8 +96,8 @@ class tx_mksearch_tests_hooks_DatabaseConnectionTest extends tx_mksearch_tests_T
         self::assertSame('test', $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['rn_base']['loadHiddenObjects']);
 
         $backUpSetProperty = new ReflectionProperty('tx_mksearch_hooks_DatabaseConnection', 'loadHiddenObjectsConfigurationBackupSet');
-        self::assertFalse($backUpSetProperty->getValue(null));
-        self::assertSame($initialValue, $backUpProperty->getValue(null));
+        self::assertFalse($backUpSetProperty->getValue());
+        self::assertSame($initialValue, $backUpProperty->getValue());
     }
 
     /**
@@ -116,10 +116,10 @@ class tx_mksearch_tests_hooks_DatabaseConnectionTest extends tx_mksearch_tests_T
         self::assertSame(0, $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['rn_base']['loadHiddenObjects']);
 
         $backUpProperty = new ReflectionProperty('tx_mksearch_hooks_DatabaseConnection', 'loadHiddenObjectsConfigurationBackup');
-        self::assertSame('test', $backUpProperty->getValue(null));
+        self::assertSame('test', $backUpProperty->getValue());
 
         $backUpSetProperty = new ReflectionProperty('tx_mksearch_hooks_DatabaseConnection', 'loadHiddenObjectsConfigurationBackupSet');
-        self::assertTrue($backUpSetProperty->getValue(null));
+        self::assertTrue($backUpSetProperty->getValue());
     }
 
     /**
@@ -139,10 +139,10 @@ class tx_mksearch_tests_hooks_DatabaseConnectionTest extends tx_mksearch_tests_T
         self::assertSame(0, $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['rn_base']['loadHiddenObjects']);
 
         $backUpProperty = new ReflectionProperty('tx_mksearch_hooks_DatabaseConnection', 'loadHiddenObjectsConfigurationBackup');
-        self::assertSame('test', $backUpProperty->getValue(null));
+        self::assertSame('test', $backUpProperty->getValue());
 
         $backUpSetProperty = new ReflectionProperty('tx_mksearch_hooks_DatabaseConnection', 'loadHiddenObjectsConfigurationBackupSet');
-        self::assertTrue($backUpSetProperty->getValue(null));
+        self::assertTrue($backUpSetProperty->getValue());
     }
 
     /**
@@ -162,10 +162,10 @@ class tx_mksearch_tests_hooks_DatabaseConnectionTest extends tx_mksearch_tests_T
         self::assertSame('test', $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['rn_base']['loadHiddenObjects']);
 
         $backUpProperty = new ReflectionProperty('tx_mksearch_hooks_DatabaseConnection', 'loadHiddenObjectsConfigurationBackup');
-        self::assertNull($backUpProperty->getValue(null));
+        self::assertNull($backUpProperty->getValue());
 
         $backUpSetProperty = new ReflectionProperty('tx_mksearch_hooks_DatabaseConnection', 'loadHiddenObjectsConfigurationBackupSet');
-        self::assertFalse($backUpSetProperty->getValue(null));
+        self::assertFalse($backUpSetProperty->getValue());
     }
 
     /**
@@ -185,10 +185,10 @@ class tx_mksearch_tests_hooks_DatabaseConnectionTest extends tx_mksearch_tests_T
         self::assertSame('test', $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['rn_base']['loadHiddenObjects']);
 
         $backUpProperty = new ReflectionProperty('tx_mksearch_hooks_DatabaseConnection', 'loadHiddenObjectsConfigurationBackup');
-        self::assertNull($backUpProperty->getValue(null));
+        self::assertNull($backUpProperty->getValue());
 
         $backUpSetProperty = new ReflectionProperty('tx_mksearch_hooks_DatabaseConnection', 'loadHiddenObjectsConfigurationBackupSet');
-        self::assertFalse($backUpSetProperty->getValue(null));
+        self::assertFalse($backUpSetProperty->getValue());
     }
 
     /**

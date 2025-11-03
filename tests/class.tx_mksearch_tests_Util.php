@@ -381,7 +381,7 @@ class tx_mksearch_tests_Util
         $property = new ReflectionProperty(TYPO3\CMS\Core\Utility\RootlineUtility::class, 'rootlineFields');
 
         $rootLineFields = Sys25\RnBase\Utility\Strings::trimExplode(',', self::$addRootLineFieldsBackup, true);
-        $property->setValue(null, array_diff($property->getValue(null), $rootLineFields));
+        $property->setValue(null, array_diff($property->getValue(), $rootLineFields));
     }
 
     public static function resetAddRootlineFields(): void
@@ -389,7 +389,7 @@ class tx_mksearch_tests_Util
         if (null != self::$addRootLineFieldsBackup) {
             $property = new ReflectionProperty(TYPO3\CMS\Core\Utility\RootlineUtility::class, 'rootlineFields');
             $rootLineFields = Sys25\RnBase\Utility\Strings::trimExplode(',', self::$addRootLineFieldsBackup, true);
-            $property->setValue(null, array_unique(array_merge($property->getValue(null), $rootLineFields)));
+            $property->setValue(null, array_unique(array_merge($property->getValue(), $rootLineFields)));
             self::$addRootLineFieldsBackup = null;
         }
     }
