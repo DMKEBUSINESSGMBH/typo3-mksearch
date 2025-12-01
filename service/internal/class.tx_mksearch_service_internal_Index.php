@@ -105,7 +105,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 
         if ($checkExisting) {
             $options = [];
-            $options['where'] = 'recid=\''.$uid.'\' AND tablename=\''.$tableName.'\' AND deleted=0 AND being_indexed=0';
+            $options['where'] = "recid='".$uid."' AND tablename='".$tableName."' AND deleted=0 AND being_indexed=0";
             $options['enablefieldsoff'] = 1;
             $ret = $this->getDatabaseConnection()->doSelect('uid', self::$queueTable, $options);
             if (0 !== count($ret)) {
@@ -684,7 +684,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
 
         $query = 'INSERT INTO '.self::$queueTable.'(tablename, recid, resolver, prefer) ';
         $query .= 'SELECT DISTINCT '.$fullQuoted.', '.$uidName.
-            ', CONCAT(\''.$resolver.'\'), CONCAT(\''.$prefer.'\') FROM '.$from.$where;
+            ", CONCAT('".$resolver."'), CONCAT('".$prefer."') FROM ".$from.$where;
 
         if ($options['debug'] ?? false) {
             Sys25\RnBase\Utility\Debug::debug(

@@ -90,7 +90,7 @@ class tx_mksearch_mod1_util_Misc
             // wir holen alle seiten auf denen keywords liegen
             $database->doSelect('pid as pageid', 'tx_mksearch_keywords', ['enablefieldsbe' => 1]),
             // wir holen alle seiten die mksearch beinhalten
-            $database->doSelect('uid as pageid', 'pages', ['enablefieldsbe' => 1, 'where' => 'module=\'mksearch\''])
+            $database->doSelect('uid as pageid', 'pages', ['enablefieldsbe' => 1, 'where' => "module='mksearch'"])
         );
         if ([] === $pages) {
             return [];

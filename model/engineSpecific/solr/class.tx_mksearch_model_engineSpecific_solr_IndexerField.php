@@ -28,7 +28,7 @@
 /**
  * Model for solr specific indexer fields.
  */
-class tx_mksearch_model_engineSpecific_solr_IndexerField extends tx_mksearch_model_IndexerFieldBase
+class tx_mksearch_model_engineSpecific_solr_IndexerField extends tx_mksearch_model_IndexerFieldBase implements Stringable
 {
     /**
      * Return the field's value

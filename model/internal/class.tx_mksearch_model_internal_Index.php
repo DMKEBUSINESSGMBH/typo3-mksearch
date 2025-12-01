@@ -28,7 +28,7 @@
 /**
  * Model for indices.
  */
-class tx_mksearch_model_internal_Index extends Sys25\RnBase\Domain\Model\BaseModel
+class tx_mksearch_model_internal_Index extends Sys25\RnBase\Domain\Model\BaseModel implements Stringable
 {
     private $options = false;
 

@@ -34,7 +34,7 @@ class tx_mksearch_tests_service_engine_ElasticSearchTest extends tx_mksearch_tes
 {
     protected function setUp(): void
     {
-        self::markTestSkipped('Loading of the Elastica library doesn\'t work since using the TYPOe testing framework because the PackageManager is not available.');
+        self::markTestSkipped("Loading of the Elastica library doesn't work since using the TYPOe testing framework because the PackageManager is not available.");
         parent::setUp();
         $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['mksearch']['useInternalElasticaLib'] = 1;
     }
