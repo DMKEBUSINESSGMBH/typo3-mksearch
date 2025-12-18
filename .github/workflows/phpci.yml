@@ -19,10 +19,23 @@ jobs:
 
         strategy:
             matrix:
-                php-version:
-                    - "8.1"
-                    - "8.2"
-                    - "8.3"
+                include:
+                    -   typo3-version: "^11.5"
+                        php-version: "7.4"
+                    -   typo3-version: "^11.5"
+                        php-version: "8.0"
+                    -   typo3-version: "^11.5"
+                        php-version: "8.1"
+                    -   typo3-version: "^11.5"
+                        php-version: "8.2"
+                    -   typo3-version: "^11.5"
+                        php-version: "8.3"
+                    -   typo3-version: "^12.4"
+                        php-version: "8.1"
+                    -   typo3-version: "^12.4"
+                        php-version: "8.2"
+                    -   typo3-version: "^12.4"
+                        php-version: "8.3"
 
         steps:
             -
@@ -50,7 +63,9 @@ jobs:
                     restore-keys: "php-${{ matrix.php-version }}-composer-"
             -
                 name: "Install composer dependencies"
-                run: "composer install --no-interaction --no-progress --no-suggest"
+                run: |
+                    composer remove --no-update typo3/cms-core typo3/cms-scheduler
+                    composer require typo3/cms-core:"${{ matrix.typo3-version }}" typo3/cms-scheduler:"${{ matrix.typo3-version }}"
             -
                 name: "Run Linter"
                 run: "composer lint:php"
@@ -68,10 +83,23 @@ jobs:
                     - "test:phpcs"
                     - "test:phpcompatibility"
                     - "test:phpstan"
-                php-version:
-                    - "8.1"
-                    - "8.2"
-                    - "8.3"
+                include:
+                    -   typo3-version: "^11.5"
+                        php-version: "7.4"
+                    -   typo3-version: "^11.5"
+                        php-version: "8.0"
+                    -   typo3-version: "^11.5"
+                        php-version: "8.1"
+                    -   typo3-version: "^11.5"
+                        php-version: "8.2"
+                    -   typo3-version: "^11.5"
+                        php-version: "8.3"
+                    -   typo3-version: "^12.4"
+                        php-version: "8.1"
+                    -   typo3-version: "^12.4"
+                        php-version: "8.2"
+                    -   typo3-version: "^12.4"
+                        php-version: "8.3"
 
         steps:
             -
@@ -99,7 +127,9 @@ jobs:
                     restore-keys: "php-${{ matrix.php-version }}-composer-"
             -
                 name: "Install composer dependencies"
-                run: "composer install --no-interaction --no-progress --no-suggest"
+                run: |
+                    composer remove --no-update typo3/cms-core typo3/cms-scheduler
+                    composer require typo3/cms-core:"${{ matrix.typo3-version }}" typo3/cms-scheduler:"${{ matrix.typo3-version }}"
             -
                 name: "Run command"
                 run: "composer ${{ matrix.command }}"
@@ -160,8 +190,8 @@ jobs:
             -
                 name: "Install composer dependencies"
                 run: |
-                    composer remove --no-update typo3/cms typo3/cms-core
-                    composer require typo3/minimal:"${{ matrix.typo3-version }}"
+                    composer remove --no-update typo3/cms-core typo3/cms-scheduler
+                    composer require typo3/cms-core:"${{ matrix.typo3-version }}" typo3/cms-scheduler:"${{ matrix.typo3-version }}"
             -
                 name: "Run PHP unit tests"
                 run: "composer test:phpunit"

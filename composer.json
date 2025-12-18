@@ -91,6 +91,12 @@
             "typo3/class-alias-loader": true,
             "typo3/cms-composer-installers": true,
             "phpstan/extension-installer": true
+        },
+        "audit": {
+            "ignore": {
+                "PKSA-957f-x856-svyv": "Fixed in ELTS TYPO3 only.",
+                "PKSA-27mn-p368-8rxc": "Fixed in ELTS TYPO3 only."
+            }
         }
     },
     "scripts": {
