@@ -1,6 +1,11 @@
 Changelog
 =========
 
+13.0.1
+-----
+
+- Optimize chash excluded parameters
+
 13.0.0
 -----
 
