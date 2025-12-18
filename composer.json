@@ -93,18 +93,7 @@
             "phpstan/extension-installer": true
         },
         "audit": {
-            "ignore": {
-                "PKSA-957f-x856-svyv": "Fixed in ELTS TYPO3 only.",
-                "PKSA-27mn-p368-8rxc": "Fixed in ELTS TYPO3 only.",
-                "PKSA-pz1k-khnw-3j7j": "Fixed in ELTS TYPO3 only.",
-                "PKSA-ns26-fz7n-2jm8": "Fixed in ELTS TYPO3 only.",
-                "PKSA-q3vc-nbpk-d1gk": "Fixed in ELTS TYPO3 only.",
-                "PKSA-2ssc-6m7w-s9xh": "Fixed in ELTS TYPO3 only.",
-                "PKSA-b5m3-ttcx-cz18": "Fixed in ELTS TYPO3 only.",
-                "PKSA-6d7x-2gs8-wr59": "Fixed in ELTS TYPO3 only.",
-                "PKSA-3gg2-48j5-46ky": "Fixed in ELTS TYPO3 only.",
-                "PKSA-vzxh-337v-pjvb": "Fixed in ELTS TYPO3 only."
-            }
+            "block-insecure": false
         }
     },
     "scripts": {
