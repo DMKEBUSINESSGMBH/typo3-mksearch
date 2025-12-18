@@ -70,7 +70,6 @@ jobs:
                     - "test:phpcs"
                     - "test:rector"
                     - "test:phpcompatibility"
-                    - "test:phpstan"
                 php-version:
                     - "8.1"
                     - "8.2"
@@ -110,8 +109,8 @@ jobs:
                 run: "composer ${{ matrix.command }}"
 
 
-    php-unit:
-        name: "PHP Unit"
+    php-stan-unit:
+        name: "PHP-Stan-Unit"
 
         runs-on: "ubuntu-latest"
 
@@ -173,6 +172,9 @@ jobs:
                 run: |
                     composer remove --no-update typo3/cms typo3/cms-core
                     composer require typo3/minimal:"${{ matrix.typo3-version }}"
+            -
+                name: "Run PHPStan"
+                run: "composer test:phpstan"
             -
                 name: "Run PHP unit tests"
                 run: "composer test:phpunit"
