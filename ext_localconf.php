@@ -68,7 +68,7 @@ require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('mksear
     'mksearch[term]',
     'mksearch[sort]',
     'mksearch[sortorder]',
-    'mksearch[fq]',
+    '^mksearch[fq]',
     'mksearch[combination]',
     'mksearch[NK_addfq]',
     'mksearch[NK_remfq]',
