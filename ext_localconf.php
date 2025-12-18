@@ -90,7 +90,7 @@ Sys25\RnBase\Utility\CHashUtility::addExcludedParametersForCacheHash([
     'mksearch[term]',
     'mksearch[sort]',
     'mksearch[sortorder]',
-    'mksearch[fq]',
+    '^mksearch[fq]',
     'mksearch[combination]',
     'mksearch[NK_addfq]',
     'mksearch[NK_remfq]',
