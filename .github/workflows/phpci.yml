@@ -70,12 +70,23 @@ jobs:
                     - "test:phpcs"
                     - "test:phpcompatibility"
                     - "test:phpstan"
-                php-version:
-                    - "7.4"
-                    - "8.0"
-                    - "8.1"
-                    - "8.2"
-                    - "8.3"
+                include:
+                    -   typo3-version: "^11.5"
+                        php-version: "7.4"
+                    -   typo3-version: "^11.5"
+                        php-version: "8.0"
+                    -   typo3-version: "^11.5"
+                        php-version: "8.1"
+                    -   typo3-version: "^11.5"
+                        php-version: "8.2"
+                    -   typo3-version: "^11.5"
+                        php-version: "8.3"
+                    -   typo3-version: "^12.4"
+                        php-version: "8.1"
+                    -   typo3-version: "^12.4"
+                        php-version: "8.2"
+                    -   typo3-version: "^12.4"
+                        php-version: "8.3"
 
         steps:
             -
@@ -101,9 +112,10 @@ jobs:
                     path: "${{ steps.determine-composer-cache-directory.outputs.directory }}"
                     key: "php-${{ matrix.php-version }}-composer-${{ hashFiles('composer.lock') }}"
                     restore-keys: "php-${{ matrix.php-version }}-composer-"
-            -
-                name: "Install composer dependencies"
-                run: "composer install --no-interaction --no-progress --no-suggest"
+            -   name: "Install composer dependencies"
+                run: |
+                    composer remove --no-update typo3/cms typo3/cms-core
+                    composer require typo3/minimal:"${{ matrix.typo3-version }}"
             -
                 name: "Run command"
                 run: "composer ${{ matrix.command }}"
