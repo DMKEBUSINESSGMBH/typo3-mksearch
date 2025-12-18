@@ -64,8 +64,8 @@ jobs:
             -
                 name: "Install composer dependencies"
                 run: |
-                    composer remove --no-update typo3/cms-core typo3/cms-scheduler
-                    composer require typo3/cms-core:"${{ matrix.typo3-version }}" typo3/cms-scheduler:"${{ matrix.typo3-version }}"
+                    composer remove --no-update typo3/cms typo3/cms-core
+                    composer require typo3/minimal:"${{ matrix.typo3-version }}"
             -
                 name: "Run Linter"
                 run: "composer lint:php"
@@ -128,8 +128,8 @@ jobs:
             -
                 name: "Install composer dependencies"
                 run: |
-                    composer remove --no-update typo3/cms-core typo3/cms-scheduler
-                    composer require typo3/cms-core:"${{ matrix.typo3-version }}" typo3/cms-scheduler:"${{ matrix.typo3-version }}"
+                    composer remove --no-update typo3/cms typo3/cms-core
+                    composer require typo3/minimal:"${{ matrix.typo3-version }}"
             -
                 name: "Run command"
                 run: "composer ${{ matrix.command }}"
@@ -190,8 +190,8 @@ jobs:
             -
                 name: "Install composer dependencies"
                 run: |
-                    composer remove --no-update typo3/cms-core typo3/cms-scheduler
-                    composer require typo3/cms-core:"${{ matrix.typo3-version }}" typo3/cms-scheduler:"${{ matrix.typo3-version }}"
+                    composer remove --no-update typo3/cms typo3/cms-core
+                    composer require typo3/minimal:"${{ matrix.typo3-version }}"
             -
                 name: "Run PHP unit tests"
                 run: "composer test:phpunit"
