@@ -217,12 +217,16 @@ class tx_mksearch_indexer_FAL extends tx_mksearch_indexer_BaseMedia
         tx_mksearch_interface_IndexerDocument $indexDoc,
         $options = [],
     ): bool {
+        if (($sourceRecord['deleted'] ?? false) || ($sourceRecord['missing'] ?? false)) {
+            return true;
+        }
+
         $filePath = $this->getFilePath($tableName, $sourceRecord);
         if (!TYPO3\CMS\Core\Utility\PathUtility::isAbsolutePath($filePath)) {
             $filePath = Sys25\RnBase\Utility\Environment::getPublicPath().$filePath;
         }
 
-        return ($sourceRecord['deleted'] ?? false) || ($sourceRecord['missing'] ?? false) || !file_exists($filePath.($sourceRecord['name'] ?? ''));
+        return !file_exists($filePath.($sourceRecord['name'] ?? ''));
     }
 
     /**
