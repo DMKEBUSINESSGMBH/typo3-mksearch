@@ -1,6 +1,11 @@
 Changelog
 =========
 
+13.0.2
+-----
+
+- Fix indexing of deleted files
+
 13.0.1
 -----
 
