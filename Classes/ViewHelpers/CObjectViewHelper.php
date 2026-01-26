@@ -211,7 +211,7 @@ class CObjectViewHelper extends AbstractViewHelper
             $tsfe->initializeLanguageService($request);
         } else {
             $site = $request->getAttribute('site');
-            if (!($site instanceof SiteInterface)) {
+            if (!$site instanceof SiteInterface) {
                 $sites = GeneralUtility::makeInstance(SiteFinder::class)->getAllSites();
                 $site = reset($sites);
             }

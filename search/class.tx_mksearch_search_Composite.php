@@ -44,7 +44,7 @@ class tx_mksearch_search_Composite extends Sys25\RnBase\Search\SearchBase implem
      * return name of base table
      * MUST be public as we need these data from external!
      *
-     * @see \Sys25\RnBase\Search\SearchBase::getBaseTable()
+     * @see Sys25\RnBase\Search\SearchBase::getBaseTable()
      */
     protected function getBaseTable(): string
     {
