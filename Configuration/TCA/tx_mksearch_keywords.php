@@ -55,7 +55,6 @@ return [
             'label' => 'LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_keywords_keyword',
             'config' => [
                 'type' => 'input',
-                'size' => '30',
                 'required' => true,
             ],
         ],
@@ -64,8 +63,6 @@ return [
             'label' => 'LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:tx_mksearch_keywords_link',
             'config' => [
                 'type' => 'link',
-                'size' => '15',
-                'checkbox' => '',
                 'wizards' => Sys25\RnBase\Backend\Utility\TcaTool::getWizards(
                     '',
                     ['link' => true]
