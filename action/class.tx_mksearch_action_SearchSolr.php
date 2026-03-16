@@ -396,10 +396,12 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
         // shall we parse the content just as json
         if ($request->getParameters()->get('ajax')) {
             // if the frontend debug is enabled, so the json will be invalid.
-            // so we has to disable the debug.
+            // so we have to disable the debug.
             $GLOBALS['TYPO3_CONF_VARS']['FE']['debug'] = 0;
-            $tsfe = Sys25\RnBase\Utility\TYPO3::getTSFE();
-            $tsfe->config['config']['debug'] = 0;
+            $frontendTypoScript = $GLOBALS['TYPO3_REQUEST']->getAttribute('frontend.typoscript');
+            $configurationArray = $frontendTypoScript->getConfigArray();
+            $configurationArray['debug'] = 0;
+            $frontendTypoScript->setConfigArray($configurationArray);
 
             $result = $request->getViewContext()->offsetGet('result');
             $forbiddenResultItems = ['searchUrl' => null, 'searchTime' => null, 'response' => null];
