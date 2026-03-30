@@ -133,7 +133,7 @@ class tx_mksearch_mod1_IndizeIndizes extends Sys25\RnBase\Backend\Module\BaseMod
                 $aRecord = [];
                 $aRecord['name'] = array_shift($aTables);
                 // Die Tabelle nur einmal darstellen, auch wenn Sie in mehreren Indexern definiert ist.
-                if (!in_array($aRecord, $aDefinedTables)) {
+                if (!in_array($aRecord, $aDefinedTables, true)) {
                     $aDefinedTables[] = $aRecord;
                 }
             }
