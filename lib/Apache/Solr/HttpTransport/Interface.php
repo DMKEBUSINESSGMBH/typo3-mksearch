@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Copyright (c) 2007-2011, Servigistics, Inc.
  * All rights reserved.
@@ -34,7 +37,6 @@
  *
  * @author Timo Schmidt <timo.schmidt@aoemedia.de>, Donovan Jimenez <djimenez@conduit-it.com>
  */
-
 /**
  * Interface that all Transport (HTTP Requester) implementations must implement. These
  * Implementations can then be plugged into the Service instance in order to user their

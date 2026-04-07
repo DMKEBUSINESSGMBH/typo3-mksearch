@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Copyright (c) 2007-2011, Servigistics, Inc.
  * All rights reserved.

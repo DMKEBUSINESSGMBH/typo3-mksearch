@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class Apache_Solr_Compatibility_Solr4CompatibilityLayer implements Apache_Solr_Compatibility_CompatibilityLayer, Apache_Solr_Compatibility_AddDocumentXmlCreator
 {
     /**

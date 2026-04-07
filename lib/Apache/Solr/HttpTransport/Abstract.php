@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Copyright (c) 2007-2011, Servigistics, Inc.
  * All rights reserved.
@@ -34,7 +37,6 @@
  *
  * @author Timo Schmidt <timo.schmidt@aoemedia.de>, Donovan Jimenez <djimenez@conduit-it.com>
  */
-
 /**
  * Convenience class that implements the transport implementation. Can be extended by
  * real implementations to do some of the common book keeping.

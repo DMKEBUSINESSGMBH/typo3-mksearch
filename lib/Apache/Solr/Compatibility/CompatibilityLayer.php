@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 interface Apache_Solr_Compatibility_CompatibilityLayer
 {
     /**
