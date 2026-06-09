@@ -25,15 +25,6 @@
 
 class tx_mksearch_scheduler_IndexTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
 {
-    /**
-     * Was used as the scheduler options before making the extension compatible with TYPO3 9. But as private
-     * class variables can't be serialized anymore (@see __makeUp() method) this variable can't be used anymore.
-     *
-     * @var int
-     *
-     * @deprecated can be removed including the __wakeup() method when support for TYPO3 8.7 and below is dropped.
-     */
-    private $amountOfItems;
 
     /**
      * Amount of items to be indexed at one run.
@@ -41,23 +32,6 @@ class tx_mksearch_scheduler_IndexTask extends \TYPO3\CMS\Scheduler\Task\Abstract
      * @var int
      */
     protected $amountOfItemsToIndexPerRun;
-
-    /**
-     * After the update to TYPO3 9 the private $options variable can't be serialized and therefore not saved in the
-     * database anymore as our parent implemented the __sleep() method to return the class variables which should be
-     * serialized/saved. So to keep the possibly saved $options we need to move them to $schedulerOptions if present.
-     * Otherwise the $options will be lost after the scheduler is executed/saved.
-     */
-    public function __wakeup()
-    {
-        if (method_exists(parent::class, '__wakeup')) {
-            parent::__wakeup();
-        }
-
-        if ($this->amountOfItems && !$this->amountOfItemsToIndexPerRun) {
-            $this->amountOfItemsToIndexPerRun = $this->amountOfItems;
-        }
-    }
 
     /**
      * Function executed from the Scheduler.
