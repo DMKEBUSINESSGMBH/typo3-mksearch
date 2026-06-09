@@ -119,9 +119,9 @@ abstract class tx_mksearch_indexer_BaseMedia implements tx_mksearch_interface_In
                 $indexDoc->setDeleted(true);
 
                 return $indexDoc;
-            } else {
-                return null;
             }
+
+            return null;
         }
 
         // titel aus dem feld titel oder name holen, als fallback den dateinamen nutzen!

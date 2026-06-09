@@ -225,9 +225,9 @@ class tx_mksearch_indexer_TxNewsNews extends tx_mksearch_indexer_Base
                 $indexDoc->setDeleted(true);
 
                 return $indexDoc;
-            } else {
-                return null;
             }
+
+            return null;
         }
 
         $this->indexNews($rawData, $news, $indexDoc, $options);
