@@ -401,9 +401,9 @@ class tx_mksearch_util_Indexer
 
         if (empty($includePageTrees)) {
             return $this->includePageTreesNotSet($pid, $options);
-        } else {
-            return $this->includePageTreesSet($pid, $options);
         }
+
+        return $this->includePageTreesSet($pid, $options);
     }
 
     /**
@@ -418,9 +418,9 @@ class tx_mksearch_util_Indexer
 
         if (false !== $this->getFirstRootlineIndexInPageTrees($pid, $excludePageTrees)) {
             return false;
-        } else {
-            return $this->pageIsNotInExcludePageTrees($pid, $options);
         }
+
+        return $this->pageIsNotInExcludePageTrees($pid, $options);
     }
 
     /**
@@ -435,9 +435,9 @@ class tx_mksearch_util_Indexer
             $includePages = $this->getConfigValue('pages', $options['include.'] ?? []);
 
             return empty($includePages);
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -467,9 +467,9 @@ class tx_mksearch_util_Indexer
 
         if (false === $firstRootlineIndexInIncludePageTrees) {
             return false;
-        } else {
-            return $this->pageIsInIncludePageTrees($pid, $options, $firstRootlineIndexInIncludePageTrees);
         }
+
+        return $this->pageIsInIncludePageTrees($pid, $options, $firstRootlineIndexInIncludePageTrees);
     }
 
     /**
@@ -491,9 +491,9 @@ class tx_mksearch_util_Indexer
         )
         ) {
             return false;
-        } else {
-            return $this->pageIsNotInExcludePages($pid, $options);
         }
+
+        return $this->pageIsNotInExcludePages($pid, $options);
     }
 
     /**

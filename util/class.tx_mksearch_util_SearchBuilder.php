@@ -305,9 +305,9 @@ class tx_mksearch_util_SearchBuilder
     {
         if (is_array($term)) {
             return 0 == count($term);
-        } else {
-            // wir nutzen strlen und nicht empty damit auch bei "0" gesucht wird
-            return 0 == strlen($term);
         }
+
+        // wir nutzen strlen und nicht empty damit auch bei "0" gesucht wird
+        return 0 == strlen($term);
     }
 }

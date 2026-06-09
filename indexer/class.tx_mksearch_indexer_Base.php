@@ -124,9 +124,9 @@ abstract class tx_mksearch_indexer_Base implements tx_mksearch_interface_Indexer
                 $indexDoc->setDeleted(true);
 
                 return $indexDoc;
-            } else {
-                return null;
             }
+
+            return null;
         }
 
         // shall we break the indexing and set the doc to deleted?

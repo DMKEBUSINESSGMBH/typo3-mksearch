@@ -25,7 +25,6 @@
 
 class tx_mksearch_scheduler_IndexTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
 {
-
     /**
      * Amount of items to be indexed at one run.
      *
