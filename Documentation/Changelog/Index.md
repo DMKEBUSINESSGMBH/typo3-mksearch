@@ -1,6 +1,11 @@
 Changelog
 =========
 
+12.0.21
+------
+* Fix conflict with newest TYPO3 versions
+* Optimize chash excluded parameters
+
 12.0.20
 -----
 
