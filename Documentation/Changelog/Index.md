@@ -1,6 +1,21 @@
 Changelog
 =========
 
+11.0.17
+-----
+
+- Fix conflict with newest TYPO3 versions
+
+11.0.16
+-----
+
+- Fix warnings
+
+11.0.15
+-----
+
+- Fix warnings
+
 11.0.14
 -----
 
