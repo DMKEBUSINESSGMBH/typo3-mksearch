@@ -1,6 +1,11 @@
 Changelog
 =========
 
+13.0.3
+-----
+
+- Fix conflict with newest TYPO3 versions
+
 13.0.2
 -----
 
