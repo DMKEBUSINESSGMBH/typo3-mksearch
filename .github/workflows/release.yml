@@ -19,15 +19,15 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Get version
         id: get-version
-        run: echo ::set-output name=version::$(echo "${{ github.event.ref }}" | cut -d 'v' -f 2)
+        run: echo "version=$(echo "${{ github.event.ref }}" | cut -d 'v' -f 2)" >> $GITHUB_OUTPUT
 
       - name: Get comment
         id: get-comment
-        run: echo ::set-output name=comment::Released version ${{ steps.get-version.outputs.version }}. Check changelog in documentation on github for more information.
+        run: echo "comment=Released version ${{ steps.get-version.outputs.version }}. Check changelog in documentation on github for more information." >> $GITHUB_OUTPUT
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
