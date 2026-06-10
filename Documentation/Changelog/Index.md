@@ -1,6 +1,11 @@
 Changelog
 =========
 
+13.0.5
+-----
+
+- Update release workflow
+
 13.0.4
 -----
 
