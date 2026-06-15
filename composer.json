@@ -89,6 +89,11 @@
         "dmk/mksanitizedparameters": "keeps your parameters clean and safe"
     },
     "config": {
+		"policy": {
+			"advisories": {
+				"block": false
+			}
+		},
         "vendor-dir": ".Build/vendor",
         "bin-dir": ".Build/bin",
         "preferred-install": {
