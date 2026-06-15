@@ -94,11 +94,6 @@ return static function (RectorConfig $rectorConfig): void {
         Rector\CodingStyle\Rector\String_\UseClassKeywordForClassNameResolutionRector::class => [
             __DIR__.'/scheduler/class.tx_mksearch_scheduler_IndexTaskAddFieldProvider.php',
         ],
-
-        // declare strict breaks TER releases
-        Rector\TypeDeclaration\Rector\StmtsAwareInterface\SafeDeclareStrictTypesRector::class => [
-            '/ext_emconf.php',
-        ],
     ]);
 
     // keep backwards compatibility to TYPO3 12.4
