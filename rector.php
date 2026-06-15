@@ -113,4 +113,13 @@ return static function (RectorConfig $rectorConfig): void {
             Ssch\TYPO3Rector\TYPO313\v0\MigrateTypoScriptFrontendControllerFeUserRector::class,
         ]);
     }
+
+    // declare strict breaks TER releases
+    if (class_exists(Rector\TypeDeclaration\Rector\StmtsAwareInterface\SafeDeclareStrictTypesRector::class)) {
+        $rectorConfig->skip([
+            Rector\TypeDeclaration\Rector\StmtsAwareInterface\SafeDeclareStrictTypesRector::class => [
+                '/ext_emconf.php',
+            ],
+        ]);
+    }
 };
