@@ -76,10 +76,6 @@ jobs:
 
         strategy:
             matrix:
-                command:
-                    - "test:phpcs"
-                    - "test:rector"
-                    - "test:phpcompatibility"
                 include:
                   -
                     typo3-version: "^12.4"
@@ -120,14 +116,19 @@ jobs:
                     key: "php-${{ matrix.php-version }}-composer-${{ hashFiles('composer.lock') }}"
                     restore-keys: "php-${{ matrix.php-version }}-composer-"
             -
-              name: "Install composer dependencies"
-              run: |
-                composer remove --no-update typo3/cms typo3/cms-core
-                composer require typo3/minimal:"${{ matrix.typo3-version }}"
+                name: "Install composer dependencies"
+                run: |
+                    composer remove --no-update typo3/cms typo3/cms-core
+                    composer require typo3/minimal:"${{ matrix.typo3-version }}"
             -
-                name: "Run command"
-                run: "composer ${{ matrix.command }}"
-
+              name: "Run phpcs"
+              run: "composer test:phpcs"
+            -
+              name: "Run rector"
+              run: "composer test:rector"
+            -
+              name: "Run phpcompatibility"
+              run: "composer test:phpcompatibility"
 
     php-stan-unit:
         name: "PHP-Stan-Unit"
