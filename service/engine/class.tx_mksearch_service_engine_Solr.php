@@ -301,7 +301,7 @@ class tx_mksearch_service_engine_Solr extends Sys25\RnBase\Typo3Wrapper\Service\
      */
     public function replaceIndex($which, $by): void
     {
-        if (!($this->indexExists($which) && $this->indexExists($by))) {
+        if (!$this->indexExists($which) || !$this->indexExists($by)) {
             throw new Exception("class.tx_mksearch_service_ZendLucene.php::replaceIndex() - at least one of the specified indexes doesn'n exist!");
         }
 

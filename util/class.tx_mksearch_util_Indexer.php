@@ -159,8 +159,7 @@ class tx_mksearch_util_Indexer
      */
     public function doValueConversion($value, string $indexDocKey, $rawData, $sRecordKey, array $options)
     {
-        if (!(array_key_exists('fieldsConversion.', $options)
-            && array_key_exists($indexDocKey.'.', $options['fieldsConversion.']))) {
+        if (!array_key_exists('fieldsConversion.', $options) || !array_key_exists($indexDocKey.'.', $options['fieldsConversion.'])) {
             return $value;
         }
 

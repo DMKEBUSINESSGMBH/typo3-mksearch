@@ -185,7 +185,7 @@ class tx_mksearch_mod1_IndizeIndizes extends Sys25\RnBase\Backend\Module\BaseMod
     private function handleClear($oIntIndexSrv): string
     {
         $aTables = $GLOBALS['TYPO3_REQUEST']->getParsedBody()['clearTables'] ?? $GLOBALS['TYPO3_REQUEST']->getQueryParams()['clearTables'] ?? null;
-        if (!(is_array($aTables) && ([] !== $aTables))) {
+        if (!is_array($aTables) || [] === $aTables) {
             return '';
         }
 

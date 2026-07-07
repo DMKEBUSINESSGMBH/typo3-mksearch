@@ -40,7 +40,7 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
      */
     protected $autocompleteConfId = 'autocomplete.';
 
-    protected function handleRequest(Sys25\RnBase\Frontend\Request\RequestInterface $request)
+    protected function handleRequest(Sys25\RnBase\Frontend\Request\RequestInterface $request): string|false|null
     {
         $configurations = $request->getConfigurations();
         $parameters = $request->getParameters();
@@ -391,7 +391,7 @@ class tx_mksearch_action_SearchSolr extends tx_mksearch_action_AbstractSearch
     /**
      * Process a autocomplete call and return the json directly!
      */
-    protected function processAutocomplete(Sys25\RnBase\Frontend\Request\RequestInterface $request)
+    protected function processAutocomplete(Sys25\RnBase\Frontend\Request\RequestInterface $request): string|false|null
     {
         // shall we parse the content just as json
         if ($request->getParameters()->get('ajax')) {

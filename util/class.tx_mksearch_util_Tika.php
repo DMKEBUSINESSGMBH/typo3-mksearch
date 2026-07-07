@@ -257,7 +257,7 @@ class tx_mksearch_util_Tika
     {
         $absFile = Sys25\RnBase\Utility\Files::getFileAbsFileName($fName);
         $absFile = $this->fixFilenameWithPossibleUmlautsForWindows($absFile);
-        if (!(Sys25\RnBase\Utility\Files::isAllowedAbsPath($absFile) && @is_file($absFile))) {
+        if (!Sys25\RnBase\Utility\Files::isAllowedAbsPath($absFile) || !@is_file($absFile)) {
             throw new Exception('File not found: '.$absFile);
         }
 

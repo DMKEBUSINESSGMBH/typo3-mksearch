@@ -146,7 +146,7 @@ class tx_mksearch_model_IndexerDocumentBase implements tx_mksearch_interface_Ind
      *                'uid'           => tx_mksearch_interface_IndexerField
      *                ]
      */
-    public function getPrimaryKey($flat = false)
+    public function getPrimaryKey($flat = false): string|array
     {
         if (empty($this->uid)) {
             throw new Exception('tx_mksearch_model_IndexerDocumentBase->getPrimaryKey(): uid not yet set!');

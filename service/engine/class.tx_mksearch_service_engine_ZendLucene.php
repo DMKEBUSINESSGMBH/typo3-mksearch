@@ -172,7 +172,7 @@ class tx_mksearch_service_engine_ZendLucene extends Sys25\RnBase\Typo3Wrapper\Se
             foreach ($f as $ff) {
                 if (!is_array($ff['term'])) {
                     // The term is a single token
-                    if (!(isset($ff['phrase']) && $ff['phrase'])) {
+                    if (!isset($ff['phrase']) || !$ff['phrase']) {
                         // Call hook to manipulate search term. Term is utf8-encoded!
                         Sys25\RnBase\Utility\Misc::callHook(
                             'mksearch',
@@ -577,7 +577,7 @@ class tx_mksearch_service_engine_ZendLucene extends Sys25\RnBase\Typo3Wrapper\Se
      */
     public function replaceIndex($which, $by): void
     {
-        if (!($this->indexExists($which) && $this->indexExists($by))) {
+        if (!$this->indexExists($which) || !$this->indexExists($by)) {
             throw new Exception("class.tx_mksearch_service_ZendLucene.php::replaceIndex() - at least one of the specified indexes doesn'n exist!");
         }
 
