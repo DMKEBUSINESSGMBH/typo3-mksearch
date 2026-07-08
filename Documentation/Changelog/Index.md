@@ -1,10 +1,15 @@
 Changelog
 =========
 
+13.0.7
+-----
+
+- Fix indexer scheduler in newest TYPO3 versions
+
 13.0.6
 -----
 
-- Fix TER release13.0.6
+- Fix TER release
 
 13.0.5
 -----
