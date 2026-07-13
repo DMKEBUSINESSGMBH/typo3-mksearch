@@ -85,8 +85,6 @@ class tx_mksearch_model_engineSpecific_solr_IndexerField extends tx_mksearch_mod
 
     /**
      * Return values with their associated boost, respecting multiple values.
-     *
-     * @return unknown
      */
     public function getValuesWithBoost(): array
     {

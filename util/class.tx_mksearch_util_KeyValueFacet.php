@@ -94,9 +94,6 @@ class tx_mksearch_util_KeyValueFacet
         return $builded;
     }
 
-    /**
-     * @return string
-     */
     public function buildFacetValues(array $keys, array $values, $sortings = null): array
     {
         $builded = [];

@@ -84,9 +84,6 @@ class tx_mksearch_action_ElasticSearch extends tx_mksearch_action_AbstractSearch
         return null;
     }
 
-    /**
-     * @return string
-     */
     protected function getSearchSolrAction(): object
     {
         return TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_action_SearchSolr');

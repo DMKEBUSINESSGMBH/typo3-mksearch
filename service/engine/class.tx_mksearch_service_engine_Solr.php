@@ -313,8 +313,6 @@ class tx_mksearch_service_engine_Solr extends Sys25\RnBase\Typo3Wrapper\Service\
 
     /**
      * Get a document from index.
-     *
-     * @return unknown_type
      */
     private function getIndexDocumentByContentUid(string $uid, $extKey, $contentType): array
     {

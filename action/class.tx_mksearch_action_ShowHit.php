@@ -152,8 +152,6 @@ class tx_mksearch_action_ShowHit extends Sys25\RnBase\Frontend\Controller\Abstra
     /**
      * returns the dataset for the current used index.
      *
-     * @return tx_mksearch_model_internal_Index
-     *
      * @throws Exception
      */
     protected function getIndex(Sys25\RnBase\Frontend\Request\RequestInterface $request): bool
