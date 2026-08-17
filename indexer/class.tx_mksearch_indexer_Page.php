@@ -47,16 +47,6 @@ class tx_mksearch_indexer_Page extends tx_mksearch_indexer_Base
     }
 
     /**
-     * (non-PHPdoc).
-     *
-     * @see tx_mksearch_interface_Indexer::prepareSearchData()
-     */
-    public function prepareSearchData($tableName, $sourceRecord, tx_mksearch_interface_IndexerDocument $indexDoc, $options)
-    {
-        return parent::prepareSearchData($tableName, $sourceRecord, $indexDoc, $options);
-    }
-
-    /**
      * check if we have a shortcut and index the target instead.
      *
      * @see tx_mksearch_indexer_Base::stopIndexing()

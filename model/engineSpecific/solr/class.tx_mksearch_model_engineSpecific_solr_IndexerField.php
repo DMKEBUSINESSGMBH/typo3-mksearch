@@ -106,9 +106,4 @@ class tx_mksearch_model_engineSpecific_solr_IndexerField extends tx_mksearch_mod
 
         return $res;
     }
-
-    public function __toString(): string
-    {
-        return parent::__toString();
-    }
 }
