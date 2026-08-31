@@ -43,9 +43,7 @@ class tx_mksearch_mod1_handler_IndexerConfig extends tx_mksearch_mod1_handler_Ba
      */
     protected function getSearcher(Sys25\RnBase\Backend\Module\IModule $mod, &$options): object
     {
-        if (!isset($options['pid'])) {
-            $options['pid'] = $mod->getPid();
-        }
+        $options['pid'] ??= $mod->getPid();
 
         return TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_mod1_searcher_IndexerConfig', $mod, $options);
     }

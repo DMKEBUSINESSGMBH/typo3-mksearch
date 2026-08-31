@@ -153,13 +153,9 @@ class tx_mksearch_util_Config
      */
     public static function registerIndexer($extKey, $contentType, $indexerClass, array $tables, $resolver = false): void
     {
-        if (!isset(self::$indexerTableMappings[$extKey])) {
-            self::$indexerTableMappings[$extKey] = [];
-        }
+        self::$indexerTableMappings[$extKey] ??= [];
 
-        if (!isset(self::$indexerTableMappings[$extKey][$contentType])) {
-            self::$indexerTableMappings[$extKey][$contentType] = [];
-        }
+        self::$indexerTableMappings[$extKey][$contentType] ??= [];
 
         self::$indexerTableMappings[$extKey][$contentType] =
             array_merge(self::$indexerTableMappings[$extKey][$contentType], $tables);
@@ -167,9 +163,7 @@ class tx_mksearch_util_Config
         $ec = ['extKey' => $extKey, 'contentType' => $contentType, 'className' => $indexerClass];
 
         foreach ($tables as $table) {
-            if (!isset(self::$tableIndexerMappings[$table])) {
-                self::$tableIndexerMappings[$table] = [];
-            }
+            self::$tableIndexerMappings[$table] ??= [];
 
             if (!in_array($ec, self::$tableIndexerMappings[$table])) {
                 self::$tableIndexerMappings[$table][] = $ec;

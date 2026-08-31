@@ -86,11 +86,9 @@ class tx_mksearch_util_FacetBuilder
      */
     protected function getKeyValueFacetInstance(): object
     {
-        if (null === $this->keyValueFacetInstance) {
-            $this->keyValueFacetInstance = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-                'tx_mksearch_util_KeyValueFacet'
-            );
-        }
+        $this->keyValueFacetInstance ??= TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+            'tx_mksearch_util_KeyValueFacet'
+        );
 
         return $this->keyValueFacetInstance;
     }

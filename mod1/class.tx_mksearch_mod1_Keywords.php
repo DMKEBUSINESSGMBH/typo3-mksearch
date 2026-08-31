@@ -111,9 +111,7 @@ class tx_mksearch_mod1_Keywords extends Sys25\RnBase\Backend\Module\BaseModFunc
      */
     private function getSearcher(array &$options): object
     {
-        if (!isset($options['pid'])) {
-            $options['pid'] = $this->getModule()->getPid();
-        }
+        $options['pid'] ??= $this->getModule()->getPid();
 
         return TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_mksearch_mod1_searcher_Keywords', $this->getModule(), $options);
     }

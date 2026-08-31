@@ -1049,9 +1049,7 @@ class Apache_Solr_Service
 
         if (false !== $contents) {
             // add the resource.name parameter if not specified
-            if (!isset($params['resource.name'])) {
-                $params['resource.name'] = basename($file);
-            }
+            $params['resource.name'] ??= basename($file);
 
             // delegate the rest to extractFromString
             return $this->extractFromString($contents, $params, $document, $mimetype);
@@ -1152,9 +1150,7 @@ class Apache_Solr_Service
         // check that its a 200 response
         if (200 == $httpResponse->getStatusCode()) {
             // add the resource.name parameter if not specified
-            if (!isset($params['resource.name'])) {
-                $params['resource.name'] = $url;
-            }
+            $params['resource.name'] ??= $url;
 
             // delegate the rest to extractFromString
             return $this->extractFromString($httpResponse->getBody(), $params, $document, $mimetype);
