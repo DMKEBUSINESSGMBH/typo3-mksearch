@@ -191,7 +191,7 @@ class tx_mksearch_service_internal_Index extends tx_mksearch_service_internal_Ba
      *
      * @return bool true if record was successfully spooled
      */
-    public function addRecordsToIndex(array $records, array $options = [])
+    public function addRecordsToIndex(array $records, array $options = []): bool
     {
         if ([] === $records) {
             return true;

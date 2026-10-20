@@ -443,10 +443,8 @@ class tx_mksearch_indexer_ttcontent_Normal extends tx_mksearch_indexer_Base
 
     /**
      * Prüft ob das Element anhand der Spalte inkludiert oder ausgeschlossen werden soll.
-     *
-     * @return bool
      */
-    protected function isIndexableColumn(array $sourceRecord, array $options)
+    protected function isIndexableColumn(array $sourceRecord, array $options): bool
     {
         $columns = $this->getConfigValue('columns', $options['include.'] ?? []);
         if (is_array($columns) && count($columns)) {

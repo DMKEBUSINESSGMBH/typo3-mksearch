@@ -370,10 +370,8 @@ class tx_mksearch_util_Indexer
      * was der fall wird in.
      *
      * @param int $pid
-     *
-     * @return bool
      */
-    private function pageIsNotInIncludePages($pid, array $options)
+    private function pageIsNotInIncludePages($pid, array $options): bool
     {
         $includePageTrees = $this->getConfigValue('pageTrees', $options['include.'] ?? []);
 
@@ -386,10 +384,8 @@ class tx_mksearch_util_Indexer
 
     /**
      * @param int $pid
-     *
-     * @return bool
      */
-    private function includePageTreesNotSet($pid, array $options)
+    private function includePageTreesNotSet($pid, array $options): bool
     {
         $excludePageTrees = $this->getConfigValue('pageTrees', $options['exclude.'] ?? []);
 
@@ -402,10 +398,8 @@ class tx_mksearch_util_Indexer
 
     /**
      * @param int $pid
-     *
-     * @return bool
      */
-    private function pageIsNotInExcludePageTrees($pid, array $options)
+    private function pageIsNotInExcludePageTrees($pid, array $options): bool
     {
         if ($this->pageIsNotInExcludePages($pid, $options)) {
             $includePages = $this->getConfigValue('pages', $options['include.'] ?? []);
@@ -428,10 +422,8 @@ class tx_mksearch_util_Indexer
 
     /**
      * @param int $pid
-     *
-     * @return bool
      */
-    private function includePageTreesSet($pid, array $options)
+    private function includePageTreesSet($pid, array $options): bool
     {
         $includePageTrees = $this->getConfigValue('pageTrees', $options['include.'] ?? []);
         $firstRootlineIndexInIncludePageTrees =
@@ -447,10 +439,8 @@ class tx_mksearch_util_Indexer
     /**
      * @param int $pid
      * @param int || boolean $firstRootlineIndexInIncludePageTrees
-     *
-     * @return bool
      */
-    private function pageIsInIncludePageTrees($pid, array $options, int|string $firstRootlineIndexInIncludePageTrees)
+    private function pageIsInIncludePageTrees($pid, array $options, int|string $firstRootlineIndexInIncludePageTrees): bool
     {
         $excludePageTrees = $this->getConfigValue('pageTrees', $options['exclude.'] ?? []);
         $firstRootlineIndexInExcludePageTrees =

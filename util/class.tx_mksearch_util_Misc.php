@@ -60,12 +60,10 @@ class tx_mksearch_util_Misc
      *
      * @param array $options
      *
-     * @return bool
-     *
      * @deprecated unbedingt tx_mksearch_util_Indexer::getInstance()->isOnIndexablePage nutzen.
      * das unterstützt sowohl pages als auch pageTrees.
      */
-    public static function isOnValidPage(array $sourceRecord, $options)
+    public static function isOnValidPage(array $sourceRecord, $options): bool
     {
         if (!is_array($options)) {
             return true;
