@@ -297,7 +297,7 @@ class tx_mksearch_tests_util_FacetBuilderTest extends tx_mksearch_tests_Testcase
         return $facetData;
     }
 
-    private function buildPivotFacets()
+    private function buildPivotFacets(): stdClass
     {
         return (object) [
             'fiel_one,fiel_two,fiel_three' => [

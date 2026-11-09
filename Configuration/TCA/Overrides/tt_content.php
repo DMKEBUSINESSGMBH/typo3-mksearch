@@ -78,7 +78,7 @@ TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue(
     'tx_mksearch'
 );
 TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPlugin(
-    ['LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.label', 'tx_mksearch'],
+    new TYPO3\CMS\Core\Schema\Struct\SelectItem(type: 'select', label: 'LLL:EXT:mksearch/Resources/Private/Language/locallang_db.xlf:plugin.mksearch.label', value: 'tx_mksearch'),
     TYPO3\CMS\Extbase\Utility\ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT,
     'mksearch'
 );
